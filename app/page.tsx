@@ -1,4 +1,6 @@
+import ArtistSearch from './components/v3/ArtistSearch';
 import LineChartCard from './components/v3/LineChartCard';
+import { artistUniverse } from './data/v3/artistUniverse';
 import { marketChartPoints, trendingIssues } from './data/v3/mockData';
 
 export default function Home() {
@@ -15,6 +17,10 @@ export default function Home() {
           <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400 md:text-base">
             K-pop 종합지수의 흐름과 오늘의 주요 이슈를 한 화면에서 확인합니다.
           </p>
+        </div>
+
+        <div className="mb-8">
+          <ArtistSearch artists={artistUniverse} />
         </div>
 
         <LineChartCard
