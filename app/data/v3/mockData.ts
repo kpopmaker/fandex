@@ -1,528 +1,664 @@
-git log --oneline -3import type {
-    ArtistNewsItem,
-    ArtistPricePoint,
-    ChartPoint,
-    CustomIndexConfig,
-    FactorDefinitionV3,
-    FactorKey,
-    FactorWeights,
-    KpopIssue,
-    MarketIndexPoint,
-  } from './types';
-  
-  export const factorDefinitionsV3: FactorDefinitionV3[] = [
-    {
-      key: 'music',
-      label: '음원',
-      easyLabel: '노래 성적',
-      description: '음원 차트, 스트리밍, 다운로드 반응을 반영합니다.',
-      defaultWeight: 18,
-      helpText: '노래가 얼마나 많이 듣고 있는지를 보는 요소입니다.',
+import type {
+  ArtistNewsItem,
+  ArtistPricePoint,
+  ChartPoint,
+  CustomIndexConfig,
+  FactorDefinitionV3,
+  FactorKey,
+  FactorWeights,
+  KpopIssue,
+  MarketIndexPoint,
+} from './types';
+
+export const factorDefinitionsV3: FactorDefinitionV3[] = [
+  {
+    key: 'music',
+    label: 'Music',
+    easyLabel: 'Music performance',
+    description: 'Reflects charting, streaming, downloads, and music-platform reaction.',
+    defaultWeight: 18,
+    helpText: 'Shows how strongly songs are being consumed and discussed.',
+  },
+  {
+    key: 'album',
+    label: 'Album',
+    easyLabel: 'Album sales',
+    description: 'Reflects first-week sales, cumulative sales, and fandom purchase power.',
+    defaultWeight: 14,
+    helpText: 'Shows whether fandom buying power is strong.',
+  },
+  {
+    key: 'youtube',
+    label: 'YouTube',
+    easyLabel: 'Video reaction',
+    description: 'Reflects music video views, official content views, and video engagement.',
+    defaultWeight: 16,
+    helpText: 'Shows whether video content is spreading.',
+  },
+  {
+    key: 'sns',
+    label: 'SNS',
+    easyLabel: 'SNS reaction',
+    description: 'Reflects Instagram, X, TikTok, and official-channel social engagement.',
+    defaultWeight: 12,
+    helpText: 'Shows likes, shares, comments, and conversation velocity.',
+  },
+  {
+    key: 'search',
+    label: 'Search',
+    easyLabel: 'Search demand',
+    description: 'Reflects search volume and query growth.',
+    defaultWeight: 10,
+    helpText: 'Shows how much people are actively looking up the artist.',
+  },
+  {
+    key: 'news',
+    label: 'News',
+    easyLabel: 'News exposure',
+    description: 'Reflects article volume and issue spread across media and communities.',
+    defaultWeight: 8,
+    helpText: 'Shows whether the artist is becoming a broader topic.',
+  },
+  {
+    key: 'global',
+    label: 'Global',
+    easyLabel: 'Global reaction',
+    description: 'Reflects overseas news, global fan response, and international platform activity.',
+    defaultWeight: 10,
+    helpText: 'Shows whether momentum is expanding outside Korea.',
+  },
+  {
+    key: 'fandom',
+    label: 'Fandom',
+    easyLabel: 'Fandom strength',
+    description: 'Reflects fandom activity, community engagement, and coordinated support.',
+    defaultWeight: 8,
+    helpText: 'Shows whether fans are moving actively and consistently.',
+  },
+  {
+    key: 'company',
+    label: 'Company',
+    easyLabel: 'Company scale',
+    description: 'Reflects agency scale, operational stability, and marketing capacity.',
+    defaultWeight: 4,
+    helpText: 'Shows how much company support may amplify market signals.',
+  },
+];
+
+export const defaultFactorWeightsV3: FactorWeights = {
+  music: 18,
+  album: 14,
+  youtube: 16,
+  sns: 12,
+  search: 10,
+  news: 8,
+  global: 10,
+  fandom: 8,
+  company: 4,
+};
+
+const allFactorKeys: FactorKey[] = [
+  'music',
+  'album',
+  'youtube',
+  'sns',
+  'search',
+  'news',
+  'global',
+  'fandom',
+  'company',
+];
+
+export const defaultCustomIndexConfig: CustomIndexConfig = {
+  preset: 'Balanced',
+  weights: defaultFactorWeightsV3,
+  enabledFactors: allFactorKeys,
+};
+
+type CustomIndexViewPreset = {
+  id: string;
+  label: string;
+  shortLabel: string;
+  name: string;
+  title: string;
+  description: string;
+  question: string;
+  interpretation: string;
+  preset: string;
+  weights: FactorWeights;
+  enabledFactors: FactorKey[];
+  config: CustomIndexConfig;
+};
+
+function createCustomIndexView({
+  id,
+  label,
+  shortLabel,
+  description,
+  question,
+  interpretation,
+  weights,
+  enabledFactors = allFactorKeys,
+}: {
+  id: string;
+  label: CustomIndexConfig['preset'];
+  shortLabel?: string;
+  description: string;
+  question?: string;
+  interpretation?: string;
+  weights: FactorWeights;
+  enabledFactors?: FactorKey[];
+}): CustomIndexViewPreset {
+  const displayLabel = shortLabel ?? label;
+
+  return {
+    id,
+    label,
+    shortLabel: displayLabel,
+    name: label,
+    title: label,
+    description,
+    question:
+      question ??
+      `Which FANDEX signals explain the current ${displayLabel} movement?`,
+    interpretation:
+      interpretation ??
+      `${displayLabel} is a simulated FANDEX view for comparing artist market signals. It is not financial advice.`,
+    preset: label,
+    weights,
+    enabledFactors,
+    config: {
+      preset: label,
+      weights,
+      enabledFactors,
     },
-    {
-      key: 'album',
-      label: '음반',
-      easyLabel: '앨범 판매',
-      description: '초동, 누적 판매량, 앨범 구매력을 반영합니다.',
-      defaultWeight: 14,
-      helpText: '팬덤의 구매력이 강한지 보는 요소입니다.',
-    },
-    {
-      key: 'youtube',
-      label: '유튜브',
-      easyLabel: '영상 반응',
-      description: '뮤직비디오, 티저, 자체 콘텐츠의 조회수와 반응을 반영합니다.',
-      defaultWeight: 16,
-      helpText: '영상이 얼마나 많이 보고 반응받는지 보는 요소입니다.',
-    },
-    {
-      key: 'sns',
-      label: 'SNS',
-      easyLabel: 'SNS 반응',
-      description: '인스타그램, X, 틱톡 등 공식 채널 반응을 반영합니다.',
-      defaultWeight: 12,
-      helpText: 'SNS에서 얼마나 많이 좋아요, 공유, 댓글이 생기는지 보는 요소입니다.',
-    },
-    {
-      key: 'search',
-      label: '검색량',
-      easyLabel: '검색 관심도',
-      description: '포털 검색량과 검색 증가율을 반영합니다.',
-      defaultWeight: 10,
-      helpText: '사람들이 얼마나 많이 검색하는지 보는 요소입니다.',
-    },
-    {
-      key: 'news',
-      label: '뉴스',
-      easyLabel: '이슈성',
-      description: '뉴스 기사 수, 보도량, 이슈 확산 정도를 반영합니다.',
-      defaultWeight: 8,
-      helpText: '언론과 커뮤니티에서 얼마나 화제가 되는지 보는 요소입니다.',
-    },
-    {
-      key: 'global',
-      label: '해외',
-      easyLabel: '해외 반응',
-      description: '해외 뉴스, 글로벌 팬 반응, 해외 플랫폼 반응을 반영합니다.',
-      defaultWeight: 10,
-      helpText: '한국 밖에서 얼마나 반응이 좋은지 보는 요소입니다.',
-    },
-    {
-      key: 'fandom',
-      label: '팬덤',
-      easyLabel: '팬덤 힘',
-      description: '팬덤 활동량, 팬채널, 커뮤니티 반응을 반영합니다.',
-      defaultWeight: 8,
-      helpText: '팬들이 얼마나 적극적으로 움직이는지 보는 요소입니다.',
-    },
-    {
-      key: 'company',
-      label: '소속사',
-      easyLabel: '회사 체급',
-      description: '소속사의 규모, 안정성, 마케팅 역량을 반영합니다.',
-      defaultWeight: 4,
-      helpText: '소속사가 얼마나 큰 지원을 할 수 있는지 보는 요소입니다.',
-    },
-  ];
-  
-  export const defaultFactorWeightsV3: FactorWeights = {
-    music: 18,
-    album: 14,
-    youtube: 16,
-    sns: 12,
-    search: 10,
-    news: 8,
-    global: 10,
-    fandom: 8,
-    company: 4,
   };
-  
-  export const defaultCustomIndexConfig: CustomIndexConfig = {
-    preset: '종합형',
+}
+
+export const customIndexViews: CustomIndexViewPreset[] = [
+  createCustomIndexView({
+    id: 'all',
+    label: 'Balanced',
+    shortLabel: 'Official FANDEX',
+    description:
+      'A balanced FANDEX view across music, album, video, SNS, search, news, global, fandom, and company factors.',
+    question: 'How is the official FANDEX artist index moving right now?',
+    interpretation:
+      'Use this as the baseline simulated artist index before comparing custom views.',
     weights: defaultFactorWeightsV3,
-    enabledFactors: [
-      'music',
-      'album',
-      'youtube',
-      'sns',
-      'search',
-      'news',
-      'global',
-      'fandom',
-      'company',
-    ],
+  }),
+  createCustomIndexView({
+    id: 'contentReaction',
+    label: 'Video focused',
+    shortLabel: 'Content reaction',
+    description:
+      'Weights YouTube and SNS reaction more heavily to evaluate content-led momentum.',
+    weights: {
+      music: 14,
+      album: 8,
+      youtube: 24,
+      sns: 18,
+      search: 12,
+      news: 8,
+      global: 10,
+      fandom: 4,
+      company: 2,
+    },
+  }),
+  createCustomIndexView({
+    id: 'fandomExpansion',
+    label: 'Fandom focused',
+    shortLabel: 'Fandom expansion',
+    description:
+      'Weights fandom, album, SNS, and global signals to evaluate fanbase expansion.',
+    weights: {
+      music: 10,
+      album: 16,
+      youtube: 10,
+      sns: 14,
+      search: 10,
+      news: 6,
+      global: 12,
+      fandom: 18,
+      company: 4,
+    },
+  }),
+  createCustomIndexView({
+    id: 'globalReaction',
+    label: 'Global reaction',
+    shortLabel: 'Global reaction',
+    description:
+      'Weights overseas reaction, YouTube, SNS, and music signals to evaluate global momentum.',
+    weights: {
+      music: 14,
+      album: 8,
+      youtube: 18,
+      sns: 12,
+      search: 8,
+      news: 8,
+      global: 22,
+      fandom: 6,
+      company: 4,
+    },
+  }),
+  createCustomIndexView({
+    id: 'businessImpact',
+    label: 'Company scale',
+    shortLabel: 'Business impact',
+    description:
+      'Weights company scale, fandom base, and commercial stability signals for longer-horizon market context.',
+    weights: {
+      music: 12,
+      album: 12,
+      youtube: 12,
+      sns: 10,
+      search: 8,
+      news: 8,
+      global: 8,
+      fandom: 10,
+      company: 20,
+    },
+  }),
+  createCustomIndexView({
+    id: 'buzz',
+    label: 'SNS focused',
+    shortLabel: 'Buzz signal',
+    description:
+      'Weights SNS, search, news, and YouTube to identify fast attention spikes.',
+    weights: {
+      music: 8,
+      album: 4,
+      youtube: 16,
+      sns: 24,
+      search: 18,
+      news: 16,
+      global: 8,
+      fandom: 4,
+      company: 2,
+    },
+  }),
+  createCustomIndexView({
+    id: 'organicPublic',
+    label: 'Music focused',
+    shortLabel: 'Public demand',
+    description:
+      'Weights music, search, and SNS signals to evaluate broad public demand.',
+    weights: {
+      music: 26,
+      album: 6,
+      youtube: 12,
+      sns: 14,
+      search: 18,
+      news: 8,
+      global: 8,
+      fandom: 4,
+      company: 4,
+    },
+  }),
+  createCustomIndexView({
+    id: 'custom',
+    label: 'Balanced',
+    shortLabel: 'Custom view',
+    description:
+      'Choose factors manually to simulate a custom artist market lens.',
+    question: 'Which factors should drive this custom FANDEX view?',
+    interpretation:
+      'Custom views are exploratory simulations for content planning and market reading.',
+    weights: defaultFactorWeightsV3,
+  }),
+];
+
+export const marketIndexHistory: MarketIndexPoint[] = [
+  { time: '09:00', indexValue: 982.4, changeRate: -0.4, totalVolume: 182300, risingArtistCount: 38, fallingArtistCount: 62 },
+  { time: '10:00', indexValue: 991.8, changeRate: 0.52, totalVolume: 221500, risingArtistCount: 47, fallingArtistCount: 53 },
+  { time: '11:00', indexValue: 1004.2, changeRate: 1.77, totalVolume: 264200, risingArtistCount: 58, fallingArtistCount: 42 },
+  { time: '12:00', indexValue: 998.6, changeRate: 1.2, totalVolume: 238100, risingArtistCount: 51, fallingArtistCount: 49 },
+  { time: '13:00', indexValue: 1011.9, changeRate: 2.55, totalVolume: 312900, risingArtistCount: 66, fallingArtistCount: 34 },
+  { time: '14:00', indexValue: 1026.7, changeRate: 4.05, totalVolume: 386400, risingArtistCount: 72, fallingArtistCount: 28 },
+  { time: '15:00', indexValue: 1019.3, changeRate: 3.3, totalVolume: 341700, risingArtistCount: 63, fallingArtistCount: 37 },
+  { time: '16:00', indexValue: 1038.5, changeRate: 5.25, totalVolume: 421800, risingArtistCount: 76, fallingArtistCount: 24 },
+];
+
+export const marketChartPoints: ChartPoint[] = marketIndexHistory.map((point) => ({
+  time: point.time,
+  value: point.indexValue,
+}));
+
+const baseArtistIds = [
+  'aespa',
+  'ive',
+  'riize',
+  'illit',
+  'tws',
+  'lesserafim',
+  'newjeans',
+  'nmixx',
+  'babymonster',
+  'boynextdoor',
+];
+
+function createScores(seed: number): Record<FactorKey, number> {
+  const clamp = (value: number) => Math.min(Math.max(value, 35), 98);
+
+  return {
+    music: clamp(62 + seed * 2),
+    album: clamp(58 + seed * 1.5),
+    youtube: clamp(64 + seed * 2.2),
+    sns: clamp(60 + seed * 1.8),
+    search: clamp(55 + seed * 2.5),
+    news: clamp(52 + seed * 1.6),
+    global: clamp(59 + seed * 2),
+    fandom: clamp(61 + seed * 1.7),
+    company: clamp(57 + seed * 1.2),
   };
-  
-  export const marketIndexHistory: MarketIndexPoint[] = [
-    {
-      time: '09:00',
-      indexValue: 982.4,
-      changeRate: -0.4,
-      totalVolume: 182300,
-      risingArtistCount: 38,
-      fallingArtistCount: 62,
-    },
-    {
-      time: '10:00',
-      indexValue: 991.8,
-      changeRate: 0.52,
-      totalVolume: 221500,
-      risingArtistCount: 47,
-      fallingArtistCount: 53,
-    },
-    {
-      time: '11:00',
-      indexValue: 1004.2,
-      changeRate: 1.77,
-      totalVolume: 264200,
-      risingArtistCount: 58,
-      fallingArtistCount: 42,
-    },
-    {
-      time: '12:00',
-      indexValue: 998.6,
-      changeRate: 1.2,
-      totalVolume: 238100,
-      risingArtistCount: 51,
-      fallingArtistCount: 49,
-    },
-    {
-      time: '13:00',
-      indexValue: 1011.9,
-      changeRate: 2.55,
-      totalVolume: 312900,
-      risingArtistCount: 66,
-      fallingArtistCount: 34,
-    },
-    {
-      time: '14:00',
-      indexValue: 1026.7,
-      changeRate: 4.05,
-      totalVolume: 386400,
-      risingArtistCount: 72,
-      fallingArtistCount: 28,
-    },
-    {
-      time: '15:00',
-      indexValue: 1019.3,
-      changeRate: 3.3,
-      totalVolume: 341700,
-      risingArtistCount: 63,
-      fallingArtistCount: 37,
-    },
-    {
-      time: '16:00',
-      indexValue: 1038.5,
-      changeRate: 5.25,
-      totalVolume: 421800,
-      risingArtistCount: 76,
-      fallingArtistCount: 24,
-    },
-  ];
-  
-  export const marketChartPoints: ChartPoint[] = marketIndexHistory.map(
-    (point) => ({
-      time: point.time,
-      value: point.indexValue,
-    })
-  );
-  
-  const baseArtistIds = [
-    'aespa',
-    'ive',
-    'riize',
-    'illit',
-    'tws',
-    'lesserafim',
-    'newjeans',
-    'nmixx',
-    'babymonster',
-    'boynextdoor',
-  ];
-  
-  function createScores(seed: number) {
-    const clamp = (value: number) => Math.min(Math.max(value, 35), 98);
-  
+}
+
+export function getArtistPriceHistory(artistId: string): ArtistPricePoint[] {
+  const artistIndex = Math.max(baseArtistIds.indexOf(artistId), 0);
+  const basePrice = 92 + artistIndex * 4;
+
+  return marketIndexHistory.map((point, index) => {
+    const wave = Math.sin(index + artistIndex) * 4;
+    const price = Number((basePrice + index * 2.1 + wave).toFixed(2));
+    const previousPrice = index === 0 ? basePrice : basePrice + (index - 1) * 2.1;
+
     return {
-      music: clamp(62 + seed * 2),
-      album: clamp(58 + seed * 1.5),
-      youtube: clamp(64 + seed * 2.2),
-      sns: clamp(60 + seed * 1.8),
-      search: clamp(55 + seed * 2.5),
-      news: clamp(52 + seed * 1.6),
-      global: clamp(59 + seed * 2),
-      fandom: clamp(61 + seed * 1.7),
-      company: clamp(57 + seed * 1.2),
-    };
-  }
-  
-  export function getArtistPriceHistory(artistId: string): ArtistPricePoint[] {
-    const artistIndex = Math.max(baseArtistIds.indexOf(artistId), 0);
-    const basePrice = 92 + artistIndex * 4;
-  
-    return marketIndexHistory.map((point, index) => {
-      const wave = Math.sin(index + artistIndex) * 4;
-      const price = Number((basePrice + index * 2.1 + wave).toFixed(2));
-      const previousPrice =
-        index === 0 ? basePrice : basePrice + (index - 1) * 2.1;
-  
-      return {
-        artistId,
-        time: point.time,
-        price,
-        changeRate: Number((((price - previousPrice) / previousPrice) * 100).toFixed(2)),
-        volume: Math.round(12000 + artistIndex * 1800 + index * 2500),
-        fanSizeValue: Math.round(price * (900000 + artistIndex * 90000)),
-        scores: createScores(artistIndex + index),
-      };
-    });
-  }
-  
-  export function getArtistChartPoints(artistId: string): ChartPoint[] {
-    return getArtistPriceHistory(artistId).map((point) => ({
-      time: point.time,
-      value: point.price,
-    }));
-  }
-  
-  export const trendingIssues: KpopIssue[] = [
-    {
-      id: 'issue-001',
-      rank: 1,
-      headline: '대형 걸그룹 컴백 티저 공개 후 검색량 급등',
-      summary:
-        '컴백 티저 공개 이후 검색량과 유튜브 반응이 동시에 증가하며 K-pop 종합지수를 끌어올렸습니다.',
-      category: '컴백',
-      relatedArtistIds: ['aespa', 'ive'],
-      relatedKeywords: ['컴백', '티저', '뮤직비디오'],
-      issueScore: 94.2,
-      newsCount: 38,
-      searchGrowthRate: 128.4,
-      impact: '종합지수 상승',
-      updatedAt: '16:00',
-      sourceNames: ['네이버뉴스', '유튜브', 'SNS'],
-    },
-    {
-      id: 'issue-002',
-      rank: 2,
-      headline: '신인 보이그룹 자체 콘텐츠 반응 상승',
-      summary:
-        '자체 웹예능 클립이 팬 커뮤니티와 숏폼에서 확산되며 거래량 지표가 상승했습니다.',
-      category: 'SNS',
-      relatedArtistIds: ['riize', 'tws', 'boynextdoor'],
-      relatedKeywords: ['자체콘텐츠', '웹예능', '팬반응'],
-      issueScore: 88.7,
-      newsCount: 21,
-      searchGrowthRate: 72.1,
-      impact: '관심도 증가',
-      updatedAt: '15:50',
-      sourceNames: ['유튜브', 'X', '틱톡'],
-    },
-    {
-      id: 'issue-003',
-      rank: 3,
-      headline: '해외 팬덤 중심으로 뮤직비디오 재확산',
-      summary:
-        '해외 팬 계정과 리액션 채널을 중심으로 뮤직비디오 조회 흐름이 다시 강해졌습니다.',
-      category: '해외반응',
-      relatedArtistIds: ['babymonster', 'lesserafim'],
-      relatedKeywords: ['해외반응', '리액션', '뮤직비디오'],
-      issueScore: 84.9,
-      newsCount: 17,
-      searchGrowthRate: 61.8,
-      impact: '개별 아티스트 상승',
-      updatedAt: '15:40',
-      sourceNames: ['해외뉴스', '유튜브'],
-    },
-    {
-      id: 'issue-004',
-      rank: 4,
-      headline: '음악방송 무대 클립 반응 상승',
-      summary:
-        '최근 음악방송 무대 클립이 SNS에서 재공유되며 영상 반응 지표가 올랐습니다.',
-      category: '방송',
-      relatedArtistIds: ['illit', 'nmixx'],
-      relatedKeywords: ['음악방송', '무대', '직캠'],
-      issueScore: 81.3,
-      newsCount: 12,
-      searchGrowthRate: 49.7,
-      impact: '관심도 증가',
-      updatedAt: '15:30',
-      sourceNames: ['유튜브', 'SNS'],
-    },
-    {
-      id: 'issue-005',
-      rank: 5,
-      headline: '팬덤 커뮤니티에서 새 콘셉트 해석 확산',
-      summary:
-        '콘셉트 포토와 세계관 해석 글이 커뮤니티에서 확산되며 팬덤 반응 지표가 상승했습니다.',
-      category: '팬덤',
-      relatedArtistIds: ['aespa', 'newjeans'],
-      relatedKeywords: ['콘셉트', '세계관', '팬덤'],
-      issueScore: 78.5,
-      newsCount: 9,
-      searchGrowthRate: 42.5,
-      impact: '관심도 증가',
-      updatedAt: '15:20',
-      sourceNames: ['커뮤니티', 'SNS'],
-    },
-    {
-      id: 'issue-006',
-      rank: 6,
-      headline: '앨범 예약 판매 관련 언급량 증가',
-      summary:
-        '예약 판매 시작 이후 팬덤 구매 반응과 앨범 관련 검색량이 함께 증가했습니다.',
-      category: '앨범',
-      relatedArtistIds: ['ive', 'riize'],
-      relatedKeywords: ['예약판매', '앨범', '초동'],
-      issueScore: 75.8,
-      newsCount: 11,
-      searchGrowthRate: 36.2,
-      impact: '개별 아티스트 상승',
-      updatedAt: '15:10',
-      sourceNames: ['네이버뉴스', '팬커뮤니티'],
-    },
-    {
-      id: 'issue-007',
-      rank: 7,
-      headline: '멤버 개인 영상 클립이 숏폼에서 확산',
-      summary:
-        '멤버 개인 클립이 숏폼 플랫폼에서 확산되며 아티스트 검색량에 영향을 주고 있습니다.',
-      category: 'SNS',
-      relatedArtistIds: ['ive', 'aespa', 'illit'],
-      relatedKeywords: ['숏폼', '멤버', '바이럴'],
-      issueScore: 72.4,
-      newsCount: 8,
-      searchGrowthRate: 31.9,
-      impact: '관심도 증가',
-      updatedAt: '15:00',
-      sourceNames: ['틱톡', '인스타그램'],
-    },
-    {
-      id: 'issue-008',
-      rank: 8,
-      headline: '글로벌 차트 진입 소식으로 해외 반응 상승',
-      summary:
-        '글로벌 차트 진입 관련 언급이 늘어나며 해외 반응 지표가 상승했습니다.',
-      category: '음원',
-      relatedArtistIds: ['lesserafim', 'babymonster'],
-      relatedKeywords: ['글로벌차트', '해외팬', '음원'],
-      issueScore: 70.6,
-      newsCount: 14,
-      searchGrowthRate: 29.2,
-      impact: '개별 아티스트 상승',
-      updatedAt: '14:50',
-      sourceNames: ['해외뉴스', '음원플랫폼'],
-    },
-    {
-      id: 'issue-009',
-      rank: 9,
-      headline: '신인 그룹 팬덤명 관련 검색 증가',
-      summary:
-        '팬덤명과 멤버명 검색량이 동시에 증가하며 신인 관심도가 올라갔습니다.',
-      category: '팬덤',
-      relatedArtistIds: ['tws', 'illit'],
-      relatedKeywords: ['팬덤명', '신인', '멤버'],
-      issueScore: 67.8,
-      newsCount: 6,
-      searchGrowthRate: 23.5,
-      impact: '관심도 증가',
-      updatedAt: '14:40',
-      sourceNames: ['검색', 'SNS'],
-    },
-    {
-      id: 'issue-010',
-      rank: 10,
-      headline: '소속사 공식 일정 공개로 단기 관심 상승',
-      summary:
-        '공식 일정과 프로모션 공지가 공개되며 관련 키워드 검색량이 늘었습니다.',
-      category: '이슈',
-      relatedArtistIds: ['nmixx', 'boynextdoor'],
-      relatedKeywords: ['공식일정', '프로모션', '공지'],
-      issueScore: 64.1,
-      newsCount: 5,
-      searchGrowthRate: 18.6,
-      impact: '영향 적음',
-      updatedAt: '14:30',
-      sourceNames: ['공식공지', '네이버뉴스'],
-    },
-  ];
-  
-  export const artistNewsItems: ArtistNewsItem[] = [
-    {
-      id: 'news-aespa-001',
-      artistId: 'aespa',
-      title: '컴백 티저 공개 후 팬덤 반응 상승',
-      summary: '티저 공개 이후 검색량과 영상 반응이 동시에 증가했습니다.',
-      detail:
-        '컴백 티저 공개 직후 팬 커뮤니티와 SNS에서 관련 키워드 언급량이 늘었고, 유튜브 조회 흐름도 강해졌습니다. FANDEX 기준으로는 검색량, 유튜브, SNS 요소가 가격 상승에 기여했습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '16:00',
-      relatedKeywords: ['컴백', '티저', '검색량'],
-      importanceScore: 92,
-    },
-    {
-      id: 'news-aespa-002',
-      artistId: 'aespa',
-      title: '세계관 해석 콘텐츠 확산',
-      summary: '콘셉트 해석 글이 팬덤 사이에서 확산되고 있습니다.',
-      detail:
-        '세계관과 콘셉트 해석 게시물이 커뮤니티에서 확산되며 팬덤 반응 점수가 상승했습니다. 장기적으로는 팬덤 몰입도를 높이는 요소로 해석할 수 있습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '15:30',
-      relatedKeywords: ['세계관', '콘셉트', '팬덤'],
-      importanceScore: 86,
-    },
-    {
-      id: 'news-aespa-003',
-      artistId: 'aespa',
-      title: '뮤직비디오 관련 클립 재확산',
-      summary: '기존 뮤직비디오 클립이 숏폼에서 다시 확산됐습니다.',
-      detail:
-        '팬 편집 영상과 리액션 클립이 숏폼에서 재확산되면서 유튜브와 SNS 반응 점수에 영향을 주었습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '14:50',
-      relatedKeywords: ['뮤직비디오', '숏폼', '바이럴'],
-      importanceScore: 79,
-    },
-    {
-      id: 'news-aespa-004',
-      artistId: 'aespa',
-      title: '해외 팬 반응 증가',
-      summary: '해외 팬 계정 중심으로 반응이 증가했습니다.',
-      detail:
-        '글로벌 팬 계정에서 관련 콘텐츠가 공유되며 해외 반응 점수가 상승했습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '14:20',
-      relatedKeywords: ['해외반응', '글로벌', '팬계정'],
-      importanceScore: 73,
-    },
-    {
-      id: 'news-aespa-005',
-      artistId: 'aespa',
-      title: '멤버 개인 키워드 검색 증가',
-      summary: '멤버 개인 이름 검색량이 함께 증가했습니다.',
-      detail:
-        '멤버 개인 클립과 사진이 확산되며 그룹 전체 검색량에도 긍정적인 영향을 주었습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '13:40',
-      relatedKeywords: ['멤버', '검색량', 'SNS'],
-      importanceScore: 70,
-    },
-    {
-      id: 'news-aespa-006',
-      artistId: 'aespa',
-      title: '공식 SNS 게시물 반응 상승',
-      summary: '공식 SNS 게시물의 반응 속도가 빨라졌습니다.',
-      detail:
-        '좋아요와 댓글 반응이 이전 대비 빠르게 증가하며 SNS 요소 점수에 반영되었습니다.',
-      sourceName: 'FANDEX 모의 뉴스',
-      sourceType: '기타',
-      publishedAt: '13:00',
-      relatedKeywords: ['SNS', '좋아요', '댓글'],
-      importanceScore: 68,
-    },
-  ];
-  
-  export function getNewsByArtistId(artistId: string) {
-    const matchedNews = artistNewsItems.filter((item) => item.artistId === artistId);
-  
-    if (matchedNews.length > 0) {
-      return matchedNews;
-    }
-  
-    return artistNewsItems.map((item, index) => ({
-      ...item,
-      id: `${artistId}-news-${index + 1}`,
       artistId,
-    }));
+      time: point.time,
+      price,
+      changeRate: Number((((price - previousPrice) / previousPrice) * 100).toFixed(2)),
+      volume: Math.round(12000 + artistIndex * 1800 + index * 2500),
+      fanSizeValue: Math.round(price * (900000 + artistIndex * 90000)),
+      scores: createScores(artistIndex + index),
+    };
+  });
+}
+
+export function getArtistChartPoints(artistId: string): ChartPoint[] {
+  return getArtistPriceHistory(artistId).map((point) => ({
+    time: point.time,
+    value: point.price,
+  }));
+}
+
+export const trendingIssues: KpopIssue[] = [
+  {
+    id: 'issue-001',
+    rank: 1,
+    headline: 'Comeback teaser drives search demand',
+    summary:
+      'Search demand and video reaction increased after a comeback teaser, lifting simulated FANDEX momentum.',
+    category: 'Comeback',
+    relatedArtistIds: ['aespa', 'ive'],
+    relatedKeywords: ['comeback', 'teaser', 'music video'],
+    issueScore: 94.2,
+    newsCount: 38,
+    searchGrowthRate: 128.4,
+    impact: 'Market index up',
+    updatedAt: '16:00',
+    sourceNames: ['News', 'YouTube', 'SNS'],
+  },
+  {
+    id: 'issue-002',
+    rank: 2,
+    headline: 'Rookie boy group content reaction accelerates',
+    summary:
+      'Original content clips spread across communities and short-form platforms, increasing attention volume.',
+    category: 'SNS',
+    relatedArtistIds: ['riize', 'tws', 'boynextdoor'],
+    relatedKeywords: ['original content', 'variety', 'short-form'],
+    issueScore: 88.7,
+    newsCount: 21,
+    searchGrowthRate: 72.1,
+    impact: 'Attention increased',
+    updatedAt: '15:50',
+    sourceNames: ['YouTube', 'X', 'TikTok'],
+  },
+  {
+    id: 'issue-003',
+    rank: 3,
+    headline: 'Global fandom lifts music video replay',
+    summary:
+      'International fan accounts and reaction channels are pushing renewed music video attention.',
+    category: 'Global reaction',
+    relatedArtistIds: ['babymonster', 'lesserafim'],
+    relatedKeywords: ['global reaction', 'reaction video', 'music video'],
+    issueScore: 84.9,
+    newsCount: 17,
+    searchGrowthRate: 61.8,
+    impact: 'Artist index up',
+    updatedAt: '15:40',
+    sourceNames: ['Global news', 'YouTube'],
+  },
+  {
+    id: 'issue-004',
+    rank: 4,
+    headline: 'Broadcast performance clips trend upward',
+    summary:
+      'Recent stage clips are spreading on SNS, increasing video reaction and search attention.',
+    category: 'Broadcast',
+    relatedArtistIds: ['illit', 'nmixx'],
+    relatedKeywords: ['broadcast', 'stage', 'performance'],
+    issueScore: 81.3,
+    newsCount: 12,
+    searchGrowthRate: 49.7,
+    impact: 'Attention increased',
+    updatedAt: '15:30',
+    sourceNames: ['YouTube', 'SNS'],
+  },
+  {
+    id: 'issue-005',
+    rank: 5,
+    headline: 'Fandom concept analysis spreads',
+    summary:
+      'Concept interpretation posts are spreading in fan communities and supporting fandom engagement.',
+    category: 'Fandom',
+    relatedArtistIds: ['aespa', 'newjeans'],
+    relatedKeywords: ['concept', 'analysis', 'fandom'],
+    issueScore: 78.5,
+    newsCount: 9,
+    searchGrowthRate: 42.5,
+    impact: 'Attention increased',
+    updatedAt: '15:20',
+    sourceNames: ['Community', 'SNS'],
+  },
+  {
+    id: 'issue-006',
+    rank: 6,
+    headline: 'Album preorder conversation increases',
+    summary:
+      'Album-related search demand and fan purchase conversation rose after preorder activity started.',
+    category: 'Album',
+    relatedArtistIds: ['ive', 'riize'],
+    relatedKeywords: ['preorder', 'album', 'first week'],
+    issueScore: 75.8,
+    newsCount: 11,
+    searchGrowthRate: 36.2,
+    impact: 'Artist index up',
+    updatedAt: '15:10',
+    sourceNames: ['News', 'Commerce'],
+  },
+  {
+    id: 'issue-007',
+    rank: 7,
+    headline: 'Member-focused clips increase search demand',
+    summary:
+      'Member-specific short-form clips increased individual and group-level search demand.',
+    category: 'SNS',
+    relatedArtistIds: ['ive', 'aespa', 'illit'],
+    relatedKeywords: ['short-form', 'member', 'viral'],
+    issueScore: 72.4,
+    newsCount: 8,
+    searchGrowthRate: 31.9,
+    impact: 'Attention increased',
+    updatedAt: '15:00',
+    sourceNames: ['TikTok', 'Instagram'],
+  },
+  {
+    id: 'issue-008',
+    rank: 8,
+    headline: 'Global chart mention boosts overseas reaction',
+    summary:
+      'Global chart-related mentions increased overseas reaction and music-platform interest.',
+    category: 'Music',
+    relatedArtistIds: ['lesserafim', 'babymonster'],
+    relatedKeywords: ['global chart', 'overseas', 'music'],
+    issueScore: 70.6,
+    newsCount: 14,
+    searchGrowthRate: 29.2,
+    impact: 'Artist index up',
+    updatedAt: '14:50',
+    sourceNames: ['Global news', 'Music platform'],
+  },
+  {
+    id: 'issue-009',
+    rank: 9,
+    headline: 'Rookie fandom name search grows',
+    summary:
+      'Fandom-name and member-name searches rose together, signaling rookie-market awareness.',
+    category: 'Fandom',
+    relatedArtistIds: ['tws', 'illit'],
+    relatedKeywords: ['fandom name', 'rookie', 'member'],
+    issueScore: 67.8,
+    newsCount: 6,
+    searchGrowthRate: 23.5,
+    impact: 'Attention increased',
+    updatedAt: '14:40',
+    sourceNames: ['Search', 'SNS'],
+  },
+  {
+    id: 'issue-010',
+    rank: 10,
+    headline: 'Agency schedule announcement lifts short-term attention',
+    summary:
+      'Official schedule and promotion announcements increased related keyword demand.',
+    category: 'Issue',
+    relatedArtistIds: ['nmixx', 'boynextdoor'],
+    relatedKeywords: ['official schedule', 'promotion', 'announcement'],
+    issueScore: 64.1,
+    newsCount: 5,
+    searchGrowthRate: 18.6,
+    impact: 'Limited impact',
+    updatedAt: '14:30',
+    sourceNames: ['Official', 'News'],
+  },
+];
+
+export const artistNewsItems: ArtistNewsItem[] = [
+  {
+    id: 'news-aespa-001',
+    artistId: 'aespa',
+    title: 'Comeback teaser increases fandom reaction',
+    summary: 'Search demand and video reaction rose after the teaser release.',
+    detail:
+      'After the comeback teaser, fan communities and SNS showed more keyword mentions, and YouTube viewing momentum strengthened. In FANDEX terms, search, YouTube, and SNS factors contributed to the price move.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '16:00',
+    relatedKeywords: ['comeback', 'teaser', 'search demand'],
+    importanceScore: 92,
+  },
+  {
+    id: 'news-aespa-002',
+    artistId: 'aespa',
+    title: 'Concept analysis content spreads',
+    summary: 'Fan interpretation posts are spreading across communities.',
+    detail:
+      'Concept and storyline analysis posts increased fandom engagement. This can be read as a signal for deeper fan-market involvement.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '15:30',
+    relatedKeywords: ['concept', 'analysis', 'fandom'],
+    importanceScore: 86,
+  },
+  {
+    id: 'news-aespa-003',
+    artistId: 'aespa',
+    title: 'Music video clips regain attention',
+    summary: 'Existing music video clips are spreading again on short-form platforms.',
+    detail:
+      'Fan edits and reaction clips increased short-form circulation, adding to YouTube and SNS factor scores.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '14:50',
+    relatedKeywords: ['music video', 'short-form', 'viral'],
+    importanceScore: 79,
+  },
+  {
+    id: 'news-aespa-004',
+    artistId: 'aespa',
+    title: 'Global fan reaction increases',
+    summary: 'Overseas fan accounts are driving more reaction.',
+    detail:
+      'Global fan accounts shared related content, lifting the global reaction score.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '14:20',
+    relatedKeywords: ['global reaction', 'global', 'fan accounts'],
+    importanceScore: 73,
+  },
+  {
+    id: 'news-aespa-005',
+    artistId: 'aespa',
+    title: 'Member keyword searches rise',
+    summary: 'Member-specific search demand increased alongside group interest.',
+    detail:
+      'Member clips and photos spread across SNS, supporting overall group search demand.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '13:40',
+    relatedKeywords: ['member', 'search demand', 'SNS'],
+    importanceScore: 70,
+  },
+  {
+    id: 'news-aespa-006',
+    artistId: 'aespa',
+    title: 'Official SNS post reaction rises',
+    summary: 'Official SNS post engagement accelerated.',
+    detail:
+      'Likes and comments increased faster than the previous baseline and were reflected in the SNS factor score.',
+    sourceName: 'FANDEX mock news',
+    sourceType: 'Other',
+    publishedAt: '13:00',
+    relatedKeywords: ['SNS', 'likes', 'comments'],
+    importanceScore: 68,
+  },
+];
+
+export function getNewsByArtistId(artistId: string): ArtistNewsItem[] {
+  const matchedNews = artistNewsItems.filter((item) => item.artistId === artistId);
+
+  if (matchedNews.length > 0) {
+    return matchedNews;
   }
-  
-  export function getLatestMarketPoint() {
-    return marketIndexHistory[marketIndexHistory.length - 1];
+
+  return artistNewsItems.map((item, index) => ({
+    ...item,
+    id: `${artistId}-news-${index + 1}`,
+    artistId,
+  }));
+}
+
+export function getLatestMarketPoint(): MarketIndexPoint {
+  return marketIndexHistory[marketIndexHistory.length - 1];
+}
+
+export function getIssueById(issueId: string): KpopIssue | undefined {
+  return trendingIssues.find((issue) => issue.id === issueId);
+}
+
+export function calculateCustomScore(
+  scores: Record<FactorKey, number>,
+  weights: FactorWeights
+): number {
+  const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+
+  if (totalWeight === 0) {
+    return 0;
   }
-  
-  export function getIssueById(issueId: string) {
-    return trendingIssues.find((issue) => issue.id === issueId);
-  }
-  
-  export function calculateCustomScore(
-    scores: Record<FactorKey, number>,
-    weights: FactorWeights
-  ) {
-    const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
-  
-    if (totalWeight === 0) {
-      return 0;
-    }
-  
-    return Object.entries(weights).reduce((sum, [key, weight]) => {
-      const factorKey = key as FactorKey;
-      return sum + scores[factorKey] * (weight / totalWeight);
-    }, 0);
-  }
+
+  return Object.entries(weights).reduce((sum, [key, weight]) => {
+    const factorKey = key as FactorKey;
+    return sum + scores[factorKey] * (weight / totalWeight);
+  }, 0);
+}

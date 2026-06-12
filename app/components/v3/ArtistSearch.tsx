@@ -45,13 +45,13 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-4">
         <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-          아티스트 검색
+          Artist search
         </p>
         <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-          관심 있는 아티스트를 바로 찾아보세요
+          Find artists by ticker, member, or agency
         </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          그룹명, 멤버명, 소속사, 티커로 검색할 수 있습니다.
+          Search across the FANDEX artist universe.
         </p>
       </div>
 
@@ -59,7 +59,7 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="예: 에스파, aespa, 카리나, SM, RIIZE"
+          placeholder="Try aespa, Karina, SM, RIIZE"
           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-cyan-300"
         />
 
@@ -69,7 +69,7 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
             onClick={() => setQuery('')}
             className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-slate-200 px-3 py-1 text-xs font-black text-slate-600 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300"
           >
-            지우기
+            Clear
           </button>
         )}
       </div>
@@ -90,10 +90,10 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
                         {artist.ticker}
                       </p>
                       <h3 className="mt-1 text-xl font-black text-slate-950 dark:text-white">
-                        {artist.nameKo}
+                        {artist.nameEn}
                       </h3>
                       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                        {artist.nameEn} · {artist.agency}
+                        {artist.agency}
                       </p>
                     </div>
 
@@ -107,14 +107,15 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
                   </p>
 
                   <p className="mt-3 text-sm font-black text-cyan-600 opacity-0 transition group-hover:opacity-100 dark:text-cyan-300">
-                    상세 보기 →
+                    View details
                   </p>
                 </Link>
               ))}
             </div>
           ) : (
             <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
-              검색 결과가 없습니다. 다른 그룹명, 멤버명, 소속사로 검색해보세요.
+              No matching artists found. Try another artist, member, agency, or
+              ticker.
             </div>
           )}
         </div>

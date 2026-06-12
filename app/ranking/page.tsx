@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { getMockArtistPrices } from '../data/mockPrices';
 
 function formatNumber(value: number) {
-  return new Intl.NumberFormat('ko-KR').format(value);
+  return new Intl.NumberFormat('en-US').format(value);
 }
 
 function formatLargeNumber(value: number) {
-  return new Intl.NumberFormat('ko-KR', {
+  return new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1,
   }).format(value);
@@ -19,13 +19,9 @@ export default function RankingPage() {
     (a, b) => b.changeRate - a.changeRate
   );
 
-  const volumeRanking = [...prices].sort(
-    (a, b) => b.volume - a.volume
-  );
+  const volumeRanking = [...prices].sort((a, b) => b.volume - a.volume);
 
-  const fanCapRanking = [...prices].sort(
-    (a, b) => b.fanCap - a.fanCap
-  );
+  const fanCapRanking = [...prices].sort((a, b) => b.fanCap - a.fanCap);
 
   return (
     <main className="min-h-screen bg-[#070A12] text-white">
@@ -35,31 +31,32 @@ export default function RankingPage() {
             FANDEX RANKING
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-            K-pop Artist Ranking
+            K-pop artist ranking
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-400 md:text-base">
-            FANDEX v2 mock price engine을 기준으로 상승률, 거래량, Fan Cap 순위를 보여줍니다.
+            Rank artists by simulated FANDEX price movement, attention volume,
+            and fan size value.
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
           <RankingCard
-            title="급등률 TOP"
-            description="현재 커스텀 없이 종합 주가 기준으로 가장 많이 오른 아티스트"
+            title="Top change"
+            description="Artists with the strongest simulated FANDEX price movement."
             items={risingRanking.slice(0, 5)}
             valueType="change"
           />
 
           <RankingCard
-            title="거래량 TOP"
-            description="최근 반응량이 가장 크게 움직인 아티스트"
+            title="Top volume"
+            description="Artists with the largest recent attention volume."
             items={volumeRanking.slice(0, 5)}
             valueType="volume"
           />
 
           <RankingCard
-            title="Fan Cap TOP"
-            description="가상 팬덤 시가총액이 가장 큰 아티스트"
+            title="Top fan size"
+            description="Artists with the largest simulated fandom value metric."
             items={fanCapRanking.slice(0, 5)}
             valueType="fanCap"
           />
@@ -108,11 +105,9 @@ function RankingCard({
                   </div>
 
                   <div>
-                    <p className="font-black text-white">
-                      {item.nameKo}
-                    </p>
+                    <p className="font-black text-white">{item.nameEn}</p>
                     <p className="font-mono text-xs text-slate-500">
-                      {item.ticker} · {item.agency}
+                      {item.ticker} / {item.agency}
                     </p>
                   </div>
                 </div>
@@ -139,9 +134,7 @@ function RankingCard({
                       <p className="font-mono text-lg font-black text-purple-300">
                         {formatNumber(item.volume)}
                       </p>
-                      <p className="text-xs text-slate-500">
-                        volume
-                      </p>
+                      <p className="text-xs text-slate-500">volume</p>
                     </>
                   )}
 
@@ -150,9 +143,7 @@ function RankingCard({
                       <p className="font-mono text-lg font-black text-cyan-300">
                         {formatLargeNumber(item.fanCap)}
                       </p>
-                      <p className="text-xs text-slate-500">
-                        Fan Cap
-                      </p>
+                      <p className="text-xs text-slate-500">fan size</p>
                     </>
                   )}
                 </div>

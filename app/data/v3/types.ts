@@ -1,41 +1,37 @@
 export type ArtistType =
-  | '걸그룹'
-  | '보이그룹'
-  | '혼성그룹'
-  | '솔로'
-  | '유닛'
-  | '프로젝트';
+  | 'Girl group'
+  | 'Boy group'
+  | 'Co-ed group'
+  | 'Solo'
+  | 'Unit'
+  | 'Project';
 
 export type ArtistStatus =
-  | '활동중'
-  | '휴식기'
-  | '군백기'
-  | '해체'
-  | '데뷔전'
-  | '프로젝트종료';
+  | 'Active'
+  | 'On break'
+  | 'Military hiatus'
+  | 'Disbanded'
+  | 'Pre-debut'
+  | 'Project ended';
 
 export type ArtistGeneration =
-  | '1세대'
-  | '2세대'
-  | '3세대'
-  | '4세대'
-  | '5세대'
-  | '신인';
+  | '1st gen'
+  | '2nd gen'
+  | '3rd gen'
+  | '4th gen'
+  | '5th gen'
+  | 'Rookie';
 
-export type CollectionPriority =
-  | '실시간'
-  | '높음'
-  | '보통'
-  | '낮음';
+export type CollectionPriority = 'Real time' | 'High' | 'Normal' | 'Low';
 
 export type CountryFocus =
-  | '한국'
-  | '일본'
-  | '미국'
-  | '동남아'
-  | '중국'
-  | '유럽'
-  | '글로벌';
+  | 'Korea'
+  | 'Japan'
+  | 'United States'
+  | 'Southeast Asia'
+  | 'China'
+  | 'Europe'
+  | 'Global';
 
 export type OfficialChannels = {
   youtube?: string;
@@ -118,24 +114,24 @@ export type MarketIndexPoint = {
 };
 
 export type IssueCategory =
-  | '컴백'
-  | '뮤직비디오'
-  | '음원'
-  | '앨범'
-  | '방송'
-  | '콘서트'
+  | 'Comeback'
+  | 'Music video'
+  | 'Music'
+  | 'Album'
+  | 'Broadcast'
+  | 'Concert'
   | 'SNS'
-  | '해외반응'
-  | '팬덤'
-  | '이슈';
+  | 'Global reaction'
+  | 'Fandom'
+  | 'Issue';
 
 export type IssueImpact =
-  | '종합지수 상승'
-  | '종합지수 하락'
-  | '개별 아티스트 상승'
-  | '개별 아티스트 하락'
-  | '관심도 증가'
-  | '영향 적음';
+  | 'Market index up'
+  | 'Market index down'
+  | 'Artist index up'
+  | 'Artist index down'
+  | 'Attention increased'
+  | 'Limited impact';
 
 export type KpopIssue = {
   id: string;
@@ -154,14 +150,14 @@ export type KpopIssue = {
 };
 
 export type NewsSourceType =
-  | '네이버뉴스'
-  | '공식공지'
-  | '유튜브'
-  | '인스타그램'
+  | 'News'
+  | 'Official'
+  | 'YouTube'
+  | 'Instagram'
   | 'X'
-  | '틱톡'
-  | '해외뉴스'
-  | '기타';
+  | 'TikTok'
+  | 'Global news'
+  | 'Other';
 
 export type ArtistNewsItem = {
   id: string;
@@ -178,13 +174,13 @@ export type ArtistNewsItem = {
 };
 
 export type CustomIndexPreset =
-  | '종합형'
-  | '음원중심'
-  | '영상중심'
-  | 'SNS중심'
-  | '해외반응'
-  | '팬덤중심'
-  | '회사체급';
+  | 'Balanced'
+  | 'Music focused'
+  | 'Video focused'
+  | 'SNS focused'
+  | 'Global reaction'
+  | 'Fandom focused'
+  | 'Company scale';
 
 export type CustomIndexConfig = {
   preset: CustomIndexPreset;
@@ -192,21 +188,41 @@ export type CustomIndexConfig = {
   enabledFactors: FactorKey[];
 };
 
+export type CustomIndexViewId =
+  | 'all'
+  | 'buzz'
+  | 'fandomExpansion'
+  | 'contentReaction'
+  | 'globalReaction'
+  | 'businessImpact'
+  | 'organicPublic'
+  | 'custom';
+
+export type CustomIndexView = {
+  id: CustomIndexViewId;
+  label: string;
+  shortLabel: string;
+  description: string;
+  question: string;
+  enabledFactors: FactorKey[];
+  interpretation: string;
+};
+
 export type ContentFormat =
-  | '인스타 카드뉴스'
-  | '릴스/쇼츠 대본'
-  | 'X 짧은 글'
-  | '스레드'
-  | '블로그 초안'
-  | '뉴스레터';
+  | 'Instagram carousel'
+  | 'Reels or Shorts script'
+  | 'X short post'
+  | 'Thread'
+  | 'Blog draft'
+  | 'Newsletter';
 
 export type ContentStatus =
-  | '아이디어'
-  | '초안생성'
-  | '검수중'
-  | '수정필요'
-  | '발행준비'
-  | '발행완료';
+  | 'Idea'
+  | 'Draft generated'
+  | 'In review'
+  | 'Needs revision'
+  | 'Ready to publish'
+  | 'Published';
 
 export type ContentBrief = {
   id: string;
@@ -235,22 +251,22 @@ export type ContentDraft = {
   updatedAt: string;
 };
 
-export type ThemeMode = '데이모드' | '나이트모드';
+export type ThemeMode = 'Day mode' | 'Night mode';
 
 export type ApiDataSource =
-  | '네이버뉴스검색'
-  | '네이버데이터랩'
-  | '유튜브데이터API'
+  | 'News search'
+  | 'Search trend data'
+  | 'YouTube Data API'
   | 'GDELT'
   | 'OpenDART'
   | 'OpenAI'
-  | '수동입력'
+  | 'Manual input'
   | 'Mock';
 
 export type CollectionLog = {
   id: string;
   source: ApiDataSource;
-  status: '성공' | '실패' | '대기';
+  status: 'Success' | 'Failed' | 'Pending';
   message: string;
   collectedAt: string;
 };

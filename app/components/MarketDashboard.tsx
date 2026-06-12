@@ -15,11 +15,11 @@ import {
 const INITIAL_MARKET_TIME = new Date('2026-01-01T00:00:00.000Z');
 
 function formatNumber(value: number) {
-  return new Intl.NumberFormat('ko-KR').format(value);
+  return new Intl.NumberFormat('en-US').format(value);
 }
 
 function formatLargeNumber(value: number) {
-  return new Intl.NumberFormat('ko-KR', {
+  return new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1,
   }).format(value);
@@ -27,12 +27,12 @@ function formatLargeNumber(value: number) {
 
 function getSignalLabel(signal: SignalType) {
   const labels: Record<SignalType, string> = {
-    surging: '급등',
-    rising: '상승',
-    neutral: '중립',
-    falling: '하락',
-    plunging: '급락',
-    volume_spike: '거래량 폭증',
+    surging: 'Surging',
+    rising: 'Rising',
+    neutral: 'Neutral',
+    falling: 'Falling',
+    plunging: 'Dropping',
+    volume_spike: 'Volume spike',
   };
 
   return labels[signal];
@@ -56,30 +56,26 @@ export default function MarketDashboard() {
   const [enabledFactors, setEnabledFactors] =
     useState<FactorKey[]>(allFactorKeys);
 
-    useEffect(() => {
-      const updateTime = () => {
-        setNow(new Date());
-      };
-    
-      updateTime();
-    
-      const timer = setInterval(updateTime, 10_000);
-    
-      return () => clearInterval(timer);
-    }, []);
-    const prices = useMemo(() => {
-      return getMockArtistPrices({
-        enabledFactors,
-        now: renderTime,
-      });
-    }, [enabledFactors, renderTime]);
+  useEffect(() => {
+    const updateTime = () => setNow(new Date());
+    updateTime();
+    const timer = setInterval(updateTime, 10_000);
+    return () => clearInterval(timer);
+  }, []);
 
-    const defaultPrices = useMemo(() => {
-      return getMockArtistPrices({
-        enabledFactors: allFactorKeys,
-        now: renderTime,
-      });
-    }, [renderTime]);
+  const prices = useMemo(() => {
+    return getMockArtistPrices({
+      enabledFactors,
+      now: renderTime,
+    });
+  }, [enabledFactors, renderTime]);
+
+  const defaultPrices = useMemo(() => {
+    return getMockArtistPrices({
+      enabledFactors: allFactorKeys,
+      now: renderTime,
+    });
+  }, [renderTime]);
 
   const defaultPriceMap = useMemo(() => {
     return new Map(defaultPrices.map((item) => [item.artistId, item]));
@@ -127,74 +123,36 @@ export default function MarketDashboard() {
               FANDEX MARKET
             </p>
             <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-              K-pop Artist Stock Board
+              K-pop artist market board
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-400 md:text-base">
-              아티스트의 음원·콘텐츠·SNS·검색·해외반응·팬덤·소속사 요소를
-              종합해 주식 시세처럼 보여주는 FANDEX v2 mock market입니다.
+              A simulated market dashboard for artist price, momentum,
+              attention volume, and fandom value signals.
             </p>
           </div>
 
           <div className="rounded-2xl border border-slate-800 bg-slate-950/70 px-5 py-4">
             <p className="text-xs text-slate-500">Last updated</p>
             <p className="mt-1 font-mono text-sm text-cyan-300">
-            {now ? now.toLocaleString('ko-KR') : '동기화 중...'}
+              {now ? now.toLocaleString('en-US') : 'Loading...'}
             </p>
           </div>
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-          <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
-            <p className="text-sm text-cyan-200">KMI Composite</p>
-            <p className="mt-2 text-3xl font-black">
-              {marketSummary.kmiComposite}
-            </p>
-            <p className="mt-1 text-xs text-slate-400">
-              K-pop Market Index
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
-            <p className="text-sm text-slate-400">상승 종목</p>
-            <p className="mt-2 text-3xl font-black text-red-300">
-              {marketSummary.risingCount}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">Rising artists</p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
-            <p className="text-sm text-slate-400">하락 종목</p>
-            <p className="mt-2 text-3xl font-black text-blue-300">
-              {marketSummary.fallingCount}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">Falling artists</p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
-            <p className="text-sm text-slate-400">총 거래량</p>
-            <p className="mt-2 text-3xl font-black">
-              {formatLargeNumber(marketSummary.totalVolume)}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">Attention volume</p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
-            <p className="text-sm text-slate-400">급등주</p>
-            <p className="mt-2 text-2xl font-black text-red-300">
-              {marketSummary.topGainer?.ticker}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">
-              {marketSummary.topGainer?.changeRate}%
-            </p>
-          </div>
+          <SummaryCard label="KMI Composite" value={`${marketSummary.kmiComposite}`} subValue="K-pop Market Index" />
+          <SummaryCard label="Rising artists" value={`${marketSummary.risingCount}`} subValue="Positive momentum" tone="text-red-300" />
+          <SummaryCard label="Falling artists" value={`${marketSummary.fallingCount}`} subValue="Negative momentum" tone="text-blue-300" />
+          <SummaryCard label="Total volume" value={formatLargeNumber(marketSummary.totalVolume)} subValue="Attention volume" />
+          <SummaryCard label="Top gainer" value={marketSummary.topGainer?.ticker ?? '-'} subValue={`${marketSummary.topGainer?.changeRate ?? '-'}%`} tone="text-red-300" />
         </div>
 
         <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
           <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
-              <h2 className="text-xl font-black">Custom Index Builder</h2>
+              <h2 className="text-xl font-black">Custom index builder</h2>
               <p className="mt-1 text-sm text-slate-400">
-                요소를 켜고 끄면 커스텀 주가 기준으로 테이블이 다시 계산됩니다.
+                Toggle factors to recalculate the simulated artist table.
               </p>
             </div>
 
@@ -202,7 +160,7 @@ export default function MarketDashboard() {
               onClick={resetFactors}
               className="rounded-full border border-slate-700 px-4 py-2 text-sm font-bold text-slate-200 hover:border-cyan-300 hover:text-cyan-300"
             >
-              기본값으로 되돌리기
+              Reset factors
             </button>
           </div>
 
@@ -218,7 +176,7 @@ export default function MarketDashboard() {
                       : 'bg-slate-900 text-slate-300 hover:bg-slate-800'
                   }`}
                 >
-                  {preset.label}
+                  {presetKey}
                 </button>
               )
             )}
@@ -239,7 +197,7 @@ export default function MarketDashboard() {
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <p className="font-bold">{factor.label}</p>
+                    <p className="font-bold capitalize">{factor.key}</p>
                     <span
                       className={`rounded-full px-2 py-1 text-xs font-black ${
                         isEnabled
@@ -251,10 +209,7 @@ export default function MarketDashboard() {
                     </span>
                   </div>
                   <p className="mt-2 text-xs leading-5 text-slate-400">
-                    {factor.description}
-                  </p>
-                  <p className="mt-2 text-xs text-slate-500">
-                    기본 가중치 {factor.defaultWeight}% · {factor.speed === 'fast' ? '빠른 신호' : '느린 신호'}
+                    Weight {factor.defaultWeight}% / {factor.speed === 'fast' ? 'fast signal' : 'slow signal'}
                   </p>
                 </button>
               );
@@ -264,9 +219,9 @@ export default function MarketDashboard() {
 
         <div className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-950/70">
           <div className="border-b border-slate-800 px-5 py-4">
-            <h2 className="text-xl font-black">Real-time Artist Prices</h2>
+            <h2 className="text-xl font-black">Real-time artist prices</h2>
             <p className="mt-1 text-sm text-slate-400">
-              기본 FANDEX Price와 커스텀 조건이 반영된 Custom Price를 함께 비교합니다.
+              Compare official FANDEX price with the selected custom price view.
             </p>
           </div>
 
@@ -301,12 +256,8 @@ export default function MarketDashboard() {
                         {artistPrice.ticker}
                       </td>
                       <td className="px-5 py-4">
-                        <p className="font-bold text-white">
-                          {artistPrice.nameKo}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {artistPrice.nameEn} · {artistPrice.agency}
-                        </p>
+                        <p className="font-bold text-white">{artistPrice.nameEn}</p>
+                        <p className="text-xs text-slate-500">{artistPrice.agency}</p>
                       </td>
                       <td className="px-5 py-4 text-right font-mono text-lg font-black">
                         {artistPrice.price.toFixed(2)}
@@ -353,21 +304,40 @@ export default function MarketDashboard() {
         </div>
 
         <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
-          <h2 className="text-xl font-black">Market Insight</h2>
+          <h2 className="text-xl font-black">Market insight</h2>
           <p className="mt-3 text-sm leading-6 text-slate-400">
-            현재 선택된 지표 기준으로 가장 강한 종목은{' '}
+            Based on the selected index view, the strongest mover is{' '}
             <span className="font-black text-red-300">
-              {marketSummary.topGainer?.nameKo}
+              {marketSummary.topGainer?.nameEn}
             </span>
-            입니다. 거래량 기준으로는{' '}
+            . By volume,{' '}
             <span className="font-black text-purple-300">
-              {marketSummary.topVolume?.nameKo}
-            </span>
-            가 가장 크게 움직이고 있습니다. 이 문장은 나중에 Content Lab에서
-            SNS 콘텐츠 문구로 자동 변환될 수 있습니다.
+              {marketSummary.topVolume?.nameEn}
+            </span>{' '}
+            has the largest attention signal.
           </p>
         </div>
       </section>
     </main>
+  );
+}
+
+function SummaryCard({
+  label,
+  value,
+  subValue,
+  tone = 'text-white',
+}: {
+  label: string;
+  value: string;
+  subValue: string;
+  tone?: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
+      <p className="text-sm text-slate-400">{label}</p>
+      <p className={`mt-2 text-3xl font-black ${tone}`}>{value}</p>
+      <p className="mt-1 text-xs text-slate-500">{subValue}</p>
+    </div>
   );
 }
