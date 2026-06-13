@@ -15,7 +15,7 @@ export const factorDefinitionsV3: FactorDefinitionV3[] = [
     key: 'music',
     label: 'Music',
     easyLabel: 'Music performance',
-    description: 'Reflects charting, streaming, downloads, and music-platform reaction.',
+    description: 'Reflects absolute charting, streaming, downloads, and music-platform reaction.',
     defaultWeight: 18,
     helpText: 'Shows how strongly songs are being consumed and discussed.',
   },
@@ -31,7 +31,7 @@ export const factorDefinitionsV3: FactorDefinitionV3[] = [
     key: 'youtube',
     label: 'YouTube',
     easyLabel: 'Video reaction',
-    description: 'Reflects music video views, official content views, and video engagement.',
+    description: 'Reflects absolute music video views, official content views, and video engagement.',
     defaultWeight: 16,
     helpText: 'Shows whether video content is spreading.',
   },
@@ -39,7 +39,7 @@ export const factorDefinitionsV3: FactorDefinitionV3[] = [
     key: 'sns',
     label: 'SNS',
     easyLabel: 'SNS reaction',
-    description: 'Reflects Instagram, X, TikTok, and official-channel social engagement.',
+    description: 'Reflects Instagram, X, TikTok, and official-channel social engagement volume.',
     defaultWeight: 12,
     helpText: 'Shows likes, shares, comments, and conversation velocity.',
   },
@@ -47,7 +47,7 @@ export const factorDefinitionsV3: FactorDefinitionV3[] = [
     key: 'search',
     label: 'Search',
     easyLabel: 'Search demand',
-    description: 'Reflects search volume and query growth.',
+    description: 'Reflects absolute search volume and query growth.',
     defaultWeight: 10,
     helpText: 'Shows how much people are actively looking up the artist.',
   },
@@ -178,7 +178,7 @@ function createCustomIndexView({
 export const customIndexViews: CustomIndexViewPreset[] = [
   createCustomIndexView({
     id: 'all',
-    label: 'Balanced',
+    label: '종합 주가',
     shortLabel: 'Official FANDEX',
     description:
       'A balanced FANDEX view across music, album, video, SNS, search, news, global, fandom, and company factors.',
@@ -189,7 +189,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'contentReaction',
-    label: 'Video focused',
+    label: '콘텐츠 반응 중심',
     shortLabel: 'Content reaction',
     description:
       'Weights YouTube and SNS reaction more heavily to evaluate content-led momentum.',
@@ -207,7 +207,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'fandomExpansion',
-    label: 'Fandom focused',
+    label: '팬덤 확장 중심',
     shortLabel: 'Fandom expansion',
     description:
       'Weights fandom, album, SNS, and global signals to evaluate fanbase expansion.',
@@ -225,7 +225,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'globalReaction',
-    label: 'Global reaction',
+    label: '해외 반응 중심',
     shortLabel: 'Global reaction',
     description:
       'Weights overseas reaction, YouTube, SNS, and music signals to evaluate global momentum.',
@@ -243,7 +243,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'businessImpact',
-    label: 'Company scale',
+    label: '사업성 중심',
     shortLabel: 'Business impact',
     description:
       'Weights company scale, fandom base, and commercial stability signals for longer-horizon market context.',
@@ -261,7 +261,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'buzz',
-    label: 'SNS focused',
+    label: '화제성 중심',
     shortLabel: 'Buzz signal',
     description:
       'Weights SNS, search, news, and YouTube to identify fast attention spikes.',
@@ -279,7 +279,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'organicPublic',
-    label: 'Music focused',
+    label: '대중 확산 중심',
     shortLabel: 'Public demand',
     description:
       'Weights music, search, and SNS signals to evaluate broad public demand.',
@@ -297,7 +297,7 @@ export const customIndexViews: CustomIndexViewPreset[] = [
   }),
   createCustomIndexView({
     id: 'custom',
-    label: 'Balanced',
+    label: '직접 선택',
     shortLabel: 'Custom view',
     description:
       'Choose factors manually to simulate a custom artist market lens.',
@@ -370,6 +370,23 @@ export function getArtistPriceHistory(artistId: string): ArtistPricePoint[] {
       volume: Math.round(12000 + artistIndex * 1800 + index * 2500),
       fanSizeValue: Math.round(price * (900000 + artistIndex * 90000)),
       scores: createScores(artistIndex + index),
+      absoluteMetrics: {
+        music: Math.round(820000 + artistIndex * 52000 + index * 18000),
+        album: Math.round(140000 + artistIndex * 12000 + index * 3500),
+        youtube: Math.round(1800000 + artistIndex * 170000 + index * 64000),
+        sns: Math.round(96000 + artistIndex * 8700 + index * 4200),
+        search: Math.round(76000 + artistIndex * 5200 + index * 3100),
+        news: Math.round(32 + artistIndex * 3 + index * 2),
+        global: Math.round(118000 + artistIndex * 9400 + index * 4700),
+        fandom: Math.round(84000 + artistIndex * 7600 + index * 3600),
+      },
+      lifecycleAdjustment: {
+        albumReleaseCycle: 0,
+        comebackPeriod: index >= 4 ? 1.08 : 1,
+        activityPeriod: 1.03,
+        hiatusRetention: 1,
+      },
+      sourceStatus: 'Mock needs verification',
     };
   });
 }
@@ -397,6 +414,11 @@ export const trendingIssues: KpopIssue[] = [
     impact: 'Market index up',
     updatedAt: '16:00',
     sourceNames: ['News', 'YouTube', 'SNS'],
+    sourceType: 'Other',
+    confidence: 72,
+    sourceData: ['Mock news count', 'Mock search growth', 'Mock SNS reaction'],
+    graphImpact: 1.8,
+    estimatedPriceImpact: 2.4,
   },
   {
     id: 'issue-002',
@@ -413,6 +435,11 @@ export const trendingIssues: KpopIssue[] = [
     impact: 'Attention increased',
     updatedAt: '15:50',
     sourceNames: ['YouTube', 'X', 'TikTok'],
+    sourceType: 'Other',
+    confidence: 68,
+    sourceData: ['Mock short-form reaction', 'Mock SNS reaction'],
+    graphImpact: 1.1,
+    estimatedPriceImpact: 1.6,
   },
   {
     id: 'issue-003',
@@ -429,6 +456,11 @@ export const trendingIssues: KpopIssue[] = [
     impact: 'Artist index up',
     updatedAt: '15:40',
     sourceNames: ['Global news', 'YouTube'],
+    sourceType: 'Global news',
+    confidence: 66,
+    sourceData: ['Mock global news volume', 'Mock YouTube replay'],
+    graphImpact: 0.9,
+    estimatedPriceImpact: 1.2,
   },
   {
     id: 'issue-004',
@@ -552,10 +584,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Search demand and video reaction rose after the teaser release.',
     detail:
       'After the comeback teaser, fan communities and SNS showed more keyword mentions, and YouTube viewing momentum strengthened. In FANDEX terms, search, YouTube, and SNS factors contributed to the price move.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '16:00',
     relatedKeywords: ['comeback', 'teaser', 'search demand'],
+    impactScore: 92,
+    estimatedPriceImpact: 2.4,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 92,
   },
   {
@@ -565,10 +602,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Fan interpretation posts are spreading across communities.',
     detail:
       'Concept and storyline analysis posts increased fandom engagement. This can be read as a signal for deeper fan-market involvement.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '15:30',
     relatedKeywords: ['concept', 'analysis', 'fandom'],
+    impactScore: 86,
+    estimatedPriceImpact: 1.7,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 86,
   },
   {
@@ -578,10 +620,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Existing music video clips are spreading again on short-form platforms.',
     detail:
       'Fan edits and reaction clips increased short-form circulation, adding to YouTube and SNS factor scores.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '14:50',
     relatedKeywords: ['music video', 'short-form', 'viral'],
+    impactScore: 79,
+    estimatedPriceImpact: 1.2,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 79,
   },
   {
@@ -591,10 +638,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Overseas fan accounts are driving more reaction.',
     detail:
       'Global fan accounts shared related content, lifting the global reaction score.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '14:20',
     relatedKeywords: ['global reaction', 'global', 'fan accounts'],
+    impactScore: 73,
+    estimatedPriceImpact: 0.9,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 73,
   },
   {
@@ -604,10 +656,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Member-specific search demand increased alongside group interest.',
     detail:
       'Member clips and photos spread across SNS, supporting overall group search demand.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '13:40',
     relatedKeywords: ['member', 'search demand', 'SNS'],
+    impactScore: 70,
+    estimatedPriceImpact: 0.8,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 70,
   },
   {
@@ -617,10 +674,15 @@ export const artistNewsItems: ArtistNewsItem[] = [
     summary: 'Official SNS post engagement accelerated.',
     detail:
       'Likes and comments increased faster than the previous baseline and were reflected in the SNS factor score.',
+    source: 'FANDEX mock news',
     sourceName: 'FANDEX mock news',
     sourceType: 'Other',
+    relatedArtists: ['aespa'],
     publishedAt: '13:00',
     relatedKeywords: ['SNS', 'likes', 'comments'],
+    impactScore: 68,
+    estimatedPriceImpact: 0.6,
+    sourceStatus: 'Mock needs verification',
     importanceScore: 68,
   },
 ];

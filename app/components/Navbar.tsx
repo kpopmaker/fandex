@@ -9,7 +9,6 @@ const navItems = [
   { href: '/ranking', label: 'Ranking' },
   { href: '/compare', label: 'Compare' },
   { href: '/signals', label: 'Signals' },
-  { href: '/content-lab', label: 'Content Lab' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/about', label: 'About' },
 ];

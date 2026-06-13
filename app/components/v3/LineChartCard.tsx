@@ -9,7 +9,7 @@ type LineChartCardProps = {
 };
 
 function formatValue(value: number, suffix = '') {
-  return `${new Intl.NumberFormat('ko-KR', {
+  return `${new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 2,
   }).format(value)}${suffix}`;
 }
@@ -48,24 +48,19 @@ export default function LineChartCard({
   const chartWidth = 800;
   const chartHeight = 240;
   const polylinePoints = createPolylinePoints(points, chartWidth, chartHeight);
-
   const latestPoint = points[points.length - 1];
   const firstPoint = points[0];
-
   const changeValue =
-    latestPoint && firstPoint
-      ? latestPoint.value - firstPoint.value
-      : 0;
-
+    latestPoint && firstPoint ? latestPoint.value - firstPoint.value : 0;
   const changeRate =
     latestPoint && firstPoint && firstPoint.value !== 0
       ? (changeValue / firstPoint.value) * 100
       : 0;
-
   const isUp = changeValue >= 0;
-
-  const maxValue = points.length > 0 ? Math.max(...points.map((point) => point.value)) : 0;
-  const minValue = points.length > 0 ? Math.min(...points.map((point) => point.value)) : 0;
+  const maxValue =
+    points.length > 0 ? Math.max(...points.map((point) => point.value)) : 0;
+  const minValue =
+    points.length > 0 ? Math.min(...points.map((point) => point.value)) : 0;
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -84,7 +79,7 @@ export default function LineChartCard({
 
         {latestPoint && (
           <div className="text-left md:text-right">
-            <p className="text-sm text-slate-500">현재값</p>
+            <p className="text-sm text-slate-500">Current value</p>
             <p className="mt-1 font-mono text-3xl font-black text-slate-950 dark:text-white">
               {formatValue(latestPoint.value, valueSuffix)}
             </p>
@@ -105,11 +100,11 @@ export default function LineChartCard({
         style={{ height }}
       >
         <div className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:bg-slate-950/80 dark:text-slate-400">
-          최고 {formatValue(maxValue, valueSuffix)}
+          High {formatValue(maxValue, valueSuffix)}
         </div>
 
         <div className="absolute bottom-4 left-4 z-10 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:bg-slate-950/80 dark:text-slate-400">
-          최저 {formatValue(minValue, valueSuffix)}
+          Low {formatValue(minValue, valueSuffix)}
         </div>
 
         <svg
@@ -117,15 +112,8 @@ export default function LineChartCard({
           className="h-full w-full"
           preserveAspectRatio="none"
           role="img"
-          aria-label={`${title} 꺾은선 그래프`}
+          aria-label={`${title} line chart`}
         >
-          <defs>
-            <linearGradient id={`gradient-${title}`} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-
           <line
             x1="0"
             y1="60"
@@ -171,7 +159,6 @@ export default function LineChartCard({
             const min = Math.min(...values);
             const max = Math.max(...values);
             const range = max - min || 1;
-
             const x = (index / (points.length - 1)) * chartWidth;
             const y = chartHeight - ((point.value - min) / range) * chartHeight;
 

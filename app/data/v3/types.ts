@@ -24,6 +24,11 @@ export type ArtistGeneration =
 
 export type CollectionPriority = 'Real time' | 'High' | 'Normal' | 'Low';
 
+export type SourceStatus =
+  | 'Verified'
+  | 'Partially verified'
+  | 'Mock needs verification';
+
 export type CountryFocus =
   | 'Korea'
   | 'Japan'
@@ -44,6 +49,33 @@ export type OfficialChannels = {
   melon?: string;
 };
 
+export type AlbumRelease = {
+  title: string;
+  releasedAt: string;
+  sourceStatus?: SourceStatus;
+};
+
+export type ArtistLifecycleMetadata = {
+  albumReleaseDates?: AlbumRelease[];
+  latestComebackDate?: string;
+  comebackPeriodStart?: string;
+  comebackPeriodEnd?: string;
+  activityPeriodStart?: string;
+  activityPeriodEnd?: string;
+  hiatusPeriodStart?: string;
+  hiatusPeriodEnd?: string;
+  comebackReactionStrength?: number;
+  activityEffect?: number;
+  hiatusRetention?: number;
+  sourceStatus?: SourceStatus;
+};
+
+export type RepresentativeSong = {
+  title: string;
+  releasedAt?: string;
+  sourceStatus?: SourceStatus;
+};
+
 export type ArtistV3 = {
   id: string;
   ticker: string;
@@ -61,6 +93,12 @@ export type ArtistV3 = {
   countryFocus: CountryFocus[];
   collectionPriority: CollectionPriority;
   officialChannels: OfficialChannels;
+  officialSnsChannels?: OfficialChannels;
+  representativeSongs?: RepresentativeSong[];
+  mainMarkets?: CountryFocus[];
+  lifecycle?: ArtistLifecycleMetadata;
+  sourceStatus?: SourceStatus;
+  dataNotes?: string;
   shortIntro: string;
   profileImage?: string;
 };
@@ -102,6 +140,14 @@ export type ArtistPricePoint = {
   volume: number;
   fanSizeValue: number;
   scores: FactorScores;
+  absoluteMetrics?: Partial<Record<FactorKey, number>>;
+  lifecycleAdjustment?: {
+    albumReleaseCycle?: number;
+    comebackPeriod?: number;
+    activityPeriod?: number;
+    hiatusRetention?: number;
+  };
+  sourceStatus?: SourceStatus;
 };
 
 export type MarketIndexPoint = {
@@ -147,6 +193,12 @@ export type KpopIssue = {
   impact: IssueImpact;
   updatedAt: string;
   sourceNames: string[];
+  sourceType?: NewsSourceType;
+  relatedNewsIds?: string[];
+  confidence?: number;
+  sourceData?: string[];
+  graphImpact?: number;
+  estimatedPriceImpact?: number;
 };
 
 export type NewsSourceType =
@@ -165,11 +217,16 @@ export type ArtistNewsItem = {
   title: string;
   summary: string;
   detail: string;
+  source?: string;
   sourceName: string;
   sourceType: NewsSourceType;
   url?: string;
   publishedAt: string;
+  relatedArtists?: string[];
   relatedKeywords: string[];
+  impactScore?: number;
+  estimatedPriceImpact?: number;
+  sourceStatus?: SourceStatus;
   importanceScore: number;
 };
 
@@ -180,7 +237,15 @@ export type CustomIndexPreset =
   | 'SNS focused'
   | 'Global reaction'
   | 'Fandom focused'
-  | 'Company scale';
+  | 'Company scale'
+  | '종합 주가'
+  | '화제성 중심'
+  | '팬덤 확장 중심'
+  | '콘텐츠 반응 중심'
+  | '해외 반응 중심'
+  | '사업성 중심'
+  | '대중 확산 중심'
+  | '직접 선택';
 
 export type CustomIndexConfig = {
   preset: CustomIndexPreset;
@@ -254,12 +319,15 @@ export type ContentDraft = {
 export type ThemeMode = 'Day mode' | 'Night mode';
 
 export type ApiDataSource =
-  | 'News search'
-  | 'Search trend data'
+  | 'Naver News Search API'
+  | 'Naver DataLab'
   | 'YouTube Data API'
   | 'GDELT'
   | 'OpenDART'
   | 'OpenAI'
+  | 'Supabase'
+  | 'Official announcement'
+  | 'Agency press release'
   | 'Manual input'
   | 'Mock';
 

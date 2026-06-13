@@ -18,6 +18,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'United States', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 4th generation girl group with strong concept identity, performance power, and global fan-market reaction.',
   },
@@ -38,6 +44,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 4th generation girl group with strong mainstream awareness, brand power, and fandom-driven attention.',
   },
@@ -58,6 +70,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 5th generation boy group with strong rookie momentum, fandom conversation, and issue sensitivity.',
   },
@@ -77,6 +95,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 5th generation girl group with fast early awareness and short-form reaction signals.',
   },
@@ -96,6 +120,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'Global'],
     collectionPriority: 'High',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 5th generation boy group gaining awareness through fresh positioning and youth-market response.',
   },
@@ -116,6 +146,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'United States', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 4th generation girl group with performance-led identity and strong global fan-market reaction.',
   },
@@ -136,6 +172,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'United States', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A major K-pop girl group with strong music, fashion, brand, and cultural attention signals.',
   },
@@ -156,6 +198,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Global'],
     collectionPriority: 'High',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 4th generation girl group with strong vocal-performance signals and active fandom response.',
   },
@@ -175,6 +223,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Southeast Asia', 'Japan', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 5th generation girl group with YG-backed global fandom momentum and strong overseas response.',
   },
@@ -194,6 +248,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'Global'],
     collectionPriority: 'High',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A 5th generation boy group with relatable positioning and strong self-produced content reaction.',
   },
@@ -214,6 +274,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['United States', 'Japan', 'Europe', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A leading K-pop boy group with strong global fandom, album demand, and self-produced identity.',
   },
@@ -234,6 +300,12 @@ export const artistUniverse: ArtistV3[] = [
     countryFocus: ['Korea', 'Japan', 'United States', 'Global'],
     collectionPriority: 'Real time',
     officialChannels: {},
+    officialSnsChannels: {},
+    representativeSongs: [],
+    lifecycle: { albumReleaseDates: [], sourceStatus: 'Mock needs verification' },
+    sourceStatus: 'Mock needs verification',
+    dataNotes:
+      'Seed artist profile for product validation. Verify factual fields before using as commercial data.',
     shortIntro:
       'A major 3rd generation boy group with strong fandom purchasing power and concert mobilization.',
   },
