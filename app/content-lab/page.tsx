@@ -67,6 +67,11 @@ export default function ContentLabPage() {
                 content ideas, captions, scripts, visual direction, and
                 upload-ready planning checklists.
               </p>
+              <p className="mt-4 max-w-3xl rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-sm font-bold leading-6 text-yellow-100">
+                Private/admin planning workspace. This page is intentionally
+                hidden from public navigation and is for internal content
+                planning review only.
+              </p>
               <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm font-bold leading-6 text-cyan-100">
                 This is a mock planning workflow. FANDEX does not upload,
                 publish, or connect to external creative or SNS platforms yet.

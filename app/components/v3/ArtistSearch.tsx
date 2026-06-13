@@ -45,13 +45,13 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-4">
         <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-          Artist search
+          아티스트 검색
         </p>
         <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-          Find artists by ticker, member, or agency
+          이름, 멤버, 소속사, 티커로 찾기
         </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Search across the FANDEX artist universe.
+          한국어 이름, 영어 이름, 멤버명, 소속사, 티커, 키워드를 함께 검색합니다.
         </p>
       </div>
 
@@ -59,7 +59,7 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Try aespa, Karina, SM, RIIZE"
+          placeholder="예: aespa, Karina, SM, RIIZE"
           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-cyan-300"
         />
 
@@ -69,7 +69,7 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
             onClick={() => setQuery('')}
             className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-slate-200 px-3 py-1 text-xs font-black text-slate-600 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300"
           >
-            Clear
+            지우기
           </button>
         )}
       </div>
@@ -106,16 +106,15 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
                     {artist.shortIntro}
                   </p>
 
-                  <p className="mt-3 text-sm font-black text-cyan-600 opacity-0 transition group-hover:opacity-100 dark:text-cyan-300">
-                    View details
+                      <p className="mt-3 text-sm font-black text-cyan-600 opacity-0 transition group-hover:opacity-100 dark:text-cyan-300">
+                    상세 보기
                   </p>
                 </Link>
               ))}
             </div>
           ) : (
             <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
-              No matching artists found. Try another artist, member, agency, or
-              ticker.
+              검색 결과가 없습니다. 다른 아티스트, 멤버, 소속사, 티커를 입력해 보세요.
             </div>
           )}
         </div>

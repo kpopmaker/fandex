@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/', label: 'Market' },
-  { href: '/artists', label: 'Artists' },
-  { href: '/ranking', label: 'Ranking' },
-  { href: '/compare', label: 'Compare' },
-  { href: '/signals', label: 'Signals' },
-  { href: '/methodology', label: 'Methodology' },
-  { href: '/about', label: 'About' },
+  { href: '/', label: '시장' },
+  { href: '/artists', label: '아티스트' },
+  { href: '/compare', label: '아티스트 비교' },
+  { href: '/ranking', label: '순위' },
+  { href: '/signals', label: '시장 신호' },
+  { href: '/methodology', label: '산정 방식' },
+  { href: '/about', label: '소개' },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -64,7 +64,7 @@ export default function Navbar() {
 
         <div className="hidden lg:block">
           <span className="rounded-full bg-slate-950 px-5 py-2 text-xs font-black text-slate-400">
-            Mock Market v2
+            Mock Market v4
           </span>
         </div>
       </nav>

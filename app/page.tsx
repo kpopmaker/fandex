@@ -1,270 +1,337 @@
 import Link from 'next/link';
+import ArtistSearch from './components/v3/ArtistSearch';
+import { artistUniverse, getArtistV3ById } from './data/v3/artistUniverse';
 import {
   getLatestMarketPoint,
   marketChartPoints,
   trendingIssues,
 } from './data/v3/mockData';
-import { getArtistRankingRows } from './data/v3/artistRanking';
+import type { KpopIssue } from './data/v3/types';
+
+function formatPercent(value: number) {
+  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+}
+
+function formatLargeNumber(value: number) {
+  return new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat('ko-KR', {
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function getIssueBadge(issue: KpopIssue) {
+  if (issue.impact.toLowerCase().includes('down')) {
+    return '주의';
+  }
+
+  if (issue.relatedArtistIds.length > 2) {
+    return '혼조';
+  }
+
+  if (issue.impact.toLowerCase().includes('up')) {
+    return '상승';
+  }
+
+  return '주목';
+}
+
+function getIssueBadgeClass(badge: string) {
+  const classes: Record<string, string> = {
+    상승: 'bg-red-400/10 text-red-300',
+    주목: 'bg-cyan-400/10 text-cyan-300',
+    혼조: 'bg-violet-400/10 text-violet-300',
+    주의: 'bg-blue-400/10 text-blue-300',
+  };
+
+  return classes[badge] ?? classes.주목;
+}
+
+function getRelatedArtistLabel(issue: KpopIssue) {
+  const names = issue.relatedArtistIds
+    .map((artistId) => getArtistV3ById(artistId))
+    .filter((artist): artist is NonNullable<typeof artist> => Boolean(artist))
+    .map((artist) => artist.nameEn);
+
+  return names.length > 0 ? names.join(', ') : '시장 전체';
+}
+
+function getHomepageIssueRows() {
+  const fallbackIssues: KpopIssue[] = [
+    {
+      id: 'homepage-issue-fallback-001',
+      rank: 1,
+      headline: 'K-pop 시장 검색량 상승 예시',
+      summary: '시장 전체 검색 흐름이 증가하는 상황을 가정한 mock 이슈입니다.',
+      category: 'Issue',
+      relatedArtistIds: [],
+      relatedKeywords: ['search', 'market'],
+      issueScore: 60,
+      newsCount: 0,
+      searchGrowthRate: 12,
+      impact: 'Attention increased',
+      updatedAt: 'mock',
+      sourceNames: ['Mock'],
+    },
+    {
+      id: 'homepage-issue-fallback-002',
+      rank: 2,
+      headline: '해외 반응 증가 예시',
+      summary: '해외 팬 반응 증가를 가정한 mock 시장 신호입니다.',
+      category: 'Global reaction',
+      relatedArtistIds: [],
+      relatedKeywords: ['global', 'reaction'],
+      issueScore: 58,
+      newsCount: 0,
+      searchGrowthRate: 10,
+      impact: 'Attention increased',
+      updatedAt: 'mock',
+      sourceNames: ['Mock'],
+    },
+  ];
+
+  return Array.from({ length: 10 }, (_, index) => {
+    const issue = trendingIssues[index] ?? fallbackIssues[index % fallbackIssues.length];
+
+    return {
+      ...issue,
+      id: index < trendingIssues.length ? issue.id : `${issue.id}-${index + 1}`,
+      rank: index + 1,
+    };
+  });
+}
 
 export default function Home() {
   const latestMarket = getLatestMarketPoint();
-  const artistRankings = getArtistRankingRows();
-  const topMover = [...artistRankings].sort(
-    (a, b) => b.changeRate - a.changeRate
-  )[0];
-  const mostActive = [...artistRankings].sort((a, b) => b.volume - a.volume)[0];
-  const featuredArtists = artistRankings.slice(0, 4);
+  const values = marketChartPoints.map((point) => point.value);
+  const highValue = Math.max(...values);
+  const lowValue = Math.min(...values);
+  const periodLabel = `${marketChartPoints[0]?.time ?? '-'} - ${
+    marketChartPoints[marketChartPoints.length - 1]?.time ?? '-'
+  }`;
   const leadingIssue = trendingIssues[0];
+  const issueRows = getHomepageIssueRows();
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8">
-        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
-          <div className="flex min-h-[420px] flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900 p-7 shadow-2xl shadow-slate-950/40">
+        <section className="grid gap-6 xl:grid-cols-[1fr_0.95fr] xl:items-stretch">
+          <div className="flex min-h-[520px] flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900 p-7 shadow-2xl shadow-slate-950/40">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">
-                FANDEX Market Intelligence
+                FANDEX K-pop Market Intelligence
               </p>
               <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
-                K-pop artist signals, issue impact, and AI-ready content angles.
+                K-pop 시장의 관심 흐름을 숫자로 읽는 FANDEX
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-                FANDEX turns simulated artist index movement, attention volume,
-                issue data, fandom reaction, search demand, and social signals
-                into a dashboard for timing, comparison, and content planning.
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300">
+                FANDEX는 팬 반응, 검색량, 영상 반응, 뉴스량, 해외 반응을
+                모아 아티스트와 이슈가 지금 얼마나 주목받는지 보여주는
+                K-pop 시장 인텔리전스 플랫폼입니다.
               </p>
               <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm font-bold leading-6 text-cyan-100">
-                FANDEX price is an internal simulated artist market index. It
-                is not a real stock, security, investment product, or financial
-                advice.
+                FANDEX 가격은 실제 주식 가격이 아니라 mock 데이터 기반의
+                simulated index입니다. 투자 상품, 증권, 금융 조언이 아닙니다.
               </p>
             </div>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href="/compare?artists=aespa,ive,riize"
-                className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-200"
-              >
-                Compare artists
-              </Link>
-              <Link
-                href="/ranking"
-                className="rounded-full border border-slate-700 px-5 py-3 text-sm font-black text-slate-200 hover:border-cyan-300 hover:text-cyan-300"
-              >
-                View ranking
-              </Link>
+            <div className="mt-7 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+              <div className="rounded-3xl border border-cyan-400/20 bg-slate-950 p-5">
+                <p className="text-sm font-black text-cyan-300">
+                  K-pop 종합지수
+                </p>
+                <p className="mt-2 font-mono text-5xl font-black text-white">
+                  {formatNumber(latestMarket.indexValue)}
+                </p>
+                <p className="mt-2 font-mono text-sm font-black text-red-300">
+                  {formatPercent(latestMarket.changeRate)} 오늘
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/compare?artists=aespa,ive,riize"
+                  className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-200"
+                >
+                  아티스트 비교하기
+                </Link>
+                <Link
+                  href="/ranking"
+                  className="rounded-full border border-slate-700 px-5 py-3 text-sm font-black text-slate-200 hover:border-cyan-300 hover:text-cyan-300"
+                >
+                  순위 보기
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <div className="mb-5 flex items-center justify-between gap-3">
+            <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
-                <h2 className="text-xl font-black">Market pulse</h2>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+                  Composite Index
+                </p>
+                <h2 className="mt-2 text-2xl font-black">K-pop 종합지수 차트</h2>
                 <p className="mt-1 text-sm text-slate-500">
-                  Intraday FANDEX index movement
+                  기간 {periodLabel} · mock intraday history
                 </p>
               </div>
-              <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-cyan-300">
+              <span className="w-fit rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-cyan-300">
                 Simulated
               </span>
             </div>
 
             <MarketLineChart />
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <SnapshotCard
-                label="Market index"
-                value={latestMarket.indexValue.toLocaleString()}
-                detail={`+${latestMarket.changeRate}% today`}
+                label="현재값"
+                value={formatNumber(latestMarket.indexValue)}
+                detail={formatPercent(latestMarket.changeRate)}
               />
               <SnapshotCard
-                label="Attention volume"
+                label="고가"
+                value={formatNumber(highValue)}
+                detail="표시 기간 기준"
+              />
+              <SnapshotCard
+                label="저가"
+                value={formatNumber(lowValue)}
+                detail="표시 기간 기준"
+              />
+              <SnapshotCard
+                label="관심량"
                 value={formatLargeNumber(latestMarket.totalVolume)}
-                detail="Market-wide activity"
+                detail="시장 전체 활동"
               />
             </div>
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <SnapshotCard
-            label="Top mover"
-            value={topMover?.ticker ?? '-'}
-            detail={`${formatPercent(topMover?.changeRate ?? 0)} FANDEX price`}
-          />
-          <SnapshotCard
-            label="Most active artist"
-            value={mostActive?.ticker ?? '-'}
-            detail={`${formatLargeNumber(mostActive?.volume ?? 0)} attention volume`}
-          />
-          <SnapshotCard
-            label="Issue-driven momentum"
-            value={leadingIssue ? `#${leadingIssue.rank}` : '-'}
-            detail={leadingIssue?.headline ?? 'No active issue'}
-          />
-          <SnapshotCard
-            label="Rising artists"
-            value={`${latestMarket.risingArtistCount}`}
-            detail={`${latestMarket.fallingArtistCount} cooling signals`}
-          />
-        </section>
-
-        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <div className="mb-5">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
-              Product pillars
-            </p>
-            <h2 className="mt-2 text-2xl font-black">What FANDEX does</h2>
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-3">
-            <PillarCard
-              title="Artist market signals"
-              status="Live"
-              description="Compare FANDEX price, momentum, activity volume, and relative signal strength across K-pop artists."
-              href="/compare?artists=aespa,ive,riize"
-              action="Open compare"
-            />
-            <PillarCard
-              title="Issue impact analysis"
-              status="In progress"
-              description="Track how issues may affect FANDEX price movement, search demand, social reaction, news exposure, and market momentum."
-              href="/signals"
-              action="View signals"
-            />
-            <PillarCard
-              title="Creator tools planned"
-              status="Planned"
-              description="Private SNS planning and AI draft workflows are being kept separate from the public market product."
-            />
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
+        <section className="rounded-3xl border-2 border-cyan-300 bg-slate-800 p-6 shadow-2xl shadow-cyan-950/40">
+            <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
-                Featured artists
-              </p>
-              <h2 className="mt-2 text-2xl font-black">
-                Start with the current market leaders
-              </h2>
-            </div>
-            <Link
-              href="/ranking"
-              className="w-fit rounded-full border border-slate-700 px-4 py-2 text-xs font-black text-slate-300 hover:border-cyan-300 hover:text-cyan-300"
-            >
-              Full ranking
-            </Link>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {featuredArtists.map((artist) => (
-              <Link
-                key={artist.id}
-                href={`/artists/${artist.id}`}
-                className="rounded-2xl border border-slate-800 bg-slate-950 p-5 transition hover:border-cyan-300"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-black text-cyan-300">
-                      {artist.ticker}
-                    </p>
-                    <h3 className="mt-2 text-xl font-black">
-                      {artist.nameEn}
-                    </h3>
-                  </div>
-                  <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-black text-slate-400">
-                    #{artist.rank}
-                  </span>
-                </div>
-                <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                  <MiniMetric label="Price" value={artist.price.toFixed(2)} />
-                  <MiniMetric
-                    label="Change"
-                    value={formatPercent(artist.changeRate)}
-                  />
-                  <MiniMetric
-                    label="Volume"
-                    value={formatLargeNumber(artist.volume)}
-                  />
-                  <MiniMetric label="Type" value={artist.category} />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
-              Recent issues
-            </p>
-            <h2 className="mt-2 text-2xl font-black">
-              Market signals move when issues spread
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              FANDEX connects each issue to before-and-after movement across
-              price, attention, fandom, search, social, news, and momentum
-              signals.
-            </p>
-            <Link
-              href="/signals"
-              className="mt-5 inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-black text-slate-300 hover:border-cyan-300 hover:text-cyan-300"
-            >
-              Explore issue signals
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {trendingIssues.slice(0, 4).map((issue) => (
-              <article
-                key={issue.id}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-cyan-300 px-2.5 py-1 text-xs font-black text-slate-950">
-                    #{issue.rank}
-                  </span>
-                  <span className="rounded-full bg-slate-950 px-2.5 py-1 text-xs font-bold text-slate-400">
-                    {issue.category}
-                  </span>
-                  <span className="rounded-full bg-slate-950 px-2.5 py-1 text-xs font-bold text-slate-400">
-                    {issue.impact}
-                  </span>
-                </div>
-                <h3 className="mt-3 font-black">{issue.headline}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {issue.summary}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-7">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200">
-                Next action
+                시장 신호 예시
               </p>
               <h2 className="mt-2 text-3xl font-black">
-                Compare aespa, IVE, and RIIZE first.
+                실시간 이슈 TOP 10
               </h2>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-cyan-100">
-                Use the compare page to see price movement, factor leaders,
-                low-point context, and momentum differences in one view.
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                예시 이슈를 기준으로 FANDEX 시장 신호가 어떻게 보일지
+                확인하는 영역입니다.
               </p>
             </div>
 
-            <Link
-              href="/compare?artists=aespa,ive,riize"
-              className="w-fit rounded-full bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-200"
-            >
-              Launch compare
-            </Link>
-          </div>
+            <div className="grid gap-3">
+              {issueRows.map((issue) => {
+                const badge = getIssueBadge(issue);
+
+                return (
+                  <article
+                    key={issue.id}
+                    className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
+                  >
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div className="flex gap-3">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 font-mono text-sm font-black text-slate-950">
+                          {issue.rank}
+                        </span>
+                        <div>
+                          <h3 className="font-black">{issue.headline}</h3>
+                          <p className="mt-1 text-xs font-bold text-slate-500">
+                            관련 아티스트: {getRelatedArtistLabel(issue)}
+                          </p>
+                        </div>
+                      </div>
+                      <span
+                        className={`w-fit rounded-full px-3 py-1 text-xs font-black ${getIssueBadgeClass(
+                          badge
+                        )}`}
+                      >
+                        {badge}
+                      </span>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <p className="mt-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm font-bold leading-6 text-slate-400">
+              현재 이슈 순위는 mock 데이터 기반 예시이며, 추후 실제 뉴스·검색량·SNS 반응 데이터와 연결될 예정입니다.
+            </p>
         </section>
+
+        <section>
+          <ArtistSearch artists={artistUniverse} />
+        </section>
+
+        {leadingIssue && (
+          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+                  Selected Issue Detail
+                </p>
+                <h2 className="mt-2 text-2xl font-black">
+                  선택 이슈 상세
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  이번 단계에서는 첫 번째 이슈의 상세 패널을 고정으로
+                  보여줍니다. 실제 뉴스 상세 모달은 이후 단계에서 구현합니다.
+                </p>
+              </div>
+
+              <article className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-cyan-300 px-2.5 py-1 text-xs font-black text-slate-950">
+                    #{leadingIssue.rank}
+                  </span>
+                  <span className="rounded-full bg-slate-900 px-2.5 py-1 text-xs font-bold text-slate-400">
+                    {leadingIssue.category}
+                  </span>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-black ${getIssueBadgeClass(
+                      getIssueBadge(leadingIssue)
+                    )}`}
+                  >
+                    {getIssueBadge(leadingIssue)}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-xl font-black">
+                  {leadingIssue.headline}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  {leadingIssue.summary}
+                </p>
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <MiniMetric
+                    label="검색 증가"
+                    value={formatPercent(leadingIssue.searchGrowthRate)}
+                  />
+                  <MiniMetric
+                    label="뉴스량"
+                    value={`${leadingIssue.newsCount} items`}
+                  />
+                  <MiniMetric
+                    label="영향"
+                    value={leadingIssue.impact}
+                  />
+                </div>
+                <Link
+                  href="/signals"
+                  className="mt-5 inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-black text-slate-300 hover:border-cyan-300 hover:text-cyan-300"
+                >
+                  시장 신호 더 보기
+                </Link>
+              </article>
+            </div>
+          </section>
+        )}
       </section>
     </main>
   );
@@ -303,7 +370,7 @@ function MarketLineChart() {
         viewBox={`0 0 ${chartWidth} ${chartHeight}`}
         className="h-[260px] min-w-[640px] w-full"
         role="img"
-        aria-label="K-pop market index line chart"
+        aria-label="K-pop 종합지수 라인 차트"
       >
         <defs>
           <linearGradient id="marketIndexArea" x1="0" y1="0" x2="0" y2="1">
@@ -382,54 +449,12 @@ function SnapshotCard({
   detail: string;
 }) {
   return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-        {label}
-      </p>
-      <p className="mt-2 text-2xl font-black text-white">{value}</p>
-      <p className="mt-2 line-clamp-2 text-xs font-bold leading-5 text-slate-500">
+    <article className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+      <p className="text-xs font-bold text-slate-500">{label}</p>
+      <p className="mt-2 font-mono text-xl font-black text-white">{value}</p>
+      <p className="mt-1 text-xs font-bold leading-5 text-slate-500">
         {detail}
       </p>
-    </article>
-  );
-}
-
-function PillarCard({
-  title,
-  status,
-  description,
-  href,
-  action,
-}: {
-  title: string;
-  status: 'Live' | 'In progress' | 'Planned';
-  description: string;
-  href?: string;
-  action?: string;
-}) {
-  const statusClass = {
-    Live: 'bg-emerald-400/10 text-emerald-300',
-    'In progress': 'bg-cyan-400/10 text-cyan-300',
-    Planned: 'bg-slate-800 text-slate-300',
-  }[status];
-
-  return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-xl font-black">{title}</h3>
-        <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass}`}>
-          {status}
-        </span>
-      </div>
-      <p className="mt-3 text-sm leading-6 text-slate-400">{description}</p>
-      {href && action && (
-        <Link
-          href={href}
-          className="mt-5 inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-black text-slate-300 hover:border-cyan-300 hover:text-cyan-300"
-        >
-          {action}
-        </Link>
-      )}
     </article>
   );
 }
@@ -441,15 +466,4 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
       <p className="mt-1 text-sm font-black text-white">{value}</p>
     </div>
   );
-}
-
-function formatPercent(value: number) {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
-}
-
-function formatLargeNumber(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value);
 }
