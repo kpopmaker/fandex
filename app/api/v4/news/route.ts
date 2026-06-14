@@ -18,6 +18,15 @@ function parseDisplay(value: string | null) {
   return Number.isFinite(parsed) ? Math.min(Math.max(parsed, 1), 100) : 10;
 }
 
+function parseStart(value: string | null) {
+  if (!value) {
+    return 1;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.min(Math.max(parsed, 1), 1000) : 1;
+}
+
 function parseSort(value: string | null): NaverNewsSort {
   return value === 'sim' ? 'sim' : 'date';
 }
@@ -27,6 +36,7 @@ export async function GET(request: Request) {
   const artistId = url.searchParams.get('artistId');
   const rawQuery = url.searchParams.get('q');
   const display = parseDisplay(url.searchParams.get('display'));
+  const start = parseStart(url.searchParams.get('start'));
   const sort = parseSort(url.searchParams.get('sort'));
   const artist = artistId ? getArtistV4ById(artistId) : undefined;
   const query = rawQuery ?? (artist ? buildArtistNewsQuery(artist) : undefined);
@@ -53,7 +63,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const result = await searchNaverNews({ query, display, sort });
+    const result = await searchNaverNews({ query, display, start, sort });
     const items = naverNewsItemsToArtistNewsItems({
       items: result.items,
       query,
