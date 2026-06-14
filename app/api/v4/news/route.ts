@@ -9,6 +9,30 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+type ApiErrorCode =
+  | 'missing_query'
+  | 'missing_credentials'
+  | 'upstream_error';
+
+function errorResponse(
+  status: number,
+  code: ApiErrorCode,
+  message: string,
+  details?: unknown,
+) {
+  return Response.json(
+    {
+      ok: false,
+      error: {
+        code,
+        message,
+        ...(details === undefined ? {} : { details }),
+      },
+    },
+    { status },
+  );
+}
+
 function parseDisplay(value: string | null) {
   if (!value) {
     return 10;
@@ -42,23 +66,24 @@ export async function GET(request: Request) {
   const query = rawQuery ?? (artist ? buildArtistNewsQuery(artist) : undefined);
 
   if (!query) {
-    return Response.json(
+    return errorResponse(
+      400,
+      'missing_query',
+      'Provide q or artistId.',
       {
-        error: 'Missing query',
-        message: 'Provide q or artistId.',
         availableArtistIds: artistUniverseV4.map((item) => item.id),
       },
-      { status: 400 },
     );
   }
 
   if (!hasNaverNewsCredentials()) {
-    return Response.json(
+    return errorResponse(
+      503,
+      'missing_credentials',
+      'Naver News API credentials are not configured.',
       {
-        error: 'Naver News API credentials are not configured',
         requiredEnv: ['NAVER_NEWS_CLIENT_ID', 'NAVER_NEWS_CLIENT_SECRET'],
       },
-      { status: 503 },
     );
   }
 
@@ -83,12 +108,10 @@ export async function GET(request: Request) {
       items,
     });
   } catch (error) {
-    return Response.json(
-      {
-        error: 'Naver News API request failed',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 502 },
+    return errorResponse(
+      502,
+      'upstream_error',
+      error instanceof Error ? error.message : 'Unknown error',
     );
   }
 }
