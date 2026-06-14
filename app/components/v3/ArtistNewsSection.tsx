@@ -132,6 +132,17 @@ export default function ArtistNewsSection({
               {selectedNews.detail}
             </p>
 
+            {selectedNews.url && (
+              <a
+                href={selectedNews.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex rounded-full bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-cyan-300 focus:outline-none focus:ring-4 focus:ring-cyan-300/40 dark:!bg-cyan-300 dark:hover:!bg-cyan-200"
+              >
+                Open source
+              </a>
+            )}
+
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               <InfoBox label="Importance" value={`${selectedNews.importanceScore}`} />
               <InfoBox label="Published at" value={selectedNews.publishedAt} />
