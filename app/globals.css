@@ -25,6 +25,12 @@
   --purple-soft: rgba(124, 58, 237, 0.1);
   --warning: #854d0e;
   --warning-soft: #fef3c7;
+  --chart-accent: #0d9488;
+  --chart-purple: #7c3aed;
+  --chart-green: #047857;
+  --chart-red: #be123c;
+  --chart-grid: rgba(100, 116, 139, 0.36);
+  --chart-point-fill: #ffffff;
   --page-gradient-from: #f8fafc;
   --page-gradient-via: #ffffff;
   --page-gradient-to: #ecfeff;
@@ -55,6 +61,12 @@
   --purple-soft: rgba(167, 139, 250, 0.14);
   --warning: #fde68a;
   --warning-soft: rgba(234, 179, 8, 0.13);
+  --chart-accent: #5eead4;
+  --chart-purple: #c4b5fd;
+  --chart-green: #86efac;
+  --chart-red: #fda4af;
+  --chart-grid: rgba(148, 163, 184, 0.32);
+  --chart-point-fill: #07111f;
   --page-gradient-from: #07111f;
   --page-gradient-via: #0d1828;
   --page-gradient-to: #102434;

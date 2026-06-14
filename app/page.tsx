@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FandexLineChart from './components/FandexLineChart';
 import ArtistSearch from './components/v3/ArtistSearch';
 import { artistUniverse, getArtistV3ById } from './data/v3/artistUniverse';
 import {
@@ -186,7 +187,26 @@ export default function Home() {
               </span>
             </div>
 
-            <MarketLineChart />
+            <FandexLineChart
+              ariaLabel="K-pop composite index line chart"
+              period={periodLabel}
+              showArea
+              height={260}
+              minWidth={640}
+              valueLocale="ko-KR"
+              maximumFractionDigits={2}
+              changeFractionDigits={2}
+              series={[
+                {
+                  id: 'kpop-composite',
+                  label: 'K-pop Composite',
+                  points: marketChartPoints.map((point) => ({
+                    label: point.time,
+                    value: point.value,
+                  })),
+                },
+              ]}
+            />
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <SnapshotCard
