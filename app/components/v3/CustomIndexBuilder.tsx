@@ -14,7 +14,7 @@ import {
   defaultFactorWeightsV3,
   factorDefinitionsV3,
 } from '../../data/v3/mockData';
-import LineChartCard from './LineChartCard';
+import FandexLineChart from '../FandexLineChart';
 
 type CustomIndexBuilderProps = {
   artistName: string;
@@ -22,6 +22,28 @@ type CustomIndexBuilderProps = {
 };
 
 const allFactorKeys = factorDefinitionsV3.map((factor) => factor.key);
+
+const perspectiveOrder: CustomIndexViewId[] = [
+  'all',
+  'buzz',
+  'fandomExpansion',
+  'contentReaction',
+  'globalReaction',
+  'businessImpact',
+  'organicPublic',
+  'custom',
+];
+
+const perspectiveLabels: Record<CustomIndexViewId, string> = {
+  all: '종합 주가',
+  buzz: '화제성 중심',
+  fandomExpansion: '팬덤 확장 중심',
+  contentReaction: '콘텐츠 반응 중심',
+  globalReaction: '해외 반응 중심',
+  businessImpact: '사업성 중심',
+  organicPublic: '대중 확산 중심',
+  custom: '직접 선택',
+};
 
 function scoreToPrice(score: number) {
   return Number((100 * Math.exp((score - 50) / 50)).toFixed(2));
@@ -78,10 +100,14 @@ export default function CustomIndexBuilder({
     useState<CustomIndexViewId>('all');
   const [customEnabledFactors, setCustomEnabledFactors] =
     useState<FactorKey[]>(['search', 'news', 'youtube', 'sns']);
+  const perspectiveOptions = perspectiveOrder
+    .map((id) => customIndexViews.find((view) => view.id === id))
+    .filter((view): view is NonNullable<typeof view> => Boolean(view));
 
   const selectedView =
     customIndexViews.find((view) => view.id === selectedViewId) ??
     customIndexViews[0];
+  const selectedPerspectiveLabel = perspectiveLabels[selectedViewId];
   const isCustomMode = selectedViewId === 'custom';
   const activeFactors = isCustomMode
     ? customEnabledFactors
@@ -118,6 +144,9 @@ export default function CustomIndexBuilder({
   const changeGap = selectedChangeRate - officialChangeRate;
   const latestOfficial = officialChartPoints[officialChartPoints.length - 1];
   const latestSelected = selectedChartPoints[selectedChartPoints.length - 1];
+  const periodLabel = `${officialChartPoints[0]?.time ?? '-'} - ${
+    officialChartPoints[officialChartPoints.length - 1]?.time ?? '-'
+  }`;
 
   function handleViewChange(nextId: CustomIndexViewId) {
     setSelectedViewId(nextId);
@@ -149,16 +178,16 @@ export default function CustomIndexBuilder({
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-6">
         <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-          Custom index builder
+          FANDEX v4 perspective builder
         </p>
 
         <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-          View {artistName} through a selected market lens
+          View {artistName} through a market perspective
         </h2>
 
         <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-500 dark:text-slate-400">
-          Adjust factor groups to see whether music, content, fandom, global,
-          or company signals explain the current FANDEX price movement.
+          Select a v4 perspective to generate a simulated custom index. Direct
+          Selection allows only factor ON/OFF choices, without weight sliders.
         </p>
       </div>
 
@@ -169,7 +198,7 @@ export default function CustomIndexBuilder({
               htmlFor="custom-index-view"
               className="text-sm font-black text-slate-700 dark:text-slate-200"
             >
-              Select analysis view
+              Perspective
             </label>
 
             <select
@@ -180,15 +209,15 @@ export default function CustomIndexBuilder({
               }
               className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-950 outline-none focus:border-cyan-400 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
             >
-              {customIndexViews.map((view) => (
+              {perspectiveOptions.map((view) => (
                 <option key={view.id} value={view.id}>
-                  {view.label}
+                  {perspectiveLabels[view.id as CustomIndexViewId]}
                 </option>
               ))}
             </select>
 
             <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
-              {selectedView.description}
+              {selectedPerspectiveLabel}: {selectedView.description}
             </p>
           </div>
 
@@ -202,62 +231,78 @@ export default function CustomIndexBuilder({
             </p>
           </div>
 
-          <details
-            open
-            className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
-          >
-            <summary className="cursor-pointer text-sm font-black text-slate-700 dark:text-slate-200">
-              Included factors
-            </summary>
-
-            <div className="mt-4 grid gap-3">
-              {factorDefinitionsV3.map((factor) => {
-                const isEnabled = activeFactors.includes(factor.key);
-
-                return (
-                  <button
-                    key={factor.key}
-                    type="button"
-                    disabled={!isCustomMode}
-                    onClick={() => toggleFactor(factor.key)}
-                    className={`rounded-2xl border p-4 text-left transition ${
-                      isEnabled
-                        ? 'border-cyan-300 bg-white dark:border-cyan-300 dark:bg-slate-950'
-                        : 'border-slate-200 bg-slate-100 opacity-60 dark:border-slate-800 dark:bg-slate-900'
-                    } ${isCustomMode ? 'hover:border-cyan-400' : 'cursor-default'}`}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-black text-slate-950 dark:text-white">
-                          {factor.easyLabel}
-                        </p>
-                        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                          {factor.helpText}
-                        </p>
-                      </div>
-
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-black ${
-                          isEnabled
-                            ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-300 dark:text-slate-950'
-                            : 'bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
-                        }`}
-                      >
-                        {isEnabled ? 'ON' : 'OFF'}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
+          <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-black text-slate-700 dark:text-slate-200">
+                  {isCustomMode ? 'Direct Selection factors' : 'Perspective factors'}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                  {isCustomMode
+                    ? 'Turn factors on or off. Weights stay fixed to the FANDEX v4 default model.'
+                    : 'This perspective uses a preset factor group. Choose Direct Selection to edit factors.'}
+                </p>
+              </div>
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 dark:bg-slate-950 dark:text-slate-300">
+                {activeFactors.length}/{factorDefinitionsV3.length} ON
+              </span>
             </div>
 
-            {!isCustomMode && (
-              <p className="mt-4 rounded-2xl bg-white p-3 text-xs font-bold leading-5 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                This preset is locked. Choose the custom view to edit factors
-                manually.
-              </p>
+            {isCustomMode ? (
+              <div className="mt-4 grid gap-3">
+                {factorDefinitionsV3.map((factor) => {
+                  const isEnabled = activeFactors.includes(factor.key);
+
+                  return (
+                    <button
+                      key={factor.key}
+                      type="button"
+                      onClick={() => toggleFactor(factor.key)}
+                      className={`rounded-2xl border p-4 text-left transition hover:border-cyan-400 ${
+                        isEnabled
+                          ? 'border-cyan-300 bg-white dark:border-cyan-300 dark:bg-slate-950'
+                          : 'border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-black text-slate-950 dark:text-white">
+                            {factor.easyLabel}
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                            {factor.helpText}
+                          </p>
+                        </div>
+
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-black ${
+                            isEnabled
+                              ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-300 dark:text-slate-950'
+                              : 'bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                          }`}
+                        >
+                          {isEnabled ? 'ON' : 'OFF'}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {factorDefinitionsV3
+                  .filter((factor) => activeFactors.includes(factor.key))
+                  .map((factor) => (
+                    <span
+                      key={factor.key}
+                      className="rounded-full border border-cyan-200 bg-white px-3 py-1 text-xs font-bold text-cyan-700 dark:border-cyan-400/20 dark:bg-slate-950 dark:text-cyan-300"
+                    >
+                      {factor.easyLabel}
+                    </span>
+                  ))}
+              </div>
             )}
-          </details>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -270,7 +315,7 @@ export default function CustomIndexBuilder({
             />
 
             <CompareCard
-              label={selectedView.shortLabel}
+              label={selectedPerspectiveLabel}
               value={`${latestSelected?.value.toFixed(2) ?? '-'} FDX`}
               subValue={`${selectedChangeRate >= 0 ? '+' : ''}${selectedChangeRate.toFixed(2)}%`}
               tone={selectedChangeRate >= 0 ? 'red' : 'blue'}
@@ -284,12 +329,27 @@ export default function CustomIndexBuilder({
             />
           </div>
 
-          <LineChartCard
-            title={selectedView.shortLabel}
-            subtitle={`${artistName} selected index movement`}
-            points={selectedChartPoints}
-            valueSuffix=" FDX"
+          <FandexLineChart
+            title={selectedPerspectiveLabel}
+            description={`${artistName} selected perspective index movement`}
+            ariaLabel={`${artistName} ${selectedPerspectiveLabel} custom index line chart`}
+            period={periodLabel}
             height={390}
+            minWidth={720}
+            valueLocale="en-US"
+            minimumFractionDigits={2}
+            maximumFractionDigits={2}
+            changeFractionDigits={2}
+            series={[
+              {
+                id: `${selectedViewId}-custom-index`,
+                label: selectedPerspectiveLabel,
+                points: selectedChartPoints.map((point) => ({
+                  label: point.time,
+                  value: point.value,
+                })),
+              },
+            ]}
           />
 
           <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
@@ -299,7 +359,7 @@ export default function CustomIndexBuilder({
 
             <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">
               {getAutoReading({
-                selectedLabel: selectedView.shortLabel,
+                selectedLabel: selectedPerspectiveLabel,
                 officialChangeRate,
                 selectedChangeRate,
               })}

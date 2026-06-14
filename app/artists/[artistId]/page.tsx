@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import FandexLineChart from '../../components/FandexLineChart';
 import ArtistNewsSection from '../../components/v3/ArtistNewsSection';
 import CustomIndexBuilder from '../../components/v3/CustomIndexBuilder';
-import LineChartCard from '../../components/v3/LineChartCard';
 import {
   artistUniverse,
   getArtistV3ById,
@@ -84,6 +84,9 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const priceChangeRate = (priceChange / firstPrice.price) * 100;
   const isUp = priceChange >= 0;
   const marketSignal = getMarketSignal(priceChangeRate, latestPrice.volume);
+  const periodLabel = `${priceHistory[0]?.time ?? '-'} - ${
+    priceHistory[priceHistory.length - 1]?.time ?? '-'
+  }`;
   const factorRows = factorDefinitionsV3
     .map((factor) => ({
       key: factor.key,
@@ -123,6 +126,30 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                 is not a real stock, security, investment product, or financial
                 advice.
               </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <IntroFact label="Debut" value={artist.debutDate} />
+                <IntroFact label="Fandom" value={artist.fandomName ?? 'TBD'} />
+                <IntroFact
+                  label="Members"
+                  value={`${artist.members.length} tracked`}
+                />
+                <IntroFact
+                  label="Markets"
+                  value={artist.countryFocus.slice(0, 3).join(', ')}
+                />
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {artist.keywords.slice(0, 6).map((keyword) => (
+                  <span
+                    key={keyword}
+                    className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    #{keyword}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -177,13 +204,43 @@ export default async function ArtistDetailPage({ params }: PageProps) {
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <LineChartCard
-            title={`${artist.nameEn} FANDEX price`}
-            subtitle="Price trend"
-            points={chartPoints}
-            valueSuffix=" FDX"
-            height={380}
-          />
+          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <div className="mb-5">
+              <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
+                Official FANDEX price
+              </p>
+              <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
+                {artist.nameEn} official artist index
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                The official FANDEX price blends music, album, video, SNS,
+                search, news, global, fandom, and company signals into one
+                simulated artist market index.
+              </p>
+            </div>
+
+            <FandexLineChart
+              ariaLabel={`${artist.nameEn} official FANDEX price line chart`}
+              period={periodLabel}
+              height={360}
+              minWidth={720}
+              showArea
+              valueLocale="en-US"
+              minimumFractionDigits={2}
+              maximumFractionDigits={2}
+              changeFractionDigits={2}
+              series={[
+                {
+                  id: `${artist.id}-official-price`,
+                  label: `${artist.ticker} Official FANDEX`,
+                  points: chartPoints.map((point) => ({
+                    label: point.time,
+                    value: point.value,
+                  })),
+                },
+              ]}
+            />
+          </section>
 
           <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
@@ -334,6 +391,17 @@ function MarketStat({
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <p className="text-xs font-bold text-slate-400">{label}</p>
       <p className={`mt-2 font-mono text-xl font-black ${toneClass}`}>
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function IntroFact({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <p className="text-xs font-bold text-slate-400">{label}</p>
+      <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
         {value}
       </p>
     </div>
