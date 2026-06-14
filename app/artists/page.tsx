@@ -12,7 +12,7 @@ export default function ArtistsPage() {
   const prices = getMockArtistPrices();
 
   return (
-    <main className="min-h-screen bg-[#070A12] text-white">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
       <section className="mx-auto max-w-7xl px-5 py-10">
         <div className="mb-8">
           <Link
@@ -44,7 +44,7 @@ export default function ArtistsPage() {
               <Link
                 key={item.artistId}
                 href={`/artists/${item.artistId}`}
-                className="group rounded-3xl border border-slate-800 bg-slate-950/70 p-5 transition hover:border-cyan-400/50 hover:bg-slate-900/80"
+                className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-cyan-400/50 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950/70 dark:hover:bg-slate-900/80"
               >
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <div>
@@ -52,7 +52,7 @@ export default function ArtistsPage() {
                       {item.ticker}
                     </p>
 
-                    <h2 className="mt-1 text-2xl font-black text-white">
+                    <h2 className="mt-1 text-2xl font-black text-slate-950 dark:text-white">
                       {item.nameKo}
                     </h2>
 
@@ -61,20 +61,20 @@ export default function ArtistsPage() {
                     </p>
                   </div>
 
-                  <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">
+                  <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
                     {item.trackingTier}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl bg-slate-900/70 p-4">
+                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/70">
                     <p className="text-xs text-slate-500">Price</p>
                     <p className="mt-1 font-mono text-2xl font-black">
                       {item.price.toFixed(2)}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-900/70 p-4">
+                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/70">
                     <p className="text-xs text-slate-500">Change</p>
                     <p
                       className={`mt-1 font-mono text-2xl font-black ${
@@ -86,14 +86,14 @@ export default function ArtistsPage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-900/70 p-4">
+                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/70">
                     <p className="text-xs text-slate-500">Volume</p>
                     <p className="mt-1 font-mono text-xl font-black text-purple-300">
                       {formatLargeNumber(item.volume)}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-900/70 p-4">
+                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/70">
                     <p className="text-xs text-slate-500">Fan Cap</p>
                     <p className="mt-1 font-mono text-xl font-black text-cyan-300">
                       {formatLargeNumber(item.fanCap)}

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import ThemeToggle from './ThemeToggle';
 
 const navItems = [
   { href: '/', label: '시장' },
@@ -25,7 +26,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-5">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-lg font-black text-slate-950">
@@ -33,7 +34,7 @@ export default function Navbar() {
           </div>
 
           <div>
-            <p className="text-xl font-black leading-none text-white">
+            <p className="text-xl font-black leading-none text-slate-950">
               FANDEX
             </p>
             <p className="mt-1 text-xs text-slate-500">
@@ -52,8 +53,8 @@ export default function Navbar() {
                 href={item.href}
                 className={
                   active
-                    ? 'rounded-full bg-cyan-400 px-5 py-2 text-sm font-black text-slate-950'
-                    : 'rounded-full px-5 py-2 text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-cyan-300'
+                    ? 'rounded-full bg-cyan-500 px-5 py-2 text-sm font-black text-white shadow-sm'
+                    : 'rounded-full px-5 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 hover:text-cyan-700'
                 }
               >
                 {item.label}
@@ -62,14 +63,17 @@ export default function Navbar() {
           })}
         </div>
 
+        <div className="ml-auto flex items-center gap-3">
         <div className="hidden lg:block">
-          <span className="rounded-full bg-slate-950 px-5 py-2 text-xs font-black text-slate-400">
+          <span className="rounded-full bg-slate-100 px-5 py-2 text-xs font-black text-slate-600">
             Mock Market v4
           </span>
         </div>
+          <ThemeToggle />
+        </div>
       </nav>
 
-      <div className="flex gap-2 overflow-x-auto border-t border-slate-800 px-4 py-3 lg:hidden">
+      <div className="flex gap-2 overflow-x-auto border-t border-slate-200 bg-white/95 px-4 py-3 lg:hidden">
         {navItems.map((item) => {
           const active = isActivePath(pathname, item.href);
 
@@ -79,8 +83,8 @@ export default function Navbar() {
               href={item.href}
               className={
                 active
-                  ? 'shrink-0 rounded-full bg-cyan-400 px-4 py-2 text-xs font-black text-slate-950'
-                  : 'shrink-0 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-slate-400'
+                  ? 'shrink-0 rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white shadow-sm'
+                  : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700'
               }
             >
               {item.label}

@@ -62,7 +62,7 @@ const roadmap = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#070A12] text-white">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
       <section className="mx-auto max-w-7xl px-5 py-10">
         <div className="mb-8">
           <Link
@@ -98,7 +98,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
             <p className="text-sm font-bold text-slate-400">Default View</p>
             <h2 className="mt-3 text-2xl font-black">종합 FANDEX Price</h2>
             <p className="mt-3 text-sm leading-6 text-slate-400">
@@ -107,7 +107,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
             <p className="text-sm font-bold text-slate-400">Custom View</p>
             <h2 className="mt-3 text-2xl font-black">커스텀 지표 빌더</h2>
             <p className="mt-3 text-sm leading-6 text-slate-400">
@@ -117,7 +117,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+        <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
           <h2 className="text-2xl font-black">왜 FANDEX가 필요한가?</h2>
 
           <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -141,14 +141,14 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+        <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
           <h2 className="text-2xl font-black">핵심 기능</h2>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <div
                 key={feature.title}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5"
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/50"
               >
                 <h3 className="font-black text-cyan-300">
                   {feature.title}
@@ -162,7 +162,7 @@ export default function AboutPage() {
         </div>
 
         <div className="mb-6 grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
             <h2 className="text-2xl font-black">FANDEX가 보는 데이터</h2>
 
             <div className="mt-5 space-y-3">
@@ -176,7 +176,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
             <h2 className="text-2xl font-black">주요 사용자</h2>
 
             <div className="mt-5 space-y-3">
@@ -189,14 +189,14 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
+        <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/70">
           <h2 className="text-2xl font-black">개발 로드맵</h2>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {roadmap.map((item) => (
               <div
                 key={item.phase}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5"
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/50"
               >
                 <p className="font-mono text-sm font-black text-cyan-300">
                   {item.phase}
@@ -211,11 +211,11 @@ export default function AboutPage() {
         </div>
 
         <div className="rounded-3xl border border-yellow-400/20 bg-yellow-400/10 p-6">
-          <h2 className="text-2xl font-black text-yellow-200">
+          <h2 className="text-2xl font-black text-yellow-900 dark:text-yellow-200">
             현재 버전 안내
           </h2>
 
-          <p className="mt-3 text-sm leading-6 text-yellow-100/80">
+          <p className="mt-3 text-sm leading-6 text-yellow-800 dark:text-yellow-100/80">
             현재 FANDEX v2는 실제 API를 연결하기 전의 mock market 단계입니다.
             화면에 표시되는 가격, 거래량, 등락률은 서비스 구조를 검증하기 위한
             예시 데이터입니다. 이후 실제 데이터 API를 연결해 실시간 시장 반응
@@ -237,7 +237,7 @@ function ReasonCard({
   description: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/50">
       <p className="font-mono text-sm font-black text-cyan-300">{number}</p>
       <h3 className="mt-3 text-xl font-black">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-400">
@@ -255,8 +255,8 @@ function DataRow({
   value: string;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="font-bold text-white">{label}</p>
+    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/50">
+      <p className="font-bold text-slate-950 dark:text-white">{label}</p>
       <p className="text-right text-sm text-slate-400">{value}</p>
     </div>
   );
@@ -270,8 +270,8 @@ function UserRow({
   description: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
-      <p className="font-black text-white">{title}</p>
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/50">
+      <p className="font-black text-slate-950 dark:text-white">{title}</p>
       <p className="mt-2 text-sm leading-6 text-slate-400">
         {description}
       </p>

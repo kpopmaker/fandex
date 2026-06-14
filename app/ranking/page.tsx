@@ -24,7 +24,7 @@ export default function RankingPage() {
   const fanCapRanking = [...prices].sort((a, b) => b.fanCap - a.fanCap);
 
   return (
-    <main className="min-h-screen bg-[#070A12] text-white">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-sky-50 text-slate-950">
       <section className="mx-auto max-w-7xl px-5 py-10">
         <div className="mb-8">
           <p className="text-sm font-bold uppercase tracking-[0.3em] text-cyan-300">
@@ -33,7 +33,7 @@ export default function RankingPage() {
           <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
             K-pop artist ranking
           </h1>
-          <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-400 md:text-base">
+          <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-500 md:text-base">
             Rank artists by simulated FANDEX price movement, attention volume,
             and fan size value.
           </p>
@@ -80,10 +80,10 @@ function RankingCard({
   valueType: 'change' | 'volume' | 'fanCap';
 }) {
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-5">
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-5">
         <h2 className="text-xl font-black">{title}</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">
+        <p className="mt-2 text-sm leading-6 text-slate-500">
           {description}
         </p>
       </div>
@@ -96,16 +96,16 @@ function RankingCard({
             <Link
               key={item.artistId}
               href={`/artists/${item.artistId}`}
-              className="block rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition hover:border-cyan-400/50 hover:bg-slate-900"
+              className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-400/50 hover:bg-white"
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-sm font-black text-cyan-300">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-sm font-black text-cyan-700">
                     {index + 1}
                   </div>
 
                   <div>
-                    <p className="font-black text-white">{item.nameEn}</p>
+                    <p className="font-black text-slate-950">{item.nameEn}</p>
                     <p className="font-mono text-xs text-slate-500">
                       {item.ticker} / {item.agency}
                     </p>
@@ -117,7 +117,7 @@ function RankingCard({
                     <>
                       <p
                         className={`font-mono text-lg font-black ${
-                          isUp ? 'text-red-300' : 'text-blue-300'
+                        isUp ? 'text-red-500' : 'text-blue-500'
                         }`}
                       >
                         {isUp ? '+' : ''}
@@ -131,7 +131,7 @@ function RankingCard({
 
                   {valueType === 'volume' && (
                     <>
-                      <p className="font-mono text-lg font-black text-purple-300">
+                      <p className="font-mono text-lg font-black text-purple-500">
                         {formatNumber(item.volume)}
                       </p>
                       <p className="text-xs text-slate-500">volume</p>
@@ -140,7 +140,7 @@ function RankingCard({
 
                   {valueType === 'fanCap' && (
                     <>
-                      <p className="font-mono text-lg font-black text-cyan-300">
+                      <p className="font-mono text-lg font-black text-cyan-600">
                         {formatLargeNumber(item.fanCap)}
                       </p>
                       <p className="text-xs text-slate-500">fan size</p>

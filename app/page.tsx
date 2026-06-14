@@ -44,7 +44,7 @@ function getIssueBadge(issue: KpopIssue) {
 function getIssueBadgeClass(badge: string) {
   const classes: Record<string, string> = {
     상승: 'bg-red-400/10 text-red-300',
-    주목: 'bg-cyan-400/10 text-cyan-300',
+    주목: 'bg-cyan-400/10 text-cyan-600',
     혼조: 'bg-violet-400/10 text-violet-300',
     주의: 'bg-blue-400/10 text-blue-300',
   };
@@ -118,34 +118,34 @@ export default function Home() {
   const issueRows = getHomepageIssueRows();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950">
       <section className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8">
         <section className="grid gap-6 xl:grid-cols-[1fr_0.95fr] xl:items-stretch">
-          <div className="flex min-h-[520px] flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900 p-7 shadow-2xl shadow-slate-950/40">
+          <div className="flex min-h-[520px] flex-col justify-between rounded-3xl border border-slate-200 bg-white p-7 shadow-lg shadow-slate-200/60">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
                 FANDEX K-pop Market Intelligence
               </p>
               <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                 K-pop 시장의 관심 흐름을 숫자로 읽는 FANDEX
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300">
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 FANDEX는 팬 반응, 검색량, 영상 반응, 뉴스량, 해외 반응을
                 모아 아티스트와 이슈가 지금 얼마나 주목받는지 보여주는
                 K-pop 시장 인텔리전스 플랫폼입니다.
               </p>
-              <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm font-bold leading-6 text-cyan-100">
+              <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
                 FANDEX 가격은 실제 주식 가격이 아니라 mock 데이터 기반의
                 simulated index입니다. 투자 상품, 증권, 금융 조언이 아닙니다.
               </p>
             </div>
 
             <div className="mt-7 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-              <div className="rounded-3xl border border-cyan-400/20 bg-slate-950 p-5">
-                <p className="text-sm font-black text-cyan-300">
+              <div className="rounded-3xl border border-cyan-200 bg-slate-50 p-5 shadow-sm">
+                <p className="text-sm font-black text-cyan-700">
                   K-pop 종합지수
                 </p>
-                <p className="mt-2 font-mono text-5xl font-black text-white">
+                <p className="mt-2 font-mono text-5xl font-black text-slate-950">
                   {formatNumber(latestMarket.indexValue)}
                 </p>
                 <p className="mt-2 font-mono text-sm font-black text-red-300">
@@ -156,13 +156,13 @@ export default function Home() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/compare?artists=aespa,ive,riize"
-                  className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-200"
+                  className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
                 >
                   아티스트 비교하기
                 </Link>
                 <Link
                   href="/ranking"
-                  className="rounded-full border border-slate-700 px-5 py-3 text-sm font-black text-slate-200 hover:border-cyan-300 hover:text-cyan-300"
+                  className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
                 >
                   순위 보기
                 </Link>
@@ -170,10 +170,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
                   Composite Index
                 </p>
                 <h2 className="mt-2 text-2xl font-black">K-pop 종합지수 차트</h2>
@@ -181,7 +181,7 @@ export default function Home() {
                   기간 {periodLabel} · mock intraday history
                 </p>
               </div>
-              <span className="w-fit rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-cyan-300">
+              <span className="w-fit rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700">
                 Simulated
               </span>
             </div>
@@ -213,15 +213,15 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border-2 border-cyan-300 bg-slate-800 p-6 shadow-2xl shadow-cyan-950/40">
+        <section className="rounded-3xl border-2 border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
             <div className="mb-5">
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
                 시장 신호 예시
               </p>
               <h2 className="mt-2 text-3xl font-black">
                 실시간 이슈 TOP 10
               </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
+              <p className="mt-2 text-sm leading-6 text-slate-500">
                 예시 이슈를 기준으로 FANDEX 시장 신호가 어떻게 보일지
                 확인하는 영역입니다.
               </p>
@@ -234,11 +234,11 @@ export default function Home() {
                 return (
                   <article
                     key={issue.id}
-                    className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
                   >
                     <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                       <div className="flex gap-3">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 font-mono text-sm font-black text-slate-950">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500 font-mono text-sm font-black text-white">
                           {issue.rank}
                         </span>
                         <div>
@@ -261,7 +261,7 @@ export default function Home() {
               })}
             </div>
 
-            <p className="mt-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm font-bold leading-6 text-slate-400">
+            <p className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-6 text-slate-500">
               현재 이슈 순위는 mock 데이터 기반 예시이며, 추후 실제 뉴스·검색량·SNS 반응 데이터와 연결될 예정입니다.
             </p>
         </section>
@@ -271,27 +271,27 @@ export default function Home() {
         </section>
 
         {leadingIssue && (
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
                   Selected Issue Detail
                 </p>
                 <h2 className="mt-2 text-2xl font-black">
                   선택 이슈 상세
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-slate-400">
+                <p className="mt-3 text-sm leading-6 text-slate-500">
                   이번 단계에서는 첫 번째 이슈의 상세 패널을 고정으로
                   보여줍니다. 실제 뉴스 상세 모달은 이후 단계에서 구현합니다.
                 </p>
               </div>
 
-              <article className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-cyan-300 px-2.5 py-1 text-xs font-black text-slate-950">
+                  <span className="rounded-full bg-cyan-500 px-2.5 py-1 text-xs font-black text-white">
                     #{leadingIssue.rank}
                   </span>
-                  <span className="rounded-full bg-slate-900 px-2.5 py-1 text-xs font-bold text-slate-400">
+                  <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-slate-500">
                     {leadingIssue.category}
                   </span>
                   <span
@@ -305,7 +305,7 @@ export default function Home() {
                 <h3 className="mt-4 text-xl font-black">
                   {leadingIssue.headline}
                 </h3>
-                <p className="mt-3 text-sm leading-6 text-slate-400">
+                <p className="mt-3 text-sm leading-6 text-slate-500">
                   {leadingIssue.summary}
                 </p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
@@ -324,7 +324,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/signals"
-                  className="mt-5 inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-black text-slate-300 hover:border-cyan-300 hover:text-cyan-300"
+                  className="mt-5 inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
                 >
                   시장 신호 더 보기
                 </Link>
@@ -365,7 +365,7 @@ function MarketLineChart() {
   const yGuideValues = [maxValue, minValue + valueRange * 0.5, minValue];
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950">
+    <div className="overflow-x-auto rounded-2xl border border-slate-100 bg-white">
       <svg
         viewBox={`0 0 ${chartWidth} ${chartHeight}`}
         className="h-[260px] min-w-[640px] w-full"
@@ -449,9 +449,9 @@ function SnapshotCard({
   detail: string;
 }) {
   return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
       <p className="text-xs font-bold text-slate-500">{label}</p>
-      <p className="mt-2 font-mono text-xl font-black text-white">{value}</p>
+      <p className="mt-2 font-mono text-xl font-black text-slate-950">{value}</p>
       <p className="mt-1 text-xs font-bold leading-5 text-slate-500">
         {detail}
       </p>
@@ -461,9 +461,9 @@ function SnapshotCard({
 
 function MiniMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-slate-900 p-3">
+    <div className="rounded-xl bg-white p-3 shadow-sm">
       <p className="text-xs font-bold text-slate-500">{label}</p>
-      <p className="mt-1 text-sm font-black text-white">{value}</p>
+      <p className="mt-1 text-sm font-black text-slate-950">{value}</p>
     </div>
   );
 }

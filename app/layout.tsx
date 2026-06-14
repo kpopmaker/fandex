@@ -12,8 +12,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeScript = `
+    (() => {
+      try {
+        const theme = window.localStorage.getItem('fandex-theme') === 'night' ? 'night' : 'day';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle('dark', theme === 'night');
+      } catch {
+        document.documentElement.dataset.theme = 'day';
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  `;
+
   return (
-    <html lang="ko">
+    <html lang="ko" data-theme="day" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <Navbar />
         {children}
