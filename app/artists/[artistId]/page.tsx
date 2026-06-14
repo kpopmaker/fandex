@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getArtistV4ById } from '../../data/v4/artistUniverse';
+import type { ArtistNewsItem } from '../../data/v3/types';
 import FandexLineChart from '../../components/FandexLineChart';
 import ArtistNewsSection from '../../components/v3/ArtistNewsSection';
 import CustomIndexBuilder from '../../components/v3/CustomIndexBuilder';
@@ -14,6 +16,12 @@ import {
   getNewsByArtistId,
   trendingIssues,
 } from '../../data/v3/mockData';
+import { naverNewsItemsToArtistNewsItems } from '../../../lib/services/newsAdapter';
+import {
+  buildArtistNewsQuery,
+  hasNaverNewsCredentials,
+  searchNaverNews,
+} from '../../../lib/services/naverNews';
 
 type PageProps = {
   params: Promise<{
@@ -62,6 +70,42 @@ function getCompareGroup(artistId: string) {
     .join(',');
 }
 
+function getMockNewsItems(artistId: string) {
+  return getNewsByArtistId(artistId).slice(0, 6);
+}
+
+async function getHybridNewsItems(artistId: string): Promise<ArtistNewsItem[]> {
+  if (!hasNaverNewsCredentials()) {
+    return getMockNewsItems(artistId);
+  }
+
+  const artistV4 = getArtistV4ById(artistId);
+
+  if (!artistV4) {
+    return getMockNewsItems(artistId);
+  }
+
+  try {
+    const query = buildArtistNewsQuery(artistV4);
+    const result = await searchNaverNews({
+      query,
+      display: 6,
+      sort: 'date',
+    });
+    const realNewsItems = naverNewsItemsToArtistNewsItems({
+      items: result.items,
+      query,
+      artist: artistV4,
+    });
+
+    return realNewsItems.length > 0
+      ? realNewsItems.slice(0, 6)
+      : getMockNewsItems(artistId);
+  } catch {
+    return getMockNewsItems(artistId);
+  }
+}
+
 export default async function ArtistDetailPage({ params }: PageProps) {
   const { artistId } = await params;
   const artist = getArtistV3ById(artistId);
@@ -72,7 +116,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
 
   const priceHistory = getArtistPriceHistory(artistId);
   const chartPoints = getArtistChartPoints(artistId);
-  const newsItems = getNewsByArtistId(artistId).slice(0, 6);
+  const newsItems = await getHybridNewsItems(artistId);
   const latestPrice = priceHistory[priceHistory.length - 1];
   const firstPrice = priceHistory[0];
 
