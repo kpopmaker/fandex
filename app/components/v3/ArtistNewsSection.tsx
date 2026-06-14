@@ -49,9 +49,15 @@ export default function ArtistNewsSection({
             className="rounded-2xl border-2 border-slate-100 bg-white p-4 text-left transition-[border-color,box-shadow] duration-200 hover:!border-white focus:!border-white focus:outline-none focus-visible:!border-white active:!border-white dark:!border-slate-800 dark:!bg-slate-950/60 dark:hover:!border-white dark:focus:!border-white dark:focus-visible:!border-white dark:active:!border-white [html[data-theme='night']_&]:!border-slate-800 [html[data-theme='night']_&]:!bg-slate-950/60 [html[data-theme='night']_&]:hover:!border-white [html[data-theme='night']_&]:focus:!border-white [html[data-theme='night']_&]:focus-visible:!border-white [html[data-theme='night']_&]:active:!border-white [html[data-theme='night']_&]:hover:!bg-slate-950/60 [html[data-theme='night']_&]:focus:!bg-slate-950/60 [html[data-theme='night']_&]:focus-visible:!bg-slate-950/60 [html[data-theme='night']_&]:active:!bg-slate-950/60"
           >
             <div className="mb-3 flex items-center justify-between gap-3">
-              <span className="rounded-full border border-slate-100 bg-white px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                {item.sourceType}
-              </span>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-full border border-slate-100 bg-white px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                  {item.sourceType}
+                </span>
+
+                {item.sourceStatus && (
+                  <SourceStatusBadge sourceStatus={item.sourceStatus} />
+                )}
+              </div>
 
               <span className="text-xs font-bold text-slate-400">
                 {item.publishedAt}
@@ -95,9 +101,15 @@ export default function ArtistNewsSection({
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-                  {selectedNews.sourceName}
-                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
+                    {selectedNews.sourceName}
+                  </p>
+
+                  {selectedNews.sourceStatus && (
+                    <SourceStatusBadge sourceStatus={selectedNews.sourceStatus} />
+                  )}
+                </div>
 
                 <h2
                   id="artist-news-dialog-title"
@@ -139,6 +151,21 @@ export default function ArtistNewsSection({
         </div>
       )}
     </div>
+  );
+}
+
+function SourceStatusBadge({ sourceStatus }: { sourceStatus: string }) {
+  const isMock = sourceStatus.toLowerCase().includes('mock');
+  const className = isMock
+    ? 'border-amber-200 bg-amber-50 text-amber-700 dark:!border-amber-500/30 dark:!bg-amber-500/10 dark:!text-amber-200'
+    : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:!border-emerald-500/30 dark:!bg-emerald-500/10 dark:!text-emerald-200';
+
+  return (
+    <span
+      className={`rounded-full border px-3 py-1 text-xs font-bold ${className}`}
+    >
+      {sourceStatus}
+    </span>
   );
 }
 
