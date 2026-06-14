@@ -306,10 +306,10 @@ export default async function ArtistDetailPage({ params }: PageProps) {
               {issuesToShow.map((issue) => (
                 <article
                   key={issue.id}
-                  className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+                  className="rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <div className="flex flex-wrap gap-2">
-                    <span className="rounded-full bg-cyan-100 px-2 py-1 text-xs font-black text-cyan-700 dark:bg-cyan-400 dark:text-slate-950">
+                    <span className="rounded-full border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 dark:!border-slate-500 dark:!bg-slate-800 dark:!text-slate-50">
                       #{issue.rank}
                     </span>
                     <span className="rounded-full bg-white px-2 py-1 text-xs font-bold text-slate-500 dark:bg-slate-950 dark:text-slate-400">
@@ -462,7 +462,7 @@ function FactorBar({
 
 function ContentIdea({ label, value }: { label: string; value: string }) {
   return (
-    <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+    <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700 dark:hover:bg-slate-900">
       <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">
         {label}
       </p>

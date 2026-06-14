@@ -60,14 +60,14 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="예: aespa, Karina, SM, RIIZE"
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-cyan-300"
+          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-base font-bold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-700/10 dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-cyan-300 dark:focus:bg-slate-900 dark:focus:ring-cyan-300/20"
         />
 
         {query && (
           <button
             type="button"
             onClick={() => setQuery('')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-slate-200 px-3 py-1 text-xs font-black text-slate-600 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300"
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-slate-200 px-3 py-1 text-xs font-black text-slate-600 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
           >
             지우기
           </button>
@@ -82,7 +82,7 @@ export default function ArtistSearch({ artists }: ArtistSearchProps) {
                 <Link
                   key={artist.id}
                   href={`/artists/${artist.id}`}
-                  className="group rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-cyan-300 hover:bg-cyan-50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-300 dark:hover:bg-slate-900"
+                  className="group rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-cyan-300 hover:bg-cyan-50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-300 dark:hover:bg-slate-900 dark:active:bg-slate-950"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>

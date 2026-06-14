@@ -44,7 +44,7 @@ export default function ArtistsPage() {
               <Link
                 key={item.artistId}
                 href={`/artists/${item.artistId}`}
-                className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-cyan-400/50 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950/70 dark:hover:bg-slate-900/80"
+                className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-cyan-400/50 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950/70 dark:hover:border-slate-700 dark:hover:bg-slate-900/80 dark:active:bg-slate-950"
               >
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <div>
@@ -101,7 +101,7 @@ export default function ArtistsPage() {
                   </div>
                 </div>
 
-                <p className="mt-5 text-sm font-bold text-slate-400 group-hover:text-cyan-300">
+                <p className="mt-5 text-sm font-bold text-slate-400 group-hover:text-cyan-700 dark:group-hover:text-cyan-300">
                   종목 상세 보기 →
                 </p>
               </Link>
