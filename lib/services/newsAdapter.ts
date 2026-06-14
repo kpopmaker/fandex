@@ -11,6 +11,21 @@ const htmlEntityMap: Record<string, string> = {
   nbsp: ' ',
 };
 
+const sourceNameByHostname: Record<string, string> = {
+  'en.yna.co.kr': 'Yonhap News',
+  'yna.co.kr': 'Yonhap News',
+  'koreaherald.com': 'The Korea Herald',
+  'koreajoongangdaily.joins.com': 'Korea JoongAng Daily',
+  'joins.com': 'Korea JoongAng Daily',
+  'breaknews.com': 'BreakNews',
+  'starnewskorea.com': 'StarNews',
+  'sportschosun.com': 'Sports Chosun',
+  'tenasia.hankyung.com': 'TenAsia',
+  'newsis.com': 'Newsis',
+  'mk.co.kr': 'Maeil Business Newspaper',
+  'naver.com': 'Naver News',
+};
+
 function decodeHtmlEntities(value: string) {
   return value.replace(/&(#\d+|#x[\da-f]+|[a-z]+);/gi, (entity, token: string) => {
     if (token.startsWith('#x')) {
@@ -52,6 +67,51 @@ function normalizeUrl(item: NaverNewsItem) {
   }
 }
 
+function getHostname(item: NaverNewsItem) {
+  const rawUrl = item.originallink || item.link;
+
+  try {
+    return new URL(rawUrl).hostname.replace(/^www\./, '');
+  } catch {
+    return undefined;
+  }
+}
+
+function toTitleCase(value: string) {
+  return value
+    .split(/[\s.-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function getSourceName(item: NaverNewsItem) {
+  const hostname = getHostname(item);
+
+  if (!hostname) {
+    return 'Naver News';
+  }
+
+  if (sourceNameByHostname[hostname]) {
+    return sourceNameByHostname[hostname];
+  }
+
+  const matchedHostname = Object.keys(sourceNameByHostname).find(
+    (mappedHostname) => hostname === mappedHostname || hostname.endsWith(`.${mappedHostname}`),
+  );
+
+  if (matchedHostname) {
+    return sourceNameByHostname[matchedHostname];
+  }
+
+  const fallbackHost = hostname
+    .split('.')
+    .filter((part) => !['com', 'co', 'kr', 'net', 'org'].includes(part))
+    .join(' ');
+
+  return fallbackHost ? toTitleCase(fallbackHost) : hostname;
+}
+
 function getImportanceScore(item: NaverNewsItem, query: string) {
   const searchableText = normalizeNewsText(`${item.title} ${item.description}`).toLowerCase();
   const queryTokens = query
@@ -89,7 +149,7 @@ export function naverNewsItemToArtistNewsItem({
     summary,
     detail: summary,
     source: 'Naver News',
-    sourceName: 'Naver',
+    sourceName: getSourceName(item),
     sourceType: 'News',
     url,
     publishedAt,
