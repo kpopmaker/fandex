@@ -1,4 +1,5 @@
 import { artistUniverseV4, getArtistV4ById } from '@/app/data/v4/artistUniverse';
+import { naverNewsItemsToArtistNewsItems } from '@/lib/services/newsAdapter';
 import {
   buildArtistNewsQuery,
   hasNaverNewsCredentials,
@@ -53,11 +54,23 @@ export async function GET(request: Request) {
 
   try {
     const result = await searchNaverNews({ query, display, sort });
+    const items = naverNewsItemsToArtistNewsItems({
+      items: result.items,
+      query,
+      artist,
+    });
 
     return Response.json({
       artistId: artist?.id ?? null,
       artistName: artist?.nameEn ?? null,
-      ...result,
+      source: result.source,
+      query: result.query,
+      display: result.display,
+      start: result.start,
+      sort: result.sort,
+      total: result.total,
+      lastBuildDate: result.lastBuildDate,
+      items,
     });
   } catch (error) {
     return Response.json(
