@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 type Theme = 'day' | 'night';
 
@@ -13,12 +13,22 @@ function applyTheme(theme: Theme) {
   root.classList.toggle('dark', theme === 'night');
 }
 
-function getStoredTheme(): Theme {
-  if (typeof window === 'undefined') {
+function getThemeSnapshot(): Theme {
+  if (typeof document === 'undefined') {
     return 'day';
   }
 
-  return window.localStorage.getItem(storageKey) === 'night' ? 'night' : 'day';
+  return document.documentElement.dataset.theme === 'night' ? 'night' : 'day';
+}
+
+function subscribe(listener: () => void) {
+  window.addEventListener('storage', listener);
+  window.addEventListener('fandex-theme-change', listener);
+
+  return () => {
+    window.removeEventListener('storage', listener);
+    window.removeEventListener('fandex-theme-change', listener);
+  };
 }
 
 function SunIcon() {
@@ -64,21 +74,14 @@ function MoonIcon() {
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>('day');
-
-  useEffect(() => {
-    const storedTheme = getStoredTheme();
-
-    setTheme(storedTheme);
-    applyTheme(storedTheme);
-  }, []);
+  const theme = useSyncExternalStore(subscribe, getThemeSnapshot, () => 'day');
 
   function toggleTheme() {
     const nextTheme = theme === 'day' ? 'night' : 'day';
 
-    setTheme(nextTheme);
     window.localStorage.setItem(storageKey, nextTheme);
     applyTheme(nextTheme);
+    window.dispatchEvent(new Event('fandex-theme-change'));
   }
 
   return (

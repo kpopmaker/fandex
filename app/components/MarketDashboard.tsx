@@ -166,7 +166,7 @@ export default function MarketDashboard() {
 
           <div className="mb-5 flex flex-wrap gap-2">
             {(Object.entries(pricePresets) as [PricePresetKey, typeof pricePresets[PricePresetKey]][]).map(
-              ([presetKey, preset]) => (
+              ([presetKey]) => (
                 <button
                   key={presetKey}
                   onClick={() => handlePresetChange(presetKey)}
