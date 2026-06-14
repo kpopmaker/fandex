@@ -46,8 +46,12 @@ export type ArtistOfficialChannelsV4 = {
 
 export type ArtistSearchProfile = {
   primaryQuery: string;
+  naverNewsQuery?: string;
   aliases: string[];
+  koreanAliases: string[];
+  englishAliases: string[];
   includeKeywords: string[];
+  disambiguationKeywords: string[];
   excludeKeywords: string[];
   markets: ArtistMarketCode[];
 };

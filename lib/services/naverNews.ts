@@ -35,6 +35,10 @@ export function hasNaverNewsCredentials() {
 }
 
 export function buildArtistNewsQuery(artist: ArtistV4) {
+  if (artist.profile.naverNewsQuery) {
+    return artist.profile.naverNewsQuery;
+  }
+
   return [artist.profile.primaryQuery, artist.agency]
     .filter(Boolean)
     .join(' ');
