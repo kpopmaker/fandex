@@ -46,10 +46,10 @@ export default function ArtistNewsSection({
             key={item.id}
             type="button"
             onClick={() => setSelectedNews(item)}
-            className="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-cyan-300 hover:bg-cyan-50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-300 dark:hover:bg-slate-900"
+            className="rounded-2xl border-2 border-slate-100 bg-white p-4 text-left transition-[border-color,box-shadow] duration-200 hover:!border-white focus:!border-white focus:outline-none focus-visible:!border-white active:!border-white dark:!border-slate-800 dark:!bg-slate-950/60 dark:hover:!border-white dark:focus:!border-white dark:focus-visible:!border-white dark:active:!border-white [html[data-theme='night']_&]:!border-slate-800 [html[data-theme='night']_&]:!bg-slate-950/60 [html[data-theme='night']_&]:hover:!border-white [html[data-theme='night']_&]:focus:!border-white [html[data-theme='night']_&]:focus-visible:!border-white [html[data-theme='night']_&]:active:!border-white [html[data-theme='night']_&]:hover:!bg-slate-950/60 [html[data-theme='night']_&]:focus:!bg-slate-950/60 [html[data-theme='night']_&]:focus-visible:!bg-slate-950/60 [html[data-theme='night']_&]:active:!bg-slate-950/60"
           >
             <div className="mb-3 flex items-center justify-between gap-3">
-              <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:bg-slate-950 dark:text-slate-400">
+              <span className="rounded-full border border-slate-100 bg-white px-3 py-1 text-xs font-bold text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
                 {item.sourceType}
               </span>
 
@@ -90,7 +90,7 @@ export default function ArtistNewsSection({
             role="dialog"
             aria-modal="true"
             aria-labelledby="artist-news-dialog-title"
-            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-950"
+            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:!border-slate-700 dark:!bg-slate-950"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex items-start justify-between gap-4">
@@ -101,7 +101,7 @@ export default function ArtistNewsSection({
 
                 <h2
                   id="artist-news-dialog-title"
-                  className="mt-2 text-2xl font-black text-slate-950 dark:text-white"
+                  className="mt-2 text-2xl font-black text-slate-950 dark:text-slate-50"
                 >
                   {selectedNews.title}
                 </h2>
@@ -110,13 +110,13 @@ export default function ArtistNewsSection({
               <button
                 type="button"
                 onClick={() => setSelectedNews(null)}
-                className="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-slate-600 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-300"
+                className="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-slate-600 hover:bg-slate-200 focus:outline-none focus:ring-4 focus:ring-slate-300/40 dark:!bg-slate-800 dark:!text-slate-200 dark:hover:!bg-slate-700 dark:focus:!bg-slate-800 dark:focus:ring-slate-700/40"
               >
                 Close
               </button>
             </div>
 
-            <p className="rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            <p className="rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-600 dark:!bg-slate-900 dark:!text-slate-300">
               {selectedNews.detail}
             </p>
 
@@ -129,7 +129,7 @@ export default function ArtistNewsSection({
               {selectedNews.relatedKeywords.map((keyword) => (
                 <span
                   key={keyword}
-                  className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-300"
+                  className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700 dark:!bg-slate-900 dark:!text-slate-300"
                 >
                   #{keyword}
                 </span>
@@ -144,9 +144,9 @@ export default function ArtistNewsSection({
 
 function InfoBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:!border-slate-700 dark:!bg-slate-900">
       <p className="text-xs font-bold text-slate-400">{label}</p>
-      <p className="mt-1 font-mono text-lg font-black text-slate-950 dark:text-white">
+      <p className="mt-1 font-mono text-lg font-black text-slate-950 dark:text-slate-50">
         {value}
       </p>
     </div>
