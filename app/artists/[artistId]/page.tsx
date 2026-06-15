@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getArtistV4ById } from '../../data/v4/artistUniverse';
+import {
+  artistUniverseV4,
+  getArtistV4ById,
+} from '../../data/v4/artistUniverse';
+import type { ArtistV4 } from '../../data/v4/types';
 import type { ArtistNewsItem } from '../../data/v3/types';
 import FandexLineChart from '../../components/FandexLineChart';
 import ArtistNewsSection from '../../components/v3/ArtistNewsSection';
@@ -33,9 +37,33 @@ type PageProps = {
 
 type MarketSignal = 'Rising' | 'Cooling' | 'Stable' | 'Watchlist';
 
+type ArtistDetailViewModel = {
+  id: string;
+  ticker: string;
+  name: string;
+  nameEn: string;
+  agency: string;
+  type: string;
+  status: string;
+  generation: string;
+  shortIntro: string;
+  debutDate: string;
+  fandomName?: string;
+  members: string[];
+  countryFocus: string[];
+  keywords: string[];
+};
+
 export function generateStaticParams() {
-  return artistUniverse.map((artist) => ({
-    artistId: artist.id,
+  const artistIds = Array.from(
+    new Set([
+      ...artistUniverse.map((artist) => artist.id),
+      ...artistUniverseV4.map((artist) => artist.id),
+    ])
+  );
+
+  return artistIds.map((artistId) => ({
+    artistId,
   }));
 }
 
@@ -70,6 +98,107 @@ function getCompareGroup(artistId: string) {
   return Array.from(new Set([artistId, 'aespa', 'ive', 'riize']))
     .slice(0, 4)
     .join(',');
+}
+
+function formatEntityType(entityType: ArtistV4['entityType']) {
+  const labels: Record<ArtistV4['entityType'], string> = {
+    group: 'Group',
+    solo: 'Solo',
+    unit: 'Unit',
+    project: 'Project',
+  };
+
+  return labels[entityType];
+}
+
+function formatLifecycleStatus(status: ArtistV4['lifecycleStatus']) {
+  const labels: Record<ArtistV4['lifecycleStatus'], string> = {
+    active: 'Active',
+    hiatus: 'Hiatus',
+    military: 'Military hiatus',
+    inactive: 'Inactive',
+    predebut: 'Pre-debut',
+  };
+
+  return labels[status];
+}
+
+function formatMarketCode(market: ArtistV4['profile']['markets'][number]) {
+  const labels: Record<ArtistV4['profile']['markets'][number], string> = {
+    KR: 'Korea',
+    JP: 'Japan',
+    US: 'United States',
+    SEA: 'Southeast Asia',
+    CN: 'China',
+    EU: 'Europe',
+    GLOBAL: 'Global',
+  };
+
+  return labels[market];
+}
+
+function createV4ArtistDetailViewModel(
+  artist: ArtistV4
+): ArtistDetailViewModel {
+  const keywords = Array.from(
+    new Set([
+      ...artist.profile.includeKeywords,
+      ...artist.profile.aliases,
+      artist.agency,
+    ])
+  ).filter(Boolean);
+  const countryFocus =
+    artist.profile.markets.length > 0
+      ? artist.profile.markets.map(formatMarketCode)
+      : ['Global'];
+
+  return {
+    id: artist.id,
+    ticker: artist.ticker,
+    name: artist.nameKo,
+    nameEn: artist.nameEn,
+    agency: artist.agency,
+    type: formatEntityType(artist.entityType),
+    status: formatLifecycleStatus(artist.lifecycleStatus),
+    generation: artist.generation ?? 'TBD',
+    shortIntro:
+      artist.shortIntro ??
+      `${artist.nameEn} is tracked in the FANDEX v4 artist universe.`,
+    debutDate: artist.debutDate ?? 'TBD',
+    fandomName: artist.fandomName,
+    members: artist.members,
+    countryFocus,
+    keywords,
+  };
+}
+
+function getArtistDetailViewModel(
+  artistId: string
+): ArtistDetailViewModel | undefined {
+  const artistV3 = getArtistV3ById(artistId);
+
+  if (artistV3) {
+    return {
+      id: artistV3.id,
+      ticker: artistV3.ticker,
+      name: artistV3.nameKo,
+      nameEn: artistV3.nameEn,
+      agency: artistV3.agency,
+      type: artistV3.type,
+      status: artistV3.status,
+      generation: artistV3.generation,
+      shortIntro: artistV3.shortIntro,
+      debutDate: artistV3.debutDate,
+      fandomName: artistV3.fandomName,
+      members: artistV3.members,
+      countryFocus: artistV3.countryFocus,
+      keywords: artistV3.keywords,
+    };
+  }
+
+  const artistV4 = getArtistV4ById(artistId);
+
+  return artistV4 ? createV4ArtistDetailViewModel(artistV4) : undefined;
 }
 
 function getMockNewsItems(artistId: string) {
@@ -110,7 +239,7 @@ async function getHybridNewsItems(artistId: string): Promise<ArtistNewsItem[]> {
 
 export default async function ArtistDetailPage({ params }: PageProps) {
   const { artistId } = await params;
-  const artist = getArtistV3ById(artistId);
+  const artist = getArtistDetailViewModel(artistId);
 
   if (!artist) {
     notFound();
