@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getMockArtistPrices } from '../data/mockPrices';
+import { getArtistRankingRowsV4 } from '../data/v4/artistRanking';
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat('en-US').format(value);
@@ -13,7 +13,7 @@ function formatLargeNumber(value: number) {
 }
 
 export default function RankingPage() {
-  const prices = getMockArtistPrices();
+  const prices = getArtistRankingRowsV4();
 
   const risingRanking = [...prices].sort(
     (a, b) => b.changeRate - a.changeRate
@@ -66,7 +66,7 @@ export default function RankingPage() {
   );
 }
 
-type RankingItem = ReturnType<typeof getMockArtistPrices>[number];
+type RankingItem = ReturnType<typeof getArtistRankingRowsV4>[number];
 
 function RankingCard({
   title,
