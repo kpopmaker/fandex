@@ -3,7 +3,9 @@ import Link from 'next/link';
 import ComparePriceChart from '../components/v3/ComparePriceChart';
 
 import { artistUniverse, getArtistV3ById } from '../data/v3/artistUniverse';
-import { factorDefinitionsV3, getArtistPriceHistory } from '../data/v3/mockData';
+import { getArtistV4ById } from '../data/v4/artistUniverse';
+import { factorDefinitionsV3 } from '../data/v3/mockData';
+import { getArtistPriceHistoryV4Compatible } from '../data/v4/scoring/compatibleHistory';
 
 const defaultArtistIds = ['aespa', 'ive', 'riize'];
 
@@ -13,10 +15,17 @@ type ComparePageProps = {
   }>;
 };
 
+type CompareArtistViewModel = {
+  id: string;
+  ticker: string;
+  nameKo: string;
+  nameEn: string;
+};
+
 type CompareRow = {
-  artist: NonNullable<ReturnType<typeof getArtistV3ById>>;
-  history: ReturnType<typeof getArtistPriceHistory>;
-  latest: ReturnType<typeof getArtistPriceHistory>[number];
+  artist: CompareArtistViewModel;
+  history: ReturnType<typeof getArtistPriceHistoryV4Compatible>;
+  latest: ReturnType<typeof getArtistPriceHistoryV4Compatible>[number];
   changeRate: number;
   isUp: boolean;
 };
@@ -67,6 +76,34 @@ function createCompareHref(ids: string[]): string {
   return `/compare?artists=${uniqueIds.join(',')}`;
 }
 
+function getCompareArtistViewModel(
+  artistId: string
+): CompareArtistViewModel | undefined {
+  const artistV3 = getArtistV3ById(artistId);
+
+  if (artistV3) {
+    return {
+      id: artistV3.id,
+      ticker: artistV3.ticker,
+      nameKo: artistV3.nameKo,
+      nameEn: artistV3.nameEn,
+    };
+  }
+
+  const artistV4 = getArtistV4ById(artistId);
+
+  if (!artistV4) {
+    return undefined;
+  }
+
+  return {
+    id: artistV4.id,
+    ticker: artistV4.ticker,
+    nameKo: artistV4.nameKo,
+    nameEn: artistV4.nameEn,
+  };
+}
+
 function getLeader(
   rows: CompareRow[],
   selectValue: (row: CompareRow) => number
@@ -99,13 +136,13 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
   const compareRows: CompareRow[] = selectedIds
     .map((id) => {
-      const artist = getArtistV3ById(id);
+      const artist = getCompareArtistViewModel(id);
 
       if (!artist) {
         return null;
       }
 
-      const history = getArtistPriceHistory(artist.id);
+      const history = getArtistPriceHistoryV4Compatible(artist.id);
       const first = history[0];
       const latest = history[history.length - 1];
 
