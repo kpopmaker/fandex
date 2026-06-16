@@ -13,15 +13,15 @@ function formatLargeNumber(value: number) {
 }
 
 export default function RankingPage() {
-  const prices = getArtistRankingRowsV4();
+  const rankingRows = getArtistRankingRowsV4();
 
-  const risingRanking = [...prices].sort(
+  const risingRanking = [...rankingRows].sort(
     (a, b) => b.changeRate - a.changeRate
   );
 
-  const volumeRanking = [...prices].sort((a, b) => b.volume - a.volume);
+  const volumeRanking = [...rankingRows].sort((a, b) => b.volume - a.volume);
 
-  const fanCapRanking = [...prices].sort((a, b) => b.fanCap - a.fanCap);
+  const fanCapRanking = [...rankingRows].sort((a, b) => b.fanCap - a.fanCap);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-sky-50 text-slate-950">
@@ -42,7 +42,7 @@ export default function RankingPage() {
         <div className="grid gap-6 lg:grid-cols-3">
           <RankingCard
             title="Top change"
-            description="Artists with the strongest simulated FANDEX price movement."
+            description="Artists with the strongest simulated FANDEX price movement across the full mocked session."
             items={risingRanking.slice(0, 5)}
             valueType="change"
           />
@@ -61,6 +61,8 @@ export default function RankingPage() {
             valueType="fanCap"
           />
         </div>
+
+        <ArtistList items={fanCapRanking} />
       </section>
     </main>
   );
@@ -153,5 +155,95 @@ function RankingCard({
         })}
       </div>
     </div>
+  );
+}
+
+function ArtistList({ items }: { items: RankingItem[] }) {
+  return (
+    <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h2 className="text-2xl font-black">Artist list by fan size</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Full v4 artist universe ranked by simulated fan size value, with the
+            highest fan size at the top.
+          </p>
+        </div>
+
+        <Link
+          href="/compare"
+          className="w-fit rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-700 transition hover:border-cyan-300 hover:text-cyan-600"
+        >
+          Compare artists
+        </Link>
+      </div>
+
+      <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        <table className="w-full min-w-[780px] text-left text-sm">
+          <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+            <tr>
+              <th className="px-4 py-3">Fan size rank</th>
+              <th className="px-4 py-3">Artist</th>
+              <th className="px-4 py-3">Agency</th>
+              <th className="px-4 py-3 text-right">FANDEX price</th>
+              <th className="px-4 py-3 text-right">Change</th>
+              <th className="px-4 py-3 text-right">Volume</th>
+              <th className="px-4 py-3 text-right">Fan size</th>
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-slate-200 bg-white">
+            {items.map((item, index) => {
+              const isUp = item.changeRate >= 0;
+
+              return (
+                <tr key={item.artistId} className="hover:bg-slate-50">
+                  <td className="px-4 py-4">
+                    <span className="font-mono font-black text-cyan-600">
+                      #{index + 1}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-4">
+                    <Link
+                      href={`/artists/${item.artistId}`}
+                      className="font-black text-slate-950 hover:text-cyan-600"
+                    >
+                      {item.nameEn}
+                    </Link>
+                    <p className="mt-1 font-mono text-xs text-slate-500">
+                      {item.ticker}
+                    </p>
+                  </td>
+
+                  <td className="px-4 py-4 text-slate-600">{item.agency}</td>
+
+                  <td className="px-4 py-4 text-right font-mono font-black">
+                    {item.price.toFixed(2)}
+                  </td>
+
+                  <td
+                    className={`px-4 py-4 text-right font-mono font-black ${
+                      isUp ? 'text-red-500' : 'text-blue-500'
+                    }`}
+                  >
+                    {isUp ? '+' : ''}
+                    {item.changeRate.toFixed(2)}%
+                  </td>
+
+                  <td className="px-4 py-4 text-right font-mono text-slate-600">
+                    {formatNumber(item.volume)}
+                  </td>
+
+                  <td className="px-4 py-4 text-right font-mono font-black text-cyan-600">
+                    {formatLargeNumber(item.fanCap)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
