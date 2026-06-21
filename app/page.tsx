@@ -2,11 +2,11 @@ import Link from 'next/link';
 import FandexLineChart from './components/FandexLineChart';
 import ArtistSearch from './components/v3/ArtistSearch';
 import { artistUniverse, getArtistV3ById } from './data/v3/artistUniverse';
+import { trendingIssues } from './data/v3/mockData';
 import {
-  getLatestMarketPoint,
-  marketChartPoints,
-  trendingIssues,
-} from './data/v3/mockData';
+  getKpopMarketChartPointsV4,
+  getKpopMarketIndexSummaryV4,
+} from './data/v4/marketIndex';
 import type { KpopIssue } from './data/v3/types';
 
 function formatPercent(value: number) {
@@ -108,10 +108,10 @@ function getHomepageIssueRows() {
 }
 
 export default function Home() {
-  const latestMarket = getLatestMarketPoint();
-  const values = marketChartPoints.map((point) => point.value);
-  const highValue = Math.max(...values);
-  const lowValue = Math.min(...values);
+  const latestMarket = getKpopMarketIndexSummaryV4();
+  const marketChartPoints = getKpopMarketChartPointsV4();
+  const highValue = latestMarket.highValue;
+  const lowValue = latestMarket.lowValue;
   const periodLabel = `${marketChartPoints[0]?.time ?? '-'} - ${
     marketChartPoints[marketChartPoints.length - 1]?.time ?? '-'
   }`;
