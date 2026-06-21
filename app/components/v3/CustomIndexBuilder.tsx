@@ -6,23 +6,27 @@ import type {
   ChartPoint,
   CustomIndexViewId,
   FactorKey,
+  FactorScores,
   FactorWeights,
 } from '../../data/v3/types';
 import {
-  calculateCustomScore,
   customIndexViews,
   defaultFactorWeightsV3,
   factorDefinitionsV3,
 } from '../../data/v3/mockData';
+import type { ArtistPriceHistoryPointV4 } from '../../data/v4/artistPriceHistory';
 import FandexLineChart from '../FandexLineChart';
+
+type CustomIndexHistoryPoint = ArtistPricePoint &
+  Partial<
+    Pick<ArtistPriceHistoryPointV4, 'scoreBreakdown' | 'v4ScoreBreakdown'>
+  >;
 
 type CustomIndexBuilderProps = {
   artistName: string;
-  priceHistory: ArtistPricePoint[];
+  priceHistory: CustomIndexHistoryPoint[];
 };
 
-// TODO(v4-price-history): accept ArtistPriceHistoryPointV4 directly once custom
-// index presets move from legacy v3 factor scores to native v4 scoreBreakdown.
 const allFactorKeys = factorDefinitionsV3.map((factor) => factor.key);
 
 const perspectiveOrder: CustomIndexViewId[] = [
@@ -48,7 +52,8 @@ const perspectiveLabels: Record<CustomIndexViewId, string> = {
 };
 
 function scoreToPrice(score: number) {
-  return Number((100 * Math.exp((score - 50) / 50)).toFixed(2));
+  const safeScore = clampScore(score);
+  return Number((100 * Math.exp((safeScore - 50) / 50)).toFixed(2));
 }
 
 function getChangeRate(points: ChartPoint[]) {
@@ -70,6 +75,76 @@ function buildWeights(enabledFactors: FactorKey[]) {
 
     return acc;
   }, {} as FactorWeights);
+}
+
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function clampScore(value: number | null | undefined) {
+  return Math.min(Math.max(safeNumber(value), 0), 100);
+}
+
+function getPointScoreBreakdown(point: CustomIndexHistoryPoint) {
+  return point.scoreBreakdown ?? point.v4ScoreBreakdown;
+}
+
+function getFallbackFactorScore(
+  point: CustomIndexHistoryPoint,
+  factorKey: FactorKey
+) {
+  return clampScore(point.scores[factorKey]);
+}
+
+function getFactorScoresFromHistoryPoint(
+  point: CustomIndexHistoryPoint
+): FactorScores {
+  const breakdown = getPointScoreBreakdown(point);
+
+  if (!breakdown) {
+    return allFactorKeys.reduce((acc, factorKey) => {
+      acc[factorKey] = getFallbackFactorScore(point, factorKey);
+      return acc;
+    }, {} as FactorScores);
+  }
+
+  const releaseCycleScore = clampScore(breakdown.releaseCycleScore);
+  const newsImpactScore = clampScore(breakdown.newsImpactScore);
+  const searchMomentumScore = clampScore(breakdown.searchMomentumScore);
+  const videoMomentumScore = clampScore(breakdown.videoMomentumScore);
+  const agencyFinancialScore = clampScore(breakdown.agencyFinancialScore);
+  const totalScore = clampScore(breakdown.totalScore);
+
+  return {
+    music: clampScore(totalScore * 0.45 + videoMomentumScore * 0.35 + searchMomentumScore * 0.2),
+    album: releaseCycleScore,
+    youtube: videoMomentumScore,
+    sns: clampScore(videoMomentumScore * 0.55 + searchMomentumScore * 0.45),
+    search: searchMomentumScore,
+    news: newsImpactScore,
+    global: agencyFinancialScore,
+    fandom: clampScore(releaseCycleScore * 0.45 + agencyFinancialScore * 0.55),
+    company: agencyFinancialScore,
+  };
+}
+
+function calculateCustomIndexScore(
+  scores: FactorScores,
+  weights: FactorWeights
+) {
+  const totalWeight = Object.values(weights).reduce(
+    (sum, weight) => sum + Math.max(safeNumber(weight), 0),
+    0
+  );
+
+  if (totalWeight === 0) {
+    return 0;
+  }
+
+  return allFactorKeys.reduce((sum, factorKey) => {
+    const weight = Math.max(safeNumber(weights[factorKey]), 0);
+    return sum + clampScore(scores[factorKey]) * (weight / totalWeight);
+  }, 0);
 }
 
 function getAutoReading({
@@ -120,10 +195,12 @@ export default function CustomIndexBuilder({
   }, [activeFactors]);
 
   const officialChartPoints: ChartPoint[] = useMemo(() => {
-    return priceHistory.map((point) => ({
-      time: point.time,
-      value: point.price,
-    }));
+    return priceHistory
+      .filter((point) => Number.isFinite(point.price))
+      .map((point) => ({
+        time: point.time,
+        value: Math.max(safeNumber(point.price), 0),
+      }));
   }, [priceHistory]);
 
   const selectedChartPoints: ChartPoint[] = useMemo(() => {
@@ -131,14 +208,19 @@ export default function CustomIndexBuilder({
       return officialChartPoints;
     }
 
-    return priceHistory.map((point) => {
-      const selectedScore = calculateCustomScore(point.scores, selectedWeights);
+    return priceHistory
+      .map((point) => {
+        const selectedScore = calculateCustomIndexScore(
+          getFactorScoresFromHistoryPoint(point),
+          selectedWeights
+        );
 
-      return {
-        time: point.time,
-        value: scoreToPrice(selectedScore),
-      };
-    });
+        return {
+          time: point.time,
+          value: scoreToPrice(selectedScore),
+        };
+      })
+      .filter((point) => Number.isFinite(point.value));
   }, [officialChartPoints, priceHistory, selectedViewId, selectedWeights]);
 
   const officialChangeRate = getChangeRate(officialChartPoints);
