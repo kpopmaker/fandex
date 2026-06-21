@@ -21,6 +21,8 @@ type CustomIndexBuilderProps = {
   priceHistory: ArtistPricePoint[];
 };
 
+// TODO(v4-price-history): accept ArtistPriceHistoryPointV4 directly once custom
+// index presets move from legacy v3 factor scores to native v4 scoreBreakdown.
 const allFactorKeys = factorDefinitionsV3.map((factor) => factor.key);
 
 const perspectiveOrder: CustomIndexViewId[] = [

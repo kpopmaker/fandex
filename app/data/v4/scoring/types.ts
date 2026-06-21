@@ -79,12 +79,17 @@ export type PriceCalculationResult = {
 
 export type ArtistPriceHistoryPointV4 = {
   artistId: string;
+  date: string;
+  timestamp: string;
   time: string;
   price: number;
+  change: number;
   changeRate: number;
   volume: number;
+  fandomSize: number;
   fanSizeValue: number;
   scores: FactorScores;
+  scoreBreakdown: ScoreBreakdown;
   absoluteMetrics: Partial<Record<FactorKey, number>>;
   lifecycleAdjustment: {
     albumReleaseCycle: number;
@@ -96,4 +101,3 @@ export type ArtistPriceHistoryPointV4 = {
   v4ScoreBreakdown: ScoreBreakdown;
   rawSignal: RawSignalSnapshot;
 };
-

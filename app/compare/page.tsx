@@ -5,7 +5,7 @@ import ComparePriceChart from '../components/v3/ComparePriceChart';
 import { artistUniverse, getArtistV3ById } from '../data/v3/artistUniverse';
 import { getArtistV4ById } from '../data/v4/artistUniverse';
 import { factorDefinitionsV3 } from '../data/v3/mockData';
-import { getArtistPriceHistoryV4Compatible } from '../data/v4/scoring/compatibleHistory';
+import { getArtistPriceHistoryV4 } from '../data/v4/artistPriceHistory';
 
 const defaultArtistIds = ['aespa', 'ive', 'riize'];
 
@@ -24,8 +24,8 @@ type CompareArtistViewModel = {
 
 type CompareRow = {
   artist: CompareArtistViewModel;
-  history: ReturnType<typeof getArtistPriceHistoryV4Compatible>;
-  latest: ReturnType<typeof getArtistPriceHistoryV4Compatible>[number];
+  history: ReturnType<typeof getArtistPriceHistoryV4>;
+  latest: ReturnType<typeof getArtistPriceHistoryV4>[number];
   changeRate: number;
   isUp: boolean;
 };
@@ -142,7 +142,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         return null;
       }
 
-      const history = getArtistPriceHistoryV4Compatible(artist.id);
+      const history = getArtistPriceHistoryV4(artist.id);
       const first = history[0];
       const latest = history[history.length - 1];
 

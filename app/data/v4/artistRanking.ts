@@ -1,5 +1,5 @@
 import { artistUniverseV4 } from './artistUniverse';
-import { getArtistPriceHistoryV4Compatible } from './scoring/compatibleHistory';
+import { getArtistPriceHistoryV4 } from './artistPriceHistory';
 
 export type ArtistRankingRowV4 = {
   artistId: string;
@@ -16,7 +16,7 @@ export type ArtistRankingRowV4 = {
 
 export function getArtistRankingRowsV4(): ArtistRankingRowV4[] {
   return artistUniverseV4.map((artist) => {
-    const history = getArtistPriceHistoryV4Compatible(artist.id);
+    const history = getArtistPriceHistoryV4(artist.id);
     const first = history[0];
     const latest = history[history.length - 1];
     const priceChange = Number((latest.price - first.price).toFixed(2));

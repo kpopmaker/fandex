@@ -19,9 +19,9 @@ import {
   trendingIssues,
 } from '../../data/v3/mockData';
 import {
-  getArtistChartPointsV4Compatible,
-  getArtistPriceHistoryV4Compatible,
-} from '../../data/v4/scoring/compatibleHistory';
+  getArtistChartPointsV4,
+  getArtistPriceHistoryV4,
+} from '../../data/v4/artistPriceHistory';
 import { naverNewsItemsToArtistNewsItems } from '../../../lib/services/newsAdapter';
 import {
   buildArtistNewsQuery,
@@ -245,8 +245,8 @@ export default async function ArtistDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const priceHistory = getArtistPriceHistoryV4Compatible(artistId);
-  const chartPoints = getArtistChartPointsV4Compatible(artistId);
+  const priceHistory = getArtistPriceHistoryV4(artistId);
+  const chartPoints = getArtistChartPointsV4(artistId);
   const newsItems = await getHybridNewsItems(artistId);
   const latestPrice = priceHistory[priceHistory.length - 1];
   const firstPrice = priceHistory[0];

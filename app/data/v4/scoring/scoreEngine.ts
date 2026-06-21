@@ -9,12 +9,14 @@ export const defaultV4ScoreWeights: Record<V4ScoreKey, number> = {
 };
 
 function clamp(value: number, min = 0, max = 100) {
-  return Math.min(Math.max(value, min), max);
+  const safeValue = Number.isFinite(value) ? value : min;
+  return Math.min(Math.max(safeValue, min), max);
 }
 
 function round(value: number, digits = 2) {
   const multiplier = 10 ** digits;
-  return Math.round(value * multiplier) / multiplier;
+  const safeValue = Number.isFinite(value) ? value : 0;
+  return Math.round(safeValue * multiplier) / multiplier;
 }
 
 function logarithmicScore(value: number, baseline: number, maxScore = 100) {
@@ -112,4 +114,3 @@ export function calculateScoreBreakdown(
     weights,
   };
 }
-
