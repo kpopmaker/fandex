@@ -5,7 +5,7 @@ import {
   getArtistV4ById,
 } from '../../data/v4/artistUniverse';
 import type { ArtistV4 } from '../../data/v4/types';
-import type { ArtistNewsItem } from '../../data/v3/types';
+import type { ArtistNewsItem, ChartPoint } from '../../data/v3/types';
 import FandexLineChart from '../../components/FandexLineChart';
 import ArtistNewsSection from '../../components/v3/ArtistNewsSection';
 import CustomIndexBuilder from '../../components/v3/CustomIndexBuilder';
@@ -71,11 +71,13 @@ function formatLargeNumber(value: number) {
   return new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1,
-  }).format(value);
+  }).format(safeNumber(value));
 }
 
 function formatPercent(value: number) {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+  const safeValue = safeNumber(value);
+
+  return `${safeValue >= 0 ? '+' : ''}${safeValue.toFixed(2)}%`;
 }
 
 function getMarketSignal(changeRate: number, volume: number): MarketSignal {
@@ -92,6 +94,48 @@ function getMarketSignal(changeRate: number, volume: number): MarketSignal {
   }
 
   return 'Stable';
+}
+
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function safePositiveNumber(
+  value: number | null | undefined,
+  fallback = 0
+): number {
+  return Math.max(safeNumber(value, fallback), 0);
+}
+
+function getChangeRateFromHistory(firstPrice: number, latestPrice: number) {
+  const safeFirstPrice = safeNumber(firstPrice);
+  const safeLatestPrice = safeNumber(latestPrice);
+
+  if (safeFirstPrice === 0) {
+    return 0;
+  }
+
+  return ((safeLatestPrice - safeFirstPrice) / safeFirstPrice) * 100;
+}
+
+function getPeriodLabel(chartPoints: ChartPoint[]) {
+  const first = chartPoints[0];
+  const latest = chartPoints[chartPoints.length - 1];
+
+  if (!first || !latest) {
+    return '-';
+  }
+
+  return `${first.time} - ${latest.time}`;
+}
+
+function toChartSeriesPoints(chartPoints: ChartPoint[]) {
+  return chartPoints
+    .filter((point) => Number.isFinite(point.value))
+    .map((point) => ({
+      label: point.time,
+      value: point.value,
+    }));
 }
 
 function getCompareGroup(artistId: string) {
@@ -250,23 +294,25 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const newsItems = await getHybridNewsItems(artistId);
   const latestPrice = priceHistory[priceHistory.length - 1];
   const firstPrice = priceHistory[0];
+  const officialChartPoints = toChartSeriesPoints(chartPoints);
 
-  if (!latestPrice || !firstPrice) {
+  if (!latestPrice || !firstPrice || officialChartPoints.length === 0) {
     notFound();
   }
 
-  const priceChange = latestPrice.price - firstPrice.price;
-  const priceChangeRate = (priceChange / firstPrice.price) * 100;
+  const currentPrice = safePositiveNumber(latestPrice.price);
+  const currentVolume = safePositiveNumber(latestPrice.volume);
+  const currentFanSizeValue = safePositiveNumber(latestPrice.fanSizeValue);
+  const priceChange = currentPrice - safeNumber(firstPrice.price);
+  const priceChangeRate = getChangeRateFromHistory(firstPrice.price, currentPrice);
   const isUp = priceChange >= 0;
-  const marketSignal = getMarketSignal(priceChangeRate, latestPrice.volume);
-  const periodLabel = `${priceHistory[0]?.time ?? '-'} - ${
-    priceHistory[priceHistory.length - 1]?.time ?? '-'
-  }`;
+  const marketSignal = getMarketSignal(priceChangeRate, currentVolume);
+  const periodLabel = getPeriodLabel(chartPoints);
   const factorRows = factorDefinitionsV3
     .map((factor) => ({
       key: factor.key,
       label: factor.label,
-      score: latestPrice.scores[factor.key],
+      score: safeNumber(latestPrice.scores[factor.key]),
       helpText: factor.helpText,
     }))
     .sort((a, b) => b.score - a.score);
@@ -353,7 +399,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           <MarketStat
             label="Current FANDEX price"
-            value={`${latestPrice.price.toFixed(2)} FDX`}
+            value={`${currentPrice.toFixed(2)} FDX`}
             tone="black"
           />
           <MarketStat
@@ -363,12 +409,12 @@ export default async function ArtistDetailPage({ params }: PageProps) {
           />
           <MarketStat
             label="Volume"
-            value={formatLargeNumber(latestPrice.volume)}
+            value={formatLargeNumber(currentVolume)}
             tone="purple"
           />
           <MarketStat
             label="Fan size value"
-            value={formatLargeNumber(latestPrice.fanSizeValue)}
+            value={formatLargeNumber(currentFanSizeValue)}
             tone="cyan"
           />
           <MarketStat
@@ -408,10 +454,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                 {
                   id: `${artist.id}-official-price`,
                   label: `${artist.ticker} Official FANDEX`,
-                  points: chartPoints.map((point) => ({
-                    label: point.time,
-                    value: point.value,
-                  })),
+                  points: officialChartPoints,
                 },
               ]}
             />
