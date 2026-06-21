@@ -5,6 +5,7 @@ import type {
   ScoreBreakdown,
   V4ScoreKey,
 } from './types';
+import { getIssueScoreBreakdownForArtist } from './issueScoreEngine';
 
 export const defaultV4ScoreWeights: Record<V4ScoreKey, number> = {
   releaseCycleScore: 18,
@@ -206,10 +207,21 @@ export function calculateScoreBreakdown(
           return sum + score * (weights[key as V4ScoreKey] / totalWeight);
         }, 0)
       : 0;
+  const issueScoreBreakdown = getIssueScoreBreakdownForArtist(
+    signal.artistId,
+    signal.collectedAt,
+  );
 
   return {
     ...scores,
     totalScore: round(totalScore, 2),
     weights,
+    issueScore: issueScoreBreakdown.issueScore,
+    newsSentimentScore: issueScoreBreakdown.newsSentimentScore,
+    issueMomentumScore: issueScoreBreakdown.issueMomentumScore,
+    controversyRiskScore: issueScoreBreakdown.controversyRiskScore,
+    confidenceScore: issueScoreBreakdown.confidenceScore,
+    volatilityScore: issueScoreBreakdown.volatilityScore,
+    issueScoreBreakdown,
   };
 }

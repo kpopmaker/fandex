@@ -7,6 +7,80 @@ export type V4ScoreKey =
   | 'videoMomentumScore'
   | 'agencyFinancialScore';
 
+export type IssueCategory =
+  | 'comeback_announcement'
+  | 'album_release'
+  | 'chart_record'
+  | 'music_show_win'
+  | 'tour_announcement'
+  | 'sold_out_event'
+  | 'brand_deal'
+  | 'award_win'
+  | 'viral_moment'
+  | 'fandom_growth'
+  | 'member_issue'
+  | 'contract_issue'
+  | 'legal_issue'
+  | 'health_issue'
+  | 'controversy'
+  | 'hiatus_announcement'
+  | 'enlistment'
+  | 'disbandment_rumor'
+  | 'agency_issue';
+
+export type IssueSourceType =
+  | 'official_agency'
+  | 'artist_official'
+  | 'major_media'
+  | 'entertainment_media'
+  | 'chart_platform'
+  | 'social_trend'
+  | 'community_rumor'
+  | 'unknown_source';
+
+export type IssueLifecycleStage =
+  | 'breaking'
+  | 'confirmed'
+  | 'amplified'
+  | 'cooling'
+  | 'resolved'
+  | 'archived';
+
+export type IssueDecaySpeed = 'fast' | 'medium' | 'slow';
+
+export type IssueSignal = {
+  issueId: string;
+  artistId: string;
+  category: IssueCategory;
+  title: string;
+  sourceType: IssueSourceType;
+  sentimentScore: number;
+  reliabilityWeight: number;
+  publishedAt: string;
+  detectedAt: string;
+  lifecycleStage: IssueLifecycleStage;
+  impactScore: number;
+  volatilityImpact: number;
+  confidenceImpact: number;
+  expiresAt: string;
+  decaySpeed?: IssueDecaySpeed;
+  duplicateGroupId?: string;
+  officiallyConfirmed?: boolean;
+  relatedKeywords?: string[];
+};
+
+export type IssueScoreBreakdown = {
+  issueScore: number;
+  newsSentimentScore: number;
+  issueMomentumScore: number;
+  controversyRiskScore: number;
+  confidenceScore: number;
+  volatilityScore: number;
+  activeIssueCount: number;
+  positiveIssueCount: number;
+  negativeIssueCount: number;
+};
+
 export type RawSignalSnapshot = {
   artistId: string;
   collectedAt: string;
@@ -74,6 +148,13 @@ export type LifecycleSignal = {
 export type ScoreBreakdown = Record<V4ScoreKey, number> & {
   totalScore: number;
   weights: Record<V4ScoreKey, number>;
+  issueScore?: number;
+  newsSentimentScore?: number;
+  issueMomentumScore?: number;
+  controversyRiskScore?: number;
+  confidenceScore?: number;
+  volatilityScore?: number;
+  issueScoreBreakdown?: IssueScoreBreakdown;
 };
 
 export type PriceCalculationInput = {
