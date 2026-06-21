@@ -1,6 +1,12 @@
 import { artistUniverseV4, getArtistV4ById } from '../artistUniverse';
 import type { ArtistV4 } from '../types';
-import type { ArtistSignalMetrics, LifecycleSignal, RawSignalSnapshot } from './types';
+import type {
+  ArtistSignalMetrics,
+  CareerStage,
+  LifecycleSignal,
+  RawSignalSnapshot,
+  ReleaseCyclePhase,
+} from './types';
 
 export const V4_COMPATIBLE_HISTORY_TIMES = [
   '09:00',
@@ -101,14 +107,103 @@ function getTierMultiplier(artist: ArtistV4) {
   return multipliers[artist.collection.tier];
 }
 
+function getDebutAgeYears(artist: ArtistV4) {
+  if (!artist.debutDate) {
+    return 3;
+  }
+
+  const debutTime = new Date(artist.debutDate).getTime();
+  const referenceTime = new Date(`${FIXED_HISTORY_DATE}T00:00:00.000Z`).getTime();
+
+  if (!Number.isFinite(debutTime)) {
+    return 3;
+  }
+
+  return Math.max((referenceTime - debutTime) / (365.25 * 24 * 60 * 60 * 1000), 0);
+}
+
+function getCareerStage(artist: ArtistV4): CareerStage {
+  const debutAgeYears = getDebutAgeYears(artist);
+
+  if (artist.lifecycleStatus === 'predebut' || debutAgeYears < 1) {
+    return 'rookie';
+  }
+
+  if (debutAgeYears < 3) {
+    return 'growth';
+  }
+
+  if (debutAgeYears < 7) {
+    return 'established';
+  }
+
+  if (debutAgeYears < 12) {
+    return 'mature';
+  }
+
+  return 'legacy';
+}
+
+function getDebutAgeFactor(careerStage: CareerStage) {
+  const factors: Record<CareerStage, number> = {
+    rookie: 1.05,
+    growth: 1.04,
+    established: 1,
+    mature: 0.98,
+    legacy: 0.96,
+  };
+
+  return factors[careerStage];
+}
+
+function getReleaseCyclePhase(daysSinceLastRelease: number): ReleaseCyclePhase {
+  if (daysSinceLastRelease < 0) {
+    return 'pre_comeback';
+  }
+
+  if (daysSinceLastRelease <= 10) {
+    return 'comeback_peak';
+  }
+
+  if (daysSinceLastRelease <= 45) {
+    return 'active_promotion';
+  }
+
+  if (daysSinceLastRelease <= 90) {
+    return 'post_promotion';
+  }
+
+  if (daysSinceLastRelease <= 210) {
+    return 'normal';
+  }
+
+  return 'hiatus';
+}
+
 function getLifecycleSignal(artist: ArtistV4, pointIndex: number): LifecycleSignal {
+  const careerStage = getCareerStage(artist);
+  const debutAgeFactor = getDebutAgeFactor(careerStage);
+
   if (artist.lifecycleStatus === 'predebut') {
+    const daysSinceLastRelease = -14 + pointIndex;
+    const releaseCyclePhase: ReleaseCyclePhase = 'pre_comeback';
+    const comebackMomentum = 64 + pointIndex * 2;
+    const activityFreshness = 56 + pointIndex;
+    const hiatusRisk = 12;
+
     return {
-      daysFromLatestRelease: -14 + pointIndex,
+      daysFromLatestRelease: daysSinceLastRelease,
+      daysSinceLastRelease,
       releasePhase: 'predebut',
+      releaseCyclePhase,
+      comebackMomentum,
       comebackPeriod: 1.08,
+      activityFreshness,
       activityPeriod: 0.8,
+      hiatusRisk,
       hiatusPeriod: 0,
+      debutAgeFactor,
+      careerStage,
       comebackReactionStrength: 64,
       activityEffect: 56,
       hiatusRetention: 72,
@@ -116,13 +211,26 @@ function getLifecycleSignal(artist: ArtistV4, pointIndex: number): LifecycleSign
   }
 
   if (artist.lifecycleStatus === 'hiatus' || artist.lifecycleStatus === 'military') {
+    const daysSinceLastRelease = 240 + pointIndex;
+    const releaseCyclePhase: ReleaseCyclePhase = 'hiatus';
+    const comebackMomentum = 48;
+    const activityFreshness = 42;
+    const hiatusRisk = artist.lifecycleStatus === 'military' ? 72 : 64;
+
     return {
       latestReleaseDate: artist.debutDate,
-      daysFromLatestRelease: 240 + pointIndex,
+      daysFromLatestRelease: daysSinceLastRelease,
+      daysSinceLastRelease,
       releasePhase: 'hiatus',
+      releaseCyclePhase,
+      comebackMomentum,
       comebackPeriod: 0.82,
+      activityFreshness,
       activityPeriod: 0.72,
+      hiatusRisk,
       hiatusPeriod: 1,
+      debutAgeFactor,
+      careerStage,
       comebackReactionStrength: 48,
       activityEffect: 42,
       hiatusRetention: 78,
@@ -130,23 +238,50 @@ function getLifecycleSignal(artist: ArtistV4, pointIndex: number): LifecycleSign
   }
 
   const seed = hashString(`${artist.id}-release-cycle`) % 120;
-  const daysFromLatestRelease = Math.max(0, seed - 20 + pointIndex);
+  const daysFromLatestRelease = Math.max(-10, seed - 20 + pointIndex);
+  const releaseCyclePhase = getReleaseCyclePhase(daysFromLatestRelease);
   const releasePhase =
-    daysFromLatestRelease <= 7
-      ? 'launch'
-      : daysFromLatestRelease <= 45
-        ? 'active_promotion'
-        : 'catalog';
+    releaseCyclePhase === 'pre_comeback'
+      ? 'pre_release'
+      : releaseCyclePhase === 'comeback_peak'
+        ? 'launch'
+        : releaseCyclePhase === 'normal' || releaseCyclePhase === 'post_promotion'
+          ? 'catalog'
+          : releaseCyclePhase;
+  const comebackMomentum = clamp(
+    62 + seededRange(`${artist.id}-comeback`, -12, 18) +
+      (releaseCyclePhase === 'pre_comeback' || releaseCyclePhase === 'comeback_peak' ? 8 : 0),
+    35,
+    98,
+  );
+  const activityFreshness = clamp(
+    58 + seededRange(`${artist.id}-activity`, -10, 16) -
+      Math.max(daysFromLatestRelease - 90, 0) * 0.08,
+    35,
+    98,
+  );
+  const hiatusRisk = clamp(
+    Math.max(daysFromLatestRelease - 150, 0) * 0.28,
+    0,
+    82,
+  );
 
   return {
     latestReleaseDate: artist.debutDate,
     daysFromLatestRelease,
+    daysSinceLastRelease: daysFromLatestRelease,
     releasePhase,
-    comebackPeriod: releasePhase === 'launch' ? 1.18 : releasePhase === 'active_promotion' ? 1.08 : 0.96,
-    activityPeriod: releasePhase === 'catalog' ? 0.92 : 1.05,
+    releaseCyclePhase,
+    comebackMomentum,
+    comebackPeriod: releaseCyclePhase === 'comeback_peak' ? 1.18 : releaseCyclePhase === 'active_promotion' ? 1.08 : 0.96,
+    activityFreshness,
+    activityPeriod: releaseCyclePhase === 'normal' || releaseCyclePhase === 'post_promotion' ? 0.94 : 1.05,
+    hiatusRisk,
     hiatusPeriod: 0,
-    comebackReactionStrength: clamp(62 + seededRange(`${artist.id}-comeback`, -12, 18), 35, 98),
-    activityEffect: clamp(58 + seededRange(`${artist.id}-activity`, -10, 16), 35, 98),
+    debutAgeFactor,
+    careerStage,
+    comebackReactionStrength: comebackMomentum,
+    activityEffect: activityFreshness,
     hiatusRetention: clamp(66 + seededRange(`${artist.id}-retention`, -8, 12), 35, 98),
   };
 }
@@ -199,4 +334,3 @@ export function getMockRawSignalHistory(artistId: string): RawSignalSnapshot[] {
     getMockRawSignalSnapshot(artistId, index),
   );
 }
-

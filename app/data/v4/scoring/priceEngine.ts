@@ -48,10 +48,13 @@ function calculateVolume(input: PriceCalculationInput) {
 export function calculateArtistPrice(input: PriceCalculationInput): PriceCalculationResult {
   const totalScore = safeNumber(input.scoreBreakdown.totalScore);
   const basePrice = getArtistBasePrice(input.artistId);
-  const lifecycleMultiplier =
+  const lifecycleMultiplier = clamp(
     safeNumber(input.signal.lifecycle.comebackPeriod, 1) *
-    safeNumber(input.signal.lifecycle.activityPeriod, 1) *
-    Math.max(safeNumber(input.signal.lifecycle.hiatusRetention, 100) / 100, 0.55);
+      safeNumber(input.signal.lifecycle.activityPeriod, 1) *
+      Math.max(safeNumber(input.signal.lifecycle.hiatusRetention, 100) / 100, 0.55),
+    0.68,
+    1.18,
+  );
   const scoreScale = Math.exp((totalScore - 50) / 58);
   const price = round(clamp(basePrice * scoreScale * lifecycleMultiplier, 20, 600), 2);
   const previousPrice =

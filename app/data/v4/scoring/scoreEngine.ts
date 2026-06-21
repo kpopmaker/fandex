@@ -1,4 +1,10 @@
-import type { RawSignalSnapshot, ScoreBreakdown, V4ScoreKey } from './types';
+import type {
+  CareerStage,
+  RawSignalSnapshot,
+  ReleaseCyclePhase,
+  ScoreBreakdown,
+  V4ScoreKey,
+} from './types';
 
 export const defaultV4ScoreWeights: Record<V4ScoreKey, number> = {
   releaseCycleScore: 18,
@@ -19,6 +25,10 @@ function round(value: number, digits = 2) {
   return Math.round(safeValue * multiplier) / multiplier;
 }
 
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
 function logarithmicScore(value: number, baseline: number, maxScore = 100) {
   if (value <= 0) {
     return 0;
@@ -27,23 +37,112 @@ function logarithmicScore(value: number, baseline: number, maxScore = 100) {
   return clamp((Math.log10(value + 1) / Math.log10(baseline + 1)) * maxScore);
 }
 
+function normalizeReleasePhase(phase?: ReleaseCyclePhase): ReleaseCyclePhase {
+  const phaseMap: Partial<Record<ReleaseCyclePhase, ReleaseCyclePhase>> = {
+    pre_release: 'pre_comeback',
+    launch: 'comeback_peak',
+    catalog: 'normal',
+  };
+
+  return phaseMap[phase ?? 'normal'] ?? phase ?? 'normal';
+}
+
+function getReleasePhaseBaseScore(phase: ReleaseCyclePhase) {
+  const baseScores: Record<ReleaseCyclePhase, number> = {
+    pre_comeback: 82,
+    comeback_peak: 94,
+    active_promotion: 86,
+    post_promotion: 68,
+    normal: 56,
+    hiatus: 42,
+    predebut: 58,
+    pre_release: 82,
+    launch: 94,
+    catalog: 56,
+  };
+
+  return baseScores[phase];
+}
+
+function calculateReleaseRecencyScore(daysSinceLastRelease: number) {
+  if (daysSinceLastRelease < 0) {
+    return clamp(74 + Math.min(Math.abs(daysSinceLastRelease), 30) * 0.5, 35, 94);
+  }
+
+  if (daysSinceLastRelease <= 14) {
+    return clamp(98 - daysSinceLastRelease * 1.1, 35, 100);
+  }
+
+  if (daysSinceLastRelease <= 60) {
+    return clamp(84 - (daysSinceLastRelease - 14) * 0.42, 35, 100);
+  }
+
+  if (daysSinceLastRelease <= 180) {
+    return clamp(64 - (daysSinceLastRelease - 60) * 0.12, 35, 100);
+  }
+
+  return clamp(50 - Math.min((daysSinceLastRelease - 180) * 0.04, 18), 32, 100);
+}
+
+function getCareerStageAdjustment(careerStage?: CareerStage) {
+  const adjustments: Record<CareerStage, number> = {
+    rookie: 3,
+    growth: 2,
+    established: 0,
+    mature: -1,
+    legacy: -2,
+  };
+
+  return careerStage ? adjustments[careerStage] : 0;
+}
+
 export function calculateReleaseCycleScore(signal: RawSignalSnapshot) {
   const lifecycle = signal.lifecycle;
-  const phaseBonus = {
-    pre_release: 12,
-    launch: 18,
-    active_promotion: 10,
-    catalog: -2,
-    hiatus: -12,
-    predebut: 4,
-  }[lifecycle.releasePhase];
-  const recencyScore = clamp(100 - Math.max(lifecycle.daysFromLatestRelease, 0) * 1.15);
+  const daysSinceLastRelease = clamp(
+    safeNumber(lifecycle.daysSinceLastRelease ?? lifecycle.daysFromLatestRelease, 120),
+    -60,
+    900,
+  );
+  const releaseCyclePhase = normalizeReleasePhase(
+    lifecycle.releaseCyclePhase ?? lifecycle.releasePhase,
+  );
+  const phaseScore = getReleasePhaseBaseScore(releaseCyclePhase);
+  const recencyScore = calculateReleaseRecencyScore(daysSinceLastRelease);
+  const comebackMomentum = clamp(
+    safeNumber(lifecycle.comebackMomentum ?? lifecycle.comebackReactionStrength, 55),
+    0,
+    100,
+  );
+  const activityFreshness = clamp(
+    safeNumber(lifecycle.activityFreshness ?? lifecycle.activityEffect, 55),
+    0,
+    100,
+  );
+  const hiatusRetention = clamp(safeNumber(lifecycle.hiatusRetention, 70), 0, 100);
+  const hiatusRisk = clamp(
+    safeNumber(
+      lifecycle.hiatusRisk,
+      releaseCyclePhase === 'hiatus' ? 65 : Math.max(daysSinceLastRelease - 180, 0) * 0.25,
+    ),
+    0,
+    100,
+  );
+  const careerAdjustment =
+    getCareerStageAdjustment(lifecycle.careerStage) +
+    (safeNumber(lifecycle.debutAgeFactor, 1) - 1) * 10;
   const lifecycleStrength =
-    lifecycle.comebackReactionStrength * 0.42 +
-    lifecycle.activityEffect * 0.36 +
-    lifecycle.hiatusRetention * 0.22;
+    comebackMomentum * 0.42 +
+    activityFreshness * 0.36 +
+    hiatusRetention * 0.22;
+  const hiatusPenalty = Math.min(hiatusRisk * 0.18, 18);
+  const releaseCycleScore =
+    phaseScore * 0.28 +
+    recencyScore * 0.3 +
+    lifecycleStrength * 0.42 -
+    hiatusPenalty +
+    careerAdjustment;
 
-  return round(clamp(recencyScore * 0.42 + lifecycleStrength * 0.58 + phaseBonus), 1);
+  return round(clamp(releaseCycleScore), 1);
 }
 
 export function calculateNewsImpactScore(signal: RawSignalSnapshot) {

@@ -4,11 +4,14 @@ import { calculateArtistPrice } from './priceEngine';
 import { calculateScoreBreakdown } from './scoreEngine';
 import type { ArtistPriceHistoryPointV4 } from './types';
 
-function safeNumber(value: number, fallback = 0) {
-  return Number.isFinite(value) ? value : fallback;
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
-function safePositiveNumber(value: number, fallback = 0) {
+function safePositiveNumber(
+  value: number | null | undefined,
+  fallback = 0
+): number {
   return Math.max(safeNumber(value, fallback), 0);
 }
 
@@ -94,6 +97,9 @@ export function getArtistPriceHistoryV4Compatible(
         comebackPeriod: safeNumber(signal.lifecycle.comebackPeriod, 1),
         activityPeriod: safeNumber(signal.lifecycle.activityPeriod, 1),
         hiatusRetention: round(safeNumber(signal.lifecycle.hiatusRetention, 100) / 100, 4),
+        releaseCyclePhase: signal.lifecycle.releaseCyclePhase ?? signal.lifecycle.releasePhase,
+        hiatusRisk: safePositiveNumber(signal.lifecycle.hiatusRisk),
+        careerStage: signal.lifecycle.careerStage,
       },
       sourceStatus: priceResult.sourceStatus,
       scoreBreakdown,

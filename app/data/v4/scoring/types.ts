@@ -32,22 +32,43 @@ export type ArtistSignalMetrics = {
   agencyFinancialScale: number;
 };
 
+export type ReleaseCyclePhase =
+  | 'pre_comeback'
+  | 'comeback_peak'
+  | 'active_promotion'
+  | 'post_promotion'
+  | 'normal'
+  | 'hiatus'
+  | 'predebut'
+  | 'pre_release'
+  | 'launch'
+  | 'catalog';
+
+export type CareerStage =
+  | 'rookie'
+  | 'growth'
+  | 'established'
+  | 'mature'
+  | 'legacy';
+
 export type LifecycleSignal = {
   latestReleaseDate?: string;
   daysFromLatestRelease: number;
-  releasePhase:
-    | 'pre_release'
-    | 'launch'
-    | 'active_promotion'
-    | 'catalog'
-    | 'hiatus'
-    | 'predebut';
+  daysSinceLastRelease?: number;
+  releasePhase: ReleaseCyclePhase;
+  releaseCyclePhase?: ReleaseCyclePhase;
+  comebackMomentum?: number;
   comebackPeriod: number;
+  activityFreshness?: number;
   activityPeriod: number;
+  hiatusRisk?: number;
   hiatusPeriod: number;
+  debutAgeFactor?: number;
+  careerStage?: CareerStage;
   comebackReactionStrength: number;
   activityEffect: number;
   hiatusRetention: number;
+  releaseCycleScore?: number;
 };
 
 export type ScoreBreakdown = Record<V4ScoreKey, number> & {
@@ -96,6 +117,9 @@ export type ArtistPriceHistoryPointV4 = {
     comebackPeriod: number;
     activityPeriod: number;
     hiatusRetention: number;
+    releaseCyclePhase?: ReleaseCyclePhase;
+    hiatusRisk?: number;
+    careerStage?: CareerStage;
   };
   sourceStatus: SourceStatus;
   v4ScoreBreakdown: ScoreBreakdown;
