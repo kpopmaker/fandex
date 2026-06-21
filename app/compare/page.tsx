@@ -5,7 +5,12 @@ import ComparePriceChart from '../components/v3/ComparePriceChart';
 import { artistUniverse, getArtistV3ById } from '../data/v3/artistUniverse';
 import { getArtistV4ById } from '../data/v4/artistUniverse';
 import { factorDefinitionsV3 } from '../data/v3/mockData';
-import { getArtistPriceHistoryV4 } from '../data/v4/artistPriceHistory';
+import type { ChartPoint, FactorKey } from '../data/v3/types';
+import {
+  getArtistChartPointsV4,
+  getArtistPriceHistoryV4,
+  type ArtistPriceHistoryPointV4,
+} from '../data/v4/artistPriceHistory';
 
 const defaultArtistIds = ['aespa', 'ive', 'riize'];
 
@@ -22,10 +27,18 @@ type CompareArtistViewModel = {
   nameEn: string;
 };
 
+type CompareHistoryPoint = {
+  time: string;
+  price: number;
+};
+
 type CompareRow = {
   artist: CompareArtistViewModel;
-  history: ReturnType<typeof getArtistPriceHistoryV4>;
-  latest: ReturnType<typeof getArtistPriceHistoryV4>[number];
+  history: CompareHistoryPoint[];
+  latest: ArtistPriceHistoryPointV4;
+  currentPrice: number;
+  currentVolume: number;
+  currentFanSizeValue: number;
   changeRate: number;
   isUp: boolean;
 };
@@ -43,32 +56,67 @@ const factorLabels: Record<string, string> = {
 };
 
 function formatPrice(value: number): string {
-  return value.toFixed(2);
+  return safePositiveNumber(value).toFixed(2);
 }
 
 function formatPercent(value: number): string {
-  const sign = value >= 0 ? '+' : '';
-  return `${sign}${value.toFixed(2)}%`;
+  const safeValue = safeNumber(value);
+  const sign = safeValue >= 0 ? '+' : '';
+
+  return `${sign}${safeValue.toFixed(2)}%`;
 }
 
 function formatLargeNumber(value: number): string {
-  if (!Number.isFinite(value)) {
-    return '-';
+  const safeValue = safePositiveNumber(value);
+
+  if (safeValue >= 1000000000) {
+    return `${(safeValue / 1000000000).toFixed(1)}B`;
   }
 
-  if (Math.abs(value) >= 1000000000) {
-    return `${(value / 1000000000).toFixed(1)}B`;
+  if (safeValue >= 1000000) {
+    return `${(safeValue / 1000000).toFixed(1)}M`;
   }
 
-  if (Math.abs(value) >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`;
+  if (safeValue >= 1000) {
+    return `${(safeValue / 1000).toFixed(1)}K`;
   }
 
-  if (Math.abs(value) >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`;
+  return String(safeValue);
+}
+
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function safePositiveNumber(
+  value: number | null | undefined,
+  fallback = 0
+): number {
+  return Math.max(safeNumber(value, fallback), 0);
+}
+
+function getChangeRateFromHistory(firstPrice: number, latestPrice: number) {
+  const safeFirstPrice = safeNumber(firstPrice);
+  const safeLatestPrice = safeNumber(latestPrice);
+
+  if (safeFirstPrice === 0) {
+    return 0;
   }
 
-  return String(value);
+  return ((safeLatestPrice - safeFirstPrice) / safeFirstPrice) * 100;
+}
+
+function toCompareHistory(chartPoints: ChartPoint[]): CompareHistoryPoint[] {
+  return chartPoints
+    .filter((point) => Number.isFinite(point.value))
+    .map((point) => ({
+      time: point.time,
+      price: safePositiveNumber(point.value),
+    }));
+}
+
+function getFactorScore(row: CompareRow, factorKey: FactorKey) {
+  return safeNumber(row.latest.scores[factorKey]);
 }
 
 function createCompareHref(ids: string[]): string {
@@ -142,20 +190,27 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         return null;
       }
 
-      const history = getArtistPriceHistoryV4(artist.id);
-      const first = history[0];
-      const latest = history[history.length - 1];
+      const priceHistory = getArtistPriceHistoryV4(artist.id);
+      const chartHistory = toCompareHistory(getArtistChartPointsV4(artist.id));
+      const first = priceHistory[0];
+      const latest = priceHistory[priceHistory.length - 1];
 
-      if (!first || !latest) {
+      if (!first || !latest || chartHistory.length === 0) {
         return null;
       }
 
-      const changeRate = ((latest.price - first.price) / first.price) * 100;
+      const currentPrice = safePositiveNumber(latest.price);
+      const currentVolume = safePositiveNumber(latest.volume);
+      const currentFanSizeValue = safePositiveNumber(latest.fanSizeValue);
+      const changeRate = getChangeRateFromHistory(first.price, currentPrice);
 
       return {
         artist,
-        history,
+        history: chartHistory,
         latest,
+        currentPrice,
+        currentVolume,
+        currentFanSizeValue,
         changeRate,
         isUp: changeRate >= 0,
       };
@@ -165,8 +220,8 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const insightCards = [
     {
       label: 'Top price',
-      row: getLeader(compareRows, (row) => row.latest.price),
-      value: (row: CompareRow) => formatPrice(row.latest.price),
+      row: getLeader(compareRows, (row) => row.currentPrice),
+      value: (row: CompareRow) => formatPrice(row.currentPrice),
       note: 'Highest current FANDEX price',
     },
     {
@@ -177,14 +232,14 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
     },
     {
       label: 'Top volume',
-      row: getLeader(compareRows, (row) => row.latest.volume),
-      value: (row: CompareRow) => formatLargeNumber(row.latest.volume),
+      row: getLeader(compareRows, (row) => row.currentVolume),
+      value: (row: CompareRow) => formatLargeNumber(row.currentVolume),
       note: 'Largest activity volume',
     },
     {
       label: 'Top fan size',
-      row: getLeader(compareRows, (row) => row.latest.fanSizeValue),
-      value: (row: CompareRow) => formatLargeNumber(row.latest.fanSizeValue),
+      row: getLeader(compareRows, (row) => row.currentFanSizeValue),
+      value: (row: CompareRow) => formatLargeNumber(row.currentFanSizeValue),
       note: 'Largest simulated fan value',
     },
   ];
@@ -252,12 +307,12 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <MiniStat label="Current price" value={formatPrice(row.latest.price)} />
+                <MiniStat label="Current price" value={formatPrice(row.currentPrice)} />
                 <MiniStat label="Change rate" value={formatPercent(row.changeRate)} />
-                <MiniStat label="Volume" value={formatLargeNumber(row.latest.volume)} />
+                <MiniStat label="Volume" value={formatLargeNumber(row.currentVolume)} />
                 <MiniStat
                   label="Fan size"
-                  value={formatLargeNumber(row.latest.fanSizeValue)}
+                  value={formatLargeNumber(row.currentFanSizeValue)}
                 />
               </div>
             </article>
@@ -282,7 +337,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             {factorDefinitionsV3.map((factor) => {
               const leader = getLeader(
                 compareRows,
-                (row) => row.latest.scores[factor.key]
+                (row) => getFactorScore(row, factor.key)
               );
 
               return (
@@ -309,7 +364,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
                   <div className="mt-4 space-y-3">
                     {compareRows.map((row) => {
-                      const score = row.latest.scores[factor.key];
+                      const score = getFactorScore(row, factor.key);
 
                       return (
                         <div key={`${factor.key}-${row.artist.id}`}>
