@@ -1,5 +1,6 @@
 import type {
   CareerStage,
+  IssueScoreBreakdown,
   RawSignalSnapshot,
   ReleaseCyclePhase,
   ScoreBreakdown,
@@ -28,6 +29,22 @@ function round(value: number, digits = 2) {
 
 function safeNumber(value: number | null | undefined, fallback = 0): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function normalizeIssueScoreBreakdown(
+  breakdown: IssueScoreBreakdown,
+): IssueScoreBreakdown {
+  return {
+    issueScore: round(clamp(safeNumber(breakdown.issueScore, 50)), 1),
+    newsSentimentScore: round(clamp(safeNumber(breakdown.newsSentimentScore, 50)), 1),
+    issueMomentumScore: round(clamp(safeNumber(breakdown.issueMomentumScore)), 1),
+    controversyRiskScore: round(clamp(safeNumber(breakdown.controversyRiskScore)), 1),
+    confidenceScore: round(clamp(safeNumber(breakdown.confidenceScore, 50)), 1),
+    volatilityScore: round(clamp(safeNumber(breakdown.volatilityScore)), 1),
+    activeIssueCount: Math.max(Math.round(safeNumber(breakdown.activeIssueCount)), 0),
+    positiveIssueCount: Math.max(Math.round(safeNumber(breakdown.positiveIssueCount)), 0),
+    negativeIssueCount: Math.max(Math.round(safeNumber(breakdown.negativeIssueCount)), 0),
+  };
 }
 
 function logarithmicScore(value: number, baseline: number, maxScore = 100) {
@@ -207,9 +224,8 @@ export function calculateScoreBreakdown(
           return sum + score * (weights[key as V4ScoreKey] / totalWeight);
         }, 0)
       : 0;
-  const issueScoreBreakdown = getIssueScoreBreakdownForArtist(
-    signal.artistId,
-    signal.collectedAt,
+  const issueScoreBreakdown = normalizeIssueScoreBreakdown(
+    getIssueScoreBreakdownForArtist(signal.artistId, signal.collectedAt),
   );
 
   return {

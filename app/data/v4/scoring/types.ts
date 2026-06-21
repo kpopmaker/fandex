@@ -204,5 +204,11 @@ export type ArtistPriceHistoryPointV4 = {
   };
   sourceStatus: SourceStatus;
   v4ScoreBreakdown: ScoreBreakdown;
+  issueScoreBreakdown?: IssueScoreBreakdown;
+  issueSignalsSummary?: {
+    activeIssueCount: number;
+    positiveIssueCount: number;
+    negativeIssueCount: number;
+  };
   rawSignal: RawSignalSnapshot;
 };

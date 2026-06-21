@@ -50,6 +50,7 @@ export function getArtistPriceHistoryV4Compatible(
 
   return getMockRawSignalHistory(artistId).map((signal) => {
     const scoreBreakdown = calculateScoreBreakdown(signal);
+    const issueScoreBreakdown = scoreBreakdown.issueScoreBreakdown;
     const priceResult = calculateArtistPrice({
       artistId,
       collectedAt: signal.collectedAt,
@@ -104,6 +105,14 @@ export function getArtistPriceHistoryV4Compatible(
       sourceStatus: priceResult.sourceStatus,
       scoreBreakdown,
       v4ScoreBreakdown: scoreBreakdown,
+      issueScoreBreakdown,
+      issueSignalsSummary: issueScoreBreakdown
+        ? {
+            activeIssueCount: safePositiveNumber(issueScoreBreakdown.activeIssueCount),
+            positiveIssueCount: safePositiveNumber(issueScoreBreakdown.positiveIssueCount),
+            negativeIssueCount: safePositiveNumber(issueScoreBreakdown.negativeIssueCount),
+          }
+        : undefined,
       rawSignal: signal,
     };
 
