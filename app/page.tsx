@@ -3,10 +3,13 @@ import FandexLineChart from './components/FandexLineChart';
 import ArtistSearch from './components/v3/ArtistSearch';
 import { artistUniverse, getArtistV3ById } from './data/v3/artistUniverse';
 import { trendingIssues } from './data/v3/mockData';
+import { artistUniverseV4 } from './data/v4/artistUniverse';
+import { getArtistPriceHistoryV4 } from './data/v4/artistPriceHistory';
 import {
   getKpopMarketChartPointsV4,
   getKpopMarketIndexSummaryV4,
 } from './data/v4/marketIndex';
+import type { IssueScoreBreakdown } from './data/v4/scoring/types';
 import type { KpopIssue } from './data/v3/types';
 
 function formatPercent(value: number) {
@@ -24,6 +27,245 @@ function formatNumber(value: number) {
   return new Intl.NumberFormat('ko-KR', {
     maximumFractionDigits: 2,
   }).format(value);
+}
+
+function safeNumber(value: number | null | undefined, fallback = 0) {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function safePositiveNumber(value: number | null | undefined, fallback = 0) {
+  return Math.max(safeNumber(value, fallback), 0);
+}
+
+function clampScore(value: number | null | undefined, fallback = 0) {
+  return Math.min(Math.max(safeNumber(value, fallback), 0), 100);
+}
+
+type MarketClimateTone = 'positive' | 'balanced' | 'watch' | 'risk';
+
+type MarketIssueClimate = {
+  label:
+    | 'Positive climate'
+    | 'Balanced climate'
+    | 'Watch climate'
+    | 'Risk climate';
+  tone: MarketClimateTone;
+  copy: string;
+  avgIssueScore: number;
+  avgControversyRiskScore: number;
+  avgConfidenceScore: number;
+  totalActiveIssueCount: number;
+  totalPositiveIssueCount: number;
+  totalNegativeIssueCount: number;
+  positiveArtistCount: number;
+  neutralArtistCount: number;
+  watchArtistCount: number;
+  riskArtistCount: number;
+  artistCount: number;
+};
+
+function getIssueTone({
+  issueScore,
+  controversyRiskScore,
+  activeIssueCount,
+  negativeIssueCount,
+}: {
+  issueScore: number;
+  controversyRiskScore: number;
+  activeIssueCount: number;
+  negativeIssueCount: number;
+}): 'positive' | 'neutral' | 'watch' | 'risk' {
+  if (controversyRiskScore >= 65) {
+    return 'risk';
+  }
+
+  if (
+    issueScore <= 40 ||
+    controversyRiskScore >= 35 ||
+    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+  ) {
+    return 'watch';
+  }
+
+  if (issueScore >= 60 && controversyRiskScore < 50) {
+    return 'positive';
+  }
+
+  return 'neutral';
+}
+
+function getMarketClimateLabel({
+  avgIssueScore,
+  avgControversyRiskScore,
+  totalActiveIssueCount,
+  totalPositiveIssueCount,
+  totalNegativeIssueCount,
+  riskArtistCount,
+  artistCount,
+}: Pick<
+  MarketIssueClimate,
+  | 'avgIssueScore'
+  | 'avgControversyRiskScore'
+  | 'totalActiveIssueCount'
+  | 'totalPositiveIssueCount'
+  | 'totalNegativeIssueCount'
+  | 'riskArtistCount'
+  | 'artistCount'
+>): Pick<MarketIssueClimate, 'label' | 'tone' | 'copy'> {
+  const riskShare = artistCount > 0 ? riskArtistCount / artistCount : 0;
+
+  if (totalActiveIssueCount === 0) {
+    return {
+      label: 'Balanced climate',
+      tone: 'balanced',
+      copy: 'No active market issue signals are currently reflected.',
+    };
+  }
+
+  if (avgControversyRiskScore >= 65 || riskShare >= 0.35) {
+    return {
+      label: 'Risk climate',
+      tone: 'risk',
+      copy: 'Watch signals are elevated across several tracked artists.',
+    };
+  }
+
+  if (avgIssueScore <= 40 || totalNegativeIssueCount > totalPositiveIssueCount) {
+    return {
+      label: 'Watch climate',
+      tone: 'watch',
+      copy: 'Watch signals are slightly stronger than positive issue momentum.',
+    };
+  }
+
+  if (avgIssueScore >= 60 && avgControversyRiskScore < 50) {
+    return {
+      label: 'Positive climate',
+      tone: 'positive',
+      copy: 'Positive issue momentum is slightly stronger across the tracked artist universe.',
+    };
+  }
+
+  return {
+    label: 'Balanced climate',
+    tone: 'balanced',
+    copy: 'K-pop issue signals are currently balanced across the tracked artist universe.',
+  };
+}
+
+function getMarketIssueClimate(): MarketIssueClimate {
+  const summaries = artistUniverseV4.map((artist) => {
+    const history = getArtistPriceHistoryV4(artist.id);
+    const latest = history[history.length - 1];
+    const breakdown: IssueScoreBreakdown | undefined =
+      latest?.issueScoreBreakdown ?? latest?.scoreBreakdown.issueScoreBreakdown;
+    const summary = latest?.issueSignalsSummary;
+    const issueScore = clampScore(breakdown?.issueScore, 50);
+    const controversyRiskScore = clampScore(breakdown?.controversyRiskScore);
+    const confidenceScore = clampScore(breakdown?.confidenceScore, 50);
+    const activeIssueCount = Math.round(
+      safePositiveNumber(summary?.activeIssueCount)
+    );
+    const positiveIssueCount = Math.round(
+      safePositiveNumber(summary?.positiveIssueCount)
+    );
+    const negativeIssueCount = Math.round(
+      safePositiveNumber(summary?.negativeIssueCount)
+    );
+
+    return {
+      issueScore,
+      controversyRiskScore,
+      confidenceScore,
+      activeIssueCount,
+      positiveIssueCount,
+      negativeIssueCount,
+      tone: getIssueTone({
+        issueScore,
+        controversyRiskScore,
+        activeIssueCount,
+        negativeIssueCount,
+      }),
+    };
+  });
+  const artistCount = summaries.length;
+
+  if (artistCount === 0) {
+    return {
+      label: 'Balanced climate',
+      tone: 'balanced',
+      copy: 'No active market issue signals are currently reflected.',
+      avgIssueScore: 50,
+      avgControversyRiskScore: 0,
+      avgConfidenceScore: 50,
+      totalActiveIssueCount: 0,
+      totalPositiveIssueCount: 0,
+      totalNegativeIssueCount: 0,
+      positiveArtistCount: 0,
+      neutralArtistCount: 0,
+      watchArtistCount: 0,
+      riskArtistCount: 0,
+      artistCount: 0,
+    };
+  }
+
+  const totals = summaries.reduce(
+    (acc, summary) => ({
+      issueScore: acc.issueScore + summary.issueScore,
+      controversyRiskScore:
+        acc.controversyRiskScore + summary.controversyRiskScore,
+      confidenceScore: acc.confidenceScore + summary.confidenceScore,
+      activeIssueCount: acc.activeIssueCount + summary.activeIssueCount,
+      positiveIssueCount: acc.positiveIssueCount + summary.positiveIssueCount,
+      negativeIssueCount: acc.negativeIssueCount + summary.negativeIssueCount,
+      positiveArtistCount:
+        acc.positiveArtistCount + (summary.tone === 'positive' ? 1 : 0),
+      neutralArtistCount:
+        acc.neutralArtistCount + (summary.tone === 'neutral' ? 1 : 0),
+      watchArtistCount:
+        acc.watchArtistCount + (summary.tone === 'watch' ? 1 : 0),
+      riskArtistCount: acc.riskArtistCount + (summary.tone === 'risk' ? 1 : 0),
+    }),
+    {
+      issueScore: 0,
+      controversyRiskScore: 0,
+      confidenceScore: 0,
+      activeIssueCount: 0,
+      positiveIssueCount: 0,
+      negativeIssueCount: 0,
+      positiveArtistCount: 0,
+      neutralArtistCount: 0,
+      watchArtistCount: 0,
+      riskArtistCount: 0,
+    }
+  );
+  const avgIssueScore = totals.issueScore / artistCount;
+  const avgControversyRiskScore = totals.controversyRiskScore / artistCount;
+  const avgConfidenceScore = totals.confidenceScore / artistCount;
+  const label = getMarketClimateLabel({
+    avgIssueScore,
+    avgControversyRiskScore,
+    totalActiveIssueCount: totals.activeIssueCount,
+    totalPositiveIssueCount: totals.positiveIssueCount,
+    totalNegativeIssueCount: totals.negativeIssueCount,
+    riskArtistCount: totals.riskArtistCount,
+    artistCount,
+  });
+
+  return {
+    ...label,
+    avgIssueScore,
+    avgControversyRiskScore,
+    avgConfidenceScore,
+    totalActiveIssueCount: totals.activeIssueCount,
+    totalPositiveIssueCount: totals.positiveIssueCount,
+    totalNegativeIssueCount: totals.negativeIssueCount,
+    positiveArtistCount: totals.positiveArtistCount,
+    neutralArtistCount: totals.neutralArtistCount,
+    watchArtistCount: totals.watchArtistCount,
+    riskArtistCount: totals.riskArtistCount,
+    artistCount,
+  };
 }
 
 function getIssueBadge(issue: KpopIssue) {
@@ -117,6 +359,7 @@ export default function Home() {
   }`;
   const leadingIssue = trendingIssues[0];
   const issueRows = getHomepageIssueRows();
+  const marketIssueClimate = getMarketIssueClimate();
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950">
@@ -232,6 +475,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <MarketIssueClimateSection climate={marketIssueClimate} />
 
         <section className="rounded-3xl border-2 border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
             <div className="mb-5">
@@ -354,6 +599,87 @@ export default function Home() {
         )}
       </section>
     </main>
+  );
+}
+
+function MarketIssueClimateSection({
+  climate,
+}: {
+  climate: MarketIssueClimate;
+}) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+            Market issue climate
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <h2 className="text-2xl font-black">News & issue climate</h2>
+            <MarketClimateBadge label={climate.label} tone={climate.tone} />
+          </div>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
+            {climate.copy}
+          </p>
+          <p className="mt-3 text-xs font-bold text-slate-500">
+            Tracked artists {climate.artistCount} / Positive{' '}
+            {climate.positiveArtistCount} / Balanced{' '}
+            {climate.neutralArtistCount} / Watch {climate.watchArtistCount} /
+            Risk {climate.riskArtistCount}
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <MiniMetric
+            label="Avg issue"
+            value={String(Math.round(climate.avgIssueScore))}
+          />
+          <MiniMetric
+            label="Avg risk"
+            value={String(Math.round(climate.avgControversyRiskScore))}
+          />
+          <MiniMetric
+            label="Avg confidence"
+            value={String(Math.round(climate.avgConfidenceScore))}
+          />
+          <MiniMetric
+            label="Active signals"
+            value={String(climate.totalActiveIssueCount)}
+          />
+          <MiniMetric
+            label="Positive signals"
+            value={String(climate.totalPositiveIssueCount)}
+          />
+          <MiniMetric
+            label="Watch signals"
+            value={String(climate.totalNegativeIssueCount)}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MarketClimateBadge({
+  label,
+  tone,
+}: {
+  label: MarketIssueClimate['label'];
+  tone: MarketClimateTone;
+}) {
+  const toneClass = {
+    positive: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    balanced: 'border-slate-200 bg-slate-50 text-slate-600',
+    watch: 'border-purple-200 bg-purple-50 text-purple-700',
+    risk: 'border-blue-200 bg-blue-50 text-blue-700',
+  }[tone];
+
+  return (
+    <span
+      className={`rounded-full border px-3 py-1 text-xs font-black ${toneClass}`}
+    >
+      {label}
+    </span>
   );
 }
 
