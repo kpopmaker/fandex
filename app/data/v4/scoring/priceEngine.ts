@@ -1,4 +1,12 @@
-import type { PriceCalculationInput, PriceCalculationResult } from './types';
+import type {
+  PriceCalculationInput,
+  PriceCalculationResult,
+  ScoreBreakdown,
+} from './types';
+
+const ISSUE_NEUTRAL_SCORE = 50;
+const MIN_ISSUE_MULTIPLIER = 0.94;
+const MAX_ISSUE_MULTIPLIER = 1.06;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -8,9 +16,76 @@ function safeNumber(value: number, fallback = 0) {
   return Number.isFinite(value) ? value : fallback;
 }
 
+function safePositiveNumber(value: number, fallback = 0) {
+  return Math.max(safeNumber(value, fallback), 0);
+}
+
 function round(value: number, digits = 2) {
   const multiplier = 10 ** digits;
   return Math.round(safeNumber(value) * multiplier) / multiplier;
+}
+
+function normalizeIssueScoreInput(
+  value: number | null | undefined,
+  fallback = ISSUE_NEUTRAL_SCORE,
+) {
+  return clamp(safeNumber(value ?? Number.NaN, fallback), 0, 100);
+}
+
+function hasIssueScoreInput(scoreBreakdown: ScoreBreakdown) {
+  return (
+    scoreBreakdown.issueScore != null ||
+    scoreBreakdown.newsSentimentScore != null ||
+    scoreBreakdown.issueMomentumScore != null ||
+    scoreBreakdown.controversyRiskScore != null ||
+    scoreBreakdown.confidenceScore != null ||
+    scoreBreakdown.volatilityScore != null
+  );
+}
+
+function calculateIssueImpactMultiplier(scoreBreakdown: ScoreBreakdown) {
+  if (!hasIssueScoreInput(scoreBreakdown)) {
+    return 1;
+  }
+
+  const issueScore = normalizeIssueScoreInput(scoreBreakdown.issueScore);
+  const newsSentimentScore = normalizeIssueScoreInput(
+    scoreBreakdown.newsSentimentScore,
+  );
+  const confidenceScore = normalizeIssueScoreInput(scoreBreakdown.confidenceScore);
+  const controversyRiskScore = normalizeIssueScoreInput(
+    scoreBreakdown.controversyRiskScore,
+    0,
+  );
+  const issueMomentumScore = normalizeIssueScoreInput(
+    scoreBreakdown.issueMomentumScore,
+    0,
+  );
+  const volatilityScore = normalizeIssueScoreInput(scoreBreakdown.volatilityScore);
+  const issueDelta = (issueScore - ISSUE_NEUTRAL_SCORE) / ISSUE_NEUTRAL_SCORE;
+  const sentimentDelta =
+    (newsSentimentScore - ISSUE_NEUTRAL_SCORE) / ISSUE_NEUTRAL_SCORE;
+  const confidenceFactor = confidenceScore / 100;
+  const controversyFactor = controversyRiskScore / 100;
+  const combinedIssueSignal = issueDelta * 0.6 + sentimentDelta * 0.4;
+  const issueMomentumFactor = 0.9 + (issueMomentumScore / 100) * 0.1;
+  const volatilityDampening =
+    1 -
+    (Math.max(volatilityScore - ISSUE_NEUTRAL_SCORE, 0) / ISSUE_NEUTRAL_SCORE) *
+      0.05;
+  const positiveBoost =
+    Math.max(0, combinedIssueSignal) *
+    0.045 *
+    confidenceFactor *
+    issueMomentumFactor *
+    volatilityDampening;
+  const negativeDrag = Math.min(0, combinedIssueSignal) * 0.04;
+  const controversyPenalty = controversyFactor * 0.025;
+  const rawIssueMultiplier = 1 + positiveBoost + negativeDrag - controversyPenalty;
+
+  // TODO: Route negative issue risk more strongly into future confidence/volatility
+  // outputs once price result types support that without changing existing UI contracts.
+  return clamp(rawIssueMultiplier, MIN_ISSUE_MULTIPLIER, MAX_ISSUE_MULTIPLIER);
 }
 
 function hashString(input: string) {
@@ -56,7 +131,9 @@ export function calculateArtistPrice(input: PriceCalculationInput): PriceCalcula
     1.18,
   );
   const scoreScale = Math.exp((totalScore - 50) / 58);
-  const price = round(clamp(basePrice * scoreScale * lifecycleMultiplier, 20, 600), 2);
+  const issueMultiplier = calculateIssueImpactMultiplier(input.scoreBreakdown);
+  const rawPrice = basePrice * scoreScale * lifecycleMultiplier * issueMultiplier;
+  const price = round(clamp(safePositiveNumber(rawPrice, basePrice), 20, 600), 2);
   const previousPrice =
     input.previousPrice && Number.isFinite(input.previousPrice)
       ? input.previousPrice

@@ -319,3 +319,20 @@ v4 scoring과 UI adapter는 다음 방어 원칙을 유지해야 합니다.
 8. scoreBreakdown UI 설명 tooltip 추가
 9. verified source status와 mock source status의 화면 표시 정책 정리
 10. release event/calendar 기반 lifecycle signal 생성기 분리
+
+## 11. Issue Price Impact Guardrail
+
+`priceEngine` applies a limited issue impact multiplier after the base score
+scale and lifecycle multiplier are calculated.
+
+Rules:
+
+1. `priceEngine` does not import or call `issueScoreEngine`.
+2. Issue impact reads only optional issue fields already present on
+   `scoreBreakdown`.
+3. Missing issue fields return a neutral `1.0` multiplier.
+4. `issueScore`, `newsSentimentScore`, `confidenceScore`,
+   `controversyRiskScore`, and `volatilityScore` are clamped to `0 ~ 100`.
+5. The final issue multiplier is capped to `0.94 ~ 1.06`.
+6. This is still a mock-based limited price impact step before any real news
+   API, Supabase, DB, or external data integration.
