@@ -22,6 +22,12 @@ import {
   getArtistChartPointsV4,
   getArtistPriceHistoryV4,
 } from '../../data/v4/artistPriceHistory';
+import { getIssueSignalsForArtist } from '../../data/v4/scoring/issueScoreEngine';
+import type {
+  IssueCategory,
+  IssueScoreBreakdown,
+  IssueSignal,
+} from '../../data/v4/scoring/types';
 import { naverNewsItemsToArtistNewsItems } from '../../../lib/services/newsAdapter';
 import {
   buildArtistNewsQuery,
@@ -36,6 +42,7 @@ type PageProps = {
 };
 
 type MarketSignal = 'Rising' | 'Cooling' | 'Stable' | 'Watchlist';
+type IssueTone = 'positive' | 'neutral' | 'watch' | 'risk';
 
 type ArtistDetailViewModel = {
   id: string;
@@ -107,6 +114,10 @@ function safePositiveNumber(
   return Math.max(safeNumber(value, fallback), 0);
 }
 
+function clampScore(value: number | null | undefined, fallback = 0) {
+  return Math.min(Math.max(safeNumber(value, fallback), 0), 100);
+}
+
 function getChangeRateFromHistory(firstPrice: number, latestPrice: number) {
   const safeFirstPrice = safeNumber(firstPrice);
   const safeLatestPrice = safeNumber(latestPrice);
@@ -142,6 +153,84 @@ function getCompareGroup(artistId: string) {
   return Array.from(new Set([artistId, 'aespa', 'ive', 'riize']))
     .slice(0, 4)
     .join(',');
+}
+
+function getTimestamp(value: string | undefined) {
+  if (!value) {
+    return 0;
+  }
+
+  const timestamp = new Date(value).getTime();
+
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function formatIssueDate(value: string | undefined) {
+  const timestamp = getTimestamp(value);
+
+  if (timestamp === 0) {
+    return 'TBD';
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(timestamp));
+}
+
+function getLatestIssueSignal(signals: IssueSignal[]) {
+  return [...signals].sort((a, b) => {
+    const aTime = Math.max(
+      getTimestamp(a.detectedAt),
+      getTimestamp(a.publishedAt)
+    );
+    const bTime = Math.max(
+      getTimestamp(b.detectedAt),
+      getTimestamp(b.publishedAt)
+    );
+
+    return bTime - aTime;
+  })[0];
+}
+
+function formatIssueCategory(category: IssueCategory | undefined) {
+  if (!category) {
+    return 'No active category';
+  }
+
+  return category
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function getIssueTone({
+  breakdown,
+  latestIssue,
+}: {
+  breakdown: IssueScoreBreakdown | undefined;
+  latestIssue: IssueSignal | undefined;
+}): { label: string; tone: IssueTone } {
+  const issueScore = clampScore(breakdown?.issueScore, 50);
+  const riskScore = clampScore(breakdown?.controversyRiskScore);
+  const sentimentScore = clampScore(breakdown?.newsSentimentScore, 50);
+  const latestSentiment = safeNumber(latestIssue?.sentimentScore);
+
+  if (riskScore >= 35 || latestSentiment <= -45) {
+    return { label: 'Risk', tone: 'risk' };
+  }
+
+  if (riskScore >= 15 || issueScore < 45 || sentimentScore < 45) {
+    return { label: 'Watch', tone: 'watch' };
+  }
+
+  if (issueScore >= 56 || sentimentScore >= 56 || latestSentiment >= 35) {
+    return { label: 'Positive', tone: 'positive' };
+  }
+
+  return { label: 'Neutral', tone: 'neutral' };
 }
 
 function formatEntityType(entityType: ArtistV4['entityType']) {
@@ -303,6 +392,14 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const currentPrice = safePositiveNumber(latestPrice.price);
   const currentVolume = safePositiveNumber(latestPrice.volume);
   const currentFanSizeValue = safePositiveNumber(latestPrice.fanSizeValue);
+  const issueSignals = getIssueSignalsForArtist(artistId);
+  const latestIssueSignal = getLatestIssueSignal(issueSignals);
+  const issueScoreBreakdown = latestPrice.issueScoreBreakdown;
+  const issueSignalsSummary = latestPrice.issueSignalsSummary;
+  const issueTone = getIssueTone({
+    breakdown: issueScoreBreakdown,
+    latestIssue: latestIssueSignal,
+  });
   const priceChange = currentPrice - safeNumber(firstPrice.price);
   const priceChangeRate = getChangeRateFromHistory(firstPrice.price, currentPrice);
   const isUp = priceChange >= 0;
@@ -423,6 +520,13 @@ export default async function ArtistDetailPage({ params }: PageProps) {
             tone={marketSignal === 'Cooling' ? 'blue' : 'cyan'}
           />
         </section>
+
+        <IssueNewsSignalPanel
+          latestIssue={latestIssueSignal}
+          scoreBreakdown={issueScoreBreakdown}
+          summary={issueSignalsSummary}
+          tone={issueTone}
+        />
 
         <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
           <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -674,6 +778,145 @@ function FactorBar({
         />
       </div>
       <p className="mt-1 text-xs leading-5 text-slate-400">{helpText}</p>
+    </div>
+  );
+}
+
+function IssueNewsSignalPanel({
+  latestIssue,
+  scoreBreakdown,
+  summary,
+  tone,
+}: {
+  latestIssue: IssueSignal | undefined;
+  scoreBreakdown: IssueScoreBreakdown | undefined;
+  summary:
+    | {
+        activeIssueCount: number;
+        positiveIssueCount: number;
+        negativeIssueCount: number;
+      }
+    | undefined;
+  tone: { label: string; tone: IssueTone };
+}) {
+  const hasActiveIssue = safePositiveNumber(summary?.activeIssueCount) > 0;
+  const issueScore = clampScore(scoreBreakdown?.issueScore, 50);
+  const riskScore = clampScore(scoreBreakdown?.controversyRiskScore);
+  const confidenceScore = clampScore(scoreBreakdown?.confidenceScore, 50);
+  const activeIssueCount = Math.round(
+    safePositiveNumber(summary?.activeIssueCount)
+  );
+  const positiveIssueCount = Math.round(
+    safePositiveNumber(summary?.positiveIssueCount),
+  );
+  const negativeIssueCount = Math.round(
+    safePositiveNumber(summary?.negativeIssueCount),
+  );
+  const title =
+    hasActiveIssue && latestIssue?.title
+      ? latestIssue.title
+      : 'No active issue signals are currently reflected.';
+  const category = hasActiveIssue
+    ? formatIssueCategory(latestIssue?.category)
+    : 'Neutral';
+  const updatedAt = hasActiveIssue
+    ? formatIssueDate(latestIssue?.detectedAt ?? latestIssue?.publishedAt)
+    : 'No recent mock issue';
+
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-3xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
+              Latest issue / news signals
+            </p>
+            <IssueToneBadge label={tone.label} tone={tone.tone} />
+          </div>
+          <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
+            {title}
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+            Mock issue signals are shown as cautious context for FANDEX scoring.
+            No external news API, Supabase, or database connection is used here.
+          </p>
+        </div>
+
+        <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:min-w-[420px]">
+          <IssueMetric label="Issue score" value={issueScore} />
+          <IssueMetric label="Risk" value={riskScore} />
+          <IssueMetric label="Confidence" value={confidenceScore} />
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-4">
+        <IssueFact label="Category" value={category} />
+        <IssueFact label="Updated" value={updatedAt} />
+        <IssueFact label="Active issues" value={String(activeIssueCount)} />
+        <IssueFact
+          label="Direction"
+          value={`${positiveIssueCount} positive / ${negativeIssueCount} risk`}
+        />
+      </div>
+    </section>
+  );
+}
+
+function IssueToneBadge({
+  label,
+  tone,
+}: {
+  label: string;
+  tone: IssueTone;
+}) {
+  const toneClass = {
+    positive:
+      'border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-200',
+    neutral:
+      'border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
+    watch:
+      'border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-400/20 dark:bg-purple-400/10 dark:text-purple-200',
+    risk:
+      'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-200',
+  }[tone];
+
+  return (
+    <span
+      className={`rounded-full border px-3 py-1 text-xs font-black ${toneClass}`}
+    >
+      {label}
+    </span>
+  );
+}
+
+function IssueMetric({ label, value }: { label: string; value: number }) {
+  const score = clampScore(value);
+
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-bold text-slate-400">{label}</p>
+        <p className="font-mono text-sm font-black text-slate-950 dark:text-white">
+          {score.toFixed(1)}
+        </p>
+      </div>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white dark:bg-slate-800">
+        <div
+          className="h-full rounded-full bg-cyan-400"
+          style={{ width: `${score}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function IssueFact({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <p className="text-xs font-bold text-slate-400">{label}</p>
+      <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
+        {value}
+      </p>
     </div>
   );
 }
