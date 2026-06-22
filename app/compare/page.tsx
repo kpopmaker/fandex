@@ -11,6 +11,7 @@ import {
   getArtistPriceHistoryV4,
   type ArtistPriceHistoryPointV4,
 } from '../data/v4/artistPriceHistory';
+import type { IssueScoreBreakdown } from '../data/v4/scoring/types';
 
 const defaultArtistIds = ['aespa', 'ive', 'riize'];
 
@@ -41,6 +42,18 @@ type CompareRow = {
   currentFanSizeValue: number;
   changeRate: number;
   isUp: boolean;
+};
+type IssueTone = 'positive' | 'neutral' | 'watch' | 'risk';
+type CompareIssueSummary = {
+  artist: CompareArtistViewModel;
+  label: 'Positive' | 'Neutral' | 'Watch' | 'Risk';
+  tone: IssueTone;
+  issueScore: number;
+  controversyRiskScore: number;
+  confidenceScore: number;
+  activeIssueCount: number;
+  positiveIssueCount: number;
+  negativeIssueCount: number;
 };
 
 const factorLabels: Record<string, string> = {
@@ -95,6 +108,10 @@ function safePositiveNumber(
   return Math.max(safeNumber(value, fallback), 0);
 }
 
+function clampScore(value: number | null | undefined, fallback = 0) {
+  return Math.min(Math.max(safeNumber(value, fallback), 0), 100);
+}
+
 function getChangeRateFromHistory(firstPrice: number, latestPrice: number) {
   const safeFirstPrice = safeNumber(firstPrice);
   const safeLatestPrice = safeNumber(latestPrice);
@@ -117,6 +134,111 @@ function toCompareHistory(chartPoints: ChartPoint[]): CompareHistoryPoint[] {
 
 function getFactorScore(row: CompareRow, factorKey: FactorKey) {
   return safeNumber(row.latest.scores[factorKey]);
+}
+
+function getIssueTone({
+  issueScore,
+  controversyRiskScore,
+  activeIssueCount,
+  negativeIssueCount,
+}: {
+  issueScore: number;
+  controversyRiskScore: number;
+  activeIssueCount: number;
+  negativeIssueCount: number;
+}): Pick<CompareIssueSummary, 'label' | 'tone'> {
+  if (controversyRiskScore >= 65) {
+    return { label: 'Risk', tone: 'risk' };
+  }
+
+  if (
+    issueScore <= 40 ||
+    controversyRiskScore >= 35 ||
+    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+  ) {
+    return { label: 'Watch', tone: 'watch' };
+  }
+
+  if (issueScore >= 60 && controversyRiskScore < 50) {
+    return { label: 'Positive', tone: 'positive' };
+  }
+
+  return { label: 'Neutral', tone: 'neutral' };
+}
+
+function getIssueSummary(row: CompareRow): CompareIssueSummary {
+  const breakdown: IssueScoreBreakdown | undefined =
+    row.latest.issueScoreBreakdown ??
+    row.latest.scoreBreakdown.issueScoreBreakdown;
+  const summary = row.latest.issueSignalsSummary;
+  const issueScore = clampScore(breakdown?.issueScore, 50);
+  const controversyRiskScore = clampScore(breakdown?.controversyRiskScore);
+  const confidenceScore = clampScore(breakdown?.confidenceScore, 50);
+  const activeIssueCount = Math.round(
+    safePositiveNumber(summary?.activeIssueCount)
+  );
+  const positiveIssueCount = Math.round(
+    safePositiveNumber(summary?.positiveIssueCount)
+  );
+  const negativeIssueCount = Math.round(
+    safePositiveNumber(summary?.negativeIssueCount)
+  );
+  const tone = getIssueTone({
+    issueScore,
+    controversyRiskScore,
+    activeIssueCount,
+    negativeIssueCount,
+  });
+
+  return {
+    artist: row.artist,
+    ...tone,
+    issueScore,
+    controversyRiskScore,
+    confidenceScore,
+    activeIssueCount,
+    positiveIssueCount,
+    negativeIssueCount,
+  };
+}
+
+function getIssueComparisonCopy(summaries: CompareIssueSummary[]) {
+  if (summaries.length === 0) {
+    return 'Issue signals are currently balanced.';
+  }
+
+  const highestRisk = getLeader(
+    summaries,
+    (summary) => summary.controversyRiskScore
+  );
+  const strongestIssue = getLeader(summaries, (summary) => summary.issueScore);
+  const lowestConfidence = summaries.reduce((lowest, summary) =>
+    summary.confidenceScore < lowest.confidenceScore ? summary : lowest
+  );
+  const riskGap =
+    highestRisk && summaries.length > 1
+      ? highestRisk.controversyRiskScore -
+        Math.min(...summaries.map((summary) => summary.controversyRiskScore))
+      : 0;
+  const issueGap =
+    strongestIssue && summaries.length > 1
+      ? strongestIssue.issueScore -
+        Math.min(...summaries.map((summary) => summary.issueScore))
+      : 0;
+
+  if (riskGap >= 15 && highestRisk) {
+    return `${highestRisk.artist.nameEn} currently carries higher watch risk in issue signals.`;
+  }
+
+  if (issueGap >= 10 && strongestIssue) {
+    return `${strongestIssue.artist.nameEn} has stronger positive issue momentum.`;
+  }
+
+  if (lowestConfidence.confidenceScore < 45) {
+    return `${lowestConfidence.artist.nameEn} has lower issue confidence, so compare signals conservatively.`;
+  }
+
+  return 'Issue signals are currently balanced across the selected artists.';
 }
 
 function createCompareHref(ids: string[]): string {
@@ -152,10 +274,7 @@ function getCompareArtistViewModel(
   };
 }
 
-function getLeader(
-  rows: CompareRow[],
-  selectValue: (row: CompareRow) => number
-): CompareRow | null {
+function getLeader<T>(rows: T[], selectValue: (row: T) => number): T | null {
   if (rows.length === 0) {
     return null;
   }
@@ -243,6 +362,8 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
       note: 'Largest simulated fan value',
     },
   ];
+  const issueSummaries = compareRows.map(getIssueSummary);
+  const issueComparisonCopy = getIssueComparisonCopy(issueSummaries);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 px-6 py-10 text-slate-950">
@@ -294,22 +415,29 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
               key={row.artist.id}
               className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
             >
-            <p className="text-xs font-black text-cyan-600">
+              <p className="text-xs font-black text-cyan-600">
                 {row.artist.ticker}
               </p>
 
-              <h2 className="mt-1 text-2xl font-black">
-                {row.artist.nameEn}
-              </h2>
+              <h2 className="mt-1 text-2xl font-black">{row.artist.nameEn}</h2>
 
               <p className="mt-1 text-xs font-bold text-slate-500">
                 Artist market signal
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <MiniStat label="Current price" value={formatPrice(row.currentPrice)} />
-                <MiniStat label="Change rate" value={formatPercent(row.changeRate)} />
-                <MiniStat label="Volume" value={formatLargeNumber(row.currentVolume)} />
+                <MiniStat
+                  label="Current price"
+                  value={formatPrice(row.currentPrice)}
+                />
+                <MiniStat
+                  label="Change rate"
+                  value={formatPercent(row.changeRate)}
+                />
+                <MiniStat
+                  label="Volume"
+                  value={formatLargeNumber(row.currentVolume)}
+                />
                 <MiniStat
                   label="Fan size"
                   value={formatLargeNumber(row.currentFanSizeValue)}
@@ -320,6 +448,11 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         </section>
 
         <ComparePriceChart rows={compareRows} />
+
+        <IssueComparisonSection
+          summaries={issueSummaries}
+          comparisonCopy={issueComparisonCopy}
+        />
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
@@ -356,7 +489,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                     </div>
 
                     {leader && (
-                        <span className="rounded-full bg-cyan-500 px-3 py-1 text-xs font-black text-white">
+                      <span className="rounded-full bg-cyan-500 px-3 py-1 text-xs font-black text-white">
                         Leader {leader.artist.ticker}
                       </span>
                     )}
@@ -420,7 +553,11 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
               return (
                 <Link
                   key={artist.id}
-                  href={isDisabled ? createCompareHref(selectedIds) : createCompareHref(safeNextIds)}
+                  href={
+                    isDisabled
+                      ? createCompareHref(selectedIds)
+                      : createCompareHref(safeNextIds)
+                  }
                   aria-disabled={isDisabled}
                   className={`rounded-2xl border p-4 transition ${
                     isSelected
@@ -481,6 +618,107 @@ function MiniStat({ label, value }: { label: string; value: string }) {
     <div className="rounded-2xl bg-white p-3 shadow-sm">
       <p className="text-xs font-bold text-slate-500">{label}</p>
       <p className="mt-1 text-sm font-black text-slate-950">{value}</p>
+    </div>
+  );
+}
+
+function IssueComparisonSection({
+  summaries,
+  comparisonCopy,
+}: {
+  summaries: CompareIssueSummary[];
+  comparisonCopy: string;
+}) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mb-5">
+        <p className="text-xs font-black text-cyan-600">
+          NEWS & ISSUE COMPARISON
+        </p>
+        <h2 className="mt-2 text-2xl font-black">
+          Issue signal comparison
+        </h2>
+        <p className="mt-2 text-sm text-slate-500">
+          {comparisonCopy}
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {summaries.map((summary) => (
+          <article
+            key={summary.artist.id}
+            className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-black text-cyan-600">
+                  {summary.artist.ticker}
+                </p>
+                <h3 className="mt-1 font-black text-slate-950">
+                  {summary.artist.nameEn}
+                </h3>
+              </div>
+              <IssueToneBadge label={summary.label} tone={summary.tone} />
+            </div>
+
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <IssueMiniStat
+                label="Issue"
+                value={Math.round(summary.issueScore)}
+              />
+              <IssueMiniStat
+                label="Risk"
+                value={Math.round(summary.controversyRiskScore)}
+              />
+              <IssueMiniStat
+                label="Conf."
+                value={Math.round(summary.confidenceScore)}
+              />
+            </div>
+
+            <p className="mt-3 text-xs font-bold text-slate-500">
+              {summary.activeIssueCount} signals / {summary.positiveIssueCount}
+              positive / {summary.negativeIssueCount} watch
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function IssueToneBadge({
+  label,
+  tone,
+}: {
+  label: CompareIssueSummary['label'];
+  tone: IssueTone;
+}) {
+  const toneClass = {
+    positive: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    neutral: 'border-slate-200 bg-white text-slate-600',
+    watch: 'border-purple-200 bg-purple-50 text-purple-700',
+    risk: 'border-blue-200 bg-blue-50 text-blue-700',
+  }[tone];
+
+  return (
+    <span
+      className={`rounded-full border px-2.5 py-1 text-[11px] font-black ${toneClass}`}
+    >
+      {label}
+    </span>
+  );
+}
+
+function IssueMiniStat({ label, value }: { label: string; value: number }) {
+  const safeValue = Math.round(clampScore(value));
+
+  return (
+    <div className="rounded-xl bg-white p-3 shadow-sm">
+      <p className="text-[11px] font-bold text-slate-500">{label}</p>
+      <p className="mt-1 font-mono text-sm font-black text-slate-950">
+        {safeValue}
+      </p>
     </div>
   );
 }
