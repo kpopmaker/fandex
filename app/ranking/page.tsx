@@ -1,5 +1,15 @@
 import Link from 'next/link';
 import { getArtistRankingRowsV4 } from '../data/v4/artistRanking';
+import { getArtistPriceHistoryV4 } from '../data/v4/artistPriceHistory';
+import type { IssueScoreBreakdown } from '../data/v4/scoring/types';
+
+type IssueTone = 'positive' | 'neutral' | 'watch' | 'risk';
+type IssueBadge = {
+  label: 'Positive' | 'Neutral' | 'Watch' | 'Risk';
+  tone: IssueTone;
+  issueScore: number;
+  activeIssueCount: number;
+};
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat('en-US').format(value);
@@ -12,8 +22,89 @@ function formatLargeNumber(value: number) {
   }).format(value);
 }
 
+function safeNumber(value: number | null | undefined, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function safePositiveNumber(
+  value: number | null | undefined,
+  fallback = 0
+): number {
+  return Math.max(safeNumber(value, fallback), 0);
+}
+
+function clampScore(value: number | null | undefined, fallback = 0) {
+  return Math.min(Math.max(safeNumber(value, fallback), 0), 100);
+}
+
+function getIssueTone({
+  breakdown,
+  activeIssueCount,
+  negativeIssueCount,
+}: {
+  breakdown: IssueScoreBreakdown | undefined;
+  activeIssueCount: number;
+  negativeIssueCount: number;
+}): Pick<IssueBadge, 'label' | 'tone'> {
+  const issueScore = clampScore(breakdown?.issueScore, 50);
+  const riskScore = clampScore(breakdown?.controversyRiskScore);
+
+  if (riskScore >= 65) {
+    return { label: 'Risk', tone: 'risk' };
+  }
+
+  if (
+    issueScore <= 40 ||
+    riskScore >= 35 ||
+    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+  ) {
+    return { label: 'Watch', tone: 'watch' };
+  }
+
+  if (issueScore >= 60 && riskScore < 50) {
+    return { label: 'Positive', tone: 'positive' };
+  }
+
+  return { label: 'Neutral', tone: 'neutral' };
+}
+
+function getIssueBadgeForArtist(artistId: string): IssueBadge {
+  const history = getArtistPriceHistoryV4(artistId);
+  const latestPoint = history[history.length - 1];
+  const breakdown =
+    latestPoint?.issueScoreBreakdown ??
+    latestPoint?.scoreBreakdown.issueScoreBreakdown;
+  const summary = latestPoint?.issueSignalsSummary;
+  const activeIssueCount = Math.round(
+    safePositiveNumber(summary?.activeIssueCount)
+  );
+  const negativeIssueCount = Math.round(
+    safePositiveNumber(summary?.negativeIssueCount)
+  );
+  const tone = getIssueTone({
+    breakdown,
+    activeIssueCount,
+    negativeIssueCount,
+  });
+
+  return {
+    ...tone,
+    issueScore: clampScore(breakdown?.issueScore, 50),
+    activeIssueCount,
+  };
+}
+
+function getIssueBadgeLabel(badge: IssueBadge) {
+  const score = Math.round(badge.issueScore);
+
+  return `${badge.label} / Issue ${score}`;
+}
+
 export default function RankingPage() {
-  const rankingRows = getArtistRankingRowsV4();
+  const rankingRows = getArtistRankingRowsV4().map((row) => ({
+    ...row,
+    issueBadge: getIssueBadgeForArtist(row.artistId),
+  }));
 
   const risingRanking = [...rankingRows].sort(
     (a, b) => b.changeRate - a.changeRate
@@ -69,6 +160,9 @@ export default function RankingPage() {
 }
 
 type RankingItem = ReturnType<typeof getArtistRankingRowsV4>[number];
+type RankingItemWithIssue = RankingItem & {
+  issueBadge: IssueBadge;
+};
 
 function RankingCard({
   title,
@@ -78,7 +172,7 @@ function RankingCard({
 }: {
   title: string;
   description: string;
-  items: RankingItem[];
+  items: RankingItemWithIssue[];
   valueType: 'change' | 'volume' | 'fanCap';
 }) {
   return (
@@ -101,16 +195,21 @@ function RankingCard({
               className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-400/50 hover:bg-white"
             >
               <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-sm font-black text-cyan-700">
                     {index + 1}
                   </div>
 
-                  <div>
-                    <p className="font-black text-slate-950">{item.nameEn}</p>
+                  <div className="min-w-0">
+                    <p className="truncate font-black text-slate-950">
+                      {item.nameEn}
+                    </p>
                     <p className="font-mono text-xs text-slate-500">
                       {item.ticker} / {item.agency}
                     </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <IssueBadgeChip badge={item.issueBadge} />
+                    </div>
                   </div>
                 </div>
 
@@ -158,7 +257,7 @@ function RankingCard({
   );
 }
 
-function ArtistList({ items }: { items: RankingItem[] }) {
+function ArtistList({ items }: { items: RankingItemWithIssue[] }) {
   return (
     <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -179,11 +278,12 @@ function ArtistList({ items }: { items: RankingItem[] }) {
       </div>
 
       <div className="overflow-x-auto rounded-2xl border border-slate-200">
-        <table className="w-full min-w-[780px] text-left text-sm">
+        <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase text-slate-500">
             <tr>
               <th className="px-4 py-3">Fan size rank</th>
               <th className="px-4 py-3">Artist</th>
+              <th className="px-4 py-3">Issue</th>
               <th className="px-4 py-3">Agency</th>
               <th className="px-4 py-3 text-right">FANDEX price</th>
               <th className="px-4 py-3 text-right">Change</th>
@@ -216,6 +316,10 @@ function ArtistList({ items }: { items: RankingItem[] }) {
                     </p>
                   </td>
 
+                  <td className="px-4 py-4">
+                    <IssueBadgeChip badge={item.issueBadge} />
+                  </td>
+
                   <td className="px-4 py-4 text-slate-600">{item.agency}</td>
 
                   <td className="px-4 py-4 text-right font-mono font-black">
@@ -245,5 +349,22 @@ function ArtistList({ items }: { items: RankingItem[] }) {
         </table>
       </div>
     </section>
+  );
+}
+
+function IssueBadgeChip({ badge }: { badge: IssueBadge }) {
+  const toneClass = {
+    positive: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    neutral: 'border-slate-200 bg-slate-50 text-slate-600',
+    watch: 'border-purple-200 bg-purple-50 text-purple-700',
+    risk: 'border-blue-200 bg-blue-50 text-blue-700',
+  }[badge.tone];
+
+  return (
+    <span
+      className={`inline-flex w-fit whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-black ${toneClass}`}
+    >
+      {getIssueBadgeLabel(badge)}
+    </span>
   );
 }
