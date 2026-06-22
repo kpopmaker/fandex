@@ -1,0 +1,161 @@
+# FANDEX Issue Source Adapter Draft
+
+Last updated: 2026-06-22
+
+This document describes the planned source adapter layer for future real news,
+official social, YouTube, chart, event, and manual curation inputs.
+
+This is a design draft only. The current runtime still uses deterministic
+`mockIssueSignals`. No real API call, `fetch`, Supabase client, database
+connection, or external data ingestion is enabled by this document.
+
+## Why The Adapter Exists
+
+External issue data will arrive in different shapes depending on the source:
+news articles, agency press releases, official social posts, YouTube videos,
+chart events, tour announcements, album events, brand campaigns, community
+signals, and manual curation records.
+
+The adapter layer keeps those source-specific formats away from `priceEngine`
+and the UI. Its job is to normalize raw source records into a stable FANDEX
+issue pipeline before scoring.
+
+## Planned Data Flow
+
+```text
+external source payload
+  -> IssueRawSourceItem
+  -> IssueSignalCandidate
+  -> IssueSignal
+  -> issueScoreEngine
+  -> ScoreBreakdown optional issue fields
+  -> compatibleHistory issue metadata
+  -> priceEngine capped issueMultiplier
+  -> UI summaries
+```
+
+`priceEngine` must never call external source adapters directly. It should
+continue reading only optional issue fields that already exist on
+`ScoreBreakdown`.
+
+## Source Types
+
+The initial adapter interface allows these raw source types:
+
+1. `news_article`
+2. `press_release`
+3. `official_social`
+4. `youtube_video`
+5. `chart_event`
+6. `tour_event`
+7. `album_event`
+8. `brand_event`
+9. `community_signal`
+10. `manual_curation`
+
+Each source type maps to an internal `IssueSourceType` and a conservative
+default reliability profile.
+
+## Normalization Stages
+
+### 1. Raw Source Item
+
+`IssueRawSourceItem` represents source payloads after ingestion but before FANDEX
+scoring. It can hold source id, source name, URL, title, summary, snippet,
+published/fetched timestamps, language, country, artist names, mapped artist
+ids, keywords, author, raw sentiment, raw engagement, reliability hints, and
+opaque metadata.
+
+### 2. Issue Signal Candidate
+
+`IssueSignalCandidate` is a FANDEX-shaped draft. It has an artist id, issue
+category, title, internal source type, normalized sentiment, impact, volatility,
+confidence, reliability weight, lifecycle stage, expiry, decay speed, duplicate
+group id, and warnings.
+
+Candidates are the correct place to hold normalization warnings such as missing
+artist mapping, missing title, invalid date, low reliability, manual review
+required, or unknown category.
+
+### 3. Issue Signal
+
+`IssueSignal` is the scoring input currently consumed by `issueScoreEngine`.
+Adapters should only produce this shape after source normalization, duplicate
+handling, reliability checks, and any required manual review.
+
+## Reliability Handling
+
+Default source reliability should remain conservative:
+
+1. Press releases and official social sources can carry high confidence.
+2. Major media and entertainment media are useful but should still be capped.
+3. Chart platforms are reliable for chart events but not broad narrative impact.
+4. Social and community signals should increase attention/volatility more than
+   direct price impact.
+5. Community and unknown sources should require review before strong negative
+   scoring.
+
+`IssueSourceReliabilityProfile` keeps these defaults explicit and overrideable
+without changing `issueScoreEngine` or `priceEngine`.
+
+## Clustering Boundary
+
+Duplicate article and repeated issue handling should happen before or during the
+candidate stage, not inside `priceEngine`.
+
+Recommended grouping keys:
+
+1. `artistId`
+2. `category`
+3. normalized title or canonical issue phrase
+4. source time window
+5. related keywords
+
+The clustered issue should carry source count and source diversity separately
+from direct sentiment or price impact, so repeated articles do not create
+excessive scoring.
+
+## Scoring Responsibility
+
+The adapter should not directly calculate final artist price.
+
+Recommended responsibility split:
+
+1. Adapter: normalize source shape, source type, timestamps, artist mapping,
+   reliability hints, and candidate warnings.
+2. Clustering layer: merge duplicates and repeated coverage.
+3. Issue scoring layer: calculate sentiment, impact, confidence, volatility,
+   lifecycle decay, rumor dampening, and issue score breakdown.
+4. Price engine: read already attached optional `ScoreBreakdown` issue fields
+   and apply the capped issue multiplier.
+
+## Safety Before Real API Integration
+
+Before any real source is connected:
+
+1. No API key should be committed or printed.
+2. No `.env` file should be modified by adapter work.
+3. No `fetch` should run from scoring modules.
+4. No Supabase client should be imported into scoring modules.
+5. `priceEngine` must not import source adapters.
+6. Adapter output must be testable with local fixtures before ingestion jobs are
+   enabled.
+
+## Current Runtime
+
+The current runtime still uses `mockIssueSignals` as the substitute for source
+adapter output. This means the source adapter draft is additive design work and
+does not change production scoring, price calculations, or UI rendering.
+
+## Future TODO
+
+1. Naver News adapter.
+2. Google News or RSS adapter.
+3. YouTube official channel adapter.
+4. Official SNS adapter.
+5. Chart event adapter.
+6. Manual curation adapter.
+7. Supabase ingestion job.
+8. Admin review workflow.
+9. Duplicate clustering tests.
+10. Reliability and rumor dampening tests.

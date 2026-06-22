@@ -367,3 +367,29 @@ Remaining TODO:
 8. Supabase schema design.
 9. Production source whitelist and blacklist policy.
 10. Tests for duplicate grouping, rumor dampening, and issue expiry.
+
+## 15. Source Adapter And Supabase Drafts
+
+The next integration layer is prepared as draft-only design work:
+
+1. `app/data/v4/scoring/issueSourceAdapter.ts`
+   - Defines source adapter types and pure normalization helpers.
+   - Does not call real APIs.
+   - Does not use `fetch`.
+   - Does not import Supabase clients.
+   - Does not change `mockIssueSignals`, `issueScoreEngine`, `scoreEngine`,
+     `compatibleHistory`, `priceEngine`, or UI runtime behavior.
+2. `docs/fandex-issue-source-adapter.md`
+   - Documents the planned flow from external raw source payloads to
+     `IssueRawSourceItem`, `IssueSignalCandidate`, and `IssueSignal`.
+   - Explains reliability handling, duplicate clustering boundaries, scoring
+     responsibility, and pre-integration safety rules.
+3. `docs/fandex-supabase-issue-schema.md`
+   - Documents a draft Supabase schema for future issue ingestion.
+   - This is not a migration and has not been applied to any database.
+   - No Supabase project, client, or CLI command is connected by this draft.
+
+Current runtime remains `mockIssueSignals` based. `priceEngine` and UI surfaces
+continue reading only issue metadata that has already been converted into
+`ScoreBreakdown` and compatible history fields. Even after real source adapters
+are added, `priceEngine` must not call external sources or Supabase directly.
