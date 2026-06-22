@@ -169,7 +169,7 @@ function formatIssueDate(value: string | undefined) {
   const timestamp = getTimestamp(value);
 
   if (timestamp === 0) {
-    return 'TBD';
+    return 'Recently';
   }
 
   return new Intl.DateTimeFormat('en-US', {
@@ -209,24 +209,42 @@ function formatIssueCategory(category: IssueCategory | undefined) {
 function getIssueTone({
   breakdown,
   latestIssue,
+  summary,
 }: {
   breakdown: IssueScoreBreakdown | undefined;
   latestIssue: IssueSignal | undefined;
+  summary:
+    | {
+        activeIssueCount: number;
+        positiveIssueCount: number;
+        negativeIssueCount: number;
+      }
+    | undefined;
 }): { label: string; tone: IssueTone } {
   const issueScore = clampScore(breakdown?.issueScore, 50);
   const riskScore = clampScore(breakdown?.controversyRiskScore);
-  const sentimentScore = clampScore(breakdown?.newsSentimentScore, 50);
-  const latestSentiment = safeNumber(latestIssue?.sentimentScore);
+  const negativeIssueCount = Math.round(
+    safePositiveNumber(summary?.negativeIssueCount)
+  );
+  const activeIssueCount = Math.round(
+    safePositiveNumber(summary?.activeIssueCount)
+  );
+  const latestSentiment = safeNumber(latestIssue?.sentimentScore, 0);
 
-  if (riskScore >= 35 || latestSentiment <= -45) {
+  if (riskScore >= 65) {
     return { label: 'Risk', tone: 'risk' };
   }
 
-  if (riskScore >= 15 || issueScore < 45 || sentimentScore < 45) {
+  if (
+    issueScore <= 40 ||
+    riskScore >= 35 ||
+    latestSentiment <= -45 ||
+    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+  ) {
     return { label: 'Watch', tone: 'watch' };
   }
 
-  if (issueScore >= 56 || sentimentScore >= 56 || latestSentiment >= 35) {
+  if (issueScore >= 60 && riskScore < 50) {
     return { label: 'Positive', tone: 'positive' };
   }
 
@@ -399,6 +417,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const issueTone = getIssueTone({
     breakdown: issueScoreBreakdown,
     latestIssue: latestIssueSignal,
+    summary: issueSignalsSummary,
   });
   const priceChange = currentPrice - safeNumber(firstPrice.price);
   const priceChangeRate = getChangeRateFromHistory(firstPrice.price, currentPrice);
@@ -821,7 +840,7 @@ function IssueNewsSignalPanel({
     : 'Neutral';
   const updatedAt = hasActiveIssue
     ? formatIssueDate(latestIssue?.detectedAt ?? latestIssue?.publishedAt)
-    : 'No recent mock issue';
+    : 'Recently';
 
   return (
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -829,7 +848,7 @@ function IssueNewsSignalPanel({
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-              Latest issue / news signals
+              News & issue signals
             </p>
             <IssueToneBadge label={tone.label} tone={tone.tone} />
           </div>
@@ -837,14 +856,14 @@ function IssueNewsSignalPanel({
             {title}
           </h2>
           <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Mock issue signals are shown as cautious context for FANDEX scoring.
-            No external news API, Supabase, or database connection is used here.
+            Recent issue signals reflected in the current FANDEX artist index.
+            Treat them as context for momentum, confidence, and watch risk.
           </p>
         </div>
 
         <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:min-w-[420px]">
           <IssueMetric label="Issue score" value={issueScore} />
-          <IssueMetric label="Risk" value={riskScore} />
+          <IssueMetric label="Watch risk" value={riskScore} />
           <IssueMetric label="Confidence" value={confidenceScore} />
         </div>
       </div>
@@ -852,10 +871,10 @@ function IssueNewsSignalPanel({
       <div className="mt-4 grid gap-3 md:grid-cols-4">
         <IssueFact label="Category" value={category} />
         <IssueFact label="Updated" value={updatedAt} />
-        <IssueFact label="Active issues" value={String(activeIssueCount)} />
+        <IssueFact label="Active signals" value={String(activeIssueCount)} />
         <IssueFact
           label="Direction"
-          value={`${positiveIssueCount} positive / ${negativeIssueCount} risk`}
+          value={`${positiveIssueCount} positive / ${negativeIssueCount} watch`}
         />
       </div>
     </section>
