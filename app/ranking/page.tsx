@@ -39,11 +39,11 @@ function clampScore(value: number | null | undefined, fallback = 0) {
 
 function getIssueTone({
   breakdown,
-  activeIssueCount,
+  positiveIssueCount,
   negativeIssueCount,
 }: {
   breakdown: IssueScoreBreakdown | undefined;
-  activeIssueCount: number;
+  positiveIssueCount: number;
   negativeIssueCount: number;
 }): Pick<IssueBadge, 'label' | 'tone'> {
   const issueScore = clampScore(breakdown?.issueScore, 50);
@@ -56,7 +56,7 @@ function getIssueTone({
   if (
     issueScore <= 40 ||
     riskScore >= 35 ||
-    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+    negativeIssueCount > positiveIssueCount
   ) {
     return { label: 'Watch', tone: 'watch' };
   }
@@ -78,12 +78,15 @@ function getIssueBadgeForArtist(artistId: string): IssueBadge {
   const activeIssueCount = Math.round(
     safePositiveNumber(summary?.activeIssueCount)
   );
+  const positiveIssueCount = Math.round(
+    safePositiveNumber(summary?.positiveIssueCount)
+  );
   const negativeIssueCount = Math.round(
     safePositiveNumber(summary?.negativeIssueCount)
   );
   const tone = getIssueTone({
     breakdown,
-    activeIssueCount,
+    positiveIssueCount,
     negativeIssueCount,
   });
 

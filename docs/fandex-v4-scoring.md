@@ -336,3 +336,54 @@ Rules:
 5. The final issue multiplier is capped to `0.94 ~ 1.06`.
 6. This is still a mock-based limited price impact step before any real news
    API, Supabase, DB, or external data integration.
+
+## 12. Current News/Issue Factor Wiring
+
+As of 2026-06-22, the news/issue factor is wired end-to-end as a mock-based
+supporting signal.
+
+Implemented flow:
+
+1. `IssueSignal` and `IssueScoreBreakdown` live in
+   `app/data/v4/scoring/types.ts`.
+2. `mockIssueSignals` provides deterministic local issue inputs.
+3. `issueScoreEngine` converts mock issue signals into issue score breakdowns.
+4. `scoreEngine` attaches optional issue fields to `ScoreBreakdown`.
+5. `compatibleHistory` preserves `issueScoreBreakdown` and
+   `issueSignalsSummary` on `ArtistPriceHistoryPointV4`.
+6. `priceEngine` applies a capped issue multiplier as a secondary price input.
+7. `/artists/[artistId]`, `/ranking`, `/compare`, and `/` read the preserved
+   issue metadata for UI summaries.
+
+Price guardrails:
+
+1. `priceEngine` does not import or call `issueScoreEngine`.
+2. `priceEngine` reads only optional issue fields already present on
+   `ScoreBreakdown`.
+3. The issue multiplier is capped to `0.94 ~ 1.06`.
+4. The lifecycle multiplier remains capped to `0.68 ~ 1.18`.
+5. The final price clamp remains `20 ~ 600`.
+6. The effective price calculation remains:
+
+```text
+basePrice * scoreScale * lifecycleMultiplier * issueMultiplier
+```
+
+The issue factor is intentionally a weak supporting factor. It should not
+replace lifecycle, score, ranking, volume, or fan-size signals, and it must not
+create large price jumps by itself.
+
+UI connection status:
+
+1. `/` shows a market-level `Market issue climate` summary.
+2. `/ranking` shows a small issue impact badge per row/card.
+3. `/artists/[artistId]` shows a `News & issue signals` panel.
+4. `/compare` shows an `Issue signal comparison` summary.
+
+Current tone thresholds are aligned across the UI:
+
+1. `Risk`: `controversyRiskScore >= 65`
+2. `Watch`: `issueScore <= 40`, `controversyRiskScore >= 35`, or
+   `negativeIssueCount > positiveIssueCount`
+3. `Positive`: `issueScore >= 60 && controversyRiskScore < 50`
+4. `Neutral` or `Balanced`: all other states

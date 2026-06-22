@@ -67,12 +67,12 @@ type MarketIssueClimate = {
 function getIssueTone({
   issueScore,
   controversyRiskScore,
-  activeIssueCount,
+  positiveIssueCount,
   negativeIssueCount,
 }: {
   issueScore: number;
   controversyRiskScore: number;
-  activeIssueCount: number;
+  positiveIssueCount: number;
   negativeIssueCount: number;
 }): 'positive' | 'neutral' | 'watch' | 'risk' {
   if (controversyRiskScore >= 65) {
@@ -82,7 +82,7 @@ function getIssueTone({
   if (
     issueScore <= 40 ||
     controversyRiskScore >= 35 ||
-    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+    negativeIssueCount > positiveIssueCount
   ) {
     return 'watch';
   }
@@ -183,7 +183,7 @@ function getMarketIssueClimate(): MarketIssueClimate {
       tone: getIssueTone({
         issueScore,
         controversyRiskScore,
-        activeIssueCount,
+        positiveIssueCount,
         negativeIssueCount,
       }),
     };

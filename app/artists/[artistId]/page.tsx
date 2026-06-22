@@ -208,11 +208,9 @@ function formatIssueCategory(category: IssueCategory | undefined) {
 
 function getIssueTone({
   breakdown,
-  latestIssue,
   summary,
 }: {
   breakdown: IssueScoreBreakdown | undefined;
-  latestIssue: IssueSignal | undefined;
   summary:
     | {
         activeIssueCount: number;
@@ -226,10 +224,9 @@ function getIssueTone({
   const negativeIssueCount = Math.round(
     safePositiveNumber(summary?.negativeIssueCount)
   );
-  const activeIssueCount = Math.round(
-    safePositiveNumber(summary?.activeIssueCount)
+  const positiveIssueCount = Math.round(
+    safePositiveNumber(summary?.positiveIssueCount)
   );
-  const latestSentiment = safeNumber(latestIssue?.sentimentScore, 0);
 
   if (riskScore >= 65) {
     return { label: 'Risk', tone: 'risk' };
@@ -238,8 +235,7 @@ function getIssueTone({
   if (
     issueScore <= 40 ||
     riskScore >= 35 ||
-    latestSentiment <= -45 ||
-    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+    negativeIssueCount > positiveIssueCount
   ) {
     return { label: 'Watch', tone: 'watch' };
   }
@@ -416,7 +412,6 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const issueSignalsSummary = latestPrice.issueSignalsSummary;
   const issueTone = getIssueTone({
     breakdown: issueScoreBreakdown,
-    latestIssue: latestIssueSignal,
     summary: issueSignalsSummary,
   });
   const priceChange = currentPrice - safeNumber(firstPrice.price);

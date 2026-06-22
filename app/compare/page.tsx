@@ -139,12 +139,12 @@ function getFactorScore(row: CompareRow, factorKey: FactorKey) {
 function getIssueTone({
   issueScore,
   controversyRiskScore,
-  activeIssueCount,
+  positiveIssueCount,
   negativeIssueCount,
 }: {
   issueScore: number;
   controversyRiskScore: number;
-  activeIssueCount: number;
+  positiveIssueCount: number;
   negativeIssueCount: number;
 }): Pick<CompareIssueSummary, 'label' | 'tone'> {
   if (controversyRiskScore >= 65) {
@@ -154,7 +154,7 @@ function getIssueTone({
   if (
     issueScore <= 40 ||
     controversyRiskScore >= 35 ||
-    (activeIssueCount > 0 && negativeIssueCount >= activeIssueCount)
+    negativeIssueCount > positiveIssueCount
   ) {
     return { label: 'Watch', tone: 'watch' };
   }
@@ -186,7 +186,7 @@ function getIssueSummary(row: CompareRow): CompareIssueSummary {
   const tone = getIssueTone({
     issueScore,
     controversyRiskScore,
-    activeIssueCount,
+    positiveIssueCount,
     negativeIssueCount,
   });
 
