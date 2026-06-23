@@ -349,6 +349,22 @@ function getHomepageIssueRows() {
   });
 }
 
+const publicPreviewItems = [
+  'Market issue climate',
+  'Artist ranking',
+  'Artist detail preview',
+  'Compare preview',
+  'Issue signal badges',
+];
+
+const earlyAccessReportItems = [
+  'Weekly K-pop FANDEX report',
+  'Artist watchlist',
+  'Comeback / issue / brand signal summary',
+  'Artist comparison brief',
+  'Marketing insight memo',
+];
+
 export default function Home() {
   const latestMarket = getKpopMarketIndexSummaryV4();
   const marketChartPoints = getKpopMarketChartPointsV4();
@@ -597,8 +613,110 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <EarlyAccessSection />
       </section>
     </main>
+  );
+}
+
+function EarlyAccessSection() {
+  return (
+    <section
+      id="early-access"
+      className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60"
+    >
+      <div className="grid gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+            FANDEX Early Access
+          </p>
+          <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+            K-pop marketing signals, before they become obvious
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
+            FANDEX organizes public signals around K-pop fandom momentum,
+            issues, charts, brand activity, and artist movement for
+            entertainment marketing research. The Early Access phase validates a
+            free public dashboard together with a weekly report format.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+            The index is positioned as a research MVP for entertainment and
+            marketing teams, not as a real-time stock service or financial
+            product.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href="#early-access"
+              className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
+            >
+              Request Early Access
+            </a>
+            <a
+              href="#early-access"
+              className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+            >
+              View Sample Report
+            </a>
+            <a
+              href="#early-access"
+              className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
+            >
+              Join FANDEX Beta
+            </a>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <EarlyAccessCard
+            eyebrow="Free public preview"
+            title="Open dashboard signals"
+            items={publicPreviewItems}
+          />
+          <EarlyAccessCard
+            eyebrow="Early Access Report"
+            title="Weekly research brief"
+            items={earlyAccessReportItems}
+          />
+        </div>
+      </div>
+
+      <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-bold leading-6 text-slate-500">
+        FANDEX is an experimental entertainment research index. It is not
+        financial advice or an investment product. Scores may change as signal
+        logic and data coverage improve.
+      </p>
+    </section>
+  );
+}
+
+function EarlyAccessCard({
+  eyebrow,
+  title,
+  items,
+}: {
+  eyebrow: string;
+  title: string;
+  items: string[];
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+        {eyebrow}
+      </p>
+      <h3 className="mt-2 text-xl font-black text-slate-950">{title}</h3>
+      <ul className="mt-4 grid gap-2">
+        {items.map((item) => (
+          <li
+            key={item}
+            className="rounded-xl border border-white bg-white px-3 py-2 text-sm font-bold text-slate-600 shadow-sm"
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }
 
