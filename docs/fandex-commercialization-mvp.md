@@ -9,11 +9,13 @@ platform. It verifies current issues with public signal data and interprets them
 from a marketing perspective. It should not be presented as a real-time K-pop
 stock service, financial index product, or investment tool.
 
-The commercial wedge is now SNS-led:
+The commercial wedge is now SNS-led, while SNS channel operation and content
+production are handled manually by the operator:
 
 1. Publish FANDEX Signal content on Instagram, X, and LinkedIn.
 2. Drive interested readers through profile links to the website.
-3. Let visitors use free search, ranking, signal previews, and sample reports.
+3. Let visitors use free search preview, ranking snapshots, signal previews,
+   and sample reports.
 4. Convert high-intent readers into the waitlist.
 5. Validate subscriber-only research, AI interpretation, artist comparison, and
    weekly report products.
@@ -62,9 +64,9 @@ SNS content
 Commercialization stages:
 
 1. Reposition site for SNS-led research funnel.
-2. Build a Content Hub or SNS Signal archive.
-3. Add free search preview boundaries.
-4. Add subscriber research lock UI.
+2. Add free search preview.
+3. Add subscriber research lock UI.
+4. Build a Content Hub or SNS Signal archive.
 5. Connect waitlist storage.
 6. Produce SNS content batches.
 7. Validate the first paid report.
@@ -84,6 +86,44 @@ Commercialization stages:
    investment product.
 
 The CTA anchors are placeholders only and do not submit data.
+
+## Free Search Preview And Subscriber Gate
+
+`app/search/page.tsx` adds a static `/search` route for free artist signal
+preview. It uses local project data only and does not call external APIs.
+
+The current website role is now:
+
+```text
+SNS content managed by the operator
+  -> website free search preview
+  -> sample report
+  -> subscriber research lock UI
+  -> waitlist
+```
+
+Implemented free preview:
+
+1. Artist quick search.
+2. Basic artist metadata.
+3. Preview FANDEX score.
+4. Issue tone preview.
+5. Sample signal summary.
+6. Links to sample report and Early Access.
+
+Implemented subscriber lock preview:
+
+1. AI Interpretation.
+2. Full Artist Research Brief.
+3. Brand-fit Analysis.
+4. Issue Risk Analysis.
+5. Artist Comparison Report.
+6. Weekly FANDEX Report.
+7. Watchlist & Signal Commentary.
+
+`docs/fandex-free-search-subscriber-gate.md` defines the free versus subscriber
+research boundary. No login, payment, entitlement check, Supabase storage, API,
+or AI backend is implemented.
 
 ## Sample Report Page
 
@@ -150,6 +190,7 @@ Current commercialization MVP flow:
 
 ```text
 Home Early Access section
+  -> Free Search Preview
   -> Waitlist preview form
   -> Sample Report
   -> Waitlist data model draft
@@ -164,6 +205,8 @@ Still not implemented:
 5. Real form submission.
 6. Email notification.
 7. UI wiring between the preview form and the data model.
+8. Subscriber auth or payment logic.
+9. AI interpretation backend.
 
 ## Not Implemented
 
@@ -172,8 +215,8 @@ This phase does not implement:
 1. Actual SNS channel URLs.
 2. Instagram, X, or LinkedIn API integration.
 3. Content Hub.
-4. Free search limitation or lock structure.
-5. Subscriber-only features.
+4. Free search limitation or real usage limits.
+5. Subscriber-only feature implementation.
 6. Payment.
 7. Toss Payments.
 8. Login.
@@ -190,18 +233,19 @@ This phase does not implement:
 19. Form validation.
 20. Privacy copy and consent checkbox.
 21. Waitlist UI to data model wiring.
+22. Subscriber entitlement checks.
 
 ## Next TODO
 
 1. Define SNS channel launch plan.
 2. Produce the first SNS content batch.
-3. Add Content Hub or SNS Signal archive.
-4. Add free search preview boundaries.
-5. Add subscriber research lock UI.
-6. Add consent and privacy copy UI.
-7. Add validation UI.
-8. Create Supabase table migration.
-9. Decide and implement submission API route or server action.
-10. Design the report request workflow.
-11. Validate first paid report pricing.
-12. Add payment integration after product and pricing validation.
+3. Expand free search result data coverage.
+4. Add Content Hub or SNS Signal archive.
+5. Add lock UI click tracking after analytics policy is approved.
+6. Connect waitlist storage.
+7. Add consent and privacy copy UI.
+8. Add validation UI.
+9. Decide subscriber auth and payment approach.
+10. Design AI interpretation backend.
+11. Design the full research report generation workflow.
+12. Validate first paid report pricing.

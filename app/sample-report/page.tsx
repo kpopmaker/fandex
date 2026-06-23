@@ -321,6 +321,12 @@ export default function SampleReportPage() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
+                href="/search"
+                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+              >
+                Try the free artist search
+              </Link>
+              <Link
                 href="/#waitlist-form"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
@@ -328,7 +334,7 @@ export default function SampleReportPage() {
               </Link>
               <Link
                 href="/"
-                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+                className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
               >
                 Back to Dashboard
               </Link>

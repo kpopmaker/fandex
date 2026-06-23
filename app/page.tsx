@@ -684,6 +684,12 @@ function EarlyAccessSection() {
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/search"
+              className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
+            >
+              Search Artist Preview
+            </Link>
             <a
               href="#waitlist-form"
               className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
