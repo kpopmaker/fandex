@@ -147,15 +147,74 @@ The current runtime still uses `mockIssueSignals` as the substitute for source
 adapter output. This means the source adapter draft is additive design work and
 does not change production scoring, price calculations, or UI rendering.
 
+## Local Registry And Mock Harness
+
+As of 2026-06-23, the source adapter layer includes a local registry and a mock
+adapter harness for validation before any real source is connected.
+
+Current files:
+
+1. `app/data/v4/scoring/issueSourceAdapter.ts`
+   - Defines the adapter contract, raw source item shape, candidate shape,
+     warning severity, adapter capabilities, and smoke check result type.
+   - Provides pure helpers for reliability normalization, candidate creation,
+     and candidate-to-`IssueSignal` draft mapping.
+2. `app/data/v4/scoring/issueSourceFixtures.ts`
+   - Provides local fixture raw items for `news_article`, `press_release`,
+     `official_social`, `youtube_video`, `chart_event`, `tour_event`,
+     `brand_event`, and `manual_curation`.
+   - Uses only mock/example URLs.
+   - Does not call real APIs.
+3. `app/data/v4/scoring/mockIssueSourceAdapter.ts`
+   - Implements `IssueSourceAdapter` for local fixture validation.
+   - Converts fixture raw items to `IssueSignalCandidate` records and then to
+     `IssueSignal` drafts.
+   - Exposes `runMockIssueSourceAdapterSmokeCheck()` for framework-free smoke
+     checks.
+4. `app/data/v4/scoring/issueSourceRegistry.ts`
+   - Registers the mock adapter only.
+   - Exposes pure registry helpers for adapter lookup, capability listing, and
+     registered smoke checks.
+   - Keeps future real adapters as planned names only, with no runtime import.
+
+The current validation flow is:
+
+```text
+issueSourceFixtures
+  -> mockIssueSourceAdapter.normalize()
+  -> IssueSignalCandidate[]
+  -> mockIssueSourceAdapter.mapToIssueSignals()
+  -> IssueSignal draft[]
+  -> smoke check summary
+```
+
+The smoke check is intended to confirm fixture coverage, candidate creation,
+signal draft creation, warning count, source type coverage, and whether any
+blocking normalization errors exist. It is not a scoring test and does not
+connect adapter output to `priceEngine`, `scoreEngine`, compatible history, or
+UI runtime.
+
+Currently registered adapter:
+
+1. `mock_issue_source_adapter`
+
+Not implemented yet:
+
+1. Real Naver news adapter.
+2. Real GDELT adapter.
+3. Real YouTube official channel adapter.
+4. Real official social adapter.
+5. Real Supabase ingestion adapter.
+
 ## Future TODO
 
-1. Naver News adapter.
-2. Google News or RSS adapter.
-3. YouTube official channel adapter.
-4. Official SNS adapter.
-5. Chart event adapter.
-6. Manual curation adapter.
-7. Supabase ingestion job.
+1. `NaverNewsIssueSourceAdapter`.
+2. `GdeltIssueSourceAdapter`.
+3. `YouTubeOfficialChannelIssueSourceAdapter`.
+4. `OfficialSocialIssueSourceAdapter`.
+5. `SupabaseIngestionAdapter`.
+6. Chart event adapter.
+7. Manual curation adapter.
 8. Admin review workflow.
 9. Duplicate clustering tests.
 10. Reliability and rumor dampening tests.

@@ -393,3 +393,41 @@ Current runtime remains `mockIssueSignals` based. `priceEngine` and UI surfaces
 continue reading only issue metadata that has already been converted into
 `ScoreBreakdown` and compatible history fields. Even after real source adapters
 are added, `priceEngine` must not call external sources or Supabase directly.
+
+## 16. Adapter Registry And Mock Harness
+
+As of 2026-06-23, a local adapter registry and mock adapter harness have been
+added for source adapter validation.
+
+Current adapter layer roles:
+
+1. `app/data/v4/scoring/issueSourceAdapter.ts`
+   - Type and contract layer.
+   - Defines `IssueRawSourceItem`, `IssueSignalCandidate`,
+     `IssueSourceAdapter`, adapter capabilities, warning severity, and smoke
+     check result types.
+2. `app/data/v4/scoring/issueSourceRegistry.ts`
+   - Local adapter registration and lookup layer.
+   - Currently registers only `mock_issue_source_adapter`.
+   - Lists future adapter names without importing or running real adapters.
+3. `app/data/v4/scoring/mockIssueSourceAdapter.ts`
+   - Local validation adapter.
+   - Converts fixture raw items to candidates and `IssueSignal` drafts.
+   - Provides a framework-free smoke check summary.
+4. `app/data/v4/scoring/issueSourceFixtures.ts`
+   - Fixture input for validating adapter flow without external APIs.
+   - Covers news article, press release, official social, YouTube video, chart
+     event, tour event, brand event, and manual curation source types.
+
+Runtime connection status:
+
+1. `priceEngine` is still driven by issue fields already attached to
+   `ScoreBreakdown`.
+2. UI pages still read compatible history issue metadata generated from the
+   existing mock issue scoring path.
+3. Runtime scoring remains based on `mockIssueSignals` and
+   `issueScoreEngine`.
+4. Adapter output is not yet connected directly to runtime price calculation,
+   ranking, compare, market index, or artist detail UI.
+5. No real news API, external API key, Supabase client, Supabase project, or DB
+   migration is used by the adapter registry step.

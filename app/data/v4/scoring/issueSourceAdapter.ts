@@ -26,6 +26,23 @@ export type IssueSourceReliabilityProfile = {
   allowNegativeImpact: boolean;
 };
 
+export type IssueSourceAdapterCapability = {
+  sourceType: IssueRawSourceType;
+  supportsRealtime: boolean;
+  supportsBackfill: boolean;
+  supportsFixtureInput: boolean;
+  producesSignalDrafts: boolean;
+  requiresExternalNetwork: boolean;
+  requiresSupabase: boolean;
+};
+
+export type IssueSourceAdapterWarningSeverity = 'info' | 'warning' | 'blocking';
+
+export type IssueSignalCandidateMappingStatus =
+  | 'mapped'
+  | 'mapped_with_warnings'
+  | 'skipped';
+
 export type IssueRawSourceItem = {
   sourceId: string;
   sourceType: IssueRawSourceType;
@@ -60,6 +77,7 @@ export type IssueSourceAdapterContext = {
 
 export type IssueSourceNormalizationWarning = {
   sourceId: string;
+  severity?: IssueSourceAdapterWarningSeverity;
   code:
     | 'missing_artist'
     | 'missing_title'
@@ -94,12 +112,25 @@ export type IssueSignalCandidate = {
   sourceName: string;
   sourceUrl?: string;
   warnings: IssueSourceNormalizationWarning[];
+  mappingStatus?: IssueSignalCandidateMappingStatus;
 };
 
 export type IssueSourceAdapterResult = {
   candidates: IssueSignalCandidate[];
   warnings: IssueSourceNormalizationWarning[];
   rawItemCount: number;
+  adapterName?: string;
+  capabilities?: IssueSourceAdapterCapability[];
+};
+
+export type IssueSourceAdapterSmokeCheckResult = {
+  adapterName: string;
+  rawItemCount: number;
+  candidateCount: number;
+  signalDraftCount: number;
+  warningCount: number;
+  sourceTypes: IssueRawSourceType[];
+  hasBlockingErrors: boolean;
 };
 
 export type IssueSourceAdapter = {
@@ -107,6 +138,7 @@ export type IssueSourceAdapter = {
   sourceType: IssueRawSourceType;
   supportsRealtime: boolean;
   supportsBackfill: boolean;
+  capabilities?: IssueSourceAdapterCapability[];
   normalize(
     rawItems: IssueRawSourceItem[],
     context: IssueSourceAdapterContext,
@@ -208,13 +240,16 @@ const defaultReliabilityProfiles: Record<
   },
 };
 
-function safeTimestamp(value: string | undefined, fallback: string) {
+function safeTimestamp(value: string | undefined, fallback: string): string {
   const timestamp = new Date(value ?? '').getTime();
 
   return Number.isFinite(timestamp) ? value ?? fallback : fallback;
 }
 
-export function clampIssueScore(value: number | null | undefined, fallback = 0) {
+export function clampIssueScore(
+  value: number | null | undefined,
+  fallback = 0,
+): number {
   const safeValue = typeof value === 'number' && Number.isFinite(value)
     ? value
     : fallback;
@@ -225,7 +260,7 @@ export function clampIssueScore(value: number | null | undefined, fallback = 0) 
 export function clampIssueSentiment(
   value: number | null | undefined,
   fallback = 0,
-) {
+): number {
   const safeValue = typeof value === 'number' && Number.isFinite(value)
     ? value
     : fallback;
@@ -236,14 +271,14 @@ export function clampIssueSentiment(
 export function getDefaultReliabilityBySourceType(
   sourceType: IssueRawSourceType,
   overrides?: IssueSourceAdapterContext['sourceReliabilityProfiles'],
-) {
+): IssueSourceReliabilityProfile {
   return overrides?.[sourceType] ?? defaultReliabilityProfiles[sourceType];
 }
 
 export function normalizeSourceReliability(
   rawItem: IssueRawSourceItem,
   context: IssueSourceAdapterContext,
-) {
+): number {
   const profile = getDefaultReliabilityBySourceType(
     rawItem.sourceType,
     context.sourceReliabilityProfiles,
@@ -282,6 +317,7 @@ export function createIssueSignalCandidate({
   if (!artistId) {
     warnings.push({
       sourceId: rawItem.sourceId,
+      severity: 'warning',
       code: 'missing_artist',
       message: 'No artist id was mapped for the raw source item.',
     });
@@ -290,6 +326,7 @@ export function createIssueSignalCandidate({
   if (!title) {
     warnings.push({
       sourceId: rawItem.sourceId,
+      severity: 'warning',
       code: 'missing_title',
       message: 'Raw source item has no title after trimming.',
     });
@@ -298,6 +335,7 @@ export function createIssueSignalCandidate({
   if (profile.requiresManualReview) {
     warnings.push({
       sourceId: rawItem.sourceId,
+      severity: 'info',
       code: 'manual_review_required',
       message: 'Source type should be reviewed before production scoring.',
     });
@@ -342,6 +380,7 @@ export function createIssueSignalCandidate({
     sourceName: rawItem.sourceName,
     sourceUrl: rawItem.sourceUrl,
     warnings,
+    mappingStatus: warnings.length > 0 ? 'mapped_with_warnings' : 'mapped',
   };
 }
 
