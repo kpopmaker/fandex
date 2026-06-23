@@ -1,53 +1,81 @@
 # FANDEX Commercialization MVP
 
-Status: phase 1 positioning and landing CTA draft.
+Status: SNS-led research funnel positioning draft.
 
 ## Commercial Positioning
 
-FANDEX should be positioned as a K-pop entertainment marketing insight dashboard
-and research MVP. It should not be presented as a real-time K-pop stock service,
-financial index product, or investment tool.
+FANDEX should be positioned as a K-pop and entertainment issue research
+platform. It verifies current issues with public signal data and interprets them
+from a marketing perspective. It should not be presented as a real-time K-pop
+stock service, financial index product, or investment tool.
 
-The first commercial wedge is:
+The commercial wedge is now SNS-led:
 
-1. Free public dashboard preview.
-2. Paid Early Access weekly report validation.
-3. Research-oriented signal summaries for entertainment, marketing, and artist
-   monitoring use cases.
+1. Publish FANDEX Signal content on Instagram, X, and LinkedIn.
+2. Drive interested readers through profile links to the website.
+3. Let visitors use free search, ranking, signal previews, and sample reports.
+4. Convert high-intent readers into the waitlist.
+5. Validate subscriber-only research, AI interpretation, artist comparison, and
+   weekly report products.
 
 ## Free Public Area
 
 The public preview can expose lightweight dashboard surfaces:
 
-1. Market issue climate.
-2. Artist ranking.
-3. Artist detail preview.
-4. Compare preview.
-5. Issue signal badges.
+1. Artist quick search.
+2. Public ranking snapshot.
+3. Issue tone preview.
+4. Sample report.
+5. SNS signal archive preview.
 
 This area should help visitors understand FANDEX signal coverage without
 requiring login, payment, database writes, or a live waitlist flow.
 
 ## Early Access Report Area
 
-The paid beta concept is a weekly FANDEX report package:
+The paid beta concept is a subscriber research package:
 
-1. Weekly K-pop FANDEX report.
-2. Artist watchlist.
-3. Comeback, issue, and brand signal summary.
-4. Artist comparison brief.
-5. Marketing insight memo.
+1. AI interpretation.
+2. Full artist research brief.
+3. Brand-fit analysis.
+4. Issue risk analysis.
+5. Artist comparison report.
+6. Weekly FANDEX report.
+7. Watchlist and signal commentary.
 
 The report should validate whether users want recurring entertainment research
 before a full subscription product is built.
+
+## SNS-Led Research Funnel
+
+`docs/fandex-sns-research-funnel.md` defines the current funnel strategy:
+
+```text
+SNS content
+  -> profile link
+  -> FANDEX free preview
+  -> sample report
+  -> waitlist
+  -> subscriber research validation
+```
+
+Commercialization stages:
+
+1. Reposition site for SNS-led research funnel.
+2. Build a Content Hub or SNS Signal archive.
+3. Add free search preview boundaries.
+4. Add subscriber research lock UI.
+5. Connect waitlist storage.
+6. Produce SNS content batches.
+7. Validate the first paid report.
 
 ## Implemented Landing CTA
 
 `app/page.tsx` now includes a `FANDEX Early Access` section with:
 
-1. Product positioning as an entertainment marketing insight dashboard.
+1. Product positioning as an SNS-led K-pop and entertainment research platform.
 2. Free public preview card.
-3. Early Access Report card.
+3. Subscriber research card.
 4. Temporary CTA anchors:
    - Request Early Access
    - View Sample Report
@@ -135,36 +163,45 @@ Still not implemented:
 4. Server action.
 5. Real form submission.
 6. Email notification.
+7. UI wiring between the preview form and the data model.
 
 ## Not Implemented
 
 This phase does not implement:
 
-1. Payment.
-2. Toss Payments.
-3. Login.
-4. Database persistence.
-5. Email automation.
-6. Waitlist submission.
-7. New API routes.
-8. Actual Naver API collection.
-9. Supabase tables or migrations.
-10. Live sample report generation.
-11. Sample report PDF export.
-12. Waitlist form submission.
-13. Form validation.
-14. Privacy copy and consent checkbox.
-15. Waitlist UI to data model wiring.
+1. Actual SNS channel URLs.
+2. Instagram, X, or LinkedIn API integration.
+3. Content Hub.
+4. Free search limitation or lock structure.
+5. Subscriber-only features.
+6. Payment.
+7. Toss Payments.
+8. Login.
+9. Supabase storage.
+10. Actual AI interpretation backend.
+11. Database persistence.
+12. Email automation.
+13. Waitlist submission.
+14. New API routes.
+15. Actual Naver API collection.
+16. Supabase tables or migrations.
+17. Live sample report generation.
+18. Sample report PDF export.
+19. Form validation.
+20. Privacy copy and consent checkbox.
+21. Waitlist UI to data model wiring.
 
 ## Next TODO
 
-1. Add consent and privacy copy UI.
-2. Add validation UI.
-3. Create Supabase table migration.
-4. Decide and implement submission API route or server action.
-5. Add email notification.
-6. Design the report request workflow.
-7. Validate pricing.
-8. Add sample report PDF export.
-9. Design weekly report generation workflow.
-10. Add payment integration after product and pricing validation.
+1. Define SNS channel launch plan.
+2. Produce the first SNS content batch.
+3. Add Content Hub or SNS Signal archive.
+4. Add free search preview boundaries.
+5. Add subscriber research lock UI.
+6. Add consent and privacy copy UI.
+7. Add validation UI.
+8. Create Supabase table migration.
+9. Decide and implement submission API route or server action.
+10. Design the report request workflow.
+11. Validate first paid report pricing.
+12. Add payment integration after product and pricing validation.

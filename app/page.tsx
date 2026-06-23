@@ -350,19 +350,40 @@ function getHomepageIssueRows() {
 }
 
 const publicPreviewItems = [
-  'Market issue climate',
-  'Artist ranking',
-  'Artist detail preview',
-  'Compare preview',
-  'Issue signal badges',
+  'Artist quick search',
+  'Public ranking snapshot',
+  'Issue tone preview',
+  'Sample report',
+  'SNS signal archive preview',
 ];
 
 const earlyAccessReportItems = [
-  'Weekly K-pop FANDEX report',
-  'Artist watchlist',
-  'Comeback / issue / brand signal summary',
-  'Artist comparison brief',
-  'Marketing insight memo',
+  'AI interpretation',
+  'Full artist research brief',
+  'Brand-fit analysis',
+  'Issue risk analysis',
+  'Artist comparison report',
+  'Weekly FANDEX report',
+  'Watchlist and signal commentary',
+];
+
+const snsResearchFunnelSteps = [
+  {
+    title: 'Discover a FANDEX Signal',
+    copy: 'Instagram, X, and LinkedIn posts surface K-pop and entertainment issues with a data-first angle.',
+  },
+  {
+    title: 'Check the artist or issue',
+    copy: 'Visitors use FANDEX to verify the context behind a public signal, artist movement, or issue tone.',
+  },
+  {
+    title: 'Read the preview',
+    copy: 'Free pages show ranking snapshots, sample interpretation, and signal previews before subscription.',
+  },
+  {
+    title: 'Unlock deeper research',
+    copy: 'Early Access subscribers receive AI interpretation, comparison briefs, and weekly FANDEX reports.',
+  },
 ];
 
 const waitlistRoleOptions = [
@@ -649,18 +670,17 @@ function EarlyAccessSection() {
             FANDEX Early Access
           </p>
           <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
-            K-pop marketing signals, before they become obvious
+            K-pop and entertainment issues, verified for marketing context
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-            FANDEX organizes public signals around K-pop fandom momentum,
-            issues, charts, brand activity, and artist movement for
-            entertainment marketing research. The Early Access phase validates a
-            free public dashboard together with a weekly report format.
+            FANDEX is a research platform that verifies the latest K-pop and
+            entertainment industry issues with public signal data, then
+            interprets them from a marketing perspective.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            The index is positioned as a research MVP for entertainment and
-            marketing teams, not as a real-time stock service or financial
-            product.
+            FANDEX Signal content published on Instagram, X, and LinkedIn can
+            bring readers back to the website for source context, free previews,
+            sample reports, and Early Access subscriber research.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
@@ -687,17 +707,46 @@ function EarlyAccessSection() {
 
         <div className="grid gap-4 md:grid-cols-2">
           <EarlyAccessCard
-            eyebrow="Free public preview"
-            title="Open dashboard signals"
+            eyebrow="Free Preview"
+            title="What visitors can try first"
             items={publicPreviewItems}
           />
           <EarlyAccessCard
-            eyebrow="Early Access Report"
-            title="Weekly research brief"
+            eyebrow="Subscriber Research"
+            title="Coming soon for Early Access subscribers"
             items={earlyAccessReportItems}
           />
         </div>
       </div>
+
+      <section className="mt-5 rounded-3xl border border-slate-200 bg-slate-50 p-5">
+        <div className="mb-5">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+            From social signal to deeper research
+          </p>
+          <h3 className="mt-2 text-2xl font-black text-slate-950">
+            How FANDEX turns SNS attention into research demand
+          </h3>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {snsResearchFunnelSteps.map((step, index) => (
+            <article
+              key={step.title}
+              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500 font-mono text-sm font-black text-white">
+                {index + 1}
+              </span>
+              <h4 className="mt-4 text-sm font-black text-slate-950">
+                {step.title}
+              </h4>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                {step.copy}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-bold leading-6 text-slate-500">
         FANDEX is an experimental entertainment research index. It is not
@@ -725,12 +774,13 @@ function WaitlistPreviewCard() {
             Waitlist preview
           </p>
           <h3 className="mt-2 text-2xl font-black text-slate-950">
-            Request FANDEX Early Access
+            Join the FANDEX research waitlist
           </h3>
           <p className="mt-3 text-sm leading-7 text-slate-600">
-            Early Access validates the public dashboard and weekly K-pop signal
-            report together. This preview shows how teams could request access
-            and share their intended research use case.
+            Early Access is for readers who discover a K-pop or entertainment
+            issue through FANDEX Signal content and want a deeper research brief.
+            Your selected report type will help shape future beta reports and
+            subscription tests.
           </p>
           <p className="mt-3 rounded-2xl border border-cyan-200 bg-white p-4 text-xs font-bold leading-6 text-cyan-800">
             This form is a preview UI. Form submission will be connected in the
