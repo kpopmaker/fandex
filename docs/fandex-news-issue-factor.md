@@ -497,3 +497,45 @@ Future Naver integration TODO:
 3. Add duplicate clustering before issue scoring.
 4. Design Supabase ingestion jobs before storing raw items.
 5. Tune source reliability weighting for Naver-derived records.
+
+## 18. Naver Query Strategy Draft
+
+As of 2026-06-24, `app/data/v4/scoring/naverNewsQueryStrategy.ts` defines a
+planned-only query strategy layer for Naver News.
+
+Current runtime flow remains:
+
+```text
+mock issue signals
+  -> issue scoring
+  -> issue metadata
+  -> price/UI
+```
+
+The planned Naver path is separate:
+
+```text
+query strategy
+  -> source adapter
+  -> raw item normalization
+  -> candidate/signal draft
+  -> future persistence/scoring
+```
+
+The query strategy draft creates bucketed query strings from an artist identity,
+aliases, optional agency, optional disambiguation keywords, and optional exclude
+keywords. It covers core identity, comeback/release, chart performance, brand
+ads, tour/event, contract/agency, controversy risk, and fandom/community query
+intent.
+
+Runtime boundaries remain unchanged:
+
+1. The Naver query strategy does not call Naver News.
+2. It does not use `fetch`, axios, API keys, `.env`, Supabase, or migrations.
+3. It is not connected to `priceEngine`, `scoreEngine`, compatible history, UI,
+   or the active adapter registry.
+4. Risk queries are marked as `watch` priority and remain draft coverage until
+   source reliability, duplicate clustering, and review policy are designed.
+
+See `docs/fandex-naver-query-strategy.md` for the full query bucket and
+disambiguation draft.

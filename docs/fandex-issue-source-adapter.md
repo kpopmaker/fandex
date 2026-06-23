@@ -276,6 +276,37 @@ Before any real Naver ingestion is enabled, this fixture shape check should
 continue to pass and should remain separate from runtime price, scoring,
 history, and UI behavior.
 
+## Naver Query Strategy Boundary
+
+`docs/fandex-naver-query-strategy.md` documents the planned query strategy layer
+that sits before any Naver News API call.
+
+Responsibility split:
+
+1. Query strategy builds planned artist search strings from artist name, aliases,
+   agency, disambiguation keywords, exclude keywords, bucket, and priority.
+2. Source adapter responsibility begins after a raw provider payload exists.
+3. The Naver source adapter normalizes raw response items into
+   `IssueRawSourceItem` records and shape-check summaries.
+4. The source adapter should not own artist query scheduling, cadence, or alias
+   expansion policy.
+
+Planned Naver flow:
+
+```text
+artist identity
+  -> query strategy
+  -> Naver API caller
+  -> source adapter normalization
+  -> IssueRawSourceItem
+  -> IssueSignalCandidate
+  -> future persistence/scoring
+```
+
+Current status remains draft-only. No Naver API call, `fetch`, axios, API key,
+`.env`, Supabase, migration, active adapter registration, price runtime, scoring
+runtime, or UI connection is introduced by the query strategy layer.
+
 ## Future TODO
 
 1. Enable `NaverNewsIssueSourceAdapter` only after API, credential, query, and
