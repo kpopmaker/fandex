@@ -653,12 +653,12 @@ function EarlyAccessSection() {
             >
               Request Early Access
             </a>
-            <a
-              href="#early-access"
+            <Link
+              href="/sample-report"
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
             >
               View Sample Report
-            </a>
+            </Link>
             <a
               href="#early-access"
               className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"

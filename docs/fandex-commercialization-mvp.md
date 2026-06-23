@@ -57,6 +57,29 @@ before a full subscription product is built.
 
 The CTA anchors are placeholders only and do not submit data.
 
+## Sample Report Page
+
+`app/sample-report/page.tsx` adds a static sample report preview at
+`/sample-report`.
+
+The page exists to show what a FANDEX Early Access report could look like before
+building payment, login, database storage, email automation, or live data
+collection. It uses static preview values and frames the product as a K-pop
+entertainment marketing insight report, not an investment report.
+
+The current conversion flow is:
+
+```text
+Home
+  -> Early Access section
+  -> View Sample Report
+  -> future Request Early Access form
+```
+
+The home CTA `View Sample Report` now links to `/sample-report`. The remaining
+request/beta CTAs stay as temporary anchors until a real request flow is
+approved.
+
 ## Not Implemented
 
 This phase does not implement:
@@ -70,12 +93,15 @@ This phase does not implement:
 7. New API routes.
 8. Actual Naver API collection.
 9. Supabase tables or migrations.
+10. Live sample report generation.
+11. Sample report PDF export.
 
 ## Next TODO
 
-1. Build a sample report page.
-2. Add a waitlist form.
-3. Design the report request flow.
+1. Add a waitlist form UI.
+2. Add a report request form.
+3. Add a Supabase waitlist table after schema approval.
 4. Validate pricing.
-5. Add a Supabase waitlist table after schema approval.
-6. Add payment integration after product and pricing validation.
+5. Add sample report PDF export.
+6. Design weekly report generation workflow.
+7. Add payment integration after product and pricing validation.
