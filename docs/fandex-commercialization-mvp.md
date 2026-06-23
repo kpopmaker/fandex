@@ -108,6 +108,34 @@ Sample Report
 The form is intentionally static. It has no submit handler, no `action`, no
 storage, no email automation, no API route, and no Supabase connection.
 
+## Waitlist Data Model Draft
+
+`app/data/v4/commercialization/waitlistDataModel.ts` and
+`docs/fandex-waitlist-data-model.md` define the draft storage model for future
+Early Access requests.
+
+This step adds pure TypeScript types, constants, normalization helpers,
+validation warnings, record draft creation, and a local shape check. It does not
+connect the waitlist UI to the data model.
+
+Current commercialization MVP flow:
+
+```text
+Home Early Access section
+  -> Waitlist preview form
+  -> Sample Report
+  -> Waitlist data model draft
+```
+
+Still not implemented:
+
+1. Supabase connection.
+2. Supabase migration.
+3. API route.
+4. Server action.
+5. Real form submission.
+6. Email notification.
+
 ## Not Implemented
 
 This phase does not implement:
@@ -126,15 +154,16 @@ This phase does not implement:
 12. Waitlist form submission.
 13. Form validation.
 14. Privacy copy and consent checkbox.
+15. Waitlist UI to data model wiring.
 
 ## Next TODO
 
-1. Add form validation.
-2. Decide between API route and server action for request handling.
-3. Add a Supabase waitlist table after schema approval.
-4. Add email notification.
-5. Design the report request workflow.
-6. Add privacy copy and consent checkbox.
+1. Add consent and privacy copy UI.
+2. Add validation UI.
+3. Create Supabase table migration.
+4. Decide and implement submission API route or server action.
+5. Add email notification.
+6. Design the report request workflow.
 7. Validate pricing.
 8. Add sample report PDF export.
 9. Design weekly report generation workflow.
