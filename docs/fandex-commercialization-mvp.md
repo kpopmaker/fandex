@@ -80,6 +80,34 @@ The home CTA `View Sample Report` now links to `/sample-report`. The remaining
 request/beta CTAs stay as temporary anchors until a real request flow is
 approved.
 
+## Waitlist Form UI
+
+`app/page.tsx` now includes a static waitlist preview card at
+`/#waitlist-form`.
+
+The waitlist UI includes:
+
+1. Name.
+2. Email.
+3. Role / use case.
+4. Interested report type.
+5. A `type="button"` preview CTA.
+
+The current CTA flow is:
+
+```text
+Home Early Access
+  -> Request Early Access / Join FANDEX Beta
+  -> #waitlist-form
+
+Sample Report
+  -> Request Early Access
+  -> Home #waitlist-form
+```
+
+The form is intentionally static. It has no submit handler, no `action`, no
+storage, no email automation, no API route, and no Supabase connection.
+
 ## Not Implemented
 
 This phase does not implement:
@@ -95,13 +123,19 @@ This phase does not implement:
 9. Supabase tables or migrations.
 10. Live sample report generation.
 11. Sample report PDF export.
+12. Waitlist form submission.
+13. Form validation.
+14. Privacy copy and consent checkbox.
 
 ## Next TODO
 
-1. Add a waitlist form UI.
-2. Add a report request form.
+1. Add form validation.
+2. Decide between API route and server action for request handling.
 3. Add a Supabase waitlist table after schema approval.
-4. Validate pricing.
-5. Add sample report PDF export.
-6. Design weekly report generation workflow.
-7. Add payment integration after product and pricing validation.
+4. Add email notification.
+5. Design the report request workflow.
+6. Add privacy copy and consent checkbox.
+7. Validate pricing.
+8. Add sample report PDF export.
+9. Design weekly report generation workflow.
+10. Add payment integration after product and pricing validation.

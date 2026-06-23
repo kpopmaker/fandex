@@ -365,6 +365,23 @@ const earlyAccessReportItems = [
   'Marketing insight memo',
 ];
 
+const waitlistRoleOptions = [
+  'Entertainment marketer',
+  'K-pop fan / community operator',
+  'Brand marketer',
+  'Job seeker / portfolio research',
+  'Investor / market watcher',
+  'Other',
+];
+
+const waitlistReportOptions = [
+  'Weekly K-pop FANDEX report',
+  'Artist watchlist',
+  'Comeback / issue / brand signal summary',
+  'Artist comparison brief',
+  'Marketing insight memo',
+];
+
 export default function Home() {
   const latestMarket = getKpopMarketIndexSummaryV4();
   const marketChartPoints = getKpopMarketChartPointsV4();
@@ -648,7 +665,7 @@ function EarlyAccessSection() {
 
           <div className="mt-5 flex flex-wrap gap-3">
             <a
-              href="#early-access"
+              href="#waitlist-form"
               className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
             >
               Request Early Access
@@ -660,7 +677,7 @@ function EarlyAccessSection() {
               View Sample Report
             </Link>
             <a
-              href="#early-access"
+              href="#waitlist-form"
               className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
             >
               Join FANDEX Beta
@@ -687,6 +704,98 @@ function EarlyAccessSection() {
         financial advice or an investment product. Scores may change as signal
         logic and data coverage improve.
       </p>
+
+      <WaitlistPreviewCard />
+    </section>
+  );
+}
+
+function WaitlistPreviewCard() {
+  const fieldClass =
+    'mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm outline-none focus:border-cyan-300 focus:ring-2 focus:ring-cyan-100';
+
+  return (
+    <section
+      id="waitlist-form"
+      className="mt-5 rounded-3xl border border-slate-200 bg-slate-50 p-5"
+    >
+      <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+            Waitlist preview
+          </p>
+          <h3 className="mt-2 text-2xl font-black text-slate-950">
+            Request FANDEX Early Access
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-slate-600">
+            Early Access validates the public dashboard and weekly K-pop signal
+            report together. This preview shows how teams could request access
+            and share their intended research use case.
+          </p>
+          <p className="mt-3 rounded-2xl border border-cyan-200 bg-white p-4 text-xs font-bold leading-6 text-cyan-800">
+            This form is a preview UI. Form submission will be connected in the
+            next MVP step.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="text-sm font-black text-slate-700">
+            Name
+            <input
+              className={fieldClass}
+              name="name"
+              placeholder="Your name"
+              type="text"
+            />
+          </label>
+
+          <label className="text-sm font-black text-slate-700">
+            Email
+            <input
+              className={fieldClass}
+              name="email"
+              placeholder="you@example.com"
+              type="email"
+            />
+          </label>
+
+          <label className="text-sm font-black text-slate-700">
+            Role / use case
+            <select className={fieldClass} defaultValue="" name="role">
+              <option value="">Select a role</option>
+              {waitlistRoleOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="text-sm font-black text-slate-700">
+            Interested report type
+            <select className={fieldClass} defaultValue="" name="reportType">
+              <option value="">Select a report type</option>
+              {waitlistReportOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="md:col-span-2">
+            <button
+              type="button"
+              className="w-full rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400 md:w-auto"
+            >
+              Request Early Access
+            </button>
+            <p className="mt-3 text-xs font-bold leading-6 text-slate-500">
+              Early Access requests are not being stored yet in this preview.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

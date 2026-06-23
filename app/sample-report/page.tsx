@@ -303,6 +303,39 @@ export default function SampleReportPage() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
+          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+                Early Access
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Want this report every week?
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+                Join FANDEX Early Access to receive weekly K-pop signal briefs,
+                artist watchlists, and marketing insight memos as the report
+                format is validated.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 lg:justify-end">
+              <Link
+                href="/#waitlist-form"
+                className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
+              >
+                Request Early Access
+              </Link>
+              <Link
+                href="/"
+                className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+              >
+                Back to Dashboard
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold leading-6 text-slate-500">
             FANDEX is an experimental entertainment research index. It is not
