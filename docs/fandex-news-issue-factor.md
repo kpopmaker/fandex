@@ -463,3 +463,37 @@ source adapter -> IssueRawSourceItem -> IssueSignalCandidate -> IssueSignal
 
 Even after Naver News ingestion is enabled in a future task, `priceEngine` must
 not call Naver, source adapters, Supabase, or any external data source directly.
+
+### Naver Fixture Shape Check
+
+As of 2026-06-23, the planned Naver adapter has a local fixture shape check for
+normalizing Naver-like response payloads before any API integration.
+
+The fixture check validates:
+
+1. HTML tag cleanup in titles and descriptions.
+2. HTML entity decoding for quote, ampersand, apostrophe, and angle bracket
+   entities.
+3. `pubDate` fallback and warning behavior for invalid, empty, and missing
+   dates.
+4. `originallink` first, `link` second, and example URL fallback source URL
+   behavior.
+5. Malformed item warnings for empty title or description.
+6. Empty response handling.
+
+Runtime boundaries remain unchanged:
+
+1. FANDEX runtime scoring still uses `mockIssueSignals` and
+   `issueScoreEngine`.
+2. Naver adapter output is not connected to runtime price calculation, ranking,
+   compare, market index, or artist detail UI.
+3. The active registry still runs only the mock adapter.
+4. The Naver shape check is a local normalization guard before real API work.
+
+Future Naver integration TODO:
+
+1. Add real API calling only after credential and rate limit design is approved.
+2. Define artist query strategy and disambiguation rules.
+3. Add duplicate clustering before issue scoring.
+4. Design Supabase ingestion jobs before storing raw items.
+5. Tune source reliability weighting for Naver-derived records.

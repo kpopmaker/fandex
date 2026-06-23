@@ -9,6 +9,11 @@ import {
   type IssueSourceAdapterContext,
   type IssueSourceAdapterResult,
 } from './issueSourceAdapter';
+import {
+  naverNewsApiResponseFixtures,
+  naverNewsFixtureFetchedAt,
+  type NaverNewsApiResponseFixture,
+} from './naverNewsIssueSourceFixtures';
 import type { IssueCategory, IssueSignal } from './types';
 
 export type NaverNewsSearchSort = 'sim' | 'date';
@@ -46,12 +51,15 @@ export type NaverNewsNormalizationOptions = {
 
 export type NaverNewsAdapterWarning = {
   sourceId: string;
-  severity: 'info' | 'warning' | 'blocking';
+  severity: 'info' | 'warning' | 'error';
   code:
-    | 'missing_title'
-    | 'missing_url'
+    | 'empty_title'
+    | 'empty_description'
+    | 'missing_source_url'
     | 'invalid_pub_date'
-    | 'empty_query'
+    | 'html_cleanup_applied'
+    | 'entity_decode_applied'
+    | 'fallback_source_url_used'
     | 'empty_items';
   message: string;
 };
@@ -76,12 +84,36 @@ export type NaverNewsRawSourceItemsResult = {
   warnings: NaverNewsAdapterWarning[];
 };
 
+export type NaverNewsFixtureShapeCheckSummary = {
+  fixtureName: string;
+  itemCount: number;
+  rawSourceItemCount: number;
+  warningCount: number;
+  invalidDateWarningCount: number;
+  missingLinkWarningCount: number;
+  htmlCleanupCaseCount: number;
+  entityDecodeCaseCount: number;
+  sourceUrlFallbackCount: number;
+  hasBlockingErrors: boolean;
+  normalizedTitlesPreview: string[];
+  normalizedSourceTypes: Array<IssueRawSourceItem['sourceType']>;
+};
+
 export type NaverNewsAdapterShapeCheckResult = {
   adapterName: string;
   requestDraft: NaverNewsSearchRequestDraft;
+  fixtureResults: NaverNewsFixtureShapeCheckSummary[];
+  fixtureCount: number;
+  itemCount: number;
   rawItemCount: number;
   warningCount: number;
-  sourceTypes: Array<IssueRawSourceItem['sourceType']>;
+  invalidDateWarningCount: number;
+  missingLinkWarningCount: number;
+  htmlCleanupCaseCount: number;
+  entityDecodeCaseCount: number;
+  sourceUrlFallbackCount: number;
+  normalizedTitlesPreview: string[];
+  normalizedSourceTypes: Array<IssueRawSourceItem['sourceType']>;
   hasBlockingErrors: boolean;
 };
 
@@ -133,6 +165,14 @@ function getStringHash(value: string): string {
   }
 
   return hash.toString(36);
+}
+
+function hasHtmlTag(value: string | undefined): boolean {
+  return /<[^>]*>/g.test(value ?? '');
+}
+
+function hasHtmlEntity(value: string | undefined): boolean {
+  return /&(?:quot|apos|amp|lt|gt|#34|#39);/g.test(value ?? '');
 }
 
 function cleanNaverText(value: string | undefined, stripHtml: boolean): string {
@@ -232,7 +272,18 @@ export function createNaverNewsRawSourceItem({
 
   if (!title) {
     warnings.push(
-      createWarning(sourceId, 'missing_title', 'Naver News item has no title.'),
+      createWarning(sourceId, 'empty_title', 'Naver News item has no title.'),
+    );
+  }
+
+  if (!description) {
+    warnings.push(
+      createWarning(
+        sourceId,
+        'empty_description',
+        'Naver News item has no description.',
+        'info',
+      ),
     );
   }
 
@@ -240,8 +291,15 @@ export function createNaverNewsRawSourceItem({
     warnings.push(
       createWarning(
         sourceId,
-        'missing_url',
+        'missing_source_url',
         'Naver News item has no originallink or link; example fallback URL was used.',
+      ),
+    );
+    warnings.push(
+      createWarning(
+        sourceId,
+        'fallback_source_url_used',
+        'Example fallback URL was used for the Naver News source item.',
         'info',
       ),
     );
@@ -252,6 +310,28 @@ export function createNaverNewsRawSourceItem({
       ...publishedAtResult.warning,
       sourceId,
     });
+  }
+
+  if (hasHtmlTag(item.title) || hasHtmlTag(item.description)) {
+    warnings.push(
+      createWarning(
+        sourceId,
+        'html_cleanup_applied',
+        'Naver News item contained HTML tags that were removed during cleanup.',
+        'info',
+      ),
+    );
+  }
+
+  if (hasHtmlEntity(item.title) || hasHtmlEntity(item.description)) {
+    warnings.push(
+      createWarning(
+        sourceId,
+        'entity_decode_applied',
+        'Naver News item contained HTML entities that were decoded during cleanup.',
+        'info',
+      ),
+    );
   }
 
   return {
@@ -383,39 +463,97 @@ export function createNaverNewsIssueSourceAdapterDraft(): IssueSourceAdapter {
   };
 }
 
+function createFixtureShapeCheckSummary(
+  fixture: NaverNewsApiResponseFixture,
+): NaverNewsFixtureShapeCheckSummary {
+  const mapped = mapNaverNewsItemsToRawSourceItems(
+    fixture.response,
+    naverNewsFixtureFetchedAt,
+  );
+  const itemCount = fixture.response.items?.length ?? 0;
+  const normalizedSourceTypes = Array.from(
+    new Set(mapped.rawItems.map((rawItem) => rawItem.sourceType)),
+  );
+  const normalizedTitlesPreview = mapped.rawItems
+    .map((rawItem) => rawItem.title)
+    .slice(0, 3);
+
+  return {
+    fixtureName: fixture.fixtureName,
+    itemCount,
+    rawSourceItemCount: mapped.rawItems.length,
+    warningCount: mapped.warnings.length,
+    invalidDateWarningCount: mapped.warnings.filter(
+      (warning) => warning.code === 'invalid_pub_date',
+    ).length,
+    missingLinkWarningCount: mapped.warnings.filter(
+      (warning) => warning.code === 'missing_source_url',
+    ).length,
+    htmlCleanupCaseCount: mapped.warnings.filter(
+      (warning) => warning.code === 'html_cleanup_applied',
+    ).length,
+    entityDecodeCaseCount: mapped.warnings.filter(
+      (warning) => warning.code === 'entity_decode_applied',
+    ).length,
+    sourceUrlFallbackCount: mapped.warnings.filter(
+      (warning) => warning.code === 'fallback_source_url_used',
+    ).length,
+    hasBlockingErrors: mapped.warnings.some((warning) => warning.severity === 'error'),
+    normalizedTitlesPreview,
+    normalizedSourceTypes,
+  };
+}
+
 export function runNaverNewsAdapterShapeCheck(): NaverNewsAdapterShapeCheckResult {
   const requestDraft = createNaverNewsSearchRequestDraft('aespa comeback');
-  const mapped = mapNaverNewsItemsToRawSourceItems(
-    {
-      lastBuildDate: DEFAULT_FALLBACK_FETCHED_AT,
-      total: 1,
-      start: 1,
-      display: 1,
-      items: [
-        {
-          title: '<b>aespa</b> comeback &quot;schedule&quot; gains attention',
-          originallink: 'https://example.com/fandex-fixtures/naver-news/aespa-001',
-          link: 'https://example.com/fandex-fixtures/naver-news/aespa-001-proxy',
-          description:
-            'Fixture-only Naver item with <b>HTML</b> and &amp; entity cleanup.',
-          pubDate: 'Mon, 15 Jun 2026 08:20:00 +0900',
-        },
-      ],
-    },
-    DEFAULT_FALLBACK_FETCHED_AT,
+  const fixtureResults = naverNewsApiResponseFixtures.map((fixture) =>
+    createFixtureShapeCheckSummary(fixture),
   );
-  const sourceTypes = Array.from(
-    new Set(mapped.rawItems.map((rawItem) => rawItem.sourceType)),
+  const normalizedSourceTypes = Array.from(
+    new Set(fixtureResults.flatMap((result) => result.normalizedSourceTypes)),
+  );
+  const normalizedTitlesPreview = fixtureResults.flatMap(
+    (result) => result.normalizedTitlesPreview,
   );
 
   return {
     adapterName: NAVER_NEWS_ADAPTER_NAME,
     requestDraft,
-    rawItemCount: mapped.rawItems.length,
-    warningCount: mapped.warnings.length,
-    sourceTypes,
-    hasBlockingErrors: mapped.warnings.some(
-      (warning) => warning.severity === 'blocking',
+    fixtureResults,
+    fixtureCount: fixtureResults.length,
+    itemCount: fixtureResults.reduce((sum, result) => sum + result.itemCount, 0),
+    rawItemCount: fixtureResults.reduce(
+      (sum, result) => sum + result.rawSourceItemCount,
+      0,
+    ),
+    warningCount: fixtureResults.reduce(
+      (sum, result) => sum + result.warningCount,
+      0,
+    ),
+    invalidDateWarningCount: fixtureResults.reduce(
+      (sum, result) => sum + result.invalidDateWarningCount,
+      0,
+    ),
+    missingLinkWarningCount: fixtureResults.reduce(
+      (sum, result) => sum + result.missingLinkWarningCount,
+      0,
+    ),
+    htmlCleanupCaseCount: fixtureResults.reduce(
+      (sum, result) => sum + result.htmlCleanupCaseCount,
+      0,
+    ),
+    entityDecodeCaseCount: fixtureResults.reduce(
+      (sum, result) => sum + result.entityDecodeCaseCount,
+      0,
+    ),
+    sourceUrlFallbackCount: fixtureResults.reduce(
+      (sum, result) => sum + result.sourceUrlFallbackCount,
+      0,
+    ),
+    normalizedTitlesPreview: normalizedTitlesPreview.slice(0, 8),
+    normalizedSourceTypes,
+    hasBlockingErrors: fixtureResults.some(
+      (result) => result.hasBlockingErrors,
     ),
   };
 }

@@ -246,6 +246,36 @@ Before real Naver News integration:
 5. Revisit source reliability weighting for Naver-originated articles.
 6. Design Supabase ingestion jobs and retention before storing raw items.
 
+### Naver Fixture Shape Check
+
+The Naver skeleton now has local fixture coverage in
+`app/data/v4/scoring/naverNewsIssueSourceFixtures.ts`.
+
+This fixture layer is still planned-only validation. It does not call Naver,
+does not use `fetch`, does not read credentials, and is not connected to the
+active registry smoke checks.
+
+Fixture cases cover:
+
+1. Valid Naver-like response items.
+2. HTML tag cleanup in title and description.
+3. HTML entity decoding for quotes, ampersands, apostrophes, and angle brackets.
+4. `pubDate` parse fallback for invalid, empty, and missing date values.
+5. `originallink` and `link` fallback behavior.
+6. Example URL fallback when both URL fields are missing or empty.
+7. Malformed item warnings for empty title or description.
+8. Empty response handling.
+
+`runNaverNewsAdapterShapeCheck()` returns a pure summary across the fixture set,
+including fixture counts, raw item counts, warning counts, invalid date warning
+counts, missing link warning counts, HTML cleanup counts, entity decode counts,
+source URL fallback counts, normalized title previews, normalized source types,
+and `hasBlockingErrors`.
+
+Before any real Naver ingestion is enabled, this fixture shape check should
+continue to pass and should remain separate from runtime price, scoring,
+history, and UI behavior.
+
 ## Future TODO
 
 1. Enable `NaverNewsIssueSourceAdapter` only after API, credential, query, and
