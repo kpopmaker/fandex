@@ -232,6 +232,23 @@ Still not implemented:
 9. AI interpretation backend.
 10. Subscriber report generation backend.
 
+## Beta Launch Checklist
+
+`docs/fandex-beta-launch-checklist.md` is the final pre-launch checklist before
+using FANDEX as an SNS profile link destination.
+
+FANDEX is now close to a beta-site structure for SNS traffic:
+
+1. Home explains the SNS-led research funnel.
+2. `/search` provides a free artist signal preview.
+3. `/sample-report` demonstrates the report product.
+4. `/research` explains subscriber research value.
+5. `/#waitlist-form` previews Early Access demand capture.
+
+The checklist should be reviewed before publishing FANDEX in Instagram, X, or
+LinkedIn profile links. The next implementation step is waitlist validation and
+consent UI, followed by Supabase waitlist storage.
+
 ## Not Implemented
 
 This phase does not implement:
