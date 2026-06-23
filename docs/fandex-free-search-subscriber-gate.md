@@ -55,8 +55,12 @@ wall. CTAs should point to Early Access or the waitlist, not payment.
 Current CTA targets:
 
 1. `Unlock subscriber research` -> `/#waitlist-form`
-2. `Request Subscriber Research` -> `/#waitlist-form`
+2. `Learn about subscriber research` -> `/research`
 3. `View Sample Report` -> `/sample-report`
+
+The `/research` route is the subscriber research explanation destination. It
+previews Free Preview, FANDEX Plus, and FANDEX Pro feature boundaries without
+implementing pricing, payment, login, or entitlement checks.
 
 ## Not Implemented
 

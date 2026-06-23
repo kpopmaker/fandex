@@ -123,6 +123,12 @@ export default function SearchPreviewPage() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
+                href="/research"
+                className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
+              >
+                Learn about subscriber research
+              </Link>
+              <Link
                 href="/sample-report"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
@@ -216,10 +222,10 @@ export default function SearchPreviewPage() {
                   {item.description}
                 </p>
                 <Link
-                  href="/#waitlist-form"
+                  href="/research"
                   className="mt-4 inline-flex rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
                 >
-                  Request Subscriber Research
+                  Learn about subscriber research
                 </Link>
               </article>
             ))}

@@ -16,8 +16,9 @@ production are handled manually by the operator:
 2. Drive interested readers through profile links to the website.
 3. Let visitors use free search preview, ranking snapshots, signal previews,
    and sample reports.
-4. Convert high-intent readers into the waitlist.
-5. Validate subscriber-only research, AI interpretation, artist comparison, and
+4. Send high-intent readers to `/research` for subscriber research preview.
+5. Convert subscriber research interest into the waitlist.
+6. Validate subscriber-only research, AI interpretation, artist comparison, and
    weekly report products.
 
 ## Free Public Area
@@ -66,10 +67,11 @@ Commercialization stages:
 1. Reposition site for SNS-led research funnel.
 2. Add free search preview.
 3. Add subscriber research lock UI.
-4. Build a Content Hub or SNS Signal archive.
-5. Connect waitlist storage.
-6. Produce SNS content batches.
-7. Validate the first paid report.
+4. Add subscriber research plan preview.
+5. Build a Content Hub or SNS Signal archive.
+6. Connect waitlist storage.
+7. Produce SNS content batches.
+8. Validate the first paid report.
 
 ## Implemented Landing CTA
 
@@ -124,6 +126,26 @@ Implemented subscriber lock preview:
 `docs/fandex-free-search-subscriber-gate.md` defines the free versus subscriber
 research boundary. No login, payment, entitlement check, Supabase storage, API,
 or AI backend is implemented.
+
+## Subscriber Research Plan Preview
+
+`app/research/page.tsx` adds a static `/research` route that explains the
+planned subscriber research product.
+
+Current site flow:
+
+```text
+SNS content
+  -> /search free preview
+  -> /sample-report
+  -> /research subscriber research preview
+  -> /#waitlist-form
+```
+
+The page previews Free Preview, FANDEX Plus, and FANDEX Pro feature boundaries
+without pricing, payment, login, subscriber authorization, AI backend, or report
+generation backend. `docs/fandex-subscriber-research-plan.md` documents the
+planned package structure.
 
 ## Sample Report Page
 
@@ -191,6 +213,7 @@ Current commercialization MVP flow:
 ```text
 Home Early Access section
   -> Free Search Preview
+  -> Subscriber Research Preview
   -> Waitlist preview form
   -> Sample Report
   -> Waitlist data model draft
@@ -207,6 +230,7 @@ Still not implemented:
 7. UI wiring between the preview form and the data model.
 8. Subscriber auth or payment logic.
 9. AI interpretation backend.
+10. Subscriber report generation backend.
 
 ## Not Implemented
 
@@ -234,18 +258,20 @@ This phase does not implement:
 20. Privacy copy and consent checkbox.
 21. Waitlist UI to data model wiring.
 22. Subscriber entitlement checks.
+23. Subscriber research route backend.
 
 ## Next TODO
 
 1. Define SNS channel launch plan.
 2. Produce the first SNS content batch.
 3. Expand free search result data coverage.
-4. Add Content Hub or SNS Signal archive.
-5. Add lock UI click tracking after analytics policy is approved.
-6. Connect waitlist storage.
-7. Add consent and privacy copy UI.
-8. Add validation UI.
-9. Decide subscriber auth and payment approach.
-10. Design AI interpretation backend.
-11. Design the full research report generation workflow.
-12. Validate first paid report pricing.
+4. Refine Plus and Pro package boundaries.
+5. Add Content Hub or SNS Signal archive.
+6. Add lock UI click tracking after analytics policy is approved.
+7. Connect waitlist storage.
+8. Add consent and privacy copy UI.
+9. Add validation UI.
+10. Decide subscriber auth and payment approach.
+11. Design AI interpretation backend.
+12. Design the full research report generation workflow.
+13. Validate first paid report pricing.

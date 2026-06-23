@@ -321,6 +321,12 @@ export default function SampleReportPage() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
+                href="/research"
+                className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
+              >
+                See Subscriber Research
+              </Link>
+              <Link
                 href="/search"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >

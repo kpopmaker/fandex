@@ -690,6 +690,12 @@ function EarlyAccessSection() {
             >
               Search Artist Preview
             </Link>
+            <Link
+              href="/research"
+              className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+            >
+              Explore Subscriber Research
+            </Link>
             <a
               href="#waitlist-form"
               className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
