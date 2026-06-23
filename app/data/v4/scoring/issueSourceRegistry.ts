@@ -2,6 +2,7 @@ import {
   mockIssueSourceAdapter,
   runMockIssueSourceAdapterSmokeCheck,
 } from './mockIssueSourceAdapter';
+import { naverNewsIssueSourceAdapterMetadata } from './naverNewsIssueSourceAdapter';
 import type {
   IssueSourceAdapter,
   IssueSourceAdapterCapability,
@@ -16,11 +17,19 @@ export type IssueSourceAdapterRegistryEntry = {
 };
 
 export type PlannedIssueSourceAdapterName =
+  | 'naver_news_issue_source_adapter'
   | 'NaverNewsIssueSourceAdapter'
   | 'GdeltIssueSourceAdapter'
   | 'YouTubeOfficialChannelIssueSourceAdapter'
   | 'OfficialSocialIssueSourceAdapter'
   | 'SupabaseIngestionAdapter';
+
+export type PlannedIssueSourceAdapterRegistryEntry = {
+  name: PlannedIssueSourceAdapterName;
+  implementationStatus: 'planned';
+  active: false;
+  capabilities: IssueSourceAdapterCapability[];
+};
 
 export type IssueSourceAdapterRegistrySummary = {
   registeredAdapterCount: number;
@@ -39,11 +48,21 @@ const registeredIssueSourceAdapters: IssueSourceAdapterRegistryEntry[] = [
 ];
 
 export const plannedIssueSourceAdapterNames: PlannedIssueSourceAdapterName[] = [
+  'naver_news_issue_source_adapter',
   'NaverNewsIssueSourceAdapter',
   'GdeltIssueSourceAdapter',
   'YouTubeOfficialChannelIssueSourceAdapter',
   'OfficialSocialIssueSourceAdapter',
   'SupabaseIngestionAdapter',
+];
+
+export const plannedIssueSourceAdapters: PlannedIssueSourceAdapterRegistryEntry[] = [
+  {
+    name: 'naver_news_issue_source_adapter',
+    implementationStatus: 'planned',
+    active: false,
+    capabilities: [naverNewsIssueSourceAdapterMetadata.capability],
+  },
 ];
 
 export function getRegisteredIssueSourceAdapters(): IssueSourceAdapterRegistryEntry[] {
@@ -60,6 +79,10 @@ export function listIssueSourceAdapterCapabilities(): IssueSourceAdapterCapabili
   return registeredIssueSourceAdapters.flatMap(
     (entry) => entry.adapter.capabilities ?? [],
   );
+}
+
+export function listPlannedIssueSourceAdapterCapabilities(): IssueSourceAdapterCapability[] {
+  return plannedIssueSourceAdapters.flatMap((entry) => entry.capabilities);
 }
 
 export function getIssueSourceAdapterRegistrySummary(): IssueSourceAdapterRegistrySummary {

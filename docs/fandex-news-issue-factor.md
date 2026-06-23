@@ -431,3 +431,35 @@ Runtime connection status:
    ranking, compare, market index, or artist detail UI.
 5. No real news API, external API key, Supabase client, Supabase project, or DB
    migration is used by the adapter registry step.
+
+## 17. Naver News Adapter Skeleton
+
+As of 2026-06-23, Naver News is treated as a first candidate for future Korean
+K-pop news collection, but it is still planned-only.
+
+Current state:
+
+1. `app/data/v4/scoring/naverNewsIssueSourceAdapter.ts` defines draft request
+   and response types for Naver News Search shapes.
+2. The file provides pure helpers for cleaning Naver item text, parsing
+   `pubDate`, and mapping draft response items into `IssueRawSourceItem`.
+3. No Naver API call is made.
+4. No `fetch`, axios, credential lookup, API key, or `.env` access is used.
+5. `issueSourceRegistry.ts` keeps Naver as planned metadata only.
+6. Active runtime adapter registration still contains only
+   `mock_issue_source_adapter`.
+
+Runtime boundaries remain unchanged:
+
+1. Runtime scoring is still based on `mockIssueSignals` and
+   `issueScoreEngine`.
+2. `priceEngine` and UI pages do not read Naver adapter output directly.
+3. Future real integration must preserve the source flow:
+
+```text
+source adapter -> IssueRawSourceItem -> IssueSignalCandidate -> IssueSignal
+  -> issueScoreEngine -> ScoreBreakdown -> priceEngine/UI summaries
+```
+
+Even after Naver News ingestion is enabled in a future task, `priceEngine` must
+not call Naver, source adapters, Supabase, or any external data source directly.

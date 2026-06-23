@@ -34,6 +34,11 @@ export type IssueSourceAdapterCapability = {
   producesSignalDrafts: boolean;
   requiresExternalNetwork: boolean;
   requiresSupabase: boolean;
+  requiresCredentials?: boolean;
+  credentialKeys?: string[];
+  providerDocsUrl?: string;
+  rateLimitNotes?: string;
+  plannedOnly?: boolean;
 };
 
 export type IssueSourceAdapterWarningSeverity = 'info' | 'warning' | 'blocking';

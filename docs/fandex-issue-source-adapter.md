@@ -200,15 +200,56 @@ Currently registered adapter:
 
 Not implemented yet:
 
-1. Real Naver news adapter.
+1. Real Naver news ingestion.
 2. Real GDELT adapter.
 3. Real YouTube official channel adapter.
 4. Real official social adapter.
 5. Real Supabase ingestion adapter.
 
+## Naver News Adapter Skeleton
+
+As of 2026-06-23, `app/data/v4/scoring/naverNewsIssueSourceAdapter.ts`
+exists as a planned adapter skeleton for future Naver News Search integration.
+
+Current status:
+
+1. The adapter is skeleton/planned only.
+2. It does not call the Naver News API.
+3. It does not use `fetch`, axios, request clients, credentials, or `.env`.
+4. It is not active in the runtime registry.
+5. The active registered adapter remains `mock_issue_source_adapter` only.
+6. It prepares draft request/response types and pure normalization helpers.
+
+Prepared normalization layer:
+
+1. Naver News response item drafts can be mapped into `IssueRawSourceItem`
+   records with `sourceType: news_article`.
+2. Title and description cleanup handles HTML tags and common HTML entities
+   before the item enters the FANDEX source pipeline.
+3. `pubDate` parsing is guarded; invalid dates return a warning and use a
+   caller-provided fallback timestamp.
+4. `sourceUrl` uses `originallink` first, then `link`, then an
+   `example.com` fallback URL for shape checks.
+5. Language and country default to `ko` and `KR`.
+6. Reliability uses the current `news_article` default reliability profile.
+
+The skeleton can create a local `IssueSourceAdapter` draft, but registry code
+must keep it planned-only until a separate integration task explicitly enables
+real ingestion.
+
+Before real Naver News integration:
+
+1. Confirm current API call limits and quota behavior.
+2. Define query strategy per artist, alias, agency, and disambiguation keyword.
+3. Confirm artist name disambiguation and false-positive handling.
+4. Add duplicate article clustering before scoring.
+5. Revisit source reliability weighting for Naver-originated articles.
+6. Design Supabase ingestion jobs and retention before storing raw items.
+
 ## Future TODO
 
-1. `NaverNewsIssueSourceAdapter`.
+1. Enable `NaverNewsIssueSourceAdapter` only after API, credential, query, and
+   ingestion boundaries are approved.
 2. `GdeltIssueSourceAdapter`.
 3. `YouTubeOfficialChannelIssueSourceAdapter`.
 4. `OfficialSocialIssueSourceAdapter`.
