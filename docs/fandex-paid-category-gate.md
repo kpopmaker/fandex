@@ -24,23 +24,28 @@ confirmed pricing. Paid access is still shown as a beta preview.
 
 ## FANDEX v1 Category Breakdown Gate
 
-The paid category gate now represents the locked FANDEX v1 category breakdown.
+The paid category gate now represents the locked FANDEX v1 cumulative point
+breakdown.
 Free users see only:
 
-1. FANDEX v1 `publicScore`.
-2. Score band.
+1. FANDEX v1 total cumulative point.
+2. Point band.
 3. Issue tone.
 
 Locked cards can show category names and descriptions, but they must not expose:
 
-1. Category score numbers.
-2. Weighted formula details.
-3. Risk penalty values.
-4. Source-level detail.
-5. AI interpretation.
+1. Category raw point numbers.
+2. Coefficients.
+3. Category cumulative contributions.
+4. Risk penalty detail.
+5. Source-level detail.
+6. AI interpretation.
 
 The category breakdown remains a subscriber research preview until auth,
 payment, subscription checks, and real entitlement logic are implemented.
+Subscriber research is planned to show category raw point x coefficient
+breakdown, contribution, risk detail, source count, confidence context, and
+validation hints.
 
 ## Why Free Scope Is Minimal
 

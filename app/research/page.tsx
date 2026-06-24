@@ -188,17 +188,19 @@ export default function SubscriberResearchPage() {
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 <LangText
-                  en="FANDEX v1 combines music/album, news/issue, SNS/fandom, brand-fit, comeback/activity, growth momentum, and a subtractive risk penalty. Free users only see the overall public score and issue tone; subscribers are planned to see category breakdown and AI interpretation."
-                  ko="FANDEX v1은 음원/음반, 뉴스/이슈, SNS/팬덤, 브랜드 적합도, 컴백/활동, 성장 모멘텀, 리스크 감점을 조합합니다. 무료 사용자는 종합 공개 점수와 이슈 톤만 제한적으로 확인하고, 구독자는 카테고리별 breakdown과 AI 해석을 확인할 수 있도록 설계되어 있습니다."
+                  en="FANDEX v1 is now an unbounded cumulative point model. Each category raw point is multiplied by a coefficient and accumulated, while risk is subtracted as its own raw penalty point x coefficient. Free users see only the total cumulative point, point band, and issue tone; subscribers are planned to see category points, coefficients, contribution, risk detail, validation hints, and AI interpretation."
+                  ko="FANDEX v1은 상한 없는 누적 점수제입니다. 각 카테고리 raw point에 coefficient를 곱해 누적하고, 리스크는 별도의 raw penalty point x coefficient로 누적 차감합니다. 무료 이용자는 종합 누적 점수, 포인트 밴드, 이슈 톤만 확인하고, 구독자는 카테고리별 점수, coefficient, 기여도, 리스크 세부 정보, 검증 힌트, AI 해석을 확인하는 구조입니다."
                 />
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                { ko: '무료: 공개 점수, 점수 밴드, 이슈 톤', en: 'Free: public score, score band, issue tone' },
+                { ko: '무료: 종합 누적 점수, 포인트 밴드, 이슈 톤', en: 'Free: total cumulative point, point band, issue tone' },
                 { ko: '구독자: 카테고리별 breakdown', en: 'Subscriber: category breakdown' },
-                { ko: '리스크 감점: 최대 12점 차감', en: 'Risk penalty: subtracts up to 12 points' },
+                { ko: '리스크: 별도 누적 감점 포인트로 차감', en: 'Risk: subtracted as cumulative penalty points' },
                 { ko: '현재: preview/mock 기반 베타 산식', en: 'Current: preview/mock based beta formula' },
+                { ko: '브랜드 적합도: 광고/협업 가능성과 이미지 안정성 평가', en: 'Brand-fit: commercial usability and image stability' },
+                { ko: '성장 모멘텀: 현재 총량이 아닌 최근 상승/하락 속도 평가', en: 'Growth momentum: recent acceleration, not total popularity size' },
               ].map((item) => (
                 <div
                   key={item.en}

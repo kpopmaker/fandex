@@ -299,8 +299,8 @@ export default function SampleReportPage() {
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 <LangText
-                  en="This sample shows only part of the planned subscriber research output. It is a FANDEX v1 score structure sample before live data connection. Free users see a limited preview; full category breakdown and AI interpretation are reserved for subscriber research."
-                  ko="이 샘플은 예정된 구독자 리서치 결과물의 일부 예시이며, 실제 데이터 연결 전 FANDEX v1 score structure를 보여주는 베타 preview입니다. 무료 사용자는 제한된 미리보기만 볼 수 있고, 전체 카테고리 breakdown과 AI 해석은 구독자 리서치에서 제공될 예정입니다."
+                  en="This sample shows only part of the planned subscriber research output. It is a FANDEX v1 cumulative point model sample before live data connection. FANDEX v1 is not converted to a 0-100 score; it accumulates category points. Free users see only the total point preview, while subscriber research is planned to show category points and interpretation."
+                  ko="이 샘플은 예정된 구독자 리서치 결과물의 일부 예시이며, 실제 데이터 연결 전 FANDEX v1 누적 점수제 샘플입니다. FANDEX v1은 0~100 환산 점수가 아니라 카테고리별 포인트를 누적하는 구조입니다. 무료 영역은 종합 점수만 노출하고, 구독자 리서치에서는 카테고리별 누적 점수와 해석을 제공할 예정입니다."
                 />
               </p>
             </div>

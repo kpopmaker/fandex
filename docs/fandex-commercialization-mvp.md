@@ -16,15 +16,18 @@ middleware, external i18n packages, or locale-specific SEO handling.
 ## FANDEX v1 Preview Scoring
 
 FANDEX now includes a deterministic v1 scoring helper for preview UI. The helper
+uses an unbounded cumulative point model rather than a capped 0-100 score. It
 combines music/album, news/issue, SNS/fandom, brand-fit, comeback/activity,
-growth momentum, and a subtractive risk penalty. `/search` uses this structure
-to show a limited public score, score band, and issue tone while keeping
-category-level breakdown locked for subscriber research.
+growth momentum, and a separate cumulative risk penalty. `/search` uses this
+structure to show a limited total cumulative point, point band, and issue tone
+while keeping category-level raw point x coefficient breakdown locked for
+subscriber research.
 
 This is still a preview scoring structure before live data connection. It uses
 mock/manual seed style inputs and should not be presented as a live data score.
-The next scoring milestone is connecting actual Naver News issue signals and
-then applying the full FANDEX v1 formula to stored score snapshots.
+The next scoring milestone is connecting actual source data, starting with Naver
+News issue signals, and building validation benchmarks for chart, search, video,
+news, and brand event comparisons.
 
 ## Commercial Positioning
 

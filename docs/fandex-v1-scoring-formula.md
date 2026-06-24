@@ -1,119 +1,143 @@
-# FANDEX v1 Scoring Formula
+# FANDEX v1 Unbounded Cumulative Point Formula
 
-Status: preview scoring structure. This is a deterministic TypeScript helper
-for product UI and shape validation. It does not connect to live APIs,
+Status: preview scoring structure. FANDEX v1 is now an unbounded cumulative
+point model, not a 0-100 percentage score. It does not connect to live APIs,
 Supabase, auth, payment, entitlement checks, or AI generation.
 
-## Purpose
+## Why Unbounded Points
 
-FANDEX v1 defines a clearer scoring structure for the free search preview and
-subscriber category gate. The goal is to separate what free users can see from
-the category-level breakdown planned for subscriber research.
+K-pop artists can have very different scale, velocity, and commercial power. A
+0-100 capped score compresses those gaps and makes a dominant artist look only
+slightly stronger than a mid-tier artist. FANDEX v1 therefore uses cumulative
+points with no upper bound.
 
-Free users should understand the broad artist signal without receiving the full
-research logic. Subscriber research can later unlock category scores,
-explanations, and AI interpretation.
+This means:
 
-## Categories
+1. Scores above 100 are normal.
+2. Scores in the thousands are normal.
+3. A negative final score is possible when risk penalties dominate.
+4. The score is a composite indicator, not an absolute truth.
 
-Positive weighted categories:
-
-1. Music / Album Signal.
-2. News / Issue Signal.
-3. SNS / Fandom Signal.
-4. Brand-fit Signal.
-5. Comeback / Activity Signal.
-6. Growth Momentum.
-
-Subtractive category:
-
-1. Risk Penalty.
-
-## Weights
-
-The v1 preview weights are:
-
-1. Music / Album Signal: 25.
-2. News / Issue Signal: 20.
-3. SNS / Fandom Signal: 20.
-4. Brand-fit Signal: 15.
-5. Comeback / Activity Signal: 10.
-6. Growth Momentum: 10.
-
-Risk Penalty is not part of the positive weighted total. It is applied as a
-subtractive adjustment.
-
-## Risk Penalty
-
-`riskPenaltyScore` is a 0 to 100 input.
-
-The formula converts it into a maximum 12 point deduction:
+## Formula
 
 ```text
-riskPenaltyApplied = riskPenaltyScore / 100 * 12
-overallScore = weightedPositiveScore - riskPenaltyApplied
+FANDEX cumulative score
+  = sum(raw category point * category coefficient)
+    - (raw risk point * risk coefficient)
 ```
 
-The final score is clamped to 0 to 100 and rounded.
+The final score is not clamped to 100. No maximum score is defined.
 
-## Score Output
+## Categories And Coefficients
 
-`overallScore` is the internal preview result.
+Positive categories:
 
-`publicScore` is the rounded score shown to free users.
+1. Music / Album Signal: coefficient `1.25`.
+2. News / Issue Signal: coefficient `1.1`.
+3. SNS / Fandom Signal: coefficient `1.1`.
+4. Brand-fit Signal: coefficient `0.9`.
+5. Comeback / Activity Signal: coefficient `0.8`.
+6. Growth Momentum: coefficient `1.0`.
 
-`scoreBand` is derived from the score:
+Penalty category:
 
-1. 85 or higher: High Momentum.
-2. 70 or higher: Strong Signal.
-3. 55 or higher: Watch.
-4. Otherwise: Early Signal.
+1. Risk Penalty: coefficient `1.4`.
 
-`issueTone` is derived from issue, growth, and risk inputs:
+Each category receives a raw point input. The raw point is multiplied by the
+coefficient to produce the cumulative contribution. Risk uses the same
+raw-point x coefficient structure, but it is subtracted from the positive total.
 
-1. Risk Penalty 70 or higher: Risk Watch.
-2. News / Issue 70 or higher and Risk Penalty below 40: Active Buzz.
-3. Growth Momentum 70 or higher: Momentum Rising.
-4. Otherwise: Neutral Preview.
+## Brand-fit Definition
+
+Brand-fit measures how commercially suitable an artist is for brand campaigns,
+endorsements, and advertising contexts. It reflects past collaborations, public
+image stability, concept alignment, fandom purchasing power, risk exposure, and
+domestic/global campaign usability.
+
+Korean product wording:
+
+브랜드 적합도는 아티스트가 브랜드·캠페인·광고 시장에서 상업적으로 활용될 가능성을 평가하는 지표입니다. 광고/협업 이력, 대중 이미지 안정성, 콘셉트 적합성, 팬덤 구매력, 리스크 여부, 국내외 캠페인 활용 가능성을 반영합니다.
+
+## Growth Momentum Definition
+
+Growth momentum measures the recent acceleration or decline of artist power
+rather than the total size of current popularity. It reflects search growth, SNS
+spread, fandom response, post-comeback retention, news growth, and
+period-over-period change.
+
+Korean product wording:
+
+성장 모멘텀은 현재 인기 총량이 아니라 최근 일정 기간 동안 아티스트 파워가 얼마나 빠르게 상승하거나 하락하는지를 평가하는 지표입니다. 검색량 증가, SNS 확산, 팬덤 반응, 컴백 이후 유지력, 기사량 증가, 이전 기간 대비 변화율을 반영합니다.
+
+## Point Bands
+
+Point bands use cumulative point thresholds:
+
+1. `>= 5000`: Dominant Power / 압도적 파워.
+2. `>= 3000`: High Power / 강한 파워.
+3. `>= 1500`: Rising Power / 상승세.
+4. `>= 500`: Watch / 관찰 필요.
+5. `>= 0`: Early Signal / 초기 신호.
+6. `< 0`: Risk Negative / 리스크 우위.
+
+## Issue Tone
+
+Issue tone uses risk, growth momentum, and news/issue cumulative points:
+
+1. Risk Penalty >= 45% of positive total: Risk Dominant / 리스크 우위.
+2. Risk Penalty >= 25% of positive total: Risk Watch / 리스크 주시.
+3. Growth Momentum cumulative point >= 1000: Momentum Rising / 상승 모멘텀.
+4. News / Issue cumulative point >= 1000 and risk is low: Active Buzz / 이슈 활성.
+5. Otherwise: Neutral Preview / 중립 미리보기.
 
 ## Free Vs Subscriber Exposure
 
 Free preview can show:
 
-1. Artist name.
-2. Ticker or id.
-3. Minimal metadata.
-4. FANDEX v1 `publicScore`.
-5. `scoreBand`.
-6. `issueTone`.
+1. Final cumulative point.
+2. Point band.
+3. Issue tone.
+4. Minimal artist metadata.
 
 Free preview must not show:
 
-1. Category score numbers.
-2. Weighted formula details.
-3. Risk penalty value.
-4. Source-level details.
-5. AI interpretation.
+1. Category raw points.
+2. Coefficients.
+3. Category cumulative contributions.
+4. Risk penalty details.
+5. Source count.
+6. Validation hints.
+7. AI interpretation.
 
-Subscriber gate can show locked category names and descriptions, but score
-numbers remain hidden until real subscriber access is implemented.
+Subscriber research is designed to unlock:
+
+1. Category raw point.
+2. Category coefficient.
+3. Category contribution.
+4. Risk penalty detail.
+5. Source count and confidence context.
+6. Validation hints.
+7. AI interpretation.
 
 ## Current Limits
 
 This phase is limited because:
 
-1. Live data is not connected yet.
-2. Search uses mock/manual seed preview inputs.
-3. API routes are not connected.
-4. Supabase score storage is not implemented.
-5. AI interpretation backend is not implemented.
-6. Category unlock and entitlement checks are not implemented.
+1. It uses mock/manual seed preview inputs.
+2. Live APIs are not connected.
+3. Source-specific normalization is not implemented yet.
+4. Supabase score snapshots are not implemented.
+5. Score history is not implemented.
+6. AI interpretation backend is not implemented.
+7. Subscriber entitlement checks are not implemented.
 
 ## Next TODO
 
 1. Connect Naver News actual issue signal.
-2. Define manual seed data schema.
-3. Add Supabase score snapshot table.
-4. Add score history.
-5. Implement category breakdown unlock.
-6. Generate AI interpretation from category breakdown.
+2. Define raw data schema.
+3. Build validation benchmark table.
+4. Run sensitivity analysis.
+5. Add confidence/uncertainty display.
+6. Add Supabase score snapshot.
+7. Add score history.
+8. Implement subscriber category breakdown unlock.
