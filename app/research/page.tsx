@@ -2,29 +2,29 @@ import Link from 'next/link';
 
 const subscriberFeatures = [
   {
+    title: 'Music / Album Signal',
+    description:
+      'Album, comeback, chart, and release momentum context for subscriber research.',
+  },
+  {
+    title: 'News / Issue Signal',
+    description:
+      'Issue concentration, repeated headline patterns, and watch context beyond the free tone.',
+  },
+  {
+    title: 'SNS / Fandom Signal',
+    description:
+      'Fandom attention, community movement, and social pickup for tracked artists.',
+  },
+  {
+    title: 'Artist Comparison',
+    description:
+      'Side-by-side artist category profiles for positioning and research decisions.',
+  },
+  {
     title: 'AI Interpretation',
     description:
-      'Expand free preview signals into AI-assisted summaries that explain why an artist signal matters.',
-  },
-  {
-    title: 'Full Artist Research Brief',
-    description:
-      'Organize fandom, activity, issue, chart, and brand signals into one research-ready artist brief.',
-  },
-  {
-    title: 'Brand-fit Analysis',
-    description:
-      'Review collaboration, ambassador, and campaign-fit angles from a marketing perspective.',
-  },
-  {
-    title: 'Issue Risk Analysis',
-    description:
-      'Interpret controversy, rumor, contract, hiatus, and concentration risk signals before campaigns move.',
-  },
-  {
-    title: 'Artist Comparison Report',
-    description:
-      'Compare fandom, brand, issue, and momentum signals across artists for positioning decisions.',
+      'AI-assisted summaries that explain why an artist signal matters.',
   },
   {
     title: 'Weekly FANDEX Report',
@@ -41,35 +41,40 @@ const subscriberFeatures = [
 const planPreview = [
   {
     name: 'Free Preview',
-    description: 'For visitors who want a quick signal check after seeing SNS content.',
+    unlock: '3 preview categories',
+    description:
+      'For visitors who want a limited signal check after seeing SNS content.',
     items: [
-      'Artist quick search',
-      'Public ranking snapshot',
+      'Overview',
+      'Basic FANDEX Score',
       'Issue tone preview',
-      'Sample report',
-      'Limited signal preview',
     ],
   },
   {
     name: 'FANDEX Plus',
-    description: 'For fans, marketers, and industry watchers who need recurring context.',
+    unlock: '6 subscriber categories',
+    description:
+      'For fans, marketers, and industry watchers who need recurring category context.',
     items: [
-      'AI interpretation',
-      'Full artist brief',
-      'Weekly FANDEX report',
-      'Artist comparison brief',
-      'Watchlist commentary',
+      'Music / Album Signal',
+      'News / Issue Signal',
+      'SNS / Fandom Signal',
+      'Artist Comparison',
+      'AI Interpretation',
+      'Weekly Research Report',
     ],
   },
   {
     name: 'FANDEX Pro',
+    unlock: '6 advanced research categories',
     description: 'For brand, campaign, and portfolio research use cases.',
     items: [
-      'Brand-fit analysis',
-      'Issue risk memo',
-      'Portfolio/interview-ready industry brief',
-      'Custom artist research request',
-      'Campaign angle memo',
+      'Brand-fit Signal',
+      'Issue Risk Analysis',
+      'Campaign Angle Memo',
+      'Custom Artist Research Request',
+      'Portfolio / Interview-ready Industry Brief',
+      'Watchlist & Signal Commentary',
     ],
   },
 ];
@@ -115,9 +120,10 @@ export default function SubscriberResearchPage() {
                 From quick search to full artist intelligence
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
-                Free search shows the surface signal. Subscriber research
-                explains why the signal matters. FANDEX helps turn K-pop issue,
-                fandom, chart, and brand signals into marketing insight.
+                Free search shows only the surface signal. Subscriber research
+                is structured around paid category unlocks: music, issue, SNS,
+                comparison, AI interpretation, weekly reports, and Pro research
+                memos. Paid access is not live yet.
               </p>
             </div>
 
@@ -132,7 +138,7 @@ export default function SubscriberResearchPage() {
                 href="/search"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >
-                Try Free Search
+                Try Limited Free Search
               </Link>
               <Link
                 href="/sample-report"
@@ -147,11 +153,15 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Subscriber features
+              Subscriber categories
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              What Early Access research is designed to unlock
+              What Early Access subscriber research is designed to unlock
             </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+              Subscriber category access is currently shown as a beta preview.
+              Pricing will be validated during Early Access.
+            </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -177,14 +187,15 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Plan structure preview
+              Category unlock preview
             </p>
             <h2 className="mt-2 text-2xl font-black">
               Free Preview / FANDEX Plus / FANDEX Pro
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              No pricing is set yet. Pricing will be validated during Early
-              Access after report demand and subscriber use cases are clearer.
+              Paid access is not live yet. These cards show the planned Free,
+              Plus, and Pro category boundaries without checkout, login, or
+              subscription checks.
             </p>
           </div>
 
@@ -197,6 +208,9 @@ export default function SubscriberResearchPage() {
                 <h3 className="text-xl font-black text-slate-950">
                   {plan.name}
                 </h3>
+                <p className="mt-3 w-fit rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
+                  {plan.unlock}
+                </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
                   {plan.description}
                 </p>
@@ -210,6 +224,12 @@ export default function SubscriberResearchPage() {
                     </li>
                   ))}
                 </ul>
+                <Link
+                  href="/#waitlist-form"
+                  className="mt-5 inline-flex rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
+                >
+                  Join Early Access
+                </Link>
               </article>
             ))}
           </div>

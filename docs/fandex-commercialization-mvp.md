@@ -14,22 +14,22 @@ production are handled manually by the operator:
 
 1. Publish FANDEX Signal content on Instagram, X, and LinkedIn.
 2. Drive interested readers through profile links to the website.
-3. Let visitors use free search preview, ranking snapshots, signal previews,
-   and sample reports.
-4. Send high-intent readers to `/research` for subscriber research preview.
-5. Convert subscriber research interest into the waitlist.
-6. Validate subscriber-only research, AI interpretation, artist comparison, and
+3. Let visitors use limited free search and inspect sample reports.
+4. Show locked paid categories below the free preview.
+5. Send high-intent readers to `/research` for the subscriber category unlock
+   explanation.
+6. Convert subscriber research interest into the Early Access waitlist.
+7. Validate subscriber-only research, AI interpretation, artist comparison, and
    weekly report products.
 
 ## Free Public Area
 
-The public preview can expose lightweight dashboard surfaces:
+The public preview should expose only lightweight surfaces:
 
-1. Artist quick search.
-2. Public ranking snapshot.
+1. Artist overview.
+2. Basic FANDEX Score.
 3. Issue tone preview.
-4. Sample report.
-5. SNS signal archive preview.
+4. Sample report CTA.
 
 This area should help visitors understand FANDEX signal coverage without
 requiring login, payment, database writes, or a live waitlist flow.
@@ -38,13 +38,14 @@ requiring login, payment, database writes, or a live waitlist flow.
 
 The paid beta concept is a subscriber research package:
 
-1. AI interpretation.
-2. Full artist research brief.
-3. Brand-fit analysis.
-4. Issue risk analysis.
-5. Artist comparison report.
-6. Weekly FANDEX report.
-7. Watchlist and signal commentary.
+1. Music / Album Signal.
+2. News / Issue Signal.
+3. SNS / Fandom Signal.
+4. Brand-fit Signal.
+5. Artist Comparison.
+6. AI Interpretation.
+7. Weekly Research Report.
+8. Pro memos such as campaign angle, issue risk, and portfolio briefs.
 
 The report should validate whether users want recurring entertainment research
 before a full subscription product is built.
@@ -56,8 +57,10 @@ before a full subscription product is built.
 ```text
 SNS content
   -> profile link
-  -> FANDEX free preview
+  -> FANDEX limited free search
+  -> locked paid categories
   -> sample report
+  -> subscriber research plan
   -> waitlist
   -> subscriber research validation
 ```
@@ -66,7 +69,7 @@ Commercialization stages:
 
 1. Reposition site for SNS-led research funnel.
 2. Add free search preview.
-3. Add subscriber research lock UI.
+3. Add locked paid category gate UI.
 4. Add subscriber research plan preview.
 5. Build a Content Hub or SNS Signal archive.
 6. Connect waitlist storage.
@@ -98,30 +101,35 @@ The current website role is now:
 
 ```text
 SNS content managed by the operator
-  -> website free search preview
+  -> website limited free search
+  -> locked paid categories
   -> sample report
-  -> subscriber research lock UI
+  -> subscriber research plan
   -> waitlist
 ```
 
 Implemented free preview:
 
-1. Artist quick search.
-2. Basic artist metadata.
+1. Artist name and ticker/id.
+2. Minimal artist metadata.
 3. Preview FANDEX score.
 4. Issue tone preview.
-5. Sample signal summary.
-6. Links to sample report and Early Access.
+5. Subscriber-only research notice.
+6. Links to sample report and subscriber research.
 
-Implemented subscriber lock preview:
+Implemented paid category gate preview:
 
-1. AI Interpretation.
-2. Full Artist Research Brief.
-3. Brand-fit Analysis.
-4. Issue Risk Analysis.
-5. Artist Comparison Report.
-6. Weekly FANDEX Report.
-7. Watchlist & Signal Commentary.
+1. Overview.
+2. Basic FANDEX Score.
+3. Issue Tone Preview.
+4. Music / Album Signal.
+5. News / Issue Signal.
+6. SNS / Fandom Signal.
+7. Brand-fit Signal.
+8. Comeback / Activity Signal.
+9. Artist Comparison.
+10. AI Interpretation.
+11. Weekly Research Report.
 
 `docs/fandex-free-search-subscriber-gate.md` defines the free versus subscriber
 research boundary. No login, payment, entitlement check, Supabase storage, API,
@@ -143,9 +151,10 @@ SNS content
 ```
 
 The page previews Free Preview, FANDEX Plus, and FANDEX Pro feature boundaries
-without pricing, payment, login, subscriber authorization, AI backend, or report
-generation backend. `docs/fandex-subscriber-research-plan.md` documents the
-planned package structure.
+as category unlock boundaries without pricing, payment, login, subscriber
+authorization, AI backend, or report generation backend.
+`docs/fandex-subscriber-research-plan.md` documents the planned package
+structure.
 
 ## Sample Report Page
 
@@ -161,14 +170,20 @@ The current conversion flow is:
 
 ```text
 Home
-  -> Early Access section
-  -> View Sample Report
-  -> future Request Early Access form
+  -> Limited Free Search
+  -> Locked Paid Categories
+  -> Sample Report
+  -> Paid Research Categories
+  -> Early Access waitlist
 ```
 
 The home CTA `View Sample Report` now links to `/sample-report`. The remaining
 request/beta CTAs stay as temporary anchors until a real request flow is
 approved.
+
+The sample report is framed as a sample of subscriber research output. Free
+users only see a limited preview, and full category breakdown is reserved for
+subscriber research.
 
 ## Waitlist Form UI
 
@@ -276,6 +291,7 @@ This phase does not implement:
 21. Waitlist UI to data model wiring.
 22. Subscriber entitlement checks.
 23. Subscriber research route backend.
+24. Real paid category unlock logic.
 
 ## Next TODO
 

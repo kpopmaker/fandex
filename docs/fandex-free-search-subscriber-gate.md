@@ -12,8 +12,8 @@ channels.
 
 The goal is to make the product structure clear:
 
-1. Free users can check basic artist signal context.
-2. Subscriber research unlocks deeper interpretation and comparison.
+1. Free users can check only a limited artist overview.
+2. Subscriber research unlocks category-level interpretation and comparison.
 3. Early Access validates whether this boundary is commercially useful.
 
 ## Free Preview Scope
@@ -25,27 +25,40 @@ The `/search` route is a local-data preview. It can show:
 3. Agency or group metadata.
 4. Preview FANDEX score.
 5. Issue tone preview.
-6. Sample signal summary.
+6. Subscriber-only research notice.
 7. Sample report link.
-8. Early Access research CTA.
+8. Subscriber research CTA.
 
-It does not call an API and does not perform a live search against external
-sources.
+It should not expose category-level detailed scores, signal breakdowns, AI
+interpretation, full issue reasoning, brand-fit analysis, artist comparison,
+weekly reports, source-level detail, or long summaries. It does not call an API
+and does not perform a live search against external sources.
 
-## Subscriber Research Scope
+## Paid Category Gate Scope
 
-Subscriber research is represented by static locked cards:
+The `/search` route now shows a static paid category gate below the limited
+preview results.
 
-1. AI Interpretation.
-2. Full Artist Research Brief.
-3. Brand-fit Analysis.
-4. Issue Risk Analysis.
-5. Artist Comparison Report.
-6. Weekly FANDEX Report.
-7. Watchlist & Signal Commentary.
+Free or preview categories:
+
+1. Overview.
+2. Basic FANDEX Score.
+3. Issue Tone Preview.
+
+Locked subscriber categories:
+
+1. Music / Album Signal.
+2. News / Issue Signal.
+3. SNS / Fandom Signal.
+4. Brand-fit Signal.
+5. Comeback / Activity Signal.
+6. Artist Comparison.
+7. AI Interpretation.
+8. Weekly Research Report.
 
 These cards are not tied to real entitlement logic yet. They clarify what will
-be available after subscriber validation.
+be available after subscriber validation and link users to `/research` or the
+Early Access waitlist.
 
 ## Lock UI Strategy
 
@@ -54,8 +67,9 @@ wall. CTAs should point to Early Access or the waitlist, not payment.
 
 Current CTA targets:
 
-1. `Unlock subscriber research` -> `/#waitlist-form`
-2. `Learn about subscriber research` -> `/research`
+1. `Explore Subscriber Research` -> `/research`
+2. `See Research Plans` -> `/research`
+3. `Join Early Access` -> `/#waitlist-form`
 3. `View Sample Report` -> `/sample-report`
 
 The `/research` route is the subscriber research explanation destination. It
@@ -75,13 +89,13 @@ This step does not implement:
 7. Actual Naver API.
 8. External search API.
 9. Server-side submission flow.
+10. Real category unlock state.
 
 ## Next TODO
 
-1. Expand search result data coverage.
-2. Add lock UI click tracking after analytics policy is approved.
-3. Connect waitlist storage.
-4. Design subscriber auth.
-5. Validate payment and pricing.
-6. Design AI interpretation backend.
-7. Add subscriber research report generation.
+1. Connect waitlist storage.
+2. Design subscriber auth.
+3. Validate payment and pricing.
+4. Define paid category access model.
+5. Design AI interpretation backend.
+6. Add subscriber research report generation.

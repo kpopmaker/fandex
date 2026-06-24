@@ -6,41 +6,61 @@ import { artistUniverseV4 } from '../data/v4/artistUniverse';
 import { getArtistPriceHistoryV4 } from '../data/v4/artistPriceHistory';
 import { getArtistRankingRowsV4 } from '../data/v4/artistRanking';
 
-const lockedResearchItems = [
+const categoryGateItems = [
+  {
+    title: 'Overview',
+    status: 'Free',
+    description: 'Artist name, ticker, and minimal agency or group context.',
+  },
+  {
+    title: 'Basic FANDEX Score',
+    status: 'Preview',
+    description: 'A single overall preview score for quick signal checking.',
+  },
+  {
+    title: 'Issue Tone Preview',
+    status: 'Preview',
+    description: 'One-line issue tone only. Full reasoning stays gated.',
+  },
+  {
+    title: 'Music / Album Signal',
+    status: 'Locked',
+    description: 'Album, comeback, chart, and release momentum context.',
+  },
+  {
+    title: 'News / Issue Signal',
+    status: 'Locked',
+    description: 'Issue concentration, repeated headline patterns, and context.',
+  },
+  {
+    title: 'SNS / Fandom Signal',
+    status: 'Locked',
+    description: 'Fandom attention, community movement, and social pickup.',
+  },
+  {
+    title: 'Brand-fit Signal',
+    status: 'Locked',
+    description: 'Campaign fit, ambassador angle, and collaboration positioning.',
+  },
+  {
+    title: 'Comeback / Activity Signal',
+    status: 'Locked',
+    description: 'Activity timing, comeback readiness, and attention windows.',
+  },
+  {
+    title: 'Artist Comparison',
+    status: 'Locked',
+    description: 'Side-by-side artist signal context for positioning decisions.',
+  },
   {
     title: 'AI Interpretation',
-    description:
-      'Subscriber research unlocks deeper context behind the preview signal.',
+    status: 'Locked',
+    description: 'AI-assisted explanation of why the signal matters.',
   },
   {
-    title: 'Full Artist Research Brief',
-    description:
-      'A complete weekly read on artist movement, issue context, and market fit.',
-  },
-  {
-    title: 'Brand-fit Analysis',
-    description:
-      'Campaign angles, ambassador fit, and collaboration positioning signals.',
-  },
-  {
-    title: 'Issue Risk Analysis',
-    description:
-      'Watch terms, concentration risk, and volatility notes for campaign timing.',
-  },
-  {
-    title: 'Artist Comparison Report',
-    description:
-      'Side-by-side artist signal profiles for marketing and research decisions.',
-  },
-  {
-    title: 'Weekly FANDEX Report',
-    description:
-      'A recurring subscriber brief covering watchlists and signal commentary.',
-  },
-  {
-    title: 'Watchlist & Signal Commentary',
-    description:
-      'Ongoing signal changes and why they matter for entertainment marketing.',
+    title: 'Weekly Research Report',
+    status: 'Locked',
+    description: 'Recurring watchlist, category movement, and signal commentary.',
   },
 ];
 
@@ -115,9 +135,10 @@ export default function SearchPreviewPage() {
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 Check a K-pop artist or issue you saw from FANDEX Signal content.
-                Free preview shows basic artist signal context and issue tone.
-                Full AI interpretation and research briefs are reserved for
-                Early Access subscriber research.
+                Free search is intentionally limited to identity, a basic overall
+                FANDEX score, and one issue tone preview. Category breakdowns,
+                AI interpretation, comparisons, and weekly reports are reserved
+                for Early Access subscriber research.
               </p>
             </div>
 
@@ -126,7 +147,7 @@ export default function SearchPreviewPage() {
                 href="/research"
                 className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
               >
-                Learn about subscriber research
+                Explore Subscriber Research
               </Link>
               <Link
                 href="/sample-report"
@@ -197,23 +218,33 @@ export default function SearchPreviewPage() {
               Subscriber Research Lock
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              Preview only. Deeper interpretation is subscriber research.
+              Unlock deeper FANDEX categories
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Free search helps validate the signal. Subscriber research unlocks
-              deeper context, campaign angles, risk interpretation, and weekly
-              commentary.
+              Free visitors can see only the top-level preview. Paid category
+              access is not live yet, but these cards show the subscriber
+              research structure planned for FANDEX Plus and Pro.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {lockedResearchItems.map((item) => (
+            {categoryGateItems.map((item) => (
               <article
                 key={item.title}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm"
+                className={`rounded-2xl border p-5 shadow-sm ${
+                  item.status === 'Locked'
+                    ? 'border-slate-200 bg-slate-50/80'
+                    : 'border-cyan-200 bg-white'
+                }`}
               >
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
-                  Early Access
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-black shadow-sm ${
+                    item.status === 'Locked'
+                      ? 'bg-slate-950 text-white'
+                      : 'bg-cyan-50 text-cyan-700'
+                  }`}
+                >
+                  {item.status === 'Locked' ? 'Locked' : item.status}
                 </span>
                 <h3 className="mt-4 text-lg font-black text-slate-950">
                   {item.title}
@@ -221,12 +252,31 @@ export default function SearchPreviewPage() {
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                   {item.description}
                 </p>
-                <Link
-                  href="/research"
-                  className="mt-4 inline-flex rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
-                >
-                  Learn about subscriber research
-                </Link>
+                {item.status === 'Locked' ? (
+                  <>
+                    <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
+                      Available with FANDEX Plus
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Link
+                        href="/research"
+                        className="rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
+                      >
+                        See Research Plans
+                      </Link>
+                      <Link
+                        href="/#waitlist-form"
+                        className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+                      >
+                        Join Early Access
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                    Included in limited free search
+                  </p>
+                )}
               </article>
             ))}
           </div>
@@ -271,9 +321,8 @@ function ArtistPreviewCard({
         </span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <PreviewMetric label="FANDEX score" value={artist.score.toFixed(2)} />
-        <PreviewMetric label="Priority" value={String(artist.rankScore)} />
         <PreviewMetric
           label="Issue tone"
           value={artist.issueTone}
@@ -284,6 +333,9 @@ function ArtistPreviewCard({
       <p className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm font-bold leading-6 text-slate-600">
         {artist.signalSummary}
       </p>
+      <p className="mt-3 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
+        Detailed research is subscriber-only.
+      </p>
 
       <div className="mt-4 flex flex-wrap gap-3">
         <Link
@@ -293,10 +345,10 @@ function ArtistPreviewCard({
           View Sample Report
         </Link>
         <Link
-          href="/#waitlist-form"
+          href="/research"
           className="rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white shadow-sm hover:bg-cyan-400"
         >
-          Unlock subscriber research
+          Explore Subscriber Research
         </Link>
       </div>
     </article>
@@ -356,14 +408,11 @@ function getIssueToneClass(issueTone: string) {
 
 function createSignalSummary({
   issueTone,
-  activeCount,
-  positiveCount,
-  negativeCount,
 }: {
   issueTone: string;
   activeCount: number;
   positiveCount: number;
   negativeCount: number;
 }) {
-  return `${issueTone} issue tone preview based on ${activeCount} active local signal samples. Positive ${positiveCount}, watch ${negativeCount}. Full AI interpretation is reserved for subscriber research.`;
+  return `${issueTone} issue tone preview. Full category reasoning, signal breakdown, and AI interpretation are reserved for subscriber research.`;
 }

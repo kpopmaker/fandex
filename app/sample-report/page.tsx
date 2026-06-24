@@ -137,7 +137,10 @@ export default function SampleReportPage() {
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 A preview of how FANDEX translates K-pop market signals into
                 entertainment marketing insight. This sample brief uses IVE as
-                an example artist for Early Access report validation.
+                an example artist for Early Access report validation. This is a
+                sample of subscriber research output; free users only see a
+                limited preview, and full category breakdown is reserved for
+                subscriber research.
               </p>
             </div>
 
@@ -146,7 +149,13 @@ export default function SampleReportPage() {
                 href="/#early-access"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
-                Back to Early Access
+                Join Early Access
+              </Link>
+              <Link
+                href="/research"
+                className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
+              >
+                See Paid Research Categories
               </Link>
               <Link
                 href="/"
@@ -282,12 +291,12 @@ export default function SampleReportPage() {
                 Early Access Report
               </p>
               <h2 className="mt-2 text-2xl font-black">
-                What the paid report includes
+                Subscriber research category examples
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                The paid report is designed as a weekly entertainment marketing
-                brief for teams that need artist monitoring, campaign context,
-                and signal change commentary.
+                This sample shows only part of the planned subscriber research
+                output. Free users see a limited preview; full category
+                breakdowns are reserved for subscriber research.
               </p>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
@@ -324,19 +333,19 @@ export default function SampleReportPage() {
                 href="/research"
                 className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
               >
-                See Subscriber Research
+                See Paid Research Categories
               </Link>
               <Link
                 href="/search"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >
-                Try the free artist search
+                Try Limited Free Search
               </Link>
               <Link
                 href="/#waitlist-form"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
-                Request Early Access
+                Join Early Access
               </Link>
               <Link
                 href="/"

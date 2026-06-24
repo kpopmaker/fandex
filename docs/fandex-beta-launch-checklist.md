@@ -36,7 +36,7 @@ Check that:
 
 1. Free artist search preview works.
 2. Only basic signal preview is shown.
-3. Subscriber research lock UI is visible.
+3. Paid category gate is visible below results.
 4. The `/research` CTA is connected.
 5. The `/#waitlist-form` CTA is connected.
 
@@ -55,7 +55,7 @@ Check that:
 
 1. Free / Plus / Pro preview is clear.
 2. The page does not look like a real pricing or payment page.
-3. Subscriber research features are understandable.
+3. Free, Plus, and Pro category unlocks are understandable.
 4. The Early Access CTA is visible.
 5. A disclaimer is present.
 
@@ -63,21 +63,28 @@ Check that:
 
 Free Preview:
 
-1. Artist quick search.
-2. Public ranking snapshot.
-3. Issue tone preview.
-4. Sample report.
-5. Limited signal preview.
+1. Overview.
+2. Basic FANDEX Score.
+3. Issue Tone Preview.
 
 Subscriber Research:
 
-1. AI interpretation.
-2. Full artist brief.
-3. Brand-fit analysis.
-4. Issue risk analysis.
-5. Artist comparison report.
-6. Weekly FANDEX report.
-7. Watchlist commentary.
+1. Music / Album Signal.
+2. News / Issue Signal.
+3. SNS / Fandom Signal.
+4. Brand-fit Signal.
+5. Comeback / Activity Signal.
+6. Artist Comparison.
+7. AI Interpretation.
+8. Weekly Research Report.
+
+Confirm that locked paid categories:
+
+1. Show a clear lock badge.
+2. Link to `/research` for plan/category explanation.
+3. Link to `/#waitlist-form` for Early Access interest.
+4. Do not show pricing or payment CTAs.
+5. Do not imply that paid access is already live.
 
 ## D. Not Implemented Yet
 
@@ -92,6 +99,7 @@ The beta site does not yet include:
 7. Naver API live collection.
 8. Email automation.
 9. PDF export.
+10. Real paid category unlock logic.
 
 ## E. SNS Profile Link Readiness
 

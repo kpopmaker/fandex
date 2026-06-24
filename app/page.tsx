@@ -350,21 +350,21 @@ function getHomepageIssueRows() {
 }
 
 const publicPreviewItems = [
-  'Artist quick search',
-  'Public ranking snapshot',
+  'Overview',
+  'Basic FANDEX Score',
   'Issue tone preview',
-  'Sample report',
-  'SNS signal archive preview',
+  'Limited artist metadata',
+  'Sample report CTA',
 ];
 
 const earlyAccessReportItems = [
-  'AI interpretation',
-  'Full artist research brief',
+  'Music / Album Signal',
+  'News / Issue Signal',
+  'SNS / Fandom Signal',
   'Brand-fit analysis',
-  'Issue risk analysis',
-  'Artist comparison report',
+  'Artist comparison',
+  'AI interpretation',
   'Weekly FANDEX report',
-  'Watchlist and signal commentary',
 ];
 
 const snsResearchFunnelSteps = [
@@ -378,11 +378,11 @@ const snsResearchFunnelSteps = [
   },
   {
     title: 'Read the preview',
-    copy: 'Free pages show ranking snapshots, sample interpretation, and signal previews before subscription.',
+    copy: 'Free pages show only a limited preview: artist identity, basic score, and issue tone.',
   },
   {
-    title: 'Unlock deeper research',
-    copy: 'Early Access subscribers receive AI interpretation, comparison briefs, and weekly FANDEX reports.',
+    title: 'Review paid category unlocks',
+    copy: 'Early Access subscribers are planned to receive category research, AI interpretation, comparisons, and weekly reports.',
   },
 ];
 
@@ -679,8 +679,9 @@ function EarlyAccessSection() {
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
             FANDEX Signal content published on Instagram, X, and LinkedIn can
-            bring readers back to the website for source context, free previews,
-            sample reports, and Early Access subscriber research.
+            bring readers back to the website for a limited free preview, sample
+            reports, paid category unlock previews, and Early Access subscriber
+            research.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
@@ -688,13 +689,13 @@ function EarlyAccessSection() {
               href="/search"
               className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
             >
-              Search Artist Preview
+              Try Limited Free Search
             </Link>
             <Link
               href="/research"
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
             >
-              Explore Subscriber Research
+              See Paid Research Categories
             </Link>
             <a
               href="#waitlist-form"
@@ -720,12 +721,12 @@ function EarlyAccessSection() {
         <div className="grid gap-4 md:grid-cols-2">
           <EarlyAccessCard
             eyebrow="Free Preview"
-            title="What visitors can try first"
+            title="Limited search preview"
             items={publicPreviewItems}
           />
           <EarlyAccessCard
             eyebrow="Subscriber Research"
-            title="Coming soon for Early Access subscribers"
+            title="Category research unlocks"
             items={earlyAccessReportItems}
           />
         </div>
