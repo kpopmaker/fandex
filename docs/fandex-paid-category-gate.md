@@ -47,6 +47,11 @@ Subscriber research is planned to show category raw point x coefficient
 breakdown, contribution, risk detail, source count, confidence context, and
 validation hints.
 
+Subscriber research can also include benchmark alignment and uncertainty context
+from the FANDEX v1 validation benchmark scaffold. Free preview should keep those
+validation details locked and show only the total cumulative point, point band,
+and issue tone.
+
 ## Why Free Scope Is Minimal
 
 FANDEX needs the free product to create interest without giving away the full

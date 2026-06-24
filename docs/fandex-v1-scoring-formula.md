@@ -119,6 +119,10 @@ Subscriber research is designed to unlock:
 6. Validation hints.
 7. AI interpretation.
 
+Objective validation is handled by the separate validation benchmark scaffold.
+Subscriber breakdown can include validation hints, confidence bands,
+uncertainty notes, and benchmark alignment when those sources are connected.
+
 ## Current Limits
 
 This phase is limited because:

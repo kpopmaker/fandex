@@ -216,6 +216,73 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+              <LangText en="Validation framework preview" ko="객관성 검증 구조 preview" />
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              <LangText
+                en="FANDEX is a composite research indicator, not an official score"
+                ko="FANDEX는 공식 인증 점수가 아니라 검증 가능한 리서치 지표입니다"
+              />
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+              <LangText
+                en="Subscriber research is designed to pair category breakdown with benchmark alignment, confidence, uncertainty, event backtests, and manual review notes. This is currently a mock/manual seed scaffold before live benchmark sources are connected."
+                ko="구독자 리서치는 카테고리별 breakdown에 benchmark alignment, 신뢰도, 불확실성, 이벤트 백테스트, 수동 검수 메모를 함께 제공하는 구조로 설계됩니다. 현재는 실제 benchmark source 연결 전 mock/manual seed 기반 scaffold입니다."
+              />
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            {[
+              {
+                ko: '외부 기준 비교',
+                en: 'External benchmarks',
+                copyKo: '차트, 영상, 검색, 뉴스, 브랜드 이벤트와 방향성을 비교합니다.',
+                copyEn: 'Compare direction against chart, video, search, news, and brand events.',
+              },
+              {
+                ko: '이벤트 백테스트',
+                en: 'Event backtest',
+                copyKo: '컴백, 리스크, 공백, 브랜드 딜 이후 점수 움직임을 확인합니다.',
+                copyEn: 'Check score movement after comeback, risk, hiatus, and brand events.',
+              },
+              {
+                ko: '민감도 분석',
+                en: 'Sensitivity',
+                copyKo: 'coefficient 변경 시 순위 안정성과 리스크 하락폭을 점검합니다.',
+                copyEn: 'Review ranking stability and risk impact under coefficient changes.',
+              },
+              {
+                ko: '신뢰도/불확실성',
+                en: 'Confidence',
+                copyKo: 'sourceCount, 다양성, 최신성, 누락 데이터 경고를 함께 봅니다.',
+                copyEn: 'Review source count, diversity, recency, and missing data warnings.',
+              },
+              {
+                ko: '수동 검수 루프',
+                en: 'Manual review',
+                copyKo: '이상치는 보정하지 않고 analyst note와 flag로 분리합니다.',
+                copyEn: 'Outliers are flagged with analyst notes instead of silently adjusted.',
+              },
+            ].map((item) => (
+              <article
+                key={item.en}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
+              >
+                <h3 className="text-sm font-black text-slate-950">
+                  <LangText en={item.en} ko={item.ko} />
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <LangText en={item.copyEn} ko={item.copyKo} />
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
               <LangText en="Subscriber categories" ko="구독자 리서치 카테고리" />
             </p>
             <h2 className="mt-2 text-2xl font-black">

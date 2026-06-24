@@ -29,6 +29,12 @@ The next scoring milestone is connecting actual source data, starting with Naver
 News issue signals, and building validation benchmarks for chart, search, video,
 news, and brand event comparisons.
 
+The paid value should not be framed as access to a single score alone. The
+subscriber product should emphasize category breakdown, benchmark alignment,
+confidence/uncertainty, event context, and analyst interpretation. The next
+implementation step can be either real benchmark source connection or Naver News
+actual issue signal connection.
+
 ## Commercial Positioning
 
 FANDEX should be positioned as a K-pop and entertainment issue research

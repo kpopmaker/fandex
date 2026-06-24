@@ -317,6 +317,67 @@ export default function SampleReportPage() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+              <LangText en="Validation preview" ko="점수 검증 preview" />
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              <LangText
+                en="How subscriber reports can explain score reliability"
+                ko="구독자 리포트에서 제공될 점수 신뢰도 구조"
+              />
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+              <LangText
+                en="Full validation detail is planned for subscriber research. Free previews only show the total cumulative point, while subscriber reports can add benchmark alignment, confidence band, event context, and analyst review notes."
+                ko="상세 검증 정보는 구독자 리서치에서 제공될 예정입니다. 무료 미리보기는 종합 누적 점수만 보여주고, 구독자 리포트에서는 benchmark alignment, confidence band, event context, analyst review note를 함께 제공할 수 있습니다."
+              />
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              {
+                ko: 'Benchmark alignment preview',
+                en: 'Benchmark alignment preview',
+                copyKo: '외부 기준 지표와 FANDEX 카테고리 방향성이 맞는지 확인합니다.',
+                copyEn: 'Checks whether external benchmarks align with FANDEX categories.',
+              },
+              {
+                ko: 'Confidence band',
+                en: 'Confidence band',
+                copyKo: 'sourceCount와 coverage에 따라 High/Medium/Low로 표시합니다.',
+                copyEn: 'Marks confidence as High/Medium/Low based on source count and coverage.',
+              },
+              {
+                ko: 'Event context',
+                en: 'Event context',
+                copyKo: '컴백, 브랜드 딜, 리스크 이벤트 전후의 점수 움직임을 봅니다.',
+                copyEn: 'Reviews score movement around comeback, brand, and risk events.',
+              },
+              {
+                ko: 'Analyst review note',
+                en: 'Analyst review note',
+                copyKo: '이상치와 해석 주의점은 수동 검수 메모로 분리합니다.',
+                copyEn: 'Separates outliers and interpretation cautions into review notes.',
+              },
+            ].map((item) => (
+              <article
+                key={item.en}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+              >
+                <h3 className="text-sm font-black text-slate-950">
+                  <LangText en={item.en} ko={item.ko} />
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <LangText en={item.copyEn} ko={item.copyKo} />
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
           <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>

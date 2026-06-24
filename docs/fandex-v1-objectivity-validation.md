@@ -5,6 +5,12 @@ absolute truth. The v1 cumulative score should be tested against external
 benchmarks, event outcomes, sensitivity checks, uncertainty signals, and manual
 review before being presented as a mature scoring system.
 
+`app/data/v4/scoring/fandexV1ValidationBenchmark.ts` now provides a code-level
+validation benchmark scaffold. It is still mock/manual seed only and does not
+mean FANDEX has completed objective validation. Objectivity should be described
+as benchmark alignment, event backtesting, sensitivity analysis, uncertainty,
+and manual review, not as a blanket claim.
+
 ## Principle
 
 FANDEX v1 is designed to summarize multiple entertainment signals into one

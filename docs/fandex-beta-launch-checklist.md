@@ -48,6 +48,7 @@ Check that:
 9. The page does not imply that the preview score is live-data based.
 10. The score is clearly shown as cumulative `pt`, not a 0-100 percentage.
 11. Category raw point, coefficient, contribution, and risk detail stay locked.
+12. Validation detail is not overexposed in the free screen.
 
 ### `/sample-report`
 
@@ -72,6 +73,8 @@ Check that:
 7. FANDEX v1 formula copy says the current structure is beta preview/mock based.
 8. Formula copy explains the unbounded cumulative point model.
 9. The page does not describe a maximum score or maximum fixed risk deduction.
+10. FANDEX is described as a verifiable research indicator, not an official certified score.
+11. Subscriber value includes category breakdown plus benchmark validation.
 
 ## C. Language Checklist
 
@@ -147,6 +150,7 @@ Before using FANDEX as an SNS profile link, confirm:
 8. Korean default copy is clear on first load.
 9. Preview scoring disclaimers prevent confusion with actual live data.
 10. Cumulative point model disclaimer is visible enough for beta users.
+11. Copy does not imply official certification or completed objective validation.
 
 ## G. Manual QA Checklist
 
@@ -193,3 +197,4 @@ Before SNS operation:
 10. Naver News issue signal connection.
 11. FANDEX v1 score snapshot and history design.
 12. Validation benchmark table for chart, search, video, news, and brand events.
+13. Subscriber report validation detail QA.
