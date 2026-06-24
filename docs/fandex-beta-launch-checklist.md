@@ -43,6 +43,9 @@ Check that:
 4. The `/research` CTA is connected.
 5. The `/#waitlist-form` CTA is connected.
 6. Free search and locked category copy are Korean by default.
+7. FANDEX v1 public score, score band, and issue tone are visible.
+8. Category score numbers and risk penalty values are not visible to free users.
+9. The page does not imply that the preview score is live-data based.
 
 ### `/sample-report`
 
@@ -64,6 +67,7 @@ Check that:
 4. The Early Access CTA is visible.
 5. A disclaimer is present.
 6. Pricing/payment inactive copy is clear in Korean.
+7. FANDEX v1 formula copy says the current structure is beta preview/mock based.
 
 ## C. Language Checklist
 
@@ -122,6 +126,8 @@ The beta site does not yet include:
 11. Full i18n routing.
 12. Locale-specific URL handling.
 13. External i18n package.
+14. Live FANDEX v1 data connection.
+15. Subscriber category score entitlement.
 
 ## F. SNS Profile Link Readiness
 
@@ -135,6 +141,7 @@ Before using FANDEX as an SNS profile link, confirm:
 6. Primary CTAs are visible on mobile.
 7. Disclaimers are visible enough for a beta research product.
 8. Korean default copy is clear on first load.
+9. Preview scoring disclaimers prevent confusion with actual live data.
 
 ## G. Manual QA Checklist
 
@@ -178,3 +185,5 @@ Before SNS operation:
 7. Production domain and metadata QA.
 8. Korean metadata and OG copy.
 9. Full component-level i18n cleanup.
+10. Naver News issue signal connection.
+11. FANDEX v1 score snapshot and history design.

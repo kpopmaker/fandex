@@ -175,6 +175,43 @@ export default function SubscriberResearchPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+                <LangText en="FANDEX v1 scoring preview" ko="FANDEX v1 산출식 preview" />
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                <LangText
+                  en="A beta score structure before live data connection"
+                  ko="실제 데이터 연결 전의 베타 산식 구조"
+                />
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                <LangText
+                  en="FANDEX v1 combines music/album, news/issue, SNS/fandom, brand-fit, comeback/activity, growth momentum, and a subtractive risk penalty. Free users only see the overall public score and issue tone; subscribers are planned to see category breakdown and AI interpretation."
+                  ko="FANDEX v1은 음원/음반, 뉴스/이슈, SNS/팬덤, 브랜드 적합도, 컴백/활동, 성장 모멘텀, 리스크 감점을 조합합니다. 무료 사용자는 종합 공개 점수와 이슈 톤만 제한적으로 확인하고, 구독자는 카테고리별 breakdown과 AI 해석을 확인할 수 있도록 설계되어 있습니다."
+                />
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                { ko: '무료: 공개 점수, 점수 밴드, 이슈 톤', en: 'Free: public score, score band, issue tone' },
+                { ko: '구독자: 카테고리별 breakdown', en: 'Subscriber: category breakdown' },
+                { ko: '리스크 감점: 최대 12점 차감', en: 'Risk penalty: subtracts up to 12 points' },
+                { ko: '현재: preview/mock 기반 베타 산식', en: 'Current: preview/mock based beta formula' },
+              ].map((item) => (
+                <div
+                  key={item.en}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-6 text-slate-600"
+                >
+                  <LangText en={item.en} ko={item.ko} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
               <LangText en="Subscriber categories" ko="구독자 리서치 카테고리" />

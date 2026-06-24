@@ -13,6 +13,19 @@ sample report framing, Early Access CTA, and disclaimers.
 The toggle is an MVP UI layer only. It does not add `/ko` or `/en` routes,
 middleware, external i18n packages, or locale-specific SEO handling.
 
+## FANDEX v1 Preview Scoring
+
+FANDEX now includes a deterministic v1 scoring helper for preview UI. The helper
+combines music/album, news/issue, SNS/fandom, brand-fit, comeback/activity,
+growth momentum, and a subtractive risk penalty. `/search` uses this structure
+to show a limited public score, score band, and issue tone while keeping
+category-level breakdown locked for subscriber research.
+
+This is still a preview scoring structure before live data connection. It uses
+mock/manual seed style inputs and should not be presented as a live data score.
+The next scoring milestone is connecting actual Naver News issue signals and
+then applying the full FANDEX v1 formula to stored score snapshots.
+
 ## Commercial Positioning
 
 FANDEX should be positioned as a K-pop and entertainment issue research

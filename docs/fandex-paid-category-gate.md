@@ -22,6 +22,26 @@ toggle, but the default lock copy should use Korean service terms:
 The gate should avoid payment-like language such as "buy now", "checkout", or
 confirmed pricing. Paid access is still shown as a beta preview.
 
+## FANDEX v1 Category Breakdown Gate
+
+The paid category gate now represents the locked FANDEX v1 category breakdown.
+Free users see only:
+
+1. FANDEX v1 `publicScore`.
+2. Score band.
+3. Issue tone.
+
+Locked cards can show category names and descriptions, but they must not expose:
+
+1. Category score numbers.
+2. Weighted formula details.
+3. Risk penalty values.
+4. Source-level detail.
+5. AI interpretation.
+
+The category breakdown remains a subscriber research preview until auth,
+payment, subscription checks, and real entitlement logic are implemented.
+
 ## Why Free Scope Is Minimal
 
 FANDEX needs the free product to create interest without giving away the full

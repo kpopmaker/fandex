@@ -6,8 +6,15 @@ import { useMemo, useState } from 'react';
 import { artistUniverseV4 } from '../data/v4/artistUniverse';
 import { getArtistPriceHistoryV4 } from '../data/v4/artistPriceHistory';
 import { getArtistRankingRowsV4 } from '../data/v4/artistRanking';
+import {
+  calculateFandexV1Score,
+  clampScore,
+  createFandexV1SampleInputs,
+  type FandexV1Input,
+  type FandexV1Result,
+} from '../data/v4/scoring/fandexV1Scoring';
 
-const categoryGateItems = [
+const freeCategoryGateItems = [
   {
     titleKo: '개요',
     titleEn: 'Overview',
@@ -29,67 +36,17 @@ const categoryGateItems = [
     descriptionKo: '이슈 분위기를 한 줄로만 확인할 수 있습니다.',
     descriptionEn: 'One-line issue tone only. Full reasoning stays gated.',
   },
-  {
-    titleKo: '음원/음반 신호',
-    titleEn: 'Music / Album Signal',
-    status: 'Locked',
-    descriptionKo: '앨범, 컴백, 차트, 발매 흐름을 해석하는 카테고리입니다.',
-    descriptionEn: 'Album, comeback, chart, and release momentum context.',
-  },
-  {
-    titleKo: '뉴스/이슈 신호',
-    titleEn: 'News / Issue Signal',
-    status: 'Locked',
-    descriptionKo: '이슈 집중도, 반복 보도, 리스크 맥락을 분석합니다.',
-    descriptionEn: 'Issue concentration, repeated headline patterns, and context.',
-  },
-  {
-    titleKo: 'SNS/팬덤 신호',
-    titleEn: 'SNS / Fandom Signal',
-    status: 'Locked',
-    descriptionKo: '팬덤 반응, 커뮤니티 움직임, SNS 확산을 확인합니다.',
-    descriptionEn: 'Fandom attention, community movement, and social pickup.',
-  },
-  {
-    titleKo: '브랜드 적합도',
-    titleEn: 'Brand-fit Signal',
-    status: 'Locked',
-    descriptionKo: '캠페인 적합도, 앰배서더 관점, 협업 포지션을 봅니다.',
-    descriptionEn: 'Campaign fit, ambassador angle, and collaboration positioning.',
-  },
-  {
-    titleKo: '컴백/활동 신호',
-    titleEn: 'Comeback / Activity Signal',
-    status: 'Locked',
-    descriptionKo: '활동 타이밍, 컴백 기대감, 관심도 구간을 해석합니다.',
-    descriptionEn: 'Activity timing, comeback readiness, and attention windows.',
-  },
-  {
-    titleKo: '아티스트 비교',
-    titleEn: 'Artist Comparison',
-    status: 'Locked',
-    descriptionKo: '여러 아티스트의 신호를 나란히 비교합니다.',
-    descriptionEn: 'Side-by-side artist signal context for positioning decisions.',
-  },
-  {
-    titleKo: 'AI 해석',
-    titleEn: 'AI Interpretation',
-    status: 'Locked',
-    descriptionKo: '신호가 왜 중요한지 AI 기반 해석으로 정리합니다.',
-    descriptionEn: 'AI-assisted explanation of why the signal matters.',
-  },
-  {
-    titleKo: '주간 리서치 리포트',
-    titleEn: 'Weekly Research Report',
-    status: 'Locked',
-    descriptionKo: '관심 아티스트, 카테고리 변화, 신호 코멘터리를 주간 단위로 제공합니다.',
-    descriptionEn: 'Recurring watchlist, category movement, and signal commentary.',
-  },
 ];
 
 const suggestionQueries = ['IVE', 'RIIZE', 'NewJeans', 'aespa'];
 
 const rankingRows = getArtistRankingRowsV4();
+const fandexV1SampleInputsByArtistId = new Map(
+  createFandexV1SampleInputs().map((input) => [input.artistId, input]),
+);
+const fallbackFandexV1LockedCategories = calculateFandexV1Score(
+  createFandexV1SampleInputs()[0]!,
+).lockedCategories;
 const searchableArtists = artistUniverseV4.map((artist) => {
   const ranking = rankingRows.find((row) => row.artistId === artist.id);
   const history = getArtistPriceHistoryV4(artist.id);
@@ -97,12 +54,24 @@ const searchableArtists = artistUniverseV4.map((artist) => {
   const issueBreakdown =
     latest?.issueScoreBreakdown ?? latest?.scoreBreakdown.issueScoreBreakdown;
   const issueSummary = latest?.issueSignalsSummary;
-  const issueTone = getIssueTonePreview({
-    issueScore: issueBreakdown?.issueScore ?? 50,
-    riskScore: issueBreakdown?.controversyRiskScore ?? 0,
-    positiveCount: issueSummary?.positiveIssueCount ?? 0,
-    negativeCount: issueSummary?.negativeIssueCount ?? 0,
-  });
+  const fallbackScore = ranking?.price ?? latest?.price ?? 50;
+  const newsIssueScore = issueBreakdown?.issueScore ?? 50;
+  const riskPenaltyScore = issueBreakdown?.controversyRiskScore ?? 0;
+  const confidenceScore = issueBreakdown?.confidenceScore ?? 55;
+  const changeRate = ranking?.changeRate ?? latest?.changeRate ?? 0;
+  const v1Input =
+    fandexV1SampleInputsByArtistId.get(artist.id) ??
+    createFandexV1InputFromPreview({
+      artistId: artist.id,
+      artistName: artist.nameEn,
+      fallbackScore,
+      priorityScore: artist.collection.priorityScore,
+      newsIssueScore,
+      riskPenaltyScore,
+      confidenceScore,
+      changeRate,
+    });
+  const fandexV1 = calculateFandexV1Score(v1Input);
 
   return {
     id: artist.id,
@@ -112,12 +81,14 @@ const searchableArtists = artistUniverseV4.map((artist) => {
     generation: artist.generation,
     fandomName: artist.fandomName,
     aliases: artist.profile.aliases,
-    score: ranking?.price ?? latest?.price ?? 0,
+    score: fandexV1.publicScore,
     rankScore: artist.collection.priorityScore,
-    changeRate: ranking?.changeRate ?? latest?.changeRate ?? 0,
-    issueTone,
+    changeRate,
+    issueTone: fandexV1.issueTone,
+    scoreBand: fandexV1.scoreBand,
+    fandexV1,
     signalSummary: createSignalSummary({
-      issueTone,
+      issueTone: fandexV1.issueTone,
       activeCount: issueSummary?.activeIssueCount ?? 0,
       positiveCount: issueSummary?.positiveIssueCount ?? 0,
       negativeCount: issueSummary?.negativeIssueCount ?? 0,
@@ -143,6 +114,8 @@ export default function SearchPreviewPage() {
       )
       .slice(0, 6);
   }, [normalizedQuery]);
+  const displayedLockedCategories =
+    results[0]?.fandexV1.lockedCategories ?? fallbackFandexV1LockedCategories;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950">
@@ -162,7 +135,7 @@ export default function SearchPreviewPage() {
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 <LangText
                   en="Check a K-pop artist or issue you saw from FANDEX Signal content. Free search is intentionally limited to identity, a basic overall FANDEX score, and one issue tone preview. Category breakdowns, AI interpretation, comparisons, and weekly reports are reserved for Early Access subscriber research."
-                  ko="FANDEX Signal 콘텐츠에서 본 K-pop 아티스트나 이슈를 빠르게 확인해 보세요. 무료 검색에서는 아티스트 기본 정보, FANDEX 종합 점수 일부, 이슈 톤만 제한적으로 제공합니다. 카테고리별 분석, AI 해석, 아티스트 비교, 주간 리포트는 Early Access 구독자 리서치에서 제공됩니다."
+                ko="FANDEX Signal 콘텐츠에서 본 K-pop 아티스트나 이슈를 빠르게 확인해 보세요. 무료 검색에서는 아티스트 기본 정보, FANDEX v1 공개 점수, 점수 밴드, 이슈 톤만 제한적으로 제공합니다. 카테고리별 breakdown, AI 해석, 주간 리포트는 Early Access 구독자 리서치에서 제공됩니다."
                 />
               </p>
             </div>
@@ -254,13 +227,13 @@ export default function SearchPreviewPage() {
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
               <LangText
                 en="Free visitors can see only the top-level preview. Paid category access is not live yet, but these cards show the subscriber research structure planned for FANDEX Plus and Pro."
-                ko="무료 사용자는 최상위 미리보기만 확인할 수 있습니다. 결제 기능은 아직 활성화되어 있지 않으며, 아래 카드는 FANDEX Plus와 Pro에서 열릴 예정인 구독자 리서치 구조를 보여주는 베타 preview입니다."
+                ko="무료 사용자는 FANDEX v1 공개 점수와 이슈 톤만 확인할 수 있습니다. 결제 기능은 아직 활성화되어 있지 않으며, 아래 카드는 구독자에게 열릴 예정인 카테고리별 breakdown 구조를 보여주는 베타 preview입니다."
               />
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {categoryGateItems.map((item) => (
+            {freeCategoryGateItems.map((item) => (
               <article
                 key={item.titleEn}
                 className={`rounded-2xl border p-5 shadow-sm ${
@@ -317,6 +290,45 @@ export default function SearchPreviewPage() {
                 )}
               </article>
             ))}
+            {displayedLockedCategories.map((category) => (
+              <article
+                key={category.key}
+                className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 shadow-sm"
+              >
+                <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-black text-white shadow-sm">
+                  <LangText en="Locked" ko="잠금" />
+                </span>
+                <h3 className="mt-4 text-lg font-black text-slate-950">
+                  <LangText en={category.labelEn} ko={category.labelKo} />
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  <LangText
+                    en={category.descriptionEn}
+                    ko={category.descriptionKo}
+                  />
+                </p>
+                <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
+                  <LangText
+                    en="Category score hidden for subscriber research"
+                    ko="카테고리 점수는 구독자 리서치에서 제공"
+                  />
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Link
+                    href="/research"
+                    className="rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
+                  >
+                    <LangText en="See Research Plans" ko="리서치 플랜 보기" />
+                  </Link>
+                  <Link
+                    href="/#waitlist-form"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+                  >
+                    <LangText en="Join Early Access" ko="Early Access 신청" />
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -361,8 +373,12 @@ function ArtistPreviewCard({
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <PreviewMetric
-          label={<LangText en="FANDEX score" ko="FANDEX 종합 점수" />}
-          value={artist.score.toFixed(2)}
+          label={<LangText en="FANDEX v1 public score" ko="FANDEX v1 공개 점수" />}
+          value={String(artist.fandexV1.publicScore)}
+        />
+        <PreviewMetric
+          label={<LangText en="Score band" ko="점수 밴드" />}
+          value={<ScoreBandText scoreBand={artist.scoreBand} />}
         />
         <PreviewMetric
           label={<LangText en="Issue tone" ko="이슈 톤 미리보기" />}
@@ -379,8 +395,8 @@ function ArtistPreviewCard({
       </p>
       <p className="mt-3 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
         <LangText
-          en="Detailed research is subscriber-only."
-          ko="심층 리서치는 구독자 전용입니다."
+          en="Detailed category breakdown is subscriber-only."
+          ko="심층 카테고리별 breakdown은 구독자 전용입니다."
         />
       </p>
 
@@ -419,34 +435,12 @@ function PreviewMetric({
   );
 }
 
-function getIssueTonePreview({
-  issueScore,
-  riskScore,
-  positiveCount,
-  negativeCount,
-}: {
-  issueScore: number;
-  riskScore: number;
-  positiveCount: number;
-  negativeCount: number;
-}) {
-  if (riskScore >= 60 || negativeCount > positiveCount) {
-    return 'Watch';
-  }
-
-  if (issueScore >= 60 && positiveCount >= negativeCount) {
-    return 'Positive';
-  }
-
-  return 'Balanced';
-}
-
 function getIssueToneClass(issueTone: string) {
-  if (issueTone === 'Positive') {
+  if (issueTone === 'Active Buzz' || issueTone === 'Momentum Rising') {
     return 'text-cyan-700';
   }
 
-  if (issueTone === 'Watch') {
+  if (issueTone === 'Risk Watch') {
     return 'text-blue-700';
   }
 
@@ -467,6 +461,45 @@ function createSignalSummary({
   };
 }
 
+function createFandexV1InputFromPreview({
+  artistId,
+  artistName,
+  fallbackScore,
+  priorityScore,
+  newsIssueScore,
+  riskPenaltyScore,
+  confidenceScore,
+  changeRate,
+}: {
+  artistId: string;
+  artistName: string;
+  fallbackScore: number;
+  priorityScore: number;
+  newsIssueScore: number;
+  riskPenaltyScore: number;
+  confidenceScore: number;
+  changeRate: number;
+}): FandexV1Input {
+  const baseScore = clampScore(fallbackScore);
+  const prioritySignal = clampScore(priorityScore);
+  const growthMomentumScore = clampScore(55 + changeRate * 2);
+
+  return {
+    artistId,
+    artistName,
+    musicAlbumScore: baseScore,
+    newsIssueScore,
+    snsFandomScore: clampScore((baseScore + prioritySignal) / 2),
+    brandFitScore: clampScore(baseScore + 6 - riskPenaltyScore * 0.08),
+    comebackActivityScore: clampScore((baseScore + growthMomentumScore) / 2),
+    growthMomentumScore,
+    riskPenaltyScore,
+    confidenceScore,
+    updatedAt: '2026-06-24T00:00:00.000Z',
+    sourceMode: 'mock',
+  };
+}
+
 function StatusText({ status }: { status: string }) {
   if (status === 'Locked') {
     return <LangText en="Locked" ko="잠금" />;
@@ -480,27 +513,51 @@ function StatusText({ status }: { status: string }) {
 }
 
 function IssueToneText({ issueTone }: { issueTone: string }) {
-  if (issueTone === 'Positive') {
-    return <LangText en="Positive" ko="긍정" />;
+  if (issueTone === 'Risk Watch') {
+    return <LangText en="Risk Watch" ko="리스크 관찰" />;
   }
 
-  if (issueTone === 'Watch') {
-    return <LangText en="Watch" ko="주의" />;
+  if (issueTone === 'Active Buzz') {
+    return <LangText en="Active Buzz" ko="이슈 활성" />;
   }
 
-  return <LangText en="Balanced" ko="균형" />;
+  if (issueTone === 'Momentum Rising') {
+    return <LangText en="Momentum Rising" ko="모멘텀 상승" />;
+  }
+
+  return <LangText en="Neutral Preview" ko="중립 미리보기" />;
+}
+
+function ScoreBandText({ scoreBand }: { scoreBand: FandexV1Result['scoreBand'] }) {
+  if (scoreBand === 'High Momentum') {
+    return <LangText en="High Momentum" ko="높은 모멘텀" />;
+  }
+
+  if (scoreBand === 'Strong Signal') {
+    return <LangText en="Strong Signal" ko="강한 신호" />;
+  }
+
+  if (scoreBand === 'Watch') {
+    return <LangText en="Watch" ko="관찰" />;
+  }
+
+  return <LangText en="Early Signal" ko="초기 신호" />;
 }
 
 function getIssueToneKo(issueTone: string) {
-  if (issueTone === 'Positive') {
-    return '긍정';
+  if (issueTone === 'Risk Watch') {
+    return '리스크 관찰';
   }
 
-  if (issueTone === 'Watch') {
-    return '주의';
+  if (issueTone === 'Active Buzz') {
+    return '이슈 활성';
   }
 
-  return '균형';
+  if (issueTone === 'Momentum Rising') {
+    return '모멘텀 상승';
+  }
+
+  return '중립';
 }
 
 function LangText({ ko, en }: { ko: string; en: string }) {
