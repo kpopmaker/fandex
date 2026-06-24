@@ -4,6 +4,24 @@ Status: static UI and product-structure preview. No auth, payment, subscription
 check, Supabase access table, role-based access control, API route, server
 action, external fetch, or live data source is implemented.
 
+## Korean-First Gate Copy
+
+The paid category gate is now presented in Korean by default for domestic
+consumer positioning. English remains available through the lightweight KO/EN
+toggle, but the default lock copy should use Korean service terms:
+
+1. 제한된 무료 검색.
+2. 심층 리서치.
+3. 유료 리서치 카테고리.
+4. 이슈 톤 미리보기.
+5. 브랜드 적합도.
+6. AI 해석.
+7. 주간 리서치 리포트.
+8. Early Access 신청.
+
+The gate should avoid payment-like language such as "buy now", "checkout", or
+confirmed pricing. Paid access is still shown as a beta preview.
+
 ## Why Free Scope Is Minimal
 
 FANDEX needs the free product to create interest without giving away the full
@@ -50,20 +68,20 @@ The free preview should not expose:
 
 Free or preview categories:
 
-1. Overview.
-2. Basic FANDEX Score.
-3. Issue Tone Preview.
+1. 개요 / Overview.
+2. 기본 FANDEX 점수 / Basic FANDEX Score.
+3. 이슈 톤 미리보기 / Issue Tone Preview.
 
 Locked subscriber categories:
 
-1. Music / Album Signal.
-2. News / Issue Signal.
-3. SNS / Fandom Signal.
-4. Brand-fit Signal.
-5. Comeback / Activity Signal.
-6. Artist Comparison.
-7. AI Interpretation.
-8. Weekly Research Report.
+1. 음원/음반 신호 / Music / Album Signal.
+2. 뉴스/이슈 신호 / News / Issue Signal.
+3. SNS/팬덤 신호 / SNS / Fandom Signal.
+4. 브랜드 적합도 / Brand-fit Signal.
+5. 컴백/활동 신호 / Comeback / Activity Signal.
+6. 아티스트 비교 / Artist Comparison.
+7. AI 해석 / AI Interpretation.
+8. 주간 리서치 리포트 / Weekly Research Report.
 
 ## Plus And Pro Unlock Structure
 

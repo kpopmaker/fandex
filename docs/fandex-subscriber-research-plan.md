@@ -4,6 +4,10 @@ Status: product structure preview. No payment, login, entitlement logic,
 Supabase subscription table, AI backend, or report generation backend is
 implemented.
 
+The `/research` page now defaults to Korean so domestic users can understand the
+Free, Plus, and Pro category unlock model without reading English-first product
+copy. English remains available through the lightweight KO/EN toggle.
+
 ## Purpose
 
 FANDEX Subscriber Research explains which paid categories users can unlock

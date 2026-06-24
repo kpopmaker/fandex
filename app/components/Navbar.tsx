@@ -2,16 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 
 const navItems = [
-  { href: '/', label: '시장' },
-  { href: '/artists', label: '아티스트' },
-  { href: '/compare', label: '아티스트 비교' },
-  { href: '/ranking', label: '순위' },
-  { href: '/signals', label: '시장 신호' },
-  { href: '/methodology', label: '산정 방식' },
-  { href: '/about', label: '소개' },
+  { href: '/', labelKo: '홈', labelEn: 'Home' },
+  { href: '/artists', labelKo: '아티스트', labelEn: 'Artists' },
+  { href: '/compare', labelKo: '비교', labelEn: 'Compare' },
+  { href: '/ranking', labelKo: '랭킹', labelEn: 'Ranking' },
+  { href: '/signals', labelKo: '신호', labelEn: 'Signals' },
+  { href: '/methodology', labelKo: '산출 방식', labelEn: 'Method' },
+  { href: '/about', labelKo: '소개', labelEn: 'About' },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -38,7 +39,7 @@ export default function Navbar() {
               FANDEX
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              K-pop Market Index
+              <LangText en="K-pop Market Index" ko="K-pop 리서치 지표" />
             </p>
           </div>
         </Link>
@@ -57,18 +58,19 @@ export default function Navbar() {
                     : 'rounded-full px-5 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 hover:text-cyan-700'
                 }
               >
-                {item.label}
+                <LangText en={item.labelEn} ko={item.labelKo} />
               </Link>
             );
           })}
         </div>
 
         <div className="ml-auto flex items-center gap-3">
-        <div className="hidden lg:block">
-          <span className="rounded-full bg-slate-100 px-5 py-2 text-xs font-black text-slate-600">
-            Mock Market v4
-          </span>
-        </div>
+          <div className="hidden lg:block">
+            <span className="rounded-full bg-slate-100 px-5 py-2 text-xs font-black text-slate-600">
+              <LangText en="Mock Market v4" ko="베타 리서치 v4" />
+            </span>
+          </div>
+          <LanguageToggle />
           <ThemeToggle />
         </div>
       </nav>
@@ -87,11 +89,20 @@ export default function Navbar() {
                   : 'shrink-0 rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700'
               }
             >
-              {item.label}
+              <LangText en={item.labelEn} ko={item.labelKo} />
             </Link>
           );
         })}
       </div>
     </header>
+  );
+}
+
+function LangText({ ko, en }: { ko: string; en: string }) {
+  return (
+    <>
+      <span className="inline [html[data-language='en']_&]:hidden">{ko}</span>
+      <span className="hidden [html[data-language='en']_&]:inline">{en}</span>
+    </>
   );
 }

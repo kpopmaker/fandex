@@ -350,39 +350,47 @@ function getHomepageIssueRows() {
 }
 
 const publicPreviewItems = [
-  'Overview',
-  'Basic FANDEX Score',
-  'Issue tone preview',
-  'Limited artist metadata',
-  'Sample report CTA',
+  { ko: '개요', en: 'Overview' },
+  { ko: '기본 FANDEX 점수', en: 'Basic FANDEX Score' },
+  { ko: '이슈 톤 미리보기', en: 'Issue tone preview' },
+  { ko: '제한된 아티스트 메타데이터', en: 'Limited artist metadata' },
+  { ko: '샘플 리포트 CTA', en: 'Sample report CTA' },
 ];
 
 const earlyAccessReportItems = [
-  'Music / Album Signal',
-  'News / Issue Signal',
-  'SNS / Fandom Signal',
-  'Brand-fit analysis',
-  'Artist comparison',
-  'AI interpretation',
-  'Weekly FANDEX report',
+  { ko: '음원/음반 신호', en: 'Music / Album Signal' },
+  { ko: '뉴스/이슈 신호', en: 'News / Issue Signal' },
+  { ko: 'SNS/팬덤 신호', en: 'SNS / Fandom Signal' },
+  { ko: '브랜드 적합도', en: 'Brand-fit analysis' },
+  { ko: '아티스트 비교', en: 'Artist comparison' },
+  { ko: 'AI 해석', en: 'AI interpretation' },
+  { ko: '주간 리서치 리포트', en: 'Weekly FANDEX report' },
 ];
 
 const snsResearchFunnelSteps = [
   {
-    title: 'Discover a FANDEX Signal',
-    copy: 'Instagram, X, and LinkedIn posts surface K-pop and entertainment issues with a data-first angle.',
+    titleKo: 'FANDEX Signal 발견',
+    titleEn: 'Discover a FANDEX Signal',
+    copyKo: 'Instagram, X, LinkedIn 콘텐츠에서 K-pop과 엔터테인먼트 이슈를 데이터 관점으로 발견합니다.',
+    copyEn: 'Instagram, X, and LinkedIn posts surface K-pop and entertainment issues with a data-first angle.',
   },
   {
-    title: 'Check the artist or issue',
-    copy: 'Visitors use FANDEX to verify the context behind a public signal, artist movement, or issue tone.',
+    titleKo: '아티스트와 이슈 확인',
+    titleEn: 'Check the artist or issue',
+    copyKo: '방문자는 FANDEX에서 공개 신호, 아티스트 움직임, 이슈 톤의 맥락을 확인합니다.',
+    copyEn: 'Visitors use FANDEX to verify the context behind a public signal, artist movement, or issue tone.',
   },
   {
-    title: 'Read the preview',
-    copy: 'Free pages show only a limited preview: artist identity, basic score, and issue tone.',
+    titleKo: '제한된 미리보기 확인',
+    titleEn: 'Read the preview',
+    copyKo: '무료 화면에서는 아티스트 기본 정보, 기본 점수, 이슈 톤만 제한적으로 보여줍니다.',
+    copyEn: 'Free pages show only a limited preview: artist identity, basic score, and issue tone.',
   },
   {
-    title: 'Review paid category unlocks',
-    copy: 'Early Access subscribers are planned to receive category research, AI interpretation, comparisons, and weekly reports.',
+    titleKo: '유료 카테고리 확인',
+    titleEn: 'Review paid category unlocks',
+    copyKo: 'Early Access 구독자에게는 카테고리 리서치, AI 해석, 비교, 주간 리포트가 제공될 예정입니다.',
+    copyEn: 'Early Access subscribers are planned to receive category research, AI interpretation, comparisons, and weekly reports.',
   },
 ];
 
@@ -421,18 +429,41 @@ export default function Home() {
         <section className="grid gap-6 xl:grid-cols-[1fr_0.95fr] xl:items-stretch">
           <div className="flex min-h-[520px] flex-col justify-between rounded-3xl border border-slate-200 bg-white p-7 shadow-lg shadow-slate-200/60">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
+              <div className="mb-6">
+                <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
+                  <LangText en="FANDEX K-pop Market Intelligence" ko="FANDEX K-pop 리서치 플랫폼" />
+                </p>
+                <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
+                  <LangText
+                    en="FANDEX reads K-pop market attention through data"
+                    ko="K-pop과 엔터테인먼트 신호를 데이터로 읽는 FANDEX"
+                  />
+                </h1>
+                <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
+                  <LangText
+                    en="FANDEX is a research platform that analyzes K-pop and entertainment industry issues, fandom, brand, and activity signals with data."
+                    ko="FANDEX는 K-pop과 엔터테인먼트 산업의 이슈, 팬덤, 브랜드, 활동 신호를 데이터 기반으로 분석하는 리서치 플랫폼입니다."
+                  />
+                </p>
+                <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
+                  <LangText
+                    en="FANDEX scores are simulated research indicators based on preview data. FANDEX is not financial advice, securities, or an investment product."
+                    ko="FANDEX 점수는 preview 데이터 기반의 실험적 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 베타 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+                  />
+                </p>
+              </div>
+              <p className="hidden text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
                 FANDEX K-pop Market Intelligence
               </p>
-              <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
+              <h1 className="hidden mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                 K-pop 시장의 관심 흐름을 숫자로 읽는 FANDEX
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
+              <p className="hidden mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 FANDEX는 팬 반응, 검색량, 영상 반응, 뉴스량, 해외 반응을
                 모아 아티스트와 이슈가 지금 얼마나 주목받는지 보여주는
                 K-pop 시장 인텔리전스 플랫폼입니다.
               </p>
-              <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
+              <p className="hidden mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
                 FANDEX 가격은 실제 주식 가격이 아니라 mock 데이터 기반의
                 simulated index입니다. 투자 상품, 증권, 금융 조언이 아닙니다.
               </p>
@@ -667,21 +698,25 @@ function EarlyAccessSection() {
       <div className="grid gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            FANDEX Early Access
+            <LangText en="FANDEX Early Access" ko="FANDEX Early Access" />
           </p>
           <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
-            K-pop and entertainment issues, verified for marketing context
+            <LangText
+              en="K-pop and entertainment issues, verified for marketing context"
+              ko="K-pop과 엔터테인먼트 이슈를 마케팅 관점으로 해석합니다"
+            />
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-            FANDEX is a research platform that verifies the latest K-pop and
-            entertainment industry issues with public signal data, then
-            interprets them from a marketing perspective.
+            <LangText
+              en="FANDEX is a research platform that verifies the latest K-pop and entertainment industry issues with public signal data, then interprets them from a marketing perspective."
+              ko="FANDEX는 공개 신호 데이터를 바탕으로 K-pop과 엔터테인먼트 산업 이슈를 확인하고, 이를 마케팅과 브랜드 관점의 리서치로 정리합니다."
+            />
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            FANDEX Signal content published on Instagram, X, and LinkedIn can
-            bring readers back to the website for a limited free preview, sample
-            reports, paid category unlock previews, and Early Access subscriber
-            research.
+            <LangText
+              en="FANDEX Signal content published on Instagram, X, and LinkedIn can bring readers back to the website for a limited free preview, sample reports, paid category unlock previews, and Early Access subscriber research."
+              ko="SNS에서 FANDEX Signal 콘텐츠를 본 사용자는 웹사이트에서 제한된 무료 검색, 샘플 리포트, 유료 리서치 카테고리, Early Access 구독자 리서치를 확인할 수 있습니다."
+            />
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
@@ -689,44 +724,44 @@ function EarlyAccessSection() {
               href="/search"
               className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
             >
-              Try Limited Free Search
+              <LangText en="Try Limited Free Search" ko="제한된 무료 검색 시작하기" />
             </Link>
             <Link
               href="/research"
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
             >
-              See Paid Research Categories
+              <LangText en="See Paid Research Categories" ko="유료 리서치 카테고리 보기" />
             </Link>
             <a
               href="#waitlist-form"
               className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
             >
-              Request Early Access
+              <LangText en="Request Early Access" ko="Early Access 신청하기" />
             </a>
             <Link
               href="/sample-report"
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
             >
-              View Sample Report
+              <LangText en="View Sample Report" ko="샘플 리포트 보기" />
             </Link>
             <a
               href="#waitlist-form"
               className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
             >
-              Join FANDEX Beta
+              <LangText en="Join FANDEX Beta" ko="FANDEX 베타 신청" />
             </a>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <EarlyAccessCard
-            eyebrow="Free Preview"
-            title="Limited search preview"
+            eyebrow="무료 미리보기"
+            title="제한된 무료 검색"
             items={publicPreviewItems}
           />
           <EarlyAccessCard
-            eyebrow="Subscriber Research"
-            title="Category research unlocks"
+            eyebrow="구독자 리서치"
+            title="유료 카테고리 unlock"
             items={earlyAccessReportItems}
           />
         </div>
@@ -735,26 +770,29 @@ function EarlyAccessSection() {
       <section className="mt-5 rounded-3xl border border-slate-200 bg-slate-50 p-5">
         <div className="mb-5">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            From social signal to deeper research
+            <LangText en="From social signal to deeper research" ko="SNS 신호에서 심층 리서치까지" />
           </p>
           <h3 className="mt-2 text-2xl font-black text-slate-950">
-            How FANDEX turns SNS attention into research demand
+            <LangText
+              en="How FANDEX turns SNS attention into research demand"
+              ko="FANDEX가 SNS 관심을 리서치 수요로 연결하는 방식"
+            />
           </h3>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {snsResearchFunnelSteps.map((step, index) => (
             <article
-              key={step.title}
+              key={step.titleEn}
               className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
             >
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500 font-mono text-sm font-black text-white">
                 {index + 1}
               </span>
               <h4 className="mt-4 text-sm font-black text-slate-950">
-                {step.title}
+                <LangText en={step.titleEn} ko={step.titleKo} />
               </h4>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                {step.copy}
+                <LangText en={step.copyEn} ko={step.copyKo} />
               </p>
             </article>
           ))}
@@ -762,9 +800,10 @@ function EarlyAccessSection() {
       </section>
 
       <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-bold leading-6 text-slate-500">
-        FANDEX is an experimental entertainment research index. It is not
-        financial advice or an investment product. Scores may change as signal
-        logic and data coverage improve.
+        <LangText
+          en="FANDEX is an experimental entertainment research index. It is not financial advice or an investment product. Scores may change as signal logic and data coverage improve."
+          ko="FANDEX는 실험 단계의 엔터테인먼트 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 베타 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+        />
       </p>
 
       <WaitlistPreviewCard />
@@ -870,7 +909,7 @@ function EarlyAccessCard({
 }: {
   eyebrow: string;
   title: string;
-  items: string[];
+  items: Array<{ ko: string; en: string }>;
 }) {
   return (
     <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
@@ -881,10 +920,10 @@ function EarlyAccessCard({
       <ul className="mt-4 grid gap-2">
         {items.map((item) => (
           <li
-            key={item}
+            key={item.en}
             className="rounded-xl border border-white bg-white px-3 py-2 text-sm font-bold text-slate-600 shadow-sm"
           >
-            {item}
+            <LangText en={item.en} ko={item.ko} />
           </li>
         ))}
       </ul>
@@ -999,5 +1038,14 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
       <p className="text-xs font-bold text-slate-500">{label}</p>
       <p className="mt-1 text-sm font-black text-slate-950">{value}</p>
     </div>
+  );
+}
+
+function LangText({ ko, en }: { ko: string; en: string }) {
+  return (
+    <>
+      <span className="inline [html[data-language='en']_&]:hidden">{ko}</span>
+      <span className="hidden [html[data-language='en']_&]:inline">{en}</span>
+    </>
   );
 }

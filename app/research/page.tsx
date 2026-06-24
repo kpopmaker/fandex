@@ -1,108 +1,129 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 const subscriberFeatures = [
   {
-    title: 'Music / Album Signal',
-    description:
-      'Album, comeback, chart, and release momentum context for subscriber research.',
+    titleKo: '음원/음반 신호',
+    titleEn: 'Music / Album Signal',
+    descriptionKo: '앨범, 컴백, 차트, 발매 흐름을 구독자 리서치 관점으로 해석합니다.',
+    descriptionEn: 'Album, comeback, chart, and release momentum context for subscriber research.',
   },
   {
-    title: 'News / Issue Signal',
-    description:
-      'Issue concentration, repeated headline patterns, and watch context beyond the free tone.',
+    titleKo: '뉴스/이슈 신호',
+    titleEn: 'News / Issue Signal',
+    descriptionKo: '무료 이슈 톤을 넘어 반복 보도, 이슈 집중도, 관찰 포인트를 정리합니다.',
+    descriptionEn: 'Issue concentration, repeated headline patterns, and watch context beyond the free tone.',
   },
   {
-    title: 'SNS / Fandom Signal',
-    description:
-      'Fandom attention, community movement, and social pickup for tracked artists.',
+    titleKo: 'SNS/팬덤 신호',
+    titleEn: 'SNS / Fandom Signal',
+    descriptionKo: '팬덤 반응, 커뮤니티 움직임, SNS 확산 흐름을 추적합니다.',
+    descriptionEn: 'Fandom attention, community movement, and social pickup for tracked artists.',
   },
   {
-    title: 'Artist Comparison',
-    description:
-      'Side-by-side artist category profiles for positioning and research decisions.',
+    titleKo: '아티스트 비교',
+    titleEn: 'Artist Comparison',
+    descriptionKo: '아티스트별 카테고리 신호를 비교해 포지셔닝 판단을 돕습니다.',
+    descriptionEn: 'Side-by-side artist category profiles for positioning and research decisions.',
   },
   {
-    title: 'AI Interpretation',
-    description:
-      'AI-assisted summaries that explain why an artist signal matters.',
+    titleKo: 'AI 해석',
+    titleEn: 'AI Interpretation',
+    descriptionKo: '아티스트 신호가 왜 중요한지 AI 기반 요약으로 설명합니다.',
+    descriptionEn: 'AI-assisted summaries that explain why an artist signal matters.',
   },
   {
-    title: 'Weekly FANDEX Report',
-    description:
-      'Receive a weekly K-pop signal digest with artist watchlists and issue movement commentary.',
+    titleKo: '주간 리서치 리포트',
+    titleEn: 'Weekly FANDEX Report',
+    descriptionKo: '관심 아티스트와 이슈 변화를 주간 리서치 형태로 받아볼 수 있습니다.',
+    descriptionEn: 'Receive a weekly K-pop signal digest with artist watchlists and issue movement commentary.',
   },
   {
-    title: 'Watchlist & Signal Commentary',
-    description:
-      'Track priority artists and understand what changed across public signals week by week.',
+    titleKo: 'Watchlist 코멘터리',
+    titleEn: 'Watchlist & Signal Commentary',
+    descriptionKo: '관심 아티스트의 공개 신호가 어떻게 달라졌는지 주간 단위로 해석합니다.',
+    descriptionEn: 'Track priority artists and understand what changed across public signals week by week.',
   },
 ];
 
 const planPreview = [
   {
-    name: 'Free Preview',
-    unlock: '3 preview categories',
-    description:
-      'For visitors who want a limited signal check after seeing SNS content.',
+    nameKo: 'Free Preview',
+    nameEn: 'Free Preview',
+    unlockKo: '미리보기 카테고리 3개',
+    unlockEn: '3 preview categories',
+    descriptionKo: 'SNS 콘텐츠를 본 뒤 제한된 신호만 빠르게 확인하려는 사용자를 위한 범위입니다.',
+    descriptionEn: 'For visitors who want a limited signal check after seeing SNS content.',
     items: [
-      'Overview',
-      'Basic FANDEX Score',
-      'Issue tone preview',
+      { ko: '개요', en: 'Overview' },
+      { ko: '기본 FANDEX 점수', en: 'Basic FANDEX Score' },
+      { ko: '이슈 톤 미리보기', en: 'Issue tone preview' },
     ],
   },
   {
-    name: 'FANDEX Plus',
-    unlock: '6 subscriber categories',
-    description:
-      'For fans, marketers, and industry watchers who need recurring category context.',
+    nameKo: 'FANDEX Plus',
+    nameEn: 'FANDEX Plus',
+    unlockKo: '구독자 카테고리 6개',
+    unlockEn: '6 subscriber categories',
+    descriptionKo: '팬, 마케터, 업계 관찰자가 반복적으로 카테고리 맥락을 확인할 수 있는 구조입니다.',
+    descriptionEn: 'For fans, marketers, and industry watchers who need recurring category context.',
     items: [
-      'Music / Album Signal',
-      'News / Issue Signal',
-      'SNS / Fandom Signal',
-      'Artist Comparison',
-      'AI Interpretation',
-      'Weekly Research Report',
+      { ko: '음원/음반 신호', en: 'Music / Album Signal' },
+      { ko: '뉴스/이슈 신호', en: 'News / Issue Signal' },
+      { ko: 'SNS/팬덤 신호', en: 'SNS / Fandom Signal' },
+      { ko: '아티스트 비교', en: 'Artist Comparison' },
+      { ko: 'AI 해석', en: 'AI Interpretation' },
+      { ko: '주간 리서치 리포트', en: 'Weekly Research Report' },
     ],
   },
   {
-    name: 'FANDEX Pro',
-    unlock: '6 advanced research categories',
-    description: 'For brand, campaign, and portfolio research use cases.',
+    nameKo: 'FANDEX Pro',
+    nameEn: 'FANDEX Pro',
+    unlockKo: '심층 리서치 카테고리 6개',
+    unlockEn: '6 advanced research categories',
+    descriptionKo: '브랜드, 캠페인, 포트폴리오 리서치 목적의 심층 분석 구조입니다.',
+    descriptionEn: 'For brand, campaign, and portfolio research use cases.',
     items: [
-      'Brand-fit Signal',
-      'Issue Risk Analysis',
-      'Campaign Angle Memo',
-      'Custom Artist Research Request',
-      'Portfolio / Interview-ready Industry Brief',
-      'Watchlist & Signal Commentary',
+      { ko: '브랜드 적합도 분석', en: 'Brand-fit Signal' },
+      { ko: '이슈 리스크 분석', en: 'Issue Risk Analysis' },
+      { ko: '캠페인 앵글 메모', en: 'Campaign Angle Memo' },
+      { ko: '맞춤형 아티스트 리서치 요청', en: 'Custom Artist Research Request' },
+      { ko: '포트폴리오/면접용 산업 브리프', en: 'Portfolio / Interview-ready Industry Brief' },
+      { ko: '관심 아티스트 Watchlist 코멘터리', en: 'Watchlist & Signal Commentary' },
     ],
   },
 ];
 
 const exampleOutputs = [
   {
-    title: 'IVE comeback signal brief',
-    freePreview: 'Free preview shows artist score, issue tone, and sample signal count.',
-    subscriberUnlock:
-      'Subscriber research adds comeback timing context, fan attention drivers, and campaign angles.',
-    whyItMatters:
-      'Marketing teams can decide whether to emphasize anticipation, styling, or fandom activation.',
+    titleKo: 'IVE 컴백 신호 브리프',
+    titleEn: 'IVE comeback signal brief',
+    freePreviewKo: '무료 미리보기에서는 아티스트 점수와 이슈 톤만 확인할 수 있습니다.',
+    freePreviewEn: 'Free preview shows artist score, issue tone, and sample signal count.',
+    subscriberUnlockKo: '구독자 리서치는 컴백 타이밍, 팬덤 관심 요인, 캠페인 앵글을 추가합니다.',
+    subscriberUnlockEn: 'Subscriber research adds comeback timing context, fan attention drivers, and campaign angles.',
+    whyItMattersKo: '마케팅 팀은 기대감, 스타일링, 팬덤 참여 중 어떤 메시지를 강조할지 판단할 수 있습니다.',
+    whyItMattersEn: 'Marketing teams can decide whether to emphasize anticipation, styling, or fandom activation.',
   },
   {
-    title: 'RIIZE brand-fit watch',
-    freePreview: 'Free preview shows basic momentum and a balanced issue tone.',
-    subscriberUnlock:
-      'Subscriber research explains which brand categories match the current artist signal profile.',
-    whyItMatters:
-      'Brand teams can compare youthful performance fit against broader campaign goals.',
+    titleKo: 'RIIZE 브랜드 적합도 관찰',
+    titleEn: 'RIIZE brand-fit watch',
+    freePreviewKo: '무료 미리보기에서는 기본 모멘텀과 균형적인 이슈 톤만 확인합니다.',
+    freePreviewEn: 'Free preview shows basic momentum and a balanced issue tone.',
+    subscriberUnlockKo: '구독자 리서치는 현재 아티스트 신호와 맞는 브랜드 카테고리를 설명합니다.',
+    subscriberUnlockEn: 'Subscriber research explains which brand categories match the current artist signal profile.',
+    whyItMattersKo: '브랜드 팀은 청량한 퍼포먼스 이미지가 캠페인 목표와 맞는지 비교할 수 있습니다.',
+    whyItMattersEn: 'Brand teams can compare youthful performance fit against broader campaign goals.',
   },
   {
-    title: 'NewJeans issue risk context',
-    freePreview: 'Free preview highlights watch tone and basic issue concentration.',
-    subscriberUnlock:
-      'Subscriber research separates repeated headlines from material risk and adds monitoring notes.',
-    whyItMatters:
-      'Industry watchers can understand whether visibility is useful attention or campaign volatility.',
+    titleKo: 'NewJeans 이슈 리스크 맥락',
+    titleEn: 'NewJeans issue risk context',
+    freePreviewKo: '무료 미리보기에서는 주의 톤과 기본 이슈 집중도만 보여줍니다.',
+    freePreviewEn: 'Free preview highlights watch tone and basic issue concentration.',
+    subscriberUnlockKo: '구독자 리서치는 반복 보도와 실제 리스크를 구분하고 모니터링 메모를 제공합니다.',
+    subscriberUnlockEn: 'Subscriber research separates repeated headlines from material risk and adds monitoring notes.',
+    whyItMattersKo: '업계 관찰자는 노출이 유효한 관심인지 캠페인 변동성인지 판단할 수 있습니다.',
+    whyItMattersEn: 'Industry watchers can understand whether visibility is useful attention or campaign volatility.',
   },
 ];
 
@@ -114,16 +135,19 @@ export default function SubscriberResearchPage() {
           <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-start">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-600">
-                FANDEX Subscriber Research
+                <LangText en="FANDEX Subscriber Research" ko="FANDEX 구독자 리서치" />
               </p>
               <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
-                From quick search to full artist intelligence
+                <LangText
+                  en="From quick search to full artist intelligence"
+                  ko="무료 검색에서 심층 아티스트 리서치까지"
+                />
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
-                Free search shows only the surface signal. Subscriber research
-                is structured around paid category unlocks: music, issue, SNS,
-                comparison, AI interpretation, weekly reports, and Pro research
-                memos. Paid access is not live yet.
+                <LangText
+                  en="Free search shows only the surface signal. Subscriber research is structured around paid category unlocks: music, issue, SNS, comparison, AI interpretation, weekly reports, and Pro research memos. Paid access is not live yet."
+                  ko="무료 검색은 표면적인 신호만 보여줍니다. 구독자 리서치는 음원/음반, 뉴스/이슈, SNS/팬덤, 아티스트 비교, AI 해석, 주간 리포트, Pro 리서치 메모처럼 유료 카테고리가 열리는 구조로 설계되어 있습니다. 결제 기능은 아직 활성화되어 있지 않습니다."
+                />
               </p>
             </div>
 
@@ -132,19 +156,19 @@ export default function SubscriberResearchPage() {
                 href="/#waitlist-form"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
-                Join Early Access
+                <LangText en="Join Early Access" ko="Early Access 신청하기" />
               </Link>
               <Link
                 href="/search"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >
-                Try Limited Free Search
+                <LangText en="Try Limited Free Search" ko="제한된 무료 검색 시작하기" />
               </Link>
               <Link
                 href="/sample-report"
                 className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
               >
-                View Sample Report
+                <LangText en="View Sample Report" ko="샘플 리포트 보기" />
               </Link>
             </div>
           </div>
@@ -153,31 +177,36 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Subscriber categories
+              <LangText en="Subscriber categories" ko="구독자 리서치 카테고리" />
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              What Early Access subscriber research is designed to unlock
+              <LangText
+                en="What Early Access subscriber research is designed to unlock"
+                ko="Early Access 구독자에게 열리는 심층 카테고리"
+              />
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Subscriber category access is currently shown as a beta preview.
-              Pricing will be validated during Early Access.
+              <LangText
+                en="Subscriber category access is currently shown as a beta preview. Pricing will be validated during Early Access."
+                ko="현재 카테고리 잠금 구조는 베타 preview입니다. 실제 가격은 Early Access 기간에 검증됩니다."
+              />
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {subscriberFeatures.map((feature) => (
               <article
-                key={feature.title}
+                key={feature.titleEn}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm"
               >
                 <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
-                  Subscriber Research
+                  <LangText en="Subscriber Research" ko="구독자 리서치" />
                 </span>
                 <h3 className="mt-4 text-lg font-black text-slate-950">
-                  {feature.title}
+                  <LangText en={feature.titleEn} ko={feature.titleKo} />
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  {feature.description}
+                  <LangText en={feature.descriptionEn} ko={feature.descriptionKo} />
                 </p>
               </article>
             ))}
@@ -187,40 +216,44 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Category unlock preview
+              <LangText en="Category unlock preview" ko="카테고리 unlock 미리보기" />
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              Free Preview / FANDEX Plus / FANDEX Pro
+              <LangText
+                en="Free Preview / FANDEX Plus / FANDEX Pro"
+                ko="Free Preview / FANDEX Plus / FANDEX Pro"
+              />
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Paid access is not live yet. These cards show the planned Free,
-              Plus, and Pro category boundaries without checkout, login, or
-              subscription checks.
+              <LangText
+                en="Paid access is not live yet. These cards show the planned Free, Plus, and Pro category boundaries without checkout, login, or subscription checks."
+                ko="결제 기능은 아직 활성화되어 있지 않습니다. 아래 카드는 checkout, 로그인, 구독 상태 확인 없이 Free, Plus, Pro 카테고리 경계를 보여주는 preview입니다."
+              />
             </p>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-3">
             {planPreview.map((plan) => (
               <article
-                key={plan.name}
+                key={plan.nameEn}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm"
               >
                 <h3 className="text-xl font-black text-slate-950">
-                  {plan.name}
+                  <LangText en={plan.nameEn} ko={plan.nameKo} />
                 </h3>
                 <p className="mt-3 w-fit rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
-                  {plan.unlock}
+                  <LangText en={plan.unlockEn} ko={plan.unlockKo} />
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
-                  {plan.description}
+                  <LangText en={plan.descriptionEn} ko={plan.descriptionKo} />
                 </p>
                 <ul className="mt-4 grid gap-2">
                   {plan.items.map((item) => (
                     <li
-                      key={item}
+                      key={item.en}
                       className="rounded-xl border border-white bg-white px-3 py-2 text-sm font-bold text-slate-600 shadow-sm"
                     >
-                      {item}
+                      <LangText en={item.en} ko={item.ko} />
                     </li>
                   ))}
                 </ul>
@@ -228,7 +261,7 @@ export default function SubscriberResearchPage() {
                   href="/#waitlist-form"
                   className="mt-5 inline-flex rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
                 >
-                  Join Early Access
+                  <LangText en="Join Early Access" ko="Early Access 신청하기" />
                 </Link>
               </article>
             ))}
@@ -238,33 +271,33 @@ export default function SubscriberResearchPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Example research output
+              <LangText en="Example research output" ko="리서치 결과물 예시" />
             </p>
             <h2 className="mt-2 text-2xl font-black">
-              What changes after the free preview
+              <LangText en="What changes after the free preview" ko="무료 미리보기 이후 달라지는 것" />
             </h2>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-3">
             {exampleOutputs.map((output) => (
               <article
-                key={output.title}
+                key={output.titleEn}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm"
               >
                 <h3 className="text-lg font-black text-slate-950">
-                  {output.title}
+                  <LangText en={output.titleEn} ko={output.titleKo} />
                 </h3>
                 <ResearchExampleRow
-                  label="Free preview shows"
-                  value={output.freePreview}
+                label={<LangText en="Free preview shows" ko="무료 미리보기" />}
+                  value={<LangText en={output.freePreviewEn} ko={output.freePreviewKo} />}
                 />
                 <ResearchExampleRow
-                  label="Subscriber research unlocks"
-                  value={output.subscriberUnlock}
+                label={<LangText en="Subscriber research unlocks" ko="구독자 리서치 제공" />}
+                  value={<LangText en={output.subscriberUnlockEn} ko={output.subscriberUnlockKo} />}
                 />
                 <ResearchExampleRow
-                  label="Why it matters"
-                  value={output.whyItMatters}
+                label={<LangText en="Why it matters" ko="활용 포인트" />}
+                  value={<LangText en={output.whyItMattersEn} ko={output.whyItMattersKo} />}
                 />
               </article>
             ))}
@@ -273,10 +306,10 @@ export default function SubscriberResearchPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold leading-6 text-slate-500">
-            FANDEX Subscriber Research is an experimental entertainment research
-            product. It is not financial advice or an investment product. AI
-            interpretation and subscriber reports are planned Early Access
-            features. Data coverage and signal logic may change during beta.
+            <LangText
+              en="FANDEX Subscriber Research is an experimental entertainment research product. It is not financial advice or an investment product. AI interpretation and subscriber reports are planned Early Access features. Data coverage and signal logic may change during beta."
+              ko="FANDEX는 실험 단계의 엔터테인먼트 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, AI 해석과 구독자 리포트는 Early Access 단계에서 검증되는 기능입니다. 베타 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+            />
           </p>
         </section>
       </section>
@@ -288,8 +321,8 @@ function ResearchExampleRow({
   label,
   value,
 }: {
-  label: string;
-  value: string;
+  label: ReactNode;
+  value: ReactNode;
 }) {
   return (
     <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
@@ -298,5 +331,14 @@ function ResearchExampleRow({
       </p>
       <p className="mt-2 text-sm font-bold leading-6 text-slate-600">{value}</p>
     </div>
+  );
+}
+
+function LangText({ ko, en }: { ko: string; en: string }) {
+  return (
+    <>
+      <span className="inline [html[data-language='en']_&]:hidden">{ko}</span>
+      <span className="hidden [html[data-language='en']_&]:inline">{en}</span>
+    </>
   );
 }

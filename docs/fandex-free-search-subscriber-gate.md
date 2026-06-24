@@ -3,6 +3,10 @@
 Status: static preview. No login, payment, subscriber auth, API, Supabase, or AI
 backend is implemented.
 
+Core `/search` copy now defaults to Korean for domestic users, with English
+available through the lightweight KO/EN toggle. The free scope and locked
+category gate remain UI-only.
+
 ## Why Free Search Preview Exists
 
 SNS can create interest, but visitors need a fast website experience before they

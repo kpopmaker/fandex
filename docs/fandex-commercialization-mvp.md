@@ -2,6 +2,17 @@
 
 Status: SNS-led research funnel positioning draft.
 
+## Korean-First Consumer Positioning
+
+FANDEX now defaults the core public experience to Korean so the service reads
+as a domestic consumer-facing K-pop and entertainment research product. English
+is available through a lightweight KO/EN toggle, but KO is the default language
+for first-view positioning, free search explanation, paid category gate copy,
+sample report framing, Early Access CTA, and disclaimers.
+
+The toggle is an MVP UI layer only. It does not add `/ko` or `/en` routes,
+middleware, external i18n packages, or locale-specific SEO handling.
+
 ## Commercial Positioning
 
 FANDEX should be positioned as a K-pop and entertainment issue research
@@ -259,6 +270,7 @@ FANDEX is now close to a beta-site structure for SNS traffic:
 3. `/sample-report` demonstrates the report product.
 4. `/research` explains subscriber research value.
 5. `/#waitlist-form` previews Early Access demand capture.
+6. Core pages default to Korean with a KO/EN toggle in the navigation.
 
 The checklist should be reviewed before publishing FANDEX in Instagram, X, or
 LinkedIn profile links. The next implementation step is waitlist validation and
@@ -308,3 +320,5 @@ This phase does not implement:
 11. Design AI interpretation backend.
 12. Design the full research report generation workflow.
 13. Validate first paid report pricing.
+14. Connect real data sources.
+15. Apply the actual FANDEX v1 scoring formula.

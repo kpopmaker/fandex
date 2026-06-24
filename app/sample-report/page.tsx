@@ -129,18 +129,19 @@ export default function SampleReportPage() {
           <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-start">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-600">
-                FANDEX Sample Report
+                <LangText en="FANDEX Sample Report" ko="FANDEX 샘플 리포트" />
               </p>
               <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
-                Weekly K-pop Signal Report Preview
+                <LangText
+                  en="Weekly K-pop Signal Report Preview"
+                  ko="구독자 리서치 결과물 샘플"
+                />
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
-                A preview of how FANDEX translates K-pop market signals into
-                entertainment marketing insight. This sample brief uses IVE as
-                an example artist for Early Access report validation. This is a
-                sample of subscriber research output; free users only see a
-                limited preview, and full category breakdown is reserved for
-                subscriber research.
+                <LangText
+                  en="A preview of how FANDEX translates K-pop market signals into entertainment marketing insight. This is a sample of subscriber research output; free users only see a limited preview, and full category breakdown is reserved for subscriber research."
+                  ko="이 페이지는 FANDEX 구독자 리서치 결과물의 샘플입니다. 무료 사용자는 제한된 미리보기만 확인할 수 있으며, 전체 카테고리 분석과 AI 해석은 구독자 리서치에서 제공됩니다."
+                />
               </p>
             </div>
 
@@ -149,19 +150,19 @@ export default function SampleReportPage() {
                 href="/#early-access"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
-                Join Early Access
+                <LangText en="Join Early Access" ko="Early Access 신청하기" />
               </Link>
               <Link
                 href="/research"
                 className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
               >
-                See Paid Research Categories
+                <LangText en="See Paid Research Categories" ko="유료 리서치 카테고리 보기" />
               </Link>
               <Link
                 href="/"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >
-                Home
+                <LangText en="Home" ko="홈" />
               </Link>
             </div>
           </div>
@@ -288,15 +289,19 @@ export default function SampleReportPage() {
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-                Early Access Report
+                <LangText en="Early Access Report" ko="Early Access 리포트" />
               </p>
               <h2 className="mt-2 text-2xl font-black">
-                Subscriber research category examples
+                <LangText
+                  en="Subscriber research category examples"
+                  ko="구독자 리서치 카테고리 예시"
+                />
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                This sample shows only part of the planned subscriber research
-                output. Free users see a limited preview; full category
-                breakdowns are reserved for subscriber research.
+                <LangText
+                  en="This sample shows only part of the planned subscriber research output. Free users see a limited preview; full category breakdowns are reserved for subscriber research."
+                  ko="이 샘플은 예정된 구독자 리서치 결과물의 일부 예시입니다. 무료 사용자는 제한된 미리보기만 볼 수 있고, 전체 카테고리 분석은 구독자 리서치에서 제공됩니다."
+                />
               </p>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
@@ -319,12 +324,13 @@ export default function SampleReportPage() {
                 Early Access
               </p>
               <h2 className="mt-2 text-2xl font-black">
-                Want this report every week?
+                <LangText en="Want this report every week?" ko="이 리포트를 매주 받아보고 싶다면" />
               </h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-                Join FANDEX Early Access to receive weekly K-pop signal briefs,
-                artist watchlists, and marketing insight memos as the report
-                format is validated.
+                <LangText
+                  en="Join FANDEX Early Access to receive weekly K-pop signal briefs, artist watchlists, and marketing insight memos as the report format is validated."
+                  ko="FANDEX Early Access에 신청하면 주간 K-pop 신호 브리프, 관심 아티스트 watchlist, 마케팅 인사이트 메모 형식의 구독자 리서치를 검증 단계에서 확인할 수 있습니다."
+                />
               </p>
             </div>
 
@@ -333,25 +339,25 @@ export default function SampleReportPage() {
                 href="/research"
                 className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-slate-800"
               >
-                See Paid Research Categories
+                <LangText en="See Paid Research Categories" ko="유료 리서치 카테고리 보기" />
               </Link>
               <Link
                 href="/search"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
               >
-                Try Limited Free Search
+                <LangText en="Try Limited Free Search" ko="제한된 무료 검색 해보기" />
               </Link>
               <Link
                 href="/#waitlist-form"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
-                Join Early Access
+                <LangText en="Join Early Access" ko="Early Access 신청하기" />
               </Link>
               <Link
                 href="/"
                 className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
               >
-                Back to Dashboard
+                <LangText en="Back to Dashboard" ko="대시보드로 돌아가기" />
               </Link>
             </div>
           </div>
@@ -359,10 +365,10 @@ export default function SampleReportPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold leading-6 text-slate-500">
-            FANDEX is an experimental entertainment research index. It is not
-            financial advice or an investment product. Sample values are for
-            product preview and may differ from future live data. Signal logic
-            and data coverage may change during Early Access.
+            <LangText
+              en="FANDEX is an experimental entertainment research index. It is not financial advice or an investment product. Sample values are for product preview and may differ from future live data. Signal logic and data coverage may change during Early Access."
+              ko="FANDEX는 실험 단계의 엔터테인먼트 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 샘플 값은 제품 preview용입니다. Early Access 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+            />
           </p>
         </section>
       </section>
@@ -395,5 +401,14 @@ function SignalCard({
       <p className="mt-3 text-2xl font-black">{value}</p>
       <p className="mt-1 text-xs font-bold opacity-80">{detail}</p>
     </article>
+  );
+}
+
+function LangText({ ko, en }: { ko: string; en: string }) {
+  return (
+    <>
+      <span className="inline [html[data-language='en']_&]:hidden">{ko}</span>
+      <span className="hidden [html[data-language='en']_&]:inline">{en}</span>
+    </>
   );
 }

@@ -16,6 +16,8 @@ The beta site should:
 4. Guide interested users toward Early Access.
 5. Make clear that FANDEX is an entertainment research product, not an
    investment product.
+6. Present the core public experience in Korean by default.
+7. Offer a lightweight KO/EN language toggle.
 
 ## B. Public Route Checklist
 
@@ -29,6 +31,7 @@ Check that:
 4. The Sample Report CTA is visible.
 5. The Subscriber Research CTA is visible.
 6. The waitlist preview form is visible.
+7. The first viewport reads naturally in Korean.
 
 ### `/search`
 
@@ -39,6 +42,7 @@ Check that:
 3. Paid category gate is visible below results.
 4. The `/research` CTA is connected.
 5. The `/#waitlist-form` CTA is connected.
+6. Free search and locked category copy are Korean by default.
 
 ### `/sample-report`
 
@@ -48,6 +52,7 @@ Check that:
 2. The difference between free preview and paid research is visible.
 3. `/search`, `/research`, and `/#waitlist-form` CTAs are connected.
 4. A disclaimer is present.
+5. The page is framed as a subscriber research output sample in Korean.
 
 ### `/research`
 
@@ -58,8 +63,22 @@ Check that:
 3. Free, Plus, and Pro category unlocks are understandable.
 4. The Early Access CTA is visible.
 5. A disclaimer is present.
+6. Pricing/payment inactive copy is clear in Korean.
 
-## C. Free Vs Subscriber Checklist
+## C. Language Checklist
+
+Check that:
+
+1. KO is the default visible language.
+2. The KO/EN toggle is visible near the theme toggle.
+3. Clicking the toggle switches core hero, CTA, category, lock, and disclaimer
+   copy to English where supported.
+4. Clicking again returns to Korean.
+5. The selected language is remembered through `fandex-language` localStorage.
+6. The toggle remains usable on mobile width.
+7. The toggle does not interfere with the day/night theme toggle.
+
+## D. Free Vs Subscriber Checklist
 
 Free Preview:
 
@@ -86,7 +105,7 @@ Confirm that locked paid categories:
 4. Do not show pricing or payment CTAs.
 5. Do not imply that paid access is already live.
 
-## D. Not Implemented Yet
+## E. Not Implemented Yet
 
 The beta site does not yet include:
 
@@ -100,8 +119,11 @@ The beta site does not yet include:
 8. Email automation.
 9. PDF export.
 10. Real paid category unlock logic.
+11. Full i18n routing.
+12. Locale-specific URL handling.
+13. External i18n package.
 
-## E. SNS Profile Link Readiness
+## F. SNS Profile Link Readiness
 
 Before using FANDEX as an SNS profile link, confirm:
 
@@ -112,8 +134,9 @@ Before using FANDEX as an SNS profile link, confirm:
 5. All CTAs resolve without dead ends.
 6. Primary CTAs are visible on mobile.
 7. Disclaimers are visible enough for a beta research product.
+8. Korean default copy is clear on first load.
 
-## F. Manual QA Checklist
+## G. Manual QA Checklist
 
 Manually check:
 
@@ -126,8 +149,10 @@ Manually check:
 7. Build output route generation.
 8. No unexpected external links.
 9. No accidental payment or login wording.
+10. KO/EN toggle behavior.
+11. Mobile language toggle layout.
 
-## G. First Launch Operating Checklist
+## H. First Launch Operating Checklist
 
 Before SNS operation:
 
@@ -142,7 +167,7 @@ Before SNS operation:
 5. Define how early reactions will be recorded.
 6. Define how manual report requests will be managed.
 
-## H. Next Implementation Priorities
+## I. Next Implementation Priorities
 
 1. Waitlist form validation and consent copy.
 2. Supabase waitlist storage.
@@ -151,3 +176,5 @@ Before SNS operation:
 5. Report generation workflow.
 6. Pricing validation.
 7. Production domain and metadata QA.
+8. Korean metadata and OG copy.
+9. Full component-level i18n cleanup.
