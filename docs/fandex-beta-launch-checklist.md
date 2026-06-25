@@ -84,6 +84,10 @@ Check that:
     language only.
 13. Sample report copy does not imply any real artist controversy, legal issue,
     contract issue, or hiatus state.
+14. `/sample-report` uses fictional scenario labels only, not real artist names,
+    for report examples and comparison tables.
+15. Public sample copy states that fictionalized previews are formula/product
+    examples, not actual artist evaluations.
 
 ### `/research`
 
@@ -105,6 +109,12 @@ Check that:
     manual seed preview only.
 13. The page explains scenario sanity checks as fictionalized internal formula
     behavior checks, not as real artist claims.
+14. `/research` uses fictional scenario labels only for example research
+    outputs.
+15. The page must not connect any real artist name with issue, risk,
+    controversy, legal, contract, or hiatus context.
+16. Public plan copy should use subscription-plan or operating-condition
+    language; avoid ambiguous "price" wording in user-facing Korean copy.
 
 ## C. Language Checklist
 

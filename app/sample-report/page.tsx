@@ -74,7 +74,7 @@ const marketingImplications = [
   },
   {
     title: '브랜드 협업 관점',
-    copy: 'IVE는 정제된 자신감, 패션 지향 비주얼, 넓은 대중 안전성을 중심으로 포지셔닝할 수 있습니다.',
+    copy: '가상 아티스트 A는 정제된 자신감, 패션 지향 비주얼, 넓은 대중 안전성을 중심으로 포지셔닝할 수 있는 fictionalized preview입니다.',
   },
   {
     title: '커뮤니티 활성화 관점',
@@ -173,7 +173,7 @@ export default function SampleReportPage() {
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
               리서치 요약
             </p>
-            <h2 className="mt-2 text-2xl font-black">IVE 시그널 브리프 예시</h2>
+            <h2 className="mt-2 text-2xl font-black">가상 아티스트 A 시그널 브리프 예시</h2>
             <ul className="mt-5 grid gap-3">
               {executiveSummary.map((item) => (
                 <li
@@ -257,15 +257,15 @@ export default function SampleReportPage() {
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
               아티스트 비교 미리보기
             </p>
-            <h2 className="mt-2 text-2xl font-black">IVE vs NewJeans vs RIIZE</h2>
+            <h2 className="mt-2 text-2xl font-black">가상 아티스트 A/B/C 비교</h2>
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[640px] border-separate border-spacing-y-2 text-left text-sm">
                 <thead>
                   <tr className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                     <th className="px-3 py-2">항목</th>
-                    <th className="px-3 py-2">IVE</th>
-                    <th className="px-3 py-2">NewJeans</th>
-                    <th className="px-3 py-2">RIIZE</th>
+                    <th className="px-3 py-2">가상 아티스트 A</th>
+                    <th className="px-3 py-2">가상 아티스트 B</th>
+                    <th className="px-3 py-2">가상 아티스트 C</th>
                   </tr>
                 </thead>
                 <tbody>

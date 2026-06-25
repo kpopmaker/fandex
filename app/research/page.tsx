@@ -96,8 +96,8 @@ const planPreview = [
 
 const exampleOutputs = [
   {
-    titleKo: 'IVE 컴백 신호 브리프',
-    titleEn: 'IVE comeback signal brief',
+    titleKo: '가상 아티스트 A: 컴백 모멘텀이 강한 시나리오',
+    titleEn: 'Scenario A: strong comeback momentum brief',
     freePreviewKo: '무료 미리보기에서는 아티스트 점수와 이슈 톤만 확인할 수 있습니다.',
     freePreviewEn: 'Free preview shows artist score, issue tone, and sample signal count.',
     subscriberUnlockKo: '구독자 리서치는 컴백 타이밍, 팬덤 관심 요인, 캠페인 앵글을 추가합니다.',
@@ -106,8 +106,8 @@ const exampleOutputs = [
     whyItMattersEn: 'Marketing teams can decide whether to emphasize anticipation, styling, or fandom activation.',
   },
   {
-    titleKo: 'RIIZE 브랜드 적합도 관찰',
-    titleEn: 'RIIZE brand-fit watch',
+    titleKo: '가상 아티스트 C: 브랜드 안정성과 팬덤 확산이 균형 잡힌 시나리오',
+    titleEn: 'Scenario C: balanced brand stability and fandom growth',
     freePreviewKo: '무료 미리보기에서는 기본 모멘텀과 균형적인 이슈 톤만 확인합니다.',
     freePreviewEn: 'Free preview shows basic momentum and a balanced issue tone.',
     subscriberUnlockKo: '구독자 리서치는 현재 아티스트 신호와 맞는 브랜드 카테고리를 설명합니다.',
@@ -116,12 +116,12 @@ const exampleOutputs = [
     whyItMattersEn: 'Brand teams can compare youthful performance fit against broader campaign goals.',
   },
   {
-    titleKo: 'NewJeans 이슈 리스크 맥락',
-    titleEn: 'NewJeans issue risk context',
+    titleKo: '가상 아티스트 B: 뉴스 노출은 높지만 리스크 감점이 큰 시나리오',
+    titleEn: 'Scenario B: high news exposure with risk penalty',
     freePreviewKo: '무료 미리보기에서는 주의 톤과 기본 이슈 집중도만 보여줍니다.',
     freePreviewEn: 'Free preview highlights watch tone and basic issue concentration.',
-    subscriberUnlockKo: '구독자 리서치는 반복 보도와 실제 리스크를 구분하고 모니터링 메모를 제공합니다.',
-    subscriberUnlockEn: 'Subscriber research separates repeated headlines from material risk and adds monitoring notes.',
+    subscriberUnlockKo: '구독자 리서치는 반복 보도와 가상 리스크 시나리오를 구분하고 모니터링 메모를 제공합니다.',
+    subscriberUnlockEn: 'Subscriber research separates repeated headlines from fictional risk scenarios and adds monitoring notes.',
     whyItMattersKo: '업계 관찰자는 노출이 유효한 관심인지 캠페인 변동성인지 판단할 수 있습니다.',
     whyItMattersEn: 'Industry watchers can understand whether visibility is useful attention or campaign volatility.',
   },
@@ -403,8 +403,8 @@ export default function SubscriberResearchPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
               <LangText
-                en="Subscriber category access is currently shown as a beta preview. Pricing will be validated during Early Access."
-                ko="현재 카테고리 잠금 구조는 베타 preview입니다. 실제 가격은 Early Access 기간에 검증됩니다."
+                en="Subscriber category access is currently shown as a beta preview. Subscription plans will be validated during Early Access."
+                ko="현재 카테고리 잠금 구조는 베타 preview입니다. 구체적인 요금 정책과 구독 플랜은 Early Access 기간에 검증됩니다."
               />
             </p>
           </div>

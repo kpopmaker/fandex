@@ -4,6 +4,11 @@ Status: fictionalized/manual scenario preview only. No live API, Naver News
 call, `fetch`, env/API key, Supabase, database write, payment, login,
 entitlement check, or actual artist risk assertion is implemented.
 
+The scenario sanity check is a formula validation sample, not an evaluation of
+real artists. Scenario labels, descriptions, and analyst notes must stay
+fictionalized and must not imply real artist controversy, legal, contract,
+hiatus, or risk conditions.
+
 ## Why This Exists
 
 FANDEX v1 uses an unbounded cumulative point model, not a 0-100 score. Before

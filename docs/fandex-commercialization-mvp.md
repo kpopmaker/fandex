@@ -249,6 +249,16 @@ checks explain why high momentum, stable strength, hiatus risk, controversy
 risk, and weak-signal scenarios produce different point gaps. They must not use
 real artist controversy or hiatus claims.
 
+Public sample reports must be framed as fictionalized previews, not actual
+artist evaluations. Report examples and comparison tables should use labels such
+as Scenario A/B/C or fictional artist A/B/C before beta launch.
+
+Actual artist research belongs in subscriber reports only after live data
+connection, benchmark validation, and manual review are approved. Until then,
+public examples should demonstrate the FANDEX v1 formula structure, category
+gating, point-gap logic, and report format without asserting real artist risk,
+issue, legal, contract, controversy, or hiatus states.
+
 ## Waitlist Form UI
 
 `app/page.tsx` now includes a static waitlist preview card at
