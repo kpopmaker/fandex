@@ -384,6 +384,70 @@ export default function SampleReportPage() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+              <LangText en="Sanity check preview" ko="점수 격차 검증 예시" />
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              <LangText
+                en="Why buzz alone does not decide the cumulative point"
+                ko="왜 단순 화제성만으로 점수가 높아지지 않는가"
+              />
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+              <LangText
+                en="FANDEX v1 compares fictionalized scenarios before live data validation. Positive comeback momentum can raise cumulative points, while hiatus or controversy risk can lower net points through riskPenalty. High article volume with negative or mixed tone is treated differently from constructive attention."
+                ko="FANDEX v1은 실제 데이터 검증 전 fictionalized scenario로 산식 동작을 점검합니다. 긍정적 컴백 모멘텀은 누적 점수를 높일 수 있지만, 공백/논란 리스크는 riskPenalty로 netPoint를 낮출 수 있습니다. 기사량이 많아도 negative/mixed tone이면 긍정적 화제성과 다르게 처리됩니다."
+              />
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            {[
+              {
+                labelKo: '긍정적 컴백 모멘텀',
+                labelEn: 'Positive comeback momentum',
+                pointKo: '예시 netPoint: 6,980pt',
+                pointEn: 'Example netPoint: 6,980pt',
+                copyKo: '음원/음반, 활동성, 성장 모멘텀이 함께 높을 때 강한 누적 점수로 나타납니다.',
+                copyEn: 'Music, activity, and growth momentum can combine into high cumulative points.',
+              },
+              {
+                labelKo: '논란/공백 리스크',
+                labelEn: 'Controversy or hiatus risk',
+                pointKo: '예시 risk drag: 3,080pt',
+                pointEn: 'Example risk drag: 3,080pt',
+                copyKo: '리스크 감점이 커지면 긍정 신호가 있어도 netPoint가 낮아질 수 있습니다.',
+                copyEn: 'Large risk penalty can lower net points even when some positive signals exist.',
+              },
+              {
+                labelKo: '구독자 breakdown',
+                labelEn: 'Subscriber breakdown',
+                pointKo: '세부 수치 잠금',
+                pointEn: 'Detail locked',
+                copyKo: 'category contribution, point gap, risk impact는 구독자 리서치에서 제공 예정입니다.',
+                copyEn: 'Category contribution, point gap, and risk impact are planned for subscriber research.',
+              },
+            ].map((item) => (
+              <article
+                key={item.labelEn}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+              >
+                <h3 className="text-sm font-black text-slate-950">
+                  <LangText en={item.labelEn} ko={item.labelKo} />
+                </h3>
+                <p className="mt-3 font-mono text-lg font-black text-cyan-700">
+                  <LangText en={item.pointEn} ko={item.pointKo} />
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <LangText en={item.copyEn} ko={item.copyKo} />
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="rounded-3xl border border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
           <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>

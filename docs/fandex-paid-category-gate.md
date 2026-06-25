@@ -54,6 +54,11 @@ from the FANDEX v1 validation benchmark scaffold. Free preview should keep those
 validation details locked and show only the total cumulative point, point band,
 and issue tone.
 
+Scenario comparison, point gap, category contribution waterfall, and risk impact
+explanation are subscriber research concepts. Free preview can mention that the
+formula is sanity checked with fictionalized scenarios, but it should not expose
+scenario breakdown tables.
+
 ## Why Free Scope Is Minimal
 
 FANDEX needs the free product to create interest without giving away the full
@@ -99,6 +104,8 @@ The free preview should not expose:
 9. Long summaries that explain the complete research logic.
 10. News/issue article evidence, tone distribution, source count, or risk
     signal detail.
+11. Scenario comparison, category contribution, point gap, or risk impact
+    breakdown.
 
 ## Paid Category List
 
@@ -144,6 +151,7 @@ FANDEX Pro:
 4. Custom Artist Research Request.
 5. Portfolio / Interview-ready Industry Brief.
 6. Watchlist & Signal Commentary.
+7. Scenario Comparison / Point Gap Review.
 
 Pricing will be validated during Early Access. Paid access is not live yet.
 Subscriber category access is currently shown as a beta preview.

@@ -37,10 +37,11 @@ news, and brand event comparisons.
 
 The paid value should not be framed as access to a single score alone. The
 subscriber product should emphasize category breakdown, benchmark alignment,
-confidence/uncertainty, event context, and analyst interpretation. The next
-implementation step can be manual seed based news/issue signal validation,
-followed by real benchmark source connection or Naver News actual issue signal
-connection.
+confidence/uncertainty, event context, score gap sanity checks, category
+contribution explanation, and analyst interpretation. The next implementation
+step can be manual seed based news/issue signal validation and fictionalized
+scenario sanity checks, followed by real benchmark source connection or Naver
+News actual issue signal connection.
 
 ## Commercial Positioning
 
@@ -176,6 +177,8 @@ Implemented paid category gate preview:
 9. Artist Comparison.
 10. AI Interpretation.
 11. Weekly Research Report.
+12. Scenario comparison and risk impact explanation as subscriber research
+    concepts.
 
 `docs/fandex-free-search-subscriber-gate.md` defines the free versus subscriber
 research boundary. No login, payment, entitlement check, Supabase storage, API,
@@ -240,6 +243,11 @@ preview/mock/manual seed examples, not live connected data.
 The sample report can mention a news/issue seed preview, but article-level
 evidence, tone distribution, issue type, risk signal, and benchmark alignment
 remain subscriber research concepts until a real report workflow exists.
+
+The sample report can also mention fictionalized formula sanity checks. These
+checks explain why high momentum, stable strength, hiatus risk, controversy
+risk, and weak-signal scenarios produce different point gaps. They must not use
+real artist controversy or hiatus claims.
 
 ## Waitlist Form UI
 

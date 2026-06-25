@@ -58,6 +58,8 @@ Check that:
     live Naver News API connection.
 14. Article-level evidence, article count, tone distribution, sourceCount, risk
     signal, and benchmark hints stay locked for subscriber research.
+15. Scenario sanity check detail, point gap, category contribution, and risk
+    impact stay locked for subscriber research.
 
 ### `/sample-report`
 
@@ -78,6 +80,10 @@ Check that:
     live connected data.
 11. The news/issue section says it is a manual seed preview before real Naver
     News API connection.
+12. Scenario examples are clearly fictionalized and use `pt` cumulative point
+    language only.
+13. Sample report copy does not imply any real artist controversy, legal issue,
+    contract issue, or hiatus state.
 
 ### `/research`
 
@@ -97,6 +103,8 @@ Check that:
 12. The page explains that Naver News-style article signals can become
     `newsIssue` and `riskPenalty` raw point candidates, but the current beta is
     manual seed preview only.
+13. The page explains scenario sanity checks as fictionalized internal formula
+    behavior checks, not as real artist claims.
 
 ## C. Language Checklist
 
@@ -174,6 +182,9 @@ Before using FANDEX as an SNS profile link, confirm:
 9. Preview scoring disclaimers prevent confusion with actual live data.
 10. Cumulative point model disclaimer is visible enough for beta users.
 11. Copy does not imply official certification or completed objective validation.
+12. Copy does not frame FANDEX as a 0-100 score.
+13. Copy does not make controversy, risk, contract, legal, or hiatus claims
+    about specific real artists.
 
 ## G. Manual QA Checklist
 

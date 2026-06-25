@@ -19,6 +19,8 @@ Manual seed is useful because it:
 3. Keeps article evidence locked for subscriber research.
 4. Allows benchmark and report copy QA without external data access.
 5. Separates product logic from future Naver API transport concerns.
+6. Feeds scenario sanity checks that verify article visibility does not become
+   an automatic positive score.
 
 ## Seed Item Schema
 
@@ -104,6 +106,16 @@ Artist-level `riskPenaltyRawPoint` is calculated separately from:
 This can be used as the FANDEX v1 `riskPenalty.rawPoint` candidate. Negative
 and mixed tone receive stronger risk multipliers than positive tone.
 
+## Scenario Sanity Check Usage
+
+Manual seed results can be compared with fictionalized FANDEX v1 scenario
+sanity checks. For example, a high `weightedIssuePoint` with negative or mixed
+tone should not automatically produce a high net point if `riskPenaltyRawPoint`
+is also high. This keeps news visibility separate from constructive momentum.
+
+Scenario checks remain fictionalized and should not be presented as claims
+about real artists.
+
 ## Free Vs Subscriber Exposure
 
 Free preview can show:
@@ -142,6 +154,8 @@ Subscriber research can later show:
 5. Duplicate article clustering is not implemented in this helper.
 6. Manual seed samples are fictionalized preview records.
 7. Supabase issue snapshots are not stored.
+8. Scenario sanity check still needs coefficient tuning and benchmark
+   alignment.
 
 ## Next TODO
 
@@ -152,3 +166,4 @@ Subscriber research can later show:
 5. Tone classifier.
 6. Supabase issue snapshot table.
 7. Subscriber report evidence table.
+8. Scenario comparison and category contribution report.

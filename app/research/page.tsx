@@ -178,6 +178,61 @@ export default function SubscriberResearchPage() {
           <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+                <LangText en="Formula sanity check preview" ko="산식 Sanity Check Preview" />
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                <LangText
+                  en="How FANDEX v1 checks point gaps across fictional scenarios"
+                  ko="FANDEX v1이 가상 시나리오별 점수 격차를 확인하는 방식"
+                />
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                <LangText
+                  en="FANDEX v1 is not a 0-100 score. It is an unbounded cumulative point model that compares high momentum, stable top tier, brand-safe growth, hiatus risk, and controversy risk scenarios before live data validation."
+                  ko="FANDEX v1은 0~100 점수제가 아니라 상한 없는 누적 point 구조입니다. 실제 데이터 검증 전 high momentum, stable top tier, brand-safe growth, hiatus risk, controversy risk 같은 가상 시나리오로 점수 격차를 확인합니다."
+                />
+              </p>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                <LangText
+                  en="High article volume alone should not produce a high score. Tone, risk, brand fit, growth momentum, and category contribution are compared together so negative or mixed issue visibility can lower net points through risk penalty."
+                  ko="단순 기사량이 많다고 높은 점수가 되지 않습니다. tone, risk, brandFit, growthMomentum, category contribution을 함께 비교해 negative/mixed 이슈 노출은 riskPenalty를 통해 netPoint를 낮출 수 있습니다."
+                />
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  ko: '무료: 종합 point, 간단한 tone, 포인트 밴드',
+                  en: 'Free: total point, simple tone, point band',
+                },
+                {
+                  ko: '구독자: scenario comparison과 point gap',
+                  en: 'Subscriber: scenario comparison and point gap',
+                },
+                {
+                  ko: '구독자: category contribution과 risk impact',
+                  en: 'Subscriber: category contribution and risk impact',
+                },
+                {
+                  ko: '구독자: benchmark alignment와 analyst review',
+                  en: 'Subscriber: benchmark alignment and analyst review',
+                },
+              ].map((item) => (
+                <div
+                  key={item.en}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-6 text-slate-600"
+                >
+                  <LangText en={item.en} ko={item.ko} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
                 <LangText en="FANDEX v1 scoring preview" ko="FANDEX v1 산출식 preview" />
               </p>
               <h2 className="mt-2 text-2xl font-black">

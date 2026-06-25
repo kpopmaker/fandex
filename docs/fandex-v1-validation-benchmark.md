@@ -20,6 +20,12 @@ The validation scaffold helps subscriber research answer:
 4. Is source coverage strong enough to trust the interpretation?
 5. Does a human analyst need to flag an outlier?
 
+Before live benchmark sources are connected, FANDEX v1 also uses scenario
+sanity checks as an internal formula behavior step. Scenario checks are not
+external validation; they confirm that fictionalized high momentum, stable
+strength, hiatus risk, controversy risk, and weak-signal cases create plausible
+point gaps before event backtests and sensitivity reports are produced.
+
 ## Benchmark Sources
 
 Planned benchmark sources:
@@ -48,6 +54,7 @@ The scaffold supports:
 4. Confidence.
 5. Uncertainty.
 6. Manual review.
+7. Scenario sanity check as a pre-benchmark internal check.
 
 ## Correlation
 
@@ -69,6 +76,10 @@ Event backtests inspect score movement around:
 
 The goal is to check whether the score moved plausibly before and after a known
 event.
+
+Scenario sanity check happens before event backtest. It uses fictionalized
+inputs only and checks whether the formula direction is plausible before real
+event data is attached.
 
 ## Sensitivity
 
@@ -117,6 +128,7 @@ Subscriber research:
 4. Validation hints.
 5. Event backtest context.
 6. Analyst review note.
+7. Scenario comparison, point gap, category contribution, and risk impact.
 
 ## Current Limits
 
@@ -132,10 +144,11 @@ This scaffold is limited because:
 ## Next TODO
 
 1. Connect real benchmark sources.
-2. Validate Naver News manual seed article count, tone, and risk shape.
-3. Connect Naver News article count after API/env design is approved.
-4. Add Circle Chart manual seed.
-5. Define YouTube/Spotify snapshot schema.
-6. Generate sensitivity analysis reports.
-7. Add confidence score visualization.
-8. Add validation benchmark table in subscriber reports.
+2. Compare scenario sanity check results with manual seed behavior.
+3. Validate Naver News manual seed article count, tone, and risk shape.
+4. Connect Naver News article count after API/env design is approved.
+5. Add Circle Chart manual seed.
+6. Define YouTube/Spotify snapshot schema.
+7. Generate sensitivity analysis reports.
+8. Add confidence score visualization.
+9. Add validation benchmark table in subscriber reports.

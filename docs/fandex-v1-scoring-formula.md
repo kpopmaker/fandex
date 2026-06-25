@@ -28,6 +28,11 @@ FANDEX cumulative score
 
 The final score is not clamped to 100. No maximum score is defined.
 
+FANDEX v1 should be described as a risk-adjusted cumulative research point, not
+as a simple popularity total. A large news or fandom signal can increase
+positive cumulative points, but negative/mixed issue tone or activity risk can
+reduce the final net point through `riskPenalty`.
+
 ## Categories And Coefficients
 
 Positive categories:
@@ -92,6 +97,25 @@ Point bands use cumulative point thresholds:
 5. `>= 0`: Early Signal / 초기 신호.
 6. `< 0`: Risk Negative / 리스크 우위.
 
+## Scenario Sanity Check
+
+`app/data/v4/scoring/fandexV1ScenarioSanityCheck.ts` defines fictionalized
+scenario samples for internal formula sanity checks. The helper compares high
+comeback momentum, stable top-tier strength, brand-safe growth, fandom spikes,
+hiatus risk, controversy risk, and weak low-momentum scenarios.
+
+The check verifies:
+
+1. High momentum can create a meaningful point gap.
+2. Stable strength can remain high without short-term acceleration.
+3. Article volume does not automatically become positive value.
+4. Risk penalty can lower net points when issue tone or activity context is
+   negative/mixed.
+5. Subscriber reports can explain category contribution and risk impact.
+
+These scenarios are not real artist claims. They are fictionalized formula
+behavior probes and should be interpreted with benchmark alignment later.
+
 ## Issue Tone
 
 Issue tone uses risk, growth momentum, and news/issue cumulative points:
@@ -132,6 +156,7 @@ Subscriber research is designed to unlock:
 5. Source count and confidence context.
 6. Validation hints.
 7. AI interpretation.
+8. Scenario comparison, point gap, category contribution, and risk impact.
 
 Objective validation is handled by the separate validation benchmark scaffold.
 Subscriber breakdown can include validation hints, confidence bands,
@@ -152,11 +177,12 @@ This phase is limited because:
 ## Next TODO
 
 1. Validate Naver News manual seed shape.
-2. Connect Naver News actual issue signal after API/env design is approved.
-3. Define raw data schema.
-4. Build validation benchmark table.
-5. Run sensitivity analysis.
-6. Add confidence/uncertainty display.
-7. Add Supabase score snapshot.
-8. Add score history.
-9. Implement subscriber category breakdown unlock.
+2. Run scenario sanity check against manual seed samples.
+3. Connect Naver News actual issue signal after API/env design is approved.
+4. Define raw data schema.
+5. Build validation benchmark table.
+6. Run sensitivity analysis.
+7. Add confidence/uncertainty display.
+8. Add Supabase score snapshot.
+9. Add score history.
+10. Implement subscriber category breakdown unlock.
