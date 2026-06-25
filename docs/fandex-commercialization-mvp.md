@@ -25,6 +25,9 @@ subscriber research.
 
 This is still a preview scoring structure before live data connection. It uses
 mock/manual seed style inputs and should not be presented as a live data score.
+Public sample numbers should be written as cumulative `pt` values only. Copy
+that looks like a capped 0-100 score, such as a decimal "FANDEX Score" sample,
+must be removed before beta launch.
 The next scoring milestone is connecting actual source data, starting with Naver
 News issue signals, and building validation benchmarks for chart, search, video,
 news, and brand event comparisons.
@@ -41,6 +44,11 @@ FANDEX should be positioned as a K-pop and entertainment issue research
 platform. It verifies current issues with public signal data and interprets them
 from a marketing perspective. It should not be presented as a real-time K-pop
 stock service, financial index product, or investment tool.
+
+Pre-launch public copy should avoid stock, market price, market cap, percent
+change, buy/sell, or official certification framing. FANDEX is an entertainment
+research indicator and an experimental beta preview, not a financial or
+investment indicator.
 
 The commercial wedge is now SNS-led, while SNS channel operation and content
 production are handled manually by the operator:
@@ -60,7 +68,7 @@ production are handled manually by the operator:
 The public preview should expose only lightweight surfaces:
 
 1. Artist overview.
-2. Basic FANDEX Score.
+2. FANDEX cumulative point preview.
 3. Issue tone preview.
 4. Sample report CTA.
 
@@ -145,7 +153,7 @@ Implemented free preview:
 
 1. Artist name and ticker/id.
 2. Minimal artist metadata.
-3. Preview FANDEX score.
+3. Preview FANDEX cumulative point.
 4. Issue tone preview.
 5. Subscriber-only research notice.
 6. Links to sample report and subscriber research.
@@ -153,7 +161,7 @@ Implemented free preview:
 Implemented paid category gate preview:
 
 1. Overview.
-2. Basic FANDEX Score.
+2. FANDEX cumulative point preview.
 3. Issue Tone Preview.
 4. Music / Album Signal.
 5. News / Issue Signal.
@@ -217,6 +225,12 @@ approved.
 The sample report is framed as a sample of subscriber research output. Free
 users only see a limited preview, and full category breakdown is reserved for
 subscriber research.
+
+Pre-launch QA requires the sample report to default to Korean in its primary
+cards, table headings, CTA copy, and descriptions. The sample report must not
+show capped-score-looking values such as `82.4`; it should use cumulative point
+examples such as `4,820pt` and explicitly state that sample values are
+preview/mock/manual seed examples, not live connected data.
 
 ## Waitlist Form UI
 

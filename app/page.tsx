@@ -12,8 +12,16 @@ import {
 import type { IssueScoreBreakdown } from './data/v4/scoring/types';
 import type { KpopIssue } from './data/v3/types';
 
-function formatPercent(value: number) {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+function formatSignalFlow(value: number) {
+  if (value > 0) {
+    return `상승 흐름 ${value.toFixed(2)}pt`;
+  }
+
+  if (value < 0) {
+    return `하락 관찰 ${Math.abs(value).toFixed(2)}pt`;
+  }
+
+  return '보합 흐름';
 }
 
 function formatLargeNumber(value: number) {
@@ -325,7 +333,7 @@ function getHomepageIssueRows() {
       id: 'homepage-issue-fallback-002',
       rank: 2,
       headline: '해외 반응 증가 예시',
-      summary: '해외 팬 반응 증가를 가정한 mock 시장 신호입니다.',
+      summary: '해외 팬 반응 증가를 가정한 mock 산업 리서치 신호입니다.',
       category: 'Global reaction',
       relatedArtistIds: [],
       relatedKeywords: ['global', 'reaction'],
@@ -351,7 +359,7 @@ function getHomepageIssueRows() {
 
 const publicPreviewItems = [
   { ko: '개요', en: 'Overview' },
-  { ko: '기본 FANDEX 점수', en: 'Basic FANDEX Score' },
+  { ko: 'FANDEX 누적 포인트', en: 'FANDEX cumulative points' },
   { ko: '이슈 톤 미리보기', en: 'Issue tone preview' },
   { ko: '제한된 아티스트 메타데이터', en: 'Limited artist metadata' },
   { ko: '샘플 리포트 CTA', en: 'Sample report CTA' },
@@ -399,7 +407,7 @@ const waitlistRoleOptions = [
   'K-pop fan / community operator',
   'Brand marketer',
   'Job seeker / portfolio research',
-  'Investor / market watcher',
+  'Entertainment industry researcher',
   'Other',
 ];
 
@@ -431,11 +439,11 @@ export default function Home() {
             <div>
               <div className="mb-6">
                 <p className="text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
-                  <LangText en="FANDEX K-pop Market Intelligence" ko="FANDEX K-pop 리서치 플랫폼" />
+                  <LangText en="FANDEX K-pop Research Signals" ko="FANDEX K-pop 리서치 플랫폼" />
                 </p>
                 <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                   <LangText
-                    en="FANDEX reads K-pop market attention through data"
+                    en="FANDEX reads K-pop entertainment signals through data"
                     ko="K-pop과 엔터테인먼트 신호를 데이터로 읽는 FANDEX"
                   />
                 </h1>
@@ -447,38 +455,38 @@ export default function Home() {
                 </p>
                 <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
                   <LangText
-                    en="FANDEX scores are simulated research indicators based on preview data. FANDEX is not financial advice, securities, or an investment product."
-                    ko="FANDEX 점수는 preview 데이터 기반의 실험적 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 베타 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+                    en="FANDEX is an experimental K-pop and entertainment research indicator. It is not financial advice, an investment product, or an official certification score. Some screens currently use preview/mock/manual seed data, and formula detail may change during beta."
+                    ko="FANDEX는 K-pop/엔터 산업을 분석하기 위한 실험적 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 공식 인증 점수가 아닙니다. 현재 일부 화면은 preview/mock/manual seed 기반이며, 실제 데이터 연결과 세부 산식은 고도화될 수 있습니다."
                   />
                 </p>
               </div>
               <p className="hidden text-sm font-black uppercase tracking-[0.28em] text-cyan-600">
-                FANDEX K-pop Market Intelligence
+                FANDEX K-pop Research Signals
               </p>
               <h1 className="hidden mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
-                K-pop 시장의 관심 흐름을 숫자로 읽는 FANDEX
+                K-pop 산업 흐름을 리서치 지표로 읽는 FANDEX
               </h1>
               <p className="hidden mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 FANDEX는 팬 반응, 검색량, 영상 반응, 뉴스량, 해외 반응을
                 모아 아티스트와 이슈가 지금 얼마나 주목받는지 보여주는
-                K-pop 시장 인텔리전스 플랫폼입니다.
+                K-pop 리서치 플랫폼입니다.
               </p>
               <p className="hidden mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
-                FANDEX 가격은 실제 주식 가격이 아니라 mock 데이터 기반의
-                simulated index입니다. 투자 상품, 증권, 금융 조언이 아닙니다.
+                FANDEX는 K-pop/엔터 산업을 분석하기 위한 실험적 리서치
+                지표입니다. 금융 조언, 투자 상품, 공식 인증 점수가 아닙니다.
               </p>
             </div>
 
             <div className="mt-7 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
               <div className="rounded-3xl border border-cyan-200 bg-slate-50 p-5 shadow-sm">
                 <p className="text-sm font-black text-cyan-700">
-                  K-pop 종합지수
+                  FANDEX 누적 포인트
                 </p>
                 <p className="mt-2 font-mono text-5xl font-black text-slate-950">
-                  {formatNumber(latestMarket.indexValue)}
+                  {formatNumber(latestMarket.indexValue)}pt
                 </p>
                 <p className="mt-2 font-mono text-sm font-black text-red-300">
-                  {formatPercent(latestMarket.changeRate)} 오늘
+                  {formatSignalFlow(latestMarket.changeRate)} 오늘
                 </p>
               </div>
 
@@ -493,7 +501,7 @@ export default function Home() {
                   href="/ranking"
                   className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
                 >
-                  순위 보기
+                  아티스트 리서치 랭킹
                 </Link>
               </div>
             </div>
@@ -503,11 +511,11 @@ export default function Home() {
             <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-                  Composite Index
+                  FANDEX Research Indicator
                 </p>
-                <h2 className="mt-2 text-2xl font-black">K-pop 종합지수 차트</h2>
+                <h2 className="mt-2 text-2xl font-black">K-pop 리서치 지표 차트</h2>
                 <p className="mt-1 text-sm text-slate-500">
-                  기간 {periodLabel} · mock intraday history
+                  기간 {periodLabel} · mock 리서치 흐름
                 </p>
               </div>
               <span className="w-fit rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700">
@@ -516,7 +524,7 @@ export default function Home() {
             </div>
 
             <FandexLineChart
-              ariaLabel="K-pop composite index line chart"
+              ariaLabel="K-pop research indicator line chart"
               period={periodLabel}
               showArea
               height={260}
@@ -527,7 +535,7 @@ export default function Home() {
               series={[
                 {
                   id: 'kpop-composite',
-                  label: 'K-pop Composite',
+                  label: 'K-pop Research Indicator',
                   points: marketChartPoints.map((point) => ({
                     label: point.time,
                     value: point.value,
@@ -538,24 +546,24 @@ export default function Home() {
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <SnapshotCard
-                label="현재값"
-                value={formatNumber(latestMarket.indexValue)}
-                detail={formatPercent(latestMarket.changeRate)}
+                label="현재 누적 포인트"
+                value={`${formatNumber(latestMarket.indexValue)}pt`}
+                detail={formatSignalFlow(latestMarket.changeRate)}
               />
               <SnapshotCard
-                label="고가"
-                value={formatNumber(highValue)}
+                label="표시 구간 상단"
+                value={`${formatNumber(highValue)}pt`}
                 detail="표시 기간 기준"
               />
               <SnapshotCard
-                label="저가"
-                value={formatNumber(lowValue)}
+                label="표시 구간 하단"
+                value={`${formatNumber(lowValue)}pt`}
                 detail="표시 기간 기준"
               />
               <SnapshotCard
                 label="관심량"
                 value={formatLargeNumber(latestMarket.totalVolume)}
-                detail="시장 전체 활동"
+                detail="산업 흐름 관찰값"
               />
             </div>
           </div>
@@ -566,13 +574,13 @@ export default function Home() {
         <section className="rounded-3xl border-2 border-cyan-200 bg-white p-6 shadow-lg shadow-cyan-100/60">
             <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-                시장 신호 예시
+                산업 신호 예시
               </p>
               <h2 className="mt-2 text-3xl font-black">
                 실시간 이슈 TOP 10
               </h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                예시 이슈를 기준으로 FANDEX 시장 신호가 어떻게 보일지
+                예시 이슈를 기준으로 FANDEX 리서치 신호가 어떻게 보일지
                 확인하는 영역입니다.
               </p>
             </div>
@@ -661,7 +669,7 @@ export default function Home() {
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   <MiniMetric
                     label="검색 증가"
-                    value={formatPercent(leadingIssue.searchGrowthRate)}
+                    value={formatSignalFlow(leadingIssue.searchGrowthRate)}
                   />
                   <MiniMetric
                     label="뉴스량"
@@ -676,7 +684,7 @@ export default function Home() {
                   href="/signals"
                   className="mt-5 inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
                 >
-                  시장 신호 더 보기
+                  리서치 신호 더 보기
                 </Link>
               </article>
             </div>
@@ -802,7 +810,7 @@ function EarlyAccessSection() {
       <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-bold leading-6 text-slate-500">
         <LangText
           en="FANDEX is an experimental entertainment research index. It is not financial advice or an investment product. Scores may change as signal logic and data coverage improve."
-          ko="FANDEX는 실험 단계의 엔터테인먼트 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 베타 기간 동안 데이터 범위와 산출 로직은 변경될 수 있습니다."
+          ko="FANDEX는 K-pop/엔터 산업을 분석하기 위한 실험적 리서치 지표입니다. 금융 조언이나 투자 상품이 아니며, 공식 인증 점수가 아닙니다. 현재 일부 화면은 preview/mock/manual seed 기반이며, 실제 데이터 연결과 세부 산식은 고도화될 수 있습니다."
         />
       </p>
 
@@ -941,10 +949,10 @@ function MarketIssueClimateSection({
       <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            Market issue climate
+            산업 이슈 흐름
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            <h2 className="text-2xl font-black">News & issue climate</h2>
+            <h2 className="text-2xl font-black">뉴스와 이슈 흐름</h2>
             <MarketClimateBadge label={climate.label} tone={climate.tone} />
           </div>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">

@@ -32,6 +32,11 @@ Check that:
 5. The Subscriber Research CTA is visible.
 6. The waitlist preview form is visible.
 7. The first viewport reads naturally in Korean.
+8. Home copy does not frame FANDEX as a stock, market index, price, or
+   investment decision product.
+9. The disclaimer clearly says FANDEX is an experimental entertainment research
+   indicator, not financial advice, an investment product, or an official
+   certification score.
 
 ### `/search`
 
@@ -59,6 +64,14 @@ Check that:
 3. `/search`, `/research`, and `/#waitlist-form` CTAs are connected.
 4. A disclaimer is present.
 5. The page is framed as a subscriber research output sample in Korean.
+6. No sample value looks like a capped 0-100 score such as `82.4`.
+7. Sample scoring copy uses cumulative `pt` notation only.
+8. The primary cards, table headings, CTA copy, and descriptions are Korean by
+   default.
+9. Financial or investment-style wording such as stock, price, market cap,
+   percent change, or investment signal is absent from public sample copy.
+10. The page says sample values are preview/mock/manual seed examples and not
+    live connected data.
 
 ### `/research`
 
@@ -94,7 +107,7 @@ Check that:
 Free Preview:
 
 1. Overview.
-2. Basic FANDEX Score.
+2. FANDEX cumulative point preview.
 3. Issue Tone Preview.
 
 Subscriber Research:
