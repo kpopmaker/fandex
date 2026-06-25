@@ -127,8 +127,8 @@ export default function SearchPreviewPage() {
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
                 <LangText
-                  en="Free search shows a limited cumulative point preview: artist identity, FANDEX public point, point band, and issue tone. Category raw points, coefficients, contributions, risk detail, and AI interpretation are reserved for subscriber research."
-                  ko="무료 검색에서는 아티스트 기본 정보, FANDEX 공개 누적 점수, 포인트 밴드, 이슈 톤만 제한적으로 제공합니다. 카테고리별 raw point, coefficient, 누적 기여도, 리스크 세부 감점, AI 해석은 구독자 리서치에서 제공됩니다."
+                  en="Free search shows a limited cumulative point preview: artist identity, FANDEX public point, point band, and issue tone. News and issue signals are partially reflected through manual seed preview data before live API connection. Article-level evidence, category raw points, coefficients, risk detail, and AI interpretation are reserved for subscriber research."
+                  ko="무료 검색에서는 아티스트 기본 정보, FANDEX 공개 누적 점수, 포인트 밴드, 이슈 톤만 제한적으로 제공합니다. 뉴스/이슈 신호는 실제 API 연결 전 manual seed 기반 preview로 일부 반영됩니다. 기사별 근거, 카테고리별 raw point, coefficient, 리스크 세부 감점, AI 해석은 구독자 리서치에서 제공됩니다."
                 />
               </p>
             </div>
@@ -219,8 +219,8 @@ export default function SearchPreviewPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
               <LangText
-                en="Free users see only the total cumulative point, point band, and issue tone. Category raw point x coefficient results, contribution, and risk details are designed for subscriber research."
-                ko="무료 사용자는 종합 누적 점수, 포인트 밴드, 이슈 톤만 확인합니다. 카테고리별 raw point x coefficient 결과, 기여도, 리스크 세부 감점은 구독자 리서치에서 제공되는 구조입니다."
+                en="Free users see only the total cumulative point, point band, and issue tone. News article volume, tone distribution, source count, risk signal, benchmark hints, and category raw point x coefficient results are designed for subscriber research."
+                ko="무료 사용자는 종합 누적 점수, 포인트 밴드, 이슈 톤만 확인합니다. 뉴스 기사량, tone 분포, sourceCount, risk signal, benchmark validation hint, 카테고리별 raw point x coefficient 결과는 구독자 리서치에서 제공되는 구조입니다."
               />
             </p>
           </div>
@@ -276,10 +276,17 @@ export default function SearchPreviewPage() {
                   />
                 </p>
                 <p className="mt-2 text-xs font-bold leading-5 text-slate-500">
-                  <LangText
-                    en="Category raw point x coefficient results are hidden in free preview."
-                    ko="카테고리별 raw point x coefficient 결과는 무료 미리보기에서 숨깁니다."
-                  />
+                  {category.key === 'newsIssue' ? (
+                    <LangText
+                      en="Manual seed article evidence, article volume, tone distribution, source count, risk signal, and benchmark validation hints stay locked."
+                      ko="manual seed 기사별 근거, 기사량, tone 분포, sourceCount, risk signal, benchmark validation hint는 잠금 상태로 유지됩니다."
+                    />
+                  ) : (
+                    <LangText
+                      en="Category raw point x coefficient results are hidden in free preview."
+                      ko="카테고리별 raw point x coefficient 결과는 무료 미리보기에서 숨깁니다."
+                    />
+                  )}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link
@@ -303,8 +310,8 @@ export default function SearchPreviewPage() {
         <section className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold leading-6 text-slate-500">
             <LangText
-              en="FANDEX Search Preview uses local preview data only. It does not log in users, process payment, call APIs, fetch external data, or check subscription status. Cumulative points are beta preview indicators, not live-data claims."
-              ko="FANDEX 무료 검색 미리보기는 로컬 preview 데이터만 사용합니다. 로그인, 결제, API 호출, 외부 데이터 fetch, 구독 상태 확인은 수행하지 않습니다. 누적 점수는 베타 preview 지표이며 실제 데이터 기반 단정이 아닙니다."
+              en="FANDEX Search Preview uses local preview and manual seed data only. It does not log in users, process payment, call APIs, fetch external data, or check subscription status. Cumulative points are beta preview indicators, not live-data claims."
+              ko="FANDEX 무료 검색 미리보기는 로컬 preview 및 manual seed 데이터만 사용합니다. 로그인, 결제, API 호출, 외부 데이터 fetch, 구독 상태 확인은 수행하지 않습니다. 누적 점수는 베타 preview 지표이며 실제 데이터 기반 단정이 아닙니다."
             />
           </p>
         </section>
@@ -357,6 +364,12 @@ function ArtistPreviewCard({
 
       <p className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm font-bold leading-6 text-slate-600">
         <LangText en={artist.signalSummary.en} ko={artist.signalSummary.ko} />
+      </p>
+      <p className="mt-3 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-xs font-bold leading-5 text-cyan-800">
+        <LangText
+          en="News and issue signals are partially reflected through manual seed preview data. Article evidence and category detail remain subscriber-only."
+          ko="뉴스/이슈 신호는 manual seed 기반 preview로 일부 반영됩니다. 기사별 근거와 카테고리 세부 점수는 구독자 전용입니다."
+        />
       </p>
       <p className="mt-3 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">
         <LangText
@@ -414,8 +427,8 @@ function getIssueToneClass(issueTone: string) {
 
 function createSignalSummary(issueTone: string) {
   return {
-    en: `${issueTone} issue tone preview. Category raw points, coefficients, cumulative contributions, and AI interpretation are reserved for subscriber research.`,
-    ko: `${getIssueToneKo(issueTone)} 이슈 톤 미리보기입니다. 카테고리별 raw point, coefficient, 누적 기여도, AI 해석은 구독자 리서치에서 제공됩니다.`,
+    en: `${issueTone} issue tone preview. News issue manual seed detail, category raw points, coefficients, cumulative contributions, and AI interpretation are reserved for subscriber research.`,
+    ko: `${getIssueToneKo(issueTone)} 이슈 톤 미리보기입니다. 뉴스/이슈 manual seed 세부 근거, 카테고리별 raw point, coefficient, 누적 기여도, AI 해석은 구독자 리서치에서 제공됩니다.`,
   };
 }
 

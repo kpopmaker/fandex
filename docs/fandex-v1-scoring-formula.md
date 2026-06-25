@@ -47,6 +47,18 @@ Each category receives a raw point input. The raw point is multiplied by the
 coefficient to produce the cumulative contribution. Risk uses the same
 raw-point x coefficient structure, but it is subtracted from the positive total.
 
+`newsIssue.rawPoint` can come from the Naver News manual seed helper before live
+API connection. The manual seed result `weightedIssuePoint` is a cumulative
+point candidate, not a 0-100 score. In a future source-connected version, the
+same category can receive normalized Naver News API source output after
+deduplication, source calibration, and review.
+
+`riskPenalty.rawPoint` can also receive negative or mixed issue seed output.
+Manual seed items with `contractAgency`, `controversyRisk`, or
+`hiatusActivity` issue types increase the risk candidate more strongly than
+positive coverage. This preserves the separation between public attention and
+risk interpretation.
+
 ## Brand-fit Definition
 
 Brand-fit measures how commercially suitable an artist is for brand campaigns,
@@ -108,6 +120,8 @@ Free preview must not show:
 5. Source count.
 6. Validation hints.
 7. AI interpretation.
+8. Naver News manual seed article evidence, article count, tone distribution,
+   or risk signal detail.
 
 Subscriber research is designed to unlock:
 
@@ -137,11 +151,12 @@ This phase is limited because:
 
 ## Next TODO
 
-1. Connect Naver News actual issue signal.
-2. Define raw data schema.
-3. Build validation benchmark table.
-4. Run sensitivity analysis.
-5. Add confidence/uncertainty display.
-6. Add Supabase score snapshot.
-7. Add score history.
-8. Implement subscriber category breakdown unlock.
+1. Validate Naver News manual seed shape.
+2. Connect Naver News actual issue signal after API/env design is approved.
+3. Define raw data schema.
+4. Build validation benchmark table.
+5. Run sensitivity analysis.
+6. Add confidence/uncertainty display.
+7. Add Supabase score snapshot.
+8. Add score history.
+9. Implement subscriber category breakdown unlock.

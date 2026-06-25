@@ -28,12 +28,15 @@ Planned benchmark sources:
 2. YouTube.
 3. Spotify.
 4. Google Trends.
-5. Naver News article count.
+5. Naver News article count, tone, issue type, and risk seed.
 6. Brand campaign / ambassador events.
 7. Manual analyst review.
 
 Google Trends must be treated as relative interest, not absolute search volume.
 Each source has different update frequency, coverage, and measurement bias.
+Naver News is currently represented by manual seed preview data only. It can
+help test article-count, tone-distribution, and risk-signal benchmark shape
+before the real API connector is enabled.
 
 ## Validation Signal Types
 
@@ -87,6 +90,8 @@ Subscriber reports can expose:
 3. Recency.
 4. Missing data warnings.
 5. Manual review required flags.
+6. Manual seed article evidence and tone distribution when the user is in a
+   subscriber research context.
 
 Low confidence should not be hidden. It should be part of the interpretation.
 
@@ -127,9 +132,10 @@ This scaffold is limited because:
 ## Next TODO
 
 1. Connect real benchmark sources.
-2. Connect Naver News article count.
-3. Add Circle Chart manual seed.
-4. Define YouTube/Spotify snapshot schema.
-5. Generate sensitivity analysis reports.
-6. Add confidence score visualization.
-7. Add validation benchmark table in subscriber reports.
+2. Validate Naver News manual seed article count, tone, and risk shape.
+3. Connect Naver News article count after API/env design is approved.
+4. Add Circle Chart manual seed.
+5. Define YouTube/Spotify snapshot schema.
+6. Generate sensitivity analysis reports.
+7. Add confidence score visualization.
+8. Add validation benchmark table in subscriber reports.

@@ -54,6 +54,10 @@ Check that:
 10. The score is clearly shown as cumulative `pt`, not a 0-100 percentage.
 11. Category raw point, coefficient, contribution, and risk detail stay locked.
 12. Validation detail is not overexposed in the free screen.
+13. News/issue signal copy clearly says it is manual seed based preview before
+    live Naver News API connection.
+14. Article-level evidence, article count, tone distribution, sourceCount, risk
+    signal, and benchmark hints stay locked for subscriber research.
 
 ### `/sample-report`
 
@@ -72,6 +76,8 @@ Check that:
    percent change, or investment signal is absent from public sample copy.
 10. The page says sample values are preview/mock/manual seed examples and not
     live connected data.
+11. The news/issue section says it is a manual seed preview before real Naver
+    News API connection.
 
 ### `/research`
 
@@ -88,6 +94,9 @@ Check that:
 9. The page does not describe a maximum score or maximum fixed risk deduction.
 10. FANDEX is described as a verifiable research indicator, not an official certified score.
 11. Subscriber value includes category breakdown plus benchmark validation.
+12. The page explains that Naver News-style article signals can become
+    `newsIssue` and `riskPenalty` raw point candidates, but the current beta is
+    manual seed preview only.
 
 ## C. Language Checklist
 
@@ -148,6 +157,7 @@ The beta site does not yet include:
 13. External i18n package.
 14. Live FANDEX v1 data connection.
 15. Subscriber category score entitlement.
+16. Live Naver News API connection.
 
 ## F. SNS Profile Link Readiness
 

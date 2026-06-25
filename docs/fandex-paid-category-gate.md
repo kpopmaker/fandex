@@ -40,6 +40,8 @@ Locked cards can show category names and descriptions, but they must not expose:
 4. Risk penalty detail.
 5. Source-level detail.
 6. AI interpretation.
+7. Naver News manual seed article evidence, article count, tone distribution,
+   source count, risk signal detail, or benchmark validation hints.
 
 The category breakdown remains a subscriber research preview until auth,
 payment, subscription checks, and real entitlement logic are implemented.
@@ -74,11 +76,13 @@ The limited free search preview can show:
 1. Artist name.
 2. Ticker or id.
 3. Minimal agency or group metadata.
-4. Basic overall FANDEX preview score.
+4. Basic overall FANDEX cumulative point preview.
 5. One-line issue tone preview.
 6. A subscriber-only research notice.
 7. `View Sample Report` CTA.
 8. `Explore Subscriber Research` CTA.
+9. A clear note that news/issue signal is manual seed based preview before live
+   Naver News API connection.
 
 ## Free Preview Hides
 
@@ -93,13 +97,15 @@ The free preview should not expose:
 7. Weekly report content.
 8. Source-level detail.
 9. Long summaries that explain the complete research logic.
+10. News/issue article evidence, tone distribution, source count, or risk
+    signal detail.
 
 ## Paid Category List
 
 Free or preview categories:
 
 1. 개요 / Overview.
-2. 기본 FANDEX 점수 / Basic FANDEX Score.
+2. FANDEX 누적 포인트 / FANDEX Cumulative Point.
 3. 이슈 톤 미리보기 / Issue Tone Preview.
 
 Locked subscriber categories:
@@ -118,7 +124,7 @@ Locked subscriber categories:
 Free Preview:
 
 1. Overview.
-2. Basic FANDEX Score.
+2. FANDEX cumulative point preview.
 3. Issue Tone Preview.
 
 FANDEX Plus:

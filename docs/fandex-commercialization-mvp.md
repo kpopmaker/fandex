@@ -28,15 +28,19 @@ mock/manual seed style inputs and should not be presented as a live data score.
 Public sample numbers should be written as cumulative `pt` values only. Copy
 that looks like a capped 0-100 score, such as a decimal "FANDEX Score" sample,
 must be removed before beta launch.
-The next scoring milestone is connecting actual source data, starting with Naver
-News issue signals, and building validation benchmarks for chart, search, video,
+The next scoring milestone now starts with a Naver News manual seed preview:
+fictionalized/local article signals can be converted into `newsIssue.rawPoint`
+and `riskPenalty.rawPoint` candidates before the actual Naver News API is
+connected. After this manual seed shape is validated, the flow can move to
+server-side API connection and benchmark validation for chart, search, video,
 news, and brand event comparisons.
 
 The paid value should not be framed as access to a single score alone. The
 subscriber product should emphasize category breakdown, benchmark alignment,
 confidence/uncertainty, event context, and analyst interpretation. The next
-implementation step can be either real benchmark source connection or Naver News
-actual issue signal connection.
+implementation step can be manual seed based news/issue signal validation,
+followed by real benchmark source connection or Naver News actual issue signal
+connection.
 
 ## Commercial Positioning
 
@@ -157,6 +161,7 @@ Implemented free preview:
 4. Issue tone preview.
 5. Subscriber-only research notice.
 6. Links to sample report and subscriber research.
+7. Manual seed preview notice for news/issue signals before live API connection.
 
 Implemented paid category gate preview:
 
@@ -231,6 +236,10 @@ cards, table headings, CTA copy, and descriptions. The sample report must not
 show capped-score-looking values such as `82.4`; it should use cumulative point
 examples such as `4,820pt` and explicitly state that sample values are
 preview/mock/manual seed examples, not live connected data.
+
+The sample report can mention a news/issue seed preview, but article-level
+evidence, tone distribution, issue type, risk signal, and benchmark alignment
+remain subscriber research concepts until a real report workflow exists.
 
 ## Waitlist Form UI
 

@@ -56,7 +56,7 @@ const planPreview = [
     descriptionEn: 'For visitors who want a limited signal check after seeing SNS content.',
     items: [
       { ko: '개요', en: 'Overview' },
-      { ko: '기본 FANDEX 점수', en: 'Basic FANDEX Score' },
+      { ko: 'FANDEX 누적 포인트', en: 'FANDEX cumulative point' },
       { ko: '이슈 톤 미리보기', en: 'Issue tone preview' },
     ],
   },
@@ -201,6 +201,61 @@ export default function SubscriberResearchPage() {
                 { ko: '현재: preview/mock 기반 베타 산식', en: 'Current: preview/mock based beta formula' },
                 { ko: '브랜드 적합도: 광고/협업 가능성과 이미지 안정성 평가', en: 'Brand-fit: commercial usability and image stability' },
                 { ko: '성장 모멘텀: 현재 총량이 아닌 최근 상승/하락 속도 평가', en: 'Growth momentum: recent acceleration, not total popularity size' },
+              ].map((item) => (
+                <div
+                  key={item.en}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-6 text-slate-600"
+                >
+                  <LangText en={item.en} ko={item.ko} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+                <LangText en="News issue seed preview" ko="뉴스/이슈 신호 연결 구조" />
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                <LangText
+                  en="Manual seed news signals before live Naver News API connection"
+                  ko="실제 Naver News API 연결 전 manual seed 기반 뉴스 신호"
+                />
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                <LangText
+                  en="Naver News-style article signals can be converted into FANDEX v1 newsIssue rawPoint and riskPenalty rawPoint candidates. The current beta uses manual seed preview data only; it does not call Naver News, fetch external data, store data, or use API keys."
+                  ko="Naver News 기반 기사 신호는 FANDEX v1의 newsIssue rawPoint와 riskPenalty rawPoint 후보로 변환될 수 있습니다. 현재 베타는 실제 Naver News API 연결 전 manual seed preview 단계이며, Naver News 호출, 외부 데이터 fetch, 데이터 저장, API key 사용은 하지 않습니다."
+                />
+              </p>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                <LangText
+                  en="Subscriber research is planned to add article-level evidence, tone distribution, issue type, risk signal, benchmark alignment, confidence, and analyst review notes. FANDEX remains a verifiable composite research indicator, not an official certification score."
+                  ko="구독자 리서치에서는 기사별 근거, tone 분포, issue type, risk signal, benchmark alignment, 신뢰도, 분석가 검수 메모를 함께 제공할 예정입니다. FANDEX는 공식 인증 점수가 아니라 검증 가능한 복합 리서치 지표 구조입니다."
+                />
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  ko: 'newsIssue rawPoint 후보: 관련도, 매체 신뢰도, 최신성, 영향도, tone, issue type을 누적',
+                  en: 'newsIssue rawPoint candidate: relevance, outlet credibility, recency, impact, tone, and issue type',
+                },
+                {
+                  ko: 'riskPenalty rawPoint 후보: negative/mixed tone, 계약/소속, 논란, 공백 이슈를 별도 누적',
+                  en: 'riskPenalty rawPoint candidate: negative/mixed tone, contract/agency, controversy, and hiatus risk',
+                },
+                {
+                  ko: '무료 화면: 종합 누적 점수와 이슈 톤만 제공',
+                  en: 'Free screen: total cumulative point and issue tone only',
+                },
+                {
+                  ko: '구독자 화면: 기사별 근거와 검증 힌트 제공 예정',
+                  en: 'Subscriber screen: article evidence and validation hints planned',
+                },
               ].map((item) => (
                 <div
                   key={item.en}

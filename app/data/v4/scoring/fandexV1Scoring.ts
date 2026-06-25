@@ -1,3 +1,8 @@
+import {
+  calculateNaverNewsIssuePoint,
+  createNaverNewsIssueManualSeedSamples,
+} from './naverNewsIssueManualSeed';
+
 export type FandexV1CategoryKey =
   | 'musicAlbum'
   | 'newsIssue'
@@ -391,64 +396,122 @@ function pointInput(
 }
 
 export function createFandexV1SampleInputs(): FandexV1Input[] {
+  const manualNewsIssueResults = new Map(
+    createNaverNewsIssueManualSeedSamples().map((seed) => {
+      const result = calculateNaverNewsIssuePoint(seed);
+
+      return [result.artistId, result];
+    }),
+  );
+
   return [
     {
       artistId: 'ive',
       artistName: 'IVE',
       musicAlbum: pointInput(1240, 'musicAlbum', 18, 82),
-      newsIssue: pointInput(760, 'newsIssue', 24, 76),
+      newsIssue: pointInput(
+        manualNewsIssueResults.get('ive')?.weightedIssuePoint ?? 760,
+        'newsIssue',
+        manualNewsIssueResults.get('ive')?.articleCount ?? 24,
+        normalizeSeedConfidence(manualNewsIssueResults.get('ive')?.confidence, 76),
+      ),
       snsFandom: pointInput(980, 'snsFandom', 34, 80),
       brandFit: pointInput(940, 'brandFit', 8, 78),
       comebackActivity: pointInput(680, 'comebackActivity', 7, 74),
       growthMomentum: pointInput(1120, 'growthMomentum', 16, 79),
-      riskPenalty: pointInput(180, 'riskPenalty', 4, 70),
+      riskPenalty: pointInput(
+        180 + (manualNewsIssueResults.get('ive')?.riskPenaltyRawPoint ?? 0),
+        'riskPenalty',
+        manualNewsIssueResults.get('ive')?.sourceCount ?? 4,
+        normalizeSeedConfidence(manualNewsIssueResults.get('ive')?.confidence, 70),
+      ),
       confidenceScore: 78,
       updatedAt: '2026-06-24T00:00:00.000Z',
-      sourceMode: 'mock',
+      sourceMode: 'manual_seed',
     },
     {
       artistId: 'riize',
       artistName: 'RIIZE',
       musicAlbum: pointInput(860, 'musicAlbum', 14, 74),
-      newsIssue: pointInput(640, 'newsIssue', 18, 70),
+      newsIssue: pointInput(
+        manualNewsIssueResults.get('riize')?.weightedIssuePoint ?? 640,
+        'newsIssue',
+        manualNewsIssueResults.get('riize')?.articleCount ?? 18,
+        normalizeSeedConfidence(manualNewsIssueResults.get('riize')?.confidence, 70),
+      ),
       snsFandom: pointInput(1320, 'snsFandom', 42, 82),
       brandFit: pointInput(720, 'brandFit', 6, 72),
       comebackActivity: pointInput(560, 'comebackActivity', 6, 68),
       growthMomentum: pointInput(1450, 'growthMomentum', 20, 80),
-      riskPenalty: pointInput(260, 'riskPenalty', 5, 68),
+      riskPenalty: pointInput(
+        260 + (manualNewsIssueResults.get('riize')?.riskPenaltyRawPoint ?? 0),
+        'riskPenalty',
+        manualNewsIssueResults.get('riize')?.sourceCount ?? 5,
+        normalizeSeedConfidence(manualNewsIssueResults.get('riize')?.confidence, 68),
+      ),
       confidenceScore: 74,
       updatedAt: '2026-06-24T00:00:00.000Z',
-      sourceMode: 'mock',
+      sourceMode: 'manual_seed',
     },
     {
       artistId: 'newjeans',
       artistName: 'NewJeans',
       musicAlbum: pointInput(1040, 'musicAlbum', 15, 72),
-      newsIssue: pointInput(1180, 'newsIssue', 30, 70),
+      newsIssue: pointInput(
+        manualNewsIssueResults.get('newjeans')?.weightedIssuePoint ?? 1180,
+        'newsIssue',
+        manualNewsIssueResults.get('newjeans')?.articleCount ?? 30,
+        normalizeSeedConfidence(
+          manualNewsIssueResults.get('newjeans')?.confidence,
+          70,
+        ),
+      ),
       snsFandom: pointInput(1160, 'snsFandom', 36, 74),
       brandFit: pointInput(980, 'brandFit', 7, 70),
       comebackActivity: pointInput(420, 'comebackActivity', 4, 62),
       growthMomentum: pointInput(520, 'growthMomentum', 10, 64),
-      riskPenalty: pointInput(1260, 'riskPenalty', 11, 66),
+      riskPenalty: pointInput(
+        1260 + (manualNewsIssueResults.get('newjeans')?.riskPenaltyRawPoint ?? 0),
+        'riskPenalty',
+        manualNewsIssueResults.get('newjeans')?.sourceCount ?? 11,
+        normalizeSeedConfidence(
+          manualNewsIssueResults.get('newjeans')?.confidence,
+          66,
+        ),
+      ),
       confidenceScore: 68,
       updatedAt: '2026-06-24T00:00:00.000Z',
-      sourceMode: 'mock',
+      sourceMode: 'manual_seed',
     },
     {
       artistId: 'aespa',
       artistName: 'aespa',
       musicAlbum: pointInput(1560, 'musicAlbum', 22, 84),
-      newsIssue: pointInput(820, 'newsIssue', 24, 78),
+      newsIssue: pointInput(
+        manualNewsIssueResults.get('aespa')?.weightedIssuePoint ?? 820,
+        'newsIssue',
+        manualNewsIssueResults.get('aespa')?.articleCount ?? 24,
+        normalizeSeedConfidence(manualNewsIssueResults.get('aespa')?.confidence, 78),
+      ),
       snsFandom: pointInput(1180, 'snsFandom', 38, 81),
       brandFit: pointInput(1020, 'brandFit', 9, 80),
       comebackActivity: pointInput(880, 'comebackActivity', 9, 76),
       growthMomentum: pointInput(1080, 'growthMomentum', 18, 78),
-      riskPenalty: pointInput(210, 'riskPenalty', 4, 72),
+      riskPenalty: pointInput(
+        210 + (manualNewsIssueResults.get('aespa')?.riskPenaltyRawPoint ?? 0),
+        'riskPenalty',
+        manualNewsIssueResults.get('aespa')?.sourceCount ?? 4,
+        normalizeSeedConfidence(manualNewsIssueResults.get('aespa')?.confidence, 72),
+      ),
       confidenceScore: 80,
       updatedAt: '2026-06-24T00:00:00.000Z',
-      sourceMode: 'mock',
+      sourceMode: 'manual_seed',
     },
   ];
+}
+
+function normalizeSeedConfidence(value: number | undefined, fallback: number) {
+  return value == null ? fallback : Math.min(Math.max(value * 10, 0), 100);
 }
 
 export function runFandexV1ScoringShapeCheck() {
