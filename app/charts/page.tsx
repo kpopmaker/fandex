@@ -130,7 +130,7 @@ function getSelectedChartContext(
   const similarResults = findSimilarIndexMovements(
     baseProfile.artistId,
     profiles,
-  ).slice(0, 8);
+  );
   const compareArtistIds = getCompareArtistIds({
     baseArtistId: baseProfile.artistId,
     compareParam: params.compare,
@@ -230,11 +230,11 @@ function getContentCheckpoints(signals: string[]) {
     checkpoints.add('SNS 확산 게시물과 댓글 반응을 분리해서 확인하세요.');
   }
 
-  if (signals.some((signal) => signal.includes('브랜드'))) {
+  if (signals.some((signal) => signal.includes('Brand'))) {
     checkpoints.add('브랜드 노출 이후 팬덤 밖 언급이 붙었는지 확인하세요.');
   }
 
-  if (signals.some((signal) => signal.includes('컴백') || signal.includes('활동'))) {
+  if (signals.some((signal) => signal.includes('Activity'))) {
     checkpoints.add('공식 활동 일정과 콘텐츠 공개 시점을 함께 확인하세요.');
   }
 
@@ -248,15 +248,15 @@ function getFactCheckChecklistBySignals(signals: string[]) {
     'SNS 확산 게시물 확인',
   ]);
 
-  if (signals.some((signal) => signal.includes('브랜드'))) {
+  if (signals.some((signal) => signal.includes('Brand'))) {
     checklist.add('브랜드 캠페인 노출 시점 확인');
   }
 
-  if (signals.some((signal) => signal.includes('앨범') || signal.includes('음원'))) {
-    checklist.add('음원/앨범 공개 일정 확인');
+  if (signals.some((signal) => signal.includes('Music'))) {
+    checklist.add('음원/음반 공개 일정 확인');
   }
 
-  if (signals.some((signal) => signal.includes('활동') || signal.includes('컴백'))) {
+  if (signals.some((signal) => signal.includes('Activity'))) {
     checklist.add('활동 일정 확인');
   }
 
@@ -302,7 +302,7 @@ function createContentAngleSuggestions(
       artistsToCompare: [baseProfile.artistName, ...topArtists.slice(1, 3)],
       factCheckChecklist: getFactCheckChecklistBySignals([
         ...secondSignals,
-        '브랜드 적합 신호',
+        'Brand-fit signal',
       ]),
       formatSuggestion: 'short_form',
       caution: '브랜드 노출과 실제 반응의 인과관계는 단정하지 말고 외부 지표로 재확인하세요.',
@@ -314,7 +314,7 @@ function createContentAngleSuggestions(
       artistsToCompare: [baseProfile.artistName, ...topArtists.slice(0, 3)],
       factCheckChecklist: getFactCheckChecklistBySignals([
         ...baseSignals,
-        'SNS/팬덤 반응',
+        'SNS/fandom response',
       ]),
       formatSuggestion: 'thread',
       caution: '플랫폼별 반응 규모가 다르므로 단일 지표만으로 결론을 내리지 마세요.',
@@ -370,6 +370,14 @@ function getCompareInterpretation({
     mostDifferent,
     commonSignals,
     contentView,
+  };
+}
+
+function groupProfilesByCoverage(profiles: ArtistIndexChartProfile[]) {
+  return {
+    tracked: profiles.filter((profile) => profile.coverageStatus === 'tracked'),
+    partial: profiles.filter((profile) => profile.coverageStatus === 'partial'),
+    preview: profiles.filter((profile) => profile.coverageStatus === 'preview'),
   };
 }
 
@@ -531,6 +539,7 @@ export default async function ArtistIndexChartsPage({
   const params = parseChartSearchParams(await searchParams);
   const profiles = artistIndexChartProfiles;
   const coverageSummary = getCoverageSummary(profiles);
+  const groupedProfiles = groupProfilesByCoverage(profiles);
   const {
     baseProfile,
     similarResults,
@@ -566,8 +575,8 @@ export default async function ArtistIndexChartsPage({
             보이는 아티스트를 찾아 콘텐츠 주제 후보를 발굴합니다.
           </p>
           <p className="mt-4 max-w-3xl rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
-            현재 차트는 베타 editorial seed 기반이며, 공식 순위/공식
-            평가/투자 정보가 아닙니다.
+            현재 차트는 베타 editorial seed 기반이며, 공식 순위/공식 평가/금융
+            정보가 아닙니다.
           </p>
         </section>
 
@@ -581,36 +590,35 @@ export default async function ArtistIndexChartsPage({
                 FANDEX 등록/추적 아티스트 기준
               </h2>
               <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
-                현재 차트는 FANDEX 등록/추적 아티스트 기준이며, 모든
-                K-pop 아티스트를 대표하지 않습니다. 데이터는 editorial seed
-                / preview 기반이고, 실제 콘텐츠 발행 전 외부 공개 지표를 1회
-                이상 재확인해야 합니다. 시스템 신뢰도 구축 전까지 외부
-                콘텐츠에는 FANDEX 직접 언급을 보류합니다.
+                현재 차트는 전체 K-pop 아티스트가 아니라 FANDEX 등록/추적
+                아티스트 기준입니다. Coverage는 주요 활동성, 검색성, 팬덤 반응을
+                고려한 editorial seed 기준으로 순차 확장 중입니다. 실제 콘텐츠
+                발행 전 외부 공개 지표를 1회 이상 재확인하세요. 시스템 신뢰도
+                구축 전까지 외부 콘텐츠에는 FANDEX 직접 언급을 보류합니다.
               </p>
             </div>
             <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
-              data status: {coverageSummary.dataStatus}
+              {coverageSummary.dataStatus}
             </span>
           </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            <MetricCard
-              label="tracked"
-              value={coverageSummary.trackedArtistCount.toString()}
-            />
-            <MetricCard
-              label="partial"
-              value={coverageSummary.partialArtistCount.toString()}
-            />
-            <MetricCard
-              label="preview"
-              value={coverageSummary.previewArtistCount.toString()}
-            />
-            <MetricCard
-              label="total"
-              value={coverageSummary.totalArtistCount.toString()}
-            />
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <MetricCard label="total" value={coverageSummary.totalArtistCount.toString()} />
+            <MetricCard label="tracked" value={coverageSummary.trackedArtistCount.toString()} />
+            <MetricCard label="partial" value={coverageSummary.partialArtistCount.toString()} />
+            <MetricCard label="preview" value={coverageSummary.previewArtistCount.toString()} />
             <MetricCard label="last updated" value={coverageSummary.lastUpdated} />
-            <MetricCard label="data status" value={coverageSummary.dataStatus} />
+          </div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <MetricCard label="girl group" value={coverageSummary.girlGroupCount.toString()} />
+            <MetricCard label="boy group" value={coverageSummary.boyGroupCount.toString()} />
+            <MetricCard label="solo" value={coverageSummary.soloCount.toString()} />
+            <MetricCard label="unit" value={coverageSummary.unitCount.toString()} />
+            <MetricCard label="mixed" value={coverageSummary.mixedCount.toString()} />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <StatusBadge status="tracked" />
+            <StatusBadge status="partial" />
+            <StatusBadge status="preview" />
           </div>
         </section>
 
@@ -624,41 +632,33 @@ export default async function ArtistIndexChartsPage({
                 아티스트를 바꿔 지표 흐름 확인
               </h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
-                아티스트 카드를 선택하면 query param이 바뀝니다. 비교 대상이
-                없으면 비슷한 흐름 상위 3명을 자동 추천합니다.
+                tracked를 먼저 보여주고 partial/preview는 별도 섹션으로
+                구분했습니다. 비교 대상이 없으면 비슷한 흐름 상위 3명을 자동
+                추천합니다.
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
               비교 대상 자동 추천: {usingAutoCompare ? '사용 중' : '직접 선택'}
             </span>
           </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-            {profiles.map((profile) => {
-              const active = profile.artistId === baseProfile.artistId;
-              return (
-                <Link
-                  key={profile.artistId}
-                  href={buildChartHref({ artistId: profile.artistId })}
-                  className={
-                    active
-                      ? 'rounded-2xl border border-cyan-300 bg-cyan-50 p-4 shadow-sm'
-                      : 'rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:border-cyan-300 hover:bg-white'
-                  }
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-black text-slate-950">
-                        {profile.artistName}
-                      </p>
-                      <p className="mt-1 text-xs font-bold text-slate-500">
-                        {profile.ticker}
-                      </p>
-                    </div>
-                    <StatusBadge status={profile.coverageStatus} />
-                  </div>
-                </Link>
-              );
-            })}
+          <div className="mt-5 grid gap-5">
+            <ArtistSelectorGroup
+              activeArtistId={baseProfile.artistId}
+              title="Tracked artists"
+              profiles={groupedProfiles.tracked}
+            />
+            <ArtistSelectorGroup
+              activeArtistId={baseProfile.artistId}
+              title="Partial coverage"
+              profiles={groupedProfiles.partial}
+              compact
+            />
+            <ArtistSelectorGroup
+              activeArtistId={baseProfile.artistId}
+              title="Preview coverage"
+              profiles={groupedProfiles.preview}
+              compact
+            />
           </div>
         </section>
 
@@ -673,24 +673,12 @@ export default async function ArtistIndexChartsPage({
               {coverageStatusLabels[baseProfile.coverageStatus]}
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <MetricCard
-                label="latest FANDEX 지수"
-                value={formatPoint(baseLatest.fandexPoint)}
-              />
-              <MetricCard
-                label="recent delta"
-                value={formatDelta(calculateIndexDelta(baseProfile.history))}
-              />
-              <MetricCard
-                label="trend band"
-                value={trendBandLabels[getIndexTrendBand(baseProfile.history)]}
-              />
+              <MetricCard label="latest FANDEX 지수" value={formatPoint(baseLatest.fandexPoint)} />
+              <MetricCard label="recent delta" value={formatDelta(calculateIndexDelta(baseProfile.history))} />
+              <MetricCard label="trend band" value={trendBandLabels[getIndexTrendBand(baseProfile.history)]} />
               <MetricCard label="last updated" value={baseProfile.lastUpdated} />
               <MetricCard label="data status" value={baseLatest.dataStatus} />
-              <MetricCard
-                label="confidence level"
-                value={baseLatest.confidenceLevel}
-              />
+              <MetricCard label="confidence level" value={baseLatest.confidenceLevel} />
             </div>
             <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
@@ -715,9 +703,8 @@ export default async function ArtistIndexChartsPage({
             </p>
             <h2 className="mt-2 text-2xl font-black">유사 흐름 비교</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
-              기준 아티스트와 비교 대상의 FANDEX 지표 흐름을 같은 기간
-              기준으로 봅니다. 이 표시는 우열이 아니라 흐름 유사성과 공통 신호
-              확인용입니다.
+              기준 아티스트와 비교 대상의 FANDEX 지표 흐름을 같은 기간 기준으로
+              봅니다. 이 표시는 우열이 아니라 흐름 유사성과 공통 신호 확인용입니다.
             </p>
           </div>
           <CompareLineChart profiles={chartProfiles} />
@@ -744,17 +731,11 @@ export default async function ArtistIndexChartsPage({
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <MetricCard
                 label="가장 유사한 흐름"
-                value={
-                  compareInterpretation.mostSimilar?.comparedArtistName ??
-                  '비교 대상 없음'
-                }
+                value={compareInterpretation.mostSimilar?.comparedArtistName ?? '비교 대상 없음'}
               />
               <MetricCard
                 label="가장 다른 흐름"
-                value={
-                  compareInterpretation.mostDifferent?.comparedArtistName ??
-                  '비교 대상 없음'
-                }
+                value={compareInterpretation.mostDifferent?.comparedArtistName ?? '비교 대상 없음'}
               />
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -936,6 +917,65 @@ export default async function ArtistIndexChartsPage({
         </section>
       </section>
     </main>
+  );
+}
+
+function ArtistSelectorGroup({
+  activeArtistId,
+  compact = false,
+  profiles,
+  title,
+}: {
+  activeArtistId: string;
+  compact?: boolean;
+  profiles: ArtistIndexChartProfile[];
+  title: string;
+}) {
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-600">
+          {title}
+        </h3>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm">
+          {profiles.length}
+        </span>
+      </div>
+      <div
+        className={
+          compact
+            ? 'mt-4 grid max-h-56 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6'
+            : 'mt-4 grid max-h-80 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6'
+        }
+      >
+        {profiles.map((profile) => {
+          const active = profile.artistId === activeArtistId;
+          return (
+            <Link
+              key={profile.artistId}
+              href={buildChartHref({ artistId: profile.artistId })}
+              className={
+                active
+                  ? 'rounded-xl border border-cyan-300 bg-cyan-50 p-3 shadow-sm'
+                  : 'rounded-xl border border-slate-200 bg-white p-3 hover:border-cyan-300'
+              }
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-sm font-black text-slate-950">
+                    {profile.artistName}
+                  </p>
+                  <p className="mt-1 text-xs font-bold text-slate-500">
+                    {profile.ticker} / {groupTypeLabels[profile.groupType]}
+                  </p>
+                </div>
+                <StatusBadge status={profile.coverageStatus} />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 

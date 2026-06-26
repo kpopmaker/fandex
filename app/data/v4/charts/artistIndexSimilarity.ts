@@ -38,16 +38,50 @@ const signalLabels: Array<{
   >;
   label: string;
 }> = [
-  { key: 'musicAlbumPoint', label: '음원/앨범 반응' },
-  { key: 'newsIssuePoint', label: '뉴스 노출' },
-  { key: 'snsFandomPoint', label: 'SNS/팬덤 반응' },
-  { key: 'brandFitPoint', label: '브랜드 적합 신호' },
-  { key: 'comebackActivityPoint', label: '컴백/활동 모멘텀' },
-  { key: 'growthMomentumPoint', label: '성장 모멘텀' },
+  { key: 'musicAlbumPoint', label: 'Music/album response' },
+  { key: 'newsIssuePoint', label: 'News exposure' },
+  { key: 'snsFandomPoint', label: 'SNS/fandom response' },
+  { key: 'brandFitPoint', label: 'Brand-fit signal' },
+  { key: 'comebackActivityPoint', label: 'Activity momentum' },
+  { key: 'growthMomentumPoint', label: 'Growth momentum' },
 ];
 
+export function ensureComparableHistory(history: ArtistIndexHistoryPoint[]) {
+  return history.filter(
+    (point) =>
+      typeof point.fandexPoint === 'number' &&
+      Number.isFinite(point.fandexPoint),
+  );
+}
+
+export function getComparableHistoryWindow(
+  baseHistory: ArtistIndexHistoryPoint[],
+  comparedHistory: ArtistIndexHistoryPoint[],
+) {
+  const safeBaseHistory = ensureComparableHistory(baseHistory);
+  const safeComparedHistory = ensureComparableHistory(comparedHistory);
+  const pointCount = Math.min(safeBaseHistory.length, safeComparedHistory.length);
+
+  if (pointCount < 3) {
+    return {
+      baseWindow: [],
+      comparedWindow: [],
+    };
+  }
+
+  return {
+    baseWindow: safeBaseHistory.slice(-pointCount),
+    comparedWindow: safeComparedHistory.slice(-pointCount),
+  };
+}
+
 export function normalizeIndexSeries(history: ArtistIndexHistoryPoint[]) {
-  const values = history.map((point) => point.fandexPoint);
+  const values = ensureComparableHistory(history).map((point) => point.fandexPoint);
+
+  if (values.length === 0) {
+    return [];
+  }
+
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
@@ -60,79 +94,97 @@ function getDeltaSeries(values: number[]) {
 }
 
 function clampScore(value: number) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
   return Math.min(Math.max(value, 0), 1);
+}
+
+export function getSafeSimilarityBand(score: number): ArtistIndexSimilarityBand {
+  const safeScore = clampScore(score);
+
+  if (safeScore >= 0.82) {
+    return 'very_high';
+  }
+
+  if (safeScore >= 0.68) {
+    return 'high';
+  }
+
+  if (safeScore >= 0.52) {
+    return 'medium';
+  }
+
+  return 'low';
 }
 
 export function calculateSeriesSimilarity(
   baseHistory: ArtistIndexHistoryPoint[],
   comparedHistory: ArtistIndexHistoryPoint[],
 ) {
-  const baseNormalized = normalizeIndexSeries(baseHistory);
-  const comparedNormalized = normalizeIndexSeries(comparedHistory);
-  const pointCount = Math.min(baseNormalized.length, comparedNormalized.length);
+  const { baseWindow, comparedWindow } = getComparableHistoryWindow(
+    baseHistory,
+    comparedHistory,
+  );
 
-  if (pointCount < 3) {
+  if (baseWindow.length < 3 || comparedWindow.length < 3) {
     return 0;
   }
 
-  const baseDeltas = getDeltaSeries(baseNormalized.slice(-pointCount));
-  const comparedDeltas = getDeltaSeries(comparedNormalized.slice(-pointCount));
-  const directionMatches = baseDeltas.filter((delta, index) => {
-    const comparedDelta = comparedDeltas[index];
-    return Math.sign(delta) === Math.sign(comparedDelta);
-  }).length;
-  const directionScore = directionMatches / Math.max(baseDeltas.length, 1);
+  const baseNormalized = normalizeIndexSeries(baseWindow);
+  const comparedNormalized = normalizeIndexSeries(comparedWindow);
+  const baseDeltas = getDeltaSeries(baseNormalized);
+  const comparedDeltas = getDeltaSeries(comparedNormalized);
+  const deltaCount = Math.min(baseDeltas.length, comparedDeltas.length);
+
+  if (deltaCount === 0) {
+    return 0;
+  }
+
+  const directionMatches = baseDeltas
+    .slice(0, deltaCount)
+    .filter((delta, index) => {
+      const comparedDelta = comparedDeltas[index];
+      return Math.sign(delta) === Math.sign(comparedDelta);
+    }).length;
+  const directionScore = directionMatches / deltaCount;
   const averageDifference =
-    baseDeltas.reduce(
-      (total, delta, index) => total + Math.abs(delta - comparedDeltas[index]),
-      0,
-    ) / Math.max(baseDeltas.length, 1);
+    baseDeltas
+      .slice(0, deltaCount)
+      .reduce(
+        (total, delta, index) => total + Math.abs(delta - comparedDeltas[index]),
+        0,
+      ) / deltaCount;
   const shapeScore = clampScore(1 - averageDifference * 1.8);
   const trendScore =
-    getIndexTrendBand(baseHistory) === getIndexTrendBand(comparedHistory)
+    getIndexTrendBand(baseWindow) === getIndexTrendBand(comparedWindow)
       ? 1
       : 0.62;
   const scaleScore =
-    Math.sign(calculateIndexDelta(baseHistory)) ===
-    Math.sign(calculateIndexDelta(comparedHistory))
+    Math.sign(calculateIndexDelta(baseWindow)) ===
+    Math.sign(calculateIndexDelta(comparedWindow))
       ? 1
       : 0.55;
+  const score =
+    directionScore * 0.42 +
+    shapeScore * 0.34 +
+    trendScore * 0.16 +
+    scaleScore * 0.08;
 
-  return Number(
-    clampScore(
-      directionScore * 0.42 +
-        shapeScore * 0.34 +
-        trendScore * 0.16 +
-        scaleScore * 0.08,
-    ).toFixed(4),
-  );
+  return Number(clampScore(score).toFixed(4));
 }
 
 export function calculateDominantSignals(history: ArtistIndexHistoryPoint[]) {
+  const safeHistory = ensureComparableHistory(history);
   const totals = signalLabels
     .map((signal) => ({
       label: signal.label,
-      value: history.reduce((total, point) => total + point[signal.key], 0),
+      value: safeHistory.reduce((total, point) => total + point[signal.key], 0),
     }))
     .sort((a, b) => b.value - a.value);
 
   return totals.slice(0, 3).map((signal) => signal.label);
-}
-
-function toSimilarityBand(score: number): ArtistIndexSimilarityBand {
-  if (score >= 0.82) {
-    return 'very_high';
-  }
-
-  if (score >= 0.68) {
-    return 'high';
-  }
-
-  if (score >= 0.52) {
-    return 'medium';
-  }
-
-  return 'low';
 }
 
 export function createCommonThemeCandidates(
@@ -147,19 +199,19 @@ export function createCommonThemeCandidates(
   const [primarySignal, secondarySignal] = result.sharedDominantSignals;
   const trendCopy =
     result.sharedTrendBand === 'rising'
-      ? '지표 흐름이 함께 상승한'
+      ? 'teams with similar upward index flow'
       : result.sharedTrendBand === 'stable'
-        ? '안정적인 지표 흐름을 보인'
+        ? 'teams with steady index flow'
         : result.sharedTrendBand === 'volatile'
-          ? '주간 변동 폭이 커진'
-          : '지표 흐름을 다시 확인할';
+          ? 'teams with wider weekly movement'
+          : 'teams to re-check through index flow';
 
   return [
-    `${trendCopy} 팀들의 ${primarySignal ?? '팬덤 반응'} 비교`,
-    `${result.baseArtistName}와 ${result.comparedArtistName}의 공통 ${secondarySignal ?? '콘텐츠 반응'} 포인트`,
-    '뉴스 노출보다 SNS 반응이 먼저 움직인 흐름',
-    '활동 직전 모멘텀이 다시 강해진 구간',
-    '브랜드 노출 이후 누적 포인트 흐름이 비슷해진 사례',
+    `${trendCopy}: ${primarySignal ?? 'SNS/fandom response'} comparison`,
+    `${result.baseArtistName} and ${result.comparedArtistName}: shared ${secondarySignal ?? 'content response'} signals`,
+    'SNS response moving before wider news exposure',
+    'activity momentum building before the next content cycle',
+    'similar cumulative point flow after broader public exposure',
   ];
 }
 
@@ -174,13 +226,23 @@ export function createEditorialSummary(
   >,
 ) {
   const bandCopy: Record<ArtistIndexSimilarityBand, string> = {
-    very_high: '매우 높은',
-    high: '높은',
-    medium: '보통 수준의',
-    low: '낮은',
+    very_high: 'very high',
+    high: 'high',
+    medium: 'medium',
+    low: 'low',
   };
 
-  return `${result.baseArtistName}와 ${result.comparedArtistName}는 최근 8개 시점에서 ${bandCopy[result.similarityBand]} 흐름 유사성을 보입니다. 주요 공통 신호는 ${result.sharedDominantSignals.join(', ')}입니다.`;
+  return `${result.baseArtistName} and ${result.comparedArtistName} show ${bandCopy[result.similarityBand]} flow similarity across the recent window. Shared signals: ${result.sharedDominantSignals.join(', ')}.`;
+}
+
+export function sortSimilarityResults(results: ArtistIndexSimilarityResult[]) {
+  return [...results].sort((a, b) => {
+    if (b.similarityScore !== a.similarityScore) {
+      return b.similarityScore - a.similarityScore;
+    }
+
+    return a.comparedArtistName.localeCompare(b.comparedArtistName);
+  });
 }
 
 export function findSimilarIndexMovements(
@@ -195,8 +257,7 @@ export function findSimilarIndexMovements(
 
   const baseDominantSignals = calculateDominantSignals(baseProfile.history);
   const baseTrendBand = getIndexTrendBand(baseProfile.history);
-
-  return profiles
+  const results = profiles
     .filter((profile) => profile.artistId !== baseArtistId)
     .map((profile) => {
       const comparedDominantSignals = calculateDominantSignals(profile.history);
@@ -208,7 +269,7 @@ export function findSimilarIndexMovements(
         baseProfile.history,
         profile.history,
       );
-      const similarityBand = toSimilarityBand(similarityScore);
+      const similarityBand = getSafeSimilarityBand(similarityScore);
       const sharedTrendBand =
         baseTrendBand === comparedTrendBand ? baseTrendBand : comparedTrendBand;
       const draftResult = {
@@ -226,7 +287,7 @@ export function findSimilarIndexMovements(
         commonThemeCandidates: [],
         editorialSummary: '',
         cautionNote:
-          '베타 editorial seed 기반의 흐름 비교입니다. 콘텐츠 발행 전 외부 플랫폼에서 수치를 재확인하세요.',
+          'Beta editorial seed comparison. Re-check public signals before content publication.',
       } satisfies ArtistIndexSimilarityResult;
 
       return {
@@ -234,26 +295,49 @@ export function findSimilarIndexMovements(
         commonThemeCandidates: createCommonThemeCandidates(draftResult),
         editorialSummary: createEditorialSummary(draftResult),
       };
-    })
-    .sort((a, b) => b.similarityScore - a.similarityScore);
+    });
+
+  return sortSimilarityResults(results);
 }
 
 export function runArtistIndexSimilarityShapeCheck(
   profiles: ArtistIndexChartProfile[],
 ) {
-  const base = profiles[0];
-  const results = base ? findSimilarIndexMovements(base.artistId, profiles) : [];
+  const sampleProfiles = profiles.slice(0, Math.min(profiles.length, 10));
+  const sampleResults = sampleProfiles.map((profile) =>
+    findSimilarIndexMovements(profile.artistId, profiles),
+  );
+  const allScoresFinite = sampleResults.every((results) =>
+    results.every((result) => Number.isFinite(result.similarityScore)),
+  );
+  const noSelfMatches = sampleResults.every((results, index) =>
+    results.every(
+      (result) => result.comparedArtistId !== sampleProfiles[index]?.artistId,
+    ),
+  );
+  const everySampleHasThreeResults = sampleResults.every(
+    (results) => results.length >= 3,
+  );
+  const everyResultHasContentShape = sampleResults.every((results) =>
+    results.every(
+      (result) =>
+        result.commonThemeCandidates.length >= 3 &&
+        result.sharedDominantSignals.length > 0 &&
+        ['very_high', 'high', 'medium', 'low'].includes(result.similarityBand),
+    ),
+  );
 
   return {
     ok:
-      Boolean(base) &&
-      results.length > 0 &&
-      results.every(
-        (result) =>
-          result.commonThemeCandidates.length >= 3 &&
-          result.sharedDominantSignals.length > 0,
-      ),
-    baseArtistId: base?.artistId,
-    resultCount: results.length,
+      profiles.length >= 4 &&
+      allScoresFinite &&
+      noSelfMatches &&
+      everySampleHasThreeResults &&
+      everyResultHasContentShape,
+    sampledBaseCount: sampleProfiles.length,
+    allScoresFinite,
+    noSelfMatches,
+    everySampleHasThreeResults,
+    everyResultHasContentShape,
   };
 }
