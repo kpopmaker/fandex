@@ -147,7 +147,7 @@ export default function SampleReportPage() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
-                href="/#early-access"
+                href="/early-access"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
                 <LangText en="Join Early Access" ko="Early Access 신청하기" />
@@ -397,8 +397,8 @@ export default function SampleReportPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
               <LangText
-                en="FANDEX v1 compares fictionalized scenarios before live data validation. Positive comeback momentum can raise cumulative points, while hiatus or controversy risk can lower net points through riskPenalty. High article volume with negative or mixed tone is treated differently from constructive attention."
-                ko="FANDEX v1은 실제 데이터 검증 전 fictionalized scenario로 산식 동작을 점검합니다. 긍정적 컴백 모멘텀은 누적 점수를 높일 수 있지만, 공백/논란 리스크는 riskPenalty로 netPoint를 낮출 수 있습니다. 기사량이 많아도 negative/mixed tone이면 긍정적 화제성과 다르게 처리됩니다."
+                en="FANDEX v1 compares fictionalized scenarios before live data validation. Positive comeback momentum can raise cumulative points, while activity-gap or reputation risk can lower net points through riskPenalty. High article volume with negative or mixed tone is treated differently from constructive attention."
+                ko="FANDEX v1은 실제 데이터 검증 전 fictionalized scenario로 산식 동작을 점검합니다. 긍정적 컴백 모멘텀은 누적 점수를 높일 수 있지만, 활동 공백 또는 평판 리스크는 riskPenalty로 netPoint를 낮출 수 있습니다. 기사량이 많아도 negative/mixed tone이면 긍정적 화제성과 다르게 처리됩니다."
               />
             </p>
           </div>
@@ -414,8 +414,8 @@ export default function SampleReportPage() {
                 copyEn: 'Music, activity, and growth momentum can combine into high cumulative points.',
               },
               {
-                labelKo: '논란/공백 리스크',
-                labelEn: 'Controversy or hiatus risk',
+                labelKo: '평판/활동 공백 리스크',
+                labelEn: 'Reputation or activity-gap risk',
                 pointKo: '예시 risk drag: 3,080pt',
                 pointEn: 'Example risk drag: 3,080pt',
                 copyKo: '리스크 감점이 커지면 긍정 신호가 있어도 netPoint가 낮아질 수 있습니다.',
@@ -479,7 +479,7 @@ export default function SampleReportPage() {
                 <LangText en="Try Limited Free Search" ko="제한된 무료 검색 해보기" />
               </Link>
               <Link
-                href="/#waitlist-form"
+                href="/early-access"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
                 <LangText en="Join Early Access" ko="Early Access 신청하기" />

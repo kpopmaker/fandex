@@ -18,6 +18,7 @@ The beta site should:
    investment product.
 6. Present the core public experience in Korean by default.
 7. Offer a lightweight KO/EN language toggle.
+8. Provide a static `/early-access` conversion route for beta interest.
 
 ## B. Public Route Checklist
 
@@ -30,7 +31,7 @@ Check that:
 3. The Search Preview CTA is visible.
 4. The Sample Report CTA is visible.
 5. The Subscriber Research CTA is visible.
-6. The waitlist preview form is visible.
+6. The Early Access CTA links to `/early-access`.
 7. The first viewport reads naturally in Korean.
 8. Home copy does not frame FANDEX as a stock, market index, price, or
    investment decision product.
@@ -46,7 +47,7 @@ Check that:
 2. Only basic signal preview is shown.
 3. Paid category gate is visible below results.
 4. The `/research` CTA is connected.
-5. The `/#waitlist-form` CTA is connected.
+5. The `/early-access` CTA is connected.
 6. Free search and locked category copy are Korean by default.
 7. FANDEX v1 public score, score band, and issue tone are visible.
 8. Category score numbers and risk penalty values are not visible to free users.
@@ -67,7 +68,7 @@ Check that:
 
 1. The sample report feels persuasive as a product preview.
 2. The difference between free preview and paid research is visible.
-3. `/search`, `/research`, and `/#waitlist-form` CTAs are connected.
+3. `/search`, `/research`, and `/early-access` CTAs are connected.
 4. A disclaimer is present.
 5. The page is framed as a subscriber research output sample in Korean.
 6. No sample value looks like a capped 0-100 score such as `82.4`.
@@ -115,6 +116,22 @@ Check that:
     controversy, legal, contract, or hiatus context.
 16. Public plan copy should use subscription-plan or operating-condition
     language; avoid ambiguous "price" wording in user-facing Korean copy.
+
+### `/early-access`
+
+Check that:
+
+1. The page explains the Early Access value proposition in Korean.
+2. The audience cards are visible.
+3. The beta benefit cards compare free preview vs Early Access value.
+4. The static application form UI is visible.
+5. The form button is `type="button"` and does not submit or store data.
+6. The page clearly states that real application collection is not connected.
+7. CTAs link back to `/search`, `/sample-report`, and `/research`.
+8. The disclaimer is present.
+9. Copy avoids stock, investment, buy/sell, yield, and price-increase framing.
+10. Copy does not assert real artist controversy, legal, contract, or hiatus
+    conditions.
 
 ## C. Language Checklist
 
@@ -176,6 +193,8 @@ The beta site does not yet include:
 14. Live FANDEX v1 data connection.
 15. Subscriber category score entitlement.
 16. Live Naver News API connection.
+17. Real Early Access application storage.
+18. Email sending or CRM connection.
 
 ## F. SNS Profile Link Readiness
 
@@ -185,15 +204,16 @@ Before using FANDEX as an SNS profile link, confirm:
 2. `/search` works as the free trial destination.
 3. `/sample-report` explains the report product.
 4. `/research` explains subscriber value.
-5. All CTAs resolve without dead ends.
-6. Primary CTAs are visible on mobile.
-7. Disclaimers are visible enough for a beta research product.
-8. Korean default copy is clear on first load.
-9. Preview scoring disclaimers prevent confusion with actual live data.
-10. Cumulative point model disclaimer is visible enough for beta users.
-11. Copy does not imply official certification or completed objective validation.
-12. Copy does not frame FANDEX as a 0-100 score.
-13. Copy does not make controversy, risk, contract, legal, or hiatus claims
+5. `/early-access` explains beta application intent.
+6. All CTAs resolve without dead ends.
+7. Primary CTAs are visible on mobile.
+8. Disclaimers are visible enough for a beta research product.
+9. Korean default copy is clear on first load.
+10. Preview scoring disclaimers prevent confusion with actual live data.
+11. Cumulative point model disclaimer is visible enough for beta users.
+12. Copy does not imply official certification or completed objective validation.
+13. Copy does not frame FANDEX as a 0-100 score.
+14. Copy does not make controversy, risk, contract, legal, or hiatus claims
     about specific real artists.
 
 ## G. Manual QA Checklist
@@ -224,6 +244,7 @@ Before SNS operation:
    - Artist search prompt: `/search`
    - Report example: `/sample-report`
    - Subscriber research value: `/research`
+   - Early Access application preview: `/early-access`
 5. Define how early reactions will be recorded.
 6. Define how manual report requests will be managed.
 

@@ -153,7 +153,7 @@ export default function SubscriberResearchPage() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
-                href="/#waitlist-form"
+                href="/early-access"
                 className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
               >
                 <LangText en="Join Early Access" ko="Early Access 신청하기" />
@@ -188,8 +188,8 @@ export default function SubscriberResearchPage() {
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 <LangText
-                  en="FANDEX v1 is not a 0-100 score. It is an unbounded cumulative point model that compares high momentum, stable top tier, brand-safe growth, hiatus risk, and controversy risk scenarios before live data validation."
-                  ko="FANDEX v1은 0~100 점수제가 아니라 상한 없는 누적 point 구조입니다. 실제 데이터 검증 전 high momentum, stable top tier, brand-safe growth, hiatus risk, controversy risk 같은 가상 시나리오로 점수 격차를 확인합니다."
+                  en="FANDEX v1 is not a 0-100 score. It is an unbounded cumulative point model that compares high momentum, stable top tier, brand-safe growth, activity-gap risk, and reputation risk scenarios before live data validation."
+                  ko="FANDEX v1은 0~100 점수제가 아니라 상한 없는 누적 point 구조입니다. 실제 데이터 검증 전 high momentum, stable top tier, brand-safe growth, activity-gap risk, reputation risk 같은 가상 시나리오로 점수 격차를 확인합니다."
                 />
               </p>
               <p className="mt-3 text-sm leading-7 text-slate-600">
@@ -300,8 +300,8 @@ export default function SubscriberResearchPage() {
                   en: 'newsIssue rawPoint candidate: relevance, outlet credibility, recency, impact, tone, and issue type',
                 },
                 {
-                  ko: 'riskPenalty rawPoint 후보: negative/mixed tone, 계약/소속, 논란, 공백 이슈를 별도 누적',
-                  en: 'riskPenalty rawPoint candidate: negative/mixed tone, contract/agency, controversy, and hiatus risk',
+                  ko: 'riskPenalty rawPoint 후보: negative/mixed tone, 소속/활동 불확실성, 평판 리스크, 활동 공백 이슈를 별도 누적',
+                  en: 'riskPenalty rawPoint candidate: negative/mixed tone, agency or activity uncertainty, reputation risk, and activity-gap risk',
                 },
                 {
                   ko: '무료 화면: 종합 누적 점수와 이슈 톤만 제공',
@@ -474,7 +474,7 @@ export default function SubscriberResearchPage() {
                   ))}
                 </ul>
                 <Link
-                  href="/#waitlist-form"
+                  href="/early-access"
                   className="mt-5 inline-flex rounded-full border border-cyan-200 bg-white px-4 py-2 text-xs font-black text-cyan-700 shadow-sm hover:bg-cyan-50"
                 >
                   <LangText en="Join Early Access" ko="Early Access 신청하기" />

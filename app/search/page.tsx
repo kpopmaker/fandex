@@ -147,7 +147,7 @@ export default function SearchPreviewPage() {
                 <LangText en="View Sample Report" ko="샘플 리포트 보기" />
               </Link>
               <Link
-                href="/#waitlist-form"
+                href="/early-access"
                 className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
               >
                 <LangText en="Join Early Access" ko="Early Access 신청" />
@@ -296,7 +296,7 @@ export default function SearchPreviewPage() {
                     <LangText en="See Research Plans" ko="리서치 플랜 보기" />
                   </Link>
                   <Link
-                    href="/#waitlist-form"
+                    href="/early-access"
                     className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
                   >
                     <LangText en="Join Early Access" ko="Early Access 신청" />

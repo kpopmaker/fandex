@@ -740,24 +740,24 @@ function EarlyAccessSection() {
             >
               <LangText en="See Paid Research Categories" ko="유료 리서치 카테고리 보기" />
             </Link>
-            <a
-              href="#waitlist-form"
+            <Link
+              href="/early-access"
               className="rounded-full bg-cyan-500 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-cyan-400"
             >
               <LangText en="Request Early Access" ko="Early Access 신청하기" />
-            </a>
+            </Link>
             <Link
               href="/sample-report"
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
             >
               <LangText en="View Sample Report" ko="샘플 리포트 보기" />
             </Link>
-            <a
-              href="#waitlist-form"
+            <Link
+              href="/early-access"
               className="rounded-full border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-black text-cyan-700 shadow-sm hover:bg-cyan-100"
             >
               <LangText en="Join FANDEX Beta" ko="FANDEX 베타 신청" />
-            </a>
+            </Link>
           </div>
         </div>
 
