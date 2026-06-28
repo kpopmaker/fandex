@@ -586,6 +586,20 @@ export default async function ArtistIndexChartsPage({
           >
             Multi Artist Compare에서 6개월 비교하기
           </Link>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link
+              href="/methodology"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
+            >
+              산출방식 보기
+            </Link>
+            <Link
+              href="/coverage"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
+            >
+              커버리지 보기
+            </Link>
+          </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

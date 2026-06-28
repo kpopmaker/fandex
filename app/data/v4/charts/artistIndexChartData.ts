@@ -118,6 +118,59 @@ export type CompareCoverageSummary = ReturnType<typeof getCoverageSummary> & {
   selectedArtistCount: number;
 };
 
+export type MethodologyVariableDefinition = {
+  variableKey: ArtistStockVariableKey;
+  displayName: string;
+  weightLabel: string;
+  description: string;
+  higherMeaning: string;
+  lowerMeaning: string;
+  caution: string;
+};
+
+export type MethodologyFormulaSummary = {
+  conceptFormula: string;
+  basePoint: string;
+  variableScore: string;
+  weight: string;
+  riskAdjustment: string;
+  finalValue: string;
+};
+
+export type CoverageStatusGroup = {
+  status: ArtistIndexCoverageStatus;
+  label: string;
+  description: string;
+  count: number;
+  profiles: ArtistIndexChartProfile[];
+};
+
+export type GroupTypeCoverageSummary = {
+  groupType: ArtistIndexGroupType;
+  label: string;
+  count: number;
+};
+
+export type CoverageConfidenceSummary = {
+  confidenceLevel: ArtistIndexConfidenceLevel;
+  label: string;
+  count: number;
+};
+
+export type CoverageArtistRow = {
+  artistId: string;
+  artistName: string;
+  ticker: string;
+  groupType: ArtistIndexGroupType;
+  coverageStatus: ArtistIndexCoverageStatus;
+  latestFandexPoint: number;
+  sixMonthDelta: number;
+  trendBand: ArtistIndexTrendBand;
+  dataStatus: ArtistIndexDataStatus;
+  confidenceLevel: ArtistIndexConfidenceLevel;
+  lastUpdated: string;
+};
+
 export type ArtistIndexChartProfile = {
   artistId: string;
   artistName: string;
@@ -1407,5 +1460,237 @@ export function runComparePageShapeCheck() {
     everyPointIsFinite,
     summaryRowCount: summaryRows.length,
     selectedArtistCount: coverageSummary.selectedArtistCount,
+  };
+}
+
+const methodologyVariableDefinitions: MethodologyVariableDefinition[] = [
+  {
+    variableKey: 'musicAlbumPoint',
+    displayName: '음원/음반',
+    weightLabel: 'core response',
+    description: '음원 차트, 앨범 반응, 발매 후 관심 흐름을 해석하는 변수입니다.',
+    higherMeaning: '발매물 반응과 관련 관심 흐름이 비교 기간 안에서 강하게 관찰됩니다.',
+    lowerMeaning: '발매물 반응이 제한적이거나 다른 변수 대비 영향도가 낮게 반영됩니다.',
+    caution: '단일 차트 순위나 판매량만으로 판단하지 않고 여러 공개 반응 흐름을 함께 봅니다.',
+  },
+  {
+    variableKey: 'newsIssuePoint',
+    displayName: '뉴스/이슈',
+    weightLabel: 'media signal',
+    description: '공개 기사, 미디어 노출, 검색 가능한 이슈 흐름을 해석하는 변수입니다.',
+    higherMeaning: '공개 미디어 노출과 검색 가능한 관심 흐름이 활발하게 관찰됩니다.',
+    lowerMeaning: '미디어 노출이나 검색 가능한 관심 흐름이 제한적으로 관찰됩니다.',
+    caution: '실제 아티스트와 특정 민감 사안을 단정하지 않고 공개 신호의 양과 흐름만 해석합니다.',
+  },
+  {
+    variableKey: 'snsFandomPoint',
+    displayName: 'SNS/팬덤',
+    weightLabel: 'fandom signal',
+    description: 'SNS 반응, 팬덤 활동성, 커뮤니티 반응 흐름을 해석하는 변수입니다.',
+    higherMeaning: '팬덤 활동성과 확산 반응이 비교 기간 안에서 활발하게 관찰됩니다.',
+    lowerMeaning: 'SNS 및 커뮤니티 반응 흐름이 다른 변수 대비 낮게 반영됩니다.',
+    caution: '일시적 화제성과 지속 팬덤 활동성을 구분해 해석해야 합니다.',
+  },
+  {
+    variableKey: 'brandFitPoint',
+    displayName: '브랜드 적합도',
+    weightLabel: 'brand affinity',
+    description: '광고/협업/대중 인지도와 연결될 수 있는 브랜드 친화도를 해석하는 변수입니다.',
+    higherMeaning: '브랜드 협업과 대중 접점으로 확장될 수 있는 신호가 강하게 관찰됩니다.',
+    lowerMeaning: '브랜드 접점이나 대중 인지도 확장 신호가 제한적으로 반영됩니다.',
+    caution: '브랜드 적합도는 공식 평가가 아니라 공개 접점과 반응 흐름 기반의 분석 변수입니다.',
+  },
+  {
+    variableKey: 'comebackActivityPoint',
+    displayName: '컴백/활동',
+    weightLabel: 'activity cycle',
+    description: '컴백, 활동기, 프로모션, 무대 노출 등 활동 모멘텀을 해석하는 변수입니다.',
+    higherMeaning: '활동 일정과 프로모션 접점이 지표 흐름에 뚜렷하게 반영됩니다.',
+    lowerMeaning: '활동 접점이 적거나 해당 기간의 활동 모멘텀이 제한적으로 관찰됩니다.',
+    caution: '활동 주기 차이를 고려해야 하며 활동이 적은 기간을 평가 단정으로 연결하지 않습니다.',
+  },
+  {
+    variableKey: 'growthMomentumPoint',
+    displayName: '성장 모멘텀',
+    weightLabel: 'growth pace',
+    description: '최근 지표 변화 속도와 확장 가능성을 해석하는 변수입니다.',
+    higherMeaning: '최근 기간의 지표 변화 속도와 확장 흐름이 강하게 관찰됩니다.',
+    lowerMeaning: '최근 변화 속도가 안정적이거나 제한적으로 반영됩니다.',
+    caution: '단기 변화가 장기 흐름을 보장하지 않으므로 coverage와 confidence를 함께 확인합니다.',
+  },
+  {
+    variableKey: 'riskAdjustmentPoint',
+    displayName: '리스크 감점',
+    weightLabel: 'adjustment',
+    description: '데이터 변동성, 신뢰도 부족, 예외적 변수를 조정하기 위한 감점 변수입니다.',
+    higherMeaning: '데이터 변동성이나 신뢰도 보강 필요성이 더 크게 조정됩니다.',
+    lowerMeaning: '예외적 변수 조정 영향이 상대적으로 작게 반영됩니다.',
+    caution: '민감 이슈를 단정하는 항목이 아니며 데이터 품질과 예외적 변동을 보정하기 위한 장치입니다.',
+  },
+];
+
+export function getMethodologyVariableDefinitions() {
+  return methodologyVariableDefinitions;
+}
+
+export function getMethodologyFormulaSummary(): MethodologyFormulaSummary {
+  return {
+    conceptFormula:
+      'FANDEX Stock Price = Base Point + Σ(Variable Score × Weight) - Risk Adjustment',
+    basePoint: '아티스트별 기본 기준점입니다.',
+    variableScore: '각 변수의 최근 흐름을 point 구조로 해석한 값입니다.',
+    weight: '변수별 영향도를 조정하는 개념적 가중치입니다.',
+    riskAdjustment:
+      '데이터 신뢰도와 예외적 변동을 조정하는 감점 항목입니다.',
+    finalValue: '최종값은 FANDEX 주가형 지수로 표시됩니다.',
+  };
+}
+
+export function getCoveragePageSummary() {
+  return getCoverageSummary(artistIndexChartProfiles);
+}
+
+export function getCoverageStatusGroups(): CoverageStatusGroup[] {
+  const descriptions: Record<ArtistIndexCoverageStatus, string> = {
+    tracked: '현재 FANDEX에서 지속 추적 대상으로 보는 아티스트입니다.',
+    partial: '일부 지표만 반영되었거나 확장 중인 아티스트입니다.',
+    preview: '향후 확장 후보 또는 미리보기 성격의 아티스트입니다.',
+  };
+  const labels: Record<ArtistIndexCoverageStatus, string> = {
+    tracked: 'Tracked',
+    partial: 'Partial',
+    preview: 'Preview',
+  };
+
+  return (['tracked', 'partial', 'preview'] as ArtistIndexCoverageStatus[]).map(
+    (status) => {
+      const profiles = artistIndexChartProfiles.filter(
+        (profile) => profile.coverageStatus === status,
+      );
+
+      return {
+        status,
+        label: labels[status],
+        description: descriptions[status],
+        count: profiles.length,
+        profiles,
+      };
+    },
+  );
+}
+
+export function getGroupTypeCoverageSummary(): GroupTypeCoverageSummary[] {
+  const labels: Record<ArtistIndexGroupType, string> = {
+    girl_group: 'Girl Group',
+    boy_group: 'Boy Group',
+    solo: 'Solo',
+    mixed: 'Mixed',
+    unit: 'Unit',
+  };
+
+  return (
+    ['girl_group', 'boy_group', 'solo', 'mixed', 'unit'] as ArtistIndexGroupType[]
+  ).map((groupType) => ({
+    groupType,
+    label: labels[groupType],
+    count: artistIndexChartProfiles.filter(
+      (profile) => profile.groupType === groupType,
+    ).length,
+  }));
+}
+
+export function getCoverageConfidenceSummary(): CoverageConfidenceSummary[] {
+  const labels: Record<ArtistIndexConfidenceLevel, string> = {
+    high: 'High',
+    medium: 'Medium',
+    low: 'Low',
+  };
+
+  return (['high', 'medium', 'low'] as ArtistIndexConfidenceLevel[]).map(
+    (confidenceLevel) => ({
+      confidenceLevel,
+      label: labels[confidenceLevel],
+      count: artistIndexChartProfiles.filter((profile) => {
+        const latest = profile.history[profile.history.length - 1];
+        return latest?.confidenceLevel === confidenceLevel;
+      }).length,
+    }),
+  );
+}
+
+export function getCoverageArtistRows(): CoverageArtistRow[] {
+  return artistIndexChartProfiles
+    .map((profile) => {
+      const sixMonthHistory = getLastSixMonthHistory(profile);
+      const latest = sixMonthHistory[sixMonthHistory.length - 1];
+
+      return {
+        artistId: profile.artistId,
+        artistName: profile.artistName,
+        ticker: profile.ticker,
+        groupType: profile.groupType,
+        coverageStatus: profile.coverageStatus,
+        latestFandexPoint: latest?.fandexPoint ?? 0,
+        sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
+        trendBand: getIndexTrendBand(sixMonthHistory),
+        dataStatus: latest?.dataStatus ?? 'preview_only',
+        confidenceLevel: latest?.confidenceLevel ?? 'low',
+        lastUpdated: profile.lastUpdated,
+      };
+    })
+    .sort((a, b) => b.latestFandexPoint - a.latestFandexPoint);
+}
+
+export function runMethodologyPageShapeCheck() {
+  const formula = getMethodologyFormulaSummary();
+  const variables = getMethodologyVariableDefinitions();
+  const validVariableKeys = new Set(artistStockVariableKeys);
+  const everyVariableHasValidKey = variables.every((variable) =>
+    validVariableKeys.has(variable.variableKey),
+  );
+  const everyVariableHasCopy = variables.every(
+    (variable) =>
+      variable.displayName.length > 0 &&
+      variable.description.length > 0 &&
+      variable.higherMeaning.length > 0 &&
+      variable.lowerMeaning.length > 0 &&
+      variable.caution.length > 0,
+  );
+
+  return {
+    ok:
+      formula.conceptFormula.length > 0 &&
+      variables.length === artistStockVariableKeys.length &&
+      everyVariableHasValidKey &&
+      everyVariableHasCopy,
+    variableCount: variables.length,
+    everyVariableHasValidKey,
+    everyVariableHasCopy,
+  };
+}
+
+export function runCoveragePageShapeCheck() {
+  const summary = getCoveragePageSummary();
+  const statusGroups = getCoverageStatusGroups();
+  const groupSummary = getGroupTypeCoverageSummary();
+  const rows = getCoverageArtistRows();
+  const confidenceSummary = getCoverageConfidenceSummary();
+  const everyRowHasLatestPoint = rows.every((row) => row.latestFandexPoint > 0);
+
+  return {
+    ok:
+      summary.totalArtistCount === rows.length &&
+      statusGroups.reduce((total, group) => total + group.count, 0) ===
+        summary.totalArtistCount &&
+      groupSummary.reduce((total, group) => total + group.count, 0) ===
+        summary.totalArtistCount &&
+      confidenceSummary.reduce((total, group) => total + group.count, 0) ===
+        summary.totalArtistCount &&
+      everyRowHasLatestPoint,
+    totalArtistCount: summary.totalArtistCount,
+    statusGroupCount: statusGroups.length,
+    groupSummaryCount: groupSummary.length,
+    confidenceSummaryCount: confidenceSummary.length,
+    everyRowHasLatestPoint,
   };
 }

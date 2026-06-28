@@ -78,6 +78,20 @@ export default function ArtistsPage() {
           <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
             FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한
             엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link
+                href="/coverage"
+                className="rounded-full bg-white px-4 py-2 text-xs font-black text-cyan-800 shadow-sm hover:bg-cyan-100"
+              >
+                커버리지 보기
+              </Link>
+              <Link
+                href="/compare"
+                className="rounded-full bg-white px-4 py-2 text-xs font-black text-cyan-800 shadow-sm hover:bg-cyan-100"
+              >
+                여러 아티스트 비교
+              </Link>
+            </div>
           </div>
         </div>
 

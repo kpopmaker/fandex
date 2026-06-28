@@ -392,6 +392,20 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 선택 변경은 URL query param에 반영되며, 유효하지 않은
                 artistId와 variableKey는 제거됩니다.
               </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  href="/methodology"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                >
+                  산출방식 보기
+                </Link>
+                <Link
+                  href="/coverage"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                >
+                  커버리지 보기
+                </Link>
+              </div>
             </section>
           </section>
         </section>

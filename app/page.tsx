@@ -503,6 +503,18 @@ export default function Home() {
                 >
                   아티스트 리서치 랭킹
                 </Link>
+                <Link
+                  href="/methodology"
+                  className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+                >
+                  산출방식
+                </Link>
+                <Link
+                  href="/coverage"
+                  className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700"
+                >
+                  커버리지
+                </Link>
               </div>
             </div>
           </div>

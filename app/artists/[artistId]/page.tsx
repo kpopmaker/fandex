@@ -260,6 +260,18 @@ export default async function ArtistDetailPage({
                 주가 차트 비교
               </Link>
               <Link
+                href="/methodology"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+              >
+                산출방식
+              </Link>
+              <Link
+                href="/coverage"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+              >
+                커버리지
+              </Link>
+              <Link
                 href={getComparisonHref(profile.artistId)}
                 className="rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400"
               >
