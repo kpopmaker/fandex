@@ -69,6 +69,55 @@ export type ArtistStockContributionSummary = {
   shareOfLatestTotal: number;
 };
 
+export type CompareChartPoint = {
+  date: string;
+  value: number;
+};
+
+export type CompareArtistChartSeries = {
+  artistId: string;
+  artistName: string;
+  ticker: string;
+  colorKey: string;
+  points: CompareChartPoint[];
+  latestPoint: number;
+  sixMonthDelta: number;
+  trendBand: ArtistIndexTrendBand;
+};
+
+export type CompareVariableArtistSeries = {
+  artistId: string;
+  artistName: string;
+  ticker: string;
+  points: CompareChartPoint[];
+  latestPoint: number;
+  sixMonthDelta: number;
+};
+
+export type CompareVariableChartSeries = {
+  variableKey: ArtistStockVariableKey;
+  displayName: string;
+  artists: CompareVariableArtistSeries[];
+};
+
+export type CompareSummaryRow = {
+  artistId: string;
+  artistName: string;
+  ticker: string;
+  groupType: ArtistIndexGroupType;
+  coverageStatus: ArtistIndexCoverageStatus;
+  currentFandexPoint: number;
+  sixMonthDelta: number;
+  trendBand: ArtistIndexTrendBand;
+  strongestVariable: ArtistStockContributionSummary | null;
+  dataStatus: ArtistIndexDataStatus;
+  confidenceLevel: ArtistIndexConfidenceLevel;
+};
+
+export type CompareCoverageSummary = ReturnType<typeof getCoverageSummary> & {
+  selectedArtistCount: number;
+};
+
 export type ArtistIndexChartProfile = {
   artistId: string;
   artistName: string;
@@ -1176,5 +1225,187 @@ export function runArtistStockDetailShapeCheck() {
     everyVariableHasDisplayName,
     everySeriesIsFinite,
     everyContributionHasValidKey,
+  };
+}
+
+const defaultCompareArtistIds = ['aespa', 'ive', 'riize'];
+
+function getValidArtistIdSet() {
+  return new Set(artistIndexChartProfiles.map((profile) => profile.artistId));
+}
+
+export function getDefaultCompareArtists() {
+  return defaultCompareArtistIds
+    .map((artistId) => getArtistIndexChartProfile(artistId))
+    .filter((profile): profile is ArtistIndexChartProfile => Boolean(profile));
+}
+
+export function parseCompareArtistIds(
+  rawArtists?: string | string[],
+): string[] {
+  const rawValue = Array.isArray(rawArtists) ? rawArtists[0] : rawArtists;
+  const validArtistIds = getValidArtistIdSet();
+  const parsedIds =
+    rawValue
+      ?.split(',')
+      .map((artistId) => artistId.trim())
+      .filter(Boolean) ?? [];
+  const selectedIds: string[] = [];
+
+  parsedIds.forEach((artistId) => {
+    if (
+      validArtistIds.has(artistId) &&
+      !selectedIds.includes(artistId) &&
+      selectedIds.length < 5
+    ) {
+      selectedIds.push(artistId);
+    }
+  });
+
+  return selectedIds.length >= 2 ? selectedIds : defaultCompareArtistIds;
+}
+
+export function getCompareArtistProfiles(artistIds: string[]) {
+  const validArtistIds = getValidArtistIdSet();
+  const selectedIds: string[] = [];
+
+  artistIds.forEach((artistId) => {
+    if (
+      validArtistIds.has(artistId) &&
+      !selectedIds.includes(artistId) &&
+      selectedIds.length < 5
+    ) {
+      selectedIds.push(artistId);
+    }
+  });
+
+  const safeIds = selectedIds.length >= 2 ? selectedIds : defaultCompareArtistIds;
+
+  return safeIds
+    .map((artistId) => getArtistIndexChartProfile(artistId))
+    .filter((profile): profile is ArtistIndexChartProfile => Boolean(profile));
+}
+
+export function getCompareChartSeries(
+  profiles: ArtistIndexChartProfile[],
+): CompareArtistChartSeries[] {
+  return profiles.map((profile) => {
+    const sixMonthHistory = getLastSixMonthHistory(profile);
+    const latest = sixMonthHistory[sixMonthHistory.length - 1];
+
+    return {
+      artistId: profile.artistId,
+      artistName: profile.artistName,
+      ticker: profile.ticker,
+      colorKey: profile.artistId,
+      points: sixMonthHistory.map((point) => ({
+        date: point.date,
+        value: point.fandexPoint,
+      })),
+      latestPoint: latest?.fandexPoint ?? 0,
+      sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
+      trendBand: getIndexTrendBand(sixMonthHistory),
+    };
+  });
+}
+
+export function getCompareVariableSeries(
+  profiles: ArtistIndexChartProfile[],
+  variableKey: ArtistStockVariableKey,
+): CompareVariableChartSeries {
+  return {
+    variableKey,
+    displayName: getVariableDisplayName(variableKey),
+    artists: profiles.map((profile) => {
+      const series = getVariableSeries(profile, variableKey);
+
+      return {
+        artistId: profile.artistId,
+        artistName: profile.artistName,
+        ticker: profile.ticker,
+        points: series.points,
+        latestPoint: series.latestPoint,
+        sixMonthDelta: series.sixMonthDelta,
+      };
+    }),
+  };
+}
+
+export function getCompareSummaryRows(
+  profiles: ArtistIndexChartProfile[],
+): CompareSummaryRow[] {
+  return profiles.map((profile) => {
+    const sixMonthHistory = getLastSixMonthHistory(profile);
+    const latest = sixMonthHistory[sixMonthHistory.length - 1];
+
+    return {
+      artistId: profile.artistId,
+      artistName: profile.artistName,
+      ticker: profile.ticker,
+      groupType: profile.groupType,
+      coverageStatus: profile.coverageStatus,
+      currentFandexPoint: latest?.fandexPoint ?? 0,
+      sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
+      trendBand: getIndexTrendBand(sixMonthHistory),
+      strongestVariable: getStrongestVariables(profile, 1)[0] ?? null,
+      dataStatus: latest?.dataStatus ?? 'preview_only',
+      confidenceLevel: latest?.confidenceLevel ?? 'low',
+    };
+  });
+}
+
+export function getCompareStrongestVariables(
+  profiles: ArtistIndexChartProfile[],
+) {
+  return profiles.map((profile) => ({
+    artistId: profile.artistId,
+    artistName: profile.artistName,
+    ticker: profile.ticker,
+    strongestVariables: getStrongestVariables(profile, 3),
+  }));
+}
+
+export function getCompareCoverageSummary(
+  profiles: ArtistIndexChartProfile[],
+): CompareCoverageSummary {
+  return {
+    ...getCoverageSummary(profiles),
+    selectedArtistCount: profiles.length,
+  };
+}
+
+export function runComparePageShapeCheck() {
+  const profiles = getCompareArtistProfiles(defaultCompareArtistIds);
+  const chartSeries = getCompareChartSeries(profiles);
+  const variableSeries = artistStockVariableKeys.map((variableKey) =>
+    getCompareVariableSeries(profiles, variableKey),
+  );
+  const summaryRows = getCompareSummaryRows(profiles);
+  const coverageSummary = getCompareCoverageSummary(profiles);
+  const everyChartHasSixPoints = chartSeries.every(
+    (series) => series.points.length === 6,
+  );
+  const everyVariableHasArtistSeries = variableSeries.every(
+    (series) => series.artists.length === profiles.length,
+  );
+  const everyPointIsFinite = [...chartSeries, ...variableSeries.flatMap((series) => series.artists)].every(
+    (series) => series.points.every((point) => Number.isFinite(point.value)),
+  );
+
+  return {
+    ok:
+      profiles.length >= 2 &&
+      profiles.length <= 5 &&
+      everyChartHasSixPoints &&
+      everyVariableHasArtistSeries &&
+      everyPointIsFinite &&
+      summaryRows.length === profiles.length &&
+      coverageSummary.selectedArtistCount === profiles.length,
+    profileCount: profiles.length,
+    everyChartHasSixPoints,
+    everyVariableHasArtistSeries,
+    everyPointIsFinite,
+    summaryRowCount: summaryRows.length,
+    selectedArtistCount: coverageSummary.selectedArtistCount,
   };
 }

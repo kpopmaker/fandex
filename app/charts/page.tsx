@@ -578,6 +578,14 @@ export default async function ArtistIndexChartsPage({
             현재 차트는 베타 editorial seed 기반이며, 공식 순위/공식 평가/금융
             정보가 아닙니다.
           </p>
+          <Link
+            href={`/compare?artists=${chartProfiles
+              .map((profile) => profile.artistId)
+              .join(',')}`}
+            className="mt-5 inline-flex rounded-full bg-cyan-500 px-5 py-3 text-xs font-black text-white hover:bg-cyan-400"
+          >
+            Multi Artist Compare에서 6개월 비교하기
+          </Link>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -590,8 +598,8 @@ export default async function ArtistIndexChartsPage({
                 FANDEX 등록/추적 아티스트 기준
               </h2>
               <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
-                현재 차트는 전체 K-pop 아티스트가 아니라 FANDEX 등록/추적
-                아티스트 기준입니다. Coverage는 주요 활동성, 검색성, 팬덤 반응을
+                현재 차트는 모든 K-pop 아티스트를 대표하지 않으며 FANDEX
+                등록/추적 아티스트 기준입니다. Coverage는 주요 활동성, 검색성, 팬덤 반응을
                 고려한 editorial seed 기준으로 순차 확장 중입니다. 실제 콘텐츠
                 발행 전 외부 공개 지표를 1회 이상 재확인하세요. 시스템 신뢰도
                 구축 전까지 외부 콘텐츠에는 FANDEX 직접 언급을 보류합니다.
