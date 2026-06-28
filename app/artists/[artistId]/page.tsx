@@ -1,439 +1,227 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
-  artistUniverseV4,
-  getArtistV4ById,
-} from '../../data/v4/artistUniverse';
-import type { ArtistV4 } from '../../data/v4/types';
-import type { ArtistNewsItem, ChartPoint } from '../../data/v3/types';
-import FandexLineChart from '../../components/FandexLineChart';
-import ArtistNewsSection from '../../components/v3/ArtistNewsSection';
-import CustomIndexBuilder from '../../components/v3/CustomIndexBuilder';
-import {
-  artistUniverse,
-  getArtistV3ById,
-} from '../../data/v3/artistUniverse';
-import {
-  factorDefinitionsV3,
-  getNewsByArtistId,
-  trendingIssues,
-} from '../../data/v3/mockData';
-import {
-  getArtistChartPointsV4,
-  getArtistPriceHistoryV4,
-} from '../../data/v4/artistPriceHistory';
-import { getIssueSignalsForArtist } from '../../data/v4/scoring/issueScoreEngine';
-import type {
-  IssueCategory,
-  IssueScoreBreakdown,
-  IssueSignal,
-} from '../../data/v4/scoring/types';
-import { naverNewsItemsToArtistNewsItems } from '../../../lib/services/newsAdapter';
-import {
-  buildArtistNewsQuery,
-  hasNaverNewsCredentials,
-  searchNaverNews,
-} from '../../../lib/services/naverNews';
+  artistIndexChartProfiles,
+  calculateSixMonthDelta,
+  getAvailableStockVariables,
+  getIndexTrendBand,
+  getLastSixMonthHistory,
+  getSelectedVariableSeries,
+  getStrongestVariables,
+  getVariableDisplayName,
+  type ArtistIndexChartProfile,
+  type ArtistIndexCoverageStatus,
+  type ArtistIndexGroupType,
+  type ArtistIndexHistoryPoint,
+  type ArtistIndexTrendBand,
+  type ArtistStockVariableKey,
+  type ArtistStockVariableSeries,
+} from '../../data/v4/charts/artistIndexChartData';
 
 type PageProps = {
   params: Promise<{
     artistId: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-type MarketSignal = 'Rising' | 'Cooling' | 'Stable' | 'Watchlist';
-type IssueTone = 'positive' | 'neutral' | 'watch' | 'risk';
+type LineChartPoint = {
+  date: string;
+  value: number;
+};
 
-type ArtistDetailViewModel = {
-  id: string;
-  ticker: string;
-  name: string;
-  nameEn: string;
-  agency: string;
-  type: string;
-  status: string;
-  generation: string;
-  shortIntro: string;
-  debutDate: string;
-  fandomName?: string;
-  members: string[];
-  countryFocus: string[];
-  keywords: string[];
+const defaultSelectedVariables: ArtistStockVariableKey[] = [
+  'snsFandomPoint',
+  'brandFitPoint',
+  'comebackActivityPoint',
+];
+
+const lineColors = ['#0891b2', '#7c3aed', '#16a34a', '#f97316'];
+
+const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
+  girl_group: '걸그룹',
+  boy_group: '보이그룹',
+  solo: '솔로',
+  mixed: '혼성',
+  unit: '유닛',
+};
+
+const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
+  tracked: 'tracked',
+  partial: 'partial',
+  preview: 'preview',
+};
+
+const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
+  rising: '상승 흐름',
+  stable: '안정 흐름',
+  falling: '하락 흐름',
+  volatile: '변동성 흐름',
+  insufficient_data: '데이터 부족',
+};
+
+const trendSummaryLabels: Record<ArtistIndexTrendBand, string> = {
+  rising: '상승',
+  stable: '안정',
+  falling: '하락',
+  volatile: '변동성',
+  insufficient_data: '데이터 보강 필요',
 };
 
 export function generateStaticParams() {
-  const artistIds = Array.from(
-    new Set([
-      ...artistUniverse.map((artist) => artist.id),
-      ...artistUniverseV4.map((artist) => artist.id),
-    ])
-  );
-
-  return artistIds.map((artistId) => ({
-    artistId,
+  return artistIndexChartProfiles.map((profile) => ({
+    artistId: profile.artistId,
   }));
 }
 
-function formatLargeNumber(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(safeNumber(value));
+function formatPoint(value: number) {
+  return `${new Intl.NumberFormat('ko-KR').format(Math.round(value))}pt`;
 }
 
-function formatPercent(value: number) {
-  const safeValue = safeNumber(value);
-
-  return `${safeValue >= 0 ? '+' : ''}${safeValue.toFixed(2)}%`;
+function formatDelta(value: number) {
+  return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
+    Math.round(value),
+  )}pt`;
 }
 
-function getMarketSignal(changeRate: number, volume: number): MarketSignal {
-  if (changeRate >= 10) {
-    return 'Rising';
+function getLatestHistoryPoint(profile: ArtistIndexChartProfile) {
+  return profile.history[profile.history.length - 1];
+}
+
+function isStockVariableKey(value: string): value is ArtistStockVariableKey {
+  return getAvailableStockVariables().some(
+    (variable) => variable.variableKey === value,
+  );
+}
+
+function parseSelectedVariables(params: {
+  [key: string]: string | string[] | undefined;
+}): ArtistStockVariableKey[] {
+  const rawVariables = params.variables;
+  const rawValue = Array.isArray(rawVariables) ? rawVariables[0] : rawVariables;
+
+  if (!rawValue) {
+    return defaultSelectedVariables;
   }
 
-  if (changeRate <= -5) {
-    return 'Cooling';
+  const selectedVariables: ArtistStockVariableKey[] = [];
+
+  rawValue
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .forEach((value) => {
+      if (
+        isStockVariableKey(value) &&
+        !selectedVariables.includes(value) &&
+        selectedVariables.length < 4
+      ) {
+        selectedVariables.push(value);
+      }
+    });
+
+  return selectedVariables.length > 0
+    ? selectedVariables
+    : defaultSelectedVariables;
+}
+
+function buildArtistVariableHref(
+  artistId: string,
+  selectedVariables: ArtistStockVariableKey[],
+) {
+  const params = new URLSearchParams();
+
+  params.set('variables', selectedVariables.join(','));
+
+  return `/artists/${artistId}?${params.toString()}`;
+}
+
+function toggleVariableSelection(
+  currentVariables: ArtistStockVariableKey[],
+  targetVariable: ArtistStockVariableKey,
+) {
+  if (currentVariables.includes(targetVariable)) {
+    return currentVariables.length === 1
+      ? currentVariables
+      : currentVariables.filter((variable) => variable !== targetVariable);
   }
 
-  if (volume >= 30000) {
-    return 'Watchlist';
+  if (currentVariables.length >= 4) {
+    return currentVariables;
   }
 
-  return 'Stable';
+  return [...currentVariables, targetVariable];
 }
 
-function safeNumber(value: number | null | undefined, fallback = 0): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+function getSafeArtistProfile(artistId: string) {
+  return artistIndexChartProfiles.find((profile) => profile.artistId === artistId);
 }
 
-function safePositiveNumber(
-  value: number | null | undefined,
-  fallback = 0
-): number {
-  return Math.max(safeNumber(value, fallback), 0);
-}
+function createLinePath(
+  points: LineChartPoint[],
+  width: number,
+  height: number,
+  minValue: number,
+  maxValue: number,
+) {
+  const paddingX = 34;
+  const paddingY = 24;
+  const plotWidth = width - paddingX * 2;
+  const plotHeight = height - paddingY * 2;
+  const range = maxValue - minValue || 1;
 
-function clampScore(value: number | null | undefined, fallback = 0) {
-  return Math.min(Math.max(safeNumber(value, fallback), 0), 100);
-}
-
-function getChangeRateFromHistory(firstPrice: number, latestPrice: number) {
-  const safeFirstPrice = safeNumber(firstPrice);
-  const safeLatestPrice = safeNumber(latestPrice);
-
-  if (safeFirstPrice === 0) {
-    return 0;
-  }
-
-  return ((safeLatestPrice - safeFirstPrice) / safeFirstPrice) * 100;
-}
-
-function getPeriodLabel(chartPoints: ChartPoint[]) {
-  const first = chartPoints[0];
-  const latest = chartPoints[chartPoints.length - 1];
-
-  if (!first || !latest) {
-    return '-';
-  }
-
-  return `${first.time} - ${latest.time}`;
-}
-
-function toChartSeriesPoints(chartPoints: ChartPoint[]) {
-  return chartPoints
-    .filter((point) => Number.isFinite(point.value))
-    .map((point) => ({
-      label: point.time,
-      value: point.value,
-    }));
-}
-
-function getCompareGroup(artistId: string) {
-  return Array.from(new Set([artistId, 'aespa', 'ive', 'riize']))
-    .slice(0, 4)
-    .join(',');
-}
-
-function getTimestamp(value: string | undefined) {
-  if (!value) {
-    return 0;
-  }
-
-  const timestamp = new Date(value).getTime();
-
-  return Number.isFinite(timestamp) ? timestamp : 0;
-}
-
-function formatIssueDate(value: string | undefined) {
-  const timestamp = getTimestamp(value);
-
-  if (timestamp === 0) {
-    return 'Recently';
-  }
-
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(timestamp));
-}
-
-function getLatestIssueSignal(signals: IssueSignal[]) {
-  return [...signals].sort((a, b) => {
-    const aTime = Math.max(
-      getTimestamp(a.detectedAt),
-      getTimestamp(a.publishedAt)
-    );
-    const bTime = Math.max(
-      getTimestamp(b.detectedAt),
-      getTimestamp(b.publishedAt)
-    );
-
-    return bTime - aTime;
-  })[0];
-}
-
-function formatIssueCategory(category: IssueCategory | undefined) {
-  if (!category) {
-    return 'No active category';
-  }
-
-  return category
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  return points
+    .map((point, index) => {
+      const x = paddingX + (index / Math.max(points.length - 1, 1)) * plotWidth;
+      const y = paddingY + ((maxValue - point.value) / range) * plotHeight;
+      return `${index === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
     .join(' ');
 }
 
-function getIssueTone({
-  breakdown,
-  summary,
-}: {
-  breakdown: IssueScoreBreakdown | undefined;
-  summary:
-    | {
-        activeIssueCount: number;
-        positiveIssueCount: number;
-        negativeIssueCount: number;
-      }
-    | undefined;
-}): { label: string; tone: IssueTone } {
-  const issueScore = clampScore(breakdown?.issueScore, 50);
-  const riskScore = clampScore(breakdown?.controversyRiskScore);
-  const negativeIssueCount = Math.round(
-    safePositiveNumber(summary?.negativeIssueCount)
-  );
-  const positiveIssueCount = Math.round(
-    safePositiveNumber(summary?.positiveIssueCount)
-  );
-
-  if (riskScore >= 65) {
-    return { label: 'Risk', tone: 'risk' };
-  }
-
-  if (
-    issueScore <= 40 ||
-    riskScore >= 35 ||
-    negativeIssueCount > positiveIssueCount
-  ) {
-    return { label: 'Watch', tone: 'watch' };
-  }
-
-  if (issueScore >= 60 && riskScore < 50) {
-    return { label: 'Positive', tone: 'positive' };
-  }
-
-  return { label: 'Neutral', tone: 'neutral' };
+function toFandexChartPoints(history: ArtistIndexHistoryPoint[]) {
+  return history.map((point) => ({
+    date: point.date,
+    value: point.fandexPoint,
+  }));
 }
 
-function formatEntityType(entityType: ArtistV4['entityType']) {
-  const labels: Record<ArtistV4['entityType'], string> = {
-    group: 'Group',
-    solo: 'Solo',
-    unit: 'Unit',
-    project: 'Project',
-  };
-
-  return labels[entityType];
-}
-
-function formatLifecycleStatus(status: ArtistV4['lifecycleStatus']) {
-  const labels: Record<ArtistV4['lifecycleStatus'], string> = {
-    active: 'Active',
-    hiatus: 'Hiatus',
-    military: 'Military hiatus',
-    inactive: 'Inactive',
-    predebut: 'Pre-debut',
-  };
-
-  return labels[status];
-}
-
-function formatMarketCode(market: ArtistV4['profile']['markets'][number]) {
-  const labels: Record<ArtistV4['profile']['markets'][number], string> = {
-    KR: 'Korea',
-    JP: 'Japan',
-    US: 'United States',
-    SEA: 'Southeast Asia',
-    CN: 'China',
-    EU: 'Europe',
-    GLOBAL: 'Global',
-  };
-
-  return labels[market];
-}
-
-function createV4ArtistDetailViewModel(
-  artist: ArtistV4
-): ArtistDetailViewModel {
-  const keywords = Array.from(
-    new Set([
-      ...artist.profile.includeKeywords,
-      ...artist.profile.aliases,
-      artist.agency,
-    ])
-  ).filter(Boolean);
-  const countryFocus =
-    artist.profile.markets.length > 0
-      ? artist.profile.markets.map(formatMarketCode)
-      : ['Global'];
+function getMinMax(series: LineChartPoint[][]) {
+  const values = series.flat().map((point) => point.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const padding = Math.max((max - min) * 0.12, 10);
 
   return {
-    id: artist.id,
-    ticker: artist.ticker,
-    name: artist.nameKo,
-    nameEn: artist.nameEn,
-    agency: artist.agency,
-    type: formatEntityType(artist.entityType),
-    status: formatLifecycleStatus(artist.lifecycleStatus),
-    generation: artist.generation ?? 'TBD',
-    shortIntro:
-      artist.shortIntro ??
-      `${artist.nameEn} is tracked in the FANDEX v4 artist universe.`,
-    debutDate: artist.debutDate ?? 'TBD',
-    fandomName: artist.fandomName,
-    members: artist.members,
-    countryFocus,
-    keywords,
+    minValue: min - padding,
+    maxValue: max + padding,
   };
 }
 
-function getArtistDetailViewModel(
-  artistId: string
-): ArtistDetailViewModel | undefined {
-  const artistV3 = getArtistV3ById(artistId);
-
-  if (artistV3) {
-    return {
-      id: artistV3.id,
-      ticker: artistV3.ticker,
-      name: artistV3.nameKo,
-      nameEn: artistV3.nameEn,
-      agency: artistV3.agency,
-      type: artistV3.type,
-      status: artistV3.status,
-      generation: artistV3.generation,
-      shortIntro: artistV3.shortIntro,
-      debutDate: artistV3.debutDate,
-      fandomName: artistV3.fandomName,
-      members: artistV3.members,
-      countryFocus: artistV3.countryFocus,
-      keywords: artistV3.keywords,
-    };
-  }
-
-  const artistV4 = getArtistV4ById(artistId);
-
-  return artistV4 ? createV4ArtistDetailViewModel(artistV4) : undefined;
+function getComparisonHref(artistId: string) {
+  const compareIds = Array.from(new Set([artistId, 'ive'])).slice(0, 2);
+  return `/compare?artists=${compareIds.join(',')}`;
 }
 
-function getMockNewsItems(artistId: string) {
-  return getNewsByArtistId(artistId).slice(0, 6);
-}
-
-async function getHybridNewsItems(artistId: string): Promise<ArtistNewsItem[]> {
-  if (!hasNaverNewsCredentials()) {
-    return getMockNewsItems(artistId);
-  }
-
-  const artistV4 = getArtistV4ById(artistId);
-
-  if (!artistV4) {
-    return getMockNewsItems(artistId);
-  }
-
-  try {
-    const query = buildArtistNewsQuery(artistV4);
-    const result = await searchNaverNews({
-      query,
-      display: 6,
-      sort: 'date',
-    });
-    const realNewsItems = naverNewsItemsToArtistNewsItems({
-      items: result.items,
-      query,
-      artist: artistV4,
-    });
-
-    return realNewsItems.length > 0
-      ? realNewsItems.slice(0, 6)
-      : getMockNewsItems(artistId);
-  } catch {
-    return getMockNewsItems(artistId);
-  }
-}
-
-export default async function ArtistDetailPage({ params }: PageProps) {
+export default async function ArtistDetailPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { artistId } = await params;
-  const artist = getArtistDetailViewModel(artistId);
+  const profile = getSafeArtistProfile(artistId);
 
-  if (!artist) {
+  if (!profile) {
     notFound();
   }
 
-  const priceHistory = getArtistPriceHistoryV4(artistId);
-  const chartPoints = getArtistChartPointsV4(artistId);
-  const newsItems = await getHybridNewsItems(artistId);
-  const latestPrice = priceHistory[priceHistory.length - 1];
-  const firstPrice = priceHistory[0];
-  const officialChartPoints = toChartSeriesPoints(chartPoints);
-
-  if (!latestPrice || !firstPrice || officialChartPoints.length === 0) {
-    notFound();
-  }
-
-  const currentPrice = safePositiveNumber(latestPrice.price);
-  const currentVolume = safePositiveNumber(latestPrice.volume);
-  const currentFanSizeValue = safePositiveNumber(latestPrice.fanSizeValue);
-  const issueSignals = getIssueSignalsForArtist(artistId);
-  const latestIssueSignal = getLatestIssueSignal(issueSignals);
-  const issueScoreBreakdown = latestPrice.issueScoreBreakdown;
-  const issueSignalsSummary = latestPrice.issueSignalsSummary;
-  const issueTone = getIssueTone({
-    breakdown: issueScoreBreakdown,
-    summary: issueSignalsSummary,
-  });
-  const priceChange = currentPrice - safeNumber(firstPrice.price);
-  const priceChangeRate = getChangeRateFromHistory(firstPrice.price, currentPrice);
-  const isUp = priceChange >= 0;
-  const marketSignal = getMarketSignal(priceChangeRate, currentVolume);
-  const periodLabel = getPeriodLabel(chartPoints);
-  const factorRows = factorDefinitionsV3
-    .map((factor) => ({
-      key: factor.key,
-      label: factor.label,
-      score: safeNumber(latestPrice.scores[factor.key]),
-      helpText: factor.helpText,
-    }))
-    .sort((a, b) => b.score - a.score);
-  const strongestFactor = factorRows[0];
-  const weakestFactor = factorRows[factorRows.length - 1];
-  const relatedIssues = trendingIssues
-    .filter((issue) => issue.relatedArtistIds.includes(artist.id))
-    .slice(0, 4);
-  const issuesToShow =
-    relatedIssues.length > 0 ? relatedIssues : trendingIssues.slice(0, 3);
+  const selectedVariables = parseSelectedVariables(await searchParams);
+  const sixMonthHistory = getLastSixMonthHistory(profile);
+  const latestPoint = getLatestHistoryPoint(profile);
+  const fandexChartPoints = toFandexChartPoints(sixMonthHistory);
+  const fandexDelta = calculateSixMonthDelta(sixMonthHistory);
+  const trendBand = getIndexTrendBand(sixMonthHistory);
+  const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
+  const strongestVariables = getStrongestVariables(profile, 3);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
@@ -442,508 +230,470 @@ export default async function ArtistDetailPage({ params }: PageProps) {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
               <p className="font-mono text-sm font-black text-cyan-600 dark:text-cyan-300">
-                {artist.ticker}
+                {profile.ticker}
               </p>
-              <h1 className="mt-3 text-5xl font-black tracking-tight">
-                {artist.nameEn}
+              <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+                {profile.artistName} FANDEX 주가
               </h1>
-              <p className="mt-3 text-lg font-bold text-slate-500 dark:text-slate-400">
-                {artist.agency} / {artist.type} / {artist.generation}
-              </p>
-              <p className="mt-5 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                {artist.shortIntro}
+              <p className="mt-3 text-sm font-bold text-slate-500 dark:text-slate-400">
+                {groupTypeLabels[profile.groupType]} /{' '}
+                {coverageStatusLabels[profile.coverageStatus]} / updated{' '}
+                {profile.lastUpdated}
               </p>
               <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
-                FANDEX price is an internal simulated artist market index. It
-                is not a real stock, security, investment product, or financial
-                advice.
+                FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+                위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
+                아닙니다.
               </p>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                <IntroFact label="Debut" value={artist.debutDate} />
-                <IntroFact label="Fandom" value={artist.fandomName ?? 'TBD'} />
-                <IntroFact
-                  label="Members"
-                  value={`${artist.members.length} tracked`}
-                />
-                <IntroFact
-                  label="Markets"
-                  value={artist.countryFocus.slice(0, 3).join(', ')}
-                />
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {artist.keywords.slice(0, 6).map((keyword) => (
-                  <span
-                    key={keyword}
-                    className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
-                  >
-                    #{keyword}
-                  </span>
-                ))}
-              </div>
             </div>
-
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
-                href="/"
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300 dark:hover:text-cyan-300"
+                href="/artists"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
               >
-                Back to market home
+                아티스트 목록
               </Link>
               <Link
-                href={`/compare?artists=${artist.id}`}
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300 dark:hover:text-cyan-300"
+                href="/charts"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
               >
-                Compare this artist
+                주가 차트 비교
               </Link>
               <Link
-                href={`/compare?artists=${getCompareGroup(artist.id)}`}
-                className="rounded-full bg-cyan-400 px-4 py-2 text-xs font-black text-slate-950 hover:bg-cyan-300"
+                href={getComparisonHref(profile.artistId)}
+                className="rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400"
               >
-                Compare with representatives
+                이 아티스트를 비교에 추가
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <MarketStat
-            label="Current FANDEX price"
-            value={`${currentPrice.toFixed(2)} FDX`}
-            tone="black"
-          />
-          <MarketStat
-            label="Change rate"
-            value={formatPercent(priceChangeRate)}
-            tone={isUp ? 'red' : 'blue'}
-          />
-          <MarketStat
-            label="Volume"
-            value={formatLargeNumber(currentVolume)}
-            tone="purple"
-          />
-          <MarketStat
-            label="Fan size value"
-            value={formatLargeNumber(currentFanSizeValue)}
-            tone="cyan"
-          />
-          <MarketStat
-            label="Market signal"
-            value={marketSignal}
-            tone={marketSignal === 'Cooling' ? 'blue' : 'cyan'}
-          />
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+          <MetricCard label="현재 FANDEX 주가" value={formatPoint(latestPoint.fandexPoint)} />
+          <MetricCard label="최근 6개월 변화" value={formatDelta(fandexDelta)} />
+          <MetricCard label="trend band" value={trendBandLabels[trendBand]} />
+          <MetricCard label="dataStatus" value={latestPoint.dataStatus} />
+          <MetricCard label="confidenceLevel" value={latestPoint.confidenceLevel} />
+          <MetricCard label="coverageStatus" value={profile.coverageStatus} />
         </section>
 
-        <IssueNewsSignalPanel
-          latestIssue={latestIssueSignal}
-          scoreBreakdown={issueScoreBreakdown}
-          summary={issueSignalsSummary}
-          tone={issueTone}
-        />
-
-        <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
-              <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-                Official FANDEX price
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                6개월 변동 추이
               </p>
-              <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-                {artist.nameEn} official artist index
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                The official FANDEX price blends music, album, video, SNS,
-                search, news, global, fandom, and company signals into one
-                simulated artist market index.
+              <h2 className="mt-2 text-2xl font-black">FANDEX 주가 차트</h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                최근 6개 시점 기준 FANDEX 주가가{' '}
+                {trendSummaryLabels[trendBand]} 흐름을 보입니다.
               </p>
             </div>
-
-            <FandexLineChart
-              ariaLabel={`${artist.nameEn} official FANDEX price line chart`}
-              period={periodLabel}
-              height={360}
-              minWidth={720}
-              showArea
-              valueLocale="en-US"
-              minimumFractionDigits={2}
-              maximumFractionDigits={2}
-              changeFractionDigits={2}
-              series={[
-                {
-                  id: `${artist.id}-official-price`,
-                  label: `${artist.ticker} Official FANDEX`,
-                  points: officialChartPoints,
-                },
-              ]}
+            <SingleLineChart
+              ariaLabel={`${profile.artistName} 최근 6개월 FANDEX 주가 차트`}
+              color="#0891b2"
+              points={fandexChartPoints}
             />
           </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-            <div className="mb-5">
-              <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-                Factor breakdown
-              </p>
-              <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-                Strengths and weak spots
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                Latest factor scores explain which signals are carrying the
-                current artist index.
-              </p>
-            </div>
-
-            {strongestFactor && weakestFactor && (
-              <div className="mb-5 grid gap-3 sm:grid-cols-2">
-                <FactorHighlight
-                  label="Top strength"
-                  factor={strongestFactor.label}
-                  score={strongestFactor.score}
-                />
-                <FactorHighlight
-                  label="Weakest factor"
-                  factor={weakestFactor.label}
-                  score={weakestFactor.score}
-                />
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {factorRows.map((factor) => (
-                <FactorBar
-                  key={factor.key}
-                  label={factor.label}
-                  score={factor.score}
-                  helpText={factor.helpText}
-                />
-              ))}
-            </div>
-          </section>
-        </section>
-
-        <CustomIndexBuilder
-          artistName={artist.nameEn}
-          priceHistory={priceHistory}
-        />
-
-        <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-            <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-              Related issue impact
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              Summary
             </p>
-            <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-              Issues that may have influenced signals
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-              These issue cards are cautious market context. They may have
-              influenced attention, search, social reaction, or FANDEX momentum.
-            </p>
-
-            <div className="mt-5 space-y-3">
-              {issuesToShow.map((issue) => (
-                <article
-                  key={issue.id}
-                  className="rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700 dark:hover:bg-slate-900"
-                >
-                  <div className="flex flex-wrap gap-2">
-                    <span className="rounded-full border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 dark:!border-slate-500 dark:!bg-slate-800 dark:!text-slate-50">
-                      #{issue.rank}
-                    </span>
-                    <span className="rounded-full bg-white px-2 py-1 text-xs font-bold text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                      {issue.category}
-                    </span>
-                    <span className="rounded-full bg-white px-2 py-1 text-xs font-bold text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                      {issue.impact}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-black text-slate-950 dark:text-white">
-                    {issue.headline}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                    {issue.summary} This appears related to signal movement and
-                    is a watch item for future content planning.
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-            <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-              AI content angle preview
-            </p>
-            <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-              Data-to-content ideas
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-              Planned AI studio output based on this artist data. No external
-              AI API or upload workflow is called here.
-            </p>
-
+            <h2 className="mt-2 text-2xl font-black">주가형 지수 요약</h2>
             <div className="mt-5 grid gap-3">
-              <ContentIdea
-                label="Short-form hook"
-                value={`Why ${artist.nameEn}'s ${strongestFactor?.label ?? 'top'} signal is moving faster than the market.`}
-              />
-              <ContentIdea
-                label="Feed post angle"
-                value={`Break down ${artist.ticker}'s FANDEX price, volume, and fan size value in one carousel.`}
-              />
-              <ContentIdea
-                label="Thread/X post angle"
-                value={`A quick thread on what ${marketSignal.toLowerCase()} means for ${artist.nameEn}'s simulated artist index.`}
-              />
-              <ContentIdea
-                label="Fandom engagement idea"
-                value={`Ask fans which signal matters most right now: ${strongestFactor?.label ?? 'momentum'}, issue impact, or content reaction.`}
-              />
+              <InfoRow label="아티스트" value={profile.artistName} />
+              <InfoRow label="ticker" value={profile.ticker} />
+              <InfoRow label="groupType" value={groupTypeLabels[profile.groupType]} />
+              <InfoRow label="lastUpdated" value={profile.lastUpdated} />
+              <InfoRow label="latest note" value={latestPoint.note} />
             </div>
           </section>
         </section>
 
-        <ArtistNewsSection newsItems={newsItems} />
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                변수별 영향
+              </p>
+              <h2 className="mt-2 text-2xl font-black">산출 변수 선택</h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                1개부터 4개까지 선택할 수 있습니다. 선택 변수 그래프는 전체
+                FANDEX 주가 산출에 영향을 준 개별 변수의 흐름을 보여줍니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+              선택 {selectedVariables.length}/4
+            </span>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {getAvailableStockVariables().map((variable) => {
+              const active = selectedVariables.includes(variable.variableKey);
+              const nextVariables = toggleVariableSelection(
+                selectedVariables,
+                variable.variableKey,
+              );
+              const disabledAdd = !active && selectedVariables.length >= 4;
+
+              return (
+                <Link
+                  key={variable.variableKey}
+                  href={buildArtistVariableHref(profile.artistId, nextVariables)}
+                  aria-disabled={disabledAdd}
+                  className={
+                    active
+                      ? 'rounded-full border border-cyan-400 bg-cyan-50 px-4 py-2 text-sm font-black text-cyan-800 dark:border-cyan-300/40 dark:bg-cyan-400/10 dark:text-cyan-100'
+                      : disabledAdd
+                        ? 'rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-black text-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-500'
+                        : 'rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300'
+                  }
+                >
+                  {active ? '✓ ' : ''}
+                  {variable.displayName}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <div className="mb-5">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                Selected Variables
+              </p>
+              <h2 className="mt-2 text-2xl font-black">선택 변수 영향 그래프</h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                전체 주가와 동일한 값이 아니라 변수별 raw/weighted point
+                흐름입니다.
+              </p>
+            </div>
+            <MultiLineChart
+              ariaLabel={`${profile.artistName} 선택 변수별 영향 그래프`}
+              series={selectedSeries}
+            />
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              Variable Points
+            </p>
+            <h2 className="mt-2 text-2xl font-black">선택 변수 최신 포인트</h2>
+            <div className="mt-5 grid gap-3">
+              {selectedSeries.map((series, index) => (
+                <VariablePointCard
+                  key={series.variableKey}
+                  color={lineColors[index % lineColors.length]}
+                  selected
+                  series={series}
+                />
+              ))}
+            </div>
+          </section>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            Contribution
+          </p>
+          <h2 className="mt-2 text-2xl font-black">변수별 기여도 카드</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {strongestVariables.map((summary) => (
+              <article
+                key={summary.variableKey}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60"
+              >
+                <p className="text-sm font-black text-slate-950 dark:text-white">
+                  {summary.displayName}
+                </p>
+                <p className="mt-3 font-mono text-2xl font-black text-cyan-700 dark:text-cyan-300">
+                  {formatPoint(summary.latestPoint)}
+                </p>
+                <p className="mt-1 text-sm font-bold text-slate-500">
+                  6개월 변화 {formatDelta(summary.sixMonthDelta)}
+                </p>
+                <p className="mt-3 text-xs font-bold leading-5 text-slate-500 dark:text-slate-400">
+                  {selectedVariables.includes(summary.variableKey)
+                    ? '현재 선택된 변수입니다.'
+                    : '현재 선택 그래프에는 포함되지 않았습니다.'}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                Coverage / Trust Notice
+              </p>
+              <h2 className="mt-2 text-2xl font-black">데이터 기준 안내</h2>
+            </div>
+            <Link
+              href={`/compare?artists=${profile.artistId}`}
+              className="inline-flex rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400"
+            >
+              이 아티스트를 비교에 추가
+            </Link>
+          </div>
+          <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:grid-cols-2">
+            <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다.
+            </li>
+            <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              모든 K-pop 아티스트를 대표하지 않습니다.
+            </li>
+            <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              현재 차트는 editorial seed / preview 기반이며, 실제 공개 지표
+              검증과 자동 수집은 후속 단계입니다.
+            </li>
+            <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              FANDEX 주가는 금융상품/투자정보가 아닙니다.
+            </li>
+          </ul>
+        </section>
       </section>
     </main>
   );
 }
 
-function MarketStat({
-  label,
-  value,
-  tone,
+function SingleLineChart({
+  ariaLabel,
+  color,
+  points,
 }: {
-  label: string;
-  value: string;
-  tone: 'black' | 'red' | 'blue' | 'purple' | 'cyan';
+  ariaLabel: string;
+  color: string;
+  points: LineChartPoint[];
 }) {
-  const toneClass = {
-    black: 'text-slate-950 dark:text-white',
-    red: 'text-red-500',
-    blue: 'text-blue-500',
-    purple: 'text-purple-500',
-    cyan: 'text-cyan-600 dark:text-cyan-300',
-  }[tone];
+  const width = 820;
+  const height = 320;
+  const { minValue, maxValue } = getMinMax([points]);
+  const path = createLinePath(points, width, height, minValue, maxValue);
 
+  return (
+    <ChartFrame>
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="h-80 w-full">
+        <ChartGrid width={width} height={height} />
+        <path d={path} fill="none" stroke={color} strokeLinecap="round" strokeWidth="5" />
+        {points.map((point, index) => (
+          <ChartPoint
+            key={point.date}
+            color={color}
+            height={height}
+            index={index}
+            maxValue={maxValue}
+            minValue={minValue}
+            point={point}
+            pointCount={points.length}
+            width={width}
+          />
+        ))}
+      </svg>
+    </ChartFrame>
+  );
+}
+
+function MultiLineChart({
+  ariaLabel,
+  series,
+}: {
+  ariaLabel: string;
+  series: ArtistStockVariableSeries[];
+}) {
+  const width = 820;
+  const height = 320;
+  const { minValue, maxValue } = getMinMax(series.map((item) => item.points));
+
+  return (
+    <ChartFrame>
+      <div className="mb-4 flex flex-wrap gap-2">
+        {series.map((item, index) => (
+          <span
+            key={item.variableKey}
+            className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm dark:bg-slate-950 dark:text-slate-300"
+          >
+            <span
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: lineColors[index % lineColors.length] }}
+            />
+            {item.displayName}
+          </span>
+        ))}
+      </div>
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="h-80 w-full">
+        <ChartGrid width={width} height={height} />
+        {series.map((item, index) => (
+          <path
+            key={item.variableKey}
+            d={createLinePath(item.points, width, height, minValue, maxValue)}
+            fill="none"
+            stroke={lineColors[index % lineColors.length]}
+            strokeLinecap="round"
+            strokeWidth="4"
+          />
+        ))}
+        {series.map((item, seriesIndex) =>
+          item.points.map((point, pointIndex) => (
+            <ChartPoint
+              key={`${item.variableKey}-${point.date}`}
+              color={lineColors[seriesIndex % lineColors.length]}
+              height={height}
+              index={pointIndex}
+              maxValue={maxValue}
+              minValue={minValue}
+              point={point}
+              pointCount={item.points.length}
+              width={width}
+            />
+          )),
+        )}
+      </svg>
+    </ChartFrame>
+  );
+}
+
+function ChartFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      {children}
+    </div>
+  );
+}
+
+function ChartGrid({ height, width }: { height: number; width: number }) {
+  return (
+    <>
+      {[0, 1, 2, 3].map((line) => {
+        const y = 24 + line * ((height - 48) / 3);
+        return (
+          <line
+            key={line}
+            x1="34"
+            x2={width - 34}
+            y1={y}
+            y2={y}
+            stroke="currentColor"
+            strokeDasharray="5 5"
+            className="text-slate-200 dark:text-slate-700"
+          />
+        );
+      })}
+    </>
+  );
+}
+
+function ChartPoint({
+  color,
+  height,
+  index,
+  maxValue,
+  minValue,
+  point,
+  pointCount,
+  width,
+}: {
+  color: string;
+  height: number;
+  index: number;
+  maxValue: number;
+  minValue: number;
+  point: LineChartPoint;
+  pointCount: number;
+  width: number;
+}) {
+  const paddingX = 34;
+  const paddingY = 24;
+  const x = paddingX + (index / Math.max(pointCount - 1, 1)) * (width - paddingX * 2);
+  const y =
+    paddingY +
+    ((maxValue - point.value) / (maxValue - minValue || 1)) *
+      (height - paddingY * 2);
+
+  return (
+    <g>
+      <circle cx={x} cy={y} r="4.5" fill="white" stroke={color} strokeWidth="3" />
+      <text
+        x={x}
+        y={height - 7}
+        textAnchor="middle"
+        className="fill-slate-500 text-[11px] font-bold dark:fill-slate-400"
+      >
+        {point.date.replace('2026-', '')}
+      </text>
+    </g>
+  );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <p className="text-xs font-bold text-slate-400">{label}</p>
-      <p className={`mt-2 font-mono text-xl font-black ${toneClass}`}>
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function IntroFact({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-      <p className="text-xs font-bold text-slate-400">{label}</p>
-      <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function FactorHighlight({
-  label,
-  factor,
-  score,
-}: {
-  label: string;
-  factor: string;
-  score: number;
-}) {
-  return (
-    <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-      <p className="text-xs font-bold text-slate-400">{label}</p>
-      <p className="mt-1 text-lg font-black text-slate-950 dark:text-white">
-        {factor}
-      </p>
-      <p className="mt-1 font-mono text-sm font-black text-cyan-600 dark:text-cyan-300">
-        {score.toFixed(1)}
-      </p>
-    </div>
-  );
-}
-
-function FactorBar({
-  label,
-  score,
-  helpText,
-}: {
-  label: string;
-  score: number;
-  helpText: string;
-}) {
-  return (
-    <div>
-      <div className="mb-1 flex items-center justify-between gap-3 text-xs">
-        <span className="font-black text-slate-600 dark:text-slate-300">
-          {label}
-        </span>
-        <span className="font-mono font-black text-slate-950 dark:text-white">
-          {score.toFixed(1)}
-        </span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-        <div
-          className="h-full rounded-full bg-cyan-400"
-          style={{ width: `${Math.min(score, 100)}%` }}
-        />
-      </div>
-      <p className="mt-1 text-xs leading-5 text-slate-400">{helpText}</p>
-    </div>
-  );
-}
-
-function IssueNewsSignalPanel({
-  latestIssue,
-  scoreBreakdown,
-  summary,
-  tone,
-}: {
-  latestIssue: IssueSignal | undefined;
-  scoreBreakdown: IssueScoreBreakdown | undefined;
-  summary:
-    | {
-        activeIssueCount: number;
-        positiveIssueCount: number;
-        negativeIssueCount: number;
-      }
-    | undefined;
-  tone: { label: string; tone: IssueTone };
-}) {
-  const hasActiveIssue = safePositiveNumber(summary?.activeIssueCount) > 0;
-  const issueScore = clampScore(scoreBreakdown?.issueScore, 50);
-  const riskScore = clampScore(scoreBreakdown?.controversyRiskScore);
-  const confidenceScore = clampScore(scoreBreakdown?.confidenceScore, 50);
-  const activeIssueCount = Math.round(
-    safePositiveNumber(summary?.activeIssueCount)
-  );
-  const positiveIssueCount = Math.round(
-    safePositiveNumber(summary?.positiveIssueCount),
-  );
-  const negativeIssueCount = Math.round(
-    safePositiveNumber(summary?.negativeIssueCount),
-  );
-  const title =
-    hasActiveIssue && latestIssue?.title
-      ? latestIssue.title
-      : 'No active issue signals are currently reflected.';
-  const category = hasActiveIssue
-    ? formatIssueCategory(latestIssue?.category)
-    : 'Neutral';
-  const updatedAt = hasActiveIssue
-    ? formatIssueDate(latestIssue?.detectedAt ?? latestIssue?.publishedAt)
-    : 'Recently';
-
-  return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-bold text-cyan-600 dark:text-cyan-300">
-              News & issue signals
-            </p>
-            <IssueToneBadge label={tone.label} tone={tone.tone} />
-          </div>
-          <h2 className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
-            {title}
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Recent issue signals reflected in the current FANDEX artist index.
-            Treat them as context for momentum, confidence, and watch risk.
-          </p>
-        </div>
-
-        <div className="grid min-w-0 gap-3 sm:grid-cols-3 lg:min-w-[420px]">
-          <IssueMetric label="Issue score" value={issueScore} />
-          <IssueMetric label="Watch risk" value={riskScore} />
-          <IssueMetric label="Confidence" value={confidenceScore} />
-        </div>
-      </div>
-
-      <div className="mt-4 grid gap-3 md:grid-cols-4">
-        <IssueFact label="Category" value={category} />
-        <IssueFact label="Updated" value={updatedAt} />
-        <IssueFact label="Active signals" value={String(activeIssueCount)} />
-        <IssueFact
-          label="Direction"
-          value={`${positiveIssueCount} positive / ${negativeIssueCount} watch`}
-        />
-      </div>
-    </section>
-  );
-}
-
-function IssueToneBadge({
-  label,
-  tone,
-}: {
-  label: string;
-  tone: IssueTone;
-}) {
-  const toneClass = {
-    positive:
-      'border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-200',
-    neutral:
-      'border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
-    watch:
-      'border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-400/20 dark:bg-purple-400/10 dark:text-purple-200',
-    risk:
-      'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-200',
-  }[tone];
-
-  return (
-    <span
-      className={`rounded-full border px-3 py-1 text-xs font-black ${toneClass}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-function IssueMetric({ label, value }: { label: string; value: number }) {
-  const score = clampScore(value);
-
-  return (
-    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-bold text-slate-400">{label}</p>
-        <p className="font-mono text-sm font-black text-slate-950 dark:text-white">
-          {score.toFixed(1)}
-        </p>
-      </div>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white dark:bg-slate-800">
-        <div
-          className="h-full rounded-full bg-cyan-400"
-          style={{ width: `${score}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function IssueFact({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-      <p className="text-xs font-bold text-slate-400">{label}</p>
-      <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function ContentIdea({ label, value }: { label: string; value: string }) {
-  return (
-    <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4 transition hover:border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700 dark:hover:bg-slate-900">
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-400">
         {label}
       </p>
-      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+      <p className="mt-2 break-words font-mono text-lg font-black text-slate-950 dark:text-white">
         {value}
       </p>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-400">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function VariablePointCard({
+  color,
+  selected,
+  series,
+}: {
+  color: string;
+  selected: boolean;
+  series: ArtistStockVariableSeries;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {series.displayName}
+          </p>
+          <p className="mt-1 text-xs font-bold text-slate-500">
+            {selected ? '선택 변수' : getVariableDisplayName(series.variableKey)}
+          </p>
+        </div>
+        <span
+          className="mt-1 h-3 w-3 shrink-0 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <MetricMini label="최신" value={formatPoint(series.latestPoint)} />
+        <MetricMini label="6개월 변화" value={formatDelta(series.sixMonthDelta)} />
+      </div>
     </article>
+  );
+}
+
+function MetricMini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-white p-3 dark:bg-slate-950">
+      <p className="text-xs font-bold text-slate-400">{label}</p>
+      <p className="mt-1 break-words font-mono text-sm font-black text-slate-950 dark:text-white">
+        {value}
+      </p>
+    </div>
   );
 }

@@ -39,6 +39,36 @@ export type ArtistIndexHistoryPoint = {
   note: string;
 };
 
+export type ArtistStockVariableKey =
+  | 'musicAlbumPoint'
+  | 'newsIssuePoint'
+  | 'snsFandomPoint'
+  | 'brandFitPoint'
+  | 'comebackActivityPoint'
+  | 'growthMomentumPoint'
+  | 'riskAdjustmentPoint';
+
+export type ArtistStockVariablePoint = {
+  date: string;
+  value: number;
+};
+
+export type ArtistStockVariableSeries = {
+  variableKey: ArtistStockVariableKey;
+  displayName: string;
+  points: ArtistStockVariablePoint[];
+  latestPoint: number;
+  sixMonthDelta: number;
+};
+
+export type ArtistStockContributionSummary = {
+  variableKey: ArtistStockVariableKey;
+  displayName: string;
+  latestPoint: number;
+  sixMonthDelta: number;
+  shareOfLatestTotal: number;
+};
+
 export type ArtistIndexChartProfile = {
   artistId: string;
   artistName: string;
@@ -84,6 +114,26 @@ const defaultNotes = [
   'fandom spread observed',
   'music and album response preview',
   'global response preview',
+];
+
+const stockVariableDisplayNames: Record<ArtistStockVariableKey, string> = {
+  musicAlbumPoint: '음원/음반',
+  newsIssuePoint: '뉴스/이슈',
+  snsFandomPoint: 'SNS/팬덤',
+  brandFitPoint: '브랜드 적합도',
+  comebackActivityPoint: '컴백/활동',
+  growthMomentumPoint: '성장 모멘텀',
+  riskAdjustmentPoint: '리스크 감점',
+};
+
+export const artistStockVariableKeys: ArtistStockVariableKey[] = [
+  'musicAlbumPoint',
+  'newsIssuePoint',
+  'snsFandomPoint',
+  'brandFitPoint',
+  'comebackActivityPoint',
+  'growthMomentumPoint',
+  'riskAdjustmentPoint',
 ];
 
 function createPointSeries(startPoint: number, weeklyGains: number[]) {
@@ -889,6 +939,109 @@ export function calculateIndexDelta(history: ArtistIndexHistoryPoint[]) {
   return latest.fandexPoint - first.fandexPoint;
 }
 
+export function getLastSixMonthHistory(profile: ArtistIndexChartProfile) {
+  return profile.history.slice(-6);
+}
+
+export function getAvailableStockVariables() {
+  return artistStockVariableKeys.map((variableKey) => ({
+    variableKey,
+    displayName: getVariableDisplayName(variableKey),
+  }));
+}
+
+export function getVariableDisplayName(variableKey: ArtistStockVariableKey) {
+  return stockVariableDisplayNames[variableKey];
+}
+
+export function getVariableSeries(
+  profile: ArtistIndexChartProfile,
+  variableKey: ArtistStockVariableKey,
+): ArtistStockVariableSeries {
+  const points = getLastSixMonthHistory(profile).map((point) => ({
+    date: point.date,
+    value: point[variableKey],
+  }));
+
+  return {
+    variableKey,
+    displayName: getVariableDisplayName(variableKey),
+    points,
+    latestPoint: points[points.length - 1]?.value ?? 0,
+    sixMonthDelta: calculateSixMonthDelta(points),
+  };
+}
+
+export function getSelectedVariableSeries(
+  profile: ArtistIndexChartProfile,
+  variableKeys: ArtistStockVariableKey[],
+) {
+  return variableKeys.map((variableKey) =>
+    getVariableSeries(profile, variableKey),
+  );
+}
+
+export function getVariableContributionSummary(
+  profile: ArtistIndexChartProfile,
+): ArtistStockContributionSummary[] {
+  const latest = getLastSixMonthHistory(profile).at(-1);
+
+  if (!latest) {
+    return [];
+  }
+
+  const latestTotal = artistStockVariableKeys.reduce(
+    (total, variableKey) => total + Math.abs(latest[variableKey]),
+    0,
+  );
+
+  return artistStockVariableKeys
+    .map((variableKey) => {
+      const series = getVariableSeries(profile, variableKey);
+
+      return {
+        variableKey,
+        displayName: series.displayName,
+        latestPoint: series.latestPoint,
+        sixMonthDelta: series.sixMonthDelta,
+        shareOfLatestTotal:
+          latestTotal > 0 ? Math.abs(series.latestPoint) / latestTotal : 0,
+      };
+    })
+    .sort((a, b) => Math.abs(b.latestPoint) - Math.abs(a.latestPoint));
+}
+
+export function getStrongestVariables(
+  profile: ArtistIndexChartProfile,
+  limit = 3,
+) {
+  return getVariableContributionSummary(profile).slice(0, Math.max(limit, 0));
+}
+
+export function calculateSixMonthDelta(
+  history: Array<{ value: number }> | ArtistIndexHistoryPoint[],
+) {
+  const first = history[0];
+  const latest = history[history.length - 1];
+
+  if (!first || !latest) {
+    return 0;
+  }
+
+  const firstValue = 'value' in first ? first.value : first.fandexPoint;
+  const latestValue = 'value' in latest ? latest.value : latest.fandexPoint;
+
+  return latestValue - firstValue;
+}
+
+export function calculateLatestVariablePoint(
+  profile: ArtistIndexChartProfile,
+  variableKey: ArtistStockVariableKey,
+) {
+  const latest = getLastSixMonthHistory(profile).at(-1);
+  return latest?.[variableKey] ?? 0;
+}
+
 export function calculateIndexDeltaPercentForInternalUseOnly(
   history: ArtistIndexHistoryPoint[],
 ) {
@@ -986,5 +1139,42 @@ export function runArtistIndexChartDataShapeCheck() {
     hasEightPoints,
     hasValidLatestPoints,
     hasUniqueArtistIds,
+  };
+}
+
+export function runArtistStockDetailShapeCheck() {
+  const profiles = createArtistIndexChartProfiles();
+  const validVariableKeys = new Set(artistStockVariableKeys);
+  const everyProfileHasSixMonthHistory = profiles.every(
+    (profile) => getLastSixMonthHistory(profile).length === 6,
+  );
+  const everyVariableHasDisplayName = artistStockVariableKeys.every(
+    (variableKey) => getVariableDisplayName(variableKey).length > 0,
+  );
+  const everySeriesIsFinite = profiles.every((profile) =>
+    artistStockVariableKeys.every((variableKey) =>
+      getVariableSeries(profile, variableKey).points.every((point) =>
+        Number.isFinite(point.value),
+      ),
+    ),
+  );
+  const everyContributionHasValidKey = profiles.every((profile) =>
+    getVariableContributionSummary(profile).every((summary) =>
+      validVariableKeys.has(summary.variableKey),
+    ),
+  );
+
+  return {
+    ok:
+      profiles.length >= 60 &&
+      everyProfileHasSixMonthHistory &&
+      everyVariableHasDisplayName &&
+      everySeriesIsFinite &&
+      everyContributionHasValidKey,
+    profileCount: profiles.length,
+    everyProfileHasSixMonthHistory,
+    everyVariableHasDisplayName,
+    everySeriesIsFinite,
+    everyContributionHasValidKey,
   };
 }
