@@ -454,15 +454,15 @@ export function createFandexV1SampleInputs(): FandexV1Input[] {
       sourceMode: 'manual_seed',
     },
     {
-      artistId: 'newjeans',
-      artistName: 'NewJeans',
+      artistId: 'neon-pulse',
+      artistName: 'NEON PULSE',
       musicAlbum: pointInput(1040, 'musicAlbum', 15, 72),
       newsIssue: pointInput(
-        manualNewsIssueResults.get('newjeans')?.weightedIssuePoint ?? 1180,
+        manualNewsIssueResults.get('neon-pulse')?.weightedIssuePoint ?? 1180,
         'newsIssue',
-        manualNewsIssueResults.get('newjeans')?.articleCount ?? 30,
+        manualNewsIssueResults.get('neon-pulse')?.articleCount ?? 30,
         normalizeSeedConfidence(
-          manualNewsIssueResults.get('newjeans')?.confidence,
+          manualNewsIssueResults.get('neon-pulse')?.confidence,
           70,
         ),
       ),
@@ -471,11 +471,11 @@ export function createFandexV1SampleInputs(): FandexV1Input[] {
       comebackActivity: pointInput(420, 'comebackActivity', 4, 62),
       growthMomentum: pointInput(520, 'growthMomentum', 10, 64),
       riskPenalty: pointInput(
-        1260 + (manualNewsIssueResults.get('newjeans')?.riskPenaltyRawPoint ?? 0),
+        1260 + (manualNewsIssueResults.get('neon-pulse')?.riskPenaltyRawPoint ?? 0),
         'riskPenalty',
-        manualNewsIssueResults.get('newjeans')?.sourceCount ?? 11,
+        manualNewsIssueResults.get('neon-pulse')?.sourceCount ?? 11,
         normalizeSeedConfidence(
-          manualNewsIssueResults.get('newjeans')?.confidence,
+          manualNewsIssueResults.get('neon-pulse')?.confidence,
           66,
         ),
       ),

@@ -333,7 +333,7 @@ export function runNaverNewsQueryStrategyShapeCheck(): NaverNewsQueryStrategySha
     { artistName: 'IVE', agency: 'Starship', aliases: ['아이브'] },
     { artistName: 'RIIZE', agency: 'SM', aliases: ['라이즈'] },
     { artistName: 'QWER', aliases: ['큐더블유이알'] },
-    { artistName: 'NewJeans', agency: 'ADOR', aliases: ['뉴진스'] },
+    { artistName: 'NEON PULSE', agency: 'SAMPLE LABEL', aliases: ['NEON'] },
   ];
   const results = sampleIdentities.map((identity) =>
     createNaverNewsQueryStrategy(identity),

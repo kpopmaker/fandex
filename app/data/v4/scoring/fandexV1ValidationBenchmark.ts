@@ -221,8 +221,8 @@ export function createFandexV1ValidationBenchmarkSamples(): FandexValidationBenc
         'Sample comparison between video growth and SNS/fandom points.',
     },
     {
-      artistId: 'newjeans',
-      artistName: 'NewJeans',
+      artistId: 'neon-pulse',
+      artistName: 'NEON PULSE',
       benchmarkSource: 'naverNews',
       metricKey: 'articleVolume',
       signalType: 'uncertainty',
