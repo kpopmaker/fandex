@@ -198,7 +198,21 @@ type ArtistSeedInput = Omit<ArtistSeed, 'points' | 'dominantNotes'> & {
   dominantNotes?: string[];
 };
 
-const dates = ['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월'];
+const dates = [
+  '25.07',
+  '25.08',
+  '25.09',
+  '25.10',
+  '25.11',
+  '25.12',
+  '26.01',
+  '26.02',
+  '26.03',
+  '26.04',
+  '26.05',
+  '26.06',
+  '26.07',
+];
 
 const defaultNotes = [
   'SNS reaction lift',
@@ -233,8 +247,12 @@ function createPointSeries(startPoint: number, weeklyGains: number[]) {
   const gains = weeklyGains.length >= 7 ? weeklyGains : [70, 90, 110, 95, 120, 90, 110];
   const points = [startPoint];
 
-  gains.slice(0, 7).forEach((gain) => {
-    points.push(points[points.length - 1] + gain);
+  Array.from({ length: dates.length - 1 }, (_, index) => {
+    const gain = gains[index % gains.length];
+    const yearScale = index < gains.length ? 1 : 0.82;
+    points.push(points[points.length - 1] + Math.round(gain * yearScale));
+
+    return null;
   });
 
   return points;
@@ -1036,6 +1054,10 @@ export function getLastSixMonthHistory(profile: ArtistIndexChartProfile) {
   return profile.history.slice(-6);
 }
 
+export function getRecentOneYearHistory(profile: ArtistIndexChartProfile) {
+  return profile.history.slice(-13);
+}
+
 export function getAvailableStockVariables() {
   return artistStockVariableKeys.map((variableKey) => ({
     variableKey,
@@ -1051,7 +1073,11 @@ export function getVariableSeries(
   profile: ArtistIndexChartProfile,
   variableKey: ArtistStockVariableKey,
 ): ArtistStockVariableSeries {
-  const points = getLastSixMonthHistory(profile).map((point) => ({
+  const points = getRecentOneYearHistory(profile).map((point) => ({
+    date: point.date,
+    value: point[variableKey],
+  }));
+  const sixMonthPoints = getLastSixMonthHistory(profile).map((point) => ({
     date: point.date,
     value: point[variableKey],
   }));
@@ -1061,7 +1087,7 @@ export function getVariableSeries(
     displayName: getVariableDisplayName(variableKey),
     points,
     latestPoint: points[points.length - 1]?.value ?? 0,
-    sixMonthDelta: calculateSixMonthDelta(points),
+    sixMonthDelta: calculateSixMonthDelta(sixMonthPoints),
   };
 }
 
@@ -1214,7 +1240,9 @@ export function runArtistIndexChartDataShapeCheck() {
   const profiles = createArtistIndexChartProfiles();
   const ids = profiles.map((profile) => profile.artistId);
   const hasEnoughArtists = profiles.length >= 60;
-  const hasEightPoints = profiles.every((profile) => profile.history.length === 8);
+  const hasThirteenMonthlyPoints = profiles.every(
+    (profile) => profile.history.length === dates.length,
+  );
   const hasValidLatestPoints = profiles.every((profile) => {
     const latest = profile.history[profile.history.length - 1];
     return Boolean(latest && latest.fandexPoint > 0);
@@ -1224,12 +1252,12 @@ export function runArtistIndexChartDataShapeCheck() {
   return {
     ok:
       hasEnoughArtists &&
-      hasEightPoints &&
+      hasThirteenMonthlyPoints &&
       hasValidLatestPoints &&
       hasUniqueArtistIds,
     profileCount: profiles.length,
     hasEnoughArtists,
-    hasEightPoints,
+    hasThirteenMonthlyPoints,
     hasValidLatestPoints,
     hasUniqueArtistIds,
   };
@@ -1334,21 +1362,22 @@ export function getCompareChartSeries(
   profiles: ArtistIndexChartProfile[],
 ): CompareArtistChartSeries[] {
   return profiles.map((profile) => {
+    const oneYearHistory = getRecentOneYearHistory(profile);
     const sixMonthHistory = getLastSixMonthHistory(profile);
-    const latest = sixMonthHistory[sixMonthHistory.length - 1];
+    const latest = oneYearHistory[oneYearHistory.length - 1];
 
     return {
       artistId: profile.artistId,
       artistName: profile.artistName,
       ticker: profile.ticker,
       colorKey: profile.artistId,
-      points: sixMonthHistory.map((point) => ({
+      points: oneYearHistory.map((point) => ({
         date: point.date,
         value: point.fandexPoint,
       })),
       latestPoint: latest?.fandexPoint ?? 0,
       sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
-      trendBand: getIndexTrendBand(sixMonthHistory),
+      trendBand: getIndexTrendBand(oneYearHistory),
     };
   });
 }
@@ -1426,8 +1455,8 @@ export function runComparePageShapeCheck() {
   );
   const summaryRows = getCompareSummaryRows(profiles);
   const coverageSummary = getCompareCoverageSummary(profiles);
-  const everyChartHasSixPoints = chartSeries.every(
-    (series) => series.points.length === 6,
+  const everyChartHasOneYearPoints = chartSeries.every(
+    (series) => series.points.length === dates.length,
   );
   const everyVariableHasArtistSeries = variableSeries.every(
     (series) => series.artists.length === profiles.length,
@@ -1440,13 +1469,13 @@ export function runComparePageShapeCheck() {
     ok:
       profiles.length >= 2 &&
       profiles.length <= 5 &&
-      everyChartHasSixPoints &&
+      everyChartHasOneYearPoints &&
       everyVariableHasArtistSeries &&
       everyPointIsFinite &&
       summaryRows.length === profiles.length &&
       coverageSummary.selectedArtistCount === profiles.length,
     profileCount: profiles.length,
-    everyChartHasSixPoints,
+    everyChartHasOneYearPoints,
     everyVariableHasArtistSeries,
     everyPointIsFinite,
     summaryRowCount: summaryRows.length,
@@ -1543,7 +1572,7 @@ export function getCoveragePageSummary() {
 
 export function getKpopCompositeIndexSeries() {
   const histories = artistIndexChartProfiles.map((profile) =>
-    getLastSixMonthHistory(profile),
+    getRecentOneYearHistory(profile),
   );
   const maxLength = Math.max(...histories.map((history) => history.length));
 
@@ -1566,13 +1595,16 @@ export function getKpopCompositeIndexSeries() {
 export function getKpopCompositeIndexSummary() {
   const series = getKpopCompositeIndexSeries();
   const latest = series[series.length - 1];
-  const first = series[0];
+  const sixMonthSeries = series.slice(-6);
+  const firstSixMonthPoint = sixMonthSeries[0];
 
   return {
     series,
     currentPoint: latest?.fandexPoint ?? 0,
     sixMonthDelta:
-      latest && first ? latest.fandexPoint - first.fandexPoint : 0,
+      latest && firstSixMonthPoint
+        ? latest.fandexPoint - firstSixMonthPoint.fandexPoint
+        : 0,
     artistCount: latest?.artistCount ?? 0,
   };
 }

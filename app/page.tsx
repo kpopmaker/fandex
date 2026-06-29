@@ -265,7 +265,7 @@ function CompositeMiniChart({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="FANDEX K-pop 종합지수 최근 1년 월별 흐름"
+        aria-label="FANDEX K-pop 종합지수 2025년 7월부터 2026년 7월까지의 월별 흐름"
         className="h-36 min-w-[420px] w-full"
       >
         {[0, 1, 2].map((line) => (

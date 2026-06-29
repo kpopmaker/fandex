@@ -200,10 +200,10 @@ function getRecentFlowSummary(profile: ArtistIndexChartProfile) {
   const trendBand = getIndexTrendBand(profile.history);
   const delta = calculateIndexDelta(profile.history);
   const trendCopy: Record<ArtistIndexTrendBand, string> = {
-    rising: '최근 8개 시점 기준으로 지수가 완만하게 올라가는 흐름입니다.',
-    stable: '최근 8개 시점 기준으로 지수가 비교적 안정적으로 유지되는 흐름입니다.',
-    falling: '최근 8개 시점 기준으로 지수가 낮아지는 구간이 있어 추가 확인이 필요합니다.',
-    volatile: '최근 8개 시점 기준으로 변동폭이 커져 흐름 확인이 필요합니다.',
+    rising: '2025년 7월부터 2026년 7월까지 지수가 완만하게 올라가는 흐름입니다.',
+    stable: '2025년 7월부터 2026년 7월까지 지수가 비교적 안정적으로 유지되는 흐름입니다.',
+    falling: '2025년 7월부터 2026년 7월까지 지수가 낮아지는 구간이 있어 추가 확인이 필요합니다.',
+    volatile: '2025년 7월부터 2026년 7월까지 변동폭이 커져 흐름 확인이 필요합니다.',
     insufficient_data: '최근 흐름을 판단하기에는 시점 데이터가 부족합니다.',
   };
 

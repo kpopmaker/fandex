@@ -22,6 +22,34 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
   unit: '유닛',
 };
 
+const artistKoreanAliases: Partial<Record<string, string[]>> = {
+  aespa: ['에스파'],
+  ive: ['아이브'],
+  riize: ['라이즈'],
+  seventeen: ['세븐틴'],
+  newjeans: ['뉴진스'],
+  lesserafim: ['르세라핌'],
+  bts: ['방탄소년단', '비티에스'],
+  blackpink: ['블랙핑크'],
+  twice: ['트와이스'],
+  'nct-dream': ['엔시티 드림', '엔시티드림', 'NCT 드림'],
+  'nct-127': ['엔시티 127', '엔시티127', 'NCT 127'],
+  'stray-kids': ['스트레이 키즈', '스트레이키즈', '스키즈'],
+  zerobaseone: ['제로베이스원', '제베원'],
+  txt: ['투모로우바이투게더', '투바투'],
+  enhypen: ['엔하이픈'],
+  itzy: ['있지'],
+  nmixx: ['엔믹스'],
+  gidle: ['아이들', '여자아이들'],
+  'kiss-of-life': ['키스오브라이프', '키오프'],
+  babymonster: ['베이비몬스터'],
+  illit: ['아일릿'],
+  tws: ['투어스'],
+  boynextdoor: ['보이넥스트도어'],
+  hearts2hearts: ['하츠투하츠'],
+  rescene: ['리센느'],
+};
+
 function formatPoint(value: number) {
   return `${new Intl.NumberFormat('ko-KR').format(Math.round(value))}pt`;
 }
@@ -31,7 +59,22 @@ function getLatestPoint(profile: ArtistIndexChartProfile) {
 }
 
 function normalize(value: string) {
-  return value.trim().toLowerCase();
+  return value.trim().toLowerCase().replace(/[\s_-]/g, '');
+}
+
+function getArtistAliases(profile: ArtistIndexChartProfile) {
+  return artistKoreanAliases[profile.artistId] ?? [];
+}
+
+function getSearchTargets(profile: ArtistIndexChartProfile) {
+  return [
+    profile.artistName,
+    profile.ticker,
+    profile.artistId,
+    profile.groupType,
+    groupTypeLabels[profile.groupType],
+    ...getArtistAliases(profile),
+  ];
 }
 
 export default function CompareArtistSearch({
@@ -55,7 +98,7 @@ export default function CompareArtistSearch({
         return !selectedIdSet.has(profile.artistId);
       }
 
-      return [profile.artistName, profile.ticker, groupTypeLabels[profile.groupType]]
+      return getSearchTargets(profile)
         .map(normalize)
         .some((value) => value.includes(normalizedQuery));
     })
@@ -142,6 +185,7 @@ export default function CompareArtistSearch({
           const selected = selectedIdSet.has(profile.artistId);
           const disabled = selected || selectedArtistIds.length >= 5;
           const latest = getLatestPoint(profile);
+          const aliases = getArtistAliases(profile);
 
           return (
             <article
@@ -156,6 +200,11 @@ export default function CompareArtistSearch({
                   {profile.ticker} / {groupTypeLabels[profile.groupType]} / 현재{' '}
                   {formatPoint(latest?.fandexPoint ?? 0)}
                 </p>
+                {aliases.length > 0 && (
+                  <p className="mt-1 text-xs font-bold text-slate-400">
+                    {aliases.slice(0, 2).join(', ')}
+                  </p>
+                )}
               </div>
               <button
                 type="button"

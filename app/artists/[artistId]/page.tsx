@@ -6,6 +6,7 @@ import {
   getAvailableStockVariables,
   getIndexTrendBand,
   getLastSixMonthHistory,
+  getRecentOneYearHistory,
   getSelectedVariableSeries,
   getStrongestVariables,
   getVariableDisplayName,
@@ -227,10 +228,11 @@ export default async function ArtistDetailPage({
 
   const selectedVariables = parseSelectedVariables(await searchParams);
   const sixMonthHistory = getLastSixMonthHistory(profile);
+  const oneYearHistory = getRecentOneYearHistory(profile);
   const latestPoint = getLatestHistoryPoint(profile);
-  const fandexChartPoints = toFandexChartPoints(sixMonthHistory);
+  const fandexChartPoints = toFandexChartPoints(oneYearHistory);
   const fandexDelta = calculateSixMonthDelta(sixMonthHistory);
-  const trendBand = getIndexTrendBand(sixMonthHistory);
+  const trendBand = getIndexTrendBand(oneYearHistory);
   const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
   const strongestVariables = getStrongestVariables(profile, 3);
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
@@ -310,7 +312,7 @@ export default async function ArtistDetailPage({
               </p>
               <h2 className="mt-2 text-2xl font-black">최근 1년 FANDEX 주가 흐름</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                최근 1년 안에서 확인 가능한 월별 기준으로 FANDEX 주가가{' '}
+                2025년 7월부터 2026년 7월까지의 월별 기준으로 FANDEX 주가가{' '}
                 {trendSummaryLabels[trendBand]} 흐름을 보입니다.
               </p>
             </div>

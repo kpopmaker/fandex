@@ -356,7 +356,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             </p>
             <h2 className="mt-2 text-2xl font-black">최근 1년 월별 흐름 비교</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              최근 1년 안에서 확인 가능한 월별 FANDEX 주가 흐름을 비교합니다. 동일 기간 내
+              2025년 7월부터 2026년 7월까지의 월별 FANDEX 주가 흐름을 비교합니다. 동일 기간 내
               방향성, 변동폭, 현재 위치를 함께 확인할 수 있습니다.
             </p>
           </div>
