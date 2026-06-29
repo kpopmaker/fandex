@@ -1,318 +1,390 @@
 import Link from 'next/link';
-import { factorDefinitions, pricePresets } from '../data/mockPrices';
+import {
+  getMethodologyFormulaSummary,
+  getMethodologyVariableDefinitions,
+  type ArtistIndexCoverageStatus,
+  type ArtistIndexDataStatus,
+  type ArtistIndexConfidenceLevel,
+} from '../data/v4/charts/artistIndexChartData';
 
-const processSteps = [
+const disclaimer =
+  'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
+
+const coverageStatusDescriptions: Array<{
+  status: ArtistIndexCoverageStatus;
+  label: string;
+  description: string;
+}> = [
   {
-    title: '1. Raw Signal 수집',
-    description:
-      '음원, 앨범, 유튜브, SNS, 검색, 뉴스, 해외 반응, 팬덤 플랫폼, 소속사 데이터를 수집합니다.',
+    status: 'tracked',
+    label: '지속 추적',
+    description: '상대적으로 가장 안정적으로 추적 중인 아티스트입니다.',
   },
   {
-    title: '2. Factor Score 정규화',
-    description:
-      '서로 단위가 다른 데이터를 0~100점 사이의 요소 점수로 변환합니다.',
+    status: 'partial',
+    label: '일부 반영',
+    description: '일부 지표만 추적 중이거나 확장 중인 아티스트입니다.',
   },
   {
-    title: '3. Weighted Score 계산',
-    description:
-      '요소별 기본 가중치 또는 사용자가 선택한 커스텀 가중치로 종합 점수를 계산합니다.',
-  },
-  {
-    title: '4. FANDEX Price 변환',
-    description:
-      '종합 점수를 주식 가격처럼 보이는 FDX Price로 변환합니다.',
-  },
-  {
-    title: '5. Market Index 반영',
-    description:
-      '개별 아티스트 가격과 Fan Cap을 기반으로 KMI Composite와 섹터 지수를 계산합니다.',
+    status: 'preview',
+    label: '미리보기',
+    description: '확장 예정 또는 미리보기 상태의 아티스트입니다.',
   },
 ];
 
-const fastSignals = [
-  '유튜브 조회수 증가량',
-  '유튜브 좋아요·댓글 증가량',
-  '네이버 뉴스 신규 기사량',
-  '블로그·카페 신규 언급량',
-  '공식 SNS 반응',
-  '팬채널·바이럴 반응',
-  '해외 뉴스 언급량',
+const dataStatusDescriptions: Array<{
+  status: ArtistIndexDataStatus;
+  label: string;
+  description: string;
+}> = [
+  {
+    status: 'editorial_seed',
+    label: '에디토리얼 시드',
+    description: '현재 FANDEX 내부 미리보기 기준으로 구성한 시드 데이터입니다.',
+  },
+  {
+    status: 'verified_manual',
+    label: '수동 검증',
+    description: '수동 검증 데이터가 연결될 때 사용할 수 있는 상태입니다.',
+  },
+  {
+    status: 'partial_public_signal',
+    label: '일부 공개 지표',
+    description: '일부 공개 신호만 반영된 상태입니다.',
+  },
+  {
+    status: 'preview_only',
+    label: '미리보기 전용',
+    description: '확장 후보 또는 미리보기 성격의 데이터 상태입니다.',
+  },
 ];
 
-const slowSignals = [
-  '초동 음반 판매량',
-  '음원 차트 순위',
-  '네이버 데이터랩 검색 트렌드',
-  '음악방송 수상 이력',
-  '팬 플랫폼 멤버십',
-  '소속사 매출',
-  '소속사 영업이익',
+const confidenceDescriptions: Array<{
+  level: ArtistIndexConfidenceLevel;
+  label: string;
+  description: string;
+}> = [
+  {
+    level: 'high',
+    label: '높음',
+    description: '데이터 신뢰도 metadata가 충분히 쌓였을 때 사용할 수 있는 단계입니다.',
+  },
+  {
+    level: 'medium',
+    label: '중간',
+    description: '현재 지속 추적 아티스트 다수에 적용된 중간 신뢰도 단계입니다.',
+  },
+  {
+    level: 'low',
+    label: '낮음',
+    description: '일부 반영 또는 미리보기 데이터처럼 보수적으로 해석해야 하는 단계입니다.',
+  },
+];
+
+const chartInterpretationItems = [
+  {
+    title: '/artists/[artistId] 6개월 FANDEX 주가 차트',
+    copy: '단일 아티스트의 최근 6개 시점 FANDEX 주가형 지수 흐름을 보여줍니다.',
+  },
+  {
+    title: '/artists/[artistId] 변수 선택 차트',
+    copy: '선택한 변수의 raw/weighted point 흐름을 보여주며 전체 FANDEX 주가와 같은 값이 아닙니다.',
+  },
+  {
+    title: '/compare 여러 아티스트 비교 차트',
+    copy: '2~5명 아티스트의 동일 기간 FANDEX 주가 흐름을 함께 비교합니다.',
+  },
+  {
+    title: '/compare 변수별 비교 차트',
+    copy: '선택 변수 1~4개에 대해 변수별 작은 차트를 분리해 보여줍니다.',
+  },
+];
+
+const nextSteps = [
+  '실제 공개 지표 수집',
+  '데이터 업데이트 주기 정의',
+  '관리자 데이터 입력 화면',
+  '자동 수집 구조',
+  '신뢰도 메타데이터 고도화',
+];
+
+const ctaLinks = [
+  { href: '/charts', label: '주가 차트 보기' },
+  { href: '/artists', label: '아티스트 보기' },
+  { href: '/compare', label: '여러 아티스트 비교' },
+  { href: '/coverage', label: '커버리지 보기' },
 ];
 
 export default function MethodologyPage() {
+  const formula = getMethodologyFormulaSummary();
+  const variableDefinitions = getMethodologyVariableDefinitions();
+
   return (
-    <main className="min-h-screen bg-[#070A12] text-white">
-      <section className="mx-auto max-w-7xl px-5 py-10">
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="text-sm font-bold text-cyan-300 hover:text-cyan-200"
-          >
-            ← FANDEX 홈으로
-          </Link>
-
-          <p className="mt-6 text-sm font-bold uppercase tracking-[0.3em] text-cyan-300">
-            METHODOLOGY
-          </p>
-
-          <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-            FANDEX Price 산출 방식
-          </h1>
-
-          <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-400 md:text-base">
-            FANDEX는 K-pop 아티스트의 현재 시장 반응을 여러 데이터 요소로
-            나누어 계산하고, 이를 주식 시세처럼 보이는 가격과 등락률로
-            변환합니다.
-          </p>
-        </div>
-
-        <div className="mb-6 grid gap-4 lg:grid-cols-3">
-          <HeroFormulaCard
-            title="FANDEX Score"
-            formula="Σ Factor Score × Weight"
-            description="각 요소 점수에 가중치를 곱해 종합 점수를 계산합니다."
-          />
-
-          <HeroFormulaCard
-            title="FANDEX Price"
-            formula="100 × exp((Score - 50) / 50)"
-            description="0~100점 종합 점수를 주식 가격처럼 보이는 FDX Price로 변환합니다."
-          />
-
-          <HeroFormulaCard
-            title="Fan Cap"
-            formula="Price × Synthetic Float"
-            description="아티스트의 가상 팬덤 시가총액을 계산합니다."
-          />
-        </div>
-
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-          <h2 className="text-2xl font-black">1. FANDEX 구성요소</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
-            기본 FANDEX Price는 아래 9개 요소를 모두 반영합니다. 각 요소는
-            0~100점으로 정규화된 뒤 기본 가중치에 따라 종합 점수에 반영됩니다.
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {factorDefinitions.map((factor) => (
-              <div
-                key={factor.key}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4"
-              >
-                <div className="mb-3 flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-black text-white">{factor.label}</h3>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {factor.speed === 'fast' ? '빠른 신호' : '느린 신호'}
-                    </p>
-                  </div>
-
-                  <p className="font-mono text-2xl font-black text-cyan-300">
-                    {factor.defaultWeight}%
-                  </p>
-                </div>
-
-                <p className="text-sm leading-6 text-slate-400">
-                  {factor.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-6 grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-            <h2 className="text-2xl font-black">2. 빠른 신호</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              빠른 신호는 가격의 단기 등락률과 거래량에 강하게 반영됩니다.
-              컴백, 티저, MV 공개, 이슈 발생처럼 즉각 반응이 생기는 데이터를
-              감지합니다.
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {fastSignals.map((signal) => (
-                <span
-                  key={signal}
-                  className="rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-xs font-bold text-red-200"
+    <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
+      <section className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10">
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-4xl">
+              <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-300">
+                FANDEX 산출방식
+              </p>
+              <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+                K-pop 아티스트 활동성과 반응 지표를 주가형 지수로 해석하는 방식
+              </h1>
+              <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+                {disclaimer}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 lg:justify-end">
+              {ctaLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
                 >
-                  {signal}
-                </span>
+                  {link.label}
+                </Link>
               ))}
             </div>
           </div>
+        </section>
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-            <h2 className="text-2xl font-black">3. 느린 신호</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              느린 신호는 아티스트의 장기적인 팬덤 가치와 안정성에 반영됩니다.
-              단기 급등보다는 종목의 체급과 기본 가치를 설명하는 데이터입니다.
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            쉽게 읽기
+          </p>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 주가는 이렇게 읽습니다</h2>
+          <p className="mt-4 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+            FANDEX 주가는 하나의 숫자로 아티스트의 흐름을 단정하는 점수가
+            아닙니다. 음원/음반, SNS/팬덤, 컴백/활동, 브랜드 적합도 같은
+            여러 신호를 같은 기준으로 정리해 흐름을 보기 쉽게 만든 리서치
+            지수입니다.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <FormulaCard
+              title="1단계"
+              copy="아티스트별 활동/반응 신호를 변수별로 정리합니다."
+            />
+            <FormulaCard
+              title="2단계"
+              copy="변수별 흐름에 가중치를 적용해 같은 기준으로 비교합니다."
+            />
+            <FormulaCard
+              title="3단계"
+              copy="데이터 신뢰도와 예외적 변동을 조정해 FANDEX 주가형 지수로 보여줍니다."
+            />
+          </div>
+          <p className="mt-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
+            공식 순위나 투자 판단용 지표가 아닙니다. 같은 기준으로 흐름을
+            비교하기 위한 FANDEX 내부 리서치 지수입니다.
+          </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            개념식
+          </p>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 주가형 지수 산출방식</h2>
+          <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+              개념식
             </p>
+            <p className="mt-3 break-words font-mono text-lg font-black text-slate-950 dark:text-white">
+              {formula.conceptFormula}
+            </p>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <FormulaCard title="기준값" copy={formula.basePoint} />
+            <FormulaCard title="변수 점수" copy={formula.variableScore} />
+            <FormulaCard title="가중치" copy={formula.weight} />
+            <FormulaCard title="조정 신호" copy={formula.riskAdjustment} />
+            <FormulaCard title="최종값" copy={formula.finalValue} />
+          </div>
+        </section>
 
-            <div className="mt-5 flex flex-wrap gap-2">
-              {slowSignals.map((signal) => (
-                <span
-                  key={signal}
-                  className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-200"
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              산출 변수
+            </p>
+            <h2 className="mt-2 text-2xl font-black">7개 산출 변수</h2>
+            <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              각 변수는 FANDEX 주가형 지수를 구성하는 개별 흐름입니다.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {variableDefinitions.map((variable) => (
+              <article
+                key={variable.variableKey}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60"
+              >
+                <p className="font-mono text-xs font-black text-cyan-700 dark:text-cyan-300">
+                  {variable.variableKey}
+                </p>
+                <h3 className="mt-2 text-xl font-black">{variable.displayName}</h3>
+                <p className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-slate-400">
+                  {variable.weightLabel}
+                </p>
+                <InfoBlock label="해석 대상" value={variable.description} />
+                <InfoBlock label="높아질 때" value={variable.higherMeaning} />
+                <InfoBlock label="낮아질 때" value={variable.lowerMeaning} />
+                <InfoBlock label="주의사항" value={variable.caution} />
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-3">
+          <DefinitionSection
+            eyebrow="coverageStatus"
+            title="커버리지 상태"
+            items={coverageStatusDescriptions.map((item) => ({
+              label: item.label,
+              copy: item.description,
+            }))}
+          />
+          <DefinitionSection
+            eyebrow="dataStatus"
+            title="데이터 상태"
+            items={dataStatusDescriptions.map((item) => ({
+              label: item.label,
+              copy: item.description,
+            }))}
+          />
+          <DefinitionSection
+            eyebrow="confidenceLevel"
+            title="신뢰도 단계"
+            items={confidenceDescriptions.map((item) => ({
+              label: item.label,
+              copy: item.description,
+            }))}
+          />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            차트 읽는 법
+          </p>
+          <h2 className="mt-2 text-2xl font-black">주가 차트 해석 방법</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {chartInterpretationItems.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60"
+              >
+                <h3 className="font-black">{item.title}</h3>
+                <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+                  {item.copy}
+                </p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            6개월 변화 pt는 방향성 확인용이며, coverageStatus와
+            confidenceLevel을 함께 확인해야 합니다.
+          </p>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              한계
+            </p>
+            <h2 className="mt-2 text-2xl font-black">한계</h2>
+            <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다.
+              </li>
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                모든 K-pop 아티스트를 대표하지 않습니다.
+              </li>
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반입니다.
+              </li>
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                현재 값은 분석용 지수이며 공식 순위나 투자정보가 아닙니다.
+              </li>
+            </ul>
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              다음 단계
+            </p>
+            <h2 className="mt-2 text-2xl font-black">다음 단계</h2>
+            <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              {nextSteps.map((step) => (
+                <li
+                  key={step}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
                 >
-                  {signal}
-                </span>
+                  {step}
+                </li>
               ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-          <h2 className="text-2xl font-black">4. Custom Index Builder</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
-            사용자는 모든 요소가 반영된 기본 FANDEX Price뿐 아니라, 특정
-            요소를 켜고 끄면서 자신만의 커스텀 주가를 만들 수 있습니다.
-            선택되지 않은 요소의 가중치는 0이 되고, 남은 요소들의 가중치는
-            다시 100% 기준으로 재조정됩니다.
-          </p>
-
-          <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
-            <p className="text-sm font-bold text-slate-300">
-              Custom Score 계산 방식
-            </p>
-
-            <div className="mt-3 rounded-xl bg-black/30 p-4 font-mono text-sm leading-7 text-cyan-200">
-              <p>1. 사용자가 선택한 요소만 남긴다.</p>
-              <p>2. 선택되지 않은 요소의 weight는 0으로 만든다.</p>
-              <p>3. 남은 weight의 합을 100%로 재조정한다.</p>
-              <p>4. 재조정된 weight로 Custom Score를 계산한다.</p>
-              <p>5. Custom Score를 Custom Price로 변환한다.</p>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {Object.entries(pricePresets).map(([presetKey, preset]) => (
-              <div
-                key={presetKey}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4"
-              >
-                <h3 className="font-black text-white">{preset.label}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {preset.description}
-                </p>
-
-                <p className="mt-3 text-xs font-bold text-cyan-300">
-                  사용 요소 {preset.enabledFactors.length}개
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-          <h2 className="text-2xl font-black">5. KMI Composite</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
-            KMI Composite는 K-pop Market Index Composite의 약자로, FANDEX에
-            등록된 아티스트들의 전체 시장 흐름을 보여주는 종합지수입니다.
-          </p>
-
-          <div className="mt-6 grid gap-4 lg:grid-cols-3">
-            <FormulaBlock
-              label="Synthetic Float"
-              formula="아티스트 체급별 가상 유통량"
-            />
-            <FormulaBlock
-              label="Fan Cap"
-              formula="FANDEX Price × Synthetic Float"
-            />
-            <FormulaBlock
-              label="KMI Composite"
-              formula="Σ Fan Cap / Divisor"
-            />
-          </div>
-
-          <p className="mt-5 text-sm leading-6 text-slate-400">
-            대형 아티스트는 Synthetic Float가 커서 Fan Cap이 안정적으로 크게
-            형성되고, 신인 아티스트는 Fan Cap은 작지만 등락률과 모멘텀이 크게
-            움직이는 구조를 가집니다.
-          </p>
-        </div>
-
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-950/70 p-6">
-          <h2 className="text-2xl font-black">6. 계산 프로세스</h2>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-            {processSteps.map((step) => (
-              <div
-                key={step.title}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4"
-              >
-                <h3 className="font-black text-cyan-300">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-400">
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-yellow-400/20 bg-yellow-400/10 p-6">
-          <h2 className="text-2xl font-black text-yellow-200">
-            현재 버전의 한계
-          </h2>
-
-          <p className="mt-3 text-sm leading-6 text-yellow-100/80">
-            현재 FANDEX v2는 실제 API를 연결하기 전 단계입니다. 지금 보이는
-            가격, 거래량, 점수는 mock 엔진으로 생성된 예시 데이터입니다.
-            다음 단계에서 네이버 검색 API, YouTube API, OpenDART, 글로벌 뉴스
-            데이터 등을 연결하면 실제 시장 반응 기반의 가격으로 확장할 수
-            있습니다.
-          </p>
-        </div>
+            </ul>
+          </section>
+        </section>
       </section>
     </main>
   );
 }
 
-function HeroFormulaCard({
-  title,
-  formula,
-  description,
-}: {
-  title: string;
-  formula: string;
-  description: string;
-}) {
+function FormulaCard({ copy, title }: { copy: string; title: string }) {
   return (
-    <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-6">
-      <p className="text-sm font-bold text-cyan-200">{title}</p>
-      <p className="mt-3 font-mono text-2xl font-black text-white">
-        {formula}
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-400">
+        {title}
       </p>
-      <p className="mt-3 text-sm leading-6 text-slate-400">
-        {description}
+      <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+        {copy}
+      </p>
+    </article>
+  );
+}
+
+function InfoBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="mt-4">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-400">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+        {value}
       </p>
     </div>
   );
 }
 
-function FormulaBlock({
-  label,
-  formula,
+function DefinitionSection({
+  eyebrow,
+  items,
+  title,
 }: {
-  label: string;
-  formula: string;
+  eyebrow: string;
+  items: Array<{ label: string; copy: string }>;
+  title: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5">
-      <p className="text-sm font-bold text-slate-400">{label}</p>
-      <p className="mt-3 font-mono text-lg font-black text-cyan-300">
-        {formula}
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+        {eyebrow}
       </p>
-    </div>
+      <h2 className="mt-2 text-2xl font-black">{title}</h2>
+      <div className="mt-5 grid gap-3">
+        {items.map((item) => (
+          <article
+            key={item.label}
+            className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+          >
+            <p className="font-mono text-sm font-black text-slate-950 dark:text-white">
+              {item.label}
+            </p>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+              {item.copy}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
