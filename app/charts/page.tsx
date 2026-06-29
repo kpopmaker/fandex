@@ -212,7 +212,7 @@ function getRecentFlowSummary(profile: ArtistIndexChartProfile) {
 
 function getSignalCheckpoints(signals: string[]) {
   const checkpoints = new Set<string>([
-    '최근 6개월 FANDEX 주가 흐름과 6개월 변화 pt를 함께 확인하세요.',
+    '최근 1년 FANDEX 주가 흐름과 변화 pt를 함께 확인하세요.',
     '커버리지 상태와 신뢰도를 함께 확인하세요.',
   ]);
 
@@ -338,7 +338,7 @@ function MiniLineChart({
                   textAnchor="middle"
                   className="fill-slate-500 text-[12px]"
                 >
-                  {point.date.replace('2026-', '')}
+                  {point.date}
                 </text>
               ) : null}
             </g>
@@ -466,7 +466,7 @@ export default async function ArtistIndexChartsPage({
               .join(',')}`}
             className="mt-5 inline-flex rounded-full bg-cyan-500 px-5 py-3 text-xs font-black text-white hover:bg-cyan-400"
           >
-            아티스트 비교에서 6개월 흐름 보기
+            아티스트 비교에서 최근 1년 흐름 보기
           </Link>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
@@ -596,7 +596,7 @@ export default async function ArtistIndexChartsPage({
               <InfoList title="지표 확인 포인트" items={signalCheckpoints} />
             </div>
           </article>
-          <MiniLineChart profile={baseProfile} title="최근 8개 시점 주가 차트" />
+              <MiniLineChart profile={baseProfile} title="최근 1년 월별 주가 차트" />
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -752,7 +752,7 @@ export default async function ArtistIndexChartsPage({
           </p>
           <h2 className="mt-2 text-2xl font-black">주가형 지수 해석 메모</h2>
           <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
-            선택한 아티스트의 FANDEX 주가 흐름, 6개월 변화 pt, 흐름 구간을 함께 보며
+            선택한 아티스트의 최근 1년 FANDEX 주가 흐름, 변화 pt, 흐름 구간을 함께 보며
             같은 기간 안에서 어떤 변수 흐름이 두드러지는지 확인합니다.
           </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">

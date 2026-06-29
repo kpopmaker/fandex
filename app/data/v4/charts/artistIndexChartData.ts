@@ -198,16 +198,7 @@ type ArtistSeedInput = Omit<ArtistSeed, 'points' | 'dominantNotes'> & {
   dominantNotes?: string[];
 };
 
-const dates = [
-  '2026-W18',
-  '2026-W19',
-  '2026-W20',
-  '2026-W21',
-  '2026-W22',
-  '2026-W23',
-  '2026-W24',
-  '2026-W25',
-];
+const dates = ['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월'];
 
 const defaultNotes = [
   'SNS reaction lift',

@@ -306,16 +306,16 @@ export default async function ArtistDetailPage({
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                6개월 변동 추이
+                최근 1년 흐름
               </p>
-              <h2 className="mt-2 text-2xl font-black">FANDEX 주가 차트</h2>
+              <h2 className="mt-2 text-2xl font-black">최근 1년 FANDEX 주가 흐름</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                최근 6개 시점 기준 FANDEX 주가가{' '}
+                최근 1년 안에서 확인 가능한 월별 기준으로 FANDEX 주가가{' '}
                 {trendSummaryLabels[trendBand]} 흐름을 보입니다.
               </p>
             </div>
             <SingleLineChart
-              ariaLabel={`${profile.artistName} 최근 6개월 FANDEX 주가 차트`}
+              ariaLabel={`${profile.artistName} 최근 1년 FANDEX 주가 흐름 차트`}
               color="#0891b2"
               points={fandexChartPoints}
             />
@@ -708,7 +708,7 @@ function ChartPoint({
         textAnchor="middle"
         className="fill-slate-500 text-[11px] font-bold dark:fill-slate-400"
       >
-        {point.date.replace('2026-', '')}
+        {point.date}
       </text>
     </g>
   );

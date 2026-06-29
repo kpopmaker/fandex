@@ -223,7 +223,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 여러 아티스트의 주가 흐름 비교
               </h1>
               <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:text-base">
-                2~5명의 아티스트를 선택해 최근 6개월 FANDEX 주가 흐름과
+                2~5명의 아티스트를 선택해 최근 1년 FANDEX 주가 흐름과
                 산출 변수별 변화를 비교합니다.
               </p>
               <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
@@ -290,6 +290,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                     <Link
                       key={variable.variableKey}
                       href={buildCompareHref(safeSelectedArtistIds, nextVariables)}
+                      scroll={false}
                       aria-disabled={disabledAdd}
                       className={
                         active
@@ -351,16 +352,16 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              6개월 FANDEX 주가 비교 차트
+              최근 1년 FANDEX 주가 비교 차트
             </p>
-            <h2 className="mt-2 text-2xl font-black">주가형 지수 흐름 비교</h2>
+            <h2 className="mt-2 text-2xl font-black">최근 1년 월별 흐름 비교</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              최근 6개 시점 기준 FANDEX 주가 흐름을 비교합니다. 동일 기간 내
+              최근 1년 안에서 확인 가능한 월별 FANDEX 주가 흐름을 비교합니다. 동일 기간 내
               방향성, 변동폭, 현재 위치를 함께 확인할 수 있습니다.
             </p>
           </div>
           <CompareLineChart
-            ariaLabel="선택 아티스트 최근 6개 시점 FANDEX 주가 비교 차트"
+            ariaLabel="선택 아티스트 최근 1년 월별 FANDEX 주가 비교 차트"
             series={compareChartSeries}
           />
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
@@ -487,7 +488,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
               <InterpretationCard
                 label="6개월 변화폭"
                 value={interpretation.largestMove.artistName}
-                note={`최근 6개 시점 기준 변화폭은 ${formatDelta(
+                note={`최근 1년 기준 변화폭은 ${formatDelta(
                   interpretation.largestMove.sixMonthDelta,
                 )}입니다.`}
               />
@@ -734,7 +735,7 @@ function ChartPoint({
         textAnchor="middle"
         className="fill-slate-500 text-[11px] font-bold dark:fill-slate-400"
       >
-        {point.date.replace('2026-', '')}
+        {point.date}
       </text>
     </g>
   );

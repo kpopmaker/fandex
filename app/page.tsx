@@ -10,7 +10,7 @@ import { getMarketIssueTopTen } from './data/v4/charts/issueSignals';
 const primaryRoutes = [
   {
     title: '주가 차트',
-    copy: '등록/추적 아티스트의 6개월 흐름을 차트로 봅니다.',
+    copy: '등록/추적 아티스트의 최근 1년 흐름을 차트로 봅니다.',
     href: '/charts',
   },
   {
@@ -37,7 +37,7 @@ const primaryRoutes = [
 
 const capabilityItems = [
   '69팀 coverage 기반 아티스트 목록',
-  '아티스트별 6개월 FANDEX 주가 차트',
+  '아티스트별 최근 1년 FANDEX 주가 차트',
   '변수 1~4개 선택 그래프',
   '2~5명 아티스트 비교',
   '선택 변수별 비교 그래프',
@@ -265,7 +265,7 @@ function CompositeMiniChart({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="FANDEX K-pop 종합지수 최근 6개월 흐름"
+        aria-label="FANDEX K-pop 종합지수 최근 1년 월별 흐름"
         className="h-36 min-w-[420px] w-full"
       >
         {[0, 1, 2].map((line) => (
@@ -289,7 +289,7 @@ function CompositeMiniChart({
               <circle cx={x} cy={y} r="4" fill="white" stroke="#0891b2" strokeWidth="2.5" />
               {(index === 0 || index === points.length - 1) && (
                 <text x={x} y={height - 7} textAnchor="middle" className="fill-slate-500 text-[11px] font-bold">
-                  {point.date.replace('2026-', '')}
+                  {point.date}
                 </text>
               )}
             </g>
