@@ -24,7 +24,7 @@ export default function SearchPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">
-            FANDEX Search
+            FANDEX 아티스트 찾기
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
             FANDEX 등록/추적 아티스트 탐색
@@ -43,15 +43,15 @@ export default function SearchPage() {
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Metric
-            label="Total Artists"
+              label="전체 아티스트"
             value={String(summary.totalArtistCount)}
           />
           <Metric
-            label="Tracked"
+              label="지속 추적"
             value={String(summary.trackedArtistCount)}
           />
           <Metric
-            label="Preview"
+              label="미리보기"
             value={String(summary.previewArtistCount)}
           />
         </div>
@@ -59,7 +59,7 @@ export default function SearchPage() {
         <section>
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-black">Featured Artists</h2>
+              <h2 className="text-2xl font-black">주요 아티스트</h2>
               <p className="mt-2 text-sm font-bold text-slate-500">
                 FANDEX 등록/추적 아티스트 기준으로 일부 항목을 표시합니다.
               </p>
@@ -124,11 +124,11 @@ export default function SearchPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white">
-          <h2 className="text-2xl font-black">Coverage Notice</h2>
+          <h2 className="text-2xl font-black">데이터 안내</h2>
           <p className="mt-4 text-sm leading-6 text-slate-300">
             현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
-            K-pop 아티스트를 대표하지 않습니다. 현재 차트는 editorial
-            seed / preview 기반이며, 실제 공개 지표 검증과 자동 수집은
+            K-pop 아티스트를 대표하지 않습니다. 현재 차트는 에디토리얼
+            시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은
             후속 단계입니다.
           </p>
         </section>

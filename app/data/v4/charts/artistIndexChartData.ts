@@ -1536,7 +1536,7 @@ export function getMethodologyVariableDefinitions() {
 export function getMethodologyFormulaSummary(): MethodologyFormulaSummary {
   return {
     conceptFormula:
-      'FANDEX Stock Price = Base Point + Σ(Variable Score × Weight) - Risk Adjustment',
+      'FANDEX 주가형 지수 = 기준점 + 변수별 점수의 합 - 조정값',
     basePoint: '아티스트별 기본 기준점입니다.',
     variableScore: '각 변수의 최근 흐름을 point 구조로 해석한 값입니다.',
     weight: '변수별 영향도를 조정하는 개념적 가중치입니다.',
@@ -1548,6 +1548,42 @@ export function getMethodologyFormulaSummary(): MethodologyFormulaSummary {
 
 export function getCoveragePageSummary() {
   return getCoverageSummary(artistIndexChartProfiles);
+}
+
+export function getKpopCompositeIndexSeries() {
+  const histories = artistIndexChartProfiles.map((profile) =>
+    getLastSixMonthHistory(profile),
+  );
+  const maxLength = Math.max(...histories.map((history) => history.length));
+
+  return Array.from({ length: maxLength }, (_, index) => {
+    const points = histories
+      .map((history) => history[index])
+      .filter(Boolean) as ArtistIndexHistoryPoint[];
+    const average =
+      points.reduce((total, point) => total + point.fandexPoint, 0) /
+      Math.max(points.length, 1);
+
+    return {
+      date: points[0]?.date ?? '',
+      fandexPoint: Math.round(average),
+      artistCount: points.length,
+    };
+  }).filter((point) => point.date.length > 0);
+}
+
+export function getKpopCompositeIndexSummary() {
+  const series = getKpopCompositeIndexSeries();
+  const latest = series[series.length - 1];
+  const first = series[0];
+
+  return {
+    series,
+    currentPoint: latest?.fandexPoint ?? 0,
+    sixMonthDelta:
+      latest && first ? latest.fandexPoint - first.fandexPoint : 0,
+    artistCount: latest?.artistCount ?? 0,
+  };
 }
 
 export function getCoverageStatusGroups(): CoverageStatusGroup[] {

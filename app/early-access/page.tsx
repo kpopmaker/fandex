@@ -5,7 +5,7 @@ const previewItems = [
   '아티스트별 6개월 FANDEX 주가 차트',
   '변수 1~4개 선택 그래프',
   '2~5명 아티스트 비교',
-  'methodology / coverage 안내',
+  '산출방식 / 커버리지 안내',
 ];
 
 export default function EarlyAccessPage() {
@@ -14,7 +14,7 @@ export default function EarlyAccessPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">
-            FANDEX Preview
+            FANDEX 미리보기
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
             FANDEX 1차 MVP 안내
@@ -22,7 +22,7 @@ export default function EarlyAccessPage() {
           <p className="mt-5 text-lg leading-8 text-slate-600">
             FANDEX는 K-pop 아티스트의 활동성과 반응 지표를 주가형
             지수로 해석하는 리서치 플랫폼입니다. 현재 단계에서는
-            현재 단계에서는 1차 MVP의 핵심 흐름을 확인할 수 있도록
+            1차 MVP의 핵심 흐름을 확인할 수 있도록
             정리되어 있습니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
@@ -46,8 +46,8 @@ export default function EarlyAccessPage() {
             <h2 className="text-2xl font-black">신뢰 고지</h2>
             <p className="mt-4 text-sm leading-6 text-slate-600">
               현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
-              K-pop 아티스트를 대표하지 않습니다. 현재 차트는 editorial
-              seed / preview 기반이며, 실제 공개 지표 검증과 자동 수집은
+              K-pop 아티스트를 대표하지 않습니다. 현재 차트는 에디토리얼
+              시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은
               후속 단계입니다.
             </p>
           </article>

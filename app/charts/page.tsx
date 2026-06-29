@@ -42,17 +42,17 @@ const similarityBandLabels: Record<ArtistIndexSimilarityBand, string> = {
 };
 
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: 'tracked',
-  partial: 'partial',
-  preview: 'preview',
+  tracked: '지속 추적',
+  partial: '일부 반영',
+  preview: '미리보기',
 };
 
 const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
   girl_group: '걸그룹',
   boy_group: '보이그룹',
-  solo: 'solo',
-  mixed: 'mixed',
-  unit: 'unit',
+  solo: '솔로',
+  mixed: '혼성',
+  unit: '유닛',
 };
 
 const chartColors = ['#0d9488', '#7c3aed', '#2563eb', '#047857', '#be123c'];
@@ -200,32 +200,32 @@ function getRecentFlowSummary(profile: ArtistIndexChartProfile) {
   const trendBand = getIndexTrendBand(profile.history);
   const delta = calculateIndexDelta(profile.history);
   const trendCopy: Record<ArtistIndexTrendBand, string> = {
-    rising: '理쒓렐 8媛??쒖젏 湲곗? ?꾩쟻 ?ъ씤?멸? 袁몄????곸듅?섎뒗 ?먮쫫?낅땲??',
-    stable: '理쒓렐 8媛??쒖젏 湲곗? ?꾩쟻 ?ъ씤?멸? 鍮꾧탳???덉젙?곸쑝濡??좎??섎뒗 ?먮쫫?낅땲??',
-    falling: '理쒓렐 8媛??쒖젏 湲곗? ?꾩쟻 ?ъ씤?멸? ??븘吏??援ш컙???덉뼱 異붽? ?뺤씤???꾩슂?⑸땲??',
-    volatile: '理쒓렐 8媛??쒖젏 湲곗? 二쇨컙 蹂????씠 而ㅼ졇 ?먮쫫 ?ы솗?몄씠 ?꾩슂?⑸땲??',
-    insufficient_data: '理쒓렐 ?먮쫫???먮떒?섍린?먮뒗 ?쒖젏 ?곗씠?곌? 遺議깊빀?덈떎.',
+    rising: '최근 8개 시점 기준으로 지수가 완만하게 올라가는 흐름입니다.',
+    stable: '최근 8개 시점 기준으로 지수가 비교적 안정적으로 유지되는 흐름입니다.',
+    falling: '최근 8개 시점 기준으로 지수가 낮아지는 구간이 있어 추가 확인이 필요합니다.',
+    volatile: '최근 8개 시점 기준으로 변동폭이 커져 흐름 확인이 필요합니다.',
+    insufficient_data: '최근 흐름을 판단하기에는 시점 데이터가 부족합니다.',
   };
 
-  return `${trendCopy[trendBand]} ?꾩옱 臾몄옣? 踰좏? editorial seed 湲곕컲?대ŉ, 理쒓렐 蹂?붾뒗 ${formatDelta(delta)}?낅땲??`;
+  return `${trendCopy[trendBand]} 현재 문장은 에디토리얼 시드 / 미리보기 데이터 기준이며, 최근 변화는 ${formatDelta(delta)}입니다.`;
 }
 
 function getSignalCheckpoints(signals: string[]) {
   const checkpoints = new Set<string>([
-    '理쒓렐 6媛쒖썡 FANDEX 二쇨? ?먮쫫怨?6媛쒖썡 蹂??pt瑜??④퍡 ?뺤씤?섏꽭??',
-    'coverageStatus? confidenceLevel???④퍡 ?뺤씤?섏꽭??',
+    '최근 6개월 FANDEX 주가 흐름과 6개월 변화 pt를 함께 확인하세요.',
+    '커버리지 상태와 신뢰도를 함께 확인하세요.',
   ]);
 
   if (signals.some((signal) => signal.includes('SNS'))) {
-    checkpoints.add('SNS/?щ뜡 蹂???먮쫫???꾩껜 二쇨???吏?섏? 媛숈? 諛⑺뼢?몄? ?뺤씤?섏꽭??');
+    checkpoints.add('SNS/팬덤 변수 흐름이 전체 FANDEX 주가와 같은 방향인지 확인하세요.');
   }
 
   if (signals.some((signal) => signal.includes('Brand'))) {
-    checkpoints.add('釉뚮옖???곹빀??蹂???먮쫫怨?理쒖떊 FANDEX 二쇨? ?꾩튂瑜??④퍡 ?뺤씤?섏꽭??');
+    checkpoints.add('브랜드 적합도 변수 흐름과 현재 FANDEX 주가 위치를 함께 확인하세요.');
   }
 
   if (signals.some((signal) => signal.includes('Activity'))) {
-    checkpoints.add('而대갚/?쒕룞 蹂???먮쫫怨??대떦 湲곌컙??trend band瑜??④퍡 ?뺤씤?섏꽭??');
+    checkpoints.add('컴백/활동 변수 흐름과 해당 기간의 흐름 구간을 함께 확인하세요.');
   }
 
   return Array.from(checkpoints).slice(0, 3);
@@ -248,7 +248,7 @@ function getCompareInterpretation({
   ).slice(0, 4);
   const comparisonView =
     selectedResults[0]?.commonThemeCandidates[0] ??
-    '湲곗? ?꾪떚?ㅽ듃? 鍮꾧탳 ??곸쓽 怨듯넻 蹂???먮쫫???④퍡 ?뺤씤?섏꽭??';
+    '기준 아티스트와 비교 대상의 공통 변수 흐름을 함께 확인하세요.';
 
   return {
     mostSimilar,
@@ -292,7 +292,7 @@ function MiniLineChart({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label={`${profile.artistName} FANDEX 吏??李⑦듃`}
+        aria-label={`${profile.artistName} FANDEX 지수 차트`}
         className="h-64 w-full"
       >
         {[0, 1, 2].map((line) => {
@@ -386,7 +386,7 @@ function CompareLineChart({ profiles }: { profiles: ArtistIndexChartProfile[] })
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="湲곗? ?꾪떚?ㅽ듃? ?좎궗 ?꾪떚?ㅽ듃???뺢퇋??吏???먮쫫 鍮꾧탳"
+        aria-label="기준 아티스트와 비교 아티스트의 FANDEX 지수 흐름 비교"
         className="h-72 w-full"
       >
         {[0, 1, 2].map((line) => {
@@ -446,13 +446,13 @@ export default async function ArtistIndexChartsPage({
       <section className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8">
         <section className="rounded-3xl border border-cyan-200 bg-white p-7 shadow-lg shadow-cyan-100/60">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-600">
-            Editorial Preview / Beta Research Tool
+            FANDEX 리서치 미리보기
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight md:text-6xl">
             FANDEX 주가 차트
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
-            FANDEX 등록/추적 아티스트 기준으로 주가형 지수 흐름을 비교하고,
+            FANDEX 등록/추적 아티스트 기준으로 주가형 지수 흐름을 확인하고,
             비슷한 움직임을 보이는 아티스트의 변수 흐름을 함께 확인합니다.
           </p>
           <p className="mt-4 max-w-3xl rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
@@ -466,7 +466,7 @@ export default async function ArtistIndexChartsPage({
               .join(',')}`}
             className="mt-5 inline-flex rounded-full bg-cyan-500 px-5 py-3 text-xs font-black text-white hover:bg-cyan-400"
           >
-            Multi Artist Compare에서 6개월 비교하기
+            아티스트 비교에서 6개월 흐름 보기
           </Link>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
@@ -488,15 +488,15 @@ export default async function ArtistIndexChartsPage({
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-                Coverage / Trust Notice
+                데이터 안내
               </p>
               <h2 className="mt-2 text-2xl font-black">
                 FANDEX 등록/추적 아티스트 기준
               </h2>
               <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
                 현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
-                K-pop 아티스트를 대표하지 않습니다. 현재 차트는 editorial
-                seed / preview 기반이며, 실제 공개 지표 검증과 자동 수집은
+                K-pop 아티스트를 대표하지 않습니다. 현재 차트는 에디토리얼
+                시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은
                 후속 단계입니다.
               </p>
             </div>
@@ -505,18 +505,18 @@ export default async function ArtistIndexChartsPage({
             </span>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <MetricCard label="total" value={coverageSummary.totalArtistCount.toString()} />
-            <MetricCard label="tracked" value={coverageSummary.trackedArtistCount.toString()} />
-            <MetricCard label="partial" value={coverageSummary.partialArtistCount.toString()} />
-            <MetricCard label="preview" value={coverageSummary.previewArtistCount.toString()} />
-            <MetricCard label="last updated" value={coverageSummary.lastUpdated} />
+            <MetricCard label="전체 아티스트" value={coverageSummary.totalArtistCount.toString()} />
+            <MetricCard label="지속 추적" value={coverageSummary.trackedArtistCount.toString()} />
+            <MetricCard label="일부 반영" value={coverageSummary.partialArtistCount.toString()} />
+            <MetricCard label="미리보기" value={coverageSummary.previewArtistCount.toString()} />
+            <MetricCard label="마지막 업데이트" value={coverageSummary.lastUpdated} />
           </div>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <MetricCard label="girl group" value={coverageSummary.girlGroupCount.toString()} />
-            <MetricCard label="boy group" value={coverageSummary.boyGroupCount.toString()} />
-            <MetricCard label="solo" value={coverageSummary.soloCount.toString()} />
-            <MetricCard label="unit" value={coverageSummary.unitCount.toString()} />
-            <MetricCard label="mixed" value={coverageSummary.mixedCount.toString()} />
+            <MetricCard label="걸그룹" value={coverageSummary.girlGroupCount.toString()} />
+            <MetricCard label="보이그룹" value={coverageSummary.boyGroupCount.toString()} />
+            <MetricCard label="솔로" value={coverageSummary.soloCount.toString()} />
+            <MetricCard label="유닛" value={coverageSummary.unitCount.toString()} />
+            <MetricCard label="혼성" value={coverageSummary.mixedCount.toString()} />
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             <StatusBadge status="tracked" />
@@ -529,14 +529,14 @@ export default async function ArtistIndexChartsPage({
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-                湲곗? ?꾪떚?ㅽ듃 ?좏깮
+                기준 아티스트 선택
               </p>
               <h2 className="mt-2 text-2xl font-black">
-                ?꾪떚?ㅽ듃瑜?諛붽퓭 吏???먮쫫 ?뺤씤
+                아티스트를 바꿔 지수 흐름 확인
               </h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
-                tracked를 먼저 보여주고 partial/preview는 별도 섹션으로
-                구분합니다. 비교 대상이 없으면 유사 흐름 상위 3명을 자동
+                지속 추적 아티스트를 먼저 보여주고 일부 반영/미리보기
+                아티스트는 별도 섹션으로 구분합니다. 비교 대상이 없으면 유사 흐름 상위 3명을 자동
                 추천합니다.
               </p>
             </div>
@@ -547,18 +547,18 @@ export default async function ArtistIndexChartsPage({
           <div className="mt-5 grid gap-5">
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
-              title="Tracked artists"
+              title="지속 추적 아티스트"
               profiles={groupedProfiles.tracked}
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
-              title="Partial coverage"
+              title="일부 반영 아티스트"
               profiles={groupedProfiles.partial}
               compact
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
-              title="Preview coverage"
+              title="미리보기 아티스트"
               profiles={groupedProfiles.preview}
               compact
             />
@@ -568,7 +568,7 @@ export default async function ArtistIndexChartsPage({
         <section className="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
           <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Base Artist Summary
+              기준 아티스트 요약
             </p>
             <h2 className="mt-2 text-3xl font-black">{baseProfile.artistName}</h2>
             <p className="mt-1 text-sm font-bold text-slate-500">
@@ -576,16 +576,16 @@ export default async function ArtistIndexChartsPage({
               {coverageStatusLabels[baseProfile.coverageStatus]}
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <MetricCard label="latest FANDEX 주가" value={formatPoint(baseLatest.fandexPoint)} />
-              <MetricCard label="recent delta" value={formatDelta(calculateIndexDelta(baseProfile.history))} />
-              <MetricCard label="trend band" value={trendBandLabels[getIndexTrendBand(baseProfile.history)]} />
-              <MetricCard label="last updated" value={baseProfile.lastUpdated} />
-              <MetricCard label="data status" value={baseLatest.dataStatus} />
-              <MetricCard label="confidence level" value={baseLatest.confidenceLevel} />
+              <MetricCard label="현재 FANDEX 주가" value={formatPoint(baseLatest.fandexPoint)} />
+              <MetricCard label="최근 변화" value={formatDelta(calculateIndexDelta(baseProfile.history))} />
+              <MetricCard label="흐름 구간" value={trendBandLabels[getIndexTrendBand(baseProfile.history)]} />
+              <MetricCard label="마지막 업데이트" value={baseProfile.lastUpdated} />
+              <MetricCard label="데이터 상태" value={baseLatest.dataStatus} />
+              <MetricCard label="신뢰도" value={baseLatest.confidenceLevel} />
             </div>
             <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
-                理쒓렐 ?먮쫫 ?붿빟
+                최근 흐름 요약
               </p>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
                 {getRecentFlowSummary(baseProfile)}
@@ -602,12 +602,12 @@ export default async function ArtistIndexChartsPage({
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-              Compare Chart
+              비교 차트
             </p>
-            <h2 className="mt-2 text-2xl font-black">?좎궗 ?먮쫫 鍮꾧탳</h2>
+            <h2 className="mt-2 text-2xl font-black">유사 흐름 비교</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
-              湲곗? ?꾪떚?ㅽ듃? 鍮꾧탳 ??곸쓽 FANDEX 吏???먮쫫??媛숈? 湲곌컙 湲곗??쇰줈
-              遊낅땲?? ???쒖떆???곗뿴???꾨땲???먮쫫 ?좎궗?깃낵 怨듯넻 ?좏샇 ?뺤씤?⑹엯?덈떎.
+              기준 아티스트와 비교 대상의 FANDEX 지수 흐름을 같은 기간 기준으로 봅니다.
+              순위가 아니라 흐름의 유사성과 공통 신호를 확인하기 위한 차트입니다.
             </p>
           </div>
           <CompareLineChart profiles={chartProfiles} />
@@ -629,16 +629,16 @@ export default async function ArtistIndexChartsPage({
           </div>
           <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
-              鍮꾧탳 ?댁꽍
+              비교 해석
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <MetricCard
-                label="媛???좎궗???먮쫫"
-                value={compareInterpretation.mostSimilar?.comparedArtistName ?? '鍮꾧탳 ????놁쓬'}
+                label="가장 유사한 흐름"
+                value={compareInterpretation.mostSimilar?.comparedArtistName ?? '비교 대상 없음'}
               />
               <MetricCard
-                label="媛???ㅻⅨ ?먮쫫"
-                value={compareInterpretation.mostDifferent?.comparedArtistName ?? '鍮꾧탳 ????놁쓬'}
+                label="가장 다른 흐름"
+                value={compareInterpretation.mostDifferent?.comparedArtistName ?? '비교 대상 없음'}
               />
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -652,16 +652,16 @@ export default async function ArtistIndexChartsPage({
               ))}
             </div>
             <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
-              蹂???먮쫫 ?댁꽍 愿?? {compareInterpretation.comparisonView}
+              변수 흐름 해석 기준: {compareInterpretation.comparisonView}
             </p>
           </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            Similar Movement Cards
+            유사 흐름 카드
           </p>
-          <h2 className="mt-2 text-2xl font-black">鍮꾩듂??吏???먮쫫</h2>
+          <h2 className="mt-2 text-2xl font-black">비슷한 지수 흐름</h2>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
             {similarResults.slice(0, 6).map((result) => {
               const profile = profiles.find(
@@ -684,7 +684,7 @@ export default async function ArtistIndexChartsPage({
                         {result.comparedArtistName}
                       </h3>
                       <p className="mt-1 text-xs font-black uppercase tracking-[0.16em] text-cyan-700">
-                        ?좎궗??{similarityBandLabels[result.similarityBand]}
+                        유사도 {similarityBandLabels[result.similarityBand]}
                       </p>
                     </div>
                     <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
@@ -693,11 +693,11 @@ export default async function ArtistIndexChartsPage({
                   </div>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <MetricCard
-                      label="latest point"
+                      label="현재 FANDEX 주가"
                       value={latest ? formatPoint(latest.fandexPoint) : '-'}
                     />
                     <MetricCard
-                      label="delta point"
+                      label="변화 pt"
                       value={profile ? formatDelta(calculateIndexDelta(profile.history)) : '-'}
                     />
                   </div>
@@ -748,11 +748,12 @@ export default async function ArtistIndexChartsPage({
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            Index Insight Notes
+            지수 해석 메모
           </p>
-          <h2 className="mt-2 text-2xl font-black">二쇨???吏???댁꽍 硫붾え</h2>
+          <h2 className="mt-2 text-2xl font-black">주가형 지수 해석 메모</h2>
           <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
-            ?좏깮???꾪떚?ㅽ듃??FANDEX 二쇨? ?먮쫫, 6媛쒖썡 蹂??pt, trend band瑜?            ?④퍡 蹂대ŉ 媛숈? 湲곌컙 ?덉뿉???대뼡 蹂???먮쫫???먮뱶?ъ??붿? ?뺤씤?⑸땲??
+            선택한 아티스트의 FANDEX 주가 흐름, 6개월 변화 pt, 흐름 구간을 함께 보며
+            같은 기간 안에서 어떤 변수 흐름이 두드러지는지 확인합니다.
           </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {chartProfiles.map((profile) => {
@@ -773,7 +774,7 @@ export default async function ArtistIndexChartsPage({
                   </h3>
                   <div className="mt-4 grid gap-3">
                     <MetricCard
-                      label="latest FANDEX 주가"
+                      label="현재 FANDEX 주가"
                       value={formatPoint(latest.fandexPoint)}
                     />
                     <MetricCard
@@ -781,7 +782,7 @@ export default async function ArtistIndexChartsPage({
                       value={formatDelta(sixMonthDelta)}
                     />
                     <MetricCard
-                      label="trend band"
+                      label="흐름 구간"
                       value={trendBandLabels[trendBand]}
                     />
                   </div>
@@ -799,22 +800,21 @@ export default async function ArtistIndexChartsPage({
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            Trust Notice
+            데이터 안내
           </p>
-          <h2 className="mt-2 text-2xl font-black">?좊ː 怨좎?</h2>
+          <h2 className="mt-2 text-2xl font-black">데이터 안내</h2>
           <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 md:grid-cols-2">
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              FANDEX 二쇨???K-pop ?꾪떚?ㅽ듃 ?쒕룞?깃낵 諛섏쓳 吏?쒕? ?댁꽍?섍린 ?꾪븳
-              ?뷀꽣?뚯씤癒쇳듃 由ъ꽌移?吏?섏씠硫? 湲덉쑖?곹뭹/?ъ옄?뺣낫媛 ?꾨떃?덈떎.
+              FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              ?꾩옱 ?곗씠?곕뒗 FANDEX ?깅줉/異붿쟻 ?꾪떚?ㅽ듃 湲곗??낅땲??
+              현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              紐⑤뱺 K-pop ?꾪떚?ㅽ듃瑜???쒗븯吏 ?딆뒿?덈떎.
+              모든 K-pop 아티스트를 대표하지 않습니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              ?꾩옱 李⑦듃??editorial seed / preview 湲곕컲?대ŉ, ?ㅼ젣 怨듦컻 吏??              寃利앷낵 ?먮룞 ?섏쭛? ?꾩냽 ?④퀎?낅땲??
+              현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
           </ul>
         </section>

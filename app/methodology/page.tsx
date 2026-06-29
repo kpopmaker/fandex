@@ -17,17 +17,17 @@ const coverageStatusDescriptions: Array<{
 }> = [
   {
     status: 'tracked',
-    label: 'tracked',
+    label: '지속 추적',
     description: '상대적으로 가장 안정적으로 추적 중인 아티스트입니다.',
   },
   {
     status: 'partial',
-    label: 'partial',
+    label: '일부 반영',
     description: '일부 지표만 추적 중이거나 확장 중인 아티스트입니다.',
   },
   {
     status: 'preview',
-    label: 'preview',
+    label: '미리보기',
     description: '확장 예정 또는 미리보기 상태의 아티스트입니다.',
   },
 ];
@@ -39,22 +39,22 @@ const dataStatusDescriptions: Array<{
 }> = [
   {
     status: 'editorial_seed',
-    label: 'editorial_seed',
-    description: '현재 FANDEX 내부 preview 기준으로 구성한 seed 데이터입니다.',
+    label: '에디토리얼 시드',
+    description: '현재 FANDEX 내부 미리보기 기준으로 구성한 시드 데이터입니다.',
   },
   {
     status: 'verified_manual',
-    label: 'verified_manual',
+    label: '수동 검증',
     description: '수동 검증 데이터가 연결될 때 사용할 수 있는 상태입니다.',
   },
   {
     status: 'partial_public_signal',
-    label: 'partial_public_signal',
+    label: '일부 공개 지표',
     description: '일부 공개 신호만 반영된 상태입니다.',
   },
   {
     status: 'preview_only',
-    label: 'preview_only',
+    label: '미리보기 전용',
     description: '확장 후보 또는 미리보기 성격의 데이터 상태입니다.',
   },
 ];
@@ -66,18 +66,18 @@ const confidenceDescriptions: Array<{
 }> = [
   {
     level: 'high',
-    label: 'high',
+    label: '높음',
     description: '데이터 신뢰도 metadata가 충분히 쌓였을 때 사용할 수 있는 단계입니다.',
   },
   {
     level: 'medium',
-    label: 'medium',
-    description: '현재 tracked 아티스트 다수에 적용된 중간 신뢰도 단계입니다.',
+    label: '중간',
+    description: '현재 지속 추적 아티스트 다수에 적용된 중간 신뢰도 단계입니다.',
   },
   {
     level: 'low',
-    label: 'low',
-    description: 'partial 또는 preview 데이터처럼 보수적으로 해석해야 하는 단계입니다.',
+    label: '낮음',
+    description: '일부 반영 또는 미리보기 데이터처럼 보수적으로 해석해야 하는 단계입니다.',
   },
 ];
 
@@ -96,16 +96,16 @@ const chartInterpretationItems = [
   },
   {
     title: '/compare 변수별 비교 차트',
-    copy: '선택 변수 1~4개에 대해 변수별 compact chart를 분리해 보여줍니다.',
+    copy: '선택 변수 1~4개에 대해 변수별 작은 차트를 분리해 보여줍니다.',
   },
 ];
 
 const nextSteps = [
   '실제 공개 지표 수집',
   '데이터 업데이트 주기 정의',
-  '관리자 데이터 입력 UI',
-  '자동 수집 pipeline',
-  '신뢰도 metadata 고도화',
+  '관리자 데이터 입력 화면',
+  '자동 수집 구조',
+  '신뢰도 메타데이터 고도화',
 ];
 
 const ctaLinks = [
@@ -126,7 +126,7 @@ export default function MethodologyPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
               <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-300">
-                FANDEX Methodology
+                FANDEX 산출방식
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
                 K-pop 아티스트 활동성과 반응 지표를 주가형 지수로 해석하는 방식
@@ -151,7 +151,38 @@ export default function MethodologyPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-            산출 공식 개념
+            쉽게 읽기
+          </p>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 주가는 이렇게 읽습니다</h2>
+          <p className="mt-4 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+            FANDEX 주가는 하나의 숫자로 아티스트의 흐름을 단정하는 점수가
+            아닙니다. 음원/음반, SNS/팬덤, 컴백/활동, 브랜드 적합도 같은
+            여러 신호를 같은 기준으로 정리해 흐름을 보기 쉽게 만든 리서치
+            지수입니다.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <FormulaCard
+              title="1단계"
+              copy="아티스트별 활동/반응 신호를 변수별로 정리합니다."
+            />
+            <FormulaCard
+              title="2단계"
+              copy="변수별 흐름에 가중치를 적용해 같은 기준으로 비교합니다."
+            />
+            <FormulaCard
+              title="3단계"
+              copy="데이터 신뢰도와 예외적 변동을 조정해 FANDEX 주가형 지수로 보여줍니다."
+            />
+          </div>
+          <p className="mt-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
+            공식 순위나 투자 판단용 지표가 아닙니다. 같은 기준으로 흐름을
+            비교하기 위한 FANDEX 내부 리서치 지수입니다.
+          </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            개념식
           </p>
           <h2 className="mt-2 text-2xl font-black">FANDEX 주가형 지수 산출방식</h2>
           <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
@@ -163,10 +194,10 @@ export default function MethodologyPage() {
             </p>
           </div>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-            <FormulaCard title="Base Point" copy={formula.basePoint} />
-            <FormulaCard title="Variable Score" copy={formula.variableScore} />
-            <FormulaCard title="Weight" copy={formula.weight} />
-            <FormulaCard title="Risk Adjustment" copy={formula.riskAdjustment} />
+            <FormulaCard title="기준값" copy={formula.basePoint} />
+            <FormulaCard title="변수 점수" copy={formula.variableScore} />
+            <FormulaCard title="가중치" copy={formula.weight} />
+            <FormulaCard title="리스크 조정" copy={formula.riskAdjustment} />
             <FormulaCard title="최종값" copy={formula.finalValue} />
           </div>
         </section>
@@ -174,7 +205,7 @@ export default function MethodologyPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Variables
+              산출 변수
             </p>
             <h2 className="mt-2 text-2xl font-black">7개 산출 변수</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
@@ -232,7 +263,7 @@ export default function MethodologyPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-            Chart Reading
+            차트 읽는 법
           </p>
           <h2 className="mt-2 text-2xl font-black">주가 차트 해석 방법</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -257,7 +288,7 @@ export default function MethodologyPage() {
         <section className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Limits
+              한계
             </p>
             <h2 className="mt-2 text-2xl font-black">한계</h2>
             <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
@@ -268,7 +299,7 @@ export default function MethodologyPage() {
                 모든 K-pop 아티스트를 대표하지 않습니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-                현재 차트는 editorial seed / preview 기반입니다.
+                현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반입니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
                 현재 값은 분석용 지수이며 공식 순위나 투자정보가 아닙니다.
@@ -278,7 +309,7 @@ export default function MethodologyPage() {
 
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Next Steps
+              다음 단계
             </p>
             <h2 className="mt-2 text-2xl font-black">다음 단계</h2>
             <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">

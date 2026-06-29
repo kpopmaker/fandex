@@ -35,7 +35,7 @@ export default function ResearchPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">
-            FANDEX Research
+            FANDEX 리서치
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
             FANDEX 리서치 프리뷰
@@ -78,14 +78,14 @@ export default function ResearchPage() {
             <h2 className="text-2xl font-black">현재 범위</h2>
             <p className="mt-3 text-sm leading-6 text-slate-300">
               현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
-              K-pop 아티스트를 대표하지 않습니다. 현재 차트는 editorial
-              seed / preview 기반이며, 실제 공개 지표 검증과 자동 수집은
+              K-pop 아티스트를 대표하지 않습니다. 현재 차트는 에디토리얼
+              시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은
               후속 단계입니다.
             </p>
           </div>
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400">
-              Next Steps
+              다음 단계
             </h3>
             <ul className="mt-3 space-y-2 text-sm font-bold text-slate-200">
               {nextSteps.map((step) => (

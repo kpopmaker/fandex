@@ -47,9 +47,9 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
 };
 
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: 'tracked',
-  partial: 'partial',
-  preview: 'preview',
+  tracked: '지속 추적',
+  partial: '일부 반영',
+  preview: '미리보기',
 };
 
 const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
@@ -224,12 +224,12 @@ export default async function ArtistDetailPage({
   const strongestVariables = getStrongestVariables(profile, 3);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
+    <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
-              <p className="font-mono text-sm font-black text-cyan-600 dark:text-cyan-300">
+              <p className="font-mono text-sm font-black text-cyan-600">
                 {profile.ticker}
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
@@ -237,10 +237,10 @@ export default async function ArtistDetailPage({
               </h1>
               <p className="mt-3 text-sm font-bold text-slate-500 dark:text-slate-400">
                 {groupTypeLabels[profile.groupType]} /{' '}
-                {coverageStatusLabels[profile.coverageStatus]} / updated{' '}
+                {coverageStatusLabels[profile.coverageStatus]} / 마지막 업데이트{' '}
                 {profile.lastUpdated}
               </p>
-              <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+              <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
                 FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
                 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
                 아닙니다.
@@ -249,25 +249,25 @@ export default async function ArtistDetailPage({
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
                 href="/artists"
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
               >
                 아티스트 목록
               </Link>
               <Link
                 href="/charts"
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
               >
                 주가 차트 비교
               </Link>
               <Link
                 href="/methodology"
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
               >
                 산출방식
               </Link>
               <Link
                 href="/coverage"
-                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
+                className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
               >
                 커버리지
               </Link>
@@ -284,10 +284,10 @@ export default async function ArtistDetailPage({
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           <MetricCard label="현재 FANDEX 주가" value={formatPoint(latestPoint.fandexPoint)} />
           <MetricCard label="최근 6개월 변화" value={formatDelta(fandexDelta)} />
-          <MetricCard label="trend band" value={trendBandLabels[trendBand]} />
-          <MetricCard label="dataStatus" value={latestPoint.dataStatus} />
-          <MetricCard label="confidenceLevel" value={latestPoint.confidenceLevel} />
-          <MetricCard label="coverageStatus" value={profile.coverageStatus} />
+          <MetricCard label="흐름 구간" value={trendBandLabels[trendBand]} />
+          <MetricCard label="데이터 상태" value={latestPoint.dataStatus} />
+          <MetricCard label="신뢰도" value={latestPoint.confidenceLevel} />
+          <MetricCard label="커버리지 상태" value={coverageStatusLabels[profile.coverageStatus]} />
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
@@ -311,15 +311,15 @@ export default async function ArtistDetailPage({
 
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Summary
+              요약
             </p>
             <h2 className="mt-2 text-2xl font-black">주가형 지수 요약</h2>
             <div className="mt-5 grid gap-3">
               <InfoRow label="아티스트" value={profile.artistName} />
               <InfoRow label="ticker" value={profile.ticker} />
-              <InfoRow label="groupType" value={groupTypeLabels[profile.groupType]} />
-              <InfoRow label="lastUpdated" value={profile.lastUpdated} />
-              <InfoRow label="latest note" value={latestPoint.note} />
+              <InfoRow label="그룹 구분" value={groupTypeLabels[profile.groupType]} />
+              <InfoRow label="마지막 업데이트" value={profile.lastUpdated} />
+              <InfoRow label="최근 메모" value={latestPoint.note} />
             </div>
           </section>
         </section>
@@ -353,6 +353,7 @@ export default async function ArtistDetailPage({
                 <Link
                   key={variable.variableKey}
                   href={buildArtistVariableHref(profile.artistId, nextVariables)}
+                  scroll={false}
                   aria-disabled={disabledAdd}
                   className={
                     active
@@ -374,7 +375,7 @@ export default async function ArtistDetailPage({
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Selected Variables
+                선택 변수
               </p>
               <h2 className="mt-2 text-2xl font-black">선택 변수 영향 그래프</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
@@ -390,7 +391,7 @@ export default async function ArtistDetailPage({
 
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Variable Points
+              변수 포인트
             </p>
             <h2 className="mt-2 text-2xl font-black">선택 변수 최신 포인트</h2>
             <div className="mt-5 grid gap-3">
@@ -408,7 +409,7 @@ export default async function ArtistDetailPage({
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-            Contribution
+            주요 기여 변수
           </p>
           <h2 className="mt-2 text-2xl font-black">변수별 기여도 카드</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -440,7 +441,7 @@ export default async function ArtistDetailPage({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Coverage / Trust Notice
+                데이터 안내
               </p>
               <h2 className="mt-2 text-2xl font-black">데이터 기준 안내</h2>
             </div>
@@ -459,8 +460,8 @@ export default async function ArtistDetailPage({
               모든 K-pop 아티스트를 대표하지 않습니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-              현재 차트는 editorial seed / preview 기반이며, 실제 공개 지표
-              검증과 자동 수집은 후속 단계입니다.
+              현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반이며,
+              실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
               FANDEX 주가는 금융상품/투자정보가 아닙니다.

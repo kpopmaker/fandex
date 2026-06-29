@@ -27,9 +27,9 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
 };
 
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: 'tracked',
-  partial: 'partial',
-  preview: 'preview',
+  tracked: '지속 추적',
+  partial: '일부 반영',
+  preview: '미리보기',
 };
 
 const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
@@ -41,14 +41,14 @@ const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
 };
 
 const statusFilters: Array<{ label: string; value: ArtistIndexCoverageStatus }> = [
-  { label: 'Tracked', value: 'tracked' },
-  { label: 'Partial', value: 'partial' },
-  { label: 'Preview', value: 'preview' },
+  { label: '지속 추적', value: 'tracked' },
+  { label: '일부 반영', value: 'partial' },
+  { label: '미리보기', value: 'preview' },
 ];
 
 const groupFilters: Array<{ label: string; value: ArtistIndexGroupType }> = [
-  { label: 'Girl Group', value: 'girl_group' },
-  { label: 'Boy Group', value: 'boy_group' },
+  { label: '걸그룹', value: 'girl_group' },
+  { label: '보이그룹', value: 'boy_group' },
 ];
 
 const ctaLinks = [
@@ -144,26 +144,26 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
               <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-300">
-                FANDEX Coverage
+                FANDEX 커버리지
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
                 현재 FANDEX 등록/추적 아티스트와 데이터 상태
               </h1>
               <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:text-base">
-                FANDEX 등록/추적 아티스트 기준으로 coverageStatus, groupType,
-                dataStatus, confidenceLevel을 확인합니다.
+                FANDEX 등록/추적 아티스트 기준으로 커버리지 상태, 그룹 구분,
+                데이터 상태, 신뢰도를 확인합니다.
               </p>
               <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
                 {disclaimer}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:min-w-96">
-              <MetricCard label="Total Artists" value={String(summary.totalArtistCount)} />
-              <MetricCard label="Tracked" value={String(summary.trackedArtistCount)} />
-              <MetricCard label="Partial" value={String(summary.partialArtistCount)} />
-              <MetricCard label="Preview" value={String(summary.previewArtistCount)} />
-              <MetricCard label="Girl Group" value={String(summary.girlGroupCount)} />
-              <MetricCard label="Boy Group" value={String(summary.boyGroupCount)} />
+              <MetricCard label="전체 아티스트" value={String(summary.totalArtistCount)} />
+              <MetricCard label="지속 추적" value={String(summary.trackedArtistCount)} />
+              <MetricCard label="일부 반영" value={String(summary.partialArtistCount)} />
+              <MetricCard label="미리보기" value={String(summary.previewArtistCount)} />
+              <MetricCard label="걸그룹" value={String(summary.girlGroupCount)} />
+              <MetricCard label="보이그룹" value={String(summary.boyGroupCount)} />
             </div>
           </div>
         </section>
@@ -177,7 +177,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                    coverageStatus
+                    커버리지 상태
                   </p>
                   <h2 className="mt-2 text-2xl font-black">{group.label}</h2>
                 </div>
@@ -195,7 +195,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Group Type
+              그룹 구분
             </p>
             <h2 className="mt-2 text-2xl font-black">그룹 유형 요약</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -211,9 +211,9 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
 
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Confidence
+              신뢰도
             </p>
-            <h2 className="mt-2 text-2xl font-black">confidenceLevel 요약</h2>
+            <h2 className="mt-2 text-2xl font-black">신뢰도 요약</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               {confidenceSummary.map((item) => (
                 <MetricCard
@@ -230,11 +230,11 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Filters
+                필터
               </p>
               <h2 className="mt-2 text-2xl font-black">커버리지 필터</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                status와 group query를 링크 기반으로 적용합니다.
+                status와 group query param을 링크 기반으로 적용합니다.
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
@@ -245,7 +245,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             <FilterLink
               active={!selectedStatus && !selectedGroup}
               href="/coverage"
-              label="All"
+              label="전체"
             />
             {statusFilters.map((filter) => (
               <FilterLink
@@ -276,7 +276,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
           <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Artist Coverage
+                아티스트 커버리지
               </p>
               <h2 className="mt-2 text-2xl font-black">등록/추적 아티스트 목록</h2>
             </div>
@@ -296,17 +296,17 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             <table className="w-full min-w-[1080px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">artist</th>
+                  <th className="border-b border-slate-200 p-3">아티스트</th>
                   <th className="border-b border-slate-200 p-3">ticker</th>
-                  <th className="border-b border-slate-200 p-3">groupType</th>
-                  <th className="border-b border-slate-200 p-3">coverageStatus</th>
-                  <th className="border-b border-slate-200 p-3">latest FANDEX 주가</th>
+                  <th className="border-b border-slate-200 p-3">그룹 구분</th>
+                  <th className="border-b border-slate-200 p-3">커버리지 상태</th>
+                  <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
-                  <th className="border-b border-slate-200 p-3">trend band</th>
-                  <th className="border-b border-slate-200 p-3">dataStatus</th>
-                  <th className="border-b border-slate-200 p-3">confidenceLevel</th>
-                  <th className="border-b border-slate-200 p-3">lastUpdated</th>
-                  <th className="border-b border-slate-200 p-3">links</th>
+                  <th className="border-b border-slate-200 p-3">흐름 구간</th>
+                  <th className="border-b border-slate-200 p-3">데이터 상태</th>
+                  <th className="border-b border-slate-200 p-3">신뢰도</th>
+                  <th className="border-b border-slate-200 p-3">마지막 업데이트</th>
+                  <th className="border-b border-slate-200 p-3">이동</th>
                 </tr>
               </thead>
               <tbody>
@@ -367,7 +367,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-            Coverage / Trust Notice
+            데이터 안내
           </p>
           <h2 className="mt-2 text-2xl font-black">데이터 기준 안내</h2>
           <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:grid-cols-2">
@@ -378,8 +378,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               모든 K-pop 아티스트를 대표하지 않습니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-              현재 차트는 editorial seed / preview 기반이며, 실제 공개 지표
-              검증과 자동 수집은 후속 단계입니다.
+              현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반이며,
+              실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
               FANDEX 주가는 금융상품/투자정보가 아닙니다.

@@ -41,15 +41,15 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
 };
 
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: 'tracked',
-  partial: 'partial',
-  preview: 'preview',
+  tracked: '지속 추적',
+  partial: '일부 반영',
+  preview: '미리보기',
 };
 
 const coverageStatusCopy: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: '등록/추적',
-  partial: '부분 추적',
-  preview: 'preview',
+  tracked: '지속 추적',
+  partial: '일부 반영',
+  preview: '미리보기',
 };
 
 const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
@@ -247,57 +247,57 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const interpretation = getCompareInterpretation(summaryRows, variableSeries);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
+    <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
-              <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-300">
-                Multi Artist Compare
+              <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">
+                FANDEX 아티스트 비교
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-                FANDEX 등록/추적 아티스트 기준 6개월 주가형 지수 비교
+                여러 아티스트의 주가 흐름 비교
               </h1>
               <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:text-base">
-                여러 아티스트의 최근 6개 시점 FANDEX 주가 흐름과 선택
-                변수별 비교 그래프를 함께 확인합니다.
+                2~5명의 아티스트를 선택해 최근 6개월 FANDEX 주가 흐름과
+                산출 변수별 변화를 비교합니다.
               </p>
-              <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+              <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
                 {disclaimer}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:min-w-96">
               <MetricCard
-                label="selected artists"
+                label="선택 아티스트"
                 value={`${selectedProfiles.length}/5`}
               />
               <MetricCard
-                label="selected variables"
+                label="선택 변수"
                 value={`${selectedVariables.length}/4`}
               />
               <MetricCard
-                label="coverage"
-                value={`${coverageSummary.trackedArtistCount} tracked / ${coverageSummary.partialArtistCount} partial / ${coverageSummary.previewArtistCount} preview`}
+                label="커버리지"
+                value={`지속 추적 ${coverageSummary.trackedArtistCount} / 일부 반영 ${coverageSummary.partialArtistCount} / 미리보기 ${coverageSummary.previewArtistCount}`}
               />
-              <MetricCard label="last updated" value={coverageSummary.lastUpdated} />
+              <MetricCard label="마지막 업데이트" value={coverageSummary.lastUpdated} />
             </div>
           </div>
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[0.96fr_1.04fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                  Artist Selector
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                  아티스트 선택
                 </p>
                 <h2 className="mt-2 text-2xl font-black">아티스트 선택</h2>
-                <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
                   FANDEX 등록/추적 아티스트 기준으로 최소 2명, 최대 5명까지
                   비교합니다.
                 </p>
               </div>
-              <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+              <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
                 5명 선택 상태에서는 추가 선택이 잠깁니다.
               </span>
             </div>
@@ -306,38 +306,44 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 profiles={groupedProfiles.tracked}
                 selectedArtistIds={safeSelectedArtistIds}
                 selectedVariables={selectedVariables}
-                title="등록/추적"
+                title="지속 추적"
               />
               <ArtistSelectorGroup
                 compact
                 profiles={groupedProfiles.partial}
                 selectedArtistIds={safeSelectedArtistIds}
                 selectedVariables={selectedVariables}
-                title="부분 추적"
+                title="일부 반영"
               />
               <ArtistSelectorGroup
                 compact
                 profiles={groupedProfiles.preview}
                 selectedArtistIds={safeSelectedArtistIds}
                 selectedVariables={selectedVariables}
-                title="preview"
+                title="미리보기"
               />
             </div>
           </section>
 
           <section className="flex flex-col gap-6">
-            <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                    Variable Selector
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                    산출 변수 선택
                   </p>
                   <h2 className="mt-2 text-2xl font-black">산출 변수 선택</h2>
-                  <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                    변수별 비교는 1개부터 4개까지 선택할 수 있습니다.
+                  <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
+                    비교하고 싶은 산출 변수를 선택하세요. 1개부터 4개까지
+                    선택할 수 있고, 선택한 변수는 아래에서 변수별 비교
+                    그래프로 따로 표시됩니다.
+                  </p>
+                  <p className="mt-2 text-sm font-bold leading-7 text-slate-500">
+                    전체 FANDEX 주가와 변수별 그래프는 같은 값이 아니며,
+                    변수 그래프는 산출에 영향을 준 개별 흐름을 보여줍니다.
                   </p>
                 </div>
-                <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+                <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
                   선택 {selectedVariables.length}/4
                 </span>
               </div>
@@ -357,10 +363,10 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                       aria-disabled={disabledAdd}
                       className={
                         active
-                          ? 'rounded-full border border-cyan-400 bg-cyan-50 px-4 py-2 text-sm font-black text-cyan-800 dark:border-cyan-300/40 dark:bg-cyan-400/10 dark:text-cyan-100'
+                          ? 'rounded-full border border-cyan-500 bg-white px-4 py-2 text-sm font-black text-cyan-800 shadow-[inset_0_-3px_0_rgba(8,145,178,0.25)]'
                           : disabledAdd
-                            ? 'pointer-events-none rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-black text-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-500'
-                            : 'rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300'
+                            ? 'pointer-events-none rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-black text-slate-400'
+                            : 'rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700'
                       }
                     >
                       {variable.displayName}
@@ -370,38 +376,40 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
               </div>
             </section>
 
-            <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Selected Set
+            <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                비교 대상
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {selectedProfiles.map((profile, index) => (
                   <span
                     key={profile.artistId}
-                    className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black text-slate-700"
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full"
                       style={{ backgroundColor: chartColors[index % chartColors.length] }}
                     />
-                    {profile.artistName} {profile.ticker}
+                    {profile.artistName === profile.ticker
+                      ? profile.artistName
+                      : `${profile.artistName} · ${profile.ticker}`}
                   </span>
                 ))}
               </div>
-              <p className="mt-4 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
                 선택 변경은 URL query param에 반영되며, 유효하지 않은
                 artistId와 variableKey는 제거됩니다.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href="/methodology"
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
                 >
                   산출방식 보기
                 </Link>
                 <Link
                   href="/coverage"
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
                 >
                   커버리지 보기
                 </Link>
@@ -461,7 +469,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
           <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-                Compare Summary
+                비교 요약
               </p>
               <h2 className="mt-2 text-2xl font-black">비교 요약</h2>
             </div>
@@ -473,17 +481,17 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             <table className="w-full min-w-[980px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">artist</th>
+                  <th className="border-b border-slate-200 p-3">아티스트</th>
                   <th className="border-b border-slate-200 p-3">ticker</th>
-                  <th className="border-b border-slate-200 p-3">group</th>
-                  <th className="border-b border-slate-200 p-3">coverage</th>
+                  <th className="border-b border-slate-200 p-3">그룹</th>
+                  <th className="border-b border-slate-200 p-3">커버리지</th>
                   <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
-                  <th className="border-b border-slate-200 p-3">trend band</th>
+                  <th className="border-b border-slate-200 p-3">흐름 구간</th>
                   <th className="border-b border-slate-200 p-3">가장 강한 변수</th>
-                  <th className="border-b border-slate-200 p-3">dataStatus</th>
-                  <th className="border-b border-slate-200 p-3">confidence</th>
-                  <th className="border-b border-slate-200 p-3">detail</th>
+                  <th className="border-b border-slate-200 p-3">데이터 상태</th>
+                  <th className="border-b border-slate-200 p-3">신뢰도</th>
+                  <th className="border-b border-slate-200 p-3">상세</th>
                 </tr>
               </thead>
               <tbody>
@@ -537,7 +545,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         <section className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Compare Interpretation
+              비교 해석
             </p>
             <h2 className="mt-2 text-2xl font-black">비교 해석</h2>
             <div className="mt-5 grid gap-3">
@@ -563,7 +571,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              Coverage / Trust Notice
+              데이터 안내
             </p>
             <h2 className="mt-2 text-2xl font-black">데이터 기준 안내</h2>
             <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
@@ -574,8 +582,8 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 모든 K-pop 아티스트를 대표하지 않습니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-                현재 차트는 editorial seed / preview 기반이며, 실제 공개 지표
-                검증과 자동 수집은 후속 단계입니다.
+                현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반이며,
+                실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
                 FANDEX 주가는 금융상품/투자정보가 아닙니다.
@@ -634,7 +642,7 @@ function ArtistSelectorGroup({
               aria-disabled={disabledAdd}
               className={
                 active
-                  ? 'rounded-xl border border-cyan-300 bg-cyan-50 p-3 shadow-sm dark:border-cyan-300/40 dark:bg-cyan-400/10'
+                  ? 'rounded-xl border border-cyan-500 bg-white p-3 shadow-sm shadow-cyan-100 ring-2 ring-cyan-100'
                   : disabledAdd
                     ? 'pointer-events-none rounded-xl border border-slate-200 bg-slate-100 p-3 text-slate-400 dark:border-slate-800 dark:bg-slate-900'
                     : 'rounded-xl border border-slate-200 bg-white p-3 hover:border-cyan-300 dark:border-slate-800 dark:bg-slate-950'
@@ -652,8 +660,8 @@ function ArtistSelectorGroup({
                     {formatPoint(latest?.fandexPoint ?? 0)}
                   </p>
                 </div>
-                <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-cyan-700 shadow-sm dark:bg-slate-900 dark:text-cyan-300">
-                  {active ? 'active' : coverageStatusCopy[profile.coverageStatus]}
+                <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-cyan-700 shadow-sm dark:bg-slate-900 dark:text-cyan-300">
+                  {active ? '선택됨' : coverageStatusCopy[profile.coverageStatus]}
                 </span>
               </div>
             </Link>
@@ -680,7 +688,10 @@ function CompareLineChart({
       <ChartLegend
         items={series.map((item, index) => ({
           id: item.artistId,
-          label: `${item.artistName} ${item.ticker}`,
+          label:
+            item.artistName === item.ticker
+              ? item.artistName
+              : `${item.artistName} · ${item.ticker}`,
           color: chartColors[index % chartColors.length],
         }))}
       />
