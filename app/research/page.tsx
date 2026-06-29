@@ -41,10 +41,9 @@ export default function ResearchPage() {
             FANDEX 리서치 프리뷰
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-300">
-            FANDEX는 K-pop 아티스트의 활동성과 반응 지표를 주가형
-            지수로 해석하는 리서치 플랫폼입니다. 현재 리서치 페이지는
-            MVP에서 제공하는 차트, 아티스트 상세, 비교, 산출방식 안내로
-            연결됩니다.
+            FANDEX는 K-pop 아티스트의 활동 흐름을 숫자와 차트로 보여줍니다.
+            이 페이지에서는 차트, 아티스트 상세, 비교, 산출방식 화면으로
+            바로 이동할 수 있습니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-sm font-bold leading-6 text-cyan-100">
             FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기

@@ -30,9 +30,9 @@ export default function SearchPage() {
             FANDEX 등록/추적 아티스트 탐색
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-600">
-            현재 검색 페이지는 1차 MVP 기준으로 등록/추적 아티스트와 핵심
-            변수 탐색 경로를 제공합니다. 상세 검색, 자동완성, 실시간
-            업데이트는 후속 단계입니다.
+            지금은 등록/추적 아티스트와 핵심 변수로 이동하는 간단한
+            탐색 화면입니다. 상세 검색, 자동완성, 실시간 업데이트는 후속
+            단계입니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
             FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기

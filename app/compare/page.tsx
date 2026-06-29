@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CompareArtistSearch from './CompareArtistSearch';
 import {
   artistIndexChartProfiles,
   artistStockVariableKeys,
@@ -9,7 +10,6 @@ import {
   getCompareSummaryRows,
   getCompareVariableSeries,
   parseCompareArtistIds,
-  type ArtistIndexChartProfile,
   type ArtistIndexCoverageStatus,
   type ArtistIndexGroupType,
   type ArtistIndexTrendBand,
@@ -41,12 +41,6 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
 };
 
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
-  tracked: '지속 추적',
-  partial: '일부 반영',
-  preview: '미리보기',
-};
-
-const coverageStatusCopy: Record<ArtistIndexCoverageStatus, string> = {
   tracked: '지속 추적',
   partial: '일부 반영',
   preview: '미리보기',
@@ -116,23 +110,6 @@ function buildCompareHref(
   return `/compare?${params.toString()}`;
 }
 
-function toggleCompareArtistSelection(
-  currentArtists: string[],
-  targetArtist: string,
-) {
-  if (currentArtists.includes(targetArtist)) {
-    return currentArtists.length <= 2
-      ? currentArtists
-      : currentArtists.filter((artistId) => artistId !== targetArtist);
-  }
-
-  if (currentArtists.length >= 5) {
-    return currentArtists;
-  }
-
-  return [...currentArtists, targetArtist];
-}
-
 function toggleCompareVariableSelection(
   currentVariables: ArtistStockVariableKey[],
   targetVariable: ArtistStockVariableKey,
@@ -158,18 +135,6 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
     Math.round(value),
   )}pt`;
-}
-
-function getLatestPoint(profile: ArtistIndexChartProfile) {
-  return profile.history[profile.history.length - 1];
-}
-
-function groupProfilesByCoverage(profiles: ArtistIndexChartProfile[]) {
-  return {
-    tracked: profiles.filter((profile) => profile.coverageStatus === 'tracked'),
-    partial: profiles.filter((profile) => profile.coverageStatus === 'partial'),
-    preview: profiles.filter((profile) => profile.coverageStatus === 'preview'),
-  };
 }
 
 function getMinMax(series: CompareChartPoint[][]) {
@@ -243,7 +208,6 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   );
   const summaryRows = getCompareSummaryRows(selectedProfiles);
   const coverageSummary = getCompareCoverageSummary(selectedProfiles);
-  const groupedProfiles = groupProfilesByCoverage(artistIndexChartProfiles);
   const interpretation = getCompareInterpretation(summaryRows, variableSeries);
 
   return (
@@ -285,45 +249,11 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[0.96fr_1.04fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
-                  아티스트 선택
-                </p>
-                <h2 className="mt-2 text-2xl font-black">아티스트 선택</h2>
-                <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
-                  FANDEX 등록/추적 아티스트 기준으로 최소 2명, 최대 5명까지
-                  비교합니다.
-                </p>
-              </div>
-              <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
-                5명 선택 상태에서는 추가 선택이 잠깁니다.
-              </span>
-            </div>
-            <div className="mt-5 grid gap-5">
-              <ArtistSelectorGroup
-                profiles={groupedProfiles.tracked}
-                selectedArtistIds={safeSelectedArtistIds}
-                selectedVariables={selectedVariables}
-                title="지속 추적"
-              />
-              <ArtistSelectorGroup
-                compact
-                profiles={groupedProfiles.partial}
-                selectedArtistIds={safeSelectedArtistIds}
-                selectedVariables={selectedVariables}
-                title="일부 반영"
-              />
-              <ArtistSelectorGroup
-                compact
-                profiles={groupedProfiles.preview}
-                selectedArtistIds={safeSelectedArtistIds}
-                selectedVariables={selectedVariables}
-                title="미리보기"
-              />
-            </div>
-          </section>
+          <CompareArtistSearch
+            profiles={artistIndexChartProfiles}
+            selectedArtistIds={safeSelectedArtistIds}
+            selectedVariables={selectedVariables}
+          />
 
           <section className="flex flex-col gap-6">
             <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -593,82 +523,6 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         </section>
       </section>
     </main>
-  );
-}
-
-function ArtistSelectorGroup({
-  compact = false,
-  profiles,
-  selectedArtistIds,
-  selectedVariables,
-  title,
-}: {
-  compact?: boolean;
-  profiles: ArtistIndexChartProfile[];
-  selectedArtistIds: string[];
-  selectedVariables: ArtistStockVariableKey[];
-  title: string;
-}) {
-  return (
-    <section className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300">
-          {title}
-        </h3>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-500 shadow-sm dark:bg-slate-950">
-          {profiles.length}
-        </span>
-      </div>
-      <div
-        className={
-          compact
-            ? 'mt-4 grid max-h-52 gap-2 overflow-y-auto pr-1 sm:grid-cols-2'
-            : 'mt-4 grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2'
-        }
-      >
-        {profiles.map((profile) => {
-          const active = selectedArtistIds.includes(profile.artistId);
-          const disabledAdd = !active && selectedArtistIds.length >= 5;
-          const nextArtists = toggleCompareArtistSelection(
-            selectedArtistIds,
-            profile.artistId,
-          );
-          const latest = getLatestPoint(profile);
-
-          return (
-            <Link
-              key={profile.artistId}
-              href={buildCompareHref(nextArtists, selectedVariables)}
-              aria-disabled={disabledAdd}
-              className={
-                active
-                  ? 'rounded-xl border border-cyan-500 bg-white p-3 shadow-sm shadow-cyan-100 ring-2 ring-cyan-100'
-                  : disabledAdd
-                    ? 'pointer-events-none rounded-xl border border-slate-200 bg-slate-100 p-3 text-slate-400 dark:border-slate-800 dark:bg-slate-900'
-                    : 'rounded-xl border border-slate-200 bg-white p-3 hover:border-cyan-300 dark:border-slate-800 dark:bg-slate-950'
-              }
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-sm font-black text-slate-950 dark:text-white">
-                    {profile.artistName}
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-slate-500">
-                    {profile.ticker} / {groupTypeLabels[profile.groupType]}
-                  </p>
-                  <p className="mt-2 font-mono text-xs font-black text-cyan-700 dark:text-cyan-300">
-                    {formatPoint(latest?.fandexPoint ?? 0)}
-                  </p>
-                </div>
-                <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-cyan-700 shadow-sm dark:bg-slate-900 dark:text-cyan-300">
-                  {active ? '선택됨' : coverageStatusCopy[profile.coverageStatus]}
-                </span>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
   );
 }
 

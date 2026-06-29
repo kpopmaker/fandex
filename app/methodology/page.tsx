@@ -197,7 +197,7 @@ export default function MethodologyPage() {
             <FormulaCard title="기준값" copy={formula.basePoint} />
             <FormulaCard title="변수 점수" copy={formula.variableScore} />
             <FormulaCard title="가중치" copy={formula.weight} />
-            <FormulaCard title="리스크 조정" copy={formula.riskAdjustment} />
+            <FormulaCard title="조정 신호" copy={formula.riskAdjustment} />
             <FormulaCard title="최종값" copy={formula.finalValue} />
           </div>
         </section>

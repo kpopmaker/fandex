@@ -225,7 +225,7 @@ const stockVariableDisplayNames: Record<ArtistStockVariableKey, string> = {
   brandFitPoint: '브랜드 적합도',
   comebackActivityPoint: '컴백/활동',
   growthMomentumPoint: '성장 모멘텀',
-  riskAdjustmentPoint: '리스크 감점',
+  riskAdjustmentPoint: '조정 신호',
 };
 
 export const artistStockVariableKeys: ArtistStockVariableKey[] = [
@@ -1520,9 +1520,9 @@ const methodologyVariableDefinitions: MethodologyVariableDefinition[] = [
   },
   {
     variableKey: 'riskAdjustmentPoint',
-    displayName: '리스크 감점',
+    displayName: '조정 신호',
     weightLabel: 'adjustment',
-    description: '데이터 변동성, 신뢰도 부족, 예외적 변수를 조정하기 위한 감점 변수입니다.',
+    description: '데이터 변동성, 신뢰도 부족, 예외적 변수를 조정하기 위한 변수입니다.',
     higherMeaning: '데이터 변동성이나 신뢰도 보강 필요성이 더 크게 조정됩니다.',
     lowerMeaning: '예외적 변수 조정 영향이 상대적으로 작게 반영됩니다.',
     caution: '민감 이슈를 단정하는 항목이 아니며 데이터 품질과 예외적 변동을 보정하기 위한 장치입니다.',
@@ -1541,7 +1541,7 @@ export function getMethodologyFormulaSummary(): MethodologyFormulaSummary {
     variableScore: '각 변수의 최근 흐름을 point 구조로 해석한 값입니다.',
     weight: '변수별 영향도를 조정하는 개념적 가중치입니다.',
     riskAdjustment:
-      '데이터 신뢰도와 예외적 변동을 조정하는 감점 항목입니다.',
+      '데이터 신뢰도와 예외적 변동을 조정하는 항목입니다.',
     finalValue: '최종값은 FANDEX 주가형 지수로 표시됩니다.',
   };
 }
@@ -1593,9 +1593,9 @@ export function getCoverageStatusGroups(): CoverageStatusGroup[] {
     preview: '향후 확장 후보 또는 미리보기 성격의 아티스트입니다.',
   };
   const labels: Record<ArtistIndexCoverageStatus, string> = {
-    tracked: 'Tracked',
-    partial: 'Partial',
-    preview: 'Preview',
+    tracked: '지속 추적',
+    partial: '일부 반영',
+    preview: '미리보기',
   };
 
   return (['tracked', 'partial', 'preview'] as ArtistIndexCoverageStatus[]).map(

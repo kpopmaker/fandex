@@ -9,7 +9,7 @@ const sampleRows = [
   {
     label: '변수별 영향',
     value: '7개 변수',
-    copy: '음원/음반, 뉴스/이슈, SNS/팬덤, 브랜드 적합도, 컴백/활동, 성장 모멘텀, 리스크 감점을 분리해 봅니다.',
+    copy: '음원/음반, 뉴스/이슈, SNS/팬덤, 브랜드 적합도, 컴백/활동, 성장 모멘텀, 조정 신호를 나눠 봅니다.',
   },
   {
     label: '비교 기준',
@@ -30,9 +30,9 @@ export default function SampleReportPage() {
             FANDEX 리서치 리포트 예시
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-600">
-            샘플 리포트는 FANDEX 주가형 지수를 어떻게 읽을지 보여주는
-            안내 페이지입니다. 실제 공개 지표 검증과 자동 수집은 후속
-            단계이며, 현재 값은 에디토리얼 시드 / 미리보기 데이터 기반입니다.
+            FANDEX 주가형 지수를 어떻게 읽는지 보여주는 예시입니다.
+            실제 공개 지표 검증과 자동 수집은 후속 단계입니다. 현재 값은
+            에디토리얼 시드 / 미리보기 데이터 기준입니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
             FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기

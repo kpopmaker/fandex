@@ -5,31 +5,32 @@ import {
   getKpopCompositeIndexSummary,
   getMethodologyVariableDefinitions,
 } from './data/v4/charts/artistIndexChartData';
+import { getMarketIssueTopTen } from './data/v4/charts/issueSignals';
 
 const primaryRoutes = [
   {
     title: '주가 차트',
-    copy: 'FANDEX 등록/추적 아티스트 기준 6개월 주가형 지수 흐름을 확인합니다.',
+    copy: '등록/추적 아티스트의 6개월 흐름을 차트로 봅니다.',
     href: '/charts',
   },
   {
     title: '아티스트 목록',
-    copy: '69팀 coverage 기반 아티스트와 데이터 상태를 탐색합니다.',
+    copy: '현재 FANDEX에 들어온 아티스트와 데이터 상태를 봅니다.',
     href: '/artists',
   },
   {
     title: '아티스트 비교',
-    copy: '2~5명 아티스트를 같은 기간, 같은 변수 기준으로 비교합니다.',
+    copy: '2~5명을 골라 같은 기간, 같은 변수로 비교합니다.',
     href: '/compare',
   },
   {
     title: '산출방식',
-    copy: 'FANDEX 주가가 어떤 변수와 방식으로 만들어지는지 확인합니다.',
+    copy: 'FANDEX 지수가 어떤 기준으로 만들어지는지 봅니다.',
     href: '/methodology',
   },
   {
     title: '커버리지',
-    copy: '등록/추적 아티스트 범위와 coverageStatus, dataStatus를 확인합니다.',
+    copy: '어떤 아티스트를 얼마나 다루는지 확인합니다.',
     href: '/coverage',
   },
 ];
@@ -50,7 +51,7 @@ const variableLabels: Record<string, string> = {
   brandFitPoint: '브랜드 적합도',
   comebackActivityPoint: '컴백/활동',
   growthMomentumPoint: '성장 모멘텀',
-  riskAdjustmentPoint: '리스크 감점',
+  riskAdjustmentPoint: '조정 신호',
 };
 
 export default function Home() {
@@ -58,6 +59,7 @@ export default function Home() {
   const composite = getKpopCompositeIndexSummary();
   const variables = getMethodologyVariableDefinitions();
   const defaultCompareArtists = getDefaultCompareArtists();
+  const marketIssues = getMarketIssueTopTen();
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -65,19 +67,26 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-stretch">
           <section className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
             <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-700">
-              FANDEX MVP 허브
+              FANDEX K-pop 종합지수
             </p>
             <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">
-              K-pop 아티스트 흐름을 주가형 지수로 봅니다.
+              현재 {formatPoint(composite.currentPoint)}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-              FANDEX는 K-pop 아티스트의 활동성과 반응 지표를 주가형
-              지수로 해석하는 리서치 플랫폼입니다. 아티스트별 6개월
-              FANDEX 주가와 변수별 흐름을 같은 기준으로 비교합니다.
+              FANDEX는 아티스트의 활동 흐름을 숫자와 차트로 보여주는
+              서비스입니다. 지금 누가 어떤 흐름인지, 어떤 변수가 움직였는지
+              확인할 수 있습니다.
             </p>
             <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
-              FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
+              FANDEX 등록/추적 아티스트 기준입니다. 공식 K-pop 시장 지수가
+              아니라 FANDEX 내부 리서치 지수입니다.
             </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <Metric label="최근 6개월 변화" value={formatDelta(composite.sixMonthDelta)} />
+              <Metric label="반영 아티스트 수" value={`${composite.artistCount}팀`} />
+              <Metric label="기준" value="등록/추적" />
+            </div>
+            <CompositeMiniChart points={composite.series} />
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/charts"
@@ -98,30 +107,66 @@ export default function Home() {
 
           <section className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">
-              FANDEX K-pop 종합지수
+              FANDEX 한눈에 보기
             </p>
             <h2 className="mt-3 text-3xl font-black">
-              현재 {formatPoint(composite.currentPoint)}
+              K-pop 시장 흐름을 쉽게 봅니다
             </h2>
             <p className="mt-3 text-sm font-bold leading-7 text-slate-600">
-              FANDEX 등록/추적 아티스트의 최근 FANDEX 주가 평균입니다.
-              공식 K-pop 시장 지수가 아니라 FANDEX 내부 리서치 지수입니다.
+              아직 모든 K-pop 아티스트를 다루지는 않습니다. 현재 데이터는
+              FANDEX가 먼저 등록한 아티스트 기준입니다.
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <Metric label="최근 6개월 변화" value={formatDelta(composite.sixMonthDelta)} />
-              <Metric label="반영 아티스트 수" value={`${composite.artistCount}팀`} />
-              <Metric label="기준" value="등록/추적" />
+              <Metric label="전체 아티스트" value={String(summary.totalArtistCount)} />
+              <Metric label="지속 추적" value={String(summary.trackedArtistCount)} />
+              <Metric label="미리보기" value={String(summary.previewArtistCount)} />
             </div>
-            <CompositeMiniChart points={composite.series} />
           </section>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Metric label="전체 아티스트" value={String(summary.totalArtistCount)} />
-          <Metric label="지속 추적" value={String(summary.trackedArtistCount)} />
-          <Metric label="일부 반영" value={String(summary.partialArtistCount)} />
-          <Metric label="미리보기" value={String(summary.previewArtistCount)} />
-        </div>
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                FANDEX 이슈 시그널
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                K-pop 시장 최신 이슈 Top 10
+              </h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
+                현재 Top 10은 실시간 뉴스가 아니라 FANDEX 미리보기 데이터
+                기준입니다. 실제 기사나 공식 발표 목록은 아닙니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
+              에디토리얼 시드 기반 최근 이슈
+            </span>
+          </div>
+          <div className="mt-5 grid gap-3">
+            {marketIssues.map((issue, index) => (
+              <article
+                key={issue.id}
+                className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[3rem_1fr_9rem_9rem]"
+              >
+                <p className="font-mono text-lg font-black text-cyan-700">
+                  {index + 1}
+                </p>
+                <div>
+                  <h3 className="font-black">{issue.title}</h3>
+                  <p className="mt-1 text-sm font-bold leading-6 text-slate-600">
+                    {issue.summary}
+                  </p>
+                </div>
+                <p className="text-sm font-bold text-slate-600">
+                  {issue.relatedArtistName}
+                </p>
+                <p className="text-sm font-black text-slate-700">
+                  {issue.impactLabel}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {primaryRoutes.map((route) => (

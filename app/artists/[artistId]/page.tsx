@@ -17,6 +17,7 @@ import {
   type ArtistStockVariableKey,
   type ArtistStockVariableSeries,
 } from '../../data/v4/charts/artistIndexChartData';
+import { getArtistRecentIssueSignals } from '../../data/v4/charts/issueSignals';
 
 type PageProps = {
   params: Promise<{
@@ -66,6 +67,16 @@ const trendSummaryLabels: Record<ArtistIndexTrendBand, string> = {
   falling: '하락',
   volatile: '변동성',
   insufficient_data: '데이터 보강 필요',
+};
+
+const issueVariableLabels: Record<ArtistStockVariableKey, string> = {
+  musicAlbumPoint: '음원/음반',
+  newsIssuePoint: '뉴스/이슈',
+  snsFandomPoint: 'SNS/팬덤',
+  brandFitPoint: '브랜드 적합도',
+  comebackActivityPoint: '컴백/활동',
+  growthMomentumPoint: '성장 모멘텀',
+  riskAdjustmentPoint: '조정 신호',
 };
 
 export function generateStaticParams() {
@@ -222,6 +233,7 @@ export default async function ArtistDetailPage({
   const trendBand = getIndexTrendBand(sixMonthHistory);
   const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
   const strongestVariables = getStrongestVariables(profile, 3);
+  const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -434,6 +446,67 @@ export default async function ArtistDetailPage({
                 </p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                FANDEX 이슈 시그널
+              </p>
+              <h2 className="mt-2 text-2xl font-black">최근 이슈 10개</h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                FANDEX가 차트 해석을 위해 묶어둔 미리보기 이슈입니다.
+                실시간 뉴스나 공식 발표 목록은 아닙니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              에디토리얼 시드 기반
+            </span>
+          </div>
+          <div className="mt-5 overflow-x-auto">
+            <table className="w-full min-w-[860px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">순위</th>
+                  <th className="border-b border-slate-200 p-3">이슈</th>
+                  <th className="border-b border-slate-200 p-3">카테고리</th>
+                  <th className="border-b border-slate-200 p-3">변수</th>
+                  <th className="border-b border-slate-200 p-3">기준</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentIssues.map((issue, index) => (
+                  <tr key={issue.id} className="font-bold text-slate-700 dark:text-slate-300">
+                    <td className="border-b border-slate-100 p-3 font-mono font-black text-cyan-700 dark:border-slate-800 dark:text-cyan-300">
+                      {index + 1}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      <p className="font-black text-slate-950 dark:text-white">
+                        {issue.title}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                        {issue.summary}
+                      </p>
+                    </td>
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      {issue.category}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                        {issueVariableLabels[issue.relatedVariableKey]}
+                      </span>
+                    </td>
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      {issue.sourceType === 'editorial_seed'
+                        ? '에디토리얼 시드'
+                        : '미리보기 신호'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 
