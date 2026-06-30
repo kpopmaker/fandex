@@ -19,6 +19,10 @@ import {
   type ArtistStockVariableSeries,
 } from '../../data/v4/charts/artistIndexChartData';
 import { getArtistRecentIssueSignals } from '../../data/v4/charts/issueSignals';
+import {
+  getLatestArtistMetricBreakdown,
+  type ArtistMetricBreakdownItem,
+} from '../../data/v4/metrics';
 
 type PageProps = {
   params: Promise<{
@@ -80,6 +84,15 @@ const issueVariableLabels: Record<ArtistStockVariableKey, string> = {
   riskAdjustmentPoint: '조정 신호',
 };
 
+const metricCategoryLabels: Record<string, string> = {
+  content: '콘텐츠 반응',
+  attention: '관심도',
+  community: '팬덤',
+  commercial: '브랜드/활동',
+  activity: '활동 흐름',
+  quality: '조정 신호',
+};
+
 export function generateStaticParams() {
   return artistIndexChartProfiles.map((profile) => ({
     artistId: profile.artistId,
@@ -94,6 +107,21 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
     Math.round(value),
   )}pt`;
+}
+
+function formatMetricScore(value: number) {
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const clampedValue = Math.min(Math.max(Math.round(safeValue), 0), 100);
+
+  return `${clampedValue}점`;
+}
+
+function formatWeight(value: number) {
+  return `${value}%`;
+}
+
+function getMetricCategoryLabel(category: string) {
+  return metricCategoryLabels[category] ?? '기타 지표';
 }
 
 function getLatestHistoryPoint(profile: ArtistIndexChartProfile) {
@@ -236,6 +264,7 @@ export default async function ArtistDetailPage({
   const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
   const strongestVariables = getStrongestVariables(profile, 3);
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
+  const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -449,6 +478,44 @@ export default async function ArtistDetailPage({
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                metric breakdown
+              </p>
+              <h2 className="mt-2 text-2xl font-black">FANDEX 지표 구성</h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                최신 월 기준으로 FANDEX 주가를 구성하는 11개 반응 점수를
+                보여줍니다.
+              </p>
+            </div>
+            {metricBreakdown && (
+              <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+                {metricBreakdown.label} 기준
+              </span>
+            )}
+          </div>
+
+          {metricBreakdown ? (
+            <>
+              <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {metricBreakdown.items.map((item) => (
+                  <MetricBreakdownCard key={item.key} item={item} />
+                ))}
+              </div>
+              <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+                현재 값은 FANDEX MVP preview seed 기준입니다. 실제 자동 수집
+                데이터가 붙으면 지표별 점수는 더 자주 갱신될 수 있습니다.
+              </p>
+            </>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-7 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
+              이 아티스트의 최신 지표 구성이 아직 준비되지 않았습니다.
+            </p>
+          )}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -771,6 +838,35 @@ function VariablePointCard({
         <MetricMini label="최신" value={formatPoint(series.latestPoint)} />
         <MetricMini label="6개월 변화" value={formatDelta(series.sixMonthDelta)} />
       </div>
+    </article>
+  );
+}
+
+function MetricBreakdownCard({ item }: { item: ArtistMetricBreakdownItem }) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {item.label}
+          </p>
+          <p className="mt-1 text-xs font-black text-slate-500 dark:text-slate-400">
+            {getMetricCategoryLabel(item.category)}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-cyan-700 shadow-sm dark:bg-slate-950 dark:text-cyan-300">
+          {formatWeight(item.defaultWeight)}
+        </span>
+      </div>
+      <p className="mt-4 font-mono text-2xl font-black text-slate-950 dark:text-white">
+        {formatMetricScore(item.score)}
+      </p>
+      <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
+        기본 반영 비중 {formatWeight(item.defaultWeight)}
+      </p>
+      <p className="mt-3 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+        {item.description}
+      </p>
     </article>
   );
 }
