@@ -19,6 +19,11 @@ import {
   type CompareSummaryRow,
   type CompareVariableChartSeries,
 } from '../data/v4/charts/artistIndexChartData';
+import {
+  getCompareMetricBreakdown,
+  type ArtistMetricBreakdownItem,
+  type CompareMetricBreakdown,
+} from '../data/v4/metrics';
 
 type ComparePageProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -56,6 +61,15 @@ const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
 
 const disclaimer =
   'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
+
+const metricCategoryLabels: Record<string, string> = {
+  content: '콘텐츠 반응',
+  attention: '관심도',
+  community: '팬덤',
+  commercial: '브랜드/활동',
+  activity: '활동 흐름',
+  quality: '조정 신호',
+};
 
 function isStockVariableKey(value: string): value is ArtistStockVariableKey {
   return artistStockVariableKeys.includes(value as ArtistStockVariableKey);
@@ -137,6 +151,28 @@ function formatDelta(value: number) {
   )}pt`;
 }
 
+function formatMetricScore(value: number) {
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const clampedValue = Math.min(Math.max(Math.round(safeValue), 0), 100);
+
+  return `${clampedValue}점`;
+}
+
+function formatWeight(value: number) {
+  return `${value}%`;
+}
+
+function getMetricCategoryLabel(category: string) {
+  return metricCategoryLabels[category] ?? '기타 지표';
+}
+
+function getMetricScore(
+  items: ArtistMetricBreakdownItem[],
+  metricKey: ArtistMetricBreakdownItem['key'],
+) {
+  return items.find((item) => item.key === metricKey)?.score ?? 0;
+}
+
 function getMinMax(series: CompareChartPoint[][]) {
   const values = series.flat().map((point) => point.value);
   const min = Math.min(...values);
@@ -209,6 +245,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const summaryRows = getCompareSummaryRows(selectedProfiles);
   const coverageSummary = getCompareCoverageSummary(selectedProfiles);
   const interpretation = getCompareInterpretation(summaryRows, variableSeries);
+  const metricBreakdown = getCompareMetricBreakdown(safeSelectedArtistIds);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -377,6 +414,8 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
           </div>
         </section>
 
+        <CompareMetricBreakdownSection breakdown={metricBreakdown} />
+
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
@@ -524,6 +563,117 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         </section>
       </section>
     </main>
+  );
+}
+
+function CompareMetricBreakdownSection({
+  breakdown,
+}: {
+  breakdown: CompareMetricBreakdown;
+}) {
+  const metricRows = breakdown.artists[0]?.items ?? [];
+
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+            metric breakdown
+          </p>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 지표별 반응 비교</h2>
+          <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+            선택한 아티스트의 최신 월 기준 지표 점수를 비교합니다.
+          </p>
+        </div>
+        {breakdown.label && (
+          <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+            {breakdown.label} 기준
+          </span>
+        )}
+      </div>
+
+      {breakdown.artists.length === 0 ? (
+        <p className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-7 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
+          비교할 아티스트를 선택하면 지표별 반응 점수를 볼 수 있습니다.
+        </p>
+      ) : (
+        <>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full min-w-[960px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">지표</th>
+                  {breakdown.artists.map((artist) => (
+                    <th
+                      key={artist.artistId}
+                      className="border-b border-slate-200 p-3"
+                    >
+                      <span className="block max-w-44 truncate">
+                        {artist.displayName}
+                      </span>
+                      <span className="mt-1 block font-mono text-[11px] text-slate-400">
+                        {artist.ticker}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {metricRows.map((metric) => (
+                  <tr
+                    key={metric.key}
+                    className="font-bold text-slate-700 dark:text-slate-300"
+                  >
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      <p className="font-black text-slate-950 dark:text-white">
+                        {metric.label}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        기본 반영 비중 {formatWeight(metric.defaultWeight)} /{' '}
+                        {getMetricCategoryLabel(metric.category)}
+                      </p>
+                    </td>
+                    {breakdown.artists.map((artist) => (
+                      <td
+                        key={`${artist.artistId}-${metric.key}`}
+                        className="border-b border-slate-100 p-3 font-mono font-black text-slate-950 dark:border-slate-800 dark:text-white"
+                      >
+                        {formatMetricScore(getMetricScore(artist.items, metric.key))}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+            {breakdown.artists.map((artist) => (
+              <article
+                key={artist.artistId}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+              >
+                <p className="text-sm font-black text-slate-950 dark:text-white">
+                  {artist.displayName}
+                </p>
+                <p className="mt-2 text-xs font-black text-slate-500">
+                  최근 월 기준으로 두드러진 지표
+                </p>
+                <p className="mt-3 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+                  {artist.topItems.map((item) => item.label).join(', ')}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            현재 값은 FANDEX MVP preview seed 기준입니다. 실제 자동 수집
+            데이터가 붙으면 지표별 점수는 더 자주 갱신될 수 있습니다. 선택된
+            아티스트 안에서 비교한 결과입니다.
+          </p>
+        </>
+      )}
+    </section>
   );
 }
 

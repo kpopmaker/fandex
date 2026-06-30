@@ -71,6 +71,21 @@ export type ArtistMetricBreakdown = {
   items: ArtistMetricBreakdownItem[];
 };
 
+export type CompareMetricBreakdownArtist = {
+  artistId: string;
+  displayName: string;
+  ticker: string;
+  items: ArtistMetricBreakdownItem[];
+  topItems: ArtistMetricBreakdownItem[];
+};
+
+export type CompareMetricBreakdown = {
+  month: string;
+  label: string;
+  artists: CompareMetricBreakdownArtist[];
+  metricKeys: FandexVariableKey[];
+};
+
 export type MetricCoverageSummary = {
   artistCount: number;
   metricPointCount: number;

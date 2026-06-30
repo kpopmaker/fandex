@@ -9,6 +9,8 @@ import { artistMonthlyMetricSeed } from './artistMonthlyMetricSeed';
 import type {
   ArtistMetricBreakdown,
   ArtistMonthlyMetricPoint,
+  CompareMetricBreakdown,
+  CompareMetricBreakdownArtist,
   MetricCoverageSummary,
   MetricQuality,
 } from './fandexMetricTypes';
@@ -87,6 +89,51 @@ export function getArtistMetricBreakdownForMonth(
   month: string,
 ) {
   return createMetricBreakdown(getMetricPointForMonth(artistId, month));
+}
+
+function getTopMetricItems(items: ArtistMetricBreakdown['items']) {
+  return [...items]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2);
+}
+
+export function getCompareMetricBreakdown(
+  artistIds: string[],
+): CompareMetricBreakdown {
+  const uniqueArtistIds = Array.from(
+    new Set(artistIds.map((artistId) => artistId.trim()).filter(Boolean)),
+  ).slice(0, 5);
+  const artists = uniqueArtistIds
+    .map((artistId) => {
+      const metadata = artistMetadata.find((artist) => artist.artistId === artistId);
+      const breakdown = getLatestArtistMetricBreakdown(artistId);
+
+      if (!metadata || !breakdown) {
+        return null;
+      }
+
+      return {
+        artistId,
+        displayName: metadata.displayName,
+        ticker: metadata.ticker,
+        items: breakdown.items,
+        topItems: getTopMetricItems(breakdown.items),
+      };
+    })
+    .filter(
+      (artist): artist is CompareMetricBreakdownArtist => Boolean(artist),
+    );
+  const firstBreakdown =
+    uniqueArtistIds
+      .map((artistId) => getLatestArtistMetricBreakdown(artistId))
+      .find(Boolean) ?? null;
+
+  return {
+    month: firstBreakdown?.month ?? '',
+    label: firstBreakdown?.label ?? '',
+    artists,
+    metricKeys: FANDEX_METRIC_DEFINITIONS.map((definition) => definition.key),
+  };
 }
 
 export function getAllLatestArtistMetrics() {
