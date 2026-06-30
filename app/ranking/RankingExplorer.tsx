@@ -169,6 +169,59 @@ function sortRows(rows: RankingExplorerRow[], sortKey: SortKey) {
   });
 }
 
+function getMetricScore(row: RankingExplorerRow, metricKey: FandexVariableKey) {
+  const score = row.metricScores[metricKey];
+
+  if (typeof score !== 'number' || !Number.isFinite(score)) {
+    return null;
+  }
+
+  return score;
+}
+
+function sortRowsForMetricView(
+  rows: RankingExplorerRow[],
+  metricViewFilter: MetricViewFilter,
+  sortKey: SortKey,
+) {
+  if (metricViewFilter === 'all') {
+    return sortRows(rows, sortKey);
+  }
+
+  const fallbackOrder = new Map(
+    sortRows(rows, sortKey).map((row, index) => [row.artistId, index]),
+  );
+
+  return [...rows].sort((a, b) => {
+    const aScore = getMetricScore(a, metricViewFilter);
+    const bScore = getMetricScore(b, metricViewFilter);
+
+    if (aScore === null && bScore === null) {
+      return (
+        (fallbackOrder.get(a.artistId) ?? 0) -
+        (fallbackOrder.get(b.artistId) ?? 0)
+      );
+    }
+
+    if (aScore === null) {
+      return 1;
+    }
+
+    if (bScore === null) {
+      return -1;
+    }
+
+    if (aScore !== bScore) {
+      return bScore - aScore;
+    }
+
+    return (
+      (fallbackOrder.get(a.artistId) ?? 0) -
+      (fallbackOrder.get(b.artistId) ?? 0)
+    );
+  });
+}
+
 function getCompareHref(artistId: string) {
   const params = new URLSearchParams();
   params.set('artists', artistId);
@@ -215,8 +268,16 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
       );
     });
 
-    return sortRows(nextRows, sortKey);
-  }, [coverageFilter, groupFilter, query, rows, sortKey, trendFilter]);
+    return sortRowsForMetricView(nextRows, metricViewFilter, sortKey);
+  }, [
+    coverageFilter,
+    groupFilter,
+    metricViewFilter,
+    query,
+    rows,
+    sortKey,
+    trendFilter,
+  ]);
 
   const trackedCount = rows.filter((row) => row.coverageStatus === 'tracked').length;
   const risingCount = rows.filter((row) => row.trendBand === 'rising').length;
@@ -276,6 +337,9 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm font-bold text-slate-600">
             조건에 맞는 아티스트 {filteredRows.length}팀
+          </p>
+          <p className="text-xs font-bold leading-5 text-slate-500">
+            지표를 선택하면 해당 점수가 높은 순으로 정렬됩니다.
           </p>
           <button
             type="button"
