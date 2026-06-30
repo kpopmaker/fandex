@@ -53,6 +53,24 @@ export type FandexMetricDefinition = {
   legacyChartKey?: ArtistStockVariableKey;
 };
 
+export type ArtistMetricBreakdownItem = {
+  key: FandexVariableKey;
+  label: string;
+  shortLabel: string;
+  score: number;
+  defaultWeight: number;
+  description: string;
+  category: string;
+};
+
+export type ArtistMetricBreakdown = {
+  artistId: string;
+  month: string;
+  label: string;
+  fandexPoint: number;
+  items: ArtistMetricBreakdownItem[];
+};
+
 export type MetricCoverageSummary = {
   artistCount: number;
   metricPointCount: number;

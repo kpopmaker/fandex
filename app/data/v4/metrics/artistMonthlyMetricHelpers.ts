@@ -1,4 +1,5 @@
 import { artistMetadata } from '../charts/artistMetadata';
+import { FANDEX_METRIC_DEFINITIONS } from './fandexMetricDefinitions';
 import {
   FANDEX_METRIC_END_MONTH,
   FANDEX_METRIC_MONTHS,
@@ -6,6 +7,7 @@ import {
 } from './fandexMetricMonths';
 import { artistMonthlyMetricSeed } from './artistMonthlyMetricSeed';
 import type {
+  ArtistMetricBreakdown,
   ArtistMonthlyMetricPoint,
   MetricCoverageSummary,
   MetricQuality,
@@ -50,6 +52,41 @@ export function getMetricPointForMonth(artistId: string, month: string) {
       (point) => point.month === normalizedMonth,
     ) ?? null
   );
+}
+
+function createMetricBreakdown(
+  point: ArtistMonthlyMetricPoint | null,
+): ArtistMetricBreakdown | null {
+  if (!point) {
+    return null;
+  }
+
+  return {
+    artistId: point.artistId,
+    month: point.month,
+    label: point.label,
+    fandexPoint: point.fandexPoint,
+    items: FANDEX_METRIC_DEFINITIONS.map((definition) => ({
+      key: definition.key,
+      label: definition.label,
+      shortLabel: definition.shortLabel,
+      score: point.variables[definition.key] ?? 0,
+      defaultWeight: definition.defaultWeight,
+      description: definition.description,
+      category: definition.category,
+    })),
+  };
+}
+
+export function getLatestArtistMetricBreakdown(artistId: string) {
+  return createMetricBreakdown(getLatestArtistMonthlyMetric(artistId));
+}
+
+export function getArtistMetricBreakdownForMonth(
+  artistId: string,
+  month: string,
+) {
+  return createMetricBreakdown(getMetricPointForMonth(artistId, month));
 }
 
 export function getAllLatestArtistMetrics() {
