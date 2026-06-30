@@ -1,0 +1,65 @@
+import type { ArtistStockVariableKey } from '../charts/artistIndexChartData';
+
+export type FandexVariableKey =
+  | 'music'
+  | 'album'
+  | 'youtube'
+  | 'sns'
+  | 'search'
+  | 'news'
+  | 'fandom'
+  | 'brand'
+  | 'activity'
+  | 'momentum'
+  | 'adjustment';
+
+export type MetricSourceType =
+  | 'manual_seed'
+  | 'preview_signal'
+  | 'future_api'
+  | 'derived';
+
+export type MetricQuality = 'tracked' | 'partial' | 'preview';
+
+export type FandexMetricMonth = {
+  month: string;
+  label: string;
+  displayLabel: string;
+};
+
+export type ArtistMonthlyMetricVariables = Partial<
+  Record<FandexVariableKey, number>
+>;
+
+export type ArtistMonthlyMetricPoint = {
+  artistId: string;
+  month: string;
+  label: string;
+  fandexPoint: number;
+  variables: ArtistMonthlyMetricVariables;
+  sourceType: MetricSourceType;
+  quality: MetricQuality;
+  updatedAt?: string;
+};
+
+export type FandexMetricDefinition = {
+  key: FandexVariableKey;
+  label: string;
+  shortLabel: string;
+  description: string;
+  category: string;
+  defaultWeight: number;
+  higherIsBetter: boolean;
+  legacyChartKey?: ArtistStockVariableKey;
+};
+
+export type MetricCoverageSummary = {
+  artistCount: number;
+  metricPointCount: number;
+  monthCount: number;
+  trackedArtistCount: number;
+  partialArtistCount: number;
+  previewArtistCount: number;
+  startMonth: string;
+  endMonth: string;
+};
