@@ -10,6 +10,7 @@ import {
   type ArtistIndexTrendBand,
   type CoverageArtistRow,
 } from '../data/v4/charts/artistIndexChartData';
+import { getMetricCoverageSummary } from '../data/v4/metrics';
 
 type CoveragePageProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -127,6 +128,10 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const selectedStatus = parseCoverageStatus(params.status);
   const selectedGroup = parseCoverageGroup(params.group);
   const summary = getCoveragePageSummary();
+  const metricSummary = getMetricCoverageSummary();
+  const monthlyPointCount = Math.round(
+    metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
+  );
   const statusGroups = getCoverageStatusGroups();
   const groupSummary = getGroupTypeCoverageSummary();
   const confidenceSummary = getCoverageConfidenceSummary();
@@ -166,6 +171,44 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               <MetricCard label="보이그룹" value={String(summary.boyGroupCount)} />
             </div>
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              metric coverage
+            </p>
+            <h2 className="mt-2 text-2xl font-black">월별 지표 기준</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              현재 FANDEX는 {metricSummary.artistCount}개 아티스트의 2025년
+              7월~2026년 7월 월별 흐름을 기준으로 보여줍니다. 이번 단계의
+              데이터는 실제 자동 수집 데이터가 아니라, FANDEX MVP용 preview
+              seed입니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <MetricCard
+              label="반영 아티스트"
+              value={`${metricSummary.artistCount}팀`}
+            />
+            <MetricCard
+              label="월 기준"
+              value={`${metricSummary.startMonth}~${metricSummary.endMonth}`}
+            />
+            <MetricCard
+              label="월별 포인트"
+              value={String(monthlyPointCount)}
+            />
+            <MetricCard
+              label="총 metric point"
+              value={String(metricSummary.metricPointCount)}
+            />
+            <MetricCard label="월 수" value={`${metricSummary.monthCount}개월`} />
+          </div>
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            이 구조를 기준으로 이후 뉴스, 검색, 유튜브, 음원 데이터를 붙일 수
+            있습니다. 현재는 실제 API/DB 연동 전 단계입니다.
+          </p>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-3">

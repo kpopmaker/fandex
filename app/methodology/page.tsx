@@ -6,6 +6,7 @@ import {
   type ArtistIndexDataStatus,
   type ArtistIndexConfidenceLevel,
 } from '../data/v4/charts/artistIndexChartData';
+import { FANDEX_METRIC_DEFINITIONS } from '../data/v4/metrics';
 
 const disclaimer =
   'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
@@ -115,9 +116,23 @@ const ctaLinks = [
   { href: '/coverage', label: '커버리지 보기' },
 ];
 
+const metricCategoryLabels: Record<string, string> = {
+  content: '콘텐츠',
+  attention: '관심',
+  community: '팬덤',
+  commercial: '브랜드',
+  activity: '활동',
+  quality: '보정',
+};
+
+function formatWeight(value: number) {
+  return `${value}%`;
+}
+
 export default function MethodologyPage() {
   const formula = getMethodologyFormulaSummary();
   const variableDefinitions = getMethodologyVariableDefinitions();
+  const metricDefinitions = FANDEX_METRIC_DEFINITIONS;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
@@ -232,6 +247,55 @@ export default function MethodologyPage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              metric schema
+            </p>
+            <h2 className="mt-2 text-2xl font-black">FANDEX 지표 구조</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              FANDEX는 여러 반응 지표를 합쳐 아티스트의 흐름을 봅니다. 각
+              지표는 같은 비중이 아니라, MVP 기준 기본 반영 비중이 다릅니다.
+            </p>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full min-w-[900px] text-left text-sm">
+              <thead className="bg-slate-50 text-xs font-black text-slate-500 dark:bg-slate-900/60 dark:text-slate-400">
+                <tr>
+                  <th className="px-4 py-3">지표명</th>
+                  <th className="px-4 py-3">설명</th>
+                  <th className="px-4 py-3">기본 반영 비중</th>
+                  <th className="px-4 py-3">카테고리</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {metricDefinitions.map((metric) => (
+                  <tr key={metric.key} className="font-bold text-slate-700 dark:text-slate-300">
+                    <td className="px-4 py-4">
+                      <p className="font-black text-slate-950 dark:text-white">
+                        {metric.label}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-cyan-700 dark:text-cyan-300">
+                        {metric.key}
+                      </p>
+                    </td>
+                    <td className="px-4 py-4 leading-6">{metric.description}</td>
+                    <td className="px-4 py-4 font-mono font-black">
+                      {formatWeight(metric.defaultWeight)}
+                    </td>
+                    <td className="px-4 py-4">
+                      {metricCategoryLabels[metric.category] ?? metric.category}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            이 비중은 MVP 기준이며, 실제 데이터가 쌓이면 조정될 수 있습니다.
+          </p>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-3">
