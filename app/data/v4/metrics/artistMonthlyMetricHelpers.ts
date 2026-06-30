@@ -18,8 +18,18 @@ artistMonthlyMetricSeed.forEach((point) => {
   monthlyMetricsByArtistId.set(point.artistId, [...currentPoints, point]);
 });
 
+function normalizeArtistId(artistId: string) {
+  return artistId.trim();
+}
+
 export function getArtistMonthlyMetrics(artistId: string) {
-  return monthlyMetricsByArtistId.get(artistId) ?? [];
+  const normalizedArtistId = normalizeArtistId(artistId);
+
+  if (!normalizedArtistId) {
+    return [];
+  }
+
+  return monthlyMetricsByArtistId.get(normalizedArtistId) ?? [];
 }
 
 export function getLatestArtistMonthlyMetric(artistId: string) {
@@ -29,9 +39,16 @@ export function getLatestArtistMonthlyMetric(artistId: string) {
 }
 
 export function getMetricPointForMonth(artistId: string, month: string) {
+  const normalizedMonth = month.trim();
+
+  if (!normalizedMonth) {
+    return null;
+  }
+
   return (
-    getArtistMonthlyMetrics(artistId).find((point) => point.month === month) ??
-    null
+    getArtistMonthlyMetrics(artistId).find(
+      (point) => point.month === normalizedMonth,
+    ) ?? null
   );
 }
 

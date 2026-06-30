@@ -6,6 +6,7 @@ import {
   type ArtistIndexDataStatus,
   type ArtistIndexConfidenceLevel,
 } from '../data/v4/charts/artistIndexChartData';
+import { FANDEX_METRIC_DEFINITIONS } from '../data/v4/metrics';
 
 const disclaimer =
   'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
@@ -81,33 +82,6 @@ const confidenceDescriptions: Array<{
   },
 ];
 
-const chartInterpretationItems = [
-  {
-    title: '/artists/[artistId] 6개월 FANDEX 주가 차트',
-    copy: '단일 아티스트의 최근 6개 시점 FANDEX 주가형 지수 흐름을 보여줍니다.',
-  },
-  {
-    title: '/artists/[artistId] 변수 선택 차트',
-    copy: '선택한 변수의 raw/weighted point 흐름을 보여주며 전체 FANDEX 주가와 같은 값이 아닙니다.',
-  },
-  {
-    title: '/compare 여러 아티스트 비교 차트',
-    copy: '2~5명 아티스트의 동일 기간 FANDEX 주가 흐름을 함께 비교합니다.',
-  },
-  {
-    title: '/compare 변수별 비교 차트',
-    copy: '선택 변수 1~4개에 대해 변수별 작은 차트를 분리해 보여줍니다.',
-  },
-];
-
-const nextSteps = [
-  '실제 공개 지표 수집',
-  '데이터 업데이트 주기 정의',
-  '관리자 데이터 입력 화면',
-  '자동 수집 구조',
-  '신뢰도 메타데이터 고도화',
-];
-
 const ctaLinks = [
   { href: '/charts', label: '주가 차트 보기' },
   { href: '/artists', label: '아티스트 보기' },
@@ -115,9 +89,23 @@ const ctaLinks = [
   { href: '/coverage', label: '커버리지 보기' },
 ];
 
+const metricCategoryLabels: Record<string, string> = {
+  content: '콘텐츠',
+  attention: '관심',
+  community: '팬덤',
+  commercial: '브랜드',
+  activity: '활동',
+  quality: '보정',
+};
+
+function formatWeight(value: number) {
+  return `${value}%`;
+}
+
 export default function MethodologyPage() {
   const formula = getMethodologyFormulaSummary();
   const variableDefinitions = getMethodologyVariableDefinitions();
+  const metricDefinitions = FANDEX_METRIC_DEFINITIONS;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
@@ -234,6 +222,55 @@ export default function MethodologyPage() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              metric schema
+            </p>
+            <h2 className="mt-2 text-2xl font-black">FANDEX 지표 구조</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              FANDEX는 여러 반응 지표를 합쳐 아티스트의 흐름을 봅니다. 각
+              지표는 같은 비중이 아니라, MVP 기준 기본 반영 비중이 다릅니다.
+            </p>
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+            <table className="w-full min-w-[900px] text-left text-sm">
+              <thead className="bg-slate-50 text-xs font-black text-slate-500 dark:bg-slate-900/60 dark:text-slate-400">
+                <tr>
+                  <th className="px-4 py-3">지표명</th>
+                  <th className="px-4 py-3">설명</th>
+                  <th className="px-4 py-3">기본 반영 비중</th>
+                  <th className="px-4 py-3">카테고리</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {metricDefinitions.map((metric) => (
+                  <tr key={metric.key} className="font-bold text-slate-700 dark:text-slate-300">
+                    <td className="px-4 py-4">
+                      <p className="font-black text-slate-950 dark:text-white">
+                        {metric.label}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-cyan-700 dark:text-cyan-300">
+                        {metric.key}
+                      </p>
+                    </td>
+                    <td className="px-4 py-4 leading-6">{metric.description}</td>
+                    <td className="px-4 py-4 font-mono font-black">
+                      {formatWeight(metric.defaultWeight)}
+                    </td>
+                    <td className="px-4 py-4">
+                      {metricCategoryLabels[metric.category] ?? metric.category}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            이 비중은 MVP 기준이며, 실제 데이터가 쌓이면 조정될 수 있습니다.
+          </p>
+        </section>
+
         <section className="grid gap-6 lg:grid-cols-3">
           <DefinitionSection
             eyebrow="coverageStatus"
@@ -262,31 +299,6 @@ export default function MethodologyPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-            차트 읽는 법
-          </p>
-          <h2 className="mt-2 text-2xl font-black">주가 차트 해석 방법</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {chartInterpretationItems.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60"
-              >
-                <h3 className="font-black">{item.title}</h3>
-                <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
-                  {item.copy}
-                </p>
-              </article>
-            ))}
-          </div>
-          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
-            6개월 변화 pt는 방향성 확인용이며, coverageStatus와
-            confidenceLevel을 함께 확인해야 합니다.
-          </p>
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-2">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
               한계
             </p>
@@ -305,24 +317,6 @@ export default function MethodologyPage() {
                 현재 값은 분석용 지수이며 공식 순위나 투자정보가 아닙니다.
               </li>
             </ul>
-          </section>
-
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              다음 단계
-            </p>
-            <h2 className="mt-2 text-2xl font-black">다음 단계</h2>
-            <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              {nextSteps.map((step) => (
-                <li
-                  key={step}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
-                >
-                  {step}
-                </li>
-              ))}
-            </ul>
-          </section>
         </section>
       </section>
     </main>
