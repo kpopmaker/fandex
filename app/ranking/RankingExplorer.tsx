@@ -13,6 +13,8 @@ import {
   getArtistAliases,
   groupTypeLabels,
 } from '../data/v4/charts/artistSearchAliases';
+import { FANDEX_METRIC_DEFINITIONS } from '../data/v4/metrics/fandexMetricDefinitions';
+import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
 
 export type RankingExplorerRow = {
   artistId: string;
@@ -25,11 +27,15 @@ export type RankingExplorerRow = {
   trendBand: ArtistIndexTrendBand;
   confidenceLevel: ArtistIndexConfidenceLevel;
   lastUpdated: string;
+  topMetricLabels: string[];
+  metricScores: Partial<Record<FandexVariableKey, number>>;
+  metricMonthLabel: string;
 };
 
 type GroupFilter = 'all' | 'girl_group' | 'boy_group' | 'solo' | 'unit_mixed';
 type CoverageFilter = ArtistIndexCoverageStatus | 'all';
 type TrendFilter = 'all' | 'rising' | 'stable' | 'adjusting' | 'insufficient_data';
+type MetricViewFilter = FandexVariableKey | 'all';
 type SortKey =
   | 'current_desc'
   | 'delta_desc'
@@ -68,6 +74,14 @@ const sortOptions: Array<{ value: SortKey; label: string }> = [
   { value: 'confidence_desc', label: '데이터 신뢰도 높은 순' },
 ];
 
+const metricViewOptions: Array<{ value: MetricViewFilter; label: string }> = [
+  { value: 'all', label: '전체 지표' },
+  ...FANDEX_METRIC_DEFINITIONS.map((definition) => ({
+    value: definition.key,
+    label: definition.label,
+  })),
+];
+
 const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
   tracked: '지속 추적',
   partial: '일부 반영',
@@ -96,6 +110,14 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
     Math.round(value),
   )}pt`;
+}
+
+function formatMetricScore(value: number | null | undefined) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return '-';
+  }
+
+  return `${Math.round(value)}점`;
 }
 
 function matchesGroupFilter(row: RankingExplorerRow, filter: GroupFilter) {
@@ -147,6 +169,59 @@ function sortRows(rows: RankingExplorerRow[], sortKey: SortKey) {
   });
 }
 
+function getMetricScore(row: RankingExplorerRow, metricKey: FandexVariableKey) {
+  const score = row.metricScores[metricKey];
+
+  if (typeof score !== 'number' || !Number.isFinite(score)) {
+    return null;
+  }
+
+  return score;
+}
+
+function sortRowsForMetricView(
+  rows: RankingExplorerRow[],
+  metricViewFilter: MetricViewFilter,
+  sortKey: SortKey,
+) {
+  if (metricViewFilter === 'all') {
+    return sortRows(rows, sortKey);
+  }
+
+  const fallbackOrder = new Map(
+    sortRows(rows, sortKey).map((row, index) => [row.artistId, index]),
+  );
+
+  return [...rows].sort((a, b) => {
+    const aScore = getMetricScore(a, metricViewFilter);
+    const bScore = getMetricScore(b, metricViewFilter);
+
+    if (aScore === null && bScore === null) {
+      return (
+        (fallbackOrder.get(a.artistId) ?? 0) -
+        (fallbackOrder.get(b.artistId) ?? 0)
+      );
+    }
+
+    if (aScore === null) {
+      return 1;
+    }
+
+    if (bScore === null) {
+      return -1;
+    }
+
+    if (aScore !== bScore) {
+      return bScore - aScore;
+    }
+
+    return (
+      (fallbackOrder.get(a.artistId) ?? 0) -
+      (fallbackOrder.get(b.artistId) ?? 0)
+    );
+  });
+}
+
 function getCompareHref(artistId: string) {
   const params = new URLSearchParams();
   params.set('artists', artistId);
@@ -169,6 +244,8 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
   const [groupFilter, setGroupFilter] = useState<GroupFilter>('all');
   const [coverageFilter, setCoverageFilter] = useState<CoverageFilter>('all');
   const [trendFilter, setTrendFilter] = useState<TrendFilter>('all');
+  const [metricViewFilter, setMetricViewFilter] =
+    useState<MetricViewFilter>('all');
   const [sortKey, setSortKey] = useState<SortKey>('current_desc');
 
   const filteredRows = useMemo(() => {
@@ -191,8 +268,16 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
       );
     });
 
-    return sortRows(nextRows, sortKey);
-  }, [coverageFilter, groupFilter, query, rows, sortKey, trendFilter]);
+    return sortRowsForMetricView(nextRows, metricViewFilter, sortKey);
+  }, [
+    coverageFilter,
+    groupFilter,
+    metricViewFilter,
+    query,
+    rows,
+    sortKey,
+    trendFilter,
+  ]);
 
   const trackedCount = rows.filter((row) => row.coverageStatus === 'tracked').length;
   const risingCount = rows.filter((row) => row.trendBand === 'rising').length;
@@ -206,7 +291,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
       </div>
 
       <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_1fr]">
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.9fr_1fr]">
           <label className="block">
             <span className="text-xs font-black text-slate-600">검색</span>
             <input
@@ -236,6 +321,12 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
             options={trendFilterOptions}
           />
           <SelectControl
+            label="지표별 보기"
+            value={metricViewFilter}
+            onChange={(value) => setMetricViewFilter(value as MetricViewFilter)}
+            options={metricViewOptions}
+          />
+          <SelectControl
             label="정렬"
             value={sortKey}
             onChange={(value) => setSortKey(value as SortKey)}
@@ -247,6 +338,9 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
           <p className="text-sm font-bold text-slate-600">
             조건에 맞는 아티스트 {filteredRows.length}팀
           </p>
+          <p className="text-xs font-bold leading-5 text-slate-500">
+            지표를 선택하면 해당 점수가 높은 순으로 정렬됩니다.
+          </p>
           <button
             type="button"
             onClick={() => {
@@ -254,6 +348,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
               setGroupFilter('all');
               setCoverageFilter('all');
               setTrendFilter('all');
+              setMetricViewFilter('all');
               setSortKey('current_desc');
             }}
             className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
@@ -269,6 +364,10 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
             <h2 className="text-2xl font-black">아티스트 랭킹 탐색</h2>
             <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
               검색하거나 필터를 바꿔서 원하는 아티스트를 찾아보세요.
+            </p>
+            <p className="mt-2 text-xs font-bold leading-5 text-slate-500">
+              두드러진 지표는 최신 월 기준으로 상대적으로 높게 나온 항목입니다.
+              현재 값은 FANDEX MVP preview seed 기준입니다.
             </p>
           </div>
           <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-800">
@@ -287,7 +386,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
           </div>
         ) : (
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full min-w-[1080px] text-left text-sm">
+            <table className="w-full min-w-[1280px] text-left text-sm">
               <thead className="bg-slate-50 text-xs font-black text-slate-500">
                 <tr>
                   <th className="px-4 py-3">순위</th>
@@ -295,6 +394,10 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                   <th className="px-4 py-3">구분</th>
                   <th className="px-4 py-3 text-right">현재 FANDEX 주가</th>
                   <th className="px-4 py-3 text-right">최근 6개월 변화</th>
+                  <th className="px-4 py-3">두드러진 지표</th>
+                  {metricViewFilter !== 'all' && (
+                    <th className="px-4 py-3 text-right">선택 지표 점수</th>
+                  )}
                   <th className="px-4 py-3">흐름</th>
                   <th className="px-4 py-3">데이터 상태</th>
                   <th className="px-4 py-3">상세</th>
@@ -306,6 +409,10 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                   const deltaTone =
                     row.sixMonthDelta >= 0 ? 'text-red-500' : 'text-blue-500';
                   const aliases = getArtistAliases(row.artistId);
+                  const selectedMetricScore =
+                    metricViewFilter === 'all'
+                      ? null
+                      : row.metricScores[metricViewFilter];
 
                   return (
                     <tr
@@ -339,6 +446,23 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                       <td className={`px-4 py-4 text-right font-mono font-black ${deltaTone}`}>
                         {formatDelta(row.sixMonthDelta)}
                       </td>
+                      <td className="px-4 py-4">
+                        <p className="text-slate-900">
+                          {row.topMetricLabels.length > 0
+                            ? row.topMetricLabels.join(' · ')
+                            : '데이터 준비중'}
+                        </p>
+                        {row.metricMonthLabel && (
+                          <p className="mt-1 text-xs text-slate-400">
+                            {row.metricMonthLabel} 기준
+                          </p>
+                        )}
+                      </td>
+                      {metricViewFilter !== 'all' && (
+                        <td className="px-4 py-4 text-right font-mono font-black text-slate-950">
+                          {formatMetricScore(selectedMetricScore)}
+                        </td>
+                      )}
                       <td className="px-4 py-4">{trendBandLabels[row.trendBand]}</td>
                       <td className="px-4 py-4">
                         <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-700">
