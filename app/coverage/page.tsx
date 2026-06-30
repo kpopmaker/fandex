@@ -339,6 +339,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             <table className="w-full min-w-[1080px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">순번</th>
                   <th className="border-b border-slate-200 p-3">아티스트</th>
                   <th className="border-b border-slate-200 p-3">ticker</th>
                   <th className="border-b border-slate-200 p-3">그룹 구분</th>
@@ -353,8 +354,11 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                 </tr>
               </thead>
               <tbody>
-                {filteredRows.map((row) => (
+                {filteredRows.map((row, index) => (
                   <tr key={row.artistId} className="font-bold text-slate-700 dark:text-slate-300">
+                    <td className="border-b border-slate-100 p-3 font-mono font-black text-cyan-700 dark:border-slate-800 dark:text-cyan-300">
+                      {index + 1}
+                    </td>
                     <td className="border-b border-slate-100 p-3 font-black text-slate-950 dark:border-slate-800 dark:text-white">
                       {row.artistName}
                     </td>
