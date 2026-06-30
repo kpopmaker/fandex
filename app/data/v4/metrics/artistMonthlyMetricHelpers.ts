@@ -97,6 +97,29 @@ function getTopMetricItems(items: ArtistMetricBreakdown['items']) {
     .slice(0, 2);
 }
 
+export function getTopMetricItemsForArtist(artistId: string, limit = 2) {
+  const breakdown = getLatestArtistMetricBreakdown(artistId);
+  const safeLimit = Math.max(0, Math.floor(limit));
+
+  if (!breakdown || safeLimit === 0) {
+    return [];
+  }
+
+  return [...breakdown.items]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, safeLimit);
+}
+
+export function getMetricScoreForArtist(artistId: string, metricKey: string) {
+  const breakdown = getLatestArtistMetricBreakdown(artistId);
+
+  if (!breakdown || !metricKey.trim()) {
+    return null;
+  }
+
+  return breakdown.items.find((item) => item.key === metricKey)?.score ?? null;
+}
+
 export function getCompareMetricBreakdown(
   artistIds: string[],
 ): CompareMetricBreakdown {

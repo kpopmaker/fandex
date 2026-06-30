@@ -4,6 +4,11 @@ import {
   getIndexTrendBand,
   getLastSixMonthHistory,
 } from '../data/v4/charts/artistIndexChartData';
+import {
+  getLatestArtistMetricBreakdown,
+  getTopMetricItemsForArtist,
+} from '../data/v4/metrics/artistMonthlyMetricHelpers';
+import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
 import RankingExplorer, { type RankingExplorerRow } from './RankingExplorer';
 
 function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
@@ -15,6 +20,11 @@ function createRankingRows(): RankingExplorerRow[] {
     .map((profile) => {
       const latest = getLatestPoint(profile);
       const sixMonthHistory = getLastSixMonthHistory(profile);
+      const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
+      const topMetricItems = getTopMetricItemsForArtist(profile.artistId, 2);
+      const metricScores = Object.fromEntries(
+        (metricBreakdown?.items ?? []).map((item) => [item.key, item.score]),
+      ) as Partial<Record<FandexVariableKey, number>>;
 
       return {
         artistId: profile.artistId,
@@ -27,6 +37,9 @@ function createRankingRows(): RankingExplorerRow[] {
         trendBand: getIndexTrendBand(sixMonthHistory),
         confidenceLevel: latest?.confidenceLevel ?? 'low',
         lastUpdated: profile.lastUpdated,
+        topMetricLabels: topMetricItems.map((item) => item.label),
+        metricScores,
+        metricMonthLabel: metricBreakdown?.label ?? '',
       };
     })
     .sort((a, b) => b.currentFandexPoint - a.currentFandexPoint);
