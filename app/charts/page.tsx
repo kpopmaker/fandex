@@ -25,6 +25,7 @@ import {
   getLatestArtistMetricBreakdown,
   getMetricCategoryLabel,
   getMetricDisplayLabel,
+  getMetricSourceInfo,
   getMetricScoreForArtist,
   getTopMetricItemsForArtist,
   type FandexMetricDefinition,
@@ -1029,6 +1030,7 @@ function MetricContextPanel({
   const legacyLabel = definition.legacyChartKey
     ? getMetricDisplayLabel(definition.legacyChartKey)
     : definition.label;
+  const sourceInfo = getMetricSourceInfo(definition.key);
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
@@ -1041,9 +1043,14 @@ function MetricContextPanel({
             {definition.label}
           </h3>
         </div>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
-          {getMetricCategoryLabel(definition.key)}
-        </span>
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
+            {getMetricCategoryLabel(definition.key)}
+          </span>
+          <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
+            {sourceInfo.displayLabel}
+          </span>
+        </div>
       </div>
       <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
         {definition.description}
@@ -1056,7 +1063,7 @@ function MetricContextPanel({
       <p className="mt-4 rounded-xl border border-cyan-100 bg-white p-3 text-xs font-bold leading-6 text-slate-500">
         현재 데이터 기준: {formatMetricMonth(FANDEX_METRIC_START_MONTH)}부터{' '}
         {formatMetricMonth(FANDEX_METRIC_END_MONTH)}까지의 월별 흐름이며,{' '}
-        {monthRangeLabel} preview seed로 표시됩니다.
+        {monthRangeLabel} {sourceInfo.displayLabel}로 표시됩니다. {sourceInfo.description}
       </p>
     </article>
   );

@@ -10,7 +10,11 @@ import {
   type ArtistIndexTrendBand,
   type CoverageArtistRow,
 } from '../data/v4/charts/artistIndexChartData';
-import { getMetricCoverageSummary } from '../data/v4/metrics';
+import {
+  getAllMetricSourceInfo,
+  getMetricCoverageSummary,
+  getMetricSourceSummary,
+} from '../data/v4/metrics';
 
 type CoveragePageProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -129,6 +133,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const selectedGroup = parseCoverageGroup(params.group);
   const summary = getCoveragePageSummary();
   const metricSummary = getMetricCoverageSummary();
+  const metricSourceSummary = getMetricSourceSummary();
+  const metricSourceInfo = getAllMetricSourceInfo();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -209,6 +215,52 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             이 구조를 기준으로 이후 뉴스, 검색, 유튜브, 음원 데이터를 붙일 수
             있습니다. 현재는 실제 API/DB 연동 전 단계입니다.
           </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              data source quality
+            </p>
+            <h2 className="mt-2 text-2xl font-black">데이터 출처 상태</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              현재 {metricSourceSummary.totalMetrics}개 지표는 모두 FANDEX MVP preview seed 기준입니다.
+              실제 데이터 연결 전, 화면 구조와 지표 흐름을 검증하기 위한 단계입니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="전체 지표 수"
+              value={String(metricSourceSummary.totalMetrics)}
+            />
+            <MetricCard
+              label="preview seed 기준"
+              value={String(metricSourceSummary.previewSeedMetrics)}
+            />
+            <MetricCard
+              label="planned API"
+              value={String(metricSourceSummary.plannedApiMetrics)}
+            />
+            <MetricCard
+              label="tracked"
+              value={String(metricSourceSummary.trackedMetrics)}
+            />
+          </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {metricSourceInfo.slice(0, 6).map((source) => (
+              <article
+                key={source.metricKey}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+              >
+                <p className="font-mono text-xs font-black text-cyan-700 dark:text-cyan-300">
+                  {source.metricKey} / {source.displayLabel}
+                </p>
+                <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+                  {source.futureSourceHint}
+                </p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-3">

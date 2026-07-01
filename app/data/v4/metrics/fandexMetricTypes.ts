@@ -21,6 +21,34 @@ export type MetricSourceType =
 
 export type MetricQuality = 'tracked' | 'partial' | 'preview';
 
+export type FandexDataSourceStage =
+  | 'preview_seed'
+  | 'manual_tracking'
+  | 'planned_api'
+  | 'derived_signal';
+
+export type FandexDataQualityLabel =
+  | 'preview'
+  | 'partial'
+  | 'tracked'
+  | 'planned';
+
+export type FandexMetricSourceInfo = {
+  metricKey: string;
+  sourceStage: FandexDataSourceStage;
+  qualityLabel: FandexDataQualityLabel;
+  displayLabel: string;
+  description: string;
+  futureSourceHint?: string;
+};
+
+export type FandexMetricSourceSummary = {
+  totalMetrics: number;
+  previewSeedMetrics: number;
+  plannedApiMetrics: number;
+  trackedMetrics: number;
+};
+
 export type FandexMetricMonth = {
   month: string;
   label: string;
