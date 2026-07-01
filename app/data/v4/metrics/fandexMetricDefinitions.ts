@@ -118,8 +118,49 @@ export const FANDEX_METRIC_DEFINITION_BY_KEY = new Map(
   ]),
 );
 
+export const FANDEX_METRIC_DEFINITION_BY_LEGACY_CHART_KEY = new Map(
+  FANDEX_METRIC_DEFINITIONS.flatMap((definition) =>
+    definition.legacyChartKey ? [[definition.legacyChartKey, definition]] : [],
+  ),
+);
+
+const metricCategoryLabels: Record<FandexMetricDefinition['category'], string> = {
+  activity: '활동',
+  attention: '관심',
+  commercial: '브랜드',
+  community: '커뮤니티',
+  content: '콘텐츠',
+  quality: '보정',
+};
+
 export function getFandexMetricDefinition(key: string) {
   return FANDEX_METRIC_DEFINITION_BY_KEY.get(
     key as FandexMetricDefinition['key'],
   );
+}
+
+export function getMetricDefinitionByKey(key: string) {
+  return getFandexMetricDefinition(key);
+}
+
+export function getMetricDefinitionByLegacyChartKey(key: string) {
+  return FANDEX_METRIC_DEFINITION_BY_LEGACY_CHART_KEY.get(
+    key as NonNullable<FandexMetricDefinition['legacyChartKey']>,
+  );
+}
+
+export function getMetricDisplayLabel(key: string) {
+  return (
+    getMetricDefinitionByKey(key)?.label ??
+    getMetricDefinitionByLegacyChartKey(key)?.label ??
+    key
+  );
+}
+
+export function getMetricCategoryLabel(key: string) {
+  const category =
+    getMetricDefinitionByKey(key)?.category ??
+    getMetricDefinitionByLegacyChartKey(key)?.category;
+
+  return category ? metricCategoryLabels[category] ?? category : '기타';
 }
