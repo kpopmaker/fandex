@@ -16,10 +16,24 @@ import {
   type ArtistIndexSimilarityBand,
   type ArtistIndexSimilarityResult,
 } from '../data/v4/charts/artistIndexSimilarity';
+import {
+  FANDEX_METRIC_DEFINITIONS,
+  FANDEX_METRIC_END_MONTH,
+  FANDEX_METRIC_MONTH_LABELS,
+  FANDEX_METRIC_START_MONTH,
+  getFandexMetricDefinition,
+  getLatestArtistMetricBreakdown,
+  getMetricCategoryLabel,
+  getMetricDisplayLabel,
+  getMetricScoreForArtist,
+  getTopMetricItemsForArtist,
+  type FandexMetricDefinition,
+} from '../data/v4/metrics';
 
 type ChartSearchParams = {
   artist?: string;
   compare?: string;
+  metric?: string;
 };
 
 type ChartPageProps = {
@@ -62,10 +76,12 @@ function parseChartSearchParams(params: {
 }): ChartSearchParams {
   const artistParam = params.artist;
   const compareParam = params.compare;
+  const metricParam = params.metric;
 
   return {
     artist: Array.isArray(artistParam) ? artistParam[0] : artistParam,
     compare: Array.isArray(compareParam) ? compareParam[0] : compareParam,
+    metric: Array.isArray(metricParam) ? metricParam[0] : metricParam,
   };
 }
 
@@ -144,9 +160,11 @@ function getSelectedChartContext(
 function buildChartHref({
   artistId,
   compareArtistIds = [],
+  metricKey,
 }: {
   artistId: string;
   compareArtistIds?: string[];
+  metricKey?: string;
 }) {
   const params = new URLSearchParams();
   const uniqueCompareIds = compareArtistIds
@@ -160,7 +178,43 @@ function buildChartHref({
     params.set('compare', uniqueCompareIds.join(','));
   }
 
+  if (metricKey) {
+    params.set('metric', metricKey);
+  }
+
   return `/charts?${params.toString()}`;
+}
+
+function getSelectedMetricDefinition(metricKey?: string) {
+  return (
+    (metricKey ? getFandexMetricDefinition(metricKey) : undefined) ??
+    FANDEX_METRIC_DEFINITIONS[0]
+  );
+}
+
+function formatMonthRange() {
+  const startLabel = FANDEX_METRIC_MONTH_LABELS[0] ?? '25.07';
+  const endLabel =
+    FANDEX_METRIC_MONTH_LABELS[FANDEX_METRIC_MONTH_LABELS.length - 1] ??
+    '26.07';
+
+  return `${startLabel}~${endLabel} MVP 기준`;
+}
+
+function formatMetricMonth(month: string) {
+  const [year, monthNumber] = month.split('-');
+
+  return year && monthNumber
+    ? `${year}년 ${Number(monthNumber)}월`
+    : month;
+}
+
+function formatMetricWeight(weight: number) {
+  return `${weight}%`;
+}
+
+function formatMetricScore(score: number | null) {
+  return score === null ? '데이터 없음' : `${score}점`;
 }
 
 function formatPoint(value: number) {
@@ -212,16 +266,16 @@ function getRecentFlowSummary(profile: ArtistIndexChartProfile) {
 
 function getSignalCheckpoints(signals: string[]) {
   const checkpoints = new Set<string>([
-    '최근 1년 FANDEX 주가 흐름과 변화 pt를 함께 확인하세요.',
+    '25.07~26.07 FANDEX 지수 흐름과 변화 pt를 함께 확인하세요.',
     '커버리지 상태와 신뢰도를 함께 확인하세요.',
   ]);
 
   if (signals.some((signal) => signal.includes('SNS'))) {
-    checkpoints.add('SNS/팬덤 변수 흐름이 전체 FANDEX 주가와 같은 방향인지 확인하세요.');
+    checkpoints.add('SNS/팬덤 변수 흐름이 전체 FANDEX 지수와 같은 방향인지 확인하세요.');
   }
 
   if (signals.some((signal) => signal.includes('Brand'))) {
-    checkpoints.add('브랜드 적합도 변수 흐름과 현재 FANDEX 주가 위치를 함께 확인하세요.');
+    checkpoints.add('브랜드 적합도 변수 흐름과 현재 FANDEX 지수 위치를 함께 확인하세요.');
   }
 
   if (signals.some((signal) => signal.includes('Activity'))) {
@@ -436,10 +490,20 @@ export default async function ArtistIndexChartsPage({
   const baseLatest = getLatestPoint(baseProfile);
   const baseDominantSignals = calculateDominantSignals(baseProfile.history);
   const signalCheckpoints = getSignalCheckpoints(baseDominantSignals);
+  const selectedMetric = getSelectedMetricDefinition(params.metric);
+  const selectedMetricScore = getMetricScoreForArtist(
+    baseProfile.artistId,
+    selectedMetric.key,
+  );
+  const latestMetricBreakdown = getLatestArtistMetricBreakdown(
+    baseProfile.artistId,
+  );
+  const topMetricItems = getTopMetricItemsForArtist(baseProfile.artistId, 2);
   const compareInterpretation = getCompareInterpretation({
     compareProfiles,
     similarResults,
   });
+  const monthRangeLabel = formatMonthRange();
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-cyan-50 text-slate-950">
@@ -449,14 +513,14 @@ export default async function ArtistIndexChartsPage({
             FANDEX 리서치 미리보기
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight md:text-6xl">
-            FANDEX 주가 차트
+            FANDEX 지수 차트
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
-            FANDEX 등록/추적 아티스트 기준으로 주가형 지수 흐름을 확인하고,
+            FANDEX 등록/추적 아티스트 기준으로 지수 흐름을 확인하고,
             비슷한 움직임을 보이는 아티스트의 변수 흐름을 함께 확인합니다.
           </p>
           <p className="mt-4 max-w-3xl rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+            FANDEX 지수는 K-pop 아티스트 활동성과 반응 지표를 해석하기
             위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
             아닙니다.
           </p>
@@ -466,7 +530,7 @@ export default async function ArtistIndexChartsPage({
               .join(',')}`}
             className="mt-5 inline-flex rounded-full bg-cyan-500 px-5 py-3 text-xs font-black text-white hover:bg-cyan-400"
           >
-            아티스트 비교에서 최근 1년 흐름 보기
+            아티스트 비교에서 25.07~26.07 흐름 보기
           </Link>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
@@ -497,7 +561,8 @@ export default async function ArtistIndexChartsPage({
                 현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
                 K-pop 아티스트를 대표하지 않습니다. 현재 차트는 에디토리얼
                 시드 / 미리보기 데이터 기반이며, 실제 공개 지표 검증과 자동 수집은
-                후속 단계입니다.
+                후속 단계입니다. 2025년 7월부터 2026년 7월까지의 월별 흐름을
+                보여줍니다.
               </p>
             </div>
             <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
@@ -547,20 +612,81 @@ export default async function ArtistIndexChartsPage({
           <div className="mt-5 grid gap-5">
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
+              activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="지속 추적 아티스트"
               profiles={groupedProfiles.tracked}
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
+              activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="일부 반영 아티스트"
               profiles={groupedProfiles.partial}
               compact
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
+              activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="미리보기 아티스트"
               profiles={groupedProfiles.preview}
               compact
+            />
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
+                차트 지표 기준
+              </p>
+              <h2 className="mt-2 text-2xl font-black">선택 지표 설명</h2>
+              <p className="mt-2 max-w-3xl text-sm font-bold leading-7 text-slate-600">
+                선택한 지표가 어떤 반응을 보는지 설명합니다. 현재 값은
+                FANDEX MVP preview seed 기준입니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
+              {monthRangeLabel}
+            </span>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {FANDEX_METRIC_DEFINITIONS.map((definition) => {
+              const active = definition.key === selectedMetric.key;
+
+              return (
+                <Link
+                  key={definition.key}
+                  href={buildChartHref({
+                    artistId: baseProfile.artistId,
+                    compareArtistIds,
+                    metricKey: definition.key,
+                  })}
+                  scroll={false}
+                  className={
+                    active
+                      ? 'rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white'
+                      : 'rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700'
+                  }
+                >
+                  {definition.shortLabel || definition.label}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-5 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+            <MetricContextPanel
+              definition={selectedMetric}
+              monthRangeLabel={monthRangeLabel}
+            />
+            <SelectedArtistMetricSummary
+              artistName={baseProfile.artistName}
+              metricDefinition={selectedMetric}
+              metricScore={selectedMetricScore}
+              latestMetricBreakdown={latestMetricBreakdown}
+              topMetricItems={topMetricItems}
             />
           </div>
         </section>
@@ -576,7 +702,7 @@ export default async function ArtistIndexChartsPage({
               {coverageStatusLabels[baseProfile.coverageStatus]}
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <MetricCard label="현재 FANDEX 주가" value={formatPoint(baseLatest.fandexPoint)} />
+              <MetricCard label="현재 FANDEX 지수" value={formatPoint(baseLatest.fandexPoint)} />
               <MetricCard label="최근 변화" value={formatDelta(calculateIndexDelta(baseProfile.history))} />
               <MetricCard label="흐름 구간" value={trendBandLabels[getIndexTrendBand(baseProfile.history)]} />
               <MetricCard label="마지막 업데이트" value={baseProfile.lastUpdated} />
@@ -596,7 +722,7 @@ export default async function ArtistIndexChartsPage({
               <InfoList title="지표 확인 포인트" items={signalCheckpoints} />
             </div>
           </article>
-              <MiniLineChart profile={baseProfile} title="최근 1년 월별 주가 차트" />
+              <MiniLineChart profile={baseProfile} title="25.07~26.07 월별 지수 차트" />
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -693,7 +819,7 @@ export default async function ArtistIndexChartsPage({
                   </div>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <MetricCard
-                      label="현재 FANDEX 주가"
+                      label="현재 FANDEX 지수"
                       value={latest ? formatPoint(latest.fandexPoint) : '-'}
                     />
                     <MetricCard
@@ -731,7 +857,9 @@ export default async function ArtistIndexChartsPage({
                     href={buildChartHref({
                       artistId: baseProfile.artistId,
                       compareArtistIds: nextCompareIds,
+                      metricKey: selectedMetric.key,
                     })}
+                    scroll={false}
                     className={
                       isComparing
                         ? 'mt-4 inline-flex rounded-full bg-slate-200 px-4 py-2 text-xs font-black text-slate-600'
@@ -750,9 +878,9 @@ export default async function ArtistIndexChartsPage({
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
             지수 해석 메모
           </p>
-          <h2 className="mt-2 text-2xl font-black">주가형 지수 해석 메모</h2>
+          <h2 className="mt-2 text-2xl font-black">지수 해석 메모</h2>
           <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
-            선택한 아티스트의 최근 1년 FANDEX 주가 흐름, 변화 pt, 흐름 구간을 함께 보며
+            선택한 아티스트의 25.07~26.07 FANDEX 지수 흐름, 변화 pt, 흐름 구간을 함께 보며
             같은 기간 안에서 어떤 변수 흐름이 두드러지는지 확인합니다.
           </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -774,7 +902,7 @@ export default async function ArtistIndexChartsPage({
                   </h3>
                   <div className="mt-4 grid gap-3">
                     <MetricCard
-                      label="현재 FANDEX 주가"
+                      label="현재 FANDEX 지수"
                       value={formatPoint(latest.fandexPoint)}
                     />
                     <MetricCard
@@ -790,7 +918,7 @@ export default async function ArtistIndexChartsPage({
                     href={`/artists/${profile.artistId}`}
                     className="mt-4 inline-flex rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400"
                   >
-                    상세 주가 차트 보기
+                    상세 지수 차트 보기
                   </Link>
                 </article>
               );
@@ -805,7 +933,7 @@ export default async function ArtistIndexChartsPage({
           <h2 className="mt-2 text-2xl font-black">데이터 안내</h2>
           <ul className="mt-5 grid gap-3 text-sm font-bold leading-7 text-slate-600 md:grid-cols-2">
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
+              FANDEX 지수는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
               현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다.
@@ -825,11 +953,15 @@ export default async function ArtistIndexChartsPage({
 
 function ArtistSelectorGroup({
   activeArtistId,
+  activeMetricKey,
+  compareArtistIds,
   compact = false,
   profiles,
   title,
 }: {
   activeArtistId: string;
+  activeMetricKey?: string;
+  compareArtistIds: string[];
   compact?: boolean;
   profiles: ArtistIndexChartProfile[];
   title: string;
@@ -856,7 +988,12 @@ function ArtistSelectorGroup({
           return (
             <Link
               key={profile.artistId}
-              href={buildChartHref({ artistId: profile.artistId })}
+              href={buildChartHref({
+                artistId: profile.artistId,
+                compareArtistIds,
+                metricKey: activeMetricKey,
+              })}
+              scroll={false}
               className={
                 active
                   ? 'rounded-xl border border-cyan-300 bg-cyan-50 p-3 shadow-sm'
@@ -879,6 +1016,109 @@ function ArtistSelectorGroup({
         })}
       </div>
     </section>
+  );
+}
+
+function MetricContextPanel({
+  definition,
+  monthRangeLabel,
+}: {
+  definition: FandexMetricDefinition;
+  monthRangeLabel: string;
+}) {
+  const legacyLabel = definition.legacyChartKey
+    ? getMetricDisplayLabel(definition.legacyChartKey)
+    : definition.label;
+
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+            이 지표는 무엇을 보나요?
+          </p>
+          <h3 className="mt-2 text-2xl font-black text-slate-950">
+            {definition.label}
+          </h3>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
+          {getMetricCategoryLabel(definition.key)}
+        </span>
+      </div>
+      <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
+        {definition.description}
+      </p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <MetricCard label="기본 반영 비중" value={formatMetricWeight(definition.defaultWeight)} />
+        <MetricCard label="카테고리" value={getMetricCategoryLabel(definition.key)} />
+        <MetricCard label="차트 연결" value={legacyLabel} />
+      </div>
+      <p className="mt-4 rounded-xl border border-cyan-100 bg-white p-3 text-xs font-bold leading-6 text-slate-500">
+        현재 데이터 기준: {formatMetricMonth(FANDEX_METRIC_START_MONTH)}부터{' '}
+        {formatMetricMonth(FANDEX_METRIC_END_MONTH)}까지의 월별 흐름이며,{' '}
+        {monthRangeLabel} preview seed로 표시됩니다.
+      </p>
+    </article>
+  );
+}
+
+function SelectedArtistMetricSummary({
+  artistName,
+  latestMetricBreakdown,
+  metricDefinition,
+  metricScore,
+  topMetricItems,
+}: {
+  artistName: string;
+  latestMetricBreakdown: ReturnType<typeof getLatestArtistMetricBreakdown>;
+  metricDefinition: FandexMetricDefinition;
+  metricScore: number | null;
+  topMetricItems: ReturnType<typeof getTopMetricItemsForArtist>;
+}) {
+  const latestLabel = latestMetricBreakdown?.label ?? '데이터 없음';
+
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+        선택 아티스트 최신 지표
+      </p>
+      <h3 className="mt-2 text-xl font-black text-slate-950">{artistName}</h3>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <MetricCard label="최신 기준" value={latestLabel} />
+        <MetricCard
+          label="선택 지표 점수"
+          value={formatMetricScore(metricScore)}
+        />
+      </div>
+      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+          두드러진 지표
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {topMetricItems.length > 0 ? (
+            topMetricItems.map((item) => (
+              <span
+                key={item.key}
+                className={
+                  item.key === metricDefinition.key
+                    ? 'rounded-full bg-cyan-500 px-3 py-1 text-xs font-black text-white'
+                    : 'rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm'
+                }
+              >
+                {item.shortLabel || item.label} · {item.score}점
+              </span>
+            ))
+          ) : (
+            <span className="text-sm font-bold text-slate-500">
+              표시할 preview seed가 없습니다.
+            </span>
+          )}
+        </div>
+      </div>
+      <p className="mt-4 text-xs font-bold leading-6 text-slate-500">
+        공식 평가가 아니라 FANDEX MVP preview seed 기준의 반응 점수입니다.
+      </p>
+    </article>
   );
 }
 
