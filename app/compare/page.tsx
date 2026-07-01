@@ -448,20 +448,20 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             </span>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] border-separate border-spacing-0 text-left text-sm">
+            <table className="w-full min-w-[1080px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">아티스트</th>
-                  <th className="border-b border-slate-200 p-3">ticker</th>
-                  <th className="border-b border-slate-200 p-3">그룹</th>
-                  <th className="border-b border-slate-200 p-3">커버리지</th>
+                  <th className="min-w-48 border-b border-slate-200 p-3">아티스트</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">ticker</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">그룹</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">커버리지</th>
                   <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
-                  <th className="border-b border-slate-200 p-3">흐름 구간</th>
-                  <th className="border-b border-slate-200 p-3">가장 강한 변수</th>
-                  <th className="border-b border-slate-200 p-3">데이터 상태</th>
-                  <th className="border-b border-slate-200 p-3">신뢰도</th>
-                  <th className="border-b border-slate-200 p-3">상세</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">흐름 구간</th>
+                  <th className="min-w-40 border-b border-slate-200 p-3">가장 강한 변수</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">데이터 상태</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">신뢰도</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">상세</th>
                 </tr>
               </thead>
               <tbody>
@@ -594,15 +594,15 @@ function CompareMetricBreakdownSection({
 
       {breakdown.artists.length === 0 ? (
         <p className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-7 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
-          비교할 아티스트를 선택하면 지표별 반응 점수를 볼 수 있습니다.
+          아티스트를 2명 이상 선택하면 비교할 수 있습니다.
         </p>
       ) : (
         <>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full min-w-[960px] border-separate border-spacing-0 text-left text-sm">
+            <table className="w-full min-w-[1040px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">지표</th>
+                  <th className="min-w-56 border-b border-slate-200 p-3">지표</th>
                   {breakdown.artists.map((artist) => (
                     <th
                       key={artist.artistId}

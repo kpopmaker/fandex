@@ -238,13 +238,13 @@ export default function MethodologyPage() {
             </p>
           </div>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-            <table className="w-full min-w-[900px] text-left text-sm">
+            <table className="w-full min-w-[980px] text-left text-sm">
               <thead className="bg-slate-50 text-xs font-black text-slate-500 dark:bg-slate-900/60 dark:text-slate-400">
                 <tr>
-                  <th className="px-4 py-3">지표명</th>
-                  <th className="px-4 py-3">설명</th>
-                  <th className="px-4 py-3">기본 반영 비중</th>
-                  <th className="px-4 py-3">카테고리</th>
+                  <th className="min-w-48 px-4 py-3">지표명</th>
+                  <th className="min-w-[28rem] px-4 py-3">설명</th>
+                  <th className="whitespace-nowrap px-4 py-3">기본 반영 비중</th>
+                  <th className="whitespace-nowrap px-4 py-3">카테고리</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -259,10 +259,10 @@ export default function MethodologyPage() {
                       </p>
                     </td>
                     <td className="px-4 py-4 leading-6">{metric.description}</td>
-                    <td className="px-4 py-4 font-mono font-black">
+                    <td className="whitespace-nowrap px-4 py-4 font-mono font-black">
                       {formatWeight(metric.defaultWeight)}
                     </td>
-                    <td className="px-4 py-4">
+                    <td className="whitespace-nowrap px-4 py-4">
                       {metricCategoryLabels[metric.category] ?? metric.category}
                     </td>
                   </tr>

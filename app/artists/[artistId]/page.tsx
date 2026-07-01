@@ -513,7 +513,7 @@ export default async function ArtistDetailPage({
             </>
           ) : (
             <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-7 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
-              이 아티스트의 최신 지표 구성이 아직 준비되지 않았습니다.
+              해당 지표는 아직 준비중입니다.
             </p>
           )}
         </section>
@@ -535,14 +535,14 @@ export default async function ArtistDetailPage({
             </span>
           </div>
           <div className="mt-5 overflow-x-auto">
-            <table className="w-full min-w-[860px] border-separate border-spacing-0 text-left text-sm">
+            <table className="w-full min-w-[940px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">순위</th>
-                  <th className="border-b border-slate-200 p-3">이슈</th>
-                  <th className="border-b border-slate-200 p-3">카테고리</th>
-                  <th className="border-b border-slate-200 p-3">변수</th>
-                  <th className="border-b border-slate-200 p-3">기준</th>
+                  <th className="w-20 whitespace-nowrap border-b border-slate-200 p-3">순위</th>
+                  <th className="min-w-[28rem] border-b border-slate-200 p-3">이슈</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">카테고리</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">변수</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">기준</th>
                 </tr>
               </thead>
               <tbody>
