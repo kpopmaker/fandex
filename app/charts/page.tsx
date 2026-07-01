@@ -504,14 +504,22 @@ export default async function ArtistIndexChartsPage({
     compareProfiles,
     similarResults,
   });
+  const explicitCompareArtistIds = params.compare
+    ? getCompareArtistIds({
+        baseArtistId: baseProfile.artistId,
+        compareParam: params.compare,
+        profiles,
+        similarResults,
+      })
+    : [];
   const similarityByArtistId = new Map(
     similarResults.map((result) => [result.comparedArtistId, result]),
   );
   const compareCandidateProfiles = profiles
     .filter((profile) => profile.artistId !== baseProfile.artistId)
     .sort((a, b) => {
-      const aSelected = compareArtistIds.includes(a.artistId) ? 1 : 0;
-      const bSelected = compareArtistIds.includes(b.artistId) ? 1 : 0;
+      const aSelected = explicitCompareArtistIds.includes(a.artistId) ? 1 : 0;
+      const bSelected = explicitCompareArtistIds.includes(b.artistId) ? 1 : 0;
 
       if (aSelected !== bSelected) {
         return bSelected - aSelected;
@@ -813,11 +821,15 @@ export default async function ArtistIndexChartsPage({
             {compareCandidateProfiles.map((profile) => {
               const result = similarityByArtistId.get(profile.artistId);
               const latest = getLatestPoint(profile);
-              const isComparing = compareArtistIds.includes(profile.artistId);
-              const compareLimitReached = compareArtistIds.length >= 4;
+              const isComparing = explicitCompareArtistIds.includes(
+                profile.artistId,
+              );
+              const compareLimitReached = explicitCompareArtistIds.length >= 4;
               const nextCompareIds = isComparing
-                ? compareArtistIds.filter((id) => id !== profile.artistId)
-                : [...compareArtistIds, profile.artistId].slice(0, 4);
+                ? explicitCompareArtistIds.filter(
+                    (id) => id !== profile.artistId,
+                  )
+                : [...explicitCompareArtistIds, profile.artistId].slice(0, 4);
 
               return (
                 <article
