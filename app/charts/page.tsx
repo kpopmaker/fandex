@@ -613,12 +613,14 @@ export default async function ArtistIndexChartsPage({
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="지속 추적 아티스트"
               profiles={groupedProfiles.tracked}
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="일부 반영 아티스트"
               profiles={groupedProfiles.partial}
               compact
@@ -626,6 +628,7 @@ export default async function ArtistIndexChartsPage({
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
+              compareArtistIds={compareArtistIds}
               title="미리보기 아티스트"
               profiles={groupedProfiles.preview}
               compact
@@ -856,6 +859,7 @@ export default async function ArtistIndexChartsPage({
                       compareArtistIds: nextCompareIds,
                       metricKey: selectedMetric.key,
                     })}
+                    scroll={false}
                     className={
                       isComparing
                         ? 'mt-4 inline-flex rounded-full bg-slate-200 px-4 py-2 text-xs font-black text-slate-600'
@@ -950,12 +954,14 @@ export default async function ArtistIndexChartsPage({
 function ArtistSelectorGroup({
   activeArtistId,
   activeMetricKey,
+  compareArtistIds,
   compact = false,
   profiles,
   title,
 }: {
   activeArtistId: string;
   activeMetricKey?: string;
+  compareArtistIds: string[];
   compact?: boolean;
   profiles: ArtistIndexChartProfile[];
   title: string;
@@ -984,8 +990,10 @@ function ArtistSelectorGroup({
               key={profile.artistId}
               href={buildChartHref({
                 artistId: profile.artistId,
+                compareArtistIds,
                 metricKey: activeMetricKey,
               })}
+              scroll={false}
               className={
                 active
                   ? 'rounded-xl border border-cyan-300 bg-cyan-50 p-3 shadow-sm'
