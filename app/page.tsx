@@ -5,12 +5,26 @@ import {
   getKpopCompositeIndexSummary,
   getMethodologyVariableDefinitions,
 } from './data/v4/charts/artistIndexChartData';
+import { getArtistMetadata } from './data/v4/charts/artistMetadata';
 import { getMarketIssueTopTen } from './data/v4/charts/issueSignals';
+import {
+  FANDEX_METRIC_DEFINITIONS,
+  FANDEX_METRIC_END_MONTH,
+  FANDEX_METRIC_START_MONTH,
+  getAllLatestArtistMetrics,
+  getMetricSourceSummary,
+  getTopMetricItemsForArtist,
+} from './data/v4/metrics';
 
 const primaryRoutes = [
   {
+    title: '랭킹',
+    copy: '아티스트별 FANDEX 흐름을 검색·필터로 확인',
+    href: '/ranking',
+  },
+  {
     title: '주가 차트',
-    copy: '등록/추적 아티스트의 최근 1년 흐름을 차트로 봅니다.',
+    copy: '25.07~26.07 월별 지표 흐름 확인',
     href: '/charts',
   },
   {
@@ -20,20 +34,22 @@ const primaryRoutes = [
   },
   {
     title: '아티스트 비교',
-    copy: '2~5명을 골라 같은 기간, 같은 변수로 비교합니다.',
+    copy: '2~5개 아티스트 지표를 나란히 비교',
     href: '/compare',
   },
   {
     title: '산출방식',
-    copy: 'FANDEX 지수가 어떤 기준으로 만들어지는지 봅니다.',
+    copy: 'FANDEX 지표 구성과 기준 확인',
     href: '/methodology',
   },
   {
     title: '커버리지',
-    copy: '어떤 아티스트를 얼마나 다루는지 확인합니다.',
+    copy: '반영 아티스트와 데이터 기준 확인',
     href: '/coverage',
   },
 ];
+
+const highlightedMetricKeys = new Set(['music', 'youtube', 'search', 'fandom']);
 
 const capabilityItems = [
   '69팀 coverage 기반 아티스트 목록',
@@ -60,6 +76,28 @@ export default function Home() {
   const variables = getMethodologyVariableDefinitions();
   const defaultCompareArtists = getDefaultCompareArtists();
   const marketIssues = getMarketIssueTopTen();
+  const metricSourceSummary = getMetricSourceSummary();
+  const highlightedMetrics = FANDEX_METRIC_DEFINITIONS.filter((metric) =>
+    highlightedMetricKeys.has(metric.key),
+  );
+  const highlightedArtists = getAllLatestArtistMetrics()
+    .map((metricPoint) => {
+      const artist = getArtistMetadata(metricPoint.artistId);
+      const topMetrics = getTopMetricItemsForArtist(metricPoint.artistId, 2);
+
+      if (!artist || topMetrics.length === 0) {
+        return null;
+      }
+
+      return {
+        artist,
+        metricPoint,
+        topMetrics,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    .sort((a, b) => b.metricPoint.fandexPoint - a.metricPoint.fandexPoint)
+    .slice(0, 4);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -128,6 +166,108 @@ export default function Home() {
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                metric summary
+              </p>
+              <h2 className="mt-2 text-2xl font-black">FANDEX가 보는 지표</h2>
+              <p className="mt-2 max-w-3xl text-sm font-bold leading-7 text-slate-600">
+                FANDEX는 음원, 유튜브, 검색, 팬덤 등 여러 반응을 함께 봅니다.
+                현재 값은 MVP preview seed 기준이며, 공식 순위가 아니라 아티스트 흐름을 읽기 위한 참고 지표입니다.
+              </p>
+            </div>
+            <Link
+              href="/methodology"
+              className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
+            >
+              지표 기준 보기
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Metric label="전체 지표 수" value={`${metricSourceSummary.totalMetrics}개`} />
+            <Metric
+              label="데이터 기준"
+              value={`${FANDEX_METRIC_START_MONTH}~${FANDEX_METRIC_END_MONTH}`}
+            />
+            <Metric
+              label="preview seed"
+              value={`${metricSourceSummary.previewSeedMetrics}개`}
+            />
+            <Metric label="현재 상태" value="preview 단계" />
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {highlightedMetrics.map((metric) => (
+              <span
+                key={metric.key}
+                className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700"
+              >
+                {metric.shortLabel || metric.label}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-900">
+            현재 {metricSourceSummary.totalMetrics}개 지표는 MVP preview seed 기준입니다.
+            실제 자동 수집 데이터가 붙기 전, 화면 구조와 지표 흐름을 검증하는 단계입니다.
+          </p>
+        </section>
+
+        {highlightedArtists.length > 0 && (
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                  latest metric points
+                </p>
+                <h2 className="mt-2 text-2xl font-black">최근 월 기준 두드러진 흐름</h2>
+                <p className="mt-2 max-w-3xl text-sm font-bold leading-7 text-slate-600">
+                  최신 월 preview seed에서 상위 지표가 뚜렷한 아티스트 일부입니다.
+                  기존 metric helper 기준으로 표시합니다.
+                </p>
+              </div>
+              <Link
+                href="/ranking"
+                className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-700"
+              >
+                랭킹에서 더 보기
+              </Link>
+            </div>
+            <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {highlightedArtists.map(({ artist, metricPoint, topMetrics }) => (
+                <article
+                  key={artist.artistId}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                >
+                  <p className="font-mono text-xs font-black text-cyan-700">
+                    {artist.ticker} / {metricPoint.label}
+                  </p>
+                  <h3 className="mt-2 text-xl font-black">{artist.displayName}</h3>
+                  <p className="mt-1 text-sm font-bold text-slate-500">
+                    {artist.koreanName}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {topMetrics.map((metric) => (
+                      <span
+                        key={metric.key}
+                        className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600"
+                      >
+                        {metric.shortLabel || metric.label}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/artists/${artist.artistId}`}
+                    className="mt-4 inline-flex rounded-full bg-cyan-600 px-4 py-2 text-xs font-black text-white hover:bg-cyan-500"
+                  >
+                    아티스트 보기
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
                 FANDEX 이슈 시그널
               </p>
               <h2 className="mt-2 text-2xl font-black">
@@ -168,7 +308,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           {primaryRoutes.map((route) => (
             <Link
               key={route.href}
