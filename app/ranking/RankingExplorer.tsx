@@ -447,13 +447,13 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                         {formatDelta(row.sixMonthDelta)}
                       </td>
                       <td className="px-4 py-4">
-                        <p className="text-slate-900">
+                        <p className="text-slate-700 dark:text-slate-200">
                           {row.topMetricLabels.length > 0
                             ? row.topMetricLabels.join(' · ')
                             : '데이터 준비중'}
                         </p>
                         {row.metricMonthLabel && (
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                             {row.metricMonthLabel} 기준
                           </p>
                         )}
@@ -465,7 +465,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                       )}
                       <td className="px-4 py-4">{trendBandLabels[row.trendBand]}</td>
                       <td className="px-4 py-4">
-                        <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-700">
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                           {coverageStatusLabels[row.coverageStatus]}
                         </span>
                       </td>

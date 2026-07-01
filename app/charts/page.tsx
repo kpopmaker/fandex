@@ -504,6 +504,26 @@ export default async function ArtistIndexChartsPage({
     compareProfiles,
     similarResults,
   });
+  const similarityByArtistId = new Map(
+    similarResults.map((result) => [result.comparedArtistId, result]),
+  );
+  const compareCandidateProfiles = profiles
+    .filter((profile) => profile.artistId !== baseProfile.artistId)
+    .sort((a, b) => {
+      const aSelected = compareArtistIds.includes(a.artistId) ? 1 : 0;
+      const bSelected = compareArtistIds.includes(b.artistId) ? 1 : 0;
+
+      if (aSelected !== bSelected) {
+        return bSelected - aSelected;
+      }
+
+      const aSimilarity =
+        similarityByArtistId.get(a.artistId)?.similarityScore ?? 0;
+      const bSimilarity =
+        similarityByArtistId.get(b.artistId)?.similarityScore ?? 0;
+
+      return bSimilarity - aSimilarity;
+    });
   const monthRangeLabel = formatMonthRange();
 
   return (
@@ -790,32 +810,31 @@ export default async function ArtistIndexChartsPage({
           </p>
           <h2 className="mt-2 text-2xl font-black">비슷한 지수 흐름</h2>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            {similarResults.slice(0, 6).map((result) => {
-              const profile = profiles.find(
-                (item) => item.artistId === result.comparedArtistId,
-              );
-              const latest = profile ? getLatestPoint(profile) : null;
-              const isComparing = compareArtistIds.includes(result.comparedArtistId);
+            {compareCandidateProfiles.map((profile) => {
+              const result = similarityByArtistId.get(profile.artistId);
+              const latest = getLatestPoint(profile);
+              const isComparing = compareArtistIds.includes(profile.artistId);
+              const compareLimitReached = compareArtistIds.length >= 4;
               const nextCompareIds = isComparing
-                ? compareArtistIds
-                : [...compareArtistIds, result.comparedArtistId].slice(0, 4);
+                ? compareArtistIds.filter((id) => id !== profile.artistId)
+                : [...compareArtistIds, profile.artistId].slice(0, 4);
 
               return (
                 <article
-                  key={result.comparedArtistId}
+                  key={profile.artistId}
                   className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <h3 className="text-xl font-black text-slate-950">
-                        {result.comparedArtistName}
+                        {profile.artistName}
                       </h3>
                       <p className="mt-1 text-xs font-black uppercase tracking-[0.16em] text-cyan-700">
-                        유사도 {similarityBandLabels[result.similarityBand]}
+                        유사도 {result ? similarityBandLabels[result.similarityBand] : '참고'}
                       </p>
                     </div>
                     <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
-                      {trendBandLabels[result.sharedTrendBand]}
+                      {trendBandLabels[getIndexTrendBand(profile.history)]}
                     </span>
                   </div>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -829,10 +848,13 @@ export default async function ArtistIndexChartsPage({
                     />
                   </div>
                   <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
-                    {result.editorialSummary}
+                    {result?.editorialSummary ?? getRecentFlowSummary(profile)}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {result.sharedDominantSignals.map((signal) => (
+                    {(
+                      result?.sharedDominantSignals ??
+                      calculateDominantSignals(profile.history).slice(0, 3)
+                    ).map((signal) => (
                       <span
                         key={signal}
                         className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700"
@@ -842,17 +864,22 @@ export default async function ArtistIndexChartsPage({
                     ))}
                   </div>
                   <ul className="mt-4 grid gap-2">
-                    {result.commonThemeCandidates.slice(0, 3).map((theme) => (
-                      <li
-                        key={theme}
-                        className="text-sm font-bold leading-6 text-slate-600"
-                      >
-                        {theme}
-                      </li>
-                    ))}
+                    {(
+                      result?.commonThemeCandidates ??
+                      getSignalCheckpoints(calculateDominantSignals(profile.history))
+                    )
+                      .slice(0, 3)
+                      .map((theme) => (
+                        <li
+                          key={theme}
+                          className="text-sm font-bold leading-6 text-slate-600"
+                        >
+                          {theme}
+                        </li>
+                      ))}
                   </ul>
                   <p className="mt-4 rounded-xl border border-slate-200 bg-white p-3 text-xs font-bold leading-6 text-slate-500">
-                    {result.cautionNote}
+                    {result?.cautionNote ?? '현재 값은 FANDEX MVP preview seed 기준입니다.'}
                   </p>
                   <Link
                     href={buildChartHref({
@@ -864,10 +891,16 @@ export default async function ArtistIndexChartsPage({
                     className={
                       isComparing
                         ? 'mt-4 inline-flex rounded-full bg-slate-200 px-4 py-2 text-xs font-black text-slate-600'
+                        : compareLimitReached
+                          ? 'mt-4 inline-flex rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-400'
                         : 'mt-4 inline-flex rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400'
                     }
                   >
-                    {isComparing ? '비교 중' : '비교에 추가'}
+                    {isComparing
+                      ? '선택됨 · 제거'
+                      : compareLimitReached
+                        ? '최대 4명'
+                        : '비교에 추가'}
                   </Link>
                 </article>
               );
