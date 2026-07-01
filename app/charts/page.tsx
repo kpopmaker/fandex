@@ -215,7 +215,7 @@ function formatMetricWeight(weight: number) {
 }
 
 function formatMetricScore(score: number | null) {
-  return score === null ? '데이터 없음' : `${score}점`;
+  return score === null ? '데이터 준비중' : `${score}점`;
 }
 
 function formatPoint(value: number) {
@@ -1082,7 +1082,7 @@ function SelectedArtistMetricSummary({
   metricScore: number | null;
   topMetricItems: ReturnType<typeof getTopMetricItemsForArtist>;
 }) {
-  const latestLabel = latestMetricBreakdown?.label ?? '데이터 없음';
+  const latestLabel = latestMetricBreakdown?.label ?? '데이터 준비중';
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -1117,7 +1117,7 @@ function SelectedArtistMetricSummary({
             ))
           ) : (
             <span className="text-sm font-bold text-slate-500">
-              표시할 preview seed가 없습니다.
+              preview seed 기준으로 표시할 수 있는 값이 없습니다.
             </span>
           )}
         </div>

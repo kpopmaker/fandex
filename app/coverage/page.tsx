@@ -387,22 +387,27 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               ))}
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1080px] border-separate border-spacing-0 text-left text-sm">
+          {filteredRows.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm font-bold leading-7 text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+              조건에 맞는 아티스트가 없습니다.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1160px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                  <th className="border-b border-slate-200 p-3">순번</th>
-                  <th className="border-b border-slate-200 p-3">아티스트</th>
-                  <th className="border-b border-slate-200 p-3">ticker</th>
-                  <th className="border-b border-slate-200 p-3">그룹 구분</th>
-                  <th className="border-b border-slate-200 p-3">커버리지 상태</th>
+                  <th className="w-20 whitespace-nowrap border-b border-slate-200 p-3">순번</th>
+                  <th className="min-w-48 border-b border-slate-200 p-3">아티스트</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">ticker</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">그룹 구분</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">커버리지 상태</th>
                   <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
-                  <th className="border-b border-slate-200 p-3">흐름 구간</th>
-                  <th className="border-b border-slate-200 p-3">데이터 상태</th>
-                  <th className="border-b border-slate-200 p-3">신뢰도</th>
-                  <th className="border-b border-slate-200 p-3">마지막 업데이트</th>
-                  <th className="border-b border-slate-200 p-3">이동</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">흐름 구간</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">데이터 상태</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">신뢰도</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">마지막 업데이트</th>
+                  <th className="whitespace-nowrap border-b border-slate-200 p-3">이동</th>
                 </tr>
               </thead>
               <tbody>
@@ -460,8 +465,9 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
+              </table>
+            </div>
+          )}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -515,6 +521,7 @@ function FilterLink({
   return (
     <Link
       href={href}
+      scroll={false}
       className={
         active
           ? 'rounded-full border border-cyan-400 bg-cyan-50 px-4 py-2 text-sm font-black text-cyan-800 dark:border-cyan-300/40 dark:bg-cyan-400/10 dark:text-cyan-100'

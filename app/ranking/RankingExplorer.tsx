@@ -378,7 +378,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
         {filteredRows.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
             <p className="text-lg font-black text-slate-950">
-              조건에 맞는 아티스트가 아직 없습니다.
+              조건에 맞는 아티스트가 없습니다.
             </p>
             <p className="mt-2 text-sm font-bold text-slate-500">
               검색어를 줄이거나 필터를 바꿔보세요.
@@ -386,22 +386,22 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
           </div>
         ) : (
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full min-w-[1280px] text-left text-sm">
+            <table className="w-full min-w-[1320px] text-left text-sm">
               <thead className="bg-slate-50 text-xs font-black text-slate-500">
                 <tr>
-                  <th className="px-4 py-3">순위</th>
-                  <th className="px-4 py-3">아티스트</th>
-                  <th className="px-4 py-3">구분</th>
+                  <th className="w-20 whitespace-nowrap px-4 py-3">순위</th>
+                  <th className="min-w-56 px-4 py-3">아티스트</th>
+                  <th className="whitespace-nowrap px-4 py-3">구분</th>
                   <th className="px-4 py-3 text-right">현재 FANDEX 주가</th>
                   <th className="px-4 py-3 text-right">최근 6개월 변화</th>
-                  <th className="px-4 py-3">두드러진 지표</th>
+                  <th className="min-w-56 px-4 py-3">두드러진 지표</th>
                   {metricViewFilter !== 'all' && (
                     <th className="px-4 py-3 text-right">선택 지표 점수</th>
                   )}
-                  <th className="px-4 py-3">흐름</th>
-                  <th className="px-4 py-3">데이터 상태</th>
-                  <th className="px-4 py-3">상세</th>
-                  <th className="px-4 py-3">비교</th>
+                  <th className="whitespace-nowrap px-4 py-3">흐름</th>
+                  <th className="whitespace-nowrap px-4 py-3">데이터 상태</th>
+                  <th className="whitespace-nowrap px-4 py-3">상세</th>
+                  <th className="whitespace-nowrap px-4 py-3">비교</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 bg-white">
