@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 const sampleRows = [
   {
-    label: '현재 FANDEX 주가',
+    label: '현재 FANDEX 포인트',
     value: '미리보기',
-    copy: '아티스트 상세 페이지에서 최신 주가형 지수와 6개월 변화 pt를 확인합니다.',
+    copy: '아티스트 상세 페이지에서 최신 포인트 지수와 6개월 변화 pt를 확인합니다.',
   },
   {
     label: '변수별 영향',
@@ -30,12 +30,12 @@ export default function SampleReportPage() {
             FANDEX 리서치 리포트 예시
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-600">
-            FANDEX 주가형 지수를 어떻게 읽는지 보여주는 예시입니다.
+            FANDEX 포인트 지수를 어떻게 읽는지 보여주는 예시입니다.
             실제 공개 지표 검증과 자동 수집은 후속 단계입니다. 현재 값은
             에디토리얼 시드 / 미리보기 데이터 기준입니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+            FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기
             위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
             아닙니다.
           </p>
@@ -64,7 +64,7 @@ export default function SampleReportPage() {
           <h2 className="text-2xl font-black">해석 기준</h2>
           <p className="mt-4 text-sm leading-6 text-slate-300">
             현재 데이터는 FANDEX 등록/추적 아티스트 기준입니다. 모든
-            K-pop 아티스트를 대표하지 않습니다. 전체 FANDEX 주가와
+            K-pop 아티스트를 대표하지 않습니다. 전체 FANDEX 포인트와
             변수별 그래프는 같은 값이 아니며, 변수별 그래프는 전체 산출에
             영향을 준 개별 변수 흐름입니다.
           </p>
@@ -75,7 +75,7 @@ export default function SampleReportPage() {
             href="/charts"
             className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white"
           >
-            주가 차트 보기
+            지수 차트 보기
           </Link>
           <Link
             href="/compare"

@@ -12,7 +12,7 @@ import {
 } from '../data/v4/metrics';
 
 const disclaimer =
-  'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
+  'FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
 
 const coverageStatusDescriptions: Array<{
   status: ArtistIndexCoverageStatus;
@@ -86,7 +86,7 @@ const confidenceDescriptions: Array<{
 ];
 
 const ctaLinks = [
-  { href: '/charts', label: '주가 차트 보기' },
+  { href: '/charts', label: '지수 차트 보기' },
   { href: '/artists', label: '아티스트 보기' },
   { href: '/compare', label: '여러 아티스트 비교' },
   { href: '/coverage', label: '커버리지 보기' },
@@ -121,7 +121,7 @@ export default function MethodologyPage() {
                 FANDEX 산출방식
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-                K-pop 아티스트 활동성과 반응 지표를 주가형 지수로 해석하는 방식
+                K-pop 아티스트 활동성과 반응 지표를 포인트 지수로 해석하는 방식
               </h1>
               <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
                 {disclaimer}
@@ -145,9 +145,9 @@ export default function MethodologyPage() {
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
             쉽게 읽기
           </p>
-          <h2 className="mt-2 text-2xl font-black">FANDEX 주가는 이렇게 읽습니다</h2>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 포인트는 이렇게 읽습니다</h2>
           <p className="mt-4 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-            FANDEX 주가는 하나의 숫자로 아티스트의 흐름을 단정하는 점수가
+            FANDEX 포인트는 하나의 숫자로 아티스트의 흐름을 단정하는 점수가
             아닙니다. 음원/음반, SNS/팬덤, 컴백/활동, 브랜드 적합도 같은
             여러 신호를 같은 기준으로 정리해 흐름을 보기 쉽게 만든 리서치
             지수입니다.
@@ -163,11 +163,11 @@ export default function MethodologyPage() {
             />
             <FormulaCard
               title="3단계"
-              copy="데이터 신뢰도와 예외적 변동을 조정해 FANDEX 주가형 지수로 보여줍니다."
+              copy="데이터 신뢰도와 예외적 변동을 조정해 FANDEX 포인트 지수로 보여줍니다."
             />
           </div>
           <p className="mt-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 text-sm font-bold leading-7 text-yellow-900">
-            공식 순위나 투자 판단용 지표가 아닙니다. 같은 기준으로 흐름을
+            공식 순위나 의사결정용 지표가 아닙니다. 같은 기준으로 흐름을
             비교하기 위한 FANDEX 내부 리서치 지수입니다.
           </p>
         </section>
@@ -176,7 +176,7 @@ export default function MethodologyPage() {
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
             개념식
           </p>
-          <h2 className="mt-2 text-2xl font-black">FANDEX 주가형 지수 산출방식</h2>
+          <h2 className="mt-2 text-2xl font-black">FANDEX 포인트 지수 산출방식</h2>
           <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
               개념식
@@ -201,7 +201,7 @@ export default function MethodologyPage() {
             </p>
             <h2 className="mt-2 text-2xl font-black">7개 산출 변수</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              각 변수는 FANDEX 주가형 지수를 구성하는 개별 흐름입니다.
+              각 변수는 FANDEX 포인트 지수를 구성하는 개별 흐름입니다.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -329,7 +329,7 @@ export default function MethodologyPage() {
                 현재 차트는 에디토리얼 시드 / 미리보기 데이터 기반입니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-                현재 값은 분석용 지수이며 공식 순위나 투자정보가 아닙니다.
+                현재 값은 분석용 지수이며 공식 순위가 아닙니다.
               </li>
             </ul>
         </section>

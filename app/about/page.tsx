@@ -38,7 +38,7 @@ const roadmap = [
     phase: 'Phase 1',
     title: 'Mock Market',
     description:
-      '아티스트 종목 데이터와 mock 가격 엔진으로 FANDEX의 시장 구조를 먼저 구현합니다.',
+      '아티스트 종목 데이터와 mock 포인트 엔진으로 FANDEX의 시장 구조를 먼저 구현합니다.',
   },
   {
     phase: 'Phase 2',
@@ -94,7 +94,7 @@ export default function AboutPage() {
             <h2 className="mt-3 text-2xl font-black">아티스트 = 종목</h2>
             <p className="mt-3 text-sm leading-6 text-slate-400">
               에스파, 아이브, 라이즈 같은 아티스트를 하나의 종목으로 보고,
-              시장 반응을 가격·등락률·거래량으로 표현합니다.
+              시장 반응을 포인트·변화율·거래량으로 표현합니다.
             </p>
           </div>
 
@@ -102,7 +102,7 @@ export default function AboutPage() {
             <p className="text-sm font-bold text-slate-400">Default View</p>
             <h2 className="mt-3 text-2xl font-black">종합 FANDEX Price</h2>
             <p className="mt-3 text-sm leading-6 text-slate-400">
-              첫 화면에서는 모든 요소가 반영된 기본 주가를 보여주고,
+              첫 화면에서는 모든 요소가 반영된 기본 포인트를 보여주고,
               사용자는 이를 기준으로 시장 전체 흐름을 볼 수 있습니다.
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function AboutPage() {
             <ReasonCard
               number="02"
               title="지금 뜨는 이유를 알아야 한다"
-              description="단순히 누가 1위인지보다 왜 상승하는지, 어떤 요소가 가격을 끌어올리는지가 중요합니다."
+              description="단순히 누가 1위인지보다 왜 상승하는지, 어떤 요소가 포인트 흐름을 만드는지가 중요합니다."
             />
 
             <ReasonCard
@@ -217,7 +217,7 @@ export default function AboutPage() {
 
           <p className="mt-3 text-sm leading-6 text-yellow-800 dark:text-yellow-100/80">
             현재 FANDEX v2는 실제 API를 연결하기 전의 mock market 단계입니다.
-            화면에 표시되는 가격, 거래량, 등락률은 서비스 구조를 검증하기 위한
+            화면에 표시되는 포인트, 거래량, 변화율은 서비스 구조를 검증하기 위한
             예시 데이터입니다. 이후 실제 데이터 API를 연결해 실시간 시장 반응
             기반의 FANDEX Price로 확장할 예정입니다.
           </p>

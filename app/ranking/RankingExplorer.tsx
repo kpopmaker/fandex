@@ -67,7 +67,7 @@ const trendFilterOptions: Array<{ value: TrendFilter; label: string }> = [
 ];
 
 const sortOptions: Array<{ value: SortKey; label: string }> = [
-  { value: 'current_desc', label: '현재 FANDEX 주가 높은 순' },
+  { value: 'current_desc', label: '현재 FANDEX 포인트 높은 순' },
   { value: 'delta_desc', label: '최근 6개월 변화 높은 순' },
   { value: 'delta_asc', label: '최근 6개월 변화 낮은 순' },
   { value: 'name_asc', label: '이름순' },
@@ -392,7 +392,7 @@ export default function RankingExplorer({ rows }: { rows: RankingExplorerRow[] }
                   <th className="w-20 whitespace-nowrap px-4 py-3">순위</th>
                   <th className="min-w-56 px-4 py-3">아티스트</th>
                   <th className="whitespace-nowrap px-4 py-3">구분</th>
-                  <th className="px-4 py-3 text-right">현재 FANDEX 주가</th>
+                  <th className="px-4 py-3 text-right">현재 FANDEX 포인트</th>
                   <th className="px-4 py-3 text-right">최근 6개월 변화</th>
                   <th className="min-w-56 px-4 py-3">두드러진 지표</th>
                   {metricViewFilter !== 'all' && (

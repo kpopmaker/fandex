@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const previewItems = [
   '69팀 coverage 기반 아티스트 목록',
-  '아티스트별 6개월 FANDEX 주가 차트',
+  '아티스트별 6개월 FANDEX 포인트 차트',
   '변수 1~4개 선택 그래프',
   '2~5명 아티스트 비교',
   '산출방식 / 커버리지 안내',
@@ -25,7 +25,7 @@ export default function EarlyAccessPage() {
             정리했습니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+            FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기
             위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
             아닙니다.
           </p>
@@ -57,7 +57,7 @@ export default function EarlyAccessPage() {
             href="/charts"
             className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white"
           >
-            주가 차트 보기
+            지수 차트 보기
           </Link>
           <Link
             href="/artists"

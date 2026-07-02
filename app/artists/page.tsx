@@ -70,13 +70,13 @@ export default function ArtistsPage() {
               FANDEX 등록/추적 아티스트
             </h1>
             <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 md:text-base">
-              FANDEX 등록/추적 아티스트 기준으로 최신 FANDEX 주가와 주가형
+              FANDEX 등록/추적 아티스트 기준으로 최신 FANDEX 포인트와 포인트형
               지수 흐름을 확인할 수 있습니다. 표에서 상세 페이지로 이동하거나
               바로 비교 대상에 추가할 수 있습니다.
             </p>
           </div>
           <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한
+            FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한
             엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
@@ -115,7 +115,7 @@ export default function ArtistsPage() {
                   <th className="border-b border-slate-200 p-3">ticker</th>
                   <th className="border-b border-slate-200 p-3">구분</th>
                   <th className="border-b border-slate-200 p-3">커버리지</th>
-                  <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
+                  <th className="border-b border-slate-200 p-3">현재 FANDEX 포인트</th>
                   <th className="border-b border-slate-200 p-3">최근 6개월 변화</th>
                   <th className="border-b border-slate-200 p-3">흐름</th>
                   <th className="border-b border-slate-200 p-3">데이터 상태</th>
@@ -203,7 +203,7 @@ export default function ArtistsPage() {
               실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              FANDEX 주가는 금융상품/투자정보가 아닙니다.
+              FANDEX 포인트는 금융상품/투자정보가 아닙니다.
             </li>
           </ul>
         </section>
