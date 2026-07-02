@@ -276,7 +276,7 @@ export default async function ArtistDetailPage({
                 {profile.ticker}
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-                {profile.artistName} FANDEX 주가
+                {profile.artistName} FANDEX 포인트
               </h1>
               <p className="mt-3 text-sm font-bold text-slate-500 dark:text-slate-400">
                 {groupTypeLabels[profile.groupType]} /{' '}
@@ -284,7 +284,7 @@ export default async function ArtistDetailPage({
                 {profile.lastUpdated}
               </p>
               <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
-                FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+                FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기
                 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
                 아닙니다.
               </p>
@@ -300,7 +300,7 @@ export default async function ArtistDetailPage({
                 href="/charts"
                 className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
               >
-                주가 차트 비교
+                지수 차트 비교
               </Link>
               <Link
                 href="/methodology"
@@ -325,7 +325,7 @@ export default async function ArtistDetailPage({
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-          <MetricCard label="현재 FANDEX 주가" value={formatPoint(latestPoint.fandexPoint)} />
+          <MetricCard label="현재 FANDEX 포인트" value={formatPoint(latestPoint.fandexPoint)} />
           <MetricCard label="최근 6개월 변화" value={formatDelta(fandexDelta)} />
           <MetricCard label="흐름 구간" value={trendBandLabels[trendBand]} />
           <MetricCard label="데이터 상태" value={latestPoint.dataStatus} />
@@ -339,14 +339,14 @@ export default async function ArtistDetailPage({
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
                 최근 1년 흐름
               </p>
-              <h2 className="mt-2 text-2xl font-black">최근 1년 FANDEX 주가 흐름</h2>
+              <h2 className="mt-2 text-2xl font-black">최근 1년 FANDEX 포인트 흐름</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                2025년 7월부터 2026년 7월까지의 월별 기준으로 FANDEX 주가가{' '}
+                2025년 7월부터 2026년 7월까지의 월별 기준으로 FANDEX 포인트가{' '}
                 {trendSummaryLabels[trendBand]} 흐름을 보입니다.
               </p>
             </div>
             <SingleLineChart
-              ariaLabel={`${profile.artistName} 최근 1년 FANDEX 주가 흐름 차트`}
+              ariaLabel={`${profile.artistName} 최근 1년 FANDEX 포인트 흐름 차트`}
               color="#0891b2"
               points={fandexChartPoints}
             />
@@ -356,7 +356,7 @@ export default async function ArtistDetailPage({
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
               요약
             </p>
-            <h2 className="mt-2 text-2xl font-black">주가형 지수 요약</h2>
+            <h2 className="mt-2 text-2xl font-black">포인트 지수 요약</h2>
             <div className="mt-5 grid gap-3">
               <InfoRow label="아티스트" value={profile.artistName} />
               <InfoRow label="ticker" value={profile.ticker} />
@@ -376,7 +376,7 @@ export default async function ArtistDetailPage({
               <h2 className="mt-2 text-2xl font-black">산출 변수 선택</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
                 1개부터 4개까지 선택할 수 있습니다. 선택 변수 그래프는 전체
-                FANDEX 주가 산출에 영향을 준 개별 변수의 흐름을 보여줍니다.
+                FANDEX 포인트 산출에 영향을 준 개별 변수의 흐름을 보여줍니다.
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
@@ -422,7 +422,7 @@ export default async function ArtistDetailPage({
               </p>
               <h2 className="mt-2 text-2xl font-black">선택 변수 영향 그래프</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                전체 주가와 동일한 값이 아니라 변수별 raw/weighted point
+                전체 포인트와 동일한 값이 아니라 변수별 raw/weighted point
                 흐름입니다.
               </p>
             </div>
@@ -488,7 +488,7 @@ export default async function ArtistDetailPage({
               </p>
               <h2 className="mt-2 text-2xl font-black">FANDEX 지표 구성</h2>
               <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-                최신 월 기준으로 FANDEX 주가를 구성하는 11개 반응 점수를
+                최신 월 기준으로 FANDEX 포인트를 구성하는 11개 반응 점수를
                 보여줍니다.
               </p>
             </div>
@@ -606,7 +606,7 @@ export default async function ArtistDetailPage({
               실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-              FANDEX 주가는 금융상품/투자정보가 아닙니다.
+              FANDEX 포인트는 금융상품/투자정보가 아닙니다.
             </li>
           </ul>
         </section>

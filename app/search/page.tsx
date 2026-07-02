@@ -35,7 +35,7 @@ export default function SearchPage() {
             단계입니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+            FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기
             위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
             아닙니다.
           </p>
@@ -107,7 +107,7 @@ export default function SearchPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-black">변수 탐색</h2>
           <p className="mt-3 text-sm leading-6 text-slate-600">
-            변수별 흐름은 전체 FANDEX 주가와 같은 값이 아니라, 주가형 지수
+            변수별 흐름은 전체 FANDEX 포인트와 같은 값이 아니라, 포인트 지수
             산출에 영향을 준 개별 변수의 흐름입니다.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">

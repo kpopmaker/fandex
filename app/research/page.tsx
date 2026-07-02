@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 const researchCards = [
   {
-    title: '6개월 FANDEX 주가 흐름',
-    copy: '아티스트별 최근 6개 시점의 주가형 지수 흐름과 6개월 변화 pt를 함께 확인합니다.',
+    title: '6개월 FANDEX 포인트 흐름',
+    copy: '아티스트별 최근 6개 시점의 포인트 지수 흐름과 6개월 변화 pt를 함께 확인합니다.',
     href: '/charts',
-    cta: '주가 차트 보기',
+    cta: '지수 차트 보기',
   },
   {
     title: '변수별 영향',
@@ -46,7 +46,7 @@ export default function ResearchPage() {
             바로 이동할 수 있습니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-sm font-bold leading-6 text-cyan-100">
-            FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기
+            FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기
             위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가
             아닙니다.
           </p>

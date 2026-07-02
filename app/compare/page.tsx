@@ -60,7 +60,7 @@ const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
 };
 
 const disclaimer =
-  'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
+  'FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
 
 const metricCategoryLabels: Record<string, string> = {
   content: '콘텐츠 반응',
@@ -257,10 +257,10 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 FANDEX 아티스트 비교
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-                여러 아티스트의 주가 흐름 비교
+                여러 아티스트의 포인트 흐름 비교
               </h1>
               <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300 md:text-base">
-                2~5명의 아티스트를 선택해 최근 1년 FANDEX 주가 흐름과
+                2~5명의 아티스트를 선택해 최근 1년 FANDEX 포인트 흐름과
                 산출 변수별 변화를 비교합니다.
               </p>
               <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
@@ -306,7 +306,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                     그래프로 따로 표시됩니다.
                   </p>
                   <p className="mt-2 text-sm font-bold leading-7 text-slate-500">
-                    전체 FANDEX 주가와 변수별 그래프는 같은 값이 아니며,
+                    전체 FANDEX 포인트와 변수별 그래프는 같은 값이 아니며,
                     변수 그래프는 산출에 영향을 준 개별 흐름을 보여줍니다.
                   </p>
                 </div>
@@ -389,16 +389,16 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <div className="mb-5">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
-              최근 1년 FANDEX 주가 비교 차트
+              최근 1년 FANDEX 포인트 비교 차트
             </p>
             <h2 className="mt-2 text-2xl font-black">최근 1년 월별 흐름 비교</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              2025년 7월부터 2026년 7월까지의 월별 FANDEX 주가 흐름을 비교합니다. 동일 기간 내
+              2025년 7월부터 2026년 7월까지의 월별 FANDEX 포인트 흐름을 비교합니다. 동일 기간 내
               방향성, 변동폭, 현재 위치를 함께 확인할 수 있습니다.
             </p>
           </div>
           <CompareLineChart
-            ariaLabel="선택 아티스트 최근 1년 월별 FANDEX 주가 비교 차트"
+            ariaLabel="선택 아티스트 최근 1년 월별 FANDEX 포인트 비교 차트"
             series={compareChartSeries}
           />
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
@@ -423,8 +423,8 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             </p>
             <h2 className="mt-2 text-2xl font-black">선택 변수 그래프</h2>
             <p className="mt-2 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              선택 변수 그래프는 전체 FANDEX 주가 산출에 영향을 준 개별
-              변수의 흐름을 보여줍니다. 전체 주가와 동일한 값이 아니라
+              선택 변수 그래프는 전체 FANDEX 포인트 산출에 영향을 준 개별
+              변수의 흐름을 보여줍니다. 전체 포인트와 동일한 값이 아니라
               변수별 raw/weighted point 흐름입니다.
             </p>
           </div>
@@ -455,7 +455,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">ticker</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">그룹</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">커버리지</th>
-                  <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
+                  <th className="border-b border-slate-200 p-3">현재 FANDEX 포인트</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">흐름 구간</th>
                   <th className="min-w-40 border-b border-slate-200 p-3">가장 강한 변수</th>
@@ -520,7 +520,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             <h2 className="mt-2 text-2xl font-black">비교 해석</h2>
             <div className="mt-5 grid gap-3">
               <InterpretationCard
-                label="현재 FANDEX 주가"
+                label="현재 FANDEX 포인트"
                 value={interpretation.highestCurrent.artistName}
                 note="FANDEX 등록/추적 데이터 기준으로 현재 값이 가장 높습니다."
               />
@@ -556,7 +556,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
                 실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
               </li>
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-                FANDEX 주가는 금융상품/투자정보가 아닙니다.
+                FANDEX 포인트는 금융상품/투자정보가 아닙니다.
               </li>
             </ul>
           </section>

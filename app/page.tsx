@@ -23,7 +23,7 @@ const primaryRoutes = [
     href: '/ranking',
   },
   {
-    title: '주가 차트',
+    title: '지수 차트',
     copy: '25.07~26.07 월별 지표 흐름 확인',
     href: '/charts',
   },
@@ -53,7 +53,7 @@ const highlightedMetricKeys = new Set(['music', 'youtube', 'search', 'fandom']);
 
 const capabilityItems = [
   '69팀 coverage 기반 아티스트 목록',
-  '아티스트별 최근 1년 FANDEX 주가 차트',
+  '아티스트별 최근 1년 FANDEX 포인트 차트',
   '변수 1~4개 선택 그래프',
   '2~5명 아티스트 비교',
   '선택 변수별 비교 그래프',
@@ -130,7 +130,7 @@ export default function Home() {
                 href="/charts"
                 className="rounded-full bg-cyan-600 px-5 py-3 text-sm font-black text-white hover:bg-cyan-500"
               >
-                주가 차트 보기
+                지수 차트 보기
               </Link>
               <Link
                 href={`/compare?artists=${defaultCompareArtists

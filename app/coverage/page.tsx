@@ -21,7 +21,7 @@ type CoveragePageProps = {
 };
 
 const disclaimer =
-  'FANDEX 주가는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
+  'FANDEX 포인트는 K-pop 아티스트 활동성과 반응 지표를 해석하기 위한 엔터테인먼트 리서치 지수이며, 금융상품/투자정보가 아닙니다.';
 
 const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
   girl_group: '걸그룹',
@@ -57,7 +57,7 @@ const groupFilters: Array<{ label: string; value: ArtistIndexGroupType }> = [
 ];
 
 const ctaLinks = [
-  { href: '/charts', label: '주가 차트' },
+  { href: '/charts', label: '지수 차트' },
   { href: '/artists', label: '아티스트' },
   { href: '/compare', label: '비교' },
   { href: '/methodology', label: '산출방식' },
@@ -401,7 +401,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">ticker</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">그룹 구분</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">커버리지 상태</th>
-                  <th className="border-b border-slate-200 p-3">현재 FANDEX 주가</th>
+                  <th className="border-b border-slate-200 p-3">현재 FANDEX 포인트</th>
                   <th className="border-b border-slate-200 p-3">6개월 변화</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">흐름 구간</th>
                   <th className="whitespace-nowrap border-b border-slate-200 p-3">데이터 상태</th>
@@ -487,7 +487,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               실제 공개 지표 검증과 자동 수집은 후속 단계입니다.
             </li>
             <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-              FANDEX 주가는 금융상품/투자정보가 아닙니다.
+              FANDEX 포인트는 금융상품/투자정보가 아닙니다.
             </li>
           </ul>
         </section>

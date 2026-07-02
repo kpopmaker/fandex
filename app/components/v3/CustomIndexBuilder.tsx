@@ -41,7 +41,7 @@ const perspectiveOrder: CustomIndexViewId[] = [
 ];
 
 const perspectiveLabels: Record<CustomIndexViewId, string> = {
-  all: '종합 주가',
+  all: '종합 포인트',
   buzz: '화제성 중심',
   fandomExpansion: '팬덤 확장 중심',
   contentReaction: '콘텐츠 반응 중심',

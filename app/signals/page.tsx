@@ -95,7 +95,7 @@ export default function SignalsPage() {
               </p>
               <p className="mt-4 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-900">
                 아래 수치는 실제 분석 결과가 아니라 mock 데이터 기반 예시입니다.
-                FANDEX 가격은 simulated index이며 실제 주식, 투자 상품, 금융
+                FANDEX 포인트은 simulated index이며 실제 주식, 금융 상품, 금융
                 조언이 아닙니다.
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function SignalsPage() {
                   />
                   <Metric label="뉴스량" value={`${issue.newsCount}건`} />
                   <Metric
-                    label="mock 가격 반응"
+                    label="mock 포인트 반응"
                     value={movement ? formatPercent(movement.changeRate) : '확인 필요'}
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function SignalsPage() {
             <RoadmapCard title="출처 데이터" value="뉴스, 검색, 영상, SNS" />
             <RoadmapCard title="신뢰도" value="수집량과 출처 품질 기반" />
             <RoadmapCard title="관련 뉴스" value="기사와 공식 발표 연결" />
-            <RoadmapCard title="그래프 영향" value="가격/지수 변동 구간 표시" />
+            <RoadmapCard title="그래프 영향" value="포인트/지수 변동 구간 표시" />
           </div>
         </section>
 
@@ -238,7 +238,7 @@ export default function SignalsPage() {
                 신호가 나타난 아티스트를 비교하세요.
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-cyan-100">
-                aespa, IVE, RIIZE의 FANDEX 가격과 반영 요소를 함께 보면
+                aespa, IVE, RIIZE의 FANDEX 포인트과 반영 요소를 함께 보면
                 이슈가 어느 아티스트에 더 강하게 나타나는지 비교할 수 있습니다.
               </p>
             </div>

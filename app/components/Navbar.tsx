@@ -8,8 +8,9 @@ import ThemeToggle from './ThemeToggle';
 const navItems = [
   { href: '/', labelKo: '홈', labelEn: 'Home' },
   { href: '/artists', labelKo: '아티스트', labelEn: 'Artists' },
-  { href: '/compare', labelKo: '비교', labelEn: 'Compare' },
   { href: '/ranking', labelKo: '랭킹', labelEn: 'Ranking' },
+  { href: '/charts', labelKo: '차트', labelEn: 'Charts' },
+  { href: '/compare', labelKo: '비교', labelEn: 'Compare' },
   { href: '/signals', labelKo: '신호', labelEn: 'Signals' },
   { href: '/methodology', labelKo: '산출 방식', labelEn: 'Method' },
   { href: '/about', labelKo: '소개', labelEn: 'About' },
