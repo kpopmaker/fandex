@@ -178,7 +178,7 @@ function createCustomIndexView({
 export const customIndexViews: CustomIndexViewPreset[] = [
   createCustomIndexView({
     id: 'all',
-    label: '종합 주가',
+    label: '종합 포인트',
     shortLabel: 'Official FANDEX',
     description:
       'A balanced FANDEX view across music, album, video, SNS, search, news, global, fandom, and company factors.',

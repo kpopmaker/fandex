@@ -11,9 +11,13 @@ import {
   type CoverageArtistRow,
 } from '../data/v4/charts/artistIndexChartData';
 import {
+  FANDEX_METRIC_DEFINITIONS,
+  getAllMetricCoverageSummariesByMetric,
   getAllMetricSourceInfo,
+  getMetricCategoryLabel,
   getMetricCoverageSummary,
   getMetricSourceSummary,
+  type MetricCoverageLevel,
 } from '../data/v4/metrics';
 
 type CoveragePageProps = {
@@ -51,6 +55,20 @@ const statusFilters: Array<{ label: string; value: ArtistIndexCoverageStatus }> 
   { label: '미리보기', value: 'preview' },
 ];
 
+const metricCoverageLevelLabels: Record<MetricCoverageLevel, string> = {
+  high: '높음',
+  medium: '보통',
+  low: '낮음',
+  empty: '비어 있음',
+};
+
+const metricCoverageUsageLabels: Record<MetricCoverageLevel, string> = {
+  high: '자동 비교 사용 가능',
+  medium: '자동 비교 사용 가능',
+  low: '자동 비교 제한 가능',
+  empty: '자동 비교 제한',
+};
+
 const groupFilters: Array<{ label: string; value: ArtistIndexGroupType }> = [
   { label: '걸그룹', value: 'girl_group' },
   { label: '보이그룹', value: 'boy_group' },
@@ -71,6 +89,10 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
     Math.round(value),
   )}pt`;
+}
+
+function formatPercentage(value: number) {
+  return `${Math.round(value * 100)}%`;
 }
 
 function parseCoverageStatus(value?: string | string[]) {
@@ -133,6 +155,10 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const selectedGroup = parseCoverageGroup(params.group);
   const summary = getCoveragePageSummary();
   const metricSummary = getMetricCoverageSummary();
+  const metricCoverageByMetric = getAllMetricCoverageSummariesByMetric();
+  const metricDefinitionsByKey = new Map(
+    FANDEX_METRIC_DEFINITIONS.map((definition) => [definition.key, definition]),
+  );
   const metricSourceSummary = getMetricSourceSummary();
   const metricSourceInfo = getAllMetricSourceInfo();
   const monthlyPointCount = Math.round(
@@ -215,6 +241,75 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             이 구조를 기준으로 이후 뉴스, 검색, 유튜브, 음원 데이터를 붙일 수
             있습니다. 현재는 실제 API/DB 연동 전 단계입니다.
           </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              metric data coverage
+            </p>
+            <h2 className="mt-2 text-2xl font-black">지표별 데이터 커버리지</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              0점은 유효한 데이터로 계산합니다. 데이터 없음은 값이 없거나 월별 포인트가 없는 경우입니다.
+              일부 preview seed 지표는 데이터가 부족해 자동 비교 흐름에서 제한될 수 있습니다.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[980px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">지표</th>
+                  <th className="border-b border-slate-200 p-3">카테고리</th>
+                  <th className="border-b border-slate-200 p-3">커버리지 수준</th>
+                  <th className="border-b border-slate-200 p-3">채워진 데이터 포인트</th>
+                  <th className="border-b border-slate-200 p-3">0점 데이터 포인트</th>
+                  <th className="border-b border-slate-200 p-3">누락 데이터 포인트</th>
+                  <th className="border-b border-slate-200 p-3">커버리지 비율</th>
+                  <th className="border-b border-slate-200 p-3">사용 상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                {metricCoverageByMetric.map((summary) => {
+                  const definition = metricDefinitionsByKey.get(summary.metricKey);
+
+                  return (
+                    <tr
+                      key={summary.metricKey}
+                      className="font-bold text-slate-700 dark:text-slate-300"
+                    >
+                      <td className="border-b border-slate-100 p-3 font-black text-slate-950 dark:border-slate-800 dark:text-white">
+                        <span>{definition?.shortLabel || definition?.label || summary.metricKey}</span>
+                        <span className="mt-1 block font-mono text-xs text-cyan-700 dark:text-cyan-300">
+                          {summary.metricKey}
+                        </span>
+                      </td>
+                      <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                        {getMetricCategoryLabel(summary.metricKey)}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                        {metricCoverageLevelLabels[summary.coverageLevel]}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {summary.availablePoints}/{summary.totalPoints}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {summary.zeroPoints}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {summary.missingPoints}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {formatPercentage(summary.coverageRate)}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                        {metricCoverageUsageLabels[summary.coverageLevel]}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">

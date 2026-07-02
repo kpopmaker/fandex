@@ -22,7 +22,9 @@ import {
   FANDEX_METRIC_MONTH_LABELS,
   FANDEX_METRIC_START_MONTH,
   getFandexMetricDefinition,
+  getArtistMetricCoverageSummary,
   getArtistMonthlyMetrics,
+  getMetricCoverageSummaryByMetric,
   getLatestArtistMetricBreakdown,
   getMetricCategoryLabel,
   getMetricDisplayLabel,
@@ -31,6 +33,7 @@ import {
   getTopMetricItemsForArtist,
   type FandexVariableKey,
   type FandexMetricDefinition,
+  type MetricCoverageLevel,
 } from '../data/v4/metrics';
 
 type ChartSearchParams = {
@@ -79,6 +82,13 @@ const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
 };
 
 const chartColors = ['#0d9488', '#7c3aed', '#2563eb', '#047857', '#be123c'];
+
+const metricCoverageLevelLabels: Record<MetricCoverageLevel, string> = {
+  high: '높음',
+  medium: '보통',
+  low: '낮음',
+  empty: '비어 있음',
+};
 
 function parseChartSearchParams(params: {
   [key: string]: string | string[] | undefined;
@@ -361,6 +371,10 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(value)}pt`;
 }
 
+function formatPercentage(value: number) {
+  return `${Math.round(value * 100)}%`;
+}
+
 function getLatestPoint(profile: ArtistIndexChartProfile) {
   return profile.history[profile.history.length - 1];
 }
@@ -637,6 +651,13 @@ export default async function ArtistIndexChartsPage({
     baseProfile.artistId,
     selectedMetric.key,
   );
+  const selectedArtistMetricCoverage = getArtistMetricCoverageSummary(
+    baseProfile.artistId,
+    selectedMetric.key,
+  );
+  const selectedMetricCoverageSummary = getMetricCoverageSummaryByMetric(
+    selectedMetric.key,
+  );
   const latestMetricBreakdown = getLatestArtistMetricBreakdown(
     baseProfile.artistId,
   );
@@ -856,6 +877,30 @@ export default async function ArtistIndexChartsPage({
               topMetricItems={topMetricItems}
             />
           </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            <MetricCard
+              label="선택 지표 데이터"
+              value={`${selectedArtistMetricCoverage.totalMonths}개월 중 ${selectedArtistMetricCoverage.availableMonths}개월 사용 가능`}
+            />
+            <MetricCard
+              label="0점 데이터"
+              value={`${selectedArtistMetricCoverage.zeroMonths}개월 / 유효한 지표 값`}
+            />
+            <MetricCard
+              label="전체 커버리지"
+              value={`${formatPercentage(
+                selectedMetricCoverageSummary.coverageRate,
+              )} / ${
+                metricCoverageLevelLabels[
+                  selectedMetricCoverageSummary.coverageLevel
+                ]
+              }`}
+            />
+          </div>
+          <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800">
+            선택한 지표는 아래 자동 비교 흐름의 추천 기준으로도 사용됩니다. 0점은 유효한 지표 값으로 계산하며,
+            선택 지표 데이터가 부족하면 자동 비교 흐름이 제한될 수 있습니다.
+          </p>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
