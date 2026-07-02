@@ -1,4 +1,6 @@
 ﻿import Link from 'next/link';
+import { Suspense } from 'react';
+import ChartsCompareSelector from './ChartsCompareSelector';
 import {
   artistIndexChartProfiles,
   calculateIndexDelta,
@@ -96,25 +98,14 @@ function getDefaultProfile(profiles: ArtistIndexChartProfile[]) {
 
 function getCompareArtistIds({
   baseArtistId,
-  compareParam,
+  sourceIds,
   profiles,
-  similarResults,
 }: {
   baseArtistId: string;
-  compareParam?: string;
+  sourceIds: string[];
   profiles: ArtistIndexChartProfile[];
-  similarResults: ArtistIndexSimilarityResult[];
 }) {
   const validIds = new Set(profiles.map((profile) => profile.artistId));
-  const requestedIds =
-    compareParam
-      ?.split(',')
-      .map((id) => id.trim())
-      .filter(Boolean) ?? [];
-  const sourceIds =
-    requestedIds.length > 0
-      ? requestedIds
-      : similarResults.slice(0, 3).map((result) => result.comparedArtistId);
   const uniqueIds: string[] = [];
 
   sourceIds.forEach((id) => {
@@ -124,6 +115,46 @@ function getCompareArtistIds({
   });
 
   return uniqueIds.slice(0, 4);
+}
+
+function parseExplicitCompareArtistIds({
+  baseArtistId,
+  compareParam,
+  profiles,
+}: {
+  baseArtistId: string;
+  compareParam?: string;
+  profiles: ArtistIndexChartProfile[];
+}) {
+  const requestedIds =
+    compareParam
+      ?.split(',')
+      .map((id) => id.trim())
+      .filter(Boolean) ?? [];
+
+  return getCompareArtistIds({
+    baseArtistId,
+    sourceIds: requestedIds,
+    profiles,
+  });
+}
+
+function getFallbackRecommendedCompareArtistIds({
+  baseArtistId,
+  profiles,
+  similarResults,
+}: {
+  baseArtistId: string;
+  profiles: ArtistIndexChartProfile[];
+  similarResults: ArtistIndexSimilarityResult[];
+}) {
+  return getCompareArtistIds({
+    baseArtistId,
+    sourceIds: similarResults
+      .slice(0, 3)
+      .map((result) => result.comparedArtistId),
+    profiles,
+  });
 }
 
 function getSelectedChartContext(
@@ -138,23 +169,34 @@ function getSelectedChartContext(
     baseProfile.artistId,
     profiles,
   );
-  const compareArtistIds = getCompareArtistIds({
+  const explicitCompareArtistIds = parseExplicitCompareArtistIds({
     baseArtistId: baseProfile.artistId,
     compareParam: params.compare,
     profiles,
-    similarResults,
   });
-  const compareProfiles = compareArtistIds
+  const fallbackRecommendedCompareArtistIds =
+    getFallbackRecommendedCompareArtistIds({
+      baseArtistId: baseProfile.artistId,
+      profiles,
+      similarResults,
+    });
+  const chartCompareArtistIds =
+    explicitCompareArtistIds.length > 0
+      ? explicitCompareArtistIds
+      : fallbackRecommendedCompareArtistIds;
+  const compareProfiles = chartCompareArtistIds
     .map((id) => profiles.find((profile) => profile.artistId === id))
     .filter(Boolean) as ArtistIndexChartProfile[];
 
   return {
     baseProfile,
     similarResults,
-    compareArtistIds,
+    explicitCompareArtistIds,
+    fallbackRecommendedCompareArtistIds,
+    chartCompareArtistIds,
     compareProfiles,
     chartProfiles: [baseProfile, ...compareProfiles],
-    usingAutoCompare: !params.compare,
+    usingAutoCompare: explicitCompareArtistIds.length === 0,
   };
 }
 
@@ -483,7 +525,8 @@ export default async function ArtistIndexChartsPage({
   const {
     baseProfile,
     similarResults,
-    compareArtistIds,
+    explicitCompareArtistIds,
+    fallbackRecommendedCompareArtistIds,
     compareProfiles,
     chartProfiles,
     usingAutoCompare,
@@ -504,14 +547,6 @@ export default async function ArtistIndexChartsPage({
     compareProfiles,
     similarResults,
   });
-  const explicitCompareArtistIds = params.compare
-    ? getCompareArtistIds({
-        baseArtistId: baseProfile.artistId,
-        compareParam: params.compare,
-        profiles,
-        similarResults,
-      })
-    : [];
   const similarityByArtistId = new Map(
     similarResults.map((result) => [result.comparedArtistId, result]),
   );
@@ -531,7 +566,33 @@ export default async function ArtistIndexChartsPage({
         similarityByArtistId.get(b.artistId)?.similarityScore ?? 0;
 
       return bSimilarity - aSimilarity;
-    });
+    })
+    .slice(0, 20);
+  const compareCandidates = compareCandidateProfiles.map((profile) => {
+    const result = similarityByArtistId.get(profile.artistId);
+    const latest = getLatestPoint(profile);
+
+    return {
+      artistId: profile.artistId,
+      displayName: profile.artistName,
+      ticker: profile.ticker,
+      description: result?.editorialSummary ?? getRecentFlowSummary(profile),
+      similarityLabel: result ? similarityBandLabels[result.similarityBand] : '참고',
+      trendLabel: trendBandLabels[getIndexTrendBand(profile.history)],
+      currentPointLabel: latest ? formatPoint(latest.fandexPoint) : '-',
+      deltaLabel: formatDelta(calculateIndexDelta(profile.history)),
+      signals:
+        result?.sharedDominantSignals ??
+        calculateDominantSignals(profile.history).slice(0, 3),
+      themes: (
+        result?.commonThemeCandidates ??
+        getSignalCheckpoints(calculateDominantSignals(profile.history))
+      ).slice(0, 3),
+      caution:
+        result?.cautionNote ??
+        '현재 값은 FANDEX MVP preview seed 기준입니다.',
+    };
+  });
   const monthRangeLabel = formatMonthRange();
 
   return (
@@ -635,21 +696,21 @@ export default async function ArtistIndexChartsPage({
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
-              비교 대상 자동 추천: {usingAutoCompare ? '사용 중' : '직접 선택'}
+              비교 대상 자동 추천: {usingAutoCompare ? `사용 중 (${fallbackRecommendedCompareArtistIds.length}명)` : '직접 선택'}
             </span>
           </div>
           <div className="mt-5 grid gap-5">
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
-              compareArtistIds={compareArtistIds}
+              compareArtistIds={explicitCompareArtistIds}
               title="지속 추적 아티스트"
               profiles={groupedProfiles.tracked}
             />
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
-              compareArtistIds={compareArtistIds}
+              compareArtistIds={explicitCompareArtistIds}
               title="일부 반영 아티스트"
               profiles={groupedProfiles.partial}
               compact
@@ -657,7 +718,7 @@ export default async function ArtistIndexChartsPage({
             <ArtistSelectorGroup
               activeArtistId={baseProfile.artistId}
               activeMetricKey={selectedMetric.key}
-              compareArtistIds={compareArtistIds}
+              compareArtistIds={explicitCompareArtistIds}
               title="미리보기 아티스트"
               profiles={groupedProfiles.preview}
               compact
@@ -690,7 +751,7 @@ export default async function ArtistIndexChartsPage({
                   key={definition.key}
                   href={buildChartHref({
                     artistId: baseProfile.artistId,
-                    compareArtistIds,
+                    compareArtistIds: explicitCompareArtistIds,
                     metricKey: definition.key,
                   })}
                   scroll={false}
@@ -812,113 +873,15 @@ export default async function ArtistIndexChartsPage({
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
-            유사 흐름 카드
-          </p>
-          <h2 className="mt-2 text-2xl font-black">비슷한 지수 흐름</h2>
-          <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            {compareCandidateProfiles.map((profile) => {
-              const result = similarityByArtistId.get(profile.artistId);
-              const latest = getLatestPoint(profile);
-              const isComparing = explicitCompareArtistIds.includes(
-                profile.artistId,
-              );
-              const compareLimitReached = explicitCompareArtistIds.length >= 4;
-              const nextCompareIds = isComparing
-                ? explicitCompareArtistIds.filter(
-                    (id) => id !== profile.artistId,
-                  )
-                : [...explicitCompareArtistIds, profile.artistId].slice(0, 4);
-
-              return (
-                <article
-                  key={profile.artistId}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-xl font-black text-slate-950">
-                        {profile.artistName}
-                      </h3>
-                      <p className="mt-1 text-xs font-black uppercase tracking-[0.16em] text-cyan-700">
-                        유사도 {result ? similarityBandLabels[result.similarityBand] : '참고'}
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
-                      {trendBandLabels[getIndexTrendBand(profile.history)]}
-                    </span>
-                  </div>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <MetricCard
-                      label="현재 FANDEX 지수"
-                      value={latest ? formatPoint(latest.fandexPoint) : '-'}
-                    />
-                    <MetricCard
-                      label="변화 pt"
-                      value={profile ? formatDelta(calculateIndexDelta(profile.history)) : '-'}
-                    />
-                  </div>
-                  <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
-                    {result?.editorialSummary ?? getRecentFlowSummary(profile)}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {(
-                      result?.sharedDominantSignals ??
-                      calculateDominantSignals(profile.history).slice(0, 3)
-                    ).map((signal) => (
-                      <span
-                        key={signal}
-                        className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700"
-                      >
-                        {signal}
-                      </span>
-                    ))}
-                  </div>
-                  <ul className="mt-4 grid gap-2">
-                    {(
-                      result?.commonThemeCandidates ??
-                      getSignalCheckpoints(calculateDominantSignals(profile.history))
-                    )
-                      .slice(0, 3)
-                      .map((theme) => (
-                        <li
-                          key={theme}
-                          className="text-sm font-bold leading-6 text-slate-600"
-                        >
-                          {theme}
-                        </li>
-                      ))}
-                  </ul>
-                  <p className="mt-4 rounded-xl border border-slate-200 bg-white p-3 text-xs font-bold leading-6 text-slate-500">
-                    {result?.cautionNote ?? '현재 값은 FANDEX MVP preview seed 기준입니다.'}
-                  </p>
-                  <Link
-                    href={buildChartHref({
-                      artistId: baseProfile.artistId,
-                      compareArtistIds: nextCompareIds,
-                      metricKey: selectedMetric.key,
-                    })}
-                    scroll={false}
-                    className={
-                      isComparing
-                        ? 'mt-4 inline-flex rounded-full bg-slate-200 px-4 py-2 text-xs font-black text-slate-600'
-                        : compareLimitReached
-                          ? 'mt-4 inline-flex rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-400'
-                        : 'mt-4 inline-flex rounded-full bg-cyan-500 px-4 py-2 text-xs font-black text-white hover:bg-cyan-400'
-                    }
-                  >
-                    {isComparing
-                      ? '선택됨 · 제거'
-                      : compareLimitReached
-                        ? '최대 4명'
-                        : '비교에 추가'}
-                  </Link>
-                </article>
-              );
-            })}
-          </div>
-        </section>
+        <Suspense fallback={null}>
+          <ChartsCompareSelector
+            baseArtistId={baseProfile.artistId}
+            metricKey={selectedMetric.key}
+            candidates={compareCandidates}
+            selectedCompareArtistIds={explicitCompareArtistIds}
+            maxCompareCount={4}
+          />
+        </Suspense>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">
