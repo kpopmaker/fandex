@@ -331,6 +331,12 @@ export default function MethodologyPage() {
               <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
                 현재 값은 분석용 지수이며 공식 순위가 아닙니다.
               </li>
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                0점은 유효한 preview score로 취급합니다. 데이터 없음은 월별 포인트가 없거나 값이 비어 있는 경우입니다.
+              </li>
+              <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                자동 비교 흐름은 선택 지표의 월별 데이터 커버리지를 기준으로 제한될 수 있습니다.
+              </li>
             </ul>
         </section>
       </section>

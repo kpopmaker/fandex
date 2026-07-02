@@ -238,7 +238,7 @@ export type CustomIndexPreset =
   | 'Global reaction'
   | 'Fandom focused'
   | 'Company scale'
-  | '종합 주가'
+  | '종합 포인트'
   | '화제성 중심'
   | '팬덤 확장 중심'
   | '콘텐츠 반응 중심'

@@ -1556,13 +1556,13 @@ export function getMethodologyVariableDefinitions() {
 export function getMethodologyFormulaSummary(): MethodologyFormulaSummary {
   return {
     conceptFormula:
-      'FANDEX 주가형 지수 = 기준점 + 변수별 점수의 합 - 조정값',
+      'FANDEX 포인트형 지수 = 기준점 + 변수별 점수의 합 - 조정값',
     basePoint: '아티스트별 기본 기준점입니다.',
     variableScore: '각 변수의 최근 흐름을 point 구조로 해석한 값입니다.',
     weight: '변수별 영향도를 조정하는 개념적 가중치입니다.',
     riskAdjustment:
       '데이터 신뢰도와 예외적 변동을 조정하는 항목입니다.',
-    finalValue: '최종값은 FANDEX 주가형 지수로 표시됩니다.',
+    finalValue: '최종값은 FANDEX 포인트형 지수로 표시됩니다.',
   };
 }
 
