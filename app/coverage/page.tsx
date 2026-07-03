@@ -24,6 +24,7 @@ import {
   type MetricDataReadiness,
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
+import { NEWS_ISSUE_SOURCE_ADAPTER } from '../data/v4/sources';
 
 type CoveragePageProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -177,6 +178,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const manualMetricValidationSummary = getManualMetricValidationSummary();
   const scoringPipelineSummary = getMetricScoringPipelineSummary();
   const scoringPipelineReadiness = getScoringPipelineReadiness();
+  const newsIssueSourceReadiness = NEWS_ISSUE_SOURCE_ADAPTER.getReadiness();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -340,6 +342,47 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             <MetricCard
               label="invalid points"
               value={String(scoringPipelineSummary.invalidPoints)}
+            />
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              source adapter readiness
+            </p>
+            <h2 className="mt-2 text-2xl font-black">데이터 소스 연결 준비 상태</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              뉴스/이슈 데이터는 첫 source adapter로 구조만 준비되어 있습니다. 현재 외부 API나
+              DB와 연결되어 있지 않습니다. 기존 화면은 preview seed 기준으로 유지됩니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="source type"
+              value={newsIssueSourceReadiness.sourceType}
+            />
+            <MetricCard label="label" value={NEWS_ISSUE_SOURCE_ADAPTER.label} />
+            <MetricCard label="stage" value={newsIssueSourceReadiness.stage} />
+            <MetricCard
+              label="item count"
+              value={String(newsIssueSourceReadiness.itemCount)}
+            />
+            <MetricCard
+              label="valid item count"
+              value={String(newsIssueSourceReadiness.validItemCount)}
+            />
+            <MetricCard
+              label="error count"
+              value={String(newsIssueSourceReadiness.errorCount)}
+            />
+            <MetricCard
+              label="warning count"
+              value={String(newsIssueSourceReadiness.warningCount)}
+            />
+            <MetricCard
+              label="external connection"
+              value={newsIssueSourceReadiness.hasExternalConnection ? 'connected' : 'not connected'}
             />
           </div>
         </section>

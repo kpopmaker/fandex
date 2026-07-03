@@ -308,6 +308,12 @@ export default function MethodologyPage() {
               data는 별도 구조로 분리되어 있습니다. 0점은 유효한 지표 값이며, 데이터 없음과
               구분합니다.
             </p>
+            <p className="mt-4 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              향후 source data는 adapter를 통해 검증된 뒤 metric score pipeline에 연결될 수
+              있습니다. 뉴스/이슈 데이터는 첫 source adapter 대상으로 구조만 준비되어 있으며,
+              현재 공개 화면은 preview seed 기준입니다. 외부 source 연결 전에도 artistId,
+              source type, 날짜, score 형식을 검증할 수 있도록 설계합니다.
+            </p>
           </section>
 
           <DefinitionSection
