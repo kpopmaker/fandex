@@ -8,6 +8,7 @@ import {
 } from '../data/v4/charts/artistIndexChartData';
 import {
   FANDEX_METRIC_DEFINITIONS,
+  getManualMetricValidationSummary,
   getMetricSourceSummary,
 } from '../data/v4/metrics';
 
@@ -110,6 +111,7 @@ export default function MethodologyPage() {
   const variableDefinitions = getMethodologyVariableDefinitions();
   const metricDefinitions = FANDEX_METRIC_DEFINITIONS;
   const metricSourceSummary = getMetricSourceSummary();
+  const manualMetricValidationSummary = getManualMetricValidationSummary();
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070A12] dark:text-white">
@@ -283,6 +285,12 @@ export default function MethodologyPage() {
           <p className="mt-3 text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
             현재 {metricSourceSummary.previewSeedMetrics} / {metricSourceSummary.totalMetrics} 지표는 FANDEX MVP preview seed 기준입니다.
             향후 실제 데이터 연동 시 참고할 수 있는 출처 후보이며, 공식 순위가 아니라 흐름을 보기 위한 참고 지표입니다.
+          </p>
+          <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            현재 FANDEX는 preview seed를 기준으로 표시하며, 수동 입력 데이터와 향후 source
+            data를 분리할 수 있는 구조를 준비하고 있습니다. 수동 입력값은 artistId,
+            metricKey, month, value 기준으로 검증됩니다. 0점은 유효한 입력값이며, 데이터
+            없음과 구분합니다. 현재 수동 입력 검증 오류는 {manualMetricValidationSummary.errorCount}건입니다.
           </p>
         </section>
 

@@ -14,9 +14,12 @@ import {
   FANDEX_METRIC_DEFINITIONS,
   getAllMetricCoverageSummariesByMetric,
   getAllMetricSourceInfo,
+  getManualMetricCoverageSummary,
+  getManualMetricValidationSummary,
   getMetricCategoryLabel,
   getMetricCoverageSummary,
   getMetricSourceSummary,
+  type MetricDataReadiness,
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
 
@@ -67,6 +70,13 @@ const metricCoverageUsageLabels: Record<MetricCoverageLevel, string> = {
   medium: '자동 비교 사용 가능',
   low: '자동 비교 제한 가능',
   empty: '자동 비교 제한',
+};
+
+const manualMetricReadinessLabels: Record<MetricDataReadiness, string> = {
+  ready: '구조 준비 완료',
+  partial: '일부 확인 필요',
+  empty: '데이터 입력 전',
+  invalid: '검증 오류 확인 필요',
 };
 
 const groupFilters: Array<{ label: string; value: ArtistIndexGroupType }> = [
@@ -161,6 +171,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   );
   const metricSourceSummary = getMetricSourceSummary();
   const metricSourceInfo = getAllMetricSourceInfo();
+  const manualMetricCoverageSummary = getManualMetricCoverageSummary();
+  const manualMetricValidationSummary = getManualMetricValidationSummary();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -240,6 +252,42 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
           <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
             이 구조를 기준으로 이후 뉴스, 검색, 유튜브, 음원 데이터를 붙일 수
             있습니다. 현재는 실제 API/DB 연동 전 단계입니다.
+          </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              manual input readiness
+            </p>
+            <h2 className="mt-2 text-2xl font-black">수동 데이터 입력 준비 상태</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              현재는 preview seed 기반이며, 수동 입력 데이터는 별도 구조로 분리되어 있습니다.
+              0점은 유효한 입력값으로 처리합니다. artistId, metricKey, month가 일치하지 않는
+              값은 검증 단계에서 제외됩니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="manual data point"
+              value={String(manualMetricCoverageSummary.pointCount)}
+            />
+            <MetricCard
+              label="validation error"
+              value={String(manualMetricValidationSummary.errorCount)}
+            />
+            <MetricCard
+              label="validation warning"
+              value={String(manualMetricValidationSummary.warningCount)}
+            />
+            <MetricCard
+              label="current status"
+              value={manualMetricReadinessLabels[manualMetricValidationSummary.readiness]}
+            />
+          </div>
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            구조 준비 완료: 입력 단위는 artistId / metricKey / month / value이며, 현재 manual seed는
+            데이터 입력 전 상태입니다.
           </p>
         </section>
 
