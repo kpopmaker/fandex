@@ -353,8 +353,9 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             </p>
             <h2 className="mt-2 text-2xl font-black">데이터 소스 연결 준비 상태</h2>
             <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              뉴스/이슈 데이터는 첫 source adapter로 구조만 준비되어 있습니다. 현재 외부 API나
-              DB와 연결되어 있지 않습니다. 기존 화면은 preview seed 기준으로 유지됩니다.
+              뉴스/이슈 source seed 일부가 반영되어 있습니다. 현재 외부 API나 DB와 연결되어
+              있지 않으며, 기사 기반 seed item을 검증하는 단계입니다. 기존 화면은 preview seed
+              기준으로 유지됩니다.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
