@@ -24,7 +24,10 @@ import {
   type MetricDataReadiness,
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
-import { NEWS_ISSUE_SOURCE_ADAPTER } from '../data/v4/sources';
+import {
+  NEWS_ISSUE_SOURCE_ADAPTER,
+  getNewsIssueSourceCoverageSummary,
+} from '../data/v4/sources';
 
 type CoveragePageProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -108,6 +111,18 @@ function formatPercentage(value: number) {
   return `${Math.round(value * 100)}%`;
 }
 
+function formatOptionalIssueScore(value: number | null) {
+  return value === null ? '없음' : String(Math.round(value));
+}
+
+function formatCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts);
+
+  return entries.length > 0
+    ? entries.map(([key, count]) => `${key} ${count}`).join(' / ')
+    : '없음';
+}
+
 function parseCoverageStatus(value?: string | string[]) {
   const rawValue = Array.isArray(value) ? value[0] : value;
 
@@ -179,6 +194,7 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const scoringPipelineSummary = getMetricScoringPipelineSummary();
   const scoringPipelineReadiness = getScoringPipelineReadiness();
   const newsIssueSourceReadiness = NEWS_ISSUE_SOURCE_ADAPTER.getReadiness();
+  const newsIssueSourceCoverageSummary = getNewsIssueSourceCoverageSummary();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -388,6 +404,79 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               label="Warning count"
               value={String(newsIssueSourceReadiness.warningCount)}
             />
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              source seed coverage
+            </p>
+            <h2 className="mt-2 text-2xl font-black">뉴스/이슈 source seed 커버리지</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              현재 source seed는 일부 아티스트에만 반영되어 있습니다. 이 데이터는 외부 API 연결
+              없이 검증 가능한 seed item을 기준으로 표시됩니다. 기존 화면은 preview seed 기준으로
+              유지됩니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="total item count"
+              value={String(newsIssueSourceCoverageSummary.totalItemCount)}
+            />
+            <MetricCard
+              label="covered artist count"
+              value={String(newsIssueSourceCoverageSummary.coveredArtistCount)}
+            />
+            <MetricCard
+              label="category 분포"
+              value={formatCountMap(newsIssueSourceCoverageSummary.categoryCounts)}
+            />
+            <MetricCard
+              label="sentiment 분포"
+              value={formatCountMap(newsIssueSourceCoverageSummary.sentimentCounts)}
+            />
+          </div>
+          <div className="mt-5 overflow-x-auto">
+            <table className="w-full min-w-[920px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">artistId</th>
+                  <th className="border-b border-slate-200 p-3">source item count</th>
+                  <th className="border-b border-slate-200 p-3">평균 이슈 강도</th>
+                  <th className="border-b border-slate-200 p-3">최고 이슈 강도</th>
+                  <th className="border-b border-slate-200 p-3">최신 반영 날짜</th>
+                  <th className="border-b border-slate-200 p-3">주요 category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {newsIssueSourceCoverageSummary.artistSummaries.map((artist) => (
+                  <tr
+                    key={artist.artistId}
+                    className="font-bold text-slate-700 dark:text-slate-300"
+                  >
+                    <td className="border-b border-slate-100 p-3 font-mono font-black text-slate-950 dark:border-slate-800 dark:text-white">
+                      {artist.artistId}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                      {artist.itemCount}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                      {formatOptionalIssueScore(artist.averageIssueScore)}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                      {formatOptionalIssueScore(artist.maxIssueScore)}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                      {artist.latestPublishedDate ?? '없음'}
+                    </td>
+                    <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                      {artist.topCategory ?? '없음'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 

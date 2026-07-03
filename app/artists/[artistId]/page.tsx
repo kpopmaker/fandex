@@ -23,6 +23,7 @@ import {
   getLatestArtistMetricBreakdown,
   type ArtistMetricBreakdownItem,
 } from '../../data/v4/metrics';
+import { getNewsIssueSourceArtistSummary } from '../../data/v4/sources';
 
 type PageProps = {
   params: Promise<{
@@ -114,6 +115,18 @@ function formatMetricScore(value: number) {
   const clampedValue = Math.min(Math.max(Math.round(safeValue), 0), 100);
 
   return `${clampedValue}점`;
+}
+
+function formatOptionalIssueScore(value: number | null) {
+  return value === null ? '없음' : String(Math.round(value));
+}
+
+function formatCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts);
+
+  return entries.length > 0
+    ? entries.map(([key, count]) => `${key} ${count}`).join(' / ')
+    : '없음';
 }
 
 function formatWeight(value: number) {
@@ -265,6 +278,7 @@ export default async function ArtistDetailPage({
   const strongestVariables = getStrongestVariables(profile, 3);
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
   const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
+  const newsIssueSourceSummary = getNewsIssueSourceArtistSummary(profile.artistId);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -514,6 +528,100 @@ export default async function ArtistDetailPage({
           ) : (
             <p className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-7 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
               해당 지표는 아직 준비중입니다.
+            </p>
+          )}
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                source seed insight
+              </p>
+              <h2 className="mt-2 text-2xl font-black">뉴스/이슈 source seed 요약</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                이 섹션은 기사 기반 source seed를 아티스트별로 요약한 read-only 데이터입니다.
+                현재 FANDEX 포인트 계산에는 직접 반영하지 않습니다. 외부 API나 DB와 연결되어
+                있지 않습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              source seed
+            </span>
+          </div>
+
+          {newsIssueSourceSummary.itemCount > 0 ? (
+            <>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <MetricCard
+                  label="Source item count"
+                  value={String(newsIssueSourceSummary.itemCount)}
+                />
+                <MetricCard
+                  label="평균 이슈 강도"
+                  value={formatOptionalIssueScore(
+                    newsIssueSourceSummary.averageIssueScore,
+                  )}
+                />
+                <MetricCard
+                  label="최고 이슈 강도"
+                  value={formatOptionalIssueScore(newsIssueSourceSummary.maxIssueScore)}
+                />
+                <MetricCard
+                  label="최신 반영 날짜"
+                  value={newsIssueSourceSummary.latestPublishedDate ?? '없음'}
+                />
+                <MetricCard
+                  label="주요 category"
+                  value={newsIssueSourceSummary.topCategory ?? '없음'}
+                />
+                <MetricCard
+                  label="sentiment 분포"
+                  value={formatCountMap(newsIssueSourceSummary.sentimentCounts)}
+                />
+              </div>
+              <div className="mt-5 grid gap-3 lg:grid-cols-3">
+                {newsIssueSourceSummary.recentItems.map((item) => (
+                  <article
+                    key={item.sourceId}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+                  >
+                    <div className="flex flex-wrap gap-2 text-xs font-black text-cyan-700 dark:text-cyan-300">
+                      <span>{item.publishedDate}</span>
+                      <span>{item.sourceName ?? 'source seed'}</span>
+                    </div>
+                    <h3 className="mt-2 font-black text-slate-950 dark:text-white">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+                      {item.summary}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2 text-xs font-black">
+                      <span className="rounded-full bg-white px-3 py-1 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+                        {item.category}
+                      </span>
+                      <span className="rounded-full bg-white px-3 py-1 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+                        {item.sentiment}
+                      </span>
+                      <span className="rounded-full bg-cyan-100 px-3 py-1 text-cyan-800 dark:bg-cyan-400/10 dark:text-cyan-100">
+                        이슈 강도 {item.issueScore ?? '없음'}
+                      </span>
+                    </div>
+                    {item.sourceUrl ? (
+                      <Link
+                        href={item.sourceUrl}
+                        className="mt-4 inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
+                      >
+                        원문 보기
+                      </Link>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm font-bold leading-7 text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+              아직 이 아티스트의 news issue source seed가 없습니다.
             </p>
           )}
         </section>
