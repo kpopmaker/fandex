@@ -35,6 +35,10 @@ import {
   type FandexMetricDefinition,
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
+import {
+  getNewsIssueChartInsight,
+  type NewsIssueChartInsight,
+} from '../data/v4/sources';
 
 type ChartSearchParams = {
   artist?: string;
@@ -375,6 +379,18 @@ function formatPercentage(value: number) {
   return `${Math.round(value * 100)}%`;
 }
 
+function formatOptionalIssueScore(value: number | null) {
+  return value === null ? 'source seed 없음' : String(Math.round(value));
+}
+
+function formatCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts);
+
+  return entries.length === 0
+    ? 'source seed 없음'
+    : entries.map(([key, count]) => `${key} ${count}`).join(' / ');
+}
+
 function getLatestPoint(profile: ArtistIndexChartProfile) {
   return profile.history[profile.history.length - 1];
 }
@@ -658,6 +674,10 @@ export default async function ArtistIndexChartsPage({
   const selectedMetricCoverageSummary = getMetricCoverageSummaryByMetric(
     selectedMetric.key,
   );
+  const sourceInsight = getNewsIssueChartInsight(
+    baseProfile.artistId,
+    selectedMetric.key,
+  );
   const latestMetricBreakdown = getLatestArtistMetricBreakdown(
     baseProfile.artistId,
   );
@@ -901,6 +921,11 @@ export default async function ArtistIndexChartsPage({
             선택한 지표는 아래 자동 비교 흐름의 추천 기준으로도 사용됩니다. 0점은 유효한 지표 값으로 계산하며,
             선택 지표 데이터가 부족하면 자동 비교 흐름이 제한될 수 있습니다.
           </p>
+          <ChartSourceInsightPanel
+            artistName={baseProfile.artistName}
+            insight={sourceInsight}
+            metricLabel={selectedMetric.label}
+          />
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -1317,6 +1342,83 @@ function SelectedArtistMetricSummary({
       <p className="mt-4 text-xs font-bold leading-6 text-slate-500">
         공식 평가가 아니라 FANDEX MVP preview seed 기준의 반응 점수입니다.
       </p>
+    </article>
+  );
+}
+
+function ChartSourceInsightPanel({
+  artistName,
+  insight,
+  metricLabel,
+}: {
+  artistName: string;
+  insight: NewsIssueChartInsight;
+  metricLabel: string;
+}) {
+  return (
+    <article className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+            source seed insight
+          </p>
+          <h3 className="mt-2 text-xl font-black text-slate-950">
+            source seed 기반 차트 해석 보조 정보
+          </h3>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
+          read-only
+        </span>
+      </div>
+
+      {insight.hasEvidence ? (
+        <>
+          <p className="mt-4 text-sm font-bold leading-7 text-slate-600">
+            {insight.displayNote} 현재 FANDEX 포인트 계산에는 직접 반영하지
+            않습니다. 외부 API나 DB와 연결되어 있지 않습니다.
+          </p>
+          <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <MetricCard label="선택 아티스트" value={artistName} />
+            <MetricCard label="선택 지표 이름" value={metricLabel} />
+            <MetricCard
+              label="연결된 source item 수"
+              value={`${insight.itemCount}개`}
+            />
+            <MetricCard
+              label="평균 이슈 강도"
+              value={formatOptionalIssueScore(insight.averageIssueScore)}
+            />
+            <MetricCard
+              label="최고 이슈 강도"
+              value={formatOptionalIssueScore(insight.maxIssueScore)}
+            />
+            <MetricCard
+              label="최신 반영 날짜"
+              value={insight.latestPublishedDate ?? 'source seed 없음'}
+            />
+            <MetricCard
+              label="category 분포"
+              value={formatCountMap(insight.categoryCounts)}
+            />
+            <MetricCard
+              label="sentiment 분포"
+              value={formatCountMap(insight.sentimentCounts)}
+            />
+          </div>
+          <p className="mt-4 rounded-xl border border-cyan-100 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+            {insight.interpretationSummary}
+          </p>
+          <p className="mt-3 text-xs font-bold leading-6 text-slate-500">
+            개별 source item 목록은 아티스트 상세의 source seed 요약에서 확인할 수 있습니다.
+          </p>
+        </>
+      ) : (
+        <p className="mt-4 rounded-xl border border-slate-200 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+          현재 선택한 아티스트와 지표에 연결된 source seed 해석 근거는 없습니다.
+          차트 값은 기존 preview seed 기준으로 표시됩니다. 이 보조 정보는
+          FANDEX 포인트 계산에는 직접 반영하지 않습니다.
+        </p>
+      )}
     </article>
   );
 }

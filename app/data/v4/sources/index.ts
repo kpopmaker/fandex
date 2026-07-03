@@ -6,3 +6,4 @@ export * from './sourceAdapterTypes';
 export * from './newsIssueSourceAdapter';
 export * from './newsIssueSourceInsights';
 export * from './newsIssueMetricInterpretation';
+export * from './newsIssueChartInsight';

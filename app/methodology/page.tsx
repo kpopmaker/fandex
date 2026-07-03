@@ -327,7 +327,10 @@ export default function MethodologyPage() {
                 계산에는 직접 반영하지 않습니다. 지표 해석 근거는 source category,
                 sentiment, issueScore, publishedDate를 기준으로 요약됩니다. 개별 source
                 item 목록은 아티스트 상세의 source seed 요약에서 확인하고, 지표 해석
-                근거는 중복을 줄이기 위해 요약 통계 중심으로 표시합니다.
+                근거는 중복을 줄이기 위해 요약 통계 중심으로 표시합니다. /charts에서는
+                선택 아티스트와 선택 지표 기준으로 source seed 요약을 차트 해석 보조
+                정보로 표시합니다. 이 정보는 차트 값을 바꾸지 않으며, FANDEX 포인트
+                계산에도 직접 반영하지 않습니다.
               </p>
             </div>
           </section>
