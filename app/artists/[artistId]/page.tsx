@@ -398,7 +398,8 @@ export default async function ArtistDetailPage({
               <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
                 이 해석 근거는 기사 기반 source seed를 지표별로 분류한 참고 정보입니다.
                 현재 FANDEX 포인트 계산에는 직접 반영하지 않습니다. 외부 API나 DB와
-                연결되어 있지 않습니다.
+                연결되어 있지 않습니다. 중복을 줄이기 위해 개별 기사/source item 목록은
+                위의 뉴스/이슈 source seed 요약에서만 확인할 수 있습니다.
               </p>
             </div>
             <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
@@ -457,38 +458,6 @@ export default async function ArtistDetailPage({
                         label="sentiment 분포"
                         value={formatCountMap(evidence.sentimentCounts)}
                       />
-                    </div>
-
-                    <div className="mt-4 space-y-3">
-                      {evidence.evidenceItems.map((item) => (
-                        <div
-                          key={item.sourceId}
-                          className="rounded-xl bg-white p-3 dark:bg-slate-950"
-                        >
-                          <div className="flex flex-wrap gap-2 text-xs font-black text-cyan-700 dark:text-cyan-300">
-                            <span>{item.publishedDate}</span>
-                            <span>{item.sourceName ?? 'source seed'}</span>
-                          </div>
-                          <p className="mt-2 text-sm font-black text-slate-950 dark:text-white">
-                            {item.title}
-                          </p>
-                          <div className="mt-2 flex flex-wrap gap-2 text-xs font-black text-slate-600 dark:text-slate-300">
-                            <span>{item.category}</span>
-                            <span>{item.sentiment}</span>
-                            <span>
-                              이슈 강도 {item.issueScore ?? '없음'}
-                            </span>
-                          </div>
-                          {item.sourceUrl ? (
-                            <Link
-                              href={item.sourceUrl}
-                              className="mt-3 inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
-                            >
-                              원문 보기
-                            </Link>
-                          ) : null}
-                        </div>
-                      ))}
                     </div>
                   </article>
                 );
