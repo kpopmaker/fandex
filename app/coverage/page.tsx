@@ -26,6 +26,7 @@ import {
 } from '../data/v4/metrics';
 import {
   NEWS_ISSUE_SOURCE_ADAPTER,
+  getNewsIssueMetricInterpretationCoverage,
   getNewsIssueSourceCoverageSummary,
 } from '../data/v4/sources';
 
@@ -195,6 +196,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const scoringPipelineReadiness = getScoringPipelineReadiness();
   const newsIssueSourceReadiness = NEWS_ISSUE_SOURCE_ADAPTER.getReadiness();
   const newsIssueSourceCoverageSummary = getNewsIssueSourceCoverageSummary();
+  const newsIssueMetricInterpretationCoverage =
+    getNewsIssueMetricInterpretationCoverage();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -414,9 +417,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             </p>
             <h2 className="mt-2 text-2xl font-black">뉴스/이슈 source seed 커버리지</h2>
             <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              현재 source seed는 일부 아티스트에만 반영되어 있습니다. 이 데이터는 외부 API 연결
-              없이 검증 가능한 seed item을 기준으로 표시됩니다. 기존 화면은 preview seed 기준으로
-              유지됩니다.
+              source seed는 현재 read-only 해석 근거로만 사용됩니다. FANDEX 포인트
+              계산에는 직접 반영하지 않습니다. 외부 API나 DB와 연결되어 있지 않습니다.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -429,12 +431,32 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
               value={String(newsIssueSourceCoverageSummary.coveredArtistCount)}
             />
             <MetricCard
+              label="External connection"
+              value={String(newsIssueSourceReadiness.hasExternalConnection)}
+            />
+            <MetricCard
+              label="Has seed data"
+              value={String(newsIssueSourceReadiness.hasSeedData)}
+            />
+            <MetricCard
               label="category 분포"
               value={formatCountMap(newsIssueSourceCoverageSummary.categoryCounts)}
             />
             <MetricCard
               label="sentiment 분포"
               value={formatCountMap(newsIssueSourceCoverageSummary.sentimentCounts)}
+            />
+            <MetricCard
+              label="covered metric count"
+              value={String(
+                newsIssueMetricInterpretationCoverage.coveredMetricCount,
+              )}
+            />
+            <MetricCard
+              label="metric evidence count"
+              value={formatCountMap(
+                newsIssueMetricInterpretationCoverage.metricEvidenceCounts,
+              )}
             />
           </div>
           <div className="mt-5 overflow-x-auto">
@@ -477,6 +499,55 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="mt-6">
+            <h3 className="text-base font-black text-slate-950 dark:text-white">
+              지표 해석 연결 상태
+            </h3>
+            <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[860px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">artistId</th>
+                  <th className="border-b border-slate-200 p-3">
+                    covered metric count
+                  </th>
+                  <th className="border-b border-slate-200 p-3">
+                    total evidence item count
+                  </th>
+                  <th className="border-b border-slate-200 p-3">
+                    metricKey list
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {newsIssueMetricInterpretationCoverage.artistSummaries.map(
+                  (artist) => (
+                    <tr
+                      key={artist.artistId}
+                      className="font-bold text-slate-700 dark:text-slate-300"
+                    >
+                      <td className="border-b border-slate-100 p-3 font-mono font-black text-slate-950 dark:border-slate-800 dark:text-white">
+                        {artist.artistId}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {artist.coveredMetricCount}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {artist.totalEvidenceItemCount}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                        {artist.metricEvidence
+                          .map((evidence) => evidence.metricKey)
+                          .join(' / ') || '없음'}
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+            </div>
           </div>
         </section>
 

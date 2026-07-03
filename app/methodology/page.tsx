@@ -323,7 +323,11 @@ export default function MethodologyPage() {
                 4차에서는 source seed를 먼저 read-only 인사이트로 노출한 뒤, 이후 단계에서
                 scoring pipeline 연결 여부를 검토합니다. 아티스트 상세의 source seed 요약은
                 FANDEX 포인트 계산값이 아니라, 기사 기반 seed item의 분포를 보여주는 참고
-                정보입니다.
+                정보입니다. source seed는 먼저 지표 해석 근거로 연결되며, FANDEX 포인트
+                계산에는 직접 반영하지 않습니다. 지표 해석 근거는 source category,
+                sentiment, issueScore, publishedDate를 기준으로 요약됩니다. 개별 source
+                item 목록은 아티스트 상세의 source seed 요약에서 확인하고, 지표 해석
+                근거는 중복을 줄이기 위해 요약 통계 중심으로 표시합니다.
               </p>
             </div>
           </section>
