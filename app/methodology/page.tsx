@@ -314,6 +314,15 @@ export default function MethodologyPage() {
               있으며, 현재는 외부 API 연결 없이 검증 구조를 확인하는 단계입니다. source seed는
               artistId, source type, 날짜, score 형식을 검증합니다.
             </p>
+            <div className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+              <h3 className="text-base font-black">Source seed 검증 단계</h3>
+              <p className="mt-2">
+                뉴스/이슈 source seed 일부가 반영되어 있으며, 현재는 외부 API 연결 없이 seed
+                item을 검증하는 단계입니다. 검증 기준은 artistId, source type, publishedDate,
+                sourceUrl, issueScore입니다. 0점은 유효한 값이며 데이터 없음과 구분합니다.
+                향후 source data는 scoring pipeline과 연결할 수 있습니다.
+              </p>
+            </div>
           </section>
 
           <DefinitionSection

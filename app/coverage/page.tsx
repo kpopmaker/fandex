@@ -353,37 +353,40 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             </p>
             <h2 className="mt-2 text-2xl font-black">데이터 소스 연결 준비 상태</h2>
             <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-              뉴스/이슈 source seed 일부가 반영되어 있습니다. 현재 외부 API나 DB와 연결되어
-              있지 않으며, 기사 기반 seed item을 검증하는 단계입니다. 기존 화면은 preview seed
-              기준으로 유지됩니다.
+              뉴스/이슈 source seed {newsIssueSourceReadiness.itemCount}개가 반영되어 있습니다.
+              현재 외부 API나 DB와 연결되어 있지 않습니다. 기존 화면은 preview seed 기준으로
+              유지됩니다.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <MetricCard
-              label="source type"
-              value={newsIssueSourceReadiness.sourceType}
+              label="Source type"
+              value="뉴스/이슈 데이터"
             />
-            <MetricCard label="label" value={NEWS_ISSUE_SOURCE_ADAPTER.label} />
-            <MetricCard label="stage" value={newsIssueSourceReadiness.stage} />
+            <MetricCard label="Stage" value={newsIssueSourceReadiness.stage} />
             <MetricCard
-              label="item count"
+              label="Source item count"
               value={String(newsIssueSourceReadiness.itemCount)}
             />
             <MetricCard
-              label="valid item count"
+              label="Has seed data"
+              value={String(newsIssueSourceReadiness.hasSeedData)}
+            />
+            <MetricCard
+              label="External connection"
+              value={String(newsIssueSourceReadiness.hasExternalConnection)}
+            />
+            <MetricCard
+              label="Valid item count"
               value={String(newsIssueSourceReadiness.validItemCount)}
             />
             <MetricCard
-              label="error count"
+              label="Error count"
               value={String(newsIssueSourceReadiness.errorCount)}
             />
             <MetricCard
-              label="warning count"
+              label="Warning count"
               value={String(newsIssueSourceReadiness.warningCount)}
-            />
-            <MetricCard
-              label="external connection"
-              value={newsIssueSourceReadiness.hasExternalConnection ? 'connected' : 'not connected'}
             />
           </div>
         </section>
