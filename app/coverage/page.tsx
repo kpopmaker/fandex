@@ -19,6 +19,8 @@ import {
   getMetricCategoryLabel,
   getMetricCoverageSummary,
   getMetricSourceSummary,
+  getMetricScoringPipelineSummary,
+  getScoringPipelineReadiness,
   type MetricDataReadiness,
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
@@ -173,6 +175,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const metricSourceInfo = getAllMetricSourceInfo();
   const manualMetricCoverageSummary = getManualMetricCoverageSummary();
   const manualMetricValidationSummary = getManualMetricValidationSummary();
+  const scoringPipelineSummary = getMetricScoringPipelineSummary();
+  const scoringPipelineReadiness = getScoringPipelineReadiness();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -289,6 +293,55 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             구조 준비 완료: 입력 단위는 artistId / metricKey / month / value이며, 현재 manual seed는
             데이터 입력 전 상태입니다.
           </p>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              scoring pipeline
+            </p>
+            <h2 className="mt-2 text-2xl font-black">점수 계산 파이프라인 상태</h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              현재 화면은 preview seed를 기준으로 표시됩니다. manual input 구조는 준비되어
+              있지만, 현재 입력 데이터는 별도로 분리되어 있습니다. 향후 source data가 연결되면
+              같은 파이프라인에서 검증 후 점수화할 수 있습니다. 0점은 유효한 지표 값으로
+              처리합니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="preview seed points"
+              value={String(scoringPipelineSummary.previewSeedPoints)}
+            />
+            <MetricCard
+              label="manual input points"
+              value={String(scoringPipelineSummary.manualInputPoints)}
+            />
+            <MetricCard
+              label="external source points"
+              value={String(scoringPipelineSummary.externalSourcePoints)}
+            />
+            <MetricCard
+              label="readiness"
+              value={manualMetricReadinessLabels[scoringPipelineReadiness]}
+            />
+            <MetricCard
+              label="ready points"
+              value={String(scoringPipelineSummary.readyPoints)}
+            />
+            <MetricCard
+              label="zero points"
+              value={String(scoringPipelineSummary.zeroPoints)}
+            />
+            <MetricCard
+              label="missing points"
+              value={String(scoringPipelineSummary.missingPoints)}
+            />
+            <MetricCard
+              label="invalid points"
+              value={String(scoringPipelineSummary.invalidPoints)}
+            />
+          </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">

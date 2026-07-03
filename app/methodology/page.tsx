@@ -295,6 +295,21 @@ export default function MethodologyPage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-3">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950 lg:col-span-3">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              data processing flow
+            </p>
+            <h2 className="mt-2 text-2xl font-black">데이터 처리 흐름</h2>
+            <p className="mt-3 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              FANDEX 지표 값은 preview seed, manual input, future source data를 구분해
+              처리할 수 있도록 설계되어 있습니다. 입력값은 artistId, metricKey, month 기준으로
+              검증됩니다. 검증된 값은 지표 점수와 반영 비중을 거쳐 FANDEX 포인트 해석에
+              사용됩니다. 현재 공개 화면은 preview seed 기반이며, manual input과 future source
+              data는 별도 구조로 분리되어 있습니다. 0점은 유효한 지표 값이며, 데이터 없음과
+              구분합니다.
+            </p>
+          </section>
+
           <DefinitionSection
             eyebrow="coverageStatus"
             title="커버리지 상태"
