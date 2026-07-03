@@ -26,6 +26,7 @@ import {
 } from '../data/v4/metrics';
 import {
   NEWS_ISSUE_SOURCE_ADAPTER,
+  getNewsIssueMetricInterpretationCoverage,
   getNewsIssueSourceCoverageSummary,
 } from '../data/v4/sources';
 
@@ -195,6 +196,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
   const scoringPipelineReadiness = getScoringPipelineReadiness();
   const newsIssueSourceReadiness = NEWS_ISSUE_SOURCE_ADAPTER.getReadiness();
   const newsIssueSourceCoverageSummary = getNewsIssueSourceCoverageSummary();
+  const newsIssueMetricInterpretationCoverage =
+    getNewsIssueMetricInterpretationCoverage();
   const monthlyPointCount = Math.round(
     metricSummary.metricPointCount / Math.max(metricSummary.monthCount, 1),
   );
@@ -475,6 +478,91 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="mb-5">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+              source seed metric interpretation
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              뉴스/이슈 source seed 지표 해석 커버리지
+            </h2>
+            <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              이 표는 source seed가 어떤 지표 해석에 연결될 수 있는지 보여줍니다.
+              현재 FANDEX 포인트 계산에는 직접 반영하지 않습니다. source seed는
+              read-only 해석 근거로만 사용됩니다.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              label="total source item count"
+              value={String(
+                newsIssueMetricInterpretationCoverage.totalSourceItemCount,
+              )}
+            />
+            <MetricCard
+              label="covered artist count"
+              value={String(
+                newsIssueMetricInterpretationCoverage.coveredArtistCount,
+              )}
+            />
+            <MetricCard
+              label="covered metric count"
+              value={String(
+                newsIssueMetricInterpretationCoverage.coveredMetricCount,
+              )}
+            />
+            <MetricCard
+              label="metric evidence count"
+              value={formatCountMap(
+                newsIssueMetricInterpretationCoverage.metricEvidenceCounts,
+              )}
+            />
+          </div>
+          <div className="mt-5 overflow-x-auto">
+            <table className="w-full min-w-[860px] border-separate border-spacing-0 text-left text-sm">
+              <thead>
+                <tr className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+                  <th className="border-b border-slate-200 p-3">artistId</th>
+                  <th className="border-b border-slate-200 p-3">
+                    covered metric count
+                  </th>
+                  <th className="border-b border-slate-200 p-3">
+                    total evidence item count
+                  </th>
+                  <th className="border-b border-slate-200 p-3">
+                    metricKey list
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {newsIssueMetricInterpretationCoverage.artistSummaries.map(
+                  (artist) => (
+                    <tr
+                      key={artist.artistId}
+                      className="font-bold text-slate-700 dark:text-slate-300"
+                    >
+                      <td className="border-b border-slate-100 p-3 font-mono font-black text-slate-950 dark:border-slate-800 dark:text-white">
+                        {artist.artistId}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {artist.coveredMetricCount}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono dark:border-slate-800">
+                        {artist.totalEvidenceItemCount}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 dark:border-slate-800">
+                        {artist.metricEvidence
+                          .map((evidence) => evidence.metricKey)
+                          .join(' / ') || '없음'}
+                      </td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </div>

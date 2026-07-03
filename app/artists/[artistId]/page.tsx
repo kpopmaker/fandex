@@ -23,7 +23,10 @@ import {
   getLatestArtistMetricBreakdown,
   type ArtistMetricBreakdownItem,
 } from '../../data/v4/metrics';
-import { getNewsIssueSourceArtistSummary } from '../../data/v4/sources';
+import {
+  getNewsIssueMetricEvidenceSummaryForArtist,
+  getNewsIssueSourceArtistSummary,
+} from '../../data/v4/sources';
 
 type PageProps = {
   params: Promise<{
@@ -279,6 +282,8 @@ export default async function ArtistDetailPage({
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
   const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
   const newsIssueSourceSummary = getNewsIssueSourceArtistSummary(profile.artistId);
+  const newsIssueMetricEvidenceSummary =
+    getNewsIssueMetricEvidenceSummaryForArtist(profile.artistId);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -379,6 +384,121 @@ export default async function ArtistDetailPage({
               <InfoRow label="최근 메모" value={latestPoint.note} />
             </div>
           </section>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                metric interpretation evidence
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                source seed 기반 지표 해석 근거
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                이 해석 근거는 기사 기반 source seed를 지표별로 분류한 참고 정보입니다.
+                현재 FANDEX 포인트 계산에는 직접 반영하지 않습니다. 외부 API나 DB와
+                연결되어 있지 않습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              read-only
+            </span>
+          </div>
+
+          {newsIssueMetricEvidenceSummary.metricEvidence.length > 0 ? (
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              {newsIssueMetricEvidenceSummary.metricEvidence.map((evidence) => {
+                const metricItem = metricBreakdown?.items.find(
+                  (item) => item.key === evidence.metricKey,
+                );
+
+                return (
+                  <article
+                    key={evidence.metricKey}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60"
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <p className="text-sm font-black text-slate-950 dark:text-white">
+                          {metricItem?.label ?? evidence.metricKey}
+                        </p>
+                        <p className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-300">
+                          {evidence.interpretationLabel}
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-cyan-700 shadow-sm dark:bg-slate-950 dark:text-cyan-300">
+                        {evidence.itemCount} source seed
+                      </span>
+                    </div>
+
+                    <p className="mt-4 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+                      {evidence.interpretationSummary}
+                    </p>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <MetricMini
+                        label="평균 이슈 강도"
+                        value={formatOptionalIssueScore(evidence.averageIssueScore)}
+                      />
+                      <MetricMini
+                        label="최고 이슈 강도"
+                        value={formatOptionalIssueScore(evidence.maxIssueScore)}
+                      />
+                      <MetricMini
+                        label="최신 반영 날짜"
+                        value={evidence.latestPublishedDate ?? '없음'}
+                      />
+                      <MetricMini
+                        label="category 분포"
+                        value={formatCountMap(evidence.categoryCounts)}
+                      />
+                      <MetricMini
+                        label="sentiment 분포"
+                        value={formatCountMap(evidence.sentimentCounts)}
+                      />
+                    </div>
+
+                    <div className="mt-4 space-y-3">
+                      {evidence.evidenceItems.map((item) => (
+                        <div
+                          key={item.sourceId}
+                          className="rounded-xl bg-white p-3 dark:bg-slate-950"
+                        >
+                          <div className="flex flex-wrap gap-2 text-xs font-black text-cyan-700 dark:text-cyan-300">
+                            <span>{item.publishedDate}</span>
+                            <span>{item.sourceName ?? 'source seed'}</span>
+                          </div>
+                          <p className="mt-2 text-sm font-black text-slate-950 dark:text-white">
+                            {item.title}
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs font-black text-slate-600 dark:text-slate-300">
+                            <span>{item.category}</span>
+                            <span>{item.sentiment}</span>
+                            <span>
+                              이슈 강도 {item.issueScore ?? '없음'}
+                            </span>
+                          </div>
+                          {item.sourceUrl ? (
+                            <Link
+                              href={item.sourceUrl}
+                              className="mt-3 inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
+                            >
+                              원문 보기
+                            </Link>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm font-bold leading-7 text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+              아직 이 지표에 연결된 source seed 해석 근거가 없습니다.
+            </p>
+          )}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
