@@ -5,3 +5,7 @@ export * from './fandexMetricMonths';
 export * from './artistMonthlyMetricSeed';
 export * from './artistMonthlyMetricHelpers';
 export * from './metricDataCoverage';
+export * from './manualMetricDataTypes';
+export * from './manualMetricSeed';
+export * from './manualMetricValidators';
+export * from './manualMetricHelpers';
