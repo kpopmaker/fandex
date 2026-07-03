@@ -9,3 +9,5 @@ export * from './manualMetricDataTypes';
 export * from './manualMetricSeed';
 export * from './manualMetricValidators';
 export * from './manualMetricHelpers';
+export * from './metricScoringPipelineTypes';
+export * from './metricScoringPipeline';
