@@ -320,7 +320,10 @@ export default function MethodologyPage() {
                 뉴스/이슈 source seed 일부가 반영되어 있으며, 현재는 외부 API 연결 없이 seed
                 item을 검증하는 단계입니다. 검증 기준은 artistId, source type, publishedDate,
                 sourceUrl, issueScore입니다. 0점은 유효한 값이며 데이터 없음과 구분합니다.
-                향후 source data는 scoring pipeline과 연결할 수 있습니다.
+                4차에서는 source seed를 먼저 read-only 인사이트로 노출한 뒤, 이후 단계에서
+                scoring pipeline 연결 여부를 검토합니다. 아티스트 상세의 source seed 요약은
+                FANDEX 포인트 계산값이 아니라, 기사 기반 seed item의 분포를 보여주는 참고
+                정보입니다.
               </p>
             </div>
           </section>
