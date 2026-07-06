@@ -1,6 +1,10 @@
 import type { FandexVariableKey } from '../metrics/fandexMetricTypes';
 import { getNewsIssueMetricEvidenceForArtist } from './newsIssueMetricInterpretation';
-import type { NewsIssueSourceItem } from './newsIssueSourceTypes';
+import type {
+  NewsIssueCategory,
+  NewsIssueSentiment,
+  NewsIssueSourceItem,
+} from './newsIssueSourceTypes';
 
 export type NewsIssueChartEvidenceItem = Pick<
   NewsIssueSourceItem,
@@ -26,8 +30,8 @@ export type NewsIssueChartInsight = {
   latestPublishedDate: string | null;
   categoryCounts: Record<string, number>;
   sentimentCounts: Record<string, number>;
-  dominantCategory: string | null;
-  dominantSentiment: string | null;
+  dominantCategory: NewsIssueCategory | null;
+  dominantSentiment: NewsIssueSentiment | null;
   evidenceItems: NewsIssueChartEvidenceItem[];
   sourceCoverageLabel: string;
   sourceEvidenceSummary: string;
@@ -35,8 +39,12 @@ export type NewsIssueChartInsight = {
   displayNote: string;
 };
 
-function getTopCountKey(counts: Record<string, number>) {
-  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+function getTopCountKey<T extends string>(counts: Record<string, number>) {
+  return (
+    Object.entries(counts).sort((left, right) => right[1] - left[1])[0]?.[0] as
+      | T
+      | undefined
+  ) ?? null;
 }
 
 function getSourceCoverageLabel(itemCount: number) {
@@ -73,12 +81,12 @@ function getSourceEvidenceSummary({
   averageIssueScore,
 }: {
   itemCount: number;
-  dominantCategory: string | null;
-  dominantSentiment: string | null;
+  dominantCategory: NewsIssueCategory | null;
+  dominantSentiment: NewsIssueSentiment | null;
   averageIssueScore: number | null;
 }) {
   if (itemCount === 0) {
-    return '선택한 차트 지표와 직접 연결된 기사 기반 source seed가 아직 없습니다.';
+    return '선택한 차트 지표에 직접 연결된 기사 기반 source seed가 아직 없습니다.';
   }
 
   const categoryText = dominantCategory
@@ -87,11 +95,12 @@ function getSourceEvidenceSummary({
   const sentimentText = dominantSentiment
     ? `주요 sentiment는 ${dominantSentiment}`
     : '주요 sentiment는 미분류';
-  const scoreText = averageIssueScore === null
-    ? '평균 이슈 강도는 아직 계산하지 않습니다'
-    : `평균 이슈 강도는 ${Math.round(averageIssueScore)}입니다`;
+  const scoreText =
+    averageIssueScore === null
+      ? '평균 이슈 강도는 아직 계산되지 않았습니다'
+      : `평균 이슈 강도는 ${Math.round(averageIssueScore)}입니다`;
 
-  return `${itemCount}개 source seed가 선택 지표 해석에 연결됩니다. ${categoryText}, ${sentimentText}이며 ${scoreText}.`;
+  return `${itemCount}개 source seed가 선택 지표 해석에 연결됩니다. ${categoryText}, ${sentimentText}이며 ${scoreText}. 최신 preview는 최대 3개까지 표시합니다.`;
 }
 
 export function getNewsIssueChartInsight(
@@ -99,8 +108,12 @@ export function getNewsIssueChartInsight(
   metricKey: FandexVariableKey,
 ): NewsIssueChartInsight {
   const evidence = getNewsIssueMetricEvidenceForArtist(artistId, metricKey);
-  const dominantCategory = getTopCountKey(evidence.categoryCounts);
-  const dominantSentiment = getTopCountKey(evidence.sentimentCounts);
+  const dominantCategory = getTopCountKey<NewsIssueCategory>(
+    evidence.categoryCounts,
+  );
+  const dominantSentiment = getTopCountKey<NewsIssueSentiment>(
+    evidence.sentimentCounts,
+  );
 
   return {
     artistId: evidence.artistId,

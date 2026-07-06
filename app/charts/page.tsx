@@ -37,7 +37,9 @@ import {
 } from '../data/v4/metrics';
 import {
   getNewsIssueChartInsight,
+  type NewsIssueCategory,
   type NewsIssueChartInsight,
+  type NewsIssueSentiment,
 } from '../data/v4/sources';
 
 type ChartSearchParams = {
@@ -75,6 +77,28 @@ const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
   tracked: '지속 추적',
   partial: '일부 반영',
   preview: '미리보기',
+};
+
+const newsIssueCategoryLabels: Record<NewsIssueCategory, string> = {
+  comeback: '컴백',
+  performance: '무대/퍼포먼스',
+  chart: '차트',
+  album: '음반',
+  global: '글로벌',
+  brand: '브랜드',
+  festival: '페스티벌',
+  broadcast: '방송',
+  fan: '팬덤',
+  risk: '리스크',
+  general: '일반',
+};
+
+const newsIssueSentimentLabels: Record<NewsIssueSentiment, string> = {
+  positive: '긍정',
+  neutral: '중립',
+  negative: '부정',
+  mixed: '혼재',
+  unknown: '미확인',
 };
 
 const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
@@ -389,6 +413,20 @@ function formatCountMap(counts: Record<string, number>) {
   return entries.length === 0
     ? 'source seed 없음'
     : entries.map(([key, count]) => `${key} ${count}`).join(' / ');
+}
+
+function formatNewsIssueCategory(category: NewsIssueCategory | null) {
+  return category ? newsIssueCategoryLabels[category] : 'source seed 없음';
+}
+
+function formatNewsIssueSentiment(sentiment: NewsIssueSentiment | null) {
+  return sentiment ? newsIssueSentimentLabels[sentiment] : 'source seed 없음';
+}
+
+function formatEvidenceIssueScore(value: number | undefined) {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? String(Math.round(value))
+    : '점수 없음';
 }
 
 function getLatestPoint(profile: ArtistIndexChartProfile) {
@@ -1355,6 +1393,8 @@ function ChartSourceInsightPanel({
   insight: NewsIssueChartInsight;
   metricLabel: string;
 }) {
+  const hasEvidencePreview = insight.evidenceItems.length > 0;
+
   return (
     <article className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
@@ -1366,9 +1406,14 @@ function ChartSourceInsightPanel({
             source seed 기반 차트 해석 보조 정보
           </h3>
         </div>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
-          read-only
-        </span>
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700 shadow-sm">
+            {insight.sourceCoverageLabel}
+          </span>
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
+            read-only
+          </span>
+        </div>
       </div>
 
       {insight.hasEvidence ? (
@@ -1404,10 +1449,83 @@ function ChartSourceInsightPanel({
               label="sentiment 분포"
               value={formatCountMap(insight.sentimentCounts)}
             />
+            <MetricCard
+              label="대표 category"
+              value={formatNewsIssueCategory(insight.dominantCategory)}
+            />
+            <MetricCard
+              label="대표 sentiment"
+              value={formatNewsIssueSentiment(insight.dominantSentiment)}
+            />
           </div>
-          <p className="mt-4 rounded-xl border border-cyan-100 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
-            {insight.interpretationSummary}
-          </p>
+          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            <p className="rounded-xl border border-cyan-100 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+              {insight.interpretationSummary}
+            </p>
+            <p className="rounded-xl border border-cyan-100 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+              {insight.sourceEvidenceSummary}
+            </p>
+          </div>
+          {hasEvidencePreview ? (
+            <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+                    source seed preview
+                  </p>
+                  <h4 className="mt-1 text-base font-black text-slate-950">
+                    연결 source seed preview
+                  </h4>
+                </div>
+                <span className="text-xs font-black text-slate-500">
+                  최대 3개 읽기 전용
+                </span>
+              </div>
+              <div className="mt-4 grid gap-3">
+                {insight.evidenceItems.map((item) => (
+                  <div
+                    key={item.sourceId}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+                      <div>
+                        <p className="text-sm font-black text-slate-950">
+                          {item.title}
+                        </p>
+                        <p className="mt-1 text-xs font-bold text-slate-500">
+                          {item.publishedDate} · {item.sourceName ?? '출처 미확인'}
+                        </p>
+                      </div>
+                      {item.sourceUrl ? (
+                        <a
+                          href={item.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-black text-cyan-700 underline decoration-cyan-200 underline-offset-4"
+                        >
+                          원문 보기
+                        </a>
+                      ) : null}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
+                        {newsIssueCategoryLabels[item.category]}
+                      </span>
+                      <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
+                        {newsIssueSentimentLabels[item.sentiment]}
+                      </span>
+                      <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
+                        issueScore {formatEvidenceIssueScore(item.issueScore)}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-sm font-bold leading-6 text-slate-600">
+                      {item.summary ?? item.note ?? '요약 또는 메모가 없습니다.'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
           <p className="mt-3 text-xs font-bold leading-6 text-slate-500">
             개별 source item 목록은 아티스트 상세의 source seed 요약에서 확인할 수 있습니다.
           </p>
