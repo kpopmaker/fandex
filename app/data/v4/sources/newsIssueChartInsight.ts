@@ -18,7 +18,10 @@ export type NewsIssueChartEvidenceItem = Pick<
   | 'sentiment'
   | 'issueScore'
   | 'note'
->;
+> & {
+  categoryLabel: string;
+  sentimentLabel: string;
+};
 
 export type NewsIssueChartInsight = {
   artistId: string;
@@ -31,13 +34,45 @@ export type NewsIssueChartInsight = {
   categoryCounts: Record<string, number>;
   sentimentCounts: Record<string, number>;
   dominantCategory: NewsIssueCategory | null;
+  dominantCategoryLabel: string | null;
   dominantSentiment: NewsIssueSentiment | null;
+  dominantSentimentLabel: string | null;
   evidenceItems: NewsIssueChartEvidenceItem[];
   sourceCoverageLabel: string;
   sourceEvidenceSummary: string;
   interpretationSummary: string;
   displayNote: string;
 };
+
+const newsIssueCategoryLabels: Record<NewsIssueCategory, string> = {
+  album: '앨범/발매',
+  brand: '브랜드',
+  broadcast: '방송',
+  chart: '차트',
+  comeback: '컴백',
+  fan: '팬덤',
+  festival: '페스티벌',
+  general: '일반 이슈',
+  global: '글로벌',
+  performance: '퍼포먼스',
+  risk: '리스크',
+};
+
+const newsIssueSentimentLabels: Record<NewsIssueSentiment, string> = {
+  mixed: '혼합',
+  negative: '부정',
+  neutral: '중립',
+  positive: '긍정',
+  unknown: '미확인',
+};
+
+export function getNewsIssueCategoryLabel(category: NewsIssueCategory) {
+  return newsIssueCategoryLabels[category];
+}
+
+export function getNewsIssueSentimentLabel(sentiment: NewsIssueSentiment) {
+  return newsIssueSentimentLabels[sentiment];
+}
 
 function getTopCountKey<T extends string>(counts: Record<string, number>) {
   return (
@@ -68,7 +103,9 @@ function mapEvidenceItem(item: NewsIssueSourceItem): NewsIssueChartEvidenceItem 
     sourceName: item.sourceName,
     sourceUrl: item.sourceUrl,
     category: item.category,
+    categoryLabel: getNewsIssueCategoryLabel(item.category),
     sentiment: item.sentiment,
+    sentimentLabel: getNewsIssueSentimentLabel(item.sentiment),
     issueScore: item.issueScore,
     note: item.note,
   };
@@ -76,24 +113,24 @@ function mapEvidenceItem(item: NewsIssueSourceItem): NewsIssueChartEvidenceItem 
 
 function getSourceEvidenceSummary({
   itemCount,
-  dominantCategory,
-  dominantSentiment,
+  dominantCategoryLabel,
+  dominantSentimentLabel,
   averageIssueScore,
 }: {
   itemCount: number;
-  dominantCategory: NewsIssueCategory | null;
-  dominantSentiment: NewsIssueSentiment | null;
+  dominantCategoryLabel: string | null;
+  dominantSentimentLabel: string | null;
   averageIssueScore: number | null;
 }) {
   if (itemCount === 0) {
     return '선택한 차트 지표에 직접 연결된 기사 기반 source seed가 아직 없습니다.';
   }
 
-  const categoryText = dominantCategory
-    ? `주요 category는 ${dominantCategory}`
+  const categoryText = dominantCategoryLabel
+    ? `주요 category는 ${dominantCategoryLabel}`
     : '주요 category는 미분류';
-  const sentimentText = dominantSentiment
-    ? `주요 sentiment는 ${dominantSentiment}`
+  const sentimentText = dominantSentimentLabel
+    ? `주요 sentiment는 ${dominantSentimentLabel}`
     : '주요 sentiment는 미분류';
   const scoreText =
     averageIssueScore === null
@@ -114,6 +151,12 @@ export function getNewsIssueChartInsight(
   const dominantSentiment = getTopCountKey<NewsIssueSentiment>(
     evidence.sentimentCounts,
   );
+  const dominantCategoryLabel = dominantCategory
+    ? getNewsIssueCategoryLabel(dominantCategory)
+    : null;
+  const dominantSentimentLabel = dominantSentiment
+    ? getNewsIssueSentimentLabel(dominantSentiment)
+    : null;
 
   return {
     artistId: evidence.artistId,
@@ -126,13 +169,15 @@ export function getNewsIssueChartInsight(
     categoryCounts: evidence.categoryCounts,
     sentimentCounts: evidence.sentimentCounts,
     dominantCategory,
+    dominantCategoryLabel,
     dominantSentiment,
+    dominantSentimentLabel,
     evidenceItems: evidence.evidenceItems.map(mapEvidenceItem),
     sourceCoverageLabel: getSourceCoverageLabel(evidence.itemCount),
     sourceEvidenceSummary: getSourceEvidenceSummary({
       itemCount: evidence.itemCount,
-      dominantCategory,
-      dominantSentiment,
+      dominantCategoryLabel,
+      dominantSentimentLabel,
       averageIssueScore: evidence.averageIssueScore,
     }),
     interpretationSummary: evidence.interpretationSummary,
