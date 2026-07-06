@@ -37,9 +37,7 @@ import {
 } from '../data/v4/metrics';
 import {
   getNewsIssueChartInsight,
-  type NewsIssueCategory,
   type NewsIssueChartInsight,
-  type NewsIssueSentiment,
 } from '../data/v4/sources';
 
 type ChartSearchParams = {
@@ -77,28 +75,6 @@ const coverageStatusLabels: Record<ArtistIndexCoverageStatus, string> = {
   tracked: '지속 추적',
   partial: '일부 반영',
   preview: '미리보기',
-};
-
-const newsIssueCategoryLabels: Record<NewsIssueCategory, string> = {
-  comeback: '컴백',
-  performance: '무대/퍼포먼스',
-  chart: '차트',
-  album: '음반',
-  global: '글로벌',
-  brand: '브랜드',
-  festival: '페스티벌',
-  broadcast: '방송',
-  fan: '팬덤',
-  risk: '리스크',
-  general: '일반',
-};
-
-const newsIssueSentimentLabels: Record<NewsIssueSentiment, string> = {
-  positive: '긍정',
-  neutral: '중립',
-  negative: '부정',
-  mixed: '혼재',
-  unknown: '미확인',
 };
 
 const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
@@ -415,12 +391,11 @@ function formatCountMap(counts: Record<string, number>) {
     : entries.map(([key, count]) => `${key} ${count}`).join(' / ');
 }
 
-function formatNewsIssueCategory(category: NewsIssueCategory | null) {
-  return category ? newsIssueCategoryLabels[category] : 'source seed 없음';
-}
-
-function formatNewsIssueSentiment(sentiment: NewsIssueSentiment | null) {
-  return sentiment ? newsIssueSentimentLabels[sentiment] : 'source seed 없음';
+function formatNewsIssueDisplayValue(
+  label: string | null | undefined,
+  code: string | null | undefined,
+) {
+  return label || code || '없음';
 }
 
 function formatEvidenceIssueScore(value: number | undefined) {
@@ -1451,11 +1426,17 @@ function ChartSourceInsightPanel({
             />
             <MetricCard
               label="대표 category"
-              value={formatNewsIssueCategory(insight.dominantCategory)}
+              value={formatNewsIssueDisplayValue(
+                insight.dominantCategoryLabel,
+                insight.dominantCategory,
+              )}
             />
             <MetricCard
               label="대표 sentiment"
-              value={formatNewsIssueSentiment(insight.dominantSentiment)}
+              value={formatNewsIssueDisplayValue(
+                insight.dominantSentimentLabel,
+                insight.dominantSentiment,
+              )}
             />
           </div>
           <div className="mt-4 grid gap-3 lg:grid-cols-2">
@@ -1509,10 +1490,16 @@ function ChartSourceInsightPanel({
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
                       <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
-                        {newsIssueCategoryLabels[item.category]}
+                        {formatNewsIssueDisplayValue(
+                          item.categoryLabel,
+                          item.category,
+                        )}
                       </span>
                       <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
-                        {newsIssueSentimentLabels[item.sentiment]}
+                        {formatNewsIssueDisplayValue(
+                          item.sentimentLabel,
+                          item.sentiment,
+                        )}
                       </span>
                       <span className="rounded-full bg-white px-2 py-1 text-[11px] font-black text-slate-600 shadow-sm">
                         issueScore {formatEvidenceIssueScore(item.issueScore)}
