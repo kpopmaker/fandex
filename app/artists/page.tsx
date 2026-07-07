@@ -4,7 +4,9 @@ import {
   calculateSixMonthDelta,
   getIndexTrendBand,
   getLastSixMonthHistory,
+  getStrongestVariables,
   type ArtistIndexCoverageStatus,
+  type ArtistIndexDataStatus,
   type ArtistIndexGroupType,
   type ArtistIndexTrendBand,
 } from '../data/v4/charts/artistIndexChartData';
@@ -31,6 +33,13 @@ const trendBandLabels: Record<ArtistIndexTrendBand, string> = {
   insufficient_data: '데이터 부족',
 };
 
+const dataStatusLabels: Record<ArtistIndexDataStatus, string> = {
+  editorial_seed: '에디토리얼 시드',
+  verified_manual: '수동 검증',
+  partial_public_signal: '일부 공개 신호',
+  preview_only: '미리보기',
+};
+
 function formatPoint(value: number) {
   return `${new Intl.NumberFormat('ko-KR').format(Math.round(value))}pt`;
 }
@@ -41,8 +50,61 @@ function formatDelta(value: number) {
   )}pt`;
 }
 
+function formatDeltaRate(history: Array<{ fandexPoint: number }>) {
+  const first = history[0];
+  const latest = history[history.length - 1];
+
+  if (!first || !latest || first.fandexPoint === 0) {
+    return '0.0%';
+  }
+
+  const rate = ((latest.fandexPoint - first.fandexPoint) / first.fandexPoint) * 100;
+  return `${rate >= 0 ? '+' : ''}${rate.toFixed(1)}%`;
+}
+
 function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
   return profile.history[profile.history.length - 1];
+}
+
+function getMarketRows(profiles: typeof artistIndexChartProfiles) {
+  return profiles.map((profile) => {
+    const latest = getLatestPoint(profile);
+    const sixMonthHistory = getLastSixMonthHistory(profile);
+    const sixMonthDelta = calculateSixMonthDelta(sixMonthHistory);
+
+    return {
+      profile,
+      latest,
+      sixMonthHistory,
+      sixMonthDelta,
+      sixMonthDeltaRate: formatDeltaRate(sixMonthHistory),
+      trendBand: getIndexTrendBand(sixMonthHistory),
+      strongestVariable: getStrongestVariables(profile, 1)[0] ?? null,
+    };
+  });
+}
+
+function getMarketSnapshot(rows: ReturnType<typeof getMarketRows>) {
+  const totalMarketPoint = rows.reduce(
+    (total, row) => total + (row.latest?.fandexPoint ?? 0),
+    0,
+  );
+  const topArtist = rows[0] ?? null;
+  const topMover = [...rows].sort(
+    (left, right) => right.sixMonthDelta - left.sixMonthDelta,
+  )[0] ?? null;
+  const risingCount = rows.filter((row) => row.trendBand === 'rising').length;
+  const trackedCount = rows.filter(
+    (row) => row.profile.coverageStatus === 'tracked',
+  ).length;
+
+  return {
+    totalMarketPoint,
+    topArtist,
+    topMover,
+    risingCount,
+    trackedCount,
+  };
 }
 
 export default function ArtistsPage() {
@@ -51,6 +113,8 @@ export default function ArtistsPage() {
     const bLatest = getLatestPoint(b)?.fandexPoint ?? 0;
     return bLatest - aLatest;
   });
+  const marketRows = getMarketRows(profiles);
+  const marketSnapshot = getMarketSnapshot(marketRows);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -95,12 +159,62 @@ export default function ArtistsPage() {
           </div>
         </div>
 
+        <section className="mb-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                market overview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">FANDEX 아티스트 마켓</h2>
+              <p className="mt-2 max-w-3xl text-sm font-bold leading-7 text-slate-600">
+                등록/추적 아티스트를 주식 종목표처럼 훑기 위한 요약입니다.
+                현재 값은 기존 preview seed를 화면에서 집계한 read-only 정보입니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
+              {profiles.length}팀 / {marketSnapshot.trackedCount}팀 지속 추적
+            </span>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MarketMetric
+              label="총 FANDEX 시가총점형 합계"
+              value={formatPoint(marketSnapshot.totalMarketPoint)}
+              note="등록/추적 아티스트 최신 포인트 합계"
+            />
+            <MarketMetric
+              label="현재 1위"
+              value={marketSnapshot.topArtist?.profile.artistName ?? '-'}
+              note={
+                marketSnapshot.topArtist
+                  ? `${marketSnapshot.topArtist.profile.ticker} / ${formatPoint(
+                      marketSnapshot.topArtist.latest?.fandexPoint ?? 0,
+                    )}`
+                  : '데이터 없음'
+              }
+            />
+            <MarketMetric
+              label="6개월 상승폭 1위"
+              value={marketSnapshot.topMover?.profile.artistName ?? '-'}
+              note={
+                marketSnapshot.topMover
+                  ? `${formatDelta(marketSnapshot.topMover.sixMonthDelta)} / ${marketSnapshot.topMover.sixMonthDeltaRate}`
+                  : '데이터 없음'
+              }
+            />
+            <MarketMetric
+              label="상승 흐름 종목"
+              value={`${marketSnapshot.risingCount}팀`}
+              note="최근 6개월 trend band 기준"
+            />
+          </div>
+        </section>
+
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-black">아티스트 표</h2>
+              <h2 className="text-2xl font-black">아티스트 마켓 테이블</h2>
               <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
-                아티스트명, ticker, 구분을 분리해 보여주고 행 hover만 사용합니다.
+                ticker, 현재 FANDEX, 6개월 변화율, 주요 기여 변수까지 한 번에 봅니다.
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
@@ -108,16 +222,19 @@ export default function ArtistsPage() {
             </span>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] border-separate border-spacing-0 text-left text-sm">
+            <table className="w-full min-w-[1120px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black text-slate-500">
+                  <th className="border-b border-slate-200 p-3">순위</th>
                   <th className="border-b border-slate-200 p-3">아티스트</th>
                   <th className="border-b border-slate-200 p-3">ticker</th>
                   <th className="border-b border-slate-200 p-3">구분</th>
                   <th className="border-b border-slate-200 p-3">커버리지</th>
-                  <th className="border-b border-slate-200 p-3">현재 FANDEX 포인트</th>
-                  <th className="border-b border-slate-200 p-3">최근 6개월 변화</th>
+                  <th className="border-b border-slate-200 p-3">현재 FANDEX</th>
+                  <th className="border-b border-slate-200 p-3">6개월 변화</th>
+                  <th className="border-b border-slate-200 p-3">변화율</th>
                   <th className="border-b border-slate-200 p-3">흐름</th>
+                  <th className="border-b border-slate-200 p-3">주요 기여 변수</th>
                   <th className="border-b border-slate-200 p-3">데이터 상태</th>
                   <th className="border-b border-slate-200 p-3">마지막 업데이트</th>
                   <th className="border-b border-slate-200 p-3">상세</th>
@@ -125,17 +242,17 @@ export default function ArtistsPage() {
                 </tr>
               </thead>
               <tbody>
-                {profiles.map((profile) => {
-                  const latest = getLatestPoint(profile);
-                  const sixMonthHistory = getLastSixMonthHistory(profile);
-                  const trendBand = getIndexTrendBand(sixMonthHistory);
-                  const delta = calculateSixMonthDelta(sixMonthHistory);
+                {marketRows.map((row, index) => {
+                  const { profile, latest, strongestVariable } = row;
 
                   return (
                     <tr
                       key={profile.artistId}
                       className="font-bold text-slate-700 transition hover:bg-cyan-50/60"
                     >
+                      <td className="border-b border-slate-100 p-3 font-mono text-slate-500">
+                        {index + 1}
+                      </td>
                       <td className="border-b border-slate-100 p-3 font-black text-slate-950">
                         {profile.artistName}
                       </td>
@@ -154,13 +271,25 @@ export default function ArtistsPage() {
                         {formatPoint(latest?.fandexPoint ?? 0)}
                       </td>
                       <td className="border-b border-slate-100 p-3 font-mono">
-                        {formatDelta(delta)}
+                        {formatDelta(row.sixMonthDelta)}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono">
+                        {row.sixMonthDeltaRate}
                       </td>
                       <td className="border-b border-slate-100 p-3">
-                        {trendBandLabels[trendBand]}
+                        {trendBandLabels[row.trendBand]}
                       </td>
                       <td className="border-b border-slate-100 p-3">
-                        {latest?.dataStatus ?? '-'}
+                        {strongestVariable ? (
+                          <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700">
+                            {strongestVariable.displayName} {formatPoint(strongestVariable.latestPoint)}
+                          </span>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+                      <td className="border-b border-slate-100 p-3">
+                        {latest ? dataStatusLabels[latest.dataStatus] : '-'}
                       </td>
                       <td className="border-b border-slate-100 p-3">
                         {profile.lastUpdated}
@@ -209,5 +338,27 @@ export default function ArtistsPage() {
         </section>
       </section>
     </main>
+  );
+}
+
+function MarketMetric({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: string;
+  note: string;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
+        {label}
+      </p>
+      <p className="mt-2 break-words font-mono text-xl font-black text-slate-950">
+        {value}
+      </p>
+      <p className="mt-2 text-xs font-bold leading-5 text-slate-500">{note}</p>
+    </article>
   );
 }

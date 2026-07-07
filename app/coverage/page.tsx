@@ -419,6 +419,8 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
             <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
               source seed는 현재 read-only 해석 근거로만 사용됩니다. FANDEX 포인트
               계산에는 직접 반영하지 않습니다. 외부 API나 DB와 연결되어 있지 않습니다.
+              4차-3 기준으로 source seed 요약은 /charts의 선택 지표 해석 보조 정보로도
+              사용됩니다.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -458,6 +460,9 @@ export default async function CoveragePage({ searchParams }: CoveragePageProps) 
                 newsIssueMetricInterpretationCoverage.metricEvidenceCounts,
               )}
             />
+            <MetricCard label="Charts insight" value="read-only" />
+            <MetricCard label="Score impact" value="none" />
+            <MetricCard label="Connected page" value="/charts" />
           </div>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[920px] border-separate border-spacing-0 text-left text-sm">

@@ -40,6 +40,12 @@ type LineChartPoint = {
   value: number;
 };
 
+type SelectedVariableDetail = {
+  meaning: string;
+  highMeaning: string;
+  lowMeaning: string;
+};
+
 const defaultSelectedVariables: ArtistStockVariableKey[] = [
   'snsFandomPoint',
   'brandFitPoint',
@@ -88,6 +94,47 @@ const issueVariableLabels: Record<ArtistStockVariableKey, string> = {
   riskAdjustmentPoint: '조정 신호',
 };
 
+const selectedVariableDetails: Record<
+  ArtistStockVariableKey,
+  SelectedVariableDetail
+> = {
+  musicAlbumPoint: {
+    meaning: '음원/음반 소비와 앨범 반응을 읽는 preview 변수입니다.',
+    highMeaning: '최근 발매물 소비와 앨범 반응이 강하게 유지되는 상태로 해석합니다.',
+    lowMeaning: '발매 반응 또는 소비 흐름이 상대적으로 약한 상태로 해석합니다.',
+  },
+  newsIssuePoint: {
+    meaning: '기사/이슈 노출과 공개 언급 흐름을 읽는 source seed 기반 변수입니다.',
+    highMeaning: '공개 언급량과 이슈 강도가 FANDEX 관심 흐름을 밀어 올리는 상태입니다.',
+    lowMeaning: '최근 기사 노출이나 이슈 강도가 제한적인 상태로 해석합니다.',
+  },
+  snsFandomPoint: {
+    meaning: 'SNS 확산과 팬덤 반응의 밀도를 읽는 preview 변수입니다.',
+    highMeaning: '팬덤 반응과 공유 흐름이 빠르게 확산되는 상태로 해석합니다.',
+    lowMeaning: 'SNS 반응이 안정적이거나 확산 강도가 낮은 상태로 해석합니다.',
+  },
+  brandFitPoint: {
+    meaning: '브랜드/캠페인 적합도와 상업적 매칭 흐름을 읽는 preview 변수입니다.',
+    highMeaning: '브랜드 협업이나 캠페인 관점에서 활용도가 높은 상태로 해석합니다.',
+    lowMeaning: '상업적 적합도 신호가 아직 제한적인 상태로 해석합니다.',
+  },
+  comebackActivityPoint: {
+    meaning: '컴백/활동 모멘텀과 공식 활동 흐름을 읽는 preview 변수입니다.',
+    highMeaning: '컴백, 방송, 콘텐츠 활동이 최근 흐름을 강하게 만드는 상태입니다.',
+    lowMeaning: '활동 공백 또는 컴백 모멘텀이 약한 상태로 해석합니다.',
+  },
+  growthMomentumPoint: {
+    meaning: '최근 성장 흐름과 상승 탄력을 읽는 preview 변수입니다.',
+    highMeaning: '최근 지표가 이전보다 빠르게 개선되는 성장 구간으로 해석합니다.',
+    lowMeaning: '성장 속도가 둔화되었거나 뚜렷한 상승 신호가 약한 상태입니다.',
+  },
+  riskAdjustmentPoint: {
+    meaning: '과열/리스크/조정 신호를 보조적으로 읽는 preview 변수입니다.',
+    highMeaning: '리스크보다 안정 신호가 우세해 조정 부담이 낮은 상태로 해석합니다.',
+    lowMeaning: '과열, 변동성, 평판 리스크를 더 주의해서 봐야 하는 상태입니다.',
+  },
+};
+
 const metricCategoryLabels: Record<string, string> = {
   content: '콘텐츠 반응',
   attention: '관심도',
@@ -111,6 +158,32 @@ function formatDelta(value: number) {
   return `${value >= 0 ? '+' : ''}${new Intl.NumberFormat('ko-KR').format(
     Math.round(value),
   )}pt`;
+}
+
+function formatPercentDelta(currentValue: number, baseValue?: number) {
+  if (!baseValue) {
+    return '없음';
+  }
+
+  const percentDelta = ((currentValue - baseValue) / baseValue) * 100;
+
+  if (!Number.isFinite(percentDelta)) {
+    return '없음';
+  }
+
+  return `${percentDelta >= 0 ? '+' : ''}${percentDelta.toFixed(1)}%`;
+}
+
+function getDeltaToneClass(value: number) {
+  if (value > 0) {
+    return 'text-emerald-700 dark:text-emerald-300';
+  }
+
+  if (value < 0) {
+    return 'text-rose-700 dark:text-rose-300';
+  }
+
+  return 'text-slate-600 dark:text-slate-300';
 }
 
 function formatMetricScore(value: number) {
@@ -192,6 +265,13 @@ function buildArtistVariableHref(
   return `/artists/${artistId}?${params.toString()}`;
 }
 
+function buildArtistVariableChartHref(
+  artistId: string,
+  variableKey: ArtistStockVariableKey,
+) {
+  return `${buildArtistVariableHref(artistId, [variableKey])}#variable-chart`;
+}
+
 function toggleVariableSelection(
   currentVariables: ArtistStockVariableKey[],
   targetVariable: ArtistStockVariableKey,
@@ -211,6 +291,23 @@ function toggleVariableSelection(
 
 function getSafeArtistProfile(artistId: string) {
   return artistIndexChartProfiles.find((profile) => profile.artistId === artistId);
+}
+
+function getVariableEvidenceLabel(
+  variableKey: ArtistStockVariableKey,
+  newsIssueSourceCount: number,
+) {
+  if (variableKey === 'newsIssuePoint') {
+    return newsIssueSourceCount > 0
+      ? `${newsIssueSourceCount}개 source seed 연결`
+      : 'source seed 없음';
+  }
+
+  if (variableKey === 'riskAdjustmentPoint') {
+    return '리스크/조정 보조 지표';
+  }
+
+  return '웹 데이터 변수 연결 예정';
 }
 
 function createLinePath(
@@ -278,12 +375,22 @@ export default async function ArtistDetailPage({
   const fandexDelta = calculateSixMonthDelta(sixMonthHistory);
   const trendBand = getIndexTrendBand(oneYearHistory);
   const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
+  const allVariableSeries = getSelectedVariableSeries(
+    profile,
+    getAvailableStockVariables().map((variable) => variable.variableKey),
+  );
   const strongestVariables = getStrongestVariables(profile, 3);
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
   const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
   const newsIssueSourceSummary = getNewsIssueSourceArtistSummary(profile.artistId);
   const newsIssueMetricEvidenceSummary =
     getNewsIssueMetricEvidenceSummaryForArtist(profile.artistId);
+  const sixMonthChangeRate = formatPercentDelta(
+    latestPoint.fandexPoint,
+    sixMonthHistory[0]?.fandexPoint,
+  );
+  const fandexDeltaToneClass = getDeltaToneClass(fandexDelta);
+  const primaryStrongestVariable = strongestVariables[0]?.displayName ?? '없음';
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -308,7 +415,8 @@ export default async function ArtistDetailPage({
                 아닙니다.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
+            <div className="flex w-full flex-col gap-4 lg:max-w-md">
+              <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
                 href="/artists"
                 className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
@@ -339,6 +447,67 @@ export default async function ArtistDetailPage({
               >
                 이 아티스트를 비교에 추가
               </Link>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                      stock summary
+                    </p>
+                    <p className="mt-2 font-mono text-sm font-black text-slate-500 dark:text-slate-400">
+                      {profile.ticker}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm dark:bg-slate-950 dark:text-slate-300">
+                    {profile.lastUpdated}
+                  </span>
+                </div>
+
+                <div className="mt-5">
+                  <p className="text-xs font-black text-slate-500 dark:text-slate-400">
+                    현재 FANDEX
+                  </p>
+                  <p className="mt-1 font-mono text-4xl font-black tracking-tight text-slate-950 dark:text-white">
+                    {formatPoint(latestPoint.fandexPoint)}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-sm font-black">
+                    <span className={fandexDeltaToneClass}>
+                      6개월 변화 {formatDelta(fandexDelta)}
+                    </span>
+                    <span className={fandexDeltaToneClass}>
+                      {sixMonthChangeRate}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <StockSummaryMini
+                    label="흐름"
+                    value={trendBandLabels[trendBand]}
+                  />
+                  <StockSummaryMini
+                    label="주요 기여 변수"
+                    value={primaryStrongestVariable}
+                  />
+                  <StockSummaryMini
+                    label="source seed"
+                    value={`${newsIssueSourceSummary.itemCount}개`}
+                  />
+                  <StockSummaryMini
+                    label="데이터 상태"
+                    value={latestPoint.dataStatus}
+                  />
+                  <StockSummaryMini
+                    label="신뢰도"
+                    value={latestPoint.confidenceLevel}
+                  />
+                  <StockSummaryMini
+                    label="마지막 업데이트"
+                    value={profile.lastUpdated}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -350,6 +519,54 @@ export default async function ArtistDetailPage({
           <MetricCard label="데이터 상태" value={latestPoint.dataStatus} />
           <MetricCard label="신뢰도" value={latestPoint.confidenceLevel} />
           <MetricCard label="커버리지 상태" value={coverageStatusLabels[profile.coverageStatus]} />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                variable score board
+              </p>
+              <h2 className="mt-2 text-2xl font-black">아티스트 변수 점수판</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                K-pop 아티스트를 하나의 종목처럼 볼 수 있도록 음원/음반,
+                뉴스/이슈, SNS/팬덤, 브랜드, 컴백/활동, 성장, 조정 신호를 한 화면에
+                모았습니다. 현재 값은 기존 FANDEX 산출 변수의 최신 월 preview point이며,
+                계산 로직은 변경하지 않았습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+              stock view preview
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {allVariableSeries.map((series) => {
+              const active = selectedVariables.includes(series.variableKey);
+
+              return (
+                <VariableScoreBreakdownCard
+                  key={series.variableKey}
+                  active={active}
+                  evidenceLabel={getVariableEvidenceLabel(
+                    series.variableKey,
+                    newsIssueSourceSummary.itemCount,
+                  )}
+                  href={buildArtistVariableChartHref(
+                    profile.artistId,
+                    series.variableKey,
+                  )}
+                  series={series}
+                />
+              );
+            })}
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            이 점수판은 아티스트별 변수 흐름을 읽기 위한 read-only preview입니다.
+            뉴스/이슈 변수는 현재 source seed 연결 상태를 함께 표시하며, 외부 API나
+            DB를 새로 연결하지 않습니다.
+          </p>
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
@@ -517,7 +734,10 @@ export default async function ArtistDetailPage({
           </div>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <section
+          id="variable-chart"
+          className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]"
+        >
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
@@ -551,6 +771,35 @@ export default async function ArtistDetailPage({
               ))}
             </div>
           </section>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                selected variable detail
+              </p>
+              <h2 className="mt-2 text-2xl font-black">선택 변수 상세 요약</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                선택한 변수가 현재 아티스트의 FANDEX 흐름에서 어떤 의미인지
+                보여주는 read-only preview입니다. 기존 점수 계산 로직은
+                변경하지 않습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              read-only preview
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {selectedSeries.map((series) => (
+              <SelectedVariableDetailCard
+                key={series.variableKey}
+                newsIssueSourceSummary={newsIssueSourceSummary}
+                series={series}
+              />
+            ))}
+          </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -1006,6 +1255,114 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+function SelectedVariableDetailCard({
+  newsIssueSourceSummary,
+  series,
+}: {
+  newsIssueSourceSummary: ReturnType<typeof getNewsIssueSourceArtistSummary>;
+  series: ArtistStockVariableSeries;
+}) {
+  const detail = selectedVariableDetails[series.variableKey];
+  const isNewsIssue = series.variableKey === 'newsIssuePoint';
+  const evidenceStatus = isNewsIssue
+    ? newsIssueSourceSummary.itemCount > 0
+      ? `${newsIssueSourceSummary.itemCount}개 source seed 연결`
+      : 'source seed 없음'
+    : series.variableKey === 'riskAdjustmentPoint'
+      ? 'preview 변수 기준 / 리스크 조정 보조 지표'
+      : '웹 데이터 변수 연결 예정 / preview 변수 기준';
+
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {series.displayName}
+          </p>
+          <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
+            {getVariableDisplayName(series.variableKey)}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-cyan-700 shadow-sm dark:bg-slate-950 dark:text-cyan-300">
+          read-only
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <MetricMini label="최신 점수" value={formatPoint(series.latestPoint)} />
+        <MetricMini
+          label="최근 6개월 변화"
+          value={formatDelta(series.sixMonthDelta)}
+        />
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        <VariableDetailTextRow label="변수 의미" value={detail.meaning} />
+        <VariableDetailTextRow label="점수가 높을 때" value={detail.highMeaning} />
+        <VariableDetailTextRow label="점수가 낮을 때" value={detail.lowMeaning} />
+        <VariableDetailTextRow label="근거 상태" value={evidenceStatus} />
+      </div>
+
+      {isNewsIssue ? (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <MetricMini
+            label="source seed 개수"
+            value={String(newsIssueSourceSummary.itemCount)}
+          />
+          <MetricMini
+            label="평균 이슈 강도"
+            value={formatOptionalIssueScore(
+              newsIssueSourceSummary.averageIssueScore,
+            )}
+          />
+          <MetricMini
+            label="주요 category"
+            value={newsIssueSourceSummary.topCategory ?? '없음'}
+          />
+          <MetricMini
+            label="최신 반영 날짜"
+            value={newsIssueSourceSummary.latestPublishedDate ?? '없음'}
+          />
+          <MetricMini
+            label="sentiment 분포"
+            value={formatCountMap(newsIssueSourceSummary.sentimentCounts)}
+          />
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function VariableDetailTextRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-xl bg-white p-3 dark:bg-slate-950">
+      <p className="text-xs font-black text-cyan-700 dark:text-cyan-300">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function StockSummaryMini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
+      <p className="text-xs font-bold text-slate-400">{label}</p>
+      <p className="mt-1 break-words text-sm font-black text-slate-950 dark:text-white">
+        {value}
+      </p>
+    </div>
+  );
+}
+
 function VariablePointCard({
   color,
   selected,
@@ -1036,6 +1393,61 @@ function VariablePointCard({
         <MetricMini label="6개월 변화" value={formatDelta(series.sixMonthDelta)} />
       </div>
     </article>
+  );
+}
+
+function VariableScoreBreakdownCard({
+  active,
+  evidenceLabel,
+  href,
+  series,
+}: {
+  active: boolean;
+  evidenceLabel: string;
+  href: string;
+  series: ArtistStockVariableSeries;
+}) {
+  const barWidth =
+    Math.min(Math.max(Math.abs(series.latestPoint) / 1200, 0.08), 1) * 100;
+  const deltaClassName =
+    series.sixMonthDelta >= 0
+      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200'
+      : 'bg-rose-50 text-rose-700 dark:bg-rose-400/10 dark:text-rose-200';
+  const cardClassName = active
+    ? 'block rounded-2xl border border-cyan-400 bg-cyan-50 p-4 shadow-sm transition hover:border-cyan-500 dark:border-cyan-300/50 dark:bg-cyan-400/10'
+    : 'block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-300 hover:bg-cyan-50/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-300/40 dark:hover:bg-cyan-400/10';
+
+  return (
+    <Link href={href} className={cardClassName}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {series.displayName}
+          </p>
+          <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
+            {evidenceLabel}
+          </p>
+        </div>
+        <span className={`rounded-full px-3 py-1 font-mono text-xs font-black ${deltaClassName}`}>
+          {formatDelta(series.sixMonthDelta)}
+        </span>
+      </div>
+
+      <p className="mt-4 font-mono text-2xl font-black text-slate-950 dark:text-white">
+        {formatPoint(series.latestPoint)}
+      </p>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white dark:bg-slate-950">
+        <div
+          className="h-full rounded-full bg-cyan-500"
+          style={{ width: `${barWidth}%` }}
+        />
+      </div>
+      <p className="mt-3 text-xs font-bold leading-5 text-slate-500 dark:text-slate-400">
+        {active
+          ? '현재 선택 그래프에 반영됨'
+          : '클릭하면 이 변수만 그래프에서 봅니다.'}
+      </p>
+    </Link>
   );
 }
 
