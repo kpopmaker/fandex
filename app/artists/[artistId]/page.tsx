@@ -192,6 +192,13 @@ function buildArtistVariableHref(
   return `/artists/${artistId}?${params.toString()}`;
 }
 
+function buildArtistVariableChartHref(
+  artistId: string,
+  variableKey: ArtistStockVariableKey,
+) {
+  return `${buildArtistVariableHref(artistId, [variableKey])}#variable-chart`;
+}
+
 function toggleVariableSelection(
   currentVariables: ArtistStockVariableKey[],
   targetVariable: ArtistStockVariableKey,
@@ -393,16 +400,25 @@ export default async function ArtistDetailPage({
           </div>
 
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            {allVariableSeries.map((series) => (
-              <VariableScoreBreakdownCard
-                key={series.variableKey}
-                evidenceLabel={getVariableEvidenceLabel(
-                  series.variableKey,
-                  newsIssueSourceSummary.itemCount,
-                )}
-                series={series}
-              />
-            ))}
+            {allVariableSeries.map((series) => {
+              const active = selectedVariables.includes(series.variableKey);
+
+              return (
+                <VariableScoreBreakdownCard
+                  key={series.variableKey}
+                  active={active}
+                  evidenceLabel={getVariableEvidenceLabel(
+                    series.variableKey,
+                    newsIssueSourceSummary.itemCount,
+                  )}
+                  href={buildArtistVariableChartHref(
+                    profile.artistId,
+                    series.variableKey,
+                  )}
+                  series={series}
+                />
+              );
+            })}
           </div>
 
           <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
@@ -577,7 +593,10 @@ export default async function ArtistDetailPage({
           </div>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <section
+          id="variable-chart"
+          className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]"
+        >
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
             <div className="mb-5">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
@@ -1100,20 +1119,28 @@ function VariablePointCard({
 }
 
 function VariableScoreBreakdownCard({
+  active,
   evidenceLabel,
+  href,
   series,
 }: {
+  active: boolean;
   evidenceLabel: string;
+  href: string;
   series: ArtistStockVariableSeries;
 }) {
-  const barWidth = Math.min(Math.max(Math.abs(series.latestPoint) / 1200, 0.08), 1) * 100;
+  const barWidth =
+    Math.min(Math.max(Math.abs(series.latestPoint) / 1200, 0.08), 1) * 100;
   const deltaClassName =
     series.sixMonthDelta >= 0
       ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200'
       : 'bg-rose-50 text-rose-700 dark:bg-rose-400/10 dark:text-rose-200';
+  const cardClassName = active
+    ? 'block rounded-2xl border border-cyan-400 bg-cyan-50 p-4 shadow-sm transition hover:border-cyan-500 dark:border-cyan-300/50 dark:bg-cyan-400/10'
+    : 'block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-300 hover:bg-cyan-50/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-300/40 dark:hover:bg-cyan-400/10';
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+    <Link href={href} className={cardClassName}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-black text-slate-950 dark:text-white">
@@ -1138,9 +1165,11 @@ function VariableScoreBreakdownCard({
         />
       </div>
       <p className="mt-3 text-xs font-bold leading-5 text-slate-500 dark:text-slate-400">
-        최신 월 변수 점수와 최근 6개월 변화를 함께 표시합니다.
+        {active
+          ? '현재 선택 그래프에 반영됨'
+          : '클릭하면 이 변수만 그래프에서 봅니다.'}
       </p>
-    </article>
+    </Link>
   );
 }
 
