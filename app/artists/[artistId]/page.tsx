@@ -160,6 +160,32 @@ function formatDelta(value: number) {
   )}pt`;
 }
 
+function formatPercentDelta(currentValue: number, baseValue?: number) {
+  if (!baseValue) {
+    return '없음';
+  }
+
+  const percentDelta = ((currentValue - baseValue) / baseValue) * 100;
+
+  if (!Number.isFinite(percentDelta)) {
+    return '없음';
+  }
+
+  return `${percentDelta >= 0 ? '+' : ''}${percentDelta.toFixed(1)}%`;
+}
+
+function getDeltaToneClass(value: number) {
+  if (value > 0) {
+    return 'text-emerald-700 dark:text-emerald-300';
+  }
+
+  if (value < 0) {
+    return 'text-rose-700 dark:text-rose-300';
+  }
+
+  return 'text-slate-600 dark:text-slate-300';
+}
+
 function formatMetricScore(value: number) {
   const safeValue = Number.isFinite(value) ? value : 0;
   const clampedValue = Math.min(Math.max(Math.round(safeValue), 0), 100);
@@ -359,6 +385,12 @@ export default async function ArtistDetailPage({
   const newsIssueSourceSummary = getNewsIssueSourceArtistSummary(profile.artistId);
   const newsIssueMetricEvidenceSummary =
     getNewsIssueMetricEvidenceSummaryForArtist(profile.artistId);
+  const sixMonthChangeRate = formatPercentDelta(
+    latestPoint.fandexPoint,
+    sixMonthHistory[0]?.fandexPoint,
+  );
+  const fandexDeltaToneClass = getDeltaToneClass(fandexDelta);
+  const primaryStrongestVariable = strongestVariables[0]?.displayName ?? '없음';
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -383,7 +415,8 @@ export default async function ArtistDetailPage({
                 아닙니다.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
+            <div className="flex w-full flex-col gap-4 lg:max-w-md">
+              <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
                 href="/artists"
                 className="rounded-full border border-slate-200 px-4 py-2 text-xs font-black text-slate-600 hover:border-cyan-300 hover:text-cyan-600"
@@ -414,6 +447,67 @@ export default async function ArtistDetailPage({
               >
                 이 아티스트를 비교에 추가
               </Link>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                      stock summary
+                    </p>
+                    <p className="mt-2 font-mono text-sm font-black text-slate-500 dark:text-slate-400">
+                      {profile.ticker}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm dark:bg-slate-950 dark:text-slate-300">
+                    {profile.lastUpdated}
+                  </span>
+                </div>
+
+                <div className="mt-5">
+                  <p className="text-xs font-black text-slate-500 dark:text-slate-400">
+                    현재 FANDEX
+                  </p>
+                  <p className="mt-1 font-mono text-4xl font-black tracking-tight text-slate-950 dark:text-white">
+                    {formatPoint(latestPoint.fandexPoint)}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-sm font-black">
+                    <span className={fandexDeltaToneClass}>
+                      6개월 변화 {formatDelta(fandexDelta)}
+                    </span>
+                    <span className={fandexDeltaToneClass}>
+                      {sixMonthChangeRate}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <StockSummaryMini
+                    label="흐름"
+                    value={trendBandLabels[trendBand]}
+                  />
+                  <StockSummaryMini
+                    label="주요 기여 변수"
+                    value={primaryStrongestVariable}
+                  />
+                  <StockSummaryMini
+                    label="source seed"
+                    value={`${newsIssueSourceSummary.itemCount}개`}
+                  />
+                  <StockSummaryMini
+                    label="데이터 상태"
+                    value={latestPoint.dataStatus}
+                  />
+                  <StockSummaryMini
+                    label="신뢰도"
+                    value={latestPoint.confidenceLevel}
+                  />
+                  <StockSummaryMini
+                    label="마지막 업데이트"
+                    value={profile.lastUpdated}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1252,6 +1346,17 @@ function VariableDetailTextRow({
         {label}
       </p>
       <p className="mt-1 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function StockSummaryMini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
+      <p className="text-xs font-bold text-slate-400">{label}</p>
+      <p className="mt-1 break-words text-sm font-black text-slate-950 dark:text-white">
         {value}
       </p>
     </div>
