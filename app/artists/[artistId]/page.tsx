@@ -40,6 +40,12 @@ type LineChartPoint = {
   value: number;
 };
 
+type SelectedVariableDetail = {
+  meaning: string;
+  highMeaning: string;
+  lowMeaning: string;
+};
+
 const defaultSelectedVariables: ArtistStockVariableKey[] = [
   'snsFandomPoint',
   'brandFitPoint',
@@ -86,6 +92,47 @@ const issueVariableLabels: Record<ArtistStockVariableKey, string> = {
   comebackActivityPoint: '컴백/활동',
   growthMomentumPoint: '성장 모멘텀',
   riskAdjustmentPoint: '조정 신호',
+};
+
+const selectedVariableDetails: Record<
+  ArtistStockVariableKey,
+  SelectedVariableDetail
+> = {
+  musicAlbumPoint: {
+    meaning: '음원/음반 소비와 앨범 반응을 읽는 preview 변수입니다.',
+    highMeaning: '최근 발매물 소비와 앨범 반응이 강하게 유지되는 상태로 해석합니다.',
+    lowMeaning: '발매 반응 또는 소비 흐름이 상대적으로 약한 상태로 해석합니다.',
+  },
+  newsIssuePoint: {
+    meaning: '기사/이슈 노출과 공개 언급 흐름을 읽는 source seed 기반 변수입니다.',
+    highMeaning: '공개 언급량과 이슈 강도가 FANDEX 관심 흐름을 밀어 올리는 상태입니다.',
+    lowMeaning: '최근 기사 노출이나 이슈 강도가 제한적인 상태로 해석합니다.',
+  },
+  snsFandomPoint: {
+    meaning: 'SNS 확산과 팬덤 반응의 밀도를 읽는 preview 변수입니다.',
+    highMeaning: '팬덤 반응과 공유 흐름이 빠르게 확산되는 상태로 해석합니다.',
+    lowMeaning: 'SNS 반응이 안정적이거나 확산 강도가 낮은 상태로 해석합니다.',
+  },
+  brandFitPoint: {
+    meaning: '브랜드/캠페인 적합도와 상업적 매칭 흐름을 읽는 preview 변수입니다.',
+    highMeaning: '브랜드 협업이나 캠페인 관점에서 활용도가 높은 상태로 해석합니다.',
+    lowMeaning: '상업적 적합도 신호가 아직 제한적인 상태로 해석합니다.',
+  },
+  comebackActivityPoint: {
+    meaning: '컴백/활동 모멘텀과 공식 활동 흐름을 읽는 preview 변수입니다.',
+    highMeaning: '컴백, 방송, 콘텐츠 활동이 최근 흐름을 강하게 만드는 상태입니다.',
+    lowMeaning: '활동 공백 또는 컴백 모멘텀이 약한 상태로 해석합니다.',
+  },
+  growthMomentumPoint: {
+    meaning: '최근 성장 흐름과 상승 탄력을 읽는 preview 변수입니다.',
+    highMeaning: '최근 지표가 이전보다 빠르게 개선되는 성장 구간으로 해석합니다.',
+    lowMeaning: '성장 속도가 둔화되었거나 뚜렷한 상승 신호가 약한 상태입니다.',
+  },
+  riskAdjustmentPoint: {
+    meaning: '과열/리스크/조정 신호를 보조적으로 읽는 preview 변수입니다.',
+    highMeaning: '리스크보다 안정 신호가 우세해 조정 부담이 낮은 상태로 해석합니다.',
+    lowMeaning: '과열, 변동성, 평판 리스크를 더 주의해서 봐야 하는 상태입니다.',
+  },
 };
 
 const metricCategoryLabels: Record<string, string> = {
@@ -633,6 +680,35 @@ export default async function ArtistDetailPage({
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                selected variable detail
+              </p>
+              <h2 className="mt-2 text-2xl font-black">선택 변수 상세 요약</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                선택한 변수가 현재 아티스트의 FANDEX 흐름에서 어떤 의미인지
+                보여주는 read-only preview입니다. 기존 점수 계산 로직은
+                변경하지 않습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              read-only preview
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {selectedSeries.map((series) => (
+              <SelectedVariableDetailCard
+                key={series.variableKey}
+                newsIssueSourceSummary={newsIssueSourceSummary}
+                series={series}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
             주요 기여 변수
           </p>
@@ -1079,6 +1155,103 @@ function InfoRow({ label, value }: { label: string; value: string }) {
         {label}
       </p>
       <p className="mt-1 text-sm font-black text-slate-950 dark:text-white">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function SelectedVariableDetailCard({
+  newsIssueSourceSummary,
+  series,
+}: {
+  newsIssueSourceSummary: ReturnType<typeof getNewsIssueSourceArtistSummary>;
+  series: ArtistStockVariableSeries;
+}) {
+  const detail = selectedVariableDetails[series.variableKey];
+  const isNewsIssue = series.variableKey === 'newsIssuePoint';
+  const evidenceStatus = isNewsIssue
+    ? newsIssueSourceSummary.itemCount > 0
+      ? `${newsIssueSourceSummary.itemCount}개 source seed 연결`
+      : 'source seed 없음'
+    : series.variableKey === 'riskAdjustmentPoint'
+      ? 'preview 변수 기준 / 리스크 조정 보조 지표'
+      : '웹 데이터 변수 연결 예정 / preview 변수 기준';
+
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {series.displayName}
+          </p>
+          <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
+            {getVariableDisplayName(series.variableKey)}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-cyan-700 shadow-sm dark:bg-slate-950 dark:text-cyan-300">
+          read-only
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <MetricMini label="최신 점수" value={formatPoint(series.latestPoint)} />
+        <MetricMini
+          label="최근 6개월 변화"
+          value={formatDelta(series.sixMonthDelta)}
+        />
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        <VariableDetailTextRow label="변수 의미" value={detail.meaning} />
+        <VariableDetailTextRow label="점수가 높을 때" value={detail.highMeaning} />
+        <VariableDetailTextRow label="점수가 낮을 때" value={detail.lowMeaning} />
+        <VariableDetailTextRow label="근거 상태" value={evidenceStatus} />
+      </div>
+
+      {isNewsIssue ? (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <MetricMini
+            label="source seed 개수"
+            value={String(newsIssueSourceSummary.itemCount)}
+          />
+          <MetricMini
+            label="평균 이슈 강도"
+            value={formatOptionalIssueScore(
+              newsIssueSourceSummary.averageIssueScore,
+            )}
+          />
+          <MetricMini
+            label="주요 category"
+            value={newsIssueSourceSummary.topCategory ?? '없음'}
+          />
+          <MetricMini
+            label="최신 반영 날짜"
+            value={newsIssueSourceSummary.latestPublishedDate ?? '없음'}
+          />
+          <MetricMini
+            label="sentiment 분포"
+            value={formatCountMap(newsIssueSourceSummary.sentimentCounts)}
+          />
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function VariableDetailTextRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-xl bg-white p-3 dark:bg-slate-950">
+      <p className="text-xs font-black text-cyan-700 dark:text-cyan-300">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
         {value}
       </p>
     </div>
