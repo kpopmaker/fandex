@@ -213,6 +213,23 @@ function getSafeArtistProfile(artistId: string) {
   return artistIndexChartProfiles.find((profile) => profile.artistId === artistId);
 }
 
+function getVariableEvidenceLabel(
+  variableKey: ArtistStockVariableKey,
+  newsIssueSourceCount: number,
+) {
+  if (variableKey === 'newsIssuePoint') {
+    return newsIssueSourceCount > 0
+      ? `${newsIssueSourceCount}개 source seed 연결`
+      : 'source seed 없음';
+  }
+
+  if (variableKey === 'riskAdjustmentPoint') {
+    return '리스크/조정 보조 지표';
+  }
+
+  return '웹 데이터 변수 연결 예정';
+}
+
 function createLinePath(
   points: LineChartPoint[],
   width: number,
@@ -278,6 +295,10 @@ export default async function ArtistDetailPage({
   const fandexDelta = calculateSixMonthDelta(sixMonthHistory);
   const trendBand = getIndexTrendBand(oneYearHistory);
   const selectedSeries = getSelectedVariableSeries(profile, selectedVariables);
+  const allVariableSeries = getSelectedVariableSeries(
+    profile,
+    getAvailableStockVariables().map((variable) => variable.variableKey),
+  );
   const strongestVariables = getStrongestVariables(profile, 3);
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
   const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
@@ -350,6 +371,45 @@ export default async function ArtistDetailPage({
           <MetricCard label="데이터 상태" value={latestPoint.dataStatus} />
           <MetricCard label="신뢰도" value={latestPoint.confidenceLevel} />
           <MetricCard label="커버리지 상태" value={coverageStatusLabels[profile.coverageStatus]} />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                variable score board
+              </p>
+              <h2 className="mt-2 text-2xl font-black">아티스트 변수 점수판</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                K-pop 아티스트를 하나의 종목처럼 볼 수 있도록 음원/음반,
+                뉴스/이슈, SNS/팬덤, 브랜드, 컴백/활동, 성장, 조정 신호를 한 화면에
+                모았습니다. 현재 값은 기존 FANDEX 산출 변수의 최신 월 preview point이며,
+                계산 로직은 변경하지 않았습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+              stock view preview
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {allVariableSeries.map((series) => (
+              <VariableScoreBreakdownCard
+                key={series.variableKey}
+                evidenceLabel={getVariableEvidenceLabel(
+                  series.variableKey,
+                  newsIssueSourceSummary.itemCount,
+                )}
+                series={series}
+              />
+            ))}
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+            이 점수판은 아티스트별 변수 흐름을 읽기 위한 read-only preview입니다.
+            뉴스/이슈 변수는 현재 source seed 연결 상태를 함께 표시하며, 외부 API나
+            DB를 새로 연결하지 않습니다.
+          </p>
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
@@ -1035,6 +1095,51 @@ function VariablePointCard({
         <MetricMini label="최신" value={formatPoint(series.latestPoint)} />
         <MetricMini label="6개월 변화" value={formatDelta(series.sixMonthDelta)} />
       </div>
+    </article>
+  );
+}
+
+function VariableScoreBreakdownCard({
+  evidenceLabel,
+  series,
+}: {
+  evidenceLabel: string;
+  series: ArtistStockVariableSeries;
+}) {
+  const barWidth = Math.min(Math.max(Math.abs(series.latestPoint) / 1200, 0.08), 1) * 100;
+  const deltaClassName =
+    series.sixMonthDelta >= 0
+      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200'
+      : 'bg-rose-50 text-rose-700 dark:bg-rose-400/10 dark:text-rose-200';
+
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {series.displayName}
+          </p>
+          <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
+            {evidenceLabel}
+          </p>
+        </div>
+        <span className={`rounded-full px-3 py-1 font-mono text-xs font-black ${deltaClassName}`}>
+          {formatDelta(series.sixMonthDelta)}
+        </span>
+      </div>
+
+      <p className="mt-4 font-mono text-2xl font-black text-slate-950 dark:text-white">
+        {formatPoint(series.latestPoint)}
+      </p>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white dark:bg-slate-950">
+        <div
+          className="h-full rounded-full bg-cyan-500"
+          style={{ width: `${barWidth}%` }}
+        />
+      </div>
+      <p className="mt-3 text-xs font-bold leading-5 text-slate-500 dark:text-slate-400">
+        최신 월 변수 점수와 최근 6개월 변화를 함께 표시합니다.
+      </p>
     </article>
   );
 }
