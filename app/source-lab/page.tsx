@@ -7,7 +7,14 @@ import {
   getSourceProviderAdapters,
   getSourceProviderAdapterSummaries,
   getSourceProviderPreviewImportSummary,
+  getCurrentSourceProviderSnapshotFixture,
+  getPreviousSourceProviderSnapshotFixture,
+  getSourceProviderSnapshotFixtures,
+  getSourceProviderSnapshotHistorySummary,
+  diffSourceProviderSnapshots,
   getSourceVariableSignalCandidates,
+  runSourceProviderSnapshotDiffShapeCheck,
+  runSourceProviderSnapshotShapeCheck,
   runSourceProviderPreviewImport,
   runSourceProviderPreviewImportShapeCheck,
   runSourceProviderRegistryShapeCheck,
@@ -16,6 +23,7 @@ import {
   sourceIngestionFixture,
   type FandexSourceProviderAdapterResult,
   type FandexSourceProviderAdapterSummary,
+  type FandexSourceProviderSnapshot,
   type FandexSourceCandidateArtistSummary,
   type FandexSourceCandidateVariableSummary,
   type FandexNormalizedSourceItem,
@@ -68,6 +76,19 @@ function getSourceTitleMap(items: FandexNormalizedSourceItem[]) {
   return new Map(items.map((item) => [item.sourceId, item.title]));
 }
 
+function formatPreviewList(values: string[], maxItems: number) {
+  if (values.length === 0) {
+    return '없음';
+  }
+
+  const previewValues = values.slice(0, maxItems).join(' / ');
+  const hiddenCount = values.length - maxItems;
+
+  return hiddenCount > 0
+    ? `${previewValues} 외 ${hiddenCount}개`
+    : previewValues;
+}
+
 export default function SourceLabPage() {
   const sourceItems = sourceIngestionFixture;
   const candidates = getSourceVariableSignalCandidates(sourceItems);
@@ -104,6 +125,20 @@ export default function SourceLabPage() {
     (adapter) => adapter.status === 'mock',
   ).length;
   const providerResultPreview = providerPreviewImport.providerResults.slice(0, 8);
+  const previousSnapshot = getPreviousSourceProviderSnapshotFixture();
+  const currentSnapshot = getCurrentSourceProviderSnapshotFixture();
+  const snapshotFixtures = getSourceProviderSnapshotFixtures();
+  const snapshotHistorySummary =
+    getSourceProviderSnapshotHistorySummary(snapshotFixtures);
+  const snapshotDiff = diffSourceProviderSnapshots(
+    previousSnapshot,
+    currentSnapshot,
+  );
+  const snapshotShapeCheck =
+    runSourceProviderSnapshotShapeCheck(snapshotFixtures);
+  const snapshotDiffShapeCheck =
+    runSourceProviderSnapshotDiffShapeCheck(snapshotDiff);
+  const hasComparableSnapshots = snapshotFixtures.length >= 2;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -286,6 +321,180 @@ export default function SourceLabPage() {
               detail={`${providerPreviewImportShapeCheck.providerCount} providers / ${providerPreviewImportShapeCheck.sourceItemCount} sources / ${providerPreviewImportShapeCheck.candidateCount} candidates`}
             />
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                source snapshot history
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Provider Snapshot History
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
+                실제 저장소/DB 연결 전, provider import 결과를 snapshot처럼
+                비교하는 read-only preview입니다. 이 영역은 fixture 기반이며
+                실제 파일 저장, DB 저장, 외부 API 호출을 하지 않습니다.
+                FANDEX 점수 계산에는 아직 반영하지 않습니다.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <ShapeCheckBadge
+                isValid={snapshotShapeCheck.isValid}
+                validLabel="snapshot valid"
+                invalidLabel="snapshot issue"
+              />
+              <ShapeCheckBadge
+                isValid={snapshotDiffShapeCheck.isValid}
+                validLabel="diff valid"
+                invalidLabel="diff issue"
+              />
+            </div>
+          </div>
+
+          {hasComparableSnapshots ? (
+            <>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-9">
+                <SummaryCard
+                  label="snapshot"
+                  value={String(snapshotHistorySummary.snapshotCount)}
+                />
+                <SummaryCard
+                  label="latest"
+                  value={snapshotHistorySummary.latestSnapshotId ?? '없음'}
+                />
+                <SummaryCard
+                  label="earliest"
+                  value={snapshotHistorySummary.earliestSnapshotId ?? '없음'}
+                />
+                <SummaryCard
+                  label="latest collected"
+                  value={formatOptionalDateTime(
+                    snapshotHistorySummary.latestCollectedAt,
+                  )}
+                />
+                <SummaryCard
+                  label="total source"
+                  value={String(snapshotHistorySummary.totalSourceItemCount)}
+                />
+                <SummaryCard
+                  label="total candidate"
+                  value={String(snapshotHistorySummary.totalCandidateCount)}
+                />
+                <SummaryCard
+                  label="unique artist"
+                  value={String(snapshotHistorySummary.uniqueArtistCount)}
+                />
+                <SummaryCard
+                  label="unique variable"
+                  value={String(snapshotHistorySummary.uniqueVariableCount)}
+                />
+                <SummaryCard
+                  label="warning"
+                  value={String(snapshotHistorySummary.warningCount)}
+                />
+              </div>
+
+              <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                <SnapshotCard label="previous snapshot" snapshot={previousSnapshot} />
+                <SnapshotCard label="current snapshot" snapshot={currentSnapshot} />
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-cyan-700">
+                      snapshot diff preview
+                    </p>
+                    <h3 className="mt-2 text-lg font-black">
+                      {snapshotDiff.summaryLabel}
+                    </h3>
+                    <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+                      {snapshotDiff.summaryNote}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+                    {snapshotDiff.fromSnapshotId} → {snapshotDiff.toSnapshotId}
+                  </span>
+                </div>
+
+                <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-7">
+                  <Mini
+                    label="source delta"
+                    value={String(snapshotDiff.sourceItemCountDelta)}
+                  />
+                  <Mini
+                    label="candidate delta"
+                    value={String(snapshotDiff.candidateCountDelta)}
+                  />
+                  <Mini
+                    label="artist delta"
+                    value={String(snapshotDiff.artistCountDelta)}
+                  />
+                  <Mini
+                    label="variable delta"
+                    value={String(snapshotDiff.variableCountDelta)}
+                  />
+                  <Mini
+                    label="added source"
+                    value={String(snapshotDiff.addedSourceIds.length)}
+                  />
+                  <Mini
+                    label="removed source"
+                    value={String(snapshotDiff.removedSourceIds.length)}
+                  />
+                  <Mini
+                    label="retained source"
+                    value={String(snapshotDiff.retainedSourceIds.length)}
+                  />
+                </div>
+
+                <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                  <Mini
+                    label="addedSourceIds preview"
+                    value={formatPreviewList(snapshotDiff.addedSourceIds, 5)}
+                  />
+                  <Mini
+                    label="removedSourceIds preview"
+                    value={formatPreviewList(snapshotDiff.removedSourceIds, 5)}
+                  />
+                  <Mini
+                    label="retainedSourceIds preview"
+                    value={formatPreviewList(snapshotDiff.retainedSourceIds, 5)}
+                  />
+                  <Mini
+                    label="changedArtistIds"
+                    value={formatPreviewList(snapshotDiff.changedArtistIds, 8)}
+                  />
+                  <Mini
+                    label="changedVariableKeys"
+                    value={formatPreviewList(snapshotDiff.changedVariableKeys, 8)}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 lg:grid-cols-2">
+                <ShapeCheckCard
+                  label="snapshot shape check"
+                  isValid={snapshotShapeCheck.isValid}
+                  issueCount={snapshotShapeCheck.issues.length}
+                  detail={`${snapshotShapeCheck.snapshotCount} snapshots`}
+                />
+                <ShapeCheckCard
+                  label="snapshot diff shape check"
+                  isValid={snapshotDiffShapeCheck.isValid}
+                  issueCount={snapshotDiffShapeCheck.issues.length}
+                  detail={`${snapshotDiffShapeCheck.addedSourceIdCount} added / ${snapshotDiffShapeCheck.removedSourceIdCount} removed / ${snapshotDiffShapeCheck.retainedSourceIdCount} retained`}
+                />
+              </div>
+            </>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800">
+              아직 비교 가능한 snapshot preview가 없습니다. fixture 기반
+              read-only preview 영역입니다.
+            </p>
+          )}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -605,6 +814,45 @@ function ProviderResultCard({
           {result.note}
         </p>
       </div>
+    </article>
+  );
+}
+
+function SnapshotCard({
+  label,
+  snapshot,
+}: {
+  label: string;
+  snapshot: FandexSourceProviderSnapshot;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-cyan-700">
+            {label}
+          </p>
+          <h3 className="mt-2 break-words font-mono text-lg font-black">
+            {snapshot.snapshotId}
+          </h3>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+          {snapshot.status}
+        </span>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <Mini label="createdAt" value={formatDateTime(snapshot.createdAt)} />
+        <Mini label="collectedAt" value={formatDateTime(snapshot.collectedAt)} />
+        <Mini label="providerCount" value={String(snapshot.providerCount)} />
+        <Mini label="sourceItemCount" value={String(snapshot.sourceItemCount)} />
+        <Mini label="candidateCount" value={String(snapshot.candidateCount)} />
+        <Mini label="artistCount" value={String(snapshot.artistCount)} />
+        <Mini label="variableCount" value={String(snapshot.variableCount)} />
+        <Mini label="warning" value={String(snapshot.warnings.length)} />
+      </div>
+      <p className="mt-4 rounded-xl bg-white p-3 text-xs font-bold leading-5 text-slate-600">
+        {snapshot.note}
+      </p>
     </article>
   );
 }
