@@ -47,6 +47,11 @@ const primaryRoutes = [
     copy: '반영 아티스트와 데이터 기준 확인',
     href: '/coverage',
   },
+  {
+    title: 'Source Lab',
+    copy: '웹 source가 변수 후보 신호로 바뀌는 preview',
+    href: '/source-lab',
+  },
 ];
 
 const highlightedMetricKeys = new Set(['music', 'youtube', 'search', 'fandom']);

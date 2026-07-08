@@ -7,3 +7,7 @@ export * from './newsIssueSourceAdapter';
 export * from './newsIssueSourceInsights';
 export * from './newsIssueMetricInterpretation';
 export * from './newsIssueChartInsight';
+export * from './sourceIngestionTypes';
+export * from './sourceIngestionFixture';
+export * from './sourceSignalCandidateMapper';
+export * from './sourceCandidateSummary';

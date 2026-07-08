@@ -36,7 +36,15 @@ import {
   type MetricCoverageLevel,
 } from '../data/v4/metrics';
 import {
+  getSourceCandidateArtistSummaries,
+  getSourceCandidateMarketSummary,
+  getSourceCandidateSummaryForArtist,
+  getSourceCandidateSummaryForArtistVariable,
+  getSourceCandidateVariableSummaries,
   getNewsIssueChartInsight,
+  type FandexSourceCandidateArtistSummary,
+  type FandexSourceCandidateMarketSummary,
+  type FandexSourceCandidateVariableSummary,
   type NewsIssueChartInsight,
 } from '../data/v4/sources';
 
@@ -391,6 +399,30 @@ function formatCountMap(counts: Record<string, number>) {
     : entries.map(([key, count]) => `${key} ${count}`).join(' / ');
 }
 
+function formatSourceCandidateScore(value: number) {
+  return new Intl.NumberFormat('ko-KR', {
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function formatSourceCandidateConfidence(value: number) {
+  return (value / 100).toFixed(2);
+}
+
+function formatSourceCandidateDate(value: string | null) {
+  return value ? value.slice(0, 10) : '없음';
+}
+
+function formatSourceCandidateCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0]));
+
+  return entries.length === 0
+    ? '없음'
+    : entries.map(([key, count]) => `${key} ${count}`).join(' / ');
+}
+
 function formatNewsIssueDisplayValue(
   label: string | null | undefined,
   code: string | null | undefined,
@@ -691,6 +723,37 @@ export default async function ArtistIndexChartsPage({
     baseProfile.artistId,
     selectedMetric.key,
   );
+  const sourceCandidateMarketSummary = getSourceCandidateMarketSummary();
+  const selectedArtistSourceCandidateSummary =
+    getSourceCandidateSummaryForArtist(baseProfile.artistId);
+  const selectedArtistVariableSourceCandidateSummary =
+    getSourceCandidateSummaryForArtistVariable(
+      baseProfile.artistId,
+      selectedMetric.key,
+    );
+  const selectedMetricSourceCandidateSummaries =
+    getSourceCandidateVariableSummaries()
+      .filter((summary) => summary.variableKey === selectedMetric.key)
+      .sort((first, second) => {
+        if (first.artistId === baseProfile.artistId) {
+          return -1;
+        }
+
+        if (second.artistId === baseProfile.artistId) {
+          return 1;
+        }
+
+        return second.candidateCount - first.candidateCount
+          || second.averageCandidateScore - first.averageCandidateScore
+          || first.artistId.localeCompare(second.artistId);
+      })
+      .slice(0, 6);
+  const sourceCandidateSummariesByArtist = new Map(
+    getSourceCandidateArtistSummaries().map((summary) => [
+      summary.artistId,
+      summary,
+    ]),
+  );
   const latestMetricBreakdown = getLatestArtistMetricBreakdown(
     baseProfile.artistId,
   );
@@ -938,6 +1001,24 @@ export default async function ArtistIndexChartsPage({
             artistName={baseProfile.artistName}
             insight={sourceInsight}
             metricLabel={selectedMetric.label}
+          />
+          <SourceCandidateContextPanel
+            artistSummaries={chartProfiles
+              .map((profile) =>
+                sourceCandidateSummariesByArtist.get(profile.artistId),
+              )
+              .filter(
+                (summary): summary is FandexSourceCandidateArtistSummary =>
+                  Boolean(summary),
+              )}
+            marketSummary={sourceCandidateMarketSummary}
+            metricDefinition={selectedMetric}
+            selectedArtistName={baseProfile.artistName}
+            selectedArtistSummary={selectedArtistSourceCandidateSummary}
+            selectedArtistVariableSummary={
+              selectedArtistVariableSourceCandidateSummary
+            }
+            variableSummaries={selectedMetricSourceCandidateSummaries}
           />
         </section>
 
@@ -1525,6 +1606,270 @@ function ChartSourceInsightPanel({
         </p>
       )}
     </article>
+  );
+}
+
+function SourceCandidateContextPanel({
+  artistSummaries,
+  marketSummary,
+  metricDefinition,
+  selectedArtistName,
+  selectedArtistSummary,
+  selectedArtistVariableSummary,
+  variableSummaries,
+}: {
+  artistSummaries: FandexSourceCandidateArtistSummary[];
+  marketSummary: FandexSourceCandidateMarketSummary;
+  metricDefinition: FandexMetricDefinition;
+  selectedArtistName: string;
+  selectedArtistSummary: FandexSourceCandidateArtistSummary | null;
+  selectedArtistVariableSummary: FandexSourceCandidateVariableSummary | null;
+  variableSummaries: FandexSourceCandidateVariableSummary[];
+}) {
+  const hasVariablePreview = variableSummaries.length > 0;
+  const topVariableLabel = marketSummary.topVariableKey
+    ? getMetricDisplayLabel(marketSummary.topVariableKey)
+    : '없음';
+
+  return (
+    <article className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+            source candidate context
+          </p>
+          <h3 className="mt-2 text-xl font-black text-slate-950">
+            웹 source 후보 신호
+          </h3>
+          <p className="mt-3 text-sm font-bold leading-7 text-slate-600">
+            이 영역은 fixture 기반 source candidate preview이며, 현재 FANDEX
+            점수 계산에는 반영되지 않습니다. 외부 API, DB, Supabase 연결은
+            없습니다.
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">
+          read-only preview
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+        <MetricCard
+          label="전체 candidate"
+          value={String(marketSummary.candidateCount)}
+        />
+        <MetricCard
+          label="전체 source item"
+          value={String(marketSummary.sourceItemCount)}
+        />
+        <MetricCard
+          label="연결 artist"
+          value={`${marketSummary.artistCount}팀`}
+        />
+        <MetricCard
+          label="평균 candidateScore"
+          value={formatSourceCandidateScore(
+            marketSummary.averageCandidateScore,
+          )}
+        />
+        <MetricCard
+          label="평균 confidence"
+          value={formatSourceCandidateConfidence(
+            marketSummary.averageConfidenceScore,
+          )}
+        />
+        <MetricCard
+          label="top variable"
+          value={topVariableLabel}
+        />
+        <MetricCard
+          label="latestPublishedAt"
+          value={formatSourceCandidateDate(marketSummary.latestPublishedAt)}
+        />
+      </div>
+
+      <div className="mt-4 rounded-xl border border-cyan-100 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+        <p className="font-black text-slate-950">
+          선택 지표: {metricDefinition.label}
+        </p>
+        {selectedArtistVariableSummary ? (
+          <p className="mt-1">
+            {selectedArtistName} / {metricDefinition.label} 후보:{' '}
+            {selectedArtistVariableSummary.candidateCount} candidates /{' '}
+            {selectedArtistVariableSummary.sourceItemCount} sources · 평균{' '}
+            {formatSourceCandidateScore(
+              selectedArtistVariableSummary.averageCandidateScore,
+            )}
+          </p>
+        ) : (
+          <p className="mt-1">
+            아직 이 변수에 연결된 source candidate가 없습니다. fixture 기반
+            preview이며 실제 FANDEX 계산에는 반영되지 않습니다.
+          </p>
+        )}
+        {selectedArtistSummary ? (
+          <p className="mt-1">
+            선택 아티스트 전체 후보:{' '}
+            {selectedArtistSummary.candidateCount} candidates /{' '}
+            {selectedArtistSummary.sourceItemCount} sources · top variable{' '}
+            {selectedArtistSummary.topVariableKey
+              ? getMetricDisplayLabel(selectedArtistSummary.topVariableKey)
+              : '없음'}
+          </p>
+        ) : null}
+      </div>
+
+      <div className="mt-5">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+              variable-level preview
+            </p>
+            <h4 className="mt-1 text-base font-black text-slate-950">
+              선택 변수 source candidate 요약
+            </h4>
+          </div>
+          <span className="text-xs font-black text-slate-500">
+            최대 6개 읽기 전용
+          </span>
+        </div>
+
+        {hasVariablePreview ? (
+          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            {variableSummaries.map((summary) => (
+              <SourceCandidateVariableCard
+                key={`${summary.artistId}-${summary.variableKey}`}
+                summary={summary}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 rounded-xl border border-slate-200 bg-white p-4 text-sm font-bold leading-7 text-slate-600">
+            아직 이 변수에 연결된 source candidate가 없습니다. fixture 기반
+            preview이며 실제 FANDEX 계산에는 반영되지 않습니다.
+          </p>
+        )}
+      </div>
+
+      {artistSummaries.length > 0 ? (
+        <div className="mt-5">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">
+                chart artist context
+              </p>
+              <h4 className="mt-1 text-base font-black text-slate-950">
+                차트 표시 아티스트 후보 맥락
+              </h4>
+            </div>
+            <span className="text-xs font-black text-slate-500">
+              {artistSummaries.length}팀
+            </span>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {artistSummaries.map((summary) => (
+              <SourceCandidateArtistCard
+                key={summary.artistId}
+                summary={summary}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function SourceCandidateVariableCard({
+  summary,
+}: {
+  summary: FandexSourceCandidateVariableSummary;
+}) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-black text-slate-950">
+            {getMetricDisplayLabel(summary.variableKey)}
+          </p>
+          <p className="mt-1 font-mono text-xs font-black text-cyan-700">
+            {summary.artistId} / {summary.variableKey}
+          </p>
+        </div>
+        <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-black text-slate-600">
+          {summary.candidateCount} candidates
+        </span>
+      </div>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <MetricCard label="sourceItemCount" value={String(summary.sourceItemCount)} />
+        <MetricCard
+          label="averageCandidateScore"
+          value={formatSourceCandidateScore(summary.averageCandidateScore)}
+        />
+        <MetricCard
+          label="averageConfidenceScore"
+          value={formatSourceCandidateConfidence(summary.averageConfidenceScore)}
+        />
+        <MetricCard
+          label="maxCandidateScore"
+          value={formatSourceCandidateScore(summary.maxCandidateScore)}
+        />
+        <MetricCard
+          label="latestPublishedAt"
+          value={formatSourceCandidateDate(summary.latestPublishedAt)}
+        />
+        <MetricCard
+          label="providerCounts"
+          value={formatSourceCandidateCountMap(summary.providerCounts)}
+        />
+        <MetricCard
+          label="sentimentCounts"
+          value={formatSourceCandidateCountMap(summary.sentimentCounts)}
+        />
+      </div>
+      <p className="mt-3 text-xs font-bold leading-5 text-slate-500">
+        {summary.summaryLabel}
+      </p>
+    </div>
+  );
+}
+
+function SourceCandidateArtistCard({
+  summary,
+}: {
+  summary: FandexSourceCandidateArtistSummary;
+}) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="font-mono text-xs font-black text-cyan-700">
+        {summary.artistId}
+      </p>
+      <div className="mt-3 grid gap-2">
+        <MetricCard
+          label="candidateCount"
+          value={String(summary.candidateCount)}
+        />
+        <MetricCard
+          label="sourceItemCount"
+          value={String(summary.sourceItemCount)}
+        />
+        <MetricCard
+          label="top variable"
+          value={
+            summary.topVariableKey
+              ? getMetricDisplayLabel(summary.topVariableKey)
+              : '없음'
+          }
+        />
+        <MetricCard
+          label="averageCandidateScore"
+          value={formatSourceCandidateScore(summary.averageCandidateScore)}
+        />
+        <MetricCard
+          label="latestPublishedAt"
+          value={formatSourceCandidateDate(summary.latestPublishedAt)}
+        />
+      </div>
+    </div>
   );
 }
 
