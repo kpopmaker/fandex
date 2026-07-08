@@ -20,12 +20,17 @@ import {
 } from '../../data/v4/charts/artistIndexChartData';
 import { getArtistRecentIssueSignals } from '../../data/v4/charts/issueSignals';
 import {
+  getMetricDisplayLabel,
   getLatestArtistMetricBreakdown,
+  type FandexVariableKey,
   type ArtistMetricBreakdownItem,
 } from '../../data/v4/metrics';
 import {
   getNewsIssueMetricEvidenceSummaryForArtist,
   getNewsIssueSourceArtistSummary,
+  getSourceCandidateSummaryForArtist,
+  getSourceCandidateVariableSummaries,
+  type FandexSourceCandidateVariableSummary,
 } from '../../data/v4/sources';
 
 type PageProps = {
@@ -205,12 +210,44 @@ function formatCountMap(counts: Record<string, number>) {
     : '없음';
 }
 
+function formatPreviewCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0]));
+
+  return entries.length > 0
+    ? entries.map(([key, count]) => `${key} ${count}`).join(' / ')
+    : '없음';
+}
+
+function formatPreviewScore(value: number) {
+  return new Intl.NumberFormat('ko-KR', {
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function formatPreviewDateTime(value: string | null) {
+  if (!value) {
+    return '없음';
+  }
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Seoul',
+  }).format(new Date(value));
+}
+
 function formatWeight(value: number) {
   return `${value}%`;
 }
 
 function getMetricCategoryLabel(category: string) {
   return metricCategoryLabels[category] ?? '기타 지표';
+}
+
+function getSourceCandidateVariableLabel(variableKey: FandexVariableKey) {
+  return getMetricDisplayLabel(variableKey);
 }
 
 function getLatestHistoryPoint(profile: ArtistIndexChartProfile) {
@@ -385,6 +422,14 @@ export default async function ArtistDetailPage({
   const newsIssueSourceSummary = getNewsIssueSourceArtistSummary(profile.artistId);
   const newsIssueMetricEvidenceSummary =
     getNewsIssueMetricEvidenceSummaryForArtist(profile.artistId);
+  const sourceCandidateSummary =
+    getSourceCandidateSummaryForArtist(profile.artistId);
+  const sourceCandidateVariableSummaries = getSourceCandidateVariableSummaries()
+    .filter((summary) => summary.artistId === profile.artistId)
+    .sort((first, second) => second.candidateCount - first.candidateCount
+      || second.averageCandidateScore - first.averageCandidateScore
+      || first.variableKey.localeCompare(second.variableKey))
+    .slice(0, 5);
   const sixMonthChangeRate = formatPercentDelta(
     latestPoint.fandexPoint,
     sixMonthHistory[0]?.fandexPoint,
@@ -519,6 +564,118 @@ export default async function ArtistDetailPage({
           <MetricCard label="데이터 상태" value={latestPoint.dataStatus} />
           <MetricCard label="신뢰도" value={latestPoint.confidenceLevel} />
           <MetricCard label="커버리지 상태" value={coverageStatusLabels[profile.coverageStatus]} />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+                source candidate preview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">웹 source 후보 신호</h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+                fixture source item이 이 아티스트의 FANDEX 변수 후보 신호로
+                어떻게 묶이는지 보여주는 read-only preview입니다. 외부 API,
+                DB, Supabase 연결은 없고 FANDEX 점수 계산에는 아직 반영하지
+                않습니다.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
+              fixture 기반 preview
+            </span>
+          </div>
+
+          {sourceCandidateSummary ? (
+            <div className="mt-5">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                <MetricMini
+                  label="candidateCount"
+                  value={String(sourceCandidateSummary.candidateCount)}
+                />
+                <MetricMini
+                  label="sourceItemCount"
+                  value={String(sourceCandidateSummary.sourceItemCount)}
+                />
+                <MetricMini
+                  label="평균 candidateScore"
+                  value={formatPreviewScore(
+                    sourceCandidateSummary.averageCandidateScore,
+                  )}
+                />
+                <MetricMini
+                  label="평균 confidenceScore"
+                  value={formatPreviewScore(
+                    sourceCandidateSummary.averageConfidenceScore,
+                  )}
+                />
+                <MetricMini
+                  label="top variable"
+                  value={
+                    sourceCandidateSummary.topVariableKey
+                      ? getSourceCandidateVariableLabel(
+                          sourceCandidateSummary.topVariableKey,
+                        )
+                      : '없음'
+                  }
+                />
+                <MetricMini
+                  label="latestPublishedAt"
+                  value={formatPreviewDateTime(
+                    sourceCandidateSummary.latestPublishedAt,
+                  )}
+                />
+                <MetricMini
+                  label="providerCounts"
+                  value={formatPreviewCountMap(
+                    sourceCandidateSummary.providerCounts,
+                  )}
+                />
+                <MetricMini
+                  label="contentTypeCounts"
+                  value={formatPreviewCountMap(
+                    sourceCandidateSummary.contentTypeCounts,
+                  )}
+                />
+                <MetricMini
+                  label="sentimentCounts"
+                  value={formatPreviewCountMap(
+                    sourceCandidateSummary.sentimentCounts,
+                  )}
+                />
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
+                <p className="font-black">{sourceCandidateSummary.summaryLabel}</p>
+                <p className="mt-1">{sourceCandidateSummary.summaryNote}</p>
+                <p className="mt-1">
+                  외부 API/DB/Supabase 연결 없음 · fixture 기반 preview · FANDEX
+                  점수 계산에는 아직 반영하지 않음
+                </p>
+              </div>
+
+              <div className="mt-5">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <h3 className="text-lg font-black">변수별 source candidate 요약</h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+                    preview {sourceCandidateVariableSummaries.length}개
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                  {sourceCandidateVariableSummaries.map((summary) => (
+                    <SourceCandidateVariableSummaryCard
+                      key={`${summary.artistId}-${summary.variableKey}`}
+                      summary={summary}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm font-bold leading-7 text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+              아직 이 아티스트에 연결된 source candidate가 없습니다. 실제 점수
+              계산에는 반영되지 않는 preview 영역입니다.
+            </p>
+          )}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -1475,6 +1632,54 @@ function MetricBreakdownCard({ item }: { item: ArtistMetricBreakdownItem }) {
       </p>
       <p className="mt-3 text-sm font-bold leading-6 text-slate-600 dark:text-slate-300">
         {item.description}
+      </p>
+    </article>
+  );
+}
+
+function SourceCandidateVariableSummaryCard({
+  summary,
+}: {
+  summary: FandexSourceCandidateVariableSummary;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-black text-slate-950 dark:text-white">
+            {getSourceCandidateVariableLabel(summary.variableKey)}
+          </p>
+          <p className="mt-1 font-mono text-xs font-black text-cyan-700 dark:text-cyan-300">
+            {summary.variableKey}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-black text-cyan-700 shadow-sm dark:bg-slate-950 dark:text-cyan-300">
+          {summary.candidateCount} candidates
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <MetricMini label="sourceItemCount" value={String(summary.sourceItemCount)} />
+        <MetricMini
+          label="averageCandidateScore"
+          value={formatPreviewScore(summary.averageCandidateScore)}
+        />
+        <MetricMini
+          label="averageConfidenceScore"
+          value={formatPreviewScore(summary.averageConfidenceScore)}
+        />
+        <MetricMini
+          label="maxCandidateScore"
+          value={formatPreviewScore(summary.maxCandidateScore)}
+        />
+        <MetricMini
+          label="latestPublishedAt"
+          value={formatPreviewDateTime(summary.latestPublishedAt)}
+        />
+      </div>
+
+      <p className="mt-4 rounded-xl bg-white p-3 text-xs font-bold leading-5 text-slate-600 dark:bg-slate-950 dark:text-slate-300">
+        {summary.summaryLabel}
       </p>
     </article>
   );
