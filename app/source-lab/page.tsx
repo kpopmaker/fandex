@@ -1,9 +1,15 @@
 import Link from 'next/link';
 import {
+  getSourceCandidateArtistSummaries,
+  getSourceCandidateMarketSummary,
+  getSourceCandidateVariableSummaries,
   getSourceIngestionSummary,
   getSourceVariableSignalCandidates,
+  runSourceCandidateSummaryShapeCheck,
   runSourceIngestionFoundationShapeCheck,
   sourceIngestionFixture,
+  type FandexSourceCandidateArtistSummary,
+  type FandexSourceCandidateVariableSummary,
   type FandexNormalizedSourceItem,
   type FandexSourceVariableSignalCandidate,
 } from '../data/v4/sources';
@@ -30,6 +36,26 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
+function formatOptionalDateTime(value: string | null) {
+  if (!value) {
+    return '없음';
+  }
+
+  return formatDateTime(value);
+}
+
+function formatCountMap(counts: Record<string, number>) {
+  const entries = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0]));
+
+  if (entries.length === 0) {
+    return '없음';
+  }
+
+  return entries.map(([key, count]) => `${key} ${count}`).join(' · ');
+}
+
 function getSourceTitleMap(items: FandexNormalizedSourceItem[]) {
   return new Map(items.map((item) => [item.sourceId, item.title]));
 }
@@ -39,6 +65,15 @@ export default function SourceLabPage() {
   const candidates = getSourceVariableSignalCandidates(sourceItems);
   const summary = getSourceIngestionSummary(sourceItems);
   const shapeCheck = runSourceIngestionFoundationShapeCheck(sourceItems);
+  const candidateSummaryShapeCheck =
+    runSourceCandidateSummaryShapeCheck(sourceItems);
+  const artistCandidateSummaries =
+    getSourceCandidateArtistSummaries(sourceItems);
+  const variableCandidateSummaries =
+    getSourceCandidateVariableSummaries(sourceItems);
+  const marketCandidateSummary = getSourceCandidateMarketSummary(sourceItems);
+  const artistCandidateSummaryPreview = artistCandidateSummaries.slice(0, 8);
+  const variableCandidateSummaryPreview = variableCandidateSummaries.slice(0, 10);
   const sourceTitleMap = getSourceTitleMap(sourceItems);
   const providerCount = Object.values(summary.providerCounts).filter(
     (count) => count > 0,
@@ -96,6 +131,118 @@ export default function SourceLabPage() {
             label="평균 candidate"
             value={formatScore(averageCandidateScore)}
           />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                candidate summary preview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Source candidate 요약
+              </h2>
+              <p className="mt-2 text-sm font-bold leading-7 text-slate-600">
+                source candidate를 artistId와 variableKey 기준으로 묶어 보는
+                read-only preview입니다. 외부 API, DB, Supabase 연결은 없고
+                FANDEX 계산 반영 전 단계입니다.
+              </p>
+            </div>
+            <span
+              className={
+                candidateSummaryShapeCheck.isValid
+                  ? 'rounded-full bg-emerald-50 px-4 py-2 text-xs font-black text-emerald-700'
+                  : 'rounded-full bg-rose-50 px-4 py-2 text-xs font-black text-rose-700'
+              }
+            >
+              {candidateSummaryShapeCheck.isValid
+                ? 'valid summary shape'
+                : 'summary issue'}
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <SummaryCard
+              label="market candidates"
+              value={String(marketCandidateSummary.candidateCount)}
+            />
+            <SummaryCard
+              label="market top artist"
+              value={marketCandidateSummary.topArtistId ?? '없음'}
+            />
+            <SummaryCard
+              label="market top variable"
+              value={marketCandidateSummary.topVariableKey ?? '없음'}
+            />
+          </div>
+
+          <div className="mt-5 grid gap-3 lg:grid-cols-2">
+            <Mini
+              label="market averageCandidateScore"
+              value={formatScore(marketCandidateSummary.averageCandidateScore)}
+            />
+            <Mini
+              label="market latestPublishedAt"
+              value={formatOptionalDateTime(marketCandidateSummary.latestPublishedAt)}
+            />
+            <Mini
+              label="market providerCounts"
+              value={formatCountMap(marketCandidateSummary.providerCounts)}
+            />
+            <Mini
+              label="market sentimentCounts"
+              value={formatCountMap(marketCandidateSummary.sentimentCounts)}
+            />
+          </div>
+
+          <div className="mt-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-lg font-black">아티스트별 candidate summary</h3>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                {artistCandidateSummaryPreview.length} /{' '}
+                {artistCandidateSummaries.length}
+              </span>
+            </div>
+            <div className="mt-3 grid gap-3">
+              {artistCandidateSummaryPreview.map((artistSummary) => (
+                <ArtistCandidateSummaryCard
+                  key={artistSummary.artistId}
+                  summary={artistSummary}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-lg font-black">변수별 candidate summary</h3>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                {variableCandidateSummaryPreview.length} /{' '}
+                {variableCandidateSummaries.length}
+              </span>
+            </div>
+            <div className="mt-3 grid gap-3">
+              {variableCandidateSummaryPreview.map((variableSummary) => (
+                <VariableCandidateSummaryCard
+                  key={`${variableSummary.artistId}-${variableSummary.variableKey}`}
+                  summary={variableSummary}
+                />
+              ))}
+            </div>
+          </div>
+
+          {candidateSummaryShapeCheck.issues.length > 0 ? (
+            <div className="mt-5 grid gap-3">
+              {candidateSummaryShapeCheck.issues.map((issue) => (
+                <article
+                  key={`${issue.code}-${issue.artistId ?? 'market'}-${issue.variableKey ?? 'all'}`}
+                  className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-bold text-rose-800"
+                >
+                  {issue.message}
+                </article>
+              ))}
+            </div>
+          ) : null}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -257,6 +404,62 @@ function SourceItemCard({ item }: { item: FandexNormalizedSourceItem }) {
           {item.note}
         </p>
       ) : null}
+    </article>
+  );
+}
+
+function ArtistCandidateSummaryCard({
+  summary,
+}: {
+  summary: FandexSourceCandidateArtistSummary;
+}) {
+  return (
+    <article className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 lg:grid-cols-[0.8fr_0.7fr_0.7fr_0.7fr_0.9fr_1fr] lg:items-center">
+      <Mini label="artistId" value={summary.artistId} />
+      <Mini label="candidateCount" value={String(summary.candidateCount)} />
+      <Mini label="sourceItemCount" value={String(summary.sourceItemCount)} />
+      <Mini label="top variable" value={summary.topVariableKey ?? '없음'} />
+      <Mini
+        label="averageCandidateScore"
+        value={formatScore(summary.averageCandidateScore)}
+      />
+      <Mini
+        label="latestPublishedAt"
+        value={formatOptionalDateTime(summary.latestPublishedAt)}
+      />
+      <div className="lg:col-span-6">
+        <p className="rounded-xl bg-white p-3 text-sm font-black leading-6 text-slate-700">
+          {summary.summaryLabel}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function VariableCandidateSummaryCard({
+  summary,
+}: {
+  summary: FandexSourceCandidateVariableSummary;
+}) {
+  return (
+    <article className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 lg:grid-cols-[0.8fr_0.7fr_0.7fr_0.8fr] lg:items-center">
+      <Mini label="artistId" value={summary.artistId} />
+      <Mini label="variableKey" value={summary.variableKey} />
+      <Mini label="candidateCount" value={String(summary.candidateCount)} />
+      <Mini label="sourceItemCount" value={String(summary.sourceItemCount)} />
+      <Mini
+        label="averageCandidateScore"
+        value={formatScore(summary.averageCandidateScore)}
+      />
+      <Mini label="providerCounts" value={formatCountMap(summary.providerCounts)} />
+      <Mini
+        label="sentimentCounts"
+        value={formatCountMap(summary.sentimentCounts)}
+      />
+      <Mini
+        label="latestPublishedAt"
+        value={formatOptionalDateTime(summary.latestPublishedAt)}
+      />
     </article>
   );
 }
