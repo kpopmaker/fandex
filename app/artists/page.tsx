@@ -10,6 +10,10 @@ import {
   type ArtistIndexGroupType,
   type ArtistIndexTrendBand,
 } from '../data/v4/charts/artistIndexChartData';
+import {
+  getSourceCandidateArtistSummaries,
+  getSourceCandidateMarketSummary,
+} from '../data/v4/sources';
 
 const groupTypeLabels: Record<ArtistIndexGroupType, string> = {
   girl_group: '걸그룹',
@@ -60,6 +64,24 @@ function formatDeltaRate(history: Array<{ fandexPoint: number }>) {
 
   const rate = ((latest.fandexPoint - first.fandexPoint) / first.fandexPoint) * 100;
   return `${rate >= 0 ? '+' : ''}${rate.toFixed(1)}%`;
+}
+
+function formatPreviewScore(value: number) {
+  return new Intl.NumberFormat('ko-KR', {
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function formatConfidenceRatio(value: number) {
+  return (value / 100).toFixed(2);
+}
+
+function formatSourceDate(value: string | null) {
+  if (!value) {
+    return '없음';
+  }
+
+  return value.slice(0, 10);
 }
 
 function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
@@ -115,6 +137,17 @@ export default function ArtistsPage() {
   });
   const marketRows = getMarketRows(profiles);
   const marketSnapshot = getMarketSnapshot(marketRows);
+  const sourceCandidateMarketSummary = getSourceCandidateMarketSummary();
+  const sourceCandidateSummariesByArtist = new Map(
+    getSourceCandidateArtistSummaries().map((summary) => [
+      summary.artistId,
+      summary,
+    ]),
+  );
+  const topSourceCandidateArtist = profiles.find(
+    (profile) =>
+      profile.artistId === sourceCandidateMarketSummary.topArtistId,
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -169,13 +202,15 @@ export default function ArtistsPage() {
               <p className="mt-2 max-w-3xl text-sm font-bold leading-7 text-slate-600">
                 등록/추적 아티스트를 주식 종목표처럼 훑기 위한 요약입니다.
                 현재 값은 기존 preview seed를 화면에서 집계한 read-only 정보입니다.
+                source 후보는 fixture 기반 read-only preview이며, 현재 FANDEX
+                점수 계산에는 반영되지 않습니다.
               </p>
             </div>
             <span className="rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700">
               {profiles.length}팀 / {marketSnapshot.trackedCount}팀 지속 추적
             </span>
           </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
             <MarketMetric
               label="총 FANDEX 시가총점형 합계"
               value={formatPoint(marketSnapshot.totalMarketPoint)}
@@ -206,6 +241,20 @@ export default function ArtistsPage() {
               value={`${marketSnapshot.risingCount}팀`}
               note="최근 6개월 trend band 기준"
             />
+            <MarketMetric
+              label="source 후보 연결"
+              value={`${sourceCandidateMarketSummary.artistCount}팀`}
+              note={`${sourceCandidateMarketSummary.candidateCount} candidates / ${sourceCandidateMarketSummary.sourceItemCount} sources`}
+            />
+            <MarketMetric
+              label="평균 후보 품질"
+              value={formatPreviewScore(
+                sourceCandidateMarketSummary.averageCandidateScore,
+              )}
+              note={`confidence ${formatConfidenceRatio(
+                sourceCandidateMarketSummary.averageConfidenceScore,
+              )} / 최다 ${topSourceCandidateArtist?.artistName ?? '없음'}`}
+            />
           </div>
         </section>
 
@@ -215,6 +264,8 @@ export default function ArtistsPage() {
               <h2 className="text-2xl font-black">아티스트 마켓 테이블</h2>
               <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
                 ticker, 현재 FANDEX, 6개월 변화율, 주요 기여 변수까지 한 번에 봅니다.
+                source 후보는 fixture 기반 read-only preview이며, 현재 FANDEX
+                점수 계산에는 반영되지 않습니다.
               </p>
             </div>
             <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-600">
@@ -222,7 +273,7 @@ export default function ArtistsPage() {
             </span>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1120px] border-separate border-spacing-0 text-left text-sm">
+            <table className="w-full min-w-[1480px] border-separate border-spacing-0 text-left text-sm">
               <thead>
                 <tr className="text-xs font-black text-slate-500">
                   <th className="border-b border-slate-200 p-3">순위</th>
@@ -235,6 +286,10 @@ export default function ArtistsPage() {
                   <th className="border-b border-slate-200 p-3">변화율</th>
                   <th className="border-b border-slate-200 p-3">흐름</th>
                   <th className="border-b border-slate-200 p-3">주요 기여 변수</th>
+                  <th className="border-b border-slate-200 p-3">source 후보</th>
+                  <th className="border-b border-slate-200 p-3">candidate 평균</th>
+                  <th className="border-b border-slate-200 p-3">confidence</th>
+                  <th className="border-b border-slate-200 p-3">source 최신일</th>
                   <th className="border-b border-slate-200 p-3">데이터 상태</th>
                   <th className="border-b border-slate-200 p-3">마지막 업데이트</th>
                   <th className="border-b border-slate-200 p-3">상세</th>
@@ -244,6 +299,8 @@ export default function ArtistsPage() {
               <tbody>
                 {marketRows.map((row, index) => {
                   const { profile, latest, strongestVariable } = row;
+                  const sourceCandidateSummary =
+                    sourceCandidateSummariesByArtist.get(profile.artistId);
 
                   return (
                     <tr
@@ -287,6 +344,32 @@ export default function ArtistsPage() {
                         ) : (
                           '-'
                         )}
+                      </td>
+                      <td className="border-b border-slate-100 p-3">
+                        {sourceCandidateSummary
+                          ? `${sourceCandidateSummary.candidateCount} candidates / ${sourceCandidateSummary.sourceItemCount} sources`
+                          : '없음'}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono">
+                        {sourceCandidateSummary
+                          ? formatPreviewScore(
+                              sourceCandidateSummary.averageCandidateScore,
+                            )
+                          : '-'}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono">
+                        {sourceCandidateSummary
+                          ? formatConfidenceRatio(
+                              sourceCandidateSummary.averageConfidenceScore,
+                            )
+                          : '-'}
+                      </td>
+                      <td className="border-b border-slate-100 p-3 font-mono">
+                        {sourceCandidateSummary
+                          ? formatSourceDate(
+                              sourceCandidateSummary.latestPublishedAt,
+                            )
+                          : '없음'}
                       </td>
                       <td className="border-b border-slate-100 p-3">
                         {latest ? dataStatusLabels[latest.dataStatus] : '-'}
