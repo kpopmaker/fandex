@@ -13,11 +13,17 @@ import {
   getSourceProviderSnapshotHistorySummary,
   diffSourceProviderSnapshots,
   getSourceCandidateQualityScores,
+  getCandidateEligibilityDecisions,
+  getSourceEligibilityDecisions,
+  getSourceEligibilityReasonLabel,
+  getSourceEligibilityStatusLabel,
+  getSourceEligibilitySummary,
   getSourceQualityFactorLabel,
   getSourceQualityGradeLabel,
   getSourceQualityScores,
   getSourceQualityScoringSummary,
   getSourceVariableSignalCandidates,
+  runSourceEligibilityShapeCheck,
   runSourceQualityScoringShapeCheck,
   runSourceProviderSnapshotDiffShapeCheck,
   runSourceProviderSnapshotShapeCheck,
@@ -31,6 +37,9 @@ import {
   type FandexSourceProviderAdapterSummary,
   type FandexSourceProviderSnapshot,
   type FandexSourceCandidateQualityScore,
+  type FandexCandidateEligibilityDecision,
+  type FandexSourceEligibilityDecision,
+  type FandexSourceEligibilityReasonCode,
   type FandexSourceItemQualityScore,
   type FandexSourceQualityFactor,
   type FandexSourceCandidateArtistSummary,
@@ -98,6 +107,16 @@ function formatPreviewList(values: string[], maxItems: number) {
     : previewValues;
 }
 
+function formatEligibilityReasons(
+  reasonCodes: FandexSourceEligibilityReasonCode[],
+  maxItems = 4,
+) {
+  return formatPreviewList(
+    reasonCodes.map(getSourceEligibilityReasonLabel),
+    maxItems,
+  );
+}
+
 export default function SourceLabPage() {
   const sourceItems = sourceIngestionFixture;
   const candidates = getSourceVariableSignalCandidates(sourceItems);
@@ -156,6 +175,17 @@ export default function SourceLabPage() {
   const sourceQualityShapeCheck = runSourceQualityScoringShapeCheck();
   const hasQualityScoringPreview =
     sourceQualityScores.length > 0 && candidateQualityScores.length > 0;
+  const sourceEligibilityDecisions = getSourceEligibilityDecisions();
+  const candidateEligibilityDecisions = getCandidateEligibilityDecisions();
+  const sourceEligibilityDecisionPreview =
+    sourceEligibilityDecisions.slice(0, 8);
+  const candidateEligibilityDecisionPreview =
+    candidateEligibilityDecisions.slice(0, 8);
+  const sourceEligibilitySummary = getSourceEligibilitySummary();
+  const sourceEligibilityShapeCheck = runSourceEligibilityShapeCheck();
+  const hasEligibilityPreview =
+    sourceEligibilityDecisions.length > 0
+    && candidateEligibilityDecisions.length > 0;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -661,6 +691,172 @@ export default function SourceLabPage() {
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                source eligibility preview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Source 반영 후보 판정 Preview
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
+                실제 FANDEX 점수 반영 전, source와 candidate가 반영 후보인지
+                read-only로 판정하는 preview입니다. v10 quality score를 기반으로
+                eligible / review / limited / blocked 상태를 표시합니다. 이
+                판정은 실제 FANDEX 랭킹, 차트, 아티스트 점수 계산에는 반영되지
+                않습니다. 외부 API/DB/Supabase 연결 없이 fixture/mock 데이터만
+                사용합니다.
+              </p>
+            </div>
+            <ShapeCheckBadge
+              isValid={sourceEligibilityShapeCheck.isValid}
+              validLabel="eligibility valid"
+              invalidLabel="eligibility issue"
+            />
+          </div>
+
+          {hasEligibilityPreview ? (
+            <>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-11">
+                <SummaryCard
+                  label="source decision"
+                  value={String(sourceEligibilitySummary.sourceDecisionCount)}
+                />
+                <SummaryCard
+                  label="candidate decision"
+                  value={String(sourceEligibilitySummary.candidateDecisionCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('eligible')} source`}
+                  value={String(sourceEligibilitySummary.eligibleSourceCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('review')} source`}
+                  value={String(sourceEligibilitySummary.reviewSourceCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('limited')} source`}
+                  value={String(sourceEligibilitySummary.limitedSourceCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('blocked')} source`}
+                  value={String(sourceEligibilitySummary.blockedSourceCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('eligible')} candidate`}
+                  value={String(sourceEligibilitySummary.eligibleCandidateCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('review')} candidate`}
+                  value={String(sourceEligibilitySummary.reviewCandidateCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('limited')} candidate`}
+                  value={String(sourceEligibilitySummary.limitedCandidateCount)}
+                />
+                <SummaryCard
+                  label={`${getSourceEligibilityStatusLabel('blocked')} candidate`}
+                  value={String(sourceEligibilitySummary.blockedCandidateCount)}
+                />
+                <SummaryCard
+                  label="warning"
+                  value={String(sourceEligibilitySummary.warningCount)}
+                />
+              </div>
+
+              <div className="mt-5 grid gap-3 lg:grid-cols-2">
+                <Mini
+                  label="반영 후보 source"
+                  value={formatPreviewList(
+                    sourceEligibilitySummary.eligibleSourceIds,
+                    5,
+                  )}
+                />
+                <Mini
+                  label="제외 후보 source"
+                  value={formatPreviewList(
+                    sourceEligibilitySummary.blockedSourceIds,
+                    5,
+                  )}
+                />
+                <Mini
+                  label="반영 후보 candidate"
+                  value={formatPreviewList(
+                    sourceEligibilitySummary.eligibleCandidateKeys,
+                    5,
+                  )}
+                />
+                <Mini
+                  label="제외 후보 candidate"
+                  value={formatPreviewList(
+                    sourceEligibilitySummary.blockedCandidateKeys,
+                    5,
+                  )}
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-black">
+                    source eligibility decision preview
+                  </h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                    {sourceEligibilityDecisionPreview.length} /{' '}
+                    {sourceEligibilityDecisions.length}
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                  {sourceEligibilityDecisionPreview.map((decision) => (
+                    <SourceEligibilityDecisionCard
+                      key={decision.sourceId}
+                      decision={decision}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-black">
+                    candidate eligibility decision preview
+                  </h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                    {candidateEligibilityDecisionPreview.length} /{' '}
+                    {candidateEligibilityDecisions.length}
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-3">
+                  {candidateEligibilityDecisionPreview.map((decision) => (
+                    <CandidateEligibilityDecisionCard
+                      key={decision.candidateKey}
+                      decision={decision}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 lg:grid-cols-2">
+                <ShapeCheckCard
+                  label="eligibility shape check"
+                  isValid={sourceEligibilityShapeCheck.isValid}
+                  issueCount={sourceEligibilityShapeCheck.issues.length}
+                  detail={`${sourceEligibilityShapeCheck.sourceDecisionCount} source decisions / ${sourceEligibilityShapeCheck.candidateDecisionCount} candidate decisions`}
+                />
+                <Mini
+                  label="eligibility summary note"
+                  value={sourceEligibilitySummary.summaryNote}
+                />
+              </div>
+            </>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800">
+              아직 eligibility preview 데이터가 없습니다. fixture 기반 read-only
+              preview 영역입니다.
+            </p>
+          )}
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
                 candidate summary preview
               </p>
               <h2 className="mt-2 text-2xl font-black">
@@ -1109,6 +1305,101 @@ function CandidateQualityScoreCard({
           value={formatScore(score.blendedQualityScore)}
         />
         <Mini label="warnings" value={formatWarnings(score.warnings)} />
+      </div>
+    </article>
+  );
+}
+
+function SourceEligibilityDecisionCard({
+  decision,
+}: {
+  decision: FandexSourceEligibilityDecision;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="font-mono text-xs font-black text-cyan-700">
+            {decision.sourceId}
+          </p>
+          <h3 className="mt-2 text-lg font-black">{decision.summaryLabel}</h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+            {decision.summaryNote}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+          {getSourceEligibilityStatusLabel(decision.eligibilityStatus)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <Mini label="provider" value={decision.provider} />
+        <Mini label="qualityScore" value={formatScore(decision.qualityScore)} />
+        <Mini
+          label="qualityGrade"
+          value={getSourceQualityGradeLabel(decision.qualityGrade)}
+        />
+        <Mini
+          label="reasonCodes"
+          value={formatEligibilityReasons(decision.reasonCodes)}
+        />
+        <Mini label="warnings" value={formatWarnings(decision.warnings)} />
+      </div>
+    </article>
+  );
+}
+
+function CandidateEligibilityDecisionCard({
+  decision,
+}: {
+  decision: FandexCandidateEligibilityDecision;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="font-mono text-xs font-black text-cyan-700">
+            {decision.candidateKey}
+          </p>
+          <h3 className="mt-2 text-lg font-black">{decision.summaryLabel}</h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+            {decision.summaryNote}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+          {getSourceEligibilityStatusLabel(decision.eligibilityStatus)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+        <Mini label="sourceId" value={decision.sourceId} />
+        <Mini label="artistId" value={decision.artistId} />
+        <Mini label="variableKey" value={decision.variableKey} />
+        <Mini
+          label="candidateScore"
+          value={formatScore(decision.candidateScore)}
+        />
+        <Mini
+          label="confidenceScore"
+          value={formatScore(decision.confidenceScore)}
+        />
+        <Mini
+          label="sourceQualityScore"
+          value={formatScore(decision.sourceQualityScore)}
+        />
+        <Mini
+          label="blendedQualityScore"
+          value={formatScore(decision.blendedQualityScore)}
+        />
+        <Mini
+          label="qualityGrade"
+          value={getSourceQualityGradeLabel(decision.qualityGrade)}
+        />
+        <Mini
+          label="reasonCodes"
+          value={formatEligibilityReasons(decision.reasonCodes)}
+        />
+        <Mini label="warnings" value={formatWarnings(decision.warnings)} />
       </div>
     </article>
   );
