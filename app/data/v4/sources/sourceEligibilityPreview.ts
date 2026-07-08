@@ -65,7 +65,7 @@ function hasDuplicateValues(values: string[]) {
   return new Set(values).size !== values.length;
 }
 
-function getUniqueValues(values: string[]) {
+function getUniqueValues<T extends string>(values: T[]): T[] {
   return Array.from(new Set(values)).sort();
 }
 
