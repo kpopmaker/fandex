@@ -12,7 +12,13 @@ import {
   getSourceProviderSnapshotFixtures,
   getSourceProviderSnapshotHistorySummary,
   diffSourceProviderSnapshots,
+  getSourceCandidateQualityScores,
+  getSourceQualityFactorLabel,
+  getSourceQualityGradeLabel,
+  getSourceQualityScores,
+  getSourceQualityScoringSummary,
   getSourceVariableSignalCandidates,
+  runSourceQualityScoringShapeCheck,
   runSourceProviderSnapshotDiffShapeCheck,
   runSourceProviderSnapshotShapeCheck,
   runSourceProviderPreviewImport,
@@ -24,6 +30,9 @@ import {
   type FandexSourceProviderAdapterResult,
   type FandexSourceProviderAdapterSummary,
   type FandexSourceProviderSnapshot,
+  type FandexSourceCandidateQualityScore,
+  type FandexSourceItemQualityScore,
+  type FandexSourceQualityFactor,
   type FandexSourceCandidateArtistSummary,
   type FandexSourceCandidateVariableSummary,
   type FandexNormalizedSourceItem,
@@ -139,6 +148,14 @@ export default function SourceLabPage() {
   const snapshotDiffShapeCheck =
     runSourceProviderSnapshotDiffShapeCheck(snapshotDiff);
   const hasComparableSnapshots = snapshotFixtures.length >= 2;
+  const sourceQualityScores = getSourceQualityScores();
+  const candidateQualityScores = getSourceCandidateQualityScores();
+  const sourceQualityScorePreview = sourceQualityScores.slice(0, 8);
+  const candidateQualityScorePreview = candidateQualityScores.slice(0, 8);
+  const sourceQualitySummary = getSourceQualityScoringSummary();
+  const sourceQualityShapeCheck = runSourceQualityScoringShapeCheck();
+  const hasQualityScoringPreview =
+    sourceQualityScores.length > 0 && candidateQualityScores.length > 0;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -501,6 +518,149 @@ export default function SourceLabPage() {
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                source quality scoring preview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Source 품질 점수 Preview
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
+                실제 FANDEX 점수 반영 전, source item과 candidate의 품질을
+                fixture 기반으로 평가하는 read-only preview입니다. trust /
+                relevance / engagement / freshness / sentiment / provider /
+                warning 요소를 기준으로 품질 점수를 미리 확인합니다. 이 점수는
+                실제 FANDEX 랭킹, 차트, 아티스트 점수 계산에는 반영되지 않습니다.
+                외부 API/DB/Supabase 연결 없이 fixture/mock 데이터만 사용합니다.
+              </p>
+            </div>
+            <ShapeCheckBadge
+              isValid={sourceQualityShapeCheck.isValid}
+              validLabel="quality valid"
+              invalidLabel="quality issue"
+            />
+          </div>
+
+          {hasQualityScoringPreview ? (
+            <>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-10">
+                <SummaryCard
+                  label="source score"
+                  value={String(sourceQualitySummary.sourceItemCount)}
+                />
+                <SummaryCard
+                  label="candidate score"
+                  value={String(sourceQualitySummary.candidateCount)}
+                />
+                <SummaryCard
+                  label="avg source"
+                  value={formatScore(
+                    sourceQualitySummary.averageSourceQualityScore,
+                  )}
+                />
+                <SummaryCard
+                  label="avg candidate"
+                  value={formatScore(
+                    sourceQualitySummary.averageCandidateQualityScore,
+                  )}
+                />
+                <SummaryCard
+                  label={getSourceQualityGradeLabel('excellent')}
+                  value={String(sourceQualitySummary.excellentCount)}
+                />
+                <SummaryCard
+                  label={getSourceQualityGradeLabel('good')}
+                  value={String(sourceQualitySummary.goodCount)}
+                />
+                <SummaryCard
+                  label={getSourceQualityGradeLabel('watch')}
+                  value={String(sourceQualitySummary.watchCount)}
+                />
+                <SummaryCard
+                  label={getSourceQualityGradeLabel('weak')}
+                  value={String(sourceQualitySummary.weakCount)}
+                />
+                <SummaryCard
+                  label={getSourceQualityGradeLabel('blocked')}
+                  value={String(sourceQualitySummary.blockedCount)}
+                />
+                <SummaryCard
+                  label="warning"
+                  value={String(sourceQualitySummary.warningCount)}
+                />
+              </div>
+
+              <div className="mt-5 grid gap-3 lg:grid-cols-2">
+                <Mini
+                  label="품질 상위 source"
+                  value={formatPreviewList(sourceQualitySummary.topSourceIds, 5)}
+                />
+                <Mini
+                  label="주의 필요 source"
+                  value={formatPreviewList(sourceQualitySummary.weakSourceIds, 5)}
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-black">
+                    source item quality score preview
+                  </h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                    {sourceQualityScorePreview.length} /{' '}
+                    {sourceQualityScores.length}
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                  {sourceQualityScorePreview.map((score) => (
+                    <SourceQualityScoreCard key={score.sourceId} score={score} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-black">
+                    candidate quality score preview
+                  </h3>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                    {candidateQualityScorePreview.length} /{' '}
+                    {candidateQualityScores.length}
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-3">
+                  {candidateQualityScorePreview.map((score) => (
+                    <CandidateQualityScoreCard
+                      key={score.candidateKey}
+                      score={score}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 lg:grid-cols-2">
+                <ShapeCheckCard
+                  label="quality scoring shape check"
+                  isValid={sourceQualityShapeCheck.isValid}
+                  issueCount={sourceQualityShapeCheck.issues.length}
+                  detail={`${sourceQualityShapeCheck.sourceItemCount} source scores / ${sourceQualityShapeCheck.candidateCount} candidate scores`}
+                />
+                <Mini
+                  label="quality summary note"
+                  value={sourceQualitySummary.summaryNote}
+                />
+              </div>
+            </>
+          ) : (
+            <p className="mt-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-800">
+              아직 quality scoring preview 데이터가 없습니다. fixture 기반
+              read-only preview 영역입니다.
+            </p>
+          )}
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
                 candidate summary preview
               </p>
               <h2 className="mt-2 text-2xl font-black">
@@ -853,6 +1013,103 @@ function SnapshotCard({
       <p className="mt-4 rounded-xl bg-white p-3 text-xs font-bold leading-5 text-slate-600">
         {snapshot.note}
       </p>
+    </article>
+  );
+}
+
+const sourceQualityFactorPreviewKeys: FandexSourceQualityFactor[] = [
+  'trust',
+  'relevance',
+  'engagement',
+  'freshness',
+  'warning',
+];
+
+function formatWarnings(warnings: string[]) {
+  return warnings.length > 0 ? formatPreviewList(warnings, 3) : '없음';
+}
+
+function SourceQualityScoreCard({
+  score,
+}: {
+  score: FandexSourceItemQualityScore;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="font-mono text-xs font-black text-cyan-700">
+            {score.sourceId}
+          </p>
+          <h3 className="mt-2 text-lg font-black">{score.summaryLabel}</h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+            {score.summaryNote}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+          {getSourceQualityGradeLabel(score.qualityGrade)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <Mini label="provider" value={score.provider} />
+        <Mini label="contentType" value={score.contentType} />
+        <Mini label="artistIds" value={formatPreviewList(score.artistIds, 4)} />
+        <Mini label="qualityScore" value={formatScore(score.qualityScore)} />
+        <Mini label="warnings" value={formatWarnings(score.warnings)} />
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        {sourceQualityFactorPreviewKeys.map((factor) => (
+          <Mini
+            key={factor}
+            label={getSourceQualityFactorLabel(factor)}
+            value={formatScore(score.factorScores[factor])}
+          />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function CandidateQualityScoreCard({
+  score,
+}: {
+  score: FandexSourceCandidateQualityScore;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="font-mono text-xs font-black text-cyan-700">
+            {score.candidateKey}
+          </p>
+          <h3 className="mt-2 text-lg font-black">{score.summaryLabel}</h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+            {score.summaryNote}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600">
+          {getSourceQualityGradeLabel(score.qualityGrade)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+        <Mini label="sourceId" value={score.sourceId} />
+        <Mini label="artistId" value={score.artistId} />
+        <Mini label="variableKey" value={score.variableKey} />
+        <Mini label="candidateScore" value={formatScore(score.candidateScore)} />
+        <Mini label="confidenceScore" value={formatScore(score.confidenceScore)} />
+        <Mini
+          label="sourceQualityScore"
+          value={formatScore(score.sourceQualityScore)}
+        />
+        <Mini
+          label="blendedQualityScore"
+          value={formatScore(score.blendedQualityScore)}
+        />
+        <Mini label="warnings" value={formatWarnings(score.warnings)} />
+      </div>
     </article>
   );
 }

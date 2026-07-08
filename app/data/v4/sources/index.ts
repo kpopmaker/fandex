@@ -18,3 +18,5 @@ export * from './sourceProviderImportPipeline';
 export * from './sourceProviderSnapshotTypes';
 export * from './sourceProviderSnapshotFixture';
 export * from './sourceProviderSnapshotDiff';
+export * from './sourceQualityScoringTypes';
+export * from './sourceQualityScoringPreview';
