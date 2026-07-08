@@ -4,10 +4,18 @@ import {
   getSourceCandidateMarketSummary,
   getSourceCandidateVariableSummaries,
   getSourceIngestionSummary,
+  getSourceProviderAdapters,
+  getSourceProviderAdapterSummaries,
+  getSourceProviderPreviewImportSummary,
   getSourceVariableSignalCandidates,
+  runSourceProviderPreviewImport,
+  runSourceProviderPreviewImportShapeCheck,
+  runSourceProviderRegistryShapeCheck,
   runSourceCandidateSummaryShapeCheck,
   runSourceIngestionFoundationShapeCheck,
   sourceIngestionFixture,
+  type FandexSourceProviderAdapterResult,
+  type FandexSourceProviderAdapterSummary,
   type FandexSourceCandidateArtistSummary,
   type FandexSourceCandidateVariableSummary,
   type FandexNormalizedSourceItem,
@@ -84,6 +92,18 @@ export default function SourceLabPage() {
   const averageCandidateScore = getAverage(
     candidates.map((candidate) => candidate.candidateScore),
   );
+  const providerAdapters = getSourceProviderAdapters();
+  const providerAdapterSummaries = getSourceProviderAdapterSummaries();
+  const providerAdapterSummaryPreview = providerAdapterSummaries.slice(0, 8);
+  const providerRegistryShapeCheck = runSourceProviderRegistryShapeCheck();
+  const providerPreviewImport = runSourceProviderPreviewImport();
+  const providerPreviewImportSummary = getSourceProviderPreviewImportSummary();
+  const providerPreviewImportShapeCheck =
+    runSourceProviderPreviewImportShapeCheck();
+  const mockProviderCount = providerAdapters.filter(
+    (adapter) => adapter.status === 'mock',
+  ).length;
+  const providerResultPreview = providerPreviewImport.providerResults.slice(0, 8);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -131,6 +151,141 @@ export default function SourceLabPage() {
             label="평균 candidate"
             value={formatScore(averageCandidateScore)}
           />
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-600">
+                provider adapter preview
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Provider Adapter Preview
+              </h2>
+              <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600">
+                실제 API 연결 전, provider adapter가 fixture source item을 import
+                pipeline으로 넘기는지 확인하는 영역입니다. 외부 API/DB/Supabase
+                연결 없음, fixture 기반 mock provider만 사용, FANDEX 점수
+                계산에는 아직 반영하지 않음.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <ShapeCheckBadge
+                isValid={providerRegistryShapeCheck.isValid}
+                validLabel="registry valid"
+                invalidLabel="registry issue"
+              />
+              <ShapeCheckBadge
+                isValid={providerPreviewImportShapeCheck.isValid}
+                validLabel="pipeline valid"
+                invalidLabel="pipeline issue"
+              />
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+            <SummaryCard
+              label="provider"
+              value={String(providerPreviewImportSummary.providerCount)}
+            />
+            <SummaryCard
+              label="mock provider"
+              value={String(mockProviderCount)}
+            />
+            <SummaryCard
+              label="preview source"
+              value={String(providerPreviewImportSummary.sourceItemCount)}
+            />
+            <SummaryCard
+              label="preview candidate"
+              value={String(providerPreviewImportSummary.candidateCount)}
+            />
+            <SummaryCard
+              label="warning"
+              value={String(providerPreviewImportSummary.warningCount)}
+            />
+            <SummaryCard
+              label="avg candidate"
+              value={formatScore(providerPreviewImportSummary.averageCandidateScore)}
+            />
+            <SummaryCard
+              label="avg relevance"
+              value={formatScore(providerPreviewImportSummary.averageRelevanceScore)}
+            />
+          </div>
+
+          <div className="mt-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-lg font-black">provider adapter 목록</h3>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                {providerAdapterSummaryPreview.length} /{' '}
+                {providerAdapterSummaries.length}
+              </span>
+            </div>
+            <div className="mt-3 grid gap-3 lg:grid-cols-2">
+              {providerAdapterSummaryPreview.map((adapterSummary) => (
+                <ProviderAdapterSummaryCard
+                  key={adapterSummary.provider}
+                  summary={adapterSummary}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-lg font-black">preview import pipeline 결과</h3>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">
+                {formatDateTime(providerPreviewImport.collectedAt)}
+              </span>
+            </div>
+            <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+              <Mini
+                label="providerResults"
+                value={String(providerPreviewImport.providerResults.length)}
+              />
+              <Mini
+                label="sourceItems"
+                value={String(providerPreviewImport.sourceItems.length)}
+              />
+              <Mini
+                label="candidates"
+                value={String(providerPreviewImport.candidates.length)}
+              />
+              <Mini
+                label="artistCount"
+                value={String(providerPreviewImportSummary.artistCount)}
+              />
+              <Mini
+                label="variableCount"
+                value={String(providerPreviewImportSummary.variableCount)}
+              />
+              <Mini
+                label="warningCount"
+                value={String(providerPreviewImportSummary.warningCount)}
+              />
+            </div>
+            <div className="mt-3 grid gap-3">
+              {providerResultPreview.map((result) => (
+                <ProviderResultCard key={result.provider} result={result} />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-3 lg:grid-cols-2">
+            <ShapeCheckCard
+              label="provider registry shape check"
+              isValid={providerRegistryShapeCheck.isValid}
+              issueCount={providerRegistryShapeCheck.issues.length}
+              detail={`${providerRegistryShapeCheck.adapterCount} adapters / ${providerRegistryShapeCheck.previewItemCount} preview items`}
+            />
+            <ShapeCheckCard
+              label="preview import shape check"
+              isValid={providerPreviewImportShapeCheck.isValid}
+              issueCount={providerPreviewImportShapeCheck.issues.length}
+              detail={`${providerPreviewImportShapeCheck.providerCount} providers / ${providerPreviewImportShapeCheck.sourceItemCount} sources / ${providerPreviewImportShapeCheck.candidateCount} candidates`}
+            />
+          </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -336,6 +491,121 @@ export default function SourceLabPage() {
         </section>
       </section>
     </main>
+  );
+}
+
+function ShapeCheckBadge({
+  isValid,
+  validLabel,
+  invalidLabel,
+}: {
+  isValid: boolean;
+  validLabel: string;
+  invalidLabel: string;
+}) {
+  return (
+    <span
+      className={
+        isValid
+          ? 'rounded-full bg-emerald-50 px-4 py-2 text-xs font-black text-emerald-700'
+          : 'rounded-full bg-rose-50 px-4 py-2 text-xs font-black text-rose-700'
+      }
+    >
+      {isValid ? validLabel : invalidLabel}
+    </span>
+  );
+}
+
+function ShapeCheckCard({
+  label,
+  isValid,
+  issueCount,
+  detail,
+}: {
+  label: string;
+  isValid: boolean;
+  issueCount: number;
+  detail: string;
+}) {
+  return (
+    <article
+      className={
+        isValid
+          ? 'rounded-2xl border border-emerald-200 bg-emerald-50 p-4'
+          : 'rounded-2xl border border-rose-200 bg-rose-50 p-4'
+      }
+    >
+      <p
+        className={
+          isValid
+            ? 'text-xs font-black uppercase tracking-[0.12em] text-emerald-700'
+            : 'text-xs font-black uppercase tracking-[0.12em] text-rose-700'
+        }
+      >
+        {label}
+      </p>
+      <p className="mt-2 text-lg font-black text-slate-950">
+        {isValid ? '통과' : '확인 필요'}
+      </p>
+      <p className="mt-1 text-sm font-bold text-slate-600">
+        {detail} / issues {issueCount}
+      </p>
+    </article>
+  );
+}
+
+function ProviderAdapterSummaryCard({
+  summary,
+}: {
+  summary: FandexSourceProviderAdapterSummary;
+}) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="font-mono text-xs font-black uppercase tracking-[0.12em] text-cyan-700">
+            {summary.provider}
+          </p>
+          <h3 className="mt-2 text-lg font-black">{summary.displayName}</h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-600">
+            {summary.description}
+          </p>
+        </div>
+        <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black text-amber-700">
+          {summary.status}
+        </span>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <Mini label="trustLevel" value={summary.trustLevel} />
+        <Mini label="previewItemCount" value={String(summary.previewItemCount)} />
+        <Mini label="capabilities" value={summary.capabilities.join(' 쨌 ')} />
+      </div>
+    </article>
+  );
+}
+
+function ProviderResultCard({
+  result,
+}: {
+  result: FandexSourceProviderAdapterResult;
+}) {
+  return (
+    <article className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 lg:grid-cols-[0.7fr_0.5fr_0.5fr_1.5fr] lg:items-center">
+      <Mini label="provider" value={result.provider} />
+      <Mini label="status" value={result.status} />
+      <Mini label="itemCount" value={String(result.itemCount)} />
+      <div className="rounded-xl bg-white p-3">
+        <p className="text-xs font-bold text-slate-400">warnings / note</p>
+        <p className="mt-1 break-words text-sm font-black leading-6 text-slate-950">
+          {result.warnings.length > 0
+            ? result.warnings.join(' 쨌 ')
+            : 'warning 없음'}
+        </p>
+        <p className="mt-2 text-xs font-bold leading-5 text-slate-500">
+          {result.note}
+        </p>
+      </div>
+    </article>
   );
 }
 
