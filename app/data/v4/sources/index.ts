@@ -11,3 +11,7 @@ export * from './sourceIngestionTypes';
 export * from './sourceIngestionFixture';
 export * from './sourceSignalCandidateMapper';
 export * from './sourceCandidateSummary';
+export * from './sourceProviderAdapterTypes';
+export * from './sourceProviderMockAdapters';
+export * from './sourceProviderRegistry';
+export * from './sourceProviderImportPipeline';
