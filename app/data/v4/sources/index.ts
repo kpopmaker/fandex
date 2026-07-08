@@ -20,3 +20,5 @@ export * from './sourceProviderSnapshotFixture';
 export * from './sourceProviderSnapshotDiff';
 export * from './sourceQualityScoringTypes';
 export * from './sourceQualityScoringPreview';
+export * from './sourceEligibilityTypes';
+export * from './sourceEligibilityPreview';
