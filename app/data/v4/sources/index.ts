@@ -15,3 +15,6 @@ export * from './sourceProviderAdapterTypes';
 export * from './sourceProviderMockAdapters';
 export * from './sourceProviderRegistry';
 export * from './sourceProviderImportPipeline';
+export * from './sourceProviderSnapshotTypes';
+export * from './sourceProviderSnapshotFixture';
+export * from './sourceProviderSnapshotDiff';
