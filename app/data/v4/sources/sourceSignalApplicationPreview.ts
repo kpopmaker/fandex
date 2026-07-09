@@ -1,6 +1,5 @@
 import {
   getCandidateEligibilityDecisions,
-  getSourceEligibilityReasonLabel,
   getSourceEligibilityStatusLabel,
   getSourceEligibilitySummary,
 } from './sourceEligibilityPreview';
@@ -515,5 +514,3 @@ export function runSourceSignalApplicationShapeCheck(
     issues,
   };
 }
-
-export { getSourceEligibilityReasonLabel };
