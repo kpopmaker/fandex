@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import SourcePipelineOverviewSection from './sourcePipelineOverviewSection';
+import SourceIngestionDraftPreviewSection from './sourceIngestionDraftPreviewSection';
 import SourceSignalApplicationPreviewSection from './sourceSignalApplicationPreviewSection';
 import SourceSignalImpactPreviewSection from './sourceSignalImpactPreviewSection';
 import SourceSignalReviewActionPreviewSection from './sourceSignalReviewActionPreviewSection';
@@ -19,6 +20,7 @@ export default function SourceLabLayout({
       <SourceSignalImpactPreviewSection />
       <SourceSignalReviewQueuePreviewSection />
       <SourceSignalReviewActionPreviewSection />
+      <SourceIngestionDraftPreviewSection />
     </>
   );
 }
