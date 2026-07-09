@@ -242,7 +242,7 @@ export function getSourceSignalApplicationPlans(
     );
   });
 
-  return decisions.map((decision) => {
+  return decisions.map((decision): FandexSourceSignalApplicationPlan => {
     const groupKey = `${decision.artistId}::${decision.variableKey}`;
     const applicationMode = getSourceSignalApplicationModeFromEligibility(decision);
     const reasonCodes = getApplicationReasonCodes(
@@ -305,7 +305,7 @@ export function getSourceSignalApplicationGroups(
   });
 
   return Array.from(groupMap.values())
-    .map(({ groupKey, artistId, variableKey, plans }) => {
+    .map(({ groupKey, artistId, variableKey, plans }): FandexSourceSignalApplicationGroup => {
       const sortedPlans = [...plans].sort(
         (first, second) =>
           second.blendedQualityScore - first.blendedQualityScore
