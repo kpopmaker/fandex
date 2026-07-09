@@ -32,3 +32,5 @@ export * from './sourceSignalReviewActionTypes';
 export * from './sourceSignalReviewActionPreview';
 export * from './sourceIngestionDraftTypes';
 export * from './sourceIngestionDraftPreview';
+export * from './sourceProviderSyncPolicyTypes';
+export * from './sourceProviderSyncPolicyPreview';
