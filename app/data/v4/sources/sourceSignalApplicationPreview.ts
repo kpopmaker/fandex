@@ -8,7 +8,10 @@ import type {
   FandexCandidateEligibilityDecision,
   FandexSourceEligibilityReasonCode,
 } from './sourceEligibilityTypes';
-import type { FandexNormalizedSourceItem } from './sourceIngestionTypes';
+import type {
+  FandexNormalizedSourceItem,
+  FandexSourceVariableSignalKey,
+} from './sourceIngestionTypes';
 import type {
   FandexSourceSignalApplicationGroup,
   FandexSourceSignalApplicationMode,
@@ -43,6 +46,13 @@ export type FandexSourceSignalApplicationShapeCheckResult = {
   planCount: number;
   groupCount: number;
   issues: FandexSourceSignalApplicationShapeCheckIssue[];
+};
+
+type FandexSourceSignalApplicationGroupBucket = {
+  groupKey: string;
+  artistId: string;
+  variableKey: FandexSourceVariableSignalKey;
+  plans: FandexSourceSignalApplicationPlan[];
 };
 
 const allowedApplicationModes: readonly FandexSourceSignalApplicationMode[] = [
@@ -276,17 +286,27 @@ function getModeCount(
 export function getSourceSignalApplicationGroups(
   items?: FandexNormalizedSourceItem[],
 ): FandexSourceSignalApplicationGroup[] {
-  const groupMap = new Map<string, FandexSourceSignalApplicationPlan[]>();
+  const groupMap = new Map<string, FandexSourceSignalApplicationGroupBucket>();
 
   getSourceSignalApplicationPlans(items).forEach((plan) => {
     const groupKey = `${plan.artistId}::${plan.variableKey}`;
+    const existingGroup = groupMap.get(groupKey);
 
-    groupMap.set(groupKey, [...(groupMap.get(groupKey) ?? []), plan]);
+    if (existingGroup) {
+      existingGroup.plans.push(plan);
+      return;
+    }
+
+    groupMap.set(groupKey, {
+      groupKey,
+      artistId: plan.artistId,
+      variableKey: plan.variableKey,
+      plans: [plan],
+    });
   });
 
-  return Array.from(groupMap.entries())
-    .map(([groupKey, plans]) => {
-      const [artistId, variableKey] = groupKey.split('::');
+  return Array.from(groupMap.values())
+    .map(({ groupKey, artistId, variableKey, plans }) => {
       const sortedPlans = [...plans].sort(
         (first, second) =>
           second.blendedQualityScore - first.blendedQualityScore
