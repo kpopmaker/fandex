@@ -24,3 +24,5 @@ export * from './sourceEligibilityTypes';
 export * from './sourceEligibilityPreview';
 export * from './sourceSignalApplicationTypes';
 export * from './sourceSignalApplicationPreview';
+export * from './sourceSignalImpactTypes';
+export * from './sourceSignalImpactPreview';
