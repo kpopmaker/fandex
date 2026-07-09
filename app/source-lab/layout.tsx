@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import SourcePipelineOverviewSection from './sourcePipelineOverviewSection';
 import SourceSignalApplicationPreviewSection from './sourceSignalApplicationPreviewSection';
 import SourceSignalImpactPreviewSection from './sourceSignalImpactPreviewSection';
 import SourceSignalReviewActionPreviewSection from './sourceSignalReviewActionPreviewSection';
@@ -13,6 +14,7 @@ export default function SourceLabLayout({
   return (
     <>
       {children}
+      <SourcePipelineOverviewSection />
       <SourceSignalApplicationPreviewSection />
       <SourceSignalImpactPreviewSection />
       <SourceSignalReviewQueuePreviewSection />
