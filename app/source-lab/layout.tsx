@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import SourceSignalApplicationPreviewSection from './sourceSignalApplicationPreviewSection';
 import SourceSignalImpactPreviewSection from './sourceSignalImpactPreviewSection';
+import SourceSignalReviewQueuePreviewSection from './sourceSignalReviewQueuePreviewSection';
 
 export default function SourceLabLayout({
   children,
@@ -13,6 +14,7 @@ export default function SourceLabLayout({
       {children}
       <SourceSignalApplicationPreviewSection />
       <SourceSignalImpactPreviewSection />
+      <SourceSignalReviewQueuePreviewSection />
     </>
   );
 }

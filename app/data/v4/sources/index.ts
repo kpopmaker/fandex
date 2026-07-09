@@ -26,3 +26,5 @@ export * from './sourceSignalApplicationTypes';
 export * from './sourceSignalApplicationPreview';
 export * from './sourceSignalImpactTypes';
 export * from './sourceSignalImpactPreview';
+export * from './sourceSignalReviewQueueTypes';
+export * from './sourceSignalReviewQueuePreview';
