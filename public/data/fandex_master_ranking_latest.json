@@ -1,0 +1,1342 @@
+{
+  "version": "fandex_master_v6_music_chart_uncapped_cumulative",
+  "createdAt": "2026-07-10T17:32:33",
+  "scoreScale": "uncapped_cumulative_points",
+  "scoreMode": "uncapped_cumulative_source_points",
+  "activeSources": [
+    "naver",
+    "youtube",
+    "musicChart"
+  ],
+  "sourceFiles": {
+    "naverRanking": "fandex_naver_ranking_v3_latest.json",
+    "naverReports": "fandex_naver_artist_reports_v3_latest.json",
+    "youtubeRanking": "fandex_youtube_ranking_v2_latest.json",
+    "youtubeReports": "fandex_youtube_artist_reports_v2_latest.json",
+    "musicChartRanking": "fandex_music_chart_ranking_v1_latest.json",
+    "musicChartReports": "fandex_music_chart_artist_reports_v1_latest.json"
+  },
+  "sourceVersions": {
+    "naverRanking": "v3_compare_search_quality",
+    "naverReports": "v3_compare_search_quality",
+    "youtubeRanking": "youtube_publish_v2_content_type",
+    "youtubeReports": "youtube_publish_v2_content_type",
+    "musicChartRanking": "fandex_music_chart_v1_manual_seed",
+    "musicChartReports": "fandex_music_chart_v1_manual_seed"
+  },
+  "ranking": [
+    {
+      "artist": "아이유",
+      "fandexFinalPoint": 500.35,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 1,
+          "rawPoint": 399.65,
+          "normalizedPoint": 100.0,
+          "cumulativePoint": 399.65,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 85.21,
+            "blogTopicClusterPoint": 196.02,
+            "searchDemandComparePoint": 118.42
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_아이유_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_아이유_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_아이유_20260708_192859.csv",
+            "generatedAt": "2026-07-08T19:28:59"
+          }
+        },
+        "youtube": {
+          "rank": 1,
+          "rawPoint": 76.7,
+          "normalizedPoint": 76.7,
+          "cumulativePoint": 76.7,
+          "available": true,
+          "coreSignal": "공식 음악 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.42,
+              "components": {
+                "viewPoint": 0.11,
+                "likePoint": 0.05,
+                "commentPoint": 0.05,
+                "engagementPoint": 1.21
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 24.44,
+              "components": {
+                "viewPoint": 11.25,
+                "likePoint": 6.25,
+                "commentPoint": 5.0,
+                "engagementPoint": 1.94
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 50.0,
+              "components": {
+                "viewPoint": 22.5,
+                "likePoint": 12.5,
+                "commentPoint": 10.0,
+                "engagementPoint": 5.0
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.84,
+              "components": {
+                "viewPoint": 0.01,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 0.62
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 3532572,
+              "totalLikes": 302481,
+              "totalComments": 8010,
+              "avgViews": 3532572.0,
+              "engagementPerThousandViews": 87.89
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 122269172,
+              "totalLikes": 5226272,
+              "totalComments": 220519,
+              "avgViews": 61134586.0,
+              "engagementPerThousandViews": 44.55
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 328655,
+              "totalLikes": 48013,
+              "totalComments": 645,
+              "avgViews": 328655.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 3532572,
+              "totalLikes": 302481,
+              "totalComments": 8010,
+              "avgViews": 3532572.0,
+              "engagementPerThousandViews": 87.89
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "live_clip": {
+              "videoCount": 1,
+              "totalViews": 11123392,
+              "totalLikes": 157582,
+              "totalComments": 4279,
+              "avgViews": 11123392.0,
+              "engagementPerThousandViews": 14.55
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 111145780,
+              "totalLikes": 5068690,
+              "totalComments": 216240,
+              "avgViews": 111145780.0,
+              "engagementPerThousandViews": 47.55
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 328655,
+              "totalLikes": 48013,
+              "totalComments": 645,
+              "avgViews": 328655.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 126154452,
+            "totalLikes": 5577691,
+            "totalComments": 229204,
+            "avgViews": 25230890.4,
+            "engagementPerThousandViews": 46.03
+          },
+          "topVideo": {
+            "videoId": "JleoAppaxi0",
+            "title": "IU 'Love wins all' MV",
+            "publishedAt": "2024-01-23T15:00:15Z",
+            "viewCount": 111145780,
+            "likeCount": 5068690,
+            "commentCount": 216240,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=JleoAppaxi0"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 3,
+          "rawPoint": 24.0,
+          "normalizedPoint": 24.0,
+          "cumulativePoint": 24.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "Love wins all": 24.0
+          },
+          "bestEntry": {
+            "artist": "아이유",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "Love wins all",
+            "rank": 85,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1,
+          "entries": [
+            {
+              "artist": "아이유",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "Love wins all",
+              "rank": 85,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 1,
+        "youtube": 1,
+        "musicChart": 3
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 85.21,
+          "blogTopicClusterPoint": 196.02,
+          "searchDemandComparePoint": 118.42
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "Love wins all": 24.0
+          },
+          "bestEntry": {
+            "artist": "아이유",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "Love wins all",
+            "rank": 85,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      },
+      "rank": 1
+    },
+    {
+      "artist": "에스파",
+      "fandexFinalPoint": 485.46,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 4,
+          "rawPoint": 279.11,
+          "normalizedPoint": 69.84,
+          "cumulativePoint": 279.11,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 46.0,
+            "blogTopicClusterPoint": 188.01,
+            "searchDemandComparePoint": 45.1
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에스파_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에스파_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_에스파_20260708_193805.csv",
+            "generatedAt": "2026-07-08T19:38:05"
+          }
+        },
+        "youtube": {
+          "rank": 2,
+          "rawPoint": 44.35,
+          "normalizedPoint": 44.35,
+          "cumulativePoint": 44.35,
+          "available": true,
+          "coreSignal": "공식 음악 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.88,
+              "components": {
+                "viewPoint": 0.1,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 1.59
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 5.17,
+              "components": {
+                "viewPoint": 2.21,
+                "likePoint": 0.84,
+                "commentPoint": 0.78,
+                "engagementPoint": 1.33
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 31.64,
+              "components": {
+                "viewPoint": 21.11,
+                "likePoint": 4.35,
+                "commentPoint": 4.31,
+                "engagementPoint": 1.87
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 5.66,
+              "components": {
+                "viewPoint": 2.81,
+                "likePoint": 1.56,
+                "commentPoint": 1.25,
+                "engagementPoint": 0.03
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 21236,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21236.0,
+              "engagementPerThousandViews": 51.94
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 695206,
+              "totalLikes": 40723,
+              "totalComments": 1257,
+              "avgViews": 695206.0,
+              "engagementPerThousandViews": 60.38
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 114711765,
+              "totalLikes": 1818616,
+              "totalComments": 95076,
+              "avgViews": 57355882.5,
+              "engagementPerThousandViews": 16.68
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 167616282,
+              "totalLikes": 1230018,
+              "totalComments": 5611,
+              "avgViews": 167616282.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 695206,
+              "totalLikes": 40723,
+              "totalComments": 1257,
+              "avgViews": 695206.0,
+              "engagementPerThousandViews": 60.38
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 21236,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21236.0,
+              "engagementPerThousandViews": 51.94
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 92820753,
+              "totalLikes": 1355316,
+              "totalComments": 80105,
+              "avgViews": 92820753.0,
+              "engagementPerThousandViews": 15.46
+            },
+            "performance_video": {
+              "videoCount": 1,
+              "totalViews": 21891012,
+              "totalLikes": 463300,
+              "totalComments": 14971,
+              "avgViews": 21891012.0,
+              "engagementPerThousandViews": 21.85
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 167616282,
+              "totalLikes": 1230018,
+              "totalComments": 5611,
+              "avgViews": 167616282.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 283044489,
+            "totalLikes": 3090377,
+            "totalComments": 102027,
+            "avgViews": 56608897.8,
+            "engagementPerThousandViews": 11.28
+          },
+          "topVideo": {
+            "videoId": "SKEnKaMI2nw",
+            "title": "that’s Dirty Work! Show us your #aespaDirtyWork moves! Brought to you by YouTube Shorts #aespa",
+            "publishedAt": "2025-06-27T05:00:26Z",
+            "viewCount": 167616282,
+            "likeCount": 1230018,
+            "commentCount": 5611,
+            "videoType": "shorts",
+            "contentGroup": "shortform",
+            "sourceUrl": "https://www.youtube.com/watch?v=SKEnKaMI2nw"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 1,
+          "rawPoint": 162.0,
+          "normalizedPoint": 162.0,
+          "cumulativePoint": 162.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 90.0,
+            "genie": 38.25,
+            "bugs": 33.75
+          },
+          "chartTypePoints": {
+            "daily": 90.0,
+            "realtime": 72.0
+          },
+          "trackPoints": {
+            "LEMONADE": 162.0
+          },
+          "bestEntry": {
+            "artist": "에스파",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "LEMONADE",
+            "rank": 5,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 75.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 90.0
+          },
+          "entryCount": 3,
+          "entries": [
+            {
+              "artist": "에스파",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 75.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 90.0
+            },
+            {
+              "artist": "에스파",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "LEMONADE",
+              "rank": 7,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 33.75
+            },
+            {
+              "artist": "에스파",
+              "platform": "genie",
+              "chartName": "Top 200",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.genie.co.kr/chart/top200",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.85,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 38.25
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 4,
+        "youtube": 2,
+        "musicChart": 1
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 46.0,
+          "blogTopicClusterPoint": 188.01,
+          "searchDemandComparePoint": 45.1
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 90.0,
+            "genie": 38.25,
+            "bugs": 33.75
+          },
+          "chartTypePoints": {
+            "daily": 90.0,
+            "realtime": 72.0
+          },
+          "trackPoints": {
+            "LEMONADE": 162.0
+          },
+          "bestEntry": {
+            "artist": "에스파",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "LEMONADE",
+            "rank": 5,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 75.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 90.0
+          },
+          "entryCount": 3
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      },
+      "rank": 2
+    },
+    {
+      "artist": "에이티즈",
+      "fandexFinalPoint": 399.82,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 2,
+          "rawPoint": 318.77,
+          "normalizedPoint": 79.76,
+          "cumulativePoint": 318.77,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 64.85,
+            "blogTopicClusterPoint": 183.0,
+            "searchDemandComparePoint": 70.92
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에이티즈_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에이티즈_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_에이티즈_20260708_194120.csv",
+            "generatedAt": "2026-07-08T19:41:20"
+          }
+        },
+        "youtube": {
+          "rank": 3,
+          "rawPoint": 30.05,
+          "normalizedPoint": 30.05,
+          "cumulativePoint": 30.05,
+          "available": true,
+          "coreSignal": "외부 확산 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 15.81,
+              "components": {
+                "viewPoint": 6.27,
+                "likePoint": 4.44,
+                "commentPoint": 3.23,
+                "engagementPoint": 1.88
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.27,
+              "components": {
+                "viewPoint": 0.63,
+                "likePoint": 0.37,
+                "commentPoint": 0.25,
+                "engagementPoint": 2.02
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 10.3,
+              "components": {
+                "viewPoint": 4.69,
+                "likePoint": 1.42,
+                "commentPoint": 1.45,
+                "engagementPoint": 2.75
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.67,
+              "components": {
+                "viewPoint": 0.04,
+                "likePoint": 0.16,
+                "commentPoint": 0.23,
+                "engagementPoint": 0.24
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1354202,
+              "totalLikes": 81130,
+              "totalComments": 1987,
+              "avgViews": 1354202.0,
+              "engagementPerThousandViews": 61.38
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 198342,
+              "totalLikes": 17773,
+              "totalComments": 408,
+              "avgViews": 198342.0,
+              "engagementPerThousandViews": 91.66
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 25498121,
+              "totalLikes": 592441,
+              "totalComments": 31919,
+              "avgViews": 12749060.5,
+              "engagementPerThousandViews": 24.49
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 2182802,
+              "totalLikes": 124687,
+              "totalComments": 1041,
+              "avgViews": 2182802.0,
+              "engagementPerThousandViews": 57.6
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 198342,
+              "totalLikes": 17773,
+              "totalComments": 408,
+              "avgViews": 198342.0,
+              "engagementPerThousandViews": 91.66
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 447818,
+              "totalLikes": 38444,
+              "totalComments": 975,
+              "avgViews": 447818.0,
+              "engagementPerThousandViews": 88.02
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1354202,
+              "totalLikes": 81130,
+              "totalComments": 1987,
+              "avgViews": 1354202.0,
+              "engagementPerThousandViews": 61.38
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 25050303,
+              "totalLikes": 553997,
+              "totalComments": 30944,
+              "avgViews": 25050303.0,
+              "engagementPerThousandViews": 23.35
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 2182802,
+              "totalLikes": 124687,
+              "totalComments": 1041,
+              "avgViews": 2182802.0,
+              "engagementPerThousandViews": 57.6
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 29233467,
+            "totalLikes": 816031,
+            "totalComments": 35355,
+            "avgViews": 5846693.4,
+            "engagementPerThousandViews": 29.12
+          },
+          "topVideo": {
+            "videoId": "-q_S27LbNKU",
+            "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
+            "publishedAt": "2026-06-26T04:00:00Z",
+            "viewCount": 25050303,
+            "likeCount": 553997,
+            "commentCount": 30944,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 2,
+          "rawPoint": 51.0,
+          "normalizedPoint": 51.0,
+          "cumulativePoint": 51.0,
+          "available": true,
+          "coreSignal": "bugs",
+          "platformPoints": {
+            "bugs": 27.0,
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "realtime": 27.0,
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "BAD": 51.0
+          },
+          "bestEntry": {
+            "artist": "에이티즈",
+            "platform": "bugs",
+            "chartName": "Bugs Realtime",
+            "trackTitle": "BAD",
+            "rank": 11,
+            "chartDate": "2026-07-09",
+            "chartType": "realtime",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+            "rankBasePoint": 60.0,
+            "platformWeight": 0.75,
+            "chartTypeWeight": 0.6,
+            "metricBonus": 0.0,
+            "musicChartPoint": 27.0
+          },
+          "entryCount": 2,
+          "entries": [
+            {
+              "artist": "에이티즈",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "BAD",
+              "rank": 74,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            },
+            {
+              "artist": "에이티즈",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "BAD",
+              "rank": 11,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 60.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 27.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 2,
+        "youtube": 3,
+        "musicChart": 2
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 64.85,
+          "blogTopicClusterPoint": 183.0,
+          "searchDemandComparePoint": 70.92
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "bugs": 27.0,
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "realtime": 27.0,
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "BAD": 51.0
+          },
+          "bestEntry": {
+            "artist": "에이티즈",
+            "platform": "bugs",
+            "chartName": "Bugs Realtime",
+            "trackTitle": "BAD",
+            "rank": 11,
+            "chartDate": "2026-07-09",
+            "chartType": "realtime",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+            "rankBasePoint": 60.0,
+            "platformWeight": 0.75,
+            "chartTypeWeight": 0.6,
+            "metricBonus": 0.0,
+            "musicChartPoint": 27.0
+          },
+          "entryCount": 2
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      },
+      "rank": 3
+    },
+    {
+      "artist": "보이넥스트도어",
+      "fandexFinalPoint": 356.36,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 3,
+          "rawPoint": 302.34,
+          "normalizedPoint": 75.65,
+          "cumulativePoint": 302.34,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 82.05,
+            "blogTopicClusterPoint": 170.98,
+            "searchDemandComparePoint": 49.31
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_보이넥스트도어_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_보이넥스트도어_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_보이넥스트도어_20260708_194129.csv",
+            "generatedAt": "2026-07-08T19:41:29"
+          }
+        },
+        "youtube": {
+          "rank": 4,
+          "rawPoint": 30.02,
+          "normalizedPoint": 30.02,
+          "cumulativePoint": 30.02,
+          "available": true,
+          "coreSignal": "외부 확산 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 18.35,
+              "components": {
+                "viewPoint": 8.44,
+                "likePoint": 4.69,
+                "commentPoint": 3.75,
+                "engagementPoint": 1.47
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.56,
+              "components": {
+                "viewPoint": 0.4,
+                "likePoint": 0.28,
+                "commentPoint": 0.39,
+                "engagementPoint": 2.5
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 7.62,
+              "components": {
+                "viewPoint": 4.24,
+                "likePoint": 0.58,
+                "commentPoint": 1.46,
+                "engagementPoint": 1.34
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.49,
+              "components": {
+                "viewPoint": 0.0,
+                "likePoint": 0.03,
+                "commentPoint": 0.05,
+                "engagementPoint": 0.4
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1823245,
+              "totalLikes": 85711,
+              "totalComments": 2305,
+              "avgViews": 1823245.0,
+              "engagementPerThousandViews": 48.27
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 124124,
+              "totalLikes": 13470,
+              "totalComments": 619,
+              "avgViews": 124124.0,
+              "engagementPerThousandViews": 113.51
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 23065076,
+              "totalLikes": 242945,
+              "totalComments": 32178,
+              "avgViews": 11532538.0,
+              "engagementPerThousandViews": 11.93
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 287002,
+              "totalLikes": 27276,
+              "totalComments": 228,
+              "avgViews": 287002.0,
+              "engagementPerThousandViews": 95.83
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 124124,
+              "totalLikes": 13470,
+              "totalComments": 619,
+              "avgViews": 124124.0,
+              "engagementPerThousandViews": 113.51
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 396679,
+              "totalLikes": 33689,
+              "totalComments": 1130,
+              "avgViews": 396679.0,
+              "engagementPerThousandViews": 87.78
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1823245,
+              "totalLikes": 85711,
+              "totalComments": 2305,
+              "avgViews": 1823245.0,
+              "engagementPerThousandViews": 48.27
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 22668397,
+              "totalLikes": 209256,
+              "totalComments": 31048,
+              "avgViews": 22668397.0,
+              "engagementPerThousandViews": 10.6
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 287002,
+              "totalLikes": 27276,
+              "totalComments": 228,
+              "avgViews": 287002.0,
+              "engagementPerThousandViews": 95.83
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 25299447,
+            "totalLikes": 369402,
+            "totalComments": 35330,
+            "avgViews": 5059889.4,
+            "engagementPerThousandViews": 16.0
+          },
+          "topVideo": {
+            "videoId": "zGsj0fDHB_s",
+            "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
+            "publishedAt": "2026-06-08T08:59:06Z",
+            "viewCount": 22668397,
+            "likeCount": 209256,
+            "commentCount": 31048,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 4,
+          "rawPoint": 24.0,
+          "normalizedPoint": 24.0,
+          "cumulativePoint": 24.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "VIRAL": 24.0
+          },
+          "bestEntry": {
+            "artist": "보이넥스트도어",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "VIRAL",
+            "rank": 84,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1,
+          "entries": [
+            {
+              "artist": "보이넥스트도어",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "VIRAL",
+              "rank": 84,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 3,
+        "youtube": 4,
+        "musicChart": 4
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 82.05,
+          "blogTopicClusterPoint": 170.98,
+          "searchDemandComparePoint": 49.31
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "VIRAL": 24.0
+          },
+          "bestEntry": {
+            "artist": "보이넥스트도어",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "VIRAL",
+            "rank": 84,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      },
+      "rank": 4
+    }
+  ]
+}
