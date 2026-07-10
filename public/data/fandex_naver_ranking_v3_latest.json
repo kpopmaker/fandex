@@ -1,0 +1,150 @@
+{
+  "service": "FANDEX",
+  "metric": "naverCumulativeScore",
+  "version": "v3_compare_search_quality",
+  "sourceFile": "naver_fandex_ranking_v3_20260708_195915.csv",
+  "generatedAt": "2026-07-08T19:59:16",
+  "count": 4,
+  "ranking": [
+    {
+      "rank": 1,
+      "artist": "아이유",
+      "fandexNaverFinalPoint": 399.65,
+      "components": {
+        "newsIssueClusterPoint": 85.21,
+        "blogTopicClusterPoint": 196.02,
+        "searchDemandComparePoint": 118.42
+      },
+      "shares": {
+        "newsSharePercent": 21.32,
+        "blogSharePercent": 49.05,
+        "searchSharePercent": 29.63
+      },
+      "signals": {
+        "dominantSignal": "blog_topic",
+        "dominantSignalLabel": "블로그 화제성"
+      },
+      "searchTrend": {
+        "searchCompareRank": 1,
+        "trendSum": 1184.17,
+        "trendAvg": 39.47,
+        "trendMax": 100.0,
+        "trendLatest": 43.61,
+        "trendCount": 30
+      },
+      "meta": {
+        "scoreVersion": "v3_compare_search_quality",
+        "newsClusterFile": "naver_news_아이유_20260708_191332_issue_cluster.csv",
+        "blogClusterFile": "naver_blog_아이유_20260708_191332_topic_cluster.csv",
+        "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+        "finalSourceFile": "naver_fandex_final_v3_아이유_20260708_192859.csv",
+        "generatedAt": "2026-07-08T19:28:59"
+      }
+    },
+    {
+      "rank": 2,
+      "artist": "에이티즈",
+      "fandexNaverFinalPoint": 318.77,
+      "components": {
+        "newsIssueClusterPoint": 64.85,
+        "blogTopicClusterPoint": 183.0,
+        "searchDemandComparePoint": 70.92
+      },
+      "shares": {
+        "newsSharePercent": 20.34,
+        "blogSharePercent": 57.41,
+        "searchSharePercent": 22.25
+      },
+      "signals": {
+        "dominantSignal": "blog_topic",
+        "dominantSignalLabel": "블로그 화제성"
+      },
+      "searchTrend": {
+        "searchCompareRank": 2,
+        "trendSum": 709.24,
+        "trendAvg": 23.64,
+        "trendMax": 99.43,
+        "trendLatest": 86.09,
+        "trendCount": 30
+      },
+      "meta": {
+        "scoreVersion": "v3_compare_search_quality",
+        "newsClusterFile": "naver_news_에이티즈_20260708_191332_issue_cluster.csv",
+        "blogClusterFile": "naver_blog_에이티즈_20260708_191332_topic_cluster.csv",
+        "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+        "finalSourceFile": "naver_fandex_final_v3_에이티즈_20260708_194120.csv",
+        "generatedAt": "2026-07-08T19:41:20"
+      }
+    },
+    {
+      "rank": 3,
+      "artist": "보이넥스트도어",
+      "fandexNaverFinalPoint": 302.34,
+      "components": {
+        "newsIssueClusterPoint": 82.05,
+        "blogTopicClusterPoint": 170.98,
+        "searchDemandComparePoint": 49.31
+      },
+      "shares": {
+        "newsSharePercent": 27.14,
+        "blogSharePercent": 56.55,
+        "searchSharePercent": 16.31
+      },
+      "signals": {
+        "dominantSignal": "blog_topic",
+        "dominantSignalLabel": "블로그 화제성"
+      },
+      "searchTrend": {
+        "searchCompareRank": 3,
+        "trendSum": 493.05,
+        "trendAvg": 16.44,
+        "trendMax": 30.7,
+        "trendLatest": 7.99,
+        "trendCount": 30
+      },
+      "meta": {
+        "scoreVersion": "v3_compare_search_quality",
+        "newsClusterFile": "naver_news_보이넥스트도어_20260708_191332_issue_cluster.csv",
+        "blogClusterFile": "naver_blog_보이넥스트도어_20260708_191332_topic_cluster.csv",
+        "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+        "finalSourceFile": "naver_fandex_final_v3_보이넥스트도어_20260708_194129.csv",
+        "generatedAt": "2026-07-08T19:41:29"
+      }
+    },
+    {
+      "rank": 4,
+      "artist": "에스파",
+      "fandexNaverFinalPoint": 279.11,
+      "components": {
+        "newsIssueClusterPoint": 46.0,
+        "blogTopicClusterPoint": 188.01,
+        "searchDemandComparePoint": 45.1
+      },
+      "shares": {
+        "newsSharePercent": 16.48,
+        "blogSharePercent": 67.36,
+        "searchSharePercent": 16.16
+      },
+      "signals": {
+        "dominantSignal": "blog_topic",
+        "dominantSignalLabel": "블로그 화제성"
+      },
+      "searchTrend": {
+        "searchCompareRank": 4,
+        "trendSum": 451.02,
+        "trendAvg": 15.03,
+        "trendMax": 34.45,
+        "trendLatest": 18.98,
+        "trendCount": 30
+      },
+      "meta": {
+        "scoreVersion": "v3_compare_search_quality",
+        "newsClusterFile": "naver_news_에스파_20260708_191332_issue_cluster.csv",
+        "blogClusterFile": "naver_blog_에스파_20260708_191332_topic_cluster.csv",
+        "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+        "finalSourceFile": "naver_fandex_final_v3_에스파_20260708_193805.csv",
+        "generatedAt": "2026-07-08T19:38:05"
+      }
+    }
+  ]
+}

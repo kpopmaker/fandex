@@ -1,0 +1,4018 @@
+{
+  "version": "fandex_master_v6_music_chart_uncapped_cumulative",
+  "createdAt": "2026-07-09T21:43:33",
+  "scoreScale": "uncapped_cumulative_points",
+  "scoreMode": "uncapped_cumulative_source_points",
+  "activeSources": [
+    "naver",
+    "youtube",
+    "musicChart"
+  ],
+  "sourceFiles": {
+    "naverRanking": "fandex_naver_ranking_v3_latest.json",
+    "naverReports": "fandex_naver_artist_reports_v3_latest.json",
+    "youtubeRanking": "fandex_youtube_ranking_v2_latest.json",
+    "youtubeReports": "fandex_youtube_artist_reports_v2_latest.json",
+    "musicChartRanking": "fandex_music_chart_ranking_v1_latest.json",
+    "musicChartReports": "fandex_music_chart_artist_reports_v1_latest.json"
+  },
+  "reports": [
+    {
+      "rank": 1,
+      "artist": "아이유",
+      "fandexFinalPoint": 500.29,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 1,
+          "rawPoint": 399.65,
+          "normalizedPoint": 100.0,
+          "cumulativePoint": 399.65,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 85.21,
+            "blogTopicClusterPoint": 196.02,
+            "searchDemandComparePoint": 118.42
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_아이유_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_아이유_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_아이유_20260708_192859.csv",
+            "generatedAt": "2026-07-08T19:28:59"
+          }
+        },
+        "youtube": {
+          "rank": 1,
+          "rawPoint": 76.64,
+          "normalizedPoint": 76.64,
+          "cumulativePoint": 76.64,
+          "available": true,
+          "coreSignal": "공식 음악 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.37,
+              "components": {
+                "viewPoint": 0.11,
+                "likePoint": 0.05,
+                "commentPoint": 0.05,
+                "engagementPoint": 1.16
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 24.43,
+              "components": {
+                "viewPoint": 11.25,
+                "likePoint": 6.25,
+                "commentPoint": 5.0,
+                "engagementPoint": 1.93
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 50.0,
+              "components": {
+                "viewPoint": 22.5,
+                "likePoint": 12.5,
+                "commentPoint": 10.0,
+                "engagementPoint": 5.0
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.84,
+              "components": {
+                "viewPoint": 0.01,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 0.62
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 3532405,
+              "totalLikes": 302486,
+              "totalComments": 8009,
+              "avgViews": 3532405.0,
+              "engagementPerThousandViews": 87.9
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 122230829,
+              "totalLikes": 5225888,
+              "totalComments": 220495,
+              "avgViews": 61115414.5,
+              "engagementPerThousandViews": 44.56
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 328653,
+              "totalLikes": 48012,
+              "totalComments": 645,
+              "avgViews": 328653.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 3532405,
+              "totalLikes": 302486,
+              "totalComments": 8009,
+              "avgViews": 3532405.0,
+              "engagementPerThousandViews": 87.9
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "live_clip": {
+              "videoCount": 1,
+              "totalViews": 11114609,
+              "totalLikes": 157535,
+              "totalComments": 4277,
+              "avgViews": 11114609.0,
+              "engagementPerThousandViews": 14.56
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 111116220,
+              "totalLikes": 5068353,
+              "totalComments": 216218,
+              "avgViews": 111116220.0,
+              "engagementPerThousandViews": 47.56
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 328653,
+              "totalLikes": 48012,
+              "totalComments": 645,
+              "avgViews": 328653.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 126115940,
+            "totalLikes": 5577311,
+            "totalComments": 229179,
+            "avgViews": 25223188.0,
+            "engagementPerThousandViews": 46.04
+          },
+          "topVideo": {
+            "videoId": "JleoAppaxi0",
+            "title": "IU 'Love wins all' MV",
+            "publishedAt": "2024-01-23T15:00:15Z",
+            "viewCount": 111116220,
+            "likeCount": 5068353,
+            "commentCount": 216218,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=JleoAppaxi0"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 3,
+          "rawPoint": 24.0,
+          "normalizedPoint": 24.0,
+          "cumulativePoint": 24.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "Love wins all": 24.0
+          },
+          "bestEntry": {
+            "artist": "아이유",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "Love wins all",
+            "rank": 85,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1,
+          "entries": [
+            {
+              "artist": "아이유",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "Love wins all",
+              "rank": 85,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 1,
+        "youtube": 1,
+        "musicChart": 3
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 85.21,
+          "blogTopicClusterPoint": 196.02,
+          "searchDemandComparePoint": 118.42
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "Love wins all": 24.0
+          },
+          "bestEntry": {
+            "artist": "아이유",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "Love wins all",
+            "rank": 85,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1
+        }
+      },
+      "reports": {
+        "naver": {
+          "rank": 1,
+          "artist": "아이유",
+          "fandexNaverFinalPoint": 399.65,
+          "components": {
+            "newsIssueClusterPoint": 85.21,
+            "blogTopicClusterPoint": 196.02,
+            "searchDemandComparePoint": 118.42
+          },
+          "shares": {
+            "newsSharePercent": 21.32,
+            "blogSharePercent": 49.05,
+            "searchSharePercent": 29.63
+          },
+          "signals": {
+            "dominantSignal": "blog_topic",
+            "dominantSignalLabel": "블로그 화제성"
+          },
+          "summary": {
+            "topNewsIssue": {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 7,
+              "rawPointSum": 16.5,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "아이유, 특별한 기록 남기며 [포토엔HD] / 아이유·아이브→우즈…카카오엔터 베리즈, '덕질' 기록 마이캐비닛 론... / SBS 드라마 '달의 연인: 보보경심 려' \"이준기·이지은(아이유)·강하늘... / 쯔위, 닝닝·아이유 제쳤다… ‘직캠 장인’ 1위 / [Y이슈] \"이 선 넘으면 침범이야\" 아이유vs.악플러, 전쟁의 기록"
+            },
+            "topBlogTopic": {
+              "topicKey": "concert_fan_event__concert",
+              "topicGroup": "concert_fan_event",
+              "postCount": 10,
+              "rawPointSum": 20.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 15.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 15.0,
+              "sampleTitles": "260702 아이유 콘서트 2024 HER 월드투어 서울 KSPO 돔 마지막... / 260705 아이유 콘서트 HER 월드투어 요코하마 팬 사진_ 가창... / 가수 아이유를 만나는 꿈 | 상황별 20가지 해몽 해석 / 아이유 2026 고양 콘서트, 월드투어 성공 전략은 무엇인가? / 260625 아이유 팬클럽 유애나 9기 회원 가입, 9월 고양콘서트..."
+            },
+            "searchTrendLatest": 43.61,
+            "searchCompareRank": 1
+          },
+          "newsIssues": [
+            {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 7,
+              "rawPointSum": 16.5,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "아이유, 특별한 기록 남기며 [포토엔HD] / 아이유·아이브→우즈…카카오엔터 베리즈, '덕질' 기록 마이캐비닛 론... / SBS 드라마 '달의 연인: 보보경심 려' \"이준기·이지은(아이유)·강하늘... / 쯔위, 닝닝·아이유 제쳤다… ‘직캠 장인’ 1위 / [Y이슈] \"이 선 넘으면 침범이야\" 아이유vs.악플러, 전쟁의 기록"
+            },
+            {
+              "issueKey": "music_release__etc",
+              "issueGroup": "music_release",
+              "articleCount": 10,
+              "rawPointSum": 30.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "아이유 픽 허남준…“그분께서 제가 세상에 있다는 걸 안 순간부터 여한... / 허남준, 아이유와 인연 \"내 존재 안다는 것만으로..여한 없었다\" / '멋진 신세계' 허남준, 아이유 향한 팬심 폭발…\"내 존재를 아신다니 여... / 허남준 \"아이유 MV 출연? 촬영 전까지 매일이 파티\" (하퍼스 바자) / 허남준, 아이유 뮤비 출연에 매일 파티 \"여한 없어\""
+            },
+            {
+              "issueKey": "brand_rank__advertising_model_rank",
+              "issueGroup": "brand_rank",
+              "articleCount": 12,
+              "rawPointSum": 36.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "현직 광고인 마음 뺏은 아이유·박보검, 2026년 최고 광고모델 선정 / 광고업계가 선택한 올해 광고모델…아이유·박보검 1위 / 아이유·박보검, 광고업계가 뽑은 '대한민국 대표 광고모델' 1위 / 아이유는 3년 내리 '대한민국 대표 광고모델'… 남성은 박보검 / 전문가들이 꼽은 2026년 가장 가치 있는 '광고모델 1위'는 아이유와 박보..."
+            },
+            {
+              "issueKey": "brand_ad__jaeger_lecoultre_ambassador",
+              "issueGroup": "brand_ad",
+              "articleCount": 6,
+              "rawPointSum": 16.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "아이유, '우아美' / 예거르쿨트르, 글로벌 앰배서더에 아이유 발탁 / 예거 르쿨트르, 글로벌 브랜드 앰버서더로 아티스트 ‘아이유’ 발탁..... / 아이유, 더 깊어진 은은한 품격! 시대를 초월한 절제된 우아미 워치 클... / 시대를 초월한 감동, 예거 르쿨트르 X 아이유의 ‘디 아워 비포’"
+            },
+            {
+              "issueKey": "donation_goodwill__yangpyeong",
+              "issueGroup": "donation_goodwill",
+              "articleCount": 28,
+              "rawPointSum": 76.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "'기부 천사' 아이유, 양평군에 1000만원 기부 / 아이유의 꾸준한 양평 사랑…취약계층 성금 1000만원 기부 / 전원주택으로 맺은 인연, 6년째 기부로…아이유의 ‘양평 사랑’ / 아이유, 전원주택 인연 경기 양평군에 또 성금 전달 / 아이유, 양평군에 성금 1000만 원 기부…\"저소득 취약계층 위해\""
+            },
+            {
+              "issueKey": "brand_ad__etc",
+              "issueGroup": "brand_ad",
+              "articleCount": 4,
+              "rawPointSum": 12.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "박지훈, 변우석 제치고 상반기 배우 브랜드 1위…아이유·고윤정도 '톱5... / 푸라닭 치킨, 아이유와 신메뉴 '마마치' 광고 공개 / 푸라닭 치킨, 아이유와 함께한 ‘마마치’ 광고 공개...마늘치킨 시장 ... / 푸라닭 치킨, 신메뉴 '마마치' 출시…아이유 출연 광고 영상 공개"
+            },
+            {
+              "issueKey": "content_drama_broadcast__drama",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 23,
+              "rawPointSum": 21.85,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "아이유, 빛나는 존재감 [포토엔HD] / 아이유, 눈부신 비주얼 [포토엔HD] / 아이유, 청순미의 정석 [포토엔HD] / 아이유, 감탄 부르는 비주얼 [포토엔HD] / 아이유, 손도장도 아름답게 [포토엔HD]"
+            },
+            {
+              "issueKey": "content_drama_broadcast__etc",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 14,
+              "rawPointSum": 26.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "아이유부터 이수지까지, 빛나는 스타들의 황금 손금 자랑★ [영상] / 아이유에게 영향 미친 미미! MBTI '극 E' VS '극 I' 선명히 드러나는 청... / 전한길 \"유재석·아이유 재선거 나서줘야\" 억지 주장 / 아이유·박보영 이어 박명수도 ‘정치댓글 표적’…“예능인으로만 봐... / 지디·아이유도 '흠뻑' 젖었다…개막 3일 앞둔 '흠뻑쇼', 싸이의 초특급..."
+            },
+            {
+              "issueKey": "content_drama_broadcast__when_life_gives_you_tangerines",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 23,
+              "rawPointSum": 41.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "'섬보이' 혼전임신 간호사, 알고보니 '폭싹' 아이유 올케였다…\"보내려... / 넷플릭스 드라마 '폭싹 속았수다' \"임상춘 작가, 아이유·박보검·문소리... / 아이유, '21세기 대군 부인' 후 근황…경호원 결혼식서 축가 열창 / [인터뷰②] 채서안 “아직 제 점수는 60점…‘아이유 픽’ 감사해” / 채서안 \"'폭싹' 인연 아이유와 재회, 환생한 기분\"[인터뷰③]"
+            },
+            {
+              "issueKey": "donation_goodwill__etc",
+              "issueGroup": "donation_goodwill",
+              "articleCount": 2,
+              "rawPointSum": 6.0,
+              "cappedIssuePoint": 6.0,
+              "sampleTitles": "선행이 왜 의무? 이동욱·아이유·박명수까지..SNS 덮친 '정치 댓글' 테... / 진영아이유어린이집, 아나바다 수익금 52만원 기탁"
+            }
+          ],
+          "blogTopics": [
+            {
+              "topicKey": "concert_fan_event__concert",
+              "topicGroup": "concert_fan_event",
+              "postCount": 10,
+              "rawPointSum": 20.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 15.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 15.0,
+              "sampleTitles": "260702 아이유 콘서트 2024 HER 월드투어 서울 KSPO 돔 마지막... / 260705 아이유 콘서트 HER 월드투어 요코하마 팬 사진_ 가창... / 가수 아이유를 만나는 꿈 | 상황별 20가지 해몽 해석 / 아이유 2026 고양 콘서트, 월드투어 성공 전략은 무엇인가? / 260625 아이유 팬클럽 유애나 9기 회원 가입, 9월 고양콘서트..."
+            },
+            {
+              "topicKey": "music_release__playlist_song",
+              "topicGroup": "music_release",
+              "postCount": 10,
+              "rawPointSum": 20.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.625,
+              "cappedTopicPoint": 12.5,
+              "sampleTitles": "허혜선 폭로 shh 내용 아이유 루머 어이없는 이유 / 아이유 - Celebrity 피아노 악보 (가사 첨부 / Normal ver.) / 아이유부터 드라마 OST까지, 봄에 듣기 좋은 봄러브송... / 아이유 힐링노래 '마음' / 아이유 밤편지 멜로디 악보 밤편지를 다시 꺼내 듣는 밤"
+            },
+            {
+              "topicKey": "music_release__album",
+              "topicGroup": "music_release",
+              "postCount": 31,
+              "rawPointSum": 62.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.625,
+              "cappedTopicPoint": 12.5,
+              "sampleTitles": "아이유 - LILAC (2021) / 260701 아이유 베리즈 음성 팬 메시지 고양콘서트, 새 앨범 등... / 아이유 - 조각집 (2021) / 아이유 - Love poem (2019) / 아이유 - 꽃갈피 둘 (2017)"
+            },
+            {
+              "topicKey": "music_release__etc",
+              "topicGroup": "music_release",
+              "postCount": 47,
+              "rawPointSum": 94.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.625,
+              "cappedTopicPoint": 12.5,
+              "sampleTitles": "아이유(ft.김창완) 너의 의미 드럼 연주...홈플러스 문화센터... / 21세기 대군부인 역사왜곡 논란에 눈물보인 아이유 / 역사왜곡 논란 후폭풍! 아이유·변우석 인스타 자필 사과문까지 / 역사왜곡 논란에 당당하게 사과 아이유 블랙 트위드 원피스... / 연기력 및 역사왜곡 논란, 아이유 사주"
+            },
+            {
+              "topicKey": "content_drama_broadcast__twenty_first_century_grand_prince",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 243,
+              "rawPointSum": 486.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.6081,
+              "cappedTopicPoint": 12.16,
+              "sampleTitles": "아이유 사과 21세기 대군부인 결말과 방영 내내 이어진 잡음들 / \"중국식 다도에 제후국 예법?\" 21세기 대군부인 아이유 변우석... / 아이유가 탔던 그차 60억이라고? 부가티 투르비온 / 대군부인 아이유 차, 벤츠 AMG SL 63 4MATIC+가 눈길 가는 이유 / 아이유 변우석 키스 수위 뭐야?!, 21세기 대군부인 10회 11회"
+            },
+            {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 26,
+              "rawPointSum": 52.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.6081,
+              "cappedTopicPoint": 12.16,
+              "sampleTitles": "아이유가 \"아빠 친구\"라던 가수…8살 연하 수퍼모델과 갈라선... / 아이유 연두부치즈전 레시피 연두부 요리 먹는법 / 260605 아이유 '완벽한 하루 이상순입니다' 게스트 출연... / 260524 아이유 OXX거덩요 대기실 인스타그램 셀카_ '요알못... / 나혼자산다 유수빈 이연 아이유 나혼산 근황 공개"
+            },
+            {
+              "topicKey": "content_drama_broadcast__drama",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 23,
+              "rawPointSum": 46.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.6081,
+              "cappedTopicPoint": 12.16,
+              "sampleTitles": "시청률 꼴지했지만 해외 조회수 20억뷰 터진 레전드 아이유드... / 전참시 이연, 아이유에 감동한 사연, 326억 집 단골 손님! / 아이유 신혜선 임지연 주말드라마 승자는? 행복한 고민 / 아이유 변우석 사과부터 최태성 강사의 뼈 때리는 일침까지 / 야구장 키스 엔딩 아이유 변우석 최종회..."
+            },
+            {
+              "topicKey": "fan_reaction__photo_clip",
+              "topicGroup": "fan_reaction",
+              "postCount": 11,
+              "rawPointSum": 22.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.8929,
+              "cappedTopicPoint": 10.71,
+              "sampleTitles": "\"다이어트 아닌데...\" 충격적인 44kg 아이유 식사량 / 아이유 아일릿 원희 가디건 차이점, 같은 슈슈통인데 반응 갈린... / \"전남친이 였어?!\" 아이유 변우석 10년 전 커플샷 공개? / 아이유 야식 메뉴 공개 연두부 치즈전 라면은 꾹 참는다는 진짜... / 아이유 중단발 레이어드컷, 꾸안꾸 분위기의 정석"
+            },
+            {
+              "topicKey": "fan_reaction__etc",
+              "topicGroup": "fan_reaction",
+              "postCount": 8,
+              "rawPointSum": 16.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.8929,
+              "cappedTopicPoint": 10.71,
+              "sampleTitles": "인터뷰 | 조던 아이유, 2010년의 가나를 다시 꿈꾸다 / 아이유 **푸르던** 소나기(2) / 인천 부평 숙소 추천 아이유... 좋은 곳 후기 아이유> / [포토]아이유 ‘제 손도장 어때요?’ / 아이유의 ㅁ 발음 입모습"
+            },
+            {
+              "topicKey": "brand_rank__advertising_model_rank",
+              "topicGroup": "brand_rank",
+              "postCount": 5,
+              "rawPointSum": 10.0,
+              "topicKeyCap": 8.0,
+              "keyCappedTopicPoint": 8.0,
+              "topicGroupCap": 8.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 8.0,
+              "sampleTitles": "아이유·박보검, 2026년 광고계 휩쓸다! / 아이유·박보검, 2026 대표 광고모델 선정 / 아이유베개 슬립앤슬립 깊은잠베개 목통증 사이즈 / 소비 아이유, 광고 모델 선호도 1위 2위 김연아, 3위 유재석 / 아이유 광고 모델 선호도 1위 오른 이유"
+            }
+          ],
+          "searchTrend": {
+            "searchCompareRank": 1,
+            "trendSum": 1184.17,
+            "trendAvg": 39.47,
+            "trendMax": 100.0,
+            "trendLatest": 43.61,
+            "trendCount": 30,
+            "series": [
+              {
+                "period": "2026-06-08",
+                "ratio": 75.59711
+              },
+              {
+                "period": "2026-06-09",
+                "ratio": 58.8328
+              },
+              {
+                "period": "2026-06-10",
+                "ratio": 54.91212
+              },
+              {
+                "period": "2026-06-11",
+                "ratio": 46.01622
+              },
+              {
+                "period": "2026-06-12",
+                "ratio": 37.42226
+              },
+              {
+                "period": "2026-06-13",
+                "ratio": 41.47363
+              },
+              {
+                "period": "2026-06-14",
+                "ratio": 38.17936
+              },
+              {
+                "period": "2026-06-15",
+                "ratio": 37.75123
+              },
+              {
+                "period": "2026-06-16",
+                "ratio": 33.91167
+              },
+              {
+                "period": "2026-06-17",
+                "ratio": 48.26047
+              },
+              {
+                "period": "2026-06-18",
+                "ratio": 39.64849
+              },
+              {
+                "period": "2026-06-19",
+                "ratio": 34.0018
+              },
+              {
+                "period": "2026-06-20",
+                "ratio": 32.85263
+              },
+              {
+                "period": "2026-06-21",
+                "ratio": 30.65795
+              },
+              {
+                "period": "2026-06-22",
+                "ratio": 27.44028
+              },
+              {
+                "period": "2026-06-23",
+                "ratio": 26.85443
+              },
+              {
+                "period": "2026-06-24",
+                "ratio": 26.46687
+              },
+              {
+                "period": "2026-06-25",
+                "ratio": 25.73681
+              },
+              {
+                "period": "2026-06-26",
+                "ratio": 26.22803
+              },
+              {
+                "period": "2026-06-27",
+                "ratio": 100.0
+              },
+              {
+                "period": "2026-06-28",
+                "ratio": 46.53447
+              },
+              {
+                "period": "2026-06-29",
+                "ratio": 35.20955
+              },
+              {
+                "period": "2026-06-30",
+                "ratio": 29.67552
+              },
+              {
+                "period": "2026-07-01",
+                "ratio": 28.10274
+              },
+              {
+                "period": "2026-07-02",
+                "ratio": 26.89499
+              },
+              {
+                "period": "2026-07-03",
+                "ratio": 31.47363
+              },
+              {
+                "period": "2026-07-04",
+                "ratio": 33.69986
+              },
+              {
+                "period": "2026-07-05",
+                "ratio": 35.91257
+              },
+              {
+                "period": "2026-07-06",
+                "ratio": 30.81117
+              },
+              {
+                "period": "2026-07-07",
+                "ratio": 43.60973
+              }
+            ]
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_아이유_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_아이유_20260708_191332_topic_cluster.csv",
+            "searchSummaryFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "searchDetailFile": "naver_search_trend_compare_v2_20260708_182716.csv",
+            "rankingSourceFile": "fandex_naver_ranking_v3_latest.json",
+            "generatedAt": "2026-07-08T19:59:16"
+          }
+        },
+        "youtube": {
+          "rank": 1,
+          "artist": "아이유",
+          "fandexYoutubeFinalPoint": 76.64,
+          "coreSignal": "공식 음악 콘텐츠",
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.37,
+              "components": {
+                "viewPoint": 0.11,
+                "likePoint": 0.05,
+                "commentPoint": 0.05,
+                "engagementPoint": 1.16
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 24.43,
+              "components": {
+                "viewPoint": 11.25,
+                "likePoint": 6.25,
+                "commentPoint": 5.0,
+                "engagementPoint": 1.93
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 50.0,
+              "components": {
+                "viewPoint": 22.5,
+                "likePoint": 12.5,
+                "commentPoint": 10.0,
+                "engagementPoint": 5.0
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.84,
+              "components": {
+                "viewPoint": 0.01,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 0.62
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 3532405,
+              "totalLikes": 302486,
+              "totalComments": 8009,
+              "avgViews": 3532405.0,
+              "engagementPerThousandViews": 87.9
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 122230829,
+              "totalLikes": 5225888,
+              "totalComments": 220495,
+              "avgViews": 61115414.5,
+              "engagementPerThousandViews": 44.56
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 328653,
+              "totalLikes": 48012,
+              "totalComments": 645,
+              "avgViews": 328653.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 3532405,
+              "totalLikes": 302486,
+              "totalComments": 8009,
+              "avgViews": 3532405.0,
+              "engagementPerThousandViews": 87.9
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 24053,
+              "totalLikes": 925,
+              "totalComments": 30,
+              "avgViews": 24053.0,
+              "engagementPerThousandViews": 39.7
+            },
+            "live_clip": {
+              "videoCount": 1,
+              "totalViews": 11114609,
+              "totalLikes": 157535,
+              "totalComments": 4277,
+              "avgViews": 11114609.0,
+              "engagementPerThousandViews": 14.56
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 111116220,
+              "totalLikes": 5068353,
+              "totalComments": 216218,
+              "avgViews": 111116220.0,
+              "engagementPerThousandViews": 47.56
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 328653,
+              "totalLikes": 48012,
+              "totalComments": 645,
+              "avgViews": 328653.0,
+              "engagementPerThousandViews": 148.05
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 126115940,
+            "totalLikes": 5577311,
+            "totalComments": 229179,
+            "avgViews": 25223188.0,
+            "engagementPerThousandViews": 46.04
+          },
+          "topVideos": [
+            {
+              "videoId": "JleoAppaxi0",
+              "title": "IU 'Love wins all' MV",
+              "publishedAt": "2024-01-23T15:00:15Z",
+              "viewCount": 111116220,
+              "likeCount": 5068353,
+              "commentCount": 216218,
+              "videoType": "official_mv",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=JleoAppaxi0"
+            },
+            {
+              "videoId": "-_14Lhw0y1A",
+              "title": "IU 'Love wins all' Live Clip (2024 IU HEREH WORLD TOUR CONCERT ENCORE : THE WINNING)",
+              "publishedAt": "2024-12-04T10:00:00Z",
+              "viewCount": 11114609,
+              "likeCount": 157535,
+              "commentCount": 4277,
+              "videoType": "live_clip",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=-_14Lhw0y1A"
+            },
+            {
+              "videoId": "bSxoDXrk2X4",
+              "title": "[IU TV] 멋진 결과물과 건강을 맞바꾼 날 😷",
+              "publishedAt": "2024-01-28T08:00:30Z",
+              "viewCount": 3532405,
+              "likeCount": 302486,
+              "commentCount": 8009,
+              "videoType": "behind",
+              "contentGroup": "fandom",
+              "sourceUrl": "https://www.youtube.com/watch?v=bSxoDXrk2X4"
+            },
+            {
+              "videoId": "CsYfnUVfL-4",
+              "title": "IU 'Love wins all' Track Sampler #아이유 #IU #Love_wins_all",
+              "publishedAt": "2024-01-19T15:00:19Z",
+              "viewCount": 328653,
+              "likeCount": 48012,
+              "commentCount": 645,
+              "videoType": "shorts",
+              "contentGroup": "shortform",
+              "sourceUrl": "https://www.youtube.com/watch?v=CsYfnUVfL-4"
+            },
+            {
+              "videoId": "Q2AB7ydFJv8",
+              "title": "'Love wins all' M/V behind the scenes revealed with V",
+              "publishedAt": "2024-01-29T08:10:22Z",
+              "viewCount": 24053,
+              "likeCount": 925,
+              "commentCount": 30,
+              "videoType": "external_content",
+              "contentGroup": "external",
+              "sourceUrl": "https://www.youtube.com/watch?v=Q2AB7ydFJv8"
+            }
+          ],
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 3,
+          "artist": "아이유",
+          "fandexMusicChartFinalPoint": 24.0,
+          "coreSignal": "melon",
+          "entryCount": 1,
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "Love wins all": 24.0
+          },
+          "bestEntry": {
+            "artist": "아이유",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "Love wins all",
+            "rank": 85,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entries": [
+            {
+              "artist": "아이유",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "Love wins all",
+              "rank": 85,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "artist": "에스파",
+      "fandexFinalPoint": 485.38,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 4,
+          "rawPoint": 279.11,
+          "normalizedPoint": 69.84,
+          "cumulativePoint": 279.11,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 46.0,
+            "blogTopicClusterPoint": 188.01,
+            "searchDemandComparePoint": 45.1
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에스파_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에스파_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_에스파_20260708_193805.csv",
+            "generatedAt": "2026-07-08T19:38:05"
+          }
+        },
+        "youtube": {
+          "rank": 2,
+          "rawPoint": 44.27,
+          "normalizedPoint": 44.27,
+          "cumulativePoint": 44.27,
+          "available": true,
+          "coreSignal": "공식 음악 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.8,
+              "components": {
+                "viewPoint": 0.1,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 1.51
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 5.17,
+              "components": {
+                "viewPoint": 2.21,
+                "likePoint": 0.84,
+                "commentPoint": 0.78,
+                "engagementPoint": 1.33
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 31.64,
+              "components": {
+                "viewPoint": 21.11,
+                "likePoint": 4.35,
+                "commentPoint": 4.31,
+                "engagementPoint": 1.87
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 5.66,
+              "components": {
+                "viewPoint": 2.81,
+                "likePoint": 1.56,
+                "commentPoint": 1.25,
+                "engagementPoint": 0.03
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 21233,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21233.0,
+              "engagementPerThousandViews": 51.95
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 695132,
+              "totalLikes": 40721,
+              "totalComments": 1257,
+              "avgViews": 695132.0,
+              "engagementPerThousandViews": 60.39
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 114654496,
+              "totalLikes": 1818363,
+              "totalComments": 95079,
+              "avgViews": 57327248.0,
+              "engagementPerThousandViews": 16.69
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 167614542,
+              "totalLikes": 1230002,
+              "totalComments": 5612,
+              "avgViews": 167614542.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 695132,
+              "totalLikes": 40721,
+              "totalComments": 1257,
+              "avgViews": 695132.0,
+              "engagementPerThousandViews": 60.39
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 21233,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21233.0,
+              "engagementPerThousandViews": 51.95
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 92764234,
+              "totalLikes": 1355052,
+              "totalComments": 80107,
+              "avgViews": 92764234.0,
+              "engagementPerThousandViews": 15.47
+            },
+            "performance_video": {
+              "videoCount": 1,
+              "totalViews": 21890262,
+              "totalLikes": 463311,
+              "totalComments": 14972,
+              "avgViews": 21890262.0,
+              "engagementPerThousandViews": 21.85
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 167614542,
+              "totalLikes": 1230002,
+              "totalComments": 5612,
+              "avgViews": 167614542.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 282985403,
+            "totalLikes": 3090106,
+            "totalComments": 102031,
+            "avgViews": 56597080.6,
+            "engagementPerThousandViews": 11.28
+          },
+          "topVideo": {
+            "videoId": "SKEnKaMI2nw",
+            "title": "that’s Dirty Work! Show us your #aespaDirtyWork moves! Brought to you by YouTube Shorts #aespa",
+            "publishedAt": "2025-06-27T05:00:26Z",
+            "viewCount": 167614542,
+            "likeCount": 1230002,
+            "commentCount": 5612,
+            "videoType": "shorts",
+            "contentGroup": "shortform",
+            "sourceUrl": "https://www.youtube.com/watch?v=SKEnKaMI2nw"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 1,
+          "rawPoint": 162.0,
+          "normalizedPoint": 162.0,
+          "cumulativePoint": 162.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 90.0,
+            "genie": 38.25,
+            "bugs": 33.75
+          },
+          "chartTypePoints": {
+            "daily": 90.0,
+            "realtime": 72.0
+          },
+          "trackPoints": {
+            "LEMONADE": 162.0
+          },
+          "bestEntry": {
+            "artist": "에스파",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "LEMONADE",
+            "rank": 5,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 75.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 90.0
+          },
+          "entryCount": 3,
+          "entries": [
+            {
+              "artist": "에스파",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 75.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 90.0
+            },
+            {
+              "artist": "에스파",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "LEMONADE",
+              "rank": 7,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 33.75
+            },
+            {
+              "artist": "에스파",
+              "platform": "genie",
+              "chartName": "Top 200",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.genie.co.kr/chart/top200",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.85,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 38.25
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 4,
+        "youtube": 2,
+        "musicChart": 1
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 46.0,
+          "blogTopicClusterPoint": 188.01,
+          "searchDemandComparePoint": 45.1
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 90.0,
+            "genie": 38.25,
+            "bugs": 33.75
+          },
+          "chartTypePoints": {
+            "daily": 90.0,
+            "realtime": 72.0
+          },
+          "trackPoints": {
+            "LEMONADE": 162.0
+          },
+          "bestEntry": {
+            "artist": "에스파",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "LEMONADE",
+            "rank": 5,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 75.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 90.0
+          },
+          "entryCount": 3
+        }
+      },
+      "reports": {
+        "naver": {
+          "rank": 4,
+          "artist": "에스파",
+          "fandexNaverFinalPoint": 279.11,
+          "components": {
+            "newsIssueClusterPoint": 46.0,
+            "blogTopicClusterPoint": 188.01,
+            "searchDemandComparePoint": 45.1
+          },
+          "shares": {
+            "newsSharePercent": 16.48,
+            "blogSharePercent": 67.36,
+            "searchSharePercent": 16.16
+          },
+          "signals": {
+            "dominantSignal": "blog_topic",
+            "dominantSignalLabel": "블로그 화제성"
+          },
+          "summary": {
+            "topNewsIssue": {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 94,
+              "rawPointSum": 246.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "[뮤지션100] 크루셜스타·트라이앵글·마이티 마우스 급등…에스파·하... / [뮤지션100] V8·권진아·최유정·쏜애플·클라씨 급등…에스파·하츠투... / [뮤지션100] 뽀로로·에반·핑크퐁 급등…에스파 1위 속 에이티즈까지 ... / BTS·하투하·에스파, 한터 국가별 차트 1위 / 에스파·에이티즈, 한터 6월 월간차트 1위로 존재감 과시"
+            },
+            "topBlogTopic": {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 55,
+              "rawPointSum": 110.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "영등포 제2스포츠센터 방송댄스 에스파 wda 안무 배우기... / 에스파 정규 2집 미리 들어봤습니다....쇠맛+신맛까지 결합된... / 냉장고를 부탁해 신스 2014 78회 (경축) 에스파 드디어... / 에스파 윈터 “반려견 뽀뇨, 번식장 갈 위기여서 보호소에서... / 에스파 닝닝, 결국 홍백가합전 불참"
+            },
+            "searchTrendLatest": 18.98,
+            "searchCompareRank": 4
+          },
+          "newsIssues": [
+            {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 94,
+              "rawPointSum": 246.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "[뮤지션100] 크루셜스타·트라이앵글·마이티 마우스 급등…에스파·하... / [뮤지션100] V8·권진아·최유정·쏜애플·클라씨 급등…에스파·하츠투... / [뮤지션100] 뽀로로·에반·핑크퐁 급등…에스파 1위 속 에이티즈까지 ... / BTS·하투하·에스파, 한터 국가별 차트 1위 / 에스파·에이티즈, 한터 6월 월간차트 1위로 존재감 과시"
+            },
+            {
+              "issueKey": "music_release__etc",
+              "issueGroup": "music_release",
+              "articleCount": 149,
+              "rawPointSum": 376.04,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "에스파, 日서 미스터리하네…'키스 앤 텔' / SM의 레몬 유니버스: 에스파부터 NCT까지 / 에스파 윈터, 뾰로통한 얼굴도 귀여우면 어떡해..‘인기투표 1위’의 위... / 에스파 24일 日 첫 미니앨범 '키스 앤 텔' 발매 / 에스파, 日 첫 미니앨범 ‘키스 앤 텔’ 24일 발매"
+            },
+            {
+              "issueKey": "brand_ad__etc",
+              "issueGroup": "brand_ad",
+              "articleCount": 8,
+              "rawPointSum": 24.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "K-브랜드지수, K-POP 그룹 톱10 발표…에스파 3위 안착, 르세라핌·아이... / 에스파 닝닝, 말랐는데 글래머…대왕 곡선에 깜짝 / 에스파 윈터, 에스쁘아 '노웨어 립스틱' 로즈톤 4종 제안 / 에스파 ‘닝닝’, 칼숙도~옥수수도 안좋아하는 차도녀❣️절세미녀 닝... / 컨버스, 에스파 카리나와 '척 70 X' 공개"
+            },
+            {
+              "issueKey": "brand_ad__new_balance",
+              "issueGroup": "brand_ad",
+              "articleCount": 5,
+              "rawPointSum": 15.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "에스파 윈터와 뉴발란스의 두려움을 넘어서는 용기 / K-팝 스타의 열정과 에너지, 에스파 윈터 엘르 D 에디션 커버 장식 / 에스파 윈터, \"두려움을 극복하는 과정이 즐거워\"…엘르 D에디션 커버 / 에스파 윈터, 뉴발란스 글로벌 앰버서더 발탁 / 에스파 윈터, 뉴발란스 글로벌 앰버서더 발탁...엘르 디지털 커버 공개"
+            },
+            {
+              "issueKey": "brand_ad__pictorial",
+              "issueGroup": "brand_ad",
+              "articleCount": 6,
+              "rawPointSum": 9.15,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "에스파 윈터 화보, 독보적 여신 미모+자신감 넘치는 매력..이러니 안 반... / 에스파 닝닝, 블랙 드레스 입고 中 선전서 주얼리 화보 촬영 / 에스파 카리나, 놀이공원 떴다... 모자로 가려도 화보! 수줍은 표정 ‘... / [사진]에스파 윈터,'화보 같은 출국길' / 하츠투하츠 “에스파 여동생? 부담보다는 감사”[화보]"
+            },
+            {
+              "issueKey": "content_drama_broadcast__etc",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 58,
+              "rawPointSum": 152.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "에스파 출격 '냉부' 윈터 쇠맛 주문…카리나 5분 점검 활약 / 에스파, 데뷔 6년 차에 다시 한집살이…윈터 “최근 숙소 합쳐” (냉부... / \"혼자 마실 땐...\" 에스파 윈터, 의외의 혼술 취향 공개 / 돈 많이 번 줄 알았는데…배달비 아끼는 에스파 윈터에 \"이 정도로 어렵... / 윈터, 톱아이돌인데도 배달 추가비 아낀다…안정환 “에스파 어렵냐”..."
+            },
+            {
+              "issueKey": "award_event__etc",
+              "issueGroup": "award_event",
+              "articleCount": 68,
+              "rawPointSum": 11.35,
+              "cappedIssuePoint": 4.0,
+              "sampleTitles": "방탄소년단·에스파·코르티스까지…'더팩트 뮤직 어워즈' 'TMA 베스트 뮤... / 에스파 닝닝, 블랙 드레스로 완성한 여왕 비주얼... 반전 피지컬 눈길 / [HD포토] 에스파 닝닝, '하트 모자 닝이줘' (김포공항 출국) / [HD포토] 에스파 지젤, '후디를 입은 애리' (김포공항 출국) / [HD포토] 에스파 윈터, '김민정 졸림상태' (김포공항 출국)"
+            },
+            {
+              "issueKey": "general__etc",
+              "issueGroup": "general",
+              "articleCount": 310,
+              "rawPointSum": 287.85,
+              "cappedIssuePoint": 3.0,
+              "sampleTitles": "방탄소년단·에스파·코르티스…‘TMA 베스트 뮤직 – 여름’ 투표 시작 / 원정 응원 온 걸그룹 에스파 / 에스파 윈터, 김치에 소주 병나발 '혼술 주당' 고백 / 정호영, 에스파 제5의 멤버 노리나? 춤선 대공개 (냉부해) / 에스파 윈터 입맛 겨냥한 '냉장고를 부탁해', 파스타·'쇠맛' 요리 맞대..."
+            },
+            {
+              "issueKey": "sns_update__etc",
+              "issueGroup": "sns_update",
+              "articleCount": 27,
+              "rawPointSum": 37.05,
+              "cappedIssuePoint": 3.0,
+              "sampleTitles": "\"형 그만 행복해\"… 나폴리맛피아, 에스파 만남에 유쾌 반응 폭발 [★한... / 에스파 딥페이크 제작·판매자 징역 2년6개월 선고···SM “강경 대응... / 에스파 딥페이크 제작·판매자 징역 2년 6개월…SM \"강력 대응\" / 에스파 카리나·윈터 딥페이크 제작·유포 범죄자, 징역 2년 6개월 선고 / 에스파 카리나, 운동을 얼마나 한 거야? 성난 등근육 '깜짝'"
+            },
+            {
+              "issueKey": "fan_event__etc",
+              "issueGroup": "fan_event",
+              "articleCount": 25,
+              "rawPointSum": 34.05,
+              "cappedIssuePoint": 3.0,
+              "sampleTitles": "방탄소년단·에스파 등, 'TMA 베스트 뮤직 – 여름' 사전 투표 레이스 돌... / 'TMA 베스트 뮤직 - 여름' 사전투표...BTS·에스파·코르티스 등 후보 경... / '글로벌 신드롬' 에스파, '팬앤스타' 위클리 뮤직 14위 안착 / 르세라핌·아일릿·아이브·에스파, 올 하반기 가장 기대되는 걸그룹 TO... / 에스파→아일릿도 당했다…딥페이크 성범죄, 새로운 위협[초점S]"
+            }
+          ],
+          "blogTopics": [
+            {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 55,
+              "rawPointSum": 110.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "영등포 제2스포츠센터 방송댄스 에스파 wda 안무 배우기... / 에스파 정규 2집 미리 들어봤습니다....쇠맛+신맛까지 결합된... / 냉장고를 부탁해 신스 2014 78회 (경축) 에스파 드디어... / 에스파 윈터 “반려견 뽀뇨, 번식장 갈 위기여서 보호소에서... / 에스파 닝닝, 결국 홍백가합전 불참"
+            },
+            {
+              "topicKey": "concert_fan_event__concert",
+              "topicGroup": "concert_fan_event",
+              "postCount": 21,
+              "rawPointSum": 42.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 15.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 15.0,
+              "sampleTitles": "2026 에스파 콘서트 티켓팅 예매 방법 서울 월드투어 8월... / 2026 에스파 콘서트 티켓팅 예매 방법 서울 고척스카이돔... / 에스파콘서트 2026 SYNK COMPLaeXITY 예매부터... / 2026 에스파 라이브 투어 콘서트 'SYNK : COMPLaeXITY' 선예매... / 혼자 공연을 즐겼고 에스파 윈터는? (BTS 고양콘 참석 연예인)"
+            },
+            {
+              "topicKey": "concert_fan_event__etc",
+              "topicGroup": "concert_fan_event",
+              "postCount": 7,
+              "rawPointSum": 14.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 14.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 14.0,
+              "sampleTitles": "최근 에스파 서울 콘에서 교복 입고 온, 올드스쿨 언니 카리나의... / 에스파 카리나 살 붙고 탈아이돌급 몸매 / 에스파 일본 투어 기간 도쿄에서 포착된 정국이 윈터 보러? / 아이브 리즈, 투어스 도훈, 코르티스 건호, 에스파 카리나) / 에스파 Sun and moon 한글 해석 번역 뜻"
+            },
+            {
+              "topicKey": "music_release__album",
+              "topicGroup": "music_release",
+              "postCount": 52,
+              "rawPointSum": 104.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에스파 미니 1집 앨범 – Savage (SYNK DIVE Ver.) / 에스파 - 레모네이드 LEMONADE 피아노 악보 및 가사 코드 정리 / 에스파 레모네이드 컴백!! (정규 2집 발매, 뮤비, 수록곡 전체)... / 댄스일기, 에스파 WDA / aespa(에스파) - LEMONADE (가사해석)"
+            },
+            {
+              "topicKey": "music_release__new_song",
+              "topicGroup": "music_release",
+              "postCount": 51,
+              "rawPointSum": 102.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "돌아온 쇠맛 에스파 Lemonade 가사 뜻 레모네이드 영어 해석 / 여의도 IFC몰 놀거리 에스파 팝업, 서울 실내 가볼만한곳 / 에스파 wda 가사해석 및 리뷰! / 에스파 LEMONADE 뜻 레모네이드 가사해석 영어번역 (aespa... / 에스파 레모네이드 새콤한 도전의 신곡 리뷰!"
+            },
+            {
+              "topicKey": "music_release__etc",
+              "topicGroup": "music_release",
+              "postCount": 57,
+              "rawPointSum": 114.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에스파 정규2집 LEMONADE 팝업스토어 - 여의도한강공원... / 에스파는 어떤 인이어를 사용할까? [64AUDIO] A18t / aespa – 〈LEMONADE〉 | 에스파는 이번에도 달콤함보다... / 아이오아이·르세라핌·에스파 등 5월 컴백 아이돌(걸그룹) 라인업 / 댄스일기, 에스파 레몬에이드"
+            },
+            {
+              "topicKey": "music_release__playlist_song",
+              "topicGroup": "music_release",
+              "postCount": 18,
+              "rawPointSum": 36.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에스파 카리나 틀자마자 \"어?\"… 장르 안 타는 미친... / ETA 뜻 영어 줄임말 에스파 레모네이드 가사 속 표현 / 킬 블루 OP 에스파 aespa 'ATTITUDE' [가사/해석/번역]... / 뜻 채찍질? 영화 whiplash 뜻, 에스파 노래까지 한 번에 / 에스파 카리나 윈터 딥페이크 어디서 유통되었나 사건정리"
+            },
+            {
+              "topicKey": "fan_reaction__etc",
+              "topicGroup": "fan_reaction",
+              "postCount": 34,
+              "rawPointSum": 68.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.7812,
+              "cappedTopicPoint": 9.38,
+              "sampleTitles": "에스파 윈터 도예과 김민정 선배룩, 뿔테 안경 쓴 체크셔츠 코디 / 에스파에서 제일 말랐는데? 뼈말라 지젤 기자간담회룩(카리나랑... / 에스파 카리나 레이어드 레이스 새틴 원피스 코디 / 에스파 정규 1집 Armageddon Vinyl LP 버전(51uaEra9) 예약... / \"이게 쌩얼이라고?\" 에스파 윈터·카리나"
+            },
+            {
+              "topicKey": "fan_reaction__photo_clip",
+              "topicGroup": "fan_reaction",
+              "postCount": 19,
+              "rawPointSum": 38.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.7812,
+              "cappedTopicPoint": 9.38,
+              "sampleTitles": "\"취미로 미술학원\" 에스파 카리나 더블유 코리아서 반전 인간미... / 에스파 센터장 5월 결혼식에 하객룩으로 20만원대 트위드 미니... / 선릉역미용실 에스파 지젤 긴머리 하이레이어드컷... / 에스파 카리나 비주얼이 또 달라졌다고? 팬들이 한눈에 알아본... / 농심 신라면, 에스파aespa 포토카드 증정 이벤트, \"사실..."
+            },
+            {
+              "topicKey": "brand_ad__etc",
+              "topicGroup": "brand_ad",
+              "postCount": 147,
+              "rawPointSum": 294.0,
+              "topicKeyCap": 10.0,
+              "keyCappedTopicPoint": 10.0,
+              "topicGroupCap": 35.0,
+              "topicGroupRatio": 0.875,
+              "cappedTopicPoint": 8.75,
+              "sampleTitles": "더현대서울 팝업 7월 여름휴가준비 에스파윈터 권은비 수영복... / 에스파 스타일링 참여했던 연예인 정체... 미감 좋은... / “흑발 분위기 미쳤다” 에스파 카리나 군번줄 미모 근황 패션 / 요즘 난리 난 에스파 카리나, 윈터 여름 코디로 보는 2026... / ′힙한 스트릿 패션′ 에스파 카리나, 168cm 국보급 미모"
+            }
+          ],
+          "searchTrend": {
+            "searchCompareRank": 4,
+            "trendSum": 451.02,
+            "trendAvg": 15.03,
+            "trendMax": 34.45,
+            "trendLatest": 18.98,
+            "trendCount": 30,
+            "series": [
+              {
+                "period": "2026-06-08",
+                "ratio": 19.05362
+              },
+              {
+                "period": "2026-06-09",
+                "ratio": 16.81388
+              },
+              {
+                "period": "2026-06-10",
+                "ratio": 18.26949
+              },
+              {
+                "period": "2026-06-11",
+                "ratio": 17.61153
+              },
+              {
+                "period": "2026-06-12",
+                "ratio": 20.52726
+              },
+              {
+                "period": "2026-06-13",
+                "ratio": 18.47228
+              },
+              {
+                "period": "2026-06-14",
+                "ratio": 15.25461
+              },
+              {
+                "period": "2026-06-15",
+                "ratio": 14.70482
+              },
+              {
+                "period": "2026-06-16",
+                "ratio": 13.25371
+              },
+              {
+                "period": "2026-06-17",
+                "ratio": 13.44749
+              },
+              {
+                "period": "2026-06-18",
+                "ratio": 13.37088
+              },
+              {
+                "period": "2026-06-19",
+                "ratio": 12.96079
+              },
+              {
+                "period": "2026-06-20",
+                "ratio": 13.97926
+              },
+              {
+                "period": "2026-06-21",
+                "ratio": 12.46056
+              },
+              {
+                "period": "2026-06-22",
+                "ratio": 12.6904
+              },
+              {
+                "period": "2026-06-23",
+                "ratio": 11.23479
+              },
+              {
+                "period": "2026-06-24",
+                "ratio": 11.69896
+              },
+              {
+                "period": "2026-06-25",
+                "ratio": 11.49616
+              },
+              {
+                "period": "2026-06-26",
+                "ratio": 12.15412
+              },
+              {
+                "period": "2026-06-27",
+                "ratio": 12.4155
+              },
+              {
+                "period": "2026-06-28",
+                "ratio": 11.5863
+              },
+              {
+                "period": "2026-06-29",
+                "ratio": 11.33844
+              },
+              {
+                "period": "2026-06-30",
+                "ratio": 11.05452
+              },
+              {
+                "period": "2026-07-01",
+                "ratio": 10.51825
+              },
+              {
+                "period": "2026-07-02",
+                "ratio": 10.87426
+              },
+              {
+                "period": "2026-07-03",
+                "ratio": 11.88373
+              },
+              {
+                "period": "2026-07-04",
+                "ratio": 14.2091
+              },
+              {
+                "period": "2026-07-05",
+                "ratio": 34.45245
+              },
+              {
+                "period": "2026-07-06",
+                "ratio": 24.24966
+              },
+              {
+                "period": "2026-07-07",
+                "ratio": 18.98152
+              }
+            ]
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에스파_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에스파_20260708_191332_topic_cluster.csv",
+            "searchSummaryFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "searchDetailFile": "naver_search_trend_compare_v2_20260708_182716.csv",
+            "rankingSourceFile": "fandex_naver_ranking_v3_latest.json",
+            "generatedAt": "2026-07-08T19:59:16"
+          }
+        },
+        "youtube": {
+          "rank": 2,
+          "artist": "에스파",
+          "fandexYoutubeFinalPoint": 44.27,
+          "coreSignal": "공식 음악 콘텐츠",
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 1.8,
+              "components": {
+                "viewPoint": 0.1,
+                "likePoint": 0.06,
+                "commentPoint": 0.14,
+                "engagementPoint": 1.51
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 5.17,
+              "components": {
+                "viewPoint": 2.21,
+                "likePoint": 0.84,
+                "commentPoint": 0.78,
+                "engagementPoint": 1.33
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 31.64,
+              "components": {
+                "viewPoint": 21.11,
+                "likePoint": 4.35,
+                "commentPoint": 4.31,
+                "engagementPoint": 1.87
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 5.66,
+              "components": {
+                "viewPoint": 2.81,
+                "likePoint": 1.56,
+                "commentPoint": 1.25,
+                "engagementPoint": 0.03
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 21233,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21233.0,
+              "engagementPerThousandViews": 51.95
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 695132,
+              "totalLikes": 40721,
+              "totalComments": 1257,
+              "avgViews": 695132.0,
+              "engagementPerThousandViews": 60.39
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 114654496,
+              "totalLikes": 1818363,
+              "totalComments": 95079,
+              "avgViews": 57327248.0,
+              "engagementPerThousandViews": 16.69
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 167614542,
+              "totalLikes": 1230002,
+              "totalComments": 5612,
+              "avgViews": 167614542.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 695132,
+              "totalLikes": 40721,
+              "totalComments": 1257,
+              "avgViews": 695132.0,
+              "engagementPerThousandViews": 60.39
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 21233,
+              "totalLikes": 1020,
+              "totalComments": 83,
+              "avgViews": 21233.0,
+              "engagementPerThousandViews": 51.95
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 92764234,
+              "totalLikes": 1355052,
+              "totalComments": 80107,
+              "avgViews": 92764234.0,
+              "engagementPerThousandViews": 15.47
+            },
+            "performance_video": {
+              "videoCount": 1,
+              "totalViews": 21890262,
+              "totalLikes": 463311,
+              "totalComments": 14972,
+              "avgViews": 21890262.0,
+              "engagementPerThousandViews": 21.85
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 167614542,
+              "totalLikes": 1230002,
+              "totalComments": 5612,
+              "avgViews": 167614542.0,
+              "engagementPerThousandViews": 7.37
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 282985403,
+            "totalLikes": 3090106,
+            "totalComments": 102031,
+            "avgViews": 56597080.6,
+            "engagementPerThousandViews": 11.28
+          },
+          "topVideos": [
+            {
+              "videoId": "SKEnKaMI2nw",
+              "title": "that’s Dirty Work! Show us your #aespaDirtyWork moves! Brought to you by YouTube Shorts #aespa",
+              "publishedAt": "2025-06-27T05:00:26Z",
+              "viewCount": 167614542,
+              "likeCount": 1230002,
+              "commentCount": 5612,
+              "videoType": "shorts",
+              "contentGroup": "shortform",
+              "sourceUrl": "https://www.youtube.com/watch?v=SKEnKaMI2nw"
+            },
+            {
+              "videoId": "M2WTUoy4y6E",
+              "title": "aespa 에스파 'Dirty Work' MV",
+              "publishedAt": "2025-06-27T03:59:07Z",
+              "viewCount": 92764234,
+              "likeCount": 1355052,
+              "commentCount": 80107,
+              "videoType": "official_mv",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=M2WTUoy4y6E"
+            },
+            {
+              "videoId": "1dxDjcKg21o",
+              "title": "aespa 에스파 'Dirty Work' Performance Video",
+              "publishedAt": "2025-06-08T15:00:05Z",
+              "viewCount": 21890262,
+              "likeCount": 463311,
+              "commentCount": 14972,
+              "videoType": "performance_video",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=1dxDjcKg21o"
+            },
+            {
+              "videoId": "6TvpNlT_cVU",
+              "title": "[R(ae)cord] aespa 에스파 ‘Dirty Work’ Recording Behind The Scenes",
+              "publishedAt": "2025-06-30T13:00:22Z",
+              "viewCount": 695132,
+              "likeCount": 40721,
+              "commentCount": 1257,
+              "videoType": "behind",
+              "contentGroup": "fandom",
+              "sourceUrl": "https://www.youtube.com/watch?v=6TvpNlT_cVU"
+            },
+            {
+              "videoId": "D6nqRPfP47o",
+              "title": "aespa On Their \"Dirty Work\" Come Back, KCON Performance & More | KCON LA 2025",
+              "publishedAt": "2025-08-03T05:55:55Z",
+              "viewCount": 21233,
+              "likeCount": 1020,
+              "commentCount": 83,
+              "videoType": "external_content",
+              "contentGroup": "external",
+              "sourceUrl": "https://www.youtube.com/watch?v=D6nqRPfP47o"
+            }
+          ],
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 1,
+          "artist": "에스파",
+          "fandexMusicChartFinalPoint": 162.0,
+          "coreSignal": "melon",
+          "entryCount": 3,
+          "platformPoints": {
+            "melon": 90.0,
+            "genie": 38.25,
+            "bugs": 33.75
+          },
+          "chartTypePoints": {
+            "daily": 90.0,
+            "realtime": 72.0
+          },
+          "trackPoints": {
+            "LEMONADE": 162.0
+          },
+          "bestEntry": {
+            "artist": "에스파",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "LEMONADE",
+            "rank": 5,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 75.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 90.0
+          },
+          "entries": [
+            {
+              "artist": "에스파",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 75.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 90.0
+            },
+            {
+              "artist": "에스파",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "LEMONADE",
+              "rank": 7,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 33.75
+            },
+            {
+              "artist": "에스파",
+              "platform": "genie",
+              "chartName": "Top 200",
+              "trackTitle": "LEMONADE",
+              "rank": 5,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.genie.co.kr/chart/top200",
+              "rankBasePoint": 75.0,
+              "platformWeight": 0.85,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 38.25
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "artist": "에이티즈",
+      "fandexFinalPoint": 398.95,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 2,
+          "rawPoint": 318.77,
+          "normalizedPoint": 79.76,
+          "cumulativePoint": 318.77,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 64.85,
+            "blogTopicClusterPoint": 183.0,
+            "searchDemandComparePoint": 70.92
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에이티즈_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에이티즈_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_에이티즈_20260708_194120.csv",
+            "generatedAt": "2026-07-08T19:41:20"
+          }
+        },
+        "youtube": {
+          "rank": 4,
+          "rawPoint": 29.18,
+          "normalizedPoint": 29.18,
+          "cumulativePoint": 29.18,
+          "available": true,
+          "coreSignal": "외부 확산 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 15.12,
+              "components": {
+                "viewPoint": 5.81,
+                "likePoint": 4.28,
+                "commentPoint": 3.16,
+                "engagementPoint": 1.88
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.28,
+              "components": {
+                "viewPoint": 0.6,
+                "likePoint": 0.36,
+                "commentPoint": 0.25,
+                "engagementPoint": 2.08
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 10.12,
+              "components": {
+                "viewPoint": 4.57,
+                "likePoint": 1.38,
+                "commentPoint": 1.43,
+                "engagementPoint": 2.74
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.66,
+              "components": {
+                "viewPoint": 0.03,
+                "likePoint": 0.15,
+                "commentPoint": 0.23,
+                "engagementPoint": 0.24
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1244744,
+              "totalLikes": 78093,
+              "totalComments": 1942,
+              "avgViews": 1244744.0,
+              "engagementPerThousandViews": 64.3
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 187758,
+              "totalLikes": 17305,
+              "totalComments": 403,
+              "avgViews": 187758.0,
+              "engagementPerThousandViews": 94.31
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 24847451,
+              "totalLikes": 575136,
+              "totalComments": 31501,
+              "avgViews": 12423725.5,
+              "engagementPerThousandViews": 24.41
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 2066253,
+              "totalLikes": 118798,
+              "totalComments": 1024,
+              "avgViews": 2066253.0,
+              "engagementPerThousandViews": 57.99
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 187758,
+              "totalLikes": 17305,
+              "totalComments": 403,
+              "avgViews": 187758.0,
+              "engagementPerThousandViews": 94.31
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 418892,
+              "totalLikes": 37404,
+              "totalComments": 965,
+              "avgViews": 418892.0,
+              "engagementPerThousandViews": 91.6
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1244744,
+              "totalLikes": 78093,
+              "totalComments": 1942,
+              "avgViews": 1244744.0,
+              "engagementPerThousandViews": 64.3
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 24428559,
+              "totalLikes": 537732,
+              "totalComments": 30536,
+              "avgViews": 24428559.0,
+              "engagementPerThousandViews": 23.26
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 2066253,
+              "totalLikes": 118798,
+              "totalComments": 1024,
+              "avgViews": 2066253.0,
+              "engagementPerThousandViews": 57.99
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 28346206,
+            "totalLikes": 789332,
+            "totalComments": 34870,
+            "avgViews": 5669241.2,
+            "engagementPerThousandViews": 29.08
+          },
+          "topVideo": {
+            "videoId": "-q_S27LbNKU",
+            "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
+            "publishedAt": "2026-06-26T04:00:00Z",
+            "viewCount": 24428559,
+            "likeCount": 537732,
+            "commentCount": 30536,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 2,
+          "rawPoint": 51.0,
+          "normalizedPoint": 51.0,
+          "cumulativePoint": 51.0,
+          "available": true,
+          "coreSignal": "bugs",
+          "platformPoints": {
+            "bugs": 27.0,
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "realtime": 27.0,
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "BAD": 51.0
+          },
+          "bestEntry": {
+            "artist": "에이티즈",
+            "platform": "bugs",
+            "chartName": "Bugs Realtime",
+            "trackTitle": "BAD",
+            "rank": 11,
+            "chartDate": "2026-07-09",
+            "chartType": "realtime",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+            "rankBasePoint": 60.0,
+            "platformWeight": 0.75,
+            "chartTypeWeight": 0.6,
+            "metricBonus": 0.0,
+            "musicChartPoint": 27.0
+          },
+          "entryCount": 2,
+          "entries": [
+            {
+              "artist": "에이티즈",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "BAD",
+              "rank": 74,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            },
+            {
+              "artist": "에이티즈",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "BAD",
+              "rank": 11,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 60.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 27.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 2,
+        "youtube": 4,
+        "musicChart": 2
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 64.85,
+          "blogTopicClusterPoint": 183.0,
+          "searchDemandComparePoint": 70.92
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "bugs": 27.0,
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "realtime": 27.0,
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "BAD": 51.0
+          },
+          "bestEntry": {
+            "artist": "에이티즈",
+            "platform": "bugs",
+            "chartName": "Bugs Realtime",
+            "trackTitle": "BAD",
+            "rank": 11,
+            "chartDate": "2026-07-09",
+            "chartType": "realtime",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+            "rankBasePoint": 60.0,
+            "platformWeight": 0.75,
+            "chartTypeWeight": 0.6,
+            "metricBonus": 0.0,
+            "musicChartPoint": 27.0
+          },
+          "entryCount": 2
+        }
+      },
+      "reports": {
+        "naver": {
+          "rank": 2,
+          "artist": "에이티즈",
+          "fandexNaverFinalPoint": 318.77,
+          "components": {
+            "newsIssueClusterPoint": 64.85,
+            "blogTopicClusterPoint": 183.0,
+            "searchDemandComparePoint": 70.92
+          },
+          "shares": {
+            "newsSharePercent": 20.34,
+            "blogSharePercent": 57.41,
+            "searchSharePercent": 22.25
+          },
+          "signals": {
+            "dominantSignal": "blog_topic",
+            "dominantSignalLabel": "블로그 화제성"
+          },
+          "summary": {
+            "topNewsIssue": {
+              "issueKey": "music_release__etc",
+              "issueGroup": "music_release",
+              "articleCount": 270,
+              "rawPointSum": 759.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "에이티즈, ‘배드’ 열풍 日까지…29일 싱글 발표 / 에이티즈, 29일 日 새 싱글 '배드' 발매…기세 잇는다 / 에이티즈, 日 컴백 카운트다운 / 에이티즈 산, '머슬핏 킬링 파트'로 압도적 존재감 / 에이티즈, 컴백한 지 얼마나 됐다고…일본 음반 발매한다"
+            },
+            "topBlogTopic": {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 35,
+              "rawPointSum": 70.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "에이티즈(ATEEZ) 산, 무대 위 독보적 존재감의 이유: ‘BAD’... / 에이티즈, 세계가 먼저 찾는 무대...글로벌 페스티벌 존재감... / 에이티즈(ATEEZ) 산 프로필, 키, 학력부터 출연료, 재산... / 260703 뮤직뱅크 1297회 / 1위 에이티즈 - BAD / 에이티즈, BST 하이드파크 헤드라이너, 런던 접수 비하인드"
+            },
+            "searchTrendLatest": 86.09,
+            "searchCompareRank": 2
+          },
+          "newsIssues": [
+            {
+              "issueKey": "music_release__etc",
+              "issueGroup": "music_release",
+              "articleCount": 270,
+              "rawPointSum": 759.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "에이티즈, ‘배드’ 열풍 日까지…29일 싱글 발표 / 에이티즈, 29일 日 새 싱글 '배드' 발매…기세 잇는다 / 에이티즈, 日 컴백 카운트다운 / 에이티즈 산, '머슬핏 킬링 파트'로 압도적 존재감 / 에이티즈, 컴백한 지 얼마나 됐다고…일본 음반 발매한다"
+            },
+            {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 43,
+              "rawPointSum": 120.45,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "\"한국에서 숏폼 장악하더니\"... 신보로 빌보드 200 정상 찍은 에이티즈... / 에이티즈, 빌보드 200에서 또 1위…'통산 세 번째' / 에이티즈, 美 ‘빌보드 200’ 세 번째 1위 / '북부 대공상' 산 통했다... 에이티즈, 빌보드 200 세번째 1위 / 에이티즈, 신보 커리어하이…미니 14집, '빌보드 200' 1위"
+            },
+            {
+              "issueKey": "donation_goodwill__etc",
+              "issueGroup": "donation_goodwill",
+              "articleCount": 3,
+              "rawPointSum": 9.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "에이티즈 성화, 자작시 특별 공개…기부까지 / \"너의 편이 되어줄게\"...에이티즈 성화, 자작시 담은 '비포슬립' 공개 / 에이티즈 성화, 딩고스토리 '비포슬립' 스페셜 도서로 자작시 완본 선보..."
+            },
+            {
+              "issueKey": "brand_ad__etc",
+              "issueGroup": "brand_ad",
+              "articleCount": 22,
+              "rawPointSum": 52.45,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "에이티즈 성화·민기·종호, 각기 다른 런웨이서 파리 패션위크 장식 / 에이티즈, 파리 패션위크도 접수…성화·민기·종호 3色 존재감 / MCM, 에이티즈 민기 협업 적중… 캡슐 컬렉션 완판 후 리오더 / MCM, 에이티즈 민기 협업 효과…'FIX ON' 리오더 진행 / MCM, 에이티즈 민기 협업 'FIX ON' 캡슐 컬렉션 리오더 진행"
+            },
+            {
+              "issueKey": "content_drama_broadcast__etc",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 10,
+              "rawPointSum": 24.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "'뮤직뱅크' 오늘(3일) 라이즈·V8·하츠투하츠·에이티즈·미야오 / '쇼! 음악중심' 오늘(4일) V8·최유정·에이티즈·라이즈·미야오·하츠... / '뮤직뱅크' 라인업 라이즈·앳하트·에이티즈 출격 / 에이티즈 '라이트 더 웨이 인 시네마', 8월 19일 CGV 단독 개봉 / 에이티즈 홍중 \"코첼라 전 너무 긴장돼 타블로에 전화…큰 힘 됐다\"('타..."
+            },
+            {
+              "issueKey": "brand_ad__pictorial",
+              "issueGroup": "brand_ad",
+              "articleCount": 8,
+              "rawPointSum": 6.6,
+              "cappedIssuePoint": 6.6,
+              "sampleTitles": "에이티즈 산, 요즘 떠오르는 대세…일상도 화보 그 자체[셀럽샷] / 에이티즈 우영 ‘화보집 표지가 따로없네’[포토엔HD] / 클로즈 유어 아이즈, 에이티즈·찰리 푸스 이어 ‘빌보드 아티스트’ 주... / 에이티즈 민기, 화보 그 자체 [포토엔HD] / 에이티즈 종호, 화보같은 볼하트 [포토엔HD]"
+            },
+            {
+              "issueKey": "brand_ad__ambassador",
+              "issueGroup": "brand_ad",
+              "articleCount": 2,
+              "rawPointSum": 6.0,
+              "cappedIssuePoint": 6.0,
+              "sampleTitles": "에이티즈 성화→배정남, 파리 패션위크 런웨이 빛낸 존재감 / 에이티즈(ATEEZ) 성화·최희진·배정남 참여…송지오 27SS 컬렉션 공개"
+            },
+            {
+              "issueKey": "award_event__etc",
+              "issueGroup": "award_event",
+              "articleCount": 117,
+              "rawPointSum": 64.75,
+              "cappedIssuePoint": 4.0,
+              "sampleTitles": "'리사절친' 체이스 인피니티, 에이티즈 향한 역대급 팬심 고백 ('문명특... / 에이티즈, '제35회 서울가요대상' 대상 / '서울가요대상' 대상 에이티즈→룰라 스페셜 스테이지 / [제35회 서울가요대상 SMA 레드카펫] 에이티즈(ATEEZ) / [제35회 서울가요대상 레카 직캠] 에이티즈 최산(ATEEZ CHOI SAN)"
+            },
+            {
+              "issueKey": "fan_event__etc",
+              "issueGroup": "fan_event",
+              "articleCount": 32,
+              "rawPointSum": 32.95,
+              "cappedIssuePoint": 3.0,
+              "sampleTitles": "'커리어하이' 에이티즈, 글로벌 페스티벌도 접수 / 에이티즈 성화, 자작시 최초 공개 / [fn★뮤직텔] 'Bad' 활동 속 에이티즈 산이 남긴 존재감 / 에이티즈 홍중 ‘꿀 떨어지는 팬바보 눈빛’[포토엔HD] / 에이티즈 성화 ‘팬들만 보면 미소가 절로’[포토엔HD]"
+            },
+            {
+              "issueKey": "general__etc",
+              "issueGroup": "general",
+              "articleCount": 349,
+              "rawPointSum": 254.25,
+              "cappedIssuePoint": 3.0,
+              "sampleTitles": "에이티즈 성화, 이런 것도 할 줄 아네…자작시 공개됐다 / 에이티즈, 글로벌 페스티벌서 빛난 존재감 / 에이티즈 산, ‘다 죽자’ 안무로 알고리즘 장악…‘배드’ 직캠 폭발[... / 에이티즈 여상 ‘깜찍 브이’[포토엔HD] / 에이티즈 성화 ‘청청매력’[포토엔HD]"
+            }
+          ],
+          "blogTopics": [
+            {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 35,
+              "rawPointSum": 70.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "에이티즈(ATEEZ) 산, 무대 위 독보적 존재감의 이유: ‘BAD’... / 에이티즈, 세계가 먼저 찾는 무대...글로벌 페스티벌 존재감... / 에이티즈(ATEEZ) 산 프로필, 키, 학력부터 출연료, 재산... / 260703 뮤직뱅크 1297회 / 1위 에이티즈 - BAD / 에이티즈, BST 하이드파크 헤드라이너, 런던 접수 비하인드"
+            },
+            {
+              "topicKey": "music_release__etc",
+              "topicGroup": "music_release",
+              "postCount": 89,
+              "rawPointSum": 178.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에이티즈 BAD 뜻과 가사 해석, 곡정보 진짜 의미는? (ATEEZ) / 에이티즈 산 BAD 무대 챌린지, 알고리즘 장악한 이유 / 에이티즈 최신 프로필, 멤버 8명 나이·포지션 컴백까지 한... / 에이티즈, 미니 14집으로 맞이한 'GOLDEN HOUR'…음원·음반... / 에이티즈 Bad 뮤직비디오 감독 안무가 누구 최산 체이스 입덕"
+            },
+            {
+              "topicKey": "music_release__new_song",
+              "topicGroup": "music_release",
+              "postCount": 72,
+              "rawPointSum": 144.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에이티즈 신곡 배드 발매와 동시 글로벌챠트 순식간에 점령 / 에이티즈 빌보드 1위 빌보드 200 세 번째 정상 / 에이티즈 최산 신곡 BAD 화제인 이유는? 별명이... / 에이티즈-배드bad 노래가사 신곡정보 프로필 청양고추바이브... / 에이티즈 산, 신곡 'Bad' 직캠 알고리즘 장악…'북부대공'의..."
+            },
+            {
+              "topicKey": "music_release__album",
+              "topicGroup": "music_release",
+              "postCount": 58,
+              "rawPointSum": 116.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에이티즈 BAD 뮤비 가사, 강렬한 퍼포먼스로 돌아온 컴백 / 에이티즈, 빌보드 200 세 번째 1위, 또 한 번 새 역사 / 현재 알고리즘 점령한 에이티즈 산 BAD 메이크업 제품 / 에이티즈 빌보드 200 세 번째 1위! K팝 새 역사 / 에이티즈 '빌보드 200' 또 1위? 3번째 왕좌 비결은"
+            },
+            {
+              "topicKey": "music_release__playlist_song",
+              "topicGroup": "music_release",
+              "postCount": 31,
+              "rawPointSum": 62.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "에이티즈·ATEEZ BAD·배드 듣기 가사 노래 뮤비, 왜 'BAD'를... / [2026. 댄스뮤직] 에이티즈의 BAD에서 내 스타일 찾기 / ATEEZ (에이티즈) - BAD [가사/MV] \"Your name stuck on... / 에이티즈, 6번째 대상...\"목이 쉴 때까지 노래할 것\" / ATEEZ(에이티즈) - BAD(배드) (Ofenbach Ver.(오펜바흐..."
+            },
+            {
+              "topicKey": "content_drama_broadcast__movie",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 6,
+              "rawPointSum": 11.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 11.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 11.0,
+              "sampleTitles": "에이티즈 홍중, 전주국제영화제 등장…'할루시네이션... / 에이티즈 윤호, 셔츠 하나로 여름 다 이김 / 스테이지 아이폰16 프로 촬영 영화 에이티즈 윤호 스크린 데뷔 / 에이티즈 윤호 첫 스크린 도전! 아이폰 16 Pro로 촬영한 영화... / 영화 에이티즈 월드 투어 투워즈 더 라이트 윌 투 파워 인..."
+            },
+            {
+              "topicKey": "fan_reaction__etc",
+              "topicGroup": "fan_reaction",
+              "postCount": 49,
+              "rawPointSum": 97.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.8333,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "북부대공 뜻 에이티즈 최산 남부대공 무슨말 / 에이티즈 빌보드 1위 민소매 직캠, 남편 몰래 보는 알고리즘! / SNS 알고리즘 장악한 에이티즈 최산, 그는 누구인가 / 중년의 가슴을 뛰게 만든 두 아이돌 에이티즈, 코르티스 / 에이티즈(ATEEZ), 여름 극장가 출격! ‘ATEEZ : LIGHT THE..."
+            },
+            {
+              "topicKey": "brand_ad__etc",
+              "topicGroup": "brand_ad",
+              "postCount": 131,
+              "rawPointSum": 262.0,
+              "topicKeyCap": 10.0,
+              "keyCappedTopicPoint": 10.0,
+              "topicGroupCap": 35.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "에이티즈 산 퍼스널컬러 분석 - 가을 웜 딥 / 아시아를 조롱했던 돌체앤가바나가 에이티즈 최산과 만났을 때 / 에이티즈 산 Creep, 무대 장악력으로 솔로곡까지 주목받는... / 송지오 27SS 파리패션위크에서 만난 에이티즈 성화, 배우... / 27SS 컬렉션 IMPAVIDE 에이티즈 성화 배정남 최희진 참석"
+            },
+            {
+              "topicKey": "concert_fan_event__concert",
+              "topicGroup": "concert_fan_event",
+              "postCount": 35,
+              "rawPointSum": 70.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 15.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 0.6667,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "에이티즈, VR 콘서트의 세계를 극장 스크린으로... / 에이티즈 팬미팅 2026 ATEEZ FANMEETING ATINY'S VOYAGE... / 에이티즈 섭외│글로벌 무대를 사로잡는 퍼포먼스 공연... / 팬미팅 전, 에이티즈 응원봉 라이티니 ver.3 도착 / 과몰입갑 에이티즈 VR 콘서트, '라이트더웨이'"
+            },
+            {
+              "topicKey": "brand_ad__ambassador",
+              "topicGroup": "brand_ad",
+              "postCount": 10,
+              "rawPointSum": 20.0,
+              "topicKeyCap": 10.0,
+              "keyCappedTopicPoint": 10.0,
+              "topicGroupCap": 35.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "공개! 에이티즈 성화, 최희진, 배정남도 함께 / 송지오 27SS컬렉션 IMPAVIDE 파리패션위크 정보(에이티즈... / 27SS 송지오 파리 패션위크 에이티즈 성화, 배우 최희진... / 송지오 27SS 파리 패션위크, 에이티즈 성화, 최희진, 배정남까지! / 에이티즈, 해적에서 선구자로 유리천장 돌파, 빌보드 정상 찍은..."
+            }
+          ],
+          "searchTrend": {
+            "searchCompareRank": 2,
+            "trendSum": 709.24,
+            "trendAvg": 23.64,
+            "trendMax": 99.43,
+            "trendLatest": 86.09,
+            "trendCount": 30,
+            "series": [
+              {
+                "period": "2026-06-08",
+                "ratio": 3.8621
+              },
+              {
+                "period": "2026-06-09",
+                "ratio": 3.96575
+              },
+              {
+                "period": "2026-06-10",
+                "ratio": 4.08742
+              },
+              {
+                "period": "2026-06-11",
+                "ratio": 4.01532
+              },
+              {
+                "period": "2026-06-12",
+                "ratio": 5.08337
+              },
+              {
+                "period": "2026-06-13",
+                "ratio": 3.97025
+              },
+              {
+                "period": "2026-06-14",
+                "ratio": 3.97926
+              },
+              {
+                "period": "2026-06-15",
+                "ratio": 4.62821
+              },
+              {
+                "period": "2026-06-16",
+                "ratio": 4.51554
+              },
+              {
+                "period": "2026-06-17",
+                "ratio": 4.40288
+              },
+              {
+                "period": "2026-06-18",
+                "ratio": 3.82154
+              },
+              {
+                "period": "2026-06-19",
+                "ratio": 4.53357
+              },
+              {
+                "period": "2026-06-20",
+                "ratio": 8.43623
+              },
+              {
+                "period": "2026-06-21",
+                "ratio": 9.3105
+              },
+              {
+                "period": "2026-06-22",
+                "ratio": 6.49842
+              },
+              {
+                "period": "2026-06-23",
+                "ratio": 5.96214
+              },
+              {
+                "period": "2026-06-24",
+                "ratio": 4.97972
+              },
+              {
+                "period": "2026-06-25",
+                "ratio": 5.69175
+              },
+              {
+                "period": "2026-06-26",
+                "ratio": 13.16809
+              },
+              {
+                "period": "2026-06-27",
+                "ratio": 27.85939
+              },
+              {
+                "period": "2026-06-28",
+                "ratio": 18.2785
+              },
+              {
+                "period": "2026-06-29",
+                "ratio": 20.27489
+              },
+              {
+                "period": "2026-06-30",
+                "ratio": 20.98242
+              },
+              {
+                "period": "2026-07-01",
+                "ratio": 27.7287
+              },
+              {
+                "period": "2026-07-02",
+                "ratio": 50.13068
+              },
+              {
+                "period": "2026-07-03",
+                "ratio": 78.66155
+              },
+              {
+                "period": "2026-07-04",
+                "ratio": 99.42767
+              },
+              {
+                "period": "2026-07-05",
+                "ratio": 84.25867
+              },
+              {
+                "period": "2026-07-06",
+                "ratio": 90.63542
+              },
+              {
+                "period": "2026-07-07",
+                "ratio": 86.08832
+              }
+            ]
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_에이티즈_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_에이티즈_20260708_191332_topic_cluster.csv",
+            "searchSummaryFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "searchDetailFile": "naver_search_trend_compare_v2_20260708_182716.csv",
+            "rankingSourceFile": "fandex_naver_ranking_v3_latest.json",
+            "generatedAt": "2026-07-08T19:59:16"
+          }
+        },
+        "youtube": {
+          "rank": 4,
+          "artist": "에이티즈",
+          "fandexYoutubeFinalPoint": 29.18,
+          "coreSignal": "외부 확산 콘텐츠",
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 15.12,
+              "components": {
+                "viewPoint": 5.81,
+                "likePoint": 4.28,
+                "commentPoint": 3.16,
+                "engagementPoint": 1.88
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.28,
+              "components": {
+                "viewPoint": 0.6,
+                "likePoint": 0.36,
+                "commentPoint": 0.25,
+                "engagementPoint": 2.08
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 10.12,
+              "components": {
+                "viewPoint": 4.57,
+                "likePoint": 1.38,
+                "commentPoint": 1.43,
+                "engagementPoint": 2.74
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.66,
+              "components": {
+                "viewPoint": 0.03,
+                "likePoint": 0.15,
+                "commentPoint": 0.23,
+                "engagementPoint": 0.24
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1244744,
+              "totalLikes": 78093,
+              "totalComments": 1942,
+              "avgViews": 1244744.0,
+              "engagementPerThousandViews": 64.3
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 187758,
+              "totalLikes": 17305,
+              "totalComments": 403,
+              "avgViews": 187758.0,
+              "engagementPerThousandViews": 94.31
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 24847451,
+              "totalLikes": 575136,
+              "totalComments": 31501,
+              "avgViews": 12423725.5,
+              "engagementPerThousandViews": 24.41
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 2066253,
+              "totalLikes": 118798,
+              "totalComments": 1024,
+              "avgViews": 2066253.0,
+              "engagementPerThousandViews": 57.99
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 187758,
+              "totalLikes": 17305,
+              "totalComments": 403,
+              "avgViews": 187758.0,
+              "engagementPerThousandViews": 94.31
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 418892,
+              "totalLikes": 37404,
+              "totalComments": 965,
+              "avgViews": 418892.0,
+              "engagementPerThousandViews": 91.6
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1244744,
+              "totalLikes": 78093,
+              "totalComments": 1942,
+              "avgViews": 1244744.0,
+              "engagementPerThousandViews": 64.3
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 24428559,
+              "totalLikes": 537732,
+              "totalComments": 30536,
+              "avgViews": 24428559.0,
+              "engagementPerThousandViews": 23.26
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 2066253,
+              "totalLikes": 118798,
+              "totalComments": 1024,
+              "avgViews": 2066253.0,
+              "engagementPerThousandViews": 57.99
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 28346206,
+            "totalLikes": 789332,
+            "totalComments": 34870,
+            "avgViews": 5669241.2,
+            "engagementPerThousandViews": 29.08
+          },
+          "topVideos": [
+            {
+              "videoId": "-q_S27LbNKU",
+              "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
+              "publishedAt": "2026-06-26T04:00:00Z",
+              "viewCount": 24428559,
+              "likeCount": 537732,
+              "commentCount": 30536,
+              "videoType": "official_mv",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
+            },
+            {
+              "videoId": "SdiavqMST-A",
+              "title": "ATEEZ(에이티즈) - 'BAD' Official MV CLIP #Shorts",
+              "publishedAt": "2026-06-26T04:30:01Z",
+              "viewCount": 2066253,
+              "likeCount": 118798,
+              "commentCount": 1024,
+              "videoType": "shorts",
+              "contentGroup": "shortform",
+              "sourceUrl": "https://www.youtube.com/watch?v=SdiavqMST-A"
+            },
+            {
+              "videoId": "ruP1U9eeyUk",
+              "title": "'BAD' By ATEEZ | Kelly Clarkson Show",
+              "publishedAt": "2026-07-01T23:00:00Z",
+              "viewCount": 1244744,
+              "likeCount": 78093,
+              "commentCount": 1942,
+              "videoType": "external_content",
+              "contentGroup": "external",
+              "sourceUrl": "https://www.youtube.com/watch?v=ruP1U9eeyUk"
+            },
+            {
+              "videoId": "dTK1EU3nUf4",
+              "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice (Moving Ver.)",
+              "publishedAt": "2026-07-01T10:00:02Z",
+              "viewCount": 418892,
+              "likeCount": 37404,
+              "commentCount": 965,
+              "videoType": "dance_practice",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=dTK1EU3nUf4"
+            },
+            {
+              "videoId": "0xsaO8kHt9U",
+              "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice Behind",
+              "publishedAt": "2026-07-03T11:00:00Z",
+              "viewCount": 187758,
+              "likeCount": 17305,
+              "commentCount": 403,
+              "videoType": "behind",
+              "contentGroup": "fandom",
+              "sourceUrl": "https://www.youtube.com/watch?v=0xsaO8kHt9U"
+            }
+          ],
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 2,
+          "artist": "에이티즈",
+          "fandexMusicChartFinalPoint": 51.0,
+          "coreSignal": "bugs",
+          "entryCount": 2,
+          "platformPoints": {
+            "bugs": 27.0,
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "realtime": 27.0,
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "BAD": 51.0
+          },
+          "bestEntry": {
+            "artist": "에이티즈",
+            "platform": "bugs",
+            "chartName": "Bugs Realtime",
+            "trackTitle": "BAD",
+            "rank": 11,
+            "chartDate": "2026-07-09",
+            "chartType": "realtime",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+            "rankBasePoint": 60.0,
+            "platformWeight": 0.75,
+            "chartTypeWeight": 0.6,
+            "metricBonus": 0.0,
+            "musicChartPoint": 27.0
+          },
+          "entries": [
+            {
+              "artist": "에이티즈",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "BAD",
+              "rank": 74,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            },
+            {
+              "artist": "에이티즈",
+              "platform": "bugs",
+              "chartName": "Bugs Realtime",
+              "trackTitle": "BAD",
+              "rank": 11,
+              "chartDate": "2026-07-09",
+              "chartType": "realtime",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+              "rankBasePoint": 60.0,
+              "platformWeight": 0.75,
+              "chartTypeWeight": 0.6,
+              "metricBonus": 0.0,
+              "musicChartPoint": 27.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "artist": "보이넥스트도어",
+      "fandexFinalPoint": 356.31,
+      "mainSource": "naver",
+      "sourcePoints": {
+        "naver": {
+          "rank": 3,
+          "rawPoint": 302.34,
+          "normalizedPoint": 75.65,
+          "cumulativePoint": 302.34,
+          "available": true,
+          "coreSignal": "",
+          "components": {
+            "newsIssueClusterPoint": 82.05,
+            "blogTopicClusterPoint": 170.98,
+            "searchDemandComparePoint": 49.31
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_보이넥스트도어_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_보이넥스트도어_20260708_191332_topic_cluster.csv",
+            "searchCompareFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "finalSourceFile": "naver_fandex_final_v3_보이넥스트도어_20260708_194129.csv",
+            "generatedAt": "2026-07-08T19:41:29"
+          }
+        },
+        "youtube": {
+          "rank": 3,
+          "rawPoint": 29.97,
+          "normalizedPoint": 29.97,
+          "cumulativePoint": 29.97,
+          "available": true,
+          "coreSignal": "외부 확산 콘텐츠",
+          "components": {},
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 18.29,
+              "components": {
+                "viewPoint": 8.44,
+                "likePoint": 4.69,
+                "commentPoint": 3.75,
+                "engagementPoint": 1.42
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.56,
+              "components": {
+                "viewPoint": 0.39,
+                "likePoint": 0.28,
+                "commentPoint": 0.39,
+                "engagementPoint": 2.5
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 7.62,
+              "components": {
+                "viewPoint": 4.24,
+                "likePoint": 0.58,
+                "commentPoint": 1.46,
+                "engagementPoint": 1.34
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.5,
+              "components": {
+                "viewPoint": 0.0,
+                "likePoint": 0.03,
+                "commentPoint": 0.05,
+                "engagementPoint": 0.41
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1808817,
+              "totalLikes": 85477,
+              "totalComments": 2304,
+              "avgViews": 1808817.0,
+              "engagementPerThousandViews": 48.53
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 123765,
+              "totalLikes": 13444,
+              "totalComments": 619,
+              "avgViews": 123765.0,
+              "engagementPerThousandViews": 113.63
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 23035900,
+              "totalLikes": 242387,
+              "totalComments": 32154,
+              "avgViews": 11517950.0,
+              "engagementPerThousandViews": 11.92
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 283511,
+              "totalLikes": 26991,
+              "totalComments": 228,
+              "avgViews": 283511.0,
+              "engagementPerThousandViews": 96.01
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 123765,
+              "totalLikes": 13444,
+              "totalComments": 619,
+              "avgViews": 123765.0,
+              "engagementPerThousandViews": 113.63
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 393152,
+              "totalLikes": 33570,
+              "totalComments": 1130,
+              "avgViews": 393152.0,
+              "engagementPerThousandViews": 88.26
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1808817,
+              "totalLikes": 85477,
+              "totalComments": 2304,
+              "avgViews": 1808817.0,
+              "engagementPerThousandViews": 48.53
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 22642748,
+              "totalLikes": 208817,
+              "totalComments": 31024,
+              "avgViews": 22642748.0,
+              "engagementPerThousandViews": 10.59
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 283511,
+              "totalLikes": 26991,
+              "totalComments": 228,
+              "avgViews": 283511.0,
+              "engagementPerThousandViews": 96.01
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 25251993,
+            "totalLikes": 368299,
+            "totalComments": 35305,
+            "avgViews": 5050398.6,
+            "engagementPerThousandViews": 15.98
+          },
+          "topVideo": {
+            "videoId": "zGsj0fDHB_s",
+            "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
+            "publishedAt": "2026-06-08T08:59:06Z",
+            "viewCount": 22642748,
+            "likeCount": 208817,
+            "commentCount": 31024,
+            "videoType": "official_mv",
+            "contentGroup": "music",
+            "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
+          },
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 4,
+          "rawPoint": 24.0,
+          "normalizedPoint": 24.0,
+          "cumulativePoint": 24.0,
+          "available": true,
+          "coreSignal": "melon",
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "VIRAL": 24.0
+          },
+          "bestEntry": {
+            "artist": "보이넥스트도어",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "VIRAL",
+            "rank": 84,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1,
+          "entries": [
+            {
+              "artist": "보이넥스트도어",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "VIRAL",
+              "rank": 84,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "sourceRanks": {
+        "naver": 3,
+        "youtube": 3,
+        "musicChart": 4
+      },
+      "components": {
+        "naver": {
+          "newsIssueClusterPoint": 82.05,
+          "blogTopicClusterPoint": 170.98,
+          "searchDemandComparePoint": 49.31
+        },
+        "youtube": {},
+        "musicChart": {
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "VIRAL": 24.0
+          },
+          "bestEntry": {
+            "artist": "보이넥스트도어",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "VIRAL",
+            "rank": 84,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entryCount": 1
+        }
+      },
+      "reports": {
+        "naver": {
+          "rank": 3,
+          "artist": "보이넥스트도어",
+          "fandexNaverFinalPoint": 302.34,
+          "components": {
+            "newsIssueClusterPoint": 82.05,
+            "blogTopicClusterPoint": 170.98,
+            "searchDemandComparePoint": 49.31
+          },
+          "shares": {
+            "newsSharePercent": 27.14,
+            "blogSharePercent": 56.55,
+            "searchSharePercent": 16.31
+          },
+          "signals": {
+            "dominantSignal": "blog_topic",
+            "dominantSignalLabel": "블로그 화제성"
+          },
+          "summary": {
+            "topNewsIssue": {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 47,
+              "rawPointSum": 117.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "보이넥스트도어, 첫 월드 투어 부산 공연 초고속 매진…1회 추가 / 보이넥스트도어, 부산 단독 콘서트 2회 전석 매진 / 보이넥스트도어, 부산 콘서트도 전석 매진 / 서울 이어 부산까지 전석 매진…보이넥스트도어, 무서운 티켓 파워 / 보이넥스트도어, 부산 단독 콘서트 매진…팬 성원에 추가 공연 확정"
+            },
+            "topBlogTopic": {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 41,
+              "rawPointSum": 82.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "인스타 보이넥스트도어 바이럴 뮤비 사당귀... / 톡파원 25시 213회 보이넥스트도어, 광저우 ‘인어 공연’... / 대동제 일정 시간 출연진 뜻 총정리 (싸이, 보이넥스트도어... / (MAMAMOO), 넬(NELL), 라이사(Raisa), 보이넥스트도어(BOYNEXTDOOR) / 구해줘 홈즈 보이넥스트도어 주우재 하이브 사옥 펜트하우스..."
+            },
+            "searchTrendLatest": 7.99,
+            "searchCompareRank": 3
+          },
+          "newsIssues": [
+            {
+              "issueKey": "record_chart_award__etc",
+              "issueGroup": "record_chart_award",
+              "articleCount": 47,
+              "rawPointSum": 117.0,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "보이넥스트도어, 첫 월드 투어 부산 공연 초고속 매진…1회 추가 / 보이넥스트도어, 부산 단독 콘서트 2회 전석 매진 / 보이넥스트도어, 부산 콘서트도 전석 매진 / 서울 이어 부산까지 전석 매진…보이넥스트도어, 무서운 티켓 파워 / 보이넥스트도어, 부산 단독 콘서트 매진…팬 성원에 추가 공연 확정"
+            },
+            {
+              "issueKey": "music_release__etc",
+              "issueGroup": "music_release",
+              "articleCount": 471,
+              "rawPointSum": 1198.85,
+              "cappedIssuePoint": 10.0,
+              "sampleTitles": "보이넥스트도어(BOYNEXTDOOR) ‘VIRAL’, 멜론 월간 차트 진입 / 보이넥스트도어, 6월 발매곡 중 유일하게 멜론 월간 차트 진입 / 보이넥스트도어 ‘VIRAL’, 멜론 월간 차트 진입 / 보이넥스트도어, ‘HOME’ 활동 성료 / 보이넥스트도어, ‘커리어 하이’를 달성하며 정규 1집 ‘HOME’ 활동 마..."
+            },
+            {
+              "issueKey": "brand_ad__etc",
+              "issueGroup": "brand_ad",
+              "articleCount": 53,
+              "rawPointSum": 153.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "보이넥스트도어, 8월 부산 단독 콘서트 2회 전석 매진 / 보이넥스트도어, 첫 월드 투어 부산 공연 ‘완판’..1회 추가 결정 / 보이넥스트도어, 부산 콘서트 ‘완판’ 힘입어 공연 1회 추가! / 보이넥스트도어, 첫 부산 단독 콘서트 ‘완판’..1회 추가 확정 / 보이넥스트도어, 지니 '인사이드' 캠페인 참여…독점 인터뷰 등 공개"
+            },
+            {
+              "issueKey": "brand_ad__ambassador",
+              "issueGroup": "brand_ad",
+              "articleCount": 8,
+              "rawPointSum": 24.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "LG유플러스, '보이넥스트도어' 브랜드 앰버서더로 발탁 / 비비앙, 보이넥스트도어와 신규 캠페인 전개… 신제품 ‘구름(Gureum)’ ... / 비비앙, 보이넥스트도어와 신규 캠페인 ‘몽환’ 공개…신제품 ‘구름... / 보이넥스트도어, 니치 퍼퓸 브랜드 비비앙 신규 캠페인 공개 / 니치 퍼퓸 브랜드 비비앙, 보이넥스트도어와 신규 캠페인 오픈"
+            },
+            {
+              "issueKey": "brand_ad__pictorial",
+              "issueGroup": "brand_ad",
+              "articleCount": 8,
+              "rawPointSum": 22.0,
+              "cappedIssuePoint": 8.0,
+              "sampleTitles": "보이넥스트도어 '성호·운학' 맏막즈의 완벽 케미 보여줘...감각 화보로... / 보이넥스트도어 성호·운학, ‘맏막즈’의 완벽 케미[화보] / 할리데이비슨 컬렉션스, 보이넥스트도어와 손잡고 MZ 공략 가속 / 보이넥스트도어 성호·운학, 맏막즈 완벽 케미 [화보] / 보이넥스트도어 성호·운학, \"저희를 찾아가는 과정 담았다\""
+            },
+            {
+              "issueKey": "donation_goodwill__etc",
+              "issueGroup": "donation_goodwill",
+              "articleCount": 3,
+              "rawPointSum": 7.05,
+              "cappedIssuePoint": 7.05,
+              "sampleTitles": "가마로강정, 참여형 기부 캠페인 운영…첫 프로젝트에 보이넥스트도어... / 보이넥스트도어, 보호대상아동 위한 뜻깊은 캠페인 진행 / 보이넥스트도어, 보호대상아동 위해 기부금 쾌척"
+            },
+            {
+              "issueKey": "content_drama_broadcast__etc",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 27,
+              "rawPointSum": 43.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "‘더 시즌즈’ 보이넥스트도어, 첫 정규 ‘HOME’→지코 곡 라이브 / '놀라운 토요일' 보이넥스트도어vs라이즈, 5세대 자존심 건 승부 / 보이넥스트도어 성호·미야오 수인, '쇼! 음악중심' 울산 특집 스페셜 M... / ‘놀라운토요일’ 보이넥스트도어 성호x운학·라이즈 성찬x원빈 출격 / 보이넥스트도어 “데뷔 후 하이브 자본력 느껴, BTS처럼 되고파”(라디..."
+            },
+            {
+              "issueKey": "content_drama_broadcast__drama",
+              "issueGroup": "content_drama_broadcast",
+              "articleCount": 7,
+              "rawPointSum": 9.0,
+              "cappedIssuePoint": 7.0,
+              "sampleTitles": "보이넥스트도어, ‘21세기 대군부인’ OST 합류 / 아이유♥변우석 설렘 상승…보이넥스트도어, '21세기 대군부인' OST 가창 / 보이넥스트도어, 아이유X변우석 지원사격…‘21세기 대군부인’ OST 합류 / '21세기 대군부인' OST 보이넥스트도어 참가 'No Doubt' / 보이넥스트도어, MBC '21세기 대군부인' OST 합류"
+            },
+            {
+              "issueKey": "award_event__etc",
+              "issueGroup": "award_event",
+              "articleCount": 117,
+              "rawPointSum": 56.5,
+              "cappedIssuePoint": 4.0,
+              "sampleTitles": "[제35회 서울가요대상 SMA 레드카펫] 보이넥스트도어(BOYNEXTDOOR) / '서울가요대상' 개최…에이티즈 대상·보이넥스트도어·이찬원 4관왕 / [포토] 보이넥스트도어, 멋짐 폭발 / 보이넥스트도어, 서울가요대상 4관왕 \"상에 걸맞게 좋은 음악 만들겠다... / [포토] 보이넥스트도어 ‘블랙패션으로’"
+            },
+            {
+              "issueKey": "award_event__blue_dragon_handprinting",
+              "issueGroup": "award_event",
+              "articleCount": 2,
+              "rawPointSum": 6.0,
+              "cappedIssuePoint": 4.0,
+              "sampleTitles": "유인나, 보이넥스트도어에 팬심 고백 \"청룡 무대 보고 입덕..진짜 좋아... / 보이넥스트도어, OST에 日 단독 예능까지…국내외 다채로운 활동"
+            }
+          ],
+          "blogTopics": [
+            {
+              "topicKey": "content_drama_broadcast__etc",
+              "topicGroup": "content_drama_broadcast",
+              "postCount": 41,
+              "rawPointSum": 82.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 20.0,
+              "sampleTitles": "인스타 보이넥스트도어 바이럴 뮤비 사당귀... / 톡파원 25시 213회 보이넥스트도어, 광저우 ‘인어 공연’... / 대동제 일정 시간 출연진 뜻 총정리 (싸이, 보이넥스트도어... / (MAMAMOO), 넬(NELL), 라이사(Raisa), 보이넥스트도어(BOYNEXTDOOR) / 구해줘 홈즈 보이넥스트도어 주우재 하이브 사옥 펜트하우스..."
+            },
+            {
+              "topicKey": "concert_fan_event__concert",
+              "topicGroup": "concert_fan_event",
+              "postCount": 60,
+              "rawPointSum": 120.0,
+              "topicKeyCap": 15.0,
+              "keyCappedTopicPoint": 15.0,
+              "topicGroupCap": 30.0,
+              "topicGroupRatio": 0.9091,
+              "cappedTopicPoint": 13.64,
+              "sampleTitles": "보넥도 콘서트 부산 예매방법 보이넥스트도어 가이드 알아보기 / 보이넥스트도어 콘서트 예매 방법 및 장소 md (정리) / 2026 보넥도 콘서트 티켓팅 예매 방법 보이넥스트도어... / 보이넥스트도어 콘서트 2026 서울 공연 티켓팅 총정리 (예매... / 보이넥스트도어 부산 콘서트 추가 회차 오픈 예매 일정 정보..."
+            },
+            {
+              "topicKey": "music_release__album",
+              "topicGroup": "music_release",
+              "postCount": 129,
+              "rawPointSum": 258.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "보이넥스트도어 첫 정규앨범 HOME 컴백! VIRAL 차트 폭주 중 / gs25 보이넥스트도어 빵 홈빵 애플크림 보넥도 띠부씰... / 구해줘 홈즈 352회 보이넥스트도어X주우재 ‘옆집 특집’... / 컴백 보넥도 바이럴 VIRAL 뜻 가사 파트 뮤비 + 보이넥스트도어... / 구해줘 홈즈 352회 보이넥스트도어, 대기업 창업주 옆..."
+            },
+            {
+              "topicKey": "music_release__new_song",
+              "topicGroup": "music_release",
+              "postCount": 74,
+              "rawPointSum": 147.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "[보넥도 신곡] BOYNEXTDOOR VIRAL MV 해석 (보이넥스트도어... / 보이넥스트도어 - VIRAL 바이럴 뜻 의미 뮤비 듣기 가사 / 보이넥스트도어, 일본 신보 ‘BOYLIFE’ 오리콘 1위 / 보이넥스트도어 'VIRAL', 음악방송 1위 휩쓸며 글로벌 인기... / 보이넥스트도어) BOYNEXTDOOR – Count To Love"
+            },
+            {
+              "topicKey": "music_release__playlist_song",
+              "topicGroup": "music_release",
+              "postCount": 26,
+              "rawPointSum": 52.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "보이넥스트도어·BOYNEXTDOOR｜VIRAL·바이럴 듣기 가사... / 보이넥스트도어(BOYNEXTDOOR)-아디오스ADIOS! 노래가사... / 오늘만 I LOVE YOU 보이넥스트도어 BOYNEXTDOOR 가사 / 보이넥스트도어 노래 이렇게 좋아해 본 적이 없어요 가사... / 파트 + 보이넥스트도어 루인 마이 라이프 남자 이별 노래..."
+            },
+            {
+              "topicKey": "music_release__etc",
+              "topicGroup": "music_release",
+              "postCount": 82,
+              "rawPointSum": 163.0,
+              "topicKeyCap": 20.0,
+              "keyCappedTopicPoint": 20.0,
+              "topicGroupCap": 45.0,
+              "topicGroupRatio": 0.5625,
+              "cappedTopicPoint": 11.25,
+              "sampleTitles": "포인트 상품교환 가챠머신 엘지트윈스 키캡 보이넥스트도어 / 보이넥스트도어 BOYNEXTDOOR Hollywood Action 가사 리뷰! / 보이넥스트도어 VIRAL, 공개 12일 만에 2160만 뷰 돌파... / 보이넥스트도어 - 오늘만 i love you [이보람] / 보이넥스트도어 톰과 제리 85주년 콜라보 음원 발표"
+            },
+            {
+              "topicKey": "brand_ad__etc",
+              "topicGroup": "brand_ad",
+              "postCount": 73,
+              "rawPointSum": 144.0,
+              "topicKeyCap": 10.0,
+              "keyCappedTopicPoint": 10.0,
+              "topicGroupCap": 35.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "파리 패션위크 꾸레쥬(COURREGES) 패션쇼 보이넥스트도어 태산... / 보이넥스트도어 성호 모자 얼굴 소멸 직전 볼캡 & 블루종 정보 / 보이넥스트도어 태산 운학 트위터 옷 신발 음악방송 패션은... / 보이넥스트도어 유튜브 보넥도 태산 패션 옷 사복, 스웻... / 보이넥스트도어 명재현 안경 | 아이돌 공항 패션&사복 패션"
+            },
+            {
+              "topicKey": "brand_ad__pictorial",
+              "topicGroup": "brand_ad",
+              "postCount": 14,
+              "rawPointSum": 27.0,
+              "topicKeyCap": 10.0,
+              "keyCappedTopicPoint": 10.0,
+              "topicGroupCap": 35.0,
+              "topicGroupRatio": 1.0,
+              "cappedTopicPoint": 10.0,
+              "sampleTitles": "할리데이비슨 컬렉션스 아레나 화보, 보이넥스트도어 리우... / 보이넥스트도어 리우, 명재현 레이싱 자켓 버뮤다 팬츠 남자... / 보이넥스트도어(리우,성호) 화보 패션 MLB 바람막이 점퍼... / 보이넥스트도어 리우, 명재현 아레나 화보 ️ 할리데이비슨... / 보이넥스트도어 BOYNEXTDOOR 태산 한복부터 패션화보까지"
+            },
+            {
+              "topicKey": "fan_reaction__etc",
+              "topicGroup": "fan_reaction",
+              "postCount": 46,
+              "rawPointSum": 92.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.7353,
+              "cappedTopicPoint": 8.82,
+              "sampleTitles": "GS25 보넥도 빵 HOME 홈 애플크림빵 보이넥스트도어 랜덤씰... / GS25신상 보이넥스트도어 보넥도 홈빵 랜덤씰 리뷰 / [지나다] 타임스퀘어_보넥도(보이넥스트도어(BOYNEXTDOOR)... / GS 편의점 빵 보이넥스트도어 홈빵 보넥도 크림빵 / 보이넥스트도어·리센느·슈퍼주니어 예성, 글로벌 팬들이 직접..."
+            },
+            {
+              "topicKey": "fan_reaction__photo_clip",
+              "topicGroup": "fan_reaction",
+              "postCount": 12,
+              "rawPointSum": 22.0,
+              "topicKeyCap": 12.0,
+              "keyCappedTopicPoint": 12.0,
+              "topicGroupCap": 25.0,
+              "topicGroupRatio": 0.7353,
+              "cappedTopicPoint": 8.82,
+              "sampleTitles": "이디야 보이넥스트도어 콜라보 멜팅피스타치오와 너티초콜릿... / as\"on MUL STRIPE BEANIE / 260701 보이넥스트도어... / 보이넥스트도어 빙그레 콜라보 오리지널 바나나 우유 VS... / #1 보이넥스트도어 재현 머리 분석! 요즘 가장 인기 있는 댄디컷 / 아이폰 자랑에 이슈가 된 아이돌 그룹 보이넥스트도어"
+            }
+          ],
+          "searchTrend": {
+            "searchCompareRank": 3,
+            "trendSum": 493.05,
+            "trendAvg": 16.44,
+            "trendMax": 30.7,
+            "trendLatest": 7.99,
+            "trendCount": 30,
+            "series": [
+              {
+                "period": "2026-06-08",
+                "ratio": 28.49031
+              },
+              {
+                "period": "2026-06-09",
+                "ratio": 20.54529
+              },
+              {
+                "period": "2026-06-10",
+                "ratio": 14.75439
+              },
+              {
+                "period": "2026-06-11",
+                "ratio": 30.70301
+              },
+              {
+                "period": "2026-06-12",
+                "ratio": 19.97746
+              },
+              {
+                "period": "2026-06-13",
+                "ratio": 19.91437
+              },
+              {
+                "period": "2026-06-14",
+                "ratio": 21.98287
+              },
+              {
+                "period": "2026-06-15",
+                "ratio": 14.77692
+              },
+              {
+                "period": "2026-06-16",
+                "ratio": 16.13339
+              },
+              {
+                "period": "2026-06-17",
+                "ratio": 13.68183
+              },
+              {
+                "period": "2026-06-18",
+                "ratio": 12.10905
+              },
+              {
+                "period": "2026-06-19",
+                "ratio": 21.61784
+              },
+              {
+                "period": "2026-06-20",
+                "ratio": 29.75214
+              },
+              {
+                "period": "2026-06-21",
+                "ratio": 22.06399
+              },
+              {
+                "period": "2026-06-22",
+                "ratio": 19.20684
+              },
+              {
+                "period": "2026-06-23",
+                "ratio": 21.02298
+              },
+              {
+                "period": "2026-06-24",
+                "ratio": 21.17169
+              },
+              {
+                "period": "2026-06-25",
+                "ratio": 15.42586
+              },
+              {
+                "period": "2026-06-26",
+                "ratio": 12.23073
+              },
+              {
+                "period": "2026-06-27",
+                "ratio": 12.10004
+              },
+              {
+                "period": "2026-06-28",
+                "ratio": 11.76205
+              },
+              {
+                "period": "2026-06-29",
+                "ratio": 15.00675
+              },
+              {
+                "period": "2026-06-30",
+                "ratio": 10.55881
+              },
+              {
+                "period": "2026-07-01",
+                "ratio": 10.66246
+              },
+              {
+                "period": "2026-07-02",
+                "ratio": 9.40063
+              },
+              {
+                "period": "2026-07-03",
+                "ratio": 9.1077
+              },
+              {
+                "period": "2026-07-04",
+                "ratio": 8.94096
+              },
+              {
+                "period": "2026-07-05",
+                "ratio": 12.74447
+              },
+              {
+                "period": "2026-07-06",
+                "ratio": 9.21586
+              },
+              {
+                "period": "2026-07-07",
+                "ratio": 7.99008
+              }
+            ]
+          },
+          "meta": {
+            "scoreVersion": "v3_compare_search_quality",
+            "newsClusterFile": "naver_news_보이넥스트도어_20260708_191332_issue_cluster.csv",
+            "blogClusterFile": "naver_blog_보이넥스트도어_20260708_191332_topic_cluster.csv",
+            "searchSummaryFile": "naver_search_trend_compare_v2_summary_20260708_182716.csv",
+            "searchDetailFile": "naver_search_trend_compare_v2_20260708_182716.csv",
+            "rankingSourceFile": "fandex_naver_ranking_v3_latest.json",
+            "generatedAt": "2026-07-08T19:59:16"
+          }
+        },
+        "youtube": {
+          "rank": 3,
+          "artist": "보이넥스트도어",
+          "fandexYoutubeFinalPoint": 29.97,
+          "coreSignal": "외부 확산 콘텐츠",
+          "contentGroupPoints": {
+            "external": {
+              "label": "외부 확산 콘텐츠",
+              "point": 18.29,
+              "components": {
+                "viewPoint": 8.44,
+                "likePoint": 4.69,
+                "commentPoint": 3.75,
+                "engagementPoint": 1.42
+              }
+            },
+            "fandom": {
+              "label": "팬덤 콘텐츠",
+              "point": 3.56,
+              "components": {
+                "viewPoint": 0.39,
+                "likePoint": 0.28,
+                "commentPoint": 0.39,
+                "engagementPoint": 2.5
+              }
+            },
+            "music": {
+              "label": "공식 음악 콘텐츠",
+              "point": 7.62,
+              "components": {
+                "viewPoint": 4.24,
+                "likePoint": 0.58,
+                "commentPoint": 1.46,
+                "engagementPoint": 1.34
+              }
+            },
+            "shortform": {
+              "label": "숏폼 확산",
+              "point": 0.5,
+              "components": {
+                "viewPoint": 0.0,
+                "likePoint": 0.03,
+                "commentPoint": 0.05,
+                "engagementPoint": 0.41
+              }
+            }
+          },
+          "contentGroupMetrics": {
+            "external": {
+              "videoCount": 1,
+              "totalViews": 1808817,
+              "totalLikes": 85477,
+              "totalComments": 2304,
+              "avgViews": 1808817.0,
+              "engagementPerThousandViews": 48.53
+            },
+            "fandom": {
+              "videoCount": 1,
+              "totalViews": 123765,
+              "totalLikes": 13444,
+              "totalComments": 619,
+              "avgViews": 123765.0,
+              "engagementPerThousandViews": 113.63
+            },
+            "music": {
+              "videoCount": 2,
+              "totalViews": 23035900,
+              "totalLikes": 242387,
+              "totalComments": 32154,
+              "avgViews": 11517950.0,
+              "engagementPerThousandViews": 11.92
+            },
+            "shortform": {
+              "videoCount": 1,
+              "totalViews": 283511,
+              "totalLikes": 26991,
+              "totalComments": 228,
+              "avgViews": 283511.0,
+              "engagementPerThousandViews": 96.01
+            }
+          },
+          "videoTypeMetrics": {
+            "behind": {
+              "videoCount": 1,
+              "totalViews": 123765,
+              "totalLikes": 13444,
+              "totalComments": 619,
+              "avgViews": 123765.0,
+              "engagementPerThousandViews": 113.63
+            },
+            "dance_practice": {
+              "videoCount": 1,
+              "totalViews": 393152,
+              "totalLikes": 33570,
+              "totalComments": 1130,
+              "avgViews": 393152.0,
+              "engagementPerThousandViews": 88.26
+            },
+            "external_content": {
+              "videoCount": 1,
+              "totalViews": 1808817,
+              "totalLikes": 85477,
+              "totalComments": 2304,
+              "avgViews": 1808817.0,
+              "engagementPerThousandViews": 48.53
+            },
+            "official_mv": {
+              "videoCount": 1,
+              "totalViews": 22642748,
+              "totalLikes": 208817,
+              "totalComments": 31024,
+              "avgViews": 22642748.0,
+              "engagementPerThousandViews": 10.59
+            },
+            "shorts": {
+              "videoCount": 1,
+              "totalViews": 283511,
+              "totalLikes": 26991,
+              "totalComments": 228,
+              "avgViews": 283511.0,
+              "engagementPerThousandViews": 96.01
+            }
+          },
+          "rawMetrics": {
+            "videoCount": 5,
+            "totalViews": 25251993,
+            "totalLikes": 368299,
+            "totalComments": 35305,
+            "avgViews": 5050398.6,
+            "engagementPerThousandViews": 15.98
+          },
+          "topVideos": [
+            {
+              "videoId": "zGsj0fDHB_s",
+              "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
+              "publishedAt": "2026-06-08T08:59:06Z",
+              "viewCount": 22642748,
+              "likeCount": 208817,
+              "commentCount": 31024,
+              "videoType": "official_mv",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
+            },
+            {
+              "videoId": "-y34963xF3Y",
+              "title": "BOYNEXTDOOR(보이넥스트도어) 'VIRAL' (4K) | STUDIO CHOOM ORIGINAL",
+              "publishedAt": "2026-06-09T13:00:13Z",
+              "viewCount": 1808817,
+              "likeCount": 85477,
+              "commentCount": 2304,
+              "videoType": "external_content",
+              "contentGroup": "external",
+              "sourceUrl": "https://www.youtube.com/watch?v=-y34963xF3Y"
+            },
+            {
+              "videoId": "yDRY3UIC-MM",
+              "title": "'VIRAL’ 안무 연습 영상 | BOYNEXTDOOR (보이넥스트도어)",
+              "publishedAt": "2026-06-14T13:00:16Z",
+              "viewCount": 393152,
+              "likeCount": 33570,
+              "commentCount": 1130,
+              "videoType": "dance_practice",
+              "contentGroup": "music",
+              "sourceUrl": "https://www.youtube.com/watch?v=yDRY3UIC-MM"
+            },
+            {
+              "videoId": "eMGAcu-QMLg",
+              "title": "go viral #TWS #SHINYU #BOYNEXTDOOR #VIRAL #VIRAL_Challenge",
+              "publishedAt": "2026-06-13T14:00:38Z",
+              "viewCount": 283511,
+              "likeCount": 26991,
+              "commentCount": 228,
+              "videoType": "shorts",
+              "contentGroup": "shortform",
+              "sourceUrl": "https://www.youtube.com/watch?v=eMGAcu-QMLg"
+            },
+            {
+              "videoId": "F4YMAUb1zXQ",
+              "title": "이 영상은 도배될 거야 네 피드에 | 'VIRAL' MV 비하인드ㅣBEHINDOOR",
+              "publishedAt": "2026-06-15T13:00:12Z",
+              "viewCount": 123765,
+              "likeCount": 13444,
+              "commentCount": 619,
+              "videoType": "behind",
+              "contentGroup": "fandom",
+              "sourceUrl": "https://www.youtube.com/watch?v=F4YMAUb1zXQ"
+            }
+          ],
+          "meta": {
+            "scoreVersion": "youtube_publish_v2_content_type",
+            "activeGroupWeights": {
+              "external": 18.75,
+              "fandom": 25.0,
+              "music": 50.0,
+              "shortform": 6.25
+            },
+            "baseGroupWeights": {
+              "music": 40.0,
+              "promo": 20.0,
+              "fandom": 20.0,
+              "external": 15.0,
+              "shortform": 5.0,
+              "other": 5.0
+            },
+            "metricWeights": {
+              "viewPoint": 45.0,
+              "likePoint": 25.0,
+              "commentPoint": 20.0,
+              "engagementPoint": 10.0
+            },
+            "normalization": "content group batch max normalization; active groups reweighted to 100"
+          }
+        },
+        "musicChart": {
+          "rank": 4,
+          "artist": "보이넥스트도어",
+          "fandexMusicChartFinalPoint": 24.0,
+          "coreSignal": "melon",
+          "entryCount": 1,
+          "platformPoints": {
+            "melon": 24.0
+          },
+          "chartTypePoints": {
+            "daily": 24.0
+          },
+          "trackPoints": {
+            "VIRAL": 24.0
+          },
+          "bestEntry": {
+            "artist": "보이넥스트도어",
+            "platform": "melon",
+            "chartName": "TOP100",
+            "trackTitle": "VIRAL",
+            "rank": 84,
+            "chartDate": "2026-07-09",
+            "chartType": "daily",
+            "metricType": "",
+            "metricValue": 0.0,
+            "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+            "rankBasePoint": 20.0,
+            "platformWeight": 1.2,
+            "chartTypeWeight": 1.0,
+            "metricBonus": 0.0,
+            "musicChartPoint": 24.0
+          },
+          "entries": [
+            {
+              "artist": "보이넥스트도어",
+              "platform": "melon",
+              "chartName": "TOP100",
+              "trackTitle": "VIRAL",
+              "rank": 84,
+              "chartDate": "2026-07-09",
+              "chartType": "daily",
+              "metricType": "",
+              "metricValue": 0.0,
+              "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+              "rankBasePoint": 20.0,
+              "platformWeight": 1.2,
+              "chartTypeWeight": 1.0,
+              "metricBonus": 0.0,
+              "musicChartPoint": 24.0
+            }
+          ],
+          "meta": {
+            "scoreVersion": "fandex_music_chart_v1_manual_seed",
+            "scoreMode": "uncapped_cumulative_chart_entries"
+          }
+        }
+      },
+      "meta": {
+        "scoreVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
+        "scoreMode": "uncapped_cumulative_source_points",
+        "activeSources": [
+          "naver",
+          "youtube",
+          "musicChart"
+        ],
+        "sourceAvailability": {
+          "naver": true,
+          "youtube": true,
+          "musicChart": true
+        }
+      }
+    }
+  ]
+}
