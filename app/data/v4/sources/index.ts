@@ -36,3 +36,5 @@ export * from './sourceProviderSyncPolicyTypes';
 export * from './sourceProviderSyncPolicyPreview';
 export * from './sourceStorageBoundaryTypes';
 export * from './sourceStorageBoundaryPreview';
+export * from './sourceWriteSafetyTypes';
+export * from './sourceWriteSafetyPreview';
