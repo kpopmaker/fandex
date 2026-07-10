@@ -38,3 +38,5 @@ export * from './sourceStorageBoundaryTypes';
 export * from './sourceStorageBoundaryPreview';
 export * from './sourceWriteSafetyTypes';
 export * from './sourceWriteSafetyPreview';
+export * from './sourceWriteAuditTypes';
+export * from './sourceWriteAuditPreview';

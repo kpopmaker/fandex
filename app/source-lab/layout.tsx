@@ -5,6 +5,7 @@ import SourceIngestionDraftPreviewSection from './sourceIngestionDraftPreviewSec
 import SourceProviderSyncPolicyPreviewSection from './sourceProviderSyncPolicyPreviewSection';
 import SourceStorageBoundaryPreviewSection from './sourceStorageBoundaryPreviewSection';
 import SourceWriteSafetyPreviewSection from './sourceWriteSafetyPreviewSection';
+import SourceWriteAuditPreviewSection from './sourceWriteAuditPreviewSection';
 import SourceSignalApplicationPreviewSection from './sourceSignalApplicationPreviewSection';
 import SourceSignalImpactPreviewSection from './sourceSignalImpactPreviewSection';
 import SourceSignalReviewActionPreviewSection from './sourceSignalReviewActionPreviewSection';
@@ -27,6 +28,7 @@ export default function SourceLabLayout({
       <SourceProviderSyncPolicyPreviewSection />
       <SourceStorageBoundaryPreviewSection />
       <SourceWriteSafetyPreviewSection />
+      <SourceWriteAuditPreviewSection />
     </>
   );
 }
