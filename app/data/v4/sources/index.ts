@@ -40,3 +40,5 @@ export * from './sourceWriteSafetyTypes';
 export * from './sourceWriteSafetyPreview';
 export * from './sourceWriteAuditTypes';
 export * from './sourceWriteAuditPreview';
+export * from './sourceRollbackReadinessTypes';
+export * from './sourceRollbackReadinessPreview';
