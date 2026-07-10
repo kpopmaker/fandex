@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import SourcePipelineOverviewSection from './sourcePipelineOverviewSection';
 import SourceIngestionDraftPreviewSection from './sourceIngestionDraftPreviewSection';
 import SourceProviderSyncPolicyPreviewSection from './sourceProviderSyncPolicyPreviewSection';
+import SourceStorageBoundaryPreviewSection from './sourceStorageBoundaryPreviewSection';
 import SourceSignalApplicationPreviewSection from './sourceSignalApplicationPreviewSection';
 import SourceSignalImpactPreviewSection from './sourceSignalImpactPreviewSection';
 import SourceSignalReviewActionPreviewSection from './sourceSignalReviewActionPreviewSection';
@@ -23,6 +24,7 @@ export default function SourceLabLayout({
       <SourceSignalReviewActionPreviewSection />
       <SourceIngestionDraftPreviewSection />
       <SourceProviderSyncPolicyPreviewSection />
+      <SourceStorageBoundaryPreviewSection />
     </>
   );
 }
