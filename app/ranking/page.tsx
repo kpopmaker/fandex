@@ -1,74 +1,48 @@
-import {
-  artistIndexChartProfiles,
-  calculateSixMonthDelta,
-  getIndexTrendBand,
-  getLastSixMonthHistory,
-} from '../data/v4/charts/artistIndexChartData';
-import {
-  getLatestArtistMetricBreakdown,
-  getTopMetricItemsForArtist,
-} from '../data/v4/metrics/artistMonthlyMetricHelpers';
-import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
+import { getFandexPythonExportRankingData } from '../data/v4/pythonExportedFandexData';
 import RankingExplorer, { type RankingExplorerRow } from './RankingExplorer';
 
-function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
-  return profile.history[profile.history.length - 1];
-}
-
 function createRankingRows(): RankingExplorerRow[] {
-  return artistIndexChartProfiles
-    .map((profile) => {
-      const latest = getLatestPoint(profile);
-      const sixMonthHistory = getLastSixMonthHistory(profile);
-      const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
-      const topMetricItems = getTopMetricItemsForArtist(profile.artistId, 2);
-      const metricScores = Object.fromEntries(
-        (metricBreakdown?.items ?? []).map((item) => [item.key, item.score]),
-      ) as Partial<Record<FandexVariableKey, number>>;
-
-      return {
-        artistId: profile.artistId,
-        artistName: profile.artistName,
-        ticker: profile.ticker,
-        groupType: profile.groupType,
-        coverageStatus: profile.coverageStatus,
-        currentFandexPoint: latest?.fandexPoint ?? 0,
-        sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
-        trendBand: getIndexTrendBand(sixMonthHistory),
-        confidenceLevel: latest?.confidenceLevel ?? 'low',
-        lastUpdated: profile.lastUpdated,
-        topMetricLabels: topMetricItems.map((item) => item.label),
-        metricScores,
-        metricMonthLabel: metricBreakdown?.label ?? '',
-      };
-    })
-    .sort((a, b) => b.currentFandexPoint - a.currentFandexPoint);
+  return getFandexPythonExportRankingData().rows.sort(
+    (a, b) => b.currentFandexPoint - a.currentFandexPoint,
+  );
 }
 
 export default function RankingPage() {
   const rows = createRankingRows();
+  const exportData = getFandexPythonExportRankingData();
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10">
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">
-            FANDEX 랭킹
+            FANDEX ranking
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-            K-pop 아티스트 랭킹 탐색
+            K-pop artist ranking explorer
           </h1>
           <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 md:text-base">
-            지금 FANDEX에서 강하게 잡히는 아티스트를 볼 수 있습니다.
-            검색하거나 필터를 바꿔서 원하는 아티스트를 찾아보세요.
+            Python export JSON을 읽어 최신 master ranking을 표시합니다.
+            웹 화면에서는 FANDEX 점수를 재계산하지 않고, export에 들어있는
+            값을 그대로 보여줍니다.
           </p>
           <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
-            이 순위는 공식 K-pop 순위가 아니라 FANDEX 내부 리서치 지수입니다.
-            금융상품/투자정보가 아닙니다.
+            최종 점수는 fandexFinalPoint를 사용합니다. 소스별 점수는
+            sourcePoints.naver, sourcePoints.youtube,
+            sourcePoints.musicChart의 cumulativePoint를 표시하며, 값이 없으면
+            대시로 처리합니다.
+          </p>
+          <p className="mt-3 text-xs font-bold leading-5 text-slate-500">
+            version {exportData.version} / manifest {exportData.manifestVersion} /
+            reports {exportData.reportCount} / updated {exportData.createdAt || '-'}
           </p>
         </section>
 
-        <RankingExplorer rows={rows} />
+        <RankingExplorer
+          activeSources={exportData.activeSources}
+          rows={rows}
+          scoreMode={exportData.scoreMode}
+        />
       </section>
     </main>
   );

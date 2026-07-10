@@ -1,0 +1,307 @@
+{
+  "version": "fandex_music_chart_v1_manual_seed",
+  "createdAt": "2026-07-09T21:43:32",
+  "scoreScale": "uncapped_cumulative_points",
+  "scoreMode": "uncapped_cumulative_chart_entries",
+  "inputFile": "music_chart_seed_v1.csv",
+  "platformWeights": {
+    "melon": 1.2,
+    "circle": 1.35,
+    "spotify": 1.1,
+    "youtube_music": 1.0,
+    "genie": 0.85,
+    "bugs": 0.75,
+    "flo": 0.75,
+    "other": 0.6
+  },
+  "chartTypeWeights": {
+    "realtime": 0.6,
+    "daily": 1.0,
+    "weekly": 1.15,
+    "monthly": 1.25,
+    "peak": 0.8,
+    "other": 1.0
+  },
+  "ranking": [
+    {
+      "artist": "에스파",
+      "fandexMusicChartFinalPoint": 162.0,
+      "coreSignal": "melon",
+      "entryCount": 3,
+      "platformPoints": {
+        "melon": 90.0,
+        "genie": 38.25,
+        "bugs": 33.75
+      },
+      "chartTypePoints": {
+        "daily": 90.0,
+        "realtime": 72.0
+      },
+      "trackPoints": {
+        "LEMONADE": 162.0
+      },
+      "bestEntry": {
+        "artist": "에스파",
+        "platform": "melon",
+        "chartName": "TOP100",
+        "trackTitle": "LEMONADE",
+        "rank": 5,
+        "chartDate": "2026-07-09",
+        "chartType": "daily",
+        "metricType": "",
+        "metricValue": 0.0,
+        "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+        "rankBasePoint": 75.0,
+        "platformWeight": 1.2,
+        "chartTypeWeight": 1.0,
+        "metricBonus": 0.0,
+        "musicChartPoint": 90.0
+      },
+      "entries": [
+        {
+          "artist": "에스파",
+          "platform": "melon",
+          "chartName": "TOP100",
+          "trackTitle": "LEMONADE",
+          "rank": 5,
+          "chartDate": "2026-07-09",
+          "chartType": "daily",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+          "rankBasePoint": 75.0,
+          "platformWeight": 1.2,
+          "chartTypeWeight": 1.0,
+          "metricBonus": 0.0,
+          "musicChartPoint": 90.0
+        },
+        {
+          "artist": "에스파",
+          "platform": "bugs",
+          "chartName": "Bugs Realtime",
+          "trackTitle": "LEMONADE",
+          "rank": 7,
+          "chartDate": "2026-07-09",
+          "chartType": "realtime",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+          "rankBasePoint": 75.0,
+          "platformWeight": 0.75,
+          "chartTypeWeight": 0.6,
+          "metricBonus": 0.0,
+          "musicChartPoint": 33.75
+        },
+        {
+          "artist": "에스파",
+          "platform": "genie",
+          "chartName": "Top 200",
+          "trackTitle": "LEMONADE",
+          "rank": 5,
+          "chartDate": "2026-07-09",
+          "chartType": "realtime",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://www.genie.co.kr/chart/top200",
+          "rankBasePoint": 75.0,
+          "platformWeight": 0.85,
+          "chartTypeWeight": 0.6,
+          "metricBonus": 0.0,
+          "musicChartPoint": 38.25
+        }
+      ],
+      "meta": {
+        "scoreVersion": "fandex_music_chart_v1_manual_seed",
+        "scoreMode": "uncapped_cumulative_chart_entries"
+      },
+      "rank": 1
+    },
+    {
+      "artist": "에이티즈",
+      "fandexMusicChartFinalPoint": 51.0,
+      "coreSignal": "bugs",
+      "entryCount": 2,
+      "platformPoints": {
+        "bugs": 27.0,
+        "melon": 24.0
+      },
+      "chartTypePoints": {
+        "realtime": 27.0,
+        "daily": 24.0
+      },
+      "trackPoints": {
+        "BAD": 51.0
+      },
+      "bestEntry": {
+        "artist": "에이티즈",
+        "platform": "bugs",
+        "chartName": "Bugs Realtime",
+        "trackTitle": "BAD",
+        "rank": 11,
+        "chartDate": "2026-07-09",
+        "chartType": "realtime",
+        "metricType": "",
+        "metricValue": 0.0,
+        "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+        "rankBasePoint": 60.0,
+        "platformWeight": 0.75,
+        "chartTypeWeight": 0.6,
+        "metricBonus": 0.0,
+        "musicChartPoint": 27.0
+      },
+      "entries": [
+        {
+          "artist": "에이티즈",
+          "platform": "melon",
+          "chartName": "TOP100",
+          "trackTitle": "BAD",
+          "rank": 74,
+          "chartDate": "2026-07-09",
+          "chartType": "daily",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+          "rankBasePoint": 20.0,
+          "platformWeight": 1.2,
+          "chartTypeWeight": 1.0,
+          "metricBonus": 0.0,
+          "musicChartPoint": 24.0
+        },
+        {
+          "artist": "에이티즈",
+          "platform": "bugs",
+          "chartName": "Bugs Realtime",
+          "trackTitle": "BAD",
+          "rank": 11,
+          "chartDate": "2026-07-09",
+          "chartType": "realtime",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://music.bugs.co.kr/chart",
+          "rankBasePoint": 60.0,
+          "platformWeight": 0.75,
+          "chartTypeWeight": 0.6,
+          "metricBonus": 0.0,
+          "musicChartPoint": 27.0
+        }
+      ],
+      "meta": {
+        "scoreVersion": "fandex_music_chart_v1_manual_seed",
+        "scoreMode": "uncapped_cumulative_chart_entries"
+      },
+      "rank": 2
+    },
+    {
+      "artist": "아이유",
+      "fandexMusicChartFinalPoint": 24.0,
+      "coreSignal": "melon",
+      "entryCount": 1,
+      "platformPoints": {
+        "melon": 24.0
+      },
+      "chartTypePoints": {
+        "daily": 24.0
+      },
+      "trackPoints": {
+        "Love wins all": 24.0
+      },
+      "bestEntry": {
+        "artist": "아이유",
+        "platform": "melon",
+        "chartName": "TOP100",
+        "trackTitle": "Love wins all",
+        "rank": 85,
+        "chartDate": "2026-07-09",
+        "chartType": "daily",
+        "metricType": "",
+        "metricValue": 0.0,
+        "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+        "rankBasePoint": 20.0,
+        "platformWeight": 1.2,
+        "chartTypeWeight": 1.0,
+        "metricBonus": 0.0,
+        "musicChartPoint": 24.0
+      },
+      "entries": [
+        {
+          "artist": "아이유",
+          "platform": "melon",
+          "chartName": "TOP100",
+          "trackTitle": "Love wins all",
+          "rank": 85,
+          "chartDate": "2026-07-09",
+          "chartType": "daily",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+          "rankBasePoint": 20.0,
+          "platformWeight": 1.2,
+          "chartTypeWeight": 1.0,
+          "metricBonus": 0.0,
+          "musicChartPoint": 24.0
+        }
+      ],
+      "meta": {
+        "scoreVersion": "fandex_music_chart_v1_manual_seed",
+        "scoreMode": "uncapped_cumulative_chart_entries"
+      },
+      "rank": 3
+    },
+    {
+      "artist": "보이넥스트도어",
+      "fandexMusicChartFinalPoint": 24.0,
+      "coreSignal": "melon",
+      "entryCount": 1,
+      "platformPoints": {
+        "melon": 24.0
+      },
+      "chartTypePoints": {
+        "daily": 24.0
+      },
+      "trackPoints": {
+        "VIRAL": 24.0
+      },
+      "bestEntry": {
+        "artist": "보이넥스트도어",
+        "platform": "melon",
+        "chartName": "TOP100",
+        "trackTitle": "VIRAL",
+        "rank": 84,
+        "chartDate": "2026-07-09",
+        "chartType": "daily",
+        "metricType": "",
+        "metricValue": 0.0,
+        "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+        "rankBasePoint": 20.0,
+        "platformWeight": 1.2,
+        "chartTypeWeight": 1.0,
+        "metricBonus": 0.0,
+        "musicChartPoint": 24.0
+      },
+      "entries": [
+        {
+          "artist": "보이넥스트도어",
+          "platform": "melon",
+          "chartName": "TOP100",
+          "trackTitle": "VIRAL",
+          "rank": 84,
+          "chartDate": "2026-07-09",
+          "chartType": "daily",
+          "metricType": "",
+          "metricValue": 0.0,
+          "memo": "web_checked; source=https://www.melon.com/chart/index.htm",
+          "rankBasePoint": 20.0,
+          "platformWeight": 1.2,
+          "chartTypeWeight": 1.0,
+          "metricBonus": 0.0,
+          "musicChartPoint": 24.0
+        }
+      ],
+      "meta": {
+        "scoreVersion": "fandex_music_chart_v1_manual_seed",
+        "scoreMode": "uncapped_cumulative_chart_entries"
+      },
+      "rank": 4
+    }
+  ]
+}
