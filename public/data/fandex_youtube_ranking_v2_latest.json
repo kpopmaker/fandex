@@ -1,6 +1,6 @@
 {
   "version": "youtube_publish_v2_content_type",
-  "createdAt": "2026-07-09T21:43:32",
+  "createdAt": "2026-07-10T17:32:33",
   "scoreScale": "0_to_100",
   "inputFile": "youtube_video_metrics_v1.csv",
   "typeGuideFile": "youtube_video_type_guide_v2.csv",
@@ -13,27 +13,27 @@
   "ranking": [
     {
       "artist": "아이유",
-      "fandexYoutubeFinalPoint": 76.64,
+      "fandexYoutubeFinalPoint": 76.7,
       "coreSignal": "공식 음악 콘텐츠",
       "contentGroupPoints": {
         "external": {
           "label": "외부 확산 콘텐츠",
-          "point": 1.37,
+          "point": 1.42,
           "components": {
             "viewPoint": 0.11,
             "likePoint": 0.05,
             "commentPoint": 0.05,
-            "engagementPoint": 1.16
+            "engagementPoint": 1.21
           }
         },
         "fandom": {
           "label": "팬덤 콘텐츠",
-          "point": 24.43,
+          "point": 24.44,
           "components": {
             "viewPoint": 11.25,
             "likePoint": 6.25,
             "commentPoint": 5.0,
-            "engagementPoint": 1.93
+            "engagementPoint": 1.94
           }
         },
         "music": {
@@ -68,37 +68,37 @@
         },
         "fandom": {
           "videoCount": 1,
-          "totalViews": 3532405,
-          "totalLikes": 302486,
-          "totalComments": 8009,
-          "avgViews": 3532405.0,
-          "engagementPerThousandViews": 87.9
+          "totalViews": 3532572,
+          "totalLikes": 302481,
+          "totalComments": 8010,
+          "avgViews": 3532572.0,
+          "engagementPerThousandViews": 87.89
         },
         "music": {
           "videoCount": 2,
-          "totalViews": 122230829,
-          "totalLikes": 5225888,
-          "totalComments": 220495,
-          "avgViews": 61115414.5,
-          "engagementPerThousandViews": 44.56
+          "totalViews": 122269172,
+          "totalLikes": 5226272,
+          "totalComments": 220519,
+          "avgViews": 61134586.0,
+          "engagementPerThousandViews": 44.55
         },
         "shortform": {
           "videoCount": 1,
-          "totalViews": 328653,
-          "totalLikes": 48012,
+          "totalViews": 328655,
+          "totalLikes": 48013,
           "totalComments": 645,
-          "avgViews": 328653.0,
+          "avgViews": 328655.0,
           "engagementPerThousandViews": 148.05
         }
       },
       "videoTypeMetrics": {
         "behind": {
           "videoCount": 1,
-          "totalViews": 3532405,
-          "totalLikes": 302486,
-          "totalComments": 8009,
-          "avgViews": 3532405.0,
-          "engagementPerThousandViews": 87.9
+          "totalViews": 3532572,
+          "totalLikes": 302481,
+          "totalComments": 8010,
+          "avgViews": 3532572.0,
+          "engagementPerThousandViews": 87.89
         },
         "external_content": {
           "videoCount": 1,
@@ -110,44 +110,44 @@
         },
         "live_clip": {
           "videoCount": 1,
-          "totalViews": 11114609,
-          "totalLikes": 157535,
-          "totalComments": 4277,
-          "avgViews": 11114609.0,
-          "engagementPerThousandViews": 14.56
+          "totalViews": 11123392,
+          "totalLikes": 157582,
+          "totalComments": 4279,
+          "avgViews": 11123392.0,
+          "engagementPerThousandViews": 14.55
         },
         "official_mv": {
           "videoCount": 1,
-          "totalViews": 111116220,
-          "totalLikes": 5068353,
-          "totalComments": 216218,
-          "avgViews": 111116220.0,
-          "engagementPerThousandViews": 47.56
+          "totalViews": 111145780,
+          "totalLikes": 5068690,
+          "totalComments": 216240,
+          "avgViews": 111145780.0,
+          "engagementPerThousandViews": 47.55
         },
         "shorts": {
           "videoCount": 1,
-          "totalViews": 328653,
-          "totalLikes": 48012,
+          "totalViews": 328655,
+          "totalLikes": 48013,
           "totalComments": 645,
-          "avgViews": 328653.0,
+          "avgViews": 328655.0,
           "engagementPerThousandViews": 148.05
         }
       },
       "rawMetrics": {
         "videoCount": 5,
-        "totalViews": 126115940,
-        "totalLikes": 5577311,
-        "totalComments": 229179,
-        "avgViews": 25223188.0,
-        "engagementPerThousandViews": 46.04
+        "totalViews": 126154452,
+        "totalLikes": 5577691,
+        "totalComments": 229204,
+        "avgViews": 25230890.4,
+        "engagementPerThousandViews": 46.03
       },
       "topVideo": {
         "videoId": "JleoAppaxi0",
         "title": "IU 'Love wins all' MV",
         "publishedAt": "2024-01-23T15:00:15Z",
-        "viewCount": 111116220,
-        "likeCount": 5068353,
-        "commentCount": 216218,
+        "viewCount": 111145780,
+        "likeCount": 5068690,
+        "commentCount": 216240,
         "videoType": "official_mv",
         "contentGroup": "music",
         "sourceUrl": "https://www.youtube.com/watch?v=JleoAppaxi0"
@@ -157,9 +157,9 @@
           "videoId": "JleoAppaxi0",
           "title": "IU 'Love wins all' MV",
           "publishedAt": "2024-01-23T15:00:15Z",
-          "viewCount": 111116220,
-          "likeCount": 5068353,
-          "commentCount": 216218,
+          "viewCount": 111145780,
+          "likeCount": 5068690,
+          "commentCount": 216240,
           "videoType": "official_mv",
           "contentGroup": "music",
           "sourceUrl": "https://www.youtube.com/watch?v=JleoAppaxi0"
@@ -168,9 +168,9 @@
           "videoId": "-_14Lhw0y1A",
           "title": "IU 'Love wins all' Live Clip (2024 IU HEREH WORLD TOUR CONCERT ENCORE : THE WINNING)",
           "publishedAt": "2024-12-04T10:00:00Z",
-          "viewCount": 11114609,
-          "likeCount": 157535,
-          "commentCount": 4277,
+          "viewCount": 11123392,
+          "likeCount": 157582,
+          "commentCount": 4279,
           "videoType": "live_clip",
           "contentGroup": "music",
           "sourceUrl": "https://www.youtube.com/watch?v=-_14Lhw0y1A"
@@ -179,9 +179,9 @@
           "videoId": "bSxoDXrk2X4",
           "title": "[IU TV] 멋진 결과물과 건강을 맞바꾼 날 😷",
           "publishedAt": "2024-01-28T08:00:30Z",
-          "viewCount": 3532405,
-          "likeCount": 302486,
-          "commentCount": 8009,
+          "viewCount": 3532572,
+          "likeCount": 302481,
+          "commentCount": 8010,
           "videoType": "behind",
           "contentGroup": "fandom",
           "sourceUrl": "https://www.youtube.com/watch?v=bSxoDXrk2X4"
@@ -190,8 +190,8 @@
           "videoId": "CsYfnUVfL-4",
           "title": "IU 'Love wins all' Track Sampler #아이유 #IU #Love_wins_all",
           "publishedAt": "2024-01-19T15:00:19Z",
-          "viewCount": 328653,
-          "likeCount": 48012,
+          "viewCount": 328655,
+          "likeCount": 48013,
           "commentCount": 645,
           "videoType": "shorts",
           "contentGroup": "shortform",
@@ -237,17 +237,17 @@
     },
     {
       "artist": "에스파",
-      "fandexYoutubeFinalPoint": 44.27,
+      "fandexYoutubeFinalPoint": 44.35,
       "coreSignal": "공식 음악 콘텐츠",
       "contentGroupPoints": {
         "external": {
           "label": "외부 확산 콘텐츠",
-          "point": 1.8,
+          "point": 1.88,
           "components": {
             "viewPoint": 0.1,
             "likePoint": 0.06,
             "commentPoint": 0.14,
-            "engagementPoint": 1.51
+            "engagementPoint": 1.59
           }
         },
         "fandom": {
@@ -284,94 +284,94 @@
       "contentGroupMetrics": {
         "external": {
           "videoCount": 1,
-          "totalViews": 21233,
+          "totalViews": 21236,
           "totalLikes": 1020,
           "totalComments": 83,
-          "avgViews": 21233.0,
-          "engagementPerThousandViews": 51.95
+          "avgViews": 21236.0,
+          "engagementPerThousandViews": 51.94
         },
         "fandom": {
           "videoCount": 1,
-          "totalViews": 695132,
-          "totalLikes": 40721,
+          "totalViews": 695206,
+          "totalLikes": 40723,
           "totalComments": 1257,
-          "avgViews": 695132.0,
-          "engagementPerThousandViews": 60.39
+          "avgViews": 695206.0,
+          "engagementPerThousandViews": 60.38
         },
         "music": {
           "videoCount": 2,
-          "totalViews": 114654496,
-          "totalLikes": 1818363,
-          "totalComments": 95079,
-          "avgViews": 57327248.0,
-          "engagementPerThousandViews": 16.69
+          "totalViews": 114711765,
+          "totalLikes": 1818616,
+          "totalComments": 95076,
+          "avgViews": 57355882.5,
+          "engagementPerThousandViews": 16.68
         },
         "shortform": {
           "videoCount": 1,
-          "totalViews": 167614542,
-          "totalLikes": 1230002,
-          "totalComments": 5612,
-          "avgViews": 167614542.0,
+          "totalViews": 167616282,
+          "totalLikes": 1230018,
+          "totalComments": 5611,
+          "avgViews": 167616282.0,
           "engagementPerThousandViews": 7.37
         }
       },
       "videoTypeMetrics": {
         "behind": {
           "videoCount": 1,
-          "totalViews": 695132,
-          "totalLikes": 40721,
+          "totalViews": 695206,
+          "totalLikes": 40723,
           "totalComments": 1257,
-          "avgViews": 695132.0,
-          "engagementPerThousandViews": 60.39
+          "avgViews": 695206.0,
+          "engagementPerThousandViews": 60.38
         },
         "external_content": {
           "videoCount": 1,
-          "totalViews": 21233,
+          "totalViews": 21236,
           "totalLikes": 1020,
           "totalComments": 83,
-          "avgViews": 21233.0,
-          "engagementPerThousandViews": 51.95
+          "avgViews": 21236.0,
+          "engagementPerThousandViews": 51.94
         },
         "official_mv": {
           "videoCount": 1,
-          "totalViews": 92764234,
-          "totalLikes": 1355052,
-          "totalComments": 80107,
-          "avgViews": 92764234.0,
-          "engagementPerThousandViews": 15.47
+          "totalViews": 92820753,
+          "totalLikes": 1355316,
+          "totalComments": 80105,
+          "avgViews": 92820753.0,
+          "engagementPerThousandViews": 15.46
         },
         "performance_video": {
           "videoCount": 1,
-          "totalViews": 21890262,
-          "totalLikes": 463311,
-          "totalComments": 14972,
-          "avgViews": 21890262.0,
+          "totalViews": 21891012,
+          "totalLikes": 463300,
+          "totalComments": 14971,
+          "avgViews": 21891012.0,
           "engagementPerThousandViews": 21.85
         },
         "shorts": {
           "videoCount": 1,
-          "totalViews": 167614542,
-          "totalLikes": 1230002,
-          "totalComments": 5612,
-          "avgViews": 167614542.0,
+          "totalViews": 167616282,
+          "totalLikes": 1230018,
+          "totalComments": 5611,
+          "avgViews": 167616282.0,
           "engagementPerThousandViews": 7.37
         }
       },
       "rawMetrics": {
         "videoCount": 5,
-        "totalViews": 282985403,
-        "totalLikes": 3090106,
-        "totalComments": 102031,
-        "avgViews": 56597080.6,
+        "totalViews": 283044489,
+        "totalLikes": 3090377,
+        "totalComments": 102027,
+        "avgViews": 56608897.8,
         "engagementPerThousandViews": 11.28
       },
       "topVideo": {
         "videoId": "SKEnKaMI2nw",
         "title": "that’s Dirty Work! Show us your #aespaDirtyWork moves! Brought to you by YouTube Shorts #aespa",
         "publishedAt": "2025-06-27T05:00:26Z",
-        "viewCount": 167614542,
-        "likeCount": 1230002,
-        "commentCount": 5612,
+        "viewCount": 167616282,
+        "likeCount": 1230018,
+        "commentCount": 5611,
         "videoType": "shorts",
         "contentGroup": "shortform",
         "sourceUrl": "https://www.youtube.com/watch?v=SKEnKaMI2nw"
@@ -381,9 +381,9 @@
           "videoId": "SKEnKaMI2nw",
           "title": "that’s Dirty Work! Show us your #aespaDirtyWork moves! Brought to you by YouTube Shorts #aespa",
           "publishedAt": "2025-06-27T05:00:26Z",
-          "viewCount": 167614542,
-          "likeCount": 1230002,
-          "commentCount": 5612,
+          "viewCount": 167616282,
+          "likeCount": 1230018,
+          "commentCount": 5611,
           "videoType": "shorts",
           "contentGroup": "shortform",
           "sourceUrl": "https://www.youtube.com/watch?v=SKEnKaMI2nw"
@@ -392,9 +392,9 @@
           "videoId": "M2WTUoy4y6E",
           "title": "aespa 에스파 'Dirty Work' MV",
           "publishedAt": "2025-06-27T03:59:07Z",
-          "viewCount": 92764234,
-          "likeCount": 1355052,
-          "commentCount": 80107,
+          "viewCount": 92820753,
+          "likeCount": 1355316,
+          "commentCount": 80105,
           "videoType": "official_mv",
           "contentGroup": "music",
           "sourceUrl": "https://www.youtube.com/watch?v=M2WTUoy4y6E"
@@ -403,9 +403,9 @@
           "videoId": "1dxDjcKg21o",
           "title": "aespa 에스파 'Dirty Work' Performance Video",
           "publishedAt": "2025-06-08T15:00:05Z",
-          "viewCount": 21890262,
-          "likeCount": 463311,
-          "commentCount": 14972,
+          "viewCount": 21891012,
+          "likeCount": 463300,
+          "commentCount": 14971,
           "videoType": "performance_video",
           "contentGroup": "music",
           "sourceUrl": "https://www.youtube.com/watch?v=1dxDjcKg21o"
@@ -414,8 +414,8 @@
           "videoId": "6TvpNlT_cVU",
           "title": "[R(ae)cord] aespa 에스파 ‘Dirty Work’ Recording Behind The Scenes",
           "publishedAt": "2025-06-30T13:00:22Z",
-          "viewCount": 695132,
-          "likeCount": 40721,
+          "viewCount": 695206,
+          "likeCount": 40723,
           "commentCount": 1257,
           "videoType": "behind",
           "contentGroup": "fandom",
@@ -425,7 +425,7 @@
           "videoId": "D6nqRPfP47o",
           "title": "aespa On Their \"Dirty Work\" Come Back, KCON Performance & More | KCON LA 2025",
           "publishedAt": "2025-08-03T05:55:55Z",
-          "viewCount": 21233,
+          "viewCount": 21236,
           "likeCount": 1020,
           "commentCount": 83,
           "videoType": "external_content",
@@ -460,201 +460,201 @@
       "rank": 2
     },
     {
-      "artist": "보이넥스트도어",
-      "fandexYoutubeFinalPoint": 29.97,
+      "artist": "에이티즈",
+      "fandexYoutubeFinalPoint": 30.05,
       "coreSignal": "외부 확산 콘텐츠",
       "contentGroupPoints": {
         "external": {
           "label": "외부 확산 콘텐츠",
-          "point": 18.29,
+          "point": 15.81,
           "components": {
-            "viewPoint": 8.44,
-            "likePoint": 4.69,
-            "commentPoint": 3.75,
-            "engagementPoint": 1.42
+            "viewPoint": 6.27,
+            "likePoint": 4.44,
+            "commentPoint": 3.23,
+            "engagementPoint": 1.88
           }
         },
         "fandom": {
           "label": "팬덤 콘텐츠",
-          "point": 3.56,
+          "point": 3.27,
           "components": {
-            "viewPoint": 0.39,
-            "likePoint": 0.28,
-            "commentPoint": 0.39,
-            "engagementPoint": 2.5
+            "viewPoint": 0.63,
+            "likePoint": 0.37,
+            "commentPoint": 0.25,
+            "engagementPoint": 2.02
           }
         },
         "music": {
           "label": "공식 음악 콘텐츠",
-          "point": 7.62,
+          "point": 10.3,
           "components": {
-            "viewPoint": 4.24,
-            "likePoint": 0.58,
-            "commentPoint": 1.46,
-            "engagementPoint": 1.34
+            "viewPoint": 4.69,
+            "likePoint": 1.42,
+            "commentPoint": 1.45,
+            "engagementPoint": 2.75
           }
         },
         "shortform": {
           "label": "숏폼 확산",
-          "point": 0.5,
+          "point": 0.67,
           "components": {
-            "viewPoint": 0.0,
-            "likePoint": 0.03,
-            "commentPoint": 0.05,
-            "engagementPoint": 0.41
+            "viewPoint": 0.04,
+            "likePoint": 0.16,
+            "commentPoint": 0.23,
+            "engagementPoint": 0.24
           }
         }
       },
       "contentGroupMetrics": {
         "external": {
           "videoCount": 1,
-          "totalViews": 1808817,
-          "totalLikes": 85477,
-          "totalComments": 2304,
-          "avgViews": 1808817.0,
-          "engagementPerThousandViews": 48.53
+          "totalViews": 1354202,
+          "totalLikes": 81130,
+          "totalComments": 1987,
+          "avgViews": 1354202.0,
+          "engagementPerThousandViews": 61.38
         },
         "fandom": {
           "videoCount": 1,
-          "totalViews": 123765,
-          "totalLikes": 13444,
-          "totalComments": 619,
-          "avgViews": 123765.0,
-          "engagementPerThousandViews": 113.63
+          "totalViews": 198342,
+          "totalLikes": 17773,
+          "totalComments": 408,
+          "avgViews": 198342.0,
+          "engagementPerThousandViews": 91.66
         },
         "music": {
           "videoCount": 2,
-          "totalViews": 23035900,
-          "totalLikes": 242387,
-          "totalComments": 32154,
-          "avgViews": 11517950.0,
-          "engagementPerThousandViews": 11.92
+          "totalViews": 25498121,
+          "totalLikes": 592441,
+          "totalComments": 31919,
+          "avgViews": 12749060.5,
+          "engagementPerThousandViews": 24.49
         },
         "shortform": {
           "videoCount": 1,
-          "totalViews": 283511,
-          "totalLikes": 26991,
-          "totalComments": 228,
-          "avgViews": 283511.0,
-          "engagementPerThousandViews": 96.01
+          "totalViews": 2182802,
+          "totalLikes": 124687,
+          "totalComments": 1041,
+          "avgViews": 2182802.0,
+          "engagementPerThousandViews": 57.6
         }
       },
       "videoTypeMetrics": {
         "behind": {
           "videoCount": 1,
-          "totalViews": 123765,
-          "totalLikes": 13444,
-          "totalComments": 619,
-          "avgViews": 123765.0,
-          "engagementPerThousandViews": 113.63
+          "totalViews": 198342,
+          "totalLikes": 17773,
+          "totalComments": 408,
+          "avgViews": 198342.0,
+          "engagementPerThousandViews": 91.66
         },
         "dance_practice": {
           "videoCount": 1,
-          "totalViews": 393152,
-          "totalLikes": 33570,
-          "totalComments": 1130,
-          "avgViews": 393152.0,
-          "engagementPerThousandViews": 88.26
+          "totalViews": 447818,
+          "totalLikes": 38444,
+          "totalComments": 975,
+          "avgViews": 447818.0,
+          "engagementPerThousandViews": 88.02
         },
         "external_content": {
           "videoCount": 1,
-          "totalViews": 1808817,
-          "totalLikes": 85477,
-          "totalComments": 2304,
-          "avgViews": 1808817.0,
-          "engagementPerThousandViews": 48.53
+          "totalViews": 1354202,
+          "totalLikes": 81130,
+          "totalComments": 1987,
+          "avgViews": 1354202.0,
+          "engagementPerThousandViews": 61.38
         },
         "official_mv": {
           "videoCount": 1,
-          "totalViews": 22642748,
-          "totalLikes": 208817,
-          "totalComments": 31024,
-          "avgViews": 22642748.0,
-          "engagementPerThousandViews": 10.59
+          "totalViews": 25050303,
+          "totalLikes": 553997,
+          "totalComments": 30944,
+          "avgViews": 25050303.0,
+          "engagementPerThousandViews": 23.35
         },
         "shorts": {
           "videoCount": 1,
-          "totalViews": 283511,
-          "totalLikes": 26991,
-          "totalComments": 228,
-          "avgViews": 283511.0,
-          "engagementPerThousandViews": 96.01
+          "totalViews": 2182802,
+          "totalLikes": 124687,
+          "totalComments": 1041,
+          "avgViews": 2182802.0,
+          "engagementPerThousandViews": 57.6
         }
       },
       "rawMetrics": {
         "videoCount": 5,
-        "totalViews": 25251993,
-        "totalLikes": 368299,
-        "totalComments": 35305,
-        "avgViews": 5050398.6,
-        "engagementPerThousandViews": 15.98
+        "totalViews": 29233467,
+        "totalLikes": 816031,
+        "totalComments": 35355,
+        "avgViews": 5846693.4,
+        "engagementPerThousandViews": 29.12
       },
       "topVideo": {
-        "videoId": "zGsj0fDHB_s",
-        "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
-        "publishedAt": "2026-06-08T08:59:06Z",
-        "viewCount": 22642748,
-        "likeCount": 208817,
-        "commentCount": 31024,
+        "videoId": "-q_S27LbNKU",
+        "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
+        "publishedAt": "2026-06-26T04:00:00Z",
+        "viewCount": 25050303,
+        "likeCount": 553997,
+        "commentCount": 30944,
         "videoType": "official_mv",
         "contentGroup": "music",
-        "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
+        "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
       },
       "topVideos": [
         {
-          "videoId": "zGsj0fDHB_s",
-          "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
-          "publishedAt": "2026-06-08T08:59:06Z",
-          "viewCount": 22642748,
-          "likeCount": 208817,
-          "commentCount": 31024,
+          "videoId": "-q_S27LbNKU",
+          "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
+          "publishedAt": "2026-06-26T04:00:00Z",
+          "viewCount": 25050303,
+          "likeCount": 553997,
+          "commentCount": 30944,
           "videoType": "official_mv",
           "contentGroup": "music",
-          "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
+          "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
         },
         {
-          "videoId": "-y34963xF3Y",
-          "title": "BOYNEXTDOOR(보이넥스트도어) 'VIRAL' (4K) | STUDIO CHOOM ORIGINAL",
-          "publishedAt": "2026-06-09T13:00:13Z",
-          "viewCount": 1808817,
-          "likeCount": 85477,
-          "commentCount": 2304,
-          "videoType": "external_content",
-          "contentGroup": "external",
-          "sourceUrl": "https://www.youtube.com/watch?v=-y34963xF3Y"
-        },
-        {
-          "videoId": "yDRY3UIC-MM",
-          "title": "'VIRAL’ 안무 연습 영상 | BOYNEXTDOOR (보이넥스트도어)",
-          "publishedAt": "2026-06-14T13:00:16Z",
-          "viewCount": 393152,
-          "likeCount": 33570,
-          "commentCount": 1130,
-          "videoType": "dance_practice",
-          "contentGroup": "music",
-          "sourceUrl": "https://www.youtube.com/watch?v=yDRY3UIC-MM"
-        },
-        {
-          "videoId": "eMGAcu-QMLg",
-          "title": "go viral #TWS #SHINYU #BOYNEXTDOOR #VIRAL #VIRAL_Challenge",
-          "publishedAt": "2026-06-13T14:00:38Z",
-          "viewCount": 283511,
-          "likeCount": 26991,
-          "commentCount": 228,
+          "videoId": "SdiavqMST-A",
+          "title": "ATEEZ(에이티즈) - 'BAD' Official MV CLIP #Shorts",
+          "publishedAt": "2026-06-26T04:30:01Z",
+          "viewCount": 2182802,
+          "likeCount": 124687,
+          "commentCount": 1041,
           "videoType": "shorts",
           "contentGroup": "shortform",
-          "sourceUrl": "https://www.youtube.com/watch?v=eMGAcu-QMLg"
+          "sourceUrl": "https://www.youtube.com/watch?v=SdiavqMST-A"
         },
         {
-          "videoId": "F4YMAUb1zXQ",
-          "title": "이 영상은 도배될 거야 네 피드에 | 'VIRAL' MV 비하인드ㅣBEHINDOOR",
-          "publishedAt": "2026-06-15T13:00:12Z",
-          "viewCount": 123765,
-          "likeCount": 13444,
-          "commentCount": 619,
+          "videoId": "ruP1U9eeyUk",
+          "title": "'BAD' By ATEEZ | Kelly Clarkson Show",
+          "publishedAt": "2026-07-01T23:00:00Z",
+          "viewCount": 1354202,
+          "likeCount": 81130,
+          "commentCount": 1987,
+          "videoType": "external_content",
+          "contentGroup": "external",
+          "sourceUrl": "https://www.youtube.com/watch?v=ruP1U9eeyUk"
+        },
+        {
+          "videoId": "dTK1EU3nUf4",
+          "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice (Moving Ver.)",
+          "publishedAt": "2026-07-01T10:00:02Z",
+          "viewCount": 447818,
+          "likeCount": 38444,
+          "commentCount": 975,
+          "videoType": "dance_practice",
+          "contentGroup": "music",
+          "sourceUrl": "https://www.youtube.com/watch?v=dTK1EU3nUf4"
+        },
+        {
+          "videoId": "0xsaO8kHt9U",
+          "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice Behind",
+          "publishedAt": "2026-07-03T11:00:00Z",
+          "viewCount": 198342,
+          "likeCount": 17773,
+          "commentCount": 408,
           "videoType": "behind",
           "contentGroup": "fandom",
-          "sourceUrl": "https://www.youtube.com/watch?v=F4YMAUb1zXQ"
+          "sourceUrl": "https://www.youtube.com/watch?v=0xsaO8kHt9U"
         }
       ],
       "meta": {
@@ -684,201 +684,201 @@
       "rank": 3
     },
     {
-      "artist": "에이티즈",
-      "fandexYoutubeFinalPoint": 29.18,
+      "artist": "보이넥스트도어",
+      "fandexYoutubeFinalPoint": 30.02,
       "coreSignal": "외부 확산 콘텐츠",
       "contentGroupPoints": {
         "external": {
           "label": "외부 확산 콘텐츠",
-          "point": 15.12,
+          "point": 18.35,
           "components": {
-            "viewPoint": 5.81,
-            "likePoint": 4.28,
-            "commentPoint": 3.16,
-            "engagementPoint": 1.88
+            "viewPoint": 8.44,
+            "likePoint": 4.69,
+            "commentPoint": 3.75,
+            "engagementPoint": 1.47
           }
         },
         "fandom": {
           "label": "팬덤 콘텐츠",
-          "point": 3.28,
+          "point": 3.56,
           "components": {
-            "viewPoint": 0.6,
-            "likePoint": 0.36,
-            "commentPoint": 0.25,
-            "engagementPoint": 2.08
+            "viewPoint": 0.4,
+            "likePoint": 0.28,
+            "commentPoint": 0.39,
+            "engagementPoint": 2.5
           }
         },
         "music": {
           "label": "공식 음악 콘텐츠",
-          "point": 10.12,
+          "point": 7.62,
           "components": {
-            "viewPoint": 4.57,
-            "likePoint": 1.38,
-            "commentPoint": 1.43,
-            "engagementPoint": 2.74
+            "viewPoint": 4.24,
+            "likePoint": 0.58,
+            "commentPoint": 1.46,
+            "engagementPoint": 1.34
           }
         },
         "shortform": {
           "label": "숏폼 확산",
-          "point": 0.66,
+          "point": 0.49,
           "components": {
-            "viewPoint": 0.03,
-            "likePoint": 0.15,
-            "commentPoint": 0.23,
-            "engagementPoint": 0.24
+            "viewPoint": 0.0,
+            "likePoint": 0.03,
+            "commentPoint": 0.05,
+            "engagementPoint": 0.4
           }
         }
       },
       "contentGroupMetrics": {
         "external": {
           "videoCount": 1,
-          "totalViews": 1244744,
-          "totalLikes": 78093,
-          "totalComments": 1942,
-          "avgViews": 1244744.0,
-          "engagementPerThousandViews": 64.3
+          "totalViews": 1823245,
+          "totalLikes": 85711,
+          "totalComments": 2305,
+          "avgViews": 1823245.0,
+          "engagementPerThousandViews": 48.27
         },
         "fandom": {
           "videoCount": 1,
-          "totalViews": 187758,
-          "totalLikes": 17305,
-          "totalComments": 403,
-          "avgViews": 187758.0,
-          "engagementPerThousandViews": 94.31
+          "totalViews": 124124,
+          "totalLikes": 13470,
+          "totalComments": 619,
+          "avgViews": 124124.0,
+          "engagementPerThousandViews": 113.51
         },
         "music": {
           "videoCount": 2,
-          "totalViews": 24847451,
-          "totalLikes": 575136,
-          "totalComments": 31501,
-          "avgViews": 12423725.5,
-          "engagementPerThousandViews": 24.41
+          "totalViews": 23065076,
+          "totalLikes": 242945,
+          "totalComments": 32178,
+          "avgViews": 11532538.0,
+          "engagementPerThousandViews": 11.93
         },
         "shortform": {
           "videoCount": 1,
-          "totalViews": 2066253,
-          "totalLikes": 118798,
-          "totalComments": 1024,
-          "avgViews": 2066253.0,
-          "engagementPerThousandViews": 57.99
+          "totalViews": 287002,
+          "totalLikes": 27276,
+          "totalComments": 228,
+          "avgViews": 287002.0,
+          "engagementPerThousandViews": 95.83
         }
       },
       "videoTypeMetrics": {
         "behind": {
           "videoCount": 1,
-          "totalViews": 187758,
-          "totalLikes": 17305,
-          "totalComments": 403,
-          "avgViews": 187758.0,
-          "engagementPerThousandViews": 94.31
+          "totalViews": 124124,
+          "totalLikes": 13470,
+          "totalComments": 619,
+          "avgViews": 124124.0,
+          "engagementPerThousandViews": 113.51
         },
         "dance_practice": {
           "videoCount": 1,
-          "totalViews": 418892,
-          "totalLikes": 37404,
-          "totalComments": 965,
-          "avgViews": 418892.0,
-          "engagementPerThousandViews": 91.6
+          "totalViews": 396679,
+          "totalLikes": 33689,
+          "totalComments": 1130,
+          "avgViews": 396679.0,
+          "engagementPerThousandViews": 87.78
         },
         "external_content": {
           "videoCount": 1,
-          "totalViews": 1244744,
-          "totalLikes": 78093,
-          "totalComments": 1942,
-          "avgViews": 1244744.0,
-          "engagementPerThousandViews": 64.3
+          "totalViews": 1823245,
+          "totalLikes": 85711,
+          "totalComments": 2305,
+          "avgViews": 1823245.0,
+          "engagementPerThousandViews": 48.27
         },
         "official_mv": {
           "videoCount": 1,
-          "totalViews": 24428559,
-          "totalLikes": 537732,
-          "totalComments": 30536,
-          "avgViews": 24428559.0,
-          "engagementPerThousandViews": 23.26
+          "totalViews": 22668397,
+          "totalLikes": 209256,
+          "totalComments": 31048,
+          "avgViews": 22668397.0,
+          "engagementPerThousandViews": 10.6
         },
         "shorts": {
           "videoCount": 1,
-          "totalViews": 2066253,
-          "totalLikes": 118798,
-          "totalComments": 1024,
-          "avgViews": 2066253.0,
-          "engagementPerThousandViews": 57.99
+          "totalViews": 287002,
+          "totalLikes": 27276,
+          "totalComments": 228,
+          "avgViews": 287002.0,
+          "engagementPerThousandViews": 95.83
         }
       },
       "rawMetrics": {
         "videoCount": 5,
-        "totalViews": 28346206,
-        "totalLikes": 789332,
-        "totalComments": 34870,
-        "avgViews": 5669241.2,
-        "engagementPerThousandViews": 29.08
+        "totalViews": 25299447,
+        "totalLikes": 369402,
+        "totalComments": 35330,
+        "avgViews": 5059889.4,
+        "engagementPerThousandViews": 16.0
       },
       "topVideo": {
-        "videoId": "-q_S27LbNKU",
-        "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
-        "publishedAt": "2026-06-26T04:00:00Z",
-        "viewCount": 24428559,
-        "likeCount": 537732,
-        "commentCount": 30536,
+        "videoId": "zGsj0fDHB_s",
+        "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
+        "publishedAt": "2026-06-08T08:59:06Z",
+        "viewCount": 22668397,
+        "likeCount": 209256,
+        "commentCount": 31048,
         "videoType": "official_mv",
         "contentGroup": "music",
-        "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
+        "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
       },
       "topVideos": [
         {
-          "videoId": "-q_S27LbNKU",
-          "title": "ATEEZ(에이티즈) - 'BAD' Official MV",
-          "publishedAt": "2026-06-26T04:00:00Z",
-          "viewCount": 24428559,
-          "likeCount": 537732,
-          "commentCount": 30536,
+          "videoId": "zGsj0fDHB_s",
+          "title": "BOYNEXTDOOR (보이넥스트도어) 'VIRAL' Official MV",
+          "publishedAt": "2026-06-08T08:59:06Z",
+          "viewCount": 22668397,
+          "likeCount": 209256,
+          "commentCount": 31048,
           "videoType": "official_mv",
           "contentGroup": "music",
-          "sourceUrl": "https://www.youtube.com/watch?v=-q_S27LbNKU"
+          "sourceUrl": "https://www.youtube.com/watch?v=zGsj0fDHB_s"
         },
         {
-          "videoId": "SdiavqMST-A",
-          "title": "ATEEZ(에이티즈) - 'BAD' Official MV CLIP #Shorts",
-          "publishedAt": "2026-06-26T04:30:01Z",
-          "viewCount": 2066253,
-          "likeCount": 118798,
-          "commentCount": 1024,
-          "videoType": "shorts",
-          "contentGroup": "shortform",
-          "sourceUrl": "https://www.youtube.com/watch?v=SdiavqMST-A"
-        },
-        {
-          "videoId": "ruP1U9eeyUk",
-          "title": "'BAD' By ATEEZ | Kelly Clarkson Show",
-          "publishedAt": "2026-07-01T23:00:00Z",
-          "viewCount": 1244744,
-          "likeCount": 78093,
-          "commentCount": 1942,
+          "videoId": "-y34963xF3Y",
+          "title": "BOYNEXTDOOR(보이넥스트도어) 'VIRAL' (4K) | STUDIO CHOOM ORIGINAL",
+          "publishedAt": "2026-06-09T13:00:13Z",
+          "viewCount": 1823245,
+          "likeCount": 85711,
+          "commentCount": 2305,
           "videoType": "external_content",
           "contentGroup": "external",
-          "sourceUrl": "https://www.youtube.com/watch?v=ruP1U9eeyUk"
+          "sourceUrl": "https://www.youtube.com/watch?v=-y34963xF3Y"
         },
         {
-          "videoId": "dTK1EU3nUf4",
-          "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice (Moving Ver.)",
-          "publishedAt": "2026-07-01T10:00:02Z",
-          "viewCount": 418892,
-          "likeCount": 37404,
-          "commentCount": 965,
+          "videoId": "yDRY3UIC-MM",
+          "title": "'VIRAL’ 안무 연습 영상 | BOYNEXTDOOR (보이넥스트도어)",
+          "publishedAt": "2026-06-14T13:00:16Z",
+          "viewCount": 396679,
+          "likeCount": 33689,
+          "commentCount": 1130,
           "videoType": "dance_practice",
           "contentGroup": "music",
-          "sourceUrl": "https://www.youtube.com/watch?v=dTK1EU3nUf4"
+          "sourceUrl": "https://www.youtube.com/watch?v=yDRY3UIC-MM"
         },
         {
-          "videoId": "0xsaO8kHt9U",
-          "title": "ATEEZ(에이티즈) - 'BAD' Dance Practice Behind",
-          "publishedAt": "2026-07-03T11:00:00Z",
-          "viewCount": 187758,
-          "likeCount": 17305,
-          "commentCount": 403,
+          "videoId": "eMGAcu-QMLg",
+          "title": "go viral #TWS #SHINYU #BOYNEXTDOOR #VIRAL #VIRAL_Challenge",
+          "publishedAt": "2026-06-13T14:00:38Z",
+          "viewCount": 287002,
+          "likeCount": 27276,
+          "commentCount": 228,
+          "videoType": "shorts",
+          "contentGroup": "shortform",
+          "sourceUrl": "https://www.youtube.com/watch?v=eMGAcu-QMLg"
+        },
+        {
+          "videoId": "F4YMAUb1zXQ",
+          "title": "이 영상은 도배될 거야 네 피드에 | 'VIRAL' MV 비하인드ㅣBEHINDOOR",
+          "publishedAt": "2026-06-15T13:00:12Z",
+          "viewCount": 124124,
+          "likeCount": 13470,
+          "commentCount": 619,
           "videoType": "behind",
           "contentGroup": "fandom",
-          "sourceUrl": "https://www.youtube.com/watch?v=0xsaO8kHt9U"
+          "sourceUrl": "https://www.youtube.com/watch?v=F4YMAUb1zXQ"
         }
       ],
       "meta": {

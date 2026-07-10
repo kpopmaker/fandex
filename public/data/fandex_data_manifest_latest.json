@@ -1,6 +1,6 @@
 {
   "version": "fandex_export_to_site_v1",
-  "createdAt": "2026-07-09T21:49:08",
+  "createdAt": "2026-07-10T17:32:33",
   "sourceVersion": "fandex_master_v6_music_chart_uncapped_cumulative",
   "scoreMode": "uncapped_cumulative_source_points",
   "copiedFiles": [
@@ -14,22 +14,22 @@
     {
       "rank": 1,
       "artist": "아이유",
-      "fandexFinalPoint": 500.29
+      "fandexFinalPoint": 500.35
     },
     {
       "rank": 2,
       "artist": "에스파",
-      "fandexFinalPoint": 485.38
+      "fandexFinalPoint": 485.46
     },
     {
       "rank": 3,
       "artist": "에이티즈",
-      "fandexFinalPoint": 398.95
+      "fandexFinalPoint": 399.82
     },
     {
       "rank": 4,
       "artist": "보이넥스트도어",
-      "fandexFinalPoint": 356.31
+      "fandexFinalPoint": 356.36
     }
   ]
 }

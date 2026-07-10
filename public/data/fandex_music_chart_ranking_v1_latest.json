@@ -1,6 +1,6 @@
 {
   "version": "fandex_music_chart_v1_manual_seed",
-  "createdAt": "2026-07-09T21:43:32",
+  "createdAt": "2026-07-10T17:32:33",
   "scoreScale": "uncapped_cumulative_points",
   "scoreMode": "uncapped_cumulative_chart_entries",
   "inputFile": "music_chart_seed_v1.csv",
