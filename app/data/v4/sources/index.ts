@@ -34,3 +34,5 @@ export * from './sourceIngestionDraftTypes';
 export * from './sourceIngestionDraftPreview';
 export * from './sourceProviderSyncPolicyTypes';
 export * from './sourceProviderSyncPolicyPreview';
+export * from './sourceStorageBoundaryTypes';
+export * from './sourceStorageBoundaryPreview';
