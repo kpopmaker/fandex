@@ -42,3 +42,5 @@ export * from './sourceWriteAuditTypes';
 export * from './sourceWriteAuditPreview';
 export * from './sourceRollbackReadinessTypes';
 export * from './sourceRollbackReadinessPreview';
+export * from './sourceReadinessDashboardTypes';
+export * from './sourceReadinessDashboardPreview';
