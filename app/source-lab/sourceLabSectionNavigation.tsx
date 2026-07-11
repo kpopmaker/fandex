@@ -14,16 +14,31 @@ const sections = [
 ] as const;
 
 export default function SourceLabSectionNavigation() {
+  const safetyNotes = [
+    'No external ingestion',
+    'No provider sync',
+    'No write',
+    'No audit log storage',
+    'No rollback',
+    'No score · ranking · chart application',
+  ];
+
   return (
     <nav aria-label="Source Lab sections" className="bg-slate-50 px-5 pb-10 text-slate-950">
       <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-700">Source Lab navigation</p>
-            <h2 className="mt-2 text-xl font-black">Jump to a source pipeline section</h2>
-            <p className="mt-2 text-sm font-bold leading-6 text-slate-600">Source candidate와 signal preview부터 read-only readiness pipeline까지 현재 페이지의 흐름을 빠르게 탐색한다.</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-700">Source Lab · preview boundary</p>
+            <h2 className="mt-2 text-xl font-black">Explore the read-only source pipeline</h2>
+            <p className="mt-2 max-w-3xl text-sm font-bold leading-6 text-slate-600">Source Lab은 실제 수집·저장·반영 전에 fixture와 helper 결과를 검토하는 preview 공간이다. 아래 링크로 candidate/signal 검토부터 readiness 단계까지 이동할 수 있다.</p>
           </div>
-          <p className="rounded-xl bg-amber-50 px-4 py-3 text-xs font-black leading-5 text-amber-900">설명용 navigation이며 실제 pipeline 실행 상태가 아니다.</p>
+          <p className="max-w-sm rounded-xl bg-amber-50 px-4 py-3 text-xs font-black leading-5 text-amber-900">All sections are read-only previews. Role badges and dashboard status are descriptive UI, not execution state.</p>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2" aria-label="Source Lab preview safety boundaries">
+          {safetyNotes.map((note) => (
+            <span key={note} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-wide text-slate-600">{note}</span>
+          ))}
         </div>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -42,10 +57,10 @@ export default function SourceLabSectionNavigation() {
           ))}
         </div>
 
-        <div className="mt-4 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-black leading-6 text-white">
-          <span className="text-slate-400">Current pipeline flow · </span>
-          Draft → Sync Policy → Storage Boundary → Write Safety → Write Audit → Rollback Readiness
-          <p className="mt-2 border-t border-slate-700 pt-2 text-xs font-bold text-slate-300">All Source Lab sections are read-only previews. No ingestion, sync, write, audit log, or rollback is executed here.</p>
+        <div className="mt-4 rounded-2xl bg-slate-950 px-4 py-3 text-white">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Preview flow · no steps are executed</p>
+          <p className="mt-1 text-sm font-black leading-6">Draft → Sync Policy → Storage Boundary → Write Safety → Write Audit → Rollback Readiness</p>
+          <p className="mt-2 border-t border-slate-700 pt-2 text-xs font-bold leading-5 text-slate-300">No external source call, persistence, recovery action, or FANDEX score/ranking/chart application occurs in Source Lab.</p>
         </div>
       </div>
     </nav>
