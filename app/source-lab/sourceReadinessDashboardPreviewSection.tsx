@@ -41,13 +41,13 @@ function SummaryCard({ label, value }: { label: string; value: string | number }
   );
 }
 
-const stageCopy: Record<FandexSourceReadinessStageKey, { title: string; subtitle: string }> = {
-  ingestion_draft: { title: 'Ingestion Draft', subtitle: 'fixture source ingestion draft readiness' },
-  provider_sync_policy: { title: 'Provider Sync Policy', subtitle: 'provider cadence and sync policy readiness' },
-  storage_boundary: { title: 'Storage Boundary', subtitle: 'dry-run storage boundary readiness' },
-  write_safety: { title: 'Write Safety', subtitle: 'write gate and safety readiness' },
-  write_audit: { title: 'Write Audit', subtitle: 'audit checkpoint readiness' },
-  rollback_readiness: { title: 'Rollback Readiness', subtitle: 'rollback evidence readiness' },
+const stageCopy: Record<FandexSourceReadinessStageKey, { order: string; title: string; subtitle: string }> = {
+  ingestion_draft: { order: '01', title: 'Ingestion Draft', subtitle: 'fixture source ingestion draft readiness' },
+  provider_sync_policy: { order: '02', title: 'Provider Sync Policy', subtitle: 'provider cadence and sync policy readiness' },
+  storage_boundary: { order: '03', title: 'Storage Boundary', subtitle: 'dry-run storage boundary readiness' },
+  write_safety: { order: '04', title: 'Write Safety', subtitle: 'write gate and safety readiness' },
+  write_audit: { order: '05', title: 'Write Audit', subtitle: 'audit checkpoint readiness' },
+  rollback_readiness: { order: '06', title: 'Rollback Readiness', subtitle: 'rollback evidence readiness' },
 };
 
 function getStageMetadata() {
@@ -69,40 +69,52 @@ function getStageMetadata() {
 
 function StageCard({ card, metadata }: { card: FandexSourceReadinessStageCard; metadata: ReturnType<typeof getStageMetadata>[FandexSourceReadinessStageKey] }) {
   const copy = stageCopy[card.stageKey];
+  const counts = [
+    ['ready', card.readyCount, 'text-emerald-700'],
+    ['review', card.reviewCount, 'text-amber-700'],
+    ['limited', card.limitedCount, 'text-orange-700'],
+    ['blocked', card.blockedCount, 'text-rose-700'],
+    ['skipped', card.skippedCount, 'text-slate-500'],
+  ] as const;
   return (
-    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="font-mono text-xs font-black text-indigo-700">{getSourceReadinessStageLabel(card.stageKey)}</p>
-          <h3 className="mt-2 text-lg font-black">{copy.title}</h3>
-          <p className="mt-1 text-sm font-bold text-slate-500">{copy.subtitle}</p>
+        <div className="flex items-start gap-3">
+          <span className="rounded-xl bg-slate-950 px-3 py-2 font-mono text-sm font-black text-white">{copy.order}</span>
+          <div>
+            <p className="font-mono text-xs font-black text-indigo-700">{getSourceReadinessStageLabel(card.stageKey)}</p>
+            <h3 className="mt-1 text-lg font-black">{copy.title}</h3>
+            <p className="mt-1 text-sm font-bold text-slate-500">{copy.subtitle}</p>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700">{getSourceReadinessStageStatusLabel(card.stageStatus)}</span>
-          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700">risk {getSourceReadinessRiskLevelLabel(card.riskLevel)}</span>
+          <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-black text-indigo-700">{getSourceReadinessStageStatusLabel(card.stageStatus)}</span>
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black text-amber-800">risk {getSourceReadinessRiskLevelLabel(card.riskLevel)}</span>
+          <span className={card.shapeCheckPassed ? 'rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700' : 'rounded-full bg-rose-50 px-3 py-1 text-xs font-black text-rose-700'}>
+            shape {card.shapeCheckPassed ? 'passed' : 'failed'}
+          </span>
         </div>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Mini label="itemCount" value={String(card.itemCount)} />
-        <Mini label="groupCount" value={String(metadata.groupCount)} />
-        <Mini label="providerCount" value={String(metadata.providerCount)} />
-        <Mini label="readyCount" value={String(card.readyCount)} />
-        <Mini label="reviewCount" value={String(card.reviewCount)} />
-        <Mini label="limitedCount" value={String(card.limitedCount)} />
-        <Mini label="blockedCount" value={String(card.blockedCount)} />
-        <Mini label="skippedCount" value={String(card.skippedCount)} />
-        <Mini label="warningCount" value={String(card.warningCount)} />
-        <Mini label="manualReviewCount" value={String(card.manualReviewCount)} />
-        <Mini label="shapeCheckPassed" value={String(card.shapeCheckPassed)} />
-        <Mini label="previewOnly" value={String(card.previewOnly)} />
-        <Mini label="topReadyKeys" value={formatList(metadata.topReadyKeys)} />
-        <Mini label="topReviewKeys" value={formatList(metadata.topReviewKeys)} />
-        <Mini label="topBlockedKeys" value={formatList(metadata.topBlockedKeys)} />
-        <Mini label="reasonCodes" value={formatList(card.reasonCodes.map(getSourceReadinessReasonLabel))} />
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+        {counts.map(([label, value, color]) => (
+          <div key={label} className="rounded-xl bg-slate-50 p-3 text-center">
+            <p className="text-[11px] font-black uppercase tracking-wide text-slate-400">{label}</p>
+            <p className={`mt-1 font-mono text-xl font-black ${color}`}>{value}</p>
+          </div>
+        ))}
       </div>
-      <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 rounded-xl bg-slate-50 px-4 py-3 text-xs font-black text-slate-600">
+        <span>items {card.itemCount}</span><span>groups {metadata.groupCount}</span><span>providers {metadata.providerCount}</span><span>warnings {card.warningCount}</span><span>manual review {card.manualReviewCount}</span><span>preview only {String(card.previewOnly)}</span>
+      </div>
+      <div className="mt-3 grid gap-2 lg:grid-cols-3">
+        <Mini label="topReadyKeys" value={formatList(metadata.topReadyKeys, 4)} />
+        <Mini label="topReviewKeys" value={formatList(metadata.topReviewKeys, 4)} />
+        <Mini label="topBlockedKeys" value={formatList(metadata.topBlockedKeys, 4)} />
+      </div>
+      <div className="mt-3 border-t border-slate-100 pt-3">
         <p className="text-sm font-black text-slate-900">{card.summaryLabel}</p>
         <p className="mt-1 text-sm font-bold leading-6 text-slate-600">{card.summaryNote}</p>
+        <p className="mt-2 text-xs font-bold text-slate-500">{formatList(card.reasonCodes.map(getSourceReadinessReasonLabel), 6)}</p>
       </div>
     </article>
   );
@@ -123,10 +135,8 @@ export default function SourceReadinessDashboardPreviewSection() {
   const overallStatus = summary.blockedStageCount > 0 ? 'blocked_preview' : summary.reviewStageCount > 0 ? 'review_required' : summary.limitedStageCount > 0 ? 'limited_preview' : summary.stageCount === summary.skippedStageCount ? 'skipped' : 'ready_preview';
   const overallRisk = summary.blockedRiskStageCount > 0 ? 'blocked' : summary.highRiskStageCount > 0 ? 'high' : summary.mediumRiskStageCount > 0 ? 'medium' : 'low';
   const errorCount = shapeCheck.issues.filter((issue) => issue.severity === 'error').length;
-  const summaryCards = [
-    ['stageCount', summary.stageCount], ['readyStageCount', summary.readyStageCount], ['reviewStageCount', summary.reviewStageCount], ['limitedStageCount', summary.limitedStageCount], ['blockedStageCount', summary.blockedStageCount], ['skippedStageCount', summary.skippedStageCount],
-    ['totalItemCount', totalItemCount], ['totalProviderCount', totalProviderCount], ['totalWarningCount', totalWarningCount], ['totalManualReviewCount', totalManualReviewCount], ['shapeCheckPassedCount', shapeCheckPassedCount], ['shapeCheckFailedCount', shapeCheckFailedCount],
-    ['overallStatus', getSourceReadinessStageStatusLabel(overallStatus)], ['overallRiskLevel', getSourceReadinessRiskLevelLabel(overallRisk)],
+  const headlineMetrics = [
+    ['stages', summary.stageCount], ['items', totalItemCount], ['providers', totalProviderCount], ['warnings', totalWarningCount], ['manual review', totalManualReviewCount],
   ] as const;
 
   return (
@@ -142,11 +152,27 @@ export default function SourceReadinessDashboardPreviewSection() {
               <p>실제 ingestion, sync, write, audit log, rollback 없이 summary와 shape check만 표시한다.</p>
             </div>
           </div>
-          <span className={shapeCheck.isValid ? 'rounded-full bg-emerald-50 px-4 py-2 text-xs font-black text-emerald-700' : 'rounded-full bg-rose-50 px-4 py-2 text-xs font-black text-rose-700'}>{shapeCheck.isValid ? 'readiness dashboard passed' : 'readiness dashboard failed'}</span>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-2xl bg-indigo-700 px-5 py-4 text-white">
+              <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200">overall status</p>
+              <p className="mt-1 text-lg font-black">{getSourceReadinessStageStatusLabel(overallStatus)}</p>
+            </div>
+            <div className="rounded-2xl bg-slate-950 px-5 py-4 text-white">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">overall risk</p>
+              <p className="mt-1 text-lg font-black">{getSourceReadinessRiskLevelLabel(overallRisk)}</p>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-          {summaryCards.map(([label, value]) => <SummaryCard key={label} label={label} value={value} />)}
+        <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-5">
+          {headlineMetrics.map(([label, value]) => <SummaryCard key={label} label={label} value={value} />)}
+        </div>
+
+        <div className="mt-3 grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Mini label="shape checks passed" value={`${shapeCheckPassedCount} / ${stageCards.length}`} />
+          <Mini label="shape checks failed" value={String(shapeCheckFailedCount)} />
+          <Mini label="dashboard health" value={shapeCheck.isValid ? 'passed' : 'failed'} />
+          <Mini label="stage status mix" value={`ready ${summary.readyStageCount} · review ${summary.reviewStageCount} · limited ${summary.limitedStageCount} · blocked ${summary.blockedStageCount} · skipped ${summary.skippedStageCount}`} />
         </div>
 
         <div className="mt-5 grid gap-3 lg:grid-cols-3">
