@@ -77,7 +77,7 @@ function StageCard({ card, metadata }: { card: FandexSourceReadinessStageCard; m
     ['skipped', card.skippedCount, 'text-slate-500'],
   ] as const;
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
           <span className="shrink-0 rounded-xl bg-slate-950 px-3 py-2 font-mono text-sm font-black text-white">{copy.order}</span>
@@ -95,7 +95,7 @@ function StageCard({ card, metadata }: { card: FandexSourceReadinessStageCard; m
           </span>
         </div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5 [&>div:last-child]:col-span-2 sm:[&>div:last-child]:col-span-1">
         {counts.map(([label, value, color]) => (
           <div key={label} className="rounded-xl bg-slate-50 p-3 text-center">
             <p className="text-[11px] font-black uppercase tracking-wide text-slate-400">{label}</p>
@@ -146,19 +146,18 @@ export default function SourceReadinessDashboardPreviewSection() {
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-700">v23 · source pipeline 전체 readiness summary</p>
             <h2 className="mt-2 text-xl font-black leading-7 sm:text-2xl">Source Readiness Dashboard Preview</h2>
-            <div className="mt-2 max-w-2xl space-y-1 text-sm font-bold leading-7 text-slate-600">
-              <p>v17~v22 source pipeline preview를 한 화면에서 요약하는 read-only dashboard다.</p>
-              <p>dashboard status는 실제 실행 가능 여부가 아니다.</p>
-              <p>실제 ingestion, sync, write, audit log, rollback 없이 summary와 shape check만 표시한다.</p>
+            <div className="mt-2 max-w-2xl space-y-1 text-sm font-bold leading-6 text-slate-600 sm:leading-7">
+              <p>v17~v22 source pipeline의 fixture/helper output을 요약하는 read-only dashboard다.</p>
+              <p>Status와 shape check는 preview이며 실제 ingestion, sync, write, audit log, rollback은 실행하지 않는다.</p>
             </div>
           </div>
           <div className="grid w-full gap-2 sm:grid-cols-2 lg:gap-3">
             <div className="rounded-2xl bg-indigo-700 px-4 py-4 text-white sm:px-5">
-              <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200">overall status</p>
+              <p className="text-[11px] font-black uppercase tracking-widest text-indigo-200">overall status</p>
               <p className="mt-1 text-lg font-black">{getSourceReadinessStageStatusLabel(overallStatus)}</p>
             </div>
             <div className="rounded-2xl bg-slate-950 px-4 py-4 text-white sm:px-5">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">overall risk</p>
+              <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">overall risk</p>
               <p className="mt-1 text-lg font-black">{getSourceReadinessRiskLevelLabel(overallRisk)}</p>
             </div>
           </div>
@@ -189,7 +188,7 @@ export default function SourceReadinessDashboardPreviewSection() {
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
           <p className="text-xs font-black uppercase tracking-[0.12em] text-amber-800">safety notes</p>
           <p className="mt-2 text-sm font-bold leading-6 text-amber-950">{formatList(preview.reasonCodes.map(getSourceReadinessReasonLabel), 10)}</p>
-          <p className="mt-2 text-sm font-bold leading-6 text-amber-950">fixture/helper 기반 표시 전용이며 실제 수집, provider sync, write, audit log, rollback 또는 FANDEX 반영은 없다.</p>
+          <p className="mt-2 text-sm font-bold leading-6 text-amber-950">Reason codes and status labels describe fixture/helper output only; no FANDEX application occurs.</p>
         </div>
 
         <div className={shapeCheck.isValid ? 'mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4' : 'mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4'}>
