@@ -140,19 +140,19 @@ export default function SourceReadinessDashboardPreviewSection() {
   ] as const;
 
   return (
-    <section className="bg-slate-50 px-4 pb-8 text-slate-950 sm:px-5 sm:pb-10">
-      <div className="mx-auto max-w-7xl rounded-2xl border border-indigo-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+    <section className="bg-slate-50 px-4 pb-8 text-slate-950 sm:px-5 sm:pb-10 lg:px-8 lg:pb-12">
+      <div className="mx-auto max-w-6xl rounded-2xl border border-indigo-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 lg:p-8">
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.7fr)] lg:items-end lg:gap-8">
+          <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-700">v23 · source pipeline 전체 readiness summary</p>
             <h2 className="mt-2 text-xl font-black leading-7 sm:text-2xl">Source Readiness Dashboard Preview</h2>
-            <div className="mt-2 max-w-4xl space-y-1 text-sm font-bold leading-7 text-slate-600">
+            <div className="mt-2 max-w-2xl space-y-1 text-sm font-bold leading-7 text-slate-600">
               <p>v17~v22 source pipeline preview를 한 화면에서 요약하는 read-only dashboard다.</p>
               <p>dashboard status는 실제 실행 가능 여부가 아니다.</p>
               <p>실제 ingestion, sync, write, audit log, rollback 없이 summary와 shape check만 표시한다.</p>
             </div>
           </div>
-          <div className="grid w-full gap-2 sm:grid-cols-2 lg:w-auto">
+          <div className="grid w-full gap-2 sm:grid-cols-2 lg:gap-3">
             <div className="rounded-2xl bg-indigo-700 px-4 py-4 text-white sm:px-5">
               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200">overall status</p>
               <p className="mt-1 text-lg font-black">{getSourceReadinessStageStatusLabel(overallStatus)}</p>
@@ -164,26 +164,26 @@ export default function SourceReadinessDashboardPreviewSection() {
           </div>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:mt-7 lg:grid-cols-5 lg:gap-4">
           {headlineMetrics.map(([label, value]) => <SummaryCard key={label} label={label} value={value} />)}
         </div>
 
-        <div className="mt-3 grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-3 grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2 lg:mt-4 lg:grid-cols-[repeat(3,minmax(0,0.75fr))_minmax(0,1.75fr)] lg:gap-4 lg:p-5">
           <Mini label="shape checks passed" value={`${shapeCheckPassedCount} / ${stageCards.length}`} />
           <Mini label="shape checks failed" value={String(shapeCheckFailedCount)} />
           <Mini label="dashboard health" value={shapeCheck.isValid ? 'passed' : 'failed'} />
           <Mini label="stage status mix" value={`ready ${summary.readyStageCount} · review ${summary.reviewStageCount} · limited ${summary.limitedStageCount} · blocked ${summary.blockedStageCount} · skipped ${summary.skippedStageCount}`} />
         </div>
 
-        <div className="mt-5 grid gap-3 lg:grid-cols-3">
+        <div className="mt-5 grid gap-3 lg:mt-6 lg:grid-cols-3 lg:gap-4">
           <Mini label="readyStageKeys" value={formatList(summary.readyStageKeys.map(getSourceReadinessStageLabel))} />
           <Mini label="reviewStageKeys" value={formatList(summary.reviewStageKeys.map(getSourceReadinessStageLabel))} />
           <Mini label="blockedStageKeys" value={formatList(summary.blockedStageKeys.map(getSourceReadinessStageLabel))} />
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 lg:mt-8">
           <h3 className="text-lg font-black">readiness stage card preview · {stageCards.length} / 6</h3>
-          <div className="mt-3 grid gap-4">{stageCards.map((card) => <StageCard key={card.stageKey} card={card} metadata={metadata[card.stageKey]} />)}</div>
+          <div className="mt-3 grid gap-4 lg:mt-4 lg:gap-5">{stageCards.map((card) => <StageCard key={card.stageKey} card={card} metadata={metadata[card.stageKey]} />)}</div>
         </div>
 
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
