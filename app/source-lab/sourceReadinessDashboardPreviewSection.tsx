@@ -34,9 +34,9 @@ function Mini({ label, value }: { label: string; value: string }) {
 
 function SummaryCard({ label, value }: { label: string; value: string | number }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">{label}</p>
-      <p className="mt-2 break-words font-mono text-2xl font-black text-slate-950">{value}</p>
+      <p className="mt-2 break-words font-mono text-xl font-black text-slate-950 sm:text-2xl">{value}</p>
     </article>
   );
 }
@@ -77,14 +77,14 @@ function StageCard({ card, metadata }: { card: FandexSourceReadinessStageCard; m
     ['skipped', card.skippedCount, 'text-slate-500'],
   ] as const;
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div className="flex items-start gap-3">
-          <span className="rounded-xl bg-slate-950 px-3 py-2 font-mono text-sm font-black text-white">{copy.order}</span>
-          <div>
+        <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
+          <span className="shrink-0 rounded-xl bg-slate-950 px-3 py-2 font-mono text-sm font-black text-white">{copy.order}</span>
+          <div className="min-w-0">
             <p className="font-mono text-xs font-black text-indigo-700">{getSourceReadinessStageLabel(card.stageKey)}</p>
-            <h3 className="mt-1 text-lg font-black">{copy.title}</h3>
-            <p className="mt-1 text-sm font-bold text-slate-500">{copy.subtitle}</p>
+            <h3 className="mt-1 break-words text-lg font-black leading-6">{copy.title}</h3>
+            <p className="mt-1 break-words text-sm font-bold leading-6 text-slate-500">{copy.subtitle}</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -103,7 +103,7 @@ function StageCard({ card, metadata }: { card: FandexSourceReadinessStageCard; m
           </div>
         ))}
       </div>
-      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 rounded-xl bg-slate-50 px-4 py-3 text-xs font-black text-slate-600">
+      <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 rounded-xl bg-slate-50 px-4 py-3 text-xs font-black text-slate-600 sm:flex sm:flex-wrap sm:gap-x-5 sm:gap-y-1">
         <span>items {card.itemCount}</span><span>groups {metadata.groupCount}</span><span>providers {metadata.providerCount}</span><span>warnings {card.warningCount}</span><span>manual review {card.manualReviewCount}</span><span>preview only {String(card.previewOnly)}</span>
       </div>
       <div className="mt-3 grid gap-2 lg:grid-cols-3">
@@ -140,31 +140,31 @@ export default function SourceReadinessDashboardPreviewSection() {
   ] as const;
 
   return (
-    <section className="bg-slate-50 px-5 pb-10 text-slate-950">
-      <div className="mx-auto max-w-7xl rounded-3xl border border-indigo-200 bg-white p-6 shadow-sm">
+    <section className="bg-slate-50 px-4 pb-8 text-slate-950 sm:px-5 sm:pb-10">
+      <div className="mx-auto max-w-7xl rounded-2xl border border-indigo-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-700">v23 · source pipeline 전체 readiness summary</p>
-            <h2 className="mt-2 text-2xl font-black">Source Readiness Dashboard Preview</h2>
+            <h2 className="mt-2 text-xl font-black leading-7 sm:text-2xl">Source Readiness Dashboard Preview</h2>
             <div className="mt-2 max-w-4xl space-y-1 text-sm font-bold leading-7 text-slate-600">
               <p>v17~v22 source pipeline preview를 한 화면에서 요약하는 read-only dashboard다.</p>
               <p>dashboard status는 실제 실행 가능 여부가 아니다.</p>
               <p>실제 ingestion, sync, write, audit log, rollback 없이 summary와 shape check만 표시한다.</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-2xl bg-indigo-700 px-5 py-4 text-white">
+          <div className="grid w-full gap-2 sm:grid-cols-2 lg:w-auto">
+            <div className="rounded-2xl bg-indigo-700 px-4 py-4 text-white sm:px-5">
               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200">overall status</p>
               <p className="mt-1 text-lg font-black">{getSourceReadinessStageStatusLabel(overallStatus)}</p>
             </div>
-            <div className="rounded-2xl bg-slate-950 px-5 py-4 text-white">
+            <div className="rounded-2xl bg-slate-950 px-4 py-4 text-white sm:px-5">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">overall risk</p>
               <p className="mt-1 text-lg font-black">{getSourceReadinessRiskLevelLabel(overallRisk)}</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-5">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {headlineMetrics.map(([label, value]) => <SummaryCard key={label} label={label} value={value} />)}
         </div>
 
