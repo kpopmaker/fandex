@@ -14,6 +14,11 @@ const sections = [
 ] as const;
 
 export default function SourceLabSectionNavigation() {
+  const releaseHighlights = [
+    'Readiness, safety, rollback, and dashboard previews organized',
+    'Navigation and mobile/desktop presentation polished',
+    'Manual smoke notes separated from this scope summary',
+  ];
   const safetyNotes = [
     'No ingestion or provider sync',
     'No write or audit log storage',
@@ -44,6 +49,22 @@ export default function SourceLabSectionNavigation() {
             <span key={note} className="max-w-full break-words rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-black uppercase leading-4 tracking-wide text-slate-600 sm:px-3">{note}</span>
           ))}
         </div>
+
+        <aside aria-label="Source Lab preview release note" className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 lg:mt-6 lg:p-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">Preview release note</p>
+              <p className="mt-1 text-sm font-black leading-6 text-slate-900">Source Lab preview pipeline · current UI polish scope</p>
+              <p className="mt-1 max-w-3xl text-xs font-bold leading-5 text-slate-600">A concise snapshot of the preview workspace—not an automated deployment record or runtime status.</p>
+            </div>
+            <span className="w-fit shrink-0 rounded-full bg-indigo-100 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-indigo-700">read-only preview</span>
+          </div>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-3">
+            {releaseHighlights.map((highlight) => (
+              <li key={highlight} className="rounded-xl bg-white px-3 py-2.5 text-xs font-bold leading-5 text-slate-700">{highlight}</li>
+            ))}
+          </ul>
+        </aside>
 
         <aside aria-label="Manual Source Lab smoke check" className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4 lg:mt-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
