@@ -1,0 +1,25 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "rules": [
+    {
+      "rule_id": "naver_news_attribution_exception_review",
+      "provider_key": "naver",
+      "source_type": "news",
+      "attribution_requirement": "required",
+      "missing_attribution_handling": "exception_review_required",
+      "provider_limitation_evidence_required": true,
+      "allowed_gate_status_when_complete": "approval_candidate"
+    },
+    {
+      "rule_id": "naver_blog_attribution_required",
+      "provider_key": "naver",
+      "source_type": "blog",
+      "attribution_requirement": "required",
+      "missing_attribution_handling": "manual_review_required",
+      "provider_limitation_evidence_required": false,
+      "allowed_gate_status_when_complete": "approval_candidate"
+    }
+  ]
+}
