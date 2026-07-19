@@ -114,10 +114,43 @@ def normalize_row(row, row_number, source_type, artist_name, artist_slug):
     )
     if source_type == "news":
         source_url = canonicalize_url(first_value(row, ("originallink", "link", "url")))
-        author_or_publisher = first_value(row, ("publisher", "author"))
+        author_or_publisher = first_value(
+            row,
+            (
+                "publisher",
+                "publisher_name",
+                "press",
+                "press_name",
+                "media",
+                "media_name",
+                "office",
+                "office_name",
+                "provider",
+                "journalist",
+                "reporter",
+                "author",
+                "author_name",
+                "writer",
+                "writer_name",
+            ),
+        )
     else:
         source_url = canonicalize_url(first_value(row, ("link", "url")))
-        author_or_publisher = first_value(row, ("bloggername", "author", "publisher"))
+        author_or_publisher = first_value(
+            row,
+            (
+                "bloggername",
+                "blogger_name",
+                "blogname",
+                "blog_name",
+                "author",
+                "author_name",
+                "writer",
+                "writer_name",
+                "publisher",
+                "publisher_name",
+            ),
+        )
 
     supplied_external_id = first_value(
         row, ("external_source_id", "external_id", "document_id", "id")
