@@ -1,0 +1,108 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "description": "Candidate input shape for future human review in the local source sandbox. No decision is recorded by this contract.",
+  "decision_intents": [
+    "not_decided",
+    "approve_candidate",
+    "accept_exception",
+    "reject",
+    "defer",
+    "request_enrichment"
+  ],
+  "gate_status_rules": [
+    {
+      "gate_status": "approval_candidate",
+      "allowed_decision_intents": [
+        "not_decided",
+        "approve_candidate",
+        "reject",
+        "defer",
+        "request_enrichment"
+      ]
+    },
+    {
+      "gate_status": "exception_review_required",
+      "allowed_decision_intents": [
+        "not_decided",
+        "accept_exception",
+        "reject",
+        "defer",
+        "request_enrichment"
+      ]
+    },
+    {
+      "gate_status": "manual_review_required",
+      "allowed_decision_intents": [
+        "not_decided",
+        "reject",
+        "defer",
+        "request_enrichment"
+      ]
+    },
+    {
+      "gate_status": "blocked",
+      "allowed_decision_intents": [
+        "not_decided",
+        "reject",
+        "defer",
+        "request_enrichment"
+      ]
+    }
+  ],
+  "required_fields": [
+    "internal_source_id",
+    "gate_id",
+    "decision_intent"
+  ],
+  "conditional_requirements": [
+    {
+      "when_decision_intent_is_not": "not_decided",
+      "required_fields": [
+        "reviewer_id",
+        "rationale_codes"
+      ],
+      "minimum_rationale_code_count": 1
+    },
+    {
+      "when_decision_intent_is": "accept_exception",
+      "requires_any_rationale_codes": [
+        "provider_attribution_unavailable_verified",
+        "provider_limitation_accepted_for_review",
+        "attribution_enrichment_required"
+      ]
+    },
+    {
+      "when_decision_intent_is": "reject",
+      "requires_any_rationale_codes": [
+        "irrelevant_to_artist",
+        "unreliable_source",
+        "malformed_source",
+        "unverifiable_source"
+      ]
+    }
+  ],
+  "optional_fields": [
+    "reviewer_note",
+    "reviewed_at",
+    "requested_enrichment_fields"
+  ],
+  "rationale_codes": [
+    "metadata_verified",
+    "source_relevant",
+    "insufficient_evidence",
+    "duplicate_or_redundant",
+    "defer_for_later_review",
+    "enrichment_required",
+    "identity_uncertain",
+    "unsupported_source",
+    "provider_attribution_unavailable_verified",
+    "provider_limitation_accepted_for_review",
+    "attribution_enrichment_required",
+    "irrelevant_to_artist",
+    "unreliable_source",
+    "malformed_source",
+    "unverifiable_source"
+  ]
+}
