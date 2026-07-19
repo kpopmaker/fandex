@@ -39,6 +39,7 @@ next-dev.*.log
 /Untitled
 /_backup/
 /_stable/
+/tmp/source-sandbox/
 
 # vercel
 .vercel
