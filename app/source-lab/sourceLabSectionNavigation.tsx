@@ -15,12 +15,16 @@ const sections = [
 
 export default function SourceLabSectionNavigation() {
   const safetyNotes = [
-    'No external ingestion',
-    'No provider sync',
-    'No write',
-    'No audit log storage',
+    'No ingestion or provider sync',
+    'No write or audit log storage',
     'No rollback',
     'No score · ranking · chart application',
+  ];
+  const manualSmokeChecks = [
+    'Open each static anchor and confirm its target',
+    'Confirm preview-only boundaries stay visible',
+    'Confirm no pipeline or FANDEX action is implied',
+    'Review card readability at mobile and desktop widths',
   ];
 
   return (
@@ -40,6 +44,24 @@ export default function SourceLabSectionNavigation() {
             <span key={note} className="max-w-full break-words rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-black uppercase leading-4 tracking-wide text-slate-600 sm:px-3">{note}</span>
           ))}
         </div>
+
+        <aside aria-label="Manual Source Lab smoke check" className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4 lg:mt-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-indigo-700">Manual smoke check</p>
+              <p className="mt-1 text-xs font-bold leading-5 text-slate-600">Review cues for a person—not automated test results or detected runtime state.</p>
+            </div>
+            <span className="w-fit rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-wide text-indigo-700">preview QA note</span>
+          </div>
+          <ol className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            {manualSmokeChecks.map((check, index) => (
+              <li key={check} className="flex min-w-0 items-start gap-2.5 rounded-xl bg-white p-3">
+                <span className="shrink-0 font-mono text-xs font-black text-indigo-500">{String(index + 1).padStart(2, '0')}</span>
+                <span className="text-xs font-bold leading-5 text-slate-700">{check}</span>
+              </li>
+            ))}
+          </ol>
+        </aside>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-2 md:gap-3 lg:mt-6 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4">
           {sections.map((section, index) => (
