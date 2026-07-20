@@ -1,0 +1,61 @@
+{
+  "manifest_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "description": "Manifest for replaying the local IU Naver source sandbox downstream pipeline from canonical normalized JSON into an isolated run directory.",
+  "artist": {
+    "sandbox_artist_key": "sandbox:artist:iu",
+    "artist_name": "아이유",
+    "artist_slug": "iu",
+    "aliases": ["아이유", "IU", "이지은"]
+  },
+  "provider": {
+    "provider_key": "naver",
+    "supported_source_types": ["news", "blog"]
+  },
+  "canonical_inputs": {
+    "news_normalized_file": "tmp/source-sandbox/naver/iu/news.normalized.json",
+    "blog_normalized_file": "tmp/source-sandbox/naver/iu/blog.normalized.json",
+    "import_summary_file": "tmp/source-sandbox/naver/iu/import-summary.json",
+    "attribution_audit_file": "tmp/source-sandbox/naver/iu/attribution-audit.json"
+  },
+  "canonical_comparison_outputs": {
+    "validation_report": "tmp/source-sandbox/naver/iu/validation-report.json",
+    "mapping_records": "tmp/source-sandbox/naver/iu/artist-source-mappings.json",
+    "mapping_summary": "tmp/source-sandbox/naver/iu/artist-source-mapping-summary.json",
+    "quality_records": "tmp/source-sandbox/naver/iu/quality-eligibility-preview.json",
+    "quality_summary": "tmp/source-sandbox/naver/iu/quality-eligibility-preview-summary.json",
+    "approval_records": "tmp/source-sandbox/naver/iu/approval-gate-preview.json",
+    "approval_summary": "tmp/source-sandbox/naver/iu/approval-gate-preview-summary.json",
+    "review_queue": "tmp/source-sandbox/naver/iu/human-review-queue.json",
+    "review_summary": "tmp/source-sandbox/naver/iu/human-review-queue-summary.json",
+    "decision_template": "tmp/source-sandbox/naver/iu/human-review-decision-template.json",
+    "decision_validation": "tmp/source-sandbox/naver/iu/human-review-decision-validation.json",
+    "decision_dry_run": "tmp/source-sandbox/naver/iu/human-review-decision-dry-run.json",
+    "decision_summary": "tmp/source-sandbox/naver/iu/human-review-decision-dry-run-summary.json"
+  },
+  "run_output_layout": {
+    "validation_report": "validation/validation-report.json",
+    "mapping_records": "mapping/artist-source-mappings.json",
+    "mapping_summary": "mapping/artist-source-mapping-summary.json",
+    "quality_records": "quality/quality-eligibility-preview.json",
+    "quality_summary": "quality/quality-eligibility-preview-summary.json",
+    "approval_records": "approval/approval-gate-preview.json",
+    "approval_summary": "approval/approval-gate-preview-summary.json",
+    "review_queue": "review/human-review-queue.json",
+    "review_summary": "review/human-review-queue-summary.json",
+    "decision_template": "review/human-review-decision-template.json",
+    "decision_validation": "decision/human-review-decision-validation.json",
+    "decision_dry_run": "decision/human-review-decision-dry-run.json",
+    "decision_summary": "decision/human-review-decision-dry-run-summary.json",
+    "pipeline_summary": "pipeline-run-summary.json"
+  },
+  "stages": [
+    {"stage_id": "validate_normalized_sources", "script": "scripts/source-sandbox/validate_normalized_sources.py", "enabled": true, "depends_on": [], "expected_output_keys": ["validation_report"]},
+    {"stage_id": "build_artist_source_mappings", "script": "scripts/source-sandbox/build_artist_source_mappings.py", "enabled": true, "depends_on": ["validate_normalized_sources"], "expected_output_keys": ["mapping_records", "mapping_summary"]},
+    {"stage_id": "preview_quality_eligibility", "script": "scripts/source-sandbox/preview_source_quality_eligibility.py", "enabled": true, "depends_on": ["build_artist_source_mappings"], "expected_output_keys": ["quality_records", "quality_summary"]},
+    {"stage_id": "preview_approval_gate", "script": "scripts/source-sandbox/preview_source_approval_gate.py", "enabled": true, "depends_on": ["preview_quality_eligibility"], "expected_output_keys": ["approval_records", "approval_summary"]},
+    {"stage_id": "prepare_human_review_queue", "script": "scripts/source-sandbox/prepare_human_review_queue.py", "enabled": true, "depends_on": ["preview_approval_gate"], "expected_output_keys": ["review_queue", "review_summary", "decision_template"]},
+    {"stage_id": "validate_human_review_decisions", "script": "scripts/source-sandbox/validate_human_review_decisions.py", "enabled": true, "depends_on": ["prepare_human_review_queue"], "expected_output_keys": ["decision_validation", "decision_dry_run", "decision_summary"]}
+  ]
+}
