@@ -1,0 +1,61 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "description": "Preview input shape for a future human selection of one reviewed second-artist dataset candidate. This contract does not select or register an artist.",
+  "selection_intents": [
+    "not_selected",
+    "select_existing_registry_identity",
+    "select_sandbox_identity",
+    "reject_candidate",
+    "defer"
+  ],
+  "required_fields": ["candidate_id", "selection_intent"],
+  "optional_fields": [
+    "reviewer_id", "rationale_codes", "reviewer_note", "reviewed_at",
+    "selected_registry_id", "selected_artist_name", "selected_artist_slug",
+    "selected_sandbox_artist_key", "selected_news_file_id", "selected_blog_file_id",
+    "production_registry_unchanged_acknowledged"
+  ],
+  "conditional_requirements": [
+    {
+      "selection_intent": "not_selected",
+      "reviewer_required": false,
+      "rationale_codes_must_be_empty": true,
+      "selection_fields_must_be_null": true,
+      "production_registry_unchanged_acknowledged": false
+    },
+    {
+      "selection_intent": "select_existing_registry_identity",
+      "reviewer_required": true,
+      "minimum_rationale_code_count": 1,
+      "required_selection_fields": ["selected_registry_id", "selected_artist_name", "selected_artist_slug", "selected_sandbox_artist_key"],
+      "production_registry_unchanged_acknowledged": true
+    },
+    {
+      "selection_intent": "select_sandbox_identity",
+      "reviewer_required": true,
+      "minimum_rationale_code_count": 1,
+      "null_selection_fields": ["selected_registry_id"],
+      "required_selection_fields": ["selected_artist_name", "selected_artist_slug", "selected_sandbox_artist_key"],
+      "production_registry_unchanged_acknowledged": true
+    },
+    {"selection_intent": "reject_candidate", "reviewer_required": true, "minimum_rationale_code_count": 1},
+    {"selection_intent": "defer", "reviewer_required": true, "minimum_rationale_code_count": 1},
+    {
+      "pair_resolution_status": "unresolved_pair_tie",
+      "required_selection_fields": ["selected_news_file_id", "selected_blog_file_id"]
+    },
+    {
+      "pair_resolution_statuses": ["unique_best_pair", "equivalent_duplicate_pair"],
+      "selected_file_ids_required": false
+    }
+  ],
+  "rationale_codes": [
+    "identity_confirmed", "existing_registry_identity_confirmed", "sandbox_identity_only",
+    "pair_unique_best", "pair_equivalent_duplicate_verified", "pair_manually_selected",
+    "attribution_complete", "attribution_incomplete", "insufficient_identity_evidence",
+    "unresolved_export_pair", "duplicate_dataset", "existing_sandbox_artist",
+    "defer_for_more_data", "candidate_not_suitable"
+  ]
+}
