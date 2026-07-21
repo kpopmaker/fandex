@@ -1,0 +1,17 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "description": "Preview input shape for future human resolution of second-artist export-pair evidence; it does not select data or change production.",
+  "resolution_intents": ["not_resolved", "confirm_evidence_supported_pair", "select_specific_exports", "reject_candidate_exports", "defer"],
+  "required_fields": ["candidate_id", "packet_item_id", "resolution_intent"],
+  "optional_fields": ["reviewer_id", "rationale_codes", "reviewer_note", "reviewed_at", "selected_news_file_id", "selected_blog_file_id", "export_difference_acknowledged", "production_data_unchanged_acknowledged"],
+  "conditional_requirements": [
+    {"resolution_intent": "not_resolved", "reviewer_required": false, "rationale_codes_must_be_empty": true, "selected_file_ids_must_be_null": true, "export_difference_acknowledged": false, "production_data_unchanged_acknowledged": false},
+    {"resolution_intent": "confirm_evidence_supported_pair", "reviewer_required": true, "minimum_rationale_code_count": 1, "required_pair_evidence_status": "pair_preference_available", "selected_file_ids_required": true, "selected_ids_must_be_evidence_supported": true, "export_difference_acknowledged": true, "production_data_unchanged_acknowledged": true},
+    {"resolution_intent": "select_specific_exports", "reviewer_required": true, "minimum_rationale_code_count": 1, "selected_file_ids_required": true, "selected_ids_must_exist_for_candidate": true, "export_difference_acknowledged": true, "production_data_unchanged_acknowledged": true},
+    {"resolution_intent": "reject_candidate_exports", "reviewer_required": true, "minimum_rationale_code_count": 1, "selected_file_ids_must_be_null": true},
+    {"resolution_intent": "defer", "reviewer_required": true, "minimum_rationale_code_count": 1, "selected_file_ids_must_be_null": true}
+  ],
+  "rationale_codes": ["unique_export_confirmed", "equivalent_duplicate_exports_confirmed", "reordered_duplicate_exports_confirmed", "objectively_dominant_export_confirmed", "strict_superset_preferred", "attribution_coverage_preferred", "date_range_preferred", "specific_exports_manually_selected", "partial_overlap_reviewed", "unresolved_export_difference", "insufficient_export_evidence", "candidate_exports_not_suitable", "defer_for_more_data"]
+}
