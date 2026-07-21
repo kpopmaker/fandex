@@ -1,0 +1,72 @@
+{
+  "contract_version": "v1",
+  "input_contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "dry_run_only": true,
+  "description": "Local-only preview of how validated human review decision intents would be classified without applying any decision or production effect.",
+  "effects": [
+    "no_change",
+    "would_record_approval_decision",
+    "would_record_exception_acceptance",
+    "would_record_rejection",
+    "would_record_deferral",
+    "would_record_enrichment_request"
+  ],
+  "intent_rules": [
+    {
+      "decision_intent": "not_decided",
+      "allowed_gate_statuses": ["approval_candidate", "exception_review_required", "manual_review_required", "blocked"],
+      "dry_run_effect": "no_change",
+      "reviewer_required": false,
+      "rationale_required": false,
+      "reviewed_at_required": false,
+      "enrichment_fields_required": false
+    },
+    {
+      "decision_intent": "approve_candidate",
+      "allowed_gate_statuses": ["approval_candidate"],
+      "dry_run_effect": "would_record_approval_decision",
+      "reviewer_required": true,
+      "rationale_required": true,
+      "allowed_rationale_codes": ["metadata_verified", "source_relevant"],
+      "enrichment_fields_required": false
+    },
+    {
+      "decision_intent": "accept_exception",
+      "allowed_gate_statuses": ["exception_review_required"],
+      "dry_run_effect": "would_record_exception_acceptance",
+      "reviewer_required": true,
+      "rationale_required": true,
+      "allowed_rationale_codes": ["provider_attribution_unavailable_verified", "provider_limitation_accepted_for_review"],
+      "enrichment_fields_required": false
+    },
+    {
+      "decision_intent": "reject",
+      "allowed_gate_statuses": ["approval_candidate", "exception_review_required", "manual_review_required", "blocked"],
+      "dry_run_effect": "would_record_rejection",
+      "reviewer_required": true,
+      "rationale_required": true,
+      "allowed_rationale_codes": ["irrelevant_to_artist", "unreliable_source", "malformed_source", "unverifiable_source", "insufficient_evidence", "duplicate_or_redundant", "identity_uncertain", "unsupported_source"],
+      "enrichment_fields_required": false
+    },
+    {
+      "decision_intent": "defer",
+      "allowed_gate_statuses": ["approval_candidate", "exception_review_required", "manual_review_required", "blocked"],
+      "dry_run_effect": "would_record_deferral",
+      "reviewer_required": true,
+      "rationale_required": true,
+      "allowed_rationale_codes": ["defer_for_later_review"],
+      "enrichment_fields_required": false
+    },
+    {
+      "decision_intent": "request_enrichment",
+      "allowed_gate_statuses": ["approval_candidate", "exception_review_required", "manual_review_required", "blocked"],
+      "dry_run_effect": "would_record_enrichment_request",
+      "reviewer_required": true,
+      "rationale_required": true,
+      "allowed_rationale_codes": ["enrichment_required", "attribution_enrichment_required", "insufficient_evidence", "identity_uncertain"],
+      "enrichment_fields_required": true
+    }
+  ]
+}
