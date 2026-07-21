@@ -1,0 +1,31 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "dry_run_only": true,
+  "description": "Records the user's representative export choice for the local aespa source sandbox and previews effects without import or production writes.",
+  "accepted_resolution_intent": "select_representative_exports",
+  "reviewer_identity_policy": {
+    "reviewer_id": "project_owner",
+    "identity_type": "local_role_label",
+    "personal_name_or_email": false
+  },
+  "required_input_conditions": ["target_display_query_exactly_aespa", "exactly_one_shortlisted_news_group", "exactly_one_shortlisted_blog_group", "exactly_one_pair_candidate", "blank_template_not_resolved", "blank_template_selected_ids_null", "production_policy_false"],
+  "required_decision_fields": ["candidate_id", "packet_item_id", "analysis_item_id", "display_query", "resolution_intent", "reviewer_id", "rationale_codes", "selected_news_group_id", "selected_blog_group_id", "selected_news_file_id", "selected_blog_file_id", "export_difference_acknowledged", "production_data_unchanged_acknowledged"],
+  "validation_rules": {
+    "resolution_intent": "select_representative_exports",
+    "reviewer_id": "project_owner",
+    "selected_news_group_id": "unique_shortlisted_news_group_id",
+    "selected_blog_group_id": "unique_shortlisted_blog_group_id",
+    "selected_news_file_id": "selected_news_group_representative_file_id",
+    "selected_blog_file_id": "selected_blog_group_representative_file_id",
+    "selected_files_must_be_group_members": true,
+    "selected_group_pair_must_exist": true,
+    "export_difference_acknowledged": true,
+    "production_data_unchanged_acknowledged": true,
+    "reviewed_at": null,
+    "rationale_codes": ["equivalent_exports_collapsed", "safely_dominated_subset_excluded", "maximal_content_group_selected", "identity_coverage_confirmed", "representative_file_confirmed"]
+  },
+  "dry_run_effects": ["would_record_local_sandbox_selection", "would_select_news_group", "would_select_blog_group", "would_select_news_representative_file", "would_select_blog_representative_file", "would_preserve_production_data", "would_require_import_approval_next"],
+  "prohibited_effects": ["production_write", "database_write", "storage_write", "csv_modification", "import", "normalization", "pipeline_execution", "approval_or_rejection", "score_calculation", "ranking_update", "artist_page_update"]
+}
