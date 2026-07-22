@@ -1,0 +1,61 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "local_import_authorized": true,
+  "pipeline_authorized": false,
+  "description": "Authorizes only the local sandbox import of the representative aespa news and blog exports selected by the validated v49 decision.",
+  "authorization_policy": {
+    "authorization_source": "explicit_project_owner_instruction",
+    "reviewer_role": "project_owner",
+    "authorization_scope": "selected_aespa_representative_exports_only",
+    "production_authorization": false,
+    "pipeline_authorization": false
+  },
+  "required_input_conditions": {
+    "target_query_exactly": "에스파",
+    "valid_v49_decision_count": 1,
+    "news_representative_file_count": 1,
+    "blog_representative_file_count": 1,
+    "selected_files_are_selected_group_members": true,
+    "selected_group_pair_exists_in_v48_pair_candidates": true,
+    "archive_file_id_match_count_per_source_type": 1
+  },
+  "required_import_conditions": {
+    "news_expected_row_count": 1000,
+    "blog_expected_row_count": 1000,
+    "news_expected_unique_row_count": 1000,
+    "blog_expected_unique_row_count": 1000,
+    "required_headers_complete": true,
+    "malformed_row_count": 0,
+    "duplicate_normalized_source_id_count": 0,
+    "existing_importer_schema_unchanged": true,
+    "deterministic_output_ordering": true,
+    "archive_read_only": true,
+    "output_below_tmp_only": true
+  },
+  "output_contract": {
+    "normalized_output_schema": "existing_v36_naver_importer_item_shape",
+    "metadata_excludes_archive_paths_and_filenames": true,
+    "summary_excludes_raw_source_fields": true,
+    "git_tracked_output": false
+  },
+  "attribution_policy": {
+    "preserve_news_missing_as_null": true,
+    "infer_news_provider_or_publisher": false,
+    "news_attribution_gap_is_import_failure": false,
+    "preserve_blog_source_value": true,
+    "use_attribution_for_score_or_ranking": false
+  },
+  "prohibited_effects": [
+    "production_write",
+    "database_write",
+    "storage_write",
+    "archive_write",
+    "pipeline_execution",
+    "source_approval_or_rejection",
+    "score_calculation",
+    "ranking_update",
+    "artist_page_update"
+  ]
+}
