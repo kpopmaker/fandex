@@ -1,0 +1,63 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "quality_eligibility_preview_only": true,
+  "pipeline_authorized": false,
+  "approval_gate_authorized": false,
+  "description": "Evaluates v52 aespa mappings with existing local quality and eligibility helpers without running the pipeline or approval gate.",
+  "required_input_conditions": {
+    "target_display_query": "에스파",
+    "normalized_schema_version": "v36",
+    "normalized_input_hash_verified": true,
+    "mapping_status": "valid_local_mapping_preview",
+    "mapping_next_step_eligibility": "eligible",
+    "input_record_count": 2000,
+    "mapping_record_count": 2000,
+    "mapping_error_count": 0
+  },
+  "existing_builder_reuse_policy": {
+    "existing_builder": "preview_source_quality_eligibility.py",
+    "pure_helpers_only": true,
+    "existing_main_executed": false,
+    "existing_quality_semantics_preserved": true,
+    "existing_eligibility_semantics_preserved": true
+  },
+  "validation_adapter_policy": {"used": true, "source": "v51_verified_validation_counts", "persisted": false},
+  "mapping_adapter_policy": {"used": true, "source": "v52_verified_mapping_counts", "persisted": false},
+  "canonical_output_policy": {
+    "existing_build_record_schema_preserved": true,
+    "source_url_preserved_in_canonical_local_output": true,
+    "author_or_publisher_preserved_in_canonical_local_output": true,
+    "canonical_output_local_tmp_only": true,
+    "canonical_output_git_tracked": false,
+    "canonical_output_content_logged": false
+  },
+  "safe_metadata_policy": {
+    "validation_contains_source_url_value": false,
+    "summary_contains_source_url_value": false,
+    "documentation_contains_source_url_value": false,
+    "final_report_contains_source_url_value": false,
+    "validation_contains_author_or_publisher_value": false,
+    "summary_contains_author_or_publisher_value": false,
+    "raw_title_or_summary_allowed": false,
+    "review_samples_allowed": false,
+    "filename_or_archive_path_allowed": false
+  },
+  "quality_status_policy": {"allowed": ["ready", "review_required", "blocked"], "reinterpretation_allowed": false},
+  "eligibility_status_policy": {"allowed": ["eligible_candidate", "review_required", "blocked"], "reinterpretation_allowed": false},
+  "attribution_policy": {
+    "preserve_news_missing_attribution": true,
+    "infer_author_or_publisher": false,
+    "infer_from_url_domain_or_title": false,
+    "preserve_blog_attribution": true,
+    "use_attribution_for_score_or_ranking": false,
+    "preserve_existing_missing_author_reason": true
+  },
+  "result_statuses": {
+    "valid_local_quality_eligibility_preview": "No input errors, duplicates, or blocked records.",
+    "quality_eligibility_review_required": "No input errors, but at least one blocked record requires review.",
+    "invalid_quality_eligibility_input": "Input, helper, identity, or duplicate checks failed."
+  },
+  "prohibited_effects": ["normalized_source_modification", "mapping_modification", "production_identity_creation", "registry_identity_creation", "production_write", "database_write", "storage_write", "pipeline_execution", "approval_gate_execution", "review_queue_execution", "source_approval_or_rejection", "score_calculation", "ranking_update", "artist_page_update"]
+}
