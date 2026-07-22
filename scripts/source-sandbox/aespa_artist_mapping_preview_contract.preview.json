@@ -1,0 +1,83 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "mapping_preview_only": true,
+  "pipeline_authorized": false,
+  "description": "Builds a local-only aespa artist/source mapping preview from v51-validated normalized sources while preserving the existing builder schema.",
+  "required_input_conditions": {
+    "target_display_query_exactly": "에스파",
+    "normalized_schema_version": "v36",
+    "normalized_input_hash_verified": true,
+    "validation_status": "valid_for_local_mapping_preview",
+    "local_mapping_preview_eligibility": "eligible",
+    "validation_error_count": 0,
+    "total_record_count": 2000,
+    "duplicate_source_id_count": 0,
+    "query_identity_mismatch_count": 0
+  },
+  "builder_reuse_policy": {
+    "existing_builder": "build_artist_source_mappings.py",
+    "required_helpers": ["compile_alias_patterns", "validate_preconditions", "build_mapping", "duplicate_count", "serialize_json"],
+    "existing_mapping_schema_preserved": true,
+    "existing_mapping_id_semantics_preserved": true,
+    "wrapper_mapping_semantics_allowed": false
+  },
+  "validation_adapter_policy": {
+    "used": true,
+    "source": "v51_verified_validation_counts",
+    "persisted_as_separate_file": false
+  },
+  "local_identity_policy": {
+    "sandbox_artist_key_pattern": "sandbox:artist:{artist_slug}",
+    "candidate_provenance_id_read_from_v49_decision": true,
+    "production_identity_status": "not_confirmed",
+    "registry_identity_status": "not_confirmed",
+    "production_artist_id_created": false,
+    "registry_artist_id_created": false
+  },
+  "canonical_output_policy": {
+    "existing_builder_schema_preserved": true,
+    "source_url_preserved_in_canonical_local_output": true,
+    "canonical_output_local_tmp_only": true,
+    "canonical_output_git_tracked": false,
+    "canonical_output_content_must_not_be_logged": true
+  },
+  "safe_metadata_policy": {
+    "validation_contains_source_url": false,
+    "summary_contains_source_url": false,
+    "documentation_contains_source_url": false,
+    "final_report_contains_source_url": false,
+    "raw_title_or_summary_allowed": false,
+    "filename_or_archive_path_allowed": false
+  },
+  "mapping_status_policy": {
+    "allowed_record_statuses": ["mapped", "review_required"],
+    "allowed_evidence_levels": ["confirmed", "weak", "missing"],
+    "unmapped_status_supported": false,
+    "ambiguous_status_supported": false,
+    "wrapper_status_reinterpretation_allowed": false
+  },
+  "result_statuses": {
+    "valid_local_mapping_preview": "No mapping errors and no review-required mappings.",
+    "mapping_review_required": "No mapping errors, but existing builder semantics produced review-required mappings.",
+    "invalid_mapping_input": "Existing builder preconditions or deterministic identity checks failed.",
+    "input_provenance_mismatch": "The v50 or v51 provenance evidence did not match."
+  },
+  "prohibited_effects": [
+    "normalized_source_modification",
+    "production_identity_creation",
+    "registry_identity_creation",
+    "production_write",
+    "database_write",
+    "storage_write",
+    "pipeline_execution",
+    "quality_execution",
+    "approval_execution",
+    "review_queue_execution",
+    "source_approval_or_rejection",
+    "score_calculation",
+    "ranking_update",
+    "artist_page_update"
+  ]
+}
