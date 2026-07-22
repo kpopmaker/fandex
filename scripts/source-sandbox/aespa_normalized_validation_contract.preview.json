@@ -1,0 +1,73 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "validation_only": true,
+  "pipeline_authorized": false,
+  "description": "Validates the v50 aespa normalized local source output without changing sources or executing downstream pipeline stages.",
+  "required_input_conditions": {
+    "target_query_exactly": "에스파",
+    "normalized_schema_version": "v36",
+    "normalized_file_hash_matches_v50_summary": true,
+    "first_and_repro_normalized_output_identical": true,
+    "local_import_authorization_status": "authorized",
+    "production_import_authorization_status": "not_authorized",
+    "pipeline_authorization_status": "not_authorized",
+    "record_count": 2000,
+    "duplicate_source_id_count": 0
+  },
+  "validator_reuse_policy": {
+    "existing_validator": "validate_normalized_sources.py",
+    "reuse_existing_validation_helpers": true,
+    "preserve_existing_validation_semantics": true,
+    "wrapper_schema_changes_allowed": false
+  },
+  "validation_requirements": {
+    "candidate_count": 1,
+    "total_record_count": 2000,
+    "news_record_count": 1000,
+    "blog_record_count": 1000,
+    "unique_source_id_count": 2000,
+    "duplicate_source_id_count": 0,
+    "malformed_record_count": 0,
+    "required_field_failure_count": 0,
+    "unsupported_source_type_count": 0,
+    "query_identity_mismatch_count": 0,
+    "production_artist_id_count": 0,
+    "registry_artist_id_count": 0,
+    "validator_error_count": 0
+  },
+  "attribution_policy": {
+    "news_missing_count": 1000,
+    "news_missing_status": "provider_limitation_warning",
+    "news_missing_is_validation_failure": false,
+    "infer_news_attribution": false,
+    "preserve_blog_attribution": true,
+    "blog_present_count": 1000,
+    "use_attribution_for_score_or_ranking": false
+  },
+  "output_contract": {
+    "output_below_tmp_validation_path_only": true,
+    "raw_source_content_excluded": true,
+    "paths_and_filenames_excluded": true,
+    "git_tracked_output": false
+  },
+  "result_statuses": {
+    "valid_for_local_mapping_preview": "Eligible only as input to a separately authorized local artist mapping preview; not production or pipeline approval.",
+    "invalid_normalized_sources": "Existing validator or required normalized source checks failed.",
+    "input_provenance_mismatch": "The v50 source provenance or deterministic input evidence did not match."
+  },
+  "prohibited_effects": [
+    "normalized_source_modification",
+    "archive_write",
+    "production_write",
+    "database_write",
+    "storage_write",
+    "pipeline_execution",
+    "artist_mapping_execution",
+    "source_approval_or_rejection",
+    "score_calculation",
+    "ranking_update",
+    "artist_page_update"
+  ]
+}
