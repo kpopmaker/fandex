@@ -1,0 +1,21 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "decision_input_preview_only": true,
+  "human_review_execution_authorized": false,
+  "source_decision_authorized": false,
+  "decision_application_authorized": false,
+  "pipeline_authorized": false,
+  "description": "Local-only deterministic blank decision-input template preview; no decision or reviewer value is supplied.",
+  "required_input_conditions": {"candidate": "에스파", "review_decision_preview_status": "valid_local_review_decision_preview", "eligibility": "eligible", "record_count": 1000},
+  "existing_decision_schema_reuse_policy": {"template_builder_module": "prepare_human_review_queue.py", "validator_module": "validate_human_review_decisions.py", "pure_helpers_only": true, "main_executed": false},
+  "decision_input_template_policy": {"historical_decision_template_helper": true, "decision_intent": "not_decided", "record_schema_preserved": true},
+  "decision_value_policy": {"actual_decision_provided": false, "actual_approval": false, "actual_rejection": false},
+  "reviewer_metadata_policy": {"reviewer_id": null, "reviewed_at": null, "reviewer_note": null, "rationale_codes": [], "requested_enrichment_fields": []},
+  "linkage_policy": {"queue_id_required": true, "gate_id_required": true, "internal_source_id_required": true, "deterministic_input_hash_used_as_logical_id": true},
+  "canonical_output_policy": {"local_ignored_tmp_only": true, "git_tracked": false, "content_logged": false},
+  "safe_metadata_policy": {"source_url_value": false, "author_value": false, "title_value": false, "summary_value": false, "raw_sample": false, "filename_path": false},
+  "result_statuses": {"valid": "valid_local_decision_input_preview", "invalid": "invalid_decision_input_preview", "eligible": "eligible", "ineligible": "ineligible"},
+  "prohibited_effects": ["human_review", "approval", "rejection", "decision_storage", "decision_application", "production_promotion", "database_write", "storage_write", "pipeline", "score", "ranking", "artist_page", "recommendation"]
+}
