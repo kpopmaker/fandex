@@ -1,0 +1,23 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "approval_gate_preview_only": true,
+  "pipeline_authorized": false,
+  "source_decision_authorized": false,
+  "human_review_queue_authorized": false,
+  "description": "Read-only aespa local approval gate preview using verified v53 inputs and existing helpers.",
+  "required_input_conditions": {"candidate": "에스파", "normalized_schema_version": "v36", "sandbox_artist_key": "sandbox:artist:aespa", "record_count": 2000},
+  "existing_gate_builder_reuse_policy": {"module": "preview_source_approval_gate.py", "pure_helpers_only": true, "main_executed": false, "gate_semantics_preserved": true},
+  "existing_attribution_audit_reuse_policy": {"module": "audit_naver_attribution.py", "pure_helper_reused": true, "main_executed": false, "raw_audit_saved": false, "audit_samples_saved": false},
+  "existing_rule_contract_policy": {"module": "source_type_metadata_contract.preview.json", "modified": false},
+  "archive_read_policy": {"selected_exports_only": true, "read_only": true, "file_id_resolution_required": true, "before_after_hash_equality_required": true, "path_filename_metadata_forbidden": true},
+  "adapter_policy": {"memory_only": true, "normalized_validation": true, "mapping_summary": true, "quality_summary": true},
+  "canonical_output_policy": {"existing_build_record_schema_preserved": true, "source_url_preserved": true, "author_or_publisher_preserved": true, "local_tmp_only": true, "git_tracked": false, "content_logged": false},
+  "safe_metadata_policy": {"source_url_value": false, "author_value": false, "raw_title_summary": false, "audit_samples": false, "review_samples": false, "filename_path": false},
+  "gate_status_policy": {"allowed": ["approval_candidate", "exception_review_required", "manual_review_required", "blocked"], "reinterpretation": false},
+  "decision_status_policy": {"allowed": ["not_decided"], "actual_approve": false, "actual_reject": false},
+  "attribution_policy": {"inference_allowed": false, "news_provider_limitation_must_be_verified": true},
+  "result_statuses": {"valid": "valid_local_approval_gate_preview", "invalid": "invalid_approval_gate_input", "eligible": "eligible", "ineligible": "ineligible"},
+  "prohibited_effects": ["production_identity_confirmation", "registry_identity_confirmation", "source_decision", "human_review_queue", "pipeline", "database_write", "storage_write", "score", "ranking", "artist_page"]
+}
