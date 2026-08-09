@@ -1,0 +1,20 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "review_decision_preview_only": true,
+  "human_review_execution_authorized": false,
+  "source_decision_authorized": false,
+  "decision_application_authorized": false,
+  "pipeline_authorized": false,
+  "description": "Deterministic structural preview for future aespa review decisions; no human decision is supplied, stored, or applied.",
+  "required_input_conditions": {"candidate": "에스파", "queue_preview_status": "valid_local_human_review_queue_preview", "queue_preview_eligibility": "eligible", "active_queue_count": 1000},
+  "existing_decision_builder_reuse_policy": {"module": "validate_human_review_decisions.py", "pure_helpers_only": true, "main_executed": false, "historical_schema_and_semantics_preserved": true},
+  "queue_input_policy": {"first_repro_hash_match_required": true, "known_sha256_required": true, "pending_review_only": true, "not_decided_only": true},
+  "decision_preview_policy": {"memory_only_empty_decision_template": true, "historical_dry_run_schema": true, "dry_run_effect": "no_change", "actionability_status": "no_action"},
+  "decision_status_policy": {"allowed": ["not_decided"], "actual_approval": false, "actual_rejection": false, "actual_application": false},
+  "canonical_output_policy": {"local_ignored_tmp_only": true, "git_tracked": false, "content_logged": false},
+  "safe_metadata_policy": {"source_url_value": false, "author_value": false, "title_value": false, "summary_value": false, "raw_sample": false, "filename_path": false},
+  "result_statuses": {"valid": "valid_local_review_decision_preview", "invalid": "invalid_review_decision_input", "eligible": "eligible", "ineligible": "ineligible"},
+  "prohibited_effects": ["human_review", "approval", "rejection", "decision_application", "production_promotion", "database_write", "storage_write", "pipeline", "score", "ranking", "artist_page", "recommendation"]
+}
