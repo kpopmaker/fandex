@@ -1,0 +1,44 @@
+{
+  "version": "v62",
+  "mode": "local_sandbox_preview_only",
+  "artist": "aespa",
+  "stage": "human_decision_acceptance_staging_preview",
+  "scope": "validated_intake_to_runtime_staging_only",
+  "local_sandbox_preview_only": true,
+  "validated_input_required": true,
+  "acceptance_staging_preview_only": true,
+  "application_candidate_classification_only": true,
+  "actual_human_review": false,
+  "actual_human_submission_recorded": false,
+  "actual_source_decision_recorded": false,
+  "actual_approval": false,
+  "actual_rejection": false,
+  "decision_application": false,
+  "source_mutation": false,
+  "review_queue_mutation": false,
+  "decision_state_mutation": false,
+  "production_mutation": false,
+  "production_authorization": false,
+  "external_write": false,
+  "historical_validator": {
+    "path": "scripts/source-sandbox/validate_human_review_decisions.py",
+    "sha256": "8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"
+  },
+  "historical_template_builder": {
+    "path": "scripts/source-sandbox/prepare_human_review_queue.py",
+    "helper": "decision_template",
+    "sha256": "694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"
+  },
+  "v61_intake_implementation": {
+    "path": "scripts/source-sandbox/preview_aespa_human_authored_decision_input.py",
+    "sha256": "ad1ba38a4ac37d71445626978e92aae1271383cc10dfd3d90e7ccf40c7bf90aa"
+  },
+  "historical_application_dry_run": {
+    "path": "scripts/source-sandbox/preview_aespa_decision_application.py",
+    "sha256": "fa4e59b18d1a8bddf50c1244175e358b736569b11aeb5ff2a7434a045a3f4d81"
+  },
+  "accepted_input_count_per_invocation": 1,
+  "no_write_policy": "submission_and_historical_inputs_are_read_only_and_staging_is_tmp_only",
+  "no_application_policy": "historical_application_classification_only_no_effect_execution",
+  "deterministic_staging_policy": "canonical_json_fixed_fixture_metadata_historical_dry_run_classification"
+}
