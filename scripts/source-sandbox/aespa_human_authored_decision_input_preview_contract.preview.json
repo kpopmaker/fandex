@@ -1,0 +1,40 @@
+{
+  "version": "v61",
+  "mode": "local_sandbox_preview_only",
+  "artist": "aespa",
+  "stage": "human_authored_decision_input_preview",
+  "scope": "intake_validation_only",
+  "local_sandbox_preview_only": true,
+  "human_authored_input_supported": true,
+  "intake_validation_only": true,
+  "actual_human_review": false,
+  "actual_human_submission_recorded": false,
+  "actual_source_decision": false,
+  "actual_approval": false,
+  "actual_rejection": false,
+  "decision_application": false,
+  "production_mutation": false,
+  "pipeline_authorization": false,
+  "external_write": false,
+  "historical_validator": {
+    "path": "scripts/source-sandbox/validate_human_review_decisions.py",
+    "sha256": "8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"
+  },
+  "historical_template_builder": {
+    "path": "scripts/source-sandbox/prepare_human_review_queue.py",
+    "helper": "decision_template",
+    "sha256": "694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"
+  },
+  "accepted_local_input_policy": "read_only_json_file_under_tmp_source_sandbox",
+  "allowed_submission_count_per_invocation": 1,
+  "supported_historical_decision_vocabulary": [
+    "not_decided",
+    "approve_candidate",
+    "accept_exception",
+    "reject",
+    "defer",
+    "request_enrichment"
+  ],
+  "no_write_policy": "historical_and_submission_inputs_are_read_only",
+  "no_application_policy": "validation_stops_before_decision_application"
+}
