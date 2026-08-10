@@ -1,0 +1,14 @@
+{
+  "version": "lastfm_cloud_history_v1",
+  "createdAt": "2026-08-11T01:40:30+09:00",
+  "snapshotDate": "2026-08-11",
+  "snapshotAppended": false,
+  "historyRowCount": 20,
+  "snapshotDateCount": 2,
+  "deltaReadyCount": 10,
+  "needsReviewCount": 0,
+  "scorePreviewCount": 10,
+  "scoreUsage": "preview_only_not_master_score",
+  "masterModified": false,
+  "websiteModified": false
+}
