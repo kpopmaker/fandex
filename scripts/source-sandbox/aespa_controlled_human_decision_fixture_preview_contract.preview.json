@@ -1,0 +1,29 @@
+{
+  "version": "v60",
+  "mode": "local_sandbox_preview_only",
+  "artist": "aespa",
+  "stage": "controlled_human_decision_fixture_preview",
+  "scope": "historical_schema_validation_only",
+  "local_sandbox_preview_only": true,
+  "controlled_fixture_only": true,
+  "actual_human_review": false,
+  "actual_human_submission": false,
+  "actual_source_decision": false,
+  "actual_approval": false,
+  "actual_rejection": false,
+  "decision_application": false,
+  "production_mutation": false,
+  "pipeline_authorization": false,
+  "historical_validator": {
+    "path": "scripts/source-sandbox/validate_human_review_decisions.py",
+    "sha256": "8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"
+  },
+  "historical_template_builder": {
+    "path": "scripts/source-sandbox/prepare_human_review_queue.py",
+    "helper": "decision_template",
+    "sha256": "694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"
+  },
+  "allowed_controlled_fixture_count": 2,
+  "deterministic_fixture_policy": "sorted_historical_selection_fixed_metadata_canonical_json",
+  "no_production_effect_policy": "all_actual_mutation_effect_execution_and_external_write_counts_must_be_zero"
+}
