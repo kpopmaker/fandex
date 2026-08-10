@@ -1,0 +1,59 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "human_decision_submission_preview_only": true,
+  "human_review_execution_authorized": false,
+  "human_decision_submission_authorized": false,
+  "source_decision_authorized": false,
+  "decision_application_authorized": false,
+  "production_mutation_authorized": false,
+  "pipeline_authorized": false,
+  "actual_approve": false,
+  "actual_reject": false,
+  "actual_submission": false,
+  "actual_application": false,
+  "production_promotion": false,
+  "description": "Deterministic local-only schema-readiness preview for a future explicit human decision submission; no human decision is submitted or applied.",
+  "required_input_conditions": {
+    "v57_and_v58_first_repro_hash_match": true,
+    "valid_and_eligible_previews": true,
+    "cross_stage_linkage_match": true,
+    "pending_review_not_decided_no_action_only": true
+  },
+  "historical_submission_schema_reuse_policy": {
+    "template_builder": "prepare_human_review_queue.py::decision_template",
+    "validator": "validate_human_review_decisions.py",
+    "pure_helpers_only": true,
+    "main_executed": false
+  },
+  "submission_template_policy": {
+    "historical_blank_template_preserved": true,
+    "submission_record_created": false
+  },
+  "decision_value_policy": {
+    "actual_value": "not_decided",
+    "actual_approve": false,
+    "actual_reject": false,
+    "allowed_vocabulary_is_schema_metadata_only": true
+  },
+  "reviewer_metadata_policy": {
+    "reviewer_id": null,
+    "reviewer_note": null,
+    "reviewed_at": null,
+    "rationale_codes": [],
+    "requested_enrichment_fields": []
+  },
+  "submission_timestamp_policy": {
+    "human_timestamp_generated": false,
+    "generated_at_allowed_in_summary_only": true
+  },
+  "linkage_policy": {
+    "fields": ["decision_input_id", "decision_preview_id", "queue_id", "gate_id", "internal_source_id", "sandbox_artist_key", "source_type"],
+    "all_match_required": true
+  },
+  "canonical_output_policy": {"ignored_local_tmp_only": true, "git_tracked": false},
+  "safe_metadata_policy": {"raw_source_values": false, "raw_samples": false, "filenames_or_paths": false},
+  "result_statuses": {"valid": "valid_local_human_decision_submission_preview", "eligible": "eligible"},
+  "prohibited_effects": ["human_review", "human_submission", "source_decision", "decision_application", "production_mutation", "database_write", "storage_write", "pipeline_execution", "score_calculation", "ranking_update", "artist_page_update"]
+}
