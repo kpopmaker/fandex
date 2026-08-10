@@ -1,0 +1,44 @@
+{
+  "contract_version": "v1",
+  "scope": "local_sandbox_preview_only",
+  "production_policy": false,
+  "decision_application_dry_run_only": true,
+  "human_review_execution_authorized": false,
+  "source_decision_authorized": false,
+  "decision_application_authorized": false,
+  "production_mutation_authorized": false,
+  "pipeline_authorized": false,
+  "actual_approve": false,
+  "actual_reject": false,
+  "actual_application": false,
+  "production_promotion": false,
+  "description": "Validate local decision-application readiness through the historical no-change dry-run without creating or applying a human decision.",
+  "required_input_conditions": {
+    "provenance": "verified",
+    "preview_status": "valid_local_decision_input_preview",
+    "eligibility": "eligible",
+    "first_repro_hash_match": true,
+    "decision_intent": "not_decided",
+    "queue_status": "pending_review"
+  },
+  "existing_application_builder_reuse_policy": {
+    "module": "validate_human_review_decisions.py",
+    "pure_helpers_only": true,
+    "main_executed": false,
+    "historical_schema_and_semantics_preserved": true
+  },
+  "no_decision_no_application_policy": {
+    "decision_intent": "not_decided",
+    "dry_run_effect": "no_change",
+    "actionability_status": "no_action",
+    "actual_application_candidate_count": 0,
+    "actual_application_execution_count": 0
+  },
+  "linkage_policy": ["decision_input_id", "decision_preview_id", "queue_id", "gate_id", "internal_source_id", "sandbox_artist_key", "source_type"],
+  "dry_run_policy": {"inspection_records_allowed": true, "mutation_allowed": false, "historical_output_schema_required": true},
+  "decision_state_policy": {"allowed": ["not_decided"], "queue_status": "pending_review"},
+  "canonical_output_policy": {"local_ignored_tmp_only": true, "git_tracked": false, "historical_application_schema_preserved": true},
+  "safe_metadata_policy": {"source_url": false, "author_or_publisher": false, "title": false, "source_summary": false, "raw_sample": false, "filename_or_path": false},
+  "result_statuses": {"preview_status": "valid_local_decision_application_dry_run", "eligibility": "eligible", "dry_run_effect": "no_change", "actionability_status": "no_action"},
+  "prohibited_effects": ["human_review", "approve", "reject", "source_decision", "decision_application", "production_mutation", "production_effect", "production_promotion", "database_write", "storage_write", "pipeline", "score", "ranking", "artist_page", "recommendation"]
+}
