@@ -1,0 +1,122 @@
+{
+  "version": "v65",
+  "mode": "local_sandbox_preview_only",
+  "artist": "aespa",
+  "stage": "application_state_contract_proposal",
+  "scope": "non_executable_proposed_fandex_application_state_contract_only",
+  "proposal_status": "proposal_only",
+  "historical_authority": false,
+  "production_authority": false,
+  "local_sandbox_preview_only": true,
+  "proposal_only": true,
+  "historical_semantics_preserved": true,
+  "new_semantics_explicitly_labeled": true,
+  "application_execution": false,
+  "application_simulation": false,
+  "actual_human_review": false,
+  "actual_human_submission": false,
+  "actual_approval": false,
+  "actual_rejection": false,
+  "source_mutation": false,
+  "review_queue_mutation": false,
+  "decision_state_mutation": false,
+  "audit_write": false,
+  "production_mutation": false,
+  "production_authorization": false,
+  "external_write": false,
+  "provenance_vocabulary": ["historical_existing", "proposed_v65", "unresolved", "not_applicable"],
+  "historical_modules": [
+    {"role": "v64_plan", "path": "scripts/source-sandbox/preview_aespa_decision_application_plan.py", "sha256": "4163751ee4510d573985b895a55b4c4b23f67d060a76e579bfee714cc70602c6"},
+    {"role": "v64_contract", "path": "scripts/source-sandbox/aespa_decision_application_plan_preview_contract.preview.json", "sha256": "e0badb8515cb00ca78d4201666f2b1f73e9f1ab89302b63da24a81a1397be4d0"},
+    {"role": "historical_validator", "path": "scripts/source-sandbox/validate_human_review_decisions.py", "sha256": "8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"},
+    {"role": "template_builder", "path": "scripts/source-sandbox/prepare_human_review_queue.py", "sha256": "694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"},
+    {"role": "v58_dry_run", "path": "scripts/source-sandbox/preview_aespa_decision_application.py", "sha256": "fa4e59b18d1a8bddf50c1244175e358b736569b11aeb5ff2a7434a045a3f4d81"},
+    {"role": "v61_intake", "path": "scripts/source-sandbox/preview_aespa_human_authored_decision_input.py", "sha256": "ad1ba38a4ac37d71445626978e92aae1271383cc10dfd3d90e7ccf40c7bf90aa"},
+    {"role": "v62_staging", "path": "scripts/source-sandbox/preview_aespa_human_decision_acceptance_staging.py", "sha256": "720f13ceb4c75e799e5a41554c6454f0b8b800ab722361b58f7626610eb758ee"},
+    {"role": "v63_gate", "path": "scripts/source-sandbox/preview_aespa_decision_application_authorization_gate.py", "sha256": "7e695faed8673af25e96e80842cabee68d70129b996903c3dc28fdebdec2702f"},
+    {"role": "input_contract", "path": "scripts/source-sandbox/human_review_decision_contract.preview.json", "sha256": "0a3706684c19f4c86589a1ad99039256f9c7d1aa6bc62f8d2d054cdac147a07c"},
+    {"role": "dry_run_contract", "path": "scripts/source-sandbox/human_review_decision_application_contract.preview.json", "sha256": "d76a820d160916e6b90a8648ced00aee6c879c3c0222c3d2b4f785978e8c4120"}
+  ],
+  "proposed_application_lifecycle": {
+    "provenance": "proposed_v65",
+    "states": [
+      {"status": "prepared", "meaning": "validated and gate-eligible logical application is ready for one atomic attempt", "entry_conditions": ["v61_valid", "v62_valid", "v63_eligible", "expected_state_fingerprint_matches", "no_conflicting_applied_record"], "allowed_next_states": ["applied", "failed", "conflict"], "terminal": false},
+      {"status": "applied", "meaning": "all logical application writes completed atomically", "entry_conditions": ["prepared", "atomic_boundary_succeeded"], "allowed_next_states": [], "terminal": true},
+      {"status": "failed", "meaning": "attempt produced no logical writes", "entry_conditions": ["prepared", "non_conflict_failure"], "allowed_next_states": ["prepared"], "terminal": false},
+      {"status": "conflict", "meaning": "expected state, duplicate, or already-applied check failed with no logical writes", "entry_conditions": ["prepared", "state_or_identity_conflict"], "allowed_next_states": ["prepared"], "terminal": false}
+    ],
+    "retry_precondition": "fresh_v61_v62_v63_validation_and_new_expected_state_fingerprint_required"
+  },
+  "proposed_state_vocabulary": {
+    "provenance": "proposed_v65",
+    "decision_outcomes": ["candidate_approved", "exception_accepted", "rejected", "deferred", "enrichment_requested"],
+    "queue_states": ["pending_review", "resolved", "deferred", "enrichment_requested"],
+    "source_eligibility_policy": "unchanged_by_decision_application"
+  },
+  "proposed_application_record_schema": {
+    "provenance": "proposed_v65",
+    "required_fields": ["application_id", "decision_input_id", "decision_preview_id", "queue_id", "gate_id", "internal_source_id", "sandbox_artist_key", "source_type", "decision_intent", "decision_outcome", "application_status", "reviewer_id", "reviewed_at", "rationale_codes", "input_hash", "historical_state_hash", "proposal_contract_version"],
+    "conditional_fields": {"requested_enrichment_fields": "required_only_for_request_enrichment", "applied_at": "required_only_when_application_status_is_applied", "failure_reason_code": "required_only_for_failed_or_conflict"},
+    "optional_fields": ["reviewer_note"],
+    "timestamp_policy": "future_executor_supplies_validated_ISO_8601_values; v65_generates_none",
+    "reviewer_note_policy": "persist_in_restricted_canonical_record_only_when_supplied; omit_from_safe_summaries"
+  },
+  "proposed_metadata_policy": {
+    "provenance": "proposed_v65",
+    "reviewer_id": "required_and_persisted_for_explicit_intents",
+    "reviewed_at": "validated_if_supplied_historically; proposed_required_and_persisted_for_explicit_intents",
+    "rationale_codes": "required_and_persisted_for_explicit_intents",
+    "reviewer_note": "optional_restricted_persistence_not_in_safe_summary",
+    "not_decided": "historical_null_or_empty_metadata_preserved_and_no_application_record"
+  },
+  "proposed_idempotency_rule": {
+    "provenance": "proposed_v65",
+    "algorithm": "sha256_canonical_join",
+    "ordered_components": ["proposal_contract_version", "decision_input_id", "decision_preview_id", "queue_id", "gate_id", "internal_source_id", "decision_intent", "input_hash", "historical_state_hash"],
+    "identical_retry": "return_existing_applied_result_without_new_logical_writes",
+    "same_key_different_payload": "conflict_fail_closed",
+    "different_decision_same_target": "conflict_if_target_is_resolved; requires_separate_reopen_and_new_validated_input"
+  },
+  "proposed_stale_state_rule": {
+    "provenance": "proposed_v65",
+    "fingerprint": "sha256_of_canonical_minimal_target_state_including_linkage_queue_status_current_decision_status_and_existing_application_identity",
+    "comparison_point": "immediately_before_atomic_logical_application",
+    "mismatch_result": "conflict",
+    "write_policy": "fail_closed_no_logical_writes"
+  },
+  "proposed_logical_transaction_boundary": {
+    "provenance": "proposed_v65",
+    "atomic_logical_writes": ["decision_application_record", "decision_outcome_state", "review_queue_state", "audit_event"],
+    "physical_storage": {"value": null, "provenance": "unresolved"},
+    "source_eligibility_write": "not_in_boundary",
+    "partial_success_allowed": false
+  },
+  "proposed_audit_contract": {
+    "provenance": "proposed_v65",
+    "required_fields": ["application_id", "decision_input_id", "queue_id", "gate_id", "internal_source_id", "sandbox_artist_key", "source_type", "reviewer_id", "decision_intent", "before_state_fingerprint", "after_state_fingerprint", "proposal_contract_version", "result"],
+    "conditional_fields": {"failure_reason_code": "required_for_failed_or_conflict"},
+    "write_policy": "same_atomic_logical_boundary_as_successful_application; failed_or_conflict_attempt_evidence_requires_separately_atomic_audit_only_record"
+  },
+  "proposed_failure_retry_policy": {
+    "provenance": "proposed_v65",
+    "atomic_success": true,
+    "validation_or_state_conflict": "fail_closed",
+    "partial_logical_application": "forbidden",
+    "retry": "requires_fresh_validation_gate_and_state_fingerprint",
+    "identical_applied_retry": "idempotent_existing_result",
+    "stale_or_conflicting_retry": "conflict_no_application_writes",
+    "rollback": "not_required_for_application_state_when_atomicity_holds; implementation_mechanism_unresolved"
+  },
+  "proposed_downstream_effect_boundary": {
+    "provenance": "proposed_v65",
+    "source_eligibility": "unchanged",
+    "scoring": "disconnected",
+    "ranking": "disconnected",
+    "charts": "disconnected",
+    "public_data": "disconnected",
+    "app_data": "disconnected",
+    "future_connection": "requires_separately_reviewed_contract_and_authorization"
+  },
+  "deterministic_output_policy": "sorted_canonical_json_no_time_randomness_or_generated_records",
+  "no_write_policy": "proposal_artifacts_only_under_ignored_tmp_no_application_simulation_or_audit_write"
+}
