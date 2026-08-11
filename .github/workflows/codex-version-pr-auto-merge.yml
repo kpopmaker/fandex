@@ -1,0 +1,82 @@
+name: FANDEX Codex Version PR Auto Merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+  statuses: read
+
+concurrency:
+  group: codex-version-pr-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  merge:
+    if: >-
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == github.repository_owner &&
+      github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Wait for Vercel and queue squash merge
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "${HEAD_REF}" =~ ^v[0-9]+- ]]; then
+            echo "Skipping non-version branch: ${HEAD_REF}"
+            exit 0
+          fi
+
+          deadline=$((SECONDS + 1800))
+          vercel_ready=false
+
+          while (( SECONDS < deadline )); do
+            current_head="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid --jq '.headRefOid')"
+
+            if [[ "${current_head}" != "${HEAD_SHA}" ]]; then
+              echo "PR head changed from ${HEAD_SHA} to ${current_head}; a newer run will handle it."
+              exit 1
+            fi
+
+            vercel_state="$(gh api "repos/${REPOSITORY}/commits/${HEAD_SHA}/status"               --jq '[.statuses[] | select(.context == "Vercel")][0].state // "missing"')"
+
+            case "${vercel_state}" in
+              success)
+                vercel_ready=true
+                echo "Vercel check succeeded."
+                break
+                ;;
+              failure|error)
+                echo "Vercel check failed with state: ${vercel_state}"
+                exit 1
+                ;;
+              pending|missing)
+                echo "Vercel state is ${vercel_state}; checking again in 15 seconds."
+                sleep 15
+                ;;
+              *)
+                echo "Unexpected Vercel state: ${vercel_state}"
+                exit 1
+                ;;
+            esac
+          done
+
+          if [[ "${vercel_ready}" != "true" ]]; then
+            echo "Timed out waiting for Vercel success."
+            exit 1
+          fi
+
+          gh pr merge "${PR_NUMBER}"             --repo "${REPOSITORY}"             --auto             --squash             --delete-branch             --match-head-commit "${HEAD_SHA}"
