@@ -1,0 +1,33 @@
+{
+  "version":"v70","mode":"local_sandbox_preview_only","artist":"aespa","stage":"local_end_to_end_execution_orchestrator_preview","scope":"controlled_local_shadow_orchestration_validation_only","authority":"local_end_to_end_orchestrator_validation_only","historical_authority":false,"production_authority":false,
+  "local_sandbox_preview_only":true,"local_shadow_execution_only":true,"orchestration_only":true,"in_memory_persistence_only":true,"persistent_storage":false,"database_access":false,"external_write":false,"production_write":false,"historical_mutation":false,"source_write":false,"score_write":false,"ranking_write":false,"chart_write":false,"public_data_write":false,
+  "references":[
+    {"role":"historical_validator","path":"scripts/source-sandbox/validate_human_review_decisions.py","sha256":"8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31","provenance":"historical_existing"},
+    {"role":"v61_intake","path":"scripts/source-sandbox/preview_aespa_human_authored_decision_input.py","sha256":"ad1ba38a4ac37d71445626978e92aae1271383cc10dfd3d90e7ccf40c7bf90aa","provenance":"validated_v61"},
+    {"role":"v62_staging","path":"scripts/source-sandbox/preview_aespa_human_decision_acceptance_staging.py","sha256":"720f13ceb4c75e799e5a41554c6454f0b8b800ab722361b58f7626610eb758ee","provenance":"validated_v62"},
+    {"role":"v63_authorization","path":"scripts/source-sandbox/preview_aespa_decision_application_authorization_gate.py","sha256":"7e695faed8673af25e96e80842cabee68d70129b996903c3dc28fdebdec2702f","provenance":"validated_v63"},
+    {"role":"v66_contract","path":"scripts/source-sandbox/aespa_application_contract_executable_semantics_proposal.preview.json","sha256":"7617fb6afe91a05f8b13007ff83a86ebfe2266898b46e308cdea732d7f372225","provenance":"proposed_v66"},
+    {"role":"v67_helper","path":"scripts/source-sandbox/preview_aespa_application_contract_simulation.py","sha256":"ce84ca5018fedf36a976e0278836fea29c31cc184c3f4cc9409ce23fdf4fcf35","provenance":"validated_v67"},
+    {"role":"v68_interface","path":"scripts/source-sandbox/aespa_application_persistence_interface_readiness_plan.preview.json","sha256":"07b108b34a5028ab0bc8dc69a8bcf73d62e260879cc5ce44aa66c644d59c7c5e","provenance":"proposed_v68"},
+    {"role":"v69_contract","path":"scripts/source-sandbox/aespa_local_disposable_persistence_adapter_preview_contract.preview.json","sha256":"914b32efc1913e005bb7ba8d62294c836a8432193b9c50c42803988c0b53bc55","provenance":"validated_v69_local_adapter"},
+    {"role":"v69_adapter","path":"scripts/source-sandbox/preview_aespa_local_disposable_persistence_adapter.py","sha256":"9e1963fd3ac18961570c0278474c6fd3fb6c08f8dce4fbcd09fbf45b00bad5b9","provenance":"validated_v69_local_adapter"}
+  ],
+  "provenance_vocabulary":["historical_existing","validated_v61","validated_v62","validated_v63","proposed_v65","proposed_v66","validated_v67","proposed_v68","validated_v69_local_adapter","validated_v70_local_orchestrator","controlled_fixture_only","unresolved","not_applicable"],
+  "stage_order":["load_local_inputs","historical_validation","intake_validation","staging_validation","authorization_validation","resolve_historical_target","build_initial_logical_state","resolve_v66_transition","build_v68_atomic_request","initialize_v69_disposable_adapter","execute_v69_atomic_apply","verify_persisted_evidence","finalize_safe_result"],
+  "stage_authority_map":{"load_local_inputs":"validated_v70_local_orchestrator","historical_validation":"historical_existing","intake_validation":"validated_v61","staging_validation":"validated_v62","authorization_validation":"validated_v63","resolve_historical_target":"historical_existing","build_initial_logical_state":"proposed_v66","resolve_v66_transition":"proposed_v66","build_v68_atomic_request":"proposed_v68","initialize_v69_disposable_adapter":"validated_v69_local_adapter","execute_v69_atomic_apply":"validated_v69_local_adapter","verify_persisted_evidence":"validated_v70_local_orchestrator","finalize_safe_result":"validated_v70_local_orchestrator"},
+  "input_schemas":{"submission":"historical_human_decision_submission_unchanged","application_context":"v66.execution_context_schema_separate_object"},
+  "input_immutability_rule":"byte_sha256_before_equals_after_and_no_raw_input_evidence_copy",
+  "transition_authority_rule":"resolve_exactly_one_v66_transition_table_row_without_local_business_mapping",
+  "atomic_request_authority_rule":"exact_v68_atomic_request_schema_only",
+  "adapter_reuse_rule":"import_hash_pinned_v69_and_use_public_initialization_read_lookup_apply_surfaces",
+  "no_action_rule":"v66_no_action_creates_no_atomic_request_and_no_adapter_mutation",
+  "read_after_write_rule":"independent_v69_target_read_application_lookup_and_read_only_snapshot_verification",
+  "persisted_evidence_verification_rule":"fingerprints_digests_transition_linkage_source_and_identity_all_match",
+  "idempotent_retry_rule":"same_request_same_adapter_returns_idempotent_existing_result_without_second_write",
+  "stale_conflict_propagation_rule":"preserve_exact_v69_result_and_stop_without_mutation",
+  "unknown_commit_recovery_rule":"discard_immediate_result_conceptually_then_lookup_deterministic_application_id",
+  "safe_output_policy":{"reviewer_note":false,"raw_submission":false,"raw_source_payload":false,"safe_values":["ids","counts","statuses","digests","contract_metadata"]},
+  "zero_real_effect_rule":"all_real_effect_counters_equal_zero",
+  "readiness_derivation_criteria":["historical_v61_v62_v63_integration","six_v66_rows","exact_v68_requests","v69_apply_and_read_after_write","exact_no_action","idempotency_conflict_stale_unknown_commit","safe_outputs","immutability","no_semantic_disk_persistence","zero_real_effects","deterministic_reproduction"],
+  "production_persistence_readiness":"not_ready","production_execution_readiness":"not_ready"
+}
