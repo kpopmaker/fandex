@@ -1,0 +1,130 @@
+{
+  "version": "v72",
+  "stage": "aespa_enrichment_request_field_contract_proposal",
+  "artist": "aespa",
+  "scope": "local_sandbox_proposed_requested_enrichment_field_contract_only",
+  "authority": "proposed_enrichment_request_field_vocabulary_only",
+  "historical_authority": false,
+  "production_authority": false,
+  "proposal_status": "proposed_for_future_controlled_validation",
+  "provenance_vocabulary": [
+    "historical_existing",
+    "existing_schema_observation",
+    "controlled_fixture_only",
+    "proposed_v72",
+    "unresolved",
+    "not_applicable"
+  ],
+  "consumed_references": [
+    {"role":"historical_validator","path":"scripts/source-sandbox/validate_human_review_decisions.py","sha256":"8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"},
+    {"role":"historical_queue_builder","path":"scripts/source-sandbox/prepare_human_review_queue.py","sha256":"694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"},
+    {"role":"historical_decision_contract","path":"scripts/source-sandbox/human_review_decision_contract.preview.json","sha256":"0a3706684c19f4c86589a1ad99039256f9c7d1aa6bc62f8d2d054cdac147a07c"},
+    {"role":"historical_application_contract","path":"scripts/source-sandbox/human_review_decision_application_contract.preview.json","sha256":"d76a820d160916e6b90a8648ced00aee6c879c3c0222c3d2b4f785978e8c4120"},
+    {"role":"normalized_validation_contract","path":"scripts/source-sandbox/aespa_normalized_validation_contract.preview.json","sha256":"2a5d3f1fda3f5ce58f793e7342d52486f865d3acd2243925082b4310b133b896"},
+    {"role":"normalized_validator","path":"scripts/source-sandbox/validate_aespa_normalized_sources.py","sha256":"cb38698426cc5f74cde94a98e3648947ab2d7e61477ae609a03a65e808983006"},
+    {"role":"mapping_builder","path":"scripts/source-sandbox/build_artist_source_mappings.py","sha256":"dbfc4910187c7213b41c107a0a8620000b96ac74f64f60a888d88b1423edf6e8"},
+    {"role":"aespa_mapping_builder","path":"scripts/source-sandbox/build_aespa_artist_mapping_preview.py","sha256":"643d2bb391531f296271a44d7079fbcb79377a0b27a7c9bc81f6bbaede976407"},
+    {"role":"quality_contract","path":"scripts/source-sandbox/aespa_quality_eligibility_preview_contract.preview.json","sha256":"bc47485ba3fedd1a581ff8b375b046cb376ba513111e278cebc33b7053145cbb"},
+    {"role":"quality_preview","path":"scripts/source-sandbox/preview_aespa_source_quality_eligibility.py","sha256":"d16f0e378d883bf0c20f3cce5008fa63cc96c75e21bffffa58076bdb51d65c45"},
+    {"role":"v61_contract","path":"scripts/source-sandbox/aespa_human_authored_decision_input_preview_contract.preview.json","sha256":"582d1071b0dbd2b913ac94d239664b09929c3a7766c893dfae26e1c627902233"},
+    {"role":"v61_implementation","path":"scripts/source-sandbox/preview_aespa_human_authored_decision_input.py","sha256":"ad1ba38a4ac37d71445626978e92aae1271383cc10dfd3d90e7ccf40c7bf90aa"},
+    {"role":"v62_contract","path":"scripts/source-sandbox/aespa_human_decision_acceptance_staging_preview_contract.preview.json","sha256":"d667d31122e49b89e30ee57abbc1ae033ef2354c1253121c4c8bf2802d9912b0"},
+    {"role":"v62_implementation","path":"scripts/source-sandbox/preview_aespa_human_decision_acceptance_staging.py","sha256":"720f13ceb4c75e799e5a41554c6454f0b8b800ab722361b58f7626610eb758ee"},
+    {"role":"v63_contract","path":"scripts/source-sandbox/aespa_decision_application_authorization_gate_preview_contract.preview.json","sha256":"44f18f8e1e7a85ffc5f815b85a1cab60c02efa1c73431130ca28573f52ddef22"},
+    {"role":"v63_implementation","path":"scripts/source-sandbox/preview_aespa_decision_application_authorization_gate.py","sha256":"7e695faed8673af25e96e80842cabee68d70129b996903c3dc28fdebdec2702f"},
+    {"role":"v66_contract","path":"scripts/source-sandbox/aespa_application_contract_executable_semantics_proposal.preview.json","sha256":"7617fb6afe91a05f8b13007ff83a86ebfe2266898b46e308cdea732d7f372225"},
+    {"role":"v70_contract","path":"scripts/source-sandbox/aespa_local_end_to_end_execution_orchestrator_preview_contract.preview.json","sha256":"9476ecf5228d9d572aa4c25c3fcb587590e1c28fd3cf42a5ba5b63b9285d4ff2"},
+    {"role":"v70_implementation","path":"scripts/source-sandbox/preview_aespa_local_end_to_end_execution_orchestrator.py","sha256":"dc235bd0e81b6a560d84d17bb9b595bfcba4fd04a4255a4c544463acf16e5ddd"},
+    {"role":"v71_contract","path":"scripts/source-sandbox/aespa_real_source_shadow_execution_preview_contract.preview.json","sha256":"ac6a7a5579a73b31d2096b86a0895adb88d70ec1192d6a17d079f6602ac292e8"},
+    {"role":"v71_implementation","path":"scripts/source-sandbox/preview_aespa_real_source_shadow_execution.py","sha256":"2e2df8b48d366dcb9dcad1d760b2b4d431a27a26f89d85ae86ceeeeec973b519"}
+  ],
+  "historical_gap": {
+    "decision_intent": "request_enrichment",
+    "historical_requirement": "requested_enrichment_fields must be a non-empty duplicate-free array",
+    "historical_element_constraint": "array elements are not constrained to a string vocabulary by the historical validator",
+    "closed_vocabulary_present": false,
+    "arbitrary_unique_nonempty_values_structurally_accepted": true,
+    "fixture_examples_are_contract_authority": false,
+    "gap_status": "confirmed",
+    "provenance": "historical_existing"
+  },
+  "source_model_inventory": [
+    {"concept":"human_readable_title","existing_field_paths":["normalized_source.title","review_queue.title"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_projection","absent_from_selected_real_target":true,"safe_as_enrichment_target":true,"provenance":"existing_schema_observation"},
+    {"concept":"human_readable_summary","existing_field_paths":["normalized_source.summary","review_queue.summary_excerpt"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_excerpt_projection","absent_from_selected_real_target":true,"safe_as_enrichment_target":true,"provenance":"existing_schema_observation"},
+    {"concept":"author_or_publisher_attribution","existing_field_paths":["normalized_source.author_or_publisher","review_queue.author_or_publisher"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_projection","absent_from_selected_real_target":true,"safe_as_enrichment_target":true,"provenance":"existing_schema_observation"},
+    {"concept":"provider_identity","existing_field_paths":["normalized_source.provider_key","review_queue.provider_key"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_projection","absent_from_selected_real_target":false,"safe_as_enrichment_target":false,"provenance":"existing_schema_observation"},
+    {"concept":"source_location","existing_field_paths":["normalized_source.source_url","review_queue.source_url"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_projection","absent_from_selected_real_target":false,"safe_as_enrichment_target":false,"provenance":"existing_schema_observation"},
+    {"concept":"publication_time","existing_field_paths":["normalized_source.published_at","review_queue.published_at"],"stage":"normalized_source_and_human_review_queue","applicable_source_types":["news","blog"],"persisted_historically":"review_queue_projection","absent_from_selected_real_target":false,"safe_as_enrichment_target":true,"provenance":"existing_schema_observation"},
+    {"concept":"artist_relevance_evidence","existing_field_paths":["artist_mapping.matched_aliases","artist_mapping.evidence_fields","artist_mapping.evidence_level"],"stage":"artist_mapping","applicable_source_types":["news","blog"],"persisted_historically":"mapping_and_gate_classification_only","absent_from_selected_real_target":false,"safe_as_enrichment_target":false,"provenance":"existing_schema_observation"}
+  ],
+  "allowed_requested_enrichment_fields": [
+    {
+      "key": "content_context",
+      "display_name": "Human-readable content context",
+      "semantic_definition": "Enough locally represented, human-readable source content to understand what the item is about without requiring or exposing a full article body.",
+      "category": "content",
+      "applicable_source_types": ["news", "blog"],
+      "mapped_existing_source_fields": ["normalized_source.title", "normalized_source.summary", "review_queue.title", "review_queue.summary_excerpt"],
+      "required_or_optional_evidence": {"required":["non-empty title","non-empty summary or bounded summary excerpt"],"optional":["additional bounded locally stored snippet"],"not_required":["full article body"]},
+      "completion_rule": "Complete only when both a non-empty title and a non-empty summary or bounded summary excerpt are available for human review; a URL, hash, or title alone is insufficient.",
+      "safe_output_rule": "Expose the title and only the minimum bounded summary or excerpt needed for review; never require or dump a full copyrighted article body.",
+      "provenance": "proposed_v72"
+    },
+    {
+      "key": "source_attribution",
+      "display_name": "Source attribution context",
+      "semantic_definition": "Enough attribution metadata to identify who authored, published, or otherwise bears responsibility for the source item, in addition to provider and location context.",
+      "category": "attribution",
+      "applicable_source_types": ["news", "blog"],
+      "mapped_existing_source_fields": ["normalized_source.author_or_publisher", "review_queue.author_or_publisher", "normalized_source.provider_key", "review_queue.provider_key", "normalized_source.source_url", "review_queue.source_url"],
+      "required_or_optional_evidence": {"required":["non-empty author_or_publisher attribution"],"contextual":["provider_key","source URL hostname/domain"],"insufficient_alone":["provider_key","source URL hostname/domain"]},
+      "completion_rule": "Complete only when non-empty author_or_publisher attribution is available; provider_key and URL hostname/domain provide context but cannot complete this request by themselves.",
+      "safe_output_rule": "Expose bounded attribution values and, when needed, provider key plus URL hostname/domain; do not expose unrelated source payload or credentials.",
+      "provenance": "proposed_v72"
+    }
+  ],
+  "canonical_order": ["content_context", "source_attribution"],
+  "validation_semantics": {
+    "input_type": "array_of_strings",
+    "multiple_keys_allowed": true,
+    "normalization": "validate exact keys then reorder by canonical_order",
+    "string_normalization": "exact_no_trim_no_case_fold",
+    "duplicate_policy": "invalid_duplicate",
+    "unknown_key_behavior": "invalid_unknown_enrichment_field",
+    "empty_array_behavior": "invalid_empty",
+    "invalid_type_behavior": "invalid_type",
+    "valid_status": "valid",
+    "historical_validator_replacement": false,
+    "provenance": "proposed_v72"
+  },
+  "human_requirement_mapping": [
+    {"human_requirement":"article/content information sufficient to understand what the source item says","canonical_enrichment_field":"content_context","reason":"The existing source model represents bounded human-readable content with title plus summary/summary_excerpt.","existing_source_model_evidence":["normalized_source.title","normalized_source.summary","review_queue.title","review_queue.summary_excerpt"],"provenance":"proposed_v72"},
+    {"human_requirement":"source/attribution information sufficient to understand who published/authored/provided it","canonical_enrichment_field":"source_attribution","reason":"The existing source model carries author_or_publisher separately from provider_key and source_url; historical gate evidence proves provider/domain context alone is insufficient.","existing_source_model_evidence":["normalized_source.author_or_publisher","review_queue.author_or_publisher","review_queue.provider_key","review_queue.source_url","gate.attribution_status"],"provenance":"proposed_v72"}
+  ],
+  "combined_human_requirement_fields": ["content_context", "source_attribution"],
+  "fixture_example_classification": [
+    {"value":"author","locations":["scripts/source-sandbox/validate_human_review_decisions.py","scripts/source-sandbox/preview_aespa_local_end_to_end_execution_orchestrator.py","scripts/source-sandbox/preview_aespa_real_source_shadow_execution.py"],"classification":"controlled_fixture_only","promoted_to_v72_vocabulary":false,"provenance":"controlled_fixture_only"},
+    {"value":"provider_attribution","locations":["scripts/source-sandbox/preview_aespa_application_contract_simulation.py"],"classification":"controlled_fixture_only","promoted_to_v72_vocabulary":false,"provenance":"controlled_fixture_only"}
+  ],
+  "selected_real_target_use_case": {
+    "internal_source_id": "src_40f253cea60253b4f7b8d1e747f9cc87",
+    "source_type": "news",
+    "historical_queue_status": "pending_review",
+    "historical_decision_status": "not_decided",
+    "historical_gate_status": "exception_review_required",
+    "known_present": ["provider_key", "source_url_hostname", "published_at", "mapped_artist_identity", "confirmed_mapping_evidence"],
+    "known_missing": ["title", "summary_or_snippet", "author_or_publisher", "detailed_attribution_recovery"],
+    "gate_reason_codes": ["attribution_recovery_unavailable","eligibility_review_required","exception_review_required_by_contract","missing_author_or_publisher","provider_attribution_unavailable","provider_limitation_verified","quality_review_required"],
+    "expressible_by": ["content_context", "source_attribution"],
+    "historical_state_mutation": false,
+    "provenance": "existing_schema_observation"
+  },
+  "safe_output_policy": {"allow":["contract keys","semantic definitions","field paths","bounded evidence requirements","safe IDs","statuses","counts","hashes"],"exclude":["full article body","credentials","reviewer note","unrelated raw source payload"],"external_retrieval":false},
+  "zero_effect_policy": {"human_decision_execution_count":0,"v70_execution_count":0,"v69_atomic_apply_count":0,"application_record_count":0,"audit_record_count":0,"queue_transition_count":0,"decision_transition_count":0,"source_mutation_count":0,"real_effect_count":0,"production_effect_count":0},
+  "readiness": {
+    "enrichment_request_field_contract_conformance": "passed_when_all_preview_checks_pass",
+    "future_explicit_human_shadow_decision_readiness": "ready_with_v72_enrichment_contract_when_all_preview_checks_pass",
+    "production_persistence_readiness": "not_ready",
+    "production_execution_readiness": "not_ready"
+  }
+}
