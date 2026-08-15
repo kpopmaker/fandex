@@ -1,0 +1,28 @@
+{
+  "version":"v69","mode":"local_sandbox_preview_only","artist":"aespa","stage":"local_disposable_persistence_adapter_preview","scope":"controlled_process_local_in_memory_adapter_validation_only","authority":"local_disposable_adapter_validation_only","historical_authority":false,"production_authority":false,
+  "local_sandbox_preview_only":true,"in_memory_only":true,"disposable":true,"provider_neutral_contract_consumer":true,"persistent_storage":false,"database_access":false,"external_write":false,"production_write":false,"source_write":false,"score_write":false,"ranking_write":false,"chart_write":false,"public_data_write":false,
+  "references":[
+    {"role":"v68_interface","path":"scripts/source-sandbox/aespa_application_persistence_interface_readiness_plan.preview.json","sha256":"07b108b34a5028ab0bc8dc69a8bcf73d62e260879cc5ce44aa66c644d59c7c5e","provenance":"proposed_v68"},
+    {"role":"v68_implementation","path":"scripts/source-sandbox/preview_aespa_application_persistence_interface_readiness.py","sha256":"7a1e7bbbaef30521fdc3ceac031eb8c6cf824c332c0cc694047d1a64f6b41eba","provenance":"proposed_v68"},
+    {"role":"v67_contract","path":"scripts/source-sandbox/aespa_application_contract_simulation_preview_contract.preview.json","sha256":"1d90be429d04a14bf7f2f738b0f815b508efd17d391bdd76ddaafd85523924b1","provenance":"validated_v67"},
+    {"role":"v67_implementation","path":"scripts/source-sandbox/preview_aespa_application_contract_simulation.py","sha256":"ce84ca5018fedf36a976e0278836fea29c31cc184c3f4cc9409ce23fdf4fcf35","provenance":"validated_v67"},
+    {"role":"v66_contract","path":"scripts/source-sandbox/aespa_application_contract_executable_semantics_proposal.preview.json","sha256":"7617fb6afe91a05f8b13007ff83a86ebfe2266898b46e308cdea732d7f372225","provenance":"proposed_v66"},
+    {"role":"historical_validator","path":"scripts/source-sandbox/validate_human_review_decisions.py","sha256":"8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31","provenance":"historical_existing"}
+  ],
+  "provenance_vocabulary":["historical_existing","proposed_v65","proposed_v66","validated_v67","proposed_v68","validated_v69_local_adapter","controlled_fixture_only","unresolved","not_applicable"],
+  "operation_names":["read_application_target","lookup_application_by_id","apply_application_atomically"],
+  "adapter_responsibilities":["state_read","expected_state_compare","idempotency_lookup","atomic_in_memory_persistence","canonical_result_reporting"],
+  "forbidden_responsibilities":["intent_to_outcome_mapping","intent_to_queue_mapping","source_write","downstream_write","physical_provider_selection","semantic_filesystem_persistence"],
+  "store_model":{"instance_owned_collections":["targets","applications","audits"],"module_global_store":false,"provider_metadata":false,"process_exit_discards_state":true},
+  "atomic_apply_invariant":{"mechanism":"deep_copy_validate_then_single_live_store_swap","atomic_set":["application_record","decision_outcome","review_queue_state","audit_event"],"partial_commit":false},
+  "cas_rule":{"algorithm":"v66.state_fingerprint","comparison_point":"inside_atomic_apply_immediately_before_tentative_mutation","mismatch_result":"stale_state_conflict","writes_on_mismatch":0},
+  "idempotency_rule":{"identity":"v66_deterministic_application_id","identical_payload":"idempotent_existing_result","conflicting_payload_or_identity":"conflicting_duplicate","second_application_forbidden":true},
+  "unknown_commit_recovery_rule":"lookup deterministic application_id; identical canonical payload proves existing result without second write",
+  "application_uniqueness_invariant":"one immutable canonical record per application_id and no second application per target",
+  "audit_linkage_invariant":"one immutable audit per successful application_id with matching target linkage",
+  "source_read_only_invariant":true,
+  "disposal_invariant":"independent adapter instances share no state",
+  "runtime_evidence_persistence_distinction":{"runtime_json":"ignored_reports_only","semantic_state":"process_local_memory_only","filesystem_semantic_persistence_count":0},
+  "readiness_criteria":["three_operations_conform","cas_passes","idempotency_passes","conflict_fails_closed","atomic_rollback_passes","unknown_commit_recovery_passes","read_after_write_passes","source_immutable","no_semantic_disk_persistence","all_real_effects_zero","deterministic_reproduction"],
+  "production_persistence_readiness":"not_ready"
+}
