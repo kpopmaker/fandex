@@ -1,0 +1,194 @@
+{
+  "version": "v74",
+  "stage": "aespa_enrichment_fulfillment_shadow_design",
+  "artist": "aespa",
+  "scope": "provider_neutral_local_shadow_enrichment_fulfillment_design_only",
+  "authority": "proposed_v74_enrichment_fulfillment_design_only",
+  "historical_authority": false,
+  "production_authority": false,
+  "proposal_status": "proposed_for_separate_local_adapter_implementation",
+  "provenance_vocabulary": ["historical_existing", "validated_v72", "validated_v73", "existing_source_model", "proposed_v74", "controlled_fixture_only", "unresolved", "not_applicable"],
+  "consumed_authority_hashes": [
+    {"role":"historical_decision_contract","path":"scripts/source-sandbox/human_review_decision_contract.preview.json","sha256":"0a3706684c19f4c86589a1ad99039256f9c7d1aa6bc62f8d2d054cdac147a07c"},
+    {"role":"historical_application_contract","path":"scripts/source-sandbox/human_review_decision_application_contract.preview.json","sha256":"d76a820d160916e6b90a8648ced00aee6c879c3c0222c3d2b4f785978e8c4120"},
+    {"role":"historical_validator","path":"scripts/source-sandbox/validate_human_review_decisions.py","sha256":"8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"},
+    {"role":"historical_queue_builder","path":"scripts/source-sandbox/prepare_human_review_queue.py","sha256":"694b1f541218ae9c6697422319b7966b2985f168bc0bc7d98dc00502f90c5819"},
+    {"role":"v66_contract","path":"scripts/source-sandbox/aespa_application_contract_executable_semantics_proposal.preview.json","sha256":"7617fb6afe91a05f8b13007ff83a86ebfe2266898b46e308cdea732d7f372225"},
+    {"role":"v68_contract","path":"scripts/source-sandbox/aespa_application_persistence_interface_readiness_plan.preview.json","sha256":"07b108b34a5028ab0bc8dc69a8bcf73d62e260879cc5ce44aa66c644d59c7c5e"},
+    {"role":"v69_contract","path":"scripts/source-sandbox/aespa_local_disposable_persistence_adapter_preview_contract.preview.json","sha256":"914b32efc1913e005bb7ba8d62294c836a8432193b9c50c42803988c0b53bc55"},
+    {"role":"v69_implementation","path":"scripts/source-sandbox/preview_aespa_local_disposable_persistence_adapter.py","sha256":"9e1963fd3ac18961570c0278474c6fd3fb6c08f8dce4fbcd09fbf45b00bad5b9"},
+    {"role":"v70_contract","path":"scripts/source-sandbox/aespa_local_end_to_end_execution_orchestrator_preview_contract.preview.json","sha256":"9476ecf5228d9d572aa4c25c3fcb587590e1c28fd3cf42a5ba5b63b9285d4ff2"},
+    {"role":"v70_implementation","path":"scripts/source-sandbox/preview_aespa_local_end_to_end_execution_orchestrator.py","sha256":"dc235bd0e81b6a560d84d17bb9b595bfcba4fd04a4255a4c544463acf16e5ddd"},
+    {"role":"v71_contract","path":"scripts/source-sandbox/aespa_real_source_shadow_execution_preview_contract.preview.json","sha256":"ac6a7a5579a73b31d2096b86a0895adb88d70ec1192d6a17d079f6602ac292e8"},
+    {"role":"v71_implementation","path":"scripts/source-sandbox/preview_aespa_real_source_shadow_execution.py","sha256":"2e2df8b48d366dcb9dcad1d760b2b4d431a27a26f89d85ae86ceeeeec973b519"},
+    {"role":"v72_contract","path":"scripts/source-sandbox/aespa_enrichment_request_field_contract_proposal.preview.json","sha256":"0f0bbbea649c5daab8cf69e48f41497650fed8ddd73942c299409a7dcce844e5"},
+    {"role":"v72_implementation","path":"scripts/source-sandbox/preview_aespa_enrichment_request_field_contract.py","sha256":"2fdcd170b7515dbd8a250dc26acf1a8007561c7d3b826e509edcb0bc63c7d7c2"},
+    {"role":"v73_contract","path":"scripts/source-sandbox/aespa_explicit_human_shadow_decision_execution_preview_contract.preview.json","sha256":"cc76e9e281c9dfaaa208c38dcdeca33687c80298f3d1ce398cfd4a1fb5328dae"},
+    {"role":"v73_implementation","path":"scripts/source-sandbox/preview_aespa_explicit_human_shadow_decision_execution.py","sha256":"f216dfa059e436f03320badd12f8aa234ff637e8b3f41ee54f9b632b60140224"}
+  ],
+  "requested_enrichment_field_contract": {
+    "fields": ["content_context", "source_attribution"],
+    "canonical_order": ["content_context", "source_attribution"],
+    "authority": "validated_v72"
+  },
+  "fulfillment_lifecycle": [
+    {"state":"requested","definition":"The canonical field is present in the human request and has not been planned."},
+    {"state":"planned","definition":"A data-only local-first plan exists; no retrieval is implied."},
+    {"state":"not_attempted","definition":"No evidence acquisition was attempted, including when authorization is absent."},
+    {"state":"evidence_available","definition":"Candidate evidence exists but completion validation has not succeeded."},
+    {"state":"partially_satisfied","definition":"Some but not all required semantic components validate for the field."},
+    {"state":"satisfied","definition":"Every field-specific completion requirement validates."},
+    {"state":"unavailable","definition":"Authorized or local inspection completed without the required evidence."},
+    {"state":"failed","definition":"A deterministic validation or acquisition failure prevented evaluation."}
+  ],
+  "request_level_statuses": {
+    "vocabulary": ["not_attempted", "unsatisfied", "partially_satisfied", "satisfied", "unavailable", "failed"],
+    "precedence": ["satisfied", "partially_satisfied", "failed", "unavailable", "not_attempted", "unsatisfied"],
+    "rules": {
+      "satisfied":"all requested fields are satisfied",
+      "partially_satisfied":"at least one but not all requested fields are satisfied",
+      "failed":"none are satisfied and at least one is failed",
+      "unavailable":"none are satisfied or failed and at least one is unavailable",
+      "not_attempted":"all fields are requested, planned, or not_attempted",
+      "unsatisfied":"none are satisfied and evidence is absent or incomplete without a terminal failure"
+    }
+  },
+  "source_class_vocabulary": [
+    {"key":"existing_local_normalized","external":false,"authorized_in_v74":true,"definition":"Already stored normalized/canonical or review-queue evidence."},
+    {"key":"controlled_fixture_input","external":false,"authorized_in_v74":true,"definition":"Synthetic deterministic test evidence, never real-source fact."},
+    {"key":"authorized_provider_retrieval","external":true,"authorized_in_v74":false,"definition":"Future provider-mediated retrieval requiring a separate authorization envelope."},
+    {"key":"authorized_direct_source_retrieval","external":true,"authorized_in_v74":false,"definition":"Future direct source retrieval requiring separately reviewed authorization and network controls."}
+  ],
+  "source_priority": ["existing_local_normalized", "controlled_fixture_input", "authorized_provider_retrieval", "authorized_direct_source_retrieval"],
+  "source_priority_rules": ["evaluate authoritative local evidence first", "stop when the field completion rule is satisfied", "treat external classes as candidates until explicitly authorized", "never fallback to web search or another provider"],
+  "content_context_completion": {
+    "required_semantic_fields": ["title", "summary_or_bounded_excerpt"],
+    "mapped_existing_fields": ["normalized_source.title", "normalized_source.summary", "review_queue.title", "review_queue.summary_excerpt"],
+    "title_alone": "partially_satisfied",
+    "summary_alone": "partially_satisfied",
+    "title_and_summary": "satisfied",
+    "title_and_bounded_excerpt": "satisfied",
+    "full_article_body_required": false,
+    "authority": "validated_v72"
+  },
+  "copyright_safe_content_policy": {
+    "allowed_retention_classes": ["metadata", "title", "summary", "bounded_excerpt", "content_digest", "retrieval_metadata"],
+    "full_article_body_durable_retention": "prohibited",
+    "minimum_necessary_evidence_only": true,
+    "temporary_large_payload_design": "outside_v74; only permitted derived evidence may enter future shadow state"
+  },
+  "excerpt_policy": {
+    "historical_numeric_bound_found": false,
+    "maximum_unicode_code_points": 1000,
+    "boundary_inclusive": true,
+    "normalization": "Unicode NFC then trim surrounding whitespace",
+    "over_limit_result": "evidence_invalid",
+    "provenance": "proposed_v74",
+    "rationale": "A deterministic conservative review excerpt avoids retaining a full article while supporting the v72 bounded-excerpt rule."
+  },
+  "source_attribution_completion": {
+    "required_semantic_field": "author_or_publisher",
+    "mapped_existing_fields": ["normalized_source.author_or_publisher", "review_queue.author_or_publisher"],
+    "contextual_fields": ["provider_key", "source_url_hostname"],
+    "contextual_fields_alone": "unsatisfied",
+    "non_empty_author_or_publisher": "satisfied",
+    "authority": "validated_v72"
+  },
+  "attribution_evidence_policy": {
+    "observed_value_field": "normalized_value",
+    "evidence_source_field": "source_class",
+    "retrieval_method_field": "collection_method",
+    "locator_field": "source_locator",
+    "verification_field": "validation_status",
+    "probabilistic_confidence_scores": false,
+    "normalization": "Unicode NFC then trim surrounding whitespace",
+    "provider_or_hostname_only_sufficient": false
+  },
+  "evidence_envelope_schema": {
+    "additional_properties": false,
+    "required_fields": ["evidence_id", "request_id", "target_identity", "requested_field", "evidence_type", "semantic_field", "normalized_value", "source_class", "source_locator", "collection_method", "content_digest", "provenance", "validation_status", "safe_retention_class"],
+    "fields": {
+      "evidence_id":{"type":"sha256_hex","derivation":"sha256 canonical envelope excluding evidence_id"},
+      "request_id":{"type":"sha256_hex"},
+      "target_identity":{"type":"exact_seven_field_lineage"},
+      "requested_field":{"enum":["content_context","source_attribution"]},
+      "evidence_type":{"enum":["title","summary","bounded_excerpt","author_or_publisher","context_metadata"]},
+      "semantic_field":{"enum":["title","summary_or_bounded_excerpt","author_or_publisher","provider_key","source_url_hostname"]},
+      "normalized_value":{"type":"non_empty_string","normalization":"Unicode NFC then trim surrounding whitespace"},
+      "source_class":{"enum_from":"source_class_vocabulary"},
+      "source_locator":{"type":"safe_locator_string_or_null"},
+      "collection_method":{"enum":["existing_local_projection","controlled_fixture_supply","authorized_provider_request","authorized_direct_request"]},
+      "content_digest":{"type":"sha256_hex","derivation":"sha256 UTF-8 normalized_value"},
+      "provenance":{"enum_from":"provenance_vocabulary"},
+      "validation_status":{"enum":["pending_validation","valid","invalid"]},
+      "safe_retention_class":{"enum":["metadata","title","summary","bounded_excerpt","content_digest","retrieval_metadata"]}
+    },
+    "safe_output": "omit normalized_value except controlled fixture detail; use presence and digest for real evidence"
+  },
+  "evidence_hashing": {"algorithm":"SHA-256","canonicalization":"UTF-8 JSON, sorted keys, compact separators, Unicode preserved, one trailing LF","value_digest":"SHA-256 of UTF-8 NFC-normalized value","provenance":"proposed_v74_consistent_with_fandex_canonical_sha256"},
+  "fulfillment_plan_schema": {
+    "required_fields": ["plan_version", "request_id", "target_identity", "requested_fields", "current_field_states", "available_local_evidence", "missing_requirements", "candidate_source_classes", "authorization_status", "planned_operations", "execution_status"],
+    "execution_status_enum": ["not_executed"],
+    "planned_operation_enum": ["inspect_local_evidence", "validate_supplied_evidence", "evaluate_completion", "await_external_authorization"]
+  },
+  "external_authorization_gate": {
+    "default_status":"not_authorized",
+    "statuses":["not_authorized","authorized","expired","consumed","invalid"],
+    "required_fields":["authorization_id","authorization_status","target_identity","allowed_source_class","allowed_host_or_provider","allowed_requested_fields","request_scope","one_shot","expires_at","provenance"],
+    "target_binding_required":true,
+    "host_or_provider_binding_required":true,
+    "one_shot_required":true,
+    "expiry_required":true,
+    "absent_behavior":"external operations remain not_attempted",
+    "v74_authorization_issued":false
+  },
+  "network_safety_requirements": {
+    "implemented_in_v74":false,
+    "allowed_schemes":["https"],
+    "host_must_match_authorization":true,
+    "redirect_policy":"deny_by_default; any separately authorized redirect must be revalidated for scheme, host, and address",
+    "private_local_network_denied":true,
+    "maximum_response_bytes":2097152,
+    "allowed_content_types":["text/html","application/json"],
+    "timeout_seconds":10,
+    "credential_forwarding_across_hosts":false,
+    "automatic_fallback":false,
+    "provenance":"proposed_v74"
+  },
+  "failure_vocabulary": ["authorization_missing", "authorization_invalid", "target_mismatch", "source_not_authorized", "source_unavailable", "not_found", "access_denied", "rate_limited", "timeout", "invalid_content_type", "response_too_large", "redirect_not_allowed", "evidence_missing", "evidence_invalid", "partial_evidence", "provider_failure"],
+  "retry_policy": {
+    "safe_deterministic_retry":["rate_limited","timeout","provider_failure"],
+    "requires_renewed_authorization":["authorization_missing","authorization_invalid","source_not_authorized"],
+    "do_not_retry":["target_mismatch","not_found","access_denied","invalid_content_type","response_too_large","redirect_not_allowed","evidence_missing","evidence_invalid","partial_evidence","source_unavailable"],
+    "automatic_retry":false,
+    "scheduler_or_cron":false
+  },
+  "partial_completion_semantics": {"one_of_two_satisfied":"partially_satisfied","historical_review_resolved":false,"automatic_decision_transition":false},
+  "human_review_boundary": {"fulfillment_implies_approval":false,"separate_human_review_required":true,"forbidden_automatic_intents":["accept_exception","approve_candidate","reject"]},
+  "historical_write_boundary": {"historical_source_write":false,"historical_queue_write":false,"historical_decision_write":false,"real_application_write":false,"real_audit_write":false,"future_real_write_requires_separate_reviewed_contract":true},
+  "persistence_boundary": {"v69_reused_for_enrichment_evidence":false,"reason":"v69 validates application, decision, queue, and audit state only","proposed_boundary":"separate disposable in-memory enrichment evidence adapter","runtime_json":"ignored evidence only, not semantic persistence"},
+  "future_interface": [
+    {"operation":"inspect_enrichment_satisfaction","effect":"pure_read"},
+    {"operation":"build_enrichment_fulfillment_plan","effect":"pure_transform"},
+    {"operation":"accept_controlled_enrichment_evidence","effect":"in_memory_only"},
+    {"operation":"validate_enrichment_evidence","effect":"pure_validation"},
+    {"operation":"evaluate_enrichment_completion","effect":"pure_transform"},
+    {"operation":"read_shadow_fulfillment_result","effect":"pure_read"}
+  ],
+  "controlled_fixture_policy": {"allowed":true,"provenance":"controlled_fixture_only","must_not_represent_real_article":true,"network_calls":false},
+  "selected_real_target_design_case": {
+    "target_identity":{"decision_input_id":"00de9317942918a736a24d6790e4c17fb1260b5cc2c2f820b339cf66b07be6f4","decision_preview_id":"55f2ac49c067a0f8efbf3e159aac1e523325964e521131dfdeabbb47bd14badc","queue_id":"queue_ef27330d9175d5aa91cba30030992e85168cbcdec18e2fc83699eddf01812b43","gate_id":"gate_17f644959e2a90cdc6d40a2874d47b2d500440052e83078f2122e1784a7c6a64","internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87","sandbox_artist_key":"sandbox:artist:aespa","source_type":"news"},
+    "historical_state":{"queue":"pending_review","decision":"not_decided","classification":"exception_review_required"},
+    "known_local_context":{"provider_key":"naver","source_url_hostname":"www.mydaily.co.kr","published_at":"2026-06-19T00:10:00+09:00"},
+    "requested_fields":["content_context","source_attribution"],
+    "currently_satisfied_fields":[],
+    "currently_missing_fields":["content_context","source_attribution"],
+    "missing_semantic_evidence":["title","summary_or_bounded_excerpt","author_or_publisher"],
+    "authorization_status":"not_authorized",
+    "execution_status":"not_executed",
+    "provenance":"validated_v73"
+  },
+  "safe_output_policy": {"allowed":["safe lineage","provider key","hostname","published_at","requested fields","missing semantic fields","plan status","authorization status","hashes","contract versions"],"prohibited":["full article body","fabricated real title","fabricated real author","fabricated real publisher","credentials","unbounded retrieved content"]},
+  "zero_effect_policy": {"external_request_count":0,"real_enrichment_retrieval_count":0,"shadow_enrichment_retrieval_count":0,"real_source_mutation_count":0,"real_queue_mutation_count":0,"real_decision_mutation_count":0,"real_application_write_count":0,"real_audit_write_count":0,"database_write_count":0,"filesystem_semantic_persistence_count":0,"external_write_count":0,"score_mutation_count":0,"ranking_mutation_count":0,"chart_mutation_count":0,"public_data_mutation_count":0,"production_mutation_count":0,"production_effect_count":0},
+  "readiness": {"enrichment_fulfillment_shadow_design_conformance":"passed_when_all_preview_checks_pass","future_local_enrichment_fulfillment_adapter_readiness":"ready_for_separate_local_adapter_implementation_when_all_preview_checks_pass","external_enrichment_execution_readiness":"not_ready","production_persistence_readiness":"not_ready","production_execution_readiness":"not_ready"}
+}
