@@ -1,0 +1,73 @@
+{
+  "version":"v76",
+  "stage":"aespa_enrichment_fulfillment_executable_contract_correction_proposal",
+  "artist":"aespa",
+  "scope":"contradictory_v75_executable_semantics_correction_only",
+  "authority":"enrichment_fulfillment_executable_contract_correction_proposal",
+  "historical_authority":false,
+  "production_authority":false,
+  "provenance_vocabulary":["validated_v72","validated_v73","proposed_v74","validated_v75","corrected_v76","superseded_v75_semantic","unchanged_v75_semantic"],
+  "consumed_authority_hashes":[
+    {"role":"v75_contract","path":"scripts/source-sandbox/aespa_enrichment_fulfillment_executable_contract_proposal.preview.json","sha256":"990fdec4826937eedf8bba72a70fddf48aec86ae41e4ed285523cc6b85a5ba1f"},
+    {"role":"v75_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_fulfillment_executable_contract.py","sha256":"fce217168cadd2901ffb8c7aaf0cccc96f640362ea9c6471d0bfd8c03c992ae0"},
+    {"role":"v75_documentation","path":"docs/real-source-sandbox-aespa-enrichment-fulfillment-executable-contract-proposal.md","sha256":"a13ad5c82d6f682e3bd8f921db16c8ca5ad4b1a0e3a42074b588c04636c67d92"},
+    {"role":"v72_contract","path":"scripts/source-sandbox/aespa_enrichment_request_field_contract_proposal.preview.json","sha256":"0f0bbbea649c5daab8cf69e48f41497650fed8ddd73942c299409a7dcce844e5"},
+    {"role":"v73_contract","path":"scripts/source-sandbox/aespa_explicit_human_shadow_decision_execution_preview_contract.preview.json","sha256":"cc76e9e281c9dfaaa208c38dcdeca33687c80298f3d1ce398cfd4a1fb5328dae"},
+    {"role":"v74_contract","path":"scripts/source-sandbox/aespa_enrichment_fulfillment_shadow_design.preview.json","sha256":"e6fdbf11c9af55f27b2e801dd559170f65cc6a50ef5524eede29c93c69369f2e"}
+  ],
+  "discovered_contradictions":[
+    {"id":"read_only_plan_vs_persistent_transition","reproduced":true,"v75_conflict":["public_operations.build_enrichment_fulfillment_plan.mutates_state=false","public_operations.build_enrichment_fulfillment_plan.postconditions includes state_unchanged","lifecycle_transition_table requested+plan_built->planned mutates=true"],"correction":"planned is derived_plan_status_only; plan generation never changes persistent lifecycle"},
+    {"id":"duplicate_collision_vs_evidence_identity_validation","reproduced":true,"v75_conflict":["full evidence_id recomputation precedes acceptance","same supplied stored ID with changed payload must return conflicting_duplicate"],"correction":"acceptance classifies stored-ID collisions before new-evidence self-identity verification"}
+  ],
+  "authority_precedence":{"strategy":"v75_baseline_plus_narrow_v76_corrections","rule":"v76 wins only for paths explicitly listed in superseded_v75_clauses; all other v75 clauses remain authoritative"},
+  "superseded_v75_clauses":[
+    "lifecycle_transition_table.requested.plan_built.planned",
+    "lifecycle_transition_table.planned.authorization_absent.not_attempted",
+    "lifecycle_transition_table.planned.valid_evidence_accepted.evidence_available",
+    "lifecycle persistent-state use of planned",
+    "duplicate_semantics classification after full new-evidence identity validation",
+    "state_mutation_boundary step ordering for acceptance duplicate collisions"
+  ],
+  "unchanged_v75_clauses":["six public operation names and closed input/output schemas","request_identity","evidence_identity algorithm for new evidence","content_digest","evidence compatibility matrix","source locator rules","external source non-executability","retention classes and full-body prohibition","local fixture precedence","content_context completion","source_attribution completion","request completion aggregation","excerpt validation maximum 1000 Unicode code points","human re-review boundary","safe result schema","unavailable and failed future-authorized-only semantics","no historical or production authority"],
+  "corrected_operation_consistency_matrix":[
+    {"operation":"inspect_enrichment_satisfaction","mutates_state":false,"input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed","preconditions":["initialized","request_id_matches"],"postconditions":["state_unchanged","completion_derived"],"statuses":["inspected","rejected"],"lifecycle_interaction":"none"},
+    {"operation":"build_enrichment_fulfillment_plan","mutates_state":false,"input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed_with_derived_plan_status","preconditions":["initialized","request_id_matches"],"postconditions":["state_unchanged","external_execution_not_attempted"],"statuses":["planned","rejected"],"lifecycle_interaction":"none; planned is output status only"},
+    {"operation":"validate_enrichment_evidence","mutates_state":false,"input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed","preconditions":["initialized"],"postconditions":["state_unchanged","stateless_envelope_validation"],"statuses":"unchanged_v75_validation_vocabulary","lifecycle_interaction":"none"},
+    {"operation":"accept_controlled_enrichment_evidence","mutates_state":"accepted_new_evidence_only","input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed","preconditions":["initialized","controlled_fixture_for_new_acceptance"],"postconditions":["collision_preclassified","new_evidence_fully_validated","single_replace_or_zero_change"],"statuses":"unchanged_v75_acceptance_vocabulary","lifecycle_interaction":"valid new evidence transitions requested/not_attempted/partially_satisfied to evidence_available"},
+    {"operation":"evaluate_enrichment_completion","mutates_state":true,"input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed","preconditions":["initialized","evaluate_current_evidence"],"postconditions":["derived_paths_only_updated","human_re_review_required"],"statuses":["evaluated","rejected"],"lifecycle_interaction":"corrected persistent transition table"},
+    {"operation":"read_shadow_fulfillment_result","mutates_state":false,"input_schema":"unchanged_v75_closed","output_schema":"unchanged_v75_closed","preconditions":["initialized","request_id_matches"],"postconditions":["deep_copy_returned","state_unchanged"],"statuses":["found","rejected"],"lifecycle_interaction":"read-only self observation"}
+  ],
+  "corrected_plan_semantics":{"persistent_state_mutation":false,"persistent_lifecycle_mutation":false,"status":"planned","plan_status":"planned","plan_status_kind":"derived_plan_status_only","repeated_call":"byte-identical output for identical persistent state","external_execution":"not_attempted"},
+  "persistent_lifecycle_model":{"states":["requested","not_attempted","evidence_available","partially_satisfied","satisfied","unavailable","failed"],"excluded_v75_state":{"planned":"derived_plan_status_only"},"direct_assignment":"forbidden","absent_transition":"illegal_lifecycle_transition"},
+  "derived_plan_status_model":{"vocabulary":["planned"],"storage":"operation_output_only","persistent":false,"affects_completion":false,"affects_evidence_acceptance_precondition":false},
+  "corrected_lifecycle_transition_table":[
+    {"from":"requested","event":"evaluate_current_evidence","condition":"zero required contributions","to":"not_attempted","mutates":true},
+    {"from":"requested","event":"evaluate_current_evidence","condition":"some required contributions","to":"partially_satisfied","mutates":true},
+    {"from":"requested","event":"evaluate_current_evidence","condition":"all required contributions","to":"satisfied","mutates":true},
+    {"from":"requested","event":"valid_evidence_accepted","condition":"distinct controlled evidence","to":"evidence_available","mutates":true},
+    {"from":"not_attempted","event":"valid_evidence_accepted","condition":"distinct controlled evidence","to":"evidence_available","mutates":true},
+    {"from":"partially_satisfied","event":"valid_evidence_accepted","condition":"distinct supplementary evidence","to":"evidence_available","mutates":true},
+    {"from":"evidence_available","event":"evaluate_current_evidence","condition":"zero required contributions; context-only evidence","to":"not_attempted","mutates":true},
+    {"from":"evidence_available","event":"evaluate_current_evidence","condition":"some required contributions","to":"partially_satisfied","mutates":true},
+    {"from":"evidence_available","event":"evaluate_current_evidence","condition":"all required contributions","to":"satisfied","mutates":true},
+    {"from":"not_attempted","event":"evaluate_current_evidence","condition":"zero required contributions","to":"not_attempted","mutates":false},
+    {"from":"partially_satisfied","event":"evaluate_current_evidence","condition":"same partial completion","to":"partially_satisfied","mutates":false},
+    {"from":"satisfied","event":"read_result","condition":"read only","to":"satisfied","mutates":false},
+    {"from":"unavailable","event":"read_result","condition":"read only","to":"unavailable","mutates":false},
+    {"from":"failed","event":"read_result","condition":"read only","to":"failed","mutates":false},
+    {"from":"not_attempted","event":"authorized_acquisition_failed","condition":"future authorized external outcome only","to":"failed","mutates":true},
+    {"from":"not_attempted","event":"authorized_acquisition_unavailable","condition":"future authorized external outcome only","to":"unavailable","mutates":true}
+  ],
+  "evidence_acceptance_from_initial_state":{"from":"requested","event":"valid_evidence_accepted","to":"evidence_available","requires_prior_plan":false,"mutation":"accepted evidence and lifecycle only after full new-evidence validation"},
+  "duplicate_classification_model":{"owner":"accept_controlled_enrichment_evidence","ordering":["closed input schema","target binding","request binding","lookup supplied evidence_id in accepted controlled evidence","if collision compare canonical payload excluding evidence_id","if identical return idempotent_exact_duplicate","if different return conflicting_duplicate","if no collision continue full new-evidence validation"],"validator_state_dependency":false},
+  "new_evidence_identity_validation":{"condition":"supplied evidence_id absent from accepted evidence IDs","content_digest":"unchanged v75 recomputation required","evidence_id":"unchanged v75 full-envelope-excluding-evidence_id recomputation required","mismatch":"invalid_evidence_identity","fail_closed":true},
+  "validation_acceptance_responsibility":{"validate_enrichment_evidence":"stateless full envelope validation including digest and evidence identity; never classifies duplicates","accept_controlled_enrichment_evidence":"stateful schema/target/request gate, duplicate collision classification, then invokes full validation only for non-colliding new evidence","shared_helper":"canonical payload comparison only"},
+  "status_precedence":["invalid_type","invalid_schema","target_mismatch","request_mismatch","duplicate_collision_exact_or_conflicting_acceptance_only","unknown_requested_field","semantic_field_mismatch","invalid_source_class","invalid_source_locator","external_source_not_executable","unsafe_full_body","invalid_retention_class","excerpt_too_large","invalid_digest","invalid_evidence_identity","valid"],
+  "exact_duplicate_semantics":{"condition":"same supplied evidence_id and byte-identical v75 canonical payload excluding evidence_id","result":"idempotent_exact_duplicate","state_mutation":false,"accepted_evidence_count_change":0,"lifecycle_change":"none","completion_change":"none","validation_counter_may_increment":false,"acceptance_attempt_counter_may_increment":true},
+  "conflicting_duplicate_semantics":{"condition":"same supplied evidence_id and different v75 canonical payload excluding evidence_id","result":"conflicting_duplicate","state_mutation":false,"stored_evidence":"preserved","replacement":false,"lifecycle_change":"none","completion_change":"none","retry":"do_not_retry"},
+  "new_evidence_semantics":{"collision":false,"full_v75_validation":true,"identity_strict":true,"valid_result":"accepted","invalid_result":"rejected_validation","atomic_style_boundary":"deep-copy candidate then one live replacement"},
+  "completion_lifecycle_consistency":{"initial":{"completion":"not_attempted","lifecycle":"requested until evaluated; not_attempted after evaluation"},"title_only":{"content_context":"partially_satisfied","lifecycle_after_evaluation":"partially_satisfied"},"summary_only":{"content_context":"partially_satisfied","lifecycle_after_evaluation":"partially_satisfied"},"title_plus_summary":{"content_context":"satisfied","lifecycle_after_evaluation":"satisfied"},"attribution_only":{"source_attribution":"satisfied","content_context":"not_attempted","request":"partially_satisfied"},"both_requested_fields":{"request":"satisfied","both_lifecycles":"satisfied"}},
+  "contract_vectors":{"lifecycle":[{"case":"plan_from_requested","persistent_before":"requested","plan_status":"planned","persistent_after":"requested"},{"case":"repeated_plan","persistent_before":"requested","persistent_after":"requested","same_output":true},{"case":"valid_acceptance_from_requested","persistent_before":"requested","persistent_after":"evidence_available"},{"case":"invalid_acceptance_from_requested","persistent_before":"requested","persistent_after":"requested"},{"case":"exact_duplicate","persistent_change":false},{"case":"conflicting_duplicate","persistent_change":false}],"duplicates":[{"case":"new_valid","result":"valid_then_accepted"},{"case":"exact_same_id_same_payload","result":"idempotent_exact_duplicate"},{"case":"collision_same_id_different_payload","result":"conflicting_duplicate"},{"case":"new_wrong_id","result":"invalid_evidence_identity"},{"case":"malformed","result":"invalid_schema"},{"case":"collision_payload_would_recompute_different_id","result":"conflicting_duplicate"}]},
+  "zero_effect_policy":{"adapter_implementation_count":0,"enrichment_execution_count":0,"network_request_count":0,"external_enrichment_request_count":0,"real_enrichment_retrieval_count":0,"historical_source_mutation_count":0,"historical_queue_mutation_count":0,"historical_decision_mutation_count":0,"historical_application_mutation_count":0,"historical_audit_mutation_count":0,"database_read_count":0,"database_write_count":0,"semantic_persistence_count":0,"external_write_count":0,"production_effect_count":0},
+  "readiness":{"enrichment_fulfillment_executable_contract_correction_conformance":"passed_when_all_preview_checks_pass","future_local_disposable_enrichment_adapter_readiness":"ready_for_separate_adapter_implementation_when_all_preview_checks_pass","external_enrichment_execution_readiness":"not_ready","production_persistence_readiness":"not_ready","production_execution_readiness":"not_ready"}
+}
