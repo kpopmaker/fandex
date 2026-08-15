@@ -1,0 +1,29 @@
+{
+  "version":"v71","mode":"local_sandbox_preview_only","artist":"aespa","stage":"real_source_shadow_execution_preview","scope":"one_real_historical_target_controlled_shadow_decision_validation_only","authority":"real_source_shadow_execution_validation_only","historical_authority":false,"production_authority":false,
+  "local_sandbox_preview_only":true,"real_source_read_only":true,"shadow_decision_only":true,"controlled_decision_only":true,"real_human_decision":false,"historical_mutation":false,"in_memory_persistence_only":true,"persistent_storage":false,"database_access":false,"external_write":false,"production_write":false,"source_write":false,"score_write":false,"ranking_write":false,"chart_write":false,"public_data_write":false,
+  "references":[
+    {"role":"historical_validator","path":"scripts/source-sandbox/validate_human_review_decisions.py","sha256":"8956db9a596c89091eff82497a3b6dc722de6ca48c05e736450a8169e5823c31"},
+    {"role":"v61_intake","path":"scripts/source-sandbox/preview_aespa_human_authored_decision_input.py","sha256":"ad1ba38a4ac37d71445626978e92aae1271383cc10dfd3d90e7ccf40c7bf90aa"},
+    {"role":"v62_staging","path":"scripts/source-sandbox/preview_aespa_human_decision_acceptance_staging.py","sha256":"720f13ceb4c75e799e5a41554c6454f0b8b800ab722361b58f7626610eb758ee"},
+    {"role":"v63_authorization","path":"scripts/source-sandbox/preview_aespa_decision_application_authorization_gate.py","sha256":"7e695faed8673af25e96e80842cabee68d70129b996903c3dc28fdebdec2702f"},
+    {"role":"v66_contract","path":"scripts/source-sandbox/aespa_application_contract_executable_semantics_proposal.preview.json","sha256":"7617fb6afe91a05f8b13007ff83a86ebfe2266898b46e308cdea732d7f372225"},
+    {"role":"v68_interface","path":"scripts/source-sandbox/aespa_application_persistence_interface_readiness_plan.preview.json","sha256":"07b108b34a5028ab0bc8dc69a8bcf73d62e260879cc5ce44aa66c644d59c7c5e"},
+    {"role":"v69_contract","path":"scripts/source-sandbox/aespa_local_disposable_persistence_adapter_preview_contract.preview.json","sha256":"914b32efc1913e005bb7ba8d62294c836a8432193b9c50c42803988c0b53bc55"},
+    {"role":"v69_adapter","path":"scripts/source-sandbox/preview_aespa_local_disposable_persistence_adapter.py","sha256":"9e1963fd3ac18961570c0278474c6fd3fb6c08f8dce4fbcd09fbf45b00bad5b9"},
+    {"role":"v70_contract","path":"scripts/source-sandbox/aespa_local_end_to_end_execution_orchestrator_preview_contract.preview.json","sha256":"9476ecf5228d9d572aa4c25c3fcb587590e1c28fd3cf42a5ba5b63b9285d4ff2"},
+    {"role":"v70_orchestrator","path":"scripts/source-sandbox/preview_aespa_local_end_to_end_execution_orchestrator.py","sha256":"dc235bd0e81b6a560d84d17bb9b595bfcba4fd04a4255a4c544463acf16e5ddd"}
+  ],
+  "real_target_eligibility_rule":{"queue_status":"pending_review","decision_status":"not_decided","blank_submission_template":true,"exact_seven_field_lineage":true,"v63_state_compatible":true},
+  "deterministic_target_selector":{"algorithm":"sort_eligible_by_seven_field_immutable_lineage_tuple_then_select_index_zero","key_fields":["decision_input_id","decision_preview_id","queue_id","gate_id","internal_source_id","sandbox_artist_key","source_type"],"selected_index":0},
+  "selected_target_safe_identity_fields":["decision_input_id","decision_preview_id","queue_id","gate_id","internal_source_id","sandbox_artist_key","source_type"],
+  "controlled_shadow_decision_rule":{"required_labels":["controlled_fixture_only","shadow_decision_only","not_real_human_decision","not_historical_decision","not_production"],"lineage_source":"selected_real_target","reviewer":"synthetic_contract_valid_only"},
+  "shadow_intent_selection_rule":"derive gate-compatible actionable intersection with v66 vocabulary; lexicographically sort; select index zero",
+  "v70_reuse_requirement":"hash_pinned_public_v70_orchestrate_surface_only",
+  "historical_before_rule":"safe_snapshot_and_artifact_hashes_before_shadow_execution",
+  "shadow_after_rule":"v70_result_and_v69_process_local_adapter_evidence_only",
+  "historical_after_immutability_rule":"rebuild_target_and_counts_and_require_byte_hash_and_semantic_equality",
+  "safe_output_rule":{"reviewer_note":false,"raw_submission":false,"raw_source_body":false,"urls":false,"allowed":"safe_ids_statuses_counts_hashes_digests_contract_versions"},
+  "counter_separation":{"real_effects":"all_zero","shadow_effects":"separate_nonzero_allowed","real_target_selected_count":1},
+  "readiness_derivation_rule":"all_real_lineage_shadow_orchestration_immutability_safety_and_determinism_checks_pass",
+  "production_persistence_readiness":"not_ready","production_execution_readiness":"not_ready"
+}
