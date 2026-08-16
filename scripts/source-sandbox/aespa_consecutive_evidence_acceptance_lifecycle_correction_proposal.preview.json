@@ -1,0 +1,82 @@
+{
+  "version": "v80",
+  "stage": "consecutive_evidence_acceptance_lifecycle_correction_proposal",
+  "artist": "AESPA",
+  "scope": "controlled local evidence-acceptance lifecycle completeness only",
+  "authority": "consecutive_evidence_acceptance_lifecycle_correction_proposal",
+  "historical_authority": false,
+  "production_authority": false,
+  "base_sha": "84f0f7c36ae31aaa0b6f215fcf44fb1ae1ca96e0",
+  "consumed_authority_hashes": [
+    {"role":"v75_contract","path":"scripts/source-sandbox/aespa_enrichment_fulfillment_executable_contract_proposal.preview.json","sha256":"990fdec4826937eedf8bba72a70fddf48aec86ae41e4ed285523cc6b85a5ba1f"},
+    {"role":"v75_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_fulfillment_executable_contract.py","sha256":"fce217168cadd2901ffb8c7aaf0cccc96f640362ea9c6471d0bfd8c03c992ae0"},
+    {"role":"v75_docs","path":"docs/real-source-sandbox-aespa-enrichment-fulfillment-executable-contract-proposal.md","sha256":"a13ad5c82d6f682e3bd8f921db16c8ca5ad4b1a0e3a42074b588c04636c67d92"},
+    {"role":"v76_contract","path":"scripts/source-sandbox/aespa_enrichment_fulfillment_executable_contract_correction_proposal.preview.json","sha256":"6011210710584bc8ab3aae085bea412771f9ca376fb965f93700a52cfa038833"},
+    {"role":"v76_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_fulfillment_executable_contract_correction.py","sha256":"4a6b590d643ebd718ea8785e3983ccc8a196146394a2a0fe1d2b7c29dd9f9c3e"},
+    {"role":"v76_docs","path":"docs/real-source-sandbox-aespa-enrichment-fulfillment-executable-contract-correction-proposal.md","sha256":"69351b1ab3752f2439dde3e27ebaaeb442e56232f7b2d97aa1e038fdc9547e8f"},
+    {"role":"v77_contract","path":"scripts/source-sandbox/aespa_enrichment_lifecycle_idempotent_evaluation_correction_proposal.preview.json","sha256":"9cfe1bce6ab4e1cf2ac364606aa7e7a14502ffc7bea06bae150a64fbf561277b"},
+    {"role":"v77_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_lifecycle_idempotent_evaluation_correction.py","sha256":"42b276eb0160e1dd3701dd0e320ddbc262f6693458d1e6d5a013531fc783a40a"},
+    {"role":"v77_docs","path":"docs/real-source-sandbox-aespa-enrichment-lifecycle-idempotent-evaluation-correction-proposal.md","sha256":"326df3439fa0d53f430f2d1718f13c4673f5c7ec6c0a616f335cdd5c2cb2b3d5"},
+    {"role":"v78_contract","path":"scripts/source-sandbox/aespa_enrichment_executable_contract_closure_audit_proposal.preview.json","sha256":"1734402e1de5b607e6006ada1453b0be868cb9f0791bf7911244ce3bbd0648a3"},
+    {"role":"v78_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_executable_contract_closure_audit.py","sha256":"3780cadc80e7dfd3fb5f599b5fa7384434496c58773b9898ca9c7bbb839f28ca"},
+    {"role":"v78_docs","path":"docs/real-source-sandbox-aespa-enrichment-executable-contract-closure-audit-proposal.md","sha256":"d8c89b17f060d08fad4b3568cbf0924f52d9d618abe524cba214206f2465b35b"},
+    {"role":"v79_contract","path":"scripts/source-sandbox/aespa_enrichment_deterministic_planning_policy_correction_proposal.preview.json","sha256":"08a4f714b03ecb6643597cb742502c0fb71c8ab961f1090225d74f9300f135e1"},
+    {"role":"v79_validator","path":"scripts/source-sandbox/preview_aespa_enrichment_deterministic_planning_policy_correction.py","sha256":"15bbe0af72729e32ec4b6b383bbb1c052d8d5f2a101166eaa01a13159276d66a"},
+    {"role":"v79_docs","path":"docs/real-source-sandbox-aespa-enrichment-deterministic-planning-policy-correction-proposal.md","sha256":"42b41ade0657e3f51cdbb2930d47db641ae68e3b3c37f3209236773b3b385ef8"},
+    {"role":"v72_contract","path":"scripts/source-sandbox/aespa_enrichment_request_field_contract_proposal.preview.json","sha256":"0f0bbbea649c5daab8cf69e48f41497650fed8ddd73942c299409a7dcce844e5"},
+    {"role":"v73_contract","path":"scripts/source-sandbox/aespa_explicit_human_shadow_decision_execution_preview_contract.preview.json","sha256":"cc76e9e281c9dfaaa208c38dcdeca33687c80298f3d1ce398cfd4a1fb5328dae"},
+    {"role":"v74_contract","path":"scripts/source-sandbox/aespa_enrichment_fulfillment_shadow_design.preview.json","sha256":"e6fdbf11c9af55f27b2e801dd559170f65cc6a50ef5524eede29c93c69369f2e"}
+  ],
+  "effective_authority_precedence": {
+    "acceptance_lifecycle_clauses": ["v80_consecutive_evidence_lifecycle_correction","v79_deterministic_planning_policy","v78_structural_materialization","v77_evaluation_lifecycle_correction","v76_acceptance_and_planning_correction","v75_baseline"],
+    "unrelated_clauses": ["v79_deterministic_planning_policy","v78_structural_materialization","v77_evaluation_lifecycle_correction","v76_acceptance_and_planning_correction","v75_baseline"],
+    "v80_supersedes": ["v76 persistent-lifecycle absent-transition rule for evidence_available + valid_evidence_accepted only"],
+    "unrelated_semantics": "unchanged"
+  },
+  "previous_business_semantic_gap": {
+    "classification": "business_semantic_gap",
+    "consecutive_evidence_acceptance_gap": "reproduced",
+    "first_row": {"from":"requested","event":"valid_evidence_accepted","to":"evidence_available","legal":true},
+    "second_row_before_v80": {"from":"evidence_available","event":"valid_evidence_accepted","to":null,"legal":false,"reason":"absent_transition_is_illegal_lifecycle_transition"},
+    "blocked_vector": ["accept title","accept summary before evaluation"]
+  },
+  "acceptance_lifecycle_policy": {
+    "event": "valid_evidence_accepted",
+    "scope": "new valid acceptable controlled evidence for the same requested field",
+    "preconditions": ["schema_valid","target_bound","request_bound","requested_field_known","semantic_compatible","controlled_source_executable","locator_valid","retention_safe","digest_valid","noncolliding_identity_valid","local_precedence_allows"],
+    "acceptance_does_not_evaluate": true,
+    "field_isolation": true
+  },
+  "acceptance_transition_matrix": [
+    {"from":"requested","event":"valid_evidence_accepted","to":"evidence_available","classification":"legal_mutating_transition","lifecycle_changed":true,"evidence_changed":true,"operation_mutates_state":true,"authority":"v76_preserved"},
+    {"from":"not_attempted","event":"valid_evidence_accepted","to":"evidence_available","classification":"legal_mutating_transition","lifecycle_changed":true,"evidence_changed":true,"operation_mutates_state":true,"authority":"v76_preserved"},
+    {"from":"evidence_available","event":"valid_evidence_accepted","to":"evidence_available","classification":"legal_lifecycle_self_transition_with_evidence_mutation","lifecycle_changed":false,"evidence_changed":true,"operation_mutates_state":true,"authority":"v80_correction"},
+    {"from":"partially_satisfied","event":"valid_evidence_accepted","to":"evidence_available","classification":"legal_mutating_transition","lifecycle_changed":true,"evidence_changed":true,"operation_mutates_state":true,"authority":"v76_preserved"},
+    {"from":"satisfied","event":"valid_evidence_accepted","to":null,"classification":"illegal_transition","lifecycle_changed":false,"evidence_changed":false,"operation_mutates_state":false,"authority":"v76_absent_transition_preserved"},
+    {"from":"unavailable","event":"valid_evidence_accepted","to":null,"classification":"controlled_mode_unreachable","lifecycle_changed":false,"evidence_changed":false,"operation_mutates_state":false,"authority":"v76_future_authorized_only"},
+    {"from":"failed","event":"valid_evidence_accepted","to":null,"classification":"controlled_mode_unreachable","lifecycle_changed":false,"evidence_changed":false,"operation_mutates_state":false,"authority":"v76_future_authorized_only"}
+  ],
+  "evidence_available_self_transition": {"from":"evidence_available","event":"valid_evidence_accepted","to":"evidence_available","lifecycle_changed":false,"evidence_changed":true,"operation_mutates_state":true,"completion_evaluated":false},
+  "mutation_semantics": {
+    "accepted_consecutive_new_evidence":{"lifecycle_changed":false,"evidence_changed":true,"operation_mutates_state":true},
+    "idempotent_exact_duplicate":{"lifecycle_changed":false,"evidence_changed":false,"completion_changed":false,"operation_mutates_state":false},
+    "conflicting_duplicate":{"lifecycle_changed":false,"evidence_changed":false,"completion_changed":false,"operation_mutates_state":false},
+    "rejected_new_evidence":{"lifecycle_changed":false,"evidence_changed":false,"completion_changed":false,"operation_mutates_state":false}
+  },
+  "duplicate_nontransition_semantics": {"collision_order":"v76 unchanged","exact_duplicate":"idempotent_exact_duplicate; no transition","conflicting_duplicate":"conflicting_duplicate; no transition","bad_noncolliding_identity":"rejected; no transition"},
+  "local_precedence_nontransition_semantics": {"status":"rejected_local_precedence","lifecycle_changed":false,"evidence_changed":false,"operation_mutates_state":false},
+  "cross_field_isolation": {"unit":"requested enrichment field","content_acceptance_mutates_attribution_lifecycle":false,"attribution_acceptance_mutates_content_lifecycle":false},
+  "consecutive_content_flow": {
+    "title_summary":{"states":["requested","evidence_available","evidence_available","satisfied"],"events":["accept_title","accept_summary","evaluate_current_evidence"],"result":"passed"},
+    "title_bounded_excerpt":{"states":["requested","evidence_available","evidence_available","satisfied"],"events":["accept_title","accept_bounded_excerpt","evaluate_current_evidence"],"result":"passed"},
+    "title_summary_bounded_excerpt":{"allowed_by_compatibility":true,"states":["requested","evidence_available","evidence_available","evidence_available","satisfied"],"result":"passed"}
+  },
+  "evaluation_boundary": {"acceptance_performs_evaluation":false,"sufficient_evidence_pre_evaluation_lifecycle":"evidence_available","evaluation_event":"evaluate_current_evidence","v77_semantics":"unchanged"},
+  "completion_semantics_preservation": {"content_context":"title AND (summary OR bounded_excerpt)","source_attribution":"author_or_publisher","acceptance_marks_satisfied":false,"request_completion_policy":"unchanged"},
+  "planning_semantics_preservation": {"v79_planning_behavioral_determinism":"passed","planning_policy_changed":false,"plan_vectors_changed":false},
+  "behavioral_dependency_audit_v3": {"future_adapter_structural_missing_dependencies":0,"future_adapter_planning_missing_dependencies":0,"future_adapter_acceptance_lifecycle_missing_dependencies":0,"future_adapter_other_behavioral_missing_dependencies":0},
+  "acceptance_completeness_counters": {"persistent_lifecycle_states_total":7,"controlled_acceptance_state_rows_total":7,"explicit_legal_acceptance_rows":4,"explicit_illegal_acceptance_rows":1,"controlled_mode_unreachable_rows":2,"unspecified_acceptance_rows":0,"acceptance_transition_contradictions":0,"consecutive_acceptance_paths_tested":3,"consecutive_acceptance_path_failures":0,"lifecycle_self_transition_rows":1,"lifecycle_self_transition_operation_mutation_mismatches":0},
+  "zero_effect_policy": {"network_request_count":0,"external_enrichment_request_count":0,"real_enrichment_retrieval_count":0,"real_enrichment_evidence_write_count":0,"real_enrichment_completion_count":0,"real_source_mutation_count":0,"real_queue_mutation_count":0,"real_decision_mutation_count":0,"real_application_write_count":0,"real_audit_write_count":0,"database_read_count":0,"database_write_count":0,"semantic_filesystem_persistence_count":0,"external_write_count":0,"score_mutation_count":0,"ranking_mutation_count":0,"chart_mutation_count":0,"public_data_mutation_count":0,"production_mutation_count":0,"production_effect_count":0},
+  "determinism": {"time":false,"randomness":false,"uuid":false,"network":false,"stable_ordering":true,"first_repro_required":true},
+  "readiness": {"v78_structural_closure":"passed","v79_planning_behavioral_determinism":"passed","acceptance_lifecycle_completeness_before_v80":"incomplete","consecutive_evidence_acceptance_lifecycle_correction_conformance":"passed_when_all_preview_checks_pass","acceptance_lifecycle_completeness":"passed_when_all_preview_checks_pass","future_local_disposable_enrichment_adapter_readiness":"ready_for_implementation_from_structurally_closed_planning_deterministic_and_acceptance_complete_contract_when_all_preview_checks_pass","external_enrichment_execution_readiness":"not_ready","production_persistence_readiness":"not_ready","production_execution_readiness":"not_ready"}
+}
