@@ -10,11 +10,13 @@
     "typecheck": "tsc --noEmit",
     "test:persistence": "tsx --conditions=react-server --test tests/managed-postgres-persistence.test.ts",
     "db:migrate": "tsx scripts/database/run-postgres-migrations.mts",
+    "security:audit:production": "node scripts/security/audit-production.mjs",
+    "test:security": "node --test tests/security-audit-gate.test.mjs",
     "verify:fandex": "npm run lint && npm run build"
   },
   "dependencies": {
     "@vercel/functions": "^3.9.5",
-    "next": "16.2.9",
+    "next": "16.3.2",
     "pg": "^8.23.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -28,7 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
     "tsx": "^4.23.12",
     "typescript": "^5"
