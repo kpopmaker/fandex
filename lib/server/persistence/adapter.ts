@@ -70,24 +70,14 @@ export async function getPersistenceTransactionResult(
 
 async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle): Promise<PersistenceTransactionResult> {
   await client.query('BEGIN ISOLATION LEVEL SERIALIZABLE');
-  const inserted = await client.query(
-    `INSERT INTO fandex.persistence_transactions (
-      idempotency_key, request_id, internal_source_id, canonical_payload_digest,
-      expected_normalized_version, expected_normalized_digest,
-      expected_request_version, expected_request_digest,
-      normalized_application_reference, closure_record_reference, status, before_digests
-    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'applying',$11::jsonb)
-    ON CONFLICT (idempotency_key) DO NOTHING`,
-    [bundle.idempotencyKey, bundle.requestId, bundle.internalSourceId, bundle.canonicalPayloadDigest,
-      bundle.expectedNormalizedVersion, bundle.expectedNormalizedDigest, bundle.expectedRequestVersion,
-      bundle.expectedRequestDigest, bundle.v108ApplicationRecordDigest, bundle.v110ClosureRecordDigest,
-      JSON.stringify({ normalized: bundle.expectedNormalizedDigest, request: bundle.expectedRequestDigest })],
+  await client.query("SET LOCAL lock_timeout = '10s'");
+  await client.query("SET LOCAL statement_timeout = '30s'");
+  await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [bundle.idempotencyKey]);
+  const existing = await client.query<{ canonical_payload_digest: string; status: string; after_digests: { normalized?: string; request?: string } | null }>(
+    'SELECT canonical_payload_digest, status, after_digests FROM fandex.persistence_transactions WHERE idempotency_key = $1 FOR UPDATE',
+    [bundle.idempotencyKey],
   );
-  if (inserted.rowCount === 0) {
-    const existing = await client.query<{ canonical_payload_digest: string; status: string; after_digests: { normalized?: string; request?: string } | null }>(
-      'SELECT canonical_payload_digest, status, after_digests FROM fandex.persistence_transactions WHERE idempotency_key = $1 FOR UPDATE',
-      [bundle.idempotencyKey],
-    );
+  if (existing.rows[0]) {
     const row = existing.rows[0];
     const status = row ? classifyPersistenceReplay(row.canonical_payload_digest, bundle.canonicalPayloadDigest, row.status) : 'rejected_conflict';
     await client.query('ROLLBACK');
@@ -104,11 +94,53 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
   );
   const source = normalizedBefore.rows[0];
   const request = requestBefore.rows[0];
-  const stale = !source || !request || Number(source.record_version) !== bundle.expectedNormalizedVersion || source.content_sha256 !== bundle.expectedNormalizedDigest || Number(request.record_version) !== bundle.expectedRequestVersion || request.state_sha256 !== bundle.expectedRequestDigest || request.request_state !== 'open';
+  if (bundle.expectedState === 'absent') {
+    if (source || request) {
+      await client.query('ROLLBACK');
+      return { status: 'rejected_stale_state', idempotencyKey: bundle.idempotencyKey, normalizedAfterDigest: null, requestAfterDigest: null };
+    }
+    await client.query(
+      `INSERT INTO fandex.normalized_sources (
+        internal_source_id, provider, source_type, office_code, article_id, title, summary,
+        author_or_publisher, displayed_source_timestamp, normalized_provider_timestamp,
+        content_sha256, record_version
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+      [bundle.internalSourceId, bundle.normalized.provider, bundle.normalized.sourceType,
+        bundle.normalized.officeCode, bundle.normalized.articleId, bundle.normalized.title,
+        bundle.normalized.summary, bundle.normalized.authorOrPublisher,
+        bundle.normalized.displayedSourceTimestamp, bundle.normalized.normalizedProviderTimestamp,
+        bundle.expectedNormalizedDigest, bundle.expectedNormalizedVersion],
+    );
+    await client.query(
+      `INSERT INTO fandex.historical_enrichment_requests (
+        request_id, internal_source_id, requested_fields, request_state,
+        persistent_fulfilled, persistent_closed, closure_record_reference,
+        state_sha256, record_version
+      ) VALUES ($1,$2,$3,'open',false,false,NULL,$4,$5)`,
+      [bundle.requestId, bundle.internalSourceId, bundle.request.requestedFields,
+        bundle.expectedRequestDigest, bundle.expectedRequestVersion],
+    );
+  }
+  const stale = bundle.expectedState === 'present' && (!source || !request || Number(source.record_version) !== bundle.expectedNormalizedVersion || source.content_sha256 !== bundle.expectedNormalizedDigest || Number(request.record_version) !== bundle.expectedRequestVersion || request.state_sha256 !== bundle.expectedRequestDigest || request.request_state !== 'open');
   if (stale) {
     await client.query('ROLLBACK');
     return { status: 'rejected_stale_state', idempotencyKey: bundle.idempotencyKey, normalizedAfterDigest: null, requestAfterDigest: null };
   }
+
+  const inserted = await client.query(
+    `INSERT INTO fandex.persistence_transactions (
+      idempotency_key, request_id, internal_source_id, canonical_payload_digest,
+      expected_normalized_version, expected_normalized_digest,
+      expected_request_version, expected_request_digest,
+      normalized_application_reference, closure_record_reference, status, before_digests
+    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'applying',$11::jsonb)
+    ON CONFLICT (idempotency_key) DO NOTHING`,
+    [bundle.idempotencyKey, bundle.requestId, bundle.internalSourceId, bundle.canonicalPayloadDigest,
+      bundle.expectedNormalizedVersion, bundle.expectedNormalizedDigest, bundle.expectedRequestVersion,
+      bundle.expectedRequestDigest, bundle.v108ApplicationRecordDigest, bundle.v110ClosureRecordDigest,
+      JSON.stringify({ normalized: bundle.expectedState === 'absent' ? null : bundle.expectedNormalizedDigest, request: bundle.expectedState === 'absent' ? null : bundle.expectedRequestDigest })],
+  );
+  if (inserted.rowCount !== 1) throw new Error('transaction_identity_conflict');
 
   const normalizedUpdate = await client.query(
     `UPDATE fandex.normalized_sources SET
@@ -151,12 +183,12 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
   if (requestUpdate.rowCount !== 1) throw new Error('request_compare_and_swap_failed');
 
   const auditPayload = { event: 'persistence_bundle_applied', payloadDigest: bundle.canonicalPayloadDigest };
-  const outboxInsert = await client.query(
+  await client.query(
     'INSERT INTO fandex.persistence_audit_events (idempotency_key, sequence, event_type, event_digest, bounded_payload) VALUES ($1,$2,$3,$4,$5::jsonb)',
     [bundle.idempotencyKey, 1, 'persistence_bundle_applied', sha256Canonical(auditPayload), JSON.stringify(auditPayload)],
   );
   const outboxId = sha256Canonical({ idempotencyKey: bundle.idempotencyKey, eventType: bundle.outbox.eventType });
-  await client.query(
+  const outboxInsert = await client.query(
     `INSERT INTO fandex.ingestion_outbox
       (outbox_id, idempotency_key, status, event_type, bounded_payload, attempt_count, max_attempts, next_attempt_at)
       VALUES ($1,$2,'pending',$3,$4::jsonb,0,$5,CURRENT_TIMESTAMP)
@@ -228,7 +260,8 @@ export async function claimOutboxBatch(
   const result = await pool.query<{ outbox_id: string; idempotency_key: string; event_type: string; bounded_payload: Record<string, unknown>; attempt_count: number }>(
     `WITH candidates AS (
       SELECT outbox_id FROM fandex.ingestion_outbox
-      WHERE status IN ('pending','retryable_failed') AND attempt_count < max_attempts
+      WHERE (status IN ('pending','retryable_failed') OR (status='processing' AND lease_expires_at <= CURRENT_TIMESTAMP))
+        AND attempt_count < max_attempts
         AND (next_attempt_at IS NULL OR next_attempt_at <= CURRENT_TIMESTAMP)
         AND (lease_expires_at IS NULL OR lease_expires_at <= CURRENT_TIMESTAMP)
       ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT $1

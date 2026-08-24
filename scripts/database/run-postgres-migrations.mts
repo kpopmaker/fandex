@@ -42,7 +42,11 @@ function requireMigrationConnectionString(environment: NodeJS.ProcessEnv): strin
   return value;
 }
 
-export async function applyMigrationPlan(migrations: Migration[], environment: NodeJS.ProcessEnv): Promise<void> {
+export async function applyMigrationPlan(
+  migrations: Migration[],
+  environment: NodeJS.ProcessEnv,
+  onQuery: (sql: string) => void = () => {},
+): Promise<void> {
   if (environment[APPLY_APPROVAL_KEY] !== APPLY_APPROVAL_VALUE) throw new Error('migration_apply_approval_required');
   const pool = new Pool({
     connectionString: requireMigrationConnectionString(environment),
@@ -55,31 +59,32 @@ export async function applyMigrationPlan(migrations: Migration[], environment: N
     for (const migration of migrations) {
       const client = await pool.connect();
       try {
-        await client.query('BEGIN');
-        await client.query('SELECT pg_advisory_xact_lock($1::bigint)', [ADVISORY_LOCK_KEY]);
-        await client.query('CREATE SCHEMA IF NOT EXISTS fandex');
-        await client.query(`CREATE TABLE IF NOT EXISTS fandex.schema_migrations (
+        onQuery('BEGIN'); await client.query('BEGIN');
+        onQuery('SELECT pg_advisory_xact_lock'); await client.query('SELECT pg_advisory_xact_lock($1::bigint)', [ADVISORY_LOCK_KEY]);
+        onQuery('CREATE SCHEMA'); await client.query('CREATE SCHEMA IF NOT EXISTS fandex');
+        onQuery('CREATE TABLE schema_migrations'); await client.query(`CREATE TABLE IF NOT EXISTS fandex.schema_migrations (
           version bigint PRIMARY KEY CHECK (version > 0),
           migration_sha256 char(64) NOT NULL CHECK (migration_sha256 ~ '^[0-9a-f]{64}$'),
           applied_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
         )`);
+        onQuery('SELECT schema_migrations');
         const existing = await client.query<{ migration_sha256: string }>(
           'SELECT migration_sha256 FROM fandex.schema_migrations WHERE version = $1 FOR UPDATE',
           [migration.version],
         );
         if (existing.rowCount) {
           if (existing.rows[0].migration_sha256 !== migration.sha256) throw new Error('migration_version_digest_conflict');
-          await client.query('ROLLBACK');
+          onQuery('ROLLBACK'); await client.query('ROLLBACK');
           continue;
         }
-        await client.query(migration.sql);
-        await client.query(
+        onQuery('APPLY MIGRATION'); await client.query(migration.sql);
+        onQuery('INSERT schema_migrations'); await client.query(
           'INSERT INTO fandex.schema_migrations (version, migration_sha256) VALUES ($1, $2)',
           [migration.version, migration.sha256],
         );
-        await client.query('COMMIT');
+        onQuery('COMMIT'); await client.query('COMMIT');
       } catch (error) {
-        await client.query('ROLLBACK');
+        onQuery('ROLLBACK'); await client.query('ROLLBACK');
         throw error;
       } finally {
         client.release();

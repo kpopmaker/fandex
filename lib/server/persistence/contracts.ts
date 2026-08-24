@@ -36,6 +36,7 @@ export type PersistenceBundle = {
   v108ApplicationRecordDigest: string;
   v110ClosureRecordDigest: string;
   foundationLineage: typeof V112_V113_FOUNDATION_LINEAGE;
+  expectedState: 'present' | 'absent';
   expectedNormalizedVersion: number;
   expectedNormalizedDigest: string;
   expectedRequestVersion: number;
@@ -54,6 +55,22 @@ export type PersistenceBundle = {
     normalizedProviderTimestamp: string;
     contentSha256: string;
     recordVersion: number;
+  };
+  normalizedV36: {
+    internal_source_id: string;
+    provider_key: string;
+    source_type: string;
+    artist_name: string;
+    artist_slug: string;
+    external_source_id: string;
+    source_url: string;
+    title: string;
+    summary: string;
+    published_at: string;
+    author_or_publisher: string;
+    collected_at: string | null;
+    raw_row_number: number;
+    content_hash: string;
   };
   evidence: {
     sourceUrl: string;
@@ -163,7 +180,13 @@ export function buildCanonicalPersistencePayload(bundle: PersistenceBundle) {
     v108ApplicationRecordDigest: bundle.v108ApplicationRecordDigest,
     v110ClosureRecordDigest: bundle.v110ClosureRecordDigest,
     foundationLineage: bundle.foundationLineage,
+    expectedState: bundle.expectedState,
+    normalizedV36: bundle.normalizedV36,
   };
+}
+
+function hasExactKeys(value: object, expected: readonly string[]): boolean {
+  return Object.keys(value).sort().join(',') === [...expected].sort().join(',');
 }
 
 export function validatePersistenceBundle(bundle: PersistenceBundle): void {
@@ -181,6 +204,9 @@ export function validatePersistenceBundle(bundle: PersistenceBundle): void {
     ...Object.values(bundle.foundationLineage),
   ];
   if (!digests.every(isSha256)) throw new Error('invalid_persistence_digest');
+  if (bundle.expectedState !== 'present' && bundle.expectedState !== 'absent') throw new Error('invalid_expected_state');
+  if (!hasExactKeys(bundle.normalized, ['provider','sourceType','officeCode','articleId','title','summary','authorOrPublisher','displayedSourceTimestamp','normalizedProviderTimestamp','contentSha256','recordVersion'])) throw new Error('unauthorized_normalized_field');
+  if (!hasExactKeys(bundle.normalizedV36, ['internal_source_id','provider_key','source_type','artist_name','artist_slug','external_source_id','source_url','title','summary','published_at','author_or_publisher','collected_at','raw_row_number','content_hash'])) throw new Error('invalid_v36_shape');
   if (derivePersistenceIdempotencyKey(bundle) !== bundle.idempotencyKey) throw new Error('invalid_idempotency_key');
   if (sha256Canonical(buildCanonicalPersistencePayload(bundle)) !== bundle.canonicalPayloadDigest) throw new Error('invalid_canonical_payload_digest');
   if (bundle.request.requestedFields.join(',') !== 'content_context,source_attribution') throw new Error('invalid_requested_fields');
@@ -188,6 +214,9 @@ export function validatePersistenceBundle(bundle: PersistenceBundle): void {
   if (bundle.normalized.authorOrPublisher !== bundle.evidence.publisher) throw new Error('publisher_binding_mismatch');
   if (bundle.evidence.publisher === bundle.evidence.normalizedJournalist) throw new Error('publisher_byline_role_conflation');
   if (bundle.normalized.contentSha256 !== bundle.normalizedPostDigest) throw new Error('normalized_post_digest_mismatch');
+  if (bundle.normalizedV36.internal_source_id !== bundle.internalSourceId || bundle.normalizedV36.provider_key !== bundle.normalized.provider || bundle.normalizedV36.source_type !== bundle.normalized.sourceType || bundle.normalizedV36.source_url !== bundle.evidence.sourceUrl || bundle.normalizedV36.title !== bundle.normalized.title || bundle.normalizedV36.summary !== bundle.normalized.summary || bundle.normalizedV36.author_or_publisher !== bundle.normalized.authorOrPublisher || bundle.normalizedV36.published_at !== bundle.normalized.normalizedProviderTimestamp || bundle.normalizedV36.external_source_id !== `${bundle.normalized.officeCode}/${bundle.normalized.articleId}`) throw new Error('v36_projection_mismatch');
+  if (!Number.isInteger(bundle.normalizedV36.raw_row_number) || bundle.normalizedV36.raw_row_number < 1 || !isSha256(bundle.normalizedV36.content_hash)) throw new Error('invalid_v36_record');
+  if (bundle.expectedState === 'absent' && bundle.expectedNormalizedDigest !== bundle.normalizedPostDigest) throw new Error('absent_bootstrap_digest_mismatch');
   if (canonicalJson(bundle.foundationLineage) !== canonicalJson(V112_V113_FOUNDATION_LINEAGE)) throw new Error('invalid_v112_v113_foundation_lineage');
   if (bundle.expectedNormalizedVersion < 1 || bundle.expectedRequestVersion < 1 || bundle.normalized.recordVersion < 1 || bundle.request.recordVersion < 1) throw new Error('invalid_record_version');
 }

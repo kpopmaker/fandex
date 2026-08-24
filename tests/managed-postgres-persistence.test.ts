@@ -33,6 +33,7 @@ const fixtureBase: PersistenceBundle = {
   v108ApplicationRecordDigest: 'f1f1c0c2abb6e2234b310c22ecea3986738d91566ca74ff2fd6f2cf98688a319',
   v110ClosureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
   foundationLineage: V112_V113_FOUNDATION_LINEAGE,
+  expectedState: 'present',
   expectedNormalizedVersion: 1,
   expectedNormalizedDigest: 'bb873ca811508c71efddde599a57501bbf4a9c473d4672a57f5a1ddcaed35af0',
   expectedRequestVersion: 1,
@@ -46,6 +47,15 @@ const fixtureBase: PersistenceBundle = {
     authorOrPublisher: '마이데일리', displayedSourceTimestamp: '2026-06-19 00:09:47',
     normalizedProviderTimestamp: '2026-06-19T00:10:00+09:00',
     contentSha256: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644', recordVersion: 2,
+  },
+  normalizedV36: {
+    internal_source_id: 'src_40f253cea60253b4f7b8d1e747f9cc87', provider_key: 'naver', source_type: 'news',
+    artist_name: '에스파', artist_slug: 'aespa', external_source_id: '117/0004076125',
+    source_url: 'https://www.mydaily.co.kr/page/view/2026061816093817264',
+    title: '원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]',
+    summary: '요즘 가요계에서 가장 핫한 여자 아이돌을 꼽으라면 리센느 원이, 에스파 윈터, 아일릿 원희를 빼놓을 수... 에스파 활동을 통해 글로벌 인기를 누리고 있는 윈터는 팬 소통 플랫폼과 예능 등에서 종종 부산 사투리를...',
+    published_at: '2026-06-19T00:10:00+09:00', author_or_publisher: '마이데일리', collected_at: null,
+    raw_row_number: 991, content_hash: '24d19cff5100528b54de9f1f905132a34b1c63064eff084cc727b4621c86185e',
   },
   evidence: {
     sourceUrl: 'https://www.mydaily.co.kr/page/view/2026061816093817264',
@@ -167,13 +177,50 @@ test('adapter rejects stale state and rolls back transaction failures', async ()
   assert.ok(stale.calls.includes('ROLLBACK'));
 
   const failure = mockPool(async (sql) => {
-    if (sql.includes('INSERT INTO fandex.persistence_transactions')) throw new Error('secret database detail');
+    if (sql.includes('SELECT record_version, content_sha256')) throw new Error('secret database detail');
     return { rowCount: 0, rows: [] };
   });
   const result = await applyPersistenceBundle(value, failure.pool);
   assert.equal(result.status, 'failed_rolled_back');
   assert.deepEqual(result.error, { code: 'database_operation_failed' });
   assert.ok(failure.calls.includes('ROLLBACK'));
+});
+
+test('expected absent bootstraps source and request atomically and rejects existing rows', async () => {
+  const absent = fixture();
+  absent.expectedState = 'absent';
+  absent.expectedNormalizedDigest = absent.normalizedPostDigest;
+  absent.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(absent));
+
+  const success = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 0, rows: [] };
+    if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(absent.normalized.recordVersion), content_sha256: absent.normalizedPostDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, persistent_fulfilled')) return { rowCount: 1, rows: [{ record_version: String(absent.request.recordVersion), state_sha256: absent.requestPostDigest, request_state: 'closed', persistent_fulfilled: true, persistent_closed: true, closure_record_reference: absent.request.closureRecordReference }] };
+    return { rowCount: 1, rows: [] };
+  });
+  assert.equal((await applyPersistenceBundle(absent, success.pool)).status, 'applied');
+  assert.equal(success.calls.filter((sql) => sql.includes('INSERT INTO fandex.normalized_sources')).length, 1);
+  assert.equal(success.calls.filter((sql) => sql.includes('INSERT INTO fandex.historical_enrichment_requests')).length, 1);
+
+  const existing = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 1, rows: [{ record_version: '1', content_sha256: absent.expectedNormalizedDigest }] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 0, rows: [] };
+    return { rowCount: 1, rows: [] };
+  });
+  assert.equal((await applyPersistenceBundle(absent, existing.pool)).status, 'rejected_stale_state');
+  assert.equal(existing.calls.filter((sql) => sql.includes('INSERT INTO fandex.normalized_sources')).length, 0);
+});
+
+test('unexpected normalized fields fail closed before SQL', async () => {
+  const changed = fixture() as PersistenceBundle & { normalized: PersistenceBundle['normalized'] & { unauthorized?: string } };
+  changed.normalized.unauthorized = 'blocked';
+  changed.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(changed));
+  const pool = mockPool(async () => ({ rowCount: 0, rows: [] }));
+  assert.equal((await applyPersistenceBundle(changed, pool.pool)).status, 'rejected_conflict');
+  assert.equal(pool.calls.length, 0);
 });
 
 test('serialization retries are bounded to three retries', async () => {
