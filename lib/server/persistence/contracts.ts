@@ -245,10 +245,41 @@ export async function withSerializableRetries<T>(operation: (attempt: number) =>
   throw new Error('serialization_retry_exhausted');
 }
 
-export function requireDatabaseUrl(environment: NodeJS.ProcessEnv, key: 'DATABASE_URL' | 'DATABASE_URL_UNPOOLED'): string {
-  const value = environment[key];
-  if (!value) throw new Error(`${key}_is_required`);
-  return value;
+const DATABASE_NAME = 'neondb';
+
+function parseRoleDatabaseUrl(value: string | undefined, errorCode: string): URL {
+  if (!value || value.trim() !== value) throw new Error(errorCode);
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new Error(errorCode);
+  }
+  if (!['postgres:', 'postgresql:'].includes(parsed.protocol)
+      || !parsed.hostname
+      || !parsed.username
+      || !parsed.password
+      || decodeURIComponent(parsed.pathname.slice(1)) !== DATABASE_NAME
+      || parsed.hash) throw new Error(errorCode);
+  return parsed;
+}
+
+export function requireRuntimeDatabaseUrl(environment: Readonly<Record<string, string | undefined>>): string {
+  const value = environment.FANDEX_RUNTIME_DATABASE_URL;
+  const parsed = parseRoleDatabaseUrl(value, 'runtime_database_url_invalid');
+  if (decodeURIComponent(parsed.username) !== 'fandex_runtime' || !parsed.hostname.toLowerCase().includes('pooler')) {
+    throw new Error('runtime_database_url_invalid');
+  }
+  return value as string;
+}
+
+export function requireMigrationDatabaseUrl(environment: Readonly<Record<string, string | undefined>>): string {
+  const value = environment.FANDEX_MIGRATION_DATABASE_URL;
+  const parsed = parseRoleDatabaseUrl(value, 'migration_database_url_invalid');
+  if (decodeURIComponent(parsed.username) !== 'fandex_migrator' || parsed.hostname.toLowerCase().includes('pooler')) {
+    throw new Error('migration_database_url_invalid');
+  }
+  return value as string;
 }
 
 export function redactDatabaseError(error: unknown): { code: string } {

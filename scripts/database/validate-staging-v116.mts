@@ -89,7 +89,7 @@ class CountedPool {
   async end(): Promise<void> { await this.pool.end(); }
 }
 
-function requireSecret(key: 'DATABASE_URL' | 'DATABASE_URL_UNPOOLED'): string {
+function requireSecret(key: 'FANDEX_RUNTIME_DATABASE_URL' | 'FANDEX_MIGRATION_DATABASE_URL'): string {
   const value = process.env[key];
   if (!value) throw new Error(`${key}_missing`);
   return value;
@@ -160,13 +160,13 @@ async function main(): Promise<void> {
   if (injectedPreview) {
     if (process.env.VERCEL_ENV !== 'preview') throw new Error('preview_environment_not_injected');
   } else {
-    delete process.env.DATABASE_URL;
-    delete process.env.DATABASE_URL_UNPOOLED;
+    delete process.env.FANDEX_RUNTIME_DATABASE_URL;
+    delete process.env.FANDEX_MIGRATION_DATABASE_URL;
     loadEnvFile(ENV_PATH);
   }
   setStage('preview_environment_key_validation');
-  const pooledUrl = requireSecret('DATABASE_URL');
-  const unpooledUrl = requireSecret('DATABASE_URL_UNPOOLED');
+  const pooledUrl = requireSecret('FANDEX_RUNTIME_DATABASE_URL');
+  const unpooledUrl = requireSecret('FANDEX_MIGRATION_DATABASE_URL');
   const bundle = exactBundle();
   if (bundle.idempotencyKey !== V112_V113_FOUNDATION_LINEAGE.v112IdempotencyKey) throw new Error('idempotency_lineage_mismatch');
   setStage('v115_lineage_validation');
@@ -250,7 +250,7 @@ async function main(): Promise<void> {
 
   const migrations = await loadMigrationPlan();
   if (migrations.length !== 1 || migrations[0].sha256 !== EXPECTED_MIGRATION_SHA256) throw new Error('migration_plan_mismatch');
-  const migrationEnvironment: NodeJS.ProcessEnv = { NODE_ENV: process.env.NODE_ENV ?? 'test', DATABASE_URL_UNPOOLED: unpooledUrl, FANDEX_APPROVE_V114_MIGRATION: MIGRATION_APPROVAL };
+  const migrationEnvironment: NodeJS.ProcessEnv = { NODE_ENV: process.env.NODE_ENV ?? 'test', FANDEX_MIGRATION_DATABASE_URL: unpooledUrl, FANDEX_APPROVE_V114_MIGRATION: MIGRATION_APPROVAL };
   setStage('migration_first_apply');
   await applyMigrationPlan(migrations, migrationEnvironment, (sql) => recordQuery(counts, sql));
   setStage('migration_replay');

@@ -13,6 +13,8 @@
     "security:audit:production": "node scripts/security/audit-production.mjs",
     "test:security": "node --test tests/security-audit-gate.test.mjs",
     "test:staging:v116": "tsx --conditions=react-server scripts/database/validate-staging-v116.mts",
+    "test:role-bootstrap": "tsx --test tests/postgres-role-bootstrap.test.mts",
+    "db:roles": "tsx scripts/database/bootstrap-postgres-roles.mts",
     "verify:fandex": "npm run lint && npm run build"
   },
   "dependencies": {

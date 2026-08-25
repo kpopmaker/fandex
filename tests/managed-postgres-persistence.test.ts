@@ -12,7 +12,8 @@ import {
   OUTBOX_MAX_ATTEMPTS,
   V112_V113_FOUNDATION_LINEAGE,
   redactDatabaseError,
-  requireDatabaseUrl,
+  requireMigrationDatabaseUrl,
+  requireRuntimeDatabaseUrl,
   sha256Canonical,
   validatePersistenceBundle,
   withSerializableRetries,
@@ -231,7 +232,8 @@ test('serialization retries are bounded to three retries', async () => {
 });
 
 test('missing runtime URL fails closed and errors are redacted', () => {
-  assert.throws(() => requireDatabaseUrl({ NODE_ENV: 'test' }, 'DATABASE_URL'), /DATABASE_URL_is_required/);
+  assert.throws(() => requireRuntimeDatabaseUrl({ NODE_ENV: 'test' }), /runtime_database_url_invalid/);
+  assert.throws(() => requireMigrationDatabaseUrl({ NODE_ENV: 'test' }), /migration_database_url_invalid/);
   assert.deepEqual(redactDatabaseError(Object.assign(new Error('postgres://secret'), { detail: 'password', code: 'XX000' })), { code: 'database_operation_failed' });
 });
 
@@ -239,10 +241,10 @@ test('runtime and migration environment boundaries do not cross', async () => {
   const db = await readFile(dbPath, 'utf8');
   const runner = await readFile(runnerPath, 'utf8');
   assert.match(db, /import 'server-only'/);
-  assert.match(db, /process\.env, 'DATABASE_URL'/);
-  assert.doesNotMatch(db, /DATABASE_URL_UNPOOLED/);
-  assert.match(runner, /environment\.DATABASE_URL_UNPOOLED/);
-  assert.doesNotMatch(runner, /environment\.DATABASE_URL(?:\W|$)/);
+  assert.match(db, /requireRuntimeDatabaseUrl\(process\.env\)/);
+  assert.doesNotMatch(db, /DATABASE_URL(?:_UNPOOLED)?/);
+  assert.match(runner, /requireMigrationDatabaseUrl\(environment\)/);
+  assert.doesNotMatch(runner, /environment\.DATABASE_URL(?:_UNPOOLED)?/);
   assert.match(runner, /argv\.includes\('--apply'\)/);
   assert.match(runner, /FANDEX_APPROVE_V114_MIGRATION/);
 });

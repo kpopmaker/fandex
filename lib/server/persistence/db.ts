@@ -3,7 +3,7 @@ import 'server-only';
 import { attachDatabasePool } from '@vercel/functions';
 import { Pool } from 'pg';
 
-import { requireDatabaseUrl } from './contracts';
+import { requireRuntimeDatabaseUrl } from './contracts';
 
 const MAX_POOL_SIZE = 5;
 const CONNECTION_TIMEOUT_MS = 5_000;
@@ -14,7 +14,7 @@ let runtimePool: Pool | undefined;
 export function getRuntimeDatabasePool(): Pool {
   if (runtimePool) return runtimePool;
 
-  const connectionString = requireDatabaseUrl(process.env, 'DATABASE_URL');
+  const connectionString = requireRuntimeDatabaseUrl(process.env);
   const pool = new Pool({
     connectionString,
     max: MAX_POOL_SIZE,

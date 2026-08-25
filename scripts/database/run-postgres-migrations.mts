@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { Pool } from 'pg';
 
+import { requireMigrationDatabaseUrl } from '../../lib/server/persistence/contracts';
+
 const MIGRATION_DIRECTORY = fileURLToPath(new URL('../../database/migrations/', import.meta.url));
 const APPLY_APPROVAL_KEY = 'FANDEX_APPROVE_V114_MIGRATION';
 const APPLY_APPROVAL_VALUE = 'approved-v114-managed-postgres';
@@ -36,12 +38,6 @@ export async function loadMigrationPlan(): Promise<Migration[]> {
   }));
 }
 
-function requireMigrationConnectionString(environment: NodeJS.ProcessEnv): string {
-  const value = environment.DATABASE_URL_UNPOOLED;
-  if (!value) throw new Error('DATABASE_URL_UNPOOLED_is_required');
-  return value;
-}
-
 export async function applyMigrationPlan(
   migrations: Migration[],
   environment: NodeJS.ProcessEnv,
@@ -49,7 +45,7 @@ export async function applyMigrationPlan(
 ): Promise<void> {
   if (environment[APPLY_APPROVAL_KEY] !== APPLY_APPROVAL_VALUE) throw new Error('migration_apply_approval_required');
   const pool = new Pool({
-    connectionString: requireMigrationConnectionString(environment),
+    connectionString: requireMigrationDatabaseUrl(environment),
     max: 1,
     connectionTimeoutMillis: 5_000,
     statement_timeout: 30_000,
