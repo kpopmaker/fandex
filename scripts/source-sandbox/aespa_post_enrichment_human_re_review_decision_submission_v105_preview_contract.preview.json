@@ -1,0 +1,11 @@
+{
+  "version":"v105","stage":"post_enrichment_human_re_review_decision_submission_preview","branch":"v105-real-source-sandbox-aespa-post-enrichment-human-re-review-decision-submission-preview","base_sha":"5725d8fc260d475e2b35feb4f0bb7109420bba3d",
+  "agents":{"path":"AGENTS.md","sha256":"2d7e4fa43a84db4da84fd11f8abff186f1bb10c52ad4ab42d83dccfa02addece"},
+  "authority":{"actor_role":"project_owner","personal_identity":null,"decision":"approve_candidate","human_rationale":"직접 URL과 정확한 기사 제목이 일치함","human_rationale_normalization":"NFC","human_rationale_code_points":22,"shadow_submission_authorized":true,"application_authorized":false,"persistence_authorized":false,"network_authorized":false,"production_authorized":false},
+  "target":{"request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283","internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87","requested_fields":["content_context","source_attribution"]},
+  "historical":{"v96_packet":"ad5a6b6df6625cc10c9e60a32dfc7ad99b50e24e072fb40f97fada2a9ceda9c3","v96_readiness":"7be514f7b14b6d6a9c7a2a70cbda03adb2342380fc29d030c24e93c23245f44c","v97_decision":"request_enrichment","v97_input":"9f29122b90543bd2b6cc833e93e20e25f2ca0bdf19180f5db2afd45ccbeb67cd","v97_submission":"1989f206044100a2c7bf3e3585f74139496a32fcb87828d18252353b4b0341bc"},
+  "v103":{"record_id":"v103_gate_reevaluation_986a6adf96788010b7ab0ae619ea1a838a89043327ae155d27fbef05f3f8e5d4","record_sha256":"d8fe81209cc6a68236373d9a2affc13a577f72180cb85df6205e8b8c04c56c4d","result_sha256":"80030f8571491ad3fa370dcf2fe7e6e880372fb4be2d26ed7157a7b046fca9ea","gate":"approval_candidate","allowed_decisions":["not_decided","approve_candidate","reject","defer","request_enrichment"]},
+  "v104":{"packet_id":"v104_packet_41340d5584ae21556f7855e43248ca1f430b828a61cb651d5670df04c8f2097b","packet_sha256":"5093eff21206f48ab87bafd1bf5a8d7eef9140bc84189ba9809c0b9690216b18","readiness_sha256":"cb9c45620826dfea43e43677cf95d86850a102a86c7d128d50abe17bf8e119ec"},
+  "evidence":{"path":"tmp/source-sandbox/aespa-v98-human-enrichment/enrichment-header.png","sha256":"c2afc0d294ac82a6cda0739b9cb589080c09dede72664ed6f58a454de76db1b6","dimensions":[1467,317]},
+  "history":{"human_evidence_submissions":2,"mydaily_attempts":1,"mydaily_successes":0,"naver_attempts":1,"naver_successes":0,"network_reads":0,"provider_retries":0}
+}

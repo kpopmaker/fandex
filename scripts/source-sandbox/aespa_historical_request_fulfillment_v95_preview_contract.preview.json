@@ -1,0 +1,23 @@
+{
+  "version":"v95",
+  "stage":"aespa_historical_request_fulfillment_preview",
+  "branch":"v95-real-source-sandbox-aespa-historical-request-fulfillment-preview",
+  "base_sha":"1b60a27cfb96a82a8e43d825e97f232c07b71cf5",
+  "scope":"sandbox_only_deterministic_historical_fulfillment_evaluation_over_exact_v94_aggregate",
+  "agents":{"path":"AGENTS.md","sha256":"2d7e4fa43a84db4da84fd11f8abff186f1bb10c52ad4ab42d83dccfa02addece"},
+  "authority":{"actor_class":"project_owner","authorization":"explicit_bounded_historical_fulfillment_preview","authorized_request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283","authorized_internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87","authorized_fields":["content_context","source_attribution"],"derived_preview_fulfillment_authorized":true,"persistent_fulfillment_authorized":false,"request_closure_authorized":false,"normalized_record_application_authorized":false,"human_review_packet_authorized":false,"decision_application_authorized":false,"production_authorized":false,"external_effects_authorized":false},
+  "request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283",
+  "prior_malformed_request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f2",
+  "internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87",
+  "provider_key":"naver",
+  "source_type":"news",
+  "published_at":"2026-06-19T00:10:00+09:00",
+  "requested_fields":["content_context","source_attribution"],
+  "predecessor_commits":{"v91":"4b1f2b353f40df7316741156fddd859296acee02","v92":"a4077b8c1a72c82686e2338d16e1d56c0d72750e","v93":"fbabd4763a5395414a18539e392bf51768005c91","v94":"1b60a27cfb96a82a8e43d825e97f232c07b71cf5"},
+  "pinned_digests":{"v91_candidate_collection":"4e941ac6fd1c3010406eedb4403cc8b36413117004435181571310888443859d","v91_readiness_matrix":"9fb4189ac32269a3bd0a13967f5c31232152678a0c33a869fcd3bf64a90a1da2","v92_verification_records":"a1429042a4ed56225c7213af2b1891c622441d0a5d77fbfa78f51d5f6b941cfc","v93_acceptance_collection":"b8d188b3789f64d3f3bf5c1a79f9aae2add249c452d15be41e50efca5d40a307","v93_acceptance_records":["7764c71d3b24d609a00b18063da435ccabbf92444d8f14cfb5bfa17326d13a42","98ed0f7939f17b26204cd9a64e7c62d368a6232a82bf5e7218cedc318191ceda"],"v94_satisfaction_collection":"f8cc22faa9f6ae640888eb328d228375b8b18bc6326fbc7461a13c8b6d57617e","v94_satisfaction_records":["e203f953aa2ac484129651f3a591fb6ef7c50ed772472c2b8f83f6aced26b12f","d9f4c0340f2da9fe69921cab33dc806b25406cbf81f5df59f117fc2e3ab24a7a"],"v94_request_aggregate":"8eaf5f74a9e4328798d08f0029db2668c786d2fa450e2cb50492ad3392228125"},
+  "target":{"raw_row_number":991,"original_url":"https://www.mydaily.co.kr/page/view/2026061816093817264","provider_url":"https://m.entertain.naver.com/article/117/0004076125","observed_provider_final_url":"https://m.entertain.naver.com/home/article/117/0004076125","provider_article_tuple":"117/0004076125","archive_sha256":"9b62dcc74ea96261417c7c73c120bee201b3facd28df009ecb241903cf629328"},
+  "evidence":{"screenshot_path":"tmp/source-sandbox/naver/aespa-v91-human-evidence/provider-header.png","screenshot_sha256":"57c1f7fd0e5b83734c672186bbac61646dd1c723984a14522876326fa0efe2b8","screenshot_dimensions":[1783,851],"headline":"원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]","publisher":"마이데일리","semantic_role":"publisher","summary_code_points":121,"summary_normalization":"NFC","author_observed":false,"full_article_body_retained":false,"screenshot_ignored":true},
+  "history":{"mydaily_attempts":1,"mydaily_successes":0,"naver_attempts":1,"naver_successes":0,"cumulative_automated_attempts":2,"cumulative_automated_successes":0,"human_evidence_submissions":1,"v95_network_reads":0},
+  "determinism":{"evaluation_timestamp":"2026-06-19T00:10:00+09:00","timestamp_basis":"pinned_published_at","wall_clock_used":false,"randomness_used":false,"network_used":false},
+  "terminal_states":{"derived_preview_historical_request_fulfilled":true,"persistent_historical_request_fulfilled":false,"historical_request_closed":false,"human_re_review_eligibility":"eligible","human_re_review_readiness":"blocked","normalized_record_application":"not_performed","decision_application_readiness":"blocked","production_readiness":"not_ready"}
+}

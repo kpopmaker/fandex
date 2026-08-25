@@ -1,0 +1,52 @@
+{
+  "version": "v113",
+  "contract_version": "neon_provider_binding_readiness_v1",
+  "mode": "public_pure_sanitized_provider_binding_preview",
+  "user_attested_external_state": {
+    "attestation_status": "user_confirmed",
+    "provider_class": "neon",
+    "resource_display_name": "fandex-managed-postgres",
+    "plan_classification": "free",
+    "resource_status": "available",
+    "vercel_project_name": "fandex",
+    "environment_variables": [
+      {"key_name":"DATABASE_URL","scopes":["production"],"sensitive":true,"preview_exposed":false,"development_exposed":false},
+      {"key_name":"DATABASE_URL_UNPOOLED","scopes":["production"],"sensitive":true,"preview_exposed":false,"development_exposed":false}
+    ],
+    "region_classification": "unverified"
+  },
+  "independent_cli_verification": {
+    "vercel_cli_present": false,
+    "local_project_link_present": false,
+    "read_only_external_metadata_query_count": 0,
+    "status": "unverified_cli_unavailable",
+    "verified_fields": [],
+    "unverified_fields": ["vercel_project_name","resource_display_name","plan_classification","resource_status","environment_variable_names","environment_scopes","sensitive_flags","region_classification"]
+  },
+  "v112_references": {
+    "schema_manifest_sha256": "43a21a2bd9f7c48dfed78bb945ac6dfc8af03e00e911d851a56ada5509af83d0",
+    "migration_plan_sha256": "3fc7891174e383153a9760c944fee1984f86409896438cf8d3d27067b1cae7cd",
+    "atomic_transaction_plan_sha256": "d2bbd16891eb6e3b500be8d0154024723ed8cc25a8762ebea2c4a9ee61c39e53",
+    "rollback_plan_sha256": "46b3cbd0b3a3ed9a9ede14228b51727e433780cf143ec7fa5e403a1aad498956",
+    "idempotency_key": "c177aa26b45692bdb3c442bc8f361f04d834c9d5108d90a6bcbd3e0e68ce7465"
+  },
+  "security": {
+    "credential_values_provided": false,
+    "credential_values_inspected": false,
+    "credential_values_hashed": false,
+    "process_environment_read": false,
+    "env_file_read_or_written": false,
+    "connection_attempted": false,
+    "database_schema_inspected": false,
+    "migration_attempted": false,
+    "production_write_attempted": false
+  },
+  "authority": {
+    "provider_binding_metadata_validation_authorized": true,
+    "migration_execution_authorized": false,
+    "database_connection_authorized": false,
+    "production_write_authorized": false,
+    "deployment_authorized": false,
+    "pr_or_merge_authorized": false
+  }
+}

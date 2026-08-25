@@ -7,22 +7,39 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test:persistence": "tsx --conditions=react-server --test tests/managed-postgres-persistence.test.ts",
+    "db:migrate": "tsx scripts/database/run-postgres-migrations.mts",
+    "security:audit:production": "node scripts/security/audit-production.mjs",
+    "test:security": "node --test tests/security-audit-gate.test.mjs",
+    "test:staging:v116": "tsx --conditions=react-server scripts/database/validate-staging-v116.mts",
+    "test:role-bootstrap": "tsx --test tests/postgres-role-bootstrap.test.mts",
+    "test:production-bootstrap": "tsx --test tests/production-bootstrap-v118.test.mts",
+    "test:deployment-readiness": "tsx --test tests/production-deployment-readiness-v119.test.mts",
+    "db:roles": "tsx scripts/database/bootstrap-postgres-roles.mts",
+    "db:production-bootstrap": "tsx scripts/database/bootstrap-production-v118.mts",
+    "deployment:readiness": "tsx scripts/deployment/evaluate-production-deployment-readiness-v119.mts",
     "verify:fandex": "npm run lint && npm run build"
   },
   "dependencies": {
-    "next": "16.2.9",
+    "@vercel/functions": "^3.9.5",
+    "next": "16.3.2",
+    "pg": "^8.23.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "version":"v93",
+  "stage":"aespa_authorized_external_evidence_acceptance_preview",
+  "branch":"v93-real-source-sandbox-aespa-authorized-external-evidence-acceptance-preview",
+  "base_sha":"a4077b8c1a72c82686e2338d16e1d56c0d72750e",
+  "scope":"sandbox_only_acceptance_of_two_exact_v92_verified_records",
+  "authority":{"actor_class":"project_owner","authorization":"explicit_bounded_acceptance_preview","authorized_fields":["content_context","source_attribution"],"persistent_effects":false},
+  "request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283",
+  "prior_malformed_request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f2",
+  "internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87",
+  "requested_fields":["content_context","source_attribution"],
+  "v91_candidate_collection_sha256":"4e941ac6fd1c3010406eedb4403cc8b36413117004435181571310888443859d",
+  "v91_readiness_matrix_sha256":"9fb4189ac32269a3bd0a13967f5c31232152678a0c33a869fcd3bf64a90a1da2",
+  "v92_verification_record_digest":"a1429042a4ed56225c7213af2b1891c622441d0a5d77fbfa78f51d5f6b941cfc",
+  "verification_scope":"bounded_candidate_and_provenance_verification",
+  "target":{"raw_row_number":991,"original_url":"https://www.mydaily.co.kr/page/view/2026061816093817264","provider_url":"https://m.entertain.naver.com/article/117/0004076125","observed_provider_final_url":"https://m.entertain.naver.com/home/article/117/0004076125","provider_article_tuple":"117/0004076125","archive_sha256":"9b62dcc74ea96261417c7c73c120bee201b3facd28df009ecb241903cf629328"},
+  "evidence":{"screenshot_path":"tmp/source-sandbox/naver/aespa-v91-human-evidence/provider-header.png","screenshot_sha256":"57c1f7fd0e5b83734c672186bbac61646dd1c723984a14522876326fa0efe2b8","screenshot_dimensions":[1783,851],"headline":"\uc6d0\uc774, \uc708\ud130, \uc6d0\ud76c\u2026\uacbd\uc0c1\ub3c4 \ub9e4\ub825\uc5d0 \ud479 \ube60\uc838\ub4e0\ub2e4 [MD\ud53c\ud50c]","publisher":"\ub9c8\uc774\ub370\uc77c\ub9ac","semantic_role":"publisher","acquisition_channel":"project_owner_human_browser_observation","summary_code_points":121,"author_observed":false},
+  "history":{"mydaily_attempts":1,"mydaily_successes":0,"naver_attempts":1,"naver_successes":0,"cumulative_automated_attempts":2,"cumulative_automated_successes":0,"human_evidence_submissions":1,"v93_network_reads":0},
+  "terminal_states":{"content_context_field_satisfaction":false,"source_attribution_field_satisfaction":false,"historical_request_fulfillment":false,"human_re_review_readiness":"blocked","decision_application_readiness":"blocked","normalized_record_application":"not_performed","production_readiness":"not_ready"}
+}

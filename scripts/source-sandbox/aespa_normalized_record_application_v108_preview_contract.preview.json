@@ -1,0 +1,11 @@
+{
+  "version":"v108","stage":"normalized_record_application_preview","branch":"v108-real-source-sandbox-aespa-normalized-record-application-preview","base_sha":"01fc06a2305ec533456dedca045db8b706593d08",
+  "agents":{"path":"AGENTS.md","sha256":"2d7e4fa43a84db4da84fd11f8abff186f1bb10c52ad4ab42d83dccfa02addece"},
+  "authority":{"authorization":"explicit_bounded_v108_copied_normalized_application_preview","copied_state_application_authorized":true,"persistent_application_authorized":false,"historical_fulfillment_authorized":false,"request_closure_authorized":false,"queue_authorized":false,"network_authorized":false,"production_authorized":false},
+  "target":{"request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283","internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87","permitted_write_set_fields":["content_context","source_attribution"]},
+  "v106":{"application_id":"v106_application_7138326e8c69fe40859a77fc182d1dcb3d0e42fe85ac56f79f4e57f51978197b","record_sha256":"2e61abbc0c1430d0d3dd5acf43064da4d8b18e0563ceb5e5485f28025819fe14","result_sha256":"40250ec1bc7af87b8c01c4f44355167b0580cf7ddf9fd5578f8831ec360f53c9"},
+  "v107":{"candidate_id":"v107_candidate_a14fe5474ce5948401e606240ef8b302ec75ebea4dd08c6b241f44ebae72d9a5","candidate_sha256":"1188f5a11632c4c5a596b429654e3f19a187b6f74da70177348ba63923c3bcb9","write_set_id":"v107_write_set_11147bdf353a68632c67a23040a1dad30168fe6d916d5831aefaed5c7decbaa6","write_set_sha256":"a4446ab11e9e93656511d5e07321b50335665c4524722ae5eec64cfc9049d9e4","readiness_id":"v107_readiness_0d5c32d9a20dc8356f94ec21ea74e87184a3b8a79c062dba81d91b5e6d5e7f0a","readiness_sha256":"1e14132152186ea2869ffc7b0e330a5cb0ae41bf6807a73058bf635e06d2c122","required_readiness":"ready"},
+  "evidence":{"path":"tmp/source-sandbox/aespa-v98-human-enrichment/enrichment-header.png","sha256":"c2afc0d294ac82a6cda0739b9cb589080c09dede72664ed6f58a454de76db1b6","dimensions":[1467,317]},
+  "public_boundaries":{"builder":"import_naver_exports.normalize_row","schema":"validate_normalized_sources.REQUIRED_FIELDS/validate_items","copied_state":"v67.ptr_set/v67.leaf_diff/v67.object_sha"},
+  "history":{"human_evidence_submissions":2,"mydaily_attempts":1,"mydaily_successes":0,"naver_attempts":1,"naver_successes":0,"network_reads":0,"provider_retries":0}
+}

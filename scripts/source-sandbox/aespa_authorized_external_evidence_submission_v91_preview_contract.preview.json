@@ -1,0 +1,63 @@
+{
+  "version":"v91",
+  "stage":"aespa_authorized_external_evidence_submission_preview",
+  "artist":"aespa",
+  "scope":"project_owner_supplied_bounded_provider_evidence_submission_only",
+  "authority":"authorized_external_evidence_submission_preview_only",
+  "historical_authority":false,
+  "production_authority":false,
+  "branch":"v91-real-source-sandbox-aespa-authorized-external-evidence-submission-preview",
+  "base_sha":"f706023787293b704b7ea387f8aa5ae703498adb",
+  "consumed_authority_hashes":{
+    "v90_implementation":"053694b8c4a8b1b764fb731e139f00ba45d1bf7ddd98239ed22357235fbb73b8",
+    "v90_contract":"89e7cf4ecf3182ce6070cc945e58c87b87d932b5bb54870ddfb609a43d8eed5e",
+    "v90_docs":"36055f986d9446e2fe41dbada6a116472cc509c511cd84c9c3c12a5f27c5ec22",
+    "v81_validator":"bfd7ac11d5eab7cf5bc1a4052d3c5ca11d8863261b6ada1fda835562d00b2d5b",
+    "naver_importer":"b7c61857d3e12642f4d21a53005b966c84317fd50fd0d1bff29f5e201e4a9316",
+    "selected_importer":"717599a1f80ef0812d14c6ec5021e6f8ed26afe922e6d2dd2af1b150d431f195"
+  },
+  "historical_request_lineage":{
+    "request_id":"4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283",
+    "internal_source_id":"src_40f253cea60253b4f7b8d1e747f9cc87",
+    "provider_key":"naver",
+    "source_type":"news",
+    "published_at":"2026-06-19T00:10:00+09:00",
+    "requested_fields":["content_context","source_attribution"],
+    "historical_decision":"request_enrichment",
+    "historical_reviewer":"jm-reviewer-001"
+  },
+  "target_binding":{
+    "raw_row_number":991,
+    "raw_originallink":"https://www.mydaily.co.kr/page/view/2026061816093817264",
+    "raw_provider_link":"https://m.entertain.naver.com/article/117/0004076125",
+    "observed_provider_final_url":"https://m.entertain.naver.com/home/article/117/0004076125",
+    "provider_article_tuple":"117/0004076125",
+    "selected_archive_sha256":"9b62dcc74ea96261417c7c73c120bee201b3facd28df009ecb241903cf629328",
+    "unique_raw_row_count":1
+  },
+  "bounded_evidence":{
+    "screenshot_sha256":"57c1f7fd0e5b83734c672186bbac61646dd1c723984a14522876326fa0efe2b8",
+    "screenshot_dimensions":[1783,851],
+    "acquisition_channel":"project_owner_human_browser_observation",
+    "headline":"원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]",
+    "summary":"요즘 가요계에서 가장 핫한 여자 아이돌을 꼽으라면 리센느 원이, 에스파 윈터, 아일릿 원희를 빼놓을 수... 에스파 활동을 통해 글로벌 인기를 누리고 있는 윈터는 팬 소통 플랫폼과 예능 등에서 종종 부산 사투리를...",
+    "publisher":"마이데일리",
+    "attribution_role":"publisher",
+    "displayed_input_time":"2026.06.19. 오전 12:10",
+    "displayed_modified_time":"2026.06.19. 오전 1:21",
+    "author_observed":false,
+    "full_article_body_supplied":false
+  },
+  "submission_policy":"two separately bound candidates validated by v81 through the public v90 boundary",
+  "external_verification":"not_performed",
+  "evidence_acceptance":"not_performed",
+  "field_satisfaction":false,
+  "historical_request_fulfillment":false,
+  "human_re_review_readiness":"blocked",
+  "decision_application_readiness":"blocked",
+  "production_readiness":"not_ready",
+  "failure_behavior":"fail_closed_no_retry",
+  "determinism":"compact sorted UTF-8 JSON SHA-256; offline replay only",
+  "zero_mutation_policy":true,
+  "zero_production_policy":true
+}
