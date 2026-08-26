@@ -4,6 +4,7 @@ import process from 'node:process';
 
 const TRUSTED_ASSOCIATIONS = new Set(['OWNER', 'MEMBER', 'COLLABORATOR']);
 const DECISIVE_STATES = new Set(['APPROVED', 'CHANGES_REQUESTED']);
+const HUMAN_ACCOUNT_TYPE = 'User';
 
 function requireString(value, name) {
   if (typeof value !== 'string' || value.length === 0) {
@@ -44,7 +45,9 @@ export function evaluateVersionPrReviews(reviewPages, { headSha, prAuthor }) {
     if (!DECISIVE_STATES.has(state) || review.commit_id !== exactHead) continue;
 
     const login = review.user && typeof review.user.login === 'string' ? review.user.login.toLowerCase() : '';
-    if (!login || login === author || !TRUSTED_ASSOCIATIONS.has(review.author_association)) continue;
+    const accountType = review.user && typeof review.user.type === 'string' ? review.user.type : '';
+    if (!login || accountType !== HUMAN_ACCOUNT_TYPE || login === author
+        || !TRUSTED_ASSOCIATIONS.has(review.author_association)) continue;
 
     const order = reviewOrder(review);
     const current = latestByReviewer.get(login);

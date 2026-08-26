@@ -17,9 +17,9 @@ const headSha = 'a'.repeat(40);
 function git(args, cwd, options = {}) {
   return spawnSync('git', args, { cwd, encoding: 'utf8', ...options });
 }
-const review = ({ id, login, state, submittedAt, association = 'COLLABORATOR', commitId = headSha }) => ({
+const review = ({ id, login, state, submittedAt, association = 'COLLABORATOR', commitId = headSha, accountType = 'User' }) => ({
   id,
-  user: { login },
+  user: { login, type: accountType },
   state,
   submitted_at: submittedAt,
   author_association: association,
@@ -51,6 +51,9 @@ test('version PR automation requires explicit label, exact base/head, and truste
   assert.doesNotMatch(workflow, /gh pr merge/);
   assert.doesNotMatch(workflow, /git push[^\n]*--force|git push[^\n]*-f(?:\s|$)/);
   assert.doesNotMatch(workflow, /\s--auto(?:\s|\\)/);
+  assert.equal((workflow.match(/actions\/checkout@11d5960a326750d5838078e36cf38b85af677262/g) ?? []).length, 3);
+  assert.equal((workflow.match(/actions\/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020/g) ?? []).length, 3);
+  assert.doesNotMatch(workflow, /uses:\s+actions\/(?:checkout|setup-node)@v\d/);
 });
 
 test('closed or retargeted PRs cancel fail-closed and merge uses least privilege', async () => {
@@ -98,6 +101,30 @@ test('outsiders, the PR author, and approvals from an older head cannot authoriz
     review({ id: 2, login: 'AUTHOR', state: 'APPROVED', submittedAt: '2026-08-26T00:01:00Z', association: 'OWNER' }),
     review({ id: 3, login: 'reviewer', state: 'APPROVED', submittedAt: '2026-08-26T00:02:00Z', commitId: 'b'.repeat(40) }),
   ]], { headSha, prAuthor: 'author' });
+  assert.deepEqual(result, { authorized: false, approvedCount: 0, changesRequestedCount: 0, trustedReviewerCount: 0 });
+});
+
+test('bot and untyped accounts cannot provide human approval', () => {
+  const untypedReview = review({
+    id: 2,
+    login: 'untyped-reviewer',
+    state: 'APPROVED',
+    submittedAt: '2026-08-26T00:01:00Z',
+  });
+  delete untypedReview.user.type;
+
+  const result = evaluateVersionPrReviews([[
+    review({
+      id: 1,
+      login: 'trusted-bot',
+      state: 'APPROVED',
+      submittedAt: '2026-08-26T00:00:00Z',
+      association: 'MEMBER',
+      accountType: 'Bot',
+    }),
+    untypedReview,
+  ]], { headSha, prAuthor: 'author' });
+
   assert.deepEqual(result, { authorized: false, approvedCount: 0, changesRequestedCount: 0, trustedReviewerCount: 0 });
 });
 
