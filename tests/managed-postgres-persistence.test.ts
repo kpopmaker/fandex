@@ -3,13 +3,16 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { applyPersistenceBundle } from '../lib/server/persistence/adapter';
+import { applyPersistenceBundle, claimOutboxBatch, inspectPersistentPreState } from '../lib/server/persistence/adapter';
 import {
   buildCanonicalPersistencePayload,
   classifyPersistenceReplay,
+  deriveNormalizedPostDigest,
   derivePersistenceIdempotencyKey,
+  deriveRequestPostDigest,
   MAX_SERIALIZATION_RETRIES,
   OUTBOX_MAX_ATTEMPTS,
+  V110_CLOSURE_LINEAGE,
   V112_V113_FOUNDATION_LINEAGE,
   redactDatabaseError,
   requireMigrationDatabaseUrl,
@@ -33,6 +36,7 @@ const fixtureBase: PersistenceBundle = {
   canonicalPayloadDigest: '',
   v108ApplicationRecordDigest: 'f1f1c0c2abb6e2234b310c22ecea3986738d91566ca74ff2fd6f2cf98688a319',
   v110ClosureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+  v110CopiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
   foundationLineage: V112_V113_FOUNDATION_LINEAGE,
   expectedState: 'present',
   expectedNormalizedVersion: 1,
@@ -40,7 +44,7 @@ const fixtureBase: PersistenceBundle = {
   expectedRequestVersion: 1,
   expectedRequestDigest: 'e66c8bc6d0831af5a9541646de80a4e370428c232b07b79d0435d21693da4833',
   normalizedPostDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
-  requestPostDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+  requestPostDigest: '',
   normalized: {
     provider: 'naver', sourceType: 'news', officeCode: '117', articleId: '0004076125',
     title: '원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]',
@@ -72,6 +76,7 @@ const fixtureBase: PersistenceBundle = {
 
 function fixture(): PersistenceBundle {
   const value = structuredClone(fixtureBase);
+  value.requestPostDigest = deriveRequestPostDigest(value);
   value.idempotencyKey = derivePersistenceIdempotencyKey(value);
   value.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(value));
   return value;
@@ -124,6 +129,36 @@ test('exact fixture preserves U+2026 and publisher/byline roles', () => {
   assert.equal(value.normalized.title.split('…').length - 1, 1);
   assert.equal(value.normalized.authorOrPublisher, value.evidence.publisher);
   assert.notEqual(value.evidence.publisher, value.evidence.normalizedJournalist);
+  assert.equal(value.normalizedPostDigest, deriveNormalizedPostDigest(value));
+  assert.equal(value.requestPostDigest, deriveRequestPostDigest(value));
+  assert.equal(value.requestPostDigest, 'a20d64d9fda71eb2167a8e6e852a7e6d71e64d9c61bb6565a72a5ddd7ed0a3e5');
+});
+
+test('v110 closure lineage, post-state digests, and versions are bound fail-closed', () => {
+  const value = fixture();
+  assert.deepEqual(V110_CLOSURE_LINEAGE, {
+    closureRecordId: 'v110_closure_fa95c7a9513cebe1d99f5cdd32f33285088137633037ab5e04d45d40270fb2ee',
+    closureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+    copiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+  });
+
+  const normalizedTamper = structuredClone(value);
+  normalizedTamper.normalizedV36.summary = `${normalizedTamper.normalizedV36.summary} tampered`;
+  normalizedTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(normalizedTamper));
+  assert.throws(() => validatePersistenceBundle(normalizedTamper), /normalized_post_digest_not_derived/);
+
+  const closureTamper = structuredClone(value);
+  closureTamper.request.closureRecordReference = 'v110_closure_' + 'f'.repeat(64);
+  closureTamper.requestPostDigest = deriveRequestPostDigest(closureTamper);
+  closureTamper.idempotencyKey = derivePersistenceIdempotencyKey(closureTamper);
+  closureTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(closureTamper));
+  assert.throws(() => validatePersistenceBundle(closureTamper), /invalid_v110_closure_lineage/);
+
+  const versionTamper = structuredClone(value);
+  versionTamper.request.recordVersion += 1;
+  versionTamper.requestPostDigest = deriveRequestPostDigest(versionTamper);
+  versionTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(versionTamper));
+  assert.throws(() => validatePersistenceBundle(versionTamper), /invalid_record_version_transition/);
 });
 
 test('v112 and v113 foundation lineage is exact and fail-closed', () => {
@@ -261,6 +296,49 @@ test('adapter SQL is parameterized, atomic, rollback-safe, and SKIP LOCKED', asy
   assert.match(adapter, /outbox_append_conflict/);
   assert.match(adapter, /\$1/);
   assert.doesNotMatch(adapter, /\$\{bundle\./);
+});
+
+test('persistent pre-state is read in one statement-level snapshot', async () => {
+  const state = mockPool(async (sql) => {
+    assert.match(sql, /normalized_sources/);
+    assert.match(sql, /historical_enrichment_requests/);
+    return {
+      rowCount: 1,
+      rows: [{
+        normalized_state: { recordVersion: '2', stateDigest: 'a'.repeat(64) },
+        request_state: { recordVersion: '3', stateDigest: 'b'.repeat(64), requestState: 'open' },
+      }],
+    };
+  });
+  const result = await inspectPersistentPreState('request', 'source', state.pool);
+  assert.equal(state.calls.length, 1);
+  assert.deepEqual(result, {
+    normalized: { recordVersion: 2, stateDigest: 'a'.repeat(64) },
+    request: { recordVersion: 3, stateDigest: 'b'.repeat(64), requestState: 'open' },
+  });
+});
+
+test('outbox claim terminalizes an expired final-attempt lease before claiming work', async () => {
+  const outbox = mockPool(async (sql) => {
+    assert.match(sql, /WITH terminal_expired AS/);
+    assert.match(sql, /status='dead_letter'/);
+    assert.match(sql, /lease_expired_at_attempt_limit/);
+    assert.match(sql, /attempt_count >= max_attempts/);
+    assert.match(sql, /attempt_count < max_attempts/);
+    return {
+      rowCount: 1,
+      rows: [{
+        outbox_id: 'event-1', idempotency_key: 'a'.repeat(64), event_type: 'source_persistence_applied',
+        bounded_payload: { requestId: 'request' }, attempt_count: 1,
+      }],
+    };
+  });
+  const claimed = await claimOutboxBatch('worker', 1, 30, outbox.pool);
+  assert.equal(outbox.calls.length, 1);
+  assert.deepEqual(claimed, [{
+    outboxId: 'event-1', idempotencyKey: 'a'.repeat(64), eventType: 'source_persistence_applied',
+    payload: { requestId: 'request' }, attemptCount: 1, leaseOwner: 'worker',
+  }]);
 });
 
 test('outbox claim model has zero concurrent duplicates and dead-letters at eight', async () => {

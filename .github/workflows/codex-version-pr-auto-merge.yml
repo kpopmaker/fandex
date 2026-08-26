@@ -2,61 +2,166 @@ name: FANDEX Codex Version PR Auto Merge
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+  pull_request_review:
+    types: [submitted, dismissed]
 
-permissions:
-  contents: write
-  pull-requests: write
-  statuses: read
+permissions: {}
 
 concurrency:
   group: codex-version-pr-auto-merge-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  merge:
+  authorize:
     if: >-
       github.event.pull_request.base.ref == 'main' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login == github.repository_owner &&
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      contains(github.event.pull_request.labels.*.name, 'production-merge-approved')
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
 
     steps:
-      - name: Wait for Vercel and queue squash merge
+      - name: Verify exact-head human merge authorization
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
 
           if [[ ! "${HEAD_REF}" =~ ^v[0-9]+- ]]; then
-            echo "Skipping non-version branch: ${HEAD_REF}"
-            exit 0
+            echo "Refusing non-version branch: ${HEAD_REF}"
+            exit 1
+          fi
+
+          current_head="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid --jq '.headRefOid')"
+          if [[ "${current_head}" != "${HEAD_SHA}" ]]; then
+            echo "PR head changed from ${HEAD_SHA} to ${current_head}."
+            exit 1
+          fi
+
+          label_count="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json labels --jq '[.labels[].name | select(. == "production-merge-approved")] | length')"
+          if [[ "${label_count}" != "1" ]]; then
+            echo "The exact production-merge-approved label is required."
+            exit 1
+          fi
+
+          approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
+            --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
+          if (( approval_count < 1 )); then
+            echo "An APPROVED review by someone other than the author on exact head ${HEAD_SHA} is required."
+            exit 1
+          fi
+
+  validate:
+    needs: authorize
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out exact authorized head without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Run dependency security gate
+        run: npm run security:audit:production
+
+      - name: Run static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Run persistence and deployment safety tests
+        run: >-
+          npm run test:security &&
+          npm run test:persistence &&
+          npm run test:role-bootstrap &&
+          npm run test:production-bootstrap &&
+          npm run test:deployment-readiness &&
+          npm run test:merge-safety
+
+      - name: Verify plan-only database boundaries
+        run: npm run db:migrate && npm run db:roles
+
+      - name: Build production bundle without deployment
+        run: npm run build
+
+  merge:
+    needs: [authorize, validate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: read
+
+    steps:
+      - name: Reverify authorization, wait for Vercel, and queue squash merge
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "${HEAD_REF}" =~ ^v[0-9]+- ]]; then
+            echo "Refusing non-version branch: ${HEAD_REF}"
+            exit 1
           fi
 
           deadline=$((SECONDS + 1800))
           vercel_ready=false
 
           while (( SECONDS < deadline )); do
-            current_head="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid --jq '.headRefOid')"
+            pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,isDraft,labels)"
+            current_head="$(jq -r '.headRefOid' <<<"${pr_snapshot}")"
+            current_draft="$(jq -r '.isDraft' <<<"${pr_snapshot}")"
+            label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${pr_snapshot}")"
 
-            if [[ "${current_head}" != "${HEAD_SHA}" ]]; then
-              echo "PR head changed from ${HEAD_SHA} to ${current_head}; a newer run will handle it."
+            if [[ "${current_head}" != "${HEAD_SHA}" || "${current_draft}" != "false" || "${label_count}" != "1" ]]; then
+              echo "Head, draft state, or explicit merge label changed; refusing merge."
               exit 1
             fi
 
-            vercel_state="$(gh api "repos/${REPOSITORY}/commits/${HEAD_SHA}/status"               --jq '[.statuses[] | select(.context == "Vercel")][0].state // "missing"')"
+            approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
+              --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
+            if (( approval_count < 1 )); then
+              echo "Exact-head approval is absent or was dismissed; refusing merge."
+              exit 1
+            fi
+
+            vercel_state="$(gh api "repos/${REPOSITORY}/commits/${HEAD_SHA}/status" \
+              --jq '[.statuses[] | select(.context == "Vercel")][0].state // "missing"')"
 
             case "${vercel_state}" in
               success)
                 vercel_ready=true
-                echo "Vercel check succeeded."
+                echo "Vercel check succeeded with authorization still intact."
                 break
                 ;;
               failure|error)
@@ -79,4 +184,21 @@ jobs:
             exit 1
           fi
 
-          gh pr merge "${PR_NUMBER}"             --repo "${REPOSITORY}"             --auto             --squash             --delete-branch             --match-head-commit "${HEAD_SHA}"
+          final_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,isDraft,labels)"
+          final_head="$(jq -r '.headRefOid' <<<"${final_snapshot}")"
+          final_draft="$(jq -r '.isDraft' <<<"${final_snapshot}")"
+          final_label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${final_snapshot}")"
+          final_approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
+            --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
+
+          if [[ "${final_head}" != "${HEAD_SHA}" || "${final_draft}" != "false" || "${final_label_count}" != "1" ]] \
+              || (( final_approval_count < 1 )); then
+            echo "Final exact-head authorization check failed; refusing merge."
+            exit 1
+          fi
+
+          gh pr merge "${PR_NUMBER}" \
+            --repo "${REPOSITORY}" \
+            --squash \
+            --delete-branch \
+            --match-head-commit "${HEAD_SHA}"

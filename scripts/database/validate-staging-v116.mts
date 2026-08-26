@@ -12,6 +12,7 @@ import {
 } from '../../lib/server/persistence/adapter';
 import {
   buildCanonicalPersistencePayload,
+  deriveRequestPostDigest,
   derivePersistenceIdempotencyKey,
   sha256Canonical,
   V112_V113_FOUNDATION_LINEAGE,
@@ -102,13 +103,14 @@ function exactBundle(): PersistenceBundle {
     idempotencyKey: '', canonicalPayloadDigest: '', expectedState: 'absent',
     v108ApplicationRecordDigest: 'f1f1c0c2abb6e2234b310c22ecea3986738d91566ca74ff2fd6f2cf98688a319',
     v110ClosureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+    v110CopiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
     foundationLineage: V112_V113_FOUNDATION_LINEAGE,
     expectedNormalizedVersion: 1,
     expectedNormalizedDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
     expectedRequestVersion: 1,
     expectedRequestDigest: 'e66c8bc6d0831af5a9541646de80a4e370428c232b07b79d0435d21693da4833',
     normalizedPostDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
-    requestPostDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+    requestPostDigest: '',
     normalized: {
       provider: 'naver', sourceType: 'news', officeCode: '117', articleId: '0004076125',
       title: '원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]',
@@ -137,6 +139,7 @@ function exactBundle(): PersistenceBundle {
     request: { requestedFields: ['content_context','source_attribution'], closureRecordReference: 'v110_closure_fa95c7a9513cebe1d99f5cdd32f33285088137633037ab5e04d45d40270fb2ee', recordVersion: 2 },
     outbox: { eventType: 'source_persistence_applied', payload: { requestId: '4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283' } },
   };
+  bundle.requestPostDigest = deriveRequestPostDigest(bundle);
   bundle.idempotencyKey = derivePersistenceIdempotencyKey(bundle);
   bundle.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(bundle));
   return bundle;

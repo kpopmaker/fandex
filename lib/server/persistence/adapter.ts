@@ -34,19 +34,28 @@ export async function inspectPersistentPreState(
   internalSourceId: string,
   pool: PersistencePool = getRuntimeDatabasePool(),
 ): Promise<PersistentPreState> {
-  const [normalized, request] = await Promise.all([
-    pool.query<{ record_version: string; content_sha256: string }>(
-      'SELECT record_version, content_sha256 FROM fandex.normalized_sources WHERE internal_source_id = $1',
-      [internalSourceId],
-    ),
-    pool.query<{ record_version: string; state_sha256: string; request_state: 'open' | 'closed' }>(
-      'SELECT record_version, state_sha256, request_state FROM fandex.historical_enrichment_requests WHERE request_id = $1 AND internal_source_id = $2',
-      [requestId, internalSourceId],
-    ),
-  ]);
+  const result = await pool.query<{
+    normalized_state: { recordVersion: string; stateDigest: string } | null;
+    request_state: { recordVersion: string; stateDigest: string; requestState: 'open' | 'closed' } | null;
+  }>(
+    `SELECT
+      (SELECT jsonb_build_object(
+        'recordVersion', record_version::text,
+        'stateDigest', content_sha256
+      ) FROM fandex.normalized_sources WHERE internal_source_id = $1) AS normalized_state,
+      (SELECT jsonb_build_object(
+        'recordVersion', record_version::text,
+        'stateDigest', state_sha256,
+        'requestState', request_state
+      ) FROM fandex.historical_enrichment_requests
+        WHERE request_id = $2 AND internal_source_id = $1) AS request_state`,
+    [internalSourceId, requestId],
+  );
+  const normalized = result.rows[0]?.normalized_state ?? null;
+  const request = result.rows[0]?.request_state ?? null;
   return {
-    normalized: normalized.rows[0] ? { recordVersion: Number(normalized.rows[0].record_version), stateDigest: normalized.rows[0].content_sha256 } : null,
-    request: request.rows[0] ? { recordVersion: Number(request.rows[0].record_version), stateDigest: request.rows[0].state_sha256, requestState: request.rows[0].request_state } : null,
+    normalized: normalized ? { recordVersion: Number(normalized.recordVersion), stateDigest: normalized.stateDigest } : null,
+    request: request ? { recordVersion: Number(request.recordVersion), stateDigest: request.stateDigest, requestState: request.requestState } : null,
   };
 }
 
@@ -258,7 +267,17 @@ export async function claimOutboxBatch(
   const boundedLimit = Math.min(Math.max(limit, 1), 100);
   const boundedLease = Math.min(Math.max(leaseSeconds, 5), 300);
   const result = await pool.query<{ outbox_id: string; idempotency_key: string; event_type: string; bounded_payload: Record<string, unknown>; attempt_count: number }>(
-    `WITH candidates AS (
+    `WITH terminal_expired AS (
+      UPDATE fandex.ingestion_outbox SET
+        status='dead_letter', lease_owner=NULL, lease_expires_at=NULL,
+        next_attempt_at=NULL,
+        bounded_error_metadata=jsonb_build_object('code','lease_expired_at_attempt_limit'),
+        updated_at=CURRENT_TIMESTAMP
+      WHERE status='processing'
+        AND lease_expires_at <= CURRENT_TIMESTAMP
+        AND attempt_count >= max_attempts
+      RETURNING outbox_id
+    ), candidates AS (
       SELECT outbox_id FROM fandex.ingestion_outbox
       WHERE (status IN ('pending','retryable_failed') OR (status='processing' AND lease_expires_at <= CURRENT_TIMESTAMP))
         AND attempt_count < max_attempts
