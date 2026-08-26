@@ -12,14 +12,32 @@ import {
   type DeploymentReadinessInput,
 } from '../scripts/deployment/evaluate-production-deployment-readiness-v119.mjs';
 
+type DeepMutable<T> = T extends string
+  ? string
+  : T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T extends readonly (infer Item)[]
+  ? DeepMutable<Item>[]
+  : T extends object
+    ? { -readonly [Key in keyof T]: DeepMutable<T[Key]> }
+    : T;
+type MutableDeploymentReadinessInput = DeepMutable<DeploymentReadinessInput>;
+type ReadinessMatrixKey = keyof ReturnType<typeof evaluateDeploymentReadiness>['matrix'];
+
 function input(): DeploymentReadinessInput { return structuredClone(DEFAULT_READINESS_INPUT); }
-function mutate(callback: (value: any) => void): DeploymentReadinessInput { const value = input() as any; callback(value); return value; }
+function mutate(callback: (value: MutableDeploymentReadinessInput) => void): DeploymentReadinessInput {
+  const value = structuredClone(DEFAULT_READINESS_INPUT) as MutableDeploymentReadinessInput;
+  callback(value);
+  return value as unknown as DeploymentReadinessInput;
+}
 
 test('v118 lineage and sanitized input contract are exact', () => {
   assert.deepEqual(validateDeploymentReadinessInput(input()), { valid: true });
   assert.throws(() => validateDeploymentReadinessInput(mutate((value) => { value.lineage.correctedVerifier = '0'.repeat(64); })), /v118_lineage_mismatch/);
   assert.throws(() => validateDeploymentReadinessInput(mutate((value) => { value.source.v118CommitSha = '0'.repeat(40); })), /deployment_readiness_input_invalid/);
-  assert.throws(() => validateDeploymentReadinessInput(mutate((value) => { value.forbidden = 'postgresql:\/\/synthetic'; })), /sanitized_input_required/);
+  assert.throws(() => validateDeploymentReadinessInput(mutate((value) => { (value as unknown as Record<string, unknown>).forbidden = 'postgresql:\/\/synthetic'; })), /sanitized_input_required/);
 });
 
 test('source integration blocks unknown ancestry and requires the Git main path', () => {
@@ -41,17 +59,17 @@ test('environment manifest requires exact FANDEX Production Sensitive bindings w
     ['FANDEX_MIGRATION_DATABASE_URL','unpooled',true,false,false], ['FANDEX_RUNTIME_DATABASE_URL','pooled',true,false,false],
   ]);
   for (const changed of [
-    mutate((value) => { value.vercel.environment = value.vercel.environment.filter((row: any) => row.name !== 'FANDEX_RUNTIME_DATABASE_URL'); }),
-    mutate((value) => { value.vercel.environment.find((row: any) => row.name === 'FANDEX_RUNTIME_DATABASE_URL').sensitive = false; }),
-    mutate((value) => { value.vercel.environment.find((row: any) => row.name === 'FANDEX_MIGRATION_DATABASE_URL').scope = 'preview'; }),
+    mutate((value) => { value.vercel.environment = value.vercel.environment.filter((row) => row.name !== 'FANDEX_RUNTIME_DATABASE_URL'); }),
+    mutate((value) => { const row = value.vercel.environment.find((item) => item.name === 'FANDEX_RUNTIME_DATABASE_URL'); if (row) row.sensitive = false; }),
+    mutate((value) => { const row = value.vercel.environment.find((item) => item.name === 'FANDEX_MIGRATION_DATABASE_URL'); if (row) row.scope = 'preview'; }),
     mutate((value) => { value.vercel.environment.push({ name: 'FANDEX_RUNTIME_DATABASE_URL', scope: 'development', sensitive: true }); }),
   ]) assert.equal(buildEnvironmentExposureManifest(changed).environmentBindingReadiness, 'blocked');
-  const noLegacy = mutate((value) => { value.vercel.environment = value.vercel.environment.filter((row: any) => !['DATABASE_URL','DATABASE_URL_UNPOOLED'].includes(row.name)); });
+  const noLegacy = mutate((value) => { value.vercel.environment = value.vercel.environment.filter((row) => !['DATABASE_URL','DATABASE_URL_UNPOOLED'].includes(row.name)); });
   assert.equal(buildEnvironmentExposureManifest(noLegacy).privilegedLegacyEnvironmentReadiness, 'ready');
 });
 
 test('runtime credential and persistence boundaries fail closed independently', () => {
-  const cases: [string, (value: any) => void, string][] = [
+  const cases: [string, (value: MutableDeploymentReadinessInput) => void, ReadinessMatrixKey][] = [
     ['legacy fallback', (v) => { v.staticInspection.legacyRuntimeFallbackFound = true; }, 'runtime_entrypoint_readiness'],
     ['migration credential in runtime', (v) => { v.staticInspection.migrationCredentialUsedByRuntime = true; }, 'runtime_entrypoint_readiness'],
     ['runtime credential in migration', (v) => { v.staticInspection.runtimeCredentialUsedByMigration = true; }, 'runtime_entrypoint_readiness'],
@@ -60,7 +78,7 @@ test('runtime credential and persistence boundaries fail closed independently', 
     ['build lifecycle migration', (v) => { v.staticInspection.buildLifecycleDatabaseOperationFound = true; }, 'runtime_entrypoint_readiness'],
     ['automatic persistence', (v) => { v.staticInspection.automaticBusinessPersistenceEntrypointFound = true; }, 'business_persistence_safety'],
   ];
-  for (const [,change,key] of cases) assert.equal((evaluateDeploymentReadiness(mutate(change)).matrix as any)[key], 'blocked');
+  for (const [,change,key] of cases) assert.equal(evaluateDeploymentReadiness(mutate(change)).matrix[key], 'blocked');
   const base = evaluateDeploymentReadiness(input());
   assert.equal(base.matrix.runtime_entrypoint_readiness, 'ready'); assert.equal(base.matrix.business_persistence_safety, 'ready');
   assert.equal(base.automaticCollectionApplicationActive, false); assert.equal(base.businessPersistencePerformed, false);
