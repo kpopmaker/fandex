@@ -212,7 +212,7 @@ test('adapter rejects stale state and rolls back transaction failures', async ()
   const stale = mockPool(async (sql) => {
     if (sql.includes('INSERT INTO fandex.persistence_transactions')) return { rowCount: 1, rows: [] };
     if (sql.includes('SELECT record_version, content_sha256')) return { rowCount: 1, rows: [{ record_version: '99', content_sha256: value.expectedNormalizedDigest }] };
-    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open' }] };
+    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
     return { rowCount: 0, rows: [] };
   });
   assert.equal((await applyPersistenceBundle(value, stale.pool)).status, 'rejected_stale_state');
@@ -228,6 +228,54 @@ test('adapter rejects stale state and rolls back transaction failures', async ()
   assert.ok(failure.calls.includes('ROLLBACK'));
 });
 
+test('adapter rejects mismatched requested fields before persistence writes', async () => {
+  const value = fixture();
+  const mismatch = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('SELECT record_version, content_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: ['source_attribution', 'content_context'] }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  assert.equal((await applyPersistenceBundle(value, mismatch.pool)).status, 'rejected_stale_state');
+  assert.equal(mismatch.calls.filter((sql) => sql.includes('INSERT INTO fandex.persistence_transactions')).length, 0);
+  assert.equal(mismatch.calls.filter((sql) => sql.includes('UPDATE fandex.historical_enrichment_requests')).length, 0);
+  assert.ok(mismatch.calls.includes('ROLLBACK'));
+});
+
+test('request CAS and postcondition preserve exact requested fields', async () => {
+  const value = fixture();
+  const requestUpdateValues: unknown[][] = [];
+  const success = mockPool(async (sql, values) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
+    if (sql.includes('UPDATE fandex.historical_enrichment_requests')) requestUpdateValues.push([...(values ?? [])]);
+    if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(value.normalized.recordVersion), content_sha256: value.normalizedPostDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(value.request.recordVersion), state_sha256: value.requestPostDigest, request_state: 'closed', requested_fields: value.request.requestedFields, persistent_fulfilled: true, persistent_closed: true, closure_record_reference: value.request.closureRecordReference }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  assert.equal((await applyPersistenceBundle(value, success.pool)).status, 'applied');
+  assert.equal(requestUpdateValues.length, 1);
+  assert.deepEqual(requestUpdateValues[0]?.[7], value.request.requestedFields);
+  assert.ok(success.calls.some((sql) => sql.includes('requested_fields=$8::text[]')));
+
+  const tamperedPostcondition = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
+    if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(value.normalized.recordVersion), content_sha256: value.normalizedPostDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(value.request.recordVersion), state_sha256: value.requestPostDigest, request_state: 'closed', requested_fields: ['content_context'], persistent_fulfilled: true, persistent_closed: true, closure_record_reference: value.request.closureRecordReference }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  const tampered = await applyPersistenceBundle(value, tamperedPostcondition.pool);
+  assert.equal(tampered.status, 'failed_rolled_back');
+  assert.deepEqual(tampered.error, { code: 'database_operation_failed' });
+  assert.ok(tamperedPostcondition.calls.includes('ROLLBACK'));
+});
+
 test('expected absent bootstraps source and request atomically and rejects existing rows', async () => {
   const absent = fixture();
   absent.expectedState = 'absent';
@@ -239,7 +287,7 @@ test('expected absent bootstraps source and request atomically and rejects exist
     if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 0, rows: [] };
     if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 0, rows: [] };
     if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(absent.normalized.recordVersion), content_sha256: absent.normalizedPostDigest }] };
-    if (sql.includes('SELECT record_version, state_sha256, request_state, persistent_fulfilled')) return { rowCount: 1, rows: [{ record_version: String(absent.request.recordVersion), state_sha256: absent.requestPostDigest, request_state: 'closed', persistent_fulfilled: true, persistent_closed: true, closure_record_reference: absent.request.closureRecordReference }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(absent.request.recordVersion), state_sha256: absent.requestPostDigest, request_state: 'closed', requested_fields: absent.request.requestedFields, persistent_fulfilled: true, persistent_closed: true, closure_record_reference: absent.request.closureRecordReference }] };
     return { rowCount: 1, rows: [] };
   });
   assert.equal((await applyPersistenceBundle(absent, success.pool)).status, 'applied');
@@ -312,7 +360,7 @@ test('persistent pre-state is read in one statement-level snapshot', async () =>
       rowCount: 1,
       rows: [{
         normalized_state: { recordVersion: '2', stateDigest: 'a'.repeat(64) },
-        request_state: { recordVersion: '3', stateDigest: 'b'.repeat(64), requestState: 'open' },
+        request_state: { recordVersion: '3', stateDigest: 'b'.repeat(64), requestState: 'open', requestedFields: ['content_context', 'source_attribution'] },
       }],
     };
   });
@@ -320,7 +368,7 @@ test('persistent pre-state is read in one statement-level snapshot', async () =>
   assert.equal(state.calls.length, 1);
   assert.deepEqual(result, {
     normalized: { recordVersion: 2, stateDigest: 'a'.repeat(64) },
-    request: { recordVersion: 3, stateDigest: 'b'.repeat(64), requestState: 'open' },
+    request: { recordVersion: 3, stateDigest: 'b'.repeat(64), requestState: 'open', requestedFields: ['content_context', 'source_attribution'] },
   });
 });
 

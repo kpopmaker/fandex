@@ -18,6 +18,8 @@ This change hardens the existing managed-Postgres persistence boundary and the r
 
 `inspectPersistentPreState` now reads normalized and request state with one SQL statement. The two values therefore come from one PostgreSQL statement snapshot instead of two independently scheduled queries.
 
+The requested-field tuple is now independently bound at every persistent transition boundary. The present-state lock reads the actual `requested_fields`, stale-state classification requires exact ordered equality, the request UPDATE includes the tuple in its compare-and-swap predicate, and the postcondition reads and rechecks it. Reordered, missing, extra, or post-application-mutated fields fail closed even if a stored state digest happens to match.
+
 Deterministic v120 contract values:
 
 - Idempotency key: `42321543a2d98f7add059c1d31c27581c7610767da8310832cba356819a52287`
@@ -41,9 +43,10 @@ Version PRs are Draft by default. Repository automation can reach its merge comm
 5. The exact base and head SHAs remain unchanged. Validation composes their merge tree locally and runs against that result with a read-only token and `persist-credentials: false`.
 6. Dependency audit, static checks, persistence/security/bootstrap/readiness/merge-safety tests, plan-only DB commands, and the production build pass.
 7. Immediately before merge, the workflow rechecks base/head SHAs, Draft state, label, current trusted review state, and Vercel success.
+8. The workflow composes a merge commit whose two parents are the exact authorized base and head, then performs a non-force push to `main`. A concurrently advanced `main` is not an ancestor of that commit, so Git rejects the ref update instead of merging an unvalidated base.
 
-Ready-for-review, review approval, and merge authorization are intentionally separate states. Removing Draft status alone cannot activate the merge path. The workflow does not enable a persistent GitHub auto-merge reservation; after the final authorization check it attempts only the exact-base/head guarded squash merge.
+Ready-for-review, review approval, and merge authorization are intentionally separate states. Removing Draft status alone cannot activate the merge path. The workflow does not enable a persistent GitHub auto-merge reservation; after the final authorization check it attempts only the exact-base/head guarded merge-commit push.
 
 ## Validation boundary
 
-The v120 test set covers derived digest tampering, closure-lineage substitution, invalid version transitions, versioned idempotency, explicit legacy-v116 classification, single-statement pre-state reads, bounded final-attempt lease expiry, workflow permissions, exact-base/head validation, trusted current review decisions, explicit labeling, and repository instructions. An exact legacy v116 state now fails before writes with `legacy_v116_state_requires_fresh_branch`; validating the new contract requires a fresh staging branch under separate DB authorization. Database integration remains outside this change because DB work was not authorized.
+The v120 test set covers derived digest tampering, closure-lineage substitution, invalid version transitions, versioned idempotency, explicit legacy-v116 classification, single-statement pre-state reads, requested-field pre-state/CAS/postcondition enforcement, bounded final-attempt lease expiry, workflow permissions, exact-base/head validation and non-force push behavior, trusted current review decisions, explicit labeling, and repository instructions. An exact legacy v116 state now fails before writes with `legacy_v116_state_requires_fresh_branch`; validating the new contract requires a fresh staging branch under separate DB authorization. Database integration remains outside this change because DB work was not authorized.

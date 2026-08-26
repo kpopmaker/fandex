@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
@@ -11,6 +13,10 @@ const agentsPath = new URL('../AGENTS.md', import.meta.url);
 const evaluatorPath = new URL('../scripts/github/evaluate-version-pr-reviews.mjs', import.meta.url);
 
 const headSha = 'a'.repeat(40);
+
+function git(args, cwd, options = {}) {
+  return spawnSync('git', args, { cwd, encoding: 'utf8', ...options });
+}
 const review = ({ id, login, state, submittedAt, association = 'COLLABORATOR', commitId = headSha }) => ({
   id,
   user: { login },
@@ -36,6 +42,12 @@ test('version PR automation requires explicit label, exact base/head, and truste
   assert.match(workflow, /Head, base, draft state, or explicit merge label changed; refusing merge\./);
   assert.match(workflow, /Current trusted exact-head approval is absent or a trusted changes request is active; refusing merge\./);
   assert.match(workflow, /Final exact-base\/head authorization check failed; refusing merge\./);
+  assert.match(workflow, /git ls-remote --exit-code origin refs\/heads\/main/);
+  assert.match(workflow, /git commit-tree "\$\{merge_tree\}" -p "\$\{BASE_SHA\}" -p "\$\{HEAD_SHA\}"/);
+  assert.match(workflow, /git push "https:\/\/x-access-token@github\.com\/\$\{REPOSITORY\}\.git"/);
+  assert.match(workflow, /"\$\{merge_sha\}:refs\/heads\/main"/);
+  assert.doesNotMatch(workflow, /gh pr merge/);
+  assert.doesNotMatch(workflow, /git push[^\n]*--force|git push[^\n]*-f(?:\s|$)/);
   assert.doesNotMatch(workflow, /\s--auto(?:\s|\\)/);
 });
 
@@ -108,10 +120,55 @@ test('exact base/head merge-tree validation runs read-only and without persisted
   }
 });
 
+test('an exact-base merge commit cannot non-force push over a moved main', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fandex-merge-cas-'));
+  const remote = join(root, 'remote.git');
+  const work = join(root, 'work');
+  try {
+    assert.equal(git(['init', '--bare', remote], root).status, 0);
+    assert.equal(git(['init', work], root).status, 0);
+    assert.equal(git(['config', 'user.name', 'FANDEX Test'], work).status, 0);
+    assert.equal(git(['config', 'user.email', 'fandex-test@example.invalid'], work).status, 0);
+
+    await writeFile(join(work, 'base.txt'), 'base\n');
+    assert.equal(git(['add', 'base.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'base'], work).status, 0);
+    assert.equal(git(['branch', '-M', 'main'], work).status, 0);
+    const base = git(['rev-parse', 'HEAD'], work).stdout.trim();
+
+    assert.equal(git(['checkout', '-b', 'feature'], work).status, 0);
+    await writeFile(join(work, 'feature.txt'), 'feature\n');
+    assert.equal(git(['add', 'feature.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'feature'], work).status, 0);
+    const head = git(['rev-parse', 'HEAD'], work).stdout.trim();
+
+    assert.equal(git(['checkout', 'main'], work).status, 0);
+    await writeFile(join(work, 'moved.txt'), 'moved\n');
+    assert.equal(git(['add', 'moved.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'move main'], work).status, 0);
+    assert.equal(git(['remote', 'add', 'origin', remote], work).status, 0);
+    assert.equal(git(['push', 'origin', 'main'], work).status, 0);
+
+    assert.equal(git(['checkout', '--detach', base], work).status, 0);
+    assert.equal(git(['merge', '--no-commit', '--no-ff', head], work).status, 0);
+    const tree = git(['write-tree'], work).stdout.trim();
+    const merge = git(['commit-tree', tree, '-p', base, '-p', head], work, { input: 'guarded merge\n' });
+    assert.equal(merge.status, 0, merge.stderr);
+
+    const rejected = git(['push', 'origin', `${merge.stdout.trim()}:refs/heads/main`], work);
+    assert.notEqual(rejected.status, 0);
+    assert.match(rejected.stderr, /non-fast-forward|fetch first/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('repository instructions keep non-merge work draft and label-free', async () => {
   const instructions = await readFile(agentsPath, 'utf8');
 
   assert.match(instructions, /Create a \*\*Draft\*\* PR/);
   assert.match(instructions, /Never add the `production-merge-approved` label without explicit merge authorization/);
   assert.match(instructions, /If merge or Production deployment is excluded, keep the PR Draft/);
+  assert.match(instructions, /non-force push an exact-base\/head merge commit/);
+  assert.match(instructions, /push must fail if `main` moves from the authorized base/);
 });
