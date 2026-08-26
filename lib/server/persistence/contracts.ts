@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 export const MAX_SERIALIZATION_RETRIES = 3;
 export const OUTBOX_MAX_ATTEMPTS = 8;
 export const V112_SCHEMA_VERSION = 'v112_postgresql_schema_v1';
+export const PERSISTENCE_CONTRACT_VERSION = 'v120_exact_post_state_v1';
 export const V112_V113_FOUNDATION_LINEAGE = Object.freeze({
   v112SchemaManifestDigest: '43a21a2bd9f7c48dfed78bb945ac6dfc8af03e00e911d851a56ada5509af83d0',
   v112MigrationPlanDigest: '3fc7891174e383153a9760c944fee1984f86409896438cf8d3d27067b1cae7cd',
@@ -181,6 +182,7 @@ export function deriveRequestPostDigest(bundle: PersistenceBundle): string {
 export function derivePersistenceIdempotencyKey(bundle: PersistenceBundle): string {
   const writeSetDigest = sha256Canonical(buildV112CanonicalWriteSet(bundle));
   return sha256Canonical({
+    persistence_contract_version: PERSISTENCE_CONTRACT_VERSION,
     request_id: bundle.requestId,
     internal_source_id: bundle.internalSourceId,
     v108_application_record_sha256: bundle.v108ApplicationRecordDigest,
@@ -192,6 +194,7 @@ export function derivePersistenceIdempotencyKey(bundle: PersistenceBundle): stri
 
 export function buildCanonicalPersistencePayload(bundle: PersistenceBundle) {
   return {
+    persistenceContractVersion: PERSISTENCE_CONTRACT_VERSION,
     requestId: bundle.requestId,
     internalSourceId: bundle.internalSourceId,
     expectedNormalizedVersion: bundle.expectedNormalizedVersion,

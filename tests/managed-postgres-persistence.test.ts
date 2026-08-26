@@ -12,6 +12,7 @@ import {
   deriveRequestPostDigest,
   MAX_SERIALIZATION_RETRIES,
   OUTBOX_MAX_ATTEMPTS,
+  PERSISTENCE_CONTRACT_VERSION,
   V110_CLOSURE_LINEAGE,
   V112_V113_FOUNDATION_LINEAGE,
   redactDatabaseError,
@@ -27,6 +28,7 @@ const migrationPath = new URL('../database/migrations/001_v114_managed_postgres_
 const adapterPath = new URL('../lib/server/persistence/adapter.ts', import.meta.url);
 const dbPath = new URL('../lib/server/persistence/db.ts', import.meta.url);
 const runnerPath = new URL('../scripts/database/run-postgres-migrations.mts', import.meta.url);
+const stagingValidatorPath = new URL('../scripts/database/validate-staging-v116.mts', import.meta.url);
 const packagePath = new URL('../package.json', import.meta.url);
 
 const fixtureBase: PersistenceBundle = {
@@ -115,7 +117,11 @@ test('migration excludes forbidden columns and enforces audit immutability', asy
 test('exact fixture preserves U+2026 and publisher/byline roles', () => {
   const value = fixture();
   validatePersistenceBundle(value);
-  assert.equal(value.idempotencyKey, 'c177aa26b45692bdb3c442bc8f361f04d834c9d5108d90a6bcbd3e0e68ce7465');
+  assert.equal(PERSISTENCE_CONTRACT_VERSION, 'v120_exact_post_state_v1');
+  assert.equal(value.idempotencyKey, '42321543a2d98f7add059c1d31c27581c7610767da8310832cba356819a52287');
+  assert.equal(value.canonicalPayloadDigest, 'ea55b96781c0619edfdd57b483fcd69b9c4f1c6498da4dbf117b7202503c0118');
+  assert.notEqual(value.idempotencyKey, V112_V113_FOUNDATION_LINEAGE.v112IdempotencyKey);
+  assert.equal(buildCanonicalPersistencePayload(value).persistenceContractVersion, PERSISTENCE_CONTRACT_VERSION);
   assert.equal(value.requestId, '4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283');
   assert.equal(value.internalSourceId, 'src_40f253cea60253b4f7b8d1e747f9cc87');
   assert.equal(value.evidence.sourceUrl, 'https://www.mydaily.co.kr/page/view/2026061816093817264');
@@ -320,11 +326,14 @@ test('persistent pre-state is read in one statement-level snapshot', async () =>
 
 test('outbox claim terminalizes an expired final-attempt lease before claiming work', async () => {
   const outbox = mockPool(async (sql) => {
-    assert.match(sql, /WITH terminal_expired AS/);
+    assert.match(sql, /WITH terminal_candidates AS/);
+    assert.match(sql, /terminal_expired AS/);
     assert.match(sql, /status='dead_letter'/);
     assert.match(sql, /lease_expired_at_attempt_limit/);
     assert.match(sql, /attempt_count >= max_attempts/);
     assert.match(sql, /attempt_count < max_attempts/);
+    assert.match(sql, /ORDER BY updated_at, outbox_id/);
+    assert.equal(sql.match(/FOR UPDATE SKIP LOCKED LIMIT \$1/g)?.length, 2);
     return {
       rowCount: 1,
       rows: [{
@@ -339,6 +348,15 @@ test('outbox claim terminalizes an expired final-attempt lease before claiming w
     outboxId: 'event-1', idempotencyKey: 'a'.repeat(64), eventType: 'source_persistence_applied',
     payload: { requestId: 'request' }, attemptCount: 1, leaseOwner: 'worker',
   }]);
+});
+
+test('v116 legacy staging state is classified before any current-contract write', async () => {
+  const validator = await readFile(stagingValidatorPath, 'utf8');
+  assert.match(validator, /legacyIdempotencyKey = V112_V113_FOUNDATION_LINEAGE\.v112IdempotencyKey/);
+  assert.match(validator, /bundle\.idempotencyKey === legacyIdempotencyKey/);
+  assert.match(validator, /legacy_payload_digest === legacyCanonicalPayloadDigest/);
+  assert.match(validator, /legacy_v116_state_requires_fresh_branch/);
+  assert.match(validator, /if \(legacyStateRequiresFreshBranch\) throw new Error\('legacy_v116_state_requires_fresh_branch'\)/);
 });
 
 test('outbox claim model has zero concurrent duplicates and dead-letters at eight', async () => {

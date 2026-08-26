@@ -267,16 +267,22 @@ export async function claimOutboxBatch(
   const boundedLimit = Math.min(Math.max(limit, 1), 100);
   const boundedLease = Math.min(Math.max(leaseSeconds, 5), 300);
   const result = await pool.query<{ outbox_id: string; idempotency_key: string; event_type: string; bounded_payload: Record<string, unknown>; attempt_count: number }>(
-    `WITH terminal_expired AS (
-      UPDATE fandex.ingestion_outbox SET
+    `WITH terminal_candidates AS (
+      SELECT outbox_id FROM fandex.ingestion_outbox
+      WHERE status='processing'
+        AND lease_expires_at <= CURRENT_TIMESTAMP
+        AND attempt_count >= max_attempts
+      ORDER BY updated_at, outbox_id
+      FOR UPDATE SKIP LOCKED LIMIT $1
+    ), terminal_expired AS (
+      UPDATE fandex.ingestion_outbox AS terminal SET
         status='dead_letter', lease_owner=NULL, lease_expires_at=NULL,
         next_attempt_at=NULL,
         bounded_error_metadata=jsonb_build_object('code','lease_expired_at_attempt_limit'),
         updated_at=CURRENT_TIMESTAMP
-      WHERE status='processing'
-        AND lease_expires_at <= CURRENT_TIMESTAMP
-        AND attempt_count >= max_attempts
-      RETURNING outbox_id
+      FROM terminal_candidates
+      WHERE terminal.outbox_id=terminal_candidates.outbox_id
+      RETURNING terminal.outbox_id
     ), candidates AS (
       SELECT outbox_id FROM fandex.ingestion_outbox
       WHERE (status IN ('pending','retryable_failed') OR (status='processing' AND lease_expires_at <= CURRENT_TIMESTAMP))

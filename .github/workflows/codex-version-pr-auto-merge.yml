@@ -27,6 +27,18 @@ jobs:
       pull-requests: read
 
     steps:
+      - name: Check out trusted base authorization evaluator
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up trusted authorization runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Verify exact-head human merge authorization
         shell: bash
         env:
@@ -36,6 +48,7 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
 
@@ -44,22 +57,25 @@ jobs:
             exit 1
           fi
 
-          current_head="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid --jq '.headRefOid')"
-          if [[ "${current_head}" != "${HEAD_SHA}" ]]; then
-            echo "PR head changed from ${HEAD_SHA} to ${current_head}."
+          pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,labels)"
+          current_head="$(jq -r '.headRefOid' <<<"${pr_snapshot}")"
+          current_base="$(jq -r '.baseRefOid' <<<"${pr_snapshot}")"
+          if [[ "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" ]]; then
+            echo "PR head or base changed; refusing authorization."
             exit 1
           fi
 
-          label_count="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json labels --jq '[.labels[].name | select(. == "production-merge-approved")] | length')"
+          label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${pr_snapshot}")"
           if [[ "${label_count}" != "1" ]]; then
             echo "The exact production-merge-approved label is required."
             exit 1
           fi
 
-          approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
-            --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
-          if (( approval_count < 1 )); then
-            echo "An APPROVED review by someone other than the author on exact head ${HEAD_SHA} is required."
+          review_pages="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate --slurp)"
+          review_decision="$(node scripts/github/evaluate-version-pr-reviews.mjs \
+            --head-sha "${HEAD_SHA}" --pr-author "${PR_AUTHOR}" <<<"${review_pages}")"
+          if [[ "$(jq -r '.authorized' <<<"${review_decision}")" != "true" ]]; then
+            echo "A current trusted APPROVED review and zero current trusted changes requests are required."
             exit 1
           fi
 
@@ -71,11 +87,26 @@ jobs:
       contents: read
 
     steps:
-      - name: Check out exact authorized head without persisted credentials
+      - name: Check out exact authorized base without persisted credentials
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Compose exact authorized base and head for validation
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${BASE_SHA}"
+          git cat-file -e "${HEAD_SHA}^{commit}"
+          git checkout --detach "${BASE_SHA}"
+          git merge --no-commit --no-ff "${HEAD_SHA}"
+          test -z "$(git ls-files --unmerged)"
+          git diff --check --cached
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -117,7 +148,19 @@ jobs:
       statuses: read
 
     steps:
-      - name: Reverify authorization, wait for Vercel, and queue squash merge
+      - name: Check out trusted base authorization evaluator
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up trusted authorization runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Reverify authorization, wait for Vercel, and perform guarded squash merge
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -126,6 +169,7 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
 
@@ -138,20 +182,23 @@ jobs:
           vercel_ready=false
 
           while (( SECONDS < deadline )); do
-            pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,isDraft,labels)"
+            pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,isDraft,labels)"
             current_head="$(jq -r '.headRefOid' <<<"${pr_snapshot}")"
+            current_base="$(jq -r '.baseRefOid' <<<"${pr_snapshot}")"
             current_draft="$(jq -r '.isDraft' <<<"${pr_snapshot}")"
             label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${pr_snapshot}")"
 
-            if [[ "${current_head}" != "${HEAD_SHA}" || "${current_draft}" != "false" || "${label_count}" != "1" ]]; then
-              echo "Head, draft state, or explicit merge label changed; refusing merge."
+            if [[ "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" \
+                || "${current_draft}" != "false" || "${label_count}" != "1" ]]; then
+              echo "Head, base, draft state, or explicit merge label changed; refusing merge."
               exit 1
             fi
 
-            approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
-              --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
-            if (( approval_count < 1 )); then
-              echo "Exact-head approval is absent or was dismissed; refusing merge."
+            review_pages="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate --slurp)"
+            review_decision="$(node scripts/github/evaluate-version-pr-reviews.mjs \
+              --head-sha "${HEAD_SHA}" --pr-author "${PR_AUTHOR}" <<<"${review_pages}")"
+            if [[ "$(jq -r '.authorized' <<<"${review_decision}")" != "true" ]]; then
+              echo "Current trusted exact-head approval is absent or a trusted changes request is active; refusing merge."
               exit 1
             fi
 
@@ -184,16 +231,19 @@ jobs:
             exit 1
           fi
 
-          final_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,isDraft,labels)"
+          final_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,isDraft,labels)"
           final_head="$(jq -r '.headRefOid' <<<"${final_snapshot}")"
+          final_base="$(jq -r '.baseRefOid' <<<"${final_snapshot}")"
           final_draft="$(jq -r '.isDraft' <<<"${final_snapshot}")"
           final_label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${final_snapshot}")"
-          final_approval_count="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate \
-            --jq "[.[] | select(.state == \"APPROVED\" and .commit_id == \"${HEAD_SHA}\" and .user.login != \"${PR_AUTHOR}\")] | length")"
+          final_review_pages="$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/reviews" --paginate --slurp)"
+          final_review_decision="$(node scripts/github/evaluate-version-pr-reviews.mjs \
+            --head-sha "${HEAD_SHA}" --pr-author "${PR_AUTHOR}" <<<"${final_review_pages}")"
 
-          if [[ "${final_head}" != "${HEAD_SHA}" || "${final_draft}" != "false" || "${final_label_count}" != "1" ]] \
-              || (( final_approval_count < 1 )); then
-            echo "Final exact-head authorization check failed; refusing merge."
+          if [[ "${final_head}" != "${HEAD_SHA}" || "${final_base}" != "${BASE_SHA}" \
+              || "${final_draft}" != "false" || "${final_label_count}" != "1" \
+              || "$(jq -r '.authorized' <<<"${final_review_decision}")" != "true" ]]; then
+            echo "Final exact-base/head authorization check failed; refusing merge."
             exit 1
           fi
 
