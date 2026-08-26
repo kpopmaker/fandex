@@ -2,7 +2,7 @@ name: FANDEX Codex Version PR Auto Merge
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft, closed, edited, labeled, unlabeled]
   pull_request_review:
     types: [submitted, dismissed]
 
@@ -18,6 +18,7 @@ jobs:
       github.event.pull_request.base.ref == 'main' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login == github.repository_owner &&
+      github.event.pull_request.state == 'open' &&
       github.event.pull_request.draft == false &&
       contains(github.event.pull_request.labels.*.name, 'production-merge-approved')
     runs-on: ubuntu-latest
@@ -57,11 +58,14 @@ jobs:
             exit 1
           fi
 
-          pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,labels)"
+          pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json state,baseRefName,headRefOid,baseRefOid,labels)"
+          current_state="$(jq -r '.state' <<<"${pr_snapshot}")"
+          current_base_ref="$(jq -r '.baseRefName' <<<"${pr_snapshot}")"
           current_head="$(jq -r '.headRefOid' <<<"${pr_snapshot}")"
           current_base="$(jq -r '.baseRefOid' <<<"${pr_snapshot}")"
-          if [[ "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" ]]; then
-            echo "PR head or base changed; refusing authorization."
+          if [[ "${current_state}" != "OPEN" || "${current_base_ref}" != "main" \
+              || "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" ]]; then
+            echo "PR state, base ref, head, or base changed; refusing authorization."
             exit 1
           fi
 
@@ -144,7 +148,7 @@ jobs:
     timeout-minutes: 35
     permissions:
       contents: write
-      pull-requests: write
+      pull-requests: read
       statuses: read
 
     steps:
@@ -182,15 +186,18 @@ jobs:
           vercel_ready=false
 
           while (( SECONDS < deadline )); do
-            pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,isDraft,labels)"
+            pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json state,baseRefName,headRefOid,baseRefOid,isDraft,labels)"
+            current_state="$(jq -r '.state' <<<"${pr_snapshot}")"
+            current_base_ref="$(jq -r '.baseRefName' <<<"${pr_snapshot}")"
             current_head="$(jq -r '.headRefOid' <<<"${pr_snapshot}")"
             current_base="$(jq -r '.baseRefOid' <<<"${pr_snapshot}")"
             current_draft="$(jq -r '.isDraft' <<<"${pr_snapshot}")"
             label_count="$(jq '[.labels[].name | select(. == "production-merge-approved")] | length' <<<"${pr_snapshot}")"
 
-            if [[ "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" \
+            if [[ "${current_state}" != "OPEN" || "${current_base_ref}" != "main" \
+                || "${current_head}" != "${HEAD_SHA}" || "${current_base}" != "${BASE_SHA}" \
                 || "${current_draft}" != "false" || "${label_count}" != "1" ]]; then
-              echo "Head, base, draft state, or explicit merge label changed; refusing merge."
+              echo "PR state, base ref, head, base, draft state, or explicit merge label changed; refusing merge."
               exit 1
             fi
 
@@ -231,7 +238,9 @@ jobs:
             exit 1
           fi
 
-          final_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json headRefOid,baseRefOid,isDraft,labels)"
+          final_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json state,baseRefName,headRefOid,baseRefOid,isDraft,labels)"
+          final_state="$(jq -r '.state' <<<"${final_snapshot}")"
+          final_base_ref="$(jq -r '.baseRefName' <<<"${final_snapshot}")"
           final_head="$(jq -r '.headRefOid' <<<"${final_snapshot}")"
           final_base="$(jq -r '.baseRefOid' <<<"${final_snapshot}")"
           final_draft="$(jq -r '.isDraft' <<<"${final_snapshot}")"
@@ -240,7 +249,8 @@ jobs:
           final_review_decision="$(node scripts/github/evaluate-version-pr-reviews.mjs \
             --head-sha "${HEAD_SHA}" --pr-author "${PR_AUTHOR}" <<<"${final_review_pages}")"
 
-          if [[ "${final_head}" != "${HEAD_SHA}" || "${final_base}" != "${BASE_SHA}" \
+          if [[ "${final_state}" != "OPEN" || "${final_base_ref}" != "main" \
+              || "${final_head}" != "${HEAD_SHA}" || "${final_base}" != "${BASE_SHA}" \
               || "${final_draft}" != "false" || "${final_label_count}" != "1" \
               || "$(jq -r '.authorized' <<<"${final_review_decision}")" != "true" ]]; then
             echo "Final exact-base/head authorization check failed; refusing merge."
