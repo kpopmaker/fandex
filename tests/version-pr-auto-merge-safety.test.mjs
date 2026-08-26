@@ -29,17 +29,19 @@ const review = ({ id, login, state, submittedAt, association = 'COLLABORATOR', c
 test('version PR automation requires explicit label, exact base/head, and trusted current approval', async () => {
   const workflow = await readFile(workflowPath, 'utf8');
 
-  assert.match(workflow, /pull_request_target:[\s\S]*ready_for_review, labeled, unlabeled/);
+  assert.match(workflow, /pull_request_target:[\s\S]*ready_for_review, converted_to_draft, closed, edited, labeled, unlabeled/);
   assert.match(workflow, /pull_request_review:[\s\S]*submitted, dismissed/);
+  assert.match(workflow, /github\.event\.pull_request\.state == 'open'/);
   assert.match(workflow, /github\.event\.pull_request\.draft == false/);
   assert.match(workflow, /contains\(github\.event\.pull_request\.labels\.\*\.name, 'production-merge-approved'\)/);
   assert.match(workflow, /evaluate-version-pr-reviews\.mjs/);
   assert.match(workflow, /--paginate --slurp/);
   assert.match(workflow, /baseRefOid/);
+  assert.match(workflow, /baseRefName/);
   assert.match(workflow, /BASE_SHA: \$\{\{ github\.event\.pull_request\.base\.sha \}\}/);
   assert.match(workflow, /git merge --no-commit --no-ff "\$\{HEAD_SHA\}"/);
   assert.match(workflow, /needs: \[authorize, validate\]/);
-  assert.match(workflow, /Head, base, draft state, or explicit merge label changed; refusing merge\./);
+  assert.match(workflow, /PR state, base ref, head, base, draft state, or explicit merge label changed; refusing merge\./);
   assert.match(workflow, /Current trusted exact-head approval is absent or a trusted changes request is active; refusing merge\./);
   assert.match(workflow, /Final exact-base\/head authorization check failed; refusing merge\./);
   assert.match(workflow, /git ls-remote --exit-code origin refs\/heads\/main/);
@@ -49,6 +51,21 @@ test('version PR automation requires explicit label, exact base/head, and truste
   assert.doesNotMatch(workflow, /gh pr merge/);
   assert.doesNotMatch(workflow, /git push[^\n]*--force|git push[^\n]*-f(?:\s|$)/);
   assert.doesNotMatch(workflow, /\s--auto(?:\s|\\)/);
+});
+
+test('closed or retargeted PRs cancel fail-closed and merge uses least privilege', async () => {
+  const workflow = await readFile(workflowPath, 'utf8');
+  const mergeJob = workflow.slice(workflow.indexOf('  merge:'));
+
+  assert.match(workflow, /types: \[opened, synchronize, reopened, ready_for_review, converted_to_draft, closed, edited, labeled, unlabeled\]/);
+  assert.match(workflow, /current_state="\$\(jq -r '\.state'/);
+  assert.match(workflow, /current_base_ref="\$\(jq -r '\.baseRefName'/);
+  assert.match(workflow, /"\$\{current_state\}" != "OPEN"/);
+  assert.match(workflow, /"\$\{current_base_ref\}" != "main"/);
+  assert.match(workflow, /"\$\{final_state\}" != "OPEN"/);
+  assert.match(workflow, /"\$\{final_base_ref\}" != "main"/);
+  assert.match(mergeJob, /permissions:\n      contents: write\n      pull-requests: read\n      statuses: read/);
+  assert.doesNotMatch(mergeJob, /pull-requests: write/);
 });
 
 test('trusted approval on the exact head survives later non-decisive comments', () => {
@@ -171,4 +188,6 @@ test('repository instructions keep non-merge work draft and label-free', async (
   assert.match(instructions, /If merge or Production deployment is excluded, keep the PR Draft/);
   assert.match(instructions, /non-force push an exact-base\/head merge commit/);
   assert.match(instructions, /push must fail if `main` moves from the authorized base/);
+  assert.match(instructions, /open and still targets `main`/);
+  assert.match(instructions, /pull-request metadata read-only/);
 });

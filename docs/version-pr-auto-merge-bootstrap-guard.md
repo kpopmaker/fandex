@@ -10,12 +10,13 @@ The bootstrap branch deliberately does not match `v[0-9]+-*`. The historical wor
 
 The replacement workflow requires all of the following before its write-capable job can run:
 
-1. A same-repository, owner-authored `vN-*` PR targeting `main` that is not Draft.
+1. An open, same-repository, owner-authored `vN-*` PR still targeting the `main` ref that is not Draft. Closing, retargeting, or converting the PR back to Draft starts a cancelling concurrency event.
 2. Exactly one `production-merge-approved` label added only after explicit exact-head merge authorization.
 3. At least one current trusted non-author approval on the exact head SHA and no active trusted changes request on that SHA.
-4. An unchanged exact base/head pair through authorization, validation, Vercel polling, and the final pre-merge check.
+4. An unchanged open state, exact `main` base-ref name, and exact base/head pair through authorization, validation, Vercel polling, and the final pre-merge check.
 5. Dependency security, static analysis, all persistence/bootstrap/deployment/merge-safety tests, plan-only database commands, and the production build.
 6. A merge commit whose parents are the exact authorized base and head, pushed to `main` without force. If `main` moves, Git rejects the update.
+7. `contents: write` only in the final merge job, with pull-request metadata read-only throughout.
 
 The workflow never creates a persistent GitHub auto-merge reservation. Draft release, review approval, and merge authorization remain separate actions.
 
