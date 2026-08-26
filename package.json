@@ -16,6 +16,7 @@
     "test:role-bootstrap": "tsx --test tests/postgres-role-bootstrap.test.mts",
     "test:production-bootstrap": "tsx --test tests/production-bootstrap-v118.test.mts",
     "test:deployment-readiness": "tsx --test tests/production-deployment-readiness-v119.test.mts",
+    "test:merge-safety": "node --test tests/version-pr-auto-merge-safety.test.mjs",
     "db:roles": "tsx scripts/database/bootstrap-postgres-roles.mts",
     "db:production-bootstrap": "tsx scripts/database/bootstrap-production-v118.mts",
     "deployment:readiness": "tsx scripts/deployment/evaluate-production-deployment-readiness-v119.mts",
