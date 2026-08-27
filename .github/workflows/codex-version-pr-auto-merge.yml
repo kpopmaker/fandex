@@ -292,7 +292,8 @@ jobs:
           chmod 700 "${askpass}"
 
           GIT_ASKPASS="${askpass}" GIT_TERMINAL_PROMPT=0 \
-            git push "https://x-access-token@github.com/${REPOSITORY}.git" \
+            git push --force-with-lease="refs/heads/main:${BASE_SHA}" \
+              "https://x-access-token@github.com/${REPOSITORY}.git" \
               "${merge_sha}:refs/heads/main"
 
           pushed_main="$(git ls-remote --exit-code origin refs/heads/main | awk '{print $1}')"

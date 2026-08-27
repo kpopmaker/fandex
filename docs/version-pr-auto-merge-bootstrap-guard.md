@@ -15,7 +15,7 @@ The replacement workflow requires all of the following before its write-capable 
 3. At least one current trusted non-author approval on the exact head SHA and no active trusted changes request on that SHA.
 4. An unchanged open state, exact `main` base-ref name, and exact base/head pair through authorization, validation, Vercel polling, and the final pre-merge check.
 5. Dependency security, static analysis, all persistence/bootstrap/deployment/merge-safety tests, plan-only database commands, and the production build.
-6. A merge commit whose parents are the exact authorized base and head, pushed to `main` without force. If `main` moves, Git rejects the update.
+6. A merge commit whose parents are the exact authorized base and head, pushed to `main` with an exact expected-base `--force-with-lease`. The lease rejects every changed `main`, including a move to the PR head or one of its ancestors; unconditional force is prohibited.
 7. `contents: write` only in the final merge job, with pull-request metadata read-only throughout.
 
 The workflow never creates a persistent GitHub auto-merge reservation. Draft release, review approval, and merge authorization remain separate actions.

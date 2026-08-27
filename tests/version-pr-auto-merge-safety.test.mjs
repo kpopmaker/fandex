@@ -46,10 +46,12 @@ test('version PR automation requires explicit label, exact base/head, and truste
   assert.match(workflow, /Final exact-base\/head authorization check failed; refusing merge\./);
   assert.match(workflow, /git ls-remote --exit-code origin refs\/heads\/main/);
   assert.match(workflow, /git commit-tree "\$\{merge_tree\}" -p "\$\{BASE_SHA\}" -p "\$\{HEAD_SHA\}"/);
-  assert.match(workflow, /git push "https:\/\/x-access-token@github\.com\/\$\{REPOSITORY\}\.git"/);
+  assert.match(workflow, /git push --force-with-lease="refs\/heads\/main:\$\{BASE_SHA\}"/);
+  assert.match(workflow, /"https:\/\/x-access-token@github\.com\/\$\{REPOSITORY\}\.git"/);
   assert.match(workflow, /"\$\{merge_sha\}:refs\/heads\/main"/);
   assert.doesNotMatch(workflow, /gh pr merge/);
-  assert.doesNotMatch(workflow, /git push[^\n]*--force|git push[^\n]*-f(?:\s|$)/);
+  assert.equal((workflow.match(/--force-with-lease=/g) ?? []).length, 1);
+  assert.doesNotMatch(workflow, /git push[^\n]*(?:\s--force(?:\s|$)|\s-f(?:\s|$))/);
   assert.doesNotMatch(workflow, /\s--auto(?:\s|\\)/);
   assert.equal((workflow.match(/actions\/checkout@11d5960a326750d5838078e36cf38b85af677262/g) ?? []).length, 3);
   assert.equal((workflow.match(/actions\/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020/g) ?? []).length, 3);
@@ -164,7 +166,44 @@ test('exact base/head merge-tree validation runs read-only and without persisted
   }
 });
 
-test('an exact-base merge commit cannot non-force push over a moved main', async () => {
+test('an exact-base lease accepts the authorized unchanged main', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fandex-merge-lease-success-'));
+  const remote = join(root, 'remote.git');
+  const work = join(root, 'work');
+  try {
+    assert.equal(git(['init', '--bare', remote], root).status, 0);
+    assert.equal(git(['init', work], root).status, 0);
+    assert.equal(git(['config', 'user.name', 'FANDEX Test'], work).status, 0);
+    assert.equal(git(['config', 'user.email', 'fandex-test@example.invalid'], work).status, 0);
+
+    await writeFile(join(work, 'base.txt'), 'base\n');
+    assert.equal(git(['add', 'base.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'base'], work).status, 0);
+    const base = git(['rev-parse', 'HEAD'], work).stdout.trim();
+    assert.equal(git(['remote', 'add', 'origin', remote], work).status, 0);
+    assert.equal(git(['push', 'origin', `${base}:refs/heads/main`], work).status, 0);
+
+    assert.equal(git(['checkout', '-b', 'feature'], work).status, 0);
+    await writeFile(join(work, 'feature.txt'), 'feature\n');
+    assert.equal(git(['add', 'feature.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'feature'], work).status, 0);
+    const head = git(['rev-parse', 'HEAD'], work).stdout.trim();
+
+    assert.equal(git(['checkout', '--detach', base], work).status, 0);
+    assert.equal(git(['merge', '--no-commit', '--no-ff', head], work).status, 0);
+    const tree = git(['write-tree'], work).stdout.trim();
+    const merge = git(['commit-tree', tree, '-p', base, '-p', head], work, { input: 'guarded merge\n' });
+    assert.equal(merge.status, 0, merge.stderr);
+
+    const accepted = git(['push', `--force-with-lease=refs/heads/main:${base}`, 'origin', `${merge.stdout.trim()}:refs/heads/main`], work);
+    assert.equal(accepted.status, 0, accepted.stderr);
+    assert.equal(git(['ls-remote', '--exit-code', 'origin', 'refs/heads/main'], work).stdout.split(/\s/)[0], merge.stdout.trim());
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('an exact-base lease rejects a divergent moved main', async () => {
   const root = await mkdtemp(join(tmpdir(), 'fandex-merge-cas-'));
   const remote = join(root, 'remote.git');
   const work = join(root, 'work');
@@ -199,9 +238,46 @@ test('an exact-base merge commit cannot non-force push over a moved main', async
     const merge = git(['commit-tree', tree, '-p', base, '-p', head], work, { input: 'guarded merge\n' });
     assert.equal(merge.status, 0, merge.stderr);
 
-    const rejected = git(['push', 'origin', `${merge.stdout.trim()}:refs/heads/main`], work);
+    const rejected = git(['push', `--force-with-lease=refs/heads/main:${base}`, 'origin', `${merge.stdout.trim()}:refs/heads/main`], work);
     assert.notEqual(rejected.status, 0);
-    assert.match(rejected.stderr, /non-fast-forward|fetch first/);
+    assert.match(rejected.stderr, /stale info|rejected/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('an exact-base lease rejects main moving to the PR head', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fandex-merge-head-race-'));
+  const remote = join(root, 'remote.git');
+  const work = join(root, 'work');
+  try {
+    assert.equal(git(['init', '--bare', remote], root).status, 0);
+    assert.equal(git(['init', work], root).status, 0);
+    assert.equal(git(['config', 'user.name', 'FANDEX Test'], work).status, 0);
+    assert.equal(git(['config', 'user.email', 'fandex-test@example.invalid'], work).status, 0);
+
+    await writeFile(join(work, 'base.txt'), 'base\n');
+    assert.equal(git(['add', 'base.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'base'], work).status, 0);
+    const base = git(['rev-parse', 'HEAD'], work).stdout.trim();
+
+    assert.equal(git(['checkout', '-b', 'feature'], work).status, 0);
+    await writeFile(join(work, 'feature.txt'), 'feature\n');
+    assert.equal(git(['add', 'feature.txt'], work).status, 0);
+    assert.equal(git(['commit', '-m', 'feature'], work).status, 0);
+    const head = git(['rev-parse', 'HEAD'], work).stdout.trim();
+    assert.equal(git(['remote', 'add', 'origin', remote], work).status, 0);
+    assert.equal(git(['push', 'origin', `${head}:refs/heads/main`], work).status, 0);
+
+    assert.equal(git(['checkout', '--detach', base], work).status, 0);
+    assert.equal(git(['merge', '--no-commit', '--no-ff', head], work).status, 0);
+    const tree = git(['write-tree'], work).stdout.trim();
+    const merge = git(['commit-tree', tree, '-p', base, '-p', head], work, { input: 'guarded merge\n' });
+    assert.equal(merge.status, 0, merge.stderr);
+
+    const rejected = git(['push', `--force-with-lease=refs/heads/main:${base}`, 'origin', `${merge.stdout.trim()}:refs/heads/main`], work);
+    assert.notEqual(rejected.status, 0);
+    assert.match(rejected.stderr, /stale info|rejected/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -213,8 +289,9 @@ test('repository instructions keep non-merge work draft and label-free', async (
   assert.match(instructions, /Create a \*\*Draft\*\* PR/);
   assert.match(instructions, /Never add the `production-merge-approved` label without explicit merge authorization/);
   assert.match(instructions, /If merge or Production deployment is excluded, keep the PR Draft/);
-  assert.match(instructions, /non-force push an exact-base\/head merge commit/);
-  assert.match(instructions, /push must fail if `main` moves from the authorized base/);
+  assert.match(instructions, /exact expected-base `--force-with-lease`/);
+  assert.match(instructions, /lease must fail if `main` moves from the authorized base/);
+  assert.match(instructions, /including when it moves to the PR head or one of its ancestors/);
   assert.match(instructions, /open and still targets `main`/);
   assert.match(instructions, /pull-request metadata read-only/);
 });
