@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 export const MAX_SERIALIZATION_RETRIES = 3;
 export const OUTBOX_MAX_ATTEMPTS = 8;
 export const V112_SCHEMA_VERSION = 'v112_postgresql_schema_v1';
+export const PERSISTENCE_CONTRACT_VERSION = 'v120_exact_post_state_v1';
 export const V112_V113_FOUNDATION_LINEAGE = Object.freeze({
   v112SchemaManifestDigest: '43a21a2bd9f7c48dfed78bb945ac6dfc8af03e00e911d851a56ada5509af83d0',
   v112MigrationPlanDigest: '3fc7891174e383153a9760c944fee1984f86409896438cf8d3d27067b1cae7cd',
@@ -10,6 +11,11 @@ export const V112_V113_FOUNDATION_LINEAGE = Object.freeze({
   v112RollbackPlanDigest: '46b3cbd0b3a3ed9a9ede14228b51727e433780cf143ec7fa5e403a1aad498956',
   v112IdempotencyKey: 'c177aa26b45692bdb3c442bc8f361f04d834c9d5108d90a6bcbd3e0e68ce7465',
   v113ProviderDescriptorDigest: '2b86b1730dcf4910dbcef05ae60a84a6214b424c810b5278b8fd3d2d630e2cc6',
+});
+export const V110_CLOSURE_LINEAGE = Object.freeze({
+  closureRecordId: 'v110_closure_fa95c7a9513cebe1d99f5cdd32f33285088137633037ab5e04d45d40270fb2ee',
+  closureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+  copiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
 });
 
 export type PersistenceResultStatus =
@@ -35,6 +41,7 @@ export type PersistenceBundle = {
   canonicalPayloadDigest: string;
   v108ApplicationRecordDigest: string;
   v110ClosureRecordDigest: string;
+  v110CopiedClosedRequestDigest: string;
   foundationLineage: typeof V112_V113_FOUNDATION_LINEAGE;
   expectedState: 'present' | 'absent';
   expectedNormalizedVersion: number;
@@ -151,9 +158,31 @@ export function buildV112CanonicalWriteSet(bundle: PersistenceBundle) {
   };
 }
 
+export function buildPersistentRequestPostState(bundle: PersistenceBundle) {
+  return {
+    request_id: bundle.requestId,
+    internal_source_id: bundle.internalSourceId,
+    requested_fields: bundle.request.requestedFields,
+    request_state: 'closed',
+    persistent_fulfilled: true,
+    persistent_closed: true,
+    closure_record_reference: bundle.request.closureRecordReference,
+    record_version: bundle.request.recordVersion,
+  };
+}
+
+export function deriveNormalizedPostDigest(bundle: PersistenceBundle): string {
+  return sha256Canonical(bundle.normalizedV36);
+}
+
+export function deriveRequestPostDigest(bundle: PersistenceBundle): string {
+  return sha256Canonical(buildPersistentRequestPostState(bundle));
+}
+
 export function derivePersistenceIdempotencyKey(bundle: PersistenceBundle): string {
   const writeSetDigest = sha256Canonical(buildV112CanonicalWriteSet(bundle));
   return sha256Canonical({
+    persistence_contract_version: PERSISTENCE_CONTRACT_VERSION,
     request_id: bundle.requestId,
     internal_source_id: bundle.internalSourceId,
     v108_application_record_sha256: bundle.v108ApplicationRecordDigest,
@@ -165,6 +194,7 @@ export function derivePersistenceIdempotencyKey(bundle: PersistenceBundle): stri
 
 export function buildCanonicalPersistencePayload(bundle: PersistenceBundle) {
   return {
+    persistenceContractVersion: PERSISTENCE_CONTRACT_VERSION,
     requestId: bundle.requestId,
     internalSourceId: bundle.internalSourceId,
     expectedNormalizedVersion: bundle.expectedNormalizedVersion,
@@ -179,6 +209,7 @@ export function buildCanonicalPersistencePayload(bundle: PersistenceBundle) {
     outbox: bundle.outbox,
     v108ApplicationRecordDigest: bundle.v108ApplicationRecordDigest,
     v110ClosureRecordDigest: bundle.v110ClosureRecordDigest,
+    v110CopiedClosedRequestDigest: bundle.v110CopiedClosedRequestDigest,
     foundationLineage: bundle.foundationLineage,
     expectedState: bundle.expectedState,
     normalizedV36: bundle.normalizedV36,
@@ -195,6 +226,7 @@ export function validatePersistenceBundle(bundle: PersistenceBundle): void {
     bundle.canonicalPayloadDigest,
     bundle.v108ApplicationRecordDigest,
     bundle.v110ClosureRecordDigest,
+    bundle.v110CopiedClosedRequestDigest,
     bundle.expectedNormalizedDigest,
     bundle.expectedRequestDigest,
     bundle.normalizedPostDigest,
@@ -210,15 +242,29 @@ export function validatePersistenceBundle(bundle: PersistenceBundle): void {
   if (derivePersistenceIdempotencyKey(bundle) !== bundle.idempotencyKey) throw new Error('invalid_idempotency_key');
   if (sha256Canonical(buildCanonicalPersistencePayload(bundle)) !== bundle.canonicalPayloadDigest) throw new Error('invalid_canonical_payload_digest');
   if (bundle.request.requestedFields.join(',') !== 'content_context,source_attribution') throw new Error('invalid_requested_fields');
+  if (!hasExactKeys(bundle.request, ['requestedFields','closureRecordReference','recordVersion'])) throw new Error('invalid_request_shape');
   if (bundle.normalized.title.split('…').length !== 2 || bundle.normalized.title.includes('...')) throw new Error('invalid_u2026_title');
+  if (bundle.normalized.title !== bundle.evidence.exactHeadline) throw new Error('headline_binding_mismatch');
   if (bundle.normalized.authorOrPublisher !== bundle.evidence.publisher) throw new Error('publisher_binding_mismatch');
   if (bundle.evidence.publisher === bundle.evidence.normalizedJournalist) throw new Error('publisher_byline_role_conflation');
   if (bundle.normalized.contentSha256 !== bundle.normalizedPostDigest) throw new Error('normalized_post_digest_mismatch');
+  if (deriveNormalizedPostDigest(bundle) !== bundle.normalizedPostDigest) throw new Error('normalized_post_digest_not_derived');
+  if (deriveRequestPostDigest(bundle) !== bundle.requestPostDigest) throw new Error('request_post_digest_not_derived');
+  if (bundle.v110ClosureRecordDigest !== V110_CLOSURE_LINEAGE.closureRecordDigest
+      || bundle.v110CopiedClosedRequestDigest !== V110_CLOSURE_LINEAGE.copiedClosedRequestDigest
+      || bundle.request.closureRecordReference !== V110_CLOSURE_LINEAGE.closureRecordId) {
+    throw new Error('invalid_v110_closure_lineage');
+  }
   if (bundle.normalizedV36.internal_source_id !== bundle.internalSourceId || bundle.normalizedV36.provider_key !== bundle.normalized.provider || bundle.normalizedV36.source_type !== bundle.normalized.sourceType || bundle.normalizedV36.source_url !== bundle.evidence.sourceUrl || bundle.normalizedV36.title !== bundle.normalized.title || bundle.normalizedV36.summary !== bundle.normalized.summary || bundle.normalizedV36.author_or_publisher !== bundle.normalized.authorOrPublisher || bundle.normalizedV36.published_at !== bundle.normalized.normalizedProviderTimestamp || bundle.normalizedV36.external_source_id !== `${bundle.normalized.officeCode}/${bundle.normalized.articleId}`) throw new Error('v36_projection_mismatch');
   if (!Number.isInteger(bundle.normalizedV36.raw_row_number) || bundle.normalizedV36.raw_row_number < 1 || !isSha256(bundle.normalizedV36.content_hash)) throw new Error('invalid_v36_record');
   if (bundle.expectedState === 'absent' && bundle.expectedNormalizedDigest !== bundle.normalizedPostDigest) throw new Error('absent_bootstrap_digest_mismatch');
   if (canonicalJson(bundle.foundationLineage) !== canonicalJson(V112_V113_FOUNDATION_LINEAGE)) throw new Error('invalid_v112_v113_foundation_lineage');
   if (bundle.expectedNormalizedVersion < 1 || bundle.expectedRequestVersion < 1 || bundle.normalized.recordVersion < 1 || bundle.request.recordVersion < 1) throw new Error('invalid_record_version');
+  if (bundle.normalized.recordVersion !== bundle.expectedNormalizedVersion + 1
+      || bundle.request.recordVersion !== bundle.expectedRequestVersion + 1) throw new Error('invalid_record_version_transition');
+  if (bundle.outbox.eventType !== 'source_persistence_applied'
+      || !hasExactKeys(bundle.outbox.payload, ['requestId'])
+      || bundle.outbox.payload.requestId !== bundle.requestId) throw new Error('invalid_outbox_binding');
 }
 
 export function classifyPersistenceReplay(

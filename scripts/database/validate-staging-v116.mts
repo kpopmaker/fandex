@@ -12,6 +12,7 @@ import {
 } from '../../lib/server/persistence/adapter';
 import {
   buildCanonicalPersistencePayload,
+  deriveRequestPostDigest,
   derivePersistenceIdempotencyKey,
   sha256Canonical,
   V112_V113_FOUNDATION_LINEAGE,
@@ -102,13 +103,14 @@ function exactBundle(): PersistenceBundle {
     idempotencyKey: '', canonicalPayloadDigest: '', expectedState: 'absent',
     v108ApplicationRecordDigest: 'f1f1c0c2abb6e2234b310c22ecea3986738d91566ca74ff2fd6f2cf98688a319',
     v110ClosureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+    v110CopiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
     foundationLineage: V112_V113_FOUNDATION_LINEAGE,
     expectedNormalizedVersion: 1,
     expectedNormalizedDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
     expectedRequestVersion: 1,
     expectedRequestDigest: 'e66c8bc6d0831af5a9541646de80a4e370428c232b07b79d0435d21693da4833',
     normalizedPostDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
-    requestPostDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+    requestPostDigest: '',
     normalized: {
       provider: 'naver', sourceType: 'news', officeCode: '117', articleId: '0004076125',
       title: '원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]',
@@ -137,9 +139,32 @@ function exactBundle(): PersistenceBundle {
     request: { requestedFields: ['content_context','source_attribution'], closureRecordReference: 'v110_closure_fa95c7a9513cebe1d99f5cdd32f33285088137633037ab5e04d45d40270fb2ee', recordVersion: 2 },
     outbox: { eventType: 'source_persistence_applied', payload: { requestId: '4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283' } },
   };
+  bundle.requestPostDigest = deriveRequestPostDigest(bundle);
   bundle.idempotencyKey = derivePersistenceIdempotencyKey(bundle);
   bundle.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(bundle));
   return bundle;
+}
+
+function buildV116LegacyCanonicalPayload(bundle: PersistenceBundle) {
+  return {
+    requestId: bundle.requestId,
+    internalSourceId: bundle.internalSourceId,
+    expectedNormalizedVersion: bundle.expectedNormalizedVersion,
+    expectedNormalizedDigest: bundle.expectedNormalizedDigest,
+    expectedRequestVersion: bundle.expectedRequestVersion,
+    expectedRequestDigest: bundle.expectedRequestDigest,
+    normalizedPostDigest: bundle.normalizedPostDigest,
+    requestPostDigest: bundle.v110CopiedClosedRequestDigest,
+    normalized: bundle.normalized,
+    evidence: bundle.evidence,
+    request: bundle.request,
+    outbox: bundle.outbox,
+    v108ApplicationRecordDigest: bundle.v108ApplicationRecordDigest,
+    v110ClosureRecordDigest: bundle.v110ClosureRecordDigest,
+    foundationLineage: bundle.foundationLineage,
+    expectedState: bundle.expectedState,
+    normalizedV36: bundle.normalizedV36,
+  };
 }
 
 function changedBundle(base: PersistenceBundle, summary: string): PersistenceBundle {
@@ -168,7 +193,9 @@ async function main(): Promise<void> {
   const pooledUrl = requireSecret('FANDEX_RUNTIME_DATABASE_URL');
   const unpooledUrl = requireSecret('FANDEX_MIGRATION_DATABASE_URL');
   const bundle = exactBundle();
-  if (bundle.idempotencyKey !== V112_V113_FOUNDATION_LINEAGE.v112IdempotencyKey) throw new Error('idempotency_lineage_mismatch');
+  const legacyIdempotencyKey = V112_V113_FOUNDATION_LINEAGE.v112IdempotencyKey;
+  const legacyCanonicalPayloadDigest = sha256Canonical(buildV116LegacyCanonicalPayload(bundle));
+  if (bundle.idempotencyKey === legacyIdempotencyKey) throw new Error('idempotency_contract_not_versioned');
   setStage('v115_lineage_validation');
   const lockBytes = await readFile('package-lock.json');
   if (createHash('sha256').update(lockBytes).digest('hex') !== V115_LOCK_SHA256 || V115_COMMIT.length !== 40) throw new Error('v115_lineage_mismatch');
@@ -184,6 +211,7 @@ async function main(): Promise<void> {
   );
   const preflight = firstQuery.rows[0];
   let recoveredAuthorizedApplication = false;
+  let legacyStateRequiresFreshBranch = false;
   if (!preflight || preflight.server_major !== stagingAttestation.postgresqlVersion || preflight.transaction_read_only !== 'off' || preflight.schema_exists !== preflight.migrations_exists) throw new Error('staging_preflight_failed');
   if (preflight.migrations_exists) {
     const existing = await preflightPool.query<{ version: string; migration_sha256: string }>('SELECT version, migration_sha256 FROM fandex.schema_migrations ORDER BY version');
@@ -196,6 +224,8 @@ async function main(): Promise<void> {
       request_version: string | null; request_closure: string | null; evidence_digest: string | null;
       evidence_headline: string | null; evidence_publisher: string | null; evidence_byline: string | null;
       payload_digest: string | null; transaction_status: string | null; outbox_status: string | null;
+      legacy_transaction_count: string; legacy_audit_count: string; legacy_outbox_count: string;
+      legacy_payload_digest: string | null; legacy_transaction_status: string | null; legacy_outbox_status: string | null;
     }>(`SELECT
       (SELECT count(*) FROM fandex.normalized_sources WHERE internal_source_id=$1)::text AS source_count,
       (SELECT count(*) FROM fandex.historical_enrichment_requests WHERE request_id=$2)::text AS request_count,
@@ -203,6 +233,9 @@ async function main(): Promise<void> {
       (SELECT count(*) FROM fandex.persistence_transactions WHERE idempotency_key=$3)::text AS transaction_count,
       (SELECT count(*) FROM fandex.persistence_audit_events WHERE idempotency_key=$3)::text AS audit_count,
       (SELECT count(*) FROM fandex.ingestion_outbox WHERE idempotency_key=$3)::text AS outbox_count,
+      (SELECT count(*) FROM fandex.persistence_transactions WHERE idempotency_key=$4)::text AS legacy_transaction_count,
+      (SELECT count(*) FROM fandex.persistence_audit_events WHERE idempotency_key=$4)::text AS legacy_audit_count,
+      (SELECT count(*) FROM fandex.ingestion_outbox WHERE idempotency_key=$4)::text AS legacy_outbox_count,
       (SELECT content_sha256 FROM fandex.normalized_sources WHERE internal_source_id=$1) AS source_digest,
       (SELECT record_version::text FROM fandex.normalized_sources WHERE internal_source_id=$1) AS source_version,
       (SELECT title FROM fandex.normalized_sources WHERE internal_source_id=$1) AS source_title,
@@ -219,11 +252,16 @@ async function main(): Promise<void> {
       (SELECT journalist_byline FROM fandex.source_evidence_provenance WHERE internal_source_id=$1) AS evidence_byline,
       (SELECT canonical_payload_digest FROM fandex.persistence_transactions WHERE idempotency_key=$3) AS payload_digest,
       (SELECT status FROM fandex.persistence_transactions WHERE idempotency_key=$3) AS transaction_status,
-      (SELECT status FROM fandex.ingestion_outbox WHERE idempotency_key=$3) AS outbox_status`,
-    [bundle.internalSourceId,bundle.requestId,bundle.idempotencyKey]);
+      (SELECT status FROM fandex.ingestion_outbox WHERE idempotency_key=$3) AS outbox_status,
+      (SELECT canonical_payload_digest FROM fandex.persistence_transactions WHERE idempotency_key=$4) AS legacy_payload_digest,
+      (SELECT status FROM fandex.persistence_transactions WHERE idempotency_key=$4) AS legacy_transaction_status,
+      (SELECT status FROM fandex.ingestion_outbox WHERE idempotency_key=$4) AS legacy_outbox_status`,
+    [bundle.internalSourceId,bundle.requestId,bundle.idempotencyKey,legacyIdempotencyKey]);
     const target = targets.rows[0];
     const cardinalities = [target.source_count,target.request_count,target.provenance_count,target.transaction_count,target.audit_count,target.outbox_count];
+    const legacyArtifactCardinalities = [target.legacy_transaction_count,target.legacy_audit_count,target.legacy_outbox_count];
     if (cardinalities.every((value) => value === '0')) {
+      if (!legacyArtifactCardinalities.every((value) => value === '0')) throw new Error('unexpected_existing_target_data');
       recoveredAuthorizedApplication = false;
     } else {
       const exactAuthorizedState = cardinalities.every((value) => value === '1')
@@ -242,11 +280,34 @@ async function main(): Promise<void> {
         && target.payload_digest === bundle.canonicalPayloadDigest
         && target.transaction_status === 'applied'
         && ['pending','processing','applied'].includes(target.outbox_status ?? '');
-      if (!exactAuthorizedState) throw new Error('unexpected_existing_target_data');
-      recoveredAuthorizedApplication = true;
+      if (exactAuthorizedState && legacyArtifactCardinalities.every((value) => value === '0')) {
+        recoveredAuthorizedApplication = true;
+      } else {
+        const exactLegacyState = cardinalities.slice(0,3).every((value) => value === '1')
+          && cardinalities.slice(3).every((value) => value === '0')
+          && legacyArtifactCardinalities.every((value) => value === '1')
+          && target.source_digest === bundle.normalizedPostDigest
+          && target.source_version === String(bundle.normalized.recordVersion)
+          && target.source_title === bundle.normalized.title
+          && target.source_publisher === bundle.normalized.authorOrPublisher
+          && target.request_state === 'closed' && target.request_fulfilled === true && target.request_closed === true
+          && target.request_digest === bundle.v110CopiedClosedRequestDigest
+          && target.request_version === String(bundle.request.recordVersion)
+          && target.request_closure === bundle.request.closureRecordReference
+          && target.evidence_digest === bundle.evidence.evidenceSha256
+          && target.evidence_headline === bundle.evidence.exactHeadline
+          && target.evidence_publisher === bundle.evidence.publisher
+          && target.evidence_byline === bundle.evidence.journalistByline
+          && target.legacy_payload_digest === legacyCanonicalPayloadDigest
+          && target.legacy_transaction_status === 'applied'
+          && ['pending','processing','applied'].includes(target.legacy_outbox_status ?? '');
+        if (!exactLegacyState) throw new Error('unexpected_existing_target_data');
+        legacyStateRequiresFreshBranch = true;
+      }
     }
   }
   await preflightPool.end();
+  if (legacyStateRequiresFreshBranch) throw new Error('legacy_v116_state_requires_fresh_branch');
 
   const migrations = await loadMigrationPlan();
   if (migrations.length !== 1 || migrations[0].sha256 !== EXPECTED_MIGRATION_SHA256) throw new Error('migration_plan_mismatch');
@@ -363,7 +424,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((error) => {
-  const known = new Set(['v115_lineage_mismatch','staging_preflight_failed','unexpected_existing_migration','unexpected_existing_target_data','migration_plan_mismatch','migration_record_mismatch','table_set_mismatch','constraint_set_incomplete','audit_trigger_missing','public_privilege_present','idempotency_lineage_mismatch','first_application_not_applied','first_application_cardinality_mismatch','replay_not_idempotent','replay_duplicate_effect','conflict_probe_failed','stale_probe_failed','u2026_probe_failed','role_probe_failed','field_probe_failed','rollback_probe_failed','audit_mutation_not_blocked','outbox_claim_failed']);
+  const known = new Set(['v115_lineage_mismatch','staging_preflight_failed','unexpected_existing_migration','unexpected_existing_target_data','migration_plan_mismatch','migration_record_mismatch','table_set_mismatch','constraint_set_incomplete','audit_trigger_missing','public_privilege_present','idempotency_contract_not_versioned','legacy_v116_state_requires_fresh_branch','first_application_not_applied','first_application_cardinality_mismatch','replay_not_idempotent','replay_duplicate_effect','conflict_probe_failed','stale_probe_failed','u2026_probe_failed','role_probe_failed','field_probe_failed','rollback_probe_failed','audit_mutation_not_blocked','outbox_claim_failed']);
   const message = error instanceof Error && known.has(error.message) ? error.message : 'external_boundary_error';
   process.stderr.write(`FAIL CLOSED: ${validationStage}:${message}\n`);
   process.exitCode = 1;

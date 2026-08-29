@@ -3,13 +3,17 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { applyPersistenceBundle } from '../lib/server/persistence/adapter';
+import { applyPersistenceBundle, claimOutboxBatch, inspectPersistentPreState } from '../lib/server/persistence/adapter';
 import {
   buildCanonicalPersistencePayload,
   classifyPersistenceReplay,
+  deriveNormalizedPostDigest,
   derivePersistenceIdempotencyKey,
+  deriveRequestPostDigest,
   MAX_SERIALIZATION_RETRIES,
   OUTBOX_MAX_ATTEMPTS,
+  PERSISTENCE_CONTRACT_VERSION,
+  V110_CLOSURE_LINEAGE,
   V112_V113_FOUNDATION_LINEAGE,
   redactDatabaseError,
   requireMigrationDatabaseUrl,
@@ -24,6 +28,7 @@ const migrationPath = new URL('../database/migrations/001_v114_managed_postgres_
 const adapterPath = new URL('../lib/server/persistence/adapter.ts', import.meta.url);
 const dbPath = new URL('../lib/server/persistence/db.ts', import.meta.url);
 const runnerPath = new URL('../scripts/database/run-postgres-migrations.mts', import.meta.url);
+const stagingValidatorPath = new URL('../scripts/database/validate-staging-v116.mts', import.meta.url);
 const packagePath = new URL('../package.json', import.meta.url);
 
 const fixtureBase: PersistenceBundle = {
@@ -33,6 +38,7 @@ const fixtureBase: PersistenceBundle = {
   canonicalPayloadDigest: '',
   v108ApplicationRecordDigest: 'f1f1c0c2abb6e2234b310c22ecea3986738d91566ca74ff2fd6f2cf98688a319',
   v110ClosureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+  v110CopiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
   foundationLineage: V112_V113_FOUNDATION_LINEAGE,
   expectedState: 'present',
   expectedNormalizedVersion: 1,
@@ -40,7 +46,7 @@ const fixtureBase: PersistenceBundle = {
   expectedRequestVersion: 1,
   expectedRequestDigest: 'e66c8bc6d0831af5a9541646de80a4e370428c232b07b79d0435d21693da4833',
   normalizedPostDigest: '7b854bbb1fd3acc9278a58d27b3a7d799f1b84c52c778f9b84ddc3c504fc9644',
-  requestPostDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+  requestPostDigest: '',
   normalized: {
     provider: 'naver', sourceType: 'news', officeCode: '117', articleId: '0004076125',
     title: '원이, 윈터, 원희…경상도 매력에 푹 빠져든다 [MD피플]',
@@ -72,6 +78,7 @@ const fixtureBase: PersistenceBundle = {
 
 function fixture(): PersistenceBundle {
   const value = structuredClone(fixtureBase);
+  value.requestPostDigest = deriveRequestPostDigest(value);
   value.idempotencyKey = derivePersistenceIdempotencyKey(value);
   value.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(value));
   return value;
@@ -110,7 +117,11 @@ test('migration excludes forbidden columns and enforces audit immutability', asy
 test('exact fixture preserves U+2026 and publisher/byline roles', () => {
   const value = fixture();
   validatePersistenceBundle(value);
-  assert.equal(value.idempotencyKey, 'c177aa26b45692bdb3c442bc8f361f04d834c9d5108d90a6bcbd3e0e68ce7465');
+  assert.equal(PERSISTENCE_CONTRACT_VERSION, 'v120_exact_post_state_v1');
+  assert.equal(value.idempotencyKey, '42321543a2d98f7add059c1d31c27581c7610767da8310832cba356819a52287');
+  assert.equal(value.canonicalPayloadDigest, 'ea55b96781c0619edfdd57b483fcd69b9c4f1c6498da4dbf117b7202503c0118');
+  assert.notEqual(value.idempotencyKey, V112_V113_FOUNDATION_LINEAGE.v112IdempotencyKey);
+  assert.equal(buildCanonicalPersistencePayload(value).persistenceContractVersion, PERSISTENCE_CONTRACT_VERSION);
   assert.equal(value.requestId, '4788f3059b8b0a5b111aafd475c1ff3a6fa47dc60be690236a2603001735f283');
   assert.equal(value.internalSourceId, 'src_40f253cea60253b4f7b8d1e747f9cc87');
   assert.equal(value.evidence.sourceUrl, 'https://www.mydaily.co.kr/page/view/2026061816093817264');
@@ -124,6 +135,36 @@ test('exact fixture preserves U+2026 and publisher/byline roles', () => {
   assert.equal(value.normalized.title.split('…').length - 1, 1);
   assert.equal(value.normalized.authorOrPublisher, value.evidence.publisher);
   assert.notEqual(value.evidence.publisher, value.evidence.normalizedJournalist);
+  assert.equal(value.normalizedPostDigest, deriveNormalizedPostDigest(value));
+  assert.equal(value.requestPostDigest, deriveRequestPostDigest(value));
+  assert.equal(value.requestPostDigest, 'a20d64d9fda71eb2167a8e6e852a7e6d71e64d9c61bb6565a72a5ddd7ed0a3e5');
+});
+
+test('v110 closure lineage, post-state digests, and versions are bound fail-closed', () => {
+  const value = fixture();
+  assert.deepEqual(V110_CLOSURE_LINEAGE, {
+    closureRecordId: 'v110_closure_fa95c7a9513cebe1d99f5cdd32f33285088137633037ab5e04d45d40270fb2ee',
+    closureRecordDigest: '433ee79cceecce7c131318e8c43792f1e1a7e4459e101bafd389714073952731',
+    copiedClosedRequestDigest: '091946debd718c0c5d33fe75b8eb6f0eb9e0ee8c63ec9c71ea202e59516a18f2',
+  });
+
+  const normalizedTamper = structuredClone(value);
+  normalizedTamper.normalizedV36.summary = `${normalizedTamper.normalizedV36.summary} tampered`;
+  normalizedTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(normalizedTamper));
+  assert.throws(() => validatePersistenceBundle(normalizedTamper), /normalized_post_digest_not_derived/);
+
+  const closureTamper = structuredClone(value);
+  closureTamper.request.closureRecordReference = 'v110_closure_' + 'f'.repeat(64);
+  closureTamper.requestPostDigest = deriveRequestPostDigest(closureTamper);
+  closureTamper.idempotencyKey = derivePersistenceIdempotencyKey(closureTamper);
+  closureTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(closureTamper));
+  assert.throws(() => validatePersistenceBundle(closureTamper), /invalid_v110_closure_lineage/);
+
+  const versionTamper = structuredClone(value);
+  versionTamper.request.recordVersion += 1;
+  versionTamper.requestPostDigest = deriveRequestPostDigest(versionTamper);
+  versionTamper.canonicalPayloadDigest = sha256Canonical(buildCanonicalPersistencePayload(versionTamper));
+  assert.throws(() => validatePersistenceBundle(versionTamper), /invalid_record_version_transition/);
 });
 
 test('v112 and v113 foundation lineage is exact and fail-closed', () => {
@@ -171,7 +212,7 @@ test('adapter rejects stale state and rolls back transaction failures', async ()
   const stale = mockPool(async (sql) => {
     if (sql.includes('INSERT INTO fandex.persistence_transactions')) return { rowCount: 1, rows: [] };
     if (sql.includes('SELECT record_version, content_sha256')) return { rowCount: 1, rows: [{ record_version: '99', content_sha256: value.expectedNormalizedDigest }] };
-    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open' }] };
+    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
     return { rowCount: 0, rows: [] };
   });
   assert.equal((await applyPersistenceBundle(value, stale.pool)).status, 'rejected_stale_state');
@@ -187,6 +228,54 @@ test('adapter rejects stale state and rolls back transaction failures', async ()
   assert.ok(failure.calls.includes('ROLLBACK'));
 });
 
+test('adapter rejects mismatched requested fields before persistence writes', async () => {
+  const value = fixture();
+  const mismatch = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('SELECT record_version, content_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: ['source_attribution', 'content_context'] }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  assert.equal((await applyPersistenceBundle(value, mismatch.pool)).status, 'rejected_stale_state');
+  assert.equal(mismatch.calls.filter((sql) => sql.includes('INSERT INTO fandex.persistence_transactions')).length, 0);
+  assert.equal(mismatch.calls.filter((sql) => sql.includes('UPDATE fandex.historical_enrichment_requests')).length, 0);
+  assert.ok(mismatch.calls.includes('ROLLBACK'));
+});
+
+test('request CAS and postcondition preserve exact requested fields', async () => {
+  const value = fixture();
+  const requestUpdateValues: unknown[][] = [];
+  const success = mockPool(async (sql, values) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
+    if (sql.includes('UPDATE fandex.historical_enrichment_requests')) requestUpdateValues.push([...(values ?? [])]);
+    if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(value.normalized.recordVersion), content_sha256: value.normalizedPostDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(value.request.recordVersion), state_sha256: value.requestPostDigest, request_state: 'closed', requested_fields: value.request.requestedFields, persistent_fulfilled: true, persistent_closed: true, closure_record_reference: value.request.closureRecordReference }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  assert.equal((await applyPersistenceBundle(value, success.pool)).status, 'applied');
+  assert.equal(requestUpdateValues.length, 1);
+  assert.deepEqual(requestUpdateValues[0]?.[7], value.request.requestedFields);
+  assert.ok(success.calls.some((sql) => sql.includes('requested_fields=$8::text[]')));
+
+  const tamperedPostcondition = mockPool(async (sql) => {
+    if (sql.includes('SELECT canonical_payload_digest')) return { rowCount: 0, rows: [] };
+    if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 1, rows: [{ record_version: String(value.expectedNormalizedVersion), content_sha256: value.expectedNormalizedDigest }] };
+    if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 1, rows: [{ record_version: String(value.expectedRequestVersion), state_sha256: value.expectedRequestDigest, request_state: 'open', requested_fields: value.request.requestedFields }] };
+    if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(value.normalized.recordVersion), content_sha256: value.normalizedPostDigest }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(value.request.recordVersion), state_sha256: value.requestPostDigest, request_state: 'closed', requested_fields: ['content_context'], persistent_fulfilled: true, persistent_closed: true, closure_record_reference: value.request.closureRecordReference }] };
+    return { rowCount: 1, rows: [] };
+  });
+
+  const tampered = await applyPersistenceBundle(value, tamperedPostcondition.pool);
+  assert.equal(tampered.status, 'failed_rolled_back');
+  assert.deepEqual(tampered.error, { code: 'database_operation_failed' });
+  assert.ok(tamperedPostcondition.calls.includes('ROLLBACK'));
+});
+
 test('expected absent bootstraps source and request atomically and rejects existing rows', async () => {
   const absent = fixture();
   absent.expectedState = 'absent';
@@ -198,7 +287,7 @@ test('expected absent bootstraps source and request atomically and rejects exist
     if (sql.includes('FOR UPDATE') && sql.includes('normalized_sources')) return { rowCount: 0, rows: [] };
     if (sql.includes('FOR UPDATE') && sql.includes('historical_enrichment_requests')) return { rowCount: 0, rows: [] };
     if (sql.includes('SELECT record_version, content_sha256') && !sql.includes('FOR UPDATE')) return { rowCount: 1, rows: [{ record_version: String(absent.normalized.recordVersion), content_sha256: absent.normalizedPostDigest }] };
-    if (sql.includes('SELECT record_version, state_sha256, request_state, persistent_fulfilled')) return { rowCount: 1, rows: [{ record_version: String(absent.request.recordVersion), state_sha256: absent.requestPostDigest, request_state: 'closed', persistent_fulfilled: true, persistent_closed: true, closure_record_reference: absent.request.closureRecordReference }] };
+    if (sql.includes('SELECT record_version, state_sha256, request_state, requested_fields')) return { rowCount: 1, rows: [{ record_version: String(absent.request.recordVersion), state_sha256: absent.requestPostDigest, request_state: 'closed', requested_fields: absent.request.requestedFields, persistent_fulfilled: true, persistent_closed: true, closure_record_reference: absent.request.closureRecordReference }] };
     return { rowCount: 1, rows: [] };
   });
   assert.equal((await applyPersistenceBundle(absent, success.pool)).status, 'applied');
@@ -261,6 +350,61 @@ test('adapter SQL is parameterized, atomic, rollback-safe, and SKIP LOCKED', asy
   assert.match(adapter, /outbox_append_conflict/);
   assert.match(adapter, /\$1/);
   assert.doesNotMatch(adapter, /\$\{bundle\./);
+});
+
+test('persistent pre-state is read in one statement-level snapshot', async () => {
+  const state = mockPool(async (sql) => {
+    assert.match(sql, /normalized_sources/);
+    assert.match(sql, /historical_enrichment_requests/);
+    return {
+      rowCount: 1,
+      rows: [{
+        normalized_state: { recordVersion: '2', stateDigest: 'a'.repeat(64) },
+        request_state: { recordVersion: '3', stateDigest: 'b'.repeat(64), requestState: 'open', requestedFields: ['content_context', 'source_attribution'] },
+      }],
+    };
+  });
+  const result = await inspectPersistentPreState('request', 'source', state.pool);
+  assert.equal(state.calls.length, 1);
+  assert.deepEqual(result, {
+    normalized: { recordVersion: 2, stateDigest: 'a'.repeat(64) },
+    request: { recordVersion: 3, stateDigest: 'b'.repeat(64), requestState: 'open', requestedFields: ['content_context', 'source_attribution'] },
+  });
+});
+
+test('outbox claim terminalizes an expired final-attempt lease before claiming work', async () => {
+  const outbox = mockPool(async (sql) => {
+    assert.match(sql, /WITH terminal_candidates AS/);
+    assert.match(sql, /terminal_expired AS/);
+    assert.match(sql, /status='dead_letter'/);
+    assert.match(sql, /lease_expired_at_attempt_limit/);
+    assert.match(sql, /attempt_count >= max_attempts/);
+    assert.match(sql, /attempt_count < max_attempts/);
+    assert.match(sql, /ORDER BY updated_at, outbox_id/);
+    assert.equal(sql.match(/FOR UPDATE SKIP LOCKED LIMIT \$1/g)?.length, 2);
+    return {
+      rowCount: 1,
+      rows: [{
+        outbox_id: 'event-1', idempotency_key: 'a'.repeat(64), event_type: 'source_persistence_applied',
+        bounded_payload: { requestId: 'request' }, attempt_count: 1,
+      }],
+    };
+  });
+  const claimed = await claimOutboxBatch('worker', 1, 30, outbox.pool);
+  assert.equal(outbox.calls.length, 1);
+  assert.deepEqual(claimed, [{
+    outboxId: 'event-1', idempotencyKey: 'a'.repeat(64), eventType: 'source_persistence_applied',
+    payload: { requestId: 'request' }, attemptCount: 1, leaseOwner: 'worker',
+  }]);
+});
+
+test('v116 legacy staging state is classified before any current-contract write', async () => {
+  const validator = await readFile(stagingValidatorPath, 'utf8');
+  assert.match(validator, /legacyIdempotencyKey = V112_V113_FOUNDATION_LINEAGE\.v112IdempotencyKey/);
+  assert.match(validator, /bundle\.idempotencyKey === legacyIdempotencyKey/);
+  assert.match(validator, /legacy_payload_digest === legacyCanonicalPayloadDigest/);
+  assert.match(validator, /legacy_v116_state_requires_fresh_branch/);
+  assert.match(validator, /if \(legacyStateRequiresFreshBranch\) throw new Error\('legacy_v116_state_requires_fresh_branch'\)/);
 });
 
 test('outbox claim model has zero concurrent duplicates and dead-letters at eight', async () => {

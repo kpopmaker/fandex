@@ -16,7 +16,12 @@ import { getRuntimeDatabasePool } from './db';
 
 export type PersistentPreState = {
   normalized: { recordVersion: number; stateDigest: string } | null;
-  request: { recordVersion: number; stateDigest: string; requestState: 'open' | 'closed' } | null;
+  request: {
+    recordVersion: number;
+    stateDigest: string;
+    requestState: 'open' | 'closed';
+    requestedFields: string[];
+  } | null;
 };
 
 export type PersistenceTransactionResult = {
@@ -34,20 +39,46 @@ export async function inspectPersistentPreState(
   internalSourceId: string,
   pool: PersistencePool = getRuntimeDatabasePool(),
 ): Promise<PersistentPreState> {
-  const [normalized, request] = await Promise.all([
-    pool.query<{ record_version: string; content_sha256: string }>(
-      'SELECT record_version, content_sha256 FROM fandex.normalized_sources WHERE internal_source_id = $1',
-      [internalSourceId],
-    ),
-    pool.query<{ record_version: string; state_sha256: string; request_state: 'open' | 'closed' }>(
-      'SELECT record_version, state_sha256, request_state FROM fandex.historical_enrichment_requests WHERE request_id = $1 AND internal_source_id = $2',
-      [requestId, internalSourceId],
-    ),
-  ]);
+  const result = await pool.query<{
+    normalized_state: { recordVersion: string; stateDigest: string } | null;
+    request_state: {
+      recordVersion: string;
+      stateDigest: string;
+      requestState: 'open' | 'closed';
+      requestedFields: string[];
+    } | null;
+  }>(
+    `SELECT
+      (SELECT jsonb_build_object(
+        'recordVersion', record_version::text,
+        'stateDigest', content_sha256
+      ) FROM fandex.normalized_sources WHERE internal_source_id = $1) AS normalized_state,
+      (SELECT jsonb_build_object(
+        'recordVersion', record_version::text,
+        'stateDigest', state_sha256,
+        'requestState', request_state,
+        'requestedFields', requested_fields
+      ) FROM fandex.historical_enrichment_requests
+        WHERE request_id = $2 AND internal_source_id = $1) AS request_state`,
+    [internalSourceId, requestId],
+  );
+  const normalized = result.rows[0]?.normalized_state ?? null;
+  const request = result.rows[0]?.request_state ?? null;
   return {
-    normalized: normalized.rows[0] ? { recordVersion: Number(normalized.rows[0].record_version), stateDigest: normalized.rows[0].content_sha256 } : null,
-    request: request.rows[0] ? { recordVersion: Number(request.rows[0].record_version), stateDigest: request.rows[0].state_sha256, requestState: request.rows[0].request_state } : null,
+    normalized: normalized ? { recordVersion: Number(normalized.recordVersion), stateDigest: normalized.stateDigest } : null,
+    request: request ? {
+      recordVersion: Number(request.recordVersion),
+      stateDigest: request.stateDigest,
+      requestState: request.requestState,
+      requestedFields: request.requestedFields,
+    } : null,
   };
+}
+
+function hasExactRequestedFields(actual: unknown, expected: readonly string[]): boolean {
+  return Array.isArray(actual)
+    && actual.length === expected.length
+    && actual.every((field, index) => field === expected[index]);
 }
 
 export async function getPersistenceTransactionResult(
@@ -88,8 +119,8 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
     'SELECT record_version, content_sha256 FROM fandex.normalized_sources WHERE internal_source_id = $1 FOR UPDATE',
     [bundle.internalSourceId],
   );
-  const requestBefore = await client.query<{ record_version: string; state_sha256: string; request_state: string }>(
-    'SELECT record_version, state_sha256, request_state FROM fandex.historical_enrichment_requests WHERE request_id = $1 AND internal_source_id = $2 FOR UPDATE',
+  const requestBefore = await client.query<{ record_version: string; state_sha256: string; request_state: string; requested_fields: string[] }>(
+    'SELECT record_version, state_sha256, request_state, requested_fields FROM fandex.historical_enrichment_requests WHERE request_id = $1 AND internal_source_id = $2 FOR UPDATE',
     [bundle.requestId, bundle.internalSourceId],
   );
   const source = normalizedBefore.rows[0];
@@ -121,7 +152,13 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
         bundle.expectedRequestDigest, bundle.expectedRequestVersion],
     );
   }
-  const stale = bundle.expectedState === 'present' && (!source || !request || Number(source.record_version) !== bundle.expectedNormalizedVersion || source.content_sha256 !== bundle.expectedNormalizedDigest || Number(request.record_version) !== bundle.expectedRequestVersion || request.state_sha256 !== bundle.expectedRequestDigest || request.request_state !== 'open');
+  const stale = bundle.expectedState === 'present' && (!source || !request
+    || Number(source.record_version) !== bundle.expectedNormalizedVersion
+    || source.content_sha256 !== bundle.expectedNormalizedDigest
+    || Number(request.record_version) !== bundle.expectedRequestVersion
+    || request.state_sha256 !== bundle.expectedRequestDigest
+    || request.request_state !== 'open'
+    || !hasExactRequestedFields(request.requested_fields, bundle.request.requestedFields));
   if (stale) {
     await client.query('ROLLBACK');
     return { status: 'rejected_stale_state', idempotencyKey: bundle.idempotencyKey, normalizedAfterDigest: null, requestAfterDigest: null };
@@ -176,9 +213,10 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
       persistent_fulfilled=true, request_state='closed', persistent_closed=true,
       closure_record_reference=$1, state_sha256=$2, record_version=$3
     WHERE request_id=$4 AND internal_source_id=$5 AND request_state='open'
-      AND record_version=$6 AND state_sha256=$7`,
+      AND record_version=$6 AND state_sha256=$7 AND requested_fields=$8::text[]`,
     [bundle.request.closureRecordReference, bundle.requestPostDigest, bundle.request.recordVersion,
-      bundle.requestId, bundle.internalSourceId, bundle.expectedRequestVersion, bundle.expectedRequestDigest],
+      bundle.requestId, bundle.internalSourceId, bundle.expectedRequestVersion, bundle.expectedRequestDigest,
+      bundle.request.requestedFields],
   );
   if (requestUpdate.rowCount !== 1) throw new Error('request_compare_and_swap_failed');
 
@@ -207,8 +245,8 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
     'SELECT record_version, content_sha256 FROM fandex.normalized_sources WHERE internal_source_id=$1',
     [bundle.internalSourceId],
   );
-  const requestAfter = await client.query<{ record_version: string; state_sha256: string; request_state: string; persistent_fulfilled: boolean; persistent_closed: boolean; closure_record_reference: string | null }>(
-    `SELECT record_version, state_sha256, request_state, persistent_fulfilled,
+  const requestAfter = await client.query<{ record_version: string; state_sha256: string; request_state: string; requested_fields: string[]; persistent_fulfilled: boolean; persistent_closed: boolean; closure_record_reference: string | null }>(
+    `SELECT record_version, state_sha256, request_state, requested_fields, persistent_fulfilled,
       persistent_closed, closure_record_reference
      FROM fandex.historical_enrichment_requests WHERE request_id=$1 AND internal_source_id=$2`,
     [bundle.requestId, bundle.internalSourceId],
@@ -216,7 +254,16 @@ async function applyInTransaction(client: PoolClient, bundle: PersistenceBundle)
   const normalizedPostcondition = normalizedAfter.rows[0];
   const requestPostcondition = requestAfter.rows[0];
   if (!normalizedPostcondition || Number(normalizedPostcondition.record_version) !== bundle.normalized.recordVersion || normalizedPostcondition.content_sha256 !== bundle.normalizedPostDigest) throw new Error('normalized_postcondition_failed');
-  if (!requestPostcondition || Number(requestPostcondition.record_version) !== bundle.request.recordVersion || requestPostcondition.state_sha256 !== bundle.requestPostDigest || requestPostcondition.request_state !== 'closed' || !requestPostcondition.persistent_fulfilled || !requestPostcondition.persistent_closed || requestPostcondition.closure_record_reference !== bundle.request.closureRecordReference) throw new Error('request_postcondition_failed');
+  if (!requestPostcondition
+      || Number(requestPostcondition.record_version) !== bundle.request.recordVersion
+      || requestPostcondition.state_sha256 !== bundle.requestPostDigest
+      || requestPostcondition.request_state !== 'closed'
+      || !hasExactRequestedFields(requestPostcondition.requested_fields, bundle.request.requestedFields)
+      || !requestPostcondition.persistent_fulfilled
+      || !requestPostcondition.persistent_closed
+      || requestPostcondition.closure_record_reference !== bundle.request.closureRecordReference) {
+    throw new Error('request_postcondition_failed');
+  }
   await client.query('COMMIT');
   return { status: 'applied', idempotencyKey: bundle.idempotencyKey, normalizedAfterDigest: afterDigests.normalized, requestAfterDigest: afterDigests.request };
 }
@@ -258,7 +305,23 @@ export async function claimOutboxBatch(
   const boundedLimit = Math.min(Math.max(limit, 1), 100);
   const boundedLease = Math.min(Math.max(leaseSeconds, 5), 300);
   const result = await pool.query<{ outbox_id: string; idempotency_key: string; event_type: string; bounded_payload: Record<string, unknown>; attempt_count: number }>(
-    `WITH candidates AS (
+    `WITH terminal_candidates AS (
+      SELECT outbox_id FROM fandex.ingestion_outbox
+      WHERE status='processing'
+        AND lease_expires_at <= CURRENT_TIMESTAMP
+        AND attempt_count >= max_attempts
+      ORDER BY updated_at, outbox_id
+      FOR UPDATE SKIP LOCKED LIMIT $1
+    ), terminal_expired AS (
+      UPDATE fandex.ingestion_outbox AS terminal SET
+        status='dead_letter', lease_owner=NULL, lease_expires_at=NULL,
+        next_attempt_at=NULL,
+        bounded_error_metadata=jsonb_build_object('code','lease_expired_at_attempt_limit'),
+        updated_at=CURRENT_TIMESTAMP
+      FROM terminal_candidates
+      WHERE terminal.outbox_id=terminal_candidates.outbox_id
+      RETURNING terminal.outbox_id
+    ), candidates AS (
       SELECT outbox_id FROM fandex.ingestion_outbox
       WHERE (status IN ('pending','retryable_failed') OR (status='processing' AND lease_expires_at <= CURRENT_TIMESTAMP))
         AND attempt_count < max_attempts
