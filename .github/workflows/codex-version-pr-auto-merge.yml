@@ -145,6 +145,7 @@ jobs:
         run: >-
           npm run test:security &&
           npm run test:persistence &&
+          npm run test:ingestion:v121 &&
           npm run test:role-bootstrap &&
           npm run test:production-bootstrap &&
           npm run test:deployment-readiness &&

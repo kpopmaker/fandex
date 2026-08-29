@@ -1,0 +1,37 @@
+{
+  "fetchedAt": "2026-08-29T06:00:00.000Z",
+  "response": {
+    "lastBuildDate": "Sat, 29 Aug 2026 15:00:00 +0900",
+    "total": 4,
+    "start": 1,
+    "display": 4,
+    "items": [
+      {
+        "title": "<b>FANDEX</b> v121 NAVER News fixture one",
+        "originallink": "https://news.example.test/articles/fandex-v121-001",
+        "link": "https://n.news.naver.com/mnews/article/001/0000000001",
+        "description": "Fixture-only &quot;raw evidence&quot; for deterministic normalization.",
+        "pubDate": "Sat, 29 Aug 2026 14:50:00 +0900"
+      },
+      {
+        "title": "FANDEX v121 NAVER News fixture two",
+        "originallink": "https://media.example.test/kpop/fandex-v121-002",
+        "link": "https://n.news.naver.com/mnews/article/002/0000000002",
+        "description": "Second fixture-only item with no production or external effect.",
+        "pubDate": "Sat, 29 Aug 2026 14:55:00 +0900"
+      },
+      {
+        "title": "<b>FANDEX</b> v121 NAVER News fixture one",
+        "originallink": "https://news.example.test/articles/fandex-v121-001",
+        "link": "https://n.news.naver.com/mnews/article/001/0000000001",
+        "description": "Fixture-only &quot;raw evidence&quot; for deterministic normalization.",
+        "pubDate": "Sat, 29 Aug 2026 14:50:00 +0900"
+      },
+      {
+        "title": "Rejected fixture item",
+        "description": "This item intentionally has no source URL and an invalid date.",
+        "pubDate": "not-a-date"
+      }
+    ]
+  }
+}
