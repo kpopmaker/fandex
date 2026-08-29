@@ -205,7 +205,7 @@ test('exact base/head merge-tree validation runs read-only and without persisted
   assert.match(validateJob, /fetch-depth: 0/);
   assert.match(validateJob, /git diff --check --cached/);
   assert.match(validateJob, /npm run security:audit:production/);
-  for (const script of ['typecheck','lint','test:security','test:persistence','test:role-bootstrap','test:production-bootstrap','test:deployment-readiness','test:merge-safety','db:migrate','db:roles','build']) {
+  for (const script of ['typecheck','lint','test:security','test:persistence','test:ingestion:v121','test:role-bootstrap','test:production-bootstrap','test:deployment-readiness','test:merge-safety','db:migrate','db:roles','build']) {
     assert.match(validateJob, new RegExp(`npm run ${script.replace(':', '\\:')}`));
   }
 });

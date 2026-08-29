@@ -9,6 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test:persistence": "tsx --conditions=react-server --test tests/managed-postgres-persistence.test.ts",
+    "test:ingestion:v121": "tsx --test tests/naver-news-ingestion-v121.test.mts",
+    "ingestion:naver-news:plan": "tsx scripts/ingestion/plan-naver-news-v121.mts",
     "db:migrate": "tsx scripts/database/run-postgres-migrations.mts",
     "security:audit:production": "node scripts/security/audit-production.mjs",
     "test:security": "node --test tests/security-audit-gate.test.mjs",
