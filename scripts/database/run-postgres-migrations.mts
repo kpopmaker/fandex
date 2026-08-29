@@ -42,10 +42,12 @@ export async function applyMigrationPlan(
   migrations: Migration[],
   environment: NodeJS.ProcessEnv,
   onQuery: (sql: string) => void = () => {},
+  poolOverride?: Pick<Pool, 'connect' | 'end'>,
 ): Promise<void> {
   if (environment[APPLY_APPROVAL_KEY] !== APPLY_APPROVAL_VALUE) throw new Error('migration_apply_approval_required');
-  const pool = new Pool({
-    connectionString: requireMigrationDatabaseUrl(environment),
+  const connectionString = requireMigrationDatabaseUrl(environment);
+  const pool = poolOverride ?? new Pool({
+    connectionString,
     max: 1,
     connectionTimeoutMillis: 5_000,
     statement_timeout: 30_000,
@@ -57,7 +59,14 @@ export async function applyMigrationPlan(
       try {
         onQuery('BEGIN'); await client.query('BEGIN');
         onQuery('SELECT pg_advisory_xact_lock'); await client.query('SELECT pg_advisory_xact_lock($1::bigint)', [ADVISORY_LOCK_KEY]);
-        onQuery('CREATE SCHEMA'); await client.query('CREATE SCHEMA IF NOT EXISTS fandex');
+        onQuery('SELECT fandex schema');
+        const schema = await client.query<{ schema_exists: boolean }>(
+          'SELECT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = $1) AS schema_exists',
+          ['fandex'],
+        );
+        if (!schema.rows[0]?.schema_exists) {
+          onQuery('CREATE SCHEMA'); await client.query('CREATE SCHEMA IF NOT EXISTS fandex');
+        }
         onQuery('CREATE TABLE schema_migrations'); await client.query(`CREATE TABLE IF NOT EXISTS fandex.schema_migrations (
           version bigint PRIMARY KEY CHECK (version > 0),
           migration_sha256 char(64) NOT NULL CHECK (migration_sha256 ~ '^[0-9a-f]{64}$'),

@@ -23,6 +23,7 @@ import {
   withSerializableRetries,
   type PersistenceBundle,
 } from '../lib/server/persistence/contracts';
+import { applyMigrationPlan } from '../scripts/database/run-postgres-migrations.mjs';
 
 const migrationPath = new URL('../database/migrations/001_v114_managed_postgres_persistence.sql', import.meta.url);
 const adapterPath = new URL('../lib/server/persistence/adapter.ts', import.meta.url);
@@ -96,6 +97,82 @@ function mockPool(handler: (sql: string, values?: readonly unknown[]) => Promise
     pool: { query, async connect() { return client; } } as unknown as Parameters<typeof applyPersistenceBundle>[1],
   };
 }
+
+function mockMigrationPool(handler: (sql: string, values?: readonly unknown[]) => Promise<{ rowCount: number; rows: Record<string, unknown>[] }>) {
+  const calls: string[] = [];
+  let ended = false;
+  const query = async (sql: string, values?: readonly unknown[]) => {
+    calls.push(sql);
+    return handler(sql, values);
+  };
+  const client = { query, release() {} };
+  return {
+    calls,
+    get ended() { return ended; },
+    pool: {
+      async connect() { return client; },
+      async end() { ended = true; },
+    } as unknown as NonNullable<Parameters<typeof applyMigrationPlan>[3]>,
+  };
+}
+
+const migrationEnvironment = {
+  NODE_ENV: 'test' as const,
+  FANDEX_APPROVE_V114_MIGRATION: 'approved-v114-managed-postgres',
+  FANDEX_MIGRATION_DATABASE_URL: 'postgresql://fandex_migrator:synthetic@ep-safe.example.test/neondb',
+};
+const runnerMigration = {
+  version: 1,
+  fileName: '001_test.sql',
+  sha256: 'a'.repeat(64),
+  sql: 'SELECT migration_body',
+};
+
+test('migration runner skips CREATE SCHEMA when fandex already exists', async () => {
+  const mock = mockMigrationPool(async (sql) => {
+    if (sql.includes('FROM pg_namespace')) return { rowCount: 1, rows: [{ schema_exists: true }] };
+    if (sql.includes('SELECT migration_sha256')) return { rowCount: 1, rows: [{ migration_sha256: runnerMigration.sha256 }] };
+    return { rowCount: 0, rows: [] };
+  });
+
+  await applyMigrationPlan([runnerMigration], migrationEnvironment, () => {}, mock.pool);
+
+  assert.equal(mock.calls.filter((sql) => sql.startsWith('CREATE SCHEMA')).length, 0);
+  assert.ok(mock.calls.some((sql) => sql.includes('FROM pg_namespace')));
+  assert.ok(mock.calls.indexOf('SELECT pg_advisory_xact_lock($1::bigint)') < mock.calls.findIndex((sql) => sql.includes('FROM pg_namespace')));
+  assert.ok(mock.calls.includes('ROLLBACK'));
+  assert.equal(mock.ended, true);
+});
+
+test('migration runner creates a missing schema and rolls back apply failures', async () => {
+  const mock = mockMigrationPool(async (sql) => {
+    if (sql.includes('FROM pg_namespace')) return { rowCount: 1, rows: [{ schema_exists: false }] };
+    if (sql.includes('SELECT migration_sha256')) return { rowCount: 0, rows: [] };
+    if (sql === runnerMigration.sql) throw new Error('secret database detail');
+    return { rowCount: 0, rows: [] };
+  });
+
+  await assert.rejects(applyMigrationPlan([runnerMigration], migrationEnvironment, () => {}, mock.pool), /secret database detail/);
+
+  assert.equal(mock.calls.filter((sql) => sql === 'CREATE SCHEMA IF NOT EXISTS fandex').length, 1);
+  assert.ok(mock.calls.includes(runnerMigration.sql));
+  assert.ok(mock.calls.includes('ROLLBACK'));
+  assert.equal(mock.ended, true);
+});
+
+test('migration runner preserves digest conflict fail-closed behavior', async () => {
+  const mock = mockMigrationPool(async (sql) => {
+    if (sql.includes('FROM pg_namespace')) return { rowCount: 1, rows: [{ schema_exists: true }] };
+    if (sql.includes('SELECT migration_sha256')) return { rowCount: 1, rows: [{ migration_sha256: 'b'.repeat(64) }] };
+    return { rowCount: 0, rows: [] };
+  });
+
+  await assert.rejects(applyMigrationPlan([runnerMigration], migrationEnvironment, () => {}, mock.pool), /migration_version_digest_conflict/);
+
+  assert.equal(mock.calls.filter((sql) => sql === runnerMigration.sql).length, 0);
+  assert.ok(mock.calls.includes('ROLLBACK'));
+  assert.equal(mock.ended, true);
+});
 
 test('migration has a deterministic digest and complete schema', async () => {
   const text = (await readFile(migrationPath, 'utf8')).replace(/\r\n/g, '\n');
