@@ -210,6 +210,27 @@ test('exact base/head merge-tree validation runs read-only and without persisted
   }
 });
 
+test('validation and merge establish bot identity before composing merge trees', async () => {
+  const workflow = await readFile(workflowPath, 'utf8');
+  const jobs = [
+    workflow.slice(workflow.indexOf('  validate:'), workflow.indexOf('  merge:')),
+    workflow.slice(workflow.indexOf('  merge:')),
+  ];
+
+  for (const job of jobs) {
+    const authorName = job.indexOf("export GIT_AUTHOR_NAME='github-actions[bot]'");
+    const authorEmail = job.indexOf("export GIT_AUTHOR_EMAIL='41898282+github-actions[bot]@users.noreply.github.com'");
+    const committerName = job.indexOf('export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"');
+    const committerEmail = job.indexOf('export GIT_COMMITTER_EMAIL="${GIT_AUTHOR_EMAIL}"');
+    const merge = job.indexOf('git merge --no-commit --no-ff "${HEAD_SHA}"');
+
+    assert.ok(authorName >= 0 && authorName < merge);
+    assert.ok(authorEmail >= 0 && authorEmail < merge);
+    assert.ok(committerName >= 0 && committerName < merge);
+    assert.ok(committerEmail >= 0 && committerEmail < merge);
+  }
+});
+
 test('an exact-base lease accepts the authorized unchanged main', async () => {
   const root = await mkdtemp(join(tmpdir(), 'fandex-merge-lease-success-'));
   const remote = join(root, 'remote.git');
