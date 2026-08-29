@@ -1,9 +1,91 @@
+CREATE TABLE fandex.source_data_policies (
+  policy_key text PRIMARY KEY CHECK (
+    octet_length(policy_key) BETWEEN 1 AND 128
+    AND policy_key ~ '^[a-z0-9][a-z0-9._:-]*$'
+  ),
+  provider text NOT NULL CHECK (octet_length(provider) BETWEEN 1 AND 64),
+  policy_version text NOT NULL CHECK (octet_length(policy_version) BETWEEN 1 AND 128),
+  raw_retention_mode text NOT NULL CHECK (raw_retention_mode IN (
+    'review_required', 'fixed_ttl', 'refresh_required', 'permitted'
+  )),
+  raw_ttl_days integer CHECK (raw_ttl_days IS NULL OR raw_ttl_days > 0),
+  normalized_retention_mode text NOT NULL CHECK (normalized_retention_mode IN (
+    'review_required', 'fixed_ttl', 'refresh_required', 'permitted'
+  )),
+  normalized_ttl_days integer CHECK (normalized_ttl_days IS NULL OR normalized_ttl_days > 0),
+  derived_metrics_mode text NOT NULL CHECK (derived_metrics_mode IN (
+    'review_required', 'approval_required', 'permitted', 'prohibited'
+  )),
+  cross_source_mode text NOT NULL CHECK (cross_source_mode IN (
+    'review_required', 'approval_required', 'permitted', 'prohibited'
+  )),
+  public_display_mode text NOT NULL CHECK (public_display_mode IN (
+    'review_required', 'approval_required', 'permitted', 'prohibited'
+  )),
+  commercial_use_mode text NOT NULL CHECK (commercial_use_mode IN (
+    'review_required', 'approval_required', 'permitted', 'prohibited'
+  )),
+  reviewed_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT source_data_policies_raw_ttl_state CHECK (
+    (raw_retention_mode = 'fixed_ttl' AND raw_ttl_days IS NOT NULL)
+    OR
+    (raw_retention_mode <> 'fixed_ttl' AND raw_ttl_days IS NULL)
+  ),
+  CONSTRAINT source_data_policies_normalized_ttl_state CHECK (
+    (normalized_retention_mode = 'fixed_ttl' AND normalized_ttl_days IS NOT NULL)
+    OR
+    (normalized_retention_mode <> 'fixed_ttl' AND normalized_ttl_days IS NULL)
+  ),
+  CONSTRAINT source_data_policies_review_state CHECK (
+    reviewed_at IS NOT NULL
+    OR (
+      raw_retention_mode = 'review_required'
+      AND normalized_retention_mode = 'review_required'
+      AND derived_metrics_mode = 'review_required'
+      AND cross_source_mode = 'review_required'
+      AND public_display_mode = 'review_required'
+      AND commercial_use_mode = 'review_required'
+    )
+  )
+);
+
+INSERT INTO fandex.source_data_policies (
+  policy_key,
+  provider,
+  policy_version,
+  raw_retention_mode,
+  raw_ttl_days,
+  normalized_retention_mode,
+  normalized_ttl_days,
+  derived_metrics_mode,
+  cross_source_mode,
+  public_display_mode,
+  commercial_use_mode,
+  reviewed_at
+) VALUES (
+  'naver-news:v121-review-pending',
+  'naver-news',
+  'v121-review-pending',
+  'review_required',
+  NULL,
+  'review_required',
+  NULL,
+  'review_required',
+  'review_required',
+  'review_required',
+  'review_required',
+  NULL
+);
+
 CREATE TABLE fandex.source_ingestion_jobs (
   job_id char(64) PRIMARY KEY CHECK (job_id ~ '^[0-9a-f]{64}$'),
   idempotency_key char(64) NOT NULL UNIQUE CHECK (idempotency_key ~ '^[0-9a-f]{64}$'),
   request_sha256 char(64) NOT NULL CHECK (request_sha256 ~ '^[0-9a-f]{64}$'),
   contract_version text NOT NULL CHECK (contract_version = 'v121_naver_news_ingestion_v1'),
   provider text NOT NULL CHECK (provider = 'naver-news'),
+  policy_key text NOT NULL DEFAULT 'naver-news:v121-review-pending'
+    REFERENCES fandex.source_data_policies(policy_key),
   collection_key text NOT NULL CHECK (
     octet_length(collection_key) BETWEEN 1 AND 128
     AND collection_key ~ '^[a-z0-9][a-z0-9._:-]*$'
@@ -103,6 +185,9 @@ CREATE TABLE fandex.source_ingestion_audit_events (
 CREATE INDEX source_ingestion_jobs_claim_idx
   ON fandex.source_ingestion_jobs (status, lease_expires_at, attempt_count, created_at);
 
+CREATE INDEX source_ingestion_jobs_policy_idx
+  ON fandex.source_ingestion_jobs (policy_key, created_at);
+
 CREATE INDEX source_ingestion_raw_job_idx
   ON fandex.source_ingestion_raw_evidence (job_id, item_index);
 
@@ -114,7 +199,13 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $function$
 BEGIN
-  RAISE EXCEPTION 'source ingestion evidence, normalized records, and audit events are append-only';
+  IF TG_OP = 'DELETE'
+     AND TG_TABLE_NAME IN ('source_ingestion_raw_evidence', 'source_ingestion_normalized_records')
+     AND pg_has_role(SESSION_USER, 'fandex_migrator', 'MEMBER') THEN
+    RETURN OLD;
+  END IF;
+
+  RAISE EXCEPTION 'source ingestion rows are immutable; only the migrator may delete retention-governed raw or normalized rows';
 END;
 $function$;
 
@@ -130,12 +221,14 @@ CREATE TRIGGER source_ingestion_audit_events_append_only
 BEFORE UPDATE OR DELETE ON fandex.source_ingestion_audit_events
 FOR EACH ROW EXECUTE FUNCTION fandex.reject_source_ingestion_append_only_mutation();
 
+REVOKE ALL ON TABLE fandex.source_data_policies FROM PUBLIC;
 REVOKE ALL ON TABLE fandex.source_ingestion_jobs FROM PUBLIC;
 REVOKE ALL ON TABLE fandex.source_ingestion_raw_evidence FROM PUBLIC;
 REVOKE ALL ON TABLE fandex.source_ingestion_normalized_records FROM PUBLIC;
 REVOKE ALL ON TABLE fandex.source_ingestion_audit_events FROM PUBLIC;
 REVOKE ALL ON FUNCTION fandex.reject_source_ingestion_append_only_mutation() FROM PUBLIC;
 
+GRANT SELECT ON TABLE fandex.source_data_policies TO fandex_runtime;
 GRANT SELECT, INSERT ON TABLE fandex.source_ingestion_jobs TO fandex_runtime;
 GRANT UPDATE (
   status,
