@@ -15,6 +15,7 @@
     "test:ingestion:v125": "tsx --test tests/naver-news-scheduler-v125.test.mts",
     "test:ingestion:v126": "tsx --test tests/naver-news-scheduler-dispatch-v126.test.mts",
     "test:ingestion:v127": "tsx --test tests/naver-news-monitoring-v127.test.mts",
+    "test:ingestion:v128": "tsx --test tests/naver-news-recurring-scheduler-v128.test.mts",
     "ingestion:naver-news:plan": "tsx scripts/ingestion/plan-naver-news-v121.mts",
     "ingestion:naver-news:collect": "tsx scripts/ingestion/collect-naver-news-v123.mts",
     "ingestion:naver-news:write": "tsx scripts/ingestion/write-naver-news-v124.mts",
