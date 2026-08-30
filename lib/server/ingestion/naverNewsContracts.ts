@@ -1,4 +1,5 @@
-import { createHash } from 'node:crypto';
+export { canonicalJson, isSha256, sha256Canonical } from '../../shared/canonicalDigest';
+import { canonicalJson, isSha256, sha256Canonical } from '../../shared/canonicalDigest';
 
 export const NAVER_NEWS_INGESTION_CONTRACT_VERSION = 'v121_naver_news_ingestion_v1';
 export const NAVER_NEWS_PROVIDER = 'naver-news';
@@ -135,30 +136,6 @@ export type NaverNewsIngestionWritePlan = Readonly<{
   resultSha256: string;
   planSha256: string;
 }>;
-
-function canonicalize(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(canonicalize);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, child]) => [key, canonicalize(child)]),
-    );
-  }
-  return value;
-}
-
-export function canonicalJson(value: unknown): string {
-  return JSON.stringify(canonicalize(value));
-}
-
-export function sha256Canonical(value: unknown): string {
-  return createHash('sha256').update(canonicalJson(value), 'utf8').digest('hex');
-}
-
-export function isSha256(value: unknown): value is string {
-  return typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
-}
 
 function byteLength(value: string): number {
   return Buffer.byteLength(value, 'utf8');
