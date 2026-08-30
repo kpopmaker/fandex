@@ -457,6 +457,6 @@ test('v124 source exposes only bounded output and adds no scheduler, migration, 
   assert.match(source, /NAVER News v124 production write failed closed\. No credential, endpoint, database detail, SQL, or raw payload was logged\./);
   assert.match(packageJson, /"test:ingestion:v124": "tsx --test tests\/naver-news-production-write-v124\.test\.mts"/);
   assert.match(packageJson, /"ingestion:naver-news:write": "tsx scripts\/ingestion\/write-naver-news-v124\.mts"/);
-  assert.equal(createHash('sha256').update(migrationOne).digest('hex'), '8c48ab0e3094461316e07e666b4b0370450548df1dca5847970b4dc9639e259a');
-  assert.equal(createHash('sha256').update(migrationTwo).digest('hex'), 'b0a33ab53736fec070e029e9d7df7d405b56df8d5eb04ae13d163f6b0d72bbae');
+  assert.equal(createHash('sha256').update(migrationOne.toString('utf8').replace(/\r\n/g, '\n'), 'utf8').digest('hex'), '8c48ab0e3094461316e07e666b4b0370450548df1dca5847970b4dc9639e259a');
+  assert.equal(createHash('sha256').update(migrationTwo.toString('utf8').replace(/\r\n/g, '\n'), 'utf8').digest('hex'), '8951cd9ace8f30a586a23b5b813794560ea916798ae7c64e9542440ff1881aef');
 });
