@@ -27,3 +27,4 @@ export type {
 } from './retailObservation';
 export * from './canonicalAlbumFeatureInput';
 export * from './identityFoundation';
+export * from './albumTemporalSnapshot';
