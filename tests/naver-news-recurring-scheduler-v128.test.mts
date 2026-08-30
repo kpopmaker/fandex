@@ -151,6 +151,57 @@ test('route helper directly enforces gates, ignores request overrides, and retur
   assert.equal(rejected.status, 403); assert.deepEqual(await rejected.json(), { ok: false, code: 'naver_news_recurring_scheduler_rejected' });
 });
 
+test('route helper rejects every inactive/auth failure before dispatch', async () => {
+  const request = new Request('https://example.test/api/internal/naver-news/scheduler', { method: 'POST' });
+  const cases = [
+    (env: any) => delete env[NAVER_NEWS_RECURRING_ENABLED_ENV],
+    (env: any) => { env[NAVER_NEWS_RECURRING_ENABLED_ENV] = 'wrong'; },
+    (env: any) => delete env[NAVER_NEWS_RECURRING_DEPLOYMENT_ENV],
+    (env: any) => { env[NAVER_NEWS_RECURRING_DEPLOYMENT_ENV] = 'preview'; },
+  ];
+  for (const mutate of cases) {
+    const env: any = baseEnvironment(); mutate(env); const calls: unknown[] = [];
+    const response = await handleNaverNewsRecurringSchedulerRequest(request, env, { dispatch: fakeDispatch(calls) });
+    assert.equal(response.status, 403); assert.equal(calls.length, 0);
+  }
+  for (const header of [undefined, 'Bearer wrong']) {
+    const calls: unknown[] = [];
+    const response = await handleNaverNewsRecurringSchedulerRequest(
+      new Request(request, { headers: header === undefined ? {} : { authorization: header } }),
+      baseEnvironment(), { dispatch: fakeDispatch(calls) },
+    );
+    assert.equal(response.status, 403); assert.equal(calls.length, 0);
+  }
+});
+
+test('route failure redacts sensitive dispatch errors and never retries', async () => {
+  const sensitive = [SECRET, 'postgresql://synthetic-secret@private.example/neondb', 'synthetic-naver-client-id', 'synthetic-naver-client-secret', 'RAW_PAYLOAD_MARKER', 'SELECT secret FROM private_table'];
+  let calls = 0;
+  const dispatch = async () => { calls += 1; throw new Error(sensitive.join(' ')); };
+  const response = await handleNaverNewsRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/scheduler', { method: 'POST', headers: { authorization: `Bearer ${SECRET}` } }),
+    baseEnvironment(), { dispatch: dispatch as any },
+  );
+  assert.equal(response.status, 403);
+  const text = await response.text();
+  assert.deepEqual(JSON.parse(text), { ok: false, code: 'naver_news_recurring_scheduler_rejected' });
+  for (const value of sensitive) assert.equal(text.includes(value), false);
+  assert.equal(calls, 1);
+});
+
+test('malformed configured secrets fail closed before dispatch', async () => {
+  const mutations = [
+    (env: any) => { env[NAVER_NEWS_SCHEDULER_SECRET_ENV] = 'contains whitespace'; },
+    (env: any) => { env[NAVER_NEWS_SCHEDULER_SECRET_ENV] = `control\u0000secret`; },
+    (env: any) => { env[NAVER_NEWS_SCHEDULER_SECRET_ENV] = '가'.repeat(200); },
+  ];
+  for (const mutate of mutations) {
+    const env: any = baseEnvironment(); mutate(env); const calls: unknown[] = [];
+    await assert.rejects(runNaverNewsRecurringScheduler(env, `Bearer ${SECRET}`, { dispatch: fakeDispatch(calls) }));
+    assert.equal(calls.length, 0);
+  }
+});
+
 test('same-slot invocation is deterministic and has no scheduler retry/catch-up', async () => {
   const calls: any[] = [];
   const dispatch = fakeDispatch(calls);
