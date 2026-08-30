@@ -89,22 +89,28 @@ export function buildNaverNewsSchedulerPlan(input: NaverNewsSchedulerPlanInput):
   const query = normalizeQuery(input.query);
   const at = parseInstant(input.at);
   const display = schedulerDisplay(input.display);
+  const start = 1;
+  const sort = 'date' as const;
   const slot = floorToCadence(at);
   const nextSlot = new Date(slot.getTime() + NAVER_NEWS_SCHEDULER_CADENCE_MINUTES * 60 * 1000);
   const stamp = slotStamp(slot);
-  const queryFingerprint = sha256Canonical({
+  const commandFingerprint = sha256Canonical({
     schedulerVersion: NAVER_NEWS_SCHEDULER_VERSION,
+    provider: NAVER_NEWS_PROVIDER,
     query,
+    display,
+    start,
+    sort,
   }).slice(0, 12);
-  const collectionKey = `sched-v125-naver-news-${stamp}-${queryFingerprint}`;
-  const workerId = `scheduler-v125-${stamp}-${queryFingerprint}`;
+  const collectionKey = `sched-v125-naver-news-${stamp}-${commandFingerprint}`;
+  const workerId = `scheduler-v125-${stamp}-${commandFingerprint}`;
   const command = Object.freeze({
     provider: NAVER_NEWS_PROVIDER,
     collectionKey,
     query,
     display,
-    start: 1,
-    sort: 'date' as const,
+    start,
+    sort,
   });
 
   buildNaverNewsJobIdentity(command);
