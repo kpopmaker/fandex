@@ -76,6 +76,14 @@ function requireEndpoint(value: string | undefined): URL {
   return endpoint;
 }
 
+export function validateNaverNewsExternalConfiguration(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): void {
+  requireEndpoint(environment[NAVER_NEWS_EXTERNAL_ENDPOINT_ENV]);
+  requireConfigValue(environment[FANDEX_NAVER_NEWS_CLIENT_ID_ENV]);
+  requireConfigValue(environment[FANDEX_NAVER_NEWS_CLIENT_SECRET_ENV]);
+}
+
 function hasExactKeys(value: Record<string, unknown>, keys: readonly string[]): boolean {
   const actual = Object.keys(value).sort();
   const expected = [...keys].sort();

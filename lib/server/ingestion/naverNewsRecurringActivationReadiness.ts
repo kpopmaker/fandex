@@ -1,5 +1,7 @@
 import { buildNaverNewsSchedulerPlan } from './naverNewsScheduler';
 import { readNaverNewsRecurringConfig } from './naverNewsRecurringSchedulerContracts';
+import { validateNaverNewsExternalConfiguration } from './naverNewsExternalCollector';
+import { requireRuntimeDatabaseUrl } from '../persistence/contracts';
 
 export const NAVER_NEWS_RECURRING_ACTIVATION_READINESS_VERSION = 'v129a_naver_news_recurring_activation_readiness_v1' as const;
 
@@ -42,23 +44,23 @@ const RECURRING_KEYS = {
   enabled: 'FANDEX_NAVER_NEWS_RECURRING_ENABLED', deployment: 'FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT',
   secret: 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET', query: 'FANDEX_NAVER_NEWS_RECURRING_QUERY', display: 'FANDEX_NAVER_NEWS_RECURRING_DISPLAY',
 } as const;
-const OPERATIONAL_KEYS = {
-  endpoint: 'FANDEX_NAVER_NEWS_API_ENDPOINT', clientId: 'FANDEX_NAVER_NEWS_CLIENT_ID',
-  clientSecret: 'FANDEX_NAVER_NEWS_CLIENT_SECRET', databaseUrl: 'FANDEX_RUNTIME_DATABASE_URL',
-} as const;
 
 function present(environment: Readonly<Record<string, string | undefined>>, key: string): boolean {
   const value = environment[key];
   return typeof value === 'string' && value.length > 0;
 }
 
-function validEndpoint(value: string | undefined): boolean {
-  if (!value || Buffer.byteLength(value, 'utf8') > 2048) return false;
-  try { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password && !url.hash; } catch { return false; }
-}
-
-function validDatabaseUrl(value: string | undefined): boolean {
-  return typeof value === 'string' && value.length > 0 && Buffer.byteLength(value, 'utf8') <= 4096 && /^postgres(?:ql)?:\/\/[^\s]+$/.test(value);
+function validOperationalConfiguration(environment: Readonly<Record<string, string | undefined>>): Readonly<Record<'endpoint' | 'clientId' | 'clientSecret' | 'databaseUrl', boolean>> {
+  let externalValid = false;
+  try { validateNaverNewsExternalConfiguration(environment); externalValid = true; } catch { /* bounded false */ }
+  let databaseValid = false;
+  try { requireRuntimeDatabaseUrl(environment); databaseValid = true; } catch { /* bounded false */ }
+  return Object.freeze({
+    endpoint: externalValid && environment.FANDEX_NAVER_NEWS_API_ENDPOINT === 'https://openapi.naver.com/v1/search/news.json',
+    clientId: externalValid && typeof environment.FANDEX_NAVER_NEWS_CLIENT_ID === 'string',
+    clientSecret: externalValid && typeof environment.FANDEX_NAVER_NEWS_CLIENT_SECRET === 'string',
+    databaseUrl: databaseValid,
+  });
 }
 
 function runtimeReadiness(environment: Readonly<Record<string, string | undefined>>) {
@@ -66,10 +68,7 @@ function runtimeReadiness(environment: Readonly<Record<string, string | undefine
     enabled: present(environment, RECURRING_KEYS.enabled), deployment: present(environment, RECURRING_KEYS.deployment),
     secret: present(environment, RECURRING_KEYS.secret), query: present(environment, RECURRING_KEYS.query), display: present(environment, RECURRING_KEYS.display),
   });
-  const operational = Object.freeze({
-    endpoint: validEndpoint(environment[OPERATIONAL_KEYS.endpoint]), clientId: present(environment, OPERATIONAL_KEYS.clientId),
-    clientSecret: present(environment, OPERATIONAL_KEYS.clientSecret), databaseUrl: validDatabaseUrl(environment[OPERATIONAL_KEYS.databaseUrl]),
-  });
+  const operational = validOperationalConfiguration(environment);
   return { recurring, operational };
 }
 
