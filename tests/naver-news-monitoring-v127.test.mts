@@ -111,7 +111,10 @@ test('recent scheduler runs expose only parsed v125 slot and outcome fields', ()
   assert.equal(report.recentSchedulerRuns[0].slotStart, '2026-08-30T12:00:00.000Z');
   assert.equal(report.recentSchedulerRuns[0].jobStatus, 'succeeded');
   assert.deepEqual(Object.keys(report.recentSchedulerRuns[0]).sort(), ['collectionKey', 'jobStatus', 'slotOutcome', 'slotStart']);
-  assert.throws(() => buildNaverNewsMonitoringReport(snapshot([baseJob()], { schedulerRuns: [makeRun('succeeded', null, 'sched-v125-naver-news-malformed')] }), options), /scheduler_key_invalid/);
+  for (const timestamp of ['120100', '120001', '123456']) {
+    assert.throws(() => buildNaverNewsMonitoringReport(snapshot([baseJob()], { schedulerRuns: [makeRun('succeeded', null, `sched-v125-naver-news-20260830t${timestamp}z-abcdef123456`)] }), options), /scheduler_key_invalid/);
+  }
+  assert.throws(() => buildNaverNewsMonitoringReport(snapshot([baseJob()], { schedulerRuns: [makeRun('succeeded', null, 'sched-v125-naver-news-20260230t120000z-abcdef123456')] }), options), /scheduler_key_invalid/);
 });
 
 test('CLI arguments are bounded and invalid input fails before DB creation', async () => {

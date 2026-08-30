@@ -66,6 +66,7 @@ export type NaverNewsMonitoringOptions = Readonly<{
 type LeaseState = 'not_applicable' | 'active' | 'expired';
 type SlotOutcome = 'succeeded' | 'failed' | 'in_progress' | 'not_run';
 const AUDIT_EVENT_TYPES = new Set(['job_enqueued', 'job_claimed', 'collection_received', 'raw_evidence_prepared', 'normalization_prepared', 'job_succeeded', 'job_retryable_failed', 'job_dead_lettered']);
+const V125_HOURLY_COLLECTION_KEY_PATTERN = /^sched-v125-naver-news-(\d{8})t(\d{2})0000z-[0-9a-f]{12}$/;
 
 function finiteInteger(value: unknown, name: string, minimum = 0): number {
   const result = typeof value === 'number' ? value : Number(value);
@@ -149,16 +150,16 @@ function validateSchedulerRun(run: NaverNewsMonitoringSchedulerRun): NaverNewsMo
     createdAt: iso(run.createdAt, 'scheduler_created_at'),
     updatedAt: iso(run.updatedAt, 'scheduler_updated_at'),
   } satisfies NaverNewsMonitoringSchedulerRun;
-  if (!/^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/.test(validated.collectionKey)) throw new Error('naver_news_monitoring_scheduler_key_invalid');
+  if (!V125_HOURLY_COLLECTION_KEY_PATTERN.test(validated.collectionKey)) throw new Error('naver_news_monitoring_scheduler_key_invalid');
   if (validated.status === 'running' && validated.leaseExpiresAt === null) throw new Error('naver_news_monitoring_scheduler_lease_invalid');
   if (validated.status !== 'running' && validated.leaseExpiresAt !== null) throw new Error('naver_news_monitoring_scheduler_lease_invalid');
   return Object.freeze(validated);
 }
 
 function schedulerSlotStart(collectionKeyValue: string): string {
-  const match = /^sched-v125-naver-news-(\d{8})t(\d{6})z-[0-9a-f]{12}$/.exec(collectionKeyValue);
+  const match = V125_HOURLY_COLLECTION_KEY_PATTERN.exec(collectionKeyValue);
   if (!match) throw new Error('naver_news_monitoring_scheduler_key_invalid');
-  const stamp = match[1] + match[2];
+  const stamp = match[1] + match[2] + '0000';
   const year = Number(stamp.slice(0, 4));
   const month = Number(stamp.slice(4, 6));
   const day = Number(stamp.slice(6, 8));
