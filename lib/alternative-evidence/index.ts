@@ -32,3 +32,4 @@ export * from './yes24RetailAdapter';
 export * from './directProviderEvidence';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
+export * from './persistenceContracts';
