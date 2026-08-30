@@ -20,6 +20,7 @@ export type NaverNewsMonitoringPool = { connect(): Promise<NaverNewsMonitoringQu
 type JobDbRow = Record<string, unknown>;
 type StatusDbRow = { status: string; count: number | string };
 type ClockDbRow = { observed_at: string | Date };
+type ExpiredDbRow = { expired_running_count: number | string };
 type SchedulerDbRow = JobDbRow;
 
 function fail(): never { throw new Error('naver_news_monitoring_failed'); }
@@ -131,6 +132,8 @@ export async function readNaverNewsMonitoringSnapshot(
       if (!Object.hasOwn(statusCounts, row.status)) return fail();
       statusCounts[row.status as NaverNewsMonitoringStatus] = asInt(row.count);
     }
+    const expired = await client.query<ExpiredDbRow>(`SELECT COUNT(*)::int AS expired_running_count FROM fandex.source_ingestion_jobs WHERE provider = $1 AND status = 'running' AND lease_expires_at <= CURRENT_TIMESTAMP`, [NAVER_NEWS_MONITORING_PROVIDER]);
+    if (expired.rows.length !== 1) return fail();
     const jobsResult = await client.query<JobDbRow>(JOB_METRICS_SQL, [NAVER_NEWS_MONITORING_PROVIDER, options.recentJobs]);
     const jobs = jobsResult.rows.map(mapJob);
     const success = await client.query<{ last_succeeded_at: string | Date | null }>(`SELECT MAX(a.created_at) FILTER (WHERE a.event_type = 'job_succeeded') AS last_succeeded_at FROM fandex.source_ingestion_audit_events a JOIN fandex.source_ingestion_jobs j ON j.job_id=a.job_id WHERE j.provider=$1`, [NAVER_NEWS_MONITORING_PROVIDER]);
@@ -145,7 +148,7 @@ export async function readNaverNewsMonitoringSnapshot(
     const schedulerRuns: NaverNewsMonitoringSchedulerRun[] = runs.rows.map((row) => ({ collectionKey: asString(row.collection_key), status: row.status as NaverNewsMonitoringStatus,
       leaseExpiresAt: asNullableString(row.lease_expires_at), createdAt: asString(row.created_at), updatedAt: asString(row.updated_at) }));
     await client.query('ROLLBACK');
-    return Object.freeze({ observedAt, statusCounts: Object.freeze(statusCounts), lastSucceededAt: success.rows[0]?.last_succeeded_at === null || success.rows[0]?.last_succeeded_at === undefined ? null : asString(success.rows[0].last_succeeded_at), jobs: Object.freeze(jobs), targetSchedulerJob: target, schedulerRuns: Object.freeze(schedulerRuns) });
+    return Object.freeze({ observedAt, statusCounts: Object.freeze(statusCounts), expiredRunningCount: asInt(expired.rows[0].expired_running_count), lastSucceededAt: success.rows[0]?.last_succeeded_at === null || success.rows[0]?.last_succeeded_at === undefined ? null : asString(success.rows[0].last_succeeded_at), jobs: Object.freeze(jobs), targetSchedulerJob: target, schedulerRuns: Object.freeze(schedulerRuns) });
   } catch { try { await client.query('ROLLBACK'); } catch { /* bounded failure */ } return fail();
   } finally { try { client.release(); } catch { throw new Error('naver_news_monitoring_failed'); } }
 }

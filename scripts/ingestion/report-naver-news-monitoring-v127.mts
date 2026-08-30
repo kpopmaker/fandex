@@ -6,17 +6,25 @@ import { readNaverNewsMonitoringSnapshot, type NaverNewsMonitoringPool } from '.
 
 const FLAGS = Object.freeze(['--query', '--display', '--recent-jobs', '--recent-runs', '--freshness-minutes']);
 const DEFAULTS = Object.freeze({ display: 100, recentJobs: 20, recentRuns: 20, freshnessMinutes: 120 });
+const MAX_QUERY_BYTES = 512;
 export type NaverNewsMonitoringPoolConfig = Readonly<{ connectionString: string; max: 1; connectionTimeoutMillis: 5_000; query_timeout: 15_000; statement_timeout: 15_000; ssl: Readonly<{ rejectUnauthorized: true }> }>;
 export type NaverNewsMonitoringDependencies = Readonly<{ poolFactory?: (config: NaverNewsMonitoringPoolConfig) => NaverNewsMonitoringPool & { end(): Promise<void> } }>;
 
 function invalid(): never { throw new Error('naver_news_monitoring_argument_invalid'); }
 function valueAfter(argv: readonly string[], index: number): string { const value = argv[index + 1]; if (!value || value.startsWith('--')) return invalid(); return value; }
 function bounded(value: string, max: number): number { if (!/^\d+$/.test(value)) return invalid(); const result = Number(value); if (!Number.isSafeInteger(result) || result < 1 || result > max) return invalid(); return result; }
+function normalizeQuery(value: string): string {
+  if (typeof value !== 'string') return invalid();
+  const normalized = value.normalize('NFC').replace(/\s+/gu, ' ').trim();
+  if (!normalized || Buffer.byteLength(normalized, 'utf8') > MAX_QUERY_BYTES) return invalid();
+  return normalized;
+}
 export function parseNaverNewsMonitoringCommand(argv: readonly string[]): NaverNewsMonitoringOptions {
   const values = new Map<string, string>();
   for (let index = 0; index < argv.length; index += 1) { const flag = argv[index]; if (!FLAGS.includes(flag) || values.has(flag)) return invalid(); values.set(flag, valueAfter(argv, index)); index += 1; }
-  const query = values.get('--query'); if (!query) return invalid();
-  return Object.freeze({ query, display: values.has('--display') ? bounded(values.get('--display') as string, 100) : DEFAULTS.display,
+  const query = values.get('--query'); if (query === undefined) return invalid();
+  const normalizedQuery = normalizeQuery(query);
+  return Object.freeze({ query: normalizedQuery, display: values.has('--display') ? bounded(values.get('--display') as string, 100) : DEFAULTS.display,
     recentJobs: values.has('--recent-jobs') ? bounded(values.get('--recent-jobs') as string, 50) : DEFAULTS.recentJobs,
     recentRuns: values.has('--recent-runs') ? bounded(values.get('--recent-runs') as string, 50) : DEFAULTS.recentRuns,
     freshnessMinutes: values.has('--freshness-minutes') ? bounded(values.get('--freshness-minutes') as string, 10_080) : DEFAULTS.freshnessMinutes });

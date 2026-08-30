@@ -48,6 +48,7 @@ export type NaverNewsMonitoringSchedulerRun = Readonly<{
 export type NaverNewsMonitoringSnapshot = Readonly<{
   observedAt: string;
   statusCounts: Readonly<Record<NaverNewsMonitoringStatus, number>>;
+  expiredRunningCount: number;
   lastSucceededAt: string | null;
   jobs: readonly NaverNewsMonitoringJobRow[];
   targetSchedulerJob: NaverNewsMonitoringJobRow | null;
@@ -154,6 +155,31 @@ function validateSchedulerRun(run: NaverNewsMonitoringSchedulerRun): NaverNewsMo
   return Object.freeze(validated);
 }
 
+function schedulerSlotStart(collectionKeyValue: string): string {
+  const match = /^sched-v125-naver-news-(\d{8})t(\d{6})z-[0-9a-f]{12}$/.exec(collectionKeyValue);
+  if (!match) throw new Error('naver_news_monitoring_scheduler_key_invalid');
+  const stamp = match[1] + match[2];
+  const year = Number(stamp.slice(0, 4));
+  const month = Number(stamp.slice(4, 6));
+  const day = Number(stamp.slice(6, 8));
+  const hour = Number(stamp.slice(8, 10));
+  const minute = Number(stamp.slice(10, 12));
+  const second = Number(stamp.slice(12, 14));
+  const date = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day
+      || date.getUTCHours() !== hour || date.getUTCMinutes() !== minute || date.getUTCSeconds() !== second) {
+    throw new Error('naver_news_monitoring_scheduler_key_invalid');
+  }
+  return date.toISOString();
+}
+
+function schedulerOutcome(run: NaverNewsMonitoringSchedulerRun, observedAt: string): 'succeeded' | 'failed' | 'in_progress' {
+  if (run.status === 'succeeded') return 'succeeded';
+  if (run.status === 'pending') return 'in_progress';
+  if (run.status === 'running') return run.leaseExpiresAt !== null && Date.parse(run.leaseExpiresAt) <= Date.parse(observedAt) ? 'failed' : 'in_progress';
+  return 'failed';
+}
+
 function leaseState(job: NaverNewsMonitoringJobRow, observedAt: string): LeaseState {
   if (job.status !== 'running') return 'not_applicable';
   return Date.parse(job.leaseExpiresAt as string) <= Date.parse(observedAt) ? 'expired' : 'active';
@@ -236,8 +262,9 @@ export function buildNaverNewsMonitoringReport(
       _attention: job.status === 'retryable_failed' || lease === 'expired',
     });
   });
+  const expiredRunningCount = finiteInteger(snapshot.expiredRunningCount, 'expired_running_count');
   const critical = recentJobs.some((job) => job._critical) || statuses.dead_letter > 0;
-  const attention = recentJobs.some((job) => job._attention) || statuses.retryable_failed > 0;
+  const attention = recentJobs.some((job) => job._attention) || statuses.retryable_failed > 0 || expiredRunningCount > 0;
   const overallStatus = !hasJobs ? 'no_data' as const : critical ? 'critical' as const : attention ? 'attention' as const : 'healthy' as const;
   const sanitizedJobs = recentJobs.map((job) => {
     const { _critical, _attention, ...safeJob } = job;
@@ -248,9 +275,13 @@ export function buildNaverNewsMonitoringReport(
   return Object.freeze({ mode: 'production-monitor-read-only' as const, reportVersion: NAVER_NEWS_MONITORING_REPORT_VERSION,
     observedAt, provider: NAVER_NEWS_MONITORING_PROVIDER, overallStatus,
     limits: Object.freeze({ display: options.display, recentJobs: options.recentJobs, recentRuns: options.recentRuns, freshnessMinutes: options.freshnessMinutes }),
-    statusCounts: Object.freeze(statuses),
+    statusCounts: Object.freeze(statuses), expiredRunningCount,
     freshness, recentJobs: Object.freeze(sanitizedJobs), scheduler: schedulerSlot({ ...snapshot, observedAt }, options),
-    recentSchedulerRuns: Object.freeze(snapshot.schedulerRuns.slice(0, options.recentRuns).map(validateSchedulerRun)),
+    recentSchedulerRuns: Object.freeze(snapshot.schedulerRuns.slice(0, options.recentRuns).map((run) => {
+      const validated = validateSchedulerRun(run);
+      return Object.freeze({ slotStart: schedulerSlotStart(validated.collectionKey), collectionKey: validated.collectionKey,
+        jobStatus: validated.status, slotOutcome: schedulerOutcome(validated, observedAt) });
+    })),
     effects: Object.freeze({ apiCalls: 0, databaseWrites: 0, schedulerDispatches: 0, retriesTriggered: 0,
       schedulesActivated: 0, migrationsApplied: 0, environmentMutations: 0 }),
   });
