@@ -110,19 +110,26 @@ test('v125 scheduler CLI parser rejects unknown, duplicate, and missing flags', 
 });
 
 test('v125 scheduler CLI parser uses an injected clock only when --at is omitted', () => {
-  const now = () => new Date(AT);
-  const implicit = parseSchedulerPlanCommand(['--query', '아이유'], now);
+  const implicit = parseSchedulerPlanCommand(['--query', '아이유'], () => new Date(AT));
+  let explicitClockCalled = false;
   const explicit = parseSchedulerPlanCommand(
     ['--query', '아이유', '--at', '2026-08-30T08:00:00.000Z', '--display', '5'],
     () => {
-      throw new Error('clock should still be validated before parse result');
+      explicitClockCalled = true;
+      return new Date('invalid');
     },
   );
 
   assert.equal(implicit.at, AT);
+  assert.equal(explicit.at, '2026-08-30T08:00:00.000Z');
+  assert.equal(explicit.display, 5);
+  assert.equal(explicitClockCalled, false);
+});
+
+test('v125 scheduler rejects an invalid injected clock when --at is omitted', () => {
   assert.throws(
-    () => explicit,
-    /clock should still be validated before parse result/,
+    () => parseSchedulerPlanCommand(['--query', '아이유'], () => new Date('invalid')),
+    /naver_news_scheduler_plan_clock_invalid/,
   );
 });
 
