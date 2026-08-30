@@ -1,14 +1,19 @@
 import 'server-only';
 
-import { runNaverNewsRecurringScheduler } from '@/lib/server/ingestion/naverNewsRecurringScheduler';
+import { runNaverNewsRecurringScheduler, type NaverNewsRecurringDependencies } from '@/lib/server/ingestion/naverNewsRecurringScheduler';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request): Promise<Response> {
+export async function handleNaverNewsRecurringSchedulerRequest(
+  request: Request,
+  environment: Readonly<Record<string, string | undefined>>,
+  dependencies: NaverNewsRecurringDependencies = {},
+): Promise<Response> {
   try {
     const result = await runNaverNewsRecurringScheduler(
-      process.env,
+      environment,
       request.headers.get('authorization'),
+      dependencies,
     );
     return Response.json({
       ok: true,
@@ -22,4 +27,8 @@ export async function POST(request: Request): Promise<Response> {
   } catch {
     return Response.json({ ok: false, code: 'naver_news_recurring_scheduler_rejected' }, { status: 403 });
   }
+}
+
+export async function POST(request: Request): Promise<Response> {
+  return handleNaverNewsRecurringSchedulerRequest(request, process.env);
 }

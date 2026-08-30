@@ -11,7 +11,6 @@ import {
   runNaverNewsSchedulerDispatchCore,
 } from '../../lib/server/ingestion/naverNewsSchedulerDispatch';
 
-// The reusable core delegates exactly once to runNaverNewsProductionWrite.
 
 export const NAVER_NEWS_V126_DISPATCH_VERSION = 'v126_naver_news_scheduler_dispatch_v1';
 export const NAVER_NEWS_V126_APPROVAL_ENV = 'FANDEX_APPROVE_V126_NAVER_NEWS_SCHEDULER_DISPATCH';

@@ -25,6 +25,10 @@ export async function runNaverNewsRecurringScheduler(
     throw new Error('naver_news_recurring_scheduler_rejected');
   }
   const dispatch = dependencies.dispatch ?? runNaverNewsSchedulerDispatchCore;
-  const result = await dispatch({ query: config.query, display: config.display, environment }, { now: dependencies.now });
-  return Object.freeze({ recurringVersion: NAVER_NEWS_RECURRING_SCHEDULER_VERSION, dispatch: result });
+  try {
+    const result = await dispatch({ query: config.query, display: config.display, environment }, { now: dependencies.now });
+    return Object.freeze({ recurringVersion: NAVER_NEWS_RECURRING_SCHEDULER_VERSION, dispatch: result });
+  } catch {
+    throw new Error('naver_news_recurring_scheduler_rejected');
+  }
 }

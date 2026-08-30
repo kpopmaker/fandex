@@ -220,7 +220,8 @@ test('v126 source remains manual-only with no cron, timer, or environment mutati
     readFile(packagePath, 'utf8'),
   ]);
 
-  assert.match(source, /runNaverNewsProductionWrite/);
+  assert.match(source, /runNaverNewsSchedulerDispatchCore/);
+  assert.doesNotMatch(source, /runNaverNewsProductionWrite/);
   assert.match(source, /activation: 'manual-only'/);
   assert.match(source, /FANDEX_APPROVE_V126_NAVER_NEWS_SCHEDULER_DISPATCH/);
   assert.doesNotMatch(source, /setInterval\(|setTimeout\(|node-cron|cron\.schedule|scheduleJob\(|vercel\.json|process\.env\s*\[/i);

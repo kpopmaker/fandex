@@ -1,4 +1,4 @@
-import { timingSafeEqual } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 
 export const NAVER_NEWS_RECURRING_SCHEDULER_VERSION = 'v128_naver_news_recurring_scheduler_v1' as const;
 export const NAVER_NEWS_RECURRING_ENABLED_ENV = 'FANDEX_NAVER_NEWS_RECURRING_ENABLED' as const;
@@ -27,7 +27,8 @@ function parseDisplay(value: unknown): number {
   return result;
 }
 function secret(value: unknown): string {
-  if (typeof value !== 'string' || value.length < 1 || value.length > 512) return invalid();
+  if (typeof value !== 'string' || value.length < 1 || Buffer.byteLength(value, 'utf8') > 512
+      || /[\s\u0000-\u001f\u007f]/.test(value)) return invalid();
   return value;
 }
 export function readNaverNewsRecurringConfig(
@@ -43,9 +44,12 @@ export function readNaverNewsRecurringConfig(
 }
 
 export function isNaverNewsRecurringAuthorizationValid(header: unknown, configuredSecret: string): boolean {
-  if (typeof header !== 'string' || !/^Bearer [^,\s]+$/.test(header)) return false;
+  if (typeof configuredSecret !== 'string' || configuredSecret.length < 1
+      || Buffer.byteLength(configuredSecret, 'utf8') > 512
+      || /[\s\u0000-\u001f\u007f]/.test(configuredSecret)
+      || typeof header !== 'string' || !/^Bearer [^,\s]+$/.test(header)) return false;
   const supplied = header.slice('Bearer '.length);
-  const expected = Buffer.from(configuredSecret, 'utf8');
-  const actual = Buffer.from(supplied, 'utf8');
-  return expected.length === actual.length && timingSafeEqual(expected, actual);
+  const expected = createHash('sha256').update(configuredSecret, 'utf8').digest();
+  const actual = createHash('sha256').update(supplied, 'utf8').digest();
+  return timingSafeEqual(expected, actual);
 }

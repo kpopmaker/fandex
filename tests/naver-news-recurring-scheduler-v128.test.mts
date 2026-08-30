@@ -13,6 +13,8 @@ import {
   isNaverNewsRecurringAuthorizationValid,
 } from '../lib/server/ingestion/naverNewsRecurringSchedulerContracts';
 import { runNaverNewsRecurringScheduler } from '../lib/server/ingestion/naverNewsRecurringScheduler';
+import { runNaverNewsSchedulerDispatchCore } from '../lib/server/ingestion/naverNewsSchedulerDispatch';
+import { handleNaverNewsRecurringSchedulerRequest } from '../app/api/internal/naver-news/scheduler/route';
 import { NAVER_NEWS_MONITORING_SCHEDULER_ACTIVATION, NAVER_NEWS_MONITORING_SCHEDULER_EXPECTATION } from '../lib/server/ingestion/naverNewsMonitoringContracts';
 
 const SECRET = 'local-only-recurring-secret';
@@ -61,6 +63,9 @@ test('authorization is strict and timing-safe', () => {
   for (const value of [undefined, '', 'Basic x', `Bearer ${SECRET},Bearer ${SECRET}`, `Bearer ${SECRET} `, `Bearer wrong`]) {
     assert.equal(isNaverNewsRecurringAuthorizationValid(value, SECRET), false);
   }
+  assert.equal(isNaverNewsRecurringAuthorizationValid(`Bearer ${SECRET.slice(0, -1)}x`, SECRET), false);
+  assert.equal(isNaverNewsRecurringAuthorizationValid(`Bearer ${SECRET}`, `${SECRET} `), false);
+  assert.equal(isNaverNewsRecurringAuthorizationValid(`Bearer ${SECRET}`, `${SECRET}\u0000`), false);
 });
 
 test('invalid authentication/config never dispatches', async () => {
@@ -89,6 +94,61 @@ test('valid config normalizes query and dispatches exactly once', async () => {
   assert.equal(calls.length, 1);
   assert.deepEqual(calls[0], { query: '아이유', display: 5, environment: env });
   assert.equal(result.dispatch.collectionKey, 'sched-v125-naver-news-20260830t120000z-abcdef123456');
+});
+
+test('real scheduler core computes deterministic identity with fake production writer', async () => {
+  const calls: any[] = [];
+  const productionWrite = async (argv: readonly string[], environment: Readonly<Record<string, string | undefined>>) => {
+    calls.push({ argv, environment });
+    return { mode: 'production-write', contractVersion: 'v121_naver_news_ingestion_v1', status: 'applied', requestSha256: 'a'.repeat(64), resultSha256: 'b'.repeat(64), attempt: 1, counts: { rawEvidence: 0, normalizedRecords: 0, duplicateRecords: 0, rejectedItems: 0 } } as any;
+  };
+  const input = { query: '  아이유\n', display: 5, environment: {} };
+  const first = await runNaverNewsSchedulerDispatchCore(input, { now: () => NOW, productionWrite });
+  const second = await runNaverNewsSchedulerDispatchCore(input, { now: () => NOW, productionWrite });
+  assert.equal(calls.length, 2);
+  assert.equal(first.collectionKey, second.collectionKey);
+  assert.equal(first.workerId, second.workerId);
+  assert.equal(first.slotStart, second.slotStart);
+  assert.match(first.collectionKey, /^sched-v125-naver-news-20260830t120000z-[0-9a-f]{12}$/);
+  assert.match(first.workerId, /^scheduler-v125-20260830t120000z-[0-9a-f]{12}$/);
+  const changed = await runNaverNewsSchedulerDispatchCore({ ...input, display: 6 }, { now: () => NOW, productionWrite });
+  assert.notEqual(first.collectionKey, changed.collectionKey);
+});
+
+test('real scheduler core concurrent same-slot calls share identity and each delegate once', async () => {
+  const calls: any[] = [];
+  const productionWrite = async () => {
+    calls.push(true);
+    return { mode: 'production-write', contractVersion: 'v121_naver_news_ingestion_v1', status: 'applied', requestSha256: 'a'.repeat(64), resultSha256: 'b'.repeat(64), attempt: 1, counts: { rawEvidence: 0, normalizedRecords: 0, duplicateRecords: 0, rejectedItems: 0 } } as any;
+  };
+  const [left, right] = await Promise.all([
+    runNaverNewsSchedulerDispatchCore({ query: '아이유', display: 5, environment: {} }, { now: () => NOW, productionWrite }),
+    runNaverNewsSchedulerDispatchCore({ query: '아이유', display: 5, environment: {} }, { now: () => NOW, productionWrite }),
+  ]);
+  assert.equal(calls.length, 2);
+  assert.equal(left.collectionKey, right.collectionKey);
+  assert.equal(left.workerId, right.workerId);
+});
+
+test('dispatch failures are bounded and never retried', async () => {
+  let calls = 0;
+  const failing = async () => { calls += 1; throw new Error(`${SECRET} FANDEX_RUNTIME_DATABASE_URL NAVER_NEWS_CLIENT_SECRET raw_payload SQL DETAIL`); };
+  await assert.rejects(runNaverNewsRecurringScheduler(baseEnvironment(), `Bearer ${SECRET}`, { dispatch: failing as any }), (error: any) => {
+    assert.equal(error.message, 'naver_news_recurring_scheduler_rejected');
+    assert.doesNotMatch(error.message, /SECRET|DATABASE|raw_payload|SQL|DETAIL/);
+    return true;
+  });
+  assert.equal(calls, 1);
+});
+
+test('route helper directly enforces gates, ignores request overrides, and returns bounded failure', async () => {
+  const request = new Request('https://example.test/api/internal/naver-news/scheduler?query=다른가수&display=100', { method: 'POST', headers: { authorization: `Bearer ${SECRET}`, 'content-type': 'application/json' }, body: JSON.stringify({ query: '본문변경', display: 100 }) });
+  const calls: any[] = [];
+  const response = await handleNaverNewsRecurringSchedulerRequest(request, baseEnvironment(), { now: () => NOW, dispatch: fakeDispatch(calls) });
+  assert.equal(response.status, 200); assert.equal(calls.length, 1);
+  assert.equal(calls[0].query, '아이유'); assert.equal(calls[0].display, 5);
+  const rejected = await handleNaverNewsRecurringSchedulerRequest(request, { ...baseEnvironment(), [NAVER_NEWS_RECURRING_DEPLOYMENT_ENV]: 'preview' }, { dispatch: fakeDispatch([]) });
+  assert.equal(rejected.status, 403); assert.deepEqual(await rejected.json(), { ok: false, code: 'naver_news_recurring_scheduler_rejected' });
 });
 
 test('same-slot invocation is deterministic and has no scheduler retry/catch-up', async () => {
