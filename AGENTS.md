@@ -4,15 +4,15 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# FANDEX version publish flow
+# FANDEX guarded publish flow
 
-For version branches matching `v[0-9]+-*` and targeting `main`:
+For branches matching `v[0-9]+-*` or `integration/*` and targeting `main`:
 
-1. Inspect the intended diff, run the relevant checks, commit, and push the current version branch.
+1. Inspect the intended diff, run the relevant checks, commit, and push the current guarded branch.
 2. Search for an existing PR from the current branch before creating one. Never create a duplicate PR.
 3. Create a **Draft** PR targeting `main` unless the user explicitly authorizes ready-for-review for that exact head. Prefer the GitHub connector; use authenticated `gh` only if the connector cannot create the PR.
 4. Treat ready-for-review, owner attestation, and merge authorization as separate states. Never add the `production-merge-approved` label without explicit merge authorization for the exact PR base and head.
-5. Do not call GitHub merge or enable-auto-merge tools for version PRs. This solo-maintainer repository uses the workflow `.github/workflows/codex-version-pr-auto-merge.yml`, which can create and push an exact-base/head merge commit only while the PR is open, owner-authored by the repository owner's human `User` account, and still targets `main`. It requires all checks to pass, at least one current repository-owner issue comment with `author_association: OWNER` whose body is exactly the three lines below, and the exact `production-merge-approved` label. Any different base/head or edited/deleted attestation is unauthorized.
+5. Do not call GitHub merge or enable-auto-merge tools for guarded PRs. This solo-maintainer repository uses the workflow `.github/workflows/codex-version-pr-auto-merge.yml`, which can create and push an exact-base/head merge commit only while the PR is open, owner-authored by the repository owner's human `User` account, and still targets `main`. It requires all checks to pass, at least one current repository-owner issue comment with `author_association: OWNER` whose body is exactly the three lines below, and the exact `production-merge-approved` label. Any different base/head or edited/deleted attestation is unauthorized.
 
    ```text
    FANDEX_PRODUCTION_MERGE_ATTESTATION v1
