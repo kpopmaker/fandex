@@ -28,3 +28,5 @@ export type {
 export * from './canonicalAlbumFeatureInput';
 export * from './identityFoundation';
 export * from './albumTemporalSnapshot';
+export * from './yes24RetailAdapter';
+export * from './directProviderEvidence';
