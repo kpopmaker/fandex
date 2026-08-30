@@ -4,3 +4,6 @@ export * from './identity';
 export * from './metricOwnership';
 export * from './naverNewsAlbumClaimExtractor';
 export * from './store';
+export * from './directAlbumProvider';
+export * from './retailObservation';
+export * from './canonicalAlbumFeatureInput';
