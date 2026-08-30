@@ -18,6 +18,7 @@
     "test:ingestion:v128": "tsx --conditions=react-server --test tests/naver-news-recurring-scheduler-v128.test.mts",
     "test:ingestion:v129a": "tsx --test tests/naver-news-recurring-readiness-v129a.test.mts",
     "test:alternative-evidence:v1": "tsx --test tests/alternative-evidence-foundation-v1.test.mts",
+    "test:album:synthetic-gate": "tsx --test tests/album-integrated-synthetic-validation-v1.test.mts",
     "ingestion:naver-news:plan": "tsx scripts/ingestion/plan-naver-news-v121.mts",
     "ingestion:naver-news:collect": "tsx scripts/ingestion/collect-naver-news-v123.mts",
     "ingestion:naver-news:write": "tsx scripts/ingestion/write-naver-news-v124.mts",

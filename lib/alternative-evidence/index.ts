@@ -33,3 +33,4 @@ export * from './directProviderEvidence';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
 export * from './persistenceContracts';
+export * from './albumIntegratedSyntheticValidation';
