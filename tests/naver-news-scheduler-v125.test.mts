@@ -49,6 +49,15 @@ test('v125 scheduler normalizes query whitespace before deriving identity', () =
   assert.equal(compact.workerId, spaced.workerId);
 });
 
+test('v125 scheduler binds per-slot identity to the bounded command shape', () => {
+  const defaultDisplay = buildNaverNewsSchedulerPlan({ query: '아이유', at: AT });
+  const displayFive = buildNaverNewsSchedulerPlan({ query: '아이유', at: AT, display: 5 });
+
+  assert.notEqual(defaultDisplay.collectionKey, displayFive.collectionKey);
+  assert.notEqual(defaultDisplay.workerId, displayFive.workerId);
+  assert.equal(displayFive.command.display, 5);
+});
+
 test('v125 scheduler uses bounded production-safe defaults without dispatching', () => {
   const plan = buildNaverNewsSchedulerPlan({ query: '아이유', at: AT });
 
