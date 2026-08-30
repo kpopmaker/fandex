@@ -12,7 +12,7 @@ import {
 import {
   buildSchedulerPlanReport,
   parseSchedulerPlanCommand,
-} from '../scripts/ingestion/plan-naver-news-scheduler-v125.mts';
+} from '../scripts/ingestion/plan-naver-news-scheduler-v125.mjs';
 
 const AT = '2026-08-30T06:23:45.678Z';
 
