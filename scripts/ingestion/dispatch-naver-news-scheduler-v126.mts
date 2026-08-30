@@ -51,10 +51,10 @@ function valueAfter(argv: readonly string[], index: number): string {
   return value;
 }
 
-function positiveInteger(value: string): number {
+function boundedDisplay(value: string): number {
   if (!/^\d+$/.test(value)) return argumentInvalid();
   const parsed = Number(value);
-  if (!Number.isSafeInteger(parsed)) return argumentInvalid();
+  if (!Number.isSafeInteger(parsed) || parsed < 1 || parsed > 100) return argumentInvalid();
   return parsed;
 }
 
@@ -95,7 +95,7 @@ export function parseSchedulerDispatchCommand(argv: readonly string[]): ParsedSc
 
   return Object.freeze({
     query,
-    ...(displayValue === undefined ? {} : { display: positiveInteger(displayValue) }),
+    ...(displayValue === undefined ? {} : { display: boundedDisplay(displayValue) }),
   });
 }
 
