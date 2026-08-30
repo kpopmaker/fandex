@@ -30,6 +30,19 @@ function positiveInteger(value: string): number {
   return parsed;
 }
 
+function currentIso(now: () => Date): string {
+  let current: Date;
+  try {
+    current = now();
+  } catch {
+    throw new Error('naver_news_scheduler_plan_clock_invalid');
+  }
+  if (!(current instanceof Date) || !Number.isFinite(current.getTime())) {
+    throw new Error('naver_news_scheduler_plan_clock_invalid');
+  }
+  return current.toISOString();
+}
+
 export function parseSchedulerPlanCommand(
   argv: readonly string[],
   now: () => Date = () => new Date(),
@@ -48,17 +61,7 @@ export function parseSchedulerPlanCommand(
   const query = values.get('--query');
   if (!query) return argumentInvalid();
 
-  let current: Date;
-  try {
-    current = now();
-  } catch {
-    throw new Error('naver_news_scheduler_plan_clock_invalid');
-  }
-  if (!(current instanceof Date) || !Number.isFinite(current.getTime())) {
-    throw new Error('naver_news_scheduler_plan_clock_invalid');
-  }
-
-  const at = values.get('--at') ?? current.toISOString();
+  const at = values.get('--at') ?? currentIso(now);
   const displayValue = values.get('--display');
 
   return Object.freeze({
