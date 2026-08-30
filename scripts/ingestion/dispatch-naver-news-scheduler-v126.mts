@@ -1,17 +1,16 @@
 import { pathToFileURL } from 'node:url';
 
 import {
-  buildNaverNewsSchedulerPlan,
   NAVER_NEWS_SCHEDULER_VERSION,
-  type NaverNewsSchedulerPlan,
 } from '../../lib/server/ingestion/naverNewsScheduler';
 import {
-  NAVER_NEWS_V124_APPROVAL_ENV,
-  NAVER_NEWS_V124_APPROVAL_VALUE,
   productionWriteExitCode,
-  runNaverNewsProductionWrite,
   type NaverNewsProductionWriteSummary,
 } from './write-naver-news-v124.mjs';
+import {
+  runNaverNewsSchedulerDispatchCore,
+} from '../../lib/server/ingestion/naverNewsSchedulerDispatch';
+
 
 export const NAVER_NEWS_V126_DISPATCH_VERSION = 'v126_naver_news_scheduler_dispatch_v1';
 export const NAVER_NEWS_V126_APPROVAL_ENV = 'FANDEX_APPROVE_V126_NAVER_NEWS_SCHEDULER_DISPATCH';
@@ -26,7 +25,7 @@ export type ParsedSchedulerDispatchCommand = Readonly<{
 
 export type NaverNewsSchedulerDispatchDependencies = Readonly<{
   now?: () => Date;
-  productionWrite?: typeof runNaverNewsProductionWrite;
+  productionWrite?: (argv: readonly string[], environment: Readonly<Record<string, string | undefined>>) => Promise<NaverNewsProductionWriteSummary>;
 }>;
 
 export type NaverNewsSchedulerDispatchSummary = Readonly<{
@@ -58,19 +57,6 @@ function boundedDisplay(value: string): number {
   return parsed;
 }
 
-function currentIso(now: () => Date): string {
-  let current: Date;
-  try {
-    current = now();
-  } catch {
-    throw new Error('naver_news_scheduler_dispatch_clock_invalid');
-  }
-  if (!(current instanceof Date) || !Number.isFinite(current.getTime())) {
-    throw new Error('naver_news_scheduler_dispatch_clock_invalid');
-  }
-  return current.toISOString();
-}
-
 export function parseSchedulerDispatchCommand(argv: readonly string[]): ParsedSchedulerDispatchCommand {
   const seen = new Set<string>();
   const values = new Map<string, string>();
@@ -99,22 +85,6 @@ export function parseSchedulerDispatchCommand(argv: readonly string[]): ParsedSc
   });
 }
 
-function productionArguments(plan: NaverNewsSchedulerPlan): readonly string[] {
-  return Object.freeze([
-    '--apply',
-    '--query', plan.command.query,
-    '--collection-key', plan.collectionKey,
-    '--display', String(plan.command.display),
-    '--start', String(plan.command.start),
-    '--sort', plan.command.sort,
-    '--worker-id', plan.workerId,
-  ]);
-}
-
-function dispatchFailed(): Error {
-  return new Error('naver_news_scheduler_dispatch_failed');
-}
-
 export async function runNaverNewsSchedulerDispatch(
   argv: readonly string[],
   environment: Readonly<Record<string, string | undefined>>,
@@ -125,38 +95,11 @@ export async function runNaverNewsSchedulerDispatch(
   }
 
   const parsed = parseSchedulerDispatchCommand(argv);
-  const plan = buildNaverNewsSchedulerPlan({
-    query: parsed.query,
-    at: currentIso(dependencies.now ?? (() => new Date())),
-    ...(parsed.display === undefined ? {} : { display: parsed.display }),
-  });
-
-  const delegatedEnvironment = Object.freeze({
-    ...environment,
-    [NAVER_NEWS_V124_APPROVAL_ENV]: NAVER_NEWS_V124_APPROVAL_VALUE,
-  });
-
-  let production: NaverNewsProductionWriteSummary;
-  try {
-    production = await (dependencies.productionWrite ?? runNaverNewsProductionWrite)(
-      productionArguments(plan),
-      delegatedEnvironment,
-    );
-  } catch {
-    throw dispatchFailed();
-  }
-
-  return Object.freeze({
-    mode: 'scheduler-dispatch' as const,
-    dispatchVersion: NAVER_NEWS_V126_DISPATCH_VERSION,
-    schedulerVersion: NAVER_NEWS_SCHEDULER_VERSION,
-    activation: 'manual-only' as const,
-    slotStart: plan.slotStart,
-    nextSlotStart: plan.nextSlotStart,
-    collectionKey: plan.collectionKey,
-    workerId: plan.workerId,
-    production,
-  });
+  const result = await runNaverNewsSchedulerDispatchCore(
+    { query: parsed.query, ...(parsed.display === undefined ? {} : { display: parsed.display }), environment },
+    dependencies,
+  );
+  return Object.freeze({ ...result, activation: 'manual-only' as const });
 }
 
 export async function main(
