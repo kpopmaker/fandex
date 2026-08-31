@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/fandex-cloud-v10.yml"
       - "scripts/fandex-cloud-v10/**"
+      - "scripts/fandex-cloud-migration/source/**"
       - "data/fandex-cloud-v10/seed/**"
   schedule:
     # 00:00 UTC = 09:00 KST
