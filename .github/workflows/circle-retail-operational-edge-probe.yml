@@ -9,51 +9,17 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Inspect Circle retail UI completeness hints
-        shell: bash
-        run: |
-          node <<'NODE'
-          const pageUrl = 'https://circlechart.kr/page_chart/retail.circle?termGbn=day&yyyymmdd=20260529';
-          const response = await fetch(pageUrl, { redirect: 'manual' });
-          const html = await response.text();
-          const start = html.indexOf('function ChartTable_HTML_List');
-          const nextFunction = start >= 0 ? html.indexOf('function ', start + 30) : -1;
-          const body = start >= 0
-            ? html.slice(start, nextFunction > start ? nextFunction : start + 9000)
-            : '';
-          const normalized = body.replace(/\s+/g, ' ');
-          const ajaxIndex = html.indexOf('/data/api/chart/retail_list');
-          const ajax = ajaxIndex >= 0 ? html.slice(Math.max(0, ajaxIndex - 500), ajaxIndex + 900).replace(/\s+/g, ' ') : '';
-          const paginationPatterns = {
-            pageNo: /pageNo/i.test(body),
-            pageNum: /pageNum/i.test(body),
-            pageSize: /pageSize/i.test(body),
-            offset: /offset/i.test(body),
-            limit: /\blimit\b/i.test(body),
-            cursor: /\bcursor\b/i.test(body),
-            paging: /\bpaging\b/i.test(body),
-            more: /\bmore\b/i.test(body),
-          };
-          const loopMatches = normalized.match(/for\s*\([^)]{0,180}\)/gi) || [];
-          const listLengthMatches = normalized.match(/res\.List(?:\.length|\[[^\]]+\])/g) || [];
-          const rank50Mentions = (normalized.match(/\b50\b/g) || []).length;
-          console.log(JSON.stringify({
-            status: response.status,
-            contentType: response.headers.get('content-type'),
-            functionFound: start >= 0,
-            functionLength: body.length,
-            paginationPatterns,
-            loopMatches: loopMatches.slice(0, 10),
-            listLengthSamples: [...new Set(listLengthMatches)].slice(0, 20),
-            rank50Mentions,
-            ajaxSnippet: ajax.slice(0, 1400),
-            renderSnippet: normalized.slice(0, 5000),
-          }));
-          NODE
+          cache: npm
+      - run: npm ci
+      - name: Run Circle operational, discovery, adapter and provider tests
+        run: npx tsx --test tests/circle-retail-operational-semantics-v1.test.mts tests/circle-retail-discovery-v1.test.mts tests/circle-retail-adapter-v1.test.mts tests/album-provider-specific-integration-depth-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
