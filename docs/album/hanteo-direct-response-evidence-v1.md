@@ -240,6 +240,17 @@ live calls = false
 feature bridge = false
 ```
 
+Validation run:
+
+```text
+33426524892
+npm ci = PASS
+Hanteo Discovery + Adapter + Provider Evidence tests = PASS
+TypeScript typecheck = PASS
+```
+
+Temporary probe/validation workflow was removed after validation.
+
 ## Primary-provider implication
 
 Under the current Circle-vs-Hanteo hard gates:
