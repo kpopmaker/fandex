@@ -7,10 +7,10 @@ provider = circle-chart
 capability = retail-album
 adapterContract = circle-retail-adapter-v1
 adapterImplemented = true
-technicalCapabilityDescriptor = evidence-linked
 liveCallsAllowed = false
 featureBridgeEligible = false
 productionAllowed = false
+boundedResearchCollectorCandidate = true
 ```
 
 The adapter converts only directly qualified Circle Retail `retail_list` responses into `DirectAlbumObservation` records. It does not execute network calls and does not bridge observations into production feature evidence.
@@ -156,89 +156,66 @@ identity-evidence-missing
 
 Contract-level mismatches throw before normalization.
 
-## Evidence-linked capability upgrade
+## Evidence-linked capability state
 
-Direct response evidence now supports three technical capability upgrades on `CIRCLE_EVIDENCE_DESCRIPTOR`:
+The conservative base `CIRCLE_PROVIDER_DESCRIPTOR` remains unknown/default-off.
+
+`CIRCLE_EVIDENCE_DESCRIPTOR` now directly qualifies:
 
 ```text
 supportsNativePeriodSales = true
-  evidence = circle-retail-direct-response-v1:rowSum-period-sales
-
 supportsHistoricalQueries = true
-  evidence = circle-retail-direct-response-v1:historical-day-week-month
-
 supportsSkuIdentity = true
-  evidence = circle-retail-direct-response-v1:barcode-sku-identity
 ```
 
-The conservative base descriptor remains unchanged:
+A real/non-synthetic Circle observation may therefore pass technical validation against the evidence-linked descriptor while still failing against the conservative base descriptor.
+
+This does not authorize live calls or feature bridging.
+
+## Operational semantics
+
+Operational probe evidence is implemented separately in:
 
 ```text
-CIRCLE_PROVIDER_DESCRIPTOR.supportsNativePeriodSales = unknown
-CIRCLE_PROVIDER_DESCRIPTOR.supportsHistoricalQueries = unknown
-CIRCLE_PROVIDER_DESCRIPTOR.supportsSkuIdentity = unknown
+circleRetailOperationalSemantics.ts
+circle-retail-operational-evidence-v1.md
 ```
 
-This separation prevents technical evidence from silently rewriting the generic provider baseline.
-
-Still unresolved:
+Observed behavior:
 
 ```text
-supportsCumulativeSales
-supportsFirstWeekSales
-supportsRevisions
-supportsArtistIdentity
-supportsReleaseIdentity
-supportsEditionIdentity
-supportsFormatIdentity
-supportsTerritorySegmentation
+published period:
+  HTTP 200
+  ResultStatus = OK
+  official UI Top 50 ranks 1..50
+
+invalid/future/prelaunch period:
+  HTTP 200
+  ResultStatus = Error
+  List absent
+  cause collapsed by provider
+
+known period without Cookie/Referer:
+  HTTP 200
+  ResultStatus = OK
+  same Top 50 response shape
 ```
 
-Certification remains threshold/milestone context and is not upgraded into exact cumulative sales.
+The official UI makes one `retail_list` request and renders every returned row. No page/size/offset/limit/cursor parameter was observed in the public chart request/render path.
 
-## Authorization remains independent
+Therefore `published-ui-top50-complete` means complete reproduction of the official displayed Top 50, **not** total market-universe completeness.
 
-The evidence-linked descriptor advances only technical readiness:
-
-```text
-onboarding.currentStage = live-adapter-default-off
-onboarding.technicalReadiness = adapter-ready
-```
-
-It does not authorize live or commercial use:
-
-```text
-acquisitionState = review-required
-automationState = review-required
-rawStorageState = review-required
-normalizedStorageState = review-required
-commercialUseState = contract-required
-derivedPublicationState = review-required
-rawRedistributionState = blocked
-
-enabled = false
-liveCallsAllowed = false
-productionAllowed = false
-```
-
-`bridgeDirectAlbumObservation` is unchanged, so technical validation alone cannot move Circle observations into feature evidence.
-
-## Validation state
-
-Real/non-synthetic `period-sale` observations can now pass `DirectAlbumObservation` technical validation when the evidence-linked Circle descriptor is used.
-
-The same observation still fails against the conservative base descriptor with:
-
-```text
-capability-supportsNativePeriodSales-unknown
-```
-
-Therefore:
+## Current technical status
 
 ```text
 adapterImplementationQualified = true
 fixtureNormalizationQualified = true
-realObservationTechnicalValidation = qualified-on-evidence-descriptor
+realObservationTechnicalValidation = true
+publishedUiTop50Completeness = qualified
+providerPeriodErrorShape = qualified-coarse
+strictCookieRequirementObserved = false
+strictRefererRequirementObserved = false
+boundedResearchCollectorCandidate = true
 featureBridgeEligible = false
 liveCollectorAuthorized = false
 productionCollectorAuthorized = false
@@ -246,36 +223,29 @@ productionCollectorAuthorized = false
 
 ## Validation runs
 
-Adapter validation run `33413534263`:
-
 ```text
-npm ci = PASS
-Circle Discovery + Adapter tests = PASS
-npm run typecheck = PASS
+33413534263
+  Circle Discovery + Adapter tests = PASS
+  Typecheck = PASS
+
+33414514375
+  Provider Evidence + Circle Discovery + Adapter tests = PASS
+  Typecheck = PASS
+
+33415892686
+  Circle operational + Discovery + Adapter + Provider tests = PASS
+  Typecheck = PASS
 ```
 
-Capability validation run `33414514375`:
+Temporary workflows were removed after validation.
+
+## Remaining technical gate
 
 ```text
-npm ci = PASS
-Provider Evidence + Circle Discovery + Adapter tests = PASS
-npm run typecheck = PASS
+hour raw qualification
+year raw qualification
+revision/supersession reconciliation
+conservative rate-limit/throttling observation
 ```
 
-Temporary validation workflows were removed after completion.
-
-## Next decision
-
-Remaining work is no longer the core period-sales capability contract. The next Circle qualification step should focus on operational edge behavior:
-
-```text
-invalid/future/not-published period semantics
-empty valid response behavior
-pagination / completeness beyond observed 50 rows
-natural rate-limit behavior
-direct hourly response schema
-yearly raw schema
-strict cookie / Referer requirement
-```
-
-These operational checks must remain separate from commercial-rights authorization.
+Do not manufacture a rate-limit event by aggressive requests.
