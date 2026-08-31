@@ -5,6 +5,7 @@ import {
   canPromoteCircleRetailDiscovery,
   captureCircleRetailDiscovery,
   CIRCLE_RETAIL_PUBLIC_PAGE_URL,
+  verifyCircleRetailCandidateEndpoint,
   verifyCircleRetailQuantitySemantic,
 } from '../lib/alternative-evidence/circleRetailDiscovery';
 
@@ -48,7 +49,7 @@ test('hourly discovery keeps date and hour separate', () => {
   assert.throws(() => buildCircleRetailDiscoveryRequestPlan({ timeframe: 'hour', date: '2026-08-31' }));
 });
 
-test('reported candidate endpoint is never verified by default', () => {
+test('reported candidate endpoint is never verified by default and verification requires evidence', () => {
   const plan = buildCircleRetailDiscoveryRequestPlan({
     timeframe: 'day',
     date: '2026-08-30',
@@ -56,7 +57,13 @@ test('reported candidate endpoint is never verified by default', () => {
   });
   assert.equal(plan.candidate?.url, '/data/api/chart_func/retail/default_value');
   assert.equal(plan.candidate?.evidenceState, 'reported-public-unverified');
+  assert.deepEqual(plan.candidate?.evidenceIds, []);
   assert.equal(plan.networkAllowed, false);
+  assert.throws(() => verifyCircleRetailCandidateEndpoint(plan, []));
+  const verified = verifyCircleRetailCandidateEndpoint(plan, ['endpoint-evidence-1']);
+  assert.equal(verified.candidate?.evidenceState, 'verified-public-endpoint');
+  assert.deepEqual(verified.candidate?.evidenceIds, ['endpoint-evidence-1']);
+  assert.equal(verified.networkAllowed, false);
 });
 
 test('unknown structured schema exposes candidates but never auto-selects quantity semantics', () => {
@@ -67,6 +74,7 @@ test('unknown structured schema exposes candidates but never auto-selects quanti
   assert.ok(capture.response.quantityCandidateFields.includes('copiesCandidate'));
   assert.equal(capture.quantitySemanticState, 'unverified');
   assert.equal(capture.verifiedQuantityField, null);
+  assert.deepEqual(capture.quantityVerificationEvidenceIds, []);
   assert.equal(canPromoteCircleRetailDiscovery(capture), false);
 });
 
@@ -92,6 +100,7 @@ test('quantity promotion requires explicit evidence and observed field/path', ()
     evidenceIds: ['evidence-1'],
   });
   assert.equal(verified.quantitySemanticState, 'verified-retail-copies');
+  assert.deepEqual(verified.quantityVerificationEvidenceIds, ['evidence-1']);
   assert.equal(canPromoteCircleRetailDiscovery(verified), true);
 });
 
@@ -111,18 +120,27 @@ test('empty, unpublished, failed, and HTML responses are never coerced to zero',
   }
 });
 
-test('capture digest is deterministic but changes when raw response values change', () => {
+test('capture digest is deterministic and payload-sensitive', () => {
   const plan = buildCircleRetailDiscoveryRequestPlan({ timeframe: 'day', date: '2026-08-30' });
   const first = captureCircleRetailDiscovery({ plan, rawResponse: structuredResponse, observedAt, status: 200, contentType: 'application/json' });
   const second = captureCircleRetailDiscovery({ plan, rawResponse: structuredResponse, observedAt, status: 200, contentType: 'application/json' });
   const changed = captureCircleRetailDiscovery({
     plan,
-    rawResponse: { data: { rows: [{ itemKey: 'album-1', artistText: 'Artist', albumText: 'Album', copiesCandidate: 1235 }] } },
+    rawResponse: {
+      data: {
+        rows: [
+          { itemKey: 'album-1', artistText: 'Artist', albumText: 'Album', copiesCandidate: 1235 },
+          { itemKey: 'album-2', artistText: 'Artist 2', albumText: 'Album 2', copiesCandidate: 987 },
+        ],
+      },
+    },
     observedAt,
     status: 200,
     contentType: 'application/json',
   });
+  assert.equal(first.payloadDigest, second.payloadDigest);
   assert.equal(first.responseDigest, second.responseDigest);
+  assert.notEqual(first.payloadDigest, changed.payloadDigest);
   assert.notEqual(first.responseDigest, changed.responseDigest);
 });
 
