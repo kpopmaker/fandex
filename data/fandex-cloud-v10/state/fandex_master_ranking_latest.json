@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-08-31T19:56:28",
+  "createdAt": "2026-08-31T23:28:47",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -15,10 +15,10 @@
   "ranking": [
     {
       "artist": "에스파",
-      "fandexFinalPoint": 363.22,
-      "score": 363.22,
+      "fandexFinalPoint": 361.53,
+      "score": 361.53,
       "previousMasterPoint": 363.22,
-      "deltaFromPreviousMaster": 0.0,
+      "deltaFromPreviousMaster": -1.69,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -31,8 +31,8 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 46.88,
-          "rawPoint": 187.5,
+          "cumulativePoint": 45.19,
+          "rawPoint": 180.75,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
@@ -46,15 +46,15 @@
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 363.22,
+      "sourceTotalCheck": 361.53,
       "rank": 1
     },
     {
       "artist": "에이티즈",
-      "fandexFinalPoint": 339.37,
-      "score": 339.37,
+      "fandexFinalPoint": 341.05,
+      "score": 341.05,
       "previousMasterPoint": 339.37,
-      "deltaFromPreviousMaster": 0.0,
+      "deltaFromPreviousMaster": 1.68,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -67,8 +67,8 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 46.88,
-          "rawPoint": 187.5,
+          "cumulativePoint": 48.56,
+          "rawPoint": 194.25,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
@@ -82,7 +82,7 @@
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 339.37,
+      "sourceTotalCheck": 341.05,
       "rank": 2
     },
     {
@@ -159,10 +159,10 @@
     },
     {
       "artist": "뉴진스",
-      "fandexFinalPoint": 254.28,
-      "score": 254.28,
+      "fandexFinalPoint": 256.53,
+      "score": 256.53,
       "previousMasterPoint": 254.28,
-      "deltaFromPreviousMaster": 0.0,
+      "deltaFromPreviousMaster": 2.25,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -175,8 +175,8 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 9.95,
-          "rawPoint": 39.8,
+          "cumulativePoint": 12.2,
+          "rawPoint": 48.8,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
@@ -190,7 +190,7 @@
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 254.28,
+      "sourceTotalCheck": 256.53,
       "rank": 5
     },
     {
