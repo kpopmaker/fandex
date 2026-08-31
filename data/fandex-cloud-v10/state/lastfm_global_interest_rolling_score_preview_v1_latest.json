@@ -1,0 +1,23 @@
+{
+  "version": "lastfm_global_interest_rolling_score_preview_v1",
+  "latestDate": "2026-08-31",
+  "artistCount": 10,
+  "rolling3ReadyCount": 10,
+  "rolling7ReadyCount": 10,
+  "activeMode": "rolling3_50_rolling7_50",
+  "scoreReadyCount": 10,
+  "needsReviewCount": 0,
+  "weights": {
+    "listenerVsPlaycount": {
+      "listener": 0.5,
+      "playcount": 0.5
+    },
+    "rollingWindow": {
+      "rolling3": 0.5,
+      "rolling7": 0.5
+    }
+  },
+  "output": "lastfm_global_interest_rolling_score_preview_v1_latest.csv",
+  "masterModified": false,
+  "websiteModified": false
+}

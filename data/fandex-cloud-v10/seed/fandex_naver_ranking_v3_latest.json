@@ -1,0 +1,18 @@
+{
+  "version": "cloud_seed_from_production_v10_status_2026-08-31",
+  "createdAt": "2026-08-31T18:08:01+09:00",
+  "source": "production_v10_status_snapshot",
+  "note": "Cloud migration seed. Preserves the Naver v3 points used by production v10 at cutover.",
+  "ranking": [
+    {"artist": "에스파", "fandexNaverFinalPoint": 214.28},
+    {"artist": "에이티즈", "fandexNaverFinalPoint": 226.34},
+    {"artist": "아이유", "fandexNaverFinalPoint": 244.89},
+    {"artist": "르세라핌", "fandexNaverFinalPoint": 182.26},
+    {"artist": "뉴진스", "fandexNaverFinalPoint": 201.66},
+    {"artist": "아이브", "fandexNaverFinalPoint": 166.58},
+    {"artist": "보이넥스트도어", "fandexNaverFinalPoint": 187.53},
+    {"artist": "투모로우바이투게더", "fandexNaverFinalPoint": 163.02},
+    {"artist": "세븐틴", "fandexNaverFinalPoint": 173.12},
+    {"artist": "스트레이키즈", "fandexNaverFinalPoint": 90.60}
+  ]
+}
