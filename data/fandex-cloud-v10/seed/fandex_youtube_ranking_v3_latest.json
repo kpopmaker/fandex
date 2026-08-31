@@ -1,0 +1,18 @@
+{
+  "version": "cloud_seed_from_production_v10_status_2026-08-31",
+  "createdAt": "2026-08-31T18:08:01+09:00",
+  "source": "production_v10_status_snapshot",
+  "note": "Cloud migration seed. Preserves the YouTube v3 points used by production v10 at cutover.",
+  "ranking": [
+    {"artist": "에스파", "youtubePoint": 79.04},
+    {"artist": "에이티즈", "youtubePoint": 52.43},
+    {"artist": "아이유", "youtubePoint": 49.63},
+    {"artist": "르세라핌", "youtubePoint": 52.76},
+    {"artist": "뉴진스", "youtubePoint": 21.54},
+    {"artist": "아이브", "youtubePoint": 37.20},
+    {"artist": "보이넥스트도어", "youtubePoint": 35.42},
+    {"artist": "투모로우바이투게더", "youtubePoint": 49.71},
+    {"artist": "세븐틴", "youtubePoint": 42.85},
+    {"artist": "스트레이키즈", "youtubePoint": 47.99}
+  ]
+}
