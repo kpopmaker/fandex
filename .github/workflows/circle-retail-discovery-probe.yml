@@ -1,0 +1,100 @@
+name: Circle Retail Discovery Probe
+
+on:
+  push:
+    branches:
+      - integration/album-circle-retail-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe Circle public page and static request hints
+        shell: bash
+        run: |
+          node <<'NODE'
+          const pageUrl = 'https://circlechart.kr/page_chart/retail.circle?termGbn=day&yyyymmdd=20260529';
+          const needles = ['default_value', 'hour_time', '/data/api/', 'chart_func/retail', 'retail.circle', 'ajax', 'fetch('];
+          const headers = {
+            'user-agent': 'Mozilla/5.0 (compatible; FANDEX-Research-Discovery/1.0)',
+            'accept': 'text/html,application/xhtml+xml,application/javascript,text/javascript,*/*;q=0.8',
+          };
+
+          async function get(url) {
+            const response = await fetch(url, {
+              method: 'GET',
+              headers,
+              redirect: 'follow',
+              signal: AbortSignal.timeout(15000),
+            });
+            const text = await response.text();
+            return { response, text };
+          }
+
+          function snippets(text, needle, max = 4) {
+            const out = [];
+            let from = 0;
+            while (out.length < max) {
+              const index = text.indexOf(needle, from);
+              if (index < 0) break;
+              const start = Math.max(0, index - 220);
+              const end = Math.min(text.length, index + needle.length + 320);
+              out.push(text.slice(start, end).replace(/\s+/g, ' '));
+              from = index + needle.length;
+            }
+            return out;
+          }
+
+          const page = await get(pageUrl);
+          console.log('FANDEX_CIRCLE_PAGE_META=' + JSON.stringify({
+            requestedUrl: pageUrl,
+            finalUrl: page.response.url,
+            status: page.response.status,
+            contentType: page.response.headers.get('content-type'),
+            contentLength: page.text.length,
+          }));
+
+          for (const needle of needles) {
+            const hits = snippets(page.text, needle);
+            if (hits.length) console.log('FANDEX_CIRCLE_PAGE_HINT=' + JSON.stringify({ needle, hits }));
+          }
+
+          const scriptSources = [...page.text.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
+            .map((match) => new URL(match[1], page.response.url).href)
+            .filter((url, index, all) => all.indexOf(url) === index)
+            .filter((url) => new URL(url).origin === 'https://circlechart.kr')
+            .slice(0, 12);
+
+          console.log('FANDEX_CIRCLE_SCRIPT_SOURCES=' + JSON.stringify(scriptSources));
+
+          let fetched = 0;
+          for (const scriptUrl of scriptSources) {
+            if (fetched >= 8) break;
+            try {
+              const script = await get(scriptUrl);
+              fetched += 1;
+              const matches = [];
+              for (const needle of needles) {
+                const hits = snippets(script.text, needle, 3);
+                if (hits.length) matches.push({ needle, hits });
+              }
+              if (matches.length) {
+                console.log('FANDEX_CIRCLE_SCRIPT_HINT=' + JSON.stringify({
+                  url: scriptUrl,
+                  status: script.response.status,
+                  contentType: script.response.headers.get('content-type'),
+                  matches,
+                }));
+              }
+            } catch (error) {
+              console.log('FANDEX_CIRCLE_SCRIPT_FETCH_ERROR=' + JSON.stringify({
+                url: scriptUrl,
+                error: error instanceof Error ? error.message : String(error),
+              }));
+            }
+          }
+          NODE
