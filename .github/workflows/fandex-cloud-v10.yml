@@ -10,9 +10,11 @@ on:
       - "scripts/fandex-cloud-v10/**"
       - "scripts/fandex-cloud-migration/source/**"
       - "data/fandex-cloud-v10/seed/**"
-  schedule:
-    # 00:00 UTC = 09:00 KST
-    - cron: "0 0 * * *"
+  workflow_run:
+    workflows:
+      - "FANDEX Last.fm Cloud History"
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
@@ -24,6 +26,7 @@ concurrency:
 
 jobs:
   daily:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Seoul
@@ -168,6 +171,10 @@ jobs:
           git commit -m "chore(fandex-cloud): update daily v10 state"
 
           branch="${GITHUB_REF_NAME}"
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_run" ]]; then
+            branch="main"
+          fi
+
           for attempt in 1 2 3; do
             echo "Push attempt ${attempt}/3 -> ${branch}"
             git pull --rebase origin "${branch}"
