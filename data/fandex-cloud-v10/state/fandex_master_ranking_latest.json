@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-08-31T19:01:07",
+  "createdAt": "2026-08-31T19:06:18",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -17,8 +17,8 @@
       "artist": "에스파",
       "fandexFinalPoint": 363.22,
       "score": 363.22,
-      "previousMasterPoint": 362.12,
-      "deltaFromPreviousMaster": 1.1,
+      "previousMasterPoint": 363.22,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -53,8 +53,8 @@
       "artist": "에이티즈",
       "fandexFinalPoint": 339.37,
       "score": 339.37,
-      "previousMasterPoint": 341.66,
-      "deltaFromPreviousMaster": -2.29,
+      "previousMasterPoint": 339.37,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -125,8 +125,8 @@
       "artist": "르세라핌",
       "fandexFinalPoint": 267.99,
       "score": 267.99,
-      "previousMasterPoint": 265.4,
-      "deltaFromPreviousMaster": 2.59,
+      "previousMasterPoint": 267.99,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 182.26,
@@ -161,8 +161,8 @@
       "artist": "뉴진스",
       "fandexFinalPoint": 254.28,
       "score": 254.28,
-      "previousMasterPoint": 254.65,
-      "deltaFromPreviousMaster": -0.37,
+      "previousMasterPoint": 254.28,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -197,8 +197,8 @@
       "artist": "아이브",
       "fandexFinalPoint": 243.51,
       "score": 243.51,
-      "previousMasterPoint": 243.25,
-      "deltaFromPreviousMaster": 0.26,
+      "previousMasterPoint": 243.51,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 166.58,
@@ -233,8 +233,8 @@
       "artist": "보이넥스트도어",
       "fandexFinalPoint": 241.09,
       "score": 241.09,
-      "previousMasterPoint": 240.16,
-      "deltaFromPreviousMaster": 0.93,
+      "previousMasterPoint": 241.09,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 187.53,
@@ -269,8 +269,8 @@
       "artist": "투모로우바이투게더",
       "fandexFinalPoint": 229.81,
       "score": 229.81,
-      "previousMasterPoint": 230.35,
-      "deltaFromPreviousMaster": -0.54,
+      "previousMasterPoint": 229.81,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 163.02,
@@ -305,8 +305,8 @@
       "artist": "세븐틴",
       "fandexFinalPoint": 222.67,
       "score": 222.67,
-      "previousMasterPoint": 223.11,
-      "deltaFromPreviousMaster": -0.44,
+      "previousMasterPoint": 222.67,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 173.12,
@@ -341,8 +341,8 @@
       "artist": "스트레이키즈",
       "fandexFinalPoint": 156.29,
       "score": 156.29,
-      "previousMasterPoint": 157.31,
-      "deltaFromPreviousMaster": -1.02,
+      "previousMasterPoint": 156.29,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 90.6,
