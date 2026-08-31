@@ -33,6 +33,7 @@ export * from './directProviderEvidence';
 export * from './circleRetailDiscovery';
 export * from './circleRetailAdapter';
 export * from './circleRetailOperationalSemantics';
+export * from './circleRetailRevision';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
 export * from './persistenceContracts';
