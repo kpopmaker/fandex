@@ -1,0 +1,368 @@
+{
+  "version": "fandex_music_chart_v2_current_presence_parallel_v1",
+  "createdAt": "2026-08-31T19:54:31",
+  "snapshotDate": "2026-08-31",
+  "pythonOnly": true,
+  "touchesWebsitePublicData": false,
+  "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
+  "usage": "parallel_candidate_only",
+  "sourceFiles": {
+    "preview": "music_chart_current_presence_preview_v1_latest.csv",
+    "checkHistory": "music_chart_check_history_v1_latest.json"
+  },
+  "ranking": [
+    {
+      "artist": "에이티즈",
+      "fandexMusicChartFinalPoint": 187.5,
+      "score": 187.5,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 90.0,
+        "genie": 63.75,
+        "bugs": 33.75
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "BAD",
+          "rank": "9",
+          "chartType": "daily",
+          "point": 90.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "BAD",
+          "rank": "9",
+          "chartType": "daily",
+          "point": 63.75
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "BAD",
+          "rank": "4",
+          "chartType": "realtime",
+          "point": 33.75
+        }
+      },
+      "rank": 1
+    },
+    {
+      "artist": "에스파",
+      "fandexMusicChartFinalPoint": 187.5,
+      "score": 187.5,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 90.0,
+        "genie": 63.75,
+        "bugs": 33.75
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "LEMONADE",
+          "rank": "6",
+          "chartType": "daily",
+          "point": 90.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "LEMONADE",
+          "rank": "5",
+          "chartType": "daily",
+          "point": 63.75
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "LEMONADE",
+          "rank": "9",
+          "chartType": "realtime",
+          "point": 33.75
+        }
+      },
+      "rank": 2
+    },
+    {
+      "artist": "아이브",
+      "fandexMusicChartFinalPoint": 117.0,
+      "score": 117.0,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 48.0,
+        "genie": 51.0,
+        "bugs": 18.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "BANG BANG",
+          "rank": "27",
+          "chartType": "daily",
+          "point": 48.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "BANG BANG",
+          "rank": "20",
+          "chartType": "daily",
+          "point": 51.0
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "BANG BANG",
+          "rank": "35",
+          "chartType": "realtime",
+          "point": 18.0
+        }
+      },
+      "rank": 3
+    },
+    {
+      "artist": "보이넥스트도어",
+      "fandexMusicChartFinalPoint": 39.8,
+      "score": 39.8,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 9.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "75",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "141",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "99",
+          "chartType": "realtime",
+          "point": 9.0
+        }
+      },
+      "rank": 4
+    },
+    {
+      "artist": "르세라핌",
+      "fandexMusicChartFinalPoint": 39.8,
+      "score": 39.8,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 9.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
+          "rank": "90",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
+          "rank": "138",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "BOOMPALA",
+          "rank": "76",
+          "chartType": "realtime",
+          "point": 9.0
+        }
+      },
+      "rank": 5
+    },
+    {
+      "artist": "뉴진스",
+      "fandexMusicChartFinalPoint": 39.8,
+      "score": 39.8,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 9.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "71",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "113",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "53",
+          "chartType": "realtime",
+          "point": 9.0
+        }
+      },
+      "rank": 6
+    },
+    {
+      "artist": "아이유",
+      "fandexMusicChartFinalPoint": 30.8,
+      "score": 30.8,
+      "rankedPlatformCount": 2,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "Love wins all",
+          "rank": "82",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "Love wins all",
+          "rank": "108",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 7
+    },
+    {
+      "artist": "투모로우바이투게더",
+      "fandexMusicChartFinalPoint": 0.0,
+      "score": 0.0,
+      "rankedPlatformCount": 0,
+      "platformPoints": {
+        "melon": 0.0,
+        "genie": 0.0,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "genie": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 8
+    },
+    {
+      "artist": "스트레이키즈",
+      "fandexMusicChartFinalPoint": 0.0,
+      "score": 0.0,
+      "rankedPlatformCount": 0,
+      "platformPoints": {
+        "melon": 0.0,
+        "genie": 0.0,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "genie": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 9
+    },
+    {
+      "artist": "세븐틴",
+      "fandexMusicChartFinalPoint": 0.0,
+      "score": 0.0,
+      "rankedPlatformCount": 0,
+      "platformPoints": {
+        "melon": 0.0,
+        "genie": 0.0,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "genie": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 10
+    }
+  ],
+  "seedModified": false,
+  "masterModified": false,
+  "websiteModified": false
+}
