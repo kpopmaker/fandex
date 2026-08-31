@@ -1,0 +1,1 @@
+Validated minimal cloud production packaging is prepared from this branch.
