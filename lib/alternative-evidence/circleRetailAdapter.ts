@@ -18,13 +18,14 @@ import {
 
 export const CIRCLE_RETAIL_ADAPTER_CONTRACT_VERSION = 'circle-retail-adapter-v1' as const;
 export const CIRCLE_RETAIL_LIST_ENDPOINT = '/data/api/chart/retail_list' as const;
+export const CIRCLE_RETAIL_HOUR_ENDPOINT = '/data/api/chart/retail_hour' as const;
 
-export type CircleRetailQualifiedTimeframe = 'day' | 'week' | 'month';
+export type CircleRetailQualifiedTimeframe = 'hour' | 'day' | 'week' | 'month' | 'year';
 
 export type CircleRetailRawRow = Readonly<{
   Album: string;
   Artist: string;
-  Barcode: string;
+  Barcode: string | null;
   rowSum: string;
   KSum: string | null;
   ESum: string | null;
@@ -32,6 +33,7 @@ export type CircleRetailRawRow = Readonly<{
   RankOrder: string | null;
   YYYYMMDD: string | null;
   YYYYMM: string | null;
+  YYYY: string | null;
   raw: Readonly<Record<string, unknown>>;
 }>;
 
@@ -118,7 +120,7 @@ function decodeRow(raw: Record<string, unknown>): CircleRetailRawRow {
   return Object.freeze({
     Album: requiredString(raw, 'Album'),
     Artist: requiredString(raw, 'Artist'),
-    Barcode: requiredString(raw, 'Barcode'),
+    Barcode: optionalString(raw, 'Barcode'),
     rowSum: requiredString(raw, 'rowSum'),
     KSum: optionalString(raw, 'KSum'),
     ESum: optionalString(raw, 'ESum'),
@@ -126,6 +128,7 @@ function decodeRow(raw: Record<string, unknown>): CircleRetailRawRow {
     RankOrder: optionalString(raw, 'RankOrder'),
     YYYYMMDD: optionalString(raw, 'YYYYMMDD'),
     YYYYMM: optionalString(raw, 'YYYYMM'),
+    YYYY: optionalString(raw, 'YYYY'),
     raw: Object.freeze({ ...raw }),
   });
 }
@@ -137,6 +140,16 @@ function integerQuantity(value: string): number | null {
   return parsed;
 }
 
+function hourKey(date: string, hour: string): string {
+  if (!/^\d{8}$/.test(date)) throw new Error('circle_retail_adapter_provider_period_invalid');
+  if (!/^\d{1,2}$/.test(hour)) throw new Error('circle_retail_adapter_provider_period_invalid');
+  const parsedHour = Number(hour);
+  if (!Number.isInteger(parsedHour) || parsedHour < 0 || parsedHour > 23) {
+    throw new Error('circle_retail_adapter_provider_period_invalid');
+  }
+  return `${date}-${String(parsedHour).padStart(2, '0')}`;
+}
+
 function requestContract(capture: CircleRetailDiscoveryCapture): Readonly<{
   timeframe: CircleRetailQualifiedTimeframe;
   providerPeriodKey: string;
@@ -145,7 +158,7 @@ function requestContract(capture: CircleRetailDiscoveryCapture): Readonly<{
   if (!canPromoteCircleRetailDiscovery(capture)) {
     throw new Error('circle_retail_adapter_capture_not_promotable');
   }
-  if (capture.request.method !== 'POST' || capture.request.url !== CIRCLE_RETAIL_LIST_ENDPOINT) {
+  if (capture.request.method !== 'POST') {
     throw new Error('circle_retail_adapter_request_contract_mismatch');
   }
   if (capture.verifiedQuantityField !== 'rowSum' || capture.verifiedRowPath !== '$.List{values}') {
@@ -154,12 +167,36 @@ function requestContract(capture: CircleRetailDiscoveryCapture): Readonly<{
   if (capture.response.providerStatus !== 'OK') {
     throw new Error('circle_retail_adapter_provider_status_not_ok');
   }
+
+  if (capture.request.url === CIRCLE_RETAIL_HOUR_ENDPOINT) {
+    const date = capture.request.params.yyyymmdd;
+    const thisHour = capture.request.params.thisHour;
+    if (!date || !thisHour || !capture.request.params.HourRange || !capture.request.params.ListType) {
+      throw new Error('circle_retail_adapter_request_contract_mismatch');
+    }
+    const providerPeriodKey = hourKey(date, thisHour);
+    return Object.freeze({
+      timeframe: 'hour' as const,
+      providerPeriodKey,
+      providerPeriod: `hour:${providerPeriodKey}`,
+    });
+  }
+
+  if (capture.request.url !== CIRCLE_RETAIL_LIST_ENDPOINT) {
+    throw new Error('circle_retail_adapter_request_contract_mismatch');
+  }
+
   const timeframe = capture.request.params.termGbn;
-  if (timeframe !== 'day' && timeframe !== 'week' && timeframe !== 'month') {
+  if (timeframe !== 'day' && timeframe !== 'week' && timeframe !== 'month' && timeframe !== 'year') {
     throw new Error('circle_retail_adapter_timeframe_not_qualified');
   }
   const providerPeriodKey = capture.request.params.yyyymmdd;
-  if (!providerPeriodKey || !/^\d{6}(\d{2})?$/.test(providerPeriodKey)) {
+  const validPeriod = timeframe === 'year'
+    ? /^\d{4}$/.test(providerPeriodKey ?? '')
+    : timeframe === 'month'
+      ? /^\d{6}$/.test(providerPeriodKey ?? '')
+      : /^\d{8}$/.test(providerPeriodKey ?? '');
+  if (!providerPeriodKey || !validPeriod) {
     throw new Error('circle_retail_adapter_provider_period_invalid');
   }
   return Object.freeze({
@@ -174,8 +211,14 @@ function periodMatchesRow(
   providerPeriodKey: string,
   row: CircleRetailRawRow,
 ): boolean {
+  if (timeframe === 'hour') return row.YYYYMMDD === providerPeriodKey.slice(0, 8);
   if (timeframe === 'month') return row.YYYYMM === providerPeriodKey;
+  if (timeframe === 'year') return row.YYYY === providerPeriodKey;
   return row.YYYYMMDD === providerPeriodKey;
+}
+
+function skuRequired(timeframe: CircleRetailQualifiedTimeframe): boolean {
+  return timeframe !== 'hour';
 }
 
 function rejection(
@@ -238,7 +281,9 @@ export function adaptCircleRetailQualifiedResponse(input: Readonly<{
       row = decodeRow(raw);
     } catch {
       const reasons: CircleRetailAdapterRejectionCode[] = ['source-row-invalid'];
-      if (typeof raw.Barcode !== 'string' || raw.Barcode.trim() === '') reasons.push('sku-identity-missing');
+      if (skuRequired(contract.timeframe) && (typeof raw.Barcode !== 'string' || raw.Barcode.trim() === '')) {
+        reasons.push('sku-identity-missing');
+      }
       if (typeof raw.rowSum !== 'string' || integerQuantity(raw.rowSum) === null) reasons.push('quantity-invalid');
       rejections.push(rejection(rowIndex, raw, reasons));
       return;
@@ -247,7 +292,9 @@ export function adaptCircleRetailQualifiedResponse(input: Readonly<{
     const reasons: CircleRetailAdapterRejectionCode[] = [];
     const quantity = integerQuantity(row.rowSum);
     if (quantity === null) reasons.push('quantity-invalid');
-    if (row.Barcode.trim() === '') reasons.push('sku-identity-missing');
+    if (skuRequired(contract.timeframe) && (!row.Barcode || row.Barcode.trim() === '')) {
+      reasons.push('sku-identity-missing');
+    }
     if (!periodMatchesRow(contract.timeframe, contract.providerPeriodKey, row)) {
       reasons.push('provider-period-mismatch');
     }
