@@ -1,0 +1,27 @@
+name: Album Bounded Research Validation
+
+on:
+  push:
+    branches:
+      - integration/album-bounded-research-orchestrator
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Album collector planner tests
+        run: npx tsx --test tests/album-collector-plan-v1.test.mts
+      - name: Run bounded research orchestrator tests
+        run: npx tsx --test tests/album-bounded-research-orchestrator-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
