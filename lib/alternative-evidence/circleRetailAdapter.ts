@@ -1,11 +1,11 @@
 import { sha256Canonical } from '../shared/canonicalDigest';
 import {
   buildDirectAlbumObservation,
-  CIRCLE_PROVIDER_DESCRIPTOR,
   validateDirectAlbumObservation,
   type DirectAlbumObservation,
   type DirectAlbumProviderDescriptor,
 } from './directAlbumProvider';
+import { CIRCLE_EVIDENCE_DESCRIPTOR } from './directProviderEvidence';
 import {
   canPromoteCircleRetailDiscovery,
   type CircleRetailDiscoveryCapture,
@@ -321,7 +321,7 @@ export function adaptCircleRetailQualifiedResponse(input: Readonly<{
 
 export function validateCircleRetailNormalizedObservations(
   observations: readonly DirectAlbumObservation[],
-  descriptor: DirectAlbumProviderDescriptor = CIRCLE_PROVIDER_DESCRIPTOR,
+  descriptor: DirectAlbumProviderDescriptor = CIRCLE_EVIDENCE_DESCRIPTOR,
 ): Readonly<{ valid: boolean; issues: readonly string[] }> {
   const issues = observations.flatMap((observation) =>
     validateDirectAlbumObservation(observation, descriptor, {
@@ -349,7 +349,7 @@ export type CircleRetailAdapter = Readonly<{
 }>;
 
 export const CIRCLE_RETAIL_ADAPTER: CircleRetailAdapter = Object.freeze({
-  descriptor: CIRCLE_PROVIDER_DESCRIPTOR,
+  descriptor: CIRCLE_EVIDENCE_DESCRIPTOR,
   normalizeQualifiedResponse: adaptCircleRetailQualifiedResponse,
   executeLive: async (): Promise<never> => {
     throw new CircleRetailLiveGateError();
