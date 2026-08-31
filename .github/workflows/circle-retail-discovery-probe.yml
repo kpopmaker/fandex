@@ -1,4 +1,4 @@
-name: Circle Retail Discovery Probe
+name: Circle Retail Discovery Validation
 
 on:
   push:
@@ -9,113 +9,17 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
-      - name: Verify Circle retail quantity render and period schemas
-        shell: bash
-        run: |
-          node <<'NODE'
-          (async () => {
-            const base = 'https://circlechart.kr';
-            const pageUrl = `${base}/page_chart/retail.circle?termGbn=day&yyyymmdd=20260529`;
-            const endpointUrl = `${base}/data/api/chart/retail_list`;
-            const baseHeaders = {
-              'user-agent': 'Mozilla/5.0 (compatible; FANDEX-Research-Discovery/1.0)',
-              'accept': 'text/html,application/xhtml+xml,application/json,text/javascript,*/*;q=0.8',
-            };
-
-            const pageResponse = await fetch(pageUrl, {
-              method: 'GET', headers: baseHeaders, redirect: 'follow', signal: AbortSignal.timeout(15000),
-            });
-            const pageText = await pageResponse.text();
-            const cookieHeader = pageResponse.headers.get('set-cookie');
-            const cookie = cookieHeader ? cookieHeader.split(';', 1)[0] : null;
-
-            function snippets(text, needle, max = 6) {
-              const out = [];
-              let from = 0;
-              while (out.length < max) {
-                const index = text.indexOf(needle, from);
-                if (index < 0) break;
-                const start = Math.max(0, index - 320);
-                const end = Math.min(text.length, index + needle.length + 520);
-                out.push(text.slice(start, end).replace(/\s+/g, ' '));
-                from = index + needle.length;
-              }
-              return out;
-            }
-
-            for (const needle of ['rowSum', 'KSum', 'ESum', 'ChartTable_HTML_Retail', '판매량', 'Sales']) {
-              const hits = snippets(pageText, needle);
-              if (hits.length) console.log('FANDEX_CIRCLE_RENDER_HINT=' + JSON.stringify({ needle, hits }));
-            }
-
-            const requestHeaders = {
-              ...baseHeaders,
-              'accept': 'application/json,text/javascript,*/*;q=0.01',
-              'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-              'x-requested-with': 'XMLHttpRequest',
-              'referer': pageUrl,
-            };
-            if (cookie) requestHeaders.cookie = cookie;
-
-            function rowsFromList(list) {
-              if (Array.isArray(list)) return list;
-              if (list && typeof list === 'object') {
-                return Object.entries(list)
-                  .filter(([, value]) => value && typeof value === 'object' && !Array.isArray(value))
-                  .sort(([a], [b]) => Number(a) - Number(b))
-                  .map(([, value]) => value);
-              }
-              return [];
-            }
-
-            const cases = [
-              { label: 'day', termGbn: 'day', yyyymmdd: '20260529' },
-              { label: 'week', termGbn: 'week', yyyymmdd: '20250223' },
-              { label: 'month', termGbn: 'month', yyyymmdd: '202206' },
-            ];
-
-            for (const testCase of cases) {
-              const response = await fetch(endpointUrl, {
-                method: 'POST',
-                headers: requestHeaders,
-                body: new URLSearchParams({ termGbn: testCase.termGbn, yyyymmdd: testCase.yyyymmdd }).toString(),
-                redirect: 'follow',
-                signal: AbortSignal.timeout(15000),
-              });
-              const parsed = JSON.parse(await response.text());
-              const rows = rowsFromList(parsed.List);
-              const first = rows[0] ?? null;
-              const compact = first && typeof first === 'object' ? {
-                Album: first.Album ?? null,
-                Artist: first.Artist ?? null,
-                Barcode: first.Barcode ?? null,
-                rowSum: first.rowSum ?? null,
-                KSum: first.KSum ?? null,
-                ESum: first.ESum ?? null,
-                RankInt: first.RankInt ?? null,
-                RankOrder: first.RankOrder ?? null,
-                YYYYMMDD: first.YYYYMMDD ?? null,
-              } : null;
-              console.log('FANDEX_CIRCLE_PERIOD_SCHEMA=' + JSON.stringify({
-                label: testCase.label,
-                termGbn: testCase.termGbn,
-                yyyymmdd: testCase.yyyymmdd,
-                status: response.status,
-                contentType: response.headers.get('content-type'),
-                resultStatus: parsed.ResultStatus ?? null,
-                rootKeys: Object.keys(parsed).sort(),
-                listType: Array.isArray(parsed.List) ? 'array' : parsed.List && typeof parsed.List === 'object' ? 'object' : typeof parsed.List,
-                rowCount: rows.length,
-                firstRowKeys: first && typeof first === 'object' ? Object.keys(first).sort() : [],
-                firstRow: compact,
-              }));
-            }
-          })().catch((error) => {
-            console.error('FANDEX_CIRCLE_PROBE_FATAL=' + JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
-            process.exitCode = 1;
-          });
-          NODE
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Circle retail discovery tests
+        run: npx tsx --test tests/circle-retail-discovery-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
