@@ -13,32 +13,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Probe Daily and Monthly once each plus historical page hints
+      - name: Probe Daily Monthly and historical page without early exit
         shell: bash
         run: |
-          set -euo pipefail
-          probe_api() {
-            label="$1"
-            url="$2"
-            status=$(curl --silent --show-error \
-              --request GET \
-              --header 'Accept: application/json' \
-              --header 'Accept-Language: en' \
-              --dump-header "${label}-headers.txt" \
-              --output "${label}-body.txt" \
-              --write-out '%{http_code}' \
-              "$url")
-            LABEL="$label" HTTP_STATUS="$status" node - <<'NODE'
-            const fs=require('fs');
-            const label=process.env.LABEL;
-            const httpStatus=Number(process.env.HTTP_STATUS);
-            const raw=fs.readFileSync(`${label}-body.txt`,'utf8');
-            let parsed=null, parseError=null;
+          set -u
+
+          daily_status=$(curl --silent --show-error --request GET \
+            --header 'Accept: application/json' \
+            --header 'Accept-Language: en' \
+            --output daily-body.txt --write-out '%{http_code}' \
+            'https://api.hanteochart.io/v4/ranking/list/ALBUM/DAILY/BASIC?limit=20' || echo '000')
+
+          sleep 2
+
+          monthly_status=$(curl --silent --show-error --request GET \
+            --header 'Accept: application/json' \
+            --header 'Accept-Language: en' \
+            --output monthly-body.txt --write-out '%{http_code}' \
+            'https://api.hanteochart.io/v4/ranking/list/ALBUM/MONTHLY/BASIC?limit=20' || echo '000')
+
+          page_status=$(curl --silent --show-error \
+            --output historical-page.html --write-out '%{http_code}' \
+            'https://www.hanteochart.com/en/charts/album/weekly/2026-W30' || echo '000')
+
+          DAILY_STATUS="$daily_status" MONTHLY_STATUS="$monthly_status" PAGE_STATUS="$page_status" node - <<'NODE'
+          const fs=require('fs');
+          function apiSummary(label,status){
+            const path=`${label}-body.txt`;
+            const raw=fs.existsSync(path)?fs.readFileSync(path,'utf8'):'';
+            let parsed=null,parseError=null;
             try{parsed=JSON.parse(raw)}catch(e){parseError=String(e)}
             const list=parsed?.resultData?.list;
             const first=Array.isArray(list)&&list[0]&&typeof list[0]==='object'?list[0]:null;
-            const out={
-              httpStatus,
+            return {
+              httpStatus:Number(status)||0,
               parseError,
               code:parsed?.code??null,
               message:parsed?.message??null,
@@ -47,46 +55,31 @@ jobs:
               firstRowKeys:first?Object.keys(first):[],
               firstDetailKeys:first?.detail&&typeof first.detail==='object'?Object.keys(first.detail):[],
               firstRow:first?{
-                rank:first.rank??null,
-                targetIdx:first.targetIdx??null,
-                targetName:first.targetName??null,
-                value:first.value??null,
-                artistIdx:first.detail?.artistIdx??null,
+                rank:first.rank??null,targetIdx:first.targetIdx??null,targetName:first.targetName??null,
+                value:first.value??null,artistIdx:first.detail?.artistIdx??null,
                 artistGlobalName:first.detail?.artistGlobalName??null,
-                salesVolume:first.detail?.salesVolume??null,
-                supplyPrice:first.detail?.supplyPrice??null,
-                saleDate:first.detail?.saleDate??null,
-                regDate:first.regDate??null
-              }:null
+                salesVolume:first.detail?.salesVolume??null,supplyPrice:first.detail?.supplyPrice??null,
+                saleDate:first.detail?.saleDate??null,regDate:first.regDate??null
+              }:null,
+              bodyPrefix:raw.slice(0,500)
             };
-            fs.writeFileSync(`${label}-summary.json`,JSON.stringify(out,null,2));
-            console.log(label,JSON.stringify(out));
-            NODE
           }
+          const daily=apiSummary('daily',process.env.DAILY_STATUS);
+          const monthly=apiSummary('monthly',process.env.MONTHLY_STATUS);
+          fs.writeFileSync('daily-summary.json',JSON.stringify(daily,null,2));
+          fs.writeFileSync('monthly-summary.json',JSON.stringify(monthly,null,2));
 
-          probe_api daily 'https://api.hanteochart.io/v4/ranking/list/ALBUM/DAILY/BASIC?limit=20'
-          sleep 2
-          probe_api monthly 'https://api.hanteochart.io/v4/ranking/list/ALBUM/MONTHLY/BASIC?limit=20'
-
-          curl --silent --show-error \
-            'https://www.hanteochart.com/en/charts/album/weekly/2026-W30' \
-            --output historical-page.html
-
-          node - <<'NODE'
-          const fs=require('fs');
-          const raw=fs.readFileSync('historical-page.html','utf8');
+          const raw=fs.existsSync('historical-page.html')?fs.readFileSync('historical-page.html','utf8'):'';
           const scripts=[...raw.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m=>m[1]);
           const needles=['ranking/list','api.hanteochart','salesVolume','targetIdx','2026-W30','2026.07.20','resultDatetime'];
           const hits={};
-          for(const n of needles){
-            const i=raw.indexOf(n);
-            hits[n]=i>=0?raw.slice(Math.max(0,i-180),Math.min(raw.length,i+420)):null;
-          }
-          const out={htmlLength:raw.length,scriptCount:scripts.length,scripts:scripts.slice(0,80),hits};
-          fs.writeFileSync('historical-page-summary.json',JSON.stringify(out,null,2));
-          console.log(JSON.stringify(out));
+          for(const n of needles){const i=raw.indexOf(n);hits[n]=i>=0?raw.slice(Math.max(0,i-180),Math.min(raw.length,i+420)):null;}
+          const page={httpStatus:Number(process.env.PAGE_STATUS)||0,htmlLength:raw.length,scriptCount:scripts.length,scripts:scripts.slice(0,80),hits};
+          fs.writeFileSync('historical-page-summary.json',JSON.stringify(page,null,2));
+          console.log(JSON.stringify({daily,monthly,page},null,2));
           NODE
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: hanteo-direct-contract-probe
           path: |
