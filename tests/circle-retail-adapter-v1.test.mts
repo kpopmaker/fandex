@@ -47,10 +47,14 @@ const rawDaily = {
   },
 };
 
-function qualifiedCapture(rawResponse: unknown, termGbn = 'day', yyyymmdd = '20260529') {
+function qualifiedListCapture(
+  rawResponse: unknown,
+  termGbn: 'day' | 'week' | 'month' | 'year' = 'day',
+  yyyymmdd = '20260529',
+) {
   const plan = verifyCircleRetailCandidateEndpoint(
     buildCircleRetailDiscoveryRequestPlan({
-      timeframe: termGbn as 'day' | 'week' | 'month',
+      timeframe: termGbn,
       date: termGbn === 'day' ? '2026-05-29' : null,
       providerPeriodKey: yyyymmdd,
       candidate: {
@@ -77,6 +81,40 @@ function qualifiedCapture(rawResponse: unknown, termGbn = 'day', yyyymmdd = '202
   );
 }
 
+function qualifiedHourCapture(rawResponse: unknown) {
+  const params = {
+    yyyymmdd: '20260831',
+    HourRange: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
+    ListType: '전일22시',
+    thisHour: '23',
+  };
+  const plan = verifyCircleRetailCandidateEndpoint(
+    buildCircleRetailDiscoveryRequestPlan({
+      timeframe: 'hour',
+      date: '2026-08-31',
+      hour: 23,
+      providerPeriodKey: '20260831-23',
+      candidate: { kind: 'retail-hour', params },
+    }),
+    ['circle-retail-hour-direct-v1'],
+  );
+  return verifyCircleRetailQuantitySemantic(
+    captureCircleRetailDiscovery({
+      plan,
+      rawResponse,
+      status: 200,
+      contentType: 'application/json',
+      observedAt,
+    }),
+    {
+      quantitySemanticState: 'verified-retail-copies',
+      quantityField: 'rowSum',
+      rowPath: '$.List{values}',
+      evidenceIds: ['circle-retail-hour-rowSum-sales'],
+    },
+  );
+}
+
 const resolvedIdentity = {
   fandexArtistId: 'artist:aespa',
   fandexReleaseId: 'release:aespa:lemonade-2',
@@ -89,7 +127,7 @@ const resolvedIdentity = {
 };
 
 test('qualified Circle row becomes a direct period-sale observation using rowSum only', () => {
-  const capture = qualifiedCapture(rawDaily);
+  const capture = qualifiedListCapture(rawDaily);
   const result = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: rawDaily,
@@ -130,7 +168,7 @@ test('qualified Circle row becomes a direct period-sale observation using rowSum
 });
 
 test('evidence-linked descriptor validates real period-sale observations while base descriptor remains unknown', () => {
-  const capture = qualifiedCapture(rawDaily);
+  const capture = qualifiedListCapture(rawDaily);
   const research = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: rawDaily,
@@ -157,7 +195,7 @@ test('evidence-linked descriptor validates real period-sale observations while b
 });
 
 test('payload digest mismatch fails closed', () => {
-  const capture = qualifiedCapture(rawDaily);
+  const capture = qualifiedListCapture(rawDaily);
   const changed = {
     ...rawDaily,
     List: {
@@ -180,7 +218,7 @@ test('negative quantity is rejected and never coerced to zero', () => {
       0: { ...rawDaily.List[0], rowSum: '-1' },
     },
   };
-  const capture = qualifiedCapture(invalid);
+  const capture = qualifiedListCapture(invalid);
   const result = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: invalid,
@@ -200,7 +238,7 @@ test('provider-period mismatch is rejected', () => {
       0: { ...rawDaily.List[0], YYYYMMDD: '20260528' },
     },
   };
-  const capture = qualifiedCapture(mismatch);
+  const capture = qualifiedListCapture(mismatch);
   const result = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: mismatch,
@@ -230,7 +268,7 @@ test('monthly rows preserve provider-native month period without ISO rewriting',
       },
     },
   };
-  const capture = qualifiedCapture(rawMonthly, 'month', '202206');
+  const capture = qualifiedListCapture(rawMonthly, 'month', '202206');
   const result = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: rawMonthly,
@@ -252,32 +290,116 @@ test('monthly rows preserve provider-native month period without ISO rewriting',
   assert.equal(result.observations[0].providerSkuId, '8809848751103');
 });
 
-test('hour/year remain blocked until their raw contracts are directly qualified', () => {
-  const yearRaw = {
-    FormToMap: { termGbn: 'year', yyyymmdd: '2026' },
+test('yearly retail_list rows are qualified with provider-native YYYY and Barcode', () => {
+  const rawYear = {
+    FormToMap: { termGbn: 'year', yyyymmdd: '2025' },
     ResultStatus: 'OK',
     List: {
-      0: { ...rawDaily.List[0], YYYYMMDD: null },
+      0: {
+        Album: 'KARMA',
+        Artist: 'Stray Kids (스트레이 키즈)',
+        Barcode: '8809954227851',
+        rowSum: '1095914',
+        KSum: '900000',
+        ESum: '195914',
+        RankInt: '1',
+        RankOrder: '1',
+        YYYY: '2025',
+      },
     },
   };
-  const plan = verifyCircleRetailCandidateEndpoint(
-    buildCircleRetailDiscoveryRequestPlan({
-      timeframe: 'year',
-      providerPeriodKey: '2026',
-      candidate: { kind: 'retail-list', params: { termGbn: 'year', yyyymmdd: '2026' } },
-    }),
-    ['endpoint-evidence'],
-  );
-  const capture = verifyCircleRetailQuantitySemantic(
-    captureCircleRetailDiscovery({ plan, rawResponse: yearRaw, observedAt, status: 200, contentType: 'application/json' }),
-    { quantitySemanticState: 'verified-retail-copies', quantityField: 'rowSum', rowPath: '$.List{values}', evidenceIds: ['quantity-evidence'] },
-  );
-  assert.throws(() => adaptCircleRetailQualifiedResponse({
+  const capture = qualifiedListCapture(rawYear, 'year', '2025');
+  const result = adaptCircleRetailQualifiedResponse({
     capture,
-    rawResponse: yearRaw,
+    rawResponse: rawYear,
     collectedAt,
+    syntheticFixture: false,
+    resolveIdentity: () => ({
+      fandexArtistId: 'artist:stray-kids',
+      fandexReleaseId: 'release:stray-kids:karma',
+      fandexReleaseFamilyId: 'release-family:stray-kids:karma',
+      artistResolutionState: 'resolved',
+      artistReviewState: 'human-reviewed',
+      releaseResolutionState: 'resolved',
+      releaseReviewState: 'human-reviewed',
+      evidenceIds: ['identity-review:stray-kids:karma'],
+    }),
+  });
+  assert.equal(result.timeframe, 'year');
+  assert.equal(result.providerPeriod, 'year:2025');
+  assert.equal(result.observations.length, 1);
+  assert.equal(result.observations[0].value, 1095914);
+  assert.equal(result.observations[0].providerSkuId, '8809954227851');
+  assert.equal(validateCircleRetailNormalizedObservations(result.observations).valid, true);
+});
+
+test('hourly retail_hour rows are qualified without inventing missing Barcode identity', () => {
+  const rawHour = {
+    FormToMap: {
+      yyyymmdd: '20260831',
+      HourRange: '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23',
+      ListType: '전일22시',
+      thisHour: '23',
+    },
+    ResultStatus: 'OK',
+    List: {
+      0: {
+        Album: 'GREENGREEN',
+        Artist: 'CORTIS (코르티스)',
+        rowSum: '21261',
+        KSum: '18842',
+        ESum: '2419',
+        RankInt: '1',
+        RankStatus: 'new',
+        YYYYMMDD: '20260831',
+      },
+    },
+  };
+  const capture = qualifiedHourCapture(rawHour);
+  const result = adaptCircleRetailQualifiedResponse({
+    capture,
+    rawResponse: rawHour,
+    collectedAt,
+    syntheticFixture: false,
+    resolveIdentity: () => ({
+      fandexArtistId: 'artist:cortis',
+      fandexReleaseId: 'release:cortis:greengreen',
+      fandexReleaseFamilyId: 'release-family:cortis:greengreen',
+      artistResolutionState: 'resolved',
+      artistReviewState: 'human-reviewed',
+      releaseResolutionState: 'resolved',
+      releaseReviewState: 'human-reviewed',
+      evidenceIds: ['identity-review:cortis:greengreen'],
+    }),
+  });
+  assert.equal(result.timeframe, 'hour');
+  assert.equal(result.providerPeriod, 'hour:20260831-23');
+  assert.equal(result.observations.length, 1);
+  assert.equal(result.observations[0].value, 21261);
+  assert.equal(result.observations[0].providerSkuId, null);
+  assert.equal(validateCircleRetailNormalizedObservations(result.observations).valid, true);
+});
+
+test('non-hour periods still reject missing Barcode instead of silently weakening SKU identity', () => {
+  const noBarcode = {
+    ...rawDaily,
+    List: {
+      0: {
+        ...rawDaily.List[0],
+        Barcode: undefined,
+      },
+    },
+  };
+  const capture = qualifiedListCapture(noBarcode);
+  const result = adaptCircleRetailQualifiedResponse({
+    capture,
+    rawResponse: noBarcode,
+    collectedAt,
+    syntheticFixture: true,
     resolveIdentity: () => resolvedIdentity,
-  }), /circle_retail_adapter_timeframe_not_qualified/);
+  });
+  assert.equal(result.observations.length, 0);
+  assert.ok(result.rejections[0].reasons.includes('sku-identity-missing'));
 });
 
 test('live execution stays disabled', async () => {
