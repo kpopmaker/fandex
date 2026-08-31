@@ -157,11 +157,17 @@ test('plan-only CLI defaults to primary/current and has no side effects', () => 
   assert.equal(report.effects.environmentMutation, 0);
 });
 
-test('plan-only CLI rejects ambiguous or unsupported arguments', () => {
+test('plan-only CLI separates syntax validation from provider qualification', () => {
   assert.throws(() => parseAlbumCollectorPlanCommand([], () => new Date()), /argument_invalid/);
   assert.throws(() => parseAlbumCollectorPlanCommand(['--timeframe', 'day', '--timeframe', 'week']), /argument_invalid/);
   assert.throws(() => parseAlbumCollectorPlanCommand(['--timeframe', 'day', '--unknown', 'x']), /argument_invalid/);
-  assert.throws(() => parseAlbumCollectorPlanCommand(['--provider', 'secondary', '--timeframe', 'hour']), /hanteo_timeframe_unqualified|argument_invalid/);
   assert.throws(() => parseAlbumCollectorPlanCommand(['--timeframe', 'day', '--period', '20260831']), /argument_invalid/);
   assert.throws(() => parseAlbumCollectorPlanCommand(['--timeframe', 'day', '--period-mode', 'historical']), /argument_invalid/);
+
+  const unsupported = parseAlbumCollectorPlanCommand([
+    '--provider', 'secondary',
+    '--timeframe', 'hour',
+    '--at', '2026-09-01T00:00:00Z',
+  ]);
+  assert.throws(() => buildAlbumCollectorPlanReport(unsupported), /hanteo_timeframe_unqualified/);
 });
