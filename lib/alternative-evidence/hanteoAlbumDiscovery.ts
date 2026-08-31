@@ -3,6 +3,15 @@ import { sha256Canonical } from '../shared/canonicalDigest';
 export const HANTEO_ALBUM_DISCOVERY_CONTRACT_VERSION = 'hanteo-album-discovery-v1';
 export const HANTEO_ALBUM_API_BASE = 'https://api.hanteochart.io';
 
+export const HANTEO_HISTORICAL_EXACT_COPIES_QUALIFICATION = Object.freeze({
+  publicRankHistory: 'pass' as const,
+  historicalPageSalesExposure: 'rank-only' as const,
+  historicalPageShowSales: false as const,
+  sameSiteChartSalesBehavior: 'current-only-observed' as const,
+  publicApiDocsContract: 'not-obtained-in-bounded-probe' as const,
+  exactCopiesPublicSelector: 'unverified' as const,
+});
+
 export type HanteoAlbumCurrentTimeframe = 'day' | 'week' | 'month';
 export type HanteoAlbumDiscoveryMode = 'current' | 'historical';
 
@@ -15,7 +24,7 @@ export type HanteoAlbumRequestPlan = Readonly<{
   endpointPath: string;
   url: string;
   endpointEvidenceState: 'direct-verified-current';
-  historicalSelectorState: 'pending';
+  historicalSelectorState: 'unverified-public-selector';
   networkAllowed: false;
 }>;
 
@@ -78,8 +87,9 @@ const PATH_BY_TIMEFRAME: Readonly<Record<HanteoAlbumCurrentTimeframe, string>> =
 });
 
 export class HanteoHistoricalSelectorPendingError extends Error {
+  readonly code = 'hanteo-historical-exact-copies-selector-unverified' as const;
   constructor() {
-    super('hanteo-historical-selector-pending');
+    super('hanteo-historical-exact-copies-selector-unverified');
     this.name = 'HanteoHistoricalSelectorPendingError';
   }
 }
@@ -105,7 +115,7 @@ export function buildHanteoAlbumRequestPlan(input: Readonly<{
     endpointPath,
     url,
     endpointEvidenceState: 'direct-verified-current',
-    historicalSelectorState: 'pending',
+    historicalSelectorState: 'unverified-public-selector',
     networkAllowed: false,
   });
 }
