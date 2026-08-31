@@ -13,27 +13,35 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Inspect public historical chart page chunk once
+      - name: Inspect current historical chart page chunk once
         shell: bash
         run: |
           set -euo pipefail
-          base='https://www.hanteochart.com'
-          chunk='/_next/static/chunks/app/%5Blocale%5D/charts/%5Bcategory%5D/%5Bterm%5D/%5Bperiod%5D/page-1803aea297a11422.js'
-          curl --silent --show-error "$base$chunk" --output page-chunk.js
-          node - <<'NODE'
+          page='https://www.hanteochart.com/en/charts/album/weekly/2026-W30'
+          curl --silent --show-error "$page" --output historical-page.html
+          node - <<'NODE' > chart-chunk-path.txt
+          const fs=require('fs');
+          const raw=fs.readFileSync('historical-page.html','utf8');
+          const scripts=[...raw.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m=>m[1]);
+          const match=scripts.find(x=>x.includes('/charts/')&&x.includes('/page-'));
+          if(!match) process.exit(2);
+          process.stdout.write(match);
+          NODE
+          chunk=$(cat chart-chunk-path.txt)
+          curl --silent --show-error "https://www.hanteochart.com${chunk}" --output page-chunk.js
+          CHUNK_PATH="$chunk" node - <<'NODE'
           const fs=require('fs');
           const raw=fs.readFileSync('page-chunk.js','utf8');
-          const needles=['ranking/list','api.hanteochart','resultDatetime','limit','period','WEEKLY','DAILY','MONTHLY','searchParams','issue','date','timestamp','ranking'];
+          const needles=['ranking/list','api.hanteochart','resultDatetime','limit','period','WEEKLY','DAILY','MONTHLY','searchParams','issue','date','timestamp','ranking','fetch(','axios'];
           const hits={};
           for(const n of needles){
             const all=[]; let start=0;
-            while(all.length<8){const i=raw.indexOf(n,start);if(i<0)break;all.push(raw.slice(Math.max(0,i-450),Math.min(raw.length,i+1000)));start=i+n.length;}
+            while(all.length<12){const i=raw.indexOf(n,start);if(i<0)break;all.push(raw.slice(Math.max(0,i-600),Math.min(raw.length,i+1400)));start=i+n.length;}
             hits[n]=all;
           }
-          const urls=[...new Set([...raw.matchAll(/https?:\\?\/\\?\/[^"'`\\s)]+/g)].map(m=>m[0]))].slice(0,100);
-          const out={length:raw.length,urls,hits};
+          const out={chunkPath:process.env.CHUNK_PATH,length:raw.length,hits};
           fs.writeFileSync('hanteo-historical-selector-hints.json',JSON.stringify(out,null,2));
-          console.log(JSON.stringify({length:out.length,urlCount:urls.length,hitCounts:Object.fromEntries(Object.entries(hits).map(([k,v])=>[k,v.length]))},null,2));
+          console.log(JSON.stringify({chunkPath:out.chunkPath,length:out.length,hitCounts:Object.fromEntries(Object.entries(hits).map(([k,v])=>[k,v.length]))},null,2));
           NODE
       - uses: actions/upload-artifact@v4
         with:
