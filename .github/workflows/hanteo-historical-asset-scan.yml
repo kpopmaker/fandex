@@ -1,0 +1,65 @@
+name: Hanteo Historical Asset Scan
+
+on:
+  push:
+    branches:
+      - integration/album-hanteo-direct-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Scan current historical page assets once
+        shell: bash
+        run: |
+          set -euo pipefail
+          page='https://www.hanteochart.com/en/charts/album/weekly/2026-W30'
+          curl --silent --show-error "$page" --output page.html
+          node - <<'NODE' > scripts.txt
+          const fs=require('fs');
+          const html=fs.readFileSync('page.html','utf8');
+          const scripts=[...new Set([...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m=>m[1]))];
+          for(const s of scripts) console.log(s);
+          NODE
+          mkdir -p chunks
+          : > asset-scan.txt
+          i=0
+          while IFS= read -r src; do
+            [ -z "$src" ] && continue
+            i=$((i+1))
+            url="$src"
+            case "$url" in
+              http://*|https://*) ;;
+              *) url="https://www.hanteochart.com${url}" ;;
+            esac
+            out="chunks/chunk-${i}.js"
+            curl --silent --show-error "$url" --output "$out" || true
+            if grep -Eqi 'ranking/list|api\.hanteochart|salesVolume|resultDatetime|targetIdx|/v4/ranking|WEEKLY|DAILY|MONTHLY' "$out"; then
+              echo "### $src" >> asset-scan.txt
+              node - "$out" <<'NODE' >> asset-scan.txt
+              const fs=require('fs'); const p=process.argv[2]; const raw=fs.readFileSync(p,'utf8');
+              const needles=['ranking/list','api.hanteochart','salesVolume','resultDatetime','targetIdx','/v4/ranking','WEEKLY','DAILY','MONTHLY','limit','issue','date','period','timestamp'];
+              for(const n of needles){
+                let start=0,count=0;
+                while(count<6){const idx=raw.indexOf(n,start); if(idx<0) break; console.log(`\n[${n}]\n${raw.slice(Math.max(0,idx-700),Math.min(raw.length,idx+1800))}`); start=idx+n.length; count++;}
+              }
+              NODE
+            fi
+          done < scripts.txt
+          node - <<'NODE'
+          const fs=require('fs');
+          const scripts=fs.readFileSync('scripts.txt','utf8').trim().split(/\r?\n/).filter(Boolean);
+          const scan=fs.existsSync('asset-scan.txt')?fs.readFileSync('asset-scan.txt','utf8'):'';
+          const out={scriptCount:scripts.length,matchedAssetSections:(scan.match(/^### /gm)||[]).length,scanPrefix:scan.slice(0,30000)};
+          fs.writeFileSync('hanteo-historical-asset-scan.json',JSON.stringify(out,null,2));
+          console.log(JSON.stringify({scriptCount:out.scriptCount,matchedAssetSections:out.matchedAssetSections},null,2));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hanteo-historical-asset-scan
+          path: hanteo-historical-asset-scan.json
+          retention-days: 1
