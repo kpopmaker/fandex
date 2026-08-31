@@ -31,6 +31,7 @@ export * from './albumTemporalSnapshot';
 export * from './yes24RetailAdapter';
 export * from './directProviderEvidence';
 export * from './circleRetailDiscovery';
+export * from './circleRetailAdapter';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
 export * from './persistenceContracts';
