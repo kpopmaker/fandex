@@ -1,4 +1,4 @@
-name: Hanteo Historical Asset Scan
+name: Hanteo Historical Sales Context Probe
 
 on:
   push:
@@ -9,56 +9,69 @@ permissions:
   contents: read
 
 jobs:
-  scan:
+  probe:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Scan current historical page assets once
+      - name: Probe chart-sales context with bounded referers
         shell: bash
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs = require('fs');
-          const pageUrl = 'https://www.hanteochart.com/en/charts/album/weekly/2026-W30';
           const base = 'https://www.hanteochart.com';
-          const needles = ['ranking/list','api.hanteochart','salesVolume','resultDatetime','targetIdx','/v4/ranking','WEEKLY','DAILY','MONTHLY','limit','issue','date','period','timestamp'];
-          const main = async () => {
-            const pageRes = await fetch(pageUrl, { headers: { 'user-agent': 'Mozilla/5.0' } });
-            const html = await pageRes.text();
-            const scripts = [...new Set([...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]))];
-            const matches = [];
-            for (const src of scripts) {
-              const url = /^https?:/.test(src) ? src : base + src;
-              let raw = '';
-              try {
-                const r = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0' } });
-                raw = await r.text();
-              } catch {
-                continue;
-              }
-              if (!/(ranking\/list|api\.hanteochart|salesVolume|resultDatetime|targetIdx|\/v4\/ranking|WEEKLY|DAILY|MONTHLY)/i.test(raw)) continue;
-              const snippets = {};
-              for (const n of needles) {
-                const arr = [];
-                let start = 0;
-                while (arr.length < 6) {
-                  const i = raw.indexOf(n, start);
-                  if (i < 0) break;
-                  arr.push(raw.slice(Math.max(0, i - 700), Math.min(raw.length, i + 1800)));
-                  start = i + n.length;
-                }
-                if (arr.length) snippets[n] = arr;
-              }
-              matches.push({ src, length: raw.length, snippets });
-            }
-            const out = { pageStatus: pageRes.status, scriptCount: scripts.length, matchedAssetCount: matches.length, matches };
-            fs.writeFileSync('hanteo-historical-asset-scan.json', JSON.stringify(out, null, 2));
-            console.log(JSON.stringify({ pageStatus: out.pageStatus, scriptCount: out.scriptCount, matchedAssetCount: out.matchedAssetCount }, null, 2));
-          };
-          main().catch(err => { console.error(err); process.exit(1); });
+          const historical30 = `${base}/en/charts/album/weekly/2026-W30`;
+          const historical29 = `${base}/en/charts/album/weekly/2026-W29`;
+          const sleep = ms => new Promise(r => setTimeout(r, ms));
+          async function request(url, referer) {
+            const res = await fetch(url, {headers:{'accept':'application/json','user-agent':'Mozilla/5.0','referer':referer}});
+            const text = await res.text();
+            let json=null; try{json=JSON.parse(text)}catch{}
+            const sales = Array.isArray(json?.sales) ? json.sales : null;
+            return {
+              status:res.status,
+              contentType:res.headers.get('content-type'),
+              keys:json&&typeof json==='object'?Object.keys(json):[],
+              salesCount:sales?.length??null,
+              firstSales:sales?.slice(0,3).map(x=>({targetIdx:x?.targetIdx??null,salesVolume:x?.salesVolume??null}))??null,
+              bodyPrefix:text.slice(0,500)
+            };
+          }
+          const combos = [
+            ['ALBUM','WEEKLY','BASIC'],
+            ['ALBUM','weekly','BASIC'],
+            ['album','WEEKLY','BASIC'],
+            ['album','weekly','BASIC']
+          ];
+          let working=null;
+          const attempts=[];
+          for(const [type,term,genre] of combos){
+            const url=`${base}/api/chart-sales?type=${encodeURIComponent(type)}&term=${encodeURIComponent(term)}&genre=${encodeURIComponent(genre)}`;
+            const result=await request(url,historical30);
+            attempts.push({type,term,genre,result});
+            if(!working && result.status===200 && result.salesCount!==null) working={type,term,genre,url,result};
+            if(working) break;
+            await sleep(2000);
+          }
+          const comparison={};
+          if(working){
+            await sleep(2000);
+            comparison.week30=await request(working.url,historical30);
+            await sleep(2000);
+            comparison.week29=await request(working.url,historical29);
+          }
+          const page30=await (await fetch(historical30,{headers:{'user-agent':'Mozilla/5.0'}})).text();
+          const htmlHints={};
+          for(const needle of ['ALBUM','WEEKLY','BASIC','showSales','apiType','genre','2026-W30']){
+            const i=page30.indexOf(needle);
+            htmlHints[needle]=i>=0?page30.slice(Math.max(0,i-300),Math.min(page30.length,i+700)):null;
+          }
+          const out={attempts,working:working?{type:working.type,term:working.term,genre:working.genre}:null,comparison,htmlHints};
+          fs.writeFileSync('hanteo-historical-sales-context.json',JSON.stringify(out,null,2));
+          console.log(JSON.stringify({working:out.working,attempts:attempts.map(a=>({type:a.type,term:a.term,genre:a.genre,status:a.result.status,salesCount:a.result.salesCount})),comparison},null,2));
           NODE
       - uses: actions/upload-artifact@v4
         with:
-          name: hanteo-historical-asset-scan
-          path: hanteo-historical-asset-scan.json
+          name: hanteo-historical-sales-context
+          path: hanteo-historical-sales-context.json
           retention-days: 1
