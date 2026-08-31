@@ -4,3 +4,4 @@ export * from './readModel';
 export * from './repositorySnapshot';
 export * from './identityQualityGate';
 export * from './historicalWindow';
+export * from './shadowVariableAdapter';
