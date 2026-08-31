@@ -13,12 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Run three low-frequency public requests
+      - name: Run two low-frequency public requests
         shell: bash
         run: |
           set -euo pipefail
           endpoint='https://circlechart.kr/data/api/chart/retail_list'
-          for i in 1 2 3; do
+          printf '{"requests":[' > rate-limit-evidence.json
+          for i in 1 2; do
             headers="headers-${i}.txt"
             body="body-${i}.json"
             status=$(curl --silent --show-error \
@@ -30,10 +31,36 @@ jobs:
               --output "$body" \
               --write-out '%{http_code}' \
               "$endpoint")
-            echo "request_${i}_http_status=${status}"
-            node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));console.log('request_${i}_provider_status='+(x.ResultStatus??'missing'));console.log('request_${i}_row_count='+(x.List&&typeof x.List==='object'?Object.keys(x.List).length:'missing'));" "$body"
-            echo "request_${i}_selected_headers_begin"
-            grep -Ei '^(retry-after|x-ratelimit|ratelimit|server|date|cache-control|cf-ray|x-cache|via):' "$headers" || true
-            echo "request_${i}_selected_headers_end"
-            if [ "$i" -lt 3 ]; then sleep 3; fi
+            node - <<'NODE' "$body" "$headers" "$status" "$i" >> rate-limit-fragment-${i}.json
+          const fs = require('fs');
+          const [bodyPath, headersPath, httpStatus, index] = process.argv.slice(2);
+          const body = JSON.parse(fs.readFileSync(bodyPath, 'utf8'));
+          const headers = fs.readFileSync(headersPath, 'utf8').split(/\r?\n/);
+          const selected = {};
+          for (const line of headers) {
+            const m = line.match(/^([^:]+):\s*(.*)$/);
+            if (!m) continue;
+            const key = m[1].toLowerCase();
+            if (/^(retry-after|x-ratelimit|ratelimit|server|date|cache-control|cf-ray|x-cache|via)$/.test(key)) selected[key] = m[2];
+          }
+          const result = {
+            index: Number(index),
+            httpStatus: Number(httpStatus),
+            providerStatus: body.ResultStatus ?? null,
+            rowCount: body.List && typeof body.List === 'object' ? Object.keys(body.List).length : null,
+            selectedHeaders: selected,
+          };
+          if (result.httpStatus !== 200 || result.providerStatus !== 'OK') process.exitCode = 1;
+          process.stdout.write(JSON.stringify(result));
+          NODE
+            if [ "$i" -gt 1 ]; then printf ',' >> rate-limit-evidence.json; fi
+            cat rate-limit-fragment-${i}.json >> rate-limit-evidence.json
+            if [ "$i" -lt 2 ]; then sleep 3; fi
           done
+          printf ']}' >> rate-limit-evidence.json
+          cat rate-limit-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: circle-retail-rate-limit-evidence
+          path: rate-limit-evidence.json
+          retention-days: 1
