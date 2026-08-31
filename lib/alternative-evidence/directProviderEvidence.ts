@@ -58,11 +58,11 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   identityEvidence:
     'Direct rows expose Barcode as a stable SKU/product identity candidate plus Artist and Album text. Provider-native artist/release/edition IDs remain unverified.',
   temporalEvidence:
-    'POST retail_list historical Daily, Weekly, and Monthly requests were directly observed with provider-native period keys and ResultStatus=OK.',
+    'POST retail_list historical Daily, Weekly, and Monthly requests were directly observed with provider-native period keys and ResultStatus=OK. Invalid-calendar, future, and prelaunch probes all returned HTTP 200 with ResultStatus=Error and no List, so the provider collapses those causes into one period-error shape.',
   revisionEvidence:
     'Provider correction behavior exists in the wider evidence record, but adapter-level revision/supersession handling is not yet qualified in this packet.',
   requestEvidence:
-    'Direct public request contract qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd; JSON root FormToMap/List/ResultStatus; rows at $.List{values}.',
+    'Direct public request contract qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd; JSON root FormToMap/List/ResultStatus; rows at $.List{values}. A known-period request also succeeded without Cookie or Referer. The official UI makes one retail_list request and renders every returned row with no page/size/offset/limit/cursor parameters observed; the tested published chart returned ranks 1-50.',
   authorizationEvidence:
     'Public technical reachability and capability evidence do not establish automation, storage, publication, commercial-use, or redistribution rights.',
   capabilityUpgrades: Object.freeze({
@@ -89,7 +89,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
     'supportsTerritorySegmentation',
   ]),
   blockers: Object.freeze([
-    'operational-edge-qualification-required',
+    'hour-year-revision-and-rate-limit-qualification-required',
     'storage-and-publication-rights-review-required',
   ]),
 });
