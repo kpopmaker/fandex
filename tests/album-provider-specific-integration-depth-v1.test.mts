@@ -18,8 +18,40 @@ test('YES24 documented response maps rank/index without units',()=>{
   const snapshot=fromCanonicalAlbumFeatureInput(canonical); assert.equal(snapshot.seriesKind,'snapshot-rank'); assert.equal(snapshot.periodType,'day');
 });
 
-test('YES24 request plan and live gate are default-off',async()=>{assert.equal(YES24_RETAIL_ADAPTER.descriptor.defaultOff.liveCallsAllowed,false);await assert.rejects(()=>YES24_RETAIL_ADAPTER.executeLive({execute:async()=>response},buildYes24RetailRequestPlan({requestType:'bestseller-realtime'})),(e)=>e instanceof Yes24LiveGateError);});
-test('YES24 preserves external product and raw artist/category state',()=>{const p=buildYes24RetailRequestPlan({requestType:'bestseller-monthly',date:'2026-08-01'});const o=normalizeYes24RetailResponse(decodeYes24RetailResponse(response),p,{observedAt:'2026-08-30',collectedAt:'2026-08-30',syntheticFixture:true})[0];assert.equal(o.retailerProductId,'123');assert.equal(o.retailerArtistText,'Artist');assert.equal(o.fandexReleaseId,null);assert.equal(o.categoryResolutionState,'unresolved');});
-test('Circle evidence is certification context, not cumulative units',()=>{assert.equal(CIRCLE_PROVIDER_EVIDENCE.certificationCapabilities?.supportsCumulativeCertification,true);assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsCumulativeSales,undefined);assert.ok(CIRCLE_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsCumulativeSales'));assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.currentStage,'official-docs-verified');assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.defaultOff.enabled,false);});
-test('Hanteo evidence records direct current contract but keeps capability promotion closed',()=>{assert.equal(HANTEO_PROVIDER_EVIDENCE.acquisitionClass,'public-direct-endpoint');assert.ok(HANTEO_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsNativePeriodSales'));assert.match(HANTEO_PROVIDER_EVIDENCE.requestEvidence,/GET \/v4\/ranking\/list\/ALBUM\/DAILY/i);assert.match(HANTEO_PROVIDER_EVIDENCE.semanticEvidence,/salesVolume/i);assert.match(HANTEO_PROVIDER_EVIDENCE.semanticEvidence,/Album Index/i);assert.ok(HANTEO_PROVIDER_EVIDENCE.blockers.includes('historical-exact-copies-selector-not-qualified'));assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.capabilities.supportsNativePeriodSales.state,'unknown');assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.defaultOff.productionAllowed,false);});
-test('provider evidence packet is not a market observation and providers remain unselected',()=>{assert.equal('observationId' in CIRCLE_PROVIDER_EVIDENCE,false);assert.equal('value' in HANTEO_PROVIDER_EVIDENCE,false);});
+test('YES24 request plan and live gate are default-off',async()=>{
+  assert.equal(YES24_RETAIL_ADAPTER.descriptor.defaultOff.liveCallsAllowed,false);
+  await assert.rejects(()=>YES24_RETAIL_ADAPTER.executeLive({execute:async()=>response},buildYes24RetailRequestPlan({requestType:'bestseller-realtime'})),(e)=>e instanceof Yes24LiveGateError);
+});
+
+test('YES24 preserves external product and raw artist/category state',()=>{
+  const p=buildYes24RetailRequestPlan({requestType:'bestseller-monthly',date:'2026-08-01'});
+  const o=normalizeYes24RetailResponse(decodeYes24RetailResponse(response),p,{observedAt:'2026-08-30',collectedAt:'2026-08-30',syntheticFixture:true})[0];
+  assert.equal(o.retailerProductId,'123');assert.equal(o.retailerArtistText,'Artist');assert.equal(o.fandexReleaseId,null);assert.equal(o.categoryResolutionState,'unresolved');
+});
+
+test('Circle evidence is certification context, not cumulative units',()=>{
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.certificationCapabilities?.supportsCumulativeCertification,true);
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsCumulativeSales,undefined);
+  assert.ok(CIRCLE_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsCumulativeSales'));
+  assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.currentStage,'official-docs-verified');
+  assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.defaultOff.enabled,false);
+});
+
+test('Hanteo evidence promotes only directly qualified current capabilities',()=>{
+  assert.equal(HANTEO_PROVIDER_EVIDENCE.acquisitionClass,'public-direct-endpoint');
+  assert.match(HANTEO_PROVIDER_EVIDENCE.requestEvidence,/GET \/v4\/ranking\/list\/ALBUM\/DAILY/i);
+  assert.match(HANTEO_PROVIDER_EVIDENCE.semanticEvidence,/salesVolume/i);
+  assert.match(HANTEO_PROVIDER_EVIDENCE.semanticEvidence,/Album Index/i);
+  assert.ok(HANTEO_PROVIDER_EVIDENCE.blockers.includes('historical-exact-copies-public-selector-unverified'));
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.capabilities.supportsNativePeriodSales.state,'true');
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.capabilities.supportsArtistIdentity.state,'true');
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.capabilities.supportsHistoricalQueries.state,'unknown');
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.capabilities.supportsReleaseIdentity.state,'unknown');
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.onboarding.currentStage,'live-adapter-default-off');
+  assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.defaultOff.productionAllowed,false);
+});
+
+test('provider evidence packet is not a market observation and providers remain unselected',()=>{
+  assert.equal('observationId' in CIRCLE_PROVIDER_EVIDENCE,false);
+  assert.equal('value' in HANTEO_PROVIDER_EVIDENCE,false);
+});
