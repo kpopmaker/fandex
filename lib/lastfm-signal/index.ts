@@ -5,3 +5,4 @@ export * from './repositorySnapshot';
 export * from './identityQualityGate';
 export * from './historicalWindow';
 export * from './shadowVariableAdapter';
+export * from './shadowScoringReconciliation';
