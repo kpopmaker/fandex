@@ -7,6 +7,7 @@ provider = circle-chart
 capability = retail-album
 adapterContract = circle-retail-adapter-v1
 adapterImplemented = true
+technicalCapabilityDescriptor = evidence-linked
 liveCallsAllowed = false
 featureBridgeEligible = false
 productionAllowed = false
@@ -155,26 +156,97 @@ identity-evidence-missing
 
 Contract-level mismatches throw before normalization.
 
+## Evidence-linked capability upgrade
+
+Direct response evidence now supports three technical capability upgrades on `CIRCLE_EVIDENCE_DESCRIPTOR`:
+
+```text
+supportsNativePeriodSales = true
+  evidence = circle-retail-direct-response-v1:rowSum-period-sales
+
+supportsHistoricalQueries = true
+  evidence = circle-retail-direct-response-v1:historical-day-week-month
+
+supportsSkuIdentity = true
+  evidence = circle-retail-direct-response-v1:barcode-sku-identity
+```
+
+The conservative base descriptor remains unchanged:
+
+```text
+CIRCLE_PROVIDER_DESCRIPTOR.supportsNativePeriodSales = unknown
+CIRCLE_PROVIDER_DESCRIPTOR.supportsHistoricalQueries = unknown
+CIRCLE_PROVIDER_DESCRIPTOR.supportsSkuIdentity = unknown
+```
+
+This separation prevents technical evidence from silently rewriting the generic provider baseline.
+
+Still unresolved:
+
+```text
+supportsCumulativeSales
+supportsFirstWeekSales
+supportsRevisions
+supportsArtistIdentity
+supportsReleaseIdentity
+supportsEditionIdentity
+supportsFormatIdentity
+supportsTerritorySegmentation
+```
+
+Certification remains threshold/milestone context and is not upgraded into exact cumulative sales.
+
+## Authorization remains independent
+
+The evidence-linked descriptor advances only technical readiness:
+
+```text
+onboarding.currentStage = live-adapter-default-off
+onboarding.technicalReadiness = adapter-ready
+```
+
+It does not authorize live or commercial use:
+
+```text
+acquisitionState = review-required
+automationState = review-required
+rawStorageState = review-required
+normalizedStorageState = review-required
+commercialUseState = contract-required
+derivedPublicationState = review-required
+rawRedistributionState = blocked
+
+enabled = false
+liveCallsAllowed = false
+productionAllowed = false
+```
+
+`bridgeDirectAlbumObservation` is unchanged, so technical validation alone cannot move Circle observations into feature evidence.
+
 ## Validation state
 
-A synthetic fixture observation may validate against currently unknown provider capability flags for adapter testing only.
+Real/non-synthetic `period-sale` observations can now pass `DirectAlbumObservation` technical validation when the evidence-linked Circle descriptor is used.
 
-A real/non-synthetic Circle observation remains blocked by the existing provider descriptor until `supportsNativePeriodSales` is explicitly evidence-upgraded.
+The same observation still fails against the conservative base descriptor with:
+
+```text
+capability-supportsNativePeriodSales-unknown
+```
 
 Therefore:
 
 ```text
 adapterImplementationQualified = true
 fixtureNormalizationQualified = true
-realObservationCapabilityValidation = blocked-by-descriptor
+realObservationTechnicalValidation = qualified-on-evidence-descriptor
 featureBridgeEligible = false
 liveCollectorAuthorized = false
 productionCollectorAuthorized = false
 ```
 
-## Validation run
+## Validation runs
 
-Temporary branch-only validation run `33413534263` completed successfully:
+Adapter validation run `33413534263`:
 
 ```text
 npm ci = PASS
@@ -182,16 +254,28 @@ Circle Discovery + Adapter tests = PASS
 npm run typecheck = PASS
 ```
 
-The temporary workflow was removed after validation.
+Capability validation run `33414514375`:
+
+```text
+npm ci = PASS
+Provider Evidence + Circle Discovery + Adapter tests = PASS
+npm run typecheck = PASS
+```
+
+Temporary validation workflows were removed after completion.
 
 ## Next decision
 
-The next provider decision is whether to evidence-upgrade Circle capabilities such as:
+Remaining work is no longer the core period-sales capability contract. The next Circle qualification step should focus on operational edge behavior:
 
 ```text
-supportsNativePeriodSales
-supportsHistoricalQueries
-supportsSkuIdentity
+invalid/future/not-published period semantics
+empty valid response behavior
+pagination / completeness beyond observed 50 rows
+natural rate-limit behavior
+direct hourly response schema
+yearly raw schema
+strict cookie / Referer requirement
 ```
 
-This decision should use the direct request/response and rendering evidence already captured, while leaving authorization/commercial rights gates independent and default-off.
+These operational checks must remain separate from commercial-rights authorization.
