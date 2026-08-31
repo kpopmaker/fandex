@@ -1,0 +1,39 @@
+name: Circle Retail Conservative Throttling Probe
+
+on:
+  push:
+    branches:
+      - integration/album-circle-retail-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Run three low-frequency public requests
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint='https://circlechart.kr/data/api/chart/retail_list'
+          for i in 1 2 3; do
+            headers="headers-${i}.txt"
+            body="body-${i}.json"
+            status=$(curl --silent --show-error \
+              --request POST \
+              --header 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+              --header 'X-Requested-With: XMLHttpRequest' \
+              --data 'termGbn=day&yyyymmdd=20260529' \
+              --dump-header "$headers" \
+              --output "$body" \
+              --write-out '%{http_code}' \
+              "$endpoint")
+            echo "request_${i}_http_status=${status}"
+            node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));console.log('request_${i}_provider_status='+(x.ResultStatus??'missing'));console.log('request_${i}_row_count='+(x.List&&typeof x.List==='object'?Object.keys(x.List).length:'missing'));" "$body"
+            echo "request_${i}_selected_headers_begin"
+            grep -Ei '^(retry-after|x-ratelimit|ratelimit|server|date|cache-control|cf-ray|x-cache|via):' "$headers" || true
+            echo "request_${i}_selected_headers_end"
+            if [ "$i" -lt 3 ]; then sleep 3; fi
+          done
