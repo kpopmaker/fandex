@@ -7,7 +7,7 @@ import {
 import {
   buildAlbumCollectorPlanReport,
   parseAlbumCollectorPlanCommand,
-} from '../scripts/ingestion/plan-album-collector-v1';
+} from '../lib/server/ingestion/albumCollectorPlanCli';
 
 test('primary current daily plan targets Circle Retail only and remains plan-only', () => {
   const plan = buildAlbumCollectorPlan({
