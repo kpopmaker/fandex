@@ -1,0 +1,21 @@
+{
+  "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
+  "createdAt": "2026-08-31T18:08:01+09:00",
+  "production": true,
+  "pythonOnly": true,
+  "touchesWebsitePublicData": false,
+  "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
+  "source": "production_v10_cutover_snapshot",
+  "ranking": [
+    {"rank": 1, "artist": "에스파", "fandexFinalPoint": 362.12, "score": 362.12},
+    {"rank": 2, "artist": "에이티즈", "fandexFinalPoint": 341.66, "score": 341.66},
+    {"rank": 3, "artist": "아이유", "fandexFinalPoint": 302.22, "score": 302.22},
+    {"rank": 4, "artist": "르세라핌", "fandexFinalPoint": 265.40, "score": 265.40},
+    {"rank": 5, "artist": "뉴진스", "fandexFinalPoint": 254.65, "score": 254.65},
+    {"rank": 6, "artist": "아이브", "fandexFinalPoint": 243.25, "score": 243.25},
+    {"rank": 7, "artist": "보이넥스트도어", "fandexFinalPoint": 240.16, "score": 240.16},
+    {"rank": 8, "artist": "투모로우바이투게더", "fandexFinalPoint": 230.35, "score": 230.35},
+    {"rank": 9, "artist": "세븐틴", "fandexFinalPoint": 223.11, "score": 223.11},
+    {"rank": 10, "artist": "스트레이키즈", "fandexFinalPoint": 157.31, "score": 157.31}
+  ]
+}
