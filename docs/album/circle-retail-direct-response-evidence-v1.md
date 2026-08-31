@@ -426,3 +426,16 @@ npm run typecheck
 ```
 
 The dependency install, Circle discovery test step, and TypeScript typecheck all completed successfully. The temporary validation/probe workflow was then removed from the branch so PR #130 does not retain a scheduled or persistent live-collection path.
+
+## Decision boundary
+
+This packet is sufficient to treat the Circle Retail Daily/Weekly/Monthly **request + row + quantity contract** as directly qualified for adapter implementation. It is not sufficient to activate a recurring/live collector or Production persistence path.
+
+Next engineering gate:
+
+```text
+Discovery qualified
+→ CircleRetailAdapter implementation candidate
+→ error/pagination/hourly qualification
+→ controlled collector qualification
+```
