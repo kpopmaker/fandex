@@ -31,6 +31,7 @@ export type CircleRetailDiscoveryCandidate = Readonly<{
   url: string;
   params: Readonly<Record<string, string>>;
   evidenceState: CircleRetailCandidateEvidenceState;
+  evidenceIds: readonly string[];
 }>;
 
 export type CircleRetailDiscoveryRequestPlan = Readonly<{
@@ -66,12 +67,14 @@ export type CircleRetailDiscoveryCapture = Readonly<{
   }>;
   response: CircleRetailDiscoveryResponseSummary;
   observedAt: string;
+  payloadDigest: string;
   responseDigest: string;
   schemaState: CircleRetailDiscoverySchemaState;
   missingState: CircleRetailDiscoveryMissingState;
   quantitySemanticState: CircleRetailQuantitySemanticState;
   verifiedQuantityField: string | null;
   verifiedRowPath: string | null;
+  quantityVerificationEvidenceIds: readonly string[];
 }>;
 
 export type CircleRetailQuantityVerification = Readonly<{
@@ -92,10 +95,7 @@ function assertIsoDate(value: string | null): void {
   }
 }
 
-function assertPeriodInput(
-  timeframe: CircleRetailDiscoveryTimeframe,
-  period: CircleRetailDiscoveryPeriod,
-): void {
+function assertPeriodInput(timeframe: CircleRetailDiscoveryTimeframe, period: CircleRetailDiscoveryPeriod): void {
   assertIsoDate(period.date);
   if (period.providerPeriodKey !== null && period.providerPeriodKey.trim() === '') {
     throw new Error('circle_retail_discovery_provider_period_key_invalid');
@@ -123,7 +123,6 @@ export function buildCircleRetailDiscoveryRequestPlan(input: Readonly<{
     kind: 'default-value' | 'hour-time';
     method?: 'GET' | 'POST';
     params?: Readonly<Record<string, string>>;
-    evidenceState?: CircleRetailCandidateEvidenceState;
   }> | null;
 }>): CircleRetailDiscoveryRequestPlan {
   const period: CircleRetailDiscoveryPeriod = Object.freeze({
@@ -133,12 +132,13 @@ export function buildCircleRetailDiscoveryRequestPlan(input: Readonly<{
   });
   assertPeriodInput(input.timeframe, period);
 
-  const candidate = input.candidate
+  const candidate: CircleRetailDiscoveryCandidate | null = input.candidate
     ? Object.freeze({
         method: input.candidate.method ?? 'GET',
         url: CANDIDATE_URLS[input.candidate.kind],
         params: Object.freeze({ ...(input.candidate.params ?? {}) }),
-        evidenceState: input.candidate.evidenceState ?? 'reported-public-unverified',
+        evidenceState: 'reported-public-unverified',
+        evidenceIds: Object.freeze([]),
       })
     : null;
 
@@ -151,7 +151,29 @@ export function buildCircleRetailDiscoveryRequestPlan(input: Readonly<{
     candidate,
     networkAllowed: false as const,
   };
+  return Object.freeze({ ...shape, planDigest: sha256Canonical(shape) });
+}
 
+export function verifyCircleRetailCandidateEndpoint(
+  plan: CircleRetailDiscoveryRequestPlan,
+  evidenceIds: readonly string[],
+): CircleRetailDiscoveryRequestPlan {
+  if (!plan.candidate) throw new Error('circle_retail_discovery_candidate_missing');
+  if (evidenceIds.length === 0) throw new Error('circle_retail_discovery_candidate_evidence_required');
+  const candidate: CircleRetailDiscoveryCandidate = Object.freeze({
+    ...plan.candidate,
+    evidenceState: 'verified-public-endpoint',
+    evidenceIds: Object.freeze([...evidenceIds]),
+  });
+  const shape = {
+    contractVersion: plan.contractVersion,
+    providerId: plan.providerId,
+    timeframe: plan.timeframe,
+    period: plan.period,
+    publicPageUrl: plan.publicPageUrl,
+    candidate,
+    networkAllowed: false as const,
+  };
   return Object.freeze({ ...shape, planDigest: sha256Canonical(shape) });
 }
 
@@ -170,11 +192,10 @@ function rootTypeOf(value: unknown): CircleRetailDiscoveryResponseSummary['rootT
 }
 
 function findRows(value: unknown): Readonly<{ rowPath: string | null; rows: readonly Record<string, unknown>[] }> {
-  if (Array.isArray(value) && value.every(isRecord)) {
+  if (Array.isArray(value) && value.length > 0 && value.every(isRecord)) {
     return Object.freeze({ rowPath: '$', rows: Object.freeze(value) });
   }
   if (!isRecord(value)) return Object.freeze({ rowPath: null, rows: Object.freeze([]) });
-
   const queue: Array<{ path: string; value: unknown; depth: number }> = Object.entries(value).map(([key, child]) => ({
     path: `$.${key}`,
     value: child,
@@ -199,10 +220,12 @@ function candidateFields(rows: readonly Record<string, unknown>[]): Readonly<{
   identity: readonly string[];
 }> {
   if (rows.length === 0) return Object.freeze({ quantity: Object.freeze([]), identity: Object.freeze([]) });
-  const keys = [...new Set(rows.slice(0, 5).flatMap((row) => Object.keys(row)))].sort();
-  const quantity = keys.filter((key) => rows.slice(0, 5).some((row) => typeof row[key] === 'number'));
-  const identity = keys.filter((key) => rows.slice(0, 5).some((row) => typeof row[key] === 'string'));
-  return Object.freeze({ quantity: Object.freeze(quantity), identity: Object.freeze(identity) });
+  const sample = rows.slice(0, 5);
+  const keys = [...new Set(sample.flatMap((row) => Object.keys(row)))].sort();
+  return Object.freeze({
+    quantity: Object.freeze(keys.filter((key) => sample.some((row) => typeof row[key] === 'number'))),
+    identity: Object.freeze(keys.filter((key) => sample.some((row) => typeof row[key] === 'string'))),
+  });
 }
 
 export function captureCircleRetailDiscovery(input: Readonly<{
@@ -263,19 +286,19 @@ export function captureCircleRetailDiscovery(input: Readonly<{
     quantityCandidateFields: fields.quantity,
     identityCandidateFields: fields.identity,
   });
-
   const request = Object.freeze({
     method: input.plan.candidate?.method ?? null,
     url: input.plan.candidate?.url ?? input.plan.publicPageUrl,
     params: Object.freeze({ ...(input.plan.candidate?.params ?? {}) }),
   });
-
+  const payloadDigest = sha256Canonical(input.rawResponse);
   const digestShape = {
     contractVersion: CIRCLE_RETAIL_DISCOVERY_CONTRACT_VERSION,
     planDigest: input.plan.planDigest,
     request,
     response,
     observedAt: input.observedAt,
+    payloadDigest,
     schemaState,
     missingState,
   };
@@ -286,12 +309,14 @@ export function captureCircleRetailDiscovery(input: Readonly<{
     request,
     response,
     observedAt: input.observedAt,
+    payloadDigest,
     responseDigest: sha256Canonical(digestShape),
     schemaState,
     missingState,
     quantitySemanticState: 'unverified',
     verifiedQuantityField: null,
     verifiedRowPath: null,
+    quantityVerificationEvidenceIds: Object.freeze([]),
   });
 }
 
@@ -319,6 +344,7 @@ export function verifyCircleRetailQuantitySemantic(
     quantitySemanticState: 'verified-retail-copies',
     verifiedQuantityField: verification.quantityField,
     verifiedRowPath: verification.rowPath,
+    quantityVerificationEvidenceIds: Object.freeze([...verification.evidenceIds]),
   });
 }
 
@@ -327,5 +353,6 @@ export function canPromoteCircleRetailDiscovery(capture: CircleRetailDiscoveryCa
     && capture.missingState === 'response-present'
     && capture.quantitySemanticState === 'verified-retail-copies'
     && capture.verifiedQuantityField !== null
-    && capture.verifiedRowPath !== null;
+    && capture.verifiedRowPath !== null
+    && capture.quantityVerificationEvidenceIds.length > 0;
 }
