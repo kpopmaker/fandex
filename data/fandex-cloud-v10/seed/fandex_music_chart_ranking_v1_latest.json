@@ -1,0 +1,18 @@
+{
+  "version": "cloud_compatibility_baseline_from_music_v2_2026-08-31",
+  "createdAt": "2026-08-31T18:08:01+09:00",
+  "source": "production_v10_status_snapshot",
+  "note": "Compatibility baseline for the Music current-presence preview delta only. Production v10 uses Music v2, not this file.",
+  "ranking": [
+    {"artist": "에스파", "fandexMusicChartFinalPoint": 180.75},
+    {"artist": "에이티즈", "fandexMusicChartFinalPoint": 194.25},
+    {"artist": "아이유", "fandexMusicChartFinalPoint": 30.80},
+    {"artist": "르세라핌", "fandexMusicChartFinalPoint": 30.80},
+    {"artist": "뉴진스", "fandexMusicChartFinalPoint": 39.80},
+    {"artist": "아이브", "fandexMusicChartFinalPoint": 117.00},
+    {"artist": "보이넥스트도어", "fandexMusicChartFinalPoint": 30.80},
+    {"artist": "투모로우바이투게더", "fandexMusicChartFinalPoint": 0.00},
+    {"artist": "세븐틴", "fandexMusicChartFinalPoint": 0.00},
+    {"artist": "스트레이키즈", "fandexMusicChartFinalPoint": 0.00}
+  ]
+}

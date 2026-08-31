@@ -1,0 +1,72 @@
+
+FANDEX Python Health Check v3
+========================================================================================
+createdAt: 2026-08-31T19:56:28
+version: fandex_python_health_check_v3
+scope: production v10 / Music v2 x0.25 / Last.fm Rolling x0.25 / no website export
+========================================================================================
+
+Required files
+----------------------------------------------------------------------------------------
+OK   fandex_master_ranking_latest.json
+OK   fandex_master_artist_reports_latest.json
+OK   fandex_music_chart_ranking_v2_current_presence_latest.json
+OK   music_chart_current_presence_history_v2.csv
+OK   lastfm_global_interest_rolling_score_preview_v1_latest.json
+OK   lastfm_global_interest_rolling_score_preview_v1_latest.csv
+OK   run_fandex_daily_python_only.bat
+OK   fandex_daily_python_only_v3.py
+OK   fandex_archive_generated_files_v1.py
+OK   fandex_master_score_v10.py
+OK   fandex_python_status_report_v2.py
+OK   fandex_daily_summary_v3.py
+OK   rollback_fandex_v10_promotion_v1.py
+
+Production Master v10
+----------------------------------------------------------------------------------------
+OK   version: fandex_master_v10_music_v2_lastfm_rolling_v1
+OK   scoreMode: uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25
+OK   production: TRUE
+OK   pythonOnly: TRUE
+OK   touchesWebsitePublicData: FALSE
+OK   artistCount: 10/10
+OK   rank sequence: 1-10
+OK   score order: DESC
+OK   source structure: 10/10
+OK   Music/Last.fm scale: 0.25 (10/10)
+OK   production arithmetic mismatch: 0
+
+Music v2 source
+----------------------------------------------------------------------------------------
+OK   Music v2 artistCount: 10/10
+OK   Music v2 ageDays: 0
+OK   Music v2 history duplicate: 0
+
+Last.fm rolling source
+----------------------------------------------------------------------------------------
+OK   activeMode: rolling3_50_rolling7_50
+OK   scoreReadyCount: 10/10
+OK   Last.fm ageDays: 0
+
+Runner v8 structure
+----------------------------------------------------------------------------------------
+OK   runner token: FANDEX Daily Python-Only Runner v8
+OK   runner token: fandex_daily_python_only_v3.py
+OK   runner token: music_chart_current_presence_publish_v2.py
+OK   runner token: lastfm_sync_cloud_history_v1_1.py --apply
+OK   runner token: lastfm_global_interest_rolling_score_preview_v1.py
+OK   runner token: fandex_master_score_v10.py
+OK   runner token: fandex_python_status_report_v2.py
+OK   runner token: fandex_python_health_check_v3.py
+OK   runner token: fandex_daily_summary_v3.py
+OK   legacy/website production runner tokens absent
+OK   daily v3 source-prep does not build Master
+OK   production latest archive protection: configured
+
+Health Check v3 final result
+----------------------------------------------------------------------------------------
+OK: FANDEX production v10 healthy
+failCount: 0
+warnCount: 0
+websiteModified: FALSE
+========================================================================================

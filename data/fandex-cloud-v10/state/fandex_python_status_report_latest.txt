@@ -1,0 +1,31 @@
+FANDEX Python Status Report v2
+========================================================================================
+createdAt: 2026-08-31T19:56:28
+masterVersion: fandex_master_v10_music_v2_lastfm_rolling_v1
+scoreMode: uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25
+productionFormula: Naver v3 + YouTube v3 + Music v2 x0.25 + Last.fm Rolling x0.25
+
+Current FANDEX production ranking
+----------------------------------------------------------------------------------------
+1위 에스파 | FANDEX 363.22 | Naver 214.28 | YouTube 79.04 | Music raw 187.5 x0.25=46.88 | Last.fm raw 92.0877 x0.25=23.02
+2위 에이티즈 | FANDEX 339.37 | Naver 226.34 | YouTube 52.43 | Music raw 187.5 x0.25=46.88 | Last.fm raw 54.8983 x0.25=13.72
+3위 아이유 | FANDEX 302.22 | Naver 244.89 | YouTube 49.63 | Music raw 30.8 x0.25=7.7 | Last.fm raw 0.0 x0.25=0.0
+4위 르세라핌 | FANDEX 267.99 | Naver 182.26 | YouTube 52.76 | Music raw 39.8 x0.25=9.95 | Last.fm raw 92.0799 x0.25=23.02
+5위 뉴진스 | FANDEX 254.28 | Naver 201.66 | YouTube 21.54 | Music raw 39.8 x0.25=9.95 | Last.fm raw 84.5096 x0.25=21.13
+6위 아이브 | FANDEX 243.51 | Naver 166.58 | YouTube 37.2 | Music raw 117.0 x0.25=29.25 | Last.fm raw 41.9254 x0.25=10.48
+7위 보이넥스트도어 | FANDEX 241.09 | Naver 187.53 | YouTube 35.42 | Music raw 39.8 x0.25=9.95 | Last.fm raw 32.7608 x0.25=8.19
+8위 투모로우바이투게더 | FANDEX 229.81 | Naver 163.02 | YouTube 49.71 | Music raw 0.0 x0.25=0.0 | Last.fm raw 68.3344 x0.25=17.08
+9위 세븐틴 | FANDEX 222.67 | Naver 173.12 | YouTube 42.85 | Music raw 0.0 x0.25=0.0 | Last.fm raw 26.7807 x0.25=6.7
+10위 스트레이키즈 | FANDEX 156.29 | Naver 90.6 | YouTube 47.99 | Music raw 0.0 x0.25=0.0 | Last.fm raw 70.7918 x0.25=17.7
+
+Daily operation
+----------------------------------------------------------------------------------------
+run_fandex_daily_python_only.bat
+
+Safety
+----------------------------------------------------------------------------------------
+Website public/data export is NOT part of the daily runner.
+Do not run:
+py fandex_export_to_site_v1.py
+py fandex_publish_all_v5.py
+py fandex_publish_all_v5.py --refresh-youtube

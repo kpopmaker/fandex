@@ -1,0 +1,11 @@
+﻿rank,artist,latestDate,snapshotDateCount,rolling3Status,rolling3ListenerDeltaPerDay,rolling3PlaycountDeltaPerDay,rolling3ListenerLogNormalized,rolling3PlaycountLogNormalized,rolling3PreviewPoint,rolling7Status,rolling7ListenerDeltaPerDay,rolling7PlaycountDeltaPerDay,rolling7ListenerLogNormalized,rolling7PlaycountLogNormalized,rolling7PreviewPoint,activeMode,rollingCombinedPreviewPoint,status
+1,에스파,2026-08-31,22,ready,564.0,126851.5,83.889,100.0,91.9445,ready,546.5,132199.3333,84.4619,100.0,92.2309,rolling3_50_rolling7_50,92.0877,ok
+2,르세라핌,2026-08-31,22,ready,668.5,83792.5,100.0,85.0966,92.5483,ready,654.1667,82615.5,100.0,83.2233,91.6116,rolling3_50_rolling7_50,92.0799,ok
+3,뉴진스,2026-08-31,22,ready,631.0,64725.5,94.5278,75.8173,85.1726,ready,602.1667,65338.8333,92.8426,74.8509,83.8467,rolling3_50_rolling7_50,84.5096,ok
+4,스트레이키즈,2026-08-31,22,ready,336.0,122879.5,34.8318,98.8566,66.8442,ready,366.1667,130717.5,49.881,99.5977,74.7393,rolling3_50_rolling7_50,70.7918,ok
+5,투모로우바이투게더,2026-08-31,22,ready,345.0,115256.5,37.3339,96.5549,66.9444,ready,337.8333,119910.8333,42.9303,96.5183,69.7243,rolling3_50_rolling7_50,68.3344,ok
+6,에이티즈,2026-08-31,22,ready,328.0,60840.0,32.551,73.5924,53.0717,ready,326.8333,62693.3333,40.0739,73.3759,56.7249,rolling3_50_rolling7_50,54.8983,ok
+7,아이브,2026-08-31,22,ready,331.5,34477.5,33.5556,53.1808,43.3682,ready,287.5,34396.5,29.0119,51.9535,40.4827,rolling3_50_rolling7_50,41.9254,ok
+8,보이넥스트도어,2026-08-31,22,ready,244.5,36957.5,4.7577,55.6772,30.2175,ready,239.5,40007.5,13.2619,57.3461,35.304,rolling3_50_rolling7_50,32.7608,ok
+9,세븐틴,2026-08-31,22,ready,245.0,26747.0,4.9508,44.0564,24.5036,ready,240.0,28049.1667,13.4416,44.6738,29.0577,rolling3_50_rolling7_50,26.7807,ok
+10,아이유,2026-08-31,22,ready,232.5,7850.0,0.0,0.0,0.0,ready,205.3333,8020.8333,0.0,0.0,0.0,rolling3_50_rolling7_50,0.0,ok
