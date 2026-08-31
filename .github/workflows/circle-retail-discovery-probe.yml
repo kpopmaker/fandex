@@ -13,88 +13,126 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Probe Circle public page and static request hints
+      - name: Probe Circle retail list response schema
         shell: bash
         run: |
           node <<'NODE'
           const pageUrl = 'https://circlechart.kr/page_chart/retail.circle?termGbn=day&yyyymmdd=20260529';
-          const needles = ['default_value', 'hour_time', '/data/api/', 'chart_func/retail', 'retail.circle', 'ajax', 'fetch('];
-          const headers = {
+          const endpointUrl = 'https://circlechart.kr/data/api/chart/retail_list';
+          const baseHeaders = {
             'user-agent': 'Mozilla/5.0 (compatible; FANDEX-Research-Discovery/1.0)',
-            'accept': 'text/html,application/xhtml+xml,application/javascript,text/javascript,*/*;q=0.8',
+            'accept': 'text/html,application/xhtml+xml,application/json,text/javascript,*/*;q=0.8',
           };
 
-          async function get(url) {
-            const response = await fetch(url, {
-              method: 'GET',
-              headers,
-              redirect: 'follow',
-              signal: AbortSignal.timeout(15000),
-            });
-            const text = await response.text();
-            return { response, text };
+          const pageResponse = await fetch(pageUrl, {
+            method: 'GET',
+            headers: baseHeaders,
+            redirect: 'follow',
+            signal: AbortSignal.timeout(15000),
+          });
+          const pageText = await pageResponse.text();
+          const cookieHeader = pageResponse.headers.get('set-cookie');
+          const cookie = cookieHeader ? cookieHeader.split(';', 1)[0] : null;
+
+          console.log('FANDEX_CIRCLE_PAGE_META=' + JSON.stringify({
+            requestedUrl: pageUrl,
+            finalUrl: pageResponse.url,
+            status: pageResponse.status,
+            contentType: pageResponse.headers.get('content-type'),
+            contentLength: pageText.length,
+            cookieObserved: cookie !== null,
+          }));
+
+          const requestBody = new URLSearchParams({
+            termGbn: 'day',
+            yyyymmdd: '20260529',
+          }).toString();
+
+          const requestHeaders = {
+            ...baseHeaders,
+            'accept': 'application/json,text/javascript,*/*;q=0.01',
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'x-requested-with': 'XMLHttpRequest',
+            'referer': pageUrl,
+          };
+          if (cookie) requestHeaders.cookie = cookie;
+
+          const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: requestHeaders,
+            body: requestBody,
+            redirect: 'follow',
+            signal: AbortSignal.timeout(15000),
+          });
+          const text = await response.text();
+
+          console.log('FANDEX_CIRCLE_RETAIL_LIST_META=' + JSON.stringify({
+            endpointUrl,
+            method: 'POST',
+            requestFields: ['termGbn', 'yyyymmdd'],
+            status: response.status,
+            finalUrl: response.url,
+            contentType: response.headers.get('content-type'),
+            contentLength: text.length,
+          }));
+
+          let parsed;
+          try {
+            parsed = JSON.parse(text);
+          } catch (error) {
+            console.log('FANDEX_CIRCLE_RETAIL_LIST_PARSE_ERROR=' + JSON.stringify({
+              error: error instanceof Error ? error.message : String(error),
+              prefix: text.slice(0, 300).replace(/\s+/g, ' '),
+            }));
+            process.exitCode = 2;
+            return;
           }
 
-          function snippets(text, needle, max = 4) {
-            const out = [];
-            let from = 0;
-            while (out.length < max) {
-              const index = text.indexOf(needle, from);
-              if (index < 0) break;
-              const start = Math.max(0, index - 220);
-              const end = Math.min(text.length, index + needle.length + 320);
-              out.push(text.slice(start, end).replace(/\s+/g, ' '));
-              from = index + needle.length;
+          const rootType = Array.isArray(parsed) ? 'array' : parsed === null ? 'null' : typeof parsed;
+          const rootKeys = parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+            ? Object.keys(parsed).sort()
+            : [];
+          console.log('FANDEX_CIRCLE_RETAIL_LIST_ROOT=' + JSON.stringify({ rootType, rootKeys }));
+
+          function collectArrays(value, path = '$', depth = 0, out = []) {
+            if (depth > 5 || value === null || typeof value !== 'object') return out;
+            if (Array.isArray(value)) {
+              const objectRows = value.filter((item) => item !== null && typeof item === 'object' && !Array.isArray(item));
+              out.push({ path, length: value.length, objectRowCount: objectRows.length, rows: objectRows.slice(0, 3) });
+              return out;
+            }
+            for (const [key, child] of Object.entries(value)) {
+              collectArrays(child, `${path}.${key}`, depth + 1, out);
             }
             return out;
           }
 
-          const page = await get(pageUrl);
-          console.log('FANDEX_CIRCLE_PAGE_META=' + JSON.stringify({
-            requestedUrl: pageUrl,
-            finalUrl: page.response.url,
-            status: page.response.status,
-            contentType: page.response.headers.get('content-type'),
-            contentLength: page.text.length,
-          }));
+          const arrays = collectArrays(parsed);
+          console.log('FANDEX_CIRCLE_RETAIL_LIST_ARRAYS=' + JSON.stringify(arrays.map((entry) => ({
+            path: entry.path,
+            length: entry.length,
+            objectRowCount: entry.objectRowCount,
+          }))));
 
-          for (const needle of needles) {
-            const hits = snippets(page.text, needle);
-            if (hits.length) console.log('FANDEX_CIRCLE_PAGE_HINT=' + JSON.stringify({ needle, hits }));
-          }
-
-          const scriptSources = [...page.text.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
-            .map((match) => new URL(match[1], page.response.url).href)
-            .filter((url, index, all) => all.indexOf(url) === index)
-            .filter((url) => new URL(url).origin === 'https://circlechart.kr')
-            .slice(0, 12);
-
-          console.log('FANDEX_CIRCLE_SCRIPT_SOURCES=' + JSON.stringify(scriptSources));
-
-          let fetched = 0;
-          for (const scriptUrl of scriptSources) {
-            if (fetched >= 8) break;
-            try {
-              const script = await get(scriptUrl);
-              fetched += 1;
-              const matches = [];
-              for (const needle of needles) {
-                const hits = snippets(script.text, needle, 3);
-                if (hits.length) matches.push({ needle, hits });
-              }
-              if (matches.length) {
-                console.log('FANDEX_CIRCLE_SCRIPT_HINT=' + JSON.stringify({
-                  url: scriptUrl,
-                  status: script.response.status,
-                  contentType: script.response.headers.get('content-type'),
-                  matches,
-                }));
-              }
-            } catch (error) {
-              console.log('FANDEX_CIRCLE_SCRIPT_FETCH_ERROR=' + JSON.stringify({
-                url: scriptUrl,
-                error: error instanceof Error ? error.message : String(error),
-              }));
-            }
+          for (const entry of arrays.slice(0, 8)) {
+            if (!entry.rows.length) continue;
+            const row = entry.rows[0];
+            const keys = Object.keys(row).sort();
+            const types = Object.fromEntries(keys.map((key) => [
+              key,
+              row[key] === null ? 'null' : Array.isArray(row[key]) ? 'array' : typeof row[key],
+            ]));
+            const sample = Object.fromEntries(keys.map((key) => {
+              const value = row[key];
+              if (typeof value === 'string') return [key, value.length > 120 ? value.slice(0, 120) + '…' : value];
+              if (typeof value === 'number' || typeof value === 'boolean' || value === null) return [key, value];
+              return [key, `[${Array.isArray(value) ? 'array' : typeof value}]`];
+            }));
+            console.log('FANDEX_CIRCLE_RETAIL_LIST_ROW=' + JSON.stringify({
+              path: entry.path,
+              keys,
+              types,
+              sample,
+            }));
           }
           NODE
