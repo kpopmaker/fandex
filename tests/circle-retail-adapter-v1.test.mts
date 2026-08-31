@@ -12,6 +12,7 @@ import {
   verifyCircleRetailCandidateEndpoint,
   verifyCircleRetailQuantitySemantic,
 } from '../lib/alternative-evidence/circleRetailDiscovery';
+import { CIRCLE_PROVIDER_DESCRIPTOR } from '../lib/alternative-evidence/directAlbumProvider';
 
 const observedAt = '2026-08-31T15:55:44.000Z';
 const collectedAt = '2026-08-31T15:55:45.000Z';
@@ -128,20 +129,8 @@ test('qualified Circle row becomes a direct period-sale observation using rowSum
   ]);
 });
 
-test('synthetic fixture observations validate while real observations remain capability-gated', () => {
+test('evidence-linked descriptor validates real period-sale observations while base descriptor remains unknown', () => {
   const capture = qualifiedCapture(rawDaily);
-  const fixture = adaptCircleRetailQualifiedResponse({
-    capture,
-    rawResponse: rawDaily,
-    collectedAt,
-    syntheticFixture: true,
-    resolveIdentity: (row) => row.Barcode === '8804775469824' ? resolvedIdentity : null,
-  });
-  assert.deepEqual(validateCircleRetailNormalizedObservations(fixture.observations), {
-    valid: true,
-    issues: [],
-  });
-
   const research = adaptCircleRetailQualifiedResponse({
     capture,
     rawResponse: rawDaily,
@@ -149,9 +138,22 @@ test('synthetic fixture observations validate while real observations remain cap
     syntheticFixture: false,
     resolveIdentity: (row) => row.Barcode === '8804775469824' ? resolvedIdentity : null,
   });
-  const validation = validateCircleRetailNormalizedObservations(research.observations);
-  assert.equal(validation.valid, false);
-  assert.ok(validation.issues.includes('capability-supportsNativePeriodSales-unknown'));
+
+  assert.deepEqual(validateCircleRetailNormalizedObservations(research.observations), {
+    valid: true,
+    issues: [],
+  });
+
+  const baseValidation = validateCircleRetailNormalizedObservations(
+    research.observations,
+    CIRCLE_PROVIDER_DESCRIPTOR,
+  );
+  assert.equal(baseValidation.valid, false);
+  assert.ok(baseValidation.issues.includes('capability-supportsNativePeriodSales-unknown'));
+
+  assert.equal(CIRCLE_RETAIL_ADAPTER.descriptor.capabilities.supportsNativePeriodSales.state, 'true');
+  assert.equal(CIRCLE_RETAIL_ADAPTER.descriptor.defaultOff.liveCallsAllowed, false);
+  assert.equal(CIRCLE_RETAIL_ADAPTER.descriptor.defaultOff.productionAllowed, false);
 });
 
 test('payload digest mismatch fails closed', () => {
