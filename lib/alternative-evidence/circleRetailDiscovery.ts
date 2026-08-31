@@ -4,6 +4,7 @@ export const CIRCLE_RETAIL_DISCOVERY_CONTRACT_VERSION = 'circle-retail-discovery
 export const CIRCLE_RETAIL_PUBLIC_PAGE_URL = 'https://circlechart.kr/page_chart/retail.circle' as const;
 
 export type CircleRetailDiscoveryTimeframe = 'hour' | 'day' | 'week' | 'month' | 'year';
+export type CircleRetailCandidateKind = 'default-value' | 'hour-time' | 'retail-list' | 'retail-hour';
 export type CircleRetailCandidateEvidenceState = 'reported-public-unverified' | 'verified-public-endpoint';
 export type CircleRetailDiscoverySchemaState =
   | 'unverified'
@@ -27,7 +28,8 @@ export type CircleRetailDiscoveryPeriod = Readonly<{
 }>;
 
 export type CircleRetailDiscoveryCandidate = Readonly<{
-  method: 'GET' | 'POST';
+  kind: CircleRetailCandidateKind;
+  method: 'POST';
   url: string;
   params: Readonly<Record<string, string>>;
   evidenceState: CircleRetailCandidateEvidenceState;
@@ -50,6 +52,7 @@ export type CircleRetailDiscoveryResponseSummary = Readonly<{
   contentType: string | null;
   rootType: 'object' | 'array' | 'string' | 'number' | 'boolean' | 'null' | 'unknown';
   rootKeys: readonly string[];
+  providerStatus: string | null;
   rowPath: string | null;
   rowCount: number | null;
   sampleRowKeys: readonly string[];
@@ -61,7 +64,7 @@ export type CircleRetailDiscoveryCapture = Readonly<{
   contractVersion: typeof CIRCLE_RETAIL_DISCOVERY_CONTRACT_VERSION;
   providerId: 'circle-chart';
   request: Readonly<{
-    method: 'GET' | 'POST' | null;
+    method: 'POST' | null;
     url: string;
     params: Readonly<Record<string, string>>;
   }>;
@@ -84,9 +87,11 @@ export type CircleRetailQuantityVerification = Readonly<{
   evidenceIds: readonly string[];
 }>;
 
-const CANDIDATE_URLS: Readonly<Record<'default-value' | 'hour-time', string>> = Object.freeze({
+const CANDIDATE_URLS: Readonly<Record<CircleRetailCandidateKind, string>> = Object.freeze({
   'default-value': '/data/api/chart_func/retail/default_value',
   'hour-time': '/data/api/chart_func/retail/hour_time',
+  'retail-list': '/data/api/chart/retail_list',
+  'retail-hour': '/data/api/chart/retail_hour',
 });
 
 function assertIsoDate(value: string | null): void {
@@ -120,8 +125,7 @@ export function buildCircleRetailDiscoveryRequestPlan(input: Readonly<{
   hour?: number | null;
   providerPeriodKey?: string | null;
   candidate?: Readonly<{
-    kind: 'default-value' | 'hour-time';
-    method?: 'GET' | 'POST';
+    kind: CircleRetailCandidateKind;
     params?: Readonly<Record<string, string>>;
   }> | null;
 }>): CircleRetailDiscoveryRequestPlan {
@@ -134,10 +138,11 @@ export function buildCircleRetailDiscoveryRequestPlan(input: Readonly<{
 
   const candidate: CircleRetailDiscoveryCandidate | null = input.candidate
     ? Object.freeze({
-        method: input.candidate.method ?? 'GET',
+        kind: input.candidate.kind,
+        method: 'POST' as const,
         url: CANDIDATE_URLS[input.candidate.kind],
         params: Object.freeze({ ...(input.candidate.params ?? {}) }),
-        evidenceState: 'reported-public-unverified',
+        evidenceState: 'reported-public-unverified' as const,
         evidenceIds: Object.freeze([]),
       })
     : null;
@@ -191,11 +196,26 @@ function rootTypeOf(value: unknown): CircleRetailDiscoveryResponseSummary['rootT
   return 'unknown';
 }
 
+function numericObjectRows(value: unknown): readonly Record<string, unknown>[] | null {
+  if (!isRecord(value)) return null;
+  const entries = Object.entries(value);
+  if (entries.length === 0) return null;
+  if (!entries.every(([key, child]) => /^\d+$/.test(key) && isRecord(child))) return null;
+  return Object.freeze(
+    entries
+      .sort(([left], [right]) => Number(left) - Number(right))
+      .map(([, child]) => child as Record<string, unknown>),
+  );
+}
+
 function findRows(value: unknown): Readonly<{ rowPath: string | null; rows: readonly Record<string, unknown>[] }> {
   if (Array.isArray(value) && value.length > 0 && value.every(isRecord)) {
     return Object.freeze({ rowPath: '$', rows: Object.freeze(value) });
   }
+  const rootObjectRows = numericObjectRows(value);
+  if (rootObjectRows) return Object.freeze({ rowPath: '${values}', rows: rootObjectRows });
   if (!isRecord(value)) return Object.freeze({ rowPath: null, rows: Object.freeze([]) });
+
   const queue: Array<{ path: string; value: unknown; depth: number }> = Object.entries(value).map(([key, child]) => ({
     path: `$.${key}`,
     value: child,
@@ -206,6 +226,10 @@ function findRows(value: unknown): Readonly<{ rowPath: string | null; rows: read
     if (Array.isArray(current.value) && current.value.length > 0 && current.value.every(isRecord)) {
       return Object.freeze({ rowPath: current.path, rows: Object.freeze(current.value) });
     }
+    const objectRows = numericObjectRows(current.value);
+    if (objectRows) {
+      return Object.freeze({ rowPath: `${current.path}{values}`, rows: objectRows });
+    }
     if (current.depth < 3 && isRecord(current.value)) {
       for (const [key, child] of Object.entries(current.value)) {
         queue.push({ path: `${current.path}.${key}`, value: child, depth: current.depth + 1 });
@@ -213,6 +237,12 @@ function findRows(value: unknown): Readonly<{ rowPath: string | null; rows: read
     }
   }
   return Object.freeze({ rowPath: null, rows: Object.freeze([]) });
+}
+
+function isIntegerLike(value: unknown): boolean {
+  return typeof value === 'number'
+    ? Number.isInteger(value) && Number.isFinite(value)
+    : typeof value === 'string' && /^-?\d+$/.test(value.trim());
 }
 
 function candidateFields(rows: readonly Record<string, unknown>[]): Readonly<{
@@ -223,7 +253,7 @@ function candidateFields(rows: readonly Record<string, unknown>[]): Readonly<{
   const sample = rows.slice(0, 5);
   const keys = [...new Set(sample.flatMap((row) => Object.keys(row)))].sort();
   return Object.freeze({
-    quantity: Object.freeze(keys.filter((key) => sample.some((row) => typeof row[key] === 'number'))),
+    quantity: Object.freeze(keys.filter((key) => sample.some((row) => isIntegerLike(row[key])))),
     identity: Object.freeze(keys.filter((key) => sample.some((row) => typeof row[key] === 'string'))),
   });
 }
@@ -244,6 +274,9 @@ export function captureCircleRetailDiscovery(input: Readonly<{
 
   const rootType = rootTypeOf(input.rawResponse);
   const rootKeys = isRecord(input.rawResponse) ? Object.keys(input.rawResponse).sort() : [];
+  const providerStatus = isRecord(input.rawResponse) && typeof input.rawResponse.ResultStatus === 'string'
+    ? input.rawResponse.ResultStatus
+    : null;
   const found = findRows(input.rawResponse);
   const fields = candidateFields(found.rows);
   const contentType = input.contentType ?? null;
@@ -280,6 +313,7 @@ export function captureCircleRetailDiscovery(input: Readonly<{
     contentType,
     rootType,
     rootKeys: Object.freeze(rootKeys),
+    providerStatus,
     rowPath: found.rowPath,
     rowCount: found.rowPath === null ? null : found.rows.length,
     sampleRowKeys: Object.freeze(found.rows.length === 0 ? [] : Object.keys(found.rows[0]).sort()),
