@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-08-31T19:54:31",
+  "createdAt": "2026-08-31T19:56:28",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -12,8 +12,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 363.22,
-      "previousMasterPoint": 362.12,
-      "deltaFromPreviousMaster": 1.1,
+      "previousMasterPoint": 363.22,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -48,8 +48,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 339.37,
-      "previousMasterPoint": 341.66,
-      "deltaFromPreviousMaster": -2.29,
+      "previousMasterPoint": 339.37,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -120,8 +120,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 267.99,
-      "previousMasterPoint": 265.4,
-      "deltaFromPreviousMaster": 2.59,
+      "previousMasterPoint": 267.99,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 182.26,
@@ -156,8 +156,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 254.28,
-      "previousMasterPoint": 254.65,
-      "deltaFromPreviousMaster": -0.37,
+      "previousMasterPoint": 254.28,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -192,8 +192,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 243.51,
-      "previousMasterPoint": 243.25,
-      "deltaFromPreviousMaster": 0.26,
+      "previousMasterPoint": 243.51,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 166.58,
@@ -228,8 +228,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 241.09,
-      "previousMasterPoint": 240.16,
-      "deltaFromPreviousMaster": 0.93,
+      "previousMasterPoint": 241.09,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 187.53,
@@ -264,8 +264,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 229.81,
-      "previousMasterPoint": 230.35,
-      "deltaFromPreviousMaster": -0.54,
+      "previousMasterPoint": 229.81,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 163.02,
@@ -300,8 +300,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 222.67,
-      "previousMasterPoint": 223.11,
-      "deltaFromPreviousMaster": -0.44,
+      "previousMasterPoint": 222.67,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 173.12,
@@ -336,8 +336,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 156.29,
-      "previousMasterPoint": 157.31,
-      "deltaFromPreviousMaster": -1.02,
+      "previousMasterPoint": 156.29,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 90.6,

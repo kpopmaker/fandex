@@ -1,6 +1,6 @@
 {
   "version": "music_chart_discover_artist_candidates_v2",
-  "createdAt": "2026-08-31T19:54:17",
+  "createdAt": "2026-08-31T19:56:14",
   "seedModified": false,
   "websiteModified": false,
   "sourceCounts": {
@@ -721,7 +721,7 @@
       "platform": "melon",
       "url": "https://www.melon.com/chart/index.htm",
       "statusCode": 200,
-      "rawPath": "raw_music_chart_pages/melon_20260831_195419_439978.html",
+      "rawPath": "raw_music_chart_pages/melon_20260831_195616_439978.html",
       "htmlLength": 439978
     },
     {
@@ -729,32 +729,32 @@
       "platform": "genie",
       "url": "https://www.genie.co.kr/chart/top200?ditc=D&ymd=&hh=23&rtm=N&pg=1",
       "statusCode": 200,
-      "rawPath": "raw_music_chart_pages/genie_20260831_195422_364094.html",
-      "htmlLength": 364094
+      "rawPath": "raw_music_chart_pages/genie_20260831_195620_364065.html",
+      "htmlLength": 364065
     },
     {
       "sourceKey": "genie_daily_page_2",
       "platform": "genie",
       "url": "https://www.genie.co.kr/chart/top200?ditc=D&ymd=&hh=23&rtm=N&pg=2",
       "statusCode": 200,
-      "rawPath": "raw_music_chart_pages/genie_20260831_195425_364887.html",
-      "htmlLength": 364887
+      "rawPath": "raw_music_chart_pages/genie_20260831_195622_364896.html",
+      "htmlLength": 364896
     },
     {
       "sourceKey": "genie_daily_page_3",
       "platform": "genie",
       "url": "https://www.genie.co.kr/chart/top200?ditc=D&ymd=&hh=23&rtm=N&pg=3",
       "statusCode": 200,
-      "rawPath": "raw_music_chart_pages/genie_20260831_195427_364439.html",
-      "htmlLength": 364439
+      "rawPath": "raw_music_chart_pages/genie_20260831_195624_364431.html",
+      "htmlLength": 364431
     },
     {
       "sourceKey": "genie_daily_page_4",
       "platform": "genie",
       "url": "https://www.genie.co.kr/chart/top200?ditc=D&ymd=&hh=23&rtm=N&pg=4",
       "statusCode": 200,
-      "rawPath": "raw_music_chart_pages/genie_20260831_195429_364709.html",
-      "htmlLength": 364709
+      "rawPath": "raw_music_chart_pages/genie_20260831_195625_364703.html",
+      "htmlLength": 364703
     }
   ]
 }

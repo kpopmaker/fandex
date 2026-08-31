@@ -1,6 +1,6 @@
 FANDEX Python Status Report v2
 ========================================================================================
-createdAt: 2026-08-31T19:54:31
+createdAt: 2026-08-31T19:56:28
 masterVersion: fandex_master_v10_music_v2_lastfm_rolling_v1
 scoreMode: uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25
 productionFormula: Naver v3 + YouTube v3 + Music v2 x0.25 + Last.fm Rolling x0.25
