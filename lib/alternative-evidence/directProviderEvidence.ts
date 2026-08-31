@@ -62,7 +62,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   revisionEvidence:
     'Official Circle correction/recalculation behavior is established in the provider evidence record. circle-retail-revision-v1 now preserves the original observation, treats an unchanged refetch as duplicate-noop, emits a deterministic revision observation only when the same logical series changes value, links supersedesObservationId, and maps the revision into the existing research persistence supersession contract.',
   requestEvidence:
-    'Direct public contracts qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd for day/week/month/year; POST /data/api/chart_func/retail/hour_time with termGbn=hour; POST /data/api/chart/retail_hour with yyyymmdd, HourRange, ListType, and thisHour. JSON roots expose FormToMap/List/ResultStatus and rows at $.List{values}. A known-period retail_list request also succeeded without Cookie or Referer. The official UI renders every returned row with no page/size/offset/limit/cursor parameters observed; tested published charts returned ranks 1-50.',
+    'Direct public contracts qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd for day/week/month/year; POST /data/api/chart_func/retail/hour_time with termGbn=hour; POST /data/api/chart/retail_hour with yyyymmdd, HourRange, ListType, and thisHour. JSON roots expose FormToMap/List/ResultStatus and rows at $.List{values}. A known-period retail_list request also succeeded without Cookie or Referer. The official UI renders every returned row with no page/size/offset/limit/cursor parameters observed; tested published charts returned ranks 1-50. Conservative throttling probe 33422703085 made two additional published-period requests 3 seconds apart; both returned HTTP 200, ResultStatus=OK, and 50 rows, with no Retry-After, X-RateLimit, or RateLimit-* headers observed. This does not establish a provider hard limit: circle-retail-throttling-v1 keeps the provider limit unknown and imposes FANDEX-owned low-frequency bounds.',
   authorizationEvidence:
     'Public technical reachability and capability evidence do not establish automation, storage, publication, commercial-use, or redistribution rights.',
   capabilityUpgrades: Object.freeze({
@@ -89,7 +89,6 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
     'supportsTerritorySegmentation',
   ]),
   blockers: Object.freeze([
-    'rate-limit-qualification-required',
     'storage-and-publication-rights-review-required',
   ]),
 });
