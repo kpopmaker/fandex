@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Probe Circle Hourly and Yearly contracts
+      - name: Probe direct Circle Hourly rows
         shell: bash
         run: |
           node <<'NODE'
@@ -36,56 +36,55 @@ jobs:
             try { json = JSON.parse(text); } catch {}
             return { response, text, json };
           };
-          const summarize = (label, result) => {
-            const { response, text, json } = result;
-            const rootKeys = json && typeof json === 'object' ? Object.keys(json) : [];
-            const list = json && typeof json === 'object' && json.List && typeof json.List === 'object'
-              ? Object.values(json.List)
-              : [];
-            const first = list[0] && typeof list[0] === 'object' ? list[0] : null;
-            console.log(JSON.stringify({
-              label,
-              status: response.status,
-              contentType: response.headers.get('content-type'),
-              rootKeys,
-              resultStatus: json && typeof json === 'object' ? json.ResultStatus ?? null : null,
-              listType: json && typeof json === 'object' && json.List !== undefined ? (Array.isArray(json.List) ? 'array' : typeof json.List) : 'missing',
-              rowCount: list.length,
-              sampleKeys: first ? Object.keys(first) : [],
-              sample: first ? {
-                Album: first.Album ?? null,
-                Artist: first.Artist ?? null,
-                Barcode: first.Barcode ?? null,
-                rowSum: first.rowSum ?? null,
-                RankInt: first.RankInt ?? null,
-                YYYYMMDD: first.YYYYMMDD ?? null,
-                YYYY: first.YYYY ?? null,
-              } : null,
-              rawPrefix: json ? null : text.slice(0, 300).replace(/\s+/g, ' '),
-            }));
+
+          const helper = await post('/data/api/chart_func/retail/hour_time', { termGbn: 'hour' });
+          if (!helper.json || helper.json.ResultStatus !== 'OK') {
+            console.log(JSON.stringify({ label: 'hour-helper-failed', status: helper.response.status, json: helper.json }));
+            process.exit(0);
+          }
+
+          const hourRange = Array.isArray(helper.json.Hour_Range) ? helper.json.Hour_Range.join(',') : '';
+          const thisHour = String(helper.json.Hour_End ?? helper.json.Hour_Now ?? '');
+          const params = {
+            yyyymmdd: String(helper.json.YYYYMMDD ?? ''),
+            HourRange: hourRange,
+            ListType: String(helper.json.ListType ?? ''),
+            thisHour,
           };
-
-          const hourPageUrl = `${base}/page_chart/retail.circle?termGbn=hour`;
-          const hourPageResponse = await fetch(hourPageUrl, { redirect: 'manual' });
-          const hourHtml = await hourPageResponse.text();
-          const hourTimeIdx = hourHtml.indexOf('/data/api/chart_func/retail/hour_time');
-          const retailHourIdx = hourHtml.indexOf('/data/api/chart/retail_hour');
+          const result = await post('/data/api/chart/retail_hour', params);
+          const json = result.json;
+          const list = json && typeof json === 'object' && json.List && typeof json.List === 'object'
+            ? Object.values(json.List)
+            : [];
+          const first = list[0] && typeof list[0] === 'object' ? list[0] : null;
           console.log(JSON.stringify({
-            label: 'hour-page-js',
-            status: hourPageResponse.status,
-            hourTimeSnippet: hourTimeIdx >= 0 ? hourHtml.slice(Math.max(0, hourTimeIdx - 500), hourTimeIdx + 1100).replace(/\s+/g, ' ') : null,
-            retailHourSnippet: retailHourIdx >= 0 ? hourHtml.slice(Math.max(0, retailHourIdx - 1000), retailHourIdx + 1300).replace(/\s+/g, ' ') : null,
+            label: 'hour-direct',
+            helper: {
+              YYYYMMDD: helper.json.YYYYMMDD,
+              Hour_End: helper.json.Hour_End,
+              Hour_Now: helper.json.Hour_Now,
+              ListType: helper.json.ListType,
+              HourRangeCount: Array.isArray(helper.json.Hour_Range) ? helper.json.Hour_Range.length : null,
+            },
+            request: params,
+            status: result.response.status,
+            contentType: result.response.headers.get('content-type'),
+            rootKeys: json && typeof json === 'object' ? Object.keys(json) : [],
+            resultStatus: json && typeof json === 'object' ? json.ResultStatus ?? null : null,
+            listType: json && typeof json === 'object' && json.List !== undefined ? (Array.isArray(json.List) ? 'array' : typeof json.List) : 'missing',
+            rowCount: list.length,
+            sampleKeys: first ? Object.keys(first) : [],
+            sample: first ? {
+              Album: first.Album ?? null,
+              Artist: first.Artist ?? null,
+              Barcode: first.Barcode ?? null,
+              rowSum: first.rowSum ?? null,
+              KSum: first.KSum ?? null,
+              ESum: first.ESum ?? null,
+              RankInt: first.RankInt ?? null,
+              YYYYMMDD: first.YYYYMMDD ?? null,
+              Hour: first.Hour ?? first.thisHour ?? null,
+            } : null,
+            rawPrefix: json ? null : result.text.slice(0, 300).replace(/\s+/g, ' '),
           }));
-
-          const hourTime = await post('/data/api/chart_func/retail/hour_time', { termGbn: 'hour' });
-          console.log(JSON.stringify({
-            label: 'hour-time-helper',
-            status: hourTime.response.status,
-            contentType: hourTime.response.headers.get('content-type'),
-            json: hourTime.json,
-            rawPrefix: hourTime.json ? null : hourTime.text.slice(0, 500).replace(/\s+/g, ' '),
-          }));
-
-          const year = await post('/data/api/chart/retail_list', { termGbn: 'year', yyyymmdd: '2025' });
-          summarize('year-2025', year);
           NODE
