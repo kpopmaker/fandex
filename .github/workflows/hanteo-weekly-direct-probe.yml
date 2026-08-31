@@ -17,7 +17,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          endpoint='https://api.hanteochart.io/v4/ranking/list/ALBUM/WEEKLY/BASIC'
+          endpoint='https://api.hanteochart.io/v4/ranking/list/ALBUM/WEEKLY/BASIC?limit=20'
           status=$(curl --silent --show-error \
             --request GET \
             --header 'Accept: application/json' \
@@ -42,8 +42,8 @@ jobs:
           let parsed=null, parseError=null;
           try{parsed=JSON.parse(raw)}catch(e){parseError=String(e)}
           const summarize=(value)=>{
-            if(Array.isArray(value)) return {type:'array',length:value.length,sampleKeys:value[0]&&typeof value[0]==='object'?Object.keys(value[0]).slice(0,40):[]};
-            if(value&&typeof value==='object') return {type:'object',keys:Object.keys(value).slice(0,80)};
+            if(Array.isArray(value)) return {type:'array',length:value.length,sampleKeys:value[0]&&typeof value[0]==='object'?Object.keys(value[0]).slice(0,60):[]};
+            if(value&&typeof value==='object') return {type:'object',keys:Object.keys(value).slice(0,100)};
             return {type:value===null?'null':typeof value};
           };
           const rootSummary=summarize(parsed);
@@ -53,7 +53,7 @@ jobs:
               if(v&&typeof v==='object') nested[k]=summarize(v);
             }
           }
-          const out={httpStatus,contentType,headers:selected,parseError,rootSummary,nested,bodyPrefix:raw.slice(0,500)};
+          const out={httpStatus,contentType,headers:selected,parseError,rootSummary,nested,bodyPrefix:raw.slice(0,1200)};
           fs.writeFileSync('hanteo-weekly-probe.json',JSON.stringify(out,null,2));
           console.log(JSON.stringify(out,null,2));
           NODE
