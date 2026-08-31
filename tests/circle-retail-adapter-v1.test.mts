@@ -171,11 +171,11 @@ test('payload digest mismatch fails closed', () => {
   }), /circle_retail_adapter_payload_digest_mismatch/);
 });
 
-test('invalid quantity is rejected and missing is never coerced to zero', () => {
+test('negative quantity is rejected and never coerced to zero', () => {
   const invalid = {
     ...rawDaily,
     List: {
-      0: { ...rawDaily.List[0], rowSum: '' },
+      0: { ...rawDaily.List[0], rowSum: '-1' },
     },
   };
   const capture = qualifiedCapture(invalid);
