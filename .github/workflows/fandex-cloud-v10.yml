@@ -1,0 +1,183 @@
+name: FANDEX Cloud v10 Daily
+
+on:
+  push:
+    branches:
+      - main
+      - cloud-v10-production-minimal
+    paths:
+      - ".github/workflows/fandex-cloud-v10.yml"
+      - "scripts/fandex-cloud-v10/**"
+      - "data/fandex-cloud-v10/seed/**"
+  schedule:
+    # 00:00 UTC = 09:00 KST
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fandex-cloud-v10-daily
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Seoul
+      RUNTIME_DIR: scripts/fandex-cloud-migration/source
+      SEED_DIR: data/fandex-cloud-v10/seed
+      STATE_DIR: data/fandex-cloud-v10/state
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set KST timezone
+        run: sudo timedatectl set-timezone Asia/Seoul
+
+      - name: Install Python dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+
+      - name: Prepare cloud runtime state
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required=(
+            fandex_naver_ranking_v3_latest.json
+            fandex_youtube_ranking_v3_latest.json
+            fandex_music_chart_ranking_v1_latest.json
+            fandex_master_ranking_latest.json
+          )
+
+          for file in "${required[@]}"; do
+            if [[ ! -f "${SEED_DIR}/${file}" ]]; then
+              echo "Missing cloud seed: ${SEED_DIR}/${file}"
+              exit 1
+            fi
+          done
+
+          cp -f "${SEED_DIR}"/* "${RUNTIME_DIR}"/
+
+          if [[ -d "${STATE_DIR}" ]]; then
+            find "${STATE_DIR}" -maxdepth 1 -type f -print0 | while IFS= read -r -d '' file; do
+              cp -f "$file" "${RUNTIME_DIR}/"
+            done
+          fi
+
+          echo "Cloud runtime seed/state prepared."
+
+      - name: Compile cloud runner and production scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py \
+            "${RUNTIME_DIR}/music_chart_discover_artist_candidates_v2.py" \
+            "${RUNTIME_DIR}/music_chart_discover_bugs_all_targets_v1.py" \
+            "${RUNTIME_DIR}/music_chart_check_history_v1.py" \
+            "${RUNTIME_DIR}/music_chart_current_presence_preview_v1.py" \
+            "${RUNTIME_DIR}/music_chart_current_presence_publish_v2.py" \
+            "${RUNTIME_DIR}/lastfm_sync_cloud_history_v1_1.py" \
+            "${RUNTIME_DIR}/lastfm_global_interest_delta_v1.py" \
+            "${RUNTIME_DIR}/lastfm_global_interest_score_preview_v1.py" \
+            "${RUNTIME_DIR}/lastfm_global_interest_rolling_v1.py" \
+            "${RUNTIME_DIR}/lastfm_global_interest_rolling_score_preview_v1.py" \
+            "${RUNTIME_DIR}/fandex_master_score_v10.py" \
+            "${RUNTIME_DIR}/fandex_python_status_report_v2.py" \
+            "${RUNTIME_DIR}/fandex_python_health_check_v3.py" \
+            "${RUNTIME_DIR}/fandex_daily_summary_v3.py"
+
+      - name: Run FANDEX Cloud v10
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "${RUNTIME_DIR}"
+          python ../../fandex-cloud-v10/fandex_cloud_runner_v1.py
+
+      - name: Verify website isolation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- public/data; then
+            echo "ERROR: public/data changed during FANDEX cloud run."
+            git diff -- public/data
+            exit 1
+          fi
+          echo "Website public/data untouched: PASS"
+
+      - name: Export compact cloud state
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${STATE_DIR}"
+
+          files=(
+            fandex_master_ranking_latest.json
+            fandex_master_artist_reports_latest.json
+            fandex_master_v10_audit.csv
+            FANDEX_MASTER_V10_REPORT.txt
+            fandex_music_chart_ranking_v2_current_presence_latest.json
+            music_chart_current_presence_history_v2.csv
+            music_chart_check_history_v1.csv
+            music_chart_check_history_v1_latest.csv
+            music_chart_check_history_v1_latest.json
+            music_chart_artist_candidates_v2_raw_latest.json
+            music_chart_bugs_all_targets_v1_latest.json
+            music_chart_current_presence_preview_v1_latest.csv
+            lastfm_global_interest_rolling_score_preview_v1_latest.csv
+            lastfm_global_interest_rolling_score_preview_v1_latest.json
+            fandex_python_status_report_latest.txt
+            fandex_python_health_check_v3_latest.txt
+            fandex_cloud_run_latest.json
+          )
+
+          for file in "${files[@]}"; do
+            if [[ -f "${RUNTIME_DIR}/${file}" ]]; then
+              cp -f "${RUNTIME_DIR}/${file}" "${STATE_DIR}/${file}"
+            fi
+          done
+
+          echo "Cloud state exported:"
+          ls -lah "${STATE_DIR}"
+
+      - name: Commit cloud state
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${STATE_DIR}"
+
+          if git diff --cached --quiet; then
+            echo "No FANDEX cloud state changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(fandex-cloud): update daily v10 state"
+
+          branch="${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            echo "Push attempt ${attempt}/3 -> ${branch}"
+            git pull --rebase origin "${branch}"
+
+            if git push origin HEAD:"${branch}"; then
+              echo "FANDEX cloud state push: OK"
+              exit 0
+            fi
+
+            sleep 3
+          done
+
+          echo "FANDEX cloud state push failed after 3 attempts."
+          exit 1
