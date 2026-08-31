@@ -31,6 +31,7 @@ export * from './albumTemporalSnapshot';
 export * from './yes24RetailAdapter';
 export * from './directProviderEvidence';
 export * from './hanteoAlbumDiscovery';
+export * from './hanteoAlbumAdapter';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
 export * from './persistenceContracts';
