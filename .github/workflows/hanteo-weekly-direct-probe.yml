@@ -1,4 +1,4 @@
-name: Hanteo Direct Contract Probe
+name: Hanteo Historical Selector Probe
 
 on:
   push:
@@ -13,77 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Probe Daily Monthly and historical page without early exit
+      - name: Inspect public historical chart page chunk once
         shell: bash
         run: |
-          set -u
-
-          daily_status=$(curl --silent --show-error --request GET \
-            --header 'Accept: application/json' \
-            --header 'Accept-Language: en' \
-            --output daily-body.txt --write-out '%{http_code}' \
-            'https://api.hanteochart.io/v4/ranking/list/ALBUM/DAILY/BASIC?limit=20' || echo '000')
-
-          sleep 2
-
-          monthly_status=$(curl --silent --show-error --request GET \
-            --header 'Accept: application/json' \
-            --header 'Accept-Language: en' \
-            --output monthly-body.txt --write-out '%{http_code}' \
-            'https://api.hanteochart.io/v4/ranking/list/ALBUM/MONTHLY/BASIC?limit=20' || echo '000')
-
-          page_status=$(curl --silent --show-error \
-            --output historical-page.html --write-out '%{http_code}' \
-            'https://www.hanteochart.com/en/charts/album/weekly/2026-W30' || echo '000')
-
-          DAILY_STATUS="$daily_status" MONTHLY_STATUS="$monthly_status" PAGE_STATUS="$page_status" node - <<'NODE'
+          set -euo pipefail
+          base='https://www.hanteochart.com'
+          chunk='/_next/static/chunks/app/%5Blocale%5D/charts/%5Bcategory%5D/%5Bterm%5D/%5Bperiod%5D/page-1803aea297a11422.js'
+          curl --silent --show-error "$base$chunk" --output page-chunk.js
+          node - <<'NODE'
           const fs=require('fs');
-          function apiSummary(label,status){
-            const path=`${label}-body.txt`;
-            const raw=fs.existsSync(path)?fs.readFileSync(path,'utf8'):'';
-            let parsed=null,parseError=null;
-            try{parsed=JSON.parse(raw)}catch(e){parseError=String(e)}
-            const list=parsed?.resultData?.list;
-            const first=Array.isArray(list)&&list[0]&&typeof list[0]==='object'?list[0]:null;
-            return {
-              httpStatus:Number(status)||0,
-              parseError,
-              code:parsed?.code??null,
-              message:parsed?.message??null,
-              resultDatetime:parsed?.resultData?.resultDatetime??null,
-              rowCount:Array.isArray(list)?list.length:null,
-              firstRowKeys:first?Object.keys(first):[],
-              firstDetailKeys:first?.detail&&typeof first.detail==='object'?Object.keys(first.detail):[],
-              firstRow:first?{
-                rank:first.rank??null,targetIdx:first.targetIdx??null,targetName:first.targetName??null,
-                value:first.value??null,artistIdx:first.detail?.artistIdx??null,
-                artistGlobalName:first.detail?.artistGlobalName??null,
-                salesVolume:first.detail?.salesVolume??null,supplyPrice:first.detail?.supplyPrice??null,
-                saleDate:first.detail?.saleDate??null,regDate:first.regDate??null
-              }:null,
-              bodyPrefix:raw.slice(0,500)
-            };
-          }
-          const daily=apiSummary('daily',process.env.DAILY_STATUS);
-          const monthly=apiSummary('monthly',process.env.MONTHLY_STATUS);
-          fs.writeFileSync('daily-summary.json',JSON.stringify(daily,null,2));
-          fs.writeFileSync('monthly-summary.json',JSON.stringify(monthly,null,2));
-
-          const raw=fs.existsSync('historical-page.html')?fs.readFileSync('historical-page.html','utf8'):'';
-          const scripts=[...raw.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m=>m[1]);
-          const needles=['ranking/list','api.hanteochart','salesVolume','targetIdx','2026-W30','2026.07.20','resultDatetime'];
+          const raw=fs.readFileSync('page-chunk.js','utf8');
+          const needles=['ranking/list','api.hanteochart','resultDatetime','limit','period','WEEKLY','DAILY','MONTHLY','searchParams','issue','date','timestamp','ranking'];
           const hits={};
-          for(const n of needles){const i=raw.indexOf(n);hits[n]=i>=0?raw.slice(Math.max(0,i-180),Math.min(raw.length,i+420)):null;}
-          const page={httpStatus:Number(process.env.PAGE_STATUS)||0,htmlLength:raw.length,scriptCount:scripts.length,scripts:scripts.slice(0,80),hits};
-          fs.writeFileSync('historical-page-summary.json',JSON.stringify(page,null,2));
-          console.log(JSON.stringify({daily,monthly,page},null,2));
+          for(const n of needles){
+            const all=[]; let start=0;
+            while(all.length<8){const i=raw.indexOf(n,start);if(i<0)break;all.push(raw.slice(Math.max(0,i-450),Math.min(raw.length,i+1000)));start=i+n.length;}
+            hits[n]=all;
+          }
+          const urls=[...new Set([...raw.matchAll(/https?:\\?\/\\?\/[^"'`\\s)]+/g)].map(m=>m[0]))].slice(0,100);
+          const out={length:raw.length,urls,hits};
+          fs.writeFileSync('hanteo-historical-selector-hints.json',JSON.stringify(out,null,2));
+          console.log(JSON.stringify({length:out.length,urlCount:urls.length,hitCounts:Object.fromEntries(Object.entries(hits).map(([k,v])=>[k,v.length]))},null,2));
           NODE
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: hanteo-direct-contract-probe
-          path: |
-            daily-summary.json
-            monthly-summary.json
-            historical-page-summary.json
+          name: hanteo-historical-selector-hints
+          path: hanteo-historical-selector-hints.json
           retention-days: 1
