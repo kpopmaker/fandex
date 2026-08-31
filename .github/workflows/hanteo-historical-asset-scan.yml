@@ -17,46 +17,45 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          page='https://www.hanteochart.com/en/charts/album/weekly/2026-W30'
-          curl --silent --show-error "$page" --output page.html
-          node - <<'NODE' > scripts.txt
-          const fs=require('fs');
-          const html=fs.readFileSync('page.html','utf8');
-          const scripts=[...new Set([...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m=>m[1]))];
-          for(const s of scripts) console.log(s);
-          NODE
-          mkdir -p chunks
-          : > asset-scan.txt
-          i=0
-          while IFS= read -r src; do
-            [ -z "$src" ] && continue
-            i=$((i+1))
-            url="$src"
-            case "$url" in
-              http://*|https://*) ;;
-              *) url="https://www.hanteochart.com${url}" ;;
-            esac
-            out="chunks/chunk-${i}.js"
-            curl --silent --show-error "$url" --output "$out" || true
-            if grep -Eqi 'ranking/list|api\.hanteochart|salesVolume|resultDatetime|targetIdx|/v4/ranking|WEEKLY|DAILY|MONTHLY' "$out"; then
-              echo "### $src" >> asset-scan.txt
-              node - "$out" <<'NODE' >> asset-scan.txt
-              const fs=require('fs'); const p=process.argv[2]; const raw=fs.readFileSync(p,'utf8');
-              const needles=['ranking/list','api.hanteochart','salesVolume','resultDatetime','targetIdx','/v4/ranking','WEEKLY','DAILY','MONTHLY','limit','issue','date','period','timestamp'];
-              for(const n of needles){
-                let start=0,count=0;
-                while(count<6){const idx=raw.indexOf(n,start); if(idx<0) break; console.log(`\n[${n}]\n${raw.slice(Math.max(0,idx-700),Math.min(raw.length,idx+1800))}`); start=idx+n.length; count++;}
+          node <<'NODE'
+          const fs = require('fs');
+          const pageUrl = 'https://www.hanteochart.com/en/charts/album/weekly/2026-W30';
+          const base = 'https://www.hanteochart.com';
+          const needles = ['ranking/list','api.hanteochart','salesVolume','resultDatetime','targetIdx','/v4/ranking','WEEKLY','DAILY','MONTHLY','limit','issue','date','period','timestamp'];
+          const main = async () => {
+            const pageRes = await fetch(pageUrl, { headers: { 'user-agent': 'Mozilla/5.0' } });
+            const html = await pageRes.text();
+            const scripts = [...new Set([...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]))];
+            const matches = [];
+            for (const src of scripts) {
+              const url = /^https?:/.test(src) ? src : base + src;
+              let raw = '';
+              try {
+                const r = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0' } });
+                raw = await r.text();
+              } catch {
+                continue;
               }
-              NODE
-            fi
-          done < scripts.txt
-          node - <<'NODE'
-          const fs=require('fs');
-          const scripts=fs.readFileSync('scripts.txt','utf8').trim().split(/\r?\n/).filter(Boolean);
-          const scan=fs.existsSync('asset-scan.txt')?fs.readFileSync('asset-scan.txt','utf8'):'';
-          const out={scriptCount:scripts.length,matchedAssetSections:(scan.match(/^### /gm)||[]).length,scanPrefix:scan.slice(0,30000)};
-          fs.writeFileSync('hanteo-historical-asset-scan.json',JSON.stringify(out,null,2));
-          console.log(JSON.stringify({scriptCount:out.scriptCount,matchedAssetSections:out.matchedAssetSections},null,2));
+              if (!/(ranking\/list|api\.hanteochart|salesVolume|resultDatetime|targetIdx|\/v4\/ranking|WEEKLY|DAILY|MONTHLY)/i.test(raw)) continue;
+              const snippets = {};
+              for (const n of needles) {
+                const arr = [];
+                let start = 0;
+                while (arr.length < 6) {
+                  const i = raw.indexOf(n, start);
+                  if (i < 0) break;
+                  arr.push(raw.slice(Math.max(0, i - 700), Math.min(raw.length, i + 1800)));
+                  start = i + n.length;
+                }
+                if (arr.length) snippets[n] = arr;
+              }
+              matches.push({ src, length: raw.length, snippets });
+            }
+            const out = { pageStatus: pageRes.status, scriptCount: scripts.length, matchedAssetCount: matches.length, matches };
+            fs.writeFileSync('hanteo-historical-asset-scan.json', JSON.stringify(out, null, 2));
+            console.log(JSON.stringify({ pageStatus: out.pageStatus, scriptCount: out.scriptCount, matchedAssetCount: out.matchedAssetCount }, null, 2));
+          };
+          main().catch(err => { console.error(err); process.exit(1); });
           NODE
       - uses: actions/upload-artifact@v4
         with:
