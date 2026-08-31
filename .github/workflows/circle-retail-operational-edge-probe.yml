@@ -1,0 +1,105 @@
+name: Circle Retail Operational Edge Probe
+
+on:
+  push:
+    branches:
+      - integration/album-circle-retail-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Bounded Circle operational probe
+        shell: bash
+        run: |
+          node <<'NODE'
+          const base = 'https://circlechart.kr';
+          const pageUrl = `${base}/page_chart/retail.circle?termGbn=day&yyyymmdd=20260529`;
+          const endpoint = `${base}/data/api/chart/retail_list`;
+
+          const summarize = async (label, params, context = {}) => {
+            const headers = {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              'X-Requested-With': 'XMLHttpRequest',
+              ...(context.referer ? { Referer: context.referer } : {}),
+              ...(context.cookie ? { Cookie: context.cookie } : {}),
+            };
+            let response;
+            try {
+              response = await fetch(endpoint, {
+                method: 'POST',
+                headers,
+                body: new URLSearchParams(params).toString(),
+                redirect: 'manual',
+              });
+            } catch (error) {
+              console.log(JSON.stringify({ label, transportError: String(error) }));
+              return;
+            }
+
+            const text = await response.text();
+            let json = null;
+            try { json = JSON.parse(text); } catch {}
+            const list = json && typeof json === 'object' && json.List && typeof json.List === 'object'
+              ? Object.values(json.List)
+              : [];
+            const first = list[0] && typeof list[0] === 'object' ? list[0] : null;
+            const last = list[list.length - 1] && typeof list[list.length - 1] === 'object' ? list[list.length - 1] : null;
+            const form = json && typeof json === 'object' && json.FormToMap && typeof json.FormToMap === 'object'
+              ? json.FormToMap
+              : null;
+            const pagingKeys = form ? Object.keys(form).filter((key) => /page|size|limit|offset|cursor|count|start|end/i.test(key)) : [];
+            console.log(JSON.stringify({
+              label,
+              request: params,
+              usedReferer: Boolean(context.referer),
+              usedCookie: Boolean(context.cookie),
+              status: response.status,
+              contentType: response.headers.get('content-type'),
+              location: response.headers.get('location'),
+              rootKeys: json && typeof json === 'object' ? Object.keys(json) : [],
+              resultStatus: json && typeof json === 'object' ? json.ResultStatus ?? null : null,
+              listType: json && typeof json === 'object' && json.List !== undefined ? (Array.isArray(json.List) ? 'array' : typeof json.List) : 'missing',
+              rowCount: list.length,
+              firstRank: first ? first.RankInt ?? first.RankOrder ?? null : null,
+              lastRank: last ? last.RankInt ?? last.RankOrder ?? null : null,
+              formKeys: form ? Object.keys(form) : [],
+              pagingKeys,
+              nonJsonPrefix: json ? null : text.slice(0, 120).replace(/\s+/g, ' '),
+            }));
+          };
+
+          const page = await fetch(pageUrl, { redirect: 'manual' });
+          const html = await page.text();
+          const setCookie = page.headers.get('set-cookie');
+          const cookie = setCookie ? setCookie.split(';')[0] : null;
+          const paginationTokens = [...new Set((html.match(/\b(page(?:No|Num|Size)?|paging|offset|limit|cursor|more)\b/gi) || []).map((v) => v.toLowerCase()))].slice(0, 20);
+          const retailListIndex = html.indexOf('/data/api/chart/retail_list');
+          const retailListSnippet = retailListIndex >= 0
+            ? html.slice(Math.max(0, retailListIndex - 350), retailListIndex + 650).replace(/\s+/g, ' ').slice(0, 1000)
+            : null;
+
+          console.log(JSON.stringify({
+            label: 'page-context',
+            status: page.status,
+            contentType: page.headers.get('content-type'),
+            cookieObserved: Boolean(cookie),
+            paginationTokens,
+            retailListSnippet,
+          }));
+
+          const context = { referer: pageUrl, cookie };
+          await summarize('baseline-context', { termGbn: 'day', yyyymmdd: '20260529' }, context);
+          await summarize('invalid-calendar-date', { termGbn: 'day', yyyymmdd: '20260230' }, context);
+          await summarize('future-not-published', { termGbn: 'day', yyyymmdd: '20991231' }, context);
+          await summarize('prelaunch-empty-candidate', { termGbn: 'day', yyyymmdd: '20000101' }, context);
+          await summarize('baseline-no-cookie-no-referer', { termGbn: 'day', yyyymmdd: '20260529' }, {});
+          NODE
