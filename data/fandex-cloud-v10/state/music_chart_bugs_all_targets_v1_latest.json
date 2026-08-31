@@ -1,0 +1,249 @@
+{
+  "version": "music_chart_discover_bugs_all_targets_v1",
+  "createdAt": "2026-08-31T19:01:06",
+  "chartDate": "2026-08-31",
+  "source": "bugs",
+  "sourceUrl": "https://music.bugs.co.kr/chart",
+  "parsedChartRowCount": 100,
+  "targetArtistCount": 10,
+  "candidateCount": 14,
+  "artists": [
+    {
+      "artist": "아이유",
+      "candidateCount": 0,
+      "status": "MISS"
+    },
+    {
+      "artist": "에스파",
+      "candidateCount": 4,
+      "status": "FOUND"
+    },
+    {
+      "artist": "에이티즈",
+      "candidateCount": 1,
+      "status": "FOUND"
+    },
+    {
+      "artist": "보이넥스트도어",
+      "candidateCount": 1,
+      "status": "FOUND"
+    },
+    {
+      "artist": "아이브",
+      "candidateCount": 4,
+      "status": "FOUND"
+    },
+    {
+      "artist": "르세라핌",
+      "candidateCount": 2,
+      "status": "FOUND"
+    },
+    {
+      "artist": "뉴진스",
+      "candidateCount": 2,
+      "status": "FOUND"
+    },
+    {
+      "artist": "세븐틴",
+      "candidateCount": 0,
+      "status": "MISS"
+    },
+    {
+      "artist": "스트레이키즈",
+      "candidateCount": 0,
+      "status": "MISS"
+    },
+    {
+      "artist": "투모로우바이투게더",
+      "candidateCount": 0,
+      "status": "MISS"
+    }
+  ],
+  "candidates": [
+    {
+      "artist": "뉴진스",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "Hype Boy",
+      "rank": "53",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "NewJeans",
+      "matchedAlias": "NewJeans",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "뉴진스",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "Ditto",
+      "rank": "71",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "NewJeans",
+      "matchedAlias": "NewJeans",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "르세라핌",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "BOOMPALA",
+      "rank": "76",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "LE SSERAFIM (르세라핌)",
+      "matchedAlias": "르세라핌",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "르세라핌",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "HOT",
+      "rank": "96",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "LE SSERAFIM (르세라핌)",
+      "matchedAlias": "르세라핌",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "보이넥스트도어",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "오늘만 I LOVE YOU",
+      "rank": "99",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "BOYNEXTDOOR",
+      "matchedAlias": "BOYNEXTDOOR",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "아이브",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "BANG BANG",
+      "rank": "35",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "IVE (아이브)",
+      "matchedAlias": "아이브",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "아이브",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "I AM",
+      "rank": "45",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "IVE (아이브)",
+      "matchedAlias": "아이브",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "아이브",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "BLACKHOLE",
+      "rank": "66",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "IVE (아이브)",
+      "matchedAlias": "아이브",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "아이브",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "REBEL HEART",
+      "rank": "73",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "IVE (아이브)",
+      "matchedAlias": "아이브",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "에스파",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "LEMONADE",
+      "rank": "9",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "aespa",
+      "matchedAlias": "aespa",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "에스파",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "Whiplash",
+      "rank": "30",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "aespa",
+      "matchedAlias": "aespa",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "에스파",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "Supernova",
+      "rank": "67",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "aespa",
+      "matchedAlias": "aespa",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "에스파",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "WDA (Whole Different Animal) (Feat. G-DRAGON)",
+      "rank": "68",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "aespa",
+      "matchedAlias": "aespa",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    },
+    {
+      "artist": "에이티즈",
+      "platform": "bugs",
+      "chartName": "Bugs Realtime",
+      "trackTitle": "BAD",
+      "rank": "4",
+      "chartDate": "2026-08-31",
+      "chartType": "realtime",
+      "sourceKey": "bugs_realtime",
+      "matchedArtist": "ATEEZ(에이티즈)",
+      "matchedAlias": "에이티즈",
+      "sourceUrl": "https://music.bugs.co.kr/chart"
+    }
+  ],
+  "seedModified": false,
+  "masterModified": false,
+  "websiteModified": false
+}
