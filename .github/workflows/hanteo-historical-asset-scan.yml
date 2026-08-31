@@ -1,4 +1,4 @@
-name: Hanteo Historical Sales Context Probe
+name: Hanteo Public API Docs Probe
 
 on:
   push:
@@ -13,67 +13,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Probe chart-sales context with bounded referers
+      - name: Probe public API docs endpoints once
         shell: bash
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs = require('fs');
           (async () => {
-            const base = 'https://www.hanteochart.com';
-            const historical30 = `${base}/en/charts/album/weekly/2026-W30`;
-            const historical29 = `${base}/en/charts/album/weekly/2026-W29`;
-            const sleep = ms => new Promise(r => setTimeout(r, ms));
-            async function request(url, referer) {
-              const res = await fetch(url, {headers:{'accept':'application/json','user-agent':'Mozilla/5.0','referer':referer}});
-              const text = await res.text();
-              let json=null; try{json=JSON.parse(text)}catch{}
-              const sales = Array.isArray(json?.sales) ? json.sales : null;
-              return {
-                status:res.status,
-                contentType:res.headers.get('content-type'),
-                keys:json&&typeof json==='object'?Object.keys(json):[],
-                salesCount:sales?.length??null,
-                firstSales:sales?.slice(0,3).map(x=>({targetIdx:x?.targetIdx??null,salesVolume:x?.salesVolume??null}))??null,
-                bodyPrefix:text.slice(0,500)
-              };
+            const base='https://api.hanteochart.io';
+            const paths=['/v3/api-docs','/swagger-ui/index.html','/swagger-ui.html','/openapi.json','/api-docs'];
+            const out=[];
+            for(const path of paths){
+              const res=await fetch(base+path,{headers:{'accept':'application/json,text/html;q=0.9,*/*;q=0.8','user-agent':'Mozilla/5.0'}});
+              const text=await res.text();
+              let json=null;try{json=JSON.parse(text)}catch{}
+              const rankingPaths=json?.paths?Object.keys(json.paths).filter(p=>/ranking\/list/i.test(p)).slice(0,50):[];
+              const rankingDetails={};
+              for(const p of rankingPaths){rankingDetails[p]=json.paths[p];}
+              out.push({path,status:res.status,contentType:res.headers.get('content-type'),jsonKeys:json&&typeof json==='object'?Object.keys(json).slice(0,30):[],rankingPaths,rankingDetails,bodyPrefix:text.slice(0,1000)});
+              await new Promise(r=>setTimeout(r,1500));
             }
-            const combos = [
-              ['ALBUM','WEEKLY','BASIC'],
-              ['ALBUM','weekly','BASIC'],
-              ['album','WEEKLY','BASIC'],
-              ['album','weekly','BASIC']
-            ];
-            let working=null;
-            const attempts=[];
-            for(const [type,term,genre] of combos){
-              const url=`${base}/api/chart-sales?type=${encodeURIComponent(type)}&term=${encodeURIComponent(term)}&genre=${encodeURIComponent(genre)}`;
-              const result=await request(url,historical30);
-              attempts.push({type,term,genre,result});
-              if(!working && result.status===200 && result.salesCount!==null) working={type,term,genre,url,result};
-              if(working) break;
-              await sleep(2000);
-            }
-            const comparison={};
-            if(working){
-              await sleep(2000);
-              comparison.week30=await request(working.url,historical30);
-              await sleep(2000);
-              comparison.week29=await request(working.url,historical29);
-            }
-            const page30=await (await fetch(historical30,{headers:{'user-agent':'Mozilla/5.0'}})).text();
-            const htmlHints={};
-            for(const needle of ['ALBUM','WEEKLY','BASIC','showSales','apiType','genre','2026-W30']){
-              const i=page30.indexOf(needle);
-              htmlHints[needle]=i>=0?page30.slice(Math.max(0,i-300),Math.min(page30.length,i+700)):null;
-            }
-            const out={attempts,working:working?{type:working.type,term:working.term,genre:working.genre}:null,comparison,htmlHints};
-            fs.writeFileSync('hanteo-historical-sales-context.json',JSON.stringify(out,null,2));
-            console.log(JSON.stringify({working:out.working,attempts:attempts.map(a=>({type:a.type,term:a.term,genre:a.genre,status:a.result.status,salesCount:a.result.salesCount})),comparison},null,2));
+            fs.writeFileSync('hanteo-public-api-docs-probe.json',JSON.stringify(out,null,2));
+            console.log(JSON.stringify(out.map(x=>({path:x.path,status:x.status,contentType:x.contentType,rankingPaths:x.rankingPaths})),null,2));
           })().catch(err=>{console.error(err);process.exit(1);});
           NODE
       - uses: actions/upload-artifact@v4
         with:
-          name: hanteo-historical-sales-context
-          path: hanteo-historical-sales-context.json
+          name: hanteo-public-api-docs-probe
+          path: hanteo-public-api-docs-probe.json
           retention-days: 1
