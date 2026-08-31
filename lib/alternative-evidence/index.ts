@@ -32,6 +32,7 @@ export * from './yes24RetailAdapter';
 export * from './directProviderEvidence';
 export * from './circleRetailDiscovery';
 export * from './circleRetailAdapter';
+export * from './circleRetailOperationalSemantics';
 export * from './albumMethodology';
 export * from './albumSyntheticValidation';
 export * from './persistenceContracts';
