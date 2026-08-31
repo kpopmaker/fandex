@@ -417,7 +417,7 @@ A separate run (`33411123806`) failed before any provider request because the pr
 
 ## Code validation record
 
-After updating the Discovery implementation to match the directly observed Circle contract, a branch-only validation workflow executed:
+After updating the Discovery implementation to match the directly observed Circle contract, branch-only validation run `33411943963` executed:
 
 ```text
 npm ci
@@ -425,4 +425,4 @@ npx tsx --test tests/circle-retail-discovery-v1.test.mts
 npm run typecheck
 ```
 
-The Circle discovery test step and TypeScript typecheck both completed successfully. The temporary validation/probe workflow was then removed from the branch so PR #130 does not retain a scheduled or persistent live-collection path.
+The dependency install, Circle discovery test step, and TypeScript typecheck all completed successfully. The temporary validation/probe workflow was then removed from the branch so PR #130 does not retain a scheduled or persistent live-collection path.
