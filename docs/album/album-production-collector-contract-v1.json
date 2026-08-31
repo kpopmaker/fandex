@@ -1,0 +1,163 @@
+{
+  "contractVersion": "album-production-collector-contract-v1",
+  "metric": "Album",
+  "construct": "physical album completed-purchase-class sales/reaction",
+  "providerDecision": {
+    "primaryProvider": "circle-retail",
+    "secondaryVerificationProvider": "hanteo",
+    "selectionConfidence": "HIGH",
+    "decisionState": "primary-finalized-technical"
+  },
+  "authorization": {
+    "collectorEngineeringAuthorized": true,
+    "implementationAuthorized": true,
+    "planOnlyImplementationAuthorized": true,
+    "fixtureOrchestrationAuthorized": true,
+    "boundedResearchImplementationAuthorized": true,
+    "liveRecurringCollectionAuthorized": false,
+    "shadowPersistenceAuthorized": false,
+    "productionPersistenceAuthorized": false,
+    "productionRuntimeCollectionAuthorized": false,
+    "productionPublicationAuthorized": false,
+    "commercialRightsCleared": false
+  },
+  "runModes": [
+    "plan-only",
+    "bounded-research",
+    "shadow",
+    "production"
+  ],
+  "defaultRunMode": "plan-only",
+  "providers": {
+    "circle-retail": {
+      "role": "primary",
+      "qualifiedTimeframes": ["hour", "day", "week", "month", "year"],
+      "historicalExactCopies": "qualified",
+      "quantityField": "rowSum",
+      "quantitySemantic": "period-sale",
+      "unit": "physical-units",
+      "revisionReconciliation": "qualified",
+      "throttling": {
+        "providerHardLimit": "unknown",
+        "maxConcurrency": 1,
+        "minimumIntervalMs": 3000,
+        "maxRequestsPerBoundedRun": 20,
+        "maxServerErrorRetries": 2,
+        "serverErrorBackoffMs": [10000, 30000],
+        "on429": "halt",
+        "on403": "halt-no-bypass"
+      }
+    },
+    "hanteo": {
+      "role": "secondary-verification",
+      "qualifiedTimeframes": ["day", "week", "month"],
+      "historicalExactCopies": "unverified",
+      "quantityField": "detail.salesVolume",
+      "indexField": "value",
+      "indexSemantic": "Album Index",
+      "quantitySemantic": "period-sale",
+      "unit": "physical-units",
+      "revisionReconciliation": "not-qualified",
+      "throttling": {
+        "providerHardLimit": "unknown",
+        "maxConcurrency": 1,
+        "minimumIntervalMs": 3000,
+        "on429": "halt",
+        "on403": "halt-no-bypass"
+      }
+    }
+  },
+  "semanticRules": {
+    "rawProviderSummationAllowed": false,
+    "rawProviderAveragingAllowed": false,
+    "rankAsSalesAllowed": false,
+    "indexAsSalesAllowed": false,
+    "missingAsZeroAllowed": false,
+    "certificationAsExactSalesAllowed": false,
+    "nativeWeeklyReplacedByDailySumAllowed": false,
+    "nativeMonthlyReplacedByDailySumAllowed": false
+  },
+  "killSwitch": {
+    "globalDefault": false,
+    "circleDefault": false,
+    "hanteoDefault": false,
+    "haltConditions": [
+      "403",
+      "429",
+      "login-required",
+      "captcha-or-bot-challenge",
+      "schema-drift",
+      "quantity-field-missing",
+      "provider-semantic-conflict",
+      "bounded-5xx-retries-exhausted",
+      "authorization-downgrade",
+      "persistence-scope-mismatch"
+    ]
+  },
+  "backfill": {
+    "allowedByDefault": false,
+    "circleTechnicalEligibility": "qualified-bounded-only",
+    "hanteoHistoricalExactCopyEligibility": "blocked-unverified",
+    "requiresExplicitStart": true,
+    "requiresExplicitEnd": true,
+    "requiresExplicitTimeframe": true,
+    "requiresRequestCount": true,
+    "requiresThrottlePlan": true,
+    "requiresAuthorizationSnapshot": true,
+    "requiresResumeCheckpoint": true
+  },
+  "persistence": {
+    "currentContract": "album-persistence-contract-v1",
+    "productionScopeCurrentState": "blocked",
+    "mutateHistoryInPlaceAllowed": false,
+    "revisionAppendRequired": true,
+    "productionPersistenceRequiresSeparateChange": true
+  },
+  "crossProviderVerification": {
+    "blendQuantities": false,
+    "allowedStates": [
+      "matched-direction",
+      "material-divergence",
+      "secondary-missing",
+      "secondary-unavailable",
+      "identity-mismatch",
+      "period-not-comparable"
+    ]
+  },
+  "productionActivationHardGates": [
+    "provider-final-decision-approved",
+    "circle-collector-approved",
+    "hanteo-secondary-adapter-approved",
+    "plan-only-runner-pass",
+    "bounded-research-orchestration-pass",
+    "identity-reconciliation-operational-pass",
+    "revision-persistence-pass",
+    "shadow-run-stability-pass",
+    "automation-authorization-allowed",
+    "storage-authorization-resolved",
+    "production-persistence-unblocked",
+    "kill-switch-monitoring-pass",
+    "production-runtime-collection-authorized"
+  ],
+  "nextImplementation": {
+    "name": "FANDEX Album Collector Plan Foundation v1",
+    "scope": [
+      "contracts",
+      "deterministic-planner",
+      "plan-only-cli",
+      "tests"
+    ],
+    "effects": {
+      "externalCalls": 0,
+      "databaseReads": 0,
+      "databaseWrites": 0,
+      "scheduleMutation": 0,
+      "environmentMutation": 0
+    }
+  },
+  "dependencies": {
+    "circleEvidencePR": 130,
+    "hanteoEvidencePR": 131,
+    "providerDecisionPR": 132
+  }
+}
