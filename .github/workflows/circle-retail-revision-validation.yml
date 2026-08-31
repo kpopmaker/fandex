@@ -1,0 +1,25 @@
+name: Circle Retail Revision Validation
+
+on:
+  push:
+    branches:
+      - integration/album-circle-retail-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Circle revision qualification tests
+        run: npx tsx --test tests/circle-retail-revision-v1.test.mts tests/circle-retail-adapter-v1.test.mts tests/circle-retail-discovery-v1.test.mts tests/circle-retail-operational-semantics-v1.test.mts tests/album-provider-specific-integration-depth-v1.test.mts tests/album-persistence-integration-depth-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
