@@ -60,7 +60,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   temporalEvidence:
     'POST retail_list Daily, Weekly, Monthly, and Yearly requests were directly observed with provider-native period keys and ResultStatus=OK. Hourly uses POST hour_time to resolve the provider date/hour range and POST retail_hour for the selected hour. Invalid-calendar, future, and prelaunch probes all returned HTTP 200 with ResultStatus=Error and no List, so the provider collapses those causes into one period-error shape.',
   revisionEvidence:
-    'Provider correction behavior exists in the wider evidence record, but adapter-level revision/supersession handling is not yet qualified in this packet.',
+    'Official Circle correction/recalculation behavior is established in the provider evidence record. circle-retail-revision-v1 now preserves the original observation, treats an unchanged refetch as duplicate-noop, emits a deterministic revision observation only when the same logical series changes value, links supersedesObservationId, and maps the revision into the existing research persistence supersession contract.',
   requestEvidence:
     'Direct public contracts qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd for day/week/month/year; POST /data/api/chart_func/retail/hour_time with termGbn=hour; POST /data/api/chart/retail_hour with yyyymmdd, HourRange, ListType, and thisHour. JSON roots expose FormToMap/List/ResultStatus and rows at $.List{values}. A known-period retail_list request also succeeded without Cookie or Referer. The official UI renders every returned row with no page/size/offset/limit/cursor parameters observed; tested published charts returned ranks 1-50.',
   authorizationEvidence:
@@ -68,6 +68,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   capabilityUpgrades: Object.freeze({
     supportsNativePeriodSales: 'circle-retail-direct-response-v1:rowSum-period-sales',
     supportsHistoricalQueries: 'circle-retail-direct-response-v1:historical-hour-day-week-month-year',
+    supportsRevisions: 'circle-retail-revision-v1:official-corrections-and-supersession-reconciler',
     supportsSkuIdentity: 'circle-retail-direct-response-v1:barcode-sku-identity-non-hour',
   }),
   certificationCapabilities: Object.freeze({
@@ -81,7 +82,6 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   unresolvedCapabilities: Object.freeze([
     'supportsCumulativeSales',
     'supportsFirstWeekSales',
-    'supportsRevisions',
     'supportsArtistIdentity',
     'supportsReleaseIdentity',
     'supportsEditionIdentity',
@@ -89,7 +89,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
     'supportsTerritorySegmentation',
   ]),
   blockers: Object.freeze([
-    'revision-and-rate-limit-qualification-required',
+    'rate-limit-qualification-required',
     'storage-and-publication-rights-review-required',
   ]),
 });
