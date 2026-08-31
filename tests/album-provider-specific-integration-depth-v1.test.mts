@@ -29,9 +29,11 @@ test('Circle evidence upgrades only directly proven technical capabilities',()=>
   assert.ok(CIRCLE_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsCumulativeSales'));
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsNativePeriodSales,'circle-retail-direct-response-v1:rowSum-period-sales');
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsHistoricalQueries,'circle-retail-direct-response-v1:historical-hour-day-week-month-year');
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsRevisions,'circle-retail-revision-v1:official-corrections-and-supersession-reconciler');
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsSkuIdentity,'circle-retail-direct-response-v1:barcode-sku-identity-non-hour');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsNativePeriodSales.state,'true');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsHistoricalQueries.state,'true');
+  assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsRevisions.state,'true');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsSkuIdentity.state,'true');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.currentStage,'live-adapter-default-off');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.technicalReadiness,'adapter-ready');
@@ -43,16 +45,16 @@ test('Circle evidence upgrades only directly proven technical capabilities',()=>
 test('Circle base descriptor stays conservative while evidence-linked descriptor advances',()=>{
   assert.equal(CIRCLE_PROVIDER_DESCRIPTOR.capabilities.supportsNativePeriodSales.state,'unknown');
   assert.equal(CIRCLE_PROVIDER_DESCRIPTOR.capabilities.supportsHistoricalQueries.state,'unknown');
+  assert.equal(CIRCLE_PROVIDER_DESCRIPTOR.capabilities.supportsRevisions.state,'unknown');
   assert.equal(CIRCLE_PROVIDER_DESCRIPTOR.capabilities.supportsSkuIdentity.state,'unknown');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.authorization.automationState,'review-required');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.authorization.commercialUseState,'contract-required');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.authorization.rawRedistributionState,'blocked');
 });
 
-test('Circle operational blocker is narrowed after bounded edge and hour/year qualification',()=>{
-  assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('operational-edge-qualification-required'),false);
-  assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('hour-year-revision-and-rate-limit-qualification-required'),false);
-  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('revision-and-rate-limit-qualification-required'));
+test('Circle technical blocker is narrowed to conservative rate-limit qualification',()=>{
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('revision-and-rate-limit-qualification-required'),false);
+  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('rate-limit-qualification-required'));
   assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('storage-and-publication-rights-review-required'));
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Hourly uses POST hour_time/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Yearly/i);
@@ -60,6 +62,8 @@ test('Circle operational blocker is narrowed after bounded edge and hour/year qu
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/retail_hour/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/without Cookie or Referer/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/ranks 1-50/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.revisionEvidence,/duplicate-noop/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.revisionEvidence,/supersedesObservationId/i);
 });
 
 test('Hanteo evidence keeps API and capabilities unknown',()=>{assert.equal(HANTEO_PROVIDER_EVIDENCE.acquisitionClass,'public-page-only');assert.ok(HANTEO_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsCumulativeSales'));assert.match(HANTEO_PROVIDER_EVIDENCE.requestEvidence,/unknown/i);assert.equal(HANTEO_EVIDENCE_DESCRIPTOR.defaultOff.productionAllowed,false);});
