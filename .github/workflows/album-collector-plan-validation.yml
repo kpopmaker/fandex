@@ -1,0 +1,27 @@
+name: Album Collector Plan Validation
+
+on:
+  push:
+    branches:
+      - integration/album-collector-plan-foundation
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run collector plan tests
+        run: npx tsx --test tests/album-collector-plan-v1.test.mts
+      - name: Smoke plan-only CLI
+        run: npx tsx scripts/ingestion/plan-album-collector-v1.mts --provider both --timeframe day --at 2026-09-01T00:00:00Z
+      - name: Typecheck
+        run: npm run typecheck
