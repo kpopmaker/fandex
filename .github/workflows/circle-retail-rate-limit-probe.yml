@@ -1,4 +1,4 @@
-name: Circle Retail Conservative Throttling Probe
+name: Circle Retail Technical Qualification Validation
 
 on:
   push:
@@ -9,58 +9,17 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
-      - name: Run two low-frequency public requests
-        shell: bash
-        run: |
-          set -euo pipefail
-          endpoint='https://circlechart.kr/data/api/chart/retail_list'
-          printf '{"requests":[' > rate-limit-evidence.json
-          for i in 1 2; do
-            headers="headers-${i}.txt"
-            body="body-${i}.json"
-            status=$(curl --silent --show-error \
-              --request POST \
-              --header 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
-              --header 'X-Requested-With: XMLHttpRequest' \
-              --data 'termGbn=day&yyyymmdd=20260529' \
-              --dump-header "$headers" \
-              --output "$body" \
-              --write-out '%{http_code}' \
-              "$endpoint")
-            node - <<'NODE' "$body" "$headers" "$status" "$i" >> rate-limit-fragment-${i}.json
-          const fs = require('fs');
-          const [bodyPath, headersPath, httpStatus, index] = process.argv.slice(2);
-          const body = JSON.parse(fs.readFileSync(bodyPath, 'utf8'));
-          const headers = fs.readFileSync(headersPath, 'utf8').split(/\r?\n/);
-          const selected = {};
-          for (const line of headers) {
-            const m = line.match(/^([^:]+):\s*(.*)$/);
-            if (!m) continue;
-            const key = m[1].toLowerCase();
-            if (/^(retry-after|x-ratelimit|ratelimit|server|date|cache-control|cf-ray|x-cache|via)$/.test(key)) selected[key] = m[2];
-          }
-          const result = {
-            index: Number(index),
-            httpStatus: Number(httpStatus),
-            providerStatus: body.ResultStatus ?? null,
-            rowCount: body.List && typeof body.List === 'object' ? Object.keys(body.List).length : null,
-            selectedHeaders: selected,
-          };
-          if (result.httpStatus !== 200 || result.providerStatus !== 'OK') process.exitCode = 1;
-          process.stdout.write(JSON.stringify(result));
-          NODE
-            if [ "$i" -gt 1 ]; then printf ',' >> rate-limit-evidence.json; fi
-            cat rate-limit-fragment-${i}.json >> rate-limit-evidence.json
-            if [ "$i" -lt 2 ]; then sleep 3; fi
-          done
-          printf ']}' >> rate-limit-evidence.json
-          cat rate-limit-evidence.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          name: circle-retail-rate-limit-evidence
-          path: rate-limit-evidence.json
-          retention-days: 1
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Circle qualification tests
+        run: npx tsx --test tests/circle-retail-throttling-v1.test.mts tests/circle-retail-revision-v1.test.mts tests/circle-retail-adapter-v1.test.mts tests/circle-retail-discovery-v1.test.mts tests/circle-retail-operational-semantics-v1.test.mts tests/album-provider-specific-integration-depth-v1.test.mts tests/album-persistence-integration-depth-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
