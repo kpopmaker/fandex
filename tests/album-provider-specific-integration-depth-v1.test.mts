@@ -52,16 +52,19 @@ test('Circle base descriptor stays conservative while evidence-linked descriptor
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.authorization.rawRedistributionState,'blocked');
 });
 
-test('Circle technical blocker is narrowed to conservative rate-limit qualification',()=>{
+test('Circle technical collector gates are qualified while rights remain independently blocked',()=>{
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('revision-and-rate-limit-qualification-required'),false);
-  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('rate-limit-qualification-required'));
-  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('storage-and-publication-rights-review-required'));
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('rate-limit-qualification-required'),false);
+  assert.deepEqual(CIRCLE_PROVIDER_EVIDENCE.blockers,['storage-and-publication-rights-review-required']);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Hourly uses POST hour_time/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Yearly/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/ResultStatus=Error/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/retail_hour/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/without Cookie or Referer/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/ranks 1-50/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/33422703085/);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/3 seconds apart/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/provider hard limit.*unknown/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.revisionEvidence,/duplicate-noop/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.revisionEvidence,/supersedesObservationId/i);
 });
