@@ -28,8 +28,8 @@ test('Circle evidence upgrades only directly proven technical capabilities',()=>
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsCumulativeSales,undefined);
   assert.ok(CIRCLE_PROVIDER_EVIDENCE.unresolvedCapabilities.includes('supportsCumulativeSales'));
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsNativePeriodSales,'circle-retail-direct-response-v1:rowSum-period-sales');
-  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsHistoricalQueries,'circle-retail-direct-response-v1:historical-day-week-month');
-  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsSkuIdentity,'circle-retail-direct-response-v1:barcode-sku-identity');
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsHistoricalQueries,'circle-retail-direct-response-v1:historical-hour-day-week-month-year');
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.capabilityUpgrades.supportsSkuIdentity,'circle-retail-direct-response-v1:barcode-sku-identity-non-hour');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsNativePeriodSales.state,'true');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsHistoricalQueries.state,'true');
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.capabilities.supportsSkuIdentity.state,'true');
@@ -49,11 +49,15 @@ test('Circle base descriptor stays conservative while evidence-linked descriptor
   assert.equal(CIRCLE_EVIDENCE_DESCRIPTOR.onboarding.authorization.rawRedistributionState,'blocked');
 });
 
-test('Circle operational blocker is narrowed after bounded edge qualification',()=>{
+test('Circle operational blocker is narrowed after bounded edge and hour/year qualification',()=>{
   assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('operational-edge-qualification-required'),false);
-  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('hour-year-revision-and-rate-limit-qualification-required'));
+  assert.equal(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('hour-year-revision-and-rate-limit-qualification-required'),false);
+  assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('revision-and-rate-limit-qualification-required'));
   assert.ok(CIRCLE_PROVIDER_EVIDENCE.blockers.includes('storage-and-publication-rights-review-required'));
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Hourly uses POST hour_time/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/Yearly/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.temporalEvidence,/ResultStatus=Error/i);
+  assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/retail_hour/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/without Cookie or Referer/i);
   assert.match(CIRCLE_PROVIDER_EVIDENCE.requestEvidence,/ranks 1-50/i);
 });
