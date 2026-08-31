@@ -54,21 +54,21 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
   acquisitionClass: 'public-direct-endpoint',
   productActiveState: 'active',
   semanticEvidence:
-    'Circle official Retail page directly renders rowSum as Sales/판매량. Direct retail_list responses expose rowSum for retail-album period sales.',
+    'Circle official Retail page directly renders rowSum as Sales/판매량. Direct retail_list and retail_hour responses expose rowSum for retail-album period sales.',
   identityEvidence:
-    'Direct rows expose Barcode as a stable SKU/product identity candidate plus Artist and Album text. Provider-native artist/release/edition IDs remain unverified.',
+    'Daily/Weekly/Monthly/Yearly retail_list rows expose Barcode as a stable SKU/product identity candidate plus Artist and Album text. The directly observed Hourly retail_hour rows expose Artist and Album but no Barcode. Provider-native artist/release/edition IDs remain unverified.',
   temporalEvidence:
-    'POST retail_list historical Daily, Weekly, and Monthly requests were directly observed with provider-native period keys and ResultStatus=OK. Invalid-calendar, future, and prelaunch probes all returned HTTP 200 with ResultStatus=Error and no List, so the provider collapses those causes into one period-error shape.',
+    'POST retail_list Daily, Weekly, Monthly, and Yearly requests were directly observed with provider-native period keys and ResultStatus=OK. Hourly uses POST hour_time to resolve the provider date/hour range and POST retail_hour for the selected hour. Invalid-calendar, future, and prelaunch probes all returned HTTP 200 with ResultStatus=Error and no List, so the provider collapses those causes into one period-error shape.',
   revisionEvidence:
     'Provider correction behavior exists in the wider evidence record, but adapter-level revision/supersession handling is not yet qualified in this packet.',
   requestEvidence:
-    'Direct public request contract qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd; JSON root FormToMap/List/ResultStatus; rows at $.List{values}. A known-period request also succeeded without Cookie or Referer. The official UI makes one retail_list request and renders every returned row with no page/size/offset/limit/cursor parameters observed; the tested published chart returned ranks 1-50.',
+    'Direct public contracts qualified: POST /data/api/chart/retail_list with termGbn and yyyymmdd for day/week/month/year; POST /data/api/chart_func/retail/hour_time with termGbn=hour; POST /data/api/chart/retail_hour with yyyymmdd, HourRange, ListType, and thisHour. JSON roots expose FormToMap/List/ResultStatus and rows at $.List{values}. A known-period retail_list request also succeeded without Cookie or Referer. The official UI renders every returned row with no page/size/offset/limit/cursor parameters observed; tested published charts returned ranks 1-50.',
   authorizationEvidence:
     'Public technical reachability and capability evidence do not establish automation, storage, publication, commercial-use, or redistribution rights.',
   capabilityUpgrades: Object.freeze({
     supportsNativePeriodSales: 'circle-retail-direct-response-v1:rowSum-period-sales',
-    supportsHistoricalQueries: 'circle-retail-direct-response-v1:historical-day-week-month',
-    supportsSkuIdentity: 'circle-retail-direct-response-v1:barcode-sku-identity',
+    supportsHistoricalQueries: 'circle-retail-direct-response-v1:historical-hour-day-week-month-year',
+    supportsSkuIdentity: 'circle-retail-direct-response-v1:barcode-sku-identity-non-hour',
   }),
   certificationCapabilities: Object.freeze({
     supportsCumulativeCertification: true,
@@ -89,7 +89,7 @@ export const CIRCLE_PROVIDER_EVIDENCE: ProviderEvidencePacket = Object.freeze({
     'supportsTerritorySegmentation',
   ]),
   blockers: Object.freeze([
-    'hour-year-revision-and-rate-limit-qualification-required',
+    'revision-and-rate-limit-qualification-required',
     'storage-and-publication-rights-review-required',
   ]),
 });
