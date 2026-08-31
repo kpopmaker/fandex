@@ -1,0 +1,64 @@
+name: Hanteo Weekly Direct Probe
+
+on:
+  push:
+    branches:
+      - integration/album-hanteo-direct-discovery
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe candidate weekly endpoint once
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint='https://api.hanteochart.io/v4/ranking/list/ALBUM/WEEKLY/BASIC'
+          status=$(curl --silent --show-error \
+            --request GET \
+            --header 'Accept: application/json' \
+            --header 'Accept-Language: en' \
+            --dump-header headers.txt \
+            --output body.txt \
+            --write-out '%{http_code}' \
+            "$endpoint")
+          HTTP_STATUS="$status" node - <<'NODE'
+          const fs=require('fs');
+          const httpStatus=Number(process.env.HTTP_STATUS);
+          const headers=fs.readFileSync('headers.txt','utf8').split(/\r?\n/);
+          const selected={};
+          let contentType=null;
+          for(const line of headers){
+            const m=line.match(/^([^:]+):\s*(.*)$/); if(!m) continue;
+            const k=m[1].toLowerCase(); const v=m[2];
+            if(k==='content-type') contentType=v;
+            if(/^(content-type|retry-after|x-ratelimit|ratelimit|server|date|www-authenticate|allow|via)$/.test(k)) selected[k]=v;
+          }
+          const raw=fs.readFileSync('body.txt','utf8');
+          let parsed=null, parseError=null;
+          try{parsed=JSON.parse(raw)}catch(e){parseError=String(e)}
+          const summarize=(value)=>{
+            if(Array.isArray(value)) return {type:'array',length:value.length,sampleKeys:value[0]&&typeof value[0]==='object'?Object.keys(value[0]).slice(0,40):[]};
+            if(value&&typeof value==='object') return {type:'object',keys:Object.keys(value).slice(0,80)};
+            return {type:value===null?'null':typeof value};
+          };
+          const rootSummary=summarize(parsed);
+          const nested={};
+          if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){
+            for(const [k,v] of Object.entries(parsed)){
+              if(v&&typeof v==='object') nested[k]=summarize(v);
+            }
+          }
+          const out={httpStatus,contentType,headers:selected,parseError,rootSummary,nested,bodyPrefix:raw.slice(0,500)};
+          fs.writeFileSync('hanteo-weekly-probe.json',JSON.stringify(out,null,2));
+          console.log(JSON.stringify(out,null,2));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hanteo-weekly-direct-probe
+          path: hanteo-weekly-probe.json
+          retention-days: 1
