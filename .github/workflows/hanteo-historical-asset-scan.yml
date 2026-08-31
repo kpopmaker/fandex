@@ -1,4 +1,4 @@
-name: Hanteo Public API Docs Probe
+name: Hanteo Current Adapter Validation
 
 on:
   push:
@@ -9,40 +9,17 @@ permissions:
   contents: read
 
 jobs:
-  probe:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 8
     steps:
-      - name: Probe public API docs endpoints once
-        shell: bash
-        run: |
-          set -euo pipefail
-          node <<'NODE'
-          const fs = require('fs');
-          (async () => {
-            const base='https://api.hanteochart.io';
-            const paths=['/v3/api-docs','/swagger-ui/index.html','/openapi.json','/api-docs'];
-            const out=[];
-            for(const path of paths){
-              try{
-                const res=await fetch(base+path,{headers:{'accept':'application/json,text/html;q=0.9,*/*;q=0.8','user-agent':'Mozilla/5.0'},signal:AbortSignal.timeout(5000)});
-                const text=await res.text();
-                let json=null;try{json=JSON.parse(text)}catch{}
-                const rankingPaths=json?.paths?Object.keys(json.paths).filter(p=>/ranking\/list/i.test(p)).slice(0,50):[];
-                const rankingDetails={};
-                for(const p of rankingPaths){rankingDetails[p]=json.paths[p];}
-                out.push({path,status:res.status,contentType:res.headers.get('content-type'),jsonKeys:json&&typeof json==='object'?Object.keys(json).slice(0,30):[],rankingPaths,rankingDetails,bodyPrefix:text.slice(0,1000)});
-              }catch(err){
-                out.push({path,status:null,error:String(err),contentType:null,jsonKeys:[],rankingPaths:[],rankingDetails:{},bodyPrefix:''});
-              }
-              await new Promise(r=>setTimeout(r,1000));
-            }
-            fs.writeFileSync('hanteo-public-api-docs-probe.json',JSON.stringify(out,null,2));
-            console.log(JSON.stringify(out.map(x=>({path:x.path,status:x.status,error:x.error??null,contentType:x.contentType,rankingPaths:x.rankingPaths})),null,2));
-          })().catch(err=>{console.error(err);process.exit(1);});
-          NODE
-      - uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          name: hanteo-public-api-docs-probe
-          path: hanteo-public-api-docs-probe.json
-          retention-days: 1
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Hanteo qualification tests
+        run: npx tsx --test tests/hanteo-album-discovery-v1.test.mts tests/hanteo-album-adapter-v1.test.mts tests/album-provider-specific-integration-depth-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
