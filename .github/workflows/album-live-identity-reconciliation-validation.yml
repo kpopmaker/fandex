@@ -21,6 +21,8 @@ jobs:
       - run: npm ci
       - name: Run live identity reconciliation tests
         run: npx tsx --test tests/album-live-identity-reconciliation-v1.test.mts
+      - name: Run conservative label variant tests
+        run: npx tsx --test tests/album-live-identity-label-variants-v1.test.mts
       - name: Run provider binding regression tests
         run: npx tsx --test tests/album-provider-executor-binding-v1.test.mts
       - name: Run one-shot network gate regression tests
