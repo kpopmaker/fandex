@@ -1,0 +1,25 @@
+name: Album One-Shot Live Qualification
+
+on:
+  push:
+    branches:
+      - integration/album-one-shot-live-qualification
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Run bounded one-shot live qualification
+        run: npx tsx scripts/ingestion/qualify-album-one-shot-live-v1.mts
