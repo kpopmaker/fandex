@@ -21,6 +21,8 @@ jobs:
       - run: npm ci
       - name: Run reviewed identity mapping packet tests
         run: npx tsx --test tests/album-reviewed-identity-mapping-packet-v1.test.mts
+      - name: Run reviewed subset normalizer tests
+        run: npx tsx --test tests/album-reviewed-subset-normalizer-v1.test.mts
       - name: Run live identity reconciliation regression tests
         run: npx tsx --test tests/album-live-identity-reconciliation-v1.test.mts tests/album-live-identity-label-variants-v1.test.mts
       - name: Run provider binding regression tests
