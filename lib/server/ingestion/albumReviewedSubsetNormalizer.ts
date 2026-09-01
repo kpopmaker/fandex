@@ -1,5 +1,12 @@
 import { sha256Canonical } from '../../shared/canonicalDigest';
 import {
+  CIRCLE_PROVIDER_DESCRIPTOR,
+  HANTEO_PROVIDER_DESCRIPTOR,
+  knownCapability,
+  type DirectAlbumObservation,
+  type DirectAlbumProviderDescriptor,
+} from '../../alternative-evidence/directAlbumProvider';
+import {
   adaptCircleRetailQualifiedResponse,
   validateCircleRetailNormalizedObservations,
 } from '../../alternative-evidence/circleRetailAdapter';
@@ -14,7 +21,6 @@ import {
   validateHanteoCurrentObservations,
 } from '../../alternative-evidence/hanteoAlbumAdapter';
 import { decodeHanteoAlbumResponse } from '../../alternative-evidence/hanteoAlbumDiscovery';
-import type { DirectAlbumObservation } from '../../alternative-evidence/directAlbumProvider';
 import {
   createCircleRetailLiveIdentityResolver,
   createHanteoLiveIdentityResolver,
@@ -23,6 +29,31 @@ import {
 
 export const ALBUM_REVIEWED_SUBSET_NORMALIZER_VERSION =
   'album-reviewed-subset-normalizer-v1' as const;
+
+const CIRCLE_REVIEWED_SUBSET_DESCRIPTOR: DirectAlbumProviderDescriptor = Object.freeze({
+  ...CIRCLE_PROVIDER_DESCRIPTOR,
+  capabilities: Object.freeze({
+    ...CIRCLE_PROVIDER_DESCRIPTOR.capabilities,
+    supportsNativePeriodSales: knownCapability('true', [
+      'circle-retail-direct-response-v1:rowSum-period-sales',
+      'album-reviewed-subset-normalizer-v1:run-local-capability',
+    ]),
+  }),
+});
+
+const HANTEO_REVIEWED_SUBSET_DESCRIPTOR: DirectAlbumProviderDescriptor = Object.freeze({
+  ...HANTEO_PROVIDER_DESCRIPTOR,
+  capabilities: Object.freeze({
+    ...HANTEO_PROVIDER_DESCRIPTOR.capabilities,
+    supportsNativePeriodSales: knownCapability('true', [
+      'hanteo-direct-response-v1:current-day-week-month-salesVolume',
+      'album-reviewed-subset-normalizer-v1:run-local-capability',
+    ]),
+    supportsArtistIdentity: knownCapability('true', [
+      'hanteo-direct-response-v1:artistIdx-provider-identity',
+    ]),
+  }),
+});
 
 const IDENTITY_ONLY_REASONS = new Set([
   'artist-identity-unresolved',
@@ -158,7 +189,10 @@ export function normalizeCircleReviewedSubsetDay(input: Readonly<{
     resolveIdentity: createCircleRetailLiveIdentityResolver(input.registry),
     syntheticFixture: false,
   });
-  const validation = validateCircleRetailNormalizedObservations(adapted.observations);
+  const validation = validateCircleRetailNormalizedObservations(
+    adapted.observations,
+    CIRCLE_REVIEWED_SUBSET_DESCRIPTOR,
+  );
   return finalize({
     provider: 'circle-retail',
     observations: adapted.observations,
@@ -188,7 +222,10 @@ export function normalizeHanteoReviewedSubsetCurrentDay(input: Readonly<{
     resolveIdentity: createHanteoLiveIdentityResolver(input.registry),
     syntheticFixture: false,
   });
-  const validation = validateHanteoCurrentObservations(adapted.observations);
+  const validation = validateHanteoCurrentObservations(
+    adapted.observations,
+    HANTEO_REVIEWED_SUBSET_DESCRIPTOR,
+  );
   return finalize({
     provider: 'hanteo',
     observations: adapted.observations,
