@@ -17,6 +17,7 @@ function enabledAuthorization(): AlbumBoundedResearchAuthorization {
     boundedResearchImplementationAuthorized: true,
     fixtureExecutionAuthorized: true,
     liveNetworkExecutionAuthorized: false,
+    liveNetworkGrantDigest: null,
     globalEnabled: true,
     providerEnabled: Object.freeze({
       'circle-retail': true,

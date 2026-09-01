@@ -19,7 +19,8 @@ export type AlbumBoundedResearchExecutionStatus =
 export type AlbumBoundedResearchAuthorization = Readonly<{
   boundedResearchImplementationAuthorized: boolean;
   fixtureExecutionAuthorized: boolean;
-  liveNetworkExecutionAuthorized: false;
+  liveNetworkExecutionAuthorized: boolean;
+  liveNetworkGrantDigest: string | null;
   globalEnabled: boolean;
   providerEnabled: Readonly<Record<AlbumCollectorProvider, boolean>>;
   persistenceAuthorized: false;
@@ -31,6 +32,7 @@ export const DEFAULT_ALBUM_BOUNDED_RESEARCH_AUTHORIZATION: AlbumBoundedResearchA
   boundedResearchImplementationAuthorized: true,
   fixtureExecutionAuthorized: false,
   liveNetworkExecutionAuthorized: false,
+  liveNetworkGrantDigest: null,
   globalEnabled: false,
   providerEnabled: Object.freeze({
     'circle-retail': false,
@@ -52,6 +54,7 @@ export type AlbumBoundedResearchExecutorResult = Readonly<{
 
 export type AlbumBoundedResearchExecutor = Readonly<{
   kind: AlbumBoundedResearchExecutorKind;
+  authorizationDigest?: string | null;
   execute(request: AlbumCollectorPlannedRequest): Promise<AlbumBoundedResearchExecutorResult>;
 }>;
 
@@ -114,15 +117,23 @@ function maxRequestBudget(value: number | undefined): number {
 function authorizationBlockReason(
   plan: AlbumCollectorPlan,
   authorization: AlbumBoundedResearchAuthorization,
-  executorKind: AlbumBoundedResearchExecutorKind,
+  executor: AlbumBoundedResearchExecutor,
 ): string | null {
   if (!authorization.boundedResearchImplementationAuthorized) return 'bounded-research-implementation-not-authorized';
   if (!authorization.globalEnabled) return 'global-kill-switch-disabled';
   if (authorization.persistenceAuthorized !== false) return 'persistence-must-remain-disabled';
   if (authorization.scheduleMutationAuthorized !== false) return 'schedule-mutation-must-remain-disabled';
   if (authorization.environmentMutationAuthorized !== false) return 'environment-mutation-must-remain-disabled';
-  if (executorKind === 'live-network') return 'live-network-execution-not-authorized-v1';
-  if (!authorization.fixtureExecutionAuthorized) return 'fixture-execution-not-authorized';
+  if (executor.kind === 'live-network') {
+    if (!authorization.liveNetworkExecutionAuthorized) return 'live-network-execution-not-authorized-v1';
+    if (!authorization.liveNetworkGrantDigest) return 'live-network-grant-required';
+    if (!executor.authorizationDigest || executor.authorizationDigest !== authorization.liveNetworkGrantDigest) {
+      return 'live-network-grant-mismatch';
+    }
+  }
+  if (executor.kind === 'fixture' && !authorization.fixtureExecutionAuthorized) {
+    return 'fixture-execution-not-authorized';
+  }
 
   for (const request of plan.requests) {
     if (!authorization.providerEnabled[request.provider]) return `${request.provider}-kill-switch-disabled`;
@@ -175,7 +186,7 @@ export async function runAlbumBoundedResearch(input: Readonly<{
     throw new Error('album_bounded_research_executor_kind_invalid');
   }
 
-  const blocked = authorizationBlockReason(input.plan, authorization, input.executor.kind);
+  const blocked = authorizationBlockReason(input.plan, authorization, input.executor);
   if (blocked) {
     return freezeReport({
       orchestratorVersion: ALBUM_BOUNDED_RESEARCH_ORCHESTRATOR_VERSION,
@@ -261,8 +272,8 @@ export async function runAlbumBoundedResearch(input: Readonly<{
     }),
     attempts: Object.freeze(attempts),
     effects: Object.freeze({
-      fixtureExecutorCalls: executedRequests,
-      externalCalls: 0,
+      fixtureExecutorCalls: input.executor.kind === 'fixture' ? executedRequests : 0,
+      externalCalls: input.executor.kind === 'live-network' ? executedRequests : 0,
       databaseReads: 0 as const,
       databaseWrites: 0 as const,
       scheduleMutations: 0 as const,

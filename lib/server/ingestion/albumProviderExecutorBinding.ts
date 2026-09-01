@@ -6,6 +6,7 @@ import type {
   AlbumBoundedResearchExecutor,
   AlbumBoundedResearchExecutorResult,
 } from './albumBoundedResearchOrchestrator';
+import type { DirectAlbumProviderDescriptor } from '../../alternative-evidence/directAlbumProvider';
 import {
   adaptCircleRetailQualifiedResponse,
   validateCircleRetailNormalizedObservations,
@@ -54,6 +55,12 @@ export type HanteoFixturePacket = Readonly<{
 
 export type AlbumProviderFixturePacket = CircleRetailFixturePacket | HanteoFixturePacket;
 
+export type AlbumProviderPacketExecutionOptions = Readonly<{
+  syntheticFixture: boolean;
+  circleDescriptor?: DirectAlbumProviderDescriptor;
+  hanteoDescriptor?: DirectAlbumProviderDescriptor;
+}>;
+
 function result(
   status: AlbumBoundedResearchExecutorResult['status'],
   input: Readonly<{
@@ -98,9 +105,10 @@ function rejectionStatus(rejections: readonly Readonly<{ reasons: readonly strin
   return null;
 }
 
-async function executeCircleFixture(
+async function executeCirclePacket(
   request: AlbumCollectorPlannedRequest,
   packet: CircleRetailFixturePacket,
+  options: AlbumProviderPacketExecutionOptions,
 ): Promise<AlbumBoundedResearchExecutorResult> {
   if (!circlePacketMatchesRequest(request, packet)) return result('provider-semantic-conflict');
   if (packet.endpointEvidenceIds.length === 0 || packet.quantityEvidenceIds.length === 0) {
@@ -156,7 +164,7 @@ async function executeCircleFixture(
       rawResponse: packet.rawResponse,
       collectedAt: packet.collectedAt,
       resolveIdentity: packet.resolveIdentity,
-      syntheticFixture: true,
+      syntheticFixture: options.syntheticFixture,
     });
 
     const rejectedAs = rejectionStatus(adapted.rejections);
@@ -165,7 +173,10 @@ async function executeCircleFixture(
       return result('provider-semantic-conflict', { payloadDigest: qualifiedCapture.payloadDigest });
     }
 
-    const validation = validateCircleRetailNormalizedObservations(adapted.observations);
+    const validation = validateCircleRetailNormalizedObservations(
+      adapted.observations,
+      options.circleDescriptor,
+    );
     if (!validation.valid) {
       return result('provider-semantic-conflict', {
         payloadDigest: qualifiedCapture.payloadDigest,
@@ -211,9 +222,10 @@ function hanteoRawQuantityPresent(raw: unknown): boolean {
   });
 }
 
-async function executeHanteoFixture(
+async function executeHanteoPacket(
   request: AlbumCollectorPlannedRequest,
   packet: HanteoFixturePacket,
+  options: AlbumProviderPacketExecutionOptions,
 ): Promise<AlbumBoundedResearchExecutorResult> {
   if (!hanteoPacketMatchesRequest(request, packet)) return result('provider-semantic-conflict');
   if (!packet.quantityEvidenceId.trim()) return result('provider-semantic-conflict');
@@ -249,7 +261,7 @@ async function executeHanteoFixture(
       collectedAt: packet.collectedAt,
       quantityEvidenceId: packet.quantityEvidenceId,
       resolveIdentity: packet.resolveIdentity,
-      syntheticFixture: true,
+      syntheticFixture: options.syntheticFixture,
     });
 
     const rejectedAs = rejectionStatus(adapted.rejections);
@@ -258,7 +270,10 @@ async function executeHanteoFixture(
       return result('provider-semantic-conflict', { payloadDigest: decoded.rawDigest });
     }
 
-    const validation = validateHanteoCurrentObservations(adapted.observations);
+    const validation = validateHanteoCurrentObservations(
+      adapted.observations,
+      options.hanteoDescriptor,
+    );
     if (!validation.valid) {
       return result('provider-semantic-conflict', {
         payloadDigest: decoded.rawDigest,
@@ -281,6 +296,17 @@ async function executeHanteoFixture(
   }
 }
 
+export async function executeAlbumProviderPacket(
+  request: AlbumCollectorPlannedRequest,
+  packet: AlbumProviderFixturePacket,
+  options: AlbumProviderPacketExecutionOptions,
+): Promise<AlbumBoundedResearchExecutorResult> {
+  if (packet.provider !== request.provider) return result('provider-semantic-conflict');
+  return packet.provider === 'circle-retail'
+    ? executeCirclePacket(request, packet, options)
+    : executeHanteoPacket(request, packet, options);
+}
+
 export function createAlbumProviderFixtureExecutor(
   packets: readonly AlbumProviderFixturePacket[],
 ): AlbumBoundedResearchExecutor {
@@ -292,10 +318,7 @@ export function createAlbumProviderFixtureExecutor(
     async execute(request: AlbumCollectorPlannedRequest): Promise<AlbumBoundedResearchExecutorResult> {
       const packet = queue[cursor++];
       if (!packet) return result('provider-semantic-conflict');
-      if (packet.provider !== request.provider) return result('provider-semantic-conflict');
-      return packet.provider === 'circle-retail'
-        ? executeCircleFixture(request, packet)
-        : executeHanteoFixture(request, packet);
+      return executeAlbumProviderPacket(request, packet, { syntheticFixture: true });
     },
   });
 }
