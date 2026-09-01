@@ -1,0 +1,80 @@
+{
+  "contractVersion": "album-live-identity-reconciliation-v1",
+  "candidateAuditVersion": "album-live-identity-candidate-audit-v1",
+  "candidateAuditRunId": 33456925202,
+  "artistCatalog": {
+    "source": "artistUniverseV4",
+    "size": 100,
+    "usage": "candidate-generation-only",
+    "automaticReviewUpgrade": false
+  },
+  "auditSafety": {
+    "rawBodiesPersisted": false,
+    "salesValuesPersisted": false,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "scheduleMutations": 0,
+    "publicationAuthorized": false
+  },
+  "providerRequests": {
+    "circle-retail": 1,
+    "hanteo": 1
+  },
+  "observedCounts": {
+    "circle-retail": {
+      "rows": 50,
+      "artistCandidateOnly": 16,
+      "noMatch": 34,
+      "ambiguous": 0
+    },
+    "hanteo": {
+      "rows": 20,
+      "artistCandidateOnly": 9,
+      "noMatch": 11,
+      "ambiguous": 0
+    },
+    "total": {
+      "rows": 70,
+      "artistCandidateRows": 25,
+      "noMatchRows": 45,
+      "ambiguousRows": 0
+    }
+  },
+  "identityPolicy": {
+    "candidateMatch": "exact-normalized-alias",
+    "candidateReviewState": "machine-candidate",
+    "resolvedRequires": [
+      "reviewed-artist-mapping",
+      "reviewed-release-mapping",
+      "artist-release-mapping-consistency",
+      "mapping-evidence"
+    ],
+    "allowedResolvedReviewStates": [
+      "human-reviewed",
+      "provider-verified"
+    ],
+    "fuzzyMatchingEnabled": false,
+    "providerIdAutoPromotionEnabled": false,
+    "releaseIdSynthesisEnabled": false
+  },
+  "labelVariantExtension": {
+    "contractVersion": "album-live-identity-label-variants-v1",
+    "mode": "single-full-string-parenthetical-split-only",
+    "examples": [
+      {
+        "input": "Stray Kids (스트레이 키즈)",
+        "variants": ["Stray Kids (스트레이 키즈)", "Stray Kids", "스트레이 키즈"]
+      },
+      {
+        "input": "아일릿(ILLIT)",
+        "variants": ["아일릿(ILLIT)", "아일릿", "ILLIT"]
+      }
+    ],
+    "mayCreateResolvedIdentity": false,
+    "postExtensionLiveCountClaimed": false
+  },
+  "releaseCatalogState": "canonical-release-catalog-not-found-in-current-repository-path",
+  "productionPersistenceAuthorized": false,
+  "productionPublicationAuthorized": false,
+  "commercialRightsCleared": false
+}
