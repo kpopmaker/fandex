@@ -88,7 +88,7 @@ const CIRCLE_ONE_SHOT_DESCRIPTOR: DirectAlbumProviderDescriptor = Object.freeze(
   ...CIRCLE_PROVIDER_DESCRIPTOR,
   capabilities: Object.freeze({
     ...CIRCLE_PROVIDER_DESCRIPTOR.capabilities,
-    supportsNativePeriodSales: knownCapability(true, [
+    supportsNativePeriodSales: knownCapability('true', [
       'circle-retail-direct-response-v1:rowSum-period-sales',
     ]),
   }),
@@ -98,10 +98,10 @@ const HANTEO_ONE_SHOT_DESCRIPTOR: DirectAlbumProviderDescriptor = Object.freeze(
   ...HANTEO_PROVIDER_DESCRIPTOR,
   capabilities: Object.freeze({
     ...HANTEO_PROVIDER_DESCRIPTOR.capabilities,
-    supportsNativePeriodSales: knownCapability(true, [
+    supportsNativePeriodSales: knownCapability('true', [
       'hanteo-direct-response-v1:current-day-week-month-salesVolume',
     ]),
-    supportsArtistIdentity: knownCapability(true, [
+    supportsArtistIdentity: knownCapability('true', [
       'hanteo-direct-response-v1:artistIdx-provider-identity',
     ]),
   }),
