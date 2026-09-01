@@ -1,0 +1,140 @@
+{
+  "validationVersion": "album-reviewed-identity-live-validation-v1",
+  "mappingPacketVersion": "album-reviewed-identity-mapping-packet-v1",
+  "reviewedSubsetNormalizerVersion": "album-reviewed-subset-normalizer-v1",
+  "workflowRunId": 33458837843,
+  "safety": {
+    "rawBodiesPersisted": false,
+    "salesValuesPersisted": false,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "scheduleMutations": 0,
+    "environmentMutations": 0,
+    "publicationAuthorized": false,
+    "commercialRightsCleared": false
+  },
+  "providerRequestCounts": {
+    "circle-retail": 1,
+    "hanteo": 1
+  },
+  "reviewedSubset": {
+    "circle-retail": {
+      "status": "accepted-reviewed-subset",
+      "sourceRowCount": 50,
+      "acceptedObservationCount": 3,
+      "identityPendingRowCount": 47,
+      "nonIdentityRejectedRowCount": 0,
+      "sourcePayloadDigest": "d21ba4cb22b58ee014b1cdfc1f899f9860408b927c21ef387b0ba473de5f2236",
+      "resultDigest": "f0258a5a4a7990877d4c613d8c1e6301a521eb3f0e0acf706ef0f78fa2ba957b",
+      "observations": [
+        {
+          "observationId": "3f94e51454edbdff932cb9cbeba2697e141864dc7f99f46ce96e1a60b5de22dd",
+          "providerId": "circle-chart",
+          "providerSkuId": "8809954226502",
+          "fandexArtistId": "straykids",
+          "fandexReleaseId": "straykids-this-and-that",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:20260831",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        },
+        {
+          "observationId": "5e907dc8f731b1d9895cf5f90ffb43acdc2282e0437aa4a8b55c60696eaebb95",
+          "providerId": "circle-chart",
+          "providerSkuId": "8809704435567",
+          "fandexArtistId": "enhypen",
+          "fandexReleaseId": "enhypen-the-sin-bliss",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:20260831",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        },
+        {
+          "observationId": "f18a8b5d1267b63bb7d4f020e18346d674365fe16f90ceb811448341abb771c9",
+          "providerId": "circle-chart",
+          "providerSkuId": "8800370675042",
+          "fandexArtistId": "katseye",
+          "fandexReleaseId": "katseye-wild",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:20260831",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        }
+      ]
+    },
+    "hanteo": {
+      "status": "accepted-reviewed-subset",
+      "sourceRowCount": 20,
+      "acceptedObservationCount": 3,
+      "identityPendingRowCount": 17,
+      "nonIdentityRejectedRowCount": 0,
+      "sourcePayloadDigest": "824b2cedfb40ff788b4ce49102b48aaa5b13f6fab2b073af2e21dc4dab357adc",
+      "resultDigest": "8619899c6263e65a7cbfc645ac6a2c9c42283dadee2e80855cb998f1e6170e45",
+      "observations": [
+        {
+          "observationId": "cb1b0b077fa5f18a6e32d8df39dd2af6c230d106d76332984440e5788507550b",
+          "providerId": "hanteo-chart",
+          "providerArtistId": "42116",
+          "providerReleaseId": "900562280",
+          "fandexArtistId": "straykids",
+          "fandexReleaseId": "straykids-this-and-that",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:집계 기준 (KST) : 2026.08.31",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        },
+        {
+          "observationId": "457946aa09bc708364ae85922f9068c7b4da337371f9f796b30cccacfcef7e76",
+          "providerId": "hanteo-chart",
+          "providerArtistId": "53306",
+          "providerReleaseId": "900562419",
+          "fandexArtistId": "enhypen",
+          "fandexReleaseId": "enhypen-the-sin-bliss",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:집계 기준 (KST) : 2026.08.31",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        },
+        {
+          "observationId": "ea726ab3455146d2b545a59a3e83fe6821aea4682b6ae59534c9b35c1387d1ae",
+          "providerId": "hanteo-chart",
+          "providerArtistId": "71779",
+          "providerReleaseId": "900559077",
+          "fandexArtistId": "katseye",
+          "fandexReleaseId": "katseye-wild",
+          "semantic": "period-sale",
+          "unit": "physical-units",
+          "providerPeriod": "day:집계 기준 (KST) : 2026.08.31",
+          "valueIsNonNegativeSafeInteger": true,
+          "syntheticFixture": false
+        }
+      ]
+    }
+  },
+  "legacyOneShotReports": {
+    "circle-retail": {
+      "status": "halted",
+      "haltReason": "provider-semantic-conflict",
+      "externalCalls": 1,
+      "interpretation": "Existing strict all-row Provider Binding still halts when any source row lacks reviewed FANDEX identity. This behavior is unchanged."
+    },
+    "hanteo": {
+      "status": "halted",
+      "haltReason": "provider-semantic-conflict",
+      "externalCalls": 1,
+      "interpretation": "Existing strict all-row Provider Binding still halts when any source row lacks reviewed FANDEX identity. This behavior is unchanged."
+    }
+  },
+  "qualification": {
+    "crossProviderReviewedIdentityObserved": true,
+    "nonSyntheticDirectAlbumObservationsCreated": true,
+    "providerDataErrorsInReviewedSubsetRun": 0,
+    "productionPersistenceAuthorized": false,
+    "productionPublicationAuthorized": false
+  }
+}
