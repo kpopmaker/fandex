@@ -1,0 +1,54 @@
+{
+  "qualificationVersion": "album-one-shot-live-qualification-v1",
+  "runId": 33456244715,
+  "runResult": "success",
+  "rawBodiesPersisted": false,
+  "effects": {
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "scheduleMutations": 0,
+    "publicationAuthorized": false
+  },
+  "providers": {
+    "circle-retail": {
+      "requestCount": 1,
+      "timeframe": "day",
+      "periodMode": "historical",
+      "providerPeriodKey": "20260831",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "providerStatus": "OK",
+      "rowCount": 50,
+      "quantityField": "rowSum",
+      "quantityRows": 50,
+      "payloadDigest": "d21ba4cb22b58ee014b1cdfc1f899f9860408b927c21ef387b0ba473de5f2236",
+      "liveTransportQualified": true,
+      "liveSchemaQualified": true,
+      "liveQuantityFieldQualified": true,
+      "normalizedObservationState": "identity-pending",
+      "orchestratorStatus": "halted",
+      "orchestratorHaltReason": "provider-semantic-conflict"
+    },
+    "hanteo": {
+      "requestCount": 1,
+      "timeframe": "day",
+      "periodMode": "current",
+      "limit": 20,
+      "httpStatus": 200,
+      "contentType": "application/json;charset=utf8",
+      "providerCode": 100,
+      "rowCount": 20,
+      "quantityField": "detail.salesVolume",
+      "quantityRows": 20,
+      "payloadDigest": "ad6a0965b562dc7ba7c95a1ce50d546ba38e34c1c7e2e4a51853b0eec256e75b",
+      "liveTransportQualified": true,
+      "liveSchemaQualified": true,
+      "liveQuantityFieldQualified": true,
+      "albumIndexFallback": "forbidden",
+      "normalizedObservationState": "identity-pending",
+      "orchestratorStatus": "halted",
+      "orchestratorHaltReason": "provider-semantic-conflict"
+    }
+  },
+  "nextTechnicalGate": "album-live-identity-reconciliation-v1"
+}
