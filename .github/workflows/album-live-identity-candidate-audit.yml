@@ -1,0 +1,25 @@
+name: Album Live Identity Candidate Audit
+
+on:
+  push:
+    branches:
+      - integration/album-live-identity-reconciliation
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Run bounded live identity candidate audit
+        run: npx tsx scripts/ingestion/audit-album-live-identity-candidates-v1.mts
