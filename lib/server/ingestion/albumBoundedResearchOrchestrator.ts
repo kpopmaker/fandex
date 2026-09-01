@@ -19,7 +19,7 @@ export type AlbumBoundedResearchExecutionStatus =
 export type AlbumBoundedResearchAuthorization = Readonly<{
   boundedResearchImplementationAuthorized: boolean;
   fixtureExecutionAuthorized: boolean;
-  liveNetworkExecutionAuthorized: false;
+  liveNetworkExecutionAuthorized: boolean;
   globalEnabled: boolean;
   providerEnabled: Readonly<Record<AlbumCollectorProvider, boolean>>;
   persistenceAuthorized: false;
@@ -121,8 +121,12 @@ function authorizationBlockReason(
   if (authorization.persistenceAuthorized !== false) return 'persistence-must-remain-disabled';
   if (authorization.scheduleMutationAuthorized !== false) return 'schedule-mutation-must-remain-disabled';
   if (authorization.environmentMutationAuthorized !== false) return 'environment-mutation-must-remain-disabled';
-  if (executorKind === 'live-network') return 'live-network-execution-not-authorized-v1';
-  if (!authorization.fixtureExecutionAuthorized) return 'fixture-execution-not-authorized';
+  if (executorKind === 'live-network' && !authorization.liveNetworkExecutionAuthorized) {
+    return 'live-network-execution-not-authorized-v1';
+  }
+  if (executorKind === 'fixture' && !authorization.fixtureExecutionAuthorized) {
+    return 'fixture-execution-not-authorized';
+  }
 
   for (const request of plan.requests) {
     if (!authorization.providerEnabled[request.provider]) return `${request.provider}-kill-switch-disabled`;
@@ -261,8 +265,8 @@ export async function runAlbumBoundedResearch(input: Readonly<{
     }),
     attempts: Object.freeze(attempts),
     effects: Object.freeze({
-      fixtureExecutorCalls: executedRequests,
-      externalCalls: 0,
+      fixtureExecutorCalls: input.executor.kind === 'fixture' ? executedRequests : 0,
+      externalCalls: input.executor.kind === 'live-network' ? executedRequests : 0,
       databaseReads: 0 as const,
       databaseWrites: 0 as const,
       scheduleMutations: 0 as const,
