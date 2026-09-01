@@ -1,0 +1,29 @@
+name: Album Reviewed Identity Mapping Validation
+
+on:
+  push:
+    branches:
+      - integration/album-reviewed-identity-mapping-packet
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run reviewed identity mapping packet tests
+        run: npx tsx --test tests/album-reviewed-identity-mapping-packet-v1.test.mts
+      - name: Run live identity reconciliation regression tests
+        run: npx tsx --test tests/album-live-identity-reconciliation-v1.test.mts tests/album-live-identity-label-variants-v1.test.mts
+      - name: Run provider binding regression tests
+        run: npx tsx --test tests/album-provider-executor-binding-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
