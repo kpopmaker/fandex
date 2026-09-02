@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-01T11:19:18",
-  "snapshotDate": "2026-09-01",
+  "createdAt": "2026-09-02T10:41:08",
+  "snapshotDate": "2026-09-02",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -48,13 +48,13 @@
     },
     {
       "artist": "에스파",
-      "fandexMusicChartFinalPoint": 180.75,
-      "score": 180.75,
+      "fandexMusicChartFinalPoint": 187.5,
+      "score": 187.5,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 90.0,
         "genie": 63.75,
-        "bugs": 27.0
+        "bugs": 33.75
       },
       "platformStatus": {
         "melon": {
@@ -74,82 +74,47 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "13",
+          "rank": "9",
           "chartType": "realtime",
-          "point": 27.0
+          "point": 33.75
         }
       },
       "rank": 2
     },
     {
       "artist": "아이브",
-      "fandexMusicChartFinalPoint": 117.0,
-      "score": 117.0,
+      "fandexMusicChartFinalPoint": 100.0,
+      "score": 100.0,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 48.0,
-        "genie": 51.0,
+        "genie": 34.0,
         "bugs": 18.0
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "31",
+          "rank": "33",
           "chartType": "daily",
           "point": 48.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "20",
+          "rank": "21",
           "chartType": "daily",
-          "point": 51.0
+          "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "28",
+          "rank": "39",
           "chartType": "realtime",
           "point": 18.0
         }
       },
       "rank": 3
-    },
-    {
-      "artist": "보이넥스트도어",
-      "fandexMusicChartFinalPoint": 39.8,
-      "score": 39.8,
-      "rankedPlatformCount": 3,
-      "platformPoints": {
-        "melon": 24.0,
-        "genie": 6.8,
-        "bugs": 9.0
-      },
-      "platformStatus": {
-        "melon": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "84",
-          "chartType": "daily",
-          "point": 24.0
-        },
-        "genie": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "141",
-          "chartType": "daily",
-          "point": 6.8
-        },
-        "bugs": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "89",
-          "chartType": "realtime",
-          "point": 9.0
-        }
-      },
-      "rank": 4
     },
     {
       "artist": "르세라핌",
@@ -165,26 +130,26 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "93",
+          "rank": "94",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "138",
+          "rank": "141",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BOOMPALA",
-          "rank": "84",
+          "rank": "71",
           "chartType": "realtime",
           "point": 9.0
         }
       },
-      "rank": 5
+      "rank": 4
     },
     {
       "artist": "뉴진스",
@@ -200,26 +165,26 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "73",
+          "rank": "74",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "113",
+          "rank": "112",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "54",
+          "rank": "60",
           "chartType": "realtime",
           "point": 9.0
         }
       },
-      "rank": 6
+      "rank": 5
     },
     {
       "artist": "아이유",
@@ -235,14 +200,49 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Love wins all",
-          "rank": "85",
+          "rank": "86",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Love wins all",
-          "rank": "108",
+          "rank": "106",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 6
+    },
+    {
+      "artist": "보이넥스트도어",
+      "fandexMusicChartFinalPoint": 30.8,
+      "score": 30.8,
+      "rankedPlatformCount": 2,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "84",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "146",
           "chartType": "daily",
           "point": 6.8
         },
