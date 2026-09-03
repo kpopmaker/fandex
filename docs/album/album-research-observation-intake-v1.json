@@ -1,0 +1,73 @@
+{
+  "contractVersion": "album-research-observation-intake-v1",
+  "recordVersion": "album-direct-observation-research-v1",
+  "currentViewVersion": "album-research-observation-current-view-v1",
+  "validationRunId": 33768087992,
+  "qualification": {
+    "technicalResearchStoragePlanning": true,
+    "databaseWriteExecutionAuthorized": false,
+    "rawBodyStorageAuthorized": false,
+    "publicationAuthorized": false,
+    "commercialUseAuthorized": false,
+    "rightsCleared": false
+  },
+  "eligibleProviders": [
+    "circle-chart",
+    "hanteo-chart"
+  ],
+  "eligibleObservationContract": {
+    "syntheticFixture": false,
+    "semantic": "period-sale",
+    "unit": "physical-units",
+    "quantity": "non-negative-safe-integer",
+    "fandexArtistIdRequired": true,
+    "fandexReleaseIdRequired": true,
+    "providerPeriodRequired": true
+  },
+  "grantPolicy": {
+    "scope": "research",
+    "exactObservationSetBound": true,
+    "exactProviderSetBound": true,
+    "authorizationEvidenceRequired": true,
+    "rawBodyStorageAuthorized": false,
+    "databaseWriteExecutionAuthorized": false,
+    "publicationAuthorized": false,
+    "commercialUseAuthorized": false,
+    "rightsCleared": false
+  },
+  "persistencePolicy": {
+    "scope": "research",
+    "appendOnly": true,
+    "duplicateBehavior": "duplicate-noop",
+    "changedValueWithoutRevision": "invalid",
+    "changedValueReason": "changed-observation-requires-explicit-revision",
+    "revisionTargetRequired": true,
+    "revisionSeriesMatchRequired": true,
+    "validRevisionAction": "revision-append",
+    "originalRecordImmutable": true
+  },
+  "providerSeparation": {
+    "providerIncludedInSeriesKey": true,
+    "crossProviderAggregationAllowed": false,
+    "rawProviderSumAllowed": false,
+    "differentProviderHeadsAreConflictByDefault": false
+  },
+  "effects": {
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "externalCalls": 0,
+    "scheduleMutations": 0,
+    "environmentMutations": 0
+  },
+  "validation": {
+    "intakeTests": "PASS",
+    "currentViewTests": "PASS",
+    "persistenceRegressionTests": "PASS",
+    "reviewedSubsetRegressionTests": "PASS",
+    "typecheck": "PASS",
+    "workflowConclusion": "SUCCESS"
+  },
+  "additionalProviderCallsForThisGate": 0,
+  "productionPersistenceAuthorized": false,
+  "productionPublicationAuthorized": false
+}
