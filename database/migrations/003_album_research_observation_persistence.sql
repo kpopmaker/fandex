@@ -50,3 +50,6 @@ FOR EACH ROW EXECUTE FUNCTION fandex.reject_album_research_observation_mutation(
 
 REVOKE ALL ON TABLE fandex.album_research_observation_records FROM PUBLIC;
 REVOKE ALL ON FUNCTION fandex.reject_album_research_observation_mutation() FROM PUBLIC;
+
+REVOKE ALL PRIVILEGES ON TABLE fandex.album_research_observation_records FROM fandex_runtime;
+GRANT SELECT, INSERT ON TABLE fandex.album_research_observation_records TO fandex_runtime;
