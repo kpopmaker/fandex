@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Run research observation intake tests
-        run: npx tsx --test tests/album-research-observation-intake-v1.test.mts
+        run: npx tsx --test tests/album-research-observation-intake-v1.test.mts tests/album-research-observation-current-view-v1.test.mts
       - name: Run persistence regression tests
         run: npx tsx --test tests/album-persistence-integration-depth-v1.test.mts
       - name: Run reviewed subset regression tests
