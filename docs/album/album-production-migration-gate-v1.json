@@ -65,5 +65,13 @@
     "runtimeDelete": false,
     "rowCount": 0
   },
+  "validation": {
+    "githubActionsRunId": 33772226508,
+    "productionMigrationGateTests": "PASS",
+    "researchPersistenceWriterRegression": "PASS",
+    "typecheck": "PASS",
+    "workflowConclusion": "SUCCESS"
+  },
+  "temporaryValidationWorkflowRemoved": true,
   "productionMainMutated": false
 }
