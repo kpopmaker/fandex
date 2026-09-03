@@ -1,0 +1,43 @@
+{
+  "contractVersion": "album-research-persistence-writer-v1",
+  "writeGrantVersion": "album-research-persistence-write-grant-v1",
+  "technicalQualification": "PASS_TEMPORARY_NEON_BRANCH",
+  "productionSchemaApplied": false,
+  "productionDatabaseWrites": 0,
+  "providerNetworkCallsForThisGate": 0,
+  "rawProviderBodiesPersisted": false,
+  "publicationAuthorized": false,
+  "commercialUseAuthorized": false,
+  "rightsCleared": false,
+  "schedulerEnabled": false,
+  "database": {
+    "project": "fandex-managed-postgres",
+    "defaultBranch": "br-old-term-azv3tpra",
+    "temporaryValidationBranch": "br-crimson-snow-azm8lvze",
+    "table": "fandex.album_research_observation_records",
+    "migration": "database/migrations/003_album_research_observation_persistence.sql",
+    "grant": "database/grants/002_album_research_observation_writer.sql"
+  },
+  "runtimePrivileges": {
+    "select": true,
+    "insert": true,
+    "update": false,
+    "delete": false
+  },
+  "temporaryValidation": {
+    "originalInsertRows": 1,
+    "duplicateInsertRows": 0,
+    "revisionInsertRows": 1,
+    "appendOnlyTriggerEnabled": true,
+    "revisionSupersedesOriginal": true
+  },
+  "writer": {
+    "transactional": true,
+    "appendOnly": true,
+    "idempotentDuplicate": true,
+    "conflictRollback": true,
+    "revisionSafe": true,
+    "providerSeparated": true,
+    "crossProviderAggregationAllowed": false
+  }
+}
