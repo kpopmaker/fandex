@@ -1,0 +1,48 @@
+{
+  "contractVersion": "album-production-migration-application-attempt-v1",
+  "applicationState": "blocked-credential-consumer-missing",
+  "approvedScope": {
+    "migration003": true,
+    "grant002": true,
+    "albumObservationInsert": false,
+    "schedulerActivation": false,
+    "providerAcquisition": false,
+    "publication": false
+  },
+  "target": {
+    "projectId": "wild-tree-38937656",
+    "projectName": "fandex-managed-postgres",
+    "branchId": "br-old-term-azv3tpra",
+    "branchName": "main",
+    "databaseName": "neondb",
+    "schemaName": "fandex"
+  },
+  "runner": {
+    "path": "scripts/database/apply-album-production-migration-v1.mts",
+    "requiredSecret": "FANDEX_MIGRATION_DATABASE_URL",
+    "requiredRole": "fandex_migrator",
+    "requiredConnectionMode": "unpooled"
+  },
+  "preApplyValidation": {
+    "runId": 33773343998,
+    "conclusion": "SUCCESS"
+  },
+  "applicationAttempt": {
+    "runId": 33773521205,
+    "credentialCheck": "FAIL",
+    "migrationStep": "SKIPPED",
+    "databaseConnectionOpened": false,
+    "productionMutationPerformed": false
+  },
+  "fallbackCheck": {
+    "operation": "SET SESSION AUTHORIZATION fandex_migrator",
+    "result": "permission-denied",
+    "persistentMutation": false
+  },
+  "postAttemptProductionState": {
+    "migration3Present": false,
+    "albumResearchTablePresent": false,
+    "productionMainMutated": false
+  },
+  "nextRequiredCondition": "configure-direct-unpooled-fandex-migrator-github-secret"
+}
