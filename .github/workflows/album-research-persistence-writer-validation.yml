@@ -21,6 +21,8 @@ jobs:
       - run: npm ci
       - name: Run research persistence writer tests
         run: npx tsx --test tests/album-research-persistence-writer-v1.test.mts
+      - name: Run SQL persistence contract tests
+        run: npx tsx --test tests/album-research-persistence-sql-contract-v1.test.mts
       - name: Run intake regression tests
         run: npx tsx --test tests/album-research-observation-intake-v1.test.mts tests/album-research-observation-current-view-v1.test.mts
       - name: Typecheck
