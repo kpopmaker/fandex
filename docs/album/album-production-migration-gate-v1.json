@@ -1,0 +1,77 @@
+{
+  "contractVersion": "album-production-migration-gate-v1",
+  "target": {
+    "provider": "neon",
+    "projectId": "wild-tree-38937656",
+    "projectName": "fandex-managed-postgres",
+    "branchId": "br-old-term-azv3tpra",
+    "branchName": "main",
+    "databaseName": "neondb",
+    "schemaName": "fandex"
+  },
+  "migration": {
+    "version": 3,
+    "path": "database/migrations/003_album_research_observation_persistence.sql",
+    "sha256": "637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97"
+  },
+  "grant": {
+    "version": 2,
+    "path": "database/grants/002_album_research_observation_writer.sql",
+    "sha256": "a0fc93c537148794dc36182e3a8feb2ce0218c872237a989fa3a0e70fa793244"
+  },
+  "baselineMigrations": [
+    {
+      "version": 1,
+      "sha256": "8c48ab0e3094461316e07e666b4b0370450548df1dca5847970b4dc9639e259a"
+    },
+    {
+      "version": 2,
+      "sha256": "8951cd9ace8f30a586a23b5b813794560ea916798ae7c64e9542440ff1881aef"
+    }
+  ],
+  "productionPreflight": {
+    "migration3Present": false,
+    "albumResearchTablePresent": false,
+    "schemaOwner": "fandex_migrator",
+    "migrationRole": {
+      "roleName": "fandex_migrator",
+      "login": true,
+      "superuser": false,
+      "createDatabase": false,
+      "createRole": false,
+      "replication": false,
+      "bypassRls": false
+    },
+    "requiredMigrationConnectionRole": "fandex_migrator",
+    "requiredMigrationConnectionMode": "unpooled"
+  },
+  "gate": {
+    "blockers": [],
+    "eligibleForExplicitApproval": true,
+    "executionAuthorized": false,
+    "productionDataWriteAuthorized": false,
+    "productionPublicationAuthorized": false,
+    "commercialRightsCleared": false,
+    "gateDigest": "22c4568d0ee1adfe5d346b3ca1c181f4d3de51941dd8512a9115dd3e73a4329c"
+  },
+  "requiredPostconditions": {
+    "migration3ExactDigest": true,
+    "albumResearchTablePresent": true,
+    "tableOwner": "fandex_migrator",
+    "appendOnlyTriggerEnabled": true,
+    "runtimeSelect": true,
+    "runtimeInsert": true,
+    "runtimeUpdate": false,
+    "runtimeDelete": false,
+    "rowCount": 0
+  },
+  "validation": {
+    "githubActionsRunId": 33772226508,
+    "productionMigrationGateTests": "PASS",
+    "researchPersistenceWriterRegression": "PASS",
+    "typecheck": "PASS",
+    "workflowConclusion": "SUCCESS"
+  },
+  "temporaryValidationWorkflowRemoved": true,
+  "productionMainMutated": false
+}
