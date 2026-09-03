@@ -184,6 +184,25 @@ pooled migration connection
 
 Postcondition failure also blocks any subsequent research write authorization.
 
+## CI validation
+
+Final validation run:
+
+```text
+33772226508
+```
+
+Results:
+
+```text
+production migration gate tests       PASS
+research persistence writer regression PASS
+TypeScript typecheck                  PASS
+workflow conclusion                   SUCCESS
+```
+
+The temporary GitHub validation workflow was removed after qualification.
+
 ## Scope exclusions
 
 This gate does not authorize:
