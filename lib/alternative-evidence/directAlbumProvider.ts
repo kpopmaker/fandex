@@ -212,7 +212,22 @@ export function buildDirectAlbumObservationId(input: Readonly<{
   providerPeriod: string | null;
   revisionId: string | null;
 }>): string {
-  return sha256Canonical({ contractVersion: DIRECT_ALBUM_OBSERVATION_CONTRACT_VERSION, ...input });
+  return sha256Canonical({
+    contractVersion: DIRECT_ALBUM_OBSERVATION_CONTRACT_VERSION,
+    providerId: input.providerId,
+    providerObservationId: input.providerObservationId,
+    providerArtistId: input.providerArtistId,
+    providerReleaseId: input.providerReleaseId,
+    providerEditionId: input.providerEditionId,
+    providerSkuId: input.providerSkuId,
+    semantic: input.semantic,
+    value: input.value,
+    unit: input.unit,
+    territory: input.territory,
+    format: input.format,
+    providerPeriod: input.providerPeriod,
+    revisionId: input.revisionId,
+  });
 }
 
 export function buildDirectAlbumObservation(
