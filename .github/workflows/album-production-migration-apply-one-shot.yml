@@ -1,0 +1,38 @@
+name: Album Production Migration Apply One Shot
+
+on:
+  push:
+    branches:
+      - integration/album-production-migration-apply
+    paths:
+      - ".github/workflows/album-production-migration-apply-one-shot.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      FANDEX_MIGRATION_DATABASE_URL: ${{ secrets.FANDEX_MIGRATION_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Require migration credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${FANDEX_MIGRATION_DATABASE_URL:-}" ]]; then
+            echo "FANDEX_MIGRATION_DATABASE_URL is not configured; failed closed."
+            exit 1
+          fi
+      - name: Apply exact approved Album migration
+        run: >-
+          npx tsx scripts/database/apply-album-production-migration-v1.mts
+          --apply
+          --authorize-production-main-album-migration
