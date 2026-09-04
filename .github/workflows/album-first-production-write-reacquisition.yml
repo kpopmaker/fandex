@@ -1,0 +1,25 @@
+name: Album First Production Write Reacquisition
+
+on:
+  push:
+    branches:
+      - integration/album-first-bounded-production-research-write
+    paths:
+      - ".github/workflows/album-first-production-write-reacquisition.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Reacquire Circle exactly once and verify first-write cohort
+        run: npx tsx scripts/ingestion/qualify-circle-first-production-write-v1.mts
