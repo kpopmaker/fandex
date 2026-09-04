@@ -40,7 +40,7 @@ export default function Navbar() {
               FANDEX
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              <LangText en="K-pop Market Index" ko="K-pop 리서치 지표" />
+              <LangText en="K-pop Research Metrics" ko="K-pop 리서치 지표" />
             </p>
           </div>
         </Link>
@@ -68,7 +68,7 @@ export default function Navbar() {
         <div className="ml-auto flex items-center gap-3">
           <div className="hidden lg:block">
             <span className="rounded-full bg-slate-100 px-5 py-2 text-xs font-black text-slate-600">
-              <LangText en="Mock Market v4" ko="베타 리서치 v4" />
+              <LangText en="Preview Research v4" ko="베타 리서치 v4" />
             </span>
           </div>
           <LanguageToggle />
