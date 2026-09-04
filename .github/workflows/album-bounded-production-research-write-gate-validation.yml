@@ -1,0 +1,31 @@
+name: Album Bounded Production Research Write Gate Validation
+
+on:
+  push:
+    branches:
+      - integration/album-bounded-production-research-write-gate
+    paths:
+      - "lib/server/ingestion/albumBoundedProductionResearchWriteGate.ts"
+      - "tests/album-bounded-production-research-write-gate-v1.test.mts"
+      - ".github/workflows/album-bounded-production-research-write-gate-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run bounded production research write gate tests
+        run: npx tsx --test tests/album-bounded-production-research-write-gate-v1.test.mts
+      - name: Run persistence regressions
+        run: npx tsx --test tests/album-research-observation-intake-v1.test.mts tests/album-research-persistence-writer-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
