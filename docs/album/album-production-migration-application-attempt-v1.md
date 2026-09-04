@@ -1,15 +1,15 @@
 # FANDEX Album Production Migration Application Attempt v1
 
-## Status
+## Final status
 
 ```text
-applicationState = blocked-credential-consumer-missing
-productionMainMutated = false
-migration3Present = false
-albumResearchTablePresent = false
+applicationState = applied-verified
+productionMainMutated = true
+schemaMutationOnly = true
+albumObservationInsertPerformed = false
 ```
 
-The user explicitly approved applying Production `main` migration 003 + grant 002. The exact application runner was validated, but the approved mutation was **not executed** because the required direct `fandex_migrator` credential was not available to the GitHub Actions execution environment.
+The user explicitly approved applying Production `main` migration 003 + grant 002. The first one-shot attempt failed closed because the migration credential was not configured. After the direct unpooled `fandex_migrator` credential was configured, the exact same approved runner was re-enabled and completed successfully.
 
 ## Approved scope
 
@@ -32,15 +32,23 @@ Excluded:
   publication
 ```
 
-## Exact runner
+## Exact artifacts
 
-A one-shot runner was added:
+```text
+migration 003 sha256
+637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97
+
+grant 002 sha256
+a0fc93c537148794dc36182e3a8feb2ce0218c872237a989fa3a0e70fa793244
+```
+
+## Exact runner
 
 ```text
 scripts/database/apply-album-production-migration-v1.mts
 ```
 
-It requires:
+The runner requires:
 
 ```text
 --apply
@@ -48,14 +56,7 @@ It requires:
 FANDEX_MIGRATION_DATABASE_URL
 ```
 
-The URL is validated by the repository persistence contract and must resolve to:
-
-```text
-role = fandex_migrator
-connection = unpooled
-```
-
-The runner rechecks the baseline in the same transaction before mutation, applies migration 003, records schema migration version 3 with the exact digest, applies grant 002, checks postconditions, then commits.
+The connection must be direct/unpooled and authenticated as `fandex_migrator`. The runner rechecks the qualified baseline in the same transaction, applies migration 003, records version 3 with the exact migration digest, applies grant 002, validates postconditions, and commits only if all checks pass.
 
 ## Pre-apply CI qualification
 
@@ -74,9 +75,9 @@ TypeScript typecheck              PASS
 workflow conclusion               SUCCESS
 ```
 
-No Production credential was used by this run.
+No Production credential was used by that qualification run.
 
-## One-shot application attempt
+## First application attempt — failed closed
 
 Run:
 
@@ -84,7 +85,7 @@ Run:
 33773521205
 ```
 
-Observed workflow state:
+Result:
 
 ```text
 npm ci                         PASS
@@ -92,55 +93,79 @@ Require migration credential  FAIL
 Apply exact migration         SKIPPED
 ```
 
-The repository GitHub Secret:
+No Production DB connection was opened and no mutation occurred. The temporary workflow was removed.
+
+## Credential configured and approved re-run
+
+Before re-running, Production `main` was read-only verified again:
 
 ```text
-FANDEX_MIGRATION_DATABASE_URL
+migration 3 present = false
+album research table = absent
 ```
 
-was not configured. The workflow therefore failed closed before opening a Production DB connection.
+The one-shot workflow was then re-created and executed.
 
-The temporary one-shot workflow was removed after the failed-closed attempt so it cannot retry on later pushes.
-
-## Neon session fallback check
-
-The Neon SQL connector does not expose an execution-role selector. A session-local fallback was tested without persistent mutation:
+Run:
 
 ```text
-SET SESSION AUTHORIZATION fandex_migrator
+33823297096
 ```
 
 Result:
 
 ```text
-permission denied to set session authorization "fandex_migrator"
+npm ci                         PASS
+Require migration credential  PASS
+Apply exact migration         PASS
+workflow conclusion            SUCCESS
 ```
 
-No role grants, role membership options, schema objects, or data were changed by this check.
+The approved mutation completed successfully between `2026-09-04T00:49:15Z` and `2026-09-04T00:49:20Z`.
 
-The gate therefore continues to reject an owner-session workaround. No `neondb_owner` migration apply was attempted.
+## Independent Production postcondition verification
 
-## Production post-attempt verification
+After the workflow succeeded, Production `main` was queried independently through Neon.
 
-Read-only verification after the blocked workflow confirmed:
+Observed:
 
 ```text
-migration 3 present = false
-fandex.album_research_observation_records = absent
+schema_migrations.version = 3
+migration_sha256 = 637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97
+applied_at = 2026-09-04T00:49:17.703748+00:00
+
+fandex.album_research_observation_records = present
+owner = fandex_migrator
+append-only trigger enabled = true
+
+fandex_runtime SELECT = true
+fandex_runtime INSERT = true
+fandex_runtime UPDATE = false
+fandex_runtime DELETE = false
+
+row count = 0
 ```
 
-Production `main` remains at the same schema state as before approval.
+This confirms the Production schema and least-privilege grant were applied, while no Album research observation row was inserted.
 
-## Required next condition
+## Re-run prevention
 
-To execute the already-approved migration without weakening the gate, configure this GitHub repository secret:
+The one-shot workflow was deleted immediately after successful verification. No recurring migration workflow remains on the application branch.
+
+## Authorization boundary after application
+
+The successful schema/grant application does **not** authorize:
 
 ```text
-FANDEX_MIGRATION_DATABASE_URL
+Album research observation INSERTs
+recurring Provider collection
+scheduler activation
+raw Provider body persistence
+public feature contribution
+publication
+redistribution
+commercial use
+rights clearance
 ```
 
-with the direct unpooled `fandex_migrator` connection string for Production `main` / `neondb`.
-
-Do not store the connection URI in repository files, workflow YAML, PR text, logs, or evidence documents.
-
-Once that credential consumer exists, the exact one-shot application runner can be re-enabled and must re-run all baseline checks before applying anything.
+A separate explicit write authorization remains required before any Production research observation is inserted.
