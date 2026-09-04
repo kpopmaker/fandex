@@ -1,29 +1,29 @@
 {
   "version": "music_chart_check_history_v1",
-  "createdAt": "2026-09-03T10:46:16",
-  "latestCheckDate": "2026-09-03",
-  "historyRowCount": 120,
+  "createdAt": "2026-09-04T10:40:35",
+  "latestCheckDate": "2026-09-04",
+  "historyRowCount": 150,
   "latestRowCount": 30,
   "latestArtistCount": 10,
-  "rankedCount": 19,
-  "notRankedCount": 11,
+  "rankedCount": 20,
+  "notRankedCount": 10,
   "rows": [
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "뉴진스",
       "platform": "bugs",
       "status": "RANKED",
       "candidateCount": 2,
-      "bestRank": 45,
+      "bestRank": 46,
       "bestTrackTitle": "Hype Boy",
       "sourceKeys": "bugs_realtime",
       "evidenceFile": "music_chart_bugs_all_targets_v1_latest.json",
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "뉴진스",
       "platform": "genie",
       "status": "RANKED",
@@ -35,8 +35,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "뉴진스",
       "platform": "melon",
       "status": "RANKED",
@@ -48,21 +48,21 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "르세라핌",
       "platform": "bugs",
       "status": "RANKED",
-      "candidateCount": 2,
-      "bestRank": 68,
+      "candidateCount": 3,
+      "bestRank": 64,
       "bestTrackTitle": "BOOMPALA",
       "sourceKeys": "bugs_realtime",
       "evidenceFile": "music_chart_bugs_all_targets_v1_latest.json",
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "르세라핌",
       "platform": "genie",
       "status": "RANKED",
@@ -74,60 +74,60 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "르세라핌",
       "platform": "melon",
       "status": "RANKED",
       "candidateCount": 1,
-      "bestRank": 94,
+      "bestRank": 93,
       "bestTrackTitle": "SPAGHETTI (feat. j-hope of BTS)",
       "sourceKeys": "melon_top100",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "보이넥스트도어",
       "platform": "bugs",
-      "status": "NOT_RANKED",
-      "candidateCount": 0,
-      "bestRank": "",
-      "bestTrackTitle": "",
+      "status": "RANKED",
+      "candidateCount": 1,
+      "bestRank": 98,
+      "bestTrackTitle": "오늘만 I LOVE YOU",
       "sourceKeys": "bugs_realtime",
       "evidenceFile": "music_chart_bugs_all_targets_v1_latest.json",
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "보이넥스트도어",
       "platform": "genie",
       "status": "RANKED",
       "candidateCount": 1,
-      "bestRank": 144,
+      "bestRank": 142,
       "bestTrackTitle": "오늘만 I LOVE YOU",
       "sourceKeys": "genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "보이넥스트도어",
       "platform": "melon",
       "status": "RANKED",
       "candidateCount": 1,
-      "bestRank": 83,
+      "bestRank": 88,
       "bestTrackTitle": "오늘만 I LOVE YOU",
       "sourceKeys": "melon_top100",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "세븐틴",
       "platform": "bugs",
       "status": "NOT_RANKED",
@@ -139,8 +139,8 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "세븐틴",
       "platform": "genie",
       "status": "NOT_RANKED",
@@ -152,8 +152,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "세븐틴",
       "platform": "melon",
       "status": "NOT_RANKED",
@@ -165,8 +165,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "스트레이키즈",
       "platform": "bugs",
       "status": "NOT_RANKED",
@@ -178,8 +178,8 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "스트레이키즈",
       "platform": "genie",
       "status": "NOT_RANKED",
@@ -191,8 +191,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "스트레이키즈",
       "platform": "melon",
       "status": "NOT_RANKED",
@@ -204,12 +204,12 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "아이브",
       "platform": "bugs",
       "status": "RANKED",
-      "candidateCount": 4,
+      "candidateCount": 3,
       "bestRank": 32,
       "bestTrackTitle": "BANG BANG",
       "sourceKeys": "bugs_realtime",
@@ -217,8 +217,8 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "아이브",
       "platform": "genie",
       "status": "RANKED",
@@ -230,8 +230,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "아이브",
       "platform": "melon",
       "status": "RANKED",
@@ -243,8 +243,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "아이유",
       "platform": "bugs",
       "status": "NOT_RANKED",
@@ -256,47 +256,47 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "아이유",
       "platform": "genie",
       "status": "RANKED",
       "candidateCount": 2,
-      "bestRank": 106,
+      "bestRank": 108,
       "bestTrackTitle": "Love wins all",
       "sourceKeys": "genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "아이유",
       "platform": "melon",
       "status": "RANKED",
       "candidateCount": 1,
-      "bestRank": 87,
+      "bestRank": 84,
       "bestTrackTitle": "Love wins all",
       "sourceKeys": "melon_top100",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "에스파",
       "platform": "bugs",
       "status": "RANKED",
       "candidateCount": 4,
-      "bestRank": 10,
+      "bestRank": 7,
       "bestTrackTitle": "LEMONADE",
       "sourceKeys": "bugs_realtime",
       "evidenceFile": "music_chart_bugs_all_targets_v1_latest.json",
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "에스파",
       "platform": "genie",
       "status": "RANKED",
@@ -308,8 +308,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "에스파",
       "platform": "melon",
       "status": "RANKED",
@@ -321,8 +321,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "에이티즈",
       "platform": "bugs",
       "status": "RANKED",
@@ -334,8 +334,8 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "에이티즈",
       "platform": "genie",
       "status": "RANKED",
@@ -347,21 +347,21 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "에이티즈",
       "platform": "melon",
       "status": "RANKED",
       "candidateCount": 1,
-      "bestRank": 9,
+      "bestRank": 8,
       "bestTrackTitle": "BAD",
       "sourceKeys": "melon_top100",
       "evidenceFile": "music_chart_artist_candidates_v2_raw_latest.json",
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:16",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:35",
       "artist": "투모로우바이투게더",
       "platform": "bugs",
       "status": "NOT_RANKED",
@@ -373,8 +373,8 @@
       "sourceVersion": "music_chart_discover_bugs_all_targets_v1"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "투모로우바이투게더",
       "platform": "genie",
       "status": "NOT_RANKED",
@@ -386,8 +386,8 @@
       "sourceVersion": "music_chart_discover_artist_candidates_v2"
     },
     {
-      "checkDate": "2026-09-03",
-      "checkedAt": "2026-09-03T10:46:06",
+      "checkDate": "2026-09-04",
+      "checkedAt": "2026-09-04T10:40:26",
       "artist": "투모로우바이투게더",
       "platform": "melon",
       "status": "NOT_RANKED",
