@@ -1,6 +1,6 @@
 {
   "contractVersion": "album-production-migration-application-attempt-v1",
-  "applicationState": "blocked-credential-consumer-missing",
+  "applicationState": "applied-verified",
   "approvedScope": {
     "migration003": true,
     "grant002": true,
@@ -17,6 +17,10 @@
     "databaseName": "neondb",
     "schemaName": "fandex"
   },
+  "artifacts": {
+    "migration003Sha256": "637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97",
+    "grant002Sha256": "a0fc93c537148794dc36182e3a8feb2ce0218c872237a989fa3a0e70fa793244"
+  },
   "runner": {
     "path": "scripts/database/apply-album-production-migration-v1.mts",
     "requiredSecret": "FANDEX_MIGRATION_DATABASE_URL",
@@ -27,22 +31,36 @@
     "runId": 33773343998,
     "conclusion": "SUCCESS"
   },
-  "applicationAttempt": {
-    "runId": 33773521205,
-    "credentialCheck": "FAIL",
-    "migrationStep": "SKIPPED",
-    "databaseConnectionOpened": false,
-    "productionMutationPerformed": false
+  "attempts": [
+    {
+      "runId": 33773521205,
+      "state": "failed-closed-before-db-connect",
+      "credentialCheck": "FAIL",
+      "migrationStep": "SKIPPED",
+      "productionMutationPerformed": false
+    },
+    {
+      "runId": 33823297096,
+      "state": "applied-successfully",
+      "credentialCheck": "PASS",
+      "migrationStep": "PASS",
+      "productionMutationPerformed": true
+    }
+  ],
+  "postApplyProductionState": {
+    "migration3Present": true,
+    "migration3Sha256": "637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97",
+    "migration3AppliedAt": "2026-09-04T00:49:17.703748+00:00",
+    "albumResearchTablePresent": true,
+    "tableOwner": "fandex_migrator",
+    "appendOnlyTriggerEnabled": true,
+    "runtimeSelect": true,
+    "runtimeInsert": true,
+    "runtimeUpdate": false,
+    "runtimeDelete": false,
+    "rowCount": 0
   },
-  "fallbackCheck": {
-    "operation": "SET SESSION AUTHORIZATION fandex_migrator",
-    "result": "permission-denied",
-    "persistentMutation": false
-  },
-  "postAttemptProductionState": {
-    "migration3Present": false,
-    "albumResearchTablePresent": false,
-    "productionMainMutated": false
-  },
-  "nextRequiredCondition": "configure-direct-unpooled-fandex-migrator-github-secret"
+  "workflowRemovedAfterSuccess": true,
+  "albumObservationInsertAuthorized": false,
+  "nextRequiredCondition": "separate-explicit-production-research-write-authorization"
 }
