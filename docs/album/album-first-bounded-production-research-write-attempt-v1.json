@@ -1,0 +1,91 @@
+{
+  "contractVersion": "album-first-bounded-production-research-write-attempt-v1",
+  "attemptState": "blocked-before-database-write",
+  "approvedScope": {
+    "circleHistoricalRequestsMax": 1,
+    "productionResearchInsertMax": 3,
+    "providerPeriod": "day:20260831",
+    "hanteoWriteAuthorized": false,
+    "rawBodyStorageAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "publicationAuthorized": false,
+    "commercialUseAuthorized": false,
+    "rightsCleared": false
+  },
+  "reacquisition": {
+    "runId": 33824680792,
+    "httpStatus": 200,
+    "providerRequests": 1,
+    "sourcePayloadDigest": "d21ba4cb22b58ee014b1cdfc1f899f9860408b927c21ef387b0ba473de5f2236",
+    "sourcePayloadMatchesPriorEvidence": true,
+    "sourceRowCount": 50,
+    "acceptedObservationCount": 3,
+    "identityPendingRowCount": 47,
+    "providerDataRejectedRowCount": 0,
+    "rawBodyPersisted": false,
+    "salesValuesEmitted": false,
+    "exactLegacyObservationIdMatch": false,
+    "legacyObservationIds": [
+      "3f94e51454edbdff932cb9cbeba2697e141864dc7f99f46ce96e1a60b5de22dd",
+      "5e907dc8f731b1d9895cf5f90ffb43acdc2282e0437aa4a8b55c60696eaebb95",
+      "f18a8b5d1267b63bb7d4f020e18346d674365fe16f90ceb811448341abb771c9"
+    ],
+    "preFixReacquisitionObservationIds": [
+      "13d4993593d28dbba68965ac03b68958612aa30f4f4e5023b354990d4fcd63dc",
+      "3b9be547af4d9f15333f72e184a556274ffb38e281b3731b28098cde70f9007a",
+      "95b8be1c3289401d4144d8c28d34e4ae0442595b4422c3f2984b44567e7ff69d"
+    ]
+  },
+  "rootCause": {
+    "kind": "runtime-object-spread-expanded-observation-id-input",
+    "providerRevision": false,
+    "evidenceTranscriptionError": false,
+    "collectionTimestampsEnteredObservationId": true,
+    "durableIdempotencySafeBeforeFix": false
+  },
+  "determinismFix": {
+    "file": "lib/alternative-evidence/directAlbumProvider.ts",
+    "stableProjectionOnly": true,
+    "excludesCollectionTimestamps": true,
+    "excludesFandexReconciliationMetadata": true,
+    "validationRunId": 33825044361,
+    "validationConclusion": "SUCCESS"
+  },
+  "recoveryGate": {
+    "contractVersion": "album-bounded-production-research-write-recovery-gate-v1",
+    "legacyObservationIdsStatus": "invalid-time-dependent",
+    "sourcePayloadDigestRequired": "d21ba4cb22b58ee014b1cdfc1f899f9860408b927c21ef387b0ba473de5f2236",
+    "reviewedProviderTuples": [
+      "8809954226502|straykids|straykids-this-and-that",
+      "8809704435567|enhypen|enhypen-the-sin-bliss",
+      "8800370675042|katseye|katseye-wild"
+    ],
+    "validationRunId": 33825262112,
+    "validationConclusion": "SUCCESS",
+    "databaseWriteAuthorized": false
+  },
+  "runtimeCredentialBoundary": {
+    "requiredSecret": "FANDEX_RUNTIME_DATABASE_URL",
+    "requiredRole": "fandex_runtime",
+    "requiredConnectionMode": "unpooled",
+    "ownerSessionWriteAllowed": false,
+    "migratorSessionWriteAllowed": false
+  },
+  "productionPostAttempt": {
+    "researchTableRowCount": 0,
+    "productionResearchRowsInserted": 0,
+    "partialWritePresent": false
+  },
+  "authorizationAfterAttempt": {
+    "priorAuthorizedCircleRequests": 1,
+    "circleRequestsConsumed": 1,
+    "additionalCircleRequestAuthorized": false,
+    "additionalProductionResearchWriteAuthorized": false,
+    "publicationAuthorized": false,
+    "commercialRightsCleared": false
+  },
+  "nextRequiredConditions": [
+    "configure FANDEX_RUNTIME_DATABASE_URL as Production main/neondb direct unpooled fandex_runtime credential",
+    "obtain new explicit authorization for one additional Circle reacquisition plus at most three bounded research INSERTs"
+  ]
+}
