@@ -7,6 +7,7 @@ import {
 } from '../lib/server/ingestion/naverNewsCanonicalObservationCount';
 import type { CanonicalNaverNewsObservation } from '../lib/server/ingestion/naverNewsCanonicalObservation';
 import type { NaverNewsCollectionCompleteness } from '../lib/server/ingestion/naverNewsCollectionCompleteness';
+import type { CanonicalObservationSetCoverage } from '../lib/server/ingestion/naverNewsObservationSetCoverage';
 import { NAVER_NEWS_PROVIDER } from '../lib/server/ingestion/naverNewsContracts';
 
 const complete: NaverNewsCollectionCompleteness = {
@@ -18,6 +19,15 @@ const truncated: NaverNewsCollectionCompleteness = {
 const unknown: NaverNewsCollectionCompleteness = {
   status: 'unknown', reason: 'non_first_page_whole_coverage_unproven',
 };
+
+function coverage(status: CanonicalObservationSetCoverage['status']): CanonicalObservationSetCoverage {
+  return {
+    status,
+    reason: status === 'proven' ? 'all_eligible_records_disposed' : status === 'incomplete' ? 'eligible_records_missing_disposition' : 'eligible_input_set_unavailable',
+    canonicalArtistId: 'iu', jobId: 'e'.repeat(64), eligibleRecordCount: 0, coveredRecordCount: 0, missingRecordIds: [],
+    acceptedCandidateCount: 0, unknownCandidateCount: 0, rejectedCandidateCount: 0,
+  };
+}
 
 function observation(overrides: Partial<CanonicalNaverNewsObservation> = {}): CanonicalNaverNewsObservation {
   return {
@@ -46,6 +56,7 @@ function input(overrides: Partial<CanonicalNewsObservationCountInput> = {}): Can
     interval: { startInclusive: '2026-09-01T00:00:00.000Z', endExclusive: '2026-09-02T00:00:00.000Z' },
     observations: [observation()],
     collectionCompleteness: complete,
+    observationSetCoverage: coverage('unknown'),
     ...overrides,
   };
 }
@@ -57,8 +68,7 @@ test('an explicit half-open interval preserves its observed subset count', () =>
     observation({ observationId: 'f'.repeat(64), observedAt: '2026-09-02T00:00:00.000Z' }),
   ] }));
   assert.equal(result.observedSubsetCount, 2);
-  assert.equal(result.value, null);
-  assert.equal(result.productEligible, false);
+  assert.deepEqual([result.value, result.productEligible], [null, false]);
 });
 
 test('the start boundary is included and the end boundary is excluded', () => {
@@ -89,14 +99,16 @@ test('mixed artists and providers fail closed', () => {
 test('truncated and unknown collections retain observed subset counts but withhold values', () => {
   const observations = [observation(), observation({ observationId: 'e'.repeat(64) })];
   const truncatedResult = evaluateCanonicalNewsObservationCount(input({ observations, collectionCompleteness: truncated }));
-  assert.deepEqual([truncatedResult.observedSubsetCount, truncatedResult.value, truncatedResult.productEligible, truncatedResult.unavailabilityReason], [2, null, false, 'collection_truncated']);
+  assert.deepEqual([truncatedResult.observedSubsetCount, truncatedResult.value, truncatedResult.productEligible, truncatedResult.eligibilityReason], [2, null, false, 'collection_truncated']);
   const unknownResult = evaluateCanonicalNewsObservationCount(input({ observations, collectionCompleteness: unknown }));
-  assert.deepEqual([unknownResult.observedSubsetCount, unknownResult.value, unknownResult.productEligible, unknownResult.unavailabilityReason], [2, null, false, 'collection_completeness_unknown']);
+  assert.deepEqual([unknownResult.observedSubsetCount, unknownResult.value, unknownResult.productEligible, unknownResult.eligibilityReason], [2, null, false, 'collection_completeness_unknown']);
 });
 
-test('complete collection evidence alone leaves the actual metric withheld', () => {
+test('complete collection with incomplete or unknown coverage leaves the actual metric withheld', () => {
   const result = evaluateCanonicalNewsObservationCount(input());
-  assert.deepEqual([result.value, result.productEligible, result.observationSetCoverage, result.unavailabilityReason], [null, false, 'unproven', 'observation_set_coverage_unproven']);
+  assert.deepEqual([result.value, result.productEligible, result.observationSetCoverage, result.eligibilityReason], [null, false, 'unknown', 'observation_set_unknown']);
+  const incomplete = evaluateCanonicalNewsObservationCount(input({ observationSetCoverage: coverage('incomplete') }));
+  assert.deepEqual([incomplete.value, incomplete.productEligible, incomplete.eligibilityReason], [null, false, 'observation_set_incomplete']);
 });
 
 test('unproven empty input is not converted to a zero metric value', () => {
@@ -124,4 +136,20 @@ test('interval membership uses observedAt rather than collectedAt', () => {
     observations: [observation({ observedAt: '2026-09-01T12:00:00.000Z', collectedAt: '2026-10-01T12:00:00.000Z' })],
   }));
   assert.equal(result.observedSubsetCount, 1);
+});
+
+test('complete collection and proven coverage open the actual metric, including a proven zero', () => {
+  const actual = evaluateCanonicalNewsObservationCount(input({
+    observations: [observation(), observation({ observationId: 'f'.repeat(64) })], observationSetCoverage: coverage('proven'),
+  }));
+  assert.deepEqual([actual.metricKey, actual.observedSubsetCount, actual.value, actual.productEligible, actual.eligibilityReason], ['canonicalNewsObservationCount', 2, 2, true, 'complete_observation_set']);
+  const zero = evaluateCanonicalNewsObservationCount(input({ observations: [], observationSetCoverage: coverage('proven') }));
+  assert.deepEqual([zero.observedSubsetCount, zero.value, zero.productEligible], [0, 0, true]);
+});
+
+test('collection failure takes precedence over coverage and never converts an unproven zero into a value', () => {
+  const truncatedProven = evaluateCanonicalNewsObservationCount(input({ observations: [], collectionCompleteness: truncated, observationSetCoverage: coverage('proven') }));
+  assert.deepEqual([truncatedProven.observedSubsetCount, truncatedProven.value, truncatedProven.productEligible, truncatedProven.eligibilityReason], [0, null, false, 'collection_truncated']);
+  const unknownIncomplete = evaluateCanonicalNewsObservationCount(input({ observations: [], collectionCompleteness: unknown, observationSetCoverage: coverage('incomplete') }));
+  assert.deepEqual([unknownIncomplete.value, unknownIncomplete.productEligible, unknownIncomplete.eligibilityReason], [null, false, 'collection_completeness_unknown']);
 });

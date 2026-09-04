@@ -2,6 +2,7 @@ import {
   type CanonicalNaverNewsObservation,
 } from './naverNewsCanonicalObservation';
 import type { NaverNewsCollectionCompleteness } from './naverNewsCollectionCompleteness';
+import type { CanonicalObservationSetCoverage } from './naverNewsObservationSetCoverage';
 import { NAVER_NEWS_PROVIDER } from './naverNewsContracts';
 
 export const CANONICAL_NEWS_OBSERVATION_COUNT_METRIC_KEY = 'canonicalNewsObservationCount';
@@ -11,26 +12,39 @@ export type CanonicalNewsObservationInterval = Readonly<{
   endExclusive: string;
 }>;
 
-export type CanonicalNewsObservationCountMetric = Readonly<{
+type CanonicalNewsObservationCountMetricBase = Readonly<{
   metricKey: typeof CANONICAL_NEWS_OBSERVATION_COUNT_METRIC_KEY;
   canonicalArtistId: string;
   interval: CanonicalNewsObservationInterval;
   observedSubsetCount: number;
-  value: null;
-  productEligible: false;
   collectionCompleteness: NaverNewsCollectionCompleteness;
-  observationSetCoverage: 'unproven';
-  unavailabilityReason:
-    | 'collection_truncated'
-    | 'collection_completeness_unknown'
-    | 'observation_set_coverage_unproven';
 }>;
+
+export type CanonicalNewsObservationCountMetric = CanonicalNewsObservationCountMetricBase & (
+  | Readonly<{
+    value: number;
+    productEligible: true;
+    observationSetCoverage: 'proven';
+    eligibilityReason: 'complete_observation_set';
+  }>
+  | Readonly<{
+    value: null;
+    productEligible: false;
+    observationSetCoverage: CanonicalObservationSetCoverage['status'];
+    eligibilityReason:
+      | 'collection_truncated'
+      | 'collection_completeness_unknown'
+      | 'observation_set_incomplete'
+      | 'observation_set_unknown';
+  }>
+);
 
 export type CanonicalNewsObservationCountInput = Readonly<{
   canonicalArtistId: string;
   interval: CanonicalNewsObservationInterval;
   observations: readonly CanonicalNaverNewsObservation[];
   collectionCompleteness: NaverNewsCollectionCompleteness;
+  observationSetCoverage: CanonicalObservationSetCoverage;
 }>;
 
 function parseTimestamp(value: string, errorCode: string): number {
@@ -39,12 +53,15 @@ function parseTimestamp(value: string, errorCode: string): number {
   return timestamp;
 }
 
-function unavailabilityReason(
+function eligibilityReason(
   completeness: NaverNewsCollectionCompleteness,
-): CanonicalNewsObservationCountMetric['unavailabilityReason'] {
+  coverage: CanonicalObservationSetCoverage,
+): Exclude<CanonicalNewsObservationCountMetric, { productEligible: true }>['eligibilityReason'] | 'complete_observation_set' {
   if (completeness.status === 'truncated') return 'collection_truncated';
   if (completeness.status === 'unknown') return 'collection_completeness_unknown';
-  return 'observation_set_coverage_unproven';
+  if (coverage.status === 'incomplete') return 'observation_set_incomplete';
+  if (coverage.status === 'unknown') return 'observation_set_unknown';
+  return 'complete_observation_set';
 }
 
 export function evaluateCanonicalNewsObservationCount(
@@ -53,6 +70,9 @@ export function evaluateCanonicalNewsObservationCount(
   const startInclusive = parseTimestamp(input.interval.startInclusive, 'naver_news_observation_count_interval_invalid');
   const endExclusive = parseTimestamp(input.interval.endExclusive, 'naver_news_observation_count_interval_invalid');
   if (startInclusive >= endExclusive) throw new Error('naver_news_observation_count_interval_invalid');
+  if (input.observationSetCoverage.canonicalArtistId !== input.canonicalArtistId) {
+    throw new Error('naver_news_observation_count_coverage_artist_mismatch');
+  }
 
   const observationIds = new Set<string>();
   for (const observation of input.observations) {
@@ -66,15 +86,16 @@ export function evaluateCanonicalNewsObservationCount(
     if (observedAt >= startInclusive && observedAt < endExclusive) observationIds.add(observation.observationId);
   }
 
-  return Object.freeze({
+  const metricBase = {
     metricKey: CANONICAL_NEWS_OBSERVATION_COUNT_METRIC_KEY,
     canonicalArtistId: input.canonicalArtistId,
     interval: Object.freeze({ ...input.interval }),
     observedSubsetCount: observationIds.size,
-    value: null,
-    productEligible: false,
     collectionCompleteness: input.collectionCompleteness,
-    observationSetCoverage: 'unproven',
-    unavailabilityReason: unavailabilityReason(input.collectionCompleteness),
-  });
+  } as const;
+  const reason = eligibilityReason(input.collectionCompleteness, input.observationSetCoverage);
+  if (reason === 'complete_observation_set') {
+    return Object.freeze({ ...metricBase, value: metricBase.observedSubsetCount, productEligible: true, observationSetCoverage: 'proven', eligibilityReason: reason });
+  }
+  return Object.freeze({ ...metricBase, value: null, productEligible: false, observationSetCoverage: input.observationSetCoverage.status, eligibilityReason: reason });
 }
