@@ -1,0 +1,62 @@
+{
+  "contractVersion": "album-bounded-production-research-write-gate-v1",
+  "gateDigest": "5c7a6f30da529322eaaf667309e03a3ccdfef8909c699c8ef6e29d8e52d5b4ad",
+  "target": {
+    "projectId": "wild-tree-38937656",
+    "projectName": "fandex-managed-postgres",
+    "branchId": "br-old-term-azv3tpra",
+    "branchName": "main",
+    "databaseName": "neondb",
+    "schemaName": "fandex",
+    "tableName": "album_research_observation_records"
+  },
+  "migration3Sha256": "637b934b0e7cef4d823b0e8943d48d0a94b71ca113690f3800a97dc745fe4c97",
+  "cohort": {
+    "sourceWorkflowRunId": 33458837843,
+    "acquisitionProviderId": "circle-retail",
+    "providerId": "circle-chart",
+    "timeframe": "day",
+    "providerPeriod": "day:20260831",
+    "requestMode": "historical-backfill",
+    "sourcePayloadDigest": "d21ba4cb22b58ee014b1cdfc1f899f9860408b927c21ef387b0ba473de5f2236",
+    "reviewedSubsetResultDigest": "f0258a5a4a7990877d4c613d8c1e6301a521eb3f0e0acf706ef0f78fa2ba957b",
+    "maxProviderRequests": 1,
+    "maxDatabaseWrites": 3,
+    "observationIds": [
+      "3f94e51454edbdff932cb9cbeba2697e141864dc7f99f46ce96e1a60b5de22dd",
+      "5e907dc8f731b1d9895cf5f90ffb43acdc2282e0437aa4a8b55c60696eaebb95",
+      "f18a8b5d1267b63bb7d4f020e18346d674365fe16f90ceb811448341abb771c9"
+    ]
+  },
+  "hanteo": {
+    "included": false,
+    "reason": "historical-exact-copy-reacquisition-unverified"
+  },
+  "productionPreflight": {
+    "migration3ExactDigestPresent": true,
+    "albumResearchTablePresent": true,
+    "tableOwner": "fandex_migrator",
+    "appendOnlyTriggerEnabled": true,
+    "runtimeSelect": true,
+    "runtimeInsert": true,
+    "runtimeUpdate": false,
+    "runtimeDelete": false,
+    "totalRowCount": 0,
+    "selectedObservationRowsPresent": 0
+  },
+  "authorization": {
+    "eligibleForExplicitApproval": true,
+    "executionAuthorized": false,
+    "productionResearchWriteAuthorized": false,
+    "rawBodyStorageAuthorized": false,
+    "productionPublicationAuthorized": false,
+    "commercialUseAuthorized": false,
+    "commercialRightsCleared": false
+  },
+  "validation": {
+    "workflowRunId": 33823814765,
+    "conclusion": "SUCCESS",
+    "providerRequests": 0,
+    "databaseWrites": 0
+  }
+}
