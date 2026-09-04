@@ -1,0 +1,27 @@
+name: Album First Production Research Write Execution
+
+on:
+  push:
+    branches:
+      - integration/album-first-bounded-production-research-write
+    paths:
+      - ".github/workflows/album-first-production-research-write-execution.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Execute bounded Circle reacquisition and Production research write
+        run: npx tsx scripts/ingestion/execute-album-first-production-research-write-v1.mts
