@@ -98,3 +98,35 @@ test('data issue displays a public-safe message rather than internal codes', () 
     },
   );
 });
+
+test('not-ranked and unavailable metric states remain distinct from data issues', () => {
+  assert.deepEqual(
+    getArtistMetricCardPresentation({
+      status: 'ok',
+      model: {
+        fact: { availability: 'not-ranked', value: null },
+        presentation: 'standard',
+      },
+    }),
+    {
+      state: 'not-ranked',
+      valueText: '\uC21C\uC704 \uC5C6\uC74C',
+      showPreviewBadge: false,
+    },
+  );
+
+  assert.deepEqual(
+    getArtistMetricCardPresentation({
+      status: 'ok',
+      model: {
+        fact: { availability: 'unavailable', value: null },
+        presentation: 'standard',
+      },
+    }),
+    {
+      state: 'unavailable',
+      valueText: '\uC0AC\uC6A9 \uBD88\uAC00',
+      showPreviewBadge: false,
+    },
+  );
+});

@@ -1,9 +1,15 @@
 import type { ProductDashboardArtistEntry } from '../contracts/productDashboard';
 
 export type ProductDashboardArtistPresentation = Readonly<{
-  state: 'available' | 'missing' | 'not-tracked' | 'data-issue';
+  state: 'available' | 'not-ranked' | 'missing' | 'not-tracked' | 'unavailable' | 'data-issue';
   valueText: string;
 }>;
+
+export function shouldShowProductDashboardPreviewBadge(
+  entry: ProductDashboardArtistEntry,
+) {
+  return entry.presentation === 'preview';
+}
 
 export function getProductDashboardArtistPresentation(
   entry: ProductDashboardArtistEntry,
@@ -23,6 +29,20 @@ export function getProductDashboardArtistPresentation(
 
   if (fact.availability === 'not-tracked') {
     return Object.freeze({ state: 'not-tracked', valueText: '미추적' });
+  }
+
+  if (fact.availability === 'not-ranked') {
+    return Object.freeze({
+      state: 'not-ranked',
+      valueText: '\uC21C\uC704 \uC5C6\uC74C',
+    });
+  }
+
+  if (fact.availability === 'unavailable') {
+    return Object.freeze({
+      state: 'unavailable',
+      valueText: '\uC0AC\uC6A9 \uBD88\uAC00',
+    });
   }
 
   if (fact.availability !== 'available' || typeof fact.value !== 'number') {

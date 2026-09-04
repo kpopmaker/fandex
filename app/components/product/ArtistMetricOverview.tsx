@@ -12,6 +12,10 @@ const cardToneClasses = {
     'border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/60',
   'not-tracked':
     'border-slate-300 bg-slate-100/80 dark:border-slate-700 dark:bg-slate-900',
+  'not-ranked':
+    'border-slate-300 bg-slate-100/80 dark:border-slate-700 dark:bg-slate-900',
+  unavailable:
+    'border-slate-300 bg-slate-100/80 dark:border-slate-700 dark:bg-slate-900',
   'data-issue':
     'border-amber-200 bg-amber-50 dark:border-amber-400/30 dark:bg-amber-400/10',
 } as const;

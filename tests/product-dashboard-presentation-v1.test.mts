@@ -3,7 +3,10 @@ import test from 'node:test';
 
 import type { ArtistMetadata } from '../app/data/v4/charts/artistMetadata';
 import type { ArtistMonthlyMetricPoint } from '../app/data/v4/metrics/fandexMetricTypes';
-import { getProductDashboardArtistPresentation } from '../lib/product/presentation/dashboardPresentation';
+import {
+  getProductDashboardArtistPresentation,
+  shouldShowProductDashboardPreviewBadge,
+} from '../lib/product/presentation/dashboardPresentation';
 import { getProductDashboard } from '../lib/product/queries/getProductDashboard';
 
 const artists: readonly ArtistMetadata[] = [
@@ -88,4 +91,58 @@ test('Dashboard presentation distinguishes finite, zero, missing, and data issue
     state: 'data-issue',
     valueText: '데이터 확인 필요',
   });
+});
+
+test('Dashboard presentation preserves not-ranked and unavailable distinctly', () => {
+  const base = model.entries.find(
+    (candidate) => candidate.identity.artistId === 'finite',
+  );
+
+  assert.ok(base);
+
+  if (base.status !== 'ok') {
+    assert.fail('Expected valid Dashboard entry fixture.');
+  }
+
+  assert.deepEqual(
+    getProductDashboardArtistPresentation({
+      ...base,
+      currentFandex: { availability: 'not-ranked', value: null },
+    }),
+    {
+      state: 'not-ranked',
+      valueText: '\uC21C\uC704 \uC5C6\uC74C',
+    },
+  );
+
+  assert.deepEqual(
+    getProductDashboardArtistPresentation({
+      ...base,
+      currentFandex: { availability: 'unavailable', value: null },
+    }),
+    {
+      state: 'unavailable',
+      valueText: '\uC0AC\uC6A9 \uBD88\uAC00',
+    },
+  );
+});
+test('Dashboard preview badge follows Product presentation truth', () => {
+  const entry = model.entries.find(
+    (candidate) => candidate.identity.artistId === 'finite',
+  );
+
+  assert.ok(entry);
+
+  assert.equal(
+    shouldShowProductDashboardPreviewBadge(entry),
+    true,
+  );
+
+  assert.equal(
+    shouldShowProductDashboardPreviewBadge({
+      ...entry,
+      presentation: 'standard',
+    }),
+    false,
+  );
 });

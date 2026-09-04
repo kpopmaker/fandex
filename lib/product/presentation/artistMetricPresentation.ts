@@ -10,7 +10,7 @@ export type ArtistMetricPresentationSource =
     }>;
 
 export type ArtistMetricCardPresentation = Readonly<{
-  state: 'available' | 'missing' | 'not-tracked' | 'data-issue';
+  state: 'available' | 'not-ranked' | 'missing' | 'not-tracked' | 'unavailable' | 'data-issue';
   valueText: string;
   showPreviewBadge: boolean;
 }>;
@@ -45,6 +45,22 @@ export function getArtistMetricCardPresentation(
     return Object.freeze({
       state: 'not-tracked',
       valueText: '미추적',
+      showPreviewBadge,
+    });
+  }
+
+  if (fact.availability === 'not-ranked') {
+    return Object.freeze({
+      state: 'not-ranked',
+      valueText: '\uC21C\uC704 \uC5C6\uC74C',
+      showPreviewBadge,
+    });
+  }
+
+  if (fact.availability === 'unavailable') {
+    return Object.freeze({
+      state: 'unavailable',
+      valueText: '\uC0AC\uC6A9 \uBD88\uAC00',
       showPreviewBadge,
     });
   }

@@ -10,6 +10,10 @@ import {
 } from '../data/v4/metrics/artistMonthlyMetricHelpers';
 import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
 import RankingExplorer, { type RankingExplorerRow } from './RankingExplorer';
+import {
+  compareRankingFandexDesc,
+  normalizeRankingFandexPoint,
+} from './rankingTruth';
 
 function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
   return profile.history[profile.history.length - 1];
@@ -32,7 +36,7 @@ function createRankingRows(): RankingExplorerRow[] {
         ticker: profile.ticker,
         groupType: profile.groupType,
         coverageStatus: profile.coverageStatus,
-        currentFandexPoint: latest?.fandexPoint ?? 0,
+        currentFandexPoint: normalizeRankingFandexPoint(latest?.fandexPoint),
         sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
         trendBand: getIndexTrendBand(sixMonthHistory),
         confidenceLevel: latest?.confidenceLevel ?? 'low',
@@ -42,7 +46,7 @@ function createRankingRows(): RankingExplorerRow[] {
         metricMonthLabel: metricBreakdown?.label ?? '',
       };
     })
-    .sort((a, b) => b.currentFandexPoint - a.currentFandexPoint);
+    .sort((a, b) => compareRankingFandexDesc(a.currentFandexPoint, b.currentFandexPoint));
 }
 
 export default function RankingPage() {

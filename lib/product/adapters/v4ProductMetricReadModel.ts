@@ -27,7 +27,11 @@ import type {
   ProductMetricSourceScoring,
 } from '../contracts/productMetricReadModel';
 import type { ProductPresentation } from '../contracts/productState';
-import type { ProductUnknownObservation } from '../contracts/productTime';
+import type { ProductSourceAttribution } from '../contracts/productSource';
+import type {
+  ProductDataTime,
+  ProductUnknownObservation,
+} from '../contracts/productTime';
 import {
   adaptMetricValueCoverage,
   adaptResolvedMetricScoreValue,
@@ -64,6 +68,24 @@ const SOURCE_METRIC_KEYS = new Set<FandexVariableKey>(
 const UNKNOWN_OBSERVATION = Object.freeze({
   kind: 'unknown',
 } as const satisfies ProductUnknownObservation);
+
+const UNKNOWN_DATA_TIME = Object.freeze({
+  dataAsOf: UNKNOWN_OBSERVATION,
+  updatedAt: null,
+} satisfies ProductDataTime);
+
+export function createV4ProductTruthMetadata(
+  sourceLabel: string | null,
+) {
+  return Object.freeze({
+    freshness: 'unknown' as const,
+    dataTime: UNKNOWN_DATA_TIME,
+    sourceAttribution: Object.freeze({
+      sourceKey: null,
+      sourceLabel,
+    } satisfies ProductSourceAttribution),
+  });
+}
 
 const DEFAULT_RUNTIME = Object.freeze({
   getMetricValueCoverage,
@@ -229,6 +251,9 @@ function success(
     model: Object.freeze({
       identity: sourceMetadata.identity,
       fact,
+      ...createV4ProductTruthMetadata(
+        sourceMetadata.provenance.sourceLabel,
+      ),
       presentation: presentationForOrigin(sourceMetadata.provenance.origin),
       observationTime: UNKNOWN_OBSERVATION,
       provenance: sourceMetadata.provenance,
