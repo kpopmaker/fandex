@@ -24,6 +24,11 @@ import {
   type FandexSourceCandidateVariableSummary,
 } from '../../data/v4/sources';
 import { getArtistProductMetricCollection } from '../../../lib/product/queries/getArtistProductMetricCollection';
+import { getProductDashboardArtistEntry } from '../../../lib/product/queries/getProductDashboard';
+import {
+  getProductDashboardArtistPresentation,
+  shouldShowProductDashboardPreviewBadge,
+} from '../../../lib/product/presentation/dashboardPresentation';
 import { getArtistProductVariable } from '../../../lib/product/queries/getArtistProductVariable';
 import { getArtistProductVariableEvidence } from '../../../lib/product/queries/getArtistProductVariableEvidence';
 import type { ProductVariableId } from '../../../lib/product/contracts/productVariable';
@@ -77,8 +82,14 @@ export function generateStaticParams() {
   }));
 }
 
-function formatPoint(value: number) {
-  return `${new Intl.NumberFormat('ko-KR').format(Math.round(value))}pt`;
+function formatArtistCurrentFandex(
+  presentation: ReturnType<typeof getProductDashboardArtistPresentation> | null,
+) {
+  return presentation?.valueText ?? '데이터 확인 필요';
+}
+
+function formatArtistCurrentFandexBasis(value: string | null) {
+  return value ?? '관측 없음';
 }
 
 function formatDelta(value: number) {
@@ -252,6 +263,23 @@ export default async function ArtistDetailPage({
   const latestPoint = getLatestHistoryPoint(profile);
   const fandexChartPoints = toFandexChartPoints(oneYearHistory);
   const fandexDelta = calculateSixMonthDelta(sixMonthHistory);
+
+  const currentFandexEntry = getProductDashboardArtistEntry({
+    artistId: profile.artistId,
+  });
+
+  const currentFandexPresentation = currentFandexEntry
+    ? getProductDashboardArtistPresentation(currentFandexEntry)
+    : null;
+
+  const showCurrentFandexPreviewBadge = currentFandexEntry
+    ? shouldShowProductDashboardPreviewBadge(currentFandexEntry)
+    : false;
+
+  const currentFandexSourceTimeLabel =
+    currentFandexEntry?.status === 'ok'
+      ? currentFandexEntry.source?.sourceTimeLabel ?? null
+      : null;
   const productVariableResults = requestedProductVariableIds.map((variableId) =>
     getArtistProductVariable({ artistId: profile.artistId, variableId }),
   );
@@ -302,11 +330,26 @@ export default async function ArtistDetailPage({
                 {coverageStatusLabels[profile.coverageStatus]} / 마지막 업데이트{' '}
                 {profile.lastUpdated}
               </p>
-              <p className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
-                현재 FANDEX 값과 변수·근거는 합성 데이터 기반 미리보기입니다.
-                실제 관측 Production 데이터가 아니며, FANDEX 포인트는
-                금융상품/투자정보가 아닙니다.
-              </p>
+              <div className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span>현재 FANDEX</span>
+                  {showCurrentFandexPreviewBadge ? (
+                    <span className="rounded-full bg-cyan-100 px-2.5 py-1 text-xs font-black text-cyan-800">
+                      미리보기
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-2">
+                  데이터 기준{' '}
+                  {formatArtistCurrentFandexBasis(
+                    currentFandexSourceTimeLabel,
+                  )}
+                </p>
+                <p className="mt-1">
+                  변수·근거의 미리보기 상태는 각 Product 영역의 표시를 따릅니다.
+                  FANDEX 포인트는 금융상품/투자정보가 아닙니다.
+                </p>
+              </div>
             </div>
             <div className="flex w-full flex-col gap-4 lg:max-w-md">
               <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -362,11 +405,11 @@ export default async function ArtistDetailPage({
                     현재 FANDEX
                   </p>
                   <p className="mt-1 font-mono text-4xl font-black tracking-tight text-slate-950 dark:text-white">
-                    {formatPoint(latestPoint.fandexPoint)}
+                    {formatArtistCurrentFandex(currentFandexPresentation)}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2 text-sm font-black">
                     <span className={fandexDeltaToneClass}>
-                      6개월 변화 {formatDelta(fandexDelta)}
+                      히스토리 preview 6개월 변화 {formatDelta(fandexDelta)}
                     </span>
                     <span className={fandexDeltaToneClass}>
                       {sixMonthChangeRate}
@@ -384,8 +427,8 @@ export default async function ArtistDetailPage({
                     value={`${newsIssueSourceSummary.itemCount}개`}
                   />
                   <StockSummaryMini
-                    label="마지막 업데이트"
-                    value={profile.lastUpdated}
+                    label="FANDEX 데이터 기준"
+                    value={formatArtistCurrentFandexBasis(currentFandexSourceTimeLabel)}
                   />
                 </div>
               </div>
@@ -394,8 +437,8 @@ export default async function ArtistDetailPage({
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <MetricCard label="현재 FANDEX 포인트" value={formatPoint(latestPoint.fandexPoint)} />
-          <MetricCard label="최근 6개월 변화" value={formatDelta(fandexDelta)} />
+          <MetricCard label="현재 FANDEX 포인트" value={formatArtistCurrentFandex(currentFandexPresentation)} />
+          <MetricCard label="히스토리 preview 6개월 변화" value={formatDelta(fandexDelta)} />
           <MetricCard label="커버리지 상태" value={coverageStatusLabels[profile.coverageStatus]} />
         </section>
 
