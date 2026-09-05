@@ -1,25 +1,25 @@
 ﻿artist,platform,status,trackTitle,rank,chartType,proposedPoint
-아이유,melon,RANKED,Love wins all,84,daily,24.0
+아이유,melon,RANKED,Love wins all,87,daily,24.0
 아이유,genie,RANKED,Love wins all,108,daily,6.8
 아이유,bugs,NOT_RANKED,,,,0.0
 에스파,melon,RANKED,LEMONADE,6,daily,90.0
 에스파,genie,RANKED,LEMONADE,5,daily,63.75
-에스파,bugs,RANKED,LEMONADE,7,realtime,33.75
+에스파,bugs,RANKED,LEMONADE,10,realtime,33.75
 에이티즈,melon,RANKED,BAD,8,daily,90.0
 에이티즈,genie,RANKED,BAD,8,daily,63.75
-에이티즈,bugs,RANKED,BAD,4,realtime,33.75
-보이넥스트도어,melon,RANKED,오늘만 I LOVE YOU,88,daily,24.0
-보이넥스트도어,genie,RANKED,오늘만 I LOVE YOU,142,daily,6.8
-보이넥스트도어,bugs,RANKED,오늘만 I LOVE YOU,98,realtime,9.0
-아이브,melon,RANKED,BANG BANG,33,daily,48.0
+에이티즈,bugs,RANKED,BAD,3,realtime,40.5
+보이넥스트도어,melon,RANKED,오늘만 I LOVE YOU,83,daily,24.0
+보이넥스트도어,genie,RANKED,오늘만 I LOVE YOU,145,daily,6.8
+보이넥스트도어,bugs,NOT_RANKED,,,,0.0
+아이브,melon,RANKED,BANG BANG,32,daily,48.0
 아이브,genie,RANKED,BANG BANG,21,daily,34.0
-아이브,bugs,RANKED,BANG BANG,32,realtime,18.0
-르세라핌,melon,RANKED,SPAGHETTI (feat. j-hope of BTS),93,daily,24.0
-르세라핌,genie,RANKED,SPAGHETTI (Feat. j-hope of BTS),141,daily,6.8
-르세라핌,bugs,RANKED,BOOMPALA,64,realtime,9.0
+아이브,bugs,RANKED,BANG BANG,29,realtime,18.0
+르세라핌,melon,RANKED,SPAGHETTI (feat. j-hope of BTS),95,daily,24.0
+르세라핌,genie,RANKED,SPAGHETTI (Feat. j-hope of BTS),143,daily,6.8
+르세라핌,bugs,RANKED,BOOMPALA,85,realtime,9.0
 뉴진스,melon,RANKED,Hype Boy,74,daily,24.0
-뉴진스,genie,RANKED,Hype Boy,113,daily,6.8
-뉴진스,bugs,RANKED,Hype Boy,46,realtime,18.0
+뉴진스,genie,RANKED,Hype Boy,112,daily,6.8
+뉴진스,bugs,RANKED,Hype Boy,49,realtime,18.0
 세븐틴,melon,NOT_RANKED,,,,0.0
 세븐틴,genie,NOT_RANKED,,,,0.0
 세븐틴,bugs,NOT_RANKED,,,,0.0
