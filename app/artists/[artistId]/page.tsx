@@ -327,7 +327,7 @@ export default async function ArtistDetailPage({
               </h1>
               <p className="mt-3 text-sm font-bold text-slate-500 dark:text-slate-400">
                 {groupTypeLabels[profile.groupType]} /{' '}
-                {coverageStatusLabels[profile.coverageStatus]} / 마지막 업데이트{' '}
+                {coverageStatusLabels[profile.coverageStatus]} / 프로필 기준일{' '}
                 {profile.lastUpdated}
               </p>
               <div className="mt-5 max-w-3xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
@@ -396,7 +396,7 @@ export default async function ArtistDetailPage({
                     </p>
                   </div>
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm dark:bg-slate-950 dark:text-slate-300">
-                    {profile.lastUpdated}
+                    FANDEX 데이터 기준 {formatArtistCurrentFandexBasis(currentFandexSourceTimeLabel)}
                   </span>
                 </div>
 
@@ -582,7 +582,7 @@ export default async function ArtistDetailPage({
               <InfoRow label="아티스트" value={profile.artistName} />
               <InfoRow label="ticker" value={profile.ticker} />
               <InfoRow label="그룹 구분" value={groupTypeLabels[profile.groupType]} />
-              <InfoRow label="마지막 업데이트" value={profile.lastUpdated} />
+              <InfoRow label="프로필 기준일" value={profile.lastUpdated} />
               <InfoRow label="최근 메모" value={latestPoint.note} />
             </div>
           </section>
