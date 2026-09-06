@@ -93,7 +93,7 @@ test('output is deeply immutable and input is not mutated', () => {
 test('same input is deterministic and temporal fields remain distinct', () => { const a = adapt(); const b = adapt(); assert.deepEqual(a, b); assert.notEqual(a.time.observedAt, a.time.collectedAt); });
 test('no generic observation, metric, score, confidence, rights, or publication decision is fabricated', () => {
   const entry = adapt() as Record<string, unknown>;
-  assert.equal('value' in entry, false); assert.equal('score' in entry, false); assert.equal('confidence' in entry, false); assert.equal('publicationDecision' in entry, false); assert.equal(entry.semantic && (entry.semantic as any).variableId, null);
+  assert.equal('value' in entry, false); assert.equal('score' in entry, false); assert.equal('confidence' in entry, false); assert.equal('publicationDecision' in entry, false); assert.equal((entry.semantic as { variableId: null }).variableId, null);
 });
 test('global normalized NAVER variable remains provider-intermediate research metadata', () => {
   assert.equal(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.kind, 'provider-intermediate'); assert.equal(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.lifecycle, 'research'); assert.equal(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.directProductionContributionEligible, false);
