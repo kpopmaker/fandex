@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ProductVariableEvidenceCollectionResult } from '../../../lib/product/contracts/productEvidence';
+import { getProductEvidencePresentation } from '../../../lib/product/presentation/productEvidencePresentation';
 
 export default function ProductEvidenceList({
   collection,
@@ -32,7 +33,7 @@ export default function ProductEvidenceList({
           관련 근거 {collection.items.length}건
         </h4>
         <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-          연결된 미리보기 자료
+          연결된 근거 자료
         </span>
       </div>
 
@@ -47,10 +48,10 @@ export default function ProductEvidenceList({
             </h5>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="rounded-full bg-cyan-100 px-2.5 py-1 text-[11px] font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
-                미리보기
+                {getProductEvidencePresentation(evidence).presentationLabel}
               </span>
               <span className="rounded-full bg-violet-100 px-2.5 py-1 text-[11px] font-black text-violet-800 dark:bg-violet-400/15 dark:text-violet-200">
-                합성 데이터
+                {getProductEvidencePresentation(evidence).dataOriginLabel}
               </span>
             </div>
             <p className="mt-3 break-words text-xs font-bold leading-5 text-slate-500 dark:text-slate-400">

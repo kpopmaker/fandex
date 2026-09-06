@@ -4,6 +4,7 @@ import {
   getArtistProductEvidence,
   getArtistProductEvidenceStaticParams,
 } from '../../../../../lib/product/queries/getArtistProductEvidence';
+import { getProductEvidencePresentation } from '../../../../../lib/product/presentation/productEvidencePresentation';
 
 type PageProps = {
   params: Promise<{
@@ -25,6 +26,7 @@ export default async function ProductEvidencePage({ params }: PageProps) {
   }
 
   const { model } = result;
+  const evidencePresentation = getProductEvidencePresentation(model);
   const variableHref = `/artists/${model.artist.artistId}?variables=${model.relation.relatedVariableId}#variable-chart`;
 
   return (
@@ -45,10 +47,10 @@ export default async function ProductEvidencePage({ params }: PageProps) {
           </h1>
           <div className="mt-5 flex flex-wrap gap-2">
             <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
-              미리보기
+              {evidencePresentation.presentationLabel}
             </span>
             <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-black text-violet-800 dark:bg-violet-400/15 dark:text-violet-200">
-              합성 데이터
+              {evidencePresentation.dataOriginLabel}
             </span>
           </div>
         </header>
@@ -77,8 +79,7 @@ export default async function ProductEvidencePage({ params }: PageProps) {
           </dl>
 
           <p className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-900 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
-            이 자료는 연결된 합성 미리보기 근거입니다. 실제 관측 데이터나 공식
-            발표 목록으로 해석하지 않습니다.
+            {evidencePresentation.disclosureText}
           </p>
         </div>
       </article>
