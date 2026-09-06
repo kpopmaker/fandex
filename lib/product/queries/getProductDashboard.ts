@@ -190,6 +190,27 @@ function isRankable(
   );
 }
 
+export function getProductDashboardArtistEntry(
+  input: Readonly<{ artistId: string }>,
+  runtime: ProductDashboardRuntime = DEFAULT_RUNTIME,
+): ProductDashboardArtistEntry | null {
+  const artistId = input.artistId.trim();
+
+  if (!artistId) {
+    return null;
+  }
+
+  const matchingArtists = runtime
+    .getArtists()
+    .filter((artist) => artist.artistId.trim() === artistId);
+
+  if (matchingArtists.length !== 1) {
+    return null;
+  }
+
+  return createEntry(matchingArtists[0], runtime);
+}
+
 export function getProductDashboard(
   runtime: ProductDashboardRuntime = DEFAULT_RUNTIME,
 ): ProductDashboardReadModel {

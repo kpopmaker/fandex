@@ -6,7 +6,10 @@ import type {
   ProductDashboardArtistEntry,
   ProductDashboardReadModel,
 } from '../../../lib/product/contracts/productDashboard';
-import { getProductDashboardArtistPresentation } from '../../../lib/product/presentation/dashboardPresentation';
+import {
+  getProductDashboardArtistPresentation,
+  shouldShowProductDashboardPreviewBadge,
+} from '../../../lib/product/presentation/dashboardPresentation';
 
 function normalizeSearchText(value: string) {
   return value.normalize('NFKC').trim().toLowerCase();
@@ -140,9 +143,11 @@ function ArtistEntryCard({ entry }: { entry: ProductDashboardArtistEntry }) {
             {entry.display.koreanName} · {entry.display.ticker}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
-          미리보기
-        </span>
+        {shouldShowProductDashboardPreviewBadge(entry) ? (
+          <span className="shrink-0 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
+            미리보기
+          </span>
+        ) : null}
       </div>
 
       <div className="mt-5 rounded-2xl bg-white p-4 dark:bg-slate-900">

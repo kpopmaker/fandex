@@ -13,8 +13,15 @@ import type {
 } from '../../../app/data/v4/metrics/metricScoringPipelineTypes';
 import type { FandexVariableKey } from '../../../app/data/v4/metrics/fandexMetricTypes';
 import type { ProductNumericFact } from './productNumericFact';
-import type { ProductPresentation } from './productState';
-import type { ProductUnknownObservation } from './productTime';
+import type {
+  ProductFreshness,
+  ProductPresentation,
+} from './productState';
+import type { ProductSourceAttribution } from './productSource';
+import type {
+  ProductDataTime,
+  ProductUnknownObservation,
+} from './productTime';
 
 export type ProductMetricSourceIdentity = Readonly<{
   sourceArtistId: string;
@@ -65,8 +72,11 @@ export type ProductMetricReadModelSourceMetadata = Readonly<{
 export type ProductMetricReadModel = Readonly<{
   identity: ProductMetricSourceIdentity;
   fact: ProductNumericFact;
+  freshness: ProductFreshness;
   presentation: ProductPresentation;
   observationTime: ProductUnknownObservation;
+  dataTime: ProductDataTime;
+  sourceAttribution: ProductSourceAttribution;
   provenance: ProductMetricSourceProvenance;
   scoring: ProductMetricSourceScoring;
   coverageSource: ProductMetricSourceCoverage;

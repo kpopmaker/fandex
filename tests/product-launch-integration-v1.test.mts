@@ -18,12 +18,16 @@ test('global Launch navigation does not frame FANDEX as a canonical market index
   assert.match(navbarSource, /Preview Research v4/);
 });
 
-test('Artist entry surface discloses synthetic preview truth beside its headline', () => {
-  assert.match(
+test('Artist entry surface derives current FANDEX truth from Product contracts', () => {
+  assert.match(artistSource, /getProductDashboardArtistEntry/);
+  assert.match(artistSource, /getProductDashboardArtistPresentation/);
+  assert.match(artistSource, /shouldShowProductDashboardPreviewBadge/);
+  assert.match(artistSource, /currentFandexSourceTimeLabel/);
+  assert.match(artistSource, /showCurrentFandexPreviewBadge/);
+  assert.doesNotMatch(
     artistSource,
-    /현재 FANDEX 값과 변수·근거는 합성 데이터 기반 미리보기입니다/,
+    /formatPoint\(latestPoint\.fandexPoint\)/,
   );
-  assert.match(artistSource, /실제 관측 Production 데이터가 아니며/);
 });
 
 test('Artist Launch surface does not publish legacy direction or confidence states', () => {

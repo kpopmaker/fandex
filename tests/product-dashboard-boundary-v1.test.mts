@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { getProductDashboardArtistEntry } from '../lib/product/queries/getProductDashboard';
 import test from 'node:test';
 
 import {
@@ -236,4 +237,66 @@ test('one artist source-read failure does not crash or remove healthy entries', 
   assert.equal(healthy.rank, 1);
   assert.ok(broken && broken.status === 'data-issue');
   assert.deepEqual(broken.issues, [{ code: 'source-read-failed' }]);
+});
+
+test('Artist Detail selector preserves Product current FANDEX truth', () => {
+  const zero = getProductDashboardArtistEntry(
+    { artistId: 'zero' },
+    runtime(
+      [artist('zero')],
+      {
+        zero: [point('zero', 0)],
+      },
+    ),
+  );
+
+  assert.ok(zero && zero.status === 'ok');
+  assert.deepEqual(zero.currentFandex, {
+    availability: 'available',
+    value: 0,
+  });
+  assert.equal(zero.presentation, 'preview');
+
+  const missing = getProductDashboardArtistEntry(
+    { artistId: 'missing' },
+    runtime(
+      [artist('missing')],
+      {
+        missing: [],
+      },
+    ),
+  );
+
+  assert.ok(missing && missing.status === 'ok');
+  assert.deepEqual(missing.currentFandex, {
+    availability: 'missing',
+    value: null,
+  });
+  assert.equal(missing.rank, null);
+});
+
+test('Artist Detail selector fails closed for unknown and duplicate artist identity', () => {
+  const unknown = getProductDashboardArtistEntry(
+    { artistId: 'unknown' },
+    runtime(
+      [artist('valid')],
+      {
+        valid: [point('valid', 10)],
+      },
+    ),
+  );
+
+  assert.equal(unknown, null);
+
+  const duplicate = getProductDashboardArtistEntry(
+    { artistId: 'duplicate' },
+    runtime(
+      [artist('duplicate'), artist('duplicate')],
+      {
+        duplicate: [point('duplicate', 10)],
+      },
+    ),
+  );
+
+  assert.equal(duplicate, null);
 });

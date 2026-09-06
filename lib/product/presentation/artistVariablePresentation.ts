@@ -2,7 +2,7 @@ import type { ProductNumericFact } from '../contracts/productNumericFact';
 import type { ProductVariableReadModelResult } from '../contracts/productVariable';
 
 export type ArtistVariablePresentation = Readonly<{
-  state: 'available' | 'missing' | 'not-tracked' | 'data-issue';
+  state: 'available' | 'not-ranked' | 'missing' | 'not-tracked' | 'unavailable' | 'data-issue';
   valueText: string;
   showPreviewBadge: boolean;
 }>;
@@ -18,6 +18,14 @@ export function formatProductVariableFact(fact: ProductNumericFact) {
 
   if (fact.availability === 'not-tracked') {
     return '미추적';
+  }
+
+  if (fact.availability === 'not-ranked') {
+    return '\uC21C\uC704 \uC5C6\uC74C';
+  }
+
+  if (fact.availability === 'unavailable') {
+    return '\uC0AC\uC6A9 \uBD88\uAC00';
   }
 
   if (fact.availability !== 'available' || typeof fact.value !== 'number') {
@@ -45,13 +53,18 @@ export function getArtistVariablePresentation(
   const fact = result.model.fact;
   const showPreviewBadge = result.model.presentation === 'preview';
 
-  if (
-    fact.availability === 'not-ranked' ||
-    fact.availability === 'unavailable'
-  ) {
+  if (fact.availability === 'not-ranked') {
     return Object.freeze({
-      state: 'data-issue',
-      valueText: '\uB370\uC774\uD130 \uD655\uC778 \uD544\uC694',
+      state: 'not-ranked',
+      valueText: formatProductVariableFact(fact),
+      showPreviewBadge,
+    });
+  }
+
+  if (fact.availability === 'unavailable') {
+    return Object.freeze({
+      state: 'unavailable',
+      valueText: formatProductVariableFact(fact),
       showPreviewBadge,
     });
   }

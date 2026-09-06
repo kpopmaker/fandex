@@ -55,3 +55,56 @@ test('invalid variable identity has a public-safe fail-closed label', () => {
     showPreviewBadge: false,
   });
 });
+
+test('variable formatter preserves not-ranked and unavailable as distinct truth states', () => {
+  assert.equal(
+    formatProductVariableFact({ availability: 'not-ranked', value: null }),
+    '\uC21C\uC704 \uC5C6\uC74C',
+  );
+
+  assert.equal(
+    formatProductVariableFact({ availability: 'unavailable', value: null }),
+    '\uC0AC\uC6A9 \uBD88\uAC00',
+  );
+});
+
+test('variable card presentation does not collapse not-ranked or unavailable into data-issue', () => {
+  const source = getArtistProductVariable({
+    artistId: 'aespa',
+    variableId: 'newsIssuePoint',
+  });
+
+  if (source.status !== 'ok') {
+    assert.fail('Expected valid Product variable fixture.');
+  }
+
+  assert.deepEqual(
+    getArtistVariablePresentation({
+      status: 'ok',
+      model: {
+        ...source.model,
+        fact: { availability: 'not-ranked', value: null },
+      },
+    }),
+    {
+      state: 'not-ranked',
+      valueText: '\uC21C\uC704 \uC5C6\uC74C',
+      showPreviewBadge: true,
+    },
+  );
+
+  assert.deepEqual(
+    getArtistVariablePresentation({
+      status: 'ok',
+      model: {
+        ...source.model,
+        fact: { availability: 'unavailable', value: null },
+      },
+    }),
+    {
+      state: 'unavailable',
+      valueText: '\uC0AC\uC6A9 \uBD88\uAC00',
+      showPreviewBadge: true,
+    },
+  );
+});
