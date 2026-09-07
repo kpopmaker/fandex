@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-06T10:35:21",
-  "snapshotDate": "2026-09-06",
+  "createdAt": "2026-09-07T10:33:44",
+  "snapshotDate": "2026-09-07",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -25,14 +25,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "8",
+          "rank": "7",
           "chartType": "daily",
           "point": 90.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "8",
+          "rank": "9",
           "chartType": "daily",
           "point": 63.75
         },
@@ -60,7 +60,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "6",
+          "rank": "8",
           "chartType": "daily",
           "point": 90.0
         },
@@ -74,7 +74,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "9",
+          "rank": "10",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -109,82 +109,12 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "40",
+          "rank": "34",
           "chartType": "realtime",
           "point": 18.0
         }
       },
       "rank": 3
-    },
-    {
-      "artist": "뉴진스",
-      "fandexMusicChartFinalPoint": 48.8,
-      "score": 48.8,
-      "rankedPlatformCount": 3,
-      "platformPoints": {
-        "melon": 24.0,
-        "genie": 6.8,
-        "bugs": 18.0
-      },
-      "platformStatus": {
-        "melon": {
-          "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "81",
-          "chartType": "daily",
-          "point": 24.0
-        },
-        "genie": {
-          "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "113",
-          "chartType": "daily",
-          "point": 6.8
-        },
-        "bugs": {
-          "status": "RANKED",
-          "trackTitle": "Ditto",
-          "rank": "46",
-          "chartType": "realtime",
-          "point": 18.0
-        }
-      },
-      "rank": 4
-    },
-    {
-      "artist": "보이넥스트도어",
-      "fandexMusicChartFinalPoint": 39.8,
-      "score": 39.8,
-      "rankedPlatformCount": 3,
-      "platformPoints": {
-        "melon": 24.0,
-        "genie": 6.8,
-        "bugs": 9.0
-      },
-      "platformStatus": {
-        "melon": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "83",
-          "chartType": "daily",
-          "point": 24.0
-        },
-        "genie": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "145",
-          "chartType": "daily",
-          "point": 6.8
-        },
-        "bugs": {
-          "status": "RANKED",
-          "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "94",
-          "chartType": "realtime",
-          "point": 9.0
-        }
-      },
-      "rank": 5
     },
     {
       "artist": "르세라핌",
@@ -200,26 +130,61 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "99",
+          "rank": "93",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "142",
+          "rank": "143",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "HOT",
-          "rank": "77",
+          "trackTitle": "BOOMPALA",
+          "rank": "90",
           "chartType": "realtime",
           "point": 9.0
         }
       },
-      "rank": 6
+      "rank": 4
+    },
+    {
+      "artist": "뉴진스",
+      "fandexMusicChartFinalPoint": 39.8,
+      "score": 39.8,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 9.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "76",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "112",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "Hype Boy",
+          "rank": "61",
+          "chartType": "realtime",
+          "point": 9.0
+        }
+      },
+      "rank": 5
     },
     {
       "artist": "아이유",
@@ -235,7 +200,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Love wins all",
-          "rank": "87",
+          "rank": "85",
           "chartType": "daily",
           "point": 24.0
         },
@@ -243,6 +208,41 @@
           "status": "RANKED",
           "trackTitle": "Love wins all",
           "rank": "108",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        }
+      },
+      "rank": 6
+    },
+    {
+      "artist": "보이넥스트도어",
+      "fandexMusicChartFinalPoint": 30.8,
+      "score": 30.8,
+      "rankedPlatformCount": 2,
+      "platformPoints": {
+        "melon": 24.0,
+        "genie": 6.8,
+        "bugs": 0.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "82",
+          "chartType": "daily",
+          "point": 24.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "오늘만 I LOVE YOU",
+          "rank": "139",
           "chartType": "daily",
           "point": 6.8
         },
