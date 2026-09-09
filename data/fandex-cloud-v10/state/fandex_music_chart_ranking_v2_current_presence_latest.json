@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-08T10:43:41",
-  "snapshotDate": "2026-09-08",
+  "createdAt": "2026-09-09T10:50:46",
+  "snapshotDate": "2026-09-09",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -13,13 +13,13 @@
   "ranking": [
     {
       "artist": "에이티즈",
-      "fandexMusicChartFinalPoint": 194.25,
-      "score": 194.25,
+      "fandexMusicChartFinalPoint": 187.5,
+      "score": 187.5,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 90.0,
         "genie": 63.75,
-        "bugs": 40.5
+        "bugs": 33.75
       },
       "platformStatus": {
         "melon": {
@@ -32,35 +32,35 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "8",
+          "rank": "7",
           "chartType": "daily",
           "point": 63.75
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "2",
+          "rank": "4",
           "chartType": "realtime",
-          "point": 40.5
+          "point": 33.75
         }
       },
       "rank": 1
     },
     {
       "artist": "에스파",
-      "fandexMusicChartFinalPoint": 187.5,
-      "score": 187.5,
+      "fandexMusicChartFinalPoint": 180.75,
+      "score": 180.75,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 90.0,
         "genie": 63.75,
-        "bugs": 33.75
+        "bugs": 27.0
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "9",
+          "rank": "8",
           "chartType": "daily",
           "point": 90.0
         },
@@ -74,9 +74,9 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "7",
+          "rank": "12",
           "chartType": "realtime",
-          "point": 33.75
+          "point": 27.0
         }
       },
       "rank": 2
@@ -95,7 +95,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "33",
+          "rank": "45",
           "chartType": "daily",
           "point": 48.0
         },
@@ -109,47 +109,12 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "41",
+          "rank": "36",
           "chartType": "realtime",
           "point": 18.0
         }
       },
       "rank": 3
-    },
-    {
-      "artist": "르세라핌",
-      "fandexMusicChartFinalPoint": 39.8,
-      "score": 39.8,
-      "rankedPlatformCount": 3,
-      "platformPoints": {
-        "melon": 24.0,
-        "genie": 6.8,
-        "bugs": 9.0
-      },
-      "platformStatus": {
-        "melon": {
-          "status": "RANKED",
-          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "98",
-          "chartType": "daily",
-          "point": 24.0
-        },
-        "genie": {
-          "status": "RANKED",
-          "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "144",
-          "chartType": "daily",
-          "point": 6.8
-        },
-        "bugs": {
-          "status": "RANKED",
-          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "63",
-          "chartType": "realtime",
-          "point": 9.0
-        }
-      },
-      "rank": 4
     },
     {
       "artist": "뉴진스",
@@ -165,26 +130,26 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "76",
+          "rank": "87",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "112",
+          "rank": "111",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "54",
+          "rank": "58",
           "chartType": "realtime",
           "point": 9.0
         }
       },
-      "rank": 5
+      "rank": 4
     },
     {
       "artist": "아이유",
@@ -200,14 +165,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Love wins all",
-          "rank": "86",
+          "rank": "94",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Love wins all",
-          "rank": "108",
+          "rank": "105",
           "chartType": "daily",
           "point": 6.8
         },
@@ -219,7 +184,7 @@
           "point": 0.0
         }
       },
-      "rank": 6
+      "rank": 5
     },
     {
       "artist": "보이넥스트도어",
@@ -235,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "82",
+          "rank": "97",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "141",
+          "rank": "146",
           "chartType": "daily",
           "point": 6.8
         },
@@ -252,6 +217,41 @@
           "rank": "",
           "chartType": "",
           "point": 0.0
+        }
+      },
+      "rank": 6
+    },
+    {
+      "artist": "르세라핌",
+      "fandexMusicChartFinalPoint": 15.8,
+      "score": 15.8,
+      "rankedPlatformCount": 2,
+      "platformPoints": {
+        "melon": 0.0,
+        "genie": 6.8,
+        "bugs": 9.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "NOT_RANKED",
+          "trackTitle": "",
+          "rank": "",
+          "chartType": "",
+          "point": 0.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
+          "rank": "143",
+          "chartType": "daily",
+          "point": 6.8
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "BOOMPALA",
+          "rank": "96",
+          "chartType": "realtime",
+          "point": 9.0
         }
       },
       "rank": 7
