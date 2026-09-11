@@ -1,13 +1,13 @@
 {
   "version": "fandex_cloud_runner_v1_pc_independent",
   "status": "SUCCESS",
-  "startedAtKST": "2026-09-10T10:46:50+09:00",
-  "finishedAtKST": "2026-09-10T10:47:03+09:00",
+  "startedAtKST": "2026-09-11T10:45:18+09:00",
+  "finishedAtKST": "2026-09-11T10:45:27+09:00",
   "productionVersion": "fandex_master_v10_music_v2_lastfm_rolling_v1",
   "musicVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "musicSnapshotDate": "2026-09-10",
+  "musicSnapshotDate": "2026-09-11",
   "lastfmActiveMode": "rolling3_50_rolling7_50",
-  "lastfmLatestDate": "2026-09-10",
+  "lastfmLatestDate": "2026-09-11",
   "websiteTouched": false,
   "pcRequired": false
 }

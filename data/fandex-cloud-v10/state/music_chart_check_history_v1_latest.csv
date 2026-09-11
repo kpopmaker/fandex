@@ -1,31 +1,31 @@
 ﻿checkDate,checkedAt,artist,platform,status,candidateCount,bestRank,bestTrackTitle,sourceKeys,evidenceFile,sourceVersion
-2026-09-10,2026-09-10T10:47:02,뉴진스,bugs,RANKED,2,74,Ditto,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,뉴진스,genie,RANKED,4,112,Hype Boy,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,뉴진스,melon,RANKED,1,89,Hype Boy,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,르세라핌,bugs,RANKED,1,90,HOT,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,르세라핌,genie,RANKED,2,148,SPAGHETTI (Feat. j-hope of BTS),genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,르세라핌,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,보이넥스트도어,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,보이넥스트도어,genie,RANKED,1,153,오늘만 I LOVE YOU,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,보이넥스트도어,melon,RANKED,1,96,오늘만 I LOVE YOU,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,세븐틴,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,세븐틴,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,세븐틴,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,스트레이키즈,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,스트레이키즈,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,스트레이키즈,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,아이브,bugs,RANKED,4,37,BANG BANG,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,아이브,genie,RANKED,8,21,BANG BANG,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,아이브,melon,RANKED,2,45,BANG BANG,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,아이유,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,아이유,genie,RANKED,2,105,Love wins all,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,아이유,melon,RANKED,1,90,Love wins all,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,에스파,bugs,RANKED,4,10,LEMONADE,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,에스파,genie,RANKED,6,5,LEMONADE,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,에스파,melon,RANKED,2,9,LEMONADE,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,에이티즈,bugs,RANKED,1,4,BAD,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,에이티즈,genie,RANKED,1,6,BAD,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,에이티즈,melon,RANKED,1,7,BAD,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:47:02,투모로우바이투게더,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
-2026-09-10,2026-09-10T10:46:51,투모로우바이투게더,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
-2026-09-10,2026-09-10T10:46:51,투모로우바이투게더,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,뉴진스,bugs,RANKED,2,69,Hype Boy,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,뉴진스,genie,RANKED,4,113,Hype Boy,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,뉴진스,melon,RANKED,1,93,Hype Boy,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,르세라핌,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,르세라핌,genie,RANKED,3,142,SPAGHETTI (Feat. j-hope of BTS),genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,르세라핌,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,보이넥스트도어,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,보이넥스트도어,genie,RANKED,1,153,오늘만 I LOVE YOU,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,보이넥스트도어,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,세븐틴,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,세븐틴,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,세븐틴,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,스트레이키즈,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,스트레이키즈,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,스트레이키즈,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,아이브,bugs,RANKED,4,44,BANG BANG,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,아이브,genie,RANKED,8,22,BANG BANG,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,아이브,melon,RANKED,2,48,BANG BANG,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,아이유,bugs,RANKED,2,1,이 별로부터,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,아이유,genie,RANKED,2,106,Love wins all,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,아이유,melon,RANKED,3,1,이 별로부터,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,에스파,bugs,RANKED,4,12,LEMONADE,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,에스파,genie,RANKED,6,5,LEMONADE,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,에스파,melon,RANKED,2,11,LEMONADE,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,에이티즈,bugs,RANKED,1,6,BAD,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,에이티즈,genie,RANKED,1,6,BAD,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,에이티즈,melon,RANKED,1,10,BAD,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:26,투모로우바이투게더,bugs,NOT_RANKED,0,,,bugs_realtime,music_chart_bugs_all_targets_v1_latest.json,music_chart_discover_bugs_all_targets_v1
+2026-09-11,2026-09-11T10:45:19,투모로우바이투게더,genie,NOT_RANKED,0,,,genie_daily_page_1|genie_daily_page_2|genie_daily_page_3|genie_daily_page_4,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
+2026-09-11,2026-09-11T10:45:19,투모로우바이투게더,melon,NOT_RANKED,0,,,melon_top100,music_chart_artist_candidates_v2_raw_latest.json,music_chart_discover_artist_candidates_v2
