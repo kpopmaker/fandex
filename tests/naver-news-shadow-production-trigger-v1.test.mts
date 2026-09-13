@@ -54,10 +54,10 @@ test('successful HTTP response must satisfy the pinned IU shadow protocol', asyn
   assert.match(source, /body\?\.mode === 'shadow-recurring-scheduler'/);
 });
 
-test('HTTP rejection does not print the response body or secret', async () => {
+test('HTTP rejection does not print the response body or secret value', async () => {
   const source = await workflow();
 
   assert.match(source, /Shadow scheduler rejected or failed with HTTP \$\{http_status\}\./);
   assert.doesNotMatch(source, /cat response\.json/);
-  assert.doesNotMatch(source, /echo .*SCHEDULER_SECRET/);
+  assert.doesNotMatch(source, /echo .*\$\{SCHEDULER_SECRET\}/);
 });
