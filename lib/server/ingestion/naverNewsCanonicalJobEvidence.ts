@@ -61,6 +61,11 @@ type JobDbRow = {
 type NormalizedDbRow = {
   record_id: unknown;
   raw_evidence_id: unknown;
+  stored_raw_evidence_id: unknown;
+  raw_item_index: unknown;
+  raw_observed_at: unknown;
+  raw_payload: unknown;
+  raw_payload_sha256: unknown;
   raw_job_id: unknown;
   normalization_outcome: unknown;
   normalized_record_id: unknown;
@@ -90,14 +95,20 @@ LEFT JOIN fandex.source_ingestion_audit_events AS audit
 WHERE jobs.job_id = $1 AND jobs.provider = $2`;
 
 const NORMALIZED_RECORDS_SQL = `SELECT
-  nr.record_id, nr.raw_evidence_id,
+  nr.record_id,
+  raw.evidence_id AS raw_evidence_id,
+  nr.raw_evidence_id AS stored_raw_evidence_id,
+  raw.item_index AS raw_item_index,
+  raw.observed_at AS raw_observed_at,
+  raw.raw_payload,
+  raw.raw_payload_sha256,
   raw.job_id AS raw_job_id, raw.normalization_outcome, raw.normalized_record_id,
   nr.provider, nr.source_type, nr.source_url, nr.naver_url, nr.source_host,
   nr.title, nr.summary, nr.published_at, nr.collected_at,
   nr.content_sha256, nr.record_sha256, nr.normalized_payload
-FROM fandex.source_ingestion_normalized_records AS nr
-JOIN fandex.source_ingestion_raw_evidence AS raw
-  ON raw.evidence_id = nr.raw_evidence_id
+FROM fandex.source_ingestion_raw_evidence AS raw
+JOIN fandex.source_ingestion_normalized_records AS nr
+  ON nr.record_id = raw.normalized_record_id
 WHERE raw.job_id = $1 AND raw.normalization_outcome = 'normalized'
 ORDER BY nr.record_id`;
 
@@ -138,6 +149,11 @@ function asRequest(value: unknown): NaverNewsRequestContract {
 function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNewsNormalizedRecord {
   const recordId = asString(row.record_id, 'naver_news_canonical_job_record_invalid');
   const rawEvidenceId = asString(row.raw_evidence_id, 'naver_news_canonical_job_record_invalid');
+  const storedRawEvidenceId = asString(row.stored_raw_evidence_id, 'naver_news_canonical_job_record_invalid');
+  const rawItemIndex = asInteger(row.raw_item_index, 'naver_news_canonical_job_record_invalid');
+  const rawObservedAt = asIso(row.raw_observed_at, 'naver_news_canonical_job_record_invalid');
+  const rawPayload = asObject(row.raw_payload);
+  const rawPayloadSha256 = asString(row.raw_payload_sha256, 'naver_news_canonical_job_record_invalid');
   const provider = asString(row.provider, 'naver_news_canonical_job_record_invalid');
   const sourceType = asString(row.source_type, 'naver_news_canonical_job_record_invalid');
   const sourceUrl = asString(row.source_url, 'naver_news_canonical_job_record_invalid');
@@ -146,21 +162,30 @@ function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNe
   const title = asString(row.title, 'naver_news_canonical_job_record_invalid');
   const summary = asString(row.summary, 'naver_news_canonical_job_record_invalid');
   const publishedAt = asIso(row.published_at, 'naver_news_canonical_job_record_invalid');
-  const collectedAt = asIso(row.collected_at, 'naver_news_canonical_job_record_invalid');
+  asIso(row.collected_at, 'naver_news_canonical_job_record_invalid');
   const contentSha256 = asString(row.content_sha256, 'naver_news_canonical_job_record_invalid');
   const recordSha256 = asString(row.record_sha256, 'naver_news_canonical_job_record_invalid');
   const payload = asObject(row.normalized_payload);
   const expectedPayload: NaverNewsNormalizedRecord['normalizedPayload'] = { provider: NAVER_NEWS_PROVIDER, sourceType: 'news_article', sourceUrl, naverUrl, sourceHost, title, summary, publishedAt };
+  const expectedEvidenceId = sha256Canonical({
+    contractVersion: NAVER_NEWS_INGESTION_CONTRACT_VERSION,
+    jobId,
+    itemIndex: rawItemIndex,
+    rawPayloadSha256,
+  });
   if (row.raw_job_id !== jobId || row.normalization_outcome !== 'normalized' || row.normalized_record_id !== recordId
       || provider !== NAVER_NEWS_PROVIDER || sourceType !== 'news_article'
-      || !isSha256(recordId) || !isSha256(rawEvidenceId) || !isSha256(contentSha256) || !isSha256(recordSha256)
+      || !isSha256(recordId) || !isSha256(rawEvidenceId) || !isSha256(storedRawEvidenceId)
+      || !isSha256(rawPayloadSha256) || !isSha256(contentSha256) || !isSha256(recordSha256)
+      || rawItemIndex >= 100 || !rawPayload || rawPayloadSha256 !== sha256Canonical(rawPayload)
+      || rawEvidenceId !== expectedEvidenceId
       || !payload || canonicalJson(payload) !== canonicalJson(expectedPayload)
       || contentSha256 !== sha256Canonical({ title, summary, sourceUrl, naverUrl, publishedAt })
       || recordSha256 !== sha256Canonical(expectedPayload)
       || recordId !== sha256Canonical({ contractVersion: NAVER_NEWS_INGESTION_CONTRACT_VERSION, provider: NAVER_NEWS_PROVIDER, recordSha256 })) {
     throw new Error('naver_news_canonical_job_record_invalid');
   }
-  return Object.freeze({ recordId, rawEvidenceId, provider: NAVER_NEWS_PROVIDER, sourceType: 'news_article', sourceUrl, naverUrl, sourceHost, title, summary, publishedAt, collectedAt, contentSha256, recordSha256, normalizedPayload: Object.freeze(expectedPayload) });
+  return Object.freeze({ recordId, rawEvidenceId, provider: NAVER_NEWS_PROVIDER, sourceType: 'news_article', sourceUrl, naverUrl, sourceHost, title, summary, publishedAt, collectedAt: rawObservedAt, contentSha256, recordSha256, normalizedPayload: Object.freeze(expectedPayload) });
 }
 
 export function createPostgresNaverNewsCanonicalJobEvidenceReadRepository(
