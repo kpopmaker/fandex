@@ -1,0 +1,35 @@
+name: NAVER Shadow Trigger Foundation Validation
+
+on:
+  push:
+    branches:
+      - control/naver-shadow-trigger-foundation
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - name: Focused trigger foundation contract
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-shadow-production-trigger-v1.test.mts
+      - name: Shadow activation guard regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-shadow-recurring-activation-v1.test.mts
+      - name: Shadow activity and series regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-shadow-first-seen-activity-v1.test.mts tests/naver-news-shadow-first-seen-series-v1.test.mts
+      - name: NAVER regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-*.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Diff check
+        run: git diff --check origin/main...HEAD
