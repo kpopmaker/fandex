@@ -1,0 +1,35 @@
+name: X3 Empty Summary Validation
+
+on:
+  push:
+    branches:
+      - fix/naver-empty-summary-reader-x3
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - name: Focused X3 test
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-canonical-job-empty-summary-v130.test.mts
+      - name: X2 regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-canonical-job-evidence-v130.test.mts
+      - name: X1 regression
+        run: node node_modules/tsx/dist/cli.mjs --test tests/naver-news-collection-completeness-read-model-v130.test.mts
+      - name: NAVER regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-*.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Diff check
+        run: git diff --check origin/main...HEAD
