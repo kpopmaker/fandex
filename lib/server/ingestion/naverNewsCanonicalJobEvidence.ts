@@ -123,6 +123,11 @@ function asString(value: unknown, errorCode: string): string {
   return value;
 }
 
+function asStringAllowEmpty(value: unknown, errorCode: string): string {
+  if (typeof value !== 'string') throw new Error(errorCode);
+  return value;
+}
+
 function asInteger(value: unknown, errorCode: string): number {
   const number = typeof value === 'number' ? value : Number(value);
   if (!Number.isSafeInteger(number) || number < 0) throw new Error(errorCode);
@@ -167,7 +172,7 @@ function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNe
   const naverUrl = row.naver_url === null ? null : asString(row.naver_url, 'naver_news_canonical_job_record_invalid');
   const sourceHost = asString(row.source_host, 'naver_news_canonical_job_record_invalid');
   const title = asString(row.title, 'naver_news_canonical_job_record_invalid');
-  const summary = asString(row.summary, 'naver_news_canonical_job_record_invalid');
+  const summary = asStringAllowEmpty(row.summary, 'naver_news_canonical_job_record_invalid');
   const publishedAt = asIso(row.published_at, 'naver_news_canonical_job_record_invalid');
   asIso(row.collected_at, 'naver_news_canonical_job_record_invalid');
   const contentSha256 = asString(row.content_sha256, 'naver_news_canonical_job_record_invalid');
