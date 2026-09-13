@@ -1,0 +1,66 @@
+name: NAVER Shadow Production Activation Probe
+
+on:
+  push:
+    branches:
+      - control/naver-shadow-production-activation-probe
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      ENDPOINT: https://fandex-eta.vercel.app/api/internal/naver-news/shadow-scheduler
+      SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+    steps:
+      - name: Require configured scheduler secret
+        shell: bash
+        run: |
+          if [[ -z "${SCHEDULER_SECRET:-}" ]]; then
+            echo "activation_probe=scheduler_secret_missing"
+            exit 78
+          fi
+          echo "activation_probe=scheduler_secret_present"
+
+      - name: POST guarded Production shadow scheduler once
+        id: request
+        shell: bash
+        run: |
+          set -euo pipefail
+          http_code="$(curl --silent --show-error \
+            --output response.json \
+            --write-out '%{http_code}' \
+            --request POST \
+            --header "Authorization: Bearer ${SCHEDULER_SECRET}" \
+            "${ENDPOINT}")"
+          echo "http_code=${http_code}" >> "$GITHUB_OUTPUT"
+          if [[ "${http_code}" != "200" ]]; then
+            echo "activation_probe=http_${http_code}"
+            rm -f response.json
+            exit 1
+          fi
+
+      - name: Validate bounded success contract
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const payload = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+          const valid = payload
+            && payload.ok === true
+            && payload.mode === 'shadow-recurring-scheduler'
+            && payload.canonicalArtistId === 'iu'
+            && payload.query === '아이유 IU'
+            && payload.display === 100
+            && typeof payload.slotStart === 'string'
+            && (payload.status === 'applied' || payload.status === 'idempotent_succeeded');
+          if (!valid) {
+            console.log('activation_probe=response_contract_invalid');
+            process.exit(1);
+          }
+          console.log(`activation_probe=success status=${payload.status} slotStart=${payload.slotStart}`);
+          NODE
+          rm -f response.json
