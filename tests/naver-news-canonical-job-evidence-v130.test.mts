@@ -12,6 +12,7 @@ import {
   type NaverNewsIngestionWritePlan,
   type NaverNewsApiItem,
   NAVER_NEWS_PROVIDER,
+  sha256Canonical,
 } from '../lib/server/ingestion/naverNewsContracts';
 import { buildNaverNewsIngestionCommandFromCanonicalArtist } from '../lib/server/ingestion/naverNewsArtistIngestionCommand';
 
@@ -42,13 +43,31 @@ function jobRow(value: NaverNewsIngestionWritePlan = plan, overrides: Record<str
   };
 }
 
-function normalizedRows(value: NaverNewsIngestionWritePlan = plan, rawJobId = value.identity.jobId): Record<string, unknown>[] {
-  return value.normalizedRecords.map((record) => ({
-    record_id: record.recordId, raw_evidence_id: record.rawEvidenceId, raw_job_id: rawJobId, normalization_outcome: 'normalized', normalized_record_id: record.recordId,
-    provider: record.provider, source_type: record.sourceType, source_url: record.sourceUrl, naver_url: record.naverUrl, source_host: record.sourceHost,
-    title: record.title, summary: record.summary, published_at: record.publishedAt, collected_at: record.collectedAt,
-    content_sha256: record.contentSha256, record_sha256: record.recordSha256, normalized_payload: record.normalizedPayload,
-  }));
+function normalizedRows(
+  value: NaverNewsIngestionWritePlan = plan,
+  rawJobId = value.identity.jobId,
+  overrides: ReadonlyArray<Record<string, unknown>> = [],
+): Record<string, unknown>[] {
+  return value.normalizedRecords.map((record, index) => {
+    const evidence = value.rawEvidence.find((raw) => raw.normalizedRecordId === record.recordId);
+    assert.ok(evidence);
+    return {
+      record_id: record.recordId,
+      raw_evidence_id: evidence.evidenceId,
+      stored_raw_evidence_id: record.rawEvidenceId,
+      raw_item_index: evidence.itemIndex,
+      raw_observed_at: evidence.observedAt,
+      raw_payload: evidence.rawPayload,
+      raw_payload_sha256: evidence.rawPayloadSha256,
+      raw_job_id: rawJobId,
+      normalization_outcome: 'normalized',
+      normalized_record_id: record.recordId,
+      provider: record.provider, source_type: record.sourceType, source_url: record.sourceUrl, naver_url: record.naverUrl, source_host: record.sourceHost,
+      title: record.title, summary: record.summary, published_at: record.publishedAt, collected_at: record.collectedAt,
+      content_sha256: record.contentSha256, record_sha256: record.recordSha256, normalized_payload: record.normalizedPayload,
+      ...(overrides[index] ?? {}),
+    };
+  });
 }
 
 function repository(options: { job?: Record<string, unknown>; rows?: Record<string, unknown>[] } = {}) {
@@ -91,13 +110,71 @@ test('job query/provider and artist mismatches fail closed', async () => {
   await assert.rejects(() => assembleNaverNewsCanonicalJobEvidence({ canonicalArtistId: 'unknown-artist', jobId: identity.jobId }, queryMismatch.repository), /naver_news_artist_not_found/);
 });
 
-test('cross-job normalized lineage and malformed persisted records fail closed', async () => {
+test('cross-job row ownership and malformed persisted records fail closed', async () => {
   const crossJob = repository({ rows: normalizedRows(plan, '7'.repeat(64)) });
   await assert.rejects(() => crossJob.repository.readJobEvidence(identity.jobId), /naver_news_canonical_job_record_invalid/);
   const malformed = normalizedRows();
   malformed[0].title = 'tampered';
   const malformedRepository = repository({ rows: malformed });
   await assert.rejects(() => malformedRepository.repository.readJobEvidence(identity.jobId), /naver_news_canonical_job_record_invalid/);
+});
+
+test('cross-job dedup reuses normalized content but preserves current job stored evidence lineage', async () => {
+  const repeatedCommand = buildNaverNewsIngestionCommandFromCanonicalArtist({
+    canonicalArtistId: 'iu', collectionKey: 'run11-repeat-fixture', display: 10, start: 1, sort: 'date',
+  });
+  const repeatedIdentity = buildNaverNewsJobIdentity(repeatedCommand);
+  const repeatedPlan = buildNaverNewsIngestionWritePlan(repeatedIdentity, {
+    fetchedAt: '2026-09-05T02:00:00.000Z',
+    response: {
+      lastBuildDate: '2026-09-05T02:00:00.000Z', total: 2, start: 1, display: 2,
+      items: [
+        { title: '아이유 새 소식', originallink: 'https://news.example.test/iu-1', description: '앨범 소식', pubDate: '2026-09-04T00:00:00.000Z' },
+        { title: '일반 연예 뉴스', originallink: 'https://news.example.test/other', description: '관련 없는 기사', pubDate: '2026-09-04T01:00:00.000Z' },
+      ],
+    },
+  });
+  assert.deepEqual(repeatedPlan.normalizedRecords.map((record) => record.recordId), plan.normalizedRecords.map((record) => record.recordId));
+  assert.notDeepEqual(repeatedPlan.rawEvidence.map((evidence) => evidence.evidenceId), plan.rawEvidence.map((evidence) => evidence.evidenceId));
+
+  const received = repeatedPlan.audit.find((event) => event.eventType === 'collection_received');
+  const repeatedJob = jobRow(repeatedPlan, {
+    job_id: repeatedIdentity.jobId,
+    idempotency_key: repeatedIdentity.idempotencyKey,
+    request_sha256: repeatedIdentity.requestSha256,
+    request_contract: repeatedIdentity.request,
+    collection_received_job_id: repeatedIdentity.jobId,
+    collection_received_payload: received?.boundedPayload,
+  });
+  const repeatedRows = repeatedPlan.normalizedRecords.map((record, index) => {
+    const currentEvidence = repeatedPlan.rawEvidence.find((raw) => raw.normalizedRecordId === record.recordId);
+    assert.ok(currentEvidence);
+    return {
+      ...normalizedRows(plan)[index],
+      raw_evidence_id: currentEvidence.evidenceId,
+      stored_raw_evidence_id: plan.normalizedRecords[index].rawEvidenceId,
+      raw_item_index: currentEvidence.itemIndex,
+      raw_observed_at: currentEvidence.observedAt,
+      raw_payload: currentEvidence.rawPayload,
+      raw_payload_sha256: currentEvidence.rawPayloadSha256,
+      raw_job_id: repeatedIdentity.jobId,
+      normalized_record_id: record.recordId,
+      collected_at: plan.normalizedRecords[index].collectedAt,
+    };
+  });
+
+  const { repository: readRepository } = repository({ job: repeatedJob, rows: repeatedRows });
+  const stored = await readRepository.readJobEvidence(repeatedIdentity.jobId);
+  assert.ok(stored);
+  assert.deepEqual(stored.normalizedRecords.map((record) => record.rawEvidenceId), repeatedPlan.rawEvidence.map((evidence) => evidence.evidenceId));
+  assert.deepEqual(stored.normalizedRecords.map((record) => record.collectedAt), repeatedPlan.rawEvidence.map((evidence) => evidence.observedAt));
+});
+
+test('tampered current-job raw evidence digest fails closed even when normalized content is valid', async () => {
+  const rows = normalizedRows();
+  rows[0].raw_payload_sha256 = sha256Canonical({ tampered: true });
+  const tampered = repository({ rows });
+  await assert.rejects(() => tampered.repository.readJobEvidence(identity.jobId), /naver_news_canonical_job_record_invalid/);
 });
 
 test('same-job revisions collapse to one candidate while preserving source lineage', async () => {
