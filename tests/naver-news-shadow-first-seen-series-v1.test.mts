@@ -118,9 +118,12 @@ test('assembles contiguous scheduler slots from stored canonical job evidence', 
   assert.deepEqual(result.expectedSlots.map((slot) => slot.jobId), [first.jobId, second.jobId, third.jobId]);
   assert.deepEqual(source.reads, [first.jobId, second.jobId, third.jobId]);
   assert.equal(result.snapshots.length, 3);
-  assert.ok(result.snapshots.every((snapshot) => snapshot.completeness.status === 'available'));
-  assert.ok(result.snapshots.every((snapshot) => snapshot.completeness.readModel.completeness.status === 'truncated'));
-  assert.ok(result.snapshots.every((snapshot) => snapshot.observationSetCoverage.status === 'proven'));
+  for (const snapshot of result.snapshots) {
+    assert.equal(snapshot.completeness.status, 'available');
+    if (snapshot.completeness.status !== 'available') throw new Error('expected available completeness');
+    assert.equal(snapshot.completeness.readModel.completeness.status, 'truncated');
+    assert.equal(snapshot.observationSetCoverage.status, 'proven');
+  }
   assert.deepEqual(result.activity?.slots.map((slot) => slot.firstSeenObservationCount), [null, 1, 0]);
 });
 
