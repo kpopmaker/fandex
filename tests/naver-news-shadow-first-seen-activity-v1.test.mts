@@ -13,14 +13,9 @@ const query = '아이유 IU';
 const slot0 = '2026-09-14T00:00:00.000Z';
 const slot1 = '2026-09-14T01:00:00.000Z';
 const slot2 = '2026-09-14T02:00:00.000Z';
-const slot3 = '2026-09-14T03:00:00.000Z';
 
 function plan(slotStart: string) {
   return buildNaverNewsSchedulerPlan({ query, at: slotStart, display: 100 });
-}
-
-function jobId(slotStart: string): string {
-  return buildNaverNewsJobIdentity(plan(slotStart).command).jobId;
 }
 
 function observation(
@@ -41,17 +36,17 @@ function observation(
     canonicalSourceUrl: `https://example.com/${idSeed}`,
     observedAt: '2026-09-13T23:30:00.000Z',
     collectedAt,
-    title: `IU ${idSeed}`,
+    title: `아이유 ${idSeed}`,
     summary: '',
     sourceRecordIds: Object.freeze([recordId]),
     rawEvidenceIds: Object.freeze([rawEvidenceId]),
     relevanceVerification: Object.freeze({
       status: 'accepted' as const,
-      reason: 'artist_name_exact_match' as const,
-      matchedEvidence: Object.freeze({ field: 'title' as const, value: 'IU' }),
+      reason: 'canonical_korean_alias_in_title' as const,
+      matchedEvidence: Object.freeze({ field: 'title' as const, alias: '아이유' }),
     }),
     ...overrides,
-  }) as CanonicalNaverNewsObservation;
+  });
 }
 
 function snapshot(
@@ -238,5 +233,3 @@ test('duplicate job or slot identity fails closed', () => {
     snapshots: [first, first],
   }), /naver_news_shadow_first_seen_snapshot_duplicate/);
 });
-
-void slot3;
