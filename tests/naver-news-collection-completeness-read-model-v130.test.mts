@@ -27,6 +27,81 @@ function storedEvidence(
   };
 }
 
+for (const count of [0, 1, 73, 100]) {
+  test(`numeric count ${count} preserves complete collection evidence`, () => {
+    const result = buildNaverNewsCollectionCompletenessReadModel(storedEvidence(count, count));
+    assert.equal(result.status, 'available');
+    if (result.status !== 'available') return;
+    assert.equal(result.readModel.providerTotal, count);
+    assert.equal(result.readModel.received, count);
+    assert.deepEqual(result.readModel.completeness, {
+      status: 'complete', reason: 'provider_total_covered_by_first_request',
+    });
+  });
+}
+
+const invalidCounts: readonly (readonly [string, unknown])[] = [
+  ['null', null],
+  ['undefined', undefined],
+  ['empty string', ''],
+  ['single space', ' '],
+  ['whitespace', '   '],
+  ['false', false],
+  ['true', true],
+  ['empty array', []],
+  ['numeric array', [0]],
+  ['object', {}],
+  ['coercible object', { valueOf: () => 0 }],
+  ['symbol', Symbol('count')],
+  ['bigint', BigInt(0)],
+  ['NaN', Number.NaN],
+  ['Infinity', Infinity],
+  ['negative Infinity', -Infinity],
+  ['negative integer', -1],
+  ['fractional number', 0.5],
+  ['positive fractional number', 1.5],
+  ['unsafe integer', Number.MAX_SAFE_INTEGER + 1],
+  ['non-numeric text', 'not-a-count'],
+  ['mixed numeric text', '1x'],
+  ['hexadecimal text', '0x0'],
+  ['exponent text', '0e0'],
+  ['padded numeric text', ' 0 '],
+  ['leading-zero text', '00'],
+  ['numeric zero string', '0'],
+  ['numeric positive string', '1'],
+  ['numeric seventy-three string', '73'],
+  ['numeric hundred string', '100'],
+];
+
+for (const field of ['rawEvidenceCount', 'providerTotal', 'received'] as const) {
+  for (const [label, value] of invalidCounts) {
+    test(`${field} rejects ${label} instead of coercing stored count evidence`, () => {
+      const base = storedEvidence(0, 0);
+      const evidence = field === 'rawEvidenceCount'
+        ? { ...base, rawEvidenceCount: value }
+        : { ...base, collectionReceived: { jobId, boundedPayload: { providerTotal: 0, received: 0, [field]: value } } };
+      assert.deepEqual(buildNaverNewsCollectionCompletenessReadModel(evidence), {
+        status: 'evidence_unavailable', reason: 'stored_evidence_invalid',
+      });
+    });
+  }
+}
+
+test('safe integer provider totals retain truncated collection evidence', () => {
+  const result = buildNaverNewsCollectionCompletenessReadModel(storedEvidence(Number.MAX_SAFE_INTEGER, 100));
+  assert.equal(result.status, 'available');
+  if (result.status !== 'available') return;
+  assert.equal(result.readModel.providerTotal, Number.MAX_SAFE_INTEGER);
+  assert.equal(result.readModel.completeness.status, 'truncated');
+});
+
+test('missing job and missing audit remain distinct from invalid stored counts', () => {
+  assert.deepEqual(buildNaverNewsCollectionCompletenessReadModel(null), { status: 'not_found' });
+  assert.deepEqual(buildNaverNewsCollectionCompletenessReadModel({
+    ...storedEvidence(0, 0), rawEvidenceCount: null, collectionReceived: null,
+  }), { status: 'evidence_unavailable', reason: 'collection_received_audit_missing' });
+});
+
 test('stored first-page evidence produces a complete read model', () => {
   const result = buildNaverNewsCollectionCompletenessReadModel(storedEvidence(73, 73));
   assert.equal(result.status, 'available');
