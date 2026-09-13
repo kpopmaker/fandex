@@ -1,0 +1,89 @@
+name: NAVER Shadow Production Trigger
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type ACTIVATE to allow a manual trigger when the repository gate is enabled.'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naver-shadow-production-trigger
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    if: >-
+      (github.event_name == 'schedule' && vars.FANDEX_SHADOW_COLLECTION_ENABLED == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.confirm == 'ACTIVATE' && vars.FANDEX_SHADOW_COLLECTION_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      SHADOW_ENDPOINT: https://fandex-eta.vercel.app/api/internal/naver-news/shadow-scheduler
+      SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+
+    steps:
+      - name: Fail closed when the scheduler secret is unavailable
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${SCHEDULER_SECRET}" ]]; then
+            echo "FANDEX_NAVER_NEWS_SCHEDULER_SECRET is not provisioned for this workflow."
+            exit 1
+          fi
+
+      - name: Trigger one idempotent scheduler slot attempt
+        shell: bash
+        run: |
+          set -euo pipefail
+          http_status="$(curl \
+            --silent \
+            --show-error \
+            --output response.json \
+            --write-out '%{http_code}' \
+            --request POST \
+            --connect-timeout 10 \
+            --max-time 50 \
+            --retry 2 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            --header "Authorization: Bearer ${SCHEDULER_SECRET}" \
+            --header 'Content-Type: application/json' \
+            --data '{}' \
+            "${SHADOW_ENDPOINT}")"
+
+          if [[ "${http_status}" != "200" ]]; then
+            echo "Shadow scheduler rejected or failed with HTTP ${http_status}."
+            exit 1
+          fi
+
+      - name: Validate guarded scheduler response
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const body = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+          const allowedStatuses = new Set(['applied', 'idempotent_succeeded']);
+
+          const valid = body?.ok === true
+            && body?.mode === 'shadow-recurring-scheduler'
+            && body?.canonicalArtistId === 'iu'
+            && body?.query === '아이유 IU'
+            && body?.display === 100
+            && typeof body?.slotStart === 'string'
+            && allowedStatuses.has(body?.status);
+
+          if (!valid) {
+            console.error('Shadow scheduler response failed the activation contract.');
+            process.exit(1);
+          }
+
+          console.log(`Shadow scheduler slot accepted: ${body.slotStart} (${body.status})`);
+          NODE
