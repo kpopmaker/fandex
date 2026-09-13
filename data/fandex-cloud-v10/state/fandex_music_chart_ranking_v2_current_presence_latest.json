@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-12T10:51:07",
-  "snapshotDate": "2026-09-12",
+  "createdAt": "2026-09-13T10:42:29",
+  "snapshotDate": "2026-09-13",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -13,35 +13,35 @@
   "ranking": [
     {
       "artist": "아이유",
-      "fandexMusicChartFinalPoint": 216.75,
-      "score": 216.75,
+      "fandexMusicChartFinalPoint": 194.25,
+      "score": 194.25,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 108.0,
+        "melon": 90.0,
         "genie": 63.75,
-        "bugs": 45.0
+        "bugs": 40.5
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "2",
+          "rank": "7",
           "chartType": "daily",
-          "point": 108.0
+          "point": 90.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "8",
+          "rank": "10",
           "chartType": "daily",
           "point": 63.75
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "1",
+          "rank": "2",
           "chartType": "realtime",
-          "point": 45.0
+          "point": 40.5
         }
       },
       "rank": 1
@@ -60,7 +60,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "9",
+          "rank": "10",
           "chartType": "daily",
           "point": 90.0
         },
@@ -74,7 +74,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "13",
+          "rank": "15",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -130,7 +130,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "47",
+          "rank": "49",
           "chartType": "daily",
           "point": 48.0
         },
@@ -144,7 +144,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "45",
+          "rank": "32",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -165,21 +165,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "94",
+          "rank": "93",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "116",
+          "rank": "115",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "55",
+          "trackTitle": "Ditto",
+          "rank": "79",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -223,13 +223,13 @@
     },
     {
       "artist": "르세라핌",
-      "fandexMusicChartFinalPoint": 6.8,
-      "score": 6.8,
-      "rankedPlatformCount": 1,
+      "fandexMusicChartFinalPoint": 15.8,
+      "score": 15.8,
+      "rankedPlatformCount": 2,
       "platformPoints": {
         "melon": 0.0,
         "genie": 6.8,
-        "bugs": 0.0
+        "bugs": 9.0
       },
       "platformStatus": {
         "melon": {
@@ -242,16 +242,16 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "147",
+          "rank": "145",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
-          "status": "NOT_RANKED",
-          "trackTitle": "",
-          "rank": "",
-          "chartType": "",
-          "point": 0.0
+          "status": "RANKED",
+          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
+          "rank": "99",
+          "chartType": "realtime",
+          "point": 9.0
         }
       },
       "rank": 7
