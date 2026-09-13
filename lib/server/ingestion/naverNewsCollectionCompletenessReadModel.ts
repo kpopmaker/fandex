@@ -71,8 +71,8 @@ function asObject(value: unknown): Record<string, unknown> | null {
 }
 
 function asSafeNonNegativeInteger(value: unknown): number | null {
-  const numeric = typeof value === 'number' ? value : Number(value);
-  return Number.isSafeInteger(numeric) && numeric >= 0 ? numeric : null;
+  // The stored integer column and JSON audit counts are read as numbers.
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 ? value : null;
 }
 
 function asRequestContract(value: unknown): NaverNewsRequestContract | null {
