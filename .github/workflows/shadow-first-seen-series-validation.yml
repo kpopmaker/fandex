@@ -1,0 +1,33 @@
+name: Shadow First Seen Series Validation
+
+on:
+  push:
+    branches:
+      - shadow/naver-first-seen-series-read-model
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - name: Focused series test
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-shadow-first-seen-series-v1.test.mts
+      - name: Existing shadow activity regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-shadow-first-seen-activity-v1.test.mts
+      - name: NAVER regression
+        run: node node_modules/tsx/dist/cli.mjs --conditions=react-server --test tests/naver-news-*.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Diff check
+        run: git diff --check origin/main...HEAD
