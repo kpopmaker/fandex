@@ -149,8 +149,15 @@ function asRequest(value: unknown): NaverNewsRequestContract {
 function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNewsNormalizedRecord {
   const recordId = asString(row.record_id, 'naver_news_canonical_job_record_invalid');
   const rawEvidenceId = asString(row.raw_evidence_id, 'naver_news_canonical_job_record_invalid');
-  const storedRawEvidenceId = asString(row.stored_raw_evidence_id, 'naver_news_canonical_job_record_invalid');
-  const rawItemIndex = asInteger(row.raw_item_index, 'naver_news_canonical_job_record_invalid');
+  // Historical first-acquisition provenance, not ownership of the requested job.
+  const firstAcquisitionRawEvidenceId = asString(row.stored_raw_evidence_id, 'naver_news_canonical_job_record_invalid');
+  const rawItemIndex = row.raw_item_index;
+  // PostgreSQL integer and timestamptz values must not be reconstructed by coercion.
+  if (typeof rawItemIndex !== 'number' || !Number.isSafeInteger(rawItemIndex)
+      || rawItemIndex < 0 || rawItemIndex >= 100
+      || (typeof row.raw_observed_at !== 'string' && !(row.raw_observed_at instanceof Date))) {
+    throw new Error('naver_news_canonical_job_record_invalid');
+  }
   const rawObservedAt = asIso(row.raw_observed_at, 'naver_news_canonical_job_record_invalid');
   const rawPayload = asObject(row.raw_payload);
   const rawPayloadSha256 = asString(row.raw_payload_sha256, 'naver_news_canonical_job_record_invalid');
@@ -175,9 +182,9 @@ function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNe
   });
   if (row.raw_job_id !== jobId || row.normalization_outcome !== 'normalized' || row.normalized_record_id !== recordId
       || provider !== NAVER_NEWS_PROVIDER || sourceType !== 'news_article'
-      || !isSha256(recordId) || !isSha256(rawEvidenceId) || !isSha256(storedRawEvidenceId)
+      || !isSha256(recordId) || !isSha256(rawEvidenceId) || !isSha256(firstAcquisitionRawEvidenceId)
       || !isSha256(rawPayloadSha256) || !isSha256(contentSha256) || !isSha256(recordSha256)
-      || rawItemIndex >= 100 || !rawPayload || rawPayloadSha256 !== sha256Canonical(rawPayload)
+      || !rawPayload || rawPayloadSha256 !== sha256Canonical(rawPayload)
       || rawEvidenceId !== expectedEvidenceId
       || !payload || canonicalJson(payload) !== canonicalJson(expectedPayload)
       || contentSha256 !== sha256Canonical({ title, summary, sourceUrl, naverUrl, publishedAt })
