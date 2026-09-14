@@ -1,6 +1,6 @@
 FANDEX Master v10 Production Report
 ========================================================================================
-createdAt: 2026-09-13T10:42:29
+createdAt: 2026-09-14T11:00:40
 version: fandex_master_v10_music_v2_lastfm_rolling_v1
 scoreMode: uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25
 formula: Naver v3 + YouTube v3 + Music v2 x0.25 + Last.fm Rolling x0.25
@@ -8,13 +8,13 @@ websiteModified: FALSE
 
 Ranking
 ----------------------------------------------------------------------------------------
-1위 에스파 | FANDEX 362.63 | Naver 214.28 | YouTube 79.04 | Music 180.75 x0.25=45.19 | Last.fm 96.48 x0.25=24.12
-2위 아이유 | FANDEX 347.65 | Naver 244.89 | YouTube 49.63 | Music 194.25 x0.25=48.56 | Last.fm 18.26 x0.25=4.57
-3위 에이티즈 | FANDEX 333.90 | Naver 226.34 | YouTube 52.43 | Music 169.50 x0.25=42.38 | Last.fm 51.01 x0.25=12.75
-4위 르세라핌 | FANDEX 263.19 | Naver 182.26 | YouTube 52.76 | Music 15.80 x0.25=3.95 | Last.fm 96.87 x0.25=24.22
-5위 뉴진스 | FANDEX 252.31 | Naver 201.66 | YouTube 21.54 | Music 39.80 x0.25=9.95 | Last.fm 76.63 x0.25=19.16
-6위 아이브 | FANDEX 238.41 | Naver 166.58 | YouTube 37.20 | Music 100.00 x0.25=25.00 | Last.fm 38.52 x0.25=9.63
-7위 보이넥스트도어 | FANDEX 233.60 | Naver 187.53 | YouTube 35.42 | Music 30.80 x0.25=7.70 | Last.fm 11.78 x0.25=2.95
-8위 투모로우바이투게더 | FANDEX 228.81 | Naver 163.02 | YouTube 49.71 | Music 0.00 x0.25=0.00 | Last.fm 64.34 x0.25=16.08
-9위 세븐틴 | FANDEX 220.68 | Naver 173.12 | YouTube 42.85 | Music 0.00 x0.25=0.00 | Last.fm 18.82 x0.25=4.71
-10위 스트레이키즈 | FANDEX 157.76 | Naver 90.60 | YouTube 47.99 | Music 0.00 x0.25=0.00 | Last.fm 76.67 x0.25=19.17
+1위 에스파 | FANDEX 361.35 | Naver 214.28 | YouTube 79.04 | Music 180.75 x0.25=45.19 | Last.fm 91.35 x0.25=22.84
+2위 아이유 | FANDEX 345.02 | Naver 244.89 | YouTube 49.63 | Music 186.00 x0.25=46.50 | Last.fm 15.99 x0.25=4.00
+3위 에이티즈 | FANDEX 337.91 | Naver 226.34 | YouTube 52.43 | Music 187.50 x0.25=46.88 | Last.fm 49.04 x0.25=12.26
+4위 르세라핌 | FANDEX 263.51 | Naver 182.26 | YouTube 52.76 | Music 15.80 x0.25=3.95 | Last.fm 98.18 x0.25=24.54
+5위 뉴진스 | FANDEX 251.85 | Naver 201.66 | YouTube 21.54 | Music 39.80 x0.25=9.95 | Last.fm 74.79 x0.25=18.70
+6위 아이브 | FANDEX 238.13 | Naver 166.58 | YouTube 37.20 | Music 100.00 x0.25=25.00 | Last.fm 37.40 x0.25=9.35
+7위 보이넥스트도어 | FANDEX 233.71 | Naver 187.53 | YouTube 35.42 | Music 30.80 x0.25=7.70 | Last.fm 12.22 x0.25=3.06
+8위 투모로우바이투게더 | FANDEX 228.57 | Naver 163.02 | YouTube 49.71 | Music 0.00 x0.25=0.00 | Last.fm 63.37 x0.25=15.84
+9위 세븐틴 | FANDEX 220.51 | Naver 173.12 | YouTube 42.85 | Music 0.00 x0.25=0.00 | Last.fm 18.17 x0.25=4.54
+10위 스트레이키즈 | FANDEX 157.64 | Naver 90.60 | YouTube 47.99 | Music 0.00 x0.25=0.00 | Last.fm 76.21 x0.25=19.05
