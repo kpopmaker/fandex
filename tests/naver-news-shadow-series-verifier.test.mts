@@ -168,9 +168,18 @@ test('invalid input and missing runtime DB fail closed without creating a pool',
 });
 
 test('verifier source has no collection, mutation, network-fetch, scheduler, or secret-output path', async () => {
-  const source = await readFile(new URL('../scripts/ingestion/verify-naver-news-shadow-series.mts', import.meta.url), 'utf8');
+  const cliSource = await readFile(
+    new URL('../scripts/ingestion/verify-naver-news-shadow-series.mts', import.meta.url),
+    'utf8',
+  );
+  const serverSource = await readFile(
+    new URL('../lib/server/ingestion/naverNewsShadowSeriesVerifier.ts', import.meta.url),
+    'utf8',
+  );
+  const source = `${cliSource}\n${serverSource}`;
   assert.doesNotMatch(source, /naverNewsExternalCollector|naverNewsWorker|write-naver-news|dispatch-naver-news|fetch\(|setInterval\(|setTimeout\(|\b(?:INSERT|UPDATE|DELETE|MERGE|TRUNCATE|ALTER|CREATE|DROP|GRANT|REVOKE|CALL|COPY|DO|LOCK)\b/i);
   assert.doesNotMatch(source, /console\.(?:log|debug|info)\(|connectionString\)|FANDEX_RUNTIME_DATABASE_URL\s*\]|raw_payload|normalized_payload/i);
-  assert.match(source, /createPostgresNaverNewsCanonicalJobEvidenceReadRepository/);
-  assert.match(source, /assembleNaverNewsShadowFirstSeenSeries/);
+  assert.match(serverSource, /createPostgresNaverNewsCanonicalJobEvidenceReadRepository/);
+  assert.match(serverSource, /assembleNaverNewsShadowFirstSeenSeries/);
+  assert.match(cliSource, /naverNewsShadowSeriesVerifier/);
 });
