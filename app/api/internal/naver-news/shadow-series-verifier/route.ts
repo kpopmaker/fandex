@@ -4,7 +4,7 @@ import {
   isNaverNewsRecurringAuthorizationValid,
   readNaverNewsRecurringConfig,
 } from '@/lib/server/ingestion/naverNewsRecurringSchedulerContracts';
-import { runNaverNewsShadowSeriesVerification } from '@/scripts/ingestion/verify-naver-news-shadow-series';
+import { runNaverNewsShadowSeriesVerification } from '@/lib/server/ingestion/naverNewsShadowSeriesVerifier';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
