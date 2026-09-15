@@ -69,7 +69,7 @@ function fixtureSeries(): NaverNewsShadowFirstSeenSeriesResult {
           collectionCompleteness: 'truncated',
           observedObservationCount: 100,
           firstSeenObservationCount: 0,
-          firstSeenObservationIds: ['c'.repeat(64)],
+          firstSeenObservationIds: [],
           bootstrap: false,
         },
       ],
@@ -169,7 +169,7 @@ test('invalid input and missing runtime DB fail closed without creating a pool',
 
 test('verifier source has no collection, mutation, network-fetch, scheduler, or secret-output path', async () => {
   const source = await readFile(new URL('../scripts/ingestion/verify-naver-news-shadow-series.mts', import.meta.url), 'utf8');
-  assert.doesNotMatch(source, /naverNewsExternalCollector|naverNewsWorker|write-naver-news|dispatch-naver-news|fetch\(|setInterval\(|setTimeout\(|INSERT|UPDATE|DELETE|MERGE|TRUNCATE|ALTER|CREATE|DROP|GRANT|REVOKE|CALL|COPY|DO|LOCK/i);
+  assert.doesNotMatch(source, /naverNewsExternalCollector|naverNewsWorker|write-naver-news|dispatch-naver-news|fetch\(|setInterval\(|setTimeout\(|\b(?:INSERT|UPDATE|DELETE|MERGE|TRUNCATE|ALTER|CREATE|DROP|GRANT|REVOKE|CALL|COPY|DO|LOCK)\b/i);
   assert.doesNotMatch(source, /console\.(?:log|debug|info)\(|connectionString\)|FANDEX_RUNTIME_DATABASE_URL\s*\]|raw_payload|normalized_payload/i);
   assert.match(source, /createPostgresNaverNewsCanonicalJobEvidenceReadRepository/);
   assert.match(source, /assembleNaverNewsShadowFirstSeenSeries/);
