@@ -1,8 +1,6 @@
 name: NAVER Shadow Production Trigger
 
 on:
-  schedule:
-    - cron: '2,7,12,17,22,27,32,37,42,47,52,57 * * * *'
   workflow_dispatch:
     inputs:
       confirm:
@@ -20,8 +18,7 @@ concurrency:
 jobs:
   trigger:
     if: >-
-      (github.event_name == 'schedule' && vars.FANDEX_SHADOW_COLLECTION_ENABLED == 'true') ||
-      (github.event_name == 'workflow_dispatch' && inputs.confirm == 'ACTIVATE' && vars.FANDEX_SHADOW_COLLECTION_ENABLED == 'true')
+      github.event_name == 'workflow_dispatch' && inputs.confirm == 'ACTIVATE' && vars.FANDEX_SHADOW_COLLECTION_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     env:
