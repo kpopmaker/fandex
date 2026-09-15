@@ -22,7 +22,7 @@ function fixtureSeries(): NaverNewsShadowFirstSeenSeriesResult {
     lifecycle: 'shadow',
     directProductContributionEligible: false,
     canonicalArtistId: 'iu',
-    schedulerVersion: 'v125_naver_news_scheduler',
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
     protocolStart,
     throughSlotStart,
     expectedSlots: [
@@ -43,7 +43,7 @@ function fixtureSeries(): NaverNewsShadowFirstSeenSeriesResult {
       protocolStart,
       protocol: {
         provider: 'naver-news',
-        schedulerVersion: 'v125_naver_news_scheduler',
+        schedulerVersion: 'v125_naver_news_scheduler_v1',
         cadenceMinutes: 60,
         start: 1,
         display: 100,
