@@ -1,0 +1,24 @@
+name: Temporary Media Activity Research CI
+
+on:
+  push:
+    branches:
+      - research/naver-news-media-activity-evaluator
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:ingestion:media-activity-method-research
+      - run: npx tsx --test tests/naver-news-shadow-epoch-v1.test.mts
+      - run: npm run test:ingestion:shadow-series-verifier
+      - run: npm run typecheck
