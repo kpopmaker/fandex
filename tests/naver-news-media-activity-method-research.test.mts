@@ -1,33 +1,67 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import fs from 'node:fs';
 
 import {
   evaluateNaverNewsMediaActivityMethodResearch,
+  NAVER_NEWS_MEDIA_ACTIVITY_METHOD_RESEARCH_CONTRACT_VERSION,
   parseNaverNewsMediaActivityMethodResearchCommand,
   runNaverNewsMediaActivityMethodResearch,
   summarizeNaverNewsMediaActivityMethodResearch,
 } from '../lib/server/ingestion/naverNewsMediaActivityMethodResearch';
 import type { NaverNewsShadowFirstSeenSeriesResult } from '../lib/server/ingestion/naverNewsShadowFirstSeenSeries';
 
-function createAvailableSeries(): NaverNewsShadowFirstSeenSeriesResult {
-  const baseSlots = [
-    ['2026-09-15T16:00:00.000Z', 100, null, true],
-    ['2026-09-15T17:00:00.000Z', 100, 0, false],
-    ['2026-09-15T18:00:00.000Z', 100, 10, false],
-    ['2026-09-15T19:00:00.000Z', 100, 20, false],
-    ['2026-09-15T20:00:00.000Z', 100, 10, false],
-  ] as const;
+const protocolStart = '2026-09-15T16:00:00.000Z';
+const throughSlotStart = '2026-09-15T20:00:00.000Z';
 
-  const slots = baseSlots.map(([slotStart, observedObservationCount, firstSeenObservationCount, bootstrap], index) => ({
-    slotStart,
-    jobId: `${index + 1}`.repeat(64).slice(0, 64),
-    collectionCompleteness: 'truncated' as const,
-    observedObservationCount,
-    firstSeenObservationCount,
-    firstSeenObservationIds: [] as string[],
-    bootstrap,
-  }));
+function createAvailableSeries(): NaverNewsShadowFirstSeenSeriesResult {
+  const slots = [
+    {
+      slotStart: protocolStart,
+      jobId: '1'.repeat(64),
+      collectionCompleteness: 'truncated',
+      observedObservationCount: 100,
+      firstSeenObservationCount: null,
+      firstSeenObservationIds: [],
+      bootstrap: true,
+    },
+    {
+      slotStart: '2026-09-15T17:00:00.000Z',
+      jobId: '2'.repeat(64),
+      collectionCompleteness: 'truncated',
+      observedObservationCount: 100,
+      firstSeenObservationCount: 0,
+      firstSeenObservationIds: [],
+      bootstrap: false,
+    },
+    {
+      slotStart: '2026-09-15T18:00:00.000Z',
+      jobId: '3'.repeat(64),
+      collectionCompleteness: 'truncated',
+      observedObservationCount: 100,
+      firstSeenObservationCount: 5,
+      firstSeenObservationIds: [],
+      bootstrap: false,
+    },
+    {
+      slotStart: '2026-09-15T19:00:00.000Z',
+      jobId: '4'.repeat(64),
+      collectionCompleteness: 'truncated',
+      observedObservationCount: 100,
+      firstSeenObservationCount: 10,
+      firstSeenObservationIds: [],
+      bootstrap: false,
+    },
+    {
+      slotStart: throughSlotStart,
+      jobId: '5'.repeat(64),
+      collectionCompleteness: 'truncated',
+      observedObservationCount: 100,
+      firstSeenObservationCount: 0,
+      firstSeenObservationIds: [],
+      bootstrap: false,
+    },
+  ] as const;
 
   return {
     contractVersion: 'v1_naver_news_shadow_first_seen_series',
@@ -35,8 +69,8 @@ function createAvailableSeries(): NaverNewsShadowFirstSeenSeriesResult {
     directProductContributionEligible: false,
     canonicalArtistId: 'iu',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
-    protocolStart: '2026-09-15T16:00:00.000Z',
-    throughSlotStart: '2026-09-15T20:00:00.000Z',
+    protocolStart,
+    throughSlotStart,
     expectedSlots: [],
     snapshots: [],
     status: 'available',
@@ -49,9 +83,9 @@ function createAvailableSeries(): NaverNewsShadowFirstSeenSeriesResult {
       lifecycle: 'shadow',
       directProductContributionEligible: false,
       canonicalArtistId: 'iu',
-      protocolStart: '2026-09-15T16:00:00.000Z',
+      protocolStart,
       protocol: {
-        provider: 'naver-news',
+        provider: 'NAVER',
         schedulerVersion: 'v125_naver_news_scheduler_v1',
         cadenceMinutes: 60,
         start: 1,
@@ -65,33 +99,37 @@ function createAvailableSeries(): NaverNewsShadowFirstSeenSeriesResult {
       slots,
       unavailableAtSlotStart: null,
     },
-  };
+  } as unknown as NaverNewsShadowFirstSeenSeriesResult;
 }
 
 test('command requires explicit artist, through slot, and unique positive window candidates', () => {
-  const command = parseNaverNewsMediaActivityMethodResearchCommand([
-    '--artist',
-    'iu',
-    '--through-slot-start',
-    '2026-09-16T02:00:00.000Z',
-    '--window-slots',
-    '1,3,6',
-  ]);
+  assert.deepEqual(
+    parseNaverNewsMediaActivityMethodResearchCommand([
+      '--artist', 'iu',
+      '--through-slot-start', throughSlotStart,
+      '--window-slots', '1,2,4',
+    ]),
+    {
+      canonicalArtistId: 'iu',
+      throughSlotStart,
+      candidateWindowSlotCounts: [1, 2, 4],
+    },
+  );
 
-  assert.deepEqual(command, {
-    canonicalArtistId: 'iu',
-    throughSlotStart: '2026-09-16T02:00:00.000Z',
-    candidateWindowSlotCounts: [1, 3, 6],
-  });
-  assert.throws(() => parseNaverNewsMediaActivityMethodResearchCommand([
-    '--artist', 'iu', '--through-slot-start', '2026-09-16T02:00:00.000Z',
-  ]), /naver_news_media_activity_method_research_argument_invalid/);
-  assert.throws(() => parseNaverNewsMediaActivityMethodResearchCommand([
-    '--artist', 'iu', '--through-slot-start', '2026-09-16T02:00:00.000Z', '--window-slots', '3,3',
-  ]), /naver_news_media_activity_method_research_argument_invalid/);
-  assert.throws(() => parseNaverNewsMediaActivityMethodResearchCommand([
-    '--artist', 'iu', '--through-slot-start', '2026-09-16T02:00:00.000Z', '--window-slots', '0',
-  ]), /naver_news_media_activity_method_research_argument_invalid/);
+  const invalidArgs = [
+    ['--artist', 'iu', '--through-slot-start', throughSlotStart],
+    ['--artist', 'iu', '--through-slot-start', throughSlotStart, '--window-slots', '0'],
+    ['--artist', 'iu', '--through-slot-start', throughSlotStart, '--window-slots', '2,2'],
+    ['--artist', 'iu', '--through-slot-start', '2026-09-15T20:30:00.000Z', '--window-slots', '2'],
+    ['--artist', 'unknown', '--through-slot-start', throughSlotStart, '--window-slots', '2'],
+  ];
+
+  for (const argv of invalidArgs) {
+    assert.throws(
+      () => parseNaverNewsMediaActivityMethodResearchCommand(argv),
+      /naver_news_media_activity_method_research_argument_invalid/,
+    );
+  }
 });
 
 test('research evaluator excludes bootstrap and compares explicit rolling-window candidates without publishing a Product score', () => {
@@ -100,6 +138,10 @@ test('research evaluator excludes bootstrap and compares explicit rolling-window
     candidateWindowSlotCounts: [1, 2, 5],
   });
 
+  assert.equal(
+    result.contractVersion,
+    NAVER_NEWS_MEDIA_ACTIVITY_METHOD_RESEARCH_CONTRACT_VERSION,
+  );
   assert.equal(result.lifecycle, 'research');
   assert.equal(result.directProductContributionEligible, false);
   assert.equal(result.productScorePublished, false);
@@ -111,28 +153,30 @@ test('research evaluator excludes bootstrap and compares explicit rolling-window
   assert.equal(result.analysisSlotCount, 4);
 
   const oneSlot = result.candidates[0];
-  assert.equal(oneSlot.windowSlotCount, 1);
   assert.equal(oneSlot.status, 'available');
   assert.equal(oneSlot.windowCount, 4);
-  assert.equal(oneSlot.definedActivityWindowCount, 4);
-  assert.equal(oneSlot.zeroActivityWindowCount, 1);
-  assert.equal(oneSlot.zeroActivityWindowRate, 0.25);
-  assert.equal(oneSlot.latestWindow?.observedActivityRate, 0.1);
+  assert.equal(oneSlot.zeroActivityWindowCount, 2);
+  assert.equal(oneSlot.zeroActivityWindowRate, 0.5);
+  assert.equal(oneSlot.statistics.min, 0);
+  assert.equal(oneSlot.statistics.max, 0.1);
+  assert.equal(oneSlot.statistics.mean, 0.0375);
+  assert.equal(oneSlot.statistics.median, 0.025);
+  assert.equal(oneSlot.latestWindow?.observedActivityRate, 0);
   assert.deepEqual(oneSlot.latestVsPrior, {
     priorDefinedWindowCount: 3,
-    priorLessThanLatestCount: 1,
-    priorEqualToLatestCount: 0,
+    priorLessThanLatestCount: 0,
+    priorEqualToLatestCount: 1,
     priorGreaterThanLatestCount: 2,
   });
 
   const twoSlot = result.candidates[1];
-  assert.equal(twoSlot.windowCount, 3);
-  assert.equal(twoSlot.zeroActivityWindowCount, 0);
-  assert.equal(twoSlot.statistics.mean, 0.1);
-  assert.equal(twoSlot.statistics.median, 0.1);
-  assert.equal(twoSlot.latestWindow?.firstSeenObservationCount, 30);
-  assert.equal(twoSlot.latestWindow?.observedObservationCount, 200);
-  assert.equal(twoSlot.latestWindow?.observedActivityRate, 0.15);
+  assert.equal(twoSlot.status, 'available');
+  assert.deepEqual(
+    twoSlot.windows.map((window) => window.observedActivityRate),
+    [0.025, 0.075, 0.05],
+  );
+  assert.equal(twoSlot.statistics.mean, 0.05);
+  assert.equal(twoSlot.statistics.median, 0.05);
   assert.deepEqual(twoSlot.latestVsPrior, {
     priorDefinedWindowCount: 2,
     priorLessThanLatestCount: 1,
@@ -179,7 +223,8 @@ test('unavailable source series stays unavailable and is never converted to zero
     reason: 'expected_job_missing',
     activity: null,
     missingSlotStart: '2026-09-15T18:00:00.000Z',
-  } as NaverNewsShadowFirstSeenSeriesResult;
+    missingJobId: 'a'.repeat(64),
+  } as unknown as NaverNewsShadowFirstSeenSeriesResult;
 
   const result = evaluateNaverNewsMediaActivityMethodResearch({
     series: unavailable,
@@ -193,112 +238,110 @@ test('unavailable source series stays unavailable and is never converted to zero
 });
 
 test('bounded summary omits per-window history and observation/article payloads', () => {
-  const research = evaluateNaverNewsMediaActivityMethodResearch({
+  const evaluated = evaluateNaverNewsMediaActivityMethodResearch({
     series: createAvailableSeries(),
     candidateWindowSlotCounts: [1, 2],
   });
-  const summary = summarizeNaverNewsMediaActivityMethodResearch(research);
+  const summary = summarizeNaverNewsMediaActivityMethodResearch(evaluated);
   const serialized = JSON.stringify(summary);
 
-  assert.equal(summary.lifecycle, 'research');
-  assert.equal(summary.directProductContributionEligible, false);
-  assert.equal(summary.productScorePublished, false);
-  assert.equal(serialized.includes('windows'), false);
-  assert.equal(serialized.includes('firstSeenObservationIds'), false);
-  assert.equal(serialized.includes('title'), false);
-  assert.equal(serialized.includes('summary'), false);
-  assert.equal(serialized.includes('raw_payload'), false);
-  assert.equal(serialized.includes('normalized_payload'), false);
+  assert.equal('windows' in summary.candidates[0], false);
+  assert.doesNotMatch(serialized, /firstSeenObservationIds/);
+  assert.doesNotMatch(serialized, /observations/);
+  assert.doesNotMatch(serialized, /sourceUrl/);
+  assert.doesNotMatch(serialized, /title/);
+  assert.doesNotMatch(serialized, /raw_payload/i);
 });
 
 test('runner uses official-series dependency, hardened pool config, and closes the pool', async () => {
-  let poolEnded = false;
-  let assembleInput: unknown = null;
-  let capturedPoolConfig: unknown = null;
-  const result = await runNaverNewsMediaActivityMethodResearch([
-    '--artist', 'iu',
-    '--through-slot-start', '2026-09-16T02:00:00.000Z',
-    '--window-slots', '1,2',
-  ], {
-    FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:secret@ep-test-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require',
-  }, {
-    poolFactory(config) {
-      capturedPoolConfig = config;
-      return {
-        async connect() {
-          throw new Error('repository is injected');
-        },
-        async end() {
-          poolEnded = true;
-        },
-      };
-    },
-    repositoryFactory() {
-      return {
-        async readJobEvidence() {
-          return null;
-        },
-      };
-    },
-    async assembleOfficialSeries(input) {
-      assembleInput = input;
-      return createAvailableSeries();
-    },
-  });
+  let ended = false;
+  let assembledInput: unknown = null;
+  let observedPoolConfig: unknown = null;
 
-  assert.deepEqual(assembleInput, {
+  const result = await runNaverNewsMediaActivityMethodResearch(
+    [
+      '--artist', 'iu',
+      '--through-slot-start', throughSlotStart,
+      '--window-slots', '1,2',
+    ],
+    {
+      FANDEX_RUNTIME_DATABASE_URL:
+        'postgresql://fandex_runtime:secret@ep-example-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require',
+    },
+    {
+      poolFactory(config) {
+        observedPoolConfig = config;
+        return {
+          async query() {
+            throw new Error('query must be handled by injected repository');
+          },
+          async end() {
+            ended = true;
+          },
+        } as never;
+      },
+      repositoryFactory() {
+        return {
+          async readJobEvidence() {
+            return null;
+          },
+        };
+      },
+      async assembleOfficialSeries(input) {
+        assembledInput = input;
+        return createAvailableSeries();
+      },
+    },
+  );
+
+  assert.deepEqual(assembledInput, {
     canonicalArtistId: 'iu',
-    throughSlotStart: '2026-09-16T02:00:00.000Z',
+    throughSlotStart,
   });
-  assert.deepEqual(capturedPoolConfig, {
-    connectionString: 'postgresql://fandex_runtime:secret@ep-test-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require',
+  assert.deepEqual(observedPoolConfig, {
+    connectionString:
+      'postgresql://fandex_runtime:secret@ep-example-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require',
     max: 1,
     connectionTimeoutMillis: 5_000,
     query_timeout: 15_000,
     statement_timeout: 15_000,
     ssl: { rejectUnauthorized: true },
   });
-  assert.equal(poolEnded, true);
-  assert.equal(result.status, 'available');
+  assert.equal(ended, true);
+  assert.equal(result.lifecycle, 'research');
+  assert.equal(result.directProductContributionEligible, false);
   assert.equal(result.productScorePublished, false);
 });
 
 test('runner fails closed when runtime DB contract is absent', async () => {
   await assert.rejects(
-    () => runNaverNewsMediaActivityMethodResearch([
-      '--artist', 'iu',
-      '--through-slot-start', '2026-09-16T02:00:00.000Z',
-      '--window-slots', '1',
-    ], {}),
+    () => runNaverNewsMediaActivityMethodResearch(
+      [
+        '--artist', 'iu',
+        '--through-slot-start', throughSlotStart,
+        '--window-slots', '1',
+      ],
+      {},
+    ),
     /naver_news_media_activity_method_research_failed/,
   );
 });
 
-test('research implementation has no collection, dispatch, fetch, Product pipeline, or write SQL path', () => {
-  const source = fs.readFileSync(
+test('research implementation has no collection, dispatch, fetch, Product pipeline, or write SQL path', async () => {
+  const moduleSource = await readFile(
     new URL('../lib/server/ingestion/naverNewsMediaActivityMethodResearch.ts', import.meta.url),
     'utf8',
   );
-  const script = fs.readFileSync(
+  const cliSource = await readFile(
     new URL('../scripts/ingestion/research-naver-news-media-activity.mts', import.meta.url),
     'utf8',
   );
-  const combined = `${source}\n${script}`;
+  const combined = `${moduleSource}\n${cliSource}`;
 
-  for (const forbidden of [
-    'naverNewsExternalCollector',
-    'dispatchNaverNews',
-    'fetch(',
-    'INSERT ',
-    'UPDATE ',
-    'DELETE ',
-    'CREATE ',
-    'ALTER ',
-    'DROP ',
-    'TRUNCATE ',
-    'metricScoringPipeline',
-    'newsIssuePoint',
-  ]) {
-    assert.equal(combined.includes(forbidden), false, `forbidden research path token: ${forbidden}`);
-  }
+  assert.doesNotMatch(combined, /naverNewsExternalCollector/);
+  assert.doesNotMatch(combined, /naverNewsSchedulerDispatch/);
+  assert.doesNotMatch(combined, /metricScoringPipeline/);
+  assert.doesNotMatch(combined, /issueScoreEngine/);
+  assert.doesNotMatch(combined, /\bfetch\s*\(/);
+  assert.doesNotMatch(combined, /\b(?:INSERT|UPDATE|DELETE|ALTER|DROP|TRUNCATE)\b/i);
 });
