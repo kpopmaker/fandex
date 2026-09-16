@@ -5,6 +5,7 @@ import {
   type NaverNewsCanonicalJobStoredEvidence,
 } from './naverNewsCanonicalJobEvidence';
 import { buildNaverNewsJobIdentity, canonicalJson } from './naverNewsContracts';
+import { getOfficialNaverNewsShadowEpoch } from './naverNewsShadowEpoch';
 import {
   evaluateNaverNewsShadowFirstSeenActivity,
   type NaverNewsShadowFirstSeenActivityResult,
@@ -174,4 +175,19 @@ export async function assembleNaverNewsShadowFirstSeenSeries(
     missingJobId: null,
     activity,
   });
+}
+
+export async function assembleOfficialNaverNewsShadowFirstSeenSeries(
+  input: Readonly<{
+    canonicalArtistId: string;
+    throughSlotStart: string;
+  }>,
+  repository: NaverNewsCanonicalJobEvidenceReadRepository,
+): Promise<NaverNewsShadowFirstSeenSeriesResult> {
+  const epoch = getOfficialNaverNewsShadowEpoch(input.canonicalArtistId);
+  return assembleNaverNewsShadowFirstSeenSeries({
+    canonicalArtistId: epoch.canonicalArtistId,
+    protocolStart: epoch.protocolStart,
+    throughSlotStart: input.throughSlotStart,
+  }, repository);
 }
