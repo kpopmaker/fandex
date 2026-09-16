@@ -1,0 +1,27 @@
+name: Temporary Music Release Eligibility Validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:album:music-release-eligibility-research
+      - run: npm run test:album:musicbrainz-catalog-research
+      - run: npm run test:album:musicbrainz-provider-availability
+      - run: npm run test:alternative-evidence:v1
+      - run: npm run test:album:synthetic-gate
+      - run: npm run typecheck
