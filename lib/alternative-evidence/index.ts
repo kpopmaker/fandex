@@ -37,3 +37,4 @@ export * from './albumIntegratedSyntheticValidation';
 export * from './musicbrainzAlbumCatalogResearch';
 export * from './musicbrainzProviderAvailabilityResearch';
 export * from './musicReleaseEligibilityResearch';
+export * from './musicReleaseIdentityMappingResearch';
