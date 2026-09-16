@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-15T11:08:38",
-  "snapshotDate": "2026-09-15",
+  "createdAt": "2026-09-16T11:00:11",
+  "snapshotDate": "2026-09-16",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -13,11 +13,11 @@
   "ranking": [
     {
       "artist": "에이티즈",
-      "fandexMusicChartFinalPoint": 187.5,
-      "score": 187.5,
+      "fandexMusicChartFinalPoint": 169.5,
+      "score": 169.5,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 90.0,
+        "melon": 72.0,
         "genie": 63.75,
         "bugs": 33.75
       },
@@ -25,9 +25,9 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "10",
+          "rank": "11",
           "chartType": "daily",
-          "point": 90.0
+          "point": 72.0
         },
         "genie": {
           "status": "RANKED",
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "9",
+          "rank": "7",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -47,14 +47,49 @@
       "rank": 1
     },
     {
+      "artist": "아이유",
+      "fandexMusicChartFinalPoint": 169.0,
+      "score": 169.0,
+      "rankedPlatformCount": 3,
+      "platformPoints": {
+        "melon": 90.0,
+        "genie": 34.0,
+        "bugs": 45.0
+      },
+      "platformStatus": {
+        "melon": {
+          "status": "RANKED",
+          "trackTitle": "이 별로부터",
+          "rank": "4",
+          "chartType": "daily",
+          "point": 90.0
+        },
+        "genie": {
+          "status": "RANKED",
+          "trackTitle": "이 별로부터",
+          "rank": "25",
+          "chartType": "daily",
+          "point": 34.0
+        },
+        "bugs": {
+          "status": "RANKED",
+          "trackTitle": "Dear my crazy soulmate",
+          "rank": "1",
+          "chartType": "realtime",
+          "point": 45.0
+        }
+      },
+      "rank": 2
+    },
+    {
       "artist": "에스파",
-      "fandexMusicChartFinalPoint": 180.75,
-      "score": 180.75,
+      "fandexMusicChartFinalPoint": 162.75,
+      "score": 162.75,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 72.0,
         "genie": 63.75,
-        "bugs": 45.0
+        "bugs": 27.0
       },
       "platformStatus": {
         "melon": {
@@ -73,45 +108,10 @@
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Saddle Up (WINTER Solo)",
-          "rank": "1",
+          "trackTitle": "LEMONADE",
+          "rank": "13",
           "chartType": "realtime",
-          "point": 45.0
-        }
-      },
-      "rank": 2
-    },
-    {
-      "artist": "아이유",
-      "fandexMusicChartFinalPoint": 164.5,
-      "score": 164.5,
-      "rankedPlatformCount": 3,
-      "platformPoints": {
-        "melon": 90.0,
-        "genie": 34.0,
-        "bugs": 40.5
-      },
-      "platformStatus": {
-        "melon": {
-          "status": "RANKED",
-          "trackTitle": "이 별로부터",
-          "rank": "4",
-          "chartType": "daily",
-          "point": 90.0
-        },
-        "genie": {
-          "status": "RANKED",
-          "trackTitle": "이 별로부터",
-          "rank": "21",
-          "chartType": "daily",
-          "point": 34.0
-        },
-        "bugs": {
-          "status": "RANKED",
-          "trackTitle": "Dear my crazy soulmate",
-          "rank": "2",
-          "chartType": "realtime",
-          "point": 40.5
+          "point": 27.0
         }
       },
       "rank": 3
@@ -130,14 +130,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "49",
+          "rank": "50",
           "chartType": "daily",
           "point": 48.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "24",
+          "rank": "26",
           "chartType": "daily",
           "point": 34.0
         },
@@ -165,21 +165,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "92",
+          "rank": "93",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "116",
+          "rank": "117",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "69",
+          "trackTitle": "Ditto",
+          "rank": "59",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "98",
+          "rank": "99",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "152",
+          "rank": "150",
           "chartType": "daily",
           "point": 6.8
         },
@@ -242,13 +242,13 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "147",
+          "rank": "148",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "BOOMPALA",
+          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
           "rank": "100",
           "chartType": "realtime",
           "point": 9.0
