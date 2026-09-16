@@ -68,7 +68,7 @@ export type MusicBrainzAlbumCatalogResearchPage = Readonly<{
   productMethodologyFrozen: false;
   canonicalArtistId: string;
   providerArtistId: string;
-  providerReleaseGroupCount: number;
+  providerReleaseGroupCount: number | null;
   providerOffset: number;
   requestedLimit: number;
   returnedCount: number;
@@ -233,7 +233,7 @@ export function decodeMusicBrainzReleaseGroupPage(
     productMethodologyFrozen: false,
     canonicalArtistId: input.canonicalArtistId,
     providerArtistId: input.providerArtistId,
-    providerReleaseGroupCount: providerCount ?? -1,
+    providerReleaseGroupCount: providerCount,
     providerOffset,
     requestedLimit: input.requestedLimit,
     returnedCount: observations.length,
