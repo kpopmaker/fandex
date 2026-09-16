@@ -1,8 +1,8 @@
 import { pathToFileURL } from 'node:url';
 
 import {
-  runMusicBrainzAlbumCatalogResearch,
-} from '../../lib/alternative-evidence/musicbrainzAlbumCatalogResearch';
+  runMusicBrainzAlbumCatalogResearchAttempt,
+} from '../../lib/alternative-evidence/musicbrainzProviderAvailabilityResearch';
 
 export {
   buildMusicBrainzReleaseGroupBrowseUrl,
@@ -13,9 +13,18 @@ export {
   runMusicBrainzAlbumCatalogResearch,
 } from '../../lib/alternative-evidence/musicbrainzAlbumCatalogResearch';
 
+export {
+  classifyMusicBrainzHttpFailure,
+  MUSICBRAINZ_PROVIDER_AVAILABILITY_RESEARCH_CONTRACT_VERSION,
+  MUSICBRAINZ_PROVIDER_AVAILABILITY_RESEARCH_DESCRIPTOR,
+  runMusicBrainzAlbumCatalogResearchAttempt,
+} from '../../lib/alternative-evidence/musicbrainzProviderAvailabilityResearch';
+
 export async function main(argv = process.argv.slice(2)) {
-  const result = await runMusicBrainzAlbumCatalogResearch(argv);
+  const result = await runMusicBrainzAlbumCatalogResearchAttempt(argv);
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  if (result.outcome !== 'observed') process.exitCode = 1;
+  return result;
 }
 
 const invokedPath = process.argv[1] ? pathToFileURL(process.argv[1]).href : '';
