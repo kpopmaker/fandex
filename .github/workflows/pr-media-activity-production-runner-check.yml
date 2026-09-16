@@ -1,0 +1,31 @@
+name: Media Activity Production Runner Check
+
+on:
+  push:
+    branches:
+      - research/naver-news-media-activity-production-runner
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Research evaluator regression
+        run: npm run test:ingestion:media-activity-method-research
+      - name: Temporary production runner safety test
+        run: npx tsx --test tests/naver-news-media-activity-production-runner.test.mts
+      - name: Shadow epoch regression
+        run: npx tsx --test tests/naver-news-shadow-epoch-v1.test.mts
+      - name: Shadow series verifier regression
+        run: npm run test:ingestion:shadow-series-verifier
+      - name: TypeScript typecheck
+        run: npm run typecheck
