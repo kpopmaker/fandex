@@ -24,6 +24,7 @@
     "test:album:synthetic-gate": "tsx --test tests/album-integrated-synthetic-validation-v1.test.mts",
     "test:album:musicbrainz-catalog-research": "tsx --test tests/musicbrainz-album-catalog-research-v1.test.mts",
     "test:album:musicbrainz-provider-availability": "tsx --test tests/musicbrainz-provider-availability-research-v1.test.mts",
+    "test:album:music-release-eligibility-research": "tsx --test tests/music-release-eligibility-research-v1.test.mts",
     "ingestion:naver-news:plan": "tsx scripts/ingestion/plan-naver-news-v121.mts",
     "ingestion:naver-news:collect": "tsx scripts/ingestion/collect-naver-news-v123.mts",
     "ingestion:naver-news:write": "tsx scripts/ingestion/write-naver-news-v124.mts",
