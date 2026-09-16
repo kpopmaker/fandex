@@ -36,3 +36,4 @@ export * from './persistenceContracts';
 export * from './albumIntegratedSyntheticValidation';
 export * from './musicbrainzAlbumCatalogResearch';
 export * from './musicbrainzProviderAvailabilityResearch';
+export * from './musicReleaseEligibilityResearch';
