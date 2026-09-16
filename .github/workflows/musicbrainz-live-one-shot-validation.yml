@@ -1,0 +1,95 @@
+name: MusicBrainz Live One Shot Validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-live-payload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch IU release-group payload exactly once
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/musicbrainz
+          curl --fail --silent --show-error --location \
+            --header 'Accept: application/json' \
+            --header 'User-Agent: FANDEXResearch/0.1 (https://github.com/kpopmaker/fandex)' \
+            'https://musicbrainz.org/ws/2/release-group?artist=b9545342-1e6d-4dae-84ac-013374ad8d7c&limit=100&offset=0&inc=artist-credits&fmt=json&release-group-status=website-default' \
+            --output artifacts/musicbrainz/iu-release-groups.json
+      - name: Summarize payload without additional network calls
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const inputPath = 'artifacts/musicbrainz/iu-release-groups.json';
+          const raw = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
+          const artistId = 'b9545342-1e6d-4dae-84ac-013374ad8d7c';
+          const groups = Array.isArray(raw['release-groups']) ? raw['release-groups'] : [];
+          const rows = groups.map((group) => {
+            const credits = Array.isArray(group['artist-credit']) ? group['artist-credit'] : [];
+            const matching = credits.filter((credit) => credit && credit.artist && credit.artist.id === artistId).length;
+            const creditState = credits.length === 0
+              ? 'unresolved'
+              : matching === 0
+                ? 'absent'
+                : credits.length === 1
+                  ? 'sole-credit'
+                  : 'multi-artist-credit';
+            return {
+              id: group.id ?? null,
+              title: group.title ?? null,
+              firstReleaseDate: group['first-release-date'] ?? null,
+              primaryType: group['primary-type'] ?? null,
+              secondaryTypes: Array.isArray(group['secondary-types']) ? group['secondary-types'] : [],
+              creditState,
+              artistCredits: credits.map((credit) => ({
+                name: credit?.name ?? null,
+                joinphrase: credit?.joinphrase ?? '',
+                artistId: credit?.artist?.id ?? null,
+                artistName: credit?.artist?.name ?? null,
+              })),
+            };
+          });
+          const count = Number.isInteger(raw['release-group-count']) ? raw['release-group-count'] : null;
+          const offset = Number.isInteger(raw['release-group-offset']) ? raw['release-group-offset'] : null;
+          const summary = {
+            provider: 'musicbrainz',
+            canonicalArtistId: 'iu',
+            providerArtistId: artistId,
+            providerReleaseGroupCount: count,
+            providerOffset: offset,
+            returnedCount: rows.length,
+            paginationState: count === null || offset === null
+              ? 'provider-count-unknown'
+              : offset + rows.length >= count
+                ? 'provider-count-covered'
+                : 'more-pages-available',
+            creditStateCounts: rows.reduce((acc, row) => {
+              acc[row.creditState] = (acc[row.creditState] ?? 0) + 1;
+              return acc;
+            }, {}),
+            rows,
+          };
+          fs.writeFileSync('artifacts/musicbrainz/summary.json', JSON.stringify(summary, null, 2));
+          console.log(JSON.stringify({
+            providerReleaseGroupCount: summary.providerReleaseGroupCount,
+            providerOffset: summary.providerOffset,
+            returnedCount: summary.returnedCount,
+            paginationState: summary.paginationState,
+            creditStateCounts: summary.creditStateCounts,
+          }, null, 2));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: musicbrainz-live-one-shot
+          path: artifacts/musicbrainz
+          if-no-files-found: error
+          retention-days: 1
