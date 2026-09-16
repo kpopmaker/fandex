@@ -162,6 +162,19 @@ test('provider count can show that another page remains without pretending inter
   assert.equal(result.paginationState, 'more-pages-available');
 });
 
+test('missing provider count remains null instead of a numeric sentinel', () => {
+  const { ['release-group-count']: _count, ...withoutCount } = providerFixture;
+  const result = decodeMusicBrainzReleaseGroupPage(withoutCount, {
+    canonicalArtistId: 'iu',
+    providerArtistId: IU_MUSICBRAINZ_ARTIST_ID,
+    requestedLimit: 100,
+    collectedAt: '2026-09-16T10:00:00.000Z',
+  });
+  assert.equal(result.providerReleaseGroupCount, null);
+  assert.equal(result.paginationState, 'provider-count-unknown');
+  assert.notEqual(result.providerReleaseGroupCount, 0);
+});
+
 test('runner is side-effect limited to one injected GET and returns research observations', async () => {
   let requestUrl = '';
   let requestInit: RequestInit | undefined;
