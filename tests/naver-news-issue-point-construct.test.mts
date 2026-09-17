@@ -6,7 +6,7 @@ import {
   NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
 } from '../lib/intelligence/naverNewsIssuePointConstruct';
 
-test('newsIssuePoint construct is frozen without freezing Product publication methodology', () => {
+test('newsIssuePoint construct and temporal semantics stay frozen', () => {
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT.contractVersion,
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
@@ -37,10 +37,49 @@ test('newsIssuePoint construct is frozen without freezing Product publication me
   );
 });
 
-test('only evidence-supported window candidates remain and all publication gates stay closed', () => {
-  assert.deepEqual(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.candidateWindowSlotCounts, [8, 12]);
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionStatus, 'not_frozen');
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyStatus, 'not_frozen');
+test('Product window and baseline sufficiency are frozen without opening publication', () => {
+  assert.deepEqual(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.researchCandidateWindowSlotCounts,
+    [8, 12],
+  );
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productWindowSlotCount, 8);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionStatus, 'frozen');
+
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineReferenceMembershipUnit,
+    'defined_rolling_8h_window',
+  );
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyStatus, 'frozen');
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyRule,
+    'single_cycle_independent_historical_reference_eligibility',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyEvaluation
+      .nonOverlappingProductWindowSupportRequired,
+    true,
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyEvaluation
+      .leaveOneCompleteDiurnalCycleOutRequired,
+    true,
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyEvaluation
+      .residualReferenceRequirement,
+    'complete_diurnal_cycle_support',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyEvaluation
+      .overlappingRollingWindowsCountAsIndependentSamples,
+    false,
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyEvaluation
+      .fixedHistorySlotThresholdRequired,
+    false,
+  );
+
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationStatus, 'not_frozen');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productMethodologyFrozen, false);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.directProductContributionEligible, false);
