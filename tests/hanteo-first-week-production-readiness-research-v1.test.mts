@@ -7,7 +7,7 @@ import { evaluateMusicAlbumPointProductionReadiness } from '../lib/alternative-e
 import { buildHanteoFirstWeekNormalizationFreezeInputs } from '../lib/alternative-evidence/hanteoFirstWeekPeriodResearch';
 import { HANTEO_FIRST_WEEK_PRODUCTION_EVIDENCE_RESEARCH } from '../lib/alternative-evidence/hanteoFirstWeekProductionEvidenceResearch';
 
-test('first-week period semantics are no longer a blocker for the specialized Hanteo path', () => {
+test('first-week period and public revision semantics are no longer blockers for the specialized Hanteo path', () => {
   const features = fromAlbumResearchClaim(buildIuTheWinningReportedWeeklySalesClaim());
   const readiness = evaluateMusicAlbumPointProductionReadiness({
     provider: HANTEO_FIRST_WEEK_PRODUCTION_EVIDENCE_RESEARCH,
@@ -16,12 +16,14 @@ test('first-week period semantics are no longer a blocker for the specialized Ha
   });
 
   assert.equal(HANTEO_FIRST_WEEK_PRODUCTION_EVIDENCE_RESEARCH.periodSemantics, 'verified');
+  assert.equal(HANTEO_FIRST_WEEK_PRODUCTION_EVIDENCE_RESEARCH.revisionSemantics, 'verified');
   assert.equal(readiness.normalizationState, 'blocked');
   assert.ok(!readiness.blockers.includes('provider-period-semantics-not-fully-verified'));
+  assert.ok(!readiness.blockers.includes('provider-revision-semantics-not-fully-verified'));
   assert.ok(!readiness.blockers.includes('normalization-provider-period-unresolved'));
 });
 
-test('rights, direct observation, historical API and revision contract still block Production', () => {
+test('rights, direct observation and historical query semantics still block Production', () => {
   const features = fromAlbumResearchClaim(buildIuTheWinningReportedWeeklySalesClaim());
   const readiness = evaluateMusicAlbumPointProductionReadiness({
     provider: HANTEO_FIRST_WEEK_PRODUCTION_EVIDENCE_RESEARCH,
@@ -36,7 +38,7 @@ test('rights, direct observation, historical API and revision contract still blo
   assert.ok(readiness.blockers.includes('provider-derived-publication-rights-unresolved'));
   assert.ok(readiness.blockers.includes('authorized-direct-provider-observation-missing'));
   assert.ok(readiness.blockers.includes('provider-historical-query-semantics-not-fully-verified'));
-  assert.ok(readiness.blockers.includes('provider-revision-semantics-not-fully-verified'));
+  assert.ok(!readiness.blockers.includes('provider-revision-semantics-not-fully-verified'));
   assert.ok(readiness.blockers.includes('reported-sales-context-cannot-substitute-authorized-direct-observation'));
   assert.ok(readiness.blockers.includes('direct-absolute-sales-input-missing'));
   assert.ok(readiness.blockers.includes('normalization-source-authorization-unresolved'));
