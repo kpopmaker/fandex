@@ -24,3 +24,16 @@ jobs:
       - run: npm run test:alternative-evidence:v1
       - run: npm run test:album:synthetic-gate
       - run: npm run typecheck
+
+  live-probe:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run ingestion:hanteo:research-album-sales-provider
