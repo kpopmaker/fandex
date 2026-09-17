@@ -1,0 +1,26 @@
+name: temp-album-normalization-validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/album-normalization-research-v1.test.mts
+      - run: npx tsx --test tests/album-release-eligibility-research-v1.test.mts
+      - run: npx tsx --test tests/album-normalization-readiness-integration-v1.test.mts
+      - run: npx tsx --test tests/album-production-readiness-research-v1.test.mts
+      - run: npm run test:alternative-evidence:v1
+      - run: npm run test:album:synthetic-gate
+      - run: npm run typecheck
