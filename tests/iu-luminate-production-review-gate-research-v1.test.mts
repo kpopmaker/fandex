@@ -3,6 +3,9 @@ import test from 'node:test';
 
 import type { LuminateFandexAuthorizationGrant } from '../lib/alternative-evidence/luminateAlbumAuthorizationResearch';
 import {
+  buildLuminateObservationWriteGrantDigest,
+} from '../lib/alternative-evidence/luminateAlbumObservationIntakeResearch';
+import {
   buildIuLuminateLicensedBootstrapManifest,
   type IuLuminateLicensedBootstrapManifest,
 } from '../lib/alternative-evidence/iuLuminateLicensedBootstrapResearch';
@@ -110,7 +113,7 @@ function storedRead(overrides: Partial<IuLuminateStoredNormalizationRead> = {}):
       agreementEvidenceIds: ['agreement:v1'],
       postTerminationPolicyEvidenceIds: ['post-termination:v1'],
       publicOutputModes: ['derived-metric-only'],
-      writeGrantDigests: ['a'.repeat(64)],
+      writeGrantDigests: [buildLuminateObservationWriteGrantDigest(grant())],
       authorizedTerritories: ['US'],
     },
     resolution: {
@@ -170,7 +173,10 @@ test('stored rows from another agreement lineage are blocked even if their own s
       agreementEvidenceIds: ['agreement:old'],
       postTerminationPolicyEvidenceIds: ['post-termination:v1'],
       publicOutputModes: ['derived-metric-only'],
-      writeGrantDigests: ['a'.repeat(64)],
+      writeGrantDigests: [buildLuminateObservationWriteGrantDigest({
+        ...grant(),
+        agreementEvidenceId: 'agreement:old',
+      })],
       authorizedTerritories: ['US'],
     },
   });
@@ -201,6 +207,29 @@ test('multiple write-grant snapshots require explicit review on the initial gold
   assert.ok(result.blockers.includes(
     'iu-luminate-review-multiple-write-grant-snapshots-require-explicit-review',
   ));
+});
+
+test('same agreement evidence IDs still fail when the stored grant snapshot differs from the current manifest grant', () => {
+  const staleDigest = buildLuminateObservationWriteGrantDigest({
+    ...grant(),
+    authorizedTerritories: ['US', 'CA'],
+  });
+  const read = storedRead({
+    authorizationLineage: {
+      agreementEvidenceIds: ['agreement:v1'],
+      postTerminationPolicyEvidenceIds: ['post-termination:v1'],
+      publicOutputModes: ['derived-metric-only'],
+      writeGrantDigests: [staleDigest],
+      authorizedTerritories: ['US'],
+    },
+  });
+  const result = evaluateIuLuminateProductionReviewGate({
+    manifest: manifest(),
+    storedRead: read,
+  });
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.authorizationLineageState, 'blocked');
+  assert.ok(result.blockers.includes('iu-luminate-review-write-grant-digest-mismatch'));
 });
 
 test('missing stored normalization data remains blocked and never becomes zero', () => {
