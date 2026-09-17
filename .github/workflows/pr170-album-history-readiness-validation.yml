@@ -18,6 +18,7 @@ jobs:
       - name: Validate album history readiness contract
         run: |
           npx tsx --test tests/album-production-readiness-research-v1.test.mts
+          npx tsx --test tests/album-provider-authorization-research-v1.test.mts
           npx tsx --test tests/album-direct-first-week-absolute-research-v1.test.mts
           npx tsx --test tests/hanteo-first-week-production-readiness-research-v1.test.mts
           npx tsx --test tests/album-normalization-research-v1.test.mts
