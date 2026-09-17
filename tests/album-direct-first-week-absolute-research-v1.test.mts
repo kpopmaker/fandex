@@ -58,29 +58,26 @@ const evidence: AlternativeEvidence = Object.freeze({
   contractVersion: 'alternative-evidence-v1',
 });
 
-test('generic direct converter currently treats first-week as context, specialized projection fixes the absolute path', () => {
-  const [generic] = fromDirectAlbumObservation(observation, evidence);
-  assert.equal(generic?.featureKey, 'reportedFirstWeekSales');
-  assert.equal(generic?.featureRole, 'context');
-
-  const [absolute] = projectAuthorizedDirectFirstWeekAbsolute(observation, evidence);
-  assert.equal(absolute?.featureKey, 'physicalPurchaseAbsoluteLevel');
-  assert.equal(absolute?.featureRole, 'absolute');
-  assert.equal(absolute?.sourceClass, 'direct-provider');
-  assert.equal(absolute?.semantic, 'first-week-sale');
-  assert.equal(absolute?.unit, 'physical-units');
-  assert.equal(absolute?.periodType, 'first-week');
-  assert.equal(absolute?.value, 250000);
-  assert.equal(absolute?.eligibilityState, 'feature-resolver-candidate');
-  assert.equal(absolute?.proxyFallbackState, 'absolute-available');
-  assert.equal(assessAbsoluteLevel([absolute!]).state, 'ready');
+test('authorized direct first-week physical units are canonical absolute input', () => {
+  const [direct] = fromDirectAlbumObservation(observation, evidence);
+  assert.equal(direct?.featureKey, 'physicalPurchaseAbsoluteLevel');
+  assert.equal(direct?.featureRole, 'absolute');
+  assert.equal(direct?.sourceClass, 'direct-provider');
+  assert.equal(direct?.semantic, 'first-week-sale');
+  assert.equal(direct?.unit, 'physical-units');
+  assert.equal(direct?.periodType, 'first-week');
+  assert.equal(direct?.value, 250000);
+  assert.equal(direct?.eligibilityState, 'feature-resolver-candidate');
+  assert.equal(direct?.proxyFallbackState, 'absolute-available');
+  assert.equal(assessAbsoluteLevel([direct!]).state, 'ready');
 });
 
-test('projection preserves the underlying contribution identity rather than double-counting a transformed copy', () => {
-  const [generic] = fromDirectAlbumObservation(observation, evidence);
-  const [absolute] = projectAuthorizedDirectFirstWeekAbsolute(observation, evidence);
-  assert.equal(absolute?.contributionIdentity.contributionIdentityId, generic?.contributionIdentity.contributionIdentityId);
-  assert.notEqual(absolute?.featureInputId, generic?.featureInputId);
+test('first-week guard returns the same canonical observation instead of creating a duplicate projection', () => {
+  const [direct] = fromDirectAlbumObservation(observation, evidence);
+  const [guarded] = projectAuthorizedDirectFirstWeekAbsolute(observation, evidence);
+  assert.equal(guarded?.contributionIdentity.contributionIdentityId, direct?.contributionIdentity.contributionIdentityId);
+  assert.equal(guarded?.featureInputId, direct?.featureInputId);
+  assert.equal(guarded?.featureInputFamilyId, direct?.featureInputFamilyId);
 });
 
 test('non-first-week observations cannot enter the specialized primary anchor', () => {
@@ -112,7 +109,8 @@ test('authorized direct first-week input satisfies the direct-absolute architect
   assert.ok(readiness.blockers.includes('normalization-source-authorization-unresolved'));
 });
 
-test('descriptor explicitly forbids promoting news-reported first-week claims through this projection', () => {
+test('reported first-week claims remain outside the direct first-week absolute path', () => {
+  assert.equal(ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_DESCRIPTOR.canonicalDirectTransformRequired, true);
   assert.equal(ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_DESCRIPTOR.newsReportedFirstWeekPromotionAllowed, false);
   assert.equal(ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_DESCRIPTOR.productionEligible, false);
 });
