@@ -170,6 +170,25 @@ export function buildLuminateObservationStoreProviderConstraintMigrationSql(): s
   return `ALTER TABLE fandex.album_research_observation_records\n  DROP CONSTRAINT album_research_observation_records_provider_check;\n\nALTER TABLE fandex.album_research_observation_records\n  ADD CONSTRAINT album_research_observation_records_provider_check\n  CHECK (provider = ANY (ARRAY['circle-chart'::text, 'hanteo-chart'::text, 'luminate-music'::text]));`;
 }
 
+export function buildLuminateObservationWriteGrantDigest(
+  grant: LuminateFandexAuthorizationGrant,
+): string {
+  if (!grant.agreementEvidenceId || !grant.postTerminationPolicyEvidenceId) {
+    throw new Error('luminate_write_grant_digest_evidence_missing');
+  }
+  return sha256Canonical({
+    agreementEvidenceId: grant.agreementEvidenceId,
+    postTerminationPolicyEvidenceId: grant.postTerminationPolicyEvidenceId,
+    licenseActive: grant.licenseActive,
+    authorizedTerritories: [...grant.authorizedTerritories].sort(),
+    publicOutputMode: grant.publicOutputMode,
+    normalizedStorage: grant.normalizedStorage,
+    retentionDuringLicense: grant.retentionDuringLicense,
+    commercialProductUse: grant.commercialProductUse,
+    publicDerivedMetricPublication: grant.publicDerivedMetricPublication,
+  });
+}
+
 export function buildLuminateObservationStoredRow(
   input: LuminateObservationIntakeInput,
 ): LuminateAlbumObservationStoredRow {
@@ -217,17 +236,7 @@ export function buildLuminateObservationStoredRow(
     territory: observation.territory,
     scopeRole: observation.scopeRole,
   });
-  const writeGrantDigest = sha256Canonical({
-    agreementEvidenceId,
-    postTerminationPolicyEvidenceId,
-    licenseActive: input.grant.licenseActive,
-    authorizedTerritories: [...input.grant.authorizedTerritories].sort(),
-    publicOutputMode: input.grant.publicOutputMode,
-    normalizedStorage: input.grant.normalizedStorage,
-    retentionDuringLicense: input.grant.retentionDuringLicense,
-    commercialProductUse: input.grant.commercialProductUse,
-    publicDerivedMetricPublication: input.grant.publicDerivedMetricPublication,
-  });
+  const writeGrantDigest = buildLuminateObservationWriteGrantDigest(input.grant);
   const recordState = observation.supersedesObservationId ? 'revised' as const : 'original' as const;
   const recordId = sha256Canonical({
     recordVersion: ALBUM_DIRECT_OBSERVATION_RESEARCH_RECORD_VERSION,
