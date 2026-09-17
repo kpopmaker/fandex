@@ -43,6 +43,7 @@ export * from './iuPiecesResearchEvidence';
 export * from './iuLuminateBaselineAcquisitionResearch';
 export * from './iuLuminateStoredNormalizationResearch';
 export * from './iuLuminateProviderIdentityReviewResearch';
+export * from './iuLuminateLicensedBootstrapResearch';
 export * from './albumIdentityEvidencePersistenceResearch';
 export * from './albumIdentityStoredEvidenceHydrationResearch';
 export * from './albumIdentityStoredEvidenceReaderResearch';
