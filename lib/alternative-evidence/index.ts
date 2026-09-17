@@ -59,6 +59,7 @@ export * from './albumDirectFirstWeekAbsoluteResearch';
 export * from './hanteoRevisionSemanticsResearch';
 export * from './albumCompletedPurchaseProviderSurveyResearch';
 export * from './luminateAlbumSalesProductionCandidateResearch';
+export * from './luminateAlbumAcquisitionHandoffResearch';
 export * from './luminateAlbumAuthorizationResearch';
 export * from './luminateAlbumObservationIntakeResearch';
 export * from './luminateAlbumObservationPersistenceResearch';
