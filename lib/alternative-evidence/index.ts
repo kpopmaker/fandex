@@ -39,6 +39,8 @@ export * from './musicbrainzProviderAvailabilityResearch';
 export * from './musicReleaseEligibilityResearch';
 export * from './musicReleaseIdentityMappingResearch';
 export * from './iuCanonicalReleaseReferenceCatalogResearch';
+export * from './iuPiecesResearchEvidence';
+export * from './iuLuminateBaselineAcquisitionResearch';
 export * from './albumIdentityEvidencePersistenceResearch';
 export * from './albumIdentityStoredEvidenceHydrationResearch';
 export * from './albumIdentityStoredEvidenceReaderResearch';
