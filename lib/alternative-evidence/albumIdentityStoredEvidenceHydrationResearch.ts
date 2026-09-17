@@ -117,6 +117,12 @@ function payloadShape(value: unknown): value is AlbumIdentityEvidencePersistence
   return isRecord(value.data);
 }
 
+function authorizationAllowsResearchHydration(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return value.normalizedStorage === 'allowed'
+    && ['allowed', 'not-applicable'].includes(String(value.retention));
+}
+
 function retailMappingShape(value: unknown): value is Record<string, unknown> & {
   lifecycle: 'research';
   retailerId: 'yes24';
@@ -124,7 +130,7 @@ function retailMappingShape(value: unknown): value is Record<string, unknown> & 
   fandexReleaseId: string;
   fandexReleaseFamilyId: string;
   resolutionState: 'resolved';
-  reviewState: string;
+  reviewState: 'provider-verified';
   blockers: readonly string[];
   directProductContributionEligible: false;
   productScorePublished: false;
@@ -134,13 +140,28 @@ function retailMappingShape(value: unknown): value is Record<string, unknown> & 
     && value.retailerId === 'yes24'
     && typeof value.retailerProductId === 'string'
     && typeof value.fandexReleaseId === 'string'
+    && value.fandexReleaseId.startsWith('research:iu:release:')
     && typeof value.fandexReleaseFamilyId === 'string'
+    && value.fandexReleaseFamilyId.startsWith('research:iu:release-family:')
     && value.resolutionState === 'resolved'
-    && typeof value.reviewState === 'string'
+    && value.reviewState === 'provider-verified'
     && Array.isArray(value.blockers)
     && value.blockers.every((item) => typeof item === 'string')
     && value.directProductContributionEligible === false
     && value.productScorePublished === false;
+}
+
+function canonicalReferenceShape(value: unknown, releaseId: string, familyId: string): boolean {
+  if (!isRecord(value) || !isRecord(value.reference) || !isRecord(value.reference.release)) return false;
+  const release = value.reference.release;
+  return release.fandexReleaseId === releaseId
+    && release.fandexReleaseFamilyId === familyId
+    && release.resolutionState === 'resolved'
+    && release.reviewState === 'provider-verified'
+    && Array.isArray(release.artistIds)
+    && release.artistIds.includes('iu')
+    && releaseId.startsWith('research:iu:release:')
+    && familyId.startsWith('research:iu:release-family:');
 }
 
 function timestampMillis(value: AlbumIdentityResearchStoredTimestamp): number | null {
@@ -158,6 +179,9 @@ export function validateAlbumIdentityResearchStoredRow(
 ): AlbumIdentityStoredRowValidation {
   const issues: string[] = [];
   if (row.record_version !== ALBUM_IDENTITY_EVIDENCE_RECORD_VERSION) issues.push('record-version-mismatch');
+  if (!authorizationAllowsResearchHydration(row.authorization_snapshot)) {
+    issues.push('research-storage-authorization-invalid');
+  }
   if (!payloadShape(row.evidence_payload)) {
     issues.push('evidence-payload-shape-invalid');
     return Object.freeze({ valid: false, issues: unique(issues) });
@@ -174,6 +198,12 @@ export function validateAlbumIdentityResearchStoredRow(
   if (row.fandex_artist_id !== payload.canonicalArtistId) issues.push('artist-id-mismatch');
   if (row.fandex_release_id !== payload.fandexReleaseId) issues.push('release-id-mismatch');
   if (row.fandex_release_family_id !== payload.fandexReleaseFamilyId) issues.push('release-family-id-mismatch');
+  if (row.fandex_release_id !== null && !row.fandex_release_id.startsWith('research:')) {
+    issues.push('non-research-release-id-in-research-store');
+  }
+  if (row.fandex_release_family_id !== null && !row.fandex_release_family_id.startsWith('research:')) {
+    issues.push('non-research-release-family-id-in-research-store');
+  }
   if (row.source_entity_id !== digestId(`${payload.provider}:entity`, payload.providerEntityId)) {
     issues.push('source-entity-id-mismatch');
   }
@@ -182,6 +212,9 @@ export function validateAlbumIdentityResearchStoredRow(
   }
   if (!['original', 'revised', 'conflicting', 'rejected'].includes(row.record_state)) {
     issues.push('record-state-invalid');
+  }
+  if (row.record_state === 'revised' && row.supersedes_record_id === null) {
+    issues.push('revised-record-without-supersedes-id');
   }
 
   const observedMillis = timestampMillis(row.observed_at);
@@ -302,12 +335,14 @@ export function resolveRetailObservationIdentityFromStoredAlbumResearch(
     record.row.record_state !== 'conflicting'
     && record.row.record_state !== 'rejected'
     && record.payload.recordType === 'canonical-release-reference'
+    && record.payload.provider === 'fandex-research'
     && record.payload.fandexReleaseId === releaseId
-    && record.payload.fandexReleaseFamilyId === familyId);
+    && record.payload.fandexReleaseFamilyId === familyId
+    && canonicalReferenceShape(record.payload.data, releaseId, familyId));
   if (references.length !== 1) {
     return blocked([
       references.length === 0
-        ? 'canonical-release-reference-not-stored'
+        ? 'canonical-release-reference-not-stored-or-invalid'
         : 'canonical-release-reference-not-unique',
     ], accepted.map((record) => record.row.record_id));
   }
