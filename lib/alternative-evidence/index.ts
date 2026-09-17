@@ -44,3 +44,4 @@ export * from './albumIdentityStoredEvidenceHydrationResearch';
 export * from './albumIdentityStoredEvidenceReaderResearch';
 export * from './hanteoAlbumSalesProviderResearch';
 export * from './iuTheWinningResearchEvidence';
+export * from './albumResearchClaimPersistenceResearch';
