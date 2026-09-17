@@ -18,22 +18,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:album:hanteo-sales-provider-research
+      - run: npx tsx --test tests/iu-the-winning-research-evidence-v1.test.mts
       - run: npx tsx --test tests/album-identity-stored-evidence-reader-research-v1.test.mts
       - run: npx tsx --test tests/album-identity-stored-evidence-hydration-research-v1.test.mts
       - run: npm run test:album:music-release-identity-mapping-research
       - run: npm run test:alternative-evidence:v1
       - run: npm run test:album:synthetic-gate
       - run: npm run typecheck
-
-  live-probe:
-    needs: validate
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run ingestion:hanteo:research-album-sales-provider
