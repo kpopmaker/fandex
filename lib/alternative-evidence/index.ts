@@ -46,3 +46,4 @@ export * from './hanteoAlbumSalesProviderResearch';
 export * from './iuTheWinningResearchEvidence';
 export * from './albumResearchClaimPersistenceResearch';
 export * from './albumResearchClaimStoredReaderResearch';
+export * from './albumProductionReadinessResearch';
