@@ -13,6 +13,9 @@ import {
 import type {
   IuLuminateStoredNormalizationRead,
 } from './luminateAlbumObservationStoredReaderResearch';
+import {
+  buildLuminateObservationWriteGrantDigest,
+} from './luminateAlbumObservationIntakeResearch';
 
 export const IU_LUMINATE_PRODUCTION_REVIEW_GATE_RESEARCH_VERSION =
   'iu-luminate-production-review-gate-research-v1' as const;
@@ -30,6 +33,7 @@ export const IU_LUMINATE_PRODUCTION_REVIEW_GATE_RESEARCH_DESCRIPTOR = Object.fre
   productionDatabaseWritePerformed: false as const,
   sameExecutedAgreementLineageRequiredForInitialGoldenPath: true as const,
   sameWriteGrantSnapshotRequiredForInitialGoldenPath: true as const,
+  storedWriteGrantDigestMustEqualCurrentManifestGrantDigest: true as const,
 });
 
 export type IuLuminateProductionReviewGateResult = Readonly<{
@@ -108,8 +112,11 @@ export function evaluateIuLuminateProductionReviewGate(input: Readonly<{
   if (!lineage.authorizedTerritories.includes(manifest.territory)) {
     blockers.push('iu-luminate-review-stored-territory-not-in-authorization-lineage');
   }
+  const expectedWriteGrantDigest = buildLuminateObservationWriteGrantDigest(manifest.grant);
   if (lineage.writeGrantDigests.length !== 1) {
     blockers.push('iu-luminate-review-multiple-write-grant-snapshots-require-explicit-review');
+  } else if (lineage.writeGrantDigests[0] !== expectedWriteGrantDigest) {
+    blockers.push('iu-luminate-review-write-grant-digest-mismatch');
   }
 
   const resolution = storedRead.resolution;
@@ -137,7 +144,8 @@ export function evaluateIuLuminateProductionReviewGate(input: Readonly<{
   const uniqueBlockers = Object.freeze([...new Set(blockers)]);
   const lineageState = uniqueBlockers.some((blocker) =>
     blocker.includes('lineage')
-      || blocker.includes('write-grant-snapshots'))
+      || blocker.includes('write-grant-snapshots')
+      || blocker.includes('write-grant-digest'))
     ? 'blocked' as const
     : 'matched' as const;
 
