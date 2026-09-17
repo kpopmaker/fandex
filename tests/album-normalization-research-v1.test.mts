@@ -128,12 +128,16 @@ function observation(input: Readonly<{
   };
 }
 
-test('normalization contract uses no arbitrary thresholds or cross-provider sum', () => {
+test('normalization contract uses no arbitrary thresholds, provider sums, or territory sums', () => {
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.primaryAnchor, 'release-relative-first-week-physical-units');
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.baselineDefinition, 'immediately-previous-comparable-eligible-release');
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.transformationRule, 'current-over-previous-minus-one');
+  assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.productionOutputScope, 'single-provider-single-territory-release-reaction');
+  assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.territoryLabelRequired, true);
+  assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.globalMarketReactionLabelAllowed, false);
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.arbitraryNumericThresholdsUsed, false);
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.crossProviderAggregationAllowed, false);
+  assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.crossTerritoryAggregationAllowed, false);
   assert.equal(ALBUM_NORMALIZATION_RESEARCH_DESCRIPTOR.finalScorePublished, false);
 });
 
@@ -152,10 +156,11 @@ test('selects the immediately previous comparable eligible release, not an arbit
   assert.equal(normalized.relativeChange, 1);
 });
 
-test('calendar-week or another provider cannot substitute for release-relative first week', () => {
-  const current = feature({ id: 'current', releaseId: 'r3', value: 200 });
-  const calendarWeek = feature({ id: 'weekly', releaseId: 'r2', value: 100, semantic: 'period-sale', periodType: 'week' });
-  const otherProvider = feature({ id: 'other-provider', releaseId: 'r2', value: 100, provider: 'circle-chart' });
+test('calendar-week, another provider, or another territory cannot substitute for the same release-reaction lane', () => {
+  const current = feature({ id: 'current', releaseId: 'r3', value: 200, provider: 'luminate-music', territory: 'US' });
+  const calendarWeek = feature({ id: 'weekly', releaseId: 'r2', value: 100, provider: 'luminate-music', territory: 'US', semantic: 'period-sale', periodType: 'week' });
+  const otherProvider = feature({ id: 'other-provider', releaseId: 'r2', value: 100, provider: 'circle-chart', territory: 'US' });
+  const otherTerritory = feature({ id: 'other-territory', releaseId: 'r2', value: 100, provider: 'luminate-music', territory: 'CA' });
 
   const weekComparison = evaluateFirstWeekNormalizationComparability(current, calendarWeek);
   assert.equal(weekComparison.state, 'not-comparable');
@@ -165,6 +170,10 @@ test('calendar-week or another provider cannot substitute for release-relative f
   const providerComparison = evaluateFirstWeekNormalizationComparability(current, otherProvider);
   assert.equal(providerComparison.state, 'not-comparable');
   assert.ok(providerComparison.blockers.includes('normalization-provider-mismatch'));
+
+  const territoryComparison = evaluateFirstWeekNormalizationComparability(current, otherTerritory);
+  assert.equal(territoryComparison.state, 'not-comparable');
+  assert.ok(territoryComparison.blockers.includes('normalization-territory-mismatch'));
 });
 
 test('missing comparable history remains insufficient-history and never becomes numeric zero', () => {
@@ -200,10 +209,11 @@ test('revision policy uses one active supersession head instead of counting revi
   assert.equal(asKnownBeforeRevision.observation?.observationId, 'original');
 });
 
-test('four internal definitions are resolved while external rights and provider-period semantics remain blocked', () => {
+test('internal normalization definitions include resolved territory scope while external rights and generic provider-period remain blocked', () => {
   assert.deepEqual(ALBUM_NORMALIZATION_INTERNAL_DEFINITION_READINESS, {
     baselineDefinitionResolved: true,
     crossReleaseComparabilityResolved: true,
+    territoryScopeDefinitionResolved: true,
     transformationRuleDefined: true,
     revisionPolicyResolved: true,
     sourceAuthorizationResolved: false,
