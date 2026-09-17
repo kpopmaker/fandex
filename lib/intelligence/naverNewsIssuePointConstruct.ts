@@ -1,5 +1,5 @@
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
-  'v1_naver_news_issue_point_construct' as const;
+  'v2_naver_news_issue_point_construct' as const;
 
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
@@ -16,7 +16,14 @@ export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   missingOrGapAsZeroAllowed: false as const,
   strictPublicationIntervalArticleCountClaimAllowed: false as const,
   candidateWindowSlotCounts: Object.freeze([8, 12] as const),
-  windowSelectionStatus: 'not_frozen' as const,
+  windowSelectionStatus: 'frozen' as const,
+  windowSelectionPrinciple: 'preserve_current_state_temporal_locality' as const,
+  selectedWindowSlotCount: 8 as const,
+  selectedWindowDurationHours: 8 as const,
+  responsivenessPriority: true as const,
+  persistenceAsSelectionObjective: false as const,
+  smoothingAsSelectionObjective: false as const,
+  automaticWindowFallbackAllowed: false as const,
   baselineSufficiencyStatus: 'not_frozen' as const,
   normalizationStatus: 'not_frozen' as const,
   productMethodologyFrozen: false as const,
