@@ -1,5 +1,5 @@
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
-  'v2_naver_news_issue_point_construct' as const;
+  'v3_naver_news_issue_point_construct' as const;
 
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
@@ -24,7 +24,17 @@ export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   persistenceAsSelectionObjective: false as const,
   smoothingAsSelectionObjective: false as const,
   automaticWindowFallbackAllowed: false as const,
-  baselineSufficiencyStatus: 'not_frozen' as const,
+  baselineSufficiencyStatus: 'frozen' as const,
+  baselineWindowSlotCount: 8 as const,
+  baselineMembership:
+    'all_prior_defined_rolling_windows_same_epoch_same_methodology_version' as const,
+  baselineReadinessGate: 'replicated_cycle_history' as const,
+  currentWindowIncludedInBaseline: false as const,
+  bootstrapIncludedInBaseline: false as const,
+  undefinedWindowIncludedInBaseline: false as const,
+  crossEpochHistoryAllowed: false as const,
+  crossMethodologyVersionHistoryAllowed: false as const,
+  fixedBaselineSpanParameterAllowed: false as const,
   normalizationStatus: 'not_frozen' as const,
   productMethodologyFrozen: false as const,
   directProductContributionEligible: false as const,
