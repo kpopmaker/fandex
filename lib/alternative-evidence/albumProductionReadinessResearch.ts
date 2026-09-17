@@ -20,6 +20,15 @@ export type AlbumProviderProductionEvidence = Readonly<{
   evidenceUrls: readonly string[];
 }>;
 
+export const ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH = Object.freeze({
+  lifecycle: 'research' as const,
+  providerHistoricalQueryRequiredForProduction: false as const,
+  authorizedComparableBaselineRequiredForProduction: true as const,
+  prospectiveStoredAuthorizedObservationsMaySatisfyBaseline: true as const,
+  reportedContextMaySatisfyBaseline: false as const,
+  missingBaselineMayBecomeZero: false as const,
+});
+
 export const HANTEO_ALBUM_PRODUCTION_EVIDENCE = Object.freeze({
   providerId: 'hanteo-chart' as const,
   constructCompatible: true,
@@ -87,10 +96,19 @@ export function evaluateAlbumNormalizationFreezeReadiness(
   });
 }
 
+export type AlbumNormalizationDataAssessment = Readonly<{
+  state: 'available' | 'insufficient-history' | 'blocked';
+  currentFeatureInputId: string;
+  baselineFeatureInputId: string | null;
+  relativeChange: number | null;
+  blockers: readonly string[];
+}>;
+
 export type MusicAlbumPointProductionReadiness = Readonly<{
   state: 'eligible-for-production-review' | 'blocked';
   providerState: 'ready' | 'rights-blocked' | 'semantics-blocked';
   normalizationState: AlbumNormalizationFreezeAssessment['state'];
+  normalizationDataState: AlbumNormalizationDataAssessment['state'] | 'unassessed';
   blockers: readonly string[];
   reportedContextInputIds: readonly string[];
   directAbsoluteInputIds: readonly string[];
@@ -99,6 +117,7 @@ export type MusicAlbumPointProductionReadiness = Readonly<{
 export function evaluateMusicAlbumPointProductionReadiness(input: Readonly<{
   provider: AlbumProviderProductionEvidence;
   normalization: AlbumNormalizationFreezeInputs;
+  normalizationData: AlbumNormalizationDataAssessment | null;
   features: readonly CanonicalAlbumFeatureInput[];
 }>): MusicAlbumPointProductionReadiness {
   const blockers: string[] = [];
@@ -110,7 +129,6 @@ export function evaluateMusicAlbumPointProductionReadiness(input: Readonly<{
   if (provider.derivedPublicationRights !== 'allowed') blockers.push('provider-derived-publication-rights-unresolved');
   if (!provider.directObservationAuthorized) blockers.push('authorized-direct-provider-observation-missing');
   if (provider.periodSemantics !== 'verified') blockers.push('provider-period-semantics-not-fully-verified');
-  if (provider.historicalQuerySemantics !== 'verified') blockers.push('provider-historical-query-semantics-not-fully-verified');
   if (provider.revisionSemantics !== 'verified') blockers.push('provider-revision-semantics-not-fully-verified');
 
   const reportedContextInputIds = input.features
@@ -133,6 +151,28 @@ export function evaluateMusicAlbumPointProductionReadiness(input: Readonly<{
   const normalization = evaluateAlbumNormalizationFreezeReadiness(input.normalization);
   blockers.push(...normalization.blockers);
 
+  const normalizationDataState = input.normalizationData?.state ?? 'unassessed';
+  if (input.normalizationData === null) {
+    blockers.push('normalization-data-unassessed');
+  } else if (input.normalizationData.state === 'insufficient-history') {
+    blockers.push('normalization-previous-comparable-release-missing');
+  } else if (input.normalizationData.state === 'blocked') {
+    blockers.push('normalization-data-blocked');
+    blockers.push(...input.normalizationData.blockers);
+  } else {
+    const baselineId = input.normalizationData.baselineFeatureInputId;
+    if (baselineId === null) blockers.push('normalization-baseline-feature-input-missing');
+    if (input.normalizationData.relativeChange === null || !Number.isFinite(input.normalizationData.relativeChange)) {
+      blockers.push('normalization-relative-change-unavailable');
+    }
+    if (!directAbsoluteInputIds.includes(input.normalizationData.currentFeatureInputId)) {
+      blockers.push('normalization-current-input-not-authorized-direct-absolute');
+    }
+    if (baselineId !== null && !directAbsoluteInputIds.includes(baselineId)) {
+      blockers.push('normalization-baseline-input-not-authorized-direct-absolute');
+    }
+  }
+
   const providerState = blockers.some((blocker) => blocker.includes('rights') || blocker === 'authorized-direct-provider-observation-missing')
     ? 'rights-blocked' as const
     : blockers.some((blocker) => blocker.startsWith('provider-'))
@@ -143,6 +183,7 @@ export function evaluateMusicAlbumPointProductionReadiness(input: Readonly<{
     state: blockers.length === 0 ? 'eligible-for-production-review' as const : 'blocked' as const,
     providerState,
     normalizationState: normalization.state,
+    normalizationDataState,
     blockers: Object.freeze([...new Set(blockers)]),
     reportedContextInputIds: Object.freeze(reportedContextInputIds),
     directAbsoluteInputIds: Object.freeze(directAbsoluteInputIds),
