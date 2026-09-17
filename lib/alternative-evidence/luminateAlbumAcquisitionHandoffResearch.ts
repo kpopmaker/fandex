@@ -142,13 +142,16 @@ export type LuminateAcquisitionHandoffAssessment = Readonly<{
 export function assessLuminateAlbumAcquisitionHandoff(): LuminateAcquisitionHandoffAssessment {
   const preferred = LUMINATE_ALBUM_ACQUISITION_HANDOFF_RESEARCH.surfacePriority[0];
   const fallback = LUMINATE_ALBUM_ACQUISITION_HANDOFF_RESEARCH.surfacePriority[1];
+  const preferredUnresolved = 'unresolvedBeforeContract' in preferred
+    ? preferred.unresolvedBeforeContract
+    : Object.freeze([] as const);
   return Object.freeze({
     state: 'ready-for-manual-sales-handoff' as const,
     preferredSurface: preferred.surface,
     fallbackSurface: fallback.surface,
     internalBlockers: Object.freeze([]),
     externalRequirements: Object.freeze([
-      ...preferred.unresolvedBeforeContract,
+      ...preferredUnresolved,
       ...LUMINATE_ALBUM_ACQUISITION_HANDOFF_RESEARCH.orderFormOrSeparateWritingRequirements,
     ]),
   });
