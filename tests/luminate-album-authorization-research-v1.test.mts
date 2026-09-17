@@ -23,8 +23,9 @@ function grant(overrides: Partial<LuminateFandexAuthorizationGrant> = {}): Lumin
     normalizedStorage: 'expressly-allowed',
     retentionDuringLicense: 'expressly-allowed',
     commercialProductUse: 'expressly-allowed',
+    publicOutputMode: 'derived-metric-only',
     publicDerivedMetricPublication: 'expressly-allowed',
-    publicRankingOrBenchmarking: 'expressly-allowed',
+    publicRankingOrBenchmarking: 'not-addressed',
     rawRedistribution: 'not-addressed',
     postTerminationPolicy: 'delete-source-and-retract-provider-derived-output',
     postTerminationPolicyEvidenceId: 'synthetic-termination-policy-evidence',
@@ -54,15 +55,40 @@ test('subscription-only access cannot satisfy explicit FANDEX public-product rig
   assert.ok(assessment.blockers.includes('luminate-explicit-fandex-permitted-use-writing-missing'));
 });
 
-test('public derived metric and ranking or benchmarking rights must be explicit', () => {
+test('public derived metric publication is always required', () => {
   const assessment = evaluateLuminateFandexAuthorizationGrant(grant({
     publicDerivedMetricPublication: 'not-addressed',
-    publicRankingOrBenchmarking: 'not-allowed',
   }));
 
   assert.equal(assessment.state, 'blocked');
   assert.ok(assessment.blockers.includes('luminate-public-derived-metric-publication-not-authorized'));
-  assert.ok(assessment.blockers.includes('luminate-public-ranking-or-benchmarking-not-authorized'));
+});
+
+test('ranking or benchmarking rights are conditional on comparative public output', () => {
+  assert.equal(
+    LUMINATE_FANDEX_REQUIRED_GRANTS_RESEARCH.publicRankingOrBenchmarkingRequiredForDerivedMetricOnly,
+    false,
+  );
+  assert.equal(
+    LUMINATE_FANDEX_REQUIRED_GRANTS_RESEARCH.publicRankingOrBenchmarkingRequiredForComparativeOutput,
+    true,
+  );
+
+  const derivedMetricOnly = evaluateLuminateFandexAuthorizationGrant(grant({
+    publicOutputMode: 'derived-metric-only',
+    publicRankingOrBenchmarking: 'not-addressed',
+  }));
+  assert.equal(derivedMetricOnly.state, 'eligible-for-provider-onboarding-review');
+  assert.ok(derivedMetricOnly.nonBlockingGaps.includes(
+    'luminate-public-ranking-rights-unresolved-not-used-by-derived-metric-only-output',
+  ));
+
+  const comparative = evaluateLuminateFandexAuthorizationGrant(grant({
+    publicOutputMode: 'comparative-ranking-or-benchmark',
+    publicRankingOrBenchmarking: 'not-addressed',
+  }));
+  assert.equal(comparative.state, 'blocked');
+  assert.ok(comparative.blockers.includes('luminate-public-ranking-or-benchmarking-not-authorized'));
 });
 
 test('post-termination handling must be resolved because default terms require deletion', () => {
