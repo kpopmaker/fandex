@@ -31,8 +31,12 @@ export const ORICON_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH = Object.freeze({
   providerPeriodSemantics: Object.freeze({
     publicWeeklyPeriodPattern: 'monday-through-sunday' as const,
     dailySalesAvailable: true as const,
+    releaseWeekMondayThroughFollowingSundayDailyWindowAvailable: true as const,
     customPeriodDataAvailable: true as const,
-    releaseRelativeSevenDayAggregationFeasible: true as const,
+    weeklyEstimateIncludesAdditionalWeeklyReports: true as const,
+    sumOfSevenDailyEstimatesEqualsFinalWeeklyEstimate: false as const,
+    naiveDailySevenDaySumAllowedForFandexFirstWeek: false as const,
+    customReleaseRelativeSevenDayFinalEstimateContractVerified: false as const,
     exactDailyCutoffVerified: false as const,
     exactTimezoneContractVerified: false as const,
     firstWeekCanonicalizationReady: false as const,
@@ -85,7 +89,7 @@ export const ORICON_ALBUM_PRODUCTION_EVIDENCE_RESEARCH = Object.freeze({
   providerId: 'oricon-research' as const,
   constructCompatible: true,
   constructEvidence:
-    'Oricon Research collects retailer and e-commerce physical product sales data and provides daily, weekly, cumulative, and custom-period album sales data through corporate data services. Published unit figures are provider-estimated nationwide sales copies and must retain that provider-estimate meaning.',
+    'Oricon Research collects retailer and e-commerce physical product sales data and provides daily, weekly, cumulative, and custom-period album sales data through corporate data services. Published unit figures are provider-estimated nationwide sales copies and must retain that provider-estimate meaning. Oricon explicitly states that a weekly estimate is not the simple sum of daily estimates because additional weekly store reports are incorporated.',
   acquisitionRights: 'review-required' as const,
   normalizedStorageRights: 'review-required' as const,
   derivedPublicationRights: 'review-required' as const,
