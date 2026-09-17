@@ -144,6 +144,11 @@ test('one store read resolves The Winning against Pieces', async () => {
   assert.equal(result.effects.databaseWrites, 0);
   assert.equal(result.effects.externalCalls, 0);
   assert.equal(result.rowsRead, 2);
+  assert.deepEqual(result.authorizationLineage.agreementEvidenceIds, ['test-only-executed-agreement']);
+  assert.deepEqual(result.authorizationLineage.postTerminationPolicyEvidenceIds, ['test-only-post-termination-evidence']);
+  assert.deepEqual(result.authorizationLineage.publicOutputModes, ['derived-metric-only']);
+  assert.equal(result.authorizationLineage.writeGrantDigests.length, 1);
+  assert.deepEqual(result.authorizationLineage.authorizedTerritories, ['CA', 'US']);
   assert.equal(result.resolution.state, 'available');
   assert.equal(result.resolution.selectedBaselineReleaseId, IU_PIECES_RELEASE_ID);
   assert.equal(result.resolution.reaction?.relativeChange, 0.5);
@@ -157,6 +162,8 @@ test('zero rows remains current-observation-missing and never becomes zero/stabl
   };
   const result = await readStoredIuLuminateNormalizationResearch(executor, 'US');
   assert.equal(result.rowsRead, 0);
+  assert.deepEqual(result.authorizationLineage.agreementEvidenceIds, []);
+  assert.deepEqual(result.authorizationLineage.writeGrantDigests, []);
   assert.equal(result.resolution.state, 'current-observation-missing');
   assert.equal(result.resolution.reaction, null);
 });
