@@ -111,9 +111,12 @@ export const ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH = Object.freeze({
       contractualProductionPath: 'explicitly-offered' as const,
       territoryScope: Object.freeze(['GB']),
       productionCandidateState: 'contract-capable' as const,
-      reason: 'Official Charts states that it captures daily physical sales transactions and supplies subscription data services and tailored data feeds. Public pages do not grant FANDEX acquisition, storage, or derived-publication rights; those uses require an applicable subscription/licence.',
+      reason: 'Official Charts tracks UK physical sales from direct retail partners and offers subscription data services, bespoke data feeds, and publication licences. Its public PRO material states that the data is confidential by default; exact daily sale-date/cutoff and correction semantics are not publicly specified, so FANDEX still needs both rights and provider-specific temporal/revision semantics before Production use.',
       evidenceUrls: Object.freeze([
         'https://www.officialcharts.com/our-business-services/b2b-data/',
+        'https://www.officialcharts.com/pro/standard/faqs/',
+        'https://www.officialcharts.com/pro/use-case/for-artists-managers/',
+        'https://www.officialcharts.com/pro/register-to-be-a-chart-reporting-retailer/',
         'https://www.officialcharts.com/our-business-services/chart-licensing/',
         'https://www.officialcharts.com/who-we-are/copyright-notice/',
       ]),
@@ -239,6 +242,14 @@ export const ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH = Object.freeze({
       'luminate-music-api-data-share',
       'official-charts-b2b-data',
     ]),
+    internallyResolvedExceptRightsAndAuthorizedDataCandidateIds: Object.freeze([
+      'luminate-music-api-data-share',
+    ]),
+    candidatesStillRequiringProviderSpecificSemantics: Object.freeze([
+      'official-charts-b2b-data',
+    ]),
+    productionOutputMustRemainTerritoryScoped: true as const,
+    globalMarketReactionMayBeInferredFromSingleTerritory: false as const,
     reportedContextMaySubstituteDirectObservation: false as const,
     rankOrSalesIndexMaySubstitutePhysicalUnits: false as const,
     shipmentMaySubstituteCompletedPurchase: false as const,
