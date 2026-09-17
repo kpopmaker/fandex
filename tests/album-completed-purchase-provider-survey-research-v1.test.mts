@@ -68,6 +68,18 @@ test('retailer Open APIs remain proxy or identity sources when they expose index
   }
 });
 
+test('bounded survey separates the rights-only candidate from the candidate still needing provider-specific semantics', () => {
+  const conclusion = ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH.conclusion;
+  assert.deepEqual(conclusion.internallyResolvedExceptRightsAndAuthorizedDataCandidateIds, [
+    'luminate-music-api-data-share',
+  ]);
+  assert.deepEqual(conclusion.candidatesStillRequiringProviderSpecificSemantics, [
+    'official-charts-b2b-data',
+  ]);
+  assert.equal(conclusion.productionOutputMustRemainTerritoryScoped, true);
+  assert.equal(conclusion.globalMarketReactionMayBeInferredFromSingleTerritory, false);
+});
+
 test('reported context, rank/index proxies and shipment proxies cannot substitute direct completed purchases', () => {
   const conclusion = ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH.conclusion;
   assert.equal(conclusion.reportedContextMaySubstituteDirectObservation, false);
