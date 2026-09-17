@@ -30,10 +30,11 @@ export const HANTEO_ALBUM_PRODUCTION_EVIDENCE = Object.freeze({
   derivedPublicationRights: 'review-required' as const,
   directObservationAuthorized: false,
   periodSemantics: 'partially-verified' as const,
-  historicalQuerySemantics: 'unverified' as const,
+  historicalQuerySemantics: 'partially-verified' as const,
   revisionSemantics: 'partially-verified' as const,
   evidenceUrls: Object.freeze([
     'https://www.hanteochart.com/en/about',
+    'https://www.hanteochart.com/en/charts/album/weekly/2024-W08',
     'https://api.hanteochart.com/',
     'https://www.hanteochart.com/ko/notices',
   ]),
