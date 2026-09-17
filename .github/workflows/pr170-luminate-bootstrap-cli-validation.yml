@@ -1,0 +1,29 @@
+name: PR170 Luminate bootstrap CLI validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate bootstrap review command
+        run: |
+          npx tsx --test tests/iu-luminate-licensed-bootstrap-command-research-v1.test.mts
+          npx tsx --test tests/iu-luminate-licensed-bootstrap-research-v1.test.mts
+          npx tsx --test tests/iu-luminate-provider-identity-review-research-v1.test.mts
+          npm run typecheck
+      - name: Verify package CLI entrypoint fails closed without input
+        run: |
+          if npm run ingestion:luminate:review-licensed-bootstrap -- --input /tmp/does-not-exist.json; then
+            echo "expected bootstrap CLI to fail closed"
+            exit 1
+          fi
