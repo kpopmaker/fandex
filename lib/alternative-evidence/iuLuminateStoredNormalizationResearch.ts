@@ -183,7 +183,7 @@ export function hydrateLuminateObservationResearchStoredRow(
 ): HydratedLuminateObservationResearch {
   assertStoredRowIntegrity(row);
   const observation = row.observation_payload;
-  const evidenceBase = {
+  const evidenceBase: Omit<AlternativeEvidence, 'evidenceDigest'> = Object.freeze({
     contractVersion: ALTERNATIVE_EVIDENCE_CONTRACT_VERSION,
     evidenceId: `stored:luminate-album-observation:${row.record_id}`,
     origin: 'direct-licensed-provider' as const,
@@ -194,8 +194,8 @@ export function hydrateLuminateObservationResearchStoredRow(
     observedAt: row.observed_at,
     collectedAt: row.collected_at,
     sourcePublishedAt: observation.providerPublishedAt,
-    researchOnly: true as const,
-  };
+    researchOnly: true,
+  });
   const evidence: AlternativeEvidence = Object.freeze({
     ...evidenceBase,
     evidenceDigest: sha256Canonical(evidenceBase),
