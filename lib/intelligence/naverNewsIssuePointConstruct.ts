@@ -1,0 +1,25 @@
+export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
+  'v1_naver_news_issue_point_construct' as const;
+
+export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
+  contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+  variableId: 'newsIssuePoint' as const,
+  constructStatus: 'frozen' as const,
+  lifecycle: 'research' as const,
+  sourceMetricKey: 'naverNewsShadowFirstSeenActivity' as const,
+  construct: 'protocol_conditioned_first_seen_canonical_media_activity' as const,
+  baselineScope: 'same_artist_same_official_shadow_epoch' as const,
+  activityBucketTimeBasis: 'collection_slot' as const,
+  observationTimeSource: 'normalized_published_at' as const,
+  collectionTimeSource: 'stored_evidence_collected_at' as const,
+  bootstrapExcluded: true as const,
+  missingOrGapAsZeroAllowed: false as const,
+  strictPublicationIntervalArticleCountClaimAllowed: false as const,
+  candidateWindowSlotCounts: Object.freeze([8, 12] as const),
+  windowSelectionStatus: 'not_frozen' as const,
+  baselineSufficiencyStatus: 'not_frozen' as const,
+  normalizationStatus: 'not_frozen' as const,
+  productMethodologyFrozen: false as const,
+  directProductContributionEligible: false as const,
+  productScorePublished: false as const,
+});
