@@ -66,6 +66,7 @@ export * from './luminateSnowflakeAlbumExtractionResearch';
 export * from './luminateAlbumAuthorizationResearch';
 export * from './luminateAlbumObservationIntakeResearch';
 export * from './luminateAlbumObservationPersistenceResearch';
+export * from './luminateAlbumObservationStoredReaderResearch';
 export * from './luminateAlbumObservationWriteCommandResearch';
 export * from './officialChartsAlbumSalesProductionCandidateResearch';
 export * from './oriconAlbumSalesProductionCandidateResearch';
