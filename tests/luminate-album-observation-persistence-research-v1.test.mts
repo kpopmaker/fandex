@@ -21,7 +21,7 @@ import {
   parseLuminateAlbumResearchWriteArgs,
   runLuminateAlbumResearchWrite,
   type LuminateAlbumResearchWritePool,
-} from '../scripts/ingestion/write-luminate-album-observation-research';
+} from '../lib/alternative-evidence/luminateAlbumObservationWriteCommandResearch';
 
 function grant(overrides: Partial<LuminateFandexAuthorizationGrant> = {}): LuminateFandexAuthorizationGrant {
   return {
