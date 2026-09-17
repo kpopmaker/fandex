@@ -29,7 +29,7 @@ test('official semantics do not imply Production authorization', () => {
   assert.equal(HANTEO_ALBUM_PRODUCTION_EVIDENCE.constructCompatible, true);
   assert.equal(HANTEO_ALBUM_PRODUCTION_EVIDENCE.acquisitionRights, 'review-required');
   assert.equal(HANTEO_ALBUM_PRODUCTION_EVIDENCE.directObservationAuthorized, false);
-  assert.equal(HANTEO_ALBUM_PRODUCTION_EVIDENCE.historicalQuerySemantics, 'unverified');
+  assert.equal(HANTEO_ALBUM_PRODUCTION_EVIDENCE.historicalQuerySemantics, 'partially-verified');
 
   assert.equal(CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE.constructCompatible, true);
   assert.equal(CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE.acquisitionRights, 'blocked');
