@@ -6,10 +6,14 @@ import {
   NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
 } from '../lib/intelligence/naverNewsIssuePointConstruct';
 
-test('newsIssuePoint construct is frozen without freezing Product publication methodology', () => {
+test('newsIssuePoint construct remains frozen while the Product window semantics are narrowed', () => {
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT.contractVersion,
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+    'v2_naver_news_issue_point_construct',
   );
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.variableId, 'newsIssuePoint');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.constructStatus, 'frozen');
@@ -37,9 +41,20 @@ test('newsIssuePoint construct is frozen without freezing Product publication me
   );
 });
 
-test('only evidence-supported window candidates remain and all publication gates stay closed', () => {
+test('8h is the frozen Product window by temporal-locality principle while other methodology gates stay closed', () => {
   assert.deepEqual(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.candidateWindowSlotCounts, [8, 12]);
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionStatus, 'not_frozen');
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionStatus, 'frozen');
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionPrinciple,
+    'preserve_current_state_temporal_locality',
+  );
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.selectedWindowSlotCount, 8);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.selectedWindowDurationHours, 8);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.responsivenessPriority, true);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.persistenceAsSelectionObjective, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.smoothingAsSelectionObjective, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.automaticWindowFallbackAllowed, false);
+
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyStatus, 'not_frozen');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationStatus, 'not_frozen');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productMethodologyFrozen, false);
