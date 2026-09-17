@@ -69,12 +69,20 @@ function observation(overrides: Partial<DirectAlbumObservationDraft> = {}) {
   });
 }
 
-test('current Neon provider allowlist requires a schema extension before Luminate rows can be stored', () => {
+test('main Neon provider allowlist now includes Luminate and no further provider extension is required', () => {
   const schema = LUMINATE_ALBUM_OBSERVATION_STORE_SCHEMA_RESEARCH;
-  assert.deepEqual(schema.observedMainSchemaProviderConstraint, ['circle-chart', 'hanteo-chart']);
+  assert.deepEqual(schema.observedMainSchemaProviderConstraint, [
+    'circle-chart',
+    'hanteo-chart',
+    'luminate-music',
+  ]);
   assert.equal(schema.requiredProviderId, 'luminate-music');
-  assert.equal(schema.providerConstraintExtensionRequired, true);
+  assert.equal(schema.providerConstraintExtensionRequired, false);
+  assert.equal(schema.mainDatabaseProviderConstraintVerified, true);
+  assert.equal(schema.mainDatabaseProviderConstraintMigrationApplied, true);
   assert.equal(schema.mainDatabaseMutatedByThisContract, false);
+  assert.equal(schema.migrationApplicationRequiresExplicitApproval, false);
+  assert.equal(schema.historicalMigrationSqlRetainedForAudit, true);
 
   const sql = buildLuminateObservationStoreProviderConstraintMigrationSql();
   assert.match(sql, /DROP CONSTRAINT album_research_observation_records_provider_check/);
@@ -83,7 +91,7 @@ test('current Neon provider allowlist requires a schema extension before Luminat
   assert.match(sql, /'luminate-music'/);
 });
 
-test('rights resolution alone cannot bypass the current observation-store provider constraint', () => {
+test('an explicit schema-state mismatch remains fail-closed even though main is now migrated', () => {
   const assessment = evaluateLuminateObservationIntake({
     observation: observation(),
     releaseDate: '2024-02-20',
@@ -97,7 +105,7 @@ test('rights resolution alone cannot bypass the current observation-store provid
   assert.ok(assessment.blockers.includes('luminate-provider-not-allowed-by-observation-store-schema'));
 });
 
-test('authorized exact-scope Luminate first-week observation becomes store-write-review eligible only after schema support', () => {
+test('authorized exact-scope Luminate first-week observation becomes store-write-review eligible with schema support', () => {
   const input = {
     observation: observation(),
     releaseDate: '2024-02-20',
