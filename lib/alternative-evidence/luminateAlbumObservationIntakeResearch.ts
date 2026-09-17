@@ -21,6 +21,7 @@ export const LUMINATE_ALBUM_OBSERVATION_STORE_SCHEMA_RESEARCH = Object.freeze({
   requiredProviderId: 'luminate-music' as const,
   providerConstraintExtensionRequired: true as const,
   mainDatabaseMutatedByThisContract: false as const,
+  migrationApplicationRequiresExplicitApproval: true as const,
   recordVersion: ALBUM_DIRECT_OBSERVATION_RESEARCH_RECORD_VERSION,
 });
 
