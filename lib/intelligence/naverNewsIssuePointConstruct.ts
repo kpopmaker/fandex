@@ -1,5 +1,5 @@
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
-  'v1_naver_news_issue_point_construct' as const;
+  'v2_naver_news_issue_point_methodology_partial_freeze' as const;
 
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
@@ -15,9 +15,23 @@ export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   bootstrapExcluded: true as const,
   missingOrGapAsZeroAllowed: false as const,
   strictPublicationIntervalArticleCountClaimAllowed: false as const,
-  candidateWindowSlotCounts: Object.freeze([8, 12] as const),
-  windowSelectionStatus: 'not_frozen' as const,
-  baselineSufficiencyStatus: 'not_frozen' as const,
+
+  researchCandidateWindowSlotCounts: Object.freeze([8, 12] as const),
+  productWindowSlotCount: 8 as const,
+  windowSelectionStatus: 'frozen' as const,
+
+  baselineReferenceMembershipUnit: 'defined_rolling_8h_window' as const,
+  baselineSufficiencyStatus: 'frozen' as const,
+  baselineSufficiencyRule:
+    'single_cycle_independent_historical_reference_eligibility' as const,
+  baselineSufficiencyEvaluation: Object.freeze({
+    nonOverlappingProductWindowSupportRequired: true as const,
+    leaveOneCompleteDiurnalCycleOutRequired: true as const,
+    residualReferenceRequirement: 'complete_diurnal_cycle_support' as const,
+    overlappingRollingWindowsCountAsIndependentSamples: false as const,
+    fixedHistorySlotThresholdRequired: false as const,
+  }),
+
   normalizationStatus: 'not_frozen' as const,
   productMethodologyFrozen: false as const,
   directProductContributionEligible: false as const,
