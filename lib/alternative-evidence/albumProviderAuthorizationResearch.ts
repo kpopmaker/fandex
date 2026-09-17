@@ -10,6 +10,9 @@ export const HANTEO_AUTHORIZATION_REQUEST_DESCRIPTOR = Object.freeze({
     'https://resource.hanteochart.io/qna/%ED%95%9C%ED%84%B0%EC%B0%A8%ED%8A%B8_%EB%AC%B8%EC%9D%98%EC%8B%A0%EC%B2%AD%EC%84%9C.docx' as const,
   directProductContributionEligible: false as const,
   productionEligible: false as const,
+  rawRedistributionPlanned: false as const,
+  historicalBackfillRequiredForProduction: false as const,
+  prospectiveAuthorizedObservationHistoryAllowed: true as const,
   semantics: 'provider-authorization-and-contract-clarification-request' as const,
 });
 
@@ -47,7 +50,9 @@ export type AlbumProviderAuthorizationAssessment = Readonly<{
   state: 'eligible-for-onboarding-review' | 'blocked';
   rightsResolved: boolean;
   semanticsResolved: boolean;
+  historicalQueryContractResolved: boolean;
   blockers: readonly string[];
+  nonBlockingGaps: readonly string[];
 }>;
 
 const allowed = (value: AuthorizationAnswer) =>
@@ -57,6 +62,7 @@ export function evaluateAlbumProviderAuthorizationResponse(
   response: AlbumProviderAuthorizationResponse,
 ): AlbumProviderAuthorizationAssessment {
   const blockers: string[] = [];
+  const nonBlockingGaps: string[] = [];
   const requiredRights: readonly [keyof AlbumProviderAuthorizationResponse, string][] = [
     ['acquisition', 'provider-acquisition-rights-unresolved'],
     ['automatedAccess', 'provider-automation-rights-unresolved'],
@@ -72,28 +78,32 @@ export function evaluateAlbumProviderAuthorizationResponse(
   }
 
   if (response.rawRedistribution === 'not-addressed') {
-    blockers.push('provider-raw-redistribution-policy-unresolved');
+    nonBlockingGaps.push('provider-raw-redistribution-policy-unresolved-not-used-by-fandex');
   }
   if (response.providerPeriodDefinition !== 'verified') {
-    blockers.push('provider-period-definition-unresolved');
-  }
-  if (response.historicalQueryContract !== 'verified') {
-    blockers.push('provider-historical-query-contract-unresolved');
+    nonBlockingGaps.push('provider-period-definition-unresolved-in-authorization-response');
   }
   if (response.revisionPolicy !== 'verified') {
-    blockers.push('provider-revision-policy-unresolved');
+    nonBlockingGaps.push('provider-revision-policy-unresolved-in-authorization-response');
+  }
+  if (response.historicalQueryContract !== 'verified') {
+    nonBlockingGaps.push('provider-historical-query-contract-unresolved-optional-capability');
   }
   if (!response.responseEvidenceId || response.responseEvidenceId.trim() === '') {
     blockers.push('provider-authorization-response-evidence-missing');
   }
 
-  const rightsResolved = !blockers.some((blocker) => blocker.includes('rights') || blocker.includes('redistribution'));
-  const semanticsResolved = !blockers.some((blocker) => blocker.startsWith('provider-period-') || blocker.startsWith('provider-historical-') || blocker.startsWith('provider-revision-'));
+  const rightsResolved = !blockers.some((blocker) => blocker.includes('rights'));
+  const semanticsResolved = response.providerPeriodDefinition === 'verified'
+    && response.revisionPolicy === 'verified';
+  const historicalQueryContractResolved = response.historicalQueryContract === 'verified';
 
   return Object.freeze({
     state: blockers.length === 0 ? 'eligible-for-onboarding-review' as const : 'blocked' as const,
     rightsResolved,
     semanticsResolved,
+    historicalQueryContractResolved,
     blockers: Object.freeze([...new Set(blockers)]),
+    nonBlockingGaps: Object.freeze([...new Set(nonBlockingGaps)]),
   });
 }
