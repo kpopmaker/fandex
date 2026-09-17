@@ -36,19 +36,19 @@ export type AlbumResearchClaimStoredRow = Readonly<{
   semantic: string;
   semantic_state: string;
   definition_state: string;
-  value: number | null;
+  value: number | string | null;
   value_kind: string;
   unit: string | null;
   territory: string | null;
   provider_period: string | null;
   reported_period: string | null;
-  research_only: true;
+  research_only: boolean;
   shadow_eligibility: string;
   evidence_digest: string;
   claim_payload: AlbumResearchClaim;
-  observed_at: string;
-  collected_at: string;
-  revision_observed_at: string | null;
+  observed_at: string | Date;
+  collected_at: string | Date;
+  revision_observed_at: string | Date | null;
 }>;
 
 const THE_WINNING_ARTICLE_URL =
@@ -75,7 +75,7 @@ export function buildIuTheWinningReportedSalesEvidence(
   });
   return Object.freeze({
     ...basis,
-    evidenceId: `web:manila-bulletin:iu-the-winning:hanteo-weekly:2024-W08`,
+    evidenceId: 'web:manila-bulletin:iu-the-winning:hanteo-weekly:2024-W08',
     evidenceDigest: sha256Canonical(basis),
   });
 }
@@ -99,11 +99,7 @@ export function buildIuTheWinningReportedWeeklySalesClaim(
     }),
     release: Object.freeze({
       fandexId: IU_THE_WINNING_RELEASE_ID,
-      candidate: Object.freeze({
-        label: 'The Winning',
-        providerNativeId: null,
-        source: 'provided-hint' as const,
-      }),
+      candidate: Object.freeze({ label: 'The Winning', providerNativeId: null, source: 'provided-hint' as const }),
       state: 'resolved' as const,
       reviewed: true,
       blockers: Object.freeze([]),
@@ -170,6 +166,15 @@ export function serializeAlbumResearchClaim(claim: AlbumResearchClaim): AlbumRes
   });
 }
 
+const timestampMs = (value: string | Date): number =>
+  value instanceof Date ? value.getTime() : Date.parse(value);
+
+const storedValue = (value: number | string | null): number | null => {
+  if (value === null) return null;
+  const parsed = typeof value === 'number' ? value : Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : Number.NaN;
+};
+
 export function validateAlbumResearchClaimStoredRow(row: AlbumResearchClaimStoredRow): readonly string[] {
   const issues: string[] = [];
   const claim = row.claim_payload;
@@ -179,12 +184,19 @@ export function validateAlbumResearchClaimStoredRow(row: AlbumResearchClaimStore
   if (claim.sourceEvidenceId !== row.source_evidence_id) issues.push('source-evidence-id-mismatch');
   if (claim.releaseId !== row.release_id) issues.push('release-id-mismatch');
   if (claim.semantic !== row.semantic) issues.push('semantic-mismatch');
-  if (claim.value !== row.value) issues.push('value-mismatch');
+  const normalizedValue = storedValue(row.value);
+  if (Number.isNaN(normalizedValue) || claim.value !== normalizedValue) issues.push('value-mismatch');
   if (claim.unit !== row.unit) issues.push('unit-mismatch');
   if (!row.research_only || !claim.researchOnly) issues.push('research-only-required');
   if (!/^[0-9a-f]{64}$/.test(row.claim_id)) issues.push('claim-id-invalid');
   if (!/^[0-9a-f]{64}$/.test(row.evidence_digest)) issues.push('evidence-digest-invalid');
-  if (row.collected_at < row.observed_at) issues.push('collection-before-observation');
+  const observed = timestampMs(row.observed_at);
+  const collected = timestampMs(row.collected_at);
+  if (Number.isNaN(observed)) issues.push('observed-at-invalid');
+  if (Number.isNaN(collected)) issues.push('collected-at-invalid');
+  if (!Number.isNaN(observed) && !Number.isNaN(collected) && collected < observed) {
+    issues.push('collection-before-observation');
+  }
   return Object.freeze([...new Set(issues)].sort());
 }
 
