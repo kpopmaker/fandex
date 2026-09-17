@@ -18,9 +18,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx tsx --test tests/album-research-claim-persistence-v1.test.mts
+      - run: npx tsx --test tests/album-research-claim-stored-reader-v1.test.mts
       - run: npx tsx --test tests/iu-the-winning-research-evidence-v1.test.mts
       - run: npm run test:alternative-evidence:v1
       - run: npm run test:album:synthetic-gate
       - run: npm run typecheck
-      - run: |
-          npx tsx -e "import {buildIuTheWinningReportedWeeklySalesClaim,serializeAlbumResearchClaim} from './lib/alternative-evidence/albumResearchClaimPersistenceResearch.ts'; console.log(JSON.stringify(serializeAlbumResearchClaim(buildIuTheWinningReportedWeeklySalesClaim()),null,2));"
