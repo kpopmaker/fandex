@@ -49,3 +49,4 @@ export * from './albumResearchClaimStoredReaderResearch';
 export * from './albumProductionReadinessResearch';
 export * from './albumProviderAuthorizationResearch';
 export * from './albumNormalizationResearch';
+export * from './albumReleaseEligibilityResearch';
