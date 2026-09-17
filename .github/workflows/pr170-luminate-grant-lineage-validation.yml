@@ -1,0 +1,24 @@
+name: PR170 Luminate grant-lineage validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate current grant lineage
+        run: |
+          npx tsx --test tests/iu-luminate-production-review-gate-research-v1.test.mts
+          npx tsx --test tests/luminate-album-observation-intake-research-v1.test.mts
+          npx tsx --test tests/luminate-album-observation-stored-reader-research-v1.test.mts
+          npx tsx --test tests/luminate-album-observation-persistence-research-v1.test.mts
+          npm run typecheck
