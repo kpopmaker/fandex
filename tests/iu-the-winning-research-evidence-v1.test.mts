@@ -12,7 +12,10 @@ import {
   buildIuTheWinningIdentityPersistenceRecords,
 } from '../lib/alternative-evidence/iuTheWinningResearchEvidence';
 import { serializeAlbumIdentityPersistenceRecord } from '../lib/alternative-evidence/albumIdentityEvidencePersistenceResearch';
-import { validateAlbumIdentityResearchStoredRow } from '../lib/alternative-evidence/albumIdentityStoredEvidenceHydrationResearch';
+import {
+  validateAlbumIdentityResearchStoredRow,
+  type AlbumIdentityResearchStoredRow,
+} from '../lib/alternative-evidence/albumIdentityStoredEvidenceHydrationResearch';
 import { proposeMusicBrainzReleaseIdentityMapping } from '../lib/alternative-evidence/musicReleaseIdentityMappingResearch';
 import type { MusicBrainzReleaseGroupResearchObservation } from '../lib/alternative-evidence/musicbrainzAlbumCatalogResearch';
 
@@ -109,6 +112,9 @@ test('two deterministic The Winning identity rows serialize through the existing
   for (const row of rows) {
     assert.equal(row.fandex_release_id, IU_THE_WINNING_RELEASE_ID);
     assert.equal(row.fandex_release_family_id, IU_THE_WINNING_RELEASE_FAMILY_ID);
-    assert.deepEqual(validateAlbumIdentityResearchStoredRow(row), { valid: true, issues: [] });
+    assert.deepEqual(
+      validateAlbumIdentityResearchStoredRow(row as AlbumIdentityResearchStoredRow),
+      { valid: true, issues: [] },
+    );
   }
 });
