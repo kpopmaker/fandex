@@ -22,13 +22,17 @@ test('Oricon is a JP completed-purchase unit-sales candidate with estimated-unit
   assert.equal(descriptor.constructEvidence.sameProviderEstimateMayBePreservedAsPhysicalUnits, true);
 });
 
-test('Oricon period semantics are promising but not yet freeze-ready', () => {
+test('Oricon daily estimates cannot be naively summed into the FANDEX first-week anchor', () => {
   const period = ORICON_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH.providerPeriodSemantics;
 
   assert.equal(period.publicWeeklyPeriodPattern, 'monday-through-sunday');
   assert.equal(period.dailySalesAvailable, true);
+  assert.equal(period.releaseWeekMondayThroughFollowingSundayDailyWindowAvailable, true);
   assert.equal(period.customPeriodDataAvailable, true);
-  assert.equal(period.releaseRelativeSevenDayAggregationFeasible, true);
+  assert.equal(period.weeklyEstimateIncludesAdditionalWeeklyReports, true);
+  assert.equal(period.sumOfSevenDailyEstimatesEqualsFinalWeeklyEstimate, false);
+  assert.equal(period.naiveDailySevenDaySumAllowedForFandexFirstWeek, false);
+  assert.equal(period.customReleaseRelativeSevenDayFinalEstimateContractVerified, false);
   assert.equal(period.exactDailyCutoffVerified, false);
   assert.equal(period.exactTimezoneContractVerified, false);
   assert.equal(period.firstWeekCanonicalizationReady, false);
