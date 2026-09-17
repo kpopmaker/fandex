@@ -25,3 +25,4 @@ jobs:
       - run: npm run test:alternative-evidence:v1
       - run: npm run test:album:synthetic-gate
       - run: npm run typecheck
+      - run: npx tsx scripts/ingestion/materialize-iu-the-winning-identity-research.mts
