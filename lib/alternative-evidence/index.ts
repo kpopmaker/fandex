@@ -40,3 +40,4 @@ export * from './musicReleaseEligibilityResearch';
 export * from './musicReleaseIdentityMappingResearch';
 export * from './iuCanonicalReleaseReferenceCatalogResearch';
 export * from './albumIdentityEvidencePersistenceResearch';
+export * from './albumIdentityStoredEvidenceHydrationResearch';
