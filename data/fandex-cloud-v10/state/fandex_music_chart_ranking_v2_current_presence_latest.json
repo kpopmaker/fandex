@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-16T11:00:11",
-  "snapshotDate": "2026-09-16",
+  "createdAt": "2026-09-17T11:04:25",
+  "snapshotDate": "2026-09-17",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -13,11 +13,11 @@
   "ranking": [
     {
       "artist": "에이티즈",
-      "fandexMusicChartFinalPoint": 169.5,
-      "score": 169.5,
+      "fandexMusicChartFinalPoint": 187.5,
+      "score": 187.5,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 72.0,
+        "melon": 90.0,
         "genie": 63.75,
         "bugs": 33.75
       },
@@ -25,14 +25,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "11",
+          "rank": "10",
           "chartType": "daily",
-          "point": 72.0
+          "point": 90.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "6",
+          "rank": "7",
           "chartType": "daily",
           "point": 63.75
         },
@@ -48,11 +48,11 @@
     },
     {
       "artist": "아이유",
-      "fandexMusicChartFinalPoint": 169.0,
-      "score": 169.0,
+      "fandexMusicChartFinalPoint": 187.0,
+      "score": 187.0,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 90.0,
+        "melon": 108.0,
         "genie": 34.0,
         "bugs": 45.0
       },
@@ -60,14 +60,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "4",
+          "rank": "3",
           "chartType": "daily",
-          "point": 90.0
+          "point": 108.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "25",
+          "rank": "26",
           "chartType": "daily",
           "point": 34.0
         },
@@ -102,14 +102,14 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "5",
+          "rank": "6",
           "chartType": "daily",
           "point": 63.75
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "13",
+          "rank": "12",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -137,14 +137,14 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "26",
+          "rank": "25",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "44",
+          "rank": "46",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -165,21 +165,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "93",
+          "rank": "92",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "117",
+          "rank": "116",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Ditto",
-          "rank": "59",
+          "trackTitle": "Hype Boy",
+          "rank": "65",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "99",
+          "rank": "97",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "150",
+          "rank": "152",
           "chartType": "daily",
           "point": 6.8
         },
