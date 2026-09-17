@@ -40,6 +40,7 @@
     "ingestion:musicbrainz:research-album-catalog": "tsx scripts/ingestion/research-musicbrainz-album-catalog.mts",
     "ingestion:hanteo:research-album-sales-provider": "tsx scripts/ingestion/research-hanteo-album-sales-provider.mts",
     "ingestion:luminate:write-album-observation-research": "tsx scripts/ingestion/write-luminate-album-observation-research.mts",
+    "ingestion:luminate:review-licensed-bootstrap": "tsx scripts/ingestion/review-iu-luminate-licensed-bootstrap.mts",
     "db:migrate": "tsx scripts/database/run-postgres-migrations.mts",
     "security:audit:production": "node scripts/security/audit-production.mjs",
     "test:security": "node --test tests/security-audit-gate.test.mjs",
