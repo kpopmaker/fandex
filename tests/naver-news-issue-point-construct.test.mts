@@ -4,16 +4,21 @@ import test from 'node:test';
 import {
   NAVER_NEWS_ISSUE_POINT_CONSTRUCT,
   NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+  NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
 } from '../lib/intelligence/naverNewsIssuePointConstruct';
 
-test('newsIssuePoint construct remains frozen while Product methodology is narrowed in stages', () => {
+test('newsIssuePoint construct, window, baseline, and normalization methodology are frozen', () => {
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT.contractVersion,
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
   );
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
-    'v3_naver_news_issue_point_construct',
+    'v4_naver_news_issue_point_construct',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.methodologyVersion,
+    NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
   );
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.variableId, 'newsIssuePoint');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.constructStatus, 'frozen');
@@ -75,9 +80,27 @@ test('baseline eligibility and membership are frozen without inventing a fixed b
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.fixedBaselineSpanParameterAllowed, false);
 });
 
-test('normalization and all Product publication gates remain unresolved or closed', () => {
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationStatus, 'not_frozen');
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productMethodologyFrozen, false);
+test('strict-exceedance normalization is frozen while Product publication gates remain closed', () => {
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationStatus, 'frozen');
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationType,
+    'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationFormula,
+    '100 * priorLessThanLatestCount / priorDefinedWindowCount',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.tieHandling,
+    'included_in_denominator_excluded_from_numerator',
+  );
+  assert.deepEqual(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.scoreRange, [0, 100]);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.providerTotalNormalizationAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.stage1SyntheticFormulaAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.minMaxNormalizationAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.zScoreNormalizationAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.arbitraryMultiplierAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productMethodologyFrozen, true);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.directProductContributionEligible, false);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productScorePublished, false);
 });
