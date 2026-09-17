@@ -1,5 +1,9 @@
-import type { AlbumProviderProductionEvidence } from './albumProductionReadinessResearch';
+import type {
+  AlbumNormalizationFreezeInputs,
+  AlbumProviderProductionEvidence,
+} from './albumProductionReadinessResearch';
 import {
+  buildLuminateNormalizationFreezeInputs,
   LUMINATE_ALBUM_PRODUCTION_EVIDENCE_RESEARCH,
   LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH,
 } from './luminateAlbumSalesProductionCandidateResearch';
@@ -166,5 +170,16 @@ export function projectLuminateProductionEvidenceFromAuthorization(
     evidenceUrls: Object.freeze([
       ...LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH.evidenceUrls,
     ]),
+  });
+}
+
+export function buildLuminateNormalizationFreezeInputsFromAuthorization(
+  assessment: LuminateAuthorizationAssessment,
+): AlbumNormalizationFreezeInputs {
+  const base = buildLuminateNormalizationFreezeInputs();
+  return Object.freeze({
+    ...base,
+    sourceAuthorizationResolved:
+      assessment.state === 'eligible-for-provider-onboarding-review' && assessment.rightsResolved,
   });
 }
