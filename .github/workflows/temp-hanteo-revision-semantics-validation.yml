@@ -1,0 +1,23 @@
+name: temp-hanteo-revision-semantics-validation
+
+on:
+  push:
+    branches:
+      - research/musicbrainz-album-catalog-v1
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/hanteo-revision-semantics-research-v1.test.mts
+      - run: npx tsx --test tests/album-direct-first-week-absolute-research-v1.test.mts
+      - run: npx tsx --test tests/hanteo-first-week-production-readiness-research-v1.test.mts
+      - run: npm run typecheck
