@@ -13,10 +13,13 @@ import { evaluateCanonicalAlbumReleaseEligibility } from '../lib/alternative-evi
 
 const authorizationSnapshot = Object.freeze({
   acquisition: 'allowed' as const,
+  automation: 'not-applicable' as const,
+  rawStorage: 'not-applicable' as const,
   normalizedStorage: 'allowed' as const,
-  redistribution: 'not-applicable' as const,
   retention: 'allowed' as const,
   commercialUse: 'not-applicable' as const,
+  derivedPublication: 'not-applicable' as const,
+  rawRedistribution: 'not-applicable' as const,
 });
 
 test('Pieces is research identity evidence, not Product evidence', () => {
