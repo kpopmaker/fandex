@@ -44,6 +44,7 @@ export * from './iuLuminateBaselineAcquisitionResearch';
 export * from './iuLuminateStoredNormalizationResearch';
 export * from './iuLuminateProviderIdentityReviewResearch';
 export * from './iuLuminateLicensedBootstrapResearch';
+export * from './iuLuminateLicensedBootstrapCommandResearch';
 export * from './iuLuminateProductionReviewGateResearch';
 export * from './albumIdentityEvidencePersistenceResearch';
 export * from './albumIdentityStoredEvidenceHydrationResearch';
