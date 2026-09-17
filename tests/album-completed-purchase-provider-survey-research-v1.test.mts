@@ -56,6 +56,29 @@ test('Official Charts is a licensed physical-sales path rather than an open inge
   assert.deepEqual(officialCharts?.territoryScope, ['GB']);
 });
 
+test('Oricon is a JP contract-capable unit-sales path while SoundScan Japan stays rights-path unresolved', () => {
+  const survey = ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH;
+  const oricon = survey.candidates.find((candidate) => candidate.candidateId === 'oricon-research-biz-online');
+  const soundscan = survey.candidates.find((candidate) => candidate.candidateId === 'billboard-japan-soundscan');
+
+  assert.equal(oricon?.providerClass, 'licensed-data-service');
+  assert.equal(oricon?.constructCompatible, true);
+  assert.equal(oricon?.directProviderObservationAvailable, true);
+  assert.equal(oricon?.unitPhysicalSalesAvailable, true);
+  assert.equal(oricon?.currentFandexAuthorization, false);
+  assert.equal(oricon?.contractualProductionPath, 'explicitly-offered');
+  assert.equal(oricon?.productionCandidateState, 'contract-capable');
+  assert.deepEqual(oricon?.territoryScope, ['JP']);
+
+  assert.equal(soundscan?.providerClass, 'chart-provider');
+  assert.equal(soundscan?.constructCompatible, true);
+  assert.equal(soundscan?.unitPhysicalSalesAvailable, true);
+  assert.equal(soundscan?.currentFandexAuthorization, false);
+  assert.equal(soundscan?.contractualProductionPath, 'not-evidenced');
+  assert.equal(soundscan?.productionCandidateState, 'rights-blocked');
+  assert.deepEqual(soundscan?.territoryScope, ['JP']);
+});
+
 test('retailer Open APIs remain proxy or identity sources when they expose index/rank rather than sold units', () => {
   const survey = ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH;
   for (const candidateId of ['yes24-open-api-music', 'aladin-open-api-music']) {
@@ -68,13 +91,15 @@ test('retailer Open APIs remain proxy or identity sources when they expose index
   }
 });
 
-test('bounded survey separates the rights-only candidate from the candidate still needing provider-specific semantics', () => {
+test('bounded survey separates the rights-only candidate from candidates still needing provider-specific semantics', () => {
   const conclusion = ALBUM_COMPLETED_PURCHASE_PROVIDER_SURVEY_RESEARCH.conclusion;
   assert.deepEqual(conclusion.internallyResolvedExceptRightsAndAuthorizedDataCandidateIds, [
     'luminate-music-api-data-share',
   ]);
   assert.deepEqual(conclusion.candidatesStillRequiringProviderSpecificSemantics, [
     'official-charts-b2b-data',
+    'oricon-research-biz-online',
+    'billboard-japan-soundscan',
   ]);
   assert.equal(conclusion.productionOutputMustRemainTerritoryScoped, true);
   assert.equal(conclusion.globalMarketReactionMayBeInferredFromSingleTerritory, false);
@@ -88,5 +113,6 @@ test('reported context, rank/index proxies and shipment proxies cannot substitut
   assert.deepEqual(conclusion.contractCapableCandidateIds, [
     'luminate-music-api-data-share',
     'official-charts-b2b-data',
+    'oricon-research-biz-online',
   ]);
 });
