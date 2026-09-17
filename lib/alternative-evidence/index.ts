@@ -58,5 +58,6 @@ export * from './albumCompletedPurchaseProviderSurveyResearch';
 export * from './luminateAlbumSalesProductionCandidateResearch';
 export * from './luminateAlbumAuthorizationResearch';
 export * from './luminateAlbumObservationIntakeResearch';
+export * from './luminateAlbumObservationPersistenceResearch';
 export * from './officialChartsAlbumSalesProductionCandidateResearch';
 export * from './oriconAlbumSalesProductionCandidateResearch';
