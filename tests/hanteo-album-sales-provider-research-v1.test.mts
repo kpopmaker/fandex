@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   HANTEO_ALBUM_SALES_PROVIDER_RESEARCH_DESCRIPTOR,
   HANTEO_ALBUM_WEEKLY_RESEARCH_ENDPOINT,
+  buildHanteoAlbumWeeklyResearchUrl,
   buildHanteoAlbumWeeklySchemaProbePlan,
   executeHanteoAlbumWeeklySchemaProbe,
   summarizeHanteoAlbumSchema,
@@ -20,14 +21,24 @@ test('descriptor is research-only and cannot publish Product or persist provider
   assert.equal(HANTEO_ALBUM_SALES_PROVIDER_RESEARCH_DESCRIPTOR.salesUnitSemanticsVerified, false);
 });
 
-test('weekly schema probe plan is exactly one GET with no write/retry', () => {
+test('weekly schema probe plan is exactly one minimal GET with no write/retry', () => {
   const plan = buildHanteoAlbumWeeklySchemaProbePlan();
   assert.equal(plan.method, 'GET');
-  assert.equal(plan.url, HANTEO_ALBUM_WEEKLY_RESEARCH_ENDPOINT);
+  const url = new URL(plan.url);
+  assert.equal(`${url.origin}${url.pathname}`, HANTEO_ALBUM_WEEKLY_RESEARCH_ENDPOINT);
+  assert.equal(url.searchParams.get('limit'), '1');
   assert.equal(plan.requestCount, 1);
   assert.equal(plan.automaticRetryAllowed, false);
   assert.equal(plan.persistRawPayload, false);
   assert.equal(plan.databaseWriteAllowed, false);
+});
+
+test('limit builder validates conservative bounds', () => {
+  assert.equal(new URL(buildHanteoAlbumWeeklyResearchUrl()).searchParams.get('limit'), '1');
+  assert.equal(new URL(buildHanteoAlbumWeeklyResearchUrl(20)).searchParams.get('limit'), '20');
+  assert.throws(() => buildHanteoAlbumWeeklyResearchUrl(0), /hanteo_album_weekly_limit_invalid/);
+  assert.throws(() => buildHanteoAlbumWeeklyResearchUrl(101), /hanteo_album_weekly_limit_invalid/);
+  assert.throws(() => buildHanteoAlbumWeeklyResearchUrl(1.5), /hanteo_album_weekly_limit_invalid/);
 });
 
 test('schema summary reveals only structural metadata and never verifies sales-unit semantics', () => {
@@ -54,12 +65,13 @@ test('one successful transport call can observe schema but cannot publish an obs
   const outcome = await executeHanteoAlbumWeeklySchemaProbe({
     async execute() {
       calls += 1;
-      return { status: 200, body: { data: { list: [{ rank: 1, sales: 123 }] } } };
+      return { status: 200, body: { code: 200, resultData: { list: [{ rank: 1, sales: 123 }] } } };
     },
   });
   assert.equal(calls, 1);
   assert.equal(outcome.state, 'schema-observed');
   assert.equal(outcome.httpStatus, 200);
+  assert.equal(outcome.providerCode, 200);
   assert.equal(outcome.attemptedRequests, 1);
   assert.equal(outcome.retryPerformed, false);
   assert.equal(outcome.providerObservationPublished, false);
@@ -67,6 +79,28 @@ test('one successful transport call can observe schema but cannot publish an obs
   assert.equal(outcome.databaseWrites, 0);
   assert.equal(outcome.rawPayloadRetained, false);
   assert.ok(outcome.schema?.salesLikeKeys.includes('sales'));
+});
+
+test('HTTP 200 with provider-native error is request-rejected, not successful schema observation', async () => {
+  const outcome = await executeHanteoAlbumWeeklySchemaProbe({
+    async execute() {
+      return {
+        status: 200,
+        body: {
+          code: 602,
+          message: "HT_SY_602 [ERROR_NO_PARAM]: Required int parameter 'limit' is not present",
+          resultData: null,
+        },
+      };
+    },
+  });
+  assert.equal(outcome.state, 'request-rejected');
+  assert.equal(outcome.httpStatus, 200);
+  assert.equal(outcome.providerCode, 602);
+  assert.match(outcome.providerMessage ?? '', /ERROR_NO_PARAM/);
+  assert.equal(outcome.errorClass, 'provider-code-602');
+  assert.equal(outcome.productContributionPublished, false);
+  assert.equal(outcome.databaseWrites, 0);
 });
 
 test('provider failures remain provider failures and are never Missing or zero', async () => {
