@@ -22,6 +22,10 @@ export type LuminatePostTerminationPolicy =
   | 'delete-source-and-retract-provider-derived-output'
   | 'unresolved';
 
+export type LuminatePublicOutputMode =
+  | 'derived-metric-only'
+  | 'comparative-ranking-or-benchmark';
+
 export type LuminateFandexAuthorizationGrant = Readonly<{
   agreementKind: 'order-form' | 'separate-writing' | 'subscription-only' | 'none';
   agreementEvidenceId: string | null;
@@ -33,6 +37,7 @@ export type LuminateFandexAuthorizationGrant = Readonly<{
   normalizedStorage: LuminateGrantAnswer;
   retentionDuringLicense: LuminateGrantAnswer;
   commercialProductUse: LuminateGrantAnswer;
+  publicOutputMode: LuminatePublicOutputMode;
   publicDerivedMetricPublication: LuminateGrantAnswer;
   publicRankingOrBenchmarking: LuminateGrantAnswer;
   rawRedistribution: LuminateGrantAnswer;
@@ -76,6 +81,8 @@ export const LUMINATE_FANDEX_REQUIRED_GRANTS_RESEARCH = Object.freeze({
   rawRedistributionRequired: false as const,
   publicRawPayloadPublicationRequired: false as const,
   aiModelTrainingRequired: false as const,
+  publicRankingOrBenchmarkingRequiredForDerivedMetricOnly: false as const,
+  publicRankingOrBenchmarkingRequiredForComparativeOutput: true as const,
   requiredUses: Object.freeze([
     'licensed-physical-product-sales-access',
     'api-or-data-share-access',
@@ -84,8 +91,10 @@ export const LUMINATE_FANDEX_REQUIRED_GRANTS_RESEARCH = Object.freeze({
     'retention-during-license',
     'commercial-fandex-product-use',
     'public-derived-metric-publication',
-    'public-ranking-or-benchmarking-if-product-output-is-comparative',
     'resolved-post-termination-delete-or-survival-policy',
+  ] as const),
+  conditionalUses: Object.freeze([
+    'public-ranking-or-benchmarking-only-when-output-is-comparative',
   ] as const),
 });
 
@@ -126,8 +135,12 @@ export function evaluateLuminateFandexAuthorizationGrant(
   if (!granted(grant.publicDerivedMetricPublication)) {
     blockers.push('luminate-public-derived-metric-publication-not-authorized');
   }
-  if (!granted(grant.publicRankingOrBenchmarking)) {
-    blockers.push('luminate-public-ranking-or-benchmarking-not-authorized');
+  if (grant.publicOutputMode === 'comparative-ranking-or-benchmark') {
+    if (!granted(grant.publicRankingOrBenchmarking)) {
+      blockers.push('luminate-public-ranking-or-benchmarking-not-authorized');
+    }
+  } else if (!granted(grant.publicRankingOrBenchmarking)) {
+    nonBlockingGaps.push('luminate-public-ranking-rights-unresolved-not-used-by-derived-metric-only-output');
   }
 
   if (grant.rawRedistribution === 'not-addressed') {
