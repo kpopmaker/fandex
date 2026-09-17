@@ -2,12 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  buildLuminateNormalizationFreezeInputsFromAuthorization,
   evaluateLuminateFandexAuthorizationGrant,
   LUMINATE_DEFAULT_TERMS_SNAPSHOT_RESEARCH,
   LUMINATE_FANDEX_REQUIRED_GRANTS_RESEARCH,
   projectLuminateProductionEvidenceFromAuthorization,
   type LuminateFandexAuthorizationGrant,
 } from '../lib/alternative-evidence/luminateAlbumAuthorizationResearch';
+import { evaluateMusicAlbumPointProductionReadiness } from '../lib/alternative-evidence/albumProductionReadinessResearch';
 
 function grant(overrides: Partial<LuminateFandexAuthorizationGrant> = {}): LuminateFandexAuthorizationGrant {
   return {
@@ -87,11 +89,18 @@ test('raw redistribution is not required by FANDEX authorization acceptance', ()
   assert.ok(assessment.nonBlockingGaps.includes('luminate-raw-redistribution-unresolved-not-used-by-fandex'));
 });
 
-test('an explicit complete grant resolves provider rights but does not create any actual observation', () => {
+test('an explicit complete grant resolves source rights but still cannot replace actual observations', () => {
   const assessment = evaluateLuminateFandexAuthorizationGrant(grant({
     authorizedTerritories: ['US', 'CA'],
   }));
   const provider = projectLuminateProductionEvidenceFromAuthorization(assessment);
+  const normalization = buildLuminateNormalizationFreezeInputsFromAuthorization(assessment);
+  const readiness = evaluateMusicAlbumPointProductionReadiness({
+    provider,
+    normalization,
+    normalizationData: null,
+    features: [],
+  });
 
   assert.equal(assessment.state, 'eligible-for-provider-onboarding-review');
   assert.deepEqual(assessment.authorizedTerritories, ['US', 'CA']);
@@ -101,4 +110,16 @@ test('an explicit complete grant resolves provider rights but does not create an
   assert.equal(provider.directObservationAuthorized, true);
   assert.equal(provider.periodSemantics, 'verified');
   assert.equal(provider.revisionSemantics, 'verified');
+  assert.equal(normalization.sourceAuthorizationResolved, true);
+  assert.equal(normalization.providerPeriodDefinitionResolved, true);
+  assert.equal(normalization.revisionPolicyResolved, true);
+
+  assert.equal(readiness.state, 'blocked');
+  assert.equal(readiness.providerState, 'ready');
+  assert.ok(!readiness.blockers.includes('provider-acquisition-rights-unresolved'));
+  assert.ok(!readiness.blockers.includes('provider-normalized-storage-rights-unresolved'));
+  assert.ok(!readiness.blockers.includes('provider-derived-publication-rights-unresolved'));
+  assert.ok(!readiness.blockers.includes('normalization-source-authorization-unresolved'));
+  assert.ok(readiness.blockers.includes('direct-absolute-sales-input-missing'));
+  assert.ok(readiness.blockers.includes('normalization-data-unassessed'));
 });
