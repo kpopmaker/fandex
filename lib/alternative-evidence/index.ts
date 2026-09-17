@@ -57,5 +57,6 @@ export * from './hanteoRevisionSemanticsResearch';
 export * from './albumCompletedPurchaseProviderSurveyResearch';
 export * from './luminateAlbumSalesProductionCandidateResearch';
 export * from './luminateAlbumAuthorizationResearch';
+export * from './luminateAlbumObservationIntakeResearch';
 export * from './officialChartsAlbumSalesProductionCandidateResearch';
 export * from './oriconAlbumSalesProductionCandidateResearch';
