@@ -85,6 +85,16 @@ test('all 19 deterministic Stored Evidence rows rehydrate with verified integrit
   }
 });
 
+test('Postgres Date timestamps validate the same as serializer ISO strings', () => {
+  const row = storedRows()[0];
+  const pgStyle = Object.freeze({
+    ...row,
+    observed_at: new Date(CAPTURE.observedAt),
+    collected_at: new Date(CAPTURE.collectedAt),
+  });
+  assert.deepEqual(validateAlbumIdentityResearchStoredRow(pgStyle), { valid: true, issues: [] });
+});
+
 test('payload digest tampering fails closed before identity enrichment', () => {
   const rows = storedRows();
   const tampered = rows.map((row, index) => index === 0
@@ -94,6 +104,19 @@ test('payload digest tampering fails closed before identity enrichment', () => {
   assert.equal(result.resolution.state, 'blocked');
   assert.ok(result.resolution.blockers.includes('stored-evidence-integrity-invalid'));
   assert.equal(result.observation.fandexArtistId, null);
+  assert.equal(result.observation.fandexReleaseId, null);
+});
+
+test('storage authorization tampering fails closed even when payload digest is unchanged', () => {
+  const rows = storedRows();
+  const tampered = rows.map((row, index) => index === 0
+    ? Object.freeze({ ...row, authorization_snapshot: Object.freeze({ ...authorization, normalizedStorage: 'blocked' }) })
+    : row);
+  const validation = validateAlbumIdentityResearchStoredRow(tampered[0]);
+  assert.equal(validation.valid, false);
+  assert.ok(validation.issues.includes('research-storage-authorization-invalid'));
+  const result = enrichRetailObservationWithStoredAlbumIdentityResearch(retailObservation('82272556'), tampered);
+  assert.equal(result.resolution.state, 'blocked');
   assert.equal(result.observation.fandexReleaseId, null);
 });
 
@@ -116,7 +139,7 @@ test('canonical release reference is required; mapping alone cannot hydrate a re
   ));
   const resolution = resolveRetailObservationIdentityFromStoredAlbumResearch(retailObservation('82272556'), rows);
   assert.equal(resolution.state, 'blocked');
-  assert.ok(resolution.blockers.includes('canonical-release-reference-not-stored'));
+  assert.ok(resolution.blockers.includes('canonical-release-reference-not-stored-or-invalid'));
 });
 
 test('MusicBrainz Modern Times family evidence cannot resolve a single release without a product mapping', () => {
