@@ -74,6 +74,7 @@ export type LuminateObservationIntakeInput = Readonly<{
   releaseDate: string;
   grant: LuminateFandexAuthorizationGrant;
   schemaProviderConstraintIncludesLuminate: boolean;
+  supersedesStoredRecordId?: string | null;
 }>;
 
 function validTimestamp(value: string): boolean {
@@ -127,13 +128,21 @@ export function evaluateLuminateObservationIntake(
     && Date.parse(observation.collectedAt) < Date.parse(observation.observedAt)) {
     blockers.push('luminate-collection-before-observation');
   }
+
+  const supersedesStoredRecordId = input.supersedesStoredRecordId ?? null;
   if (observation.supersedesObservationId !== null) {
     if (!observation.revisionId) blockers.push('luminate-revision-id-required-for-supersession');
     if (!observation.revisionObservedAt || !validTimestamp(observation.revisionObservedAt)) {
       blockers.push('luminate-revision-observed-at-required-for-supersession');
     }
-  } else if (observation.revisionId !== null || observation.revisionObservedAt !== null) {
-    blockers.push('luminate-revision-fields-without-supersession');
+    if (!supersedesStoredRecordId || !HEX64_RE.test(supersedesStoredRecordId)) {
+      blockers.push('luminate-superseded-stored-record-id-required');
+    }
+  } else {
+    if (observation.revisionId !== null || observation.revisionObservedAt !== null) {
+      blockers.push('luminate-revision-fields-without-supersession');
+    }
+    if (supersedesStoredRecordId !== null) blockers.push('luminate-stored-supersession-without-observation-supersession');
   }
 
   return Object.freeze({
@@ -237,7 +246,7 @@ export function buildLuminateObservationStoredRow(
     fandex_release_id: observation.fandexReleaseId!,
     provider_period: observation.providerPeriod!,
     record_state: recordState,
-    supersedes_record_id: observation.supersedesObservationId,
+    supersedes_record_id: input.supersedesStoredRecordId ?? null,
     intake_plan_digest: intakePlanDigest,
     write_grant_digest: writeGrantDigest,
     authorization_snapshot: authorizationSnapshot,
