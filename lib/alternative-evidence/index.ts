@@ -52,3 +52,4 @@ export * from './albumNormalizationResearch';
 export * from './albumReleaseEligibilityResearch';
 export * from './hanteoFirstWeekPeriodResearch';
 export * from './hanteoFirstWeekProductionEvidenceResearch';
+export * from './albumDirectFirstWeekAbsoluteResearch';
