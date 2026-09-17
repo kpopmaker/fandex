@@ -249,7 +249,7 @@ function makeSeries(
     lifecycle: 'shadow',
     directProductContributionEligible: false,
     canonicalArtistId: 'iu',
-    schedulerVersion: 'v125_naver_news_scheduler',
+    schedulerVersion: NAVER_NEWS_SCHEDULER_VERSION,
     protocolStart: epoch,
     throughSlotStart: isoAt(48),
     expectedSlots: Object.freeze([]),
@@ -267,7 +267,7 @@ function makeSeries(
       protocolStart: epoch,
       protocol: {
         provider: 'naver-news',
-        schedulerVersion: 'v125_naver_news_scheduler',
+        schedulerVersion: NAVER_NEWS_SCHEDULER_VERSION,
         cadenceMinutes: 60,
         start: 1,
         display: 100,
