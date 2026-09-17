@@ -4,6 +4,16 @@ import {
   type HanteoAlbumResearchTransport,
 } from '../../lib/alternative-evidence/hanteoAlbumSalesProviderResearch';
 
+let safeProviderMetadata: Readonly<{
+  code: string | number | null;
+  message: string | null;
+  resultDataType: string;
+  resultDataKeys: readonly string[];
+}> = Object.freeze({ code: null, message: null, resultDataType: 'unobserved', resultDataKeys: Object.freeze([]) });
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
 const transport: HanteoAlbumResearchTransport = {
   async execute(plan) {
     const controller = new AbortController();
@@ -22,6 +32,23 @@ const transport: HanteoAlbumResearchTransport = {
           body = `non-json:${contentType}`;
         } else {
           body = await response.json();
+          if (isRecord(body)) {
+            const providerCode = typeof body.code === 'string' || typeof body.code === 'number' ? body.code : null;
+            const providerMessage = typeof body.message === 'string' ? body.message : null;
+            const resultData = body.resultData;
+            const resultDataType = Array.isArray(resultData)
+              ? 'array'
+              : resultData === null
+                ? 'null'
+                : typeof resultData;
+            const resultDataKeys = isRecord(resultData) ? Object.keys(resultData).sort() : [];
+            safeProviderMetadata = Object.freeze({
+              code: providerCode,
+              message: providerMessage,
+              resultDataType,
+              resultDataKeys: Object.freeze(resultDataKeys),
+            });
+          }
         }
       }
       return Object.freeze({ status: response.status, body });
@@ -45,6 +72,7 @@ console.log(JSON.stringify({
   productContributionPublished: result.productContributionPublished,
   databaseWrites: result.databaseWrites,
   rawPayloadRetained: result.rawPayloadRetained,
+  safeProviderMetadata,
   schema: result.schema,
   errorClass: result.errorClass,
 }, null, 2));
