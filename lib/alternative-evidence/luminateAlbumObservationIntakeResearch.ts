@@ -17,11 +17,18 @@ const HEX64_RE = /^[0-9a-f]{64}$/;
 export const LUMINATE_ALBUM_OBSERVATION_STORE_SCHEMA_RESEARCH = Object.freeze({
   lifecycle: 'research' as const,
   table: 'fandex.album_research_observation_records' as const,
-  observedMainSchemaProviderConstraint: Object.freeze(['circle-chart', 'hanteo-chart'] as const),
+  observedMainSchemaProviderConstraint: Object.freeze([
+    'circle-chart',
+    'hanteo-chart',
+    'luminate-music',
+  ] as const),
   requiredProviderId: 'luminate-music' as const,
-  providerConstraintExtensionRequired: true as const,
+  providerConstraintExtensionRequired: false as const,
+  mainDatabaseProviderConstraintVerified: true as const,
+  mainDatabaseProviderConstraintMigrationApplied: true as const,
   mainDatabaseMutatedByThisContract: false as const,
-  migrationApplicationRequiresExplicitApproval: true as const,
+  migrationApplicationRequiresExplicitApproval: false as const,
+  historicalMigrationSqlRetainedForAudit: true as const,
   recordVersion: ALBUM_DIRECT_OBSERVATION_RESEARCH_RECORD_VERSION,
 });
 
