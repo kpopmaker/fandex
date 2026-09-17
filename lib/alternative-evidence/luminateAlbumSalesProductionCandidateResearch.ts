@@ -9,6 +9,41 @@ import type {
 export const LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH_VERSION =
   'luminate-album-sales-production-candidate-research-v1' as const;
 
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function addCalendarDays(date: string, days: number): string {
+  if (!ISO_DATE_RE.test(date)) throw new Error('luminate_release_date_invalid');
+  const [year, month, day] = date.split('-').map(Number);
+  const parsed = new Date(Date.UTC(year!, month! - 1, day!));
+  if (
+    parsed.getUTCFullYear() !== year
+    || parsed.getUTCMonth() !== month! - 1
+    || parsed.getUTCDate() !== day
+  ) {
+    throw new Error('luminate_release_date_invalid');
+  }
+  parsed.setUTCDate(parsed.getUTCDate() + days);
+  return parsed.toISOString().slice(0, 10);
+}
+
+export type LuminateTrackedFirstWeekWindow = Readonly<{
+  dateBasis: 'REPORT_DATE';
+  startDate: string;
+  endDate: string;
+  calendarDayCount: 7;
+  releaseRelative: true;
+}>;
+
+export function buildLuminateTrackedFirstWeekWindow(releaseDate: string): LuminateTrackedFirstWeekWindow {
+  return Object.freeze({
+    dateBasis: 'REPORT_DATE' as const,
+    startDate: releaseDate,
+    endDate: addCalendarDays(releaseDate, 6),
+    calendarDayCount: 7 as const,
+    releaseRelative: true as const,
+  });
+}
+
 export const LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH = Object.freeze({
   contractVersion: LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH_VERSION,
   lifecycle: 'research' as const,
@@ -41,6 +76,8 @@ export const LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH = Object.freeze(
       'unknown',
     ] as const),
     digitalMaySubstitutePhysical: false as const,
+    crossTerritoryRawAggregationAllowed: false as const,
+    sameTerritoryRequiredForBaselineComparison: true as const,
   }),
   quantitySemantics: Object.freeze({
     primaryRawUnitFieldCandidate: 'REPORTED_QUANTITY' as const,
@@ -58,13 +95,21 @@ export const LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH = Object.freeze(
     reportDateField: 'REPORT_DATE' as const,
     reportDateMeaning: 'date-of-record-as-reported-by-data-provider' as const,
     releaseDateField: 'RELEASE_DATE' as const,
-    releaseRelativeFirstWeekPurchaseDateEquivalentVerified: false as const,
-    storefrontReportDateEqualsConsumerPurchaseDateVerified: false as const,
-    onlineReportDateEqualsConsumerPurchaseDateVerified: false as const,
-    storefrontOnlyFirstWeekCandidateMayBeResearched: true as const,
-    totalPhysicalFirstWeekCandidateMayBeResearched: true as const,
+    providerNativeFirstWeekMetricRequired: false as const,
+    fandexPeriodDefinition:
+      'release-date-through-release-date-plus-six-report-dates-inclusive' as const,
+    dateBasis: 'REPORT_DATE' as const,
+    calendarDayCount: 7 as const,
+    releaseRelative: true as const,
+    onlinePhysicalRecognitionRule: 'ship-date-plus-three-days' as const,
+    onlinePhysicalRulePurpose: 'approximate-time-for-physical-product-to-reach-consumer' as const,
+    storefrontSourceSemantics: 'daily-electronic-point-of-sale-sales' as const,
+    consumerOrderDateEquivalentRequired: false as const,
     hanteoFirstWeekSemanticsMayBeAssumedEquivalent: false as const,
-    state: 'partially-verified' as const,
+    crossProviderFirstWeekSemanticEquivalenceVerified: false as const,
+    sameProviderSameScopeBaselineComparisonAllowed: true as const,
+    providerPeriodDefinitionResolved: true as const,
+    state: 'verified' as const,
   }),
   correctionSemantics: Object.freeze({
     modifiedAtField: 'MODIFIED_AT' as const,
@@ -111,6 +156,8 @@ export const LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH = Object.freeze(
     'https://docs.luminatedata.com/docs/metadata',
     'https://docs.luminatedata.com/changelog/music-api-updates',
     'https://docs.luminatedata.com/docs/onboarding-documentation',
+    'https://support.luminatedata.com/portal/en/kb/articles/methodology-faqs',
+    'https://support.luminatedata.com/portal/en/kb/articles/become-a-data-provider',
     'https://luminatedata.com/terms-of-use/',
   ]),
 });
@@ -119,12 +166,12 @@ export const LUMINATE_ALBUM_PRODUCTION_EVIDENCE_RESEARCH = Object.freeze({
   providerId: 'luminate-music' as const,
   constructCompatible: true,
   constructEvidence:
-    'Luminate Product Sales exposes physical product-sales units in the U.S. and Canada. REPORTED_QUANTITY preserves provider-reported units without Luminate modeling, but FANDEX has no current Luminate license and REPORT_DATE has not been verified as equivalent to the release-relative consumer-purchase first-week period required by the primary normalization anchor.',
+    'Luminate Product Sales exposes physical product-sales units in the U.S. and Canada. REPORTED_QUANTITY preserves provider-reported units without Luminate modeling. FANDEX defines the Luminate first-week anchor as the seven inclusive REPORT_DATE calendar dates beginning on RELEASE_DATE, preserving Luminate tracking semantics including its documented online-physical ship-date-plus-three-days recognition rule. This period is provider-specific and is not treated as semantically equivalent to Hanteo first-week sales. FANDEX still has no current Luminate license.',
   acquisitionRights: 'review-required' as const,
   normalizedStorageRights: 'review-required' as const,
   derivedPublicationRights: 'review-required' as const,
   directObservationAuthorized: false,
-  periodSemantics: 'partially-verified' as const,
+  periodSemantics: 'verified' as const,
   historicalQuerySemantics: 'verified' as const,
   revisionSemantics: 'verified' as const,
   evidenceUrls: LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH.evidenceUrls,
@@ -133,7 +180,8 @@ export const LUMINATE_ALBUM_PRODUCTION_EVIDENCE_RESEARCH = Object.freeze({
 export function buildLuminateNormalizationFreezeInputs(): AlbumNormalizationFreezeInputs {
   return Object.freeze({
     sourceAuthorizationResolved: false,
-    providerPeriodDefinitionResolved: false,
+    providerPeriodDefinitionResolved:
+      LUMINATE_ALBUM_SALES_PRODUCTION_CANDIDATE_RESEARCH.providerPeriodSemantics.providerPeriodDefinitionResolved,
     baselineDefinitionResolved: ALBUM_NORMALIZATION_INTERNAL_DEFINITION_READINESS.baselineDefinitionResolved,
     crossReleaseComparabilityResolved: ALBUM_NORMALIZATION_INTERNAL_DEFINITION_READINESS.crossReleaseComparabilityResolved,
     transformationRuleDefined: ALBUM_NORMALIZATION_INTERNAL_DEFINITION_READINESS.transformationRuleDefined,
