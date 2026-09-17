@@ -9,10 +9,20 @@ let safeProviderMetadata: Readonly<{
   message: string | null;
   resultDataType: string;
   resultDataKeys: readonly string[];
-}> = Object.freeze({ code: null, message: null, resultDataType: 'unobserved', resultDataKeys: Object.freeze([]) });
+  firstItemNestedObjectKeys: Readonly<Record<string, readonly string[]>>;
+  nestedSalesLikeKeys: readonly string[];
+}> = Object.freeze({
+  code: null,
+  message: null,
+  resultDataType: 'unobserved',
+  resultDataKeys: Object.freeze([]),
+  firstItemNestedObjectKeys: Object.freeze({}),
+  nestedSalesLikeKeys: Object.freeze([]),
+});
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
+const SALES_KEY = /(sale|sales|qty|quantity|volume|sold|physical|count|amount)/i;
 
 const transport: HanteoAlbumResearchTransport = {
   async execute(plan) {
@@ -42,11 +52,27 @@ const transport: HanteoAlbumResearchTransport = {
                 ? 'null'
                 : typeof resultData;
             const resultDataKeys = isRecord(resultData) ? Object.keys(resultData).sort() : [];
+            const list = isRecord(resultData) && Array.isArray(resultData.list) ? resultData.list : [];
+            const firstItem = list.find((item) => isRecord(item));
+            const nestedObjectKeys: Record<string, readonly string[]> = {};
+            const nestedSalesLikeKeys: string[] = [];
+            if (isRecord(firstItem)) {
+              for (const [key, value] of Object.entries(firstItem)) {
+                if (!isRecord(value)) continue;
+                const keys = Object.keys(value).sort();
+                nestedObjectKeys[key] = Object.freeze(keys);
+                for (const nestedKey of keys) {
+                  if (SALES_KEY.test(nestedKey)) nestedSalesLikeKeys.push(`${key}.${nestedKey}`);
+                }
+              }
+            }
             safeProviderMetadata = Object.freeze({
               code: providerCode,
               message: providerMessage,
               resultDataType,
               resultDataKeys: Object.freeze(resultDataKeys),
+              firstItemNestedObjectKeys: Object.freeze(nestedObjectKeys),
+              nestedSalesLikeKeys: Object.freeze([...new Set(nestedSalesLikeKeys)].sort()),
             });
           }
         }
@@ -66,6 +92,8 @@ console.log(JSON.stringify({
   endpointHost: new URL(plan.url).host,
   state: result.state,
   httpStatus: result.httpStatus,
+  providerCode: result.providerCode,
+  providerMessage: result.providerMessage,
   attemptedRequests: result.attemptedRequests,
   retryPerformed: result.retryPerformed,
   providerObservationPublished: result.providerObservationPublished,
