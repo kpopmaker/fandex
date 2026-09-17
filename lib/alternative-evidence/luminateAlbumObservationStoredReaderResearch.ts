@@ -67,9 +67,18 @@ export interface LuminateAlbumObservationResearchQueryExecutor {
   ): Promise<Readonly<{ rows: readonly LuminateObservationResearchStoredRow[] }>>;
 }
 
+export type IuLuminateStoredAuthorizationLineage = Readonly<{
+  agreementEvidenceIds: readonly string[];
+  postTerminationPolicyEvidenceIds: readonly string[];
+  publicOutputModes: readonly string[];
+  writeGrantDigests: readonly string[];
+  authorizedTerritories: readonly ('US' | 'CA')[];
+}>;
+
 export type IuLuminateStoredNormalizationRead = Readonly<{
   releaseIdsQueried: readonly string[];
   rowsRead: number;
+  authorizationLineage: IuLuminateStoredAuthorizationLineage;
   resolution: IuLuminateStoredNormalizationResult;
   effects: Readonly<{ databaseReads: 1; databaseWrites: 0; externalCalls: 0 }>;
 }>;
@@ -108,6 +117,34 @@ function assertReturnedRowsStayInRequestedLane(
   }
 }
 
+function summarizeAuthorizationLineage(
+  rows: readonly LuminateObservationResearchStoredRow[],
+): IuLuminateStoredAuthorizationLineage {
+  const agreements = new Set<string>();
+  const postTerminationPolicies = new Set<string>();
+  const outputModes = new Set<string>();
+  const writeGrantDigests = new Set<string>();
+  const territories = new Set<'US' | 'CA'>();
+
+  for (const row of rows) {
+    agreements.add(row.authorization_snapshot.agreementEvidenceId);
+    postTerminationPolicies.add(row.authorization_snapshot.postTerminationPolicyEvidenceId);
+    outputModes.add(row.authorization_snapshot.publicOutputMode);
+    writeGrantDigests.add(row.write_grant_digest);
+    for (const territory of row.authorization_snapshot.authorizedTerritories) {
+      territories.add(territory);
+    }
+  }
+
+  return Object.freeze({
+    agreementEvidenceIds: Object.freeze([...agreements].sort()),
+    postTerminationPolicyEvidenceIds: Object.freeze([...postTerminationPolicies].sort()),
+    publicOutputModes: Object.freeze([...outputModes].sort()),
+    writeGrantDigests: Object.freeze([...writeGrantDigests].sort()),
+    authorizedTerritories: Object.freeze([...territories].sort()),
+  });
+}
+
 export async function readStoredIuLuminateNormalizationResearch(
   executor: LuminateAlbumObservationResearchQueryExecutor,
   territory: 'US' | 'CA',
@@ -120,10 +157,12 @@ export async function readStoredIuLuminateNormalizationResearch(
 
   assertReturnedRowsStayInRequestedLane(result.rows, territory, releaseIds);
   const resolution = resolveIuLuminateStoredNormalization(result.rows, territory);
+  const authorizationLineage = summarizeAuthorizationLineage(result.rows);
 
   return Object.freeze({
     releaseIdsQueried: releaseIds,
     rowsRead: result.rows.length,
+    authorizationLineage,
     resolution,
     effects: Object.freeze({
       databaseReads: 1 as const,
