@@ -24,7 +24,7 @@ export const HANTEO_ALBUM_PRODUCTION_EVIDENCE = Object.freeze({
   providerId: 'hanteo-chart' as const,
   constructCompatible: true,
   constructEvidence:
-    'Official Hanteo pages define the Physical Album Chart as aggregated physical record sales from connected retailers.',
+    'Official Hanteo pages state that the album chart is generated from physical-album sales reported by connected retailers. A bounded research probe also observed a salesVolume field, but technical visibility is not reuse authorization.',
   acquisitionRights: 'review-required' as const,
   normalizedStorageRights: 'review-required' as const,
   derivedPublicationRights: 'review-required' as const,
@@ -34,7 +34,7 @@ export const HANTEO_ALBUM_PRODUCTION_EVIDENCE = Object.freeze({
   revisionSemantics: 'partially-verified' as const,
   evidenceUrls: Object.freeze([
     'https://www.hanteochart.com/en/about',
-    'https://www.hanteochart.com/en/charts/album/weekly/2026-W28',
+    'https://api.hanteochart.com/',
     'https://www.hanteochart.com/ko/notices',
   ]),
 }) satisfies AlbumProviderProductionEvidence;
@@ -43,17 +43,16 @@ export const CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE = Object.freeze({
   providerId: 'circle-chart' as const,
   constructCompatible: true,
   constructEvidence:
-    'Circle FAQ defines Retail Album Chart as real-time retail-store album sales; the general Album Chart is wholesale shipment quantity minus returns and is not the same construct.',
+    'Official Circle Retail Album Chart defines its ranking basis as total offline-album sales at retail stores. The general Album Chart is a separate construct and must not be substituted for retail completed-purchase-class sales.',
   acquisitionRights: 'blocked' as const,
-  normalizedStorageRights: 'blocked' as const,
+  normalizedStorageRights: 'review-required' as const,
   derivedPublicationRights: 'review-required' as const,
   directObservationAuthorized: false,
   periodSemantics: 'verified' as const,
   historicalQuerySemantics: 'partially-verified' as const,
-  revisionSemantics: 'partially-verified' as const,
+  revisionSemantics: 'unverified' as const,
   evidenceUrls: Object.freeze([
-    'https://circlechart.kr/page_community/faq.circle',
-    'https://circlechart.kr/page_community/view.circle?idx=1324&type=notice',
+    'https://circlechart.kr/page_chart/retail.circle',
   ]),
 }) satisfies AlbumProviderProductionEvidence;
 
@@ -110,6 +109,7 @@ export function evaluateMusicAlbumPointProductionReadiness(input: Readonly<{
   if (provider.derivedPublicationRights !== 'allowed') blockers.push('provider-derived-publication-rights-unresolved');
   if (!provider.directObservationAuthorized) blockers.push('authorized-direct-provider-observation-missing');
   if (provider.periodSemantics !== 'verified') blockers.push('provider-period-semantics-not-fully-verified');
+  if (provider.historicalQuerySemantics !== 'verified') blockers.push('provider-historical-query-semantics-not-fully-verified');
   if (provider.revisionSemantics !== 'verified') blockers.push('provider-revision-semantics-not-fully-verified');
 
   const reportedContextInputIds = input.features
