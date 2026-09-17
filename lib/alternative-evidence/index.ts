@@ -41,6 +41,7 @@ export * from './musicReleaseIdentityMappingResearch';
 export * from './iuCanonicalReleaseReferenceCatalogResearch';
 export * from './iuPiecesResearchEvidence';
 export * from './iuLuminateBaselineAcquisitionResearch';
+export * from './iuLuminateStoredNormalizationResearch';
 export * from './albumIdentityEvidencePersistenceResearch';
 export * from './albumIdentityStoredEvidenceHydrationResearch';
 export * from './albumIdentityStoredEvidenceReaderResearch';
