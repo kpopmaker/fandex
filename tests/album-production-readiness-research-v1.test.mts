@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH,
   CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE,
   HANTEO_ALBUM_PRODUCTION_EVIDENCE,
   evaluateAlbumNormalizationFreezeReadiness,
@@ -35,6 +36,14 @@ test('official semantics do not imply Production authorization', () => {
   assert.equal(CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE.acquisitionRights, 'blocked');
   assert.equal(CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE.normalizedStorageRights, 'review-required');
   assert.equal(CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE.directObservationAuthorized, false);
+});
+
+test('historical provider query is a data-acquisition capability, while actual comparable baseline is the Production requirement', () => {
+  assert.equal(ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH.providerHistoricalQueryRequiredForProduction, false);
+  assert.equal(ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH.authorizedComparableBaselineRequiredForProduction, true);
+  assert.equal(ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH.prospectiveStoredAuthorizedObservationsMaySatisfyBaseline, true);
+  assert.equal(ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH.reportedContextMaySatisfyBaseline, false);
+  assert.equal(ALBUM_PRODUCTION_HISTORY_POLICY_RESEARCH.missingBaselineMayBecomeZero, false);
 });
 
 test('provider onboarding distinguishes Circle TDM restriction from Hanteo rights review', () => {
@@ -74,7 +83,7 @@ test('normalization freeze is definition-based and uses no invented numeric thre
   assert.deepEqual(ready, { state: 'ready-for-freeze-review', blockers: [] });
 });
 
-test('stored reported sales context cannot substitute an authorized direct provider observation', () => {
+test('stored reported sales context cannot substitute an authorized direct provider observation or comparable baseline', () => {
   const features = fromAlbumResearchClaim(buildIuTheWinningReportedWeeklySalesClaim());
   assert.equal(features.length, 1);
   assert.equal(features[0]?.sourceClass, 'news-reported-provider');
@@ -84,17 +93,20 @@ test('stored reported sales context cannot substitute an authorized direct provi
   const readiness = evaluateMusicAlbumPointProductionReadiness({
     provider: HANTEO_ALBUM_PRODUCTION_EVIDENCE,
     normalization: unresolvedNormalization,
+    normalizationData: null,
     features,
   });
 
   assert.equal(readiness.state, 'blocked');
   assert.equal(readiness.providerState, 'rights-blocked');
+  assert.equal(readiness.normalizationDataState, 'unassessed');
   assert.equal(readiness.reportedContextInputIds.length, 1);
   assert.equal(readiness.directAbsoluteInputIds.length, 0);
   assert.ok(readiness.blockers.includes('reported-sales-context-cannot-substitute-authorized-direct-observation'));
   assert.ok(readiness.blockers.includes('direct-absolute-sales-input-missing'));
   assert.ok(readiness.blockers.includes('provider-acquisition-rights-unresolved'));
-  assert.ok(readiness.blockers.includes('provider-historical-query-semantics-not-fully-verified'));
+  assert.ok(!readiness.blockers.includes('provider-historical-query-semantics-not-fully-verified'));
+  assert.ok(readiness.blockers.includes('normalization-data-unassessed'));
   assert.ok(readiness.blockers.includes('normalization-transformation-rule-unresolved'));
 });
 
@@ -102,6 +114,7 @@ test('Circle Retail construct compatibility remains rights-blocked under current
   const readiness = evaluateMusicAlbumPointProductionReadiness({
     provider: CIRCLE_RETAIL_ALBUM_PRODUCTION_EVIDENCE,
     normalization: unresolvedNormalization,
+    normalizationData: null,
     features: [],
   });
   assert.equal(readiness.state, 'blocked');
@@ -109,4 +122,6 @@ test('Circle Retail construct compatibility remains rights-blocked under current
   assert.ok(readiness.blockers.includes('provider-acquisition-rights-unresolved'));
   assert.ok(readiness.blockers.includes('provider-normalized-storage-rights-unresolved'));
   assert.ok(readiness.blockers.includes('provider-revision-semantics-not-fully-verified'));
+  assert.ok(readiness.blockers.includes('normalization-data-unassessed'));
+  assert.ok(!readiness.blockers.includes('provider-historical-query-semantics-not-fully-verified'));
 });
