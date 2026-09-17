@@ -46,6 +46,8 @@ WHERE r.record_id IN (SELECT record_id FROM retail_mapping)
    )
 ORDER BY r.record_type, r.record_id;` as const;
 
+export type AlbumIdentityResearchStoredTimestamp = string | Date;
+
 export type AlbumIdentityResearchStoredRow = Readonly<{
   record_id: string;
   record_version: string;
@@ -62,9 +64,9 @@ export type AlbumIdentityResearchStoredRow = Readonly<{
   supersedes_record_id: string | null;
   authorization_snapshot: unknown;
   evidence_payload: unknown;
-  observed_at: string;
-  collected_at: string;
-  revision_observed_at: string | null;
+  observed_at: AlbumIdentityResearchStoredTimestamp;
+  collected_at: AlbumIdentityResearchStoredTimestamp;
+  revision_observed_at: AlbumIdentityResearchStoredTimestamp | null;
 }>;
 
 export type AlbumIdentityStoredRowValidation = Readonly<{
@@ -141,8 +143,14 @@ function retailMappingShape(value: unknown): value is Record<string, unknown> & 
     && value.productScorePublished === false;
 }
 
-function iso(value: string): boolean {
-  return value.trim() !== '' && !Number.isNaN(Date.parse(value));
+function timestampMillis(value: AlbumIdentityResearchStoredTimestamp): number | null {
+  if (value instanceof Date) {
+    const millis = value.getTime();
+    return Number.isNaN(millis) ? null : millis;
+  }
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  const millis = Date.parse(value);
+  return Number.isNaN(millis) ? null : millis;
 }
 
 export function validateAlbumIdentityResearchStoredRow(
@@ -175,13 +183,15 @@ export function validateAlbumIdentityResearchStoredRow(
   if (!['original', 'revised', 'conflicting', 'rejected'].includes(row.record_state)) {
     issues.push('record-state-invalid');
   }
-  if (!iso(row.observed_at)) issues.push('observed-at-invalid');
-  if (!iso(row.collected_at)) issues.push('collected-at-invalid');
-  if (iso(row.observed_at) && iso(row.collected_at)
-    && Date.parse(row.collected_at) < Date.parse(row.observed_at)) {
+
+  const observedMillis = timestampMillis(row.observed_at);
+  const collectedMillis = timestampMillis(row.collected_at);
+  if (observedMillis === null) issues.push('observed-at-invalid');
+  if (collectedMillis === null) issues.push('collected-at-invalid');
+  if (observedMillis !== null && collectedMillis !== null && collectedMillis < observedMillis) {
     issues.push('collection-before-observation');
   }
-  if (row.revision_observed_at !== null && !iso(row.revision_observed_at)) {
+  if (row.revision_observed_at !== null && timestampMillis(row.revision_observed_at) === null) {
     issues.push('revision-observed-at-invalid');
   }
   return Object.freeze({ valid: issues.length === 0, issues: unique(issues) });
@@ -306,7 +316,7 @@ export function resolveRetailObservationIdentityFromStoredAlbumResearch(
   if (!retailMappingShape(mappingData)) {
     return blocked(['stored-retail-mapping-contract-invalid'], accepted.map((record) => record.row.record_id));
   }
-  const sharedEvidence = mappingData.blockers;
+  const mappingBlockers = mappingData.blockers;
   const evidenceRefs = selected.payload.evidenceRefs;
   if (!evidenceRefs.some((ref) => references[0].payload.evidenceRefs.includes(ref))) {
     return blocked(['retail-mapping-release-reference-lineage-missing'], [selected.row.record_id, references[0].row.record_id]);
@@ -328,7 +338,7 @@ export function resolveRetailObservationIdentityFromStoredAlbumResearch(
     releaseId,
     releaseFamilyId: familyId,
     evidenceRecordIds: unique([selected.row.record_id, references[0].row.record_id]),
-    blockers: unique(['stored-identity-research-only', ...sharedEvidence]),
+    blockers: unique(['stored-identity-research-only', ...mappingBlockers]),
   });
 }
 
