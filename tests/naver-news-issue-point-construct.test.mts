@@ -6,14 +6,14 @@ import {
   NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
 } from '../lib/intelligence/naverNewsIssuePointConstruct';
 
-test('newsIssuePoint construct remains frozen while the Product window semantics are narrowed', () => {
+test('newsIssuePoint construct remains frozen while Product methodology is narrowed in stages', () => {
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT.contractVersion,
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
   );
   assert.equal(
     NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
-    'v2_naver_news_issue_point_construct',
+    'v3_naver_news_issue_point_construct',
   );
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.variableId, 'newsIssuePoint');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.constructStatus, 'frozen');
@@ -41,7 +41,7 @@ test('newsIssuePoint construct remains frozen while the Product window semantics
   );
 });
 
-test('8h is the frozen Product window by temporal-locality principle while other methodology gates stay closed', () => {
+test('8h is the frozen Product window by temporal-locality principle', () => {
   assert.deepEqual(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.candidateWindowSlotCounts, [8, 12]);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.windowSelectionStatus, 'frozen');
   assert.equal(
@@ -54,8 +54,28 @@ test('8h is the frozen Product window by temporal-locality principle while other
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.persistenceAsSelectionObjective, false);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.smoothingAsSelectionObjective, false);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.automaticWindowFallbackAllowed, false);
+});
 
-  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyStatus, 'not_frozen');
+test('baseline eligibility and membership are frozen without inventing a fixed baseline span', () => {
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineSufficiencyStatus, 'frozen');
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineWindowSlotCount, 8);
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineMembership,
+    'all_prior_defined_rolling_windows_same_epoch_same_methodology_version',
+  );
+  assert.equal(
+    NAVER_NEWS_ISSUE_POINT_CONSTRUCT.baselineReadinessGate,
+    'replicated_cycle_history',
+  );
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.currentWindowIncludedInBaseline, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.bootstrapIncludedInBaseline, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.undefinedWindowIncludedInBaseline, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.crossEpochHistoryAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.crossMethodologyVersionHistoryAllowed, false);
+  assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.fixedBaselineSpanParameterAllowed, false);
+});
+
+test('normalization and all Product publication gates remain unresolved or closed', () => {
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.normalizationStatus, 'not_frozen');
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.productMethodologyFrozen, false);
   assert.equal(NAVER_NEWS_ISSUE_POINT_CONSTRUCT.directProductContributionEligible, false);
