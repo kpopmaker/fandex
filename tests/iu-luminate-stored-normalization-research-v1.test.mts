@@ -188,7 +188,7 @@ test('revision head supersedes the original and is the only value used', () => {
   assert.equal(result.state, 'available');
   assert.equal(result.selectedBaselineReleaseId, IU_PIECES_RELEASE_ID);
   assert.equal(result.reaction?.baselinePhysicalUnits, 250);
-  assert.equal(result.reaction?.relativeChange, 0.2);
+  assert.ok(Math.abs((result.reaction?.relativeChange ?? Number.NaN) - 0.2) < 1e-12);
 });
 
 test('cross-territory rows cannot satisfy the requested lane', () => {
