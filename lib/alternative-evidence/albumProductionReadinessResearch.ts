@@ -7,7 +7,7 @@ export type AlbumProviderRightsState = 'allowed' | 'review-required' | 'blocked'
 export type AlbumProviderSemanticState = 'verified' | 'partially-verified' | 'unverified';
 
 export type AlbumProviderProductionEvidence = Readonly<{
-  providerId: 'hanteo-chart' | 'circle-chart' | 'luminate-music';
+  providerId: 'hanteo-chart' | 'circle-chart' | 'luminate-music' | 'official-charts-company';
   constructCompatible: boolean;
   constructEvidence: string;
   acquisitionRights: AlbumProviderRightsState;
