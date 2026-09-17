@@ -1,8 +1,6 @@
-import { sha256Canonical } from '../shared/canonicalDigest';
 import type { AlternativeEvidence } from './contracts';
 import type { DirectAlbumObservation } from './directAlbumProvider';
 import {
-  CANONICAL_ALBUM_FEATURE_INPUT_CONTRACT_VERSION,
   fromDirectAlbumObservation,
   type CanonicalAlbumFeatureInput,
 } from './canonicalAlbumFeatureInput';
@@ -18,6 +16,7 @@ export const ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_DESCRIPTOR = Object.freez
   acceptedSourceClass: 'direct-provider' as const,
   outputFeatureKey: 'physicalPurchaseAbsoluteLevel' as const,
   outputFeatureRole: 'absolute' as const,
+  canonicalDirectTransformRequired: true as const,
   newsReportedFirstWeekPromotionAllowed: false as const,
   productionEligible: false as const,
   productScorePublished: false as const,
@@ -42,47 +41,12 @@ export function projectAuthorizedDirectFirstWeekAbsolute(
     && base.provenance.origin !== 'authorized-public-api') {
     throw new Error('direct_first_week_absolute_authorized_provenance_required');
   }
+  if (base.featureKey !== 'physicalPurchaseAbsoluteLevel'
+    || base.featureRole !== 'absolute'
+    || base.semantic !== 'first-week-sale'
+    || base.periodType !== 'first-week') {
+    throw new Error('direct_first_week_absolute_canonical_transform_mismatch');
+  }
 
-  const featureInputId = sha256Canonical({
-    contractVersion: CANONICAL_ALBUM_FEATURE_INPUT_CONTRACT_VERSION,
-    projectionVersion: ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_VERSION,
-    sourceFeatureInputId: base.featureInputId,
-    sourceObservationId: base.sourceObservationId,
-    featureKey: 'physicalPurchaseAbsoluteLevel',
-    semantic: base.semantic,
-    value: base.value,
-    unit: base.unit,
-    providerPeriod: base.providerPeriod,
-    releaseId: base.releaseId,
-  });
-  const featureInputFamilyId = sha256Canonical({
-    projectionVersion: ALBUM_DIRECT_FIRST_WEEK_ABSOLUTE_RESEARCH_VERSION,
-    sourceFeatureInputFamilyId: base.featureInputFamilyId,
-    featureKey: 'physicalPurchaseAbsoluteLevel',
-    semantic: base.semantic,
-    unit: base.unit,
-    territory: base.territory,
-    periodType: base.periodType,
-    releaseId: base.releaseId,
-  });
-
-  return Object.freeze([
-    Object.freeze({
-      ...base,
-      featureInputId,
-      featureInputFamilyId,
-      featureKey: 'physicalPurchaseAbsoluteLevel' as const,
-      featureRole: 'absolute' as const,
-      eligibilityState: base.availabilityState === 'available'
-        ? 'feature-resolver-candidate' as const
-        : base.eligibilityState,
-      proxyFallbackState: base.availabilityState === 'available'
-        ? 'absolute-available' as const
-        : base.proxyFallbackState,
-      comparabilityState: base.periodType === 'first-week'
-        ? 'conditionally-comparable' as const
-        : 'not-comparable' as const,
-      blockers: Object.freeze([...base.blockers]),
-    }),
-  ]);
+  return Object.freeze([base]);
 }
