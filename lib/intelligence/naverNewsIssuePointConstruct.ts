@@ -1,8 +1,12 @@
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
-  'v3_naver_news_issue_point_construct' as const;
+  'v4_naver_news_issue_point_construct' as const;
+
+export const NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION =
+  'v1_naver_news_issue_point_real_methodology' as const;
 
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+  methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
   variableId: 'newsIssuePoint' as const,
   constructStatus: 'frozen' as const,
   lifecycle: 'research' as const,
@@ -35,8 +39,18 @@ export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   crossEpochHistoryAllowed: false as const,
   crossMethodologyVersionHistoryAllowed: false as const,
   fixedBaselineSpanParameterAllowed: false as const,
-  normalizationStatus: 'not_frozen' as const,
-  productMethodologyFrozen: false as const,
+  normalizationStatus: 'frozen' as const,
+  normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
+  normalizationFormula:
+    '100 * priorLessThanLatestCount / priorDefinedWindowCount' as const,
+  tieHandling: 'included_in_denominator_excluded_from_numerator' as const,
+  scoreRange: Object.freeze([0, 100] as const),
+  providerTotalNormalizationAllowed: false as const,
+  stage1SyntheticFormulaAllowed: false as const,
+  minMaxNormalizationAllowed: false as const,
+  zScoreNormalizationAllowed: false as const,
+  arbitraryMultiplierAllowed: false as const,
+  productMethodologyFrozen: true as const,
   directProductContributionEligible: false as const,
   productScorePublished: false as const,
 });
