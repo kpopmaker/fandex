@@ -31,7 +31,7 @@ jobs:
           MAIN_SEED="$(git rev-parse origin/main:app/data/v4/metrics/artistMonthlyMetricSeed.ts)"
           test "$BRANCH_SEED" = "$MAIN_SEED"
           git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
-          npm run research:lastfm:v137-checkpoint -- --history /tmp/main-lastfm-history.csv > /tmp/v137-output.txt
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-lastfm-v137-checkpoint.mts --history /tmp/main-lastfm-history.csv > /tmp/v137-output.txt
           node - <<'NODE'
           const fs = require('fs');
           const raw = fs.readFileSync('/tmp/v137-output.txt','utf8');
