@@ -1,0 +1,53 @@
+name: TEMP newsIssuePoint Integrated Validation v2
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-afbf-integrated
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Focused methodology tests
+        run: npx tsx --conditions=react-server --test tests/naver-news-issue-point-construct.test.mts tests/naver-news-issue-point-frozen-methodology.test.mts
+
+      - name: Relevant methodology regressions
+        run: npx tsx --conditions=react-server --test tests/naver-news-media-activity-method-research.test.mts tests/naver-news-media-activity-baseline-readiness-research.test.mts
+
+      - name: Shadow lineage regressions
+        run: npx tsx --conditions=react-server --test tests/naver-news-shadow-first-seen-activity-v1.test.mts tests/naver-news-shadow-first-seen-series-v1.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "afbf9c93df4e4a0287a91eedc0e8b40f2d2ec081"
+          git diff --check 6199ed4d727911d270f572ebe9fb0169238cc65e..HEAD^
+          git diff --name-only 6199ed4d727911d270f572ebe9fb0169238cc65e..HEAD^
