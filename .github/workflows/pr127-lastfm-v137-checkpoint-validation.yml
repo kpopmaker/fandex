@@ -56,6 +56,26 @@ jobs:
             latestCoverage: x.repeatedReadiness.history.coverageRatio.at(-1)?.value ?? null,
             latestMeanAbsNormalizedDelta: x.repeatedReadiness.history.meanAbsoluteNormalizedDelta.at(-1)?.value ?? null,
             latestMeanAbsRankDelta: x.repeatedReadiness.history.meanAbsoluteRankDelta.at(-1)?.value ?? null,
+            coverageGaps: x.repeatedReadiness.artistPersistence
+              .filter((a) => a.latestState === 'blocked' || a.comparableRatio < 1)
+              .map((a) => ({
+                artistId: a.artistId,
+                artistLabel: a.artistLabel,
+                latestState: a.latestState,
+                presenceRatio: a.presenceRatio,
+                comparableRatio: a.comparableRatio,
+                blockedSnapshotCount: a.blockedSnapshotCount
+              })),
+            worstNormalizedDivergence: [...x.repeatedReadiness.artistPersistence]
+              .filter((a) => a.meanAbsoluteNormalizedDelta !== null)
+              .sort((a, b) => b.meanAbsoluteNormalizedDelta - a.meanAbsoluteNormalizedDelta)
+              .slice(0, 5)
+              .map((a) => ({
+                artistId: a.artistId,
+                meanAbsoluteNormalizedDelta: a.meanAbsoluteNormalizedDelta,
+                meanAbsoluteRankDelta: a.meanAbsoluteRankDelta,
+                latestState: a.latestState
+              })),
             digest: x.digest
           }, null, 2));
           NODE
