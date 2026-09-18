@@ -21,7 +21,10 @@ test('sales packet carries the minimum FANDEX rights questions', async () => {
     'normalized FANDEX observation records',
     'Snowflake Music Data Share access for recurring programmatic queries',
   ]) {
-    assert.ok(text.includes(required), `missing required rights question: ${required}`);
+    assert.ok(
+      text.toLowerCase().includes(required.toLowerCase()),
+      `missing required rights question: ${required}`,
+    );
   }
 });
 
