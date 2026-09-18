@@ -7,4 +7,4 @@ export * from './historicalWindow';
 export * from './shadowVariableAdapter';
 export * from './shadowScoringReconciliation';
 export * from './repeatedShadowReconciliation';
-export * from './historicalShadowCheckpoint';\n
+export * from './historicalShadowCheckpoint';
