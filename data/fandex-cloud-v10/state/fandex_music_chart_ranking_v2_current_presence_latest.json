@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-17T11:04:25",
-  "snapshotDate": "2026-09-17",
+  "createdAt": "2026-09-18T10:52:08",
+  "snapshotDate": "2026-09-18",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "7",
+          "rank": "8",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -48,13 +48,13 @@
     },
     {
       "artist": "아이유",
-      "fandexMusicChartFinalPoint": 187.0,
-      "score": 187.0,
+      "fandexMusicChartFinalPoint": 182.5,
+      "score": 182.5,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 108.0,
         "genie": 34.0,
-        "bugs": 45.0
+        "bugs": 40.5
       },
       "platformStatus": {
         "melon": {
@@ -67,16 +67,16 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "26",
+          "rank": "25",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "1",
+          "rank": "2",
           "chartType": "realtime",
-          "point": 45.0
+          "point": 40.5
         }
       },
       "rank": 2
@@ -109,7 +109,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "12",
+          "rank": "16",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -118,35 +118,35 @@
     },
     {
       "artist": "아이브",
-      "fandexMusicChartFinalPoint": 100.0,
-      "score": 100.0,
+      "fandexMusicChartFinalPoint": 67.0,
+      "score": 67.0,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 48.0,
+        "melon": 24.0,
         "genie": 34.0,
-        "bugs": 18.0
+        "bugs": 9.0
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "50",
+          "rank": "51",
           "chartType": "daily",
-          "point": 48.0
+          "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "25",
+          "rank": "26",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "46",
+          "rank": "52",
           "chartType": "realtime",
-          "point": 18.0
+          "point": 9.0
         }
       },
       "rank": 4
@@ -165,21 +165,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "92",
+          "rank": "95",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "116",
+          "rank": "117",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "65",
+          "rank": "64",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "97",
+          "rank": "98",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "152",
+          "rank": "150",
           "chartType": "daily",
           "point": 6.8
         },
@@ -242,7 +242,7 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "148",
+          "rank": "151",
           "chartType": "daily",
           "point": 6.8
         },

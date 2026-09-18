@@ -1,25 +1,25 @@
 ﻿artist,platform,status,trackTitle,rank,chartType,proposedPoint
 아이유,melon,RANKED,이 별로부터,3,daily,108.0
-아이유,genie,RANKED,이 별로부터,26,daily,34.0
-아이유,bugs,RANKED,Dear my crazy soulmate,1,realtime,45.0
+아이유,genie,RANKED,이 별로부터,25,daily,34.0
+아이유,bugs,RANKED,Dear my crazy soulmate,2,realtime,40.5
 에스파,melon,RANKED,LEMONADE,12,daily,72.0
 에스파,genie,RANKED,LEMONADE,6,daily,63.75
-에스파,bugs,RANKED,LEMONADE,12,realtime,27.0
+에스파,bugs,RANKED,LEMONADE,16,realtime,27.0
 에이티즈,melon,RANKED,BAD,10,daily,90.0
 에이티즈,genie,RANKED,BAD,7,daily,63.75
-에이티즈,bugs,RANKED,BAD,7,realtime,33.75
-보이넥스트도어,melon,RANKED,오늘만 I LOVE YOU,97,daily,24.0
-보이넥스트도어,genie,RANKED,오늘만 I LOVE YOU,152,daily,6.8
+에이티즈,bugs,RANKED,BAD,8,realtime,33.75
+보이넥스트도어,melon,RANKED,오늘만 I LOVE YOU,98,daily,24.0
+보이넥스트도어,genie,RANKED,오늘만 I LOVE YOU,150,daily,6.8
 보이넥스트도어,bugs,NOT_RANKED,,,,0.0
-아이브,melon,RANKED,BANG BANG,50,daily,48.0
-아이브,genie,RANKED,BANG BANG,25,daily,34.0
-아이브,bugs,RANKED,BANG BANG,46,realtime,18.0
+아이브,melon,RANKED,BANG BANG,51,daily,24.0
+아이브,genie,RANKED,BANG BANG,26,daily,34.0
+아이브,bugs,RANKED,BANG BANG,52,realtime,9.0
 르세라핌,melon,NOT_RANKED,,,,0.0
-르세라핌,genie,RANKED,SPAGHETTI (Feat. j-hope of BTS),148,daily,6.8
+르세라핌,genie,RANKED,SPAGHETTI (Feat. j-hope of BTS),151,daily,6.8
 르세라핌,bugs,RANKED,SPAGHETTI (feat. j-hope of BTS),100,realtime,9.0
-뉴진스,melon,RANKED,Hype Boy,92,daily,24.0
-뉴진스,genie,RANKED,Hype Boy,116,daily,6.8
-뉴진스,bugs,RANKED,Hype Boy,65,realtime,9.0
+뉴진스,melon,RANKED,Hype Boy,95,daily,24.0
+뉴진스,genie,RANKED,Hype Boy,117,daily,6.8
+뉴진스,bugs,RANKED,Hype Boy,64,realtime,9.0
 세븐틴,melon,NOT_RANKED,,,,0.0
 세븐틴,genie,NOT_RANKED,,,,0.0
 세븐틴,bugs,NOT_RANKED,,,,0.0
