@@ -132,7 +132,9 @@ export function parseNaverNewsMediaActivityBaselineReadinessResearchCommand(
   });
 }
 
-function diurnalReadiness(analysisSlotCount: number): NaverNewsMediaActivityDiurnalReadiness {
+export function evaluateNaverNewsMediaActivityDiurnalReadiness(
+  analysisSlotCount: number,
+): NaverNewsMediaActivityDiurnalReadiness {
   const completeCycleCount = Math.floor(analysisSlotCount / DIURNAL_CYCLE_SLOT_COUNT);
   const sameUtcHourReplicationFloor = completeCycleCount;
   const sameUtcHourReplicationCeiling = analysisSlotCount === 0
@@ -184,7 +186,7 @@ export function evaluateNaverNewsMediaActivityBaselineReadinessResearch(input: R
       ? 'baseline_readiness_research_available' as const
       : 'source_method_research_unavailable' as const,
     analysisSlotCount,
-    diurnalReadiness: diurnalReadiness(analysisSlotCount),
+    diurnalReadiness: evaluateNaverNewsMediaActivityDiurnalReadiness(analysisSlotCount),
     windowReadiness: Object.freeze(input.methodResearch.candidates.map((candidate) => Object.freeze({
       windowSlotCount: candidate.windowSlotCount,
       status: candidate.status,

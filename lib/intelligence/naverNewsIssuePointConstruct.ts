@@ -1,8 +1,12 @@
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION =
-  'v1_naver_news_issue_point_construct' as const;
+  'v4_naver_news_issue_point_construct' as const;
+
+export const NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION =
+  'v1_naver_news_issue_point_real_methodology' as const;
 
 export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   contractVersion: NAVER_NEWS_ISSUE_POINT_CONSTRUCT_CONTRACT_VERSION,
+  methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
   variableId: 'newsIssuePoint' as const,
   constructStatus: 'frozen' as const,
   lifecycle: 'research' as const,
@@ -16,10 +20,37 @@ export const NAVER_NEWS_ISSUE_POINT_CONSTRUCT = Object.freeze({
   missingOrGapAsZeroAllowed: false as const,
   strictPublicationIntervalArticleCountClaimAllowed: false as const,
   candidateWindowSlotCounts: Object.freeze([8, 12] as const),
-  windowSelectionStatus: 'not_frozen' as const,
-  baselineSufficiencyStatus: 'not_frozen' as const,
-  normalizationStatus: 'not_frozen' as const,
-  productMethodologyFrozen: false as const,
+  windowSelectionStatus: 'frozen' as const,
+  windowSelectionPrinciple: 'preserve_current_state_temporal_locality' as const,
+  selectedWindowSlotCount: 8 as const,
+  selectedWindowDurationHours: 8 as const,
+  responsivenessPriority: true as const,
+  persistenceAsSelectionObjective: false as const,
+  smoothingAsSelectionObjective: false as const,
+  automaticWindowFallbackAllowed: false as const,
+  baselineSufficiencyStatus: 'frozen' as const,
+  baselineWindowSlotCount: 8 as const,
+  baselineMembership:
+    'all_prior_defined_rolling_windows_same_epoch_same_methodology_version' as const,
+  baselineReadinessGate: 'replicated_cycle_history' as const,
+  currentWindowIncludedInBaseline: false as const,
+  bootstrapIncludedInBaseline: false as const,
+  undefinedWindowIncludedInBaseline: false as const,
+  crossEpochHistoryAllowed: false as const,
+  crossMethodologyVersionHistoryAllowed: false as const,
+  fixedBaselineSpanParameterAllowed: false as const,
+  normalizationStatus: 'frozen' as const,
+  normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
+  normalizationFormula:
+    '100 * priorLessThanLatestCount / priorDefinedWindowCount' as const,
+  tieHandling: 'included_in_denominator_excluded_from_numerator' as const,
+  scoreRange: Object.freeze([0, 100] as const),
+  providerTotalNormalizationAllowed: false as const,
+  stage1SyntheticFormulaAllowed: false as const,
+  minMaxNormalizationAllowed: false as const,
+  zScoreNormalizationAllowed: false as const,
+  arbitraryMultiplierAllowed: false as const,
+  productMethodologyFrozen: true as const,
   directProductContributionEligible: false as const,
   productScorePublished: false as const,
 });
