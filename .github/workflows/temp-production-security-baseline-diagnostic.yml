@@ -1,0 +1,64 @@
+name: TEMP Production Security Baseline Diagnostic
+
+on:
+  push:
+    branches:
+      - validation/security-baseline-main-6199
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact main parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "6199ed4d727911d270f572ebe9fb0169238cc65e"
+
+      - run: npm ci
+
+      - name: Summarize production audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm audit --omit=dev --audit-level=high --json > audit.json || true
+          node <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('audit.json','utf8'));
+          const vulns = report.vulnerabilities || {};
+          const rows = Object.entries(vulns)
+            .filter(([,v]) => v && (v.severity === 'high' || v.severity === 'critical'))
+            .map(([name,v]) => ({
+              name,
+              severity: v.severity,
+              range: v.range,
+              via: (v.via || []).map(x => typeof x === 'string' ? x : {
+                source: x.source,
+                name: x.name,
+                severity: x.severity,
+                title: x.title,
+                range: x.range,
+                url: x.url
+              }),
+              effects: v.effects,
+              fixAvailable: v.fixAvailable
+            }));
+          console.log(JSON.stringify({metadata: report.metadata, highCritical: rows}, null, 2));
+          NODE
+
+      - name: Run production security gate
+        run: npm run security:audit:production
