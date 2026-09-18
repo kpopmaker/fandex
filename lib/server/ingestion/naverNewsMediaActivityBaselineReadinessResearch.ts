@@ -132,7 +132,9 @@ export function parseNaverNewsMediaActivityBaselineReadinessResearchCommand(
   });
 }
 
-export function evaluateNaverNewsMediaActivityDiurnalReadiness(\n  analysisSlotCount: number,\n): NaverNewsMediaActivityDiurnalReadiness {
+export function evaluateNaverNewsMediaActivityDiurnalReadiness(
+  analysisSlotCount: number,
+): NaverNewsMediaActivityDiurnalReadiness {
   const completeCycleCount = Math.floor(analysisSlotCount / DIURNAL_CYCLE_SLOT_COUNT);
   const sameUtcHourReplicationFloor = completeCycleCount;
   const sameUtcHourReplicationCeiling = analysisSlotCount === 0
