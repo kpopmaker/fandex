@@ -287,8 +287,13 @@ export function evaluateNaverNewsIssuePointHistoricalComparison(input: Readonly<
     });
   }
 
-  const lower = eligible.filter((window) => (window.activityRate as number) < current.activityRate).length;
-  const equal = eligible.filter((window) => window.activityRate === current.activityRate).length;
+  const currentActivityRate = current.activityRate;
+  const lower = eligible.filter(
+    (window) => (window.activityRate as number) < currentActivityRate,
+  ).length;
+  const equal = eligible.filter(
+    (window) => window.activityRate === currentActivityRate,
+  ).length;
   const greater = eligible.length - lower - equal;
 
   return Object.freeze({
@@ -296,7 +301,7 @@ export function evaluateNaverNewsIssuePointHistoricalComparison(input: Readonly<
     reason: 'frozen_methodology_value_available' as const,
     normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
     score: round(100 * lower / eligible.length),
-    currentActivityRate: current.activityRate,
+    currentActivityRate,
     priorDefinedWindowCount: eligible.length,
     priorLessThanLatestCount: lower,
     priorEqualToLatestCount: equal,
