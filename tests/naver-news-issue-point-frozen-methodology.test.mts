@@ -17,6 +17,9 @@ import {
 import type {
   NaverNewsShadowFirstSeenSeriesResult,
 } from '../lib/server/ingestion/naverNewsShadowFirstSeenSeries';
+import {
+  NAVER_NEWS_SCHEDULER_VERSION,
+} from '../lib/server/ingestion/naverNewsScheduler';
 
 const HOUR_MS = 60 * 60 * 1_000;
 const epoch = NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START;
