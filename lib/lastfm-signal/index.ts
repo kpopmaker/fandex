@@ -9,3 +9,4 @@ export * from './shadowScoringReconciliation';
 export * from './repeatedShadowReconciliation';
 export * from './historicalShadowCheckpoint';
 export * from './momentumConstructAlignment';
+export * from './momentumProductConstructResearch';
