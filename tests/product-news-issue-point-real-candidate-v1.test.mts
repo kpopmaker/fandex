@@ -79,7 +79,7 @@ function availableResult(): NaverNewsIssuePointFrozenMethodologyResult {
     normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
     status: 'available',
     reason: 'frozen_methodology_value_available',
-    score: 41.975308641975,
+    score: 100,
     currentActivityRate: 0.0025,
     priorDefinedWindowCount: 1,
     priorLessThanLatestCount: 1,
@@ -128,7 +128,7 @@ test('available frozen methodology becomes an observed shadow Product candidate 
 
   assert.deepEqual(result.candidate.fact, {
     availability: 'available',
-    value: 41.975308641975,
+    value: 100,
   });
   assert.equal(result.candidate.variableId, 'newsIssuePoint');
   assert.equal(result.candidate.canonicalArtistId, 'iu');
@@ -192,6 +192,64 @@ test('candidate adapter fails closed on score and comparison invariant corruptio
   assert.deepEqual(invalidCounts, {
     status: 'data-issue',
     reason: 'invalid-available-result',
+  });
+});
+
+test('candidate adapter independently verifies score formula, classification, frozen contract, and exact evidence lineage', () => {
+  const source = availableResult();
+
+  const wrongFormula = adaptNaverNewsIssuePointProductCandidate({
+    ...source,
+    score: 50,
+  } as NaverNewsIssuePointFrozenMethodologyResult);
+  assert.deepEqual(wrongFormula, {
+    status: 'data-issue',
+    reason: 'invalid-available-result',
+  });
+
+  const wrongClassification = adaptNaverNewsIssuePointProductCandidate({
+    ...source,
+    score: 0,
+    priorLessThanLatestCount: 0,
+    priorEqualToLatestCount: 1,
+    priorGreaterThanLatestCount: 0,
+  } as NaverNewsIssuePointFrozenMethodologyResult);
+  assert.deepEqual(wrongClassification, {
+    status: 'data-issue',
+    reason: 'invalid-available-result',
+  });
+
+  const wrongTrace = adaptNaverNewsIssuePointProductCandidate({
+    ...source,
+    evidenceTrace: Object.freeze({
+      ...source.evidenceTrace,
+      storedEvidenceJobIds: Object.freeze([
+        ...source.evidenceTrace.storedEvidenceJobIds.slice(0, -1),
+        'corrupted-job-id',
+      ]),
+    }),
+  } as NaverNewsIssuePointFrozenMethodologyResult);
+  assert.deepEqual(wrongTrace, {
+    status: 'data-issue',
+    reason: 'invalid-available-result',
+  });
+
+  const wrongMethodology = adaptNaverNewsIssuePointProductCandidate({
+    ...source,
+    methodologyVersion: 'unexpected-methodology-version',
+  } as unknown as NaverNewsIssuePointFrozenMethodologyResult);
+  assert.deepEqual(wrongMethodology, {
+    status: 'data-issue',
+    reason: 'frozen-methodology-contract-mismatch',
+  });
+
+  const wrongContract = adaptNaverNewsIssuePointProductCandidate({
+    ...source,
+    contractVersion: 'unexpected-contract-version',
+  } as unknown as NaverNewsIssuePointFrozenMethodologyResult);
+  assert.deepEqual(wrongContract, {
+    status: 'data-issue',
+    reason: 'frozen-methodology-contract-mismatch',
   });
 });
 
