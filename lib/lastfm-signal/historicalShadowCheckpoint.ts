@@ -342,6 +342,14 @@ function buildReplayBundle(
   return Object.freeze({ historyCsv, deltaCsv, scoreCsv, statusJson });
 }
 
+export function buildLastfmHistoricalReplaySourceBundle(
+  historyCsv: string,
+  cutoffDate: string,
+): LastfmRealSignalSourceBundle {
+  const rows = parseHistory(historyCsv);
+  return buildReplayBundle(rows, cutoffDate);
+}
+
 function checkpointState(
   readiness: LastfmRepeatedShadowReconciliationReadiness,
 ): LastfmHistoricalShadowCheckpoint['state'] {
