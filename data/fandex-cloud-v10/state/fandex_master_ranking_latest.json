@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-09-18T10:52:09",
+  "createdAt": "2026-09-19T10:56:34",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -15,10 +15,10 @@
   "ranking": [
     {
       "artist": "에스파",
-      "fandexFinalPoint": 357.44,
-      "score": 357.44,
-      "previousMasterPoint": 357.66,
-      "deltaFromPreviousMaster": -0.22,
+      "fandexFinalPoint": 357.35,
+      "score": 357.35,
+      "previousMasterPoint": 357.44,
+      "deltaFromPreviousMaster": -0.09,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -38,23 +38,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 23.43,
-          "rawPoint": 93.7281,
+          "cumulativePoint": 23.34,
+          "rawPoint": 93.3533,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 357.44,
+      "sourceTotalCheck": 357.35,
       "rank": 1
     },
     {
       "artist": "아이유",
-      "fandexFinalPoint": 345.09,
-      "score": 345.09,
-      "previousMasterPoint": 345.36,
-      "deltaFromPreviousMaster": -0.27,
+      "fandexFinalPoint": 341.0,
+      "score": 341.0,
+      "previousMasterPoint": 345.09,
+      "deltaFromPreviousMaster": -4.09,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 244.89,
@@ -67,30 +67,30 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 45.62,
-          "rawPoint": 182.5,
+          "cumulativePoint": 41.12,
+          "rawPoint": 164.5,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 4.95,
-          "rawPoint": 19.8197,
+          "cumulativePoint": 5.36,
+          "rawPoint": 21.449,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 345.09,
+      "sourceTotalCheck": 341.0,
       "rank": 2
     },
     {
       "artist": "에이티즈",
-      "fandexFinalPoint": 338.61,
-      "score": 338.61,
-      "previousMasterPoint": 338.0,
-      "deltaFromPreviousMaster": 0.61,
+      "fandexFinalPoint": 339.65,
+      "score": 339.65,
+      "previousMasterPoint": 338.61,
+      "deltaFromPreviousMaster": 1.04,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -110,23 +110,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 12.96,
-          "rawPoint": 51.8408,
+          "cumulativePoint": 14.0,
+          "rawPoint": 56.0091,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 338.61,
+      "sourceTotalCheck": 339.65,
       "rank": 3
     },
     {
       "artist": "르세라핌",
-      "fandexFinalPoint": 263.03,
-      "score": 263.03,
-      "previousMasterPoint": 263.01,
-      "deltaFromPreviousMaster": 0.02,
+      "fandexFinalPoint": 262.92,
+      "score": 262.92,
+      "previousMasterPoint": 263.03,
+      "deltaFromPreviousMaster": -0.11,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 182.26,
@@ -146,23 +146,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 24.06,
-          "rawPoint": 96.2545,
+          "cumulativePoint": 23.95,
+          "rawPoint": 95.7874,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 263.03,
+      "sourceTotalCheck": 262.92,
       "rank": 4
     },
     {
       "artist": "뉴진스",
-      "fandexFinalPoint": 251.63,
-      "score": 251.63,
-      "previousMasterPoint": 251.53,
-      "deltaFromPreviousMaster": 0.1,
+      "fandexFinalPoint": 251.9,
+      "score": 251.9,
+      "previousMasterPoint": 251.63,
+      "deltaFromPreviousMaster": 0.27,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -182,23 +182,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 18.48,
-          "rawPoint": 73.9138,
+          "cumulativePoint": 18.75,
+          "rawPoint": 74.9866,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 251.63,
+      "sourceTotalCheck": 251.9,
       "rank": 5
     },
     {
       "artist": "보이넥스트도어",
-      "fandexFinalPoint": 233.8,
-      "score": 233.8,
-      "previousMasterPoint": 233.79,
-      "deltaFromPreviousMaster": 0.01,
+      "fandexFinalPoint": 233.92,
+      "score": 233.92,
+      "previousMasterPoint": 233.8,
+      "deltaFromPreviousMaster": 0.12,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 187.53,
@@ -218,23 +218,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 3.15,
-          "rawPoint": 12.6156,
+          "cumulativePoint": 3.27,
+          "rawPoint": 13.0794,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 233.8,
+      "sourceTotalCheck": 233.92,
       "rank": 6
     },
     {
       "artist": "아이브",
-      "fandexFinalPoint": 229.95,
-      "score": 229.95,
-      "previousMasterPoint": 237.41,
-      "deltaFromPreviousMaster": -7.46,
+      "fandexFinalPoint": 233.24,
+      "score": 233.24,
+      "previousMasterPoint": 229.95,
+      "deltaFromPreviousMaster": 3.29,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 166.58,
@@ -247,30 +247,30 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 16.75,
-          "rawPoint": 67.0,
+          "cumulativePoint": 19.0,
+          "rawPoint": 76.0,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 9.42,
-          "rawPoint": 37.681,
+          "cumulativePoint": 10.46,
+          "rawPoint": 41.8252,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 229.95,
+      "sourceTotalCheck": 233.24,
       "rank": 7
     },
     {
       "artist": "투모로우바이투게더",
-      "fandexFinalPoint": 227.56,
-      "score": 227.56,
-      "previousMasterPoint": 226.75,
-      "deltaFromPreviousMaster": 0.81,
+      "fandexFinalPoint": 228.61,
+      "score": 228.61,
+      "previousMasterPoint": 227.56,
+      "deltaFromPreviousMaster": 1.05,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 163.02,
@@ -290,23 +290,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 14.83,
-          "rawPoint": 59.3312,
+          "cumulativePoint": 15.88,
+          "rawPoint": 63.5032,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 227.56,
+      "sourceTotalCheck": 228.61,
       "rank": 8
     },
     {
       "artist": "세븐틴",
-      "fandexFinalPoint": 220.77,
-      "score": 220.77,
-      "previousMasterPoint": 220.24,
-      "deltaFromPreviousMaster": 0.53,
+      "fandexFinalPoint": 221.41,
+      "score": 221.41,
+      "previousMasterPoint": 220.77,
+      "deltaFromPreviousMaster": 0.64,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 173.12,
@@ -326,23 +326,23 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 4.8,
-          "rawPoint": 19.2192,
+          "cumulativePoint": 5.44,
+          "rawPoint": 21.7428,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 220.77,
+      "sourceTotalCheck": 221.41,
       "rank": 9
     },
     {
       "artist": "스트레이키즈",
-      "fandexFinalPoint": 156.67,
-      "score": 156.67,
-      "previousMasterPoint": 156.64,
-      "deltaFromPreviousMaster": 0.03,
+      "fandexFinalPoint": 157.03,
+      "score": 157.03,
+      "previousMasterPoint": 156.67,
+      "deltaFromPreviousMaster": 0.36,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 90.6,
@@ -362,15 +362,15 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 18.08,
-          "rawPoint": 72.305,
+          "cumulativePoint": 18.44,
+          "rawPoint": 73.7529,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
           "sourceReadMode": "validated_rolling_x0_25"
         }
       },
-      "sourceTotalCheck": 156.67,
+      "sourceTotalCheck": 157.03,
       "rank": 10
     }
   ]
