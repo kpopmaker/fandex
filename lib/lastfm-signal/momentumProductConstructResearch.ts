@@ -80,11 +80,12 @@ export const FANDEX_MOMENTUM_COMPONENT_CATALOG =
       construct: 'persistence of recent change in canonical media attention activity',
       role: 'reaction-outcome',
       requiredTemporalProperty: 'repeated-comparable-observations',
-      currentState: 'derivation-research-required',
+      currentState: 'component-research-candidate',
       directProductContributionEligible: false,
       blockers: Object.freeze([
-        'momentum-specific-change-derivation-not-frozen',
+        'v140-descriptive-derivation-only-no-component-score',
         'component-normalization-not-frozen',
+        'cross-family-composite-evidence-not-yet-ready',
       ]),
     }),
     Object.freeze({
