@@ -1,0 +1,132 @@
+name: PR127 FANDEX momentum v142 combination validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v142 and upstream momentum contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-cross-family-combination-v142.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-temporal-normalization-v141.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-naver-media-attention-momentum-v140.test.mts
+          npm run typecheck
+      - name: Evaluate current real cross-family evidence
+        run: |
+          git fetch origin main
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
+
+          cat > .tmp-v140-actual.mts <<'TS'
+          import {
+            deriveFandexNaverMediaAttentionMomentumResearch,
+          } from './lib/intelligence/fandexNaverMediaAttentionMomentumResearch';
+          import {
+            NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+          } from './lib/server/ingestion/naverNewsIssuePointFrozenMethodology';
+          import {
+            NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+          } from './lib/intelligence/naverNewsIssuePointConstruct';
+
+          const anchors = [
+            ['2026-09-17T17:00:00.000Z', 0.00125, 26.829268292683, 41],
+            ['2026-09-18T01:00:00.000Z', 0.00125, 24.489795918367, 49],
+            ['2026-09-18T09:00:00.000Z', 0.03375, 98.245614035088, 57],
+            ['2026-09-18T17:00:00.000Z', 0.0025, 33.846153846154, 65],
+            ['2026-09-19T01:00:00.000Z', 0.0, 0.0, 73],
+            ['2026-09-19T09:00:00.000Z', 0.0025, 41.975308641975, 81],
+          ] as const;
+
+          const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
+            contractVersion: NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+            methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+            lifecycle: 'research',
+            directProductContributionEligible: false,
+            productScorePublished: false,
+            variableId: 'newsIssuePoint',
+            canonicalArtistId: 'iu',
+            protocolStart: '2026-09-15T16:00:00.000Z',
+            throughSlotStart,
+            selectedWindowSlotCount: 8,
+            rollingWindowSemantics: 'overlapping',
+            baselineScope: 'same_artist_same_official_shadow_epoch',
+            baselineReadiness: {
+              cycleSlotCount: 24,
+              utcHourCoverageCount: 24,
+              completeCycleCount: 2,
+              sameUtcHourReplicationFloor: 2,
+              sameUtcHourReplicationCeiling: 2,
+              status: 'replicated_cycle_history',
+            },
+            normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+            status: 'available',
+            reason: 'frozen_methodology_value_available',
+            score,
+            currentActivityRate: activityRate,
+            priorDefinedWindowCount,
+            priorLessThanLatestCount: 0,
+            priorEqualToLatestCount: 0,
+            priorGreaterThanLatestCount: 0,
+            currentWindow: null,
+            eligiblePriorWindows: [],
+            excludedWindows: [],
+            evidenceTrace: { windows: [], storedEvidenceJobIds: [] },
+          })) as any;
+
+          process.stdout.write(JSON.stringify(
+            deriveFandexNaverMediaAttentionMomentumResearch(points),
+            null,
+            2,
+          ));
+          TS
+
+          npx tsx --conditions=react-server .tmp-v140-actual.mts > /tmp/v140.json
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v141-momentum-normalization.mts             --artist iu             --lastfm-history /tmp/main-lastfm-history.csv             --naver-component /tmp/v140.json > /tmp/v141.json
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v142-momentum-combination.mts             --input /tmp/v141.json > /tmp/v142.json
+
+          node - <<'NODE'
+          const fs = require('fs');
+          const x = JSON.parse(fs.readFileSync('/tmp/v142.json', 'utf8'));
+          if (x.state !== 'cross-family-direction-corroborated') {
+            throw new Error('unexpected v142 state: ' + x.state);
+          }
+          if (x.directionalConsensus !== 'direction-corroborated-down') {
+            throw new Error('unexpected directional consensus: ' + x.directionalConsensus);
+          }
+          if (x.persistenceConsensus !== 'one-direction-repeated') {
+            throw new Error('unexpected persistence consensus: ' + x.persistenceConsensus);
+          }
+          if (
+            x.combinationDecision.numericCompositeAllowed !== false
+            || x.combinationDecision.equalWeightAverageAllowed !== false
+            || x.combinationDecision.percentileAverageAllowed !== false
+            || x.combinationDecision.productMomentumScore !== null
+          ) {
+            throw new Error('numeric combination boundary violated');
+          }
+          console.log(JSON.stringify({
+            contractVersion: x.contractVersion,
+            state: x.state,
+            directionalConsensus: x.directionalConsensus,
+            persistenceConsensus: x.persistenceConsensus,
+            familyEvidence: x.familyEvidence,
+            levelDiagnostics: x.levelDiagnostics,
+            combinationDecision: x.combinationDecision,
+            freezeStatus: x.freezeStatus,
+            blockers: x.blockers,
+            digest: x.digest
+          }, null, 2));
+          NODE
+
+          rm .tmp-v140-actual.mts
