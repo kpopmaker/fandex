@@ -90,7 +90,7 @@ test('v139 forbids raw provider averaging, missing-as-zero/stable, and cause/out
   assert.equal(result.semanticRules.sameUnderlyingPhenomenonDoubleCountingAllowed, false);
 });
 
-test('v139 current catalog admits Last.fm only as research component and keeps NAVER derivation unresolved', () => {
+test('v139 current catalog admits Last.fm and v140 NAVER as research components only', () => {
   const lastfm = FANDEX_MOMENTUM_COMPONENT_CATALOG.find(
     (item) => item.componentId === 'lastfm-audience-consumption-growth-persistence',
   );
@@ -103,8 +103,9 @@ test('v139 current catalog admits Last.fm only as research component and keeps N
 
   assert.equal(lastfm?.currentState, 'component-research-candidate');
   assert.equal(lastfm?.directProductContributionEligible, false);
-  assert.equal(naver?.currentState, 'derivation-research-required');
-  assert.ok(naver?.blockers.includes('momentum-specific-change-derivation-not-frozen'));
+  assert.equal(naver?.currentState, 'component-research-candidate');
+  assert.ok(naver?.blockers.includes('v140-descriptive-derivation-only-no-component-score'));
+  assert.ok(naver?.blockers.includes('component-normalization-not-frozen'));
   assert.equal(youtube?.currentState, 'source-not-ready');
 });
 
