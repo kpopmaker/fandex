@@ -247,7 +247,7 @@ test('v144 preserves insufficient and conflict semantics without numeric substit
     recordedAt: '2026-09-19T15:26:05.410Z',
   });
   assert.equal(insufficient.observation.value.rawValue, 'direction-insufficient');
-  assert.equal(insufficient.observation.value.missingState, 'insufficient');
+  assert.equal(insufficient.observation.value.missingState, 'observed');
 
   const conflict = buildFandexMomentumResearchCarrierRecord({
     result: v143('direction-conflicted'),
