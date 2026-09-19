@@ -71,7 +71,7 @@ export const FANDEX_MOMENTUM_COMPONENT_CATALOG =
       directProductContributionEligible: false,
       blockers: Object.freeze([
         'component-normalization-not-frozen',
-        'cross-family-composite-not-defined',
+        'cross-family-composite-evidence-not-yet-ready',
       ]),
     }),
     Object.freeze({
