@@ -1,0 +1,55 @@
+name: TEMP Current Main Product Eligibility Regression
+
+on:
+  push:
+    branches:
+      - validation/current-main-b419-product-eligibility
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact main parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "b4194f0d69e4bd9fed3604db1522cebd2cdf1d56"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production regression suite
+        run: >-
+          npm run test:security &&
+          npm run test:persistence &&
+          npm run test:ingestion:v121 &&
+          npm run test:role-bootstrap &&
+          npm run test:production-bootstrap &&
+          npm run test:deployment-readiness &&
+          npm run test:merge-safety
+
+      - name: Plan-only DB boundaries
+        run: npm run db:migrate && npm run db:roles
+
+      - name: Production build
+        run: npm run build
