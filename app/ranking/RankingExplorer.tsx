@@ -13,6 +13,10 @@ import {
   getArtistAliases,
   groupTypeLabels,
 } from '../data/v4/charts/artistSearchAliases';
+import {
+  compareRankingFandexDesc,
+  formatRankingFandexPoint,
+} from './rankingTruth';
 import { FANDEX_METRIC_DEFINITIONS } from '../data/v4/metrics/fandexMetricDefinitions';
 import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
 
@@ -22,7 +26,7 @@ export type RankingExplorerRow = {
   ticker: string;
   groupType: ArtistIndexGroupType;
   coverageStatus: ArtistIndexCoverageStatus;
-  currentFandexPoint: number;
+  currentFandexPoint: number | null;
   sixMonthDelta: number;
   trendBand: ArtistIndexTrendBand;
   confidenceLevel: ArtistIndexConfidenceLevel;
@@ -102,8 +106,8 @@ const confidenceScores: Record<ArtistIndexConfidenceLevel, number> = {
   low: 1,
 };
 
-function formatPoint(value: number) {
-  return `${new Intl.NumberFormat('ko-KR').format(Math.round(value))}pt`;
+function formatPoint(value: number | null) {
+  return formatRankingFandexPoint(value);
 }
 
 function formatDelta(value: number) {
@@ -161,11 +165,17 @@ function sortRows(rows: RankingExplorerRow[], sortKey: SortKey) {
     if (sortKey === 'confidence_desc') {
       return (
         confidenceScores[b.confidenceLevel] - confidenceScores[a.confidenceLevel] ||
-        b.currentFandexPoint - a.currentFandexPoint
+        compareRankingFandexDesc(
+          a.currentFandexPoint,
+          b.currentFandexPoint,
+        )
       );
     }
 
-    return b.currentFandexPoint - a.currentFandexPoint;
+    return compareRankingFandexDesc(
+      a.currentFandexPoint,
+      b.currentFandexPoint,
+    );
   });
 }
 

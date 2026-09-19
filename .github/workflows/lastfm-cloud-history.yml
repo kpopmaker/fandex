@@ -2,8 +2,8 @@ name: FANDEX Last.fm Cloud History
 
 on:
   schedule:
-    # 00:17 UTC = 09:17 KST
-    - cron: "17 0 * * *"
+    # 00:00 UTC = 09:00 KST
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 permissions:

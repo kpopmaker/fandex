@@ -130,6 +130,7 @@ const marketIssueSignals: PreviewIssueSignal[] = [
 
 const artistIssueTemplates = [
   {
+    templateId: 'issue-01',
     title: '신보 활동 구간 반응이 SNS 지표에 반영',
     category: 'SNS/팬덤',
     relatedVariableKey: 'snsFandomPoint' as const,
@@ -137,6 +138,7 @@ const artistIssueTemplates = [
     summary: '활동 콘텐츠 반응이 팬덤 지표에 먼저 잡히는 구간입니다.',
   },
   {
+    templateId: 'issue-02',
     title: '콘셉트 티저 공개 후 검색 흐름 변화',
     category: '컴백/활동',
     relatedVariableKey: 'comebackActivityPoint' as const,
@@ -144,6 +146,7 @@ const artistIssueTemplates = [
     summary: '프로모션 콘텐츠 이후 관심 흐름을 짧게 확인합니다.',
   },
   {
+    templateId: 'issue-03',
     title: '숏폼 챌린지 반응 증가',
     category: 'SNS/팬덤',
     relatedVariableKey: 'snsFandomPoint' as const,
@@ -151,6 +154,7 @@ const artistIssueTemplates = [
     summary: '짧은 영상 반응이 팬덤 활동성에 반영됩니다.',
   },
   {
+    templateId: 'issue-04',
     title: '브랜드 협업 관심 지표 반영',
     category: '브랜드',
     relatedVariableKey: 'brandFitPoint' as const,
@@ -158,6 +162,7 @@ const artistIssueTemplates = [
     summary: '협업 공개 뒤 대중 접점과 검색 흐름을 함께 봅니다.',
   },
   {
+    templateId: 'issue-05',
     title: '음원/음반 발매 전 관심 흐름 확인',
     category: '음원/음반',
     relatedVariableKey: 'musicAlbumPoint' as const,
@@ -165,6 +170,7 @@ const artistIssueTemplates = [
     summary: '발매 전 프로모션 반응을 음원/음반 변수에 반영합니다.',
   },
   {
+    templateId: 'issue-06',
     title: '해외 일정 관련 검색 흐름 증가',
     category: '해외 반응',
     relatedVariableKey: 'growthMomentumPoint' as const,
@@ -172,6 +178,7 @@ const artistIssueTemplates = [
     summary: '해외 일정 관심이 검색과 팬덤 흐름에 잡힙니다.',
   },
   {
+    templateId: 'issue-07',
     title: '무대 노출 이후 관심도 변화',
     category: '무대 노출',
     relatedVariableKey: 'comebackActivityPoint' as const,
@@ -179,6 +186,7 @@ const artistIssueTemplates = [
     summary: '무대 공개 뒤 반응량 변화가 짧게 나타납니다.',
   },
   {
+    templateId: 'issue-08',
     title: '팬 이벤트 공개 후 활동량 증가',
     category: '팬덤',
     relatedVariableKey: 'snsFandomPoint' as const,
@@ -186,6 +194,7 @@ const artistIssueTemplates = [
     summary: '팬 이벤트 일정이 팬덤 활동성 지표에 반영됩니다.',
   },
   {
+    templateId: 'issue-09',
     title: '미디어 노출량 변화 확인',
     category: '뉴스/이슈',
     relatedVariableKey: 'newsIssuePoint' as const,
@@ -193,6 +202,7 @@ const artistIssueTemplates = [
     summary: '공개 노출량이 늘어난 구간을 이슈 변수로 확인합니다.',
   },
   {
+    templateId: 'issue-10',
     title: '활동 주기 전환으로 지표 안정',
     category: '활동 주기',
     relatedVariableKey: 'riskAdjustmentPoint' as const,
@@ -205,7 +215,10 @@ export function getMarketIssueTopTen() {
   return marketIssueSignals;
 }
 
-export function getArtistRecentIssueSignals(artistId: string, limit = 10) {
+export function getArtistRecentIssueSignals(
+  artistId: string,
+  limit = 10,
+): PreviewIssueSignal[] {
   const profile = artistIndexChartProfiles.find(
     (item) => item.artistId === artistId,
   );
@@ -214,11 +227,13 @@ export function getArtistRecentIssueSignals(artistId: string, limit = 10) {
     return marketIssueSignals.slice(0, limit);
   }
 
-  return artistIssueTemplates.slice(0, limit).map((item, index) => ({
-    id: `${profile.artistId}-issue-${String(index + 1).padStart(2, '0')}`,
-    relatedArtistName: profile.artistName,
-    dateLabel: `최근 시드 ${index + 1}`,
-    sourceType: index % 2 === 0 ? 'editorial_seed' : 'preview_signal',
-    ...item,
-  }));
+  return artistIssueTemplates
+    .slice(0, limit)
+    .map(({ templateId, ...item }, index) => ({
+      id: `${profile.artistId}-${templateId}`,
+      relatedArtistName: profile.artistName,
+      dateLabel: `최근 시드 ${index + 1}`,
+      sourceType: index % 2 === 0 ? 'editorial_seed' : 'preview_signal',
+      ...item,
+    }));
 }
