@@ -1,0 +1,23 @@
+name: PR127 FANDEX momentum v141 normalization validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v141 and upstream momentum contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-temporal-normalization-v141.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-naver-media-attention-momentum-v140.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-product-construct-v139.test.mts
+          npm run typecheck
