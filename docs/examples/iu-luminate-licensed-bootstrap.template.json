@@ -1,0 +1,63 @@
+{
+  "grant": {
+    "agreementKind": "none",
+    "agreementEvidenceId": null,
+    "licenseActive": false,
+    "physicalProductSalesIncluded": "not-addressed",
+    "authorizedTerritories": [],
+    "apiOrDataShareAccess": "not-addressed",
+    "recurringProgrammaticCollection": "not-addressed",
+    "normalizedStorage": "not-addressed",
+    "retentionDuringLicense": "not-addressed",
+    "commercialProductUse": "not-addressed",
+    "publicOutputMode": "derived-metric-only",
+    "publicDerivedMetricPublication": "not-addressed",
+    "publicRankingOrBenchmarking": "not-addressed",
+    "rawRedistribution": "not-addressed",
+    "postTerminationPolicy": "unresolved",
+    "postTerminationPolicyEvidenceId": null
+  },
+  "territory": "US",
+  "access": {
+    "surface": "snowflake-data-share",
+    "evidenceId": "",
+    "shareObjectInventoryEvidenceId": "",
+    "availableViews": []
+  },
+  "breakouts": {
+    "metricCategoryProductSales": "",
+    "distributionChannelPhysical": "",
+    "purchaseMethodOnline": "",
+    "purchaseMethodStorefront": "",
+    "physicalProductFormats": []
+  },
+  "currentIdentityCandidate": {
+    "fandexReleaseId": "research:iu:release:the-winning:2024-02-20",
+    "fandexReleaseFamilyId": "research:iu:release-family:the-winning",
+    "canonicalTitle": "The Winning",
+    "releaseDate": "2024-02-20",
+    "mrelgId": "",
+    "luminateTitle": "",
+    "luminateDisplayArtist": "",
+    "luminateReleaseDate": "",
+    "matchedBarcodes": [
+      "8804775368752",
+      "8804775368769"
+    ],
+    "reviewed": false
+  },
+  "baselineIdentityCandidate": {
+    "fandexReleaseId": "research:iu:release:pieces:2021-12-29",
+    "fandexReleaseFamilyId": "research:iu:release-family:pieces",
+    "canonicalTitle": "Pieces",
+    "releaseDate": "2021-12-29",
+    "mrelgId": "",
+    "luminateTitle": "",
+    "luminateDisplayArtist": "",
+    "luminateReleaseDate": "",
+    "matchedBarcodes": [
+      "8804775236938"
+    ],
+    "reviewed": false
+  }
+}
