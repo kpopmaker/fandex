@@ -19,8 +19,14 @@ function source(input?: Readonly<{
   leftPercentile?: number | null;
   rightPercentile?: number | null;
 }>): FandexMomentumTemporalNormalizationResearchResult {
-  const leftDirection = input?.leftDirection ?? 'down';
-  const rightDirection = input?.rightDirection ?? 'down';
+  const leftDirection =
+    input && Object.prototype.hasOwnProperty.call(input, 'leftDirection')
+      ? input.leftDirection ?? null
+      : 'down';
+  const rightDirection =
+    input && Object.prototype.hasOwnProperty.call(input, 'rightDirection')
+      ? input.rightDirection ?? null
+      : 'down';
   const leftRun = input?.leftRun ?? 1;
   const rightRun = input?.rightRun ?? 2;
   const leftPercentile = input?.leftPercentile ?? 97.058823529412;
