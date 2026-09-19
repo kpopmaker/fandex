@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -21,3 +23,115 @@ jobs:
           npx tsx --conditions=react-server --test tests/fandex-naver-media-attention-momentum-v140.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-product-construct-v139.test.mts
           npm run typecheck
+      - name: Evaluate current main Last.fm with read-only Neon-derived NAVER anchors
+        run: |
+          git fetch origin main
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
+          cat > .tmp-v141-actual.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            deriveFandexNaverMediaAttentionMomentumResearch,
+          } from './lib/intelligence/fandexNaverMediaAttentionMomentumResearch';
+          import {
+            evaluateFandexMomentumTemporalNormalizationResearch,
+          } from './lib/intelligence/fandexMomentumTemporalNormalizationResearch';
+          import {
+            NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+          } from './lib/server/ingestion/naverNewsIssuePointFrozenMethodology';
+          import {
+            NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+          } from './lib/intelligence/naverNewsIssuePointConstruct';
+
+          const anchors = [
+            ['2026-09-17T17:00:00.000Z', 0.00125, 26.829268292683, 41],
+            ['2026-09-18T01:00:00.000Z', 0.00125, 24.489795918367, 49],
+            ['2026-09-18T09:00:00.000Z', 0.03375, 98.245614035088, 57],
+            ['2026-09-18T17:00:00.000Z', 0.0025, 33.846153846154, 65],
+            ['2026-09-19T01:00:00.000Z', 0.0, 0.0, 73],
+            ['2026-09-19T09:00:00.000Z', 0.0025, 41.975308641975, 81],
+          ] as const;
+
+          const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
+            contractVersion: NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+            methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+            lifecycle: 'research',
+            directProductContributionEligible: false,
+            productScorePublished: false,
+            variableId: 'newsIssuePoint',
+            canonicalArtistId: 'iu',
+            protocolStart: '2026-09-15T16:00:00.000Z',
+            throughSlotStart,
+            selectedWindowSlotCount: 8,
+            rollingWindowSemantics: 'overlapping',
+            baselineScope: 'same_artist_same_official_shadow_epoch',
+            baselineReadiness: {
+              cycleSlotCount: 24,
+              utcHourCoverageCount: 24,
+              completeCycleCount: 2,
+              sameUtcHourReplicationFloor: 2,
+              sameUtcHourReplicationCeiling: 2,
+              status: 'replicated_cycle_history',
+            },
+            normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+            status: 'available',
+            reason: 'frozen_methodology_value_available',
+            score,
+            currentActivityRate: activityRate,
+            priorDefinedWindowCount,
+            priorLessThanLatestCount: 0,
+            priorEqualToLatestCount: 0,
+            priorGreaterThanLatestCount: 0,
+            currentWindow: null,
+            eligiblePriorWindows: [],
+            excludedWindows: [],
+            evidenceTrace: { windows: [], storedEvidenceJobIds: [] },
+          })) as any;
+
+          const naver = deriveFandexNaverMediaAttentionMomentumResearch(points);
+          const history = await readFile('/tmp/main-lastfm-history.csv', 'utf8');
+          const result = evaluateFandexMomentumTemporalNormalizationResearch({
+            canonicalArtistId: 'iu',
+            lastfmHistoryCsv: history,
+            naverComponent: naver,
+          });
+
+          if (result.state !== 'aligned-normalized-research') {
+            throw new Error(`unexpected v141 state: ${result.state}`);
+          }
+          if (result.alignmentCutoffAt !== '2026-09-19T01:56:03.000Z') {
+            throw new Error(`unexpected cutoff: ${result.alignmentCutoffAt}`);
+          }
+          const naverComponent = result.components.find((item) => item.family === 'media-attention');
+          if (naverComponent?.selectedKey !== '2026-09-19T01:00:00.000Z') {
+            throw new Error(`future NAVER anchor leaked: ${naverComponent?.selectedKey}`);
+          }
+          if (result.compositeScore !== null || result.componentWeights !== null) {
+            throw new Error('v141 unexpectedly produced composite weighting or score');
+          }
+
+          console.log(JSON.stringify({
+            contractVersion: result.contractVersion,
+            state: result.state,
+            alignmentCutoffAt: result.alignmentCutoffAt,
+            normalizationType: result.normalizationType,
+            components: result.components.map((item) => ({
+              family: item.family,
+              selectedKey: item.selectedKey,
+              selectedComponentEndAt: item.selectedComponentEndAt,
+              freshnessLagHours: item.freshnessLagHours,
+              nativeValue: item.nativeValue,
+              priorDefinedCount: item.priorDefinedCount,
+              historicalStrictExceedanceShare: item.historicalStrictExceedanceShare,
+              nativeDelta: item.nativeDelta,
+              direction: item.direction,
+              latestDirectionalRunTransitionCount: item.latestDirectionalRunTransitionCount,
+              latestDirectionalRunDurationHours: item.latestDirectionalRunDurationHours,
+            })),
+            componentWeights: result.componentWeights,
+            compositeScore: result.compositeScore,
+            blockers: result.blockers,
+            digest: result.digest,
+          }, null, 2));
+          TS
+          npx tsx --conditions=react-server .tmp-v141-actual.mts
+          rm .tmp-v141-actual.mts
