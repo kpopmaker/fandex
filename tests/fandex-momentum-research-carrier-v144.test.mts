@@ -278,3 +278,25 @@ test('v144 implementation has no Product numeric resolver dependency', async () 
   assert.doesNotMatch(source, /getResolvedMetricScore/);
   assert.doesNotMatch(source, /artistMonthlyMetricSeed/);
 });
+
+
+test('committed real IU carrier artifact validates and remains Product-isolated', async () => {
+  const jsonl = await readFile(
+    new URL('../data/momentum-research/iu_cross_family_evidence_state_v1.jsonl', import.meta.url),
+    'utf8',
+  );
+  const records = parseFandexMomentumResearchCarrierJsonl(jsonl);
+  const latest = readLatestFandexMomentumResearchCarrier(jsonl);
+
+  assert.equal(records.length, 1);
+  assert.equal(records[0].sequence, 1);
+  assert.equal(records[0].sourceV143Digest, '121343630db936fa265f546523b28977614ce1658c13e68a7857344c4b3add28');
+  assert.equal(records[0].recordDigest, '478b36e2008a7bfb3df24236d3e9c5487d30c7217eca3f8566e3da09879f5033');
+  assert.equal(records[0].observation.observationId, '38f9fdd4a5cd3717ce7c4e9267728e880b2e5b981c8e3846a4db0f8aab3761db');
+  assert.equal(records[0].observation.value.rawValue, 'direction-corroborated-down');
+  assert.equal(latest.state, 'available');
+  assert.equal(latest.previewFallbackConsulted, false);
+  assert.equal(latest.productMetricResolverCalled, false);
+  assert.equal(latest.productMetricSlotRead, false);
+  assert.equal(latest.productMetricSlotWritten, false);
+});
