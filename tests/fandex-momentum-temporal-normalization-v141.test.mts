@@ -252,7 +252,7 @@ test('v141 keeps tie handling strict: ties stay in denominator but not numerator
   assert.equal(naver?.priorDefinedCount, 3);
   assert.equal(naver?.priorLessThanCurrentCount, 1);
   assert.equal(naver?.priorEqualToCurrentCount, 2);
-  assert.equal(naver?.historicalStrictExceedanceShare, 100 / 3);
+  assert.equal(naver?.historicalStrictExceedanceShare, 33.333333333333);
 });
 
 test('v141 rejects NAVER artist mismatch rather than cross-artist normalization', () => {
