@@ -218,7 +218,9 @@ test('v144 detects deleted, reordered, or tampered chain records', () => {
     /append_sequence_invalid/,
   );
 
-  const tampered = structuredClone(second);
+  const tampered = structuredClone(second) as unknown as {
+    observation: { value: { rawValue: string } };
+  } & typeof second;
   tampered.observation.value.rawValue = 'direction-conflicted';
   assert.throws(
     () => validateFandexMomentumResearchCarrierRecord(tampered),
