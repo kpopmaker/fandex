@@ -51,6 +51,7 @@ export type FandexMomentumResearchCarrierRecord = Readonly<{
   sequence: number;
   recordedAt: string;
   sourceV143Digest: string;
+  previousRecordDigest: string | null;
   sourceContractVersion:
     typeof FANDEX_MOMENTUM_OUTPUT_FORM_ELIGIBILITY_RESEARCH_VERSION;
   observation: FandexObservationV1;
@@ -155,6 +156,7 @@ function recordDigestPayload(
     sequence: record.sequence,
     recordedAt: record.recordedAt,
     sourceV143Digest: record.sourceV143Digest,
+    previousRecordDigest: record.previousRecordDigest,
     sourceContractVersion: record.sourceContractVersion,
     observation: record.observation,
     isolation: record.isolation,
@@ -166,6 +168,7 @@ export function buildFandexMomentumResearchCarrierRecord(
     result: FandexMomentumOutputFormEligibilityResearchResult;
     sequence: number;
     recordedAt: string;
+    previousRecordDigest?: string | null;
   }>,
 ): FandexMomentumResearchCarrierRecord {
   if (
@@ -182,6 +185,16 @@ export function buildFandexMomentumResearchCarrierRecord(
     throw new Error('momentum_v144_recorded_at_invalid');
   }
   assertSha256(input.result.digest, 'momentum_v144_source_digest_invalid');
+  const previousRecordDigest = input.previousRecordDigest ?? null;
+  if (input.sequence === 1 && previousRecordDigest !== null) {
+    throw new Error('momentum_v144_first_record_previous_digest_forbidden');
+  }
+  if (input.sequence > 1) {
+    if (previousRecordDigest === null) {
+      throw new Error('momentum_v144_previous_digest_required');
+    }
+    assertSha256(previousRecordDigest, 'momentum_v144_previous_digest_invalid');
+  }
 
   const observationDraft = buildFandexMomentumCategoricalResearchObservation({
     result: input.result,
@@ -195,6 +208,7 @@ export function buildFandexMomentumResearchCarrierRecord(
     sequence: input.sequence,
     recordedAt: input.recordedAt,
     sourceV143Digest: input.result.digest,
+    previousRecordDigest,
     sourceContractVersion:
       FANDEX_MOMENTUM_OUTPUT_FORM_ELIGIBILITY_RESEARCH_VERSION,
     observation,
@@ -234,6 +248,15 @@ export function validateFandexMomentumResearchCarrierRecord(
   }
   assertSha256(record.sourceV143Digest, 'momentum_v144_source_digest_invalid');
   assertSha256(record.recordDigest, 'momentum_v144_record_digest_invalid');
+  if (record.sequence === 1 && record.previousRecordDigest !== null) {
+    throw new Error('momentum_v144_first_record_previous_digest_forbidden');
+  }
+  if (record.sequence > 1) {
+    if (record.previousRecordDigest === null) {
+      throw new Error('momentum_v144_previous_digest_required');
+    }
+    assertSha256(record.previousRecordDigest, 'momentum_v144_previous_digest_invalid');
+  }
   if (
     record.sourceContractVersion
       !== FANDEX_MOMENTUM_OUTPUT_FORM_ELIGIBILITY_RESEARCH_VERSION
@@ -256,6 +279,7 @@ export function validateFandexMomentumResearchCarrierRecord(
     sequence: record.sequence,
     recordedAt: record.recordedAt,
     sourceV143Digest: record.sourceV143Digest,
+    previousRecordDigest: record.previousRecordDigest,
     sourceContractVersion: record.sourceContractVersion,
     observation: record.observation,
     isolation: record.isolation,
@@ -292,12 +316,16 @@ export function parseFandexMomentumResearchCarrierJsonl(
     if (records[index].sequence !== index + 1) {
       throw new Error('momentum_v144_append_sequence_invalid');
     }
-    if (
-      index > 0
-      && Date.parse(records[index].recordedAt)
-        < Date.parse(records[index - 1].recordedAt)
-    ) {
-      throw new Error('momentum_v144_recorded_at_order_invalid');
+    if (index > 0) {
+      if (
+        Date.parse(records[index].recordedAt)
+          < Date.parse(records[index - 1].recordedAt)
+      ) {
+        throw new Error('momentum_v144_recorded_at_order_invalid');
+      }
+      if (records[index].previousRecordDigest !== records[index - 1].recordDigest) {
+        throw new Error('momentum_v144_hash_chain_invalid');
+      }
     }
   }
 
