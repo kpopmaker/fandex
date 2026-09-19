@@ -17,6 +17,16 @@ import type { ProductObservationTime } from '../contracts/productTime';
 export const NAVER_NEWS_ISSUE_POINT_PRODUCT_CANDIDATE_CONTRACT_VERSION =
   'v1_naver_news_issue_point_product_candidate' as const;
 
+const EXPECTED_FROZEN_METHODOLOGY_CONTRACT_VERSION =
+  'v1_naver_news_issue_point_frozen_methodology' as const;
+const EXPECTED_METHODOLOGY_VERSION =
+  'v1_naver_news_issue_point_real_methodology' as const;
+const EXPECTED_WINDOW_SLOT_COUNT = 8 as const;
+const EXPECTED_BASELINE_SCOPE =
+  'same_artist_same_official_shadow_epoch' as const;
+const EXPECTED_NORMALIZATION_TYPE =
+  'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const;
+
 export type NaverNewsIssuePointProductCandidateSourceMetadata = Readonly<{
   sourceKind: 'naver-news-issue-point-frozen-methodology';
   methodologyVersion: string;
@@ -129,12 +139,148 @@ function frozenContractMatches(
   result: NaverNewsIssuePointFrozenMethodologyResult,
 ): boolean {
   return (
-    result.variableId === 'newsIssuePoint'
-    && result.selectedWindowSlotCount === 8
-    && result.normalizationType === 'HISTORICAL_STRICT_EXCEEDANCE_SHARE'
+    result.contractVersion === EXPECTED_FROZEN_METHODOLOGY_CONTRACT_VERSION
+    && result.methodologyVersion === EXPECTED_METHODOLOGY_VERSION
+    && result.lifecycle === 'research'
+    && result.variableId === 'newsIssuePoint'
+    && result.selectedWindowSlotCount === EXPECTED_WINDOW_SLOT_COUNT
+    && result.rollingWindowSemantics === 'overlapping'
+    && result.baselineScope === EXPECTED_BASELINE_SCOPE
+    && result.normalizationType === EXPECTED_NORMALIZATION_TYPE
     && result.directProductContributionEligible === false
     && result.productScorePublished === false
   );
+}
+
+function roundedScore(lower: number, total: number): number {
+  return Number((100 * lower / total).toFixed(12));
+}
+
+function sameWindowIdentity(
+  left: NaverNewsIssuePointWindowEvidence,
+  right: NaverNewsIssuePointWindowEvidence,
+): boolean {
+  return (
+    left.methodologyVersion === right.methodologyVersion
+    && left.canonicalArtistId === right.canonicalArtistId
+    && left.protocolStart === right.protocolStart
+    && left.windowSlotCount === right.windowSlotCount
+    && left.startSlotStart === right.startSlotStart
+    && left.endSlotStart === right.endSlotStart
+    && left.firstSeenObservationCount === right.firstSeenObservationCount
+    && left.observedObservationCount === right.observedObservationCount
+    && left.activityRate === right.activityRate
+  );
+}
+
+function eligibleWindowMatchesCurrentScope(
+  window: NaverNewsIssuePointWindowEvidence,
+  current: NaverNewsIssuePointWindowEvidence,
+): boolean {
+  return (
+    window.methodologyVersion === EXPECTED_METHODOLOGY_VERSION
+    && window.canonicalArtistId === current.canonicalArtistId
+    && window.protocolStart === current.protocolStart
+    && window.windowSlotCount === EXPECTED_WINDOW_SLOT_COUNT
+    && window.endSlotStart < current.endSlotStart
+    && window.activityRate !== null
+    && Number.isFinite(window.activityRate)
+    && window.slotEvidence.length === EXPECTED_WINDOW_SLOT_COUNT
+    && window.slotEvidence.every(
+      (slot) => slot.bootstrap === false && slot.jobId.length > 0,
+    )
+  );
+}
+
+function exactEvidenceTraceMatches(
+  result: NaverNewsIssuePointFrozenMethodologyResult,
+  current: NaverNewsIssuePointWindowEvidence,
+): boolean {
+  const windows = result.evidenceTrace.windows;
+  if (
+    windows.length === 0
+    || !windows.some((window) => sameWindowIdentity(window, current))
+  ) {
+    return false;
+  }
+
+  for (const prior of result.eligiblePriorWindows) {
+    if (!windows.some((window) => sameWindowIdentity(window, prior))) {
+      return false;
+    }
+  }
+
+  const derivedJobIds = [
+    ...new Set(
+      windows.flatMap((window) =>
+        window.slotEvidence.map((slot) => slot.jobId),
+      ),
+    ),
+  ];
+  const storedJobIds = [...result.evidenceTrace.storedEvidenceJobIds];
+
+  return (
+    derivedJobIds.length > 0
+    && derivedJobIds.length === storedJobIds.length
+    && derivedJobIds.every((jobId, index) => jobId === storedJobIds[index])
+  );
+}
+
+function availableResultIsConsistent(
+  result: NaverNewsIssuePointFrozenMethodologyResult,
+): boolean {
+  if (result.status !== 'available') return false;
+
+  const current = result.currentWindow;
+  const score = result.score;
+  const currentActivityRate = result.currentActivityRate;
+  if (
+    result.reason !== 'frozen_methodology_value_available'
+    || current === null
+    || result.baselineReadiness.status !== 'replicated_cycle_history'
+    || typeof score !== 'number'
+    || !Number.isFinite(score)
+    || score < 0
+    || score > 100
+    || currentActivityRate === null
+    || !Number.isFinite(currentActivityRate)
+    || current.activityRate !== currentActivityRate
+    || current.methodologyVersion !== EXPECTED_METHODOLOGY_VERSION
+    || current.canonicalArtistId !== result.canonicalArtistId
+    || current.protocolStart !== result.protocolStart
+    || current.windowSlotCount !== EXPECTED_WINDOW_SLOT_COUNT
+    || current.slotEvidence.length !== EXPECTED_WINDOW_SLOT_COUNT
+    || current.slotEvidence.some(
+      (slot) => slot.bootstrap || slot.jobId.length === 0,
+    )
+    || result.priorDefinedWindowCount <= 0
+    || result.eligiblePriorWindows.length !== result.priorDefinedWindowCount
+    || result.eligiblePriorWindows.some(
+      (window) => !eligibleWindowMatchesCurrentScope(window, current),
+    )
+  ) {
+    return false;
+  }
+
+  const lower = result.eligiblePriorWindows.filter(
+    (window) => (window.activityRate as number) < currentActivityRate,
+  ).length;
+  const equal = result.eligiblePriorWindows.filter(
+    (window) => window.activityRate === currentActivityRate,
+  ).length;
+  const greater = result.eligiblePriorWindows.length - lower - equal;
+
+  if (
+    lower !== result.priorLessThanLatestCount
+    || equal !== result.priorEqualToLatestCount
+    || greater !== result.priorGreaterThanLatestCount
+    || lower + equal + greater !== result.priorDefinedWindowCount
+    || score !== roundedScore(lower, result.priorDefinedWindowCount)
+  ) {
+    return false;
+  }
+
+  return exactEvidenceTraceMatches(result, current);
 }
 
 export function adaptNaverNewsIssuePointProductCandidate(
@@ -160,33 +306,18 @@ export function adaptNaverNewsIssuePointProductCandidate(
     );
   }
 
-  const currentWindow = result.currentWindow;
-  const score = result.score;
-  const invariantTotal =
-    result.priorLessThanLatestCount
-    + result.priorEqualToLatestCount
-    + result.priorGreaterThanLatestCount;
+  if (!availableResultIsConsistent(result)) {
+    return issue('invalid-available-result');
+  }
 
-  if (
-    currentWindow === null
-    || result.baselineReadiness.status !== 'replicated_cycle_history'
-    || typeof score !== 'number'
-    || !Number.isFinite(score)
-    || score < 0
-    || score > 100
-    || result.currentActivityRate === null
-    || !Number.isFinite(result.currentActivityRate)
-    || result.priorDefinedWindowCount <= 0
-    || invariantTotal !== result.priorDefinedWindowCount
-    || result.eligiblePriorWindows.length !== result.priorDefinedWindowCount
-    || result.evidenceTrace.storedEvidenceJobIds.length === 0
-  ) {
+  const currentWindow = result.currentWindow;
+  if (currentWindow === null || result.score === null) {
     return issue('invalid-available-result');
   }
 
   return candidate(
     result,
-    makeAvailableProductNumericFact(score),
+    makeAvailableProductNumericFact(result.score),
     Object.freeze({
       kind: 'period' as const,
       start: currentWindow.startSlotStart,
