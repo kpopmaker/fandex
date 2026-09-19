@@ -274,12 +274,6 @@ export function buildFandexMomentumCategoricalResearchObservation(
     throw new Error('momentum_v143_alignment_cutoff_missing');
   }
 
-  const missingState =
-    input.result.currentResearchOutput.directionalConsensus
-      === 'direction-insufficient'
-      ? 'insufficient' as const
-      : 'observed' as const;
-
   return Object.freeze({
     providerId: 'fandex-derived',
     entity: Object.freeze({
@@ -296,7 +290,7 @@ export function buildFandexMomentumCategoricalResearchObservation(
     value: Object.freeze({
       rawValue: input.result.currentResearchOutput.directionalConsensus,
       unit: null,
-      missingState,
+      missingState: 'observed',
     }),
     time: Object.freeze({
       providerPeriodStart: null,
