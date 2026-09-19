@@ -1,0 +1,64 @@
+name: PR127 FANDEX momentum v139 construct validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v139 and upstream Last.fm contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-product-construct-v139.test.mts
+          npx tsx --conditions=react-server --test tests/lastfm-momentum-construct-alignment-v138.test.mts
+          npx tsx --conditions=react-server --test tests/lastfm-historical-shadow-checkpoint-v137.test.mts
+          npm run typecheck
+      - name: Evaluate v139 against current main Last.fm history
+        run: |
+          git fetch origin main
+          BRANCH_SEED="$(git rev-parse HEAD:app/data/v4/metrics/artistMonthlyMetricSeed.ts)"
+          MAIN_SEED="$(git rev-parse origin/main:app/data/v4/metrics/artistMonthlyMetricSeed.ts)"
+          test "$BRANCH_SEED" = "$MAIN_SEED"
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v139-momentum-construct.mts --history /tmp/main-lastfm-history.csv > /tmp/v139-output.txt
+          node - <<'NODE'
+          const fs = require('fs');
+          const raw = fs.readFileSync('/tmp/v139-output.txt','utf8');
+          const start = raw.indexOf('{');
+          if (start < 0) throw new Error('missing v139 json');
+          const x = JSON.parse(raw.slice(start));
+          if (x.state !== 'construct-defined-composite-not-ready') throw new Error('unexpected construct state');
+          if (x.semanticRules.singleFamilySufficient !== false) throw new Error('single-family unexpectedly sufficient');
+          if (x.semanticRules.rawCrossProviderAveragingAllowed !== false) throw new Error('raw averaging unexpectedly allowed');
+          if (x.semanticRules.missingComponentAsZeroAllowed !== false) throw new Error('missing-as-zero unexpectedly allowed');
+          if (x.semanticRules.eventExposureAsReactionAllowed !== false) throw new Error('activity exposure unexpectedly treated as reaction');
+          if (x.freezeStatus.componentWeighting !== 'not-frozen') throw new Error('weighting unexpectedly frozen');
+          if (x.freezeStatus.compositeScoreFormula !== 'not-frozen') throw new Error('score formula unexpectedly frozen');
+          console.log(JSON.stringify({
+            contractVersion: x.contractVersion,
+            state: x.state,
+            construct: x.construct,
+            admittedComponentFamilies: x.admittedComponentFamilies,
+            currentComponentCatalog: x.currentComponentCatalog.map((c) => ({
+              componentId: c.componentId,
+              family: c.family,
+              role: c.role,
+              currentState: c.currentState,
+              blockers: c.blockers
+            })),
+            lastfmAlignment: x.lastfmAlignment,
+            freezeStatus: x.freezeStatus,
+            blockers: x.blockers,
+            digest: x.digest
+          }, null, 2));
+          NODE
