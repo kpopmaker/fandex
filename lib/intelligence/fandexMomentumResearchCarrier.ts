@@ -127,11 +127,7 @@ function validateCarrierObservation(
   ) {
     throw new Error('momentum_v144_numeric_value_forbidden');
   }
-  if (
-    observation.value.rawValue === 'direction-insufficient'
-      ? observation.value.missingState !== 'insufficient'
-      : observation.value.missingState !== 'observed'
-  ) {
+  if (observation.value.missingState !== 'observed') {
     throw new Error('momentum_v144_missing_state_invalid');
   }
   if (
