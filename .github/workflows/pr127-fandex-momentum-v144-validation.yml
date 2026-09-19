@@ -1,0 +1,196 @@
+name: PR127 FANDEX momentum v144 carrier validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v144 and upstream momentum contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-research-carrier-v144.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-output-form-eligibility-v143.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-cross-family-combination-v142.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-temporal-normalization-v141.test.mts
+          npm run typecheck
+      - name: Generate and read current real isolated carrier
+        run: |
+          git fetch origin main
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
+
+          cat > .tmp-v140-actual.mts <<'TS'
+          import {
+            deriveFandexNaverMediaAttentionMomentumResearch,
+          } from './lib/intelligence/fandexNaverMediaAttentionMomentumResearch';
+          import {
+            NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+          } from './lib/server/ingestion/naverNewsIssuePointFrozenMethodology';
+          import {
+            NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+          } from './lib/intelligence/naverNewsIssuePointConstruct';
+
+          const anchors = [
+            ['2026-09-17T17:00:00.000Z', 0.00125, 26.829268292683, 41],
+            ['2026-09-18T01:00:00.000Z', 0.00125, 24.489795918367, 49],
+            ['2026-09-18T09:00:00.000Z', 0.03375, 98.245614035088, 57],
+            ['2026-09-18T17:00:00.000Z', 0.0025, 33.846153846154, 65],
+            ['2026-09-19T01:00:00.000Z', 0.0, 0.0, 73],
+            ['2026-09-19T09:00:00.000Z', 0.0025, 41.975308641975, 81],
+          ] as const;
+
+          const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
+            contractVersion: NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+            methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+            lifecycle: 'research',
+            directProductContributionEligible: false,
+            productScorePublished: false,
+            variableId: 'newsIssuePoint',
+            canonicalArtistId: 'iu',
+            protocolStart: '2026-09-15T16:00:00.000Z',
+            throughSlotStart,
+            selectedWindowSlotCount: 8,
+            rollingWindowSemantics: 'overlapping',
+            baselineScope: 'same_artist_same_official_shadow_epoch',
+            baselineReadiness: {
+              cycleSlotCount: 24,
+              utcHourCoverageCount: 24,
+              completeCycleCount: 2,
+              sameUtcHourReplicationFloor: 2,
+              sameUtcHourReplicationCeiling: 2,
+              status: 'replicated_cycle_history',
+            },
+            normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+            status: 'available',
+            reason: 'frozen_methodology_value_available',
+            score,
+            currentActivityRate: activityRate,
+            priorDefinedWindowCount,
+            priorLessThanLatestCount: 0,
+            priorEqualToLatestCount: 0,
+            priorGreaterThanLatestCount: 0,
+            currentWindow: null,
+            eligiblePriorWindows: [],
+            excludedWindows: [],
+            evidenceTrace: { windows: [], storedEvidenceJobIds: [] },
+          })) as any;
+
+          process.stdout.write(JSON.stringify(
+            deriveFandexNaverMediaAttentionMomentumResearch(points),
+            null,
+            2,
+          ));
+          TS
+
+          npx tsx --conditions=react-server .tmp-v140-actual.mts > /tmp/v140.json
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v141-momentum-normalization.mts             --artist iu             --lastfm-history /tmp/main-lastfm-history.csv             --naver-component /tmp/v140.json > /tmp/v141.json
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v142-momentum-combination.mts             --input /tmp/v141.json > /tmp/v142.json
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v143-momentum-output-form.mts             --input /tmp/v142.json > /tmp/v143.json
+
+          node - <<'NODE'
+          const fs = require('fs');
+          const x = JSON.parse(fs.readFileSync('/tmp/v143.json', 'utf8'));
+          if (x.state !== 'categorical-research-output-only') {
+            throw new Error('unexpected v143 state: ' + x.state);
+          }
+          if (x.currentResearchOutput.directionalConsensus !== 'direction-corroborated-down') {
+            throw new Error('unexpected directional consensus');
+          }
+          if (x.currentResearchOutput.persistenceConsensus !== 'one-direction-repeated') {
+            throw new Error('unexpected persistence consensus');
+          }
+          if (x.numericEligibility.status !== 'not-eligible') {
+            throw new Error('numeric score unexpectedly eligible');
+          }
+          if (x.currentProductSchema.currentMomentumSourceStage !== 'derived_signal') {
+            throw new Error('current source stage changed');
+          }
+          if (x.currentProductSchema.currentMomentumQualityLabel !== 'preview') {
+            throw new Error('current momentum quality changed');
+          }
+          if (!x.currentProductSchema.previewFallbackExample) {
+            throw new Error('preview fallback example missing');
+          }
+          if (
+            x.currentProductSchema.categoricalEvidenceFitsCurrentMomentumSlot !== false
+            || x.currentResearchOutput.productMomentumScore !== null
+          ) {
+            throw new Error('numeric Product slot boundary violated');
+          }
+          console.log(JSON.stringify({
+            contractVersion: x.contractVersion,
+            state: x.state,
+            alignmentCutoffAt: x.alignmentCutoffAt,
+            currentResearchOutput: x.currentResearchOutput,
+            numericEligibility: x.numericEligibility,
+            currentProductSchema: x.currentProductSchema,
+            researchCarrier: x.researchCarrier,
+            blockers: x.blockers,
+            digest: x.digest
+          }, null, 2));
+          NODE
+
+          npx tsx --conditions=react-server scripts/lastfm-shadow/research-fandex-v144-momentum-carrier.mts \
+            --input /tmp/v143.json \
+            --recorded-at 2026-09-19T15:26:05.410Z > /tmp/v144.jsonl
+
+          cat > .tmp-v144-read.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            readLatestFandexMomentumResearchCarrier,
+          } from './lib/intelligence/fandexMomentumResearchCarrier';
+
+          const jsonl = await readFile('/tmp/v144.jsonl', 'utf8');
+          const result = readLatestFandexMomentumResearchCarrier(jsonl);
+          if (result.state !== 'available') throw new Error('carrier unavailable');
+          if (result.recordCount !== 1) throw new Error('unexpected carrier count');
+          if (result.previewFallbackConsulted !== false) throw new Error('preview fallback consulted');
+          if (result.productMetricResolverCalled !== false) throw new Error('product resolver called');
+          if (result.productMetricSlotRead !== false || result.productMetricSlotWritten !== false) {
+            throw new Error('product slot boundary violated');
+          }
+          const latest = result.latest;
+          if (!latest) throw new Error('latest carrier missing');
+          if (latest.sourceV143Digest !== '121343630db936fa265f546523b28977614ce1658c13e68a7857344c4b3add28') {
+            throw new Error('unexpected v143 lineage');
+          }
+          if (latest.observation.value.rawValue !== 'direction-corroborated-down') {
+            throw new Error('unexpected categorical state');
+          }
+          console.log(JSON.stringify({
+            state: result.state,
+            recordCount: result.recordCount,
+            latest: {
+              sequence: latest.sequence,
+              recordedAt: latest.recordedAt,
+              sourceV143Digest: latest.sourceV143Digest,
+              previousRecordDigest: latest.previousRecordDigest,
+              observationId: latest.observation.observationId,
+              rawValue: latest.observation.value.rawValue,
+              missingState: latest.observation.value.missingState,
+              lifecycle: latest.observation.lifecycle,
+              isolation: latest.isolation,
+              recordDigest: latest.recordDigest
+            },
+            previewFallbackConsulted: result.previewFallbackConsulted,
+            productMetricResolverCalled: result.productMetricResolverCalled,
+            productMetricSlotRead: result.productMetricSlotRead,
+            productMetricSlotWritten: result.productMetricSlotWritten
+          }, null, 2));
+          console.log('V144_JSONL_BEGIN');
+          process.stdout.write(jsonl);
+          console.log('V144_JSONL_END');
+          TS
+
+          npx tsx --conditions=react-server .tmp-v144-read.mts
+          rm .tmp-v140-actual.mts .tmp-v144-read.mts
