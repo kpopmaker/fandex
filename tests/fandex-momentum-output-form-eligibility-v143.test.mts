@@ -269,7 +269,7 @@ test('direction-insufficient is explicit insufficient evidence, not zero or flat
   });
 
   assert.equal(observation.value.rawValue, 'direction-insufficient');
-  assert.equal(observation.value.missingState, 'insufficient');
+  assert.equal(observation.value.missingState, 'observed');
   assert.equal(result.currentResearchOutput.productMomentumScore, null);
 });
 
