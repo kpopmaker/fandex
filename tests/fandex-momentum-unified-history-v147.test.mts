@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -324,4 +325,69 @@ test('v147 parser rejects deleted or reordered history', () => {
     ].join('\n')),
     /append_sequence_invalid/,
   );
+});
+
+
+test('committed real IU v147 unified history validates exact two-record transition', async () => {
+  const jsonl = await readFile(
+    new URL('../data/momentum-research/iu_cross_family_evidence_state_v147.jsonl', import.meta.url),
+    'utf8',
+  );
+  const records = parseFandexMomentumUnifiedHistoryJsonl(jsonl);
+
+  assert.equal(records.length, 2);
+
+  assert.equal(
+    records[0].sourceV143Digest,
+    '121343630db936fa265f546523b28977614ce1658c13e68a7857344c4b3add28',
+  );
+  assert.equal(
+    records[0].recordDigest,
+    'cfd672eafde59bf5a2e70788398688b08142b069a360ecb2b76f6c30007fcce1',
+  );
+  assert.equal(
+    records[0].observation.observationId,
+    '38f9fdd4a5cd3717ce7c4e9267728e880b2e5b981c8e3846a4db0f8aab3761db',
+  );
+  assert.equal(records[0].directionalConsensus, 'direction-corroborated-down');
+  assert.equal(records[0].persistenceConsensus, 'one-direction-repeated');
+  assert.equal(records[0].changeKind, 'initial-observation');
+
+  assert.equal(
+    records[1].sourceV143Digest,
+    '87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a',
+  );
+  assert.equal(
+    records[1].recordDigest,
+    '6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd',
+  );
+  assert.equal(
+    records[1].observation.observationId,
+    'cede964d6e37f42272f44682b5b600b39f200a3c04028d9e5c60f00f31534b9c',
+  );
+  assert.equal(records[1].directionalConsensus, 'direction-conflicted');
+  assert.equal(records[1].persistenceConsensus, 'persistence-not-applicable');
+  assert.equal(records[1].changeKind, 'direction-and-persistence-changed');
+
+  assert.equal(records[1].previousRecordDigest, records[0].recordDigest);
+  assert.equal(records[1].previousSourceV143Digest, records[0].sourceV143Digest);
+
+  for (const record of records) {
+    assert.equal(record.isolation.productMetricReads, 0);
+    assert.equal(record.isolation.productMetricWrites, 0);
+    assert.equal(record.isolation.previewFallbackReads, 0);
+    assert.equal(record.isolation.databaseWrites, 0);
+  }
+});
+
+test('legacy committed v144 artifact remains byte-separate and historically unchanged', async () => {
+  const legacy = await readFile(
+    new URL('../data/momentum-research/iu_cross_family_evidence_state_v1.jsonl', import.meta.url),
+    'utf8',
+  );
+  assert.match(
+    legacy,
+    /"recordDigest":"478b36e2008a7bfb3df24236d3e9c5487d30c7217eca3f8566e3da09879f5033"/,
+  );
+  assert.doesNotMatch(legacy, /v147_fandex_momentum_unified_history_research_v1/);
 });
