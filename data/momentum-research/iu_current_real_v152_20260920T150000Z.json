@@ -1,0 +1,115 @@
+{
+  "contractVersion": "v152_fandex_momentum_current_real_dual_artifact_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-20T15:10:00.000Z",
+  "evidence": {
+    "lastfmEvidenceId": "723cf73abb93882779edc0621a12381ab80e464c",
+    "lastfmLatestComponentEndAt": "2026-09-20T01:59:13.000Z",
+    "naverEvidenceId": "39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c",
+    "naverCollectionKey": "sched-v125-naver-news-20260920t150000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-20T15:00:00.000Z",
+    "naverStatus": "succeeded",
+    "naverRawEvidenceCount": 100,
+    "naverNormalizedRecordCount": 100,
+    "naverDuplicateRecordCount": 0,
+    "naverRejectedItemCount": 0
+  },
+  "v140": {
+    "latestAnchor": {
+      "throughSlotStart": "2026-09-20T15:00:00.000Z",
+      "currentActivityRate": 0.0025,
+      "newsIssuePointScore": 45.945945945946,
+      "priorDefinedWindowCount": 111
+    },
+    "selectedAnchorCount": 10,
+    "latestDirection": "down",
+    "latestDirectionalRunTransitionCount": 1,
+    "persistenceObserved": false,
+    "digest": "c3095083d6d530c9938da60a4afdd535612b3a8ecb8467a8656103ce6a40516a"
+  },
+  "v141": {
+    "state": "aligned-normalized-research",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "digest": "29bbd5a99dd691d9c61f0a831fab19df43a06ed347d6cc59536364d2ae0f3954",
+    "audienceConsumption": {
+      "selectedComponentEndAt": "2026-09-20T10:59:13+09:00",
+      "nativeValue": 17.21,
+      "previousNativeValue": 15.5,
+      "nativeDelta": 1.71,
+      "direction": "up",
+      "historicalStrictExceedanceShare": 100
+    },
+    "mediaAttention": {
+      "selectedComponentEndAt": "2026-09-19T23:00:00.000Z",
+      "nativeValue": 0,
+      "previousNativeValue": 0,
+      "nativeDelta": 0,
+      "direction": "flat",
+      "historicalStrictExceedanceShare": 0
+    }
+  },
+  "v143": {
+    "state": "categorical-research-output-only",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a"
+  },
+  "initialV152Application": {
+    "state": "watermark-only-appended",
+    "gateState": "source-advanced-cutoff-unchanged",
+    "historyDisposition": "not-invoked",
+    "watermarkDisposition": "appended",
+    "historyRecordCountBefore": 2,
+    "historyRecordCountAfter": 2,
+    "watermarkRecordCountBefore": 1,
+    "watermarkRecordCountAfter": 2,
+    "priorHistoryDigest": "265ce50cfbe64ba86c3aa21c4203ab21580e7d082df52a872d95a0eb983a2109",
+    "resultingHistoryDigest": "265ce50cfbe64ba86c3aa21c4203ab21580e7d082df52a872d95a0eb983a2109",
+    "priorWatermarkDigest": "ba8a0660dcf8050f62f4d07a6b9212597f3bbfafecf015970da893214fb99de0",
+    "resultingWatermarkDigest": "d89a21eddb2aad2284da0a5711ff702c225d2b272363b183e6a1690e22c0743f",
+    "coordinatorDigest": "68d93c7a71271df393a0cb0e7cd12a3961ba8780cb7e218f38c57e4554c77ee2",
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "historyWrites": 0,
+      "watermarkWrites": 1
+    },
+    "validationRunId": 35519997289
+  },
+  "committedArtifacts": {
+    "historyArtifact": "data/momentum-research/iu_cross_family_evidence_state_v147.jsonl",
+    "historyRecordCount": 2,
+    "historyChanged": false,
+    "watermarkArtifact": "data/momentum-research/iu_evaluation_watermark_v151.jsonl",
+    "watermarkRecordCount": 2,
+    "latestWatermarkRecordDigest": "30ee1033013a45cd4aa71a1505c5b992943331853e564183cae33bd50cc4ece6",
+    "latestWatermarkSourceV150Digest": "c345ec3a7ff480e0bb6befbe39edf5644afa79e0228ca9d3cd690e28069c051f",
+    "latestWatermarkSemanticBoundaryDigest": "560f6cb7e75b33e977f3e1161ad26bd7c00133b3d352ea12ccb3d079e3e5b201"
+  },
+  "committedReplayValidation": {
+    "state": "no-op",
+    "gateState": "exact-evaluation-replay",
+    "historyDisposition": "no-op",
+    "watermarkDisposition": "no-op",
+    "historyRecordCountBefore": 2,
+    "historyRecordCountAfter": 2,
+    "watermarkRecordCountBefore": 2,
+    "watermarkRecordCountAfter": 2,
+    "historyDigest": "265ce50cfbe64ba86c3aa21c4203ab21580e7d082df52a872d95a0eb983a2109",
+    "watermarkDigest": "d89a21eddb2aad2284da0a5711ff702c225d2b272363b183e6a1690e22c0743f",
+    "coordinatorDigest": "0f9bfaa682253f955e31ba4b2bc452c9a91b4ab0a5f21ecf49f9c9b980c46d9c",
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "historyWrites": 0,
+      "watermarkWrites": 0
+    },
+    "validationRunId": 35520124904
+  }
+}
