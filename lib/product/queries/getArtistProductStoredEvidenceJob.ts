@@ -74,6 +74,18 @@ export async function getArtistProductStoredEvidenceJob(
     return issue('real-stored-evidence-trace-required');
   }
 
+  const metadata = variable.sourceMetadata;
+  if (
+    metadata.sourceKind !== 'naver-news-issue-point-frozen-methodology'
+    || metadata.sourceArtistId !== variable.identity.sourceArtistId
+    || metadata.sourceVariableKey !== variable.identity.variableId
+    || metadata.methodologyVersion !== trace.methodologyVersion
+    || metadata.officialShadowEpoch !== trace.officialShadowEpoch
+    || metadata.throughSlotStart !== trace.throughSlotStart
+  ) {
+    return issue('stored-evidence-trace-inconsistent');
+  }
+
   const jobId = input.jobId.trim();
   if (!jobId || !trace.storedEvidenceJobIds.includes(jobId)) {
     return issue('job-not-in-variable-evidence-trace');
