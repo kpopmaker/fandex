@@ -309,9 +309,20 @@ export function coordinateFandexMomentumDualArtifactEvaluationResearch(
     }
   }
 
-  const historyDisposition =
-    historyApplied === null ? 'not-invoked' : historyApplied.state;
-  const watermarkDisposition = watermarkPersisted.state;
+  let historyDisposition:
+    FandexMomentumDualArtifactCoordinatorResult['historyDisposition'];
+  if (historyApplied === null) {
+    historyDisposition = 'not-invoked';
+  } else if (historyApplied.state === 'appended') {
+    historyDisposition = 'appended';
+  } else if (historyApplied.state === 'no-op') {
+    historyDisposition = 'no-op';
+  } else {
+    throw new Error('momentum_v152_unexpected_history_disposition');
+  }
+  const watermarkDisposition:
+    FandexMomentumDualArtifactCoordinatorResult['watermarkDisposition'] =
+    watermarkPersisted.state;
   const priorHistoryDigest = artifactDigest(input.historyJsonl);
   const resultingHistoryDigest = artifactDigest(nextHistoryJsonl);
   const priorWatermarkDigest = artifactDigest(input.watermarkJsonl);
