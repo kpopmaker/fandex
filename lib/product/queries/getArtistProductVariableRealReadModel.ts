@@ -160,6 +160,7 @@ function realModel(
       sourceKind: 'naver-news-issue-point-frozen-methodology' as const,
       sourceArtistId: 'iu',
       sourceVariableKey: 'newsIssuePoint' as const,
+      sourceTimeLabel: currentWindow?.endSlotStart ?? methodology.throughSlotStart,
       methodologyVersion: methodology.methodologyVersion,
       officialShadowEpoch: methodology.protocolStart,
       throughSlotStart: methodology.throughSlotStart,
