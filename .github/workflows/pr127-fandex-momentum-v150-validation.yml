@@ -20,6 +20,7 @@ jobs:
       - name: Validate v150 and history regressions
         run: |
           npx tsx --conditions=react-server --test tests/fandex-momentum-common-cutoff-advancement-v150.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-current-real-v150-fixture.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-append-from-artifact-v148.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-unified-history-v147.test.mts
           npm run typecheck
