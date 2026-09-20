@@ -1,0 +1,31 @@
+name: PR127 FANDEX momentum v147 validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v147 unified history and upstream contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-unified-history-v147.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-append-adapter-v146.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-carrier-change-v145.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-research-carrier-v144.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-categorical-carrier-v144.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-output-form-eligibility-v143.test.mts
+          npm run typecheck
