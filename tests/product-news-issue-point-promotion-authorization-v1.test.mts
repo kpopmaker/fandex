@@ -6,8 +6,10 @@ import type {
   NaverNewsIssuePointProductCandidate,
 } from '../lib/product/adapters/naverNewsIssuePointProductCandidateAdapter';
 import {
+  applyNewsIssuePointRealPromotionControl,
   authorizeNewsIssuePointRealPromotion,
   type NewsIssuePointRealPromotionApproval,
+  type NewsIssuePointRealPromotionRevocation,
 } from '../lib/product/promotion/newsIssuePointRealProductPromotionAuthorization';
 import type {
   NewsIssuePointRealPromotionEligibilityResult,
@@ -141,6 +143,25 @@ function approval(
       normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
       claimScope: 'protocol-conditioned-first-seen-only' as const,
     }),
+    ...overrides,
+  });
+}
+
+function revocation(
+  overrides: Partial<NewsIssuePointRealPromotionRevocation> = {},
+): NewsIssuePointRealPromotionRevocation {
+  return Object.freeze({
+    contractVersion: 'v1_news_issue_point_real_promotion_revocation',
+    action: 'revoke-real-variable-promotion',
+    authority: 'product-operations-owner',
+    revocationId: 'ops-revocation-newsissuepoint-0001',
+    revokedAt: '2026-09-20T05:45:00.000Z',
+    authorizationId: 'ops-approval-newsissuepoint-0001',
+    target: Object.freeze({
+      artistId: 'iu',
+      variableId: 'newsIssuePoint',
+    }),
+    reason: 'operator-disable',
     ...overrides,
   });
 }
@@ -285,7 +306,8 @@ test('authorized promotion builds an Evidence-traceable inactive production-targ
     eligible(currentCandidate),
     approval(),
   );
-  const result = buildNewsIssuePointRealProductReadModel(auth);
+  const control = applyNewsIssuePointRealPromotionControl(auth, null);
+  const result = buildNewsIssuePointRealProductReadModel(control);
 
   assert.equal(result.status, 'ok');
   if (result.status !== 'ok') return;
@@ -324,12 +346,86 @@ test('authorized promotion builds an Evidence-traceable inactive production-targ
 
 test('read model is blocked until promotion authorization exists', () => {
   const auth = authorizeNewsIssuePointRealPromotion(eligible(), null);
-  const result = buildNewsIssuePointRealProductReadModel(auth);
+  const control = applyNewsIssuePointRealPromotionControl(auth, null);
+  const result = buildNewsIssuePointRealProductReadModel(control);
 
   assert.deepEqual(result, {
     status: 'blocked',
     reason: 'promotion-not-authorized',
   });
+});
+
+test('explicit revocation disables an authorized promotion contract fail closed', () => {
+  const auth = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval(),
+  );
+  const control = applyNewsIssuePointRealPromotionControl(
+    auth,
+    revocation(),
+  );
+
+  assert.equal(control.status, 'disabled');
+  if (control.status !== 'disabled') return;
+  assert.equal(control.promotionAuthorized, false);
+  assert.equal(control.publicRouteActivated, false);
+  assert.equal(control.directProductionContributionEligible, false);
+  assert.equal(control.productScorePublished, false);
+  assert.equal(control.lifecycleState, 'blocked');
+  assert.equal(control.reason, 'operator-disable');
+
+  assert.deepEqual(buildNewsIssuePointRealProductReadModel(control), {
+    status: 'blocked',
+    reason: 'promotion-disabled',
+  });
+});
+
+test('revocation must bind to the exact authorization and cannot predate it', () => {
+  const auth = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval(),
+  );
+
+  const wrongAuthorization = applyNewsIssuePointRealPromotionControl(
+    auth,
+    revocation({ authorizationId: 'ops-approval-newsissuepoint-9999' }),
+  );
+  assert.deepEqual(wrongAuthorization, {
+    contractVersion: 'v1_news_issue_point_real_promotion_control',
+    status: 'data-issue',
+    promotionAuthorized: false,
+    publicRouteActivated: false,
+    directProductionContributionEligible: false,
+    productScorePublished: false,
+    lifecycleState: 'blocked',
+    reason: 'revocation-binding-mismatch',
+  });
+
+  const predatesApproval = applyNewsIssuePointRealPromotionControl(
+    auth,
+    revocation({ revokedAt: '2026-09-20T05:29:59.000Z' }),
+  );
+  assert.equal(predatesApproval.status, 'data-issue');
+  if (predatesApproval.status === 'data-issue') {
+    assert.equal(predatesApproval.reason, 'revocation-binding-mismatch');
+    assert.equal(predatesApproval.lifecycleState, 'blocked');
+  }
+});
+
+test('authorized control remains inactive and non-contributing until a later activation contract exists', () => {
+  const auth = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval(),
+  );
+  const control = applyNewsIssuePointRealPromotionControl(auth, null);
+
+  assert.equal(control.status, 'authorized');
+  if (control.status !== 'authorized') return;
+  assert.equal(control.promotionAuthorized, true);
+  assert.equal(control.publicRouteActivated, false);
+  assert.equal(control.directProductionContributionEligible, false);
+  assert.equal(control.productScorePublished, false);
+  assert.equal(control.lifecycleState, 'shadow');
 });
 
 test('authorization/read-model layers do not wire public query, mutate source safety flags, or permit strict interval claims', async () => {
