@@ -131,6 +131,18 @@ function realModel(
       ])
     : Object.freeze([]);
 
+  const productTraceWindows = [
+    ...methodology.eligiblePriorWindows,
+    ...(currentWindow === null ? [] : [currentWindow]),
+  ];
+  const storedEvidenceJobIds = Object.freeze([
+    ...new Set(
+      productTraceWindows.flatMap((window) =>
+        window.slotEvidence.map((slot) => slot.jobId),
+      ),
+    ),
+  ]);
+
   return Object.freeze({
     identity: Object.freeze({
       sourceArtistId: 'iu',
@@ -169,9 +181,7 @@ function realModel(
       eligiblePriorWindows: Object.freeze(
         methodology.eligiblePriorWindows.map(projectWindow),
       ),
-      storedEvidenceJobIds: Object.freeze([
-        ...methodology.evidenceTrace.storedEvidenceJobIds,
-      ]),
+      storedEvidenceJobIds,
     }),
   });
 }
