@@ -46,6 +46,7 @@ export type ProductVariableRealSourceMetadata = Readonly<{
   sourceKind: 'naver-news-issue-point-frozen-methodology';
   sourceArtistId: string;
   sourceVariableKey: 'newsIssuePoint';
+  sourceTimeLabel: string | null;
   methodologyVersion: string;
   officialShadowEpoch: string;
   throughSlotStart: string;
