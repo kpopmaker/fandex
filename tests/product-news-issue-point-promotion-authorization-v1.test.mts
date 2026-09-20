@@ -464,3 +464,99 @@ test('authorization/read-model layers do not wire public query, mutate source sa
   );
   assert.doesNotMatch(combined, /publicRouteActivated:\s*true/);
 });
+
+
+test('malformed approval contract fails closed', () => {
+  const malformed = approval({
+    contractVersion:
+      'unexpected-approval-contract' as unknown as
+        'v1_news_issue_point_real_promotion_approval',
+  });
+  const result = authorizeNewsIssuePointRealPromotion(eligible(), malformed);
+
+  assert.deepEqual(result, {
+    contractVersion: 'v1_news_issue_point_real_promotion_authorization',
+    status: 'data-issue',
+    promotionAuthorized: false,
+    publicRouteActivated: false,
+    strictPublicationIntervalClaimAllowed: false,
+    reason: 'approval-contract-invalid',
+  });
+});
+
+test('approval for the wrong artist fails closed', () => {
+  const base = approval();
+  const result = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval({
+      target: Object.freeze({
+        ...base.target,
+        artistId: 'other-artist' as unknown as 'iu',
+      }),
+    }),
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status === 'data-issue') {
+    assert.equal(result.reason, 'approval-contract-invalid');
+  }
+});
+
+test('approval for the wrong variable fails closed', () => {
+  const base = approval();
+  const result = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval({
+      target: Object.freeze({
+        ...base.target,
+        variableId: 'otherVariable' as unknown as 'newsIssuePoint',
+      }),
+    }),
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status === 'data-issue') {
+    assert.equal(result.reason, 'approval-contract-invalid');
+  }
+});
+
+test('approval with the wrong claim scope fails closed and cannot broaden strict interval claims', () => {
+  const base = approval();
+  const result = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval({
+      binding: Object.freeze({
+        ...base.binding,
+        claimScope:
+          'publication-interval-article-count' as unknown as
+            'protocol-conditioned-first-seen-only',
+      }),
+    }),
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status === 'data-issue') {
+    assert.equal(result.reason, 'approval-contract-invalid');
+    assert.equal(result.strictPublicationIntervalClaimAllowed, false);
+  }
+});
+
+test('revocation with a mismatched target fails closed', () => {
+  const auth = authorizeNewsIssuePointRealPromotion(eligible(), approval());
+  const base = revocation();
+  const result = applyNewsIssuePointRealPromotionControl(
+    auth,
+    revocation({
+      target: Object.freeze({
+        ...base.target,
+        artistId: 'other-artist' as unknown as 'iu',
+      }),
+    }),
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status === 'data-issue') {
+    assert.equal(result.promotionAuthorized, false);
+    assert.equal(result.lifecycleState, 'blocked');
+  }
+});
