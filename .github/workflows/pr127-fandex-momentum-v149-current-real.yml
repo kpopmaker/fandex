@@ -1,0 +1,184 @@
+name: PR127 FANDEX momentum v149 current-real validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Evaluate current real IU v143 through v148 artifact adapter
+        run: |
+          git fetch origin main
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/current-main-lastfm-history.csv
+
+          cat > .tmp-v149-current-real.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            deriveFandexNaverMediaAttentionMomentumResearch,
+          } from './lib/intelligence/fandexNaverMediaAttentionMomentumResearch';
+          import {
+            evaluateFandexMomentumTemporalNormalizationResearch,
+          } from './lib/intelligence/fandexMomentumTemporalNormalizationResearch';
+          import {
+            evaluateFandexMomentumCrossFamilyCombinationResearch,
+          } from './lib/intelligence/fandexMomentumCrossFamilyCombinationResearch';
+          import {
+            evaluateFandexMomentumOutputFormEligibilityResearch,
+          } from './lib/intelligence/fandexMomentumOutputFormEligibilityResearch';
+          import {
+            appendFandexMomentumUnifiedHistoryFromArtifactResearch,
+          } from './lib/intelligence/fandexMomentumAppendFromArtifactResearch';
+          import {
+            NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+          } from './lib/server/ingestion/naverNewsIssuePointFrozenMethodology';
+          import {
+            NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+          } from './lib/intelligence/naverNewsIssuePointConstruct';
+
+          const anchors = [
+            ['2026-09-17T14:00:00.000Z', 0.0075, 60.526315789474, 38],
+            ['2026-09-17T22:00:00.000Z', 0.00125, 23.913043478261, 46],
+            ['2026-09-18T06:00:00.000Z', 0.02875, 100, 54],
+            ['2026-09-18T14:00:00.000Z', 0.0075, 56.451612903226, 62],
+            ['2026-09-18T22:00:00.000Z', 0.00125, 17.142857142857, 70],
+            ['2026-09-19T06:00:00.000Z', 0.0025, 43.589743589744, 78],
+            ['2026-09-19T14:00:00.000Z', 0, 0, 86],
+            ['2026-09-19T22:00:00.000Z', 0, 0, 94],
+            ['2026-09-20T06:00:00.000Z', 0.00625, 71.56862745098, 102],
+          ] as const;
+
+          const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
+            contractVersion: NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+            methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+            lifecycle: 'research',
+            directProductContributionEligible: false,
+            productScorePublished: false,
+            variableId: 'newsIssuePoint',
+            canonicalArtistId: 'iu',
+            protocolStart: '2026-09-15T16:00:00.000Z',
+            throughSlotStart,
+            selectedWindowSlotCount: 8,
+            rollingWindowSemantics: 'overlapping',
+            baselineScope: 'same_artist_same_official_shadow_epoch',
+            baselineReadiness: {
+              cycleSlotCount: 24,
+              utcHourCoverageCount: 24,
+              completeCycleCount: 2,
+              sameUtcHourReplicationFloor: 2,
+              sameUtcHourReplicationCeiling: 2,
+              status: 'replicated_cycle_history',
+            },
+            normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+            status: 'available',
+            reason: 'frozen_methodology_value_available',
+            score,
+            currentActivityRate: activityRate,
+            priorDefinedWindowCount,
+            priorLessThanLatestCount: 0,
+            priorEqualToLatestCount: 0,
+            priorGreaterThanLatestCount: 0,
+            currentWindow: null,
+            eligiblePriorWindows: [],
+            excludedWindows: [],
+            evidenceTrace: { windows: [], storedEvidenceJobIds: [] },
+          })) as any;
+
+          const [history, artifact] = await Promise.all([
+            readFile('/tmp/current-main-lastfm-history.csv', 'utf8'),
+            readFile('./data/momentum-research/iu_cross_family_evidence_state_v147.jsonl', 'utf8'),
+          ]);
+
+          const v140 = deriveFandexNaverMediaAttentionMomentumResearch(points);
+          const v141 = evaluateFandexMomentumTemporalNormalizationResearch({
+            canonicalArtistId: 'iu',
+            lastfmHistoryCsv: history,
+            naverComponent: v140,
+          });
+          const v142 = evaluateFandexMomentumCrossFamilyCombinationResearch(v141);
+          const v143 = evaluateFandexMomentumOutputFormEligibilityResearch(v142);
+          const v148 = appendFandexMomentumUnifiedHistoryFromArtifactResearch({
+            historyJsonl: artifact,
+            result: v143,
+            recordedAt: '2026-09-20T06:55:00.000Z',
+          });
+
+          console.log(JSON.stringify({
+            v140: {
+              latestAnchor: v140.anchors.at(-1),
+              selectedAnchorCount: v140.anchors.length,
+              latestDirection: v140.latestDirection,
+              latestDirectionalRunTransitionCount: v140.latestDirectionalRunTransitionCount,
+              persistenceObserved: v140.persistenceObserved,
+              digest: v140.digest,
+            },
+            v141: {
+              state: v141.state,
+              alignmentCutoffAt: v141.alignmentCutoffAt,
+              components: v141.components.map((x) => ({
+                family: x.family,
+                selectedKey: x.selectedKey,
+                selectedComponentEndAt: x.selectedComponentEndAt,
+                nativeValue: x.nativeValue,
+                previousNativeValue: x.previousNativeValue,
+                nativeDelta: x.nativeDelta,
+                direction: x.direction,
+                directionalRunTransitionCount: x.latestDirectionalRunTransitionCount,
+                historicalStrictExceedanceShare: x.historicalStrictExceedanceShare,
+              })),
+              digest: v141.digest,
+            },
+            v142: {
+              state: v142.state,
+              directionalConsensus: v142.directionalConsensus,
+              persistenceConsensus: v142.persistenceConsensus,
+              digest: v142.digest,
+            },
+            v143: {
+              state: v143.state,
+              alignmentCutoffAt: v143.alignmentCutoffAt,
+              directionalConsensus: v143.currentResearchOutput.directionalConsensus,
+              persistenceConsensus: v143.currentResearchOutput.persistenceConsensus,
+              digest: v143.digest,
+            },
+            v148: {
+              state: v148.state,
+              changeKind: v148.decision.changeKind,
+              blockers: v148.decision.blockers,
+              priorRecordCount: v148.priorRecordCount,
+              resultingRecordCount: v148.resultingRecordCount,
+              priorLatestRecordDigest: v148.priorLatestRecordDigest,
+              resultingLatestRecordDigest: v148.resultingLatestRecordDigest,
+              artifactUnchanged: v148.artifactJsonl === artifact,
+              effects: v148.effects,
+            },
+          }, null, 2));
+
+          if (v143.alignmentCutoffAt !== '2026-09-20T01:59:13.000Z') {
+            throw new Error('unexpected current common cutoff');
+          }
+          if (v148.state !== 'blocked') {
+            throw new Error('expected current same-cutoff evidence revision to be blocked');
+          }
+          if (v148.decision.changeKind !== 'same-cutoff-conflict') {
+            throw new Error('unexpected v148 current-real classification');
+          }
+          if (v148.artifactJsonl !== artifact || v148.effects.artifactAppends !== 0) {
+            throw new Error('blocked current-real transition mutated artifact');
+          }
+          TS
+
+          npx tsx --conditions=react-server .tmp-v149-current-real.mts
+          rm .tmp-v149-current-real.mts
