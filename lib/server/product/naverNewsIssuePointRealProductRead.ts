@@ -5,6 +5,10 @@ import {
   type ProductVariableRealReadRuntime,
 } from '../../product/queries/getArtistProductVariableRealReadModel';
 import {
+  getArtistProductStoredEvidenceJob,
+} from '../../product/queries/getArtistProductStoredEvidenceJob';
+import {
+  assembleNaverNewsCanonicalJobEvidence,
   createPostgresNaverNewsCanonicalJobEvidenceReadRepository,
 } from '../ingestion/naverNewsCanonicalJobEvidence';
 import {
@@ -48,5 +52,34 @@ export async function getNaverNewsIssuePointRealProductVariable(
       throughSlotStart: input.throughSlotStart,
     },
     runtime(),
+  );
+}
+
+
+export type NaverNewsIssuePointRealProductStoredEvidenceInput = Readonly<{
+  throughSlotStart: string;
+  jobId: string;
+}>;
+
+export async function getNaverNewsIssuePointRealProductStoredEvidenceJob(
+  input: NaverNewsIssuePointRealProductStoredEvidenceInput,
+) {
+  const variableResult = await getNaverNewsIssuePointRealProductVariable({
+    throughSlotStart: input.throughSlotStart,
+  });
+  const repository =
+    createPostgresNaverNewsCanonicalJobEvidenceReadRepository(
+      getRuntimeDatabasePool(),
+    );
+
+  return getArtistProductStoredEvidenceJob(
+    {
+      variableResult,
+      jobId: input.jobId,
+    },
+    Object.freeze({
+      readCanonicalJobEvidence: (request) =>
+        assembleNaverNewsCanonicalJobEvidence(request, repository),
+    }),
   );
 }
