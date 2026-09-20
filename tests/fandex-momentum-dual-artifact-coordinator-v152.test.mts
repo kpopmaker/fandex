@@ -374,3 +374,50 @@ test('malformed prior artifact fails closed before coordination', async () => {
     /momentum_v151_/,
   );
 });
+
+
+test('committed v152 current-real audit proves watermark-only apply then idempotent replay', async () => {
+  const audit = JSON.parse(await readFile(
+    new URL('../data/momentum-research/iu_current_real_v152_20260920T150000Z.json', import.meta.url),
+    'utf8',
+  ));
+
+  assert.equal(
+    audit.contractVersion,
+    'v152_fandex_momentum_current_real_dual_artifact_audit_v1',
+  );
+  assert.equal(audit.v143.alignmentCutoffAt, '2026-09-20T01:59:13.000Z');
+  assert.equal(
+    audit.v143.digest,
+    '87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a',
+  );
+
+  assert.equal(audit.initialV152Application.state, 'watermark-only-appended');
+  assert.equal(
+    audit.initialV152Application.gateState,
+    'source-advanced-cutoff-unchanged',
+  );
+  assert.equal(audit.initialV152Application.historyRecordCountBefore, 2);
+  assert.equal(audit.initialV152Application.historyRecordCountAfter, 2);
+  assert.equal(audit.initialV152Application.watermarkRecordCountBefore, 1);
+  assert.equal(audit.initialV152Application.watermarkRecordCountAfter, 2);
+  assert.equal(audit.initialV152Application.effects.historyWrites, 0);
+  assert.equal(audit.initialV152Application.effects.watermarkWrites, 1);
+
+  assert.equal(audit.committedReplayValidation.state, 'no-op');
+  assert.equal(
+    audit.committedReplayValidation.gateState,
+    'exact-evaluation-replay',
+  );
+  assert.equal(audit.committedReplayValidation.historyRecordCountBefore, 2);
+  assert.equal(audit.committedReplayValidation.historyRecordCountAfter, 2);
+  assert.equal(audit.committedReplayValidation.watermarkRecordCountBefore, 2);
+  assert.equal(audit.committedReplayValidation.watermarkRecordCountAfter, 2);
+  assert.equal(audit.committedReplayValidation.effects.historyWrites, 0);
+  assert.equal(audit.committedReplayValidation.effects.watermarkWrites, 0);
+
+  assert.equal(
+    audit.initialV152Application.resultingWatermarkDigest,
+    audit.committedReplayValidation.watermarkDigest,
+  );
+});
