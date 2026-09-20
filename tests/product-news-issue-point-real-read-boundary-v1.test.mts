@@ -225,7 +225,8 @@ test('Real unavailable stays unavailable/null even when legacy synthetic value e
   });
   assert.equal(legacy.status, 'ok');
   if (legacy.status !== 'ok') return;
-  assert.equal(legacy.model.fact.availability, 'available');
+  assert.equal(legacy.model.dataOrigin, 'synthetic');
+  assert.equal(legacy.model.presentation, 'preview');
 
   const result = await getArtistProductVariableRealReadModel(
     {
