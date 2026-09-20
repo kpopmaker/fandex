@@ -1,0 +1,69 @@
+name: TEMP newsIssuePoint Registry Full Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-registry-469e-full
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "469e11a3bd6a8659dd8c35c7ed6825d222813f23"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production regression suite
+        run: >-
+          npm run test:security &&
+          npm run test:persistence &&
+          npm run test:ingestion:v121 &&
+          npm run test:role-bootstrap &&
+          npm run test:production-bootstrap &&
+          npm run test:deployment-readiness &&
+          npm run test:merge-safety
+
+      - name: Plan-only DB boundaries
+        run: npm run db:migrate && npm run db:roles
+
+      - name: Focused Product eligibility regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+
+      - name: Production build
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 4c962506e24aeb17b215cbb609880b6ca36f5ad2...469e11a3bd6a8659dd8c35c7ed6825d222813f23
