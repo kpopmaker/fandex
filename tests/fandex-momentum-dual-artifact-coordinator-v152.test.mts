@@ -210,9 +210,9 @@ test('source-only advancement appends watermark only', async () => {
   const watermarks = parseFandexMomentumEvaluationWatermarkJsonl(
     coordinated.watermarkJsonl,
   );
-  assert.equal(watermarks.length, 2);
+  assert.equal(watermarks.length, 3);
   assert.equal(
-    watermarks[1].evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    watermarks[2].evaluationBoundary.sourceEvidence.naverThroughSlotStart,
     '2026-09-20T22:00:00.000Z',
   );
 });
@@ -253,14 +253,14 @@ test('advanced common cutoff with same category appends both artifacts once', as
     coordinated.watermarkJsonl,
   );
   assert.equal(history.length, 3);
-  assert.equal(watermarks.length, 2);
+  assert.equal(watermarks.length, 3);
   assert.equal(history[2].alignmentCutoffAt, '2026-09-21T01:58:00.000Z');
   assert.equal(
-    watermarks[1].evaluationBoundary.commonAlignmentCutoffAt,
+    watermarks[2].evaluationBoundary.commonAlignmentCutoffAt,
     history[2].alignmentCutoffAt,
   );
   assert.equal(
-    watermarks[1].evaluationBoundary.sourceV143Digest,
+    watermarks[2].evaluationBoundary.sourceV143Digest,
     history[2].sourceV143Digest,
   );
 });
