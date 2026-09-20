@@ -1,0 +1,145 @@
+name: PR127 FANDEX momentum v150 cutoff gate validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate v150 and history regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-common-cutoff-advancement-v150.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-append-from-artifact-v148.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-unified-history-v147.test.mts
+          npm run typecheck
+      - name: Validate current real source-advance / cutoff-unchanged boundary
+        run: |
+          git fetch origin main
+          CURRENT_LASTFM_BLOB="$(git rev-parse origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv)"
+          test "$CURRENT_LASTFM_BLOB" = "723cf73abb93882779edc0621a12381ab80e464c"
+
+          cat > .tmp-v150-current.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            evaluateFandexMomentumCommonCutoffAdvancementGateResearch,
+          } from './lib/intelligence/fandexMomentumCommonCutoffAdvancementGateResearch';
+
+          const historyJsonl = await readFile(
+            'data/momentum-research/iu_cross_family_evidence_state_v147.jsonl',
+            'utf8',
+          );
+          const previousAudit = JSON.parse(await readFile(
+            'data/momentum-research/iu_current_real_v149_20260920T060000Z.json',
+            'utf8',
+          ));
+
+          const currentResult = {
+            contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
+            sourceContractVersion: 'v142_fandex_momentum_cross_family_combination_research_v1',
+            state: 'categorical-research-output-only',
+            canonicalArtistId: 'iu',
+            alignmentCutoffAt: previousAudit.evidence.commonAlignmentCutoffAt,
+            currentResearchOutput: {
+              outputForm: 'structured-categorical-evidence',
+              directionalConsensus: previousAudit.v143.directionalConsensus,
+              persistenceConsensus: previousAudit.v143.persistenceConsensus,
+              qualitativeDirectionEvidenceUsable: false,
+              levelPercentileSpreadDiagnostic: 100,
+              productMomentumScore: null,
+            },
+            numericEligibility: {
+              status: 'not-eligible',
+              unmetRequirements: [],
+              numericEstimand: null,
+              calibrationTarget: null,
+              mappingOrWeights: null,
+              outOfSampleValidation: null,
+              additionalFamiliesAloneSufficient: false,
+              legacyPreviewSeedCalibrationAllowed: false,
+            },
+            currentProductSchema: {
+              metricValueKind: 'number-or-null',
+              weightedScoreRequiresNumericValue: true,
+              currentMomentumSourceStage: 'derived_signal',
+              currentMomentumQualityLabel: 'preview',
+              previewFallbackEnabled: true,
+              previewFallbackExample: null,
+              categoricalEvidenceFitsCurrentMomentumSlot: false,
+            },
+            researchCarrier: {
+              observationContractVersion: 'fandex-observation-v1',
+              categoricalRawValueSupported: true,
+              recommendedVariableId: 'momentum.cross-family-evidence-state.research',
+              registryBindingEstablished: false,
+              productMetricBindingEstablished: false,
+            },
+            blockers: [],
+            digest: previousAudit.v143.digest,
+            effects: {
+              externalCalls: 0,
+              databaseReads: 0,
+              databaseWrites: 0,
+              masterScoreWrites: 0,
+              websiteWrites: 0,
+            },
+          } as any;
+
+          const previousBoundary = {
+            canonicalArtistId: 'iu',
+            evaluatedAt: previousAudit.evaluatedAt,
+            commonAlignmentCutoffAt: previousAudit.evidence.commonAlignmentCutoffAt,
+            sourceV143Digest: previousAudit.v143.digest,
+            directionalConsensus: previousAudit.v143.directionalConsensus,
+            persistenceConsensus: previousAudit.v143.persistenceConsensus,
+            sourceEvidence: {
+              lastfmEvidenceId: previousAudit.evidence.lastfmMainBlobSha,
+              lastfmLatestComponentEndAt: previousAudit.evidence.commonAlignmentCutoffAt,
+              naverEvidenceId: 'cc9abd83d82ab18c7304977070f95f1a5e2960c128cc6f1cba83a190d9a8afad',
+              naverThroughSlotStart: previousAudit.evidence.naverThroughSlotStart,
+            },
+          } as const;
+
+          const gate = evaluateFandexMomentumCommonCutoffAdvancementGateResearch({
+            historyJsonl,
+            result: currentResult,
+            sourceEvidence: {
+              lastfmEvidenceId: '723cf73abb93882779edc0621a12381ab80e464c',
+              lastfmLatestComponentEndAt: '2026-09-20T01:59:13.000Z',
+              naverEvidenceId: '21a47c4d99698dfa18dd802f05ca5210a6618139529a0f917598854398b8e0c5',
+              naverThroughSlotStart: '2026-09-20T14:00:00.000Z',
+            },
+            evaluatedAt: '2026-09-20T14:10:00.000Z',
+            previousEvaluationBoundary: previousBoundary,
+          });
+
+          if (gate.state !== 'source-advanced-cutoff-unchanged') {
+            throw new Error('unexpected v150 state: ' + gate.state);
+          }
+          if (
+            gate.sourceEvidenceAdvanced !== true
+            || gate.lastfmEvidenceAdvanced !== false
+            || gate.naverEvidenceAdvanced !== true
+            || gate.commonCutoffUnchanged !== true
+            || gate.historyObservationEligible !== false
+            || gate.invokeV148Allowed !== false
+            || gate.expectedV148Disposition !== 'not-invoked'
+          ) {
+            throw new Error('v150 current boundary mismatch');
+          }
+
+          console.log(JSON.stringify(gate, null, 2));
+          TS
+
+          npx tsx --conditions=react-server .tmp-v150-current.mts
+          rm .tmp-v150-current.mts
