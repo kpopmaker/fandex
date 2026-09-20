@@ -1,0 +1,172 @@
+name: PR127 FANDEX momentum v144 carrier validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate v144 and upstream contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-categorical-carrier-v144.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-output-form-eligibility-v143.test.mts
+          npx tsx --conditions=react-server --test tests/intelligence-common-observation-v1.test.mts
+          npm run typecheck
+      - name: Validate current real chain through isolated carrier
+        run: |
+          git fetch origin main
+          git show origin/main:data/lastfm-cloud/lastfm_artist_interest_history_v1.csv > /tmp/main-lastfm-history.csv
+
+          cat > .tmp-v144-actual.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            deriveFandexNaverMediaAttentionMomentumResearch,
+          } from './lib/intelligence/fandexNaverMediaAttentionMomentumResearch';
+          import {
+            evaluateFandexMomentumTemporalNormalizationResearch,
+          } from './lib/intelligence/fandexMomentumTemporalNormalizationResearch';
+          import {
+            evaluateFandexMomentumCrossFamilyCombinationResearch,
+          } from './lib/intelligence/fandexMomentumCrossFamilyCombinationResearch';
+          import {
+            evaluateFandexMomentumOutputFormEligibilityResearch,
+          } from './lib/intelligence/fandexMomentumOutputFormEligibilityResearch';
+          import {
+            readFandexMomentumCategoricalCarrierResearch,
+            writeFandexMomentumCategoricalCarrierResearch,
+          } from './lib/intelligence/fandexMomentumCategoricalCarrierResearch';
+          import {
+            NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+          } from './lib/server/ingestion/naverNewsIssuePointFrozenMethodology';
+          import {
+            NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+          } from './lib/intelligence/naverNewsIssuePointConstruct';
+
+          const anchors = [
+            ['2026-09-17T17:00:00.000Z', 0.00125, 26.829268292683, 41],
+            ['2026-09-18T01:00:00.000Z', 0.00125, 24.489795918367, 49],
+            ['2026-09-18T09:00:00.000Z', 0.03375, 98.245614035088, 57],
+            ['2026-09-18T17:00:00.000Z', 0.0025, 33.846153846154, 65],
+            ['2026-09-19T01:00:00.000Z', 0.0, 0.0, 73],
+            ['2026-09-19T09:00:00.000Z', 0.0025, 41.975308641975, 81],
+          ] as const;
+
+          const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
+            contractVersion: NAVER_NEWS_ISSUE_POINT_FROZEN_METHODOLOGY_CONTRACT_VERSION,
+            methodologyVersion: NAVER_NEWS_ISSUE_POINT_METHODOLOGY_VERSION,
+            lifecycle: 'research',
+            directProductContributionEligible: false,
+            productScorePublished: false,
+            variableId: 'newsIssuePoint',
+            canonicalArtistId: 'iu',
+            protocolStart: '2026-09-15T16:00:00.000Z',
+            throughSlotStart,
+            selectedWindowSlotCount: 8,
+            rollingWindowSemantics: 'overlapping',
+            baselineScope: 'same_artist_same_official_shadow_epoch',
+            baselineReadiness: {
+              cycleSlotCount: 24,
+              utcHourCoverageCount: 24,
+              completeCycleCount: 2,
+              sameUtcHourReplicationFloor: 2,
+              sameUtcHourReplicationCeiling: 2,
+              status: 'replicated_cycle_history',
+            },
+            normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
+            status: 'available',
+            reason: 'frozen_methodology_value_available',
+            score,
+            currentActivityRate: activityRate,
+            priorDefinedWindowCount,
+            priorLessThanLatestCount: 0,
+            priorEqualToLatestCount: 0,
+            priorGreaterThanLatestCount: 0,
+            currentWindow: null,
+            eligiblePriorWindows: [],
+            excludedWindows: [],
+            evidenceTrace: { windows: [], storedEvidenceJobIds: [] },
+          })) as any;
+
+          const history = await readFile('/tmp/main-lastfm-history.csv', 'utf8');
+          const v140 = deriveFandexNaverMediaAttentionMomentumResearch(points);
+          const v141 = evaluateFandexMomentumTemporalNormalizationResearch({
+            canonicalArtistId: 'iu',
+            lastfmHistoryCsv: history,
+            naverComponent: v140,
+          });
+          const v142 = evaluateFandexMomentumCrossFamilyCombinationResearch(v141);
+          const v143 = evaluateFandexMomentumOutputFormEligibilityResearch(v142);
+
+          const records = new Map<string, any>();
+          const repository = {
+            async findByRecordId(recordId: string) {
+              return records.get(recordId) ?? null;
+            },
+            async listByArtist(canonicalArtistId: string) {
+              return [...records.values()].filter((r) => r.canonicalArtistId === canonicalArtistId);
+            },
+            async insert(record: any) {
+              if (records.has(record.recordId)) return 'already-exists' as const;
+              records.set(record.recordId, record);
+              return 'inserted' as const;
+            },
+          };
+
+          const write = await writeFandexMomentumCategoricalCarrierResearch({
+            result: v143,
+            collectedAt: '2026-09-19T02:10:00.000Z',
+            repository,
+          });
+          const replay = await writeFandexMomentumCategoricalCarrierResearch({
+            result: v143,
+            collectedAt: '2026-09-19T02:10:00.000Z',
+            repository,
+          });
+          const read = await readFandexMomentumCategoricalCarrierResearch({
+            canonicalArtistId: 'iu',
+            repository,
+          });
+
+          if (write.state !== 'inserted') throw new Error('first write not inserted');
+          if (replay.state !== 'idempotent-existing') throw new Error('replay not idempotent');
+          if (read.state !== 'available') throw new Error('carrier read unavailable');
+          if (read.latestRecord?.directionalConsensus !== 'direction-corroborated-down') {
+            throw new Error('unexpected categorical state');
+          }
+          if (read.productMomentumScore !== null) throw new Error('numeric Product score leaked');
+          if (read.previewFallbackUsed !== false || read.productMetricReadPerformed !== false) {
+            throw new Error('preview/Product path leaked');
+          }
+
+          console.log(JSON.stringify({
+            v143State: v143.state,
+            recordId: write.record.recordId,
+            observationId: write.record.observationId,
+            variableId: write.record.variableId,
+            directionalConsensus: write.record.directionalConsensus,
+            persistenceConsensus: write.record.persistenceConsensus,
+            alignmentCutoffAt: write.record.alignmentCutoffAt,
+            firstWriteState: write.state,
+            replayState: replay.state,
+            readState: read.state,
+            recordCount: read.recordCount,
+            productMomentumScore: read.productMomentumScore,
+            previewFallbackUsed: read.previewFallbackUsed,
+            productMetricReadPerformed: read.productMetricReadPerformed,
+            lifecycle: write.record.payload.lifecycle,
+          }, null, 2));
+          TS
+
+          npx tsx --conditions=react-server .tmp-v144-actual.mts
+          rm .tmp-v144-actual.mts
