@@ -1,0 +1,81 @@
+{
+  "contractVersion": "v150_fandex_momentum_current_real_cutoff_gate_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-20T14:10:00.000Z",
+  "previousEvaluation": {
+    "source": "data/momentum-research/iu_current_real_v149_20260920T060000Z.json",
+    "commonAlignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "sourceV143Digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a",
+    "lastfmEvidenceId": "723cf73abb93882779edc0621a12381ab80e464c",
+    "lastfmLatestComponentEndAt": "2026-09-20T01:59:13.000Z",
+    "naverEvidenceId": "cc9abd83d82ab18c7304977070f95f1a5e2960c128cc6f1cba83a190d9a8afad",
+    "naverThroughSlotStart": "2026-09-20T06:00:00.000Z"
+  },
+  "currentEvidence": {
+    "lastfmEvidenceId": "723cf73abb93882779edc0621a12381ab80e464c",
+    "lastfmLatestComponentEndAt": "2026-09-20T01:59:13.000Z",
+    "lastfmSnapshotDate": "2026-09-20",
+    "lastfmHistoryRowCount": 420,
+    "lastfmSnapshotDateCount": 42,
+    "naverEvidenceId": "21a47c4d99698dfa18dd802f05ca5210a6618139529a0f917598854398b8e0c5",
+    "naverCollectionKey": "sched-v125-naver-news-20260920t140000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-20T14:00:00.000Z",
+    "naverJobCreatedAt": "2026-09-20T14:02:00.512Z",
+    "naverStatus": "succeeded",
+    "naverRawEvidenceCount": 100,
+    "naverNormalizedRecordCount": 100,
+    "naverDuplicateRecordCount": 0,
+    "naverRejectedItemCount": 0,
+    "latestNaverNonOverlappingAnchor": {
+      "throughSlotStart": "2026-09-20T14:00:00.000Z",
+      "currentActivityRate": 0.0025,
+      "newsIssuePointDiagnostic": 46.363636363636,
+      "priorDefinedWindowCount": 110
+    },
+    "selectedNaverAnchorAtCommonCutoffRemains": "2026-09-19T22:00:00.000Z"
+  },
+  "currentCategoricalState": {
+    "commonAlignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "sourceV143Digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a"
+  },
+  "v150": {
+    "state": "source-advanced-cutoff-unchanged",
+    "previousHistoryCutoffAt": "2026-09-20T01:59:13.000Z",
+    "previousEvaluationCutoffAt": "2026-09-20T01:59:13.000Z",
+    "currentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "sourceEvidenceAdvanced": true,
+    "sourceEvidenceChanged": true,
+    "lastfmEvidenceAdvanced": false,
+    "naverEvidenceAdvanced": true,
+    "commonCutoffAdvanced": false,
+    "commonCutoffUnchanged": true,
+    "commonCutoffRegressed": false,
+    "directionalConsensusChangedFromHistory": false,
+    "persistenceConsensusChangedFromHistory": false,
+    "sourceDigestChangedFromHistory": false,
+    "historyObservationEligible": false,
+    "invokeV148Allowed": false,
+    "expectedV148Disposition": "not-invoked",
+    "digest": "72d556dc6925d2d2601d964bbbf73fcdccc6d68f84bc3f0df1ff1d0fc6e44ee8"
+  },
+  "history": {
+    "artifact": "data/momentum-research/iu_cross_family_evidence_state_v147.jsonl",
+    "recordCountBefore": 2,
+    "recordCountAfter": 2,
+    "artifactAppendCount": 0
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0,
+    "historyWrites": 0
+  },
+  "validation": {
+    "githubActionsRunId": 35516165409,
+    "status": "PASS"
+  }
+}
