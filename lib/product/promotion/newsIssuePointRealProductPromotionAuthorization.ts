@@ -22,17 +22,12 @@ export type NewsIssuePointRealPromotionApproval = Readonly<{
   binding: Readonly<{
     candidateContractVersion: 'v1_naver_news_issue_point_product_candidate';
     methodologyVersion: 'v1_naver_news_issue_point_real_methodology';
-    throughSlotStart: string;
-    score: number;
-    storedEvidenceJobIds: readonly string[];
+    protocolStart: string;
+    selectedWindowSlotCount: 8;
+    normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE';
+    claimScope: 'protocol-conditioned-first-seen-only';
   }>;
 }>;
-
-export type NewsIssuePointRealPromotionAuthorizationIssue =
-  | 'eligibility-blocked'
-  | 'approval-absent'
-  | 'approval-contract-invalid'
-  | 'approval-binding-mismatch';
 
 export type NewsIssuePointRealPromotionAuthorizationResult =
   | Readonly<{
@@ -110,29 +105,32 @@ function exactIso(value: string): boolean {
 function approvalContractValid(
   approval: NewsIssuePointRealPromotionApproval,
 ): boolean {
-  return (
+  if (
     approval.contractVersion
-      === NEWS_ISSUE_POINT_REAL_PROMOTION_APPROVAL_CONTRACT_VERSION
-    && approval.action === 'authorize-real-variable-promotion'
-    && approval.authority === 'product-operations-owner'
-    && /^[a-z0-9][a-z0-9._:-]{7,127}$/.test(approval.authorizationId)
-    && exactIso(approval.authorizedAt)
-    && approval.target.artistId === 'iu'
-    && approval.target.variableId === 'newsIssuePoint'
-    && approval.binding.candidateContractVersion
-      === 'v1_naver_news_issue_point_product_candidate'
-    && approval.binding.methodologyVersion
-      === 'v1_naver_news_issue_point_real_methodology'
-    && exactIso(approval.binding.throughSlotStart)
-    && Number.isFinite(approval.binding.score)
-    && approval.binding.score >= 0
-    && approval.binding.score <= 100
-    && approval.binding.storedEvidenceJobIds.length > 0
-    && new Set(approval.binding.storedEvidenceJobIds).size
-      === approval.binding.storedEvidenceJobIds.length
-    && approval.binding.storedEvidenceJobIds.every(
-      (jobId) => typeof jobId === 'string' && jobId.length > 0,
-    )
+      !== NEWS_ISSUE_POINT_REAL_PROMOTION_APPROVAL_CONTRACT_VERSION
+    || approval.action !== 'authorize-real-variable-promotion'
+    || approval.authority !== 'product-operations-owner'
+    || !/^[a-z0-9][a-z0-9._:-]{7,127}$/.test(approval.authorizationId)
+    || !exactIso(approval.authorizedAt)
+    || approval.target.artistId !== 'iu'
+    || approval.target.variableId !== 'newsIssuePoint'
+    || approval.binding.candidateContractVersion
+      !== 'v1_naver_news_issue_point_product_candidate'
+    || approval.binding.methodologyVersion
+      !== 'v1_naver_news_issue_point_real_methodology'
+    || !exactIso(approval.binding.protocolStart)
+    || approval.binding.selectedWindowSlotCount !== 8
+    || approval.binding.normalizationType
+      !== 'HISTORICAL_STRICT_EXCEEDANCE_SHARE'
+    || approval.binding.claimScope
+      !== 'protocol-conditioned-first-seen-only'
+  ) {
+    return false;
+  }
+
+  return (
+    Date.parse(approval.authorizedAt)
+    >= Date.parse(approval.binding.protocolStart)
   );
 }
 
@@ -144,24 +142,17 @@ function approvalMatchesEligibility(
   approval: NewsIssuePointRealPromotionApproval,
 ): boolean {
   const candidate = eligibility.candidate;
-  const fact = candidate.fact;
-
-  if (fact.availability !== 'available') return false;
-
-  const expectedJobIds = candidate.evidenceTrace.storedEvidenceJobIds;
-  const approvedJobIds = approval.binding.storedEvidenceJobIds;
+  const metadata = candidate.sourceMetadata;
 
   return (
-    approval.binding.candidateContractVersion === candidate.contractVersion
-    && approval.binding.methodologyVersion
-      === candidate.sourceMetadata.methodologyVersion
-    && approval.binding.throughSlotStart
-      === candidate.sourceMetadata.throughSlotStart
-    && approval.binding.score === fact.value
-    && approvedJobIds.length === expectedJobIds.length
-    && approvedJobIds.every(
-      (jobId, index) => jobId === expectedJobIds[index],
-    )
+    eligibility.claimScope === approval.binding.claimScope
+    && eligibility.strictPublicationIntervalClaimAllowed === false
+    && approval.binding.candidateContractVersion === candidate.contractVersion
+    && approval.binding.methodologyVersion === metadata.methodologyVersion
+    && approval.binding.protocolStart === metadata.protocolStart
+    && approval.binding.selectedWindowSlotCount
+      === metadata.selectedWindowSlotCount
+    && approval.binding.normalizationType === metadata.normalizationType
   );
 }
 
