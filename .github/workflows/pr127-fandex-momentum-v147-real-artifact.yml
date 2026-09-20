@@ -19,6 +19,13 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Validate committed v147 artifact and upstream contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-unified-history-v147.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-append-adapter-v146.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-carrier-change-v145.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-research-carrier-v144.test.mts
+          npm run typecheck
       - name: Materialize real IU v147 unified history
         run: |
           git fetch origin main
