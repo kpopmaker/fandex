@@ -1,0 +1,28 @@
+name: PR127 FANDEX momentum v154 paired manifest validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v154 paired manifest and upstream contracts
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-paired-artifact-manifest-v154.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-source-provenance-v153.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-dual-artifact-coordinator-v152.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-evaluation-watermark-v151.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-common-cutoff-advancement-v150.test.mts
+          npm run typecheck
+          git diff --check
