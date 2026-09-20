@@ -5,7 +5,7 @@ import {
 import type { ProductNumericFact } from '../contracts/productNumericFact';
 import type { ProductObservationTime } from '../contracts/productTime';
 import type {
-  NewsIssuePointRealPromotionAuthorizationResult,
+  NewsIssuePointRealPromotionControlResult,
 } from '../promotion/newsIssuePointRealProductPromotionAuthorization';
 
 export const NEWS_ISSUE_POINT_REAL_PRODUCT_READ_MODEL_CONTRACT_VERSION =
@@ -54,9 +54,9 @@ export type NewsIssuePointRealProductReadModel = Readonly<{
     currentWindow:
       NonNullable<
         Extract<
-          NewsIssuePointRealPromotionAuthorizationResult,
+          NewsIssuePointRealPromotionControlResult,
           { status: 'authorized' }
-        >['eligibility']['candidate']['evidenceTrace']['currentWindow']
+        >['authorization']['eligibility']['candidate']['evidenceTrace']['currentWindow']
       >;
     storedEvidenceJobIds: readonly string[];
   }>;
@@ -75,19 +75,33 @@ export type NewsIssuePointRealProductReadModelResult =
     }>
   | Readonly<{
       status: 'blocked';
-      reason: 'promotion-not-authorized' | 'authorized-state-invalid';
+      reason:
+        | 'promotion-not-authorized'
+        | 'promotion-disabled'
+        | 'promotion-control-data-issue'
+        | 'authorized-state-invalid';
     }>;
 
 export function buildNewsIssuePointRealProductReadModel(
-  authorization: NewsIssuePointRealPromotionAuthorizationResult,
+  control: NewsIssuePointRealPromotionControlResult,
 ): NewsIssuePointRealProductReadModelResult {
-  if (authorization.status !== 'authorized') {
+  if (control.status === 'disabled') {
     return Object.freeze({
       status: 'blocked' as const,
-      reason: 'promotion-not-authorized' as const,
+      reason: 'promotion-disabled' as const,
     });
   }
 
+  if (control.status !== 'authorized') {
+    return Object.freeze({
+      status: 'blocked' as const,
+      reason: control.status === 'data-issue'
+        ? ('promotion-control-data-issue' as const)
+        : ('promotion-not-authorized' as const),
+    });
+  }
+
+  const authorization = control.authorization;
   const candidate = authorization.eligibility.candidate;
   const metadata = candidate.sourceMetadata;
   const currentWindow = candidate.evidenceTrace.currentWindow;
