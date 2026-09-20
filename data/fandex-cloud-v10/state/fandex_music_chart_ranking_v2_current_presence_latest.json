@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-19T10:56:34",
-  "snapshotDate": "2026-09-19",
+  "createdAt": "2026-09-20T10:59:41",
+  "snapshotDate": "2026-09-20",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -25,7 +25,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "9",
+          "rank": "8",
           "chartType": "daily",
           "point": 90.0
         },
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "8",
+          "rank": "7",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -60,14 +60,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "7",
+          "rank": "9",
           "chartType": "daily",
           "point": 90.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "25",
+          "rank": "28",
           "chartType": "daily",
           "point": 34.0
         },
@@ -95,7 +95,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "12",
+          "rank": "13",
           "chartType": "daily",
           "point": 72.0
         },
@@ -109,7 +109,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "14",
+          "rank": "17",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -118,11 +118,11 @@
     },
     {
       "artist": "아이브",
-      "fandexMusicChartFinalPoint": 76.0,
-      "score": 76.0,
+      "fandexMusicChartFinalPoint": 100.0,
+      "score": 100.0,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 24.0,
+        "melon": 48.0,
         "genie": 34.0,
         "bugs": 18.0
       },
@@ -130,21 +130,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "51",
+          "rank": "50",
           "chartType": "daily",
-          "point": 24.0
+          "point": 48.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "26",
+          "rank": "25",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "30",
+          "rank": "32",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -172,14 +172,14 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "117",
+          "rank": "116",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "54",
+          "trackTitle": "Ditto",
+          "rank": "53",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "98",
+          "rank": "97",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "155",
+          "rank": "151",
           "chartType": "daily",
           "point": 6.8
         },
@@ -242,14 +242,14 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "153",
+          "rank": "160",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "99",
+          "rank": "95",
           "chartType": "realtime",
           "point": 9.0
         }

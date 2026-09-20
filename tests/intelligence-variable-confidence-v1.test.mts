@@ -6,6 +6,7 @@ import {
   getFandexVariableDefinition,
   listFandexVariableDefinitions,
   NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE,
+  NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
   validateFandexVariableDefinition,
   validateObservationVariableBinding,
 } from '../lib/intelligence/variableRegistry';
@@ -35,12 +36,35 @@ test('8 invalid lifecycle is rejected', () => assert.throws(() => validateFandex
 test('9 empty construct is rejected', () => assert.throws(() => validateFandexVariableDefinition({ ...NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE, construct: ' ' }), /construct_invalid/));
 test('10 entity types are immutable and deterministic', () => { const x = NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.supportedEntityTypes; assert.deepEqual(x, ['news_article']); assert.ok(Object.isFrozen(x)); });
 test('11 blockers are immutable and ordered', () => { assert.ok(Object.isFrozen(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.blockers)); assert.deepEqual(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.blockers, ['provider-intermediate-not-direct-production']); });
-test('12 registry listing is stable', () => assert.deepEqual(listFandexVariableDefinitions().map((x) => x.variableId), ['naver-news.normalized-record-presence']));
+test('12 registry listing is stable', () => assert.deepEqual(listFandexVariableDefinitions().map((x) => x.variableId), ['naver-news.normalized-record-presence', 'newsIssuePoint']));
 test('13 source provider is preserved', () => assert.equal(NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE.sourceProviderId, 'naver-news'));
 test('14 NAVER observation binds to its variable', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.doesNotThrow(() => validateObservationVariableBinding(o, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE)); });
 test('15 mismatched variable ID is rejected', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.throws(() => validateObservationVariableBinding({ ...o, variable: { ...o.variable, variableId: 'other' } }, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE), /variable_id_mismatch/); });
 test('16 mismatched provider is rejected for intermediate variables', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.throws(() => validateObservationVariableBinding({ ...o, providerId: 'other' }, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE), /provider_mismatch/); });
 test('17 unsupported entity type is rejected', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.throws(() => validateObservationVariableBinding({ ...o, entity: { ...o.entity, entityType: 'artist' } }, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE), /entity_type_unsupported/); });
+
+test('17a canonical newsIssuePoint shadow variable is registered without Production eligibility', () => {
+  const definition = getFandexVariableDefinition('newsIssuePoint');
+  assert.deepEqual(definition, NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE);
+  assert.equal(definition?.kind, 'canonical');
+  assert.equal(definition?.family, 'media');
+  assert.equal(definition?.measureType, 'index');
+  assert.equal(definition?.role, 'primary');
+  assert.equal(definition?.lifecycle, 'shadow');
+  assert.equal(definition?.construct, 'protocol_conditioned_first_seen_canonical_media_activity');
+  assert.deepEqual(definition?.supportedEntityTypes, ['artist']);
+  assert.deepEqual(definition?.temporalSemantics, {
+    providerPeriodRequired: true,
+    observedAtRequired: false,
+    collectionTimeRequired: true,
+  });
+  assert.equal(definition?.sourceProviderId, 'naver-news');
+  assert.equal(definition?.directProductionContributionEligible, false);
+  assert.deepEqual(definition?.blockers, [
+    'product-read-model-binding-pending',
+    'production-promotion-not-authorized',
+  ]);
+});
 
 test('18 all HIGH derives HIGH', () => assert.equal(createFandexConfidenceAssessment({ subject: { type: 'evidence', id: 'e1' }, dimensions: dimensions() }).state, 'high'));
 test('19 one MODERATE derives MODERATE', () => assert.equal(createFandexConfidenceAssessment({ subject: { type: 'evidence', id: 'e1' }, dimensions: { ...dimensions(), freshness: 'moderate' } }).state, 'moderate'));
