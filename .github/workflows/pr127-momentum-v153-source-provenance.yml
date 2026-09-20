@@ -1,0 +1,63 @@
+name: PR127 momentum v153 source provenance validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'lib/intelligence/fandexMomentumSourceProvenanceResearch.ts'
+      - 'tests/fandex-momentum-source-provenance-v153.test.mts'
+      - '.github/workflows/pr127-momentum-v153-source-provenance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v153
+        run: npx tsx --test tests/fandex-momentum-source-provenance-v153.test.mts
+      - name: Materialize current provenance result
+        run: |
+          cat > .tmp-v153.mts <<'TS'
+          import {
+            evaluateFandexMomentumSourceProvenanceResearch,
+          } from './lib/intelligence/fandexMomentumSourceProvenanceResearch';
+
+          const result = evaluateFandexMomentumSourceProvenanceResearch({
+            snapshot: {
+              canonicalArtistId: 'iu',
+              naverEvidenceId: '39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c',
+              naverCollectionKey: 'sched-v125-naver-news-20260920t150000z-f1ed381d367d',
+              naverThroughSlotStart: '2026-09-20T15:00:00.000Z',
+              naverStatus: 'succeeded',
+              naverRawEvidenceCount: 100,
+              naverNormalizedRecordCount: 100,
+              naverDuplicateRecordCount: 0,
+              naverRejectedItemCount: 0,
+            },
+            runtimeObservation: {
+              observedAt: '2026-09-20T15:37:00.000Z',
+              requestPath: '/api/internal/naver-news/shadow-scheduler',
+              httpStatus: 200,
+              deploymentId: 'dpl_6fmT3qKqeytud3kFCNVoArBGGK1K',
+              branch: 'main',
+            },
+            storedEvidenceReproducedThisEvaluation: false,
+          });
+          console.log(JSON.stringify(result, null, 2));
+          TS
+          npx tsx .tmp-v153.mts
+          rm .tmp-v153.mts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Diff check
+        run: git diff --check
