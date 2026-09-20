@@ -1,0 +1,65 @@
+name: TEMP Post Merge newsIssuePoint Boundary Validation
+
+on:
+  push:
+    branches:
+      - validation/post-merge-news-issue-point-boundary-8c8a
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "8c8a4b7795baf17d7cabac8089d0f5eed50e196d"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Product boundary regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/product-variable-boundary-v1.test.mts
+
+      - name: Production regression suite
+        run: >-
+          npm run test:security &&
+          npm run test:persistence &&
+          npm run test:ingestion:v121 &&
+          npm run test:role-bootstrap &&
+          npm run test:production-bootstrap &&
+          npm run test:deployment-readiness &&
+          npm run test:merge-safety
+
+      - name: Plan-only DB boundaries
+        run: npm run db:migrate && npm run db:roles
+
+      - name: Production build
+        run: npm run build
