@@ -118,6 +118,7 @@ export type ProductStoredEvidenceJobDataIssue = Readonly<{
     | 'real-stored-evidence-trace-required'
     | 'job-not-in-variable-evidence-trace'
     | 'stored-evidence-read-failed'
+    | 'stored-evidence-trace-inconsistent'
     | 'stored-evidence-source-mismatch';
 }>;
 
