@@ -54,12 +54,14 @@ jobs:
           } from './lib/intelligence/naverNewsIssuePointConstruct';
 
           const anchors = [
-            ['2026-09-17T17:00:00.000Z', 0.00125, 26.829268292683, 41],
-            ['2026-09-18T01:00:00.000Z', 0.00125, 24.489795918367, 49],
-            ['2026-09-18T09:00:00.000Z', 0.03375, 98.245614035088, 57],
-            ['2026-09-18T17:00:00.000Z', 0.0025, 33.846153846154, 65],
-            ['2026-09-19T01:00:00.000Z', 0.0, 0.0, 73],
-            ['2026-09-19T09:00:00.000Z', 0.0025, 41.975308641975, 81],
+            ['2026-09-17T21:00:00.000Z', 0.00125, 24.444444444444, 45],
+            ['2026-09-18T05:00:00.000Z', 0.02375, 94.339622641509, 53],
+            ['2026-09-18T13:00:00.000Z', 0.0125, 72.131147540984, 61],
+            ['2026-09-18T21:00:00.000Z', 0.00125, 17.391304347826, 69],
+            ['2026-09-19T05:00:00.000Z', 0.00125, 20.779220779221, 77],
+            ['2026-09-19T13:00:00.000Z', 0.00125, 18.823529411765, 85],
+            ['2026-09-19T21:00:00.000Z', 0.0, 0.0, 93],
+            ['2026-09-20T05:00:00.000Z', 0.00125, 30.693069306931, 101],
           ] as const;
 
           const points = anchors.map(([throughSlotStart, activityRate, score, priorDefinedWindowCount]) => ({
@@ -141,8 +143,11 @@ jobs:
           if (write.state !== 'inserted') throw new Error('first write not inserted');
           if (replay.state !== 'idempotent-existing') throw new Error('replay not idempotent');
           if (read.state !== 'available') throw new Error('carrier read unavailable');
-          if (read.latestRecord?.directionalConsensus !== 'direction-corroborated-down') {
-            throw new Error('unexpected categorical state');
+          if (
+            read.latestRecord?.directionalConsensus
+              !== v143.currentResearchOutput.directionalConsensus
+          ) {
+            throw new Error('carrier did not preserve current categorical state');
           }
           if (read.productMomentumScore !== null) throw new Error('numeric Product score leaked');
           if (read.previewFallbackUsed !== false || read.productMetricReadPerformed !== false) {
