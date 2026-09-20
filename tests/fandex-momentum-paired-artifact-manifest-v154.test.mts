@@ -383,3 +383,57 @@ test('manifest JSONL rejects reorder, deletion gap, and hash-link tampering', as
     /momentum_v154_manifest_digest_mismatch/,
   );
 });
+
+
+test('committed current-real v154 manifest chain validates exact pair acceptance', async () => {
+  const [manifestJsonl, historyJsonl, watermarkJsonl] = await Promise.all([
+    readFile(
+      new URL('../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl', import.meta.url),
+      'utf8',
+    ),
+    readFile(historyUrl, 'utf8'),
+    readFile(watermarkUrl, 'utf8'),
+  ]);
+
+  const records = parseFandexMomentumPairedArtifactManifestJsonl(manifestJsonl);
+  assert.equal(records.length, 2);
+
+  assert.equal(records[0].sequence, 1);
+  assert.equal(records[0].coordinatorState, 'watermark-only-appended');
+  assert.equal(
+    records[0].manifestDigest,
+    '62a504769a0f1e92dfd920af9897f04447372e60baf108a4ee41526df01d6bc0',
+  );
+  assert.deepEqual(records[0].expectedWrites, {
+    historyWrites: 0,
+    watermarkWrites: 1,
+  });
+
+  assert.equal(records[1].sequence, 2);
+  assert.equal(records[1].coordinatorState, 'no-op');
+  assert.equal(
+    records[1].previousManifestDigest,
+    records[0].manifestDigest,
+  );
+  assert.equal(
+    records[1].manifestDigest,
+    'f75a89c363dcb06a5a534e132b25f710aa8cb12bb5be23e3c7a99f3875c0e9af',
+  );
+  assert.deepEqual(records[1].expectedWrites, {
+    historyWrites: 0,
+    watermarkWrites: 0,
+  });
+
+  const accepted = evaluateFandexMomentumPairedArtifactAcceptanceResearch({
+    manifest: records[1],
+    observedHistoryJsonl: historyJsonl,
+    observedWatermarkJsonl: watermarkJsonl,
+  });
+  assert.equal(accepted.state, 'expected-no-write-pair');
+  assert.equal(accepted.readyForNextEvaluation, true);
+  assert.deepEqual(accepted.blockers, []);
+  assert.equal(
+    accepted.digest,
+    'b9d270162f04d1016990fe7f2f0e286e249e36cae1114cc4776dbc08d9529458',
+  );
+});
