@@ -347,3 +347,64 @@ test('invalid manifest chain fails closed before any coordinator dependency can 
   );
   assert.equal(calls, 0);
 });
+
+
+test('committed v155 current-real audit reproduces the exact preflight proposal', async () => {
+  const [auditRaw, manifestJsonl, historyJsonl, watermarkJsonl] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_manifest_guarded_preflight_v155_20260920T162000Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(manifestUrl, 'utf8'),
+    readFile(historyUrl, 'utf8'),
+    readFile(watermarkUrl, 'utf8'),
+  ]);
+  const audit = JSON.parse(auditRaw);
+
+  const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
+    manifestJsonl,
+    historyJsonl,
+    watermarkJsonl,
+    result: result(),
+    sourceEvidence: source(),
+    evaluatedAt: audit.evaluatedAt,
+    recordedAt: audit.recordedAt,
+    manifestedAt: audit.manifestedAt,
+  });
+
+  assert.equal(preflight.state, 'evaluation-prepared');
+  if (preflight.state !== 'evaluation-prepared') return;
+  assert.equal(preflight.digest, audit.preflight.digest);
+  assert.equal(
+    preflight.currentPairAcceptance.digest,
+    audit.preflight.currentPairAcceptance.digest,
+  );
+  assert.equal(
+    preflight.coordinator.digest,
+    audit.preflight.coordinator.digest,
+  );
+  assert.equal(
+    preflight.nextManifest.manifestDigest,
+    audit.preflight.nextManifest.manifestDigest,
+  );
+  assert.equal(
+    preflight.nextManifest.previousManifestDigest,
+    audit.preflight.nextManifest.previousManifestDigest,
+  );
+  assert.deepEqual(preflight.proposedWrites, audit.preflight.proposedWrites);
+  assert.equal(
+    parseFandexMomentumPairedArtifactManifestJsonl(
+      preflight.proposedManifestJsonl,
+    ).length,
+    audit.preflight.proposedManifestRecordCount,
+  );
+  assert.equal(preflight.proposedHistoryJsonl === historyJsonl, true);
+  assert.equal(preflight.proposedWatermarkJsonl === watermarkJsonl, true);
+  assert.equal(audit.preflight.physicalPersistencePerformed, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
