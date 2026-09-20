@@ -416,3 +416,50 @@ test('Product Stored Evidence query rejects job IDs outside the exact variable t
     issues: [{ code: 'job-not-in-variable-evidence-trace' }],
   });
 });
+
+test('Product Stored Evidence query rejects source metadata and trace mismatch before runtime read', async () => {
+  const variableResult = await getArtistProductVariableRealReadModel(
+    {
+      artistId: 'iu',
+      variableId: 'newsIssuePoint',
+      throughSlotStart: CURRENT_END,
+    },
+    {
+      readNewsIssuePointFrozenMethodology: async () =>
+        availableMethodology(1, 2),
+    },
+  );
+  assert.equal(variableResult.status, 'ok');
+  if (variableResult.status !== 'ok') return;
+
+  let calls = 0;
+  const mismatched = {
+    status: 'ok' as const,
+    model: {
+      ...variableResult.model,
+      sourceMetadata: {
+        ...variableResult.model.sourceMetadata,
+        throughSlotStart: '2026-09-19T10:00:00.000Z',
+      },
+    },
+  };
+
+  const result = await getArtistProductStoredEvidenceJob(
+    {
+      variableResult: mismatched,
+      jobId: 'current-job-7',
+    },
+    {
+      readCanonicalJobEvidence: async () => {
+        calls += 1;
+        throw new Error('unreachable');
+      },
+    },
+  );
+
+  assert.equal(calls, 0);
+  assert.deepEqual(result, {
+    status: 'data-issue',
+    issues: [{ code: 'stored-evidence-trace-inconsistent' }],
+  });
+});
