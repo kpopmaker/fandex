@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -154,4 +155,57 @@ test('snapshot counts must reconcile without treating missing as zero', () => {
     }),
     /momentum_v153_snapshot_count_reconciliation_invalid/,
   );
+});
+
+
+test('committed v153 current-real provenance audit reproduces exact research result', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_source_provenance_v153_20260920T153700Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  assert.equal(
+    audit.contractVersion,
+    'v153_fandex_momentum_current_real_source_provenance_audit_v1',
+  );
+  assert.equal(audit.liveStoredEvidenceAccess.githubActionsRuntimeDatabaseCredentialAvailable, false);
+  assert.equal(audit.liveStoredEvidenceAccess.neonConnectorProjectVisible, false);
+  assert.equal(audit.liveStoredEvidenceAccess.storedEvidenceReproducedThisEvaluation, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+
+  const recomputed = evaluateFandexMomentumSourceProvenanceResearch({
+    snapshot: {
+      canonicalArtistId: audit.canonicalArtistId,
+      naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+      naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+      naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+      naverStatus: audit.sourceSnapshot.naverStatus,
+      naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+      naverNormalizedRecordCount: audit.sourceSnapshot.naverNormalizedRecordCount,
+      naverDuplicateRecordCount: audit.sourceSnapshot.naverDuplicateRecordCount,
+      naverRejectedItemCount: audit.sourceSnapshot.naverRejectedItemCount,
+    },
+    runtimeObservation: {
+      observedAt: audit.productionRuntimeObservation.observedAt,
+      requestPath: audit.productionRuntimeObservation.requestPath,
+      httpStatus: audit.productionRuntimeObservation.httpStatus,
+      deploymentId: audit.productionRuntimeObservation.deploymentId,
+      branch: audit.productionRuntimeObservation.branch,
+    },
+    storedEvidenceReproducedThisEvaluation:
+      audit.liveStoredEvidenceAccess.storedEvidenceReproducedThisEvaluation,
+  });
+
+  assert.equal(recomputed.digest, audit.result.digest);
+  assert.equal(recomputed.state, audit.result.state);
+  assert.equal(recomputed.provenanceStrength, audit.result.provenanceStrength);
+  assert.equal(recomputed.currentRealClaimScope, audit.result.currentRealClaimScope);
+  assert.equal(recomputed.futureLiveRefreshEligible, false);
+  assert.deepEqual(recomputed.blockers, audit.result.blockers);
 });
