@@ -49,7 +49,10 @@ export type NewsIssuePointRealSelectorResult =
       reason: NewsIssuePointRealSelectorDataIssue;
     }>;
 
-function isTargetScope(artistId: string, variableId: string): boolean {
+export function isNewsIssuePointRealProductTargetScope(
+  artistId: string,
+  variableId: string,
+): boolean {
   return artistId.trim() === 'iu' && variableId.trim() === 'newsIssuePoint';
 }
 
@@ -71,7 +74,7 @@ export function selectNewsIssuePointRealProductSource(
   const artistId = input.artistId.trim();
   const variableId = input.variableId.trim();
 
-  if (!isTargetScope(artistId, variableId)) {
+  if (!isNewsIssuePointRealProductTargetScope(artistId, variableId)) {
     return Object.freeze({
       contractVersion: NEWS_ISSUE_POINT_REAL_SELECTOR_CONTRACT_VERSION,
       selection: 'legacy-preview' as const,
