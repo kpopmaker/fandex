@@ -26,3 +26,85 @@ jobs:
           npx tsx --conditions=react-server --test tests/fandex-momentum-common-cutoff-advancement-v150.test.mts
           npm run typecheck
           git diff --check
+
+      - name: Materialize current real v154 manifest chain
+        run: |
+          cat > .tmp-v154-materialize.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            buildFandexMomentumPairedArtifactManifestResearch,
+            evaluateFandexMomentumPairedArtifactAcceptanceResearch,
+            serializeFandexMomentumPairedArtifactManifestRecord,
+          } from './lib/intelligence/fandexMomentumPairedArtifactManifestResearch';
+
+          const [historyJsonl, watermarkJsonl, auditRaw] = await Promise.all([
+            readFile('./data/momentum-research/iu_cross_family_evidence_state_v147.jsonl', 'utf8'),
+            readFile('./data/momentum-research/iu_evaluation_watermark_v151.jsonl', 'utf8'),
+            readFile('./data/momentum-research/iu_current_real_v152_20260920T150000Z.json', 'utf8'),
+          ]);
+          const audit = JSON.parse(auditRaw);
+
+          const initial: any = {
+            contractVersion: 'v152_fandex_momentum_dual_artifact_evaluation_coordinator_research_v1',
+            state: audit.initialV152Application.state,
+            priorHistoryRecordCount: audit.initialV152Application.historyRecordCountBefore,
+            resultingHistoryRecordCount: audit.initialV152Application.historyRecordCountAfter,
+            priorWatermarkRecordCount: audit.initialV152Application.watermarkRecordCountBefore,
+            resultingWatermarkRecordCount: audit.initialV152Application.watermarkRecordCountAfter,
+            priorHistoryDigest: audit.initialV152Application.priorHistoryDigest,
+            resultingHistoryDigest: audit.initialV152Application.resultingHistoryDigest,
+            priorWatermarkDigest: audit.initialV152Application.priorWatermarkDigest,
+            resultingWatermarkDigest: audit.initialV152Application.resultingWatermarkDigest,
+            effects: audit.initialV152Application.effects,
+            digest: audit.initialV152Application.coordinatorDigest,
+          };
+          const replay: any = {
+            contractVersion: 'v152_fandex_momentum_dual_artifact_evaluation_coordinator_research_v1',
+            state: audit.committedReplayValidation.state,
+            priorHistoryRecordCount: audit.committedReplayValidation.historyRecordCountBefore,
+            resultingHistoryRecordCount: audit.committedReplayValidation.historyRecordCountAfter,
+            priorWatermarkRecordCount: audit.committedReplayValidation.watermarkRecordCountBefore,
+            resultingWatermarkRecordCount: audit.committedReplayValidation.watermarkRecordCountAfter,
+            priorHistoryDigest: audit.committedReplayValidation.historyDigest,
+            resultingHistoryDigest: audit.committedReplayValidation.historyDigest,
+            priorWatermarkDigest: audit.committedReplayValidation.watermarkDigest,
+            resultingWatermarkDigest: audit.committedReplayValidation.watermarkDigest,
+            effects: audit.committedReplayValidation.effects,
+            digest: audit.committedReplayValidation.coordinatorDigest,
+          };
+
+          const first = buildFandexMomentumPairedArtifactManifestResearch({
+            coordinator: initial,
+            sequence: 1,
+            manifestedAt: '2026-09-20T15:10:00.000Z',
+            previousManifest: null,
+          });
+          const second = buildFandexMomentumPairedArtifactManifestResearch({
+            coordinator: replay,
+            sequence: 2,
+            manifestedAt: '2026-09-20T15:37:03.620Z',
+            previousManifest: first,
+          });
+
+          const acceptance = evaluateFandexMomentumPairedArtifactAcceptanceResearch({
+            manifest: second,
+            observedHistoryJsonl: historyJsonl,
+            observedWatermarkJsonl: watermarkJsonl,
+          });
+          if (!acceptance.readyForNextEvaluation) {
+            throw new Error('current committed pair not accepted by v154');
+          }
+
+          console.log(JSON.stringify({
+            firstManifestDigest: first.manifestDigest,
+            secondManifestDigest: second.manifestDigest,
+            acceptanceState: acceptance.state,
+            acceptanceDigest: acceptance.digest,
+          }, null, 2));
+          console.log('V154_MANIFEST_BEGIN');
+          console.log(serializeFandexMomentumPairedArtifactManifestRecord(first));
+          console.log(serializeFandexMomentumPairedArtifactManifestRecord(second));
+          console.log('V154_MANIFEST_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v154-materialize.mts
+          rm .tmp-v154-materialize.mts
