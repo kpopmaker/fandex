@@ -1,0 +1,60 @@
+name: TEMP newsIssuePoint Real Product Boundary
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-real-boundary-22022f
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "22022f828648b8355adba6400c09d7f9fae259a4"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Focused Product boundary regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts
+          node --import tsx --test tests/product-variable-boundary-v1.test.mts
+          node --import tsx --test tests/product-evidence-boundary-v1.test.mts
+          node --import tsx --test tests/product-artist-variable-presentation-v1.test.mts
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 2cb01343ae2cb51b551ceb7f873442e310217ba7...22022f828648b8355adba6400c09d7f9fae259a4
