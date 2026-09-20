@@ -450,3 +450,49 @@ test('watermark hash-chain detects record tampering', async () => {
     /semantic_boundary_digest_mismatch|record_digest_mismatch/,
   );
 });
+
+
+test('committed current-real v151 watermark fixture validates exact boundary', async () => {
+  const jsonl = await readFile(
+    new URL('../data/momentum-research/iu_evaluation_watermark_v151.jsonl', import.meta.url),
+    'utf8',
+  );
+  const records = parseFandexMomentumEvaluationWatermarkJsonl(jsonl);
+  assert.equal(records.length, 1);
+  assert.equal(records[0].sequence, 1);
+  assert.equal(records[0].gateState, 'source-advanced-cutoff-unchanged');
+  assert.equal(
+    records[0].sourceV150Digest,
+    '72d556dc6925d2d2601d964bbbf73fcdccc6d68f84bc3f0df1ff1d0fc6e44ee8',
+  );
+  assert.equal(
+    records[0].semanticBoundaryDigest,
+    '6e05b7c34e512e2eaad107a4bb813d972b274fa00eaa0b3aff03a9f8169fe27d',
+  );
+  assert.equal(
+    records[0].recordDigest,
+    'e79b91b87c6467507b3c09bbec1a627546af340e6b271f7cce29646d877c9645',
+  );
+
+  const latest = latestFandexMomentumEvaluationBoundaryResearch(jsonl);
+  assert.ok(latest);
+  assert.equal(latest!.commonAlignmentCutoffAt, '2026-09-20T01:59:13.000Z');
+  assert.equal(
+    latest!.sourceV143Digest,
+    '87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a',
+  );
+  assert.equal(latest!.directionalConsensus, 'direction-conflicted');
+  assert.equal(latest!.persistenceConsensus, 'persistence-not-applicable');
+  assert.equal(
+    latest!.sourceEvidence.lastfmEvidenceId,
+    '723cf73abb93882779edc0621a12381ab80e464c',
+  );
+  assert.equal(
+    latest!.sourceEvidence.naverEvidenceId,
+    '21a47c4d99698dfa18dd802f05ca5210a6618139529a0f917598854398b8e0c5',
+  );
+  assert.equal(
+    latest!.sourceEvidence.naverThroughSlotStart,
+    '2026-09-20T14:00:00.000Z',
+  );
+});
