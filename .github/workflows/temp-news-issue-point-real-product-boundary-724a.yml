@@ -1,0 +1,62 @@
+name: TEMP newsIssuePoint Real Product Boundary Validation 724a
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-real-product-boundary-724a
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+      - name: Verify exact source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "724ad818a04834b7b2cafd7805529b07b5e6bbfb"
+      - name: Install exact dependencies
+        run: npm ci
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Real Product boundary regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/product-variable-boundary-v1.test.mts
+      - name: Production regression suite
+        run: >-
+          npm run test:security &&
+          npm run test:persistence &&
+          npm run test:ingestion:v121 &&
+          npm run test:role-bootstrap &&
+          npm run test:production-bootstrap &&
+          npm run test:deployment-readiness &&
+          npm run test:merge-safety
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+      - name: Plan-only DB boundaries
+        run: npm run db:migrate && npm run db:roles
+      - name: Production build
+        run: npm run build
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 2cb01343ae2cb51b551ceb7f873442e310217ba7...724ad818a04834b7b2cafd7805529b07b5e6bbfb
