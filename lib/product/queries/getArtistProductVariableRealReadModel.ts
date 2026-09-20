@@ -32,6 +32,9 @@ export type ProductVariableRealReadRuntime = Readonly<{
     canonicalArtistId: 'iu';
     throughSlotStart: string;
   }>) => Promise<NaverNewsIssuePointFrozenMethodologyResult>;
+  readLegacyProductVariable?: (
+    input: Readonly<{ artistId: string; variableId: string }>,
+  ) => ProductVariableReadModelResult;
 }>;
 
 function dataIssue(
@@ -193,7 +196,9 @@ export async function getArtistProductVariableRealReadModel(
 ): Promise<ProductVariableReadModelResult> {
   const artistId = input.artistId.trim();
   const variableIdentity = validateProductVariableId(input.variableId);
-  const legacyResult = getArtistProductVariable({
+  const legacyResult = (
+    runtime.readLegacyProductVariable ?? getArtistProductVariable
+  )({
     artistId,
     variableId: input.variableId,
   });
