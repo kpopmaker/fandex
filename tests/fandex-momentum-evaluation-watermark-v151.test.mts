@@ -458,20 +458,31 @@ test('committed current-real v151 watermark fixture validates exact boundary', a
     'utf8',
   );
   const records = parseFandexMomentumEvaluationWatermarkJsonl(jsonl);
-  assert.equal(records.length, 1);
+  assert.equal(records.length, 2);
   assert.equal(records[0].sequence, 1);
   assert.equal(records[0].gateState, 'source-advanced-cutoff-unchanged');
   assert.equal(
-    records[0].sourceV150Digest,
-    '72d556dc6925d2d2601d964bbbf73fcdccc6d68f84bc3f0df1ff1d0fc6e44ee8',
-  );
-  assert.equal(
-    records[0].semanticBoundaryDigest,
-    '6e05b7c34e512e2eaad107a4bb813d972b274fa00eaa0b3aff03a9f8169fe27d',
-  );
-  assert.equal(
     records[0].recordDigest,
     'e79b91b87c6467507b3c09bbec1a627546af340e6b271f7cce29646d877c9645',
+  );
+
+  assert.equal(records[1].sequence, 2);
+  assert.equal(records[1].gateState, 'source-advanced-cutoff-unchanged');
+  assert.equal(
+    records[1].sourceV150Digest,
+    'c345ec3a7ff480e0bb6befbe39edf5644afa79e0228ca9d3cd690e28069c051f',
+  );
+  assert.equal(
+    records[1].semanticBoundaryDigest,
+    '560f6cb7e75b33e977f3e1161ad26bd7c00133b3d352ea12ccb3d079e3e5b201',
+  );
+  assert.equal(
+    records[1].previousRecordDigest,
+    'e79b91b87c6467507b3c09bbec1a627546af340e6b271f7cce29646d877c9645',
+  );
+  assert.equal(
+    records[1].recordDigest,
+    '30ee1033013a45cd4aa71a1505c5b992943331853e564183cae33bd50cc4ece6',
   );
 
   const latest = latestFandexMomentumEvaluationBoundaryResearch(jsonl);
@@ -489,10 +500,10 @@ test('committed current-real v151 watermark fixture validates exact boundary', a
   );
   assert.equal(
     latest!.sourceEvidence.naverEvidenceId,
-    '21a47c4d99698dfa18dd802f05ca5210a6618139529a0f917598854398b8e0c5',
+    '39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c',
   );
   assert.equal(
     latest!.sourceEvidence.naverThroughSlotStart,
-    '2026-09-20T14:00:00.000Z',
+    '2026-09-20T15:00:00.000Z',
   );
 });
