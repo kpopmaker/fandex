@@ -10,6 +10,7 @@ import type { ProductObservationTime } from './productTime';
 import type {
   ProductDataOrigin,
   ProductPresentation,
+  ProductPublication,
 } from './productState';
 
 export type ProductVariableId = ArtistStockVariableKey;
@@ -31,7 +32,7 @@ export type ProductVariableSeriesPoint = Readonly<{
   fact: ProductNumericFact;
 }>;
 
-export type ProductVariableSourceMetadata = Readonly<{
+export type ProductVariableLegacySourceMetadata = Readonly<{
   sourceKind: 'legacy-derived-index-point';
   sourceArtistId: string;
   sourceVariableKey: ArtistStockVariableKey;
@@ -40,6 +41,57 @@ export type ProductVariableSourceMetadata = Readonly<{
   confidenceLevel: ArtistIndexConfidenceLevel | null;
   coverageStatus: ArtistIndexCoverageStatus | null;
 }>;
+
+export type ProductVariableRealSourceMetadata = Readonly<{
+  sourceKind: 'naver-news-issue-point-frozen-methodology';
+  sourceArtistId: string;
+  sourceVariableKey: 'newsIssuePoint';
+  sourceTimeLabel: string | null;
+  methodologyVersion: string;
+  officialShadowEpoch: string;
+  throughSlotStart: string;
+  selectedWindowSlotCount: 8;
+  normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE';
+  baselineReadinessStatus: string;
+  currentActivityRate: number | null;
+  priorDefinedWindowCount: number;
+  priorLessThanLatestCount: number;
+  priorEqualToLatestCount: number;
+  priorGreaterThanLatestCount: number;
+}>;
+
+export type ProductVariableSourceMetadata =
+  | ProductVariableLegacySourceMetadata
+  | ProductVariableRealSourceMetadata;
+
+export type ProductVariableStoredEvidenceSlotTrace = Readonly<{
+  slotStart: string;
+  jobId: string;
+}>;
+
+export type ProductVariableStoredEvidenceWindowTrace = Readonly<{
+  startSlotStart: string;
+  endSlotStart: string;
+  firstSeenObservationCount: number;
+  observedObservationCount: number;
+  activityRate: number | null;
+  slotEvidence: readonly ProductVariableStoredEvidenceSlotTrace[];
+}>;
+
+export type ProductVariableEvidenceTrace =
+  | Readonly<{
+      kind: 'legacy-issue-signal-key';
+      sourceKey: ArtistStockVariableKey;
+    }>
+  | Readonly<{
+      kind: 'naver-news-issue-point-stored-evidence';
+      methodologyVersion: string;
+      officialShadowEpoch: string;
+      throughSlotStart: string;
+      currentWindow: ProductVariableStoredEvidenceWindowTrace | null;
+      eligiblePriorWindows: readonly ProductVariableStoredEvidenceWindowTrace[];
+      storedEvidenceJobIds: readonly string[];
+    }>;
 
 export type ProductVariableReadModel = Readonly<{
   identity: Readonly<{
@@ -53,7 +105,9 @@ export type ProductVariableReadModel = Readonly<{
   observationTime: ProductObservationTime;
   presentation: ProductPresentation;
   dataOrigin: ProductDataOrigin;
+  publication: ProductPublication;
   sourceMetadata: ProductVariableSourceMetadata;
+  evidenceTrace: ProductVariableEvidenceTrace;
 }>;
 
 export type ProductVariableDataIssue =
@@ -68,6 +122,13 @@ export type ProductVariableDataIssue =
   | Readonly<{
       code: 'source-state-conflict';
       reason: 'artist-identity-mismatch';
+    }>
+  | Readonly<{
+      code: 'real-source-data-issue';
+      reason:
+        | 'runtime-read-failed'
+        | 'selector-data-issue'
+        | 'methodology-candidate-mismatch';
     }>;
 
 export type ProductVariableReadModelResult =

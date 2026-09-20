@@ -1,4 +1,8 @@
-import type { ProductDataOrigin, ProductPresentation } from './productState';
+import type {
+  ProductDataOrigin,
+  ProductPresentation,
+  ProductPublication,
+} from './productState';
 import type { ProductObservationTime } from './productTime';
 import type { ProductVariableId } from './productVariable';
 
@@ -66,4 +70,64 @@ export type ProductVariableEvidenceCollectionResult =
       artistId: string;
       rawVariableId: string;
       issues: readonly ProductEvidenceDataIssue[];
+    }>;
+
+
+export type ProductStoredEvidenceWindowMembership = Readonly<{
+  role: 'current' | 'eligible-prior';
+  startSlotStart: string;
+  endSlotStart: string;
+}>;
+
+export type ProductStoredEvidenceCanonicalObservation = Readonly<{
+  observationId: string;
+  canonicalSourceUrl: string;
+  observedAt: string;
+  collectedAt: string;
+  title: string;
+  summary: string;
+  sourceRecordIds: readonly string[];
+  rawEvidenceIds: readonly string[];
+}>;
+
+export type ProductStoredEvidenceJobReadModel = Readonly<{
+  identity: Readonly<{
+    artistId: string;
+    variableId: ProductVariableId;
+    jobId: string;
+  }>;
+  dataOrigin: ProductDataOrigin;
+  publication: ProductPublication;
+  presentation: ProductPresentation;
+  lineage: Readonly<{
+    methodologyVersion: string;
+    officialShadowEpoch: string;
+    throughSlotStart: string;
+    slotStart: string;
+    windowMemberships: readonly ProductStoredEvidenceWindowMembership[];
+  }>;
+  storedEvidence: Readonly<{
+    eligibleNormalizedRecordIds: readonly string[];
+    canonicalObservations: readonly ProductStoredEvidenceCanonicalObservation[];
+  }>;
+}>;
+
+export type ProductStoredEvidenceJobDataIssue = Readonly<{
+  code:
+    | 'variable-read-model-unavailable'
+    | 'real-stored-evidence-trace-required'
+    | 'job-not-in-variable-evidence-trace'
+    | 'stored-evidence-read-failed'
+    | 'stored-evidence-trace-inconsistent'
+    | 'stored-evidence-source-mismatch';
+}>;
+
+export type ProductStoredEvidenceJobReadModelResult =
+  | Readonly<{
+      status: 'ok';
+      model: ProductStoredEvidenceJobReadModel;
+    }>
+  | Readonly<{
+      status: 'data-issue';
+      issues: readonly ProductStoredEvidenceJobDataIssue[];
     }>;
