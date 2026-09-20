@@ -1,0 +1,56 @@
+name: TEMP newsIssuePoint Registry After PR186
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-registry-b862
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "b8627b8bd227026eab1bc8f13af35ce2c15f9bd7"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Focused registry and Product regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 8fe3f9895d11f4ad7099c070af361a03fcfeb81f...b8627b8bd227026eab1bc8f13af35ce2c15f9bd7
