@@ -219,14 +219,30 @@ test('IU newsIssuePoint Real read preserves observed shadow time and valid zero'
 });
 
 test('Real unavailable stays unavailable/null even when legacy synthetic value exists', async () => {
-  const legacy = getArtistProductVariable({
-    artistId: 'iu',
+  const syntheticAvailable = getArtistProductVariable({
+    artistId: 'aespa',
     variableId: 'newsIssuePoint',
   });
-  assert.equal(legacy.status, 'ok');
-  if (legacy.status !== 'ok') return;
-  assert.equal(legacy.model.dataOrigin, 'synthetic');
-  assert.equal(legacy.model.presentation, 'preview');
+  assert.equal(syntheticAvailable.status, 'ok');
+  if (syntheticAvailable.status !== 'ok') return;
+  assert.equal(syntheticAvailable.model.fact.availability, 'available');
+  assert.equal(syntheticAvailable.model.dataOrigin, 'synthetic');
+  assert.equal(syntheticAvailable.model.presentation, 'preview');
+
+  const legacyForTarget = Object.freeze({
+    status: 'ok' as const,
+    model: Object.freeze({
+      ...syntheticAvailable.model,
+      identity: Object.freeze({
+        ...syntheticAvailable.model.identity,
+        sourceArtistId: 'iu',
+      }),
+      sourceMetadata: Object.freeze({
+        ...syntheticAvailable.model.sourceMetadata,
+        sourceArtistId: 'iu',
+      }),
+    }),
+  });
 
   const result = await getArtistProductVariableRealReadModel(
     {
@@ -236,6 +252,7 @@ test('Real unavailable stays unavailable/null even when legacy synthetic value e
     },
     {
       readNewsIssuePointFrozenMethodology: async () => unavailableMethodology(),
+      readLegacyProductVariable: () => legacyForTarget,
     },
   );
 
