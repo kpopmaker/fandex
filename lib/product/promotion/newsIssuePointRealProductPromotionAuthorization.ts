@@ -189,3 +189,207 @@ export function authorizeNewsIssuePointRealPromotion(
     eligibility,
   });
 }
+
+
+export const NEWS_ISSUE_POINT_REAL_PROMOTION_REVOCATION_CONTRACT_VERSION =
+  'v1_news_issue_point_real_promotion_revocation' as const;
+
+export const NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION =
+  'v1_news_issue_point_real_promotion_control' as const;
+
+export type NewsIssuePointRealPromotionRevocationReason =
+  | 'operator-disable'
+  | 'evidence-lineage-failure'
+  | 'semantic-drift'
+  | 'data-corruption'
+  | 'emergency-stop';
+
+export type NewsIssuePointRealPromotionRevocation = Readonly<{
+  contractVersion:
+    typeof NEWS_ISSUE_POINT_REAL_PROMOTION_REVOCATION_CONTRACT_VERSION;
+  action: 'revoke-real-variable-promotion';
+  authority: 'product-operations-owner';
+  revocationId: string;
+  revokedAt: string;
+  authorizationId: string;
+  target: Readonly<{
+    artistId: 'iu';
+    variableId: 'newsIssuePoint';
+  }>;
+  reason: NewsIssuePointRealPromotionRevocationReason;
+}>;
+
+export type NewsIssuePointRealPromotionControlResult =
+  | Readonly<{
+      contractVersion:
+        typeof NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION;
+      status: 'authorized';
+      promotionAuthorized: true;
+      publicRouteActivated: false;
+      directProductionContributionEligible: false;
+      productScorePublished: false;
+      lifecycleState: 'shadow';
+      authorization: Extract<
+        NewsIssuePointRealPromotionAuthorizationResult,
+        { status: 'authorized' }
+      >;
+    }>
+  | Readonly<{
+      contractVersion:
+        typeof NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION;
+      status: 'not-authorized';
+      promotionAuthorized: false;
+      publicRouteActivated: false;
+      directProductionContributionEligible: false;
+      productScorePublished: false;
+      lifecycleState: 'shadow';
+      reason: 'authorization-not-established';
+    }>
+  | Readonly<{
+      contractVersion:
+        typeof NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION;
+      status: 'disabled';
+      promotionAuthorized: false;
+      publicRouteActivated: false;
+      directProductionContributionEligible: false;
+      productScorePublished: false;
+      lifecycleState: 'blocked';
+      reason: NewsIssuePointRealPromotionRevocationReason;
+      revocation: NewsIssuePointRealPromotionRevocation;
+    }>
+  | Readonly<{
+      contractVersion:
+        typeof NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION;
+      status: 'data-issue';
+      promotionAuthorized: false;
+      publicRouteActivated: false;
+      directProductionContributionEligible: false;
+      productScorePublished: false;
+      lifecycleState: 'blocked';
+      reason:
+        | 'revocation-contract-invalid'
+        | 'revocation-binding-mismatch';
+    }>;
+
+function promotionControlBlocked(
+  status: 'not-authorized',
+  reason: 'authorization-not-established',
+): NewsIssuePointRealPromotionControlResult;
+function promotionControlBlocked(
+  status: 'data-issue',
+  reason: 'revocation-contract-invalid' | 'revocation-binding-mismatch',
+): NewsIssuePointRealPromotionControlResult;
+function promotionControlBlocked(
+  status: 'not-authorized' | 'data-issue',
+  reason:
+    | 'authorization-not-established'
+    | 'revocation-contract-invalid'
+    | 'revocation-binding-mismatch',
+): NewsIssuePointRealPromotionControlResult {
+  return Object.freeze({
+    contractVersion:
+      NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION,
+    status,
+    promotionAuthorized: false as const,
+    publicRouteActivated: false as const,
+    directProductionContributionEligible: false as const,
+    productScorePublished: false as const,
+    lifecycleState: status === 'data-issue'
+      ? ('blocked' as const)
+      : ('shadow' as const),
+    reason,
+  }) as NewsIssuePointRealPromotionControlResult;
+}
+
+function revocationContractValid(
+  revocation: NewsIssuePointRealPromotionRevocation,
+): boolean {
+  return (
+    revocation.contractVersion
+      === NEWS_ISSUE_POINT_REAL_PROMOTION_REVOCATION_CONTRACT_VERSION
+    && revocation.action === 'revoke-real-variable-promotion'
+    && revocation.authority === 'product-operations-owner'
+    && /^[a-z0-9][a-z0-9._:-]{7,127}$/.test(revocation.revocationId)
+    && exactIso(revocation.revokedAt)
+    && /^[a-z0-9][a-z0-9._:-]{7,127}$/.test(revocation.authorizationId)
+    && revocation.target.artistId === 'iu'
+    && revocation.target.variableId === 'newsIssuePoint'
+    && [
+      'operator-disable',
+      'evidence-lineage-failure',
+      'semantic-drift',
+      'data-corruption',
+      'emergency-stop',
+    ].includes(revocation.reason)
+  );
+}
+
+function revocationMatchesAuthorization(
+  authorization: Extract<
+    NewsIssuePointRealPromotionAuthorizationResult,
+    { status: 'authorized' }
+  >,
+  revocation: NewsIssuePointRealPromotionRevocation,
+): boolean {
+  return (
+    revocation.authorizationId === authorization.approval.authorizationId
+    && revocation.target.artistId === authorization.approval.target.artistId
+    && revocation.target.variableId
+      === authorization.approval.target.variableId
+    && Date.parse(revocation.revokedAt)
+      >= Date.parse(authorization.approval.authorizedAt)
+  );
+}
+
+export function applyNewsIssuePointRealPromotionControl(
+  authorization: NewsIssuePointRealPromotionAuthorizationResult,
+  revocation: NewsIssuePointRealPromotionRevocation | null,
+): NewsIssuePointRealPromotionControlResult {
+  if (authorization.status !== 'authorized') {
+    return promotionControlBlocked(
+      'not-authorized',
+      'authorization-not-established',
+    );
+  }
+
+  if (revocation === null) {
+    return Object.freeze({
+      contractVersion:
+        NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION,
+      status: 'authorized' as const,
+      promotionAuthorized: true as const,
+      publicRouteActivated: false as const,
+      directProductionContributionEligible: false as const,
+      productScorePublished: false as const,
+      lifecycleState: 'shadow' as const,
+      authorization,
+    });
+  }
+
+  if (!revocationContractValid(revocation)) {
+    return promotionControlBlocked(
+      'data-issue',
+      'revocation-contract-invalid',
+    );
+  }
+
+  if (!revocationMatchesAuthorization(authorization, revocation)) {
+    return promotionControlBlocked(
+      'data-issue',
+      'revocation-binding-mismatch',
+    );
+  }
+
+  return Object.freeze({
+    contractVersion:
+      NEWS_ISSUE_POINT_REAL_PROMOTION_CONTROL_CONTRACT_VERSION,
+    status: 'disabled' as const,
+    promotionAuthorized: false as const,
+    publicRouteActivated: false as const,
+    directProductionContributionEligible: false as const,
+    productScorePublished: false as const,
+    lifecycleState: 'blocked' as const,
+    reason: revocation.reason,
+    revocation,
+  });
+}
