@@ -1,9 +1,9 @@
 name: v152 momentum dual-artifact validation
 
 on:
-  push:
+  pull_request:
     branches:
-      - v131-lastfm-real-signal-read-model
+      - main
     paths:
       - 'lib/intelligence/fandexMomentumDualArtifactCoordinatorResearch.ts'
       - 'tests/fandex-momentum-dual-artifact-coordinator-v152.test.mts'
