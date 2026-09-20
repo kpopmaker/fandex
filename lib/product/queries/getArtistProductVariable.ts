@@ -108,12 +108,17 @@ export function getArtistProductVariable(
       observationTime: Object.freeze({ kind: 'unknown' }),
       presentation: 'preview',
       dataOrigin: 'synthetic',
+      publication: 'production',
       sourceMetadata: makeSourceMetadata(
         artistId,
         definition,
         undefined,
         undefined,
       ),
+      evidenceTrace: Object.freeze({
+        kind: 'legacy-issue-signal-key' as const,
+        sourceKey: definition.sourceKey,
+      }),
     });
   }
 
@@ -186,11 +191,16 @@ export function getArtistProductVariable(
     observationTime: Object.freeze({ kind: 'unknown' }),
     presentation: 'preview',
     dataOrigin: 'synthetic',
+    publication: 'production',
     sourceMetadata: makeSourceMetadata(
       artistId,
       definition,
       profile,
       latestPoint,
     ),
+    evidenceTrace: Object.freeze({
+      kind: 'legacy-issue-signal-key' as const,
+      sourceKey: definition.sourceKey,
+    }),
   });
 }
