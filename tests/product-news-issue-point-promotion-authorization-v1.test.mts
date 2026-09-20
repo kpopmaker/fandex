@@ -16,20 +16,33 @@ import {
   buildNewsIssuePointRealProductReadModel,
 } from '../lib/product/readModels/newsIssuePointRealProductReadModel';
 
+const PROTOCOL_START = '2026-09-15T16:00:00.000Z';
 const CURRENT_START = '2026-09-19T02:00:00.000Z';
 const CURRENT_END = '2026-09-19T09:00:00.000Z';
 const SCORE = 41.975308641975;
 
-function candidate(): NaverNewsIssuePointProductCandidate {
+function candidate(
+  overrides: Readonly<{
+    score?: number;
+    currentStart?: string;
+    currentEnd?: string;
+    jobPrefix?: string;
+  }> = {},
+): NaverNewsIssuePointProductCandidate {
+  const currentStart = overrides.currentStart ?? CURRENT_START;
+  const currentEnd = overrides.currentEnd ?? CURRENT_END;
+  const score = overrides.score ?? SCORE;
+  const jobPrefix = overrides.jobPrefix ?? 'job';
+
   const slots = Array.from({ length: 8 }, (_, index) => Object.freeze({
     slotStart: new Date(
-      Date.parse(CURRENT_START) + index * 60 * 60 * 1_000,
+      Date.parse(currentStart) + index * 60 * 60 * 1_000,
     ).toISOString(),
-    jobId: `job-${index}`,
+    jobId: `${jobPrefix}-${index}`,
     observedObservationCount: 100,
     firstSeenObservationCount: index === 7 ? 2 : 0,
     firstSeenObservationIds: Object.freeze(
-      index === 7 ? ['obs-1', 'obs-2'] : [],
+      index === 7 ? [`${jobPrefix}-obs-1`, `${jobPrefix}-obs-2`] : [],
     ),
     bootstrap: false,
   }));
@@ -40,21 +53,21 @@ function candidate(): NaverNewsIssuePointProductCandidate {
     canonicalArtistId: 'iu',
     fact: Object.freeze({
       availability: 'available' as const,
-      value: SCORE,
+      value: score,
     }),
     dataOrigin: 'observed',
     publication: 'shadow',
     presentation: 'standard',
     observationTime: Object.freeze({
       kind: 'period' as const,
-      start: CURRENT_START,
-      end: CURRENT_END,
+      start: currentStart,
+      end: currentEnd,
     }),
     sourceMetadata: Object.freeze({
       sourceKind: 'naver-news-issue-point-frozen-methodology' as const,
       methodologyVersion: 'v1_naver_news_issue_point_real_methodology',
-      protocolStart: '2026-09-15T16:00:00.000Z',
-      throughSlotStart: CURRENT_END,
+      protocolStart: PROTOCOL_START,
+      throughSlotStart: currentEnd,
       selectedWindowSlotCount: 8 as const,
       normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
       baselineReadinessStatus: 'replicated_cycle_history' as const,
@@ -67,10 +80,10 @@ function candidate(): NaverNewsIssuePointProductCandidate {
       currentWindow: Object.freeze({
         methodologyVersion: 'v1_naver_news_issue_point_real_methodology',
         canonicalArtistId: 'iu',
-        protocolStart: '2026-09-15T16:00:00.000Z',
+        protocolStart: PROTOCOL_START,
         windowSlotCount: 8,
-        startSlotStart: CURRENT_START,
-        endSlotStart: CURRENT_END,
+        startSlotStart: currentStart,
+        endSlotStart: currentEnd,
         firstSeenObservationCount: 2,
         observedObservationCount: 800,
         activityRate: 0.0025,
@@ -88,7 +101,9 @@ function candidate(): NaverNewsIssuePointProductCandidate {
   });
 }
 
-function eligible(): Extract<
+function eligible(
+  value: NaverNewsIssuePointProductCandidate = candidate(),
+): Extract<
   NewsIssuePointRealPromotionEligibilityResult,
   { status: 'eligible' }
 > {
@@ -99,15 +114,13 @@ function eligible(): Extract<
     promotionAuthorized: false,
     claimScope: 'protocol-conditioned-first-seen-only',
     strictPublicationIntervalClaimAllowed: false,
-    candidate: candidate(),
+    candidate: value,
   });
 }
 
 function approval(
   overrides: Partial<NewsIssuePointRealPromotionApproval> = {},
 ): NewsIssuePointRealPromotionApproval {
-  const value = candidate();
-
   return Object.freeze({
     contractVersion: 'v1_news_issue_point_real_promotion_approval',
     action: 'authorize-real-variable-promotion',
@@ -123,11 +136,10 @@ function approval(
         'v1_naver_news_issue_point_product_candidate',
       methodologyVersion:
         'v1_naver_news_issue_point_real_methodology',
-      throughSlotStart: CURRENT_END,
-      score: SCORE,
-      storedEvidenceJobIds: Object.freeze([
-        ...value.evidenceTrace.storedEvidenceJobIds,
-      ]),
+      protocolStart: PROTOCOL_START,
+      selectedWindowSlotCount: 8 as const,
+      normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
+      claimScope: 'protocol-conditioned-first-seen-only' as const,
     }),
     ...overrides,
   });
@@ -146,10 +158,9 @@ test('promotion remains not-authorized when no explicit approval record exists',
   });
 });
 
-test('explicit approval authorizes only the exact evidence-bound promotion snapshot', () => {
-  const eligibility = eligible();
+test('explicit approval authorizes the frozen methodology and official epoch, not a single score snapshot', () => {
   const result = authorizeNewsIssuePointRealPromotion(
-    eligibility,
+    eligible(),
     approval(),
   );
 
@@ -164,54 +175,89 @@ test('explicit approval authorizes only the exact evidence-bound promotion snaps
     'protocol-conditioned-first-seen-only',
   );
   assert.equal(result.strictPublicationIntervalClaimAllowed, false);
+  assert.equal(result.approval.binding.protocolStart, PROTOCOL_START);
   assert.equal(
-    result.approval.binding.throughSlotStart,
-    eligibility.candidate.sourceMetadata.throughSlotStart,
-  );
-  assert.deepEqual(
-    result.approval.binding.storedEvidenceJobIds,
-    eligibility.candidate.evidenceTrace.storedEvidenceJobIds,
+    result.approval.binding.methodologyVersion,
+    'v1_naver_news_issue_point_real_methodology',
   );
 });
 
-test('approval cannot be reused for a different score, through-slot, or evidence trace', () => {
+test('same approval remains valid for newer eligible evidence snapshots under the same frozen epoch and methodology', () => {
+  const newer = candidate({
+    score: 62.5,
+    currentStart: '2026-09-20T02:00:00.000Z',
+    currentEnd: '2026-09-20T09:00:00.000Z',
+    jobPrefix: 'new-job',
+  });
+
+  const result = authorizeNewsIssuePointRealPromotion(
+    eligible(newer),
+    approval(),
+  );
+
+  assert.equal(result.status, 'authorized');
+  if (result.status !== 'authorized') return;
+  assert.equal(result.eligibility.candidate.fact.availability, 'available');
+  if (result.eligibility.candidate.fact.availability === 'available') {
+    assert.equal(result.eligibility.candidate.fact.value, 62.5);
+  }
+  assert.equal(
+    result.eligibility.candidate.sourceMetadata.throughSlotStart,
+    '2026-09-20T09:00:00.000Z',
+  );
+});
+
+test('approval cannot cross epoch, methodology, window, normalization, or claim-scope boundaries', () => {
   const base = approval();
 
-  const wrongScore = authorizeNewsIssuePointRealPromotion(
+  const wrongEpoch = authorizeNewsIssuePointRealPromotion(
     eligible(),
     approval({
       binding: Object.freeze({
         ...base.binding,
-        score: SCORE + 1,
+        protocolStart: '2026-09-16T16:00:00.000Z',
       }),
     }),
   );
-  assert.equal(wrongScore.status, 'data-issue');
+  assert.equal(wrongEpoch.status, 'data-issue');
 
-  const wrongSlot = authorizeNewsIssuePointRealPromotion(
+  const wrongWindow = authorizeNewsIssuePointRealPromotion(
     eligible(),
     approval({
       binding: Object.freeze({
         ...base.binding,
-        throughSlotStart: '2026-09-19T10:00:00.000Z',
+        selectedWindowSlotCount: 12 as unknown as 8,
       }),
     }),
   );
-  assert.equal(wrongSlot.status, 'data-issue');
+  assert.equal(wrongWindow.status, 'data-issue');
 
-  const wrongTrace = authorizeNewsIssuePointRealPromotion(
+  const wrongMethodology = authorizeNewsIssuePointRealPromotion(
     eligible(),
     approval({
       binding: Object.freeze({
         ...base.binding,
-        storedEvidenceJobIds: Object.freeze([
-          ...base.binding.storedEvidenceJobIds.slice(0, -1),
-          'different-job',
-        ]),
+        methodologyVersion:
+          'unexpected-methodology' as unknown as
+            'v1_naver_news_issue_point_real_methodology',
       }),
     }),
   );
-  assert.equal(wrongTrace.status, 'data-issue');
+  assert.equal(wrongMethodology.status, 'data-issue');
+});
+
+test('approval timestamp must not predate the official epoch it authorizes', () => {
+  const result = authorizeNewsIssuePointRealPromotion(
+    eligible(),
+    approval({
+      authorizedAt: '2026-09-15T15:59:59.000Z',
+    }),
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status === 'data-issue') {
+    assert.equal(result.reason, 'approval-contract-invalid');
+  }
 });
 
 test('blocked eligibility cannot be authorized even with a syntactically valid approval', () => {
@@ -234,8 +280,9 @@ test('blocked eligibility cannot be authorized even with a syntactically valid a
 });
 
 test('authorized promotion builds an Evidence-traceable inactive production-target read model', () => {
+  const currentCandidate = candidate();
   const auth = authorizeNewsIssuePointRealPromotion(
-    eligible(),
+    eligible(currentCandidate),
     approval(),
   );
   const result = buildNewsIssuePointRealProductReadModel(auth);
@@ -267,7 +314,7 @@ test('authorized promotion builds an Evidence-traceable inactive production-targ
   );
   assert.deepEqual(
     result.model.evidenceTrace.storedEvidenceJobIds,
-    candidate().evidenceTrace.storedEvidenceJobIds,
+    currentCandidate.evidenceTrace.storedEvidenceJobIds,
   );
   assert.equal(
     result.model.authorization.authorizationId,
