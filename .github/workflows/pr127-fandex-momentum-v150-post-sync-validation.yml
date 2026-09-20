@@ -1,0 +1,27 @@
+name: PR127 FANDEX momentum v150 post-main-sync validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate v150 after latest main merge
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-common-cutoff-advancement-v150.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-current-real-v150-fixture.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-append-from-artifact-v148.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-unified-history-v147.test.mts
+          npm run typecheck
+          git diff --check origin/main...HEAD
