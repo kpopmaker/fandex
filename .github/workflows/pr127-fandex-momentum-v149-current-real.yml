@@ -169,14 +169,23 @@ jobs:
           if (v143.alignmentCutoffAt !== '2026-09-20T01:59:13.000Z') {
             throw new Error('unexpected current common cutoff');
           }
-          if (v148.state !== 'blocked') {
-            throw new Error('expected current same-cutoff evidence revision to be blocked');
+          if (v140.digest !== '825e1ac113c179faafa759e849068199397dbc11e83cb3e9951f33a533dbe4d0') {
+            throw new Error('unexpected current v140 digest');
           }
-          if (v148.decision.changeKind !== 'same-cutoff-conflict') {
+          if (v141.digest !== 'a88a653fee7cba69944faba0e3a6e421ba086c4c69334cbe4ce0e30bffabae60') {
+            throw new Error('unexpected current v141 digest');
+          }
+          if (v143.digest !== '87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a') {
+            throw new Error('current categorical v143 digest changed');
+          }
+          if (v148.state !== 'no-op') {
+            throw new Error('expected current categorical exact replay');
+          }
+          if (v148.decision.changeKind !== 'exact-replay') {
             throw new Error('unexpected v148 current-real classification');
           }
           if (v148.artifactJsonl !== artifact || v148.effects.artifactAppends !== 0) {
-            throw new Error('blocked current-real transition mutated artifact');
+            throw new Error('exact replay mutated artifact');
           }
           TS
 
