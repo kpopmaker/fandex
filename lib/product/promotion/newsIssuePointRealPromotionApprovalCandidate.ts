@@ -44,23 +44,42 @@ export type NewsIssuePointRealPromotionApprovalCandidateResult =
       strictPublicationIntervalClaimAllowed: false;
     }>;
 
+function blocked(): NewsIssuePointRealPromotionApprovalCandidateResult {
+  return Object.freeze({
+    status: 'blocked' as const,
+    contractVersion:
+      NEWS_ISSUE_POINT_REAL_PROMOTION_APPROVAL_CANDIDATE_CONTRACT_VERSION,
+    reason: 'promotion-eligibility-not-met' as const,
+    promotionAuthorized: false as const,
+    publicRouteActivated: false as const,
+    strictPublicationIntervalClaimAllowed: false as const,
+  });
+}
+
 export function createNewsIssuePointRealPromotionApprovalCandidate(
   eligibility: NewsIssuePointRealPromotionEligibilityResult,
 ): NewsIssuePointRealPromotionApprovalCandidateResult {
   if (eligibility.status !== 'eligible') {
-    return Object.freeze({
-      status: 'blocked' as const,
-      contractVersion:
-        NEWS_ISSUE_POINT_REAL_PROMOTION_APPROVAL_CANDIDATE_CONTRACT_VERSION,
-      reason: 'promotion-eligibility-not-met' as const,
-      promotionAuthorized: false as const,
-      publicRouteActivated: false as const,
-      strictPublicationIntervalClaimAllowed: false as const,
-    });
+    return blocked();
   }
 
   const candidate = eligibility.candidate;
   const metadata = candidate.sourceMetadata;
+
+  if (
+    candidate.contractVersion
+      !== 'v1_naver_news_issue_point_product_candidate'
+    || metadata.methodologyVersion
+      !== 'v1_naver_news_issue_point_real_methodology'
+    || metadata.selectedWindowSlotCount !== 8
+    || metadata.normalizationType
+      !== 'HISTORICAL_STRICT_EXCEEDANCE_SHARE'
+    || eligibility.claimScope
+      !== 'protocol-conditioned-first-seen-only'
+    || eligibility.strictPublicationIntervalClaimAllowed !== false
+  ) {
+    return blocked();
+  }
 
   return Object.freeze({
     status: 'ready-for-owner-attestation' as const,
@@ -75,12 +94,16 @@ export function createNewsIssuePointRealPromotionApprovalCandidate(
     authorizationId: null,
     authorizedAt: null,
     binding: Object.freeze({
-      candidateContractVersion: candidate.contractVersion,
-      methodologyVersion: metadata.methodologyVersion,
+      candidateContractVersion:
+        'v1_naver_news_issue_point_product_candidate' as const,
+      methodologyVersion:
+        'v1_naver_news_issue_point_real_methodology' as const,
       protocolStart: metadata.protocolStart,
-      selectedWindowSlotCount: metadata.selectedWindowSlotCount,
-      normalizationType: metadata.normalizationType,
-      claimScope: eligibility.claimScope,
+      selectedWindowSlotCount: 8 as const,
+      normalizationType:
+        'HISTORICAL_STRICT_EXCEEDANCE_SHARE' as const,
+      claimScope:
+        'protocol-conditioned-first-seen-only' as const,
     }),
     promotionAuthorized: false as const,
     publicRouteActivated: false as const,
