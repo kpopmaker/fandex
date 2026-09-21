@@ -50,6 +50,7 @@ export type FandexMomentumVerifierProvisioningPlanInput = Readonly<{
     }>;
     dedicatedSecret: Readonly<{
       key: 'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET';
+      schedulerCredentialKey: 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET';
       target: 'production';
       generateValueInPlan: false;
       exposeValueInPlan: false;
@@ -76,12 +77,14 @@ export type FandexMomentumVerifierProvisioningPlanInput = Readonly<{
     'provision-dedicated-verifier-secret-production-only',
     'prove-verifier-secret-separation-without-value-exposure',
     'confirm-existing-production-runtime-db-scope-without-preview-copy',
+    'obtain-separate-production-deployment-authorization',
     'redeploy-intended-commit-to-production',
     'rerun-v164-configuration-evidence',
     'rerun-v163-activation-readiness',
     'obtain-separate-activation-authorization',
     'execute-first-bounded-v162-native-read',
     'require-v161-v160-v159-chain-acceptance',
+    'obtain-separate-ledger-advance-authorization',
     'only-then-allow-v158-v155-v156-v157-and-ledger-advance'
   ];
   postConfigurationVerification: Readonly<{
@@ -122,7 +125,17 @@ export type FandexMomentumVerifierProvisioningPlanInput = Readonly<{
       granted: false;
       recordId: null;
     }>;
+    productionDeployment: Readonly<{
+      slotDefined: true;
+      granted: false;
+      recordId: null;
+    }>;
     activation: Readonly<{
+      slotDefined: true;
+      granted: false;
+      recordId: null;
+    }>;
+    ledgerAdvance: Readonly<{
       slotDefined: true;
       granted: false;
       recordId: null;
@@ -202,6 +215,7 @@ export function evaluateFandexMomentumVerifierProvisioningPlan(
   const secret = plan.configurationPlan.dedicatedSecret;
   if (
     secret.key !== 'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET'
+    || secret.schedulerCredentialKey !== 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET'
     || secret.target !== 'production'
     || secret.generateValueInPlan !== false
     || secret.exposeValueInPlan !== false
@@ -234,12 +248,14 @@ export function evaluateFandexMomentumVerifierProvisioningPlan(
     'provision-dedicated-verifier-secret-production-only',
     'prove-verifier-secret-separation-without-value-exposure',
     'confirm-existing-production-runtime-db-scope-without-preview-copy',
+    'obtain-separate-production-deployment-authorization',
     'redeploy-intended-commit-to-production',
     'rerun-v164-configuration-evidence',
     'rerun-v163-activation-readiness',
     'obtain-separate-activation-authorization',
     'execute-first-bounded-v162-native-read',
     'require-v161-v160-v159-chain-acceptance',
+    'obtain-separate-ledger-advance-authorization',
     'only-then-allow-v158-v155-v156-v157-and-ledger-advance',
   ];
   if (JSON.stringify(plan.orderedSteps) !== JSON.stringify(requiredSteps)) {
@@ -294,9 +310,15 @@ export function evaluateFandexMomentumVerifierProvisioningPlan(
     !plan.authorizationRecords.provisioning.slotDefined
     || plan.authorizationRecords.provisioning.granted !== false
     || plan.authorizationRecords.provisioning.recordId !== null
+    || !plan.authorizationRecords.productionDeployment.slotDefined
+    || plan.authorizationRecords.productionDeployment.granted !== false
+    || plan.authorizationRecords.productionDeployment.recordId !== null
     || !plan.authorizationRecords.activation.slotDefined
     || plan.authorizationRecords.activation.granted !== false
     || plan.authorizationRecords.activation.recordId !== null
+    || !plan.authorizationRecords.ledgerAdvance.slotDefined
+    || plan.authorizationRecords.ledgerAdvance.granted !== false
+    || plan.authorizationRecords.ledgerAdvance.recordId !== null
   ) {
     blockers.push('authorization-record-slots-invalid');
   }
