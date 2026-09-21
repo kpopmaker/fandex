@@ -1,0 +1,78 @@
+{
+  "contractVersion": "v158_fandex_momentum_current_provenance_gate_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-21T00:24:00.000Z",
+  "sourceSnapshot": {
+    "naverEvidenceId": "dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t000000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "naverStatus": "succeeded",
+    "naverRawEvidenceCount": 100,
+    "naverNormalizedRecordCount": 100,
+    "naverDuplicateRecordCount": 0,
+    "naverRejectedItemCount": 0
+  },
+  "productionRuntimeObservation": {
+    "observedAt": "2026-09-21T00:02:01.000Z",
+    "requestPath": "/api/internal/naver-news/shadow-scheduler",
+    "httpStatus": 200,
+    "deploymentId": "dpl_6fmT3qKqeytud3kFCNVoArBGGK1K",
+    "branch": "main",
+    "observationSource": "vercel-production-runtime-log"
+  },
+  "liveStoredEvidenceAccess": {
+    "currentSourceStoredEvidenceReproducedThisEvaluation": false,
+    "connectedNeonProjectVisible": false,
+    "priorStoredReadAuditTransferableToCurrentSource": false,
+    "priorReproducedThroughSlotStart": "2026-09-20T15:00:00.000Z",
+    "currentThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "blocker": "stored-evidence-live-reproduction-unavailable"
+  },
+  "provenance": {
+    "contractVersion": "v153_fandex_momentum_source_provenance_research_v1",
+    "state": "lineage-runtime-verified-stored-evidence-not-reproduced",
+    "storedEvidenceReproducedThisEvaluation": false,
+    "futureLiveRefreshEligible": false,
+    "blockers": [
+      "stored-evidence-live-reproduction-unavailable"
+    ],
+    "digest": "42a089fa8ba9bf61cdcc00b6f1aa376577c3fd15ca8609285fad21d76602810f"
+  },
+  "v158": {
+    "contractVersion": "v158_fandex_momentum_provenance_gated_current_live_refresh_research_v1",
+    "state": "provenance-blocked",
+    "sourceEvidenceMatched": true,
+    "preflightInvoked": false,
+    "readyForPhysicalPersistence": false,
+    "blockers": [
+      "live-stored-evidence-provenance-required"
+    ],
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "historyWrites": 0,
+      "watermarkWrites": 0,
+      "manifestWrites": 0
+    },
+    "digest": "bf75c7bb52ea02132a0c5f5f9e8a76b85106c1a0dab1d350da33caf552065637"
+  },
+  "validation": {
+    "githubActionsRunId": 35548194479,
+    "status": "PASS",
+    "v158RegressionPassed": true,
+    "v153RegressionPassed": true,
+    "v157RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true,
+    "priorRun35547522307AcceptedAsCurrentLiveEvidence": false,
+    "priorRunReason": "storedEvidenceReproducedThisEvaluation_was_caller_asserted_without_current_stored_read"
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
