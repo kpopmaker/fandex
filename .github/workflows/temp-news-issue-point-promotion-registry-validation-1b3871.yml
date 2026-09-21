@@ -1,0 +1,67 @@
+name: TEMP newsIssuePoint Promotion Registry Integration Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-promotion-registry-1b3871
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact registry-integration head
+        uses: actions/checkout@v4
+        with:
+          ref: 1b38711df9d809d4329ea91915d5b502e500f908
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Registry regression
+        run: npx tsx --conditions=react-server --test tests/intelligence-variable-confidence-v1.test.mts
+
+      - name: Activation readiness
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval flow
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization/control
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read and Evidence
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Promotion gate / selector / candidate
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts tests/product-news-issue-point-real-selector-v1.test.mts tests/product-news-issue-point-real-candidate-v1.test.mts
+
+      - name: Product boundaries
+        run: npx tsx --conditions=react-server --test tests/product-variable-boundary-v1.test.mts tests/product-evidence-boundary-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "1b38711df9d809d4329ea91915d5b502e500f908"
+          test -z "$(git status --short --untracked-files=all)"
+          test "$(git rev-parse HEAD^{tree})" = "378e877e7ec46d5c20fe2b14e0ea43cf6eb6321d"
+          git diff --check 66c5b1332ba2f452b34211fcf681e591191dc304..HEAD
+          git diff --stat 66c5b1332ba2f452b34211fcf681e591191dc304..HEAD
+          git diff --name-only 66c5b1332ba2f452b34211fcf681e591191dc304..HEAD
