@@ -1,0 +1,79 @@
+{
+  "contractVersion": "v162_fandex_momentum_native_verifier_execution_channel_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-21T15:05:00.000Z",
+  "implementation": {
+    "channelContractVersion": "v162_naver_news_momentum_native_verifier_execution_channel_v1",
+    "requestContractVersion": "v162_naver_news_momentum_native_verifier_execution_request_v1",
+    "routePath": "/api/internal/naver-news/momentum-verifier",
+    "productionRuntimeOnly": true,
+    "previewExecutionAllowed": false,
+    "dedicatedAuthorizationRequired": true,
+    "schedulerAuthorizationReused": false,
+    "rawPayloadResponseAllowed": false,
+    "databaseWriteAllowed": false,
+    "registryMutationAllowed": false,
+    "productionActivationAllowed": false
+  },
+  "requiredEnvironment": {
+    "enabledEnv": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+    "enabledValue": "approved-v162-research-read-only",
+    "deploymentEnv": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+    "deploymentValue": "production",
+    "secretEnv": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+    "runtimeDatabaseEnv": "FANDEX_RUNTIME_DATABASE_URL",
+    "environmentMutationPerformed": false
+  },
+  "validation": {
+    "githubActionsRunId": 35616237060,
+    "status": "PASS",
+    "v162TestsPassed": true,
+    "v161RegressionPassed": true,
+    "v160RegressionPassed": true,
+    "v159RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "currentExecutionAvailability": {
+    "connectedNeonProjectCount": 0,
+    "productionMainVerifierRoutePresent": false,
+    "productionMainRoutes": [
+      "scheduler",
+      "shadow-scheduler"
+    ],
+    "verifierChannelProductionDeployed": false,
+    "verifierChannelEnvironmentAuthorized": false,
+    "fresh1200ZNativeReadCompleted": false,
+    "blocker": "sanctioned-production-read-only-execution-channel-not-active"
+  },
+  "sourceBoundaryWaitingForNativeRead": {
+    "naverThroughSlotStart": "2026-09-21T12:00:00.000Z",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t120000z-f1ed381d367d",
+    "deterministicNaverEvidenceId": "d76d5ee3ed512280f3b0055818c38f0c857d8a9e7c9d8621e826ca48b919fb58"
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productionActivations": 0,
+    "researchArtifactLedgerWritesForFresh1200Z": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
