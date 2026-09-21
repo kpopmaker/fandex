@@ -361,3 +361,115 @@ test('committed v164 audit reproduces the exact current blocked packet', async (
   assert.equal(audit.productBoundary.productionEligible, false);
   assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
+
+
+test('committed v164 complete packet audit reproduces blocked configuration evidence and preserves ledger boundary', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_configuration_evidence_v164_20260921T151800Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  const result = evaluateFandexMomentumVerifierConfigurationEvidence({
+    ...readyEvidence,
+    productionEnvironmentInventoryQueryable: false,
+    enableFlag: {
+      ...readyEvidence.enableFlag,
+      present: false,
+      productionTargeted: false,
+      exactContractValueProven: false,
+    },
+    deploymentSelector: {
+      ...readyEvidence.deploymentSelector,
+      present: false,
+      productionTargeted: false,
+      exactContractValueProven: false,
+    },
+    dedicatedSecret: {
+      ...readyEvidence.dedicatedSecret,
+      present: false,
+      productionTargeted: false,
+      secretContractSatisfiedWithoutExposure: false,
+      distinctFromSchedulerCredentialProven: false,
+    },
+    evidenceBoundToProjectAndEnvironment: false,
+  });
+
+  assert.equal(
+    audit.contractVersion,
+    'v164_fandex_momentum_verifier_configuration_evidence_packet_audit_v2',
+  );
+  assert.equal(audit.configurationInventory.sensitiveValuesRecorded, false);
+  assert.equal(audit.runtimeDatabaseScope.credentialValueRecorded, false);
+  assert.equal(
+    audit.rollbackAndAuthorization.activationAuthorizationGranted,
+    false,
+  );
+
+  assert.equal(result.state, audit.result.state);
+  assert.equal(
+    result.readyToReevaluateV163,
+    audit.result.readyToReevaluateV163,
+  );
+  assert.equal(result.activationAuthorized, false);
+  assert.deepEqual(result.blockers, audit.result.blockers);
+  assert.equal(result.digest, audit.result.digest);
+  assert.deepEqual(result.effects, audit.effects);
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.authoritativeLedgerBoundary.fresh1200ZAdvanced, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
