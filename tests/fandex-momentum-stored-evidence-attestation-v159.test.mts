@@ -805,8 +805,8 @@ test('committed attested 00Z live refresh audit matches current persisted transa
   ]);
 
   const audit = JSON.parse(auditRaw);
-  const watermarks = watermarkJsonl.split(/\r?\n/).filter(Boolean).map(JSON.parse);
-  const manifests = manifestJsonl.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+  const watermarks = watermarkJsonl.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
+  const manifests = manifestJsonl.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 
   assert.equal(
     audit.contractVersion,
