@@ -1,0 +1,81 @@
+{
+  "contractVersion": "v153_fandex_momentum_live_stored_evidence_reproduction_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "reproducedAt": "2026-09-21T00:14:47.389Z",
+  "sourceSnapshot": {
+    "naverEvidenceId": "39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c",
+    "naverCollectionKey": "sched-v125-naver-news-20260920t150000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-20T15:00:00.000Z",
+    "naverStatus": "succeeded",
+    "naverRawEvidenceCount": 100,
+    "naverNormalizedRecordCount": 100,
+    "naverDuplicateRecordCount": 0,
+    "naverRejectedItemCount": 0
+  },
+  "liveStoredEvidenceRead": {
+    "accessMode": "neon-read-only",
+    "jobRowReproduced": true,
+    "evidenceRows": 100,
+    "distinctEvidenceIds": 100,
+    "distinctItemIndexes": 100,
+    "minItemIndex": 0,
+    "maxItemIndex": 99,
+    "normalizedOutcomes": 100,
+    "missingNormalizedIds": 0,
+    "missingNormalizedRecords": 0,
+    "distinctNormalizedRecords": 100,
+    "firstObservedAt": "2026-09-20T15:02:05.582Z",
+    "lastObservedAt": "2026-09-20T15:02:05.582Z",
+    "firstCollectedAt": "2026-09-14T14:45:24.860Z",
+    "lastCollectedAt": "2026-09-20T08:02:05.052Z",
+    "rawLinkageSetAuditMd5": "dfb8679e245e71289f3154bb3b7a0fef",
+    "normalizedSetAuditMd5": "5664ba6acb0aef22fb8d2e4b031a6371",
+    "joinedPayloadRows": 100,
+    "rawPayloadTextBytes": 60330,
+    "normalizedPayloadTextBytes": 66500,
+    "rawPayloadMaterializedAuditMd5": "34befcc416060754237ac9247a533071",
+    "normalizedPayloadMaterializedAuditMd5": "4fb1ca29c36cd6e4f8769ac6dae13c13",
+    "auditFingerprintPurpose": "read-integrity-only-not-methodology"
+  },
+  "productionRuntimeObservation": {
+    "observedAt": "2026-09-20T15:37:00.000Z",
+    "requestPath": "/api/internal/naver-news/shadow-scheduler",
+    "httpStatus": 200,
+    "deploymentId": "dpl_6fmT3qKqeytud3kFCNVoArBGGK1K",
+    "branch": "main"
+  },
+  "result": {
+    "contractVersion": "v153_fandex_momentum_source_provenance_research_v1",
+    "state": "stored-evidence-read-reproduced",
+    "deterministicLineageVerified": true,
+    "productionRuntimeInvocationObserved": true,
+    "runtimeObservationMapsToEvidenceSlot": true,
+    "snapshotEvidenceInternallyConsistent": true,
+    "storedEvidenceReproducedThisEvaluation": true,
+    "provenanceStrength": "stored-evidence-read-reproduced",
+    "currentRealClaimScope": "live-stored-evidence-reproduced",
+    "futureLiveRefreshEligible": true,
+    "blockers": [],
+    "digest": "e10672b23dca687d0bb746a7be35474a5391195026bcee5c713f8e0d187a6db4",
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0
+    }
+  },
+  "validation": {
+    "githubActionsRunId": 35547057297,
+    "status": "PASS",
+    "v153RegressionPassed": true,
+    "v156RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
