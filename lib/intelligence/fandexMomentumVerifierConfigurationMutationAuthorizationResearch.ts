@@ -12,8 +12,10 @@ export const FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCR
       'v165_fandex_momentum_verifier_provisioning_authorization_plan_research_v1' as const,
     authorizationRecordOnly: true as const,
     genericContinuationCountsAsAuthorization: false as const,
+    autoApprovalAllowed: false as const,
     environmentMutationPerformed: false as const,
     secretMutationPerformed: false as const,
+    secretValueExposureAllowed: false as const,
     productionDeploymentPerformed: false as const,
     verifierActivationPerformed: false as const,
     nativeVerifierExecutionPerformed: false as const,
@@ -21,24 +23,43 @@ export const FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCR
     productMutationPerformed: false as const,
     productionDeploymentAuthorizationSeparate: true as const,
     verifierActivationAuthorizationSeparate: true as const,
+    nativeVerifierExecutionAuthorizationSeparate: true as const,
     ledgerAdvanceAuthorizationSeparate: true as const,
   });
 
 export const FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_STATEMENT =
   'AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION' as const;
 
+export type FandexMomentumVerifierConfigurationMutationAuthorizationDecision =
+  | Readonly<{
+      state: 'approved';
+      decidedAt: string;
+      decidedBy: string;
+      validFrom: string;
+      expiresAt: string;
+      revokedAt: null | string;
+      reason: string | null;
+    }>
+  | Readonly<{
+      state: 'rejected';
+      decidedAt: string;
+      decidedBy: string;
+      validFrom: null;
+      expiresAt: null;
+      revokedAt: null;
+      reason: string;
+    }>;
+
 export type FandexMomentumVerifierConfigurationMutationAuthorizationRecord =
   Readonly<{
     contractVersion:
       'v166_fandex_momentum_verifier_configuration_mutation_authorization_record_v1';
     authorizationId: string;
+    upstreamV165PlanDigest: string;
     authorizationStatement:
       typeof FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_STATEMENT;
-    authority: 'explicit-user-authorization';
-    authorizedAt: string;
-    validFrom: string;
-    expiresAt: string;
-    revokedAt: null | string;
+    authority: 'explicit-user-decision';
+    decision: FandexMomentumVerifierConfigurationMutationAuthorizationDecision;
     target: Readonly<{
       teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs';
       projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v';
@@ -64,7 +85,13 @@ export type FandexMomentumVerifierConfigurationMutationAuthorizationRecord =
         target: 'production';
         dedicatedSecretOnly: true;
         secretValueMayBeRecordedHere: false;
+        schedulerCredentialKey: 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET';
+        minimumUtf8Bytes: 24;
+        maximumUtf8Bytes: 512;
+        whitespaceOrControlCharactersForbidden: true;
         mustDifferFromSchedulerCredential: true;
+        separationProofMethod:
+          'trusted-environment-non-equality-attestation-without-secret-output';
       }>,
     ];
     forbiddenMutationScope: Readonly<{
@@ -85,6 +112,7 @@ export type FandexMomentumVerifierConfigurationMutationAuthorizationRecord =
     downstreamAuthorizations: Readonly<{
       productionDeployment: 'not-authorized-by-this-record';
       verifierActivation: 'not-authorized-by-this-record';
+      nativeVerifierExecution: 'not-authorized-by-this-record';
       ledgerAdvance: 'not-authorized-by-this-record';
     }>;
   }>;
@@ -108,10 +136,13 @@ export type FandexMomentumVerifierConfigurationMutationAuthorizationResult =
     state:
       | 'authorization-pending'
       | 'authorization-record-rejected'
+      | 'authorization-record-invalid'
+      | 'authorization-expired'
       | 'configuration-mutation-authorized';
     configurationMutationAuthorized: boolean;
     productionDeploymentAuthorized: false;
     verifierActivationAuthorized: false;
+    nativeVerifierExecutionAuthorized: false;
     ledgerAdvanceAuthorized: false;
     blockers: readonly string[];
     evaluatedAt: string;
@@ -139,6 +170,10 @@ export type FandexMomentumVerifierConfigurationMutationAuthorizationResult =
 function exactIso(value: string): boolean {
   const timestamp = Date.parse(value);
   return Number.isFinite(timestamp) && new Date(timestamp).toISOString() === value;
+}
+
+function nonEmptyIdentity(value: string): boolean {
+  return value.trim().length > 0 && value.length <= 256;
 }
 
 function validTarget(
@@ -171,8 +206,33 @@ function validConfiguration(
     && rows[2]?.target === 'production'
     && rows[2]?.dedicatedSecretOnly === true
     && rows[2]?.secretValueMayBeRecordedHere === false
+    && rows[2]?.schedulerCredentialKey === 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET'
+    && rows[2]?.minimumUtf8Bytes === 24
+    && rows[2]?.maximumUtf8Bytes === 512
+    && rows[2]?.whitespaceOrControlCharactersForbidden === true
     && rows[2]?.mustDifferFromSchedulerCredential === true
+    && rows[2]?.separationProofMethod
+      === 'trusted-environment-non-equality-attestation-without-secret-output'
   );
+}
+
+function effects() {
+  return Object.freeze({
+    environmentReads: 0 as const,
+    environmentMutations: 0 as const,
+    secretReads: 0 as const,
+    secretWrites: 0 as const,
+    secretRotations: 0 as const,
+    productionDeployments: 0 as const,
+    verifierActivations: 0 as const,
+    nativeVerifierExecutions: 0 as const,
+    databaseWrites: 0 as const,
+    productMetricWrites: 0 as const,
+    registryMutations: 0 as const,
+    historyWrites: 0 as const,
+    watermarkWrites: 0 as const,
+    manifestWrites: 0 as const,
+  });
 }
 
 export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization(
@@ -203,6 +263,7 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
       configurationMutationAuthorized: false,
       productionDeploymentAuthorized: false as const,
       verifierActivationAuthorized: false as const,
+      nativeVerifierExecutionAuthorized: false as const,
       ledgerAdvanceAuthorized: false as const,
       blockers: Object.freeze([...new Set(blockers)]),
       evaluatedAt: input.evaluatedAt,
@@ -212,22 +273,7 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
 
     return Object.freeze({
       ...pendingPayload,
-      effects: Object.freeze({
-        environmentReads: 0 as const,
-        environmentMutations: 0 as const,
-        secretReads: 0 as const,
-        secretWrites: 0 as const,
-        secretRotations: 0 as const,
-        productionDeployments: 0 as const,
-        verifierActivations: 0 as const,
-        nativeVerifierExecutions: 0 as const,
-        databaseWrites: 0 as const,
-        productMetricWrites: 0 as const,
-        registryMutations: 0 as const,
-        historyWrites: 0 as const,
-        watermarkWrites: 0 as const,
-        manifestWrites: 0 as const,
-      }),
+      effects: effects(),
       digest: sha256Canonical(pendingPayload),
     });
   }
@@ -243,40 +289,19 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
     blockers.push('authorization-record-id-invalid');
   }
   if (
+    !/^[0-9a-f]{64}$/.test(record.upstreamV165PlanDigest)
+    || record.upstreamV165PlanDigest !== input.upstreamV165Digest
+  ) {
+    blockers.push('authorization-v165-plan-digest-mismatch');
+  }
+  if (
     record.authorizationStatement
       !== FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_STATEMENT
   ) {
     blockers.push('authorization-statement-not-explicit');
   }
-  if (record.authority !== 'explicit-user-authorization') {
+  if (record.authority !== 'explicit-user-decision') {
     blockers.push('authorization-authority-invalid');
-  }
-  if (
-    !exactIso(record.authorizedAt)
-    || !exactIso(record.validFrom)
-    || !exactIso(record.expiresAt)
-  ) {
-    blockers.push('authorization-time-boundary-invalid');
-  } else {
-    const evaluated = Date.parse(input.evaluatedAt);
-    const validFrom = Date.parse(record.validFrom);
-    const expiresAt = Date.parse(record.expiresAt);
-    const authorizedAt = Date.parse(record.authorizedAt);
-    if (
-      authorizedAt > validFrom
-      || validFrom >= expiresAt
-      || evaluated < validFrom
-      || evaluated >= expiresAt
-    ) {
-      blockers.push('authorization-record-outside-validity-window');
-    }
-  }
-  if (record.revokedAt !== null) {
-    if (!exactIso(record.revokedAt)) {
-      blockers.push('authorization-revocation-time-invalid');
-    } else if (Date.parse(record.revokedAt) <= Date.parse(input.evaluatedAt)) {
-      blockers.push('authorization-record-revoked');
-    }
   }
   if (!validTarget(record.target)) {
     blockers.push('authorization-target-mismatch');
@@ -308,20 +333,79 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
       !== 'not-authorized-by-this-record'
     || record.downstreamAuthorizations.verifierActivation
       !== 'not-authorized-by-this-record'
+    || record.downstreamAuthorizations.nativeVerifierExecution
+      !== 'not-authorized-by-this-record'
     || record.downstreamAuthorizations.ledgerAdvance
       !== 'not-authorized-by-this-record'
   ) {
     blockers.push('authorization-downstream-boundary-invalid');
   }
-  if (input.requestIntent !== 'explicit-configuration-mutation-authorization') {
-    blockers.push('request-intent-not-explicit-configuration-authorization');
+
+  const decision = record.decision;
+  let terminalState:
+    | 'authorization-record-rejected'
+    | 'authorization-record-invalid'
+    | 'authorization-expired'
+    | 'configuration-mutation-authorized'
+    | null = null;
+
+  if (!exactIso(decision.decidedAt) || !nonEmptyIdentity(decision.decidedBy)) {
+    blockers.push('authorization-decision-metadata-invalid');
+  }
+
+  if (decision.state === 'rejected') {
+    if (
+      decision.validFrom !== null
+      || decision.expiresAt !== null
+      || decision.revokedAt !== null
+      || decision.reason.trim().length === 0
+    ) {
+      blockers.push('authorization-rejection-record-invalid');
+    } else if (blockers.length === 0) {
+      terminalState = 'authorization-record-rejected';
+    }
+  } else {
+    if (
+      !exactIso(decision.validFrom)
+      || !exactIso(decision.expiresAt)
+      || Date.parse(decision.decidedAt) > Date.parse(decision.validFrom)
+      || Date.parse(decision.validFrom) >= Date.parse(decision.expiresAt)
+    ) {
+      blockers.push('authorization-approval-time-boundary-invalid');
+    }
+
+    if (decision.revokedAt !== null) {
+      if (!exactIso(decision.revokedAt)) {
+        blockers.push('authorization-revocation-time-invalid');
+      } else if (Date.parse(decision.revokedAt) <= Date.parse(input.evaluatedAt)) {
+        blockers.push('authorization-record-revoked');
+      }
+    }
+
+    if (blockers.length === 0) {
+      const evaluated = Date.parse(input.evaluatedAt);
+      const validFrom = Date.parse(decision.validFrom);
+      const expiresAt = Date.parse(decision.expiresAt);
+      if (evaluated < validFrom) {
+        blockers.push('authorization-record-not-yet-valid');
+      } else if (evaluated >= expiresAt) {
+        terminalState = 'authorization-expired';
+      } else if (
+        input.requestIntent !== 'explicit-configuration-mutation-authorization'
+      ) {
+        blockers.push('request-intent-not-explicit-configuration-authorization');
+      } else {
+        terminalState = 'configuration-mutation-authorized';
+      }
+    }
   }
 
   const uniqueBlockers = Object.freeze([...new Set(blockers)]);
-  const configurationMutationAuthorized = uniqueBlockers.length === 0;
-  const state = configurationMutationAuthorized
-    ? 'configuration-mutation-authorized' as const
-    : 'authorization-record-rejected' as const;
+  const state = uniqueBlockers.length > 0
+    ? 'authorization-record-invalid' as const
+    : terminalState ?? 'authorization-record-invalid';
+  const configurationMutationAuthorized =
+    state === 'configuration-mutation-authorized';
   const recordDigest = sha256Canonical(record);
   const payload = {
     contractVersion:
@@ -330,6 +414,7 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
     configurationMutationAuthorized,
     productionDeploymentAuthorized: false as const,
     verifierActivationAuthorized: false as const,
+    nativeVerifierExecutionAuthorized: false as const,
     ledgerAdvanceAuthorized: false as const,
     blockers: uniqueBlockers,
     evaluatedAt: input.evaluatedAt,
@@ -339,22 +424,7 @@ export function evaluateFandexMomentumVerifierConfigurationMutationAuthorization
 
   return Object.freeze({
     ...payload,
-    effects: Object.freeze({
-      environmentReads: 0 as const,
-      environmentMutations: 0 as const,
-      secretReads: 0 as const,
-      secretWrites: 0 as const,
-      secretRotations: 0 as const,
-      productionDeployments: 0 as const,
-      verifierActivations: 0 as const,
-      nativeVerifierExecutions: 0 as const,
-      databaseWrites: 0 as const,
-      productMetricWrites: 0 as const,
-      registryMutations: 0 as const,
-      historyWrites: 0 as const,
-      watermarkWrites: 0 as const,
-      manifestWrites: 0 as const,
-    }),
+    effects: effects(),
     digest: sha256Canonical(payload),
   });
 }
