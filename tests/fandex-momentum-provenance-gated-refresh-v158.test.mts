@@ -210,6 +210,38 @@ test('committed v158 current audit reproduces fail-closed provenance gate withou
     audit.liveStoredEvidenceAccess.priorStoredReadAuditTransferableToCurrentSource,
     false,
   );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewReadOnlyVerifier.deploymentCreated,
+    true,
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewReadOnlyVerifier.deploymentState,
+    'READY',
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewReadOnlyVerifier.githubActionsInvocationHttpStatus,
+    302,
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewReadOnlyVerifier.invocationBlocker,
+    'vercel-deployment-protection',
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewReadOnlyVerifier.storedEvidenceReproducedThisEvaluation,
+    false,
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewBuildTimeVerifier.attempted,
+    true,
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewBuildTimeVerifier.deploymentCreated,
+    false,
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.previewBuildTimeVerifier.blocker,
+    'vercel-build-rate-limit',
+  );
 
   const currentProvenance = evaluateFandexMomentumSourceProvenanceResearch({
     snapshot: {
