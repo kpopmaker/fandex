@@ -209,3 +209,69 @@ test('committed v153 current-real provenance audit reproduces exact research res
   assert.equal(recomputed.futureLiveRefreshEligible, false);
   assert.deepEqual(recomputed.blockers, audit.result.blockers);
 });
+
+
+test('committed v153 live reproduction audit clears provenance blocker', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_source_provenance_v153_live_reproduction_20260921T001447Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  assert.equal(
+    audit.contractVersion,
+    'v153_fandex_momentum_live_stored_evidence_reproduction_audit_v1',
+  );
+  assert.equal(audit.liveStoredEvidenceRead.accessMode, 'neon-read-only');
+  assert.equal(audit.liveStoredEvidenceRead.jobRowReproduced, true);
+  assert.equal(audit.liveStoredEvidenceRead.evidenceRows, 100);
+  assert.equal(audit.liveStoredEvidenceRead.distinctEvidenceIds, 100);
+  assert.equal(audit.liveStoredEvidenceRead.distinctItemIndexes, 100);
+  assert.equal(audit.liveStoredEvidenceRead.minItemIndex, 0);
+  assert.equal(audit.liveStoredEvidenceRead.maxItemIndex, 99);
+  assert.equal(audit.liveStoredEvidenceRead.normalizedOutcomes, 100);
+  assert.equal(audit.liveStoredEvidenceRead.missingNormalizedIds, 0);
+  assert.equal(audit.liveStoredEvidenceRead.missingNormalizedRecords, 0);
+  assert.equal(audit.liveStoredEvidenceRead.distinctNormalizedRecords, 100);
+  assert.equal(audit.liveStoredEvidenceRead.joinedPayloadRows, 100);
+  assert.equal(
+    audit.liveStoredEvidenceRead.auditFingerprintPurpose,
+    'read-integrity-only-not-methodology',
+  );
+
+  const recomputed = evaluateFandexMomentumSourceProvenanceResearch({
+    snapshot: {
+      canonicalArtistId: audit.canonicalArtistId,
+      naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+      naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+      naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+      naverStatus: audit.sourceSnapshot.naverStatus,
+      naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+      naverNormalizedRecordCount: audit.sourceSnapshot.naverNormalizedRecordCount,
+      naverDuplicateRecordCount: audit.sourceSnapshot.naverDuplicateRecordCount,
+      naverRejectedItemCount: audit.sourceSnapshot.naverRejectedItemCount,
+    },
+    runtimeObservation: {
+      observedAt: audit.productionRuntimeObservation.observedAt,
+      requestPath: audit.productionRuntimeObservation.requestPath,
+      httpStatus: audit.productionRuntimeObservation.httpStatus,
+      deploymentId: audit.productionRuntimeObservation.deploymentId,
+      branch: audit.productionRuntimeObservation.branch,
+    },
+    storedEvidenceReproducedThisEvaluation: true,
+  });
+
+  assert.equal(recomputed.digest, audit.result.digest);
+  assert.equal(recomputed.state, 'stored-evidence-read-reproduced');
+  assert.equal(recomputed.storedEvidenceReproducedThisEvaluation, true);
+  assert.equal(recomputed.provenanceStrength, 'stored-evidence-read-reproduced');
+  assert.equal(recomputed.currentRealClaimScope, 'live-stored-evidence-reproduced');
+  assert.equal(recomputed.futureLiveRefreshEligible, true);
+  assert.deepEqual(recomputed.blockers, []);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
