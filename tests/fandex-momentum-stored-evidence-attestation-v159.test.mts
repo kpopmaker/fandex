@@ -576,6 +576,10 @@ test('committed v159 current audit preserves the unattested 00Z block and rollba
     ),
   ]);
   const audit = JSON.parse(auditRaw);
+  const historicalWatermarkJsonl =
+    watermarkJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
+  const historicalManifestJsonl =
+    manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 3).join('\n') + '\n';
 
   const out = evaluateFandexMomentumStoredEvidenceAttestationResearch({
     snapshot: currentSnapshot,
@@ -608,9 +612,9 @@ test('committed v159 current audit preserves the unattested 00Z block and rollba
       snapshot: currentSnapshot,
       runtimeObservation: currentRuntime,
       readAttestation: null,
-      manifestJsonl,
+      manifestJsonl: historicalManifestJsonl,
       historyJsonl: '',
-      watermarkJsonl,
+      watermarkJsonl: historicalWatermarkJsonl,
       result: {
         contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
         sourceContractVersion:
@@ -694,8 +698,8 @@ test('committed v159 current audit preserves the unattested 00Z block and rollba
   );
   assert.deepEqual(official.blockers, audit.officialRefreshEntrypoint.blockers);
 
-  const watermarks = watermarkJsonl.split(/\r?\n/).filter(Boolean);
-  const manifests = manifestJsonl.split(/\r?\n/).filter(Boolean);
+  const watermarks = historicalWatermarkJsonl.split(/\r?\n/).filter(Boolean);
+  const manifests = historicalManifestJsonl.split(/\r?\n/).filter(Boolean);
   assert.equal(watermarks.length, audit.rollback.currentWatermarkRecordCount);
   assert.equal(manifests.length, audit.rollback.currentManifestRecordCount);
   assert.equal(
