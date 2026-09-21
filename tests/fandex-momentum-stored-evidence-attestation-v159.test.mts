@@ -710,3 +710,66 @@ test('committed v159 current audit preserves the unattested 00Z block and rollba
   assert.equal(audit.productBoundary.productionEligible, false);
   assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
+
+
+test('committed current 00Z Neon read attestation reproduces exact v159 provenance', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_stored_evidence_attestation_v159_20260921T012400Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out = evaluateFandexMomentumStoredEvidenceAttestationResearch({
+    snapshot: {
+      canonicalArtistId: audit.canonicalArtistId,
+      naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+      naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+      naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+      naverStatus: audit.sourceSnapshot.naverStatus,
+      naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+      naverNormalizedRecordCount:
+        audit.sourceSnapshot.naverNormalizedRecordCount,
+      naverDuplicateRecordCount:
+        audit.sourceSnapshot.naverDuplicateRecordCount,
+      naverRejectedItemCount:
+        audit.sourceSnapshot.naverRejectedItemCount,
+    },
+    runtimeObservation: {
+      observedAt: audit.productionRuntimeObservation.observedAt,
+      requestPath: audit.productionRuntimeObservation.requestPath,
+      httpStatus: audit.productionRuntimeObservation.httpStatus,
+      deploymentId: audit.productionRuntimeObservation.deploymentId,
+      branch: audit.productionRuntimeObservation.branch,
+    },
+    readAttestation: audit.readAttestation,
+  });
+
+  assert.equal(out.state, 'attested-provenance-ready');
+  assert.equal(out.readAttestationPresent, true);
+  assert.equal(out.readAttestationAccepted, true);
+  assert.equal(out.storedEvidenceReproducedThisEvaluation, true);
+  assert.equal(out.provenance.state, 'stored-evidence-read-reproduced');
+  assert.equal(
+    out.provenance.digest,
+    '9e7c1c47694d2ffa76f71818fecca565cf4f4c584db92d01708d15445a0e8f1d',
+  );
+  assert.equal(
+    out.digest,
+    '27f65870158f3eb6d8f639e307df5340afc950abbd13bf9a5b455663829711af',
+  );
+  assert.equal(out.provenance.futureLiveRefreshEligible, true);
+  assert.deepEqual(out.blockers, []);
+  assert.equal(
+    audit.neonReadOnlyReproduction.auditFingerprintPurpose,
+    'read-integrity-only-not-methodology',
+  );
+  assert.deepEqual(out.effects, {
+    productMetricReads: 0,
+    productMetricWrites: 0,
+    previewFallbackReads: 0,
+    databaseWrites: 0,
+  });
+});
