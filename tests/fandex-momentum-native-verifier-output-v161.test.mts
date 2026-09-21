@@ -200,7 +200,7 @@ test('v161 native output for the 12:00Z boundary is accepted directly by v160', 
       canonicalArtistId: 'iu',
       throughSlotStart: SLOT,
     },
-    { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://example.invalid/test' },
+    { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:test@example.pooler.invalid/neondb' },
     {
       poolFactory: () => mock.pool as any,
       now: () => new Date(EXECUTED_AT),
@@ -284,7 +284,7 @@ test('v161 fails closed when stored raw payload materialization is tampered', as
         canonicalArtistId: 'iu',
         throughSlotStart: SLOT,
       },
-      { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://example.invalid/test' },
+      { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:test@example.pooler.invalid/neondb' },
       {
         poolFactory: () => mock.pool as any,
         now: () => new Date(EXECUTED_AT),
@@ -324,7 +324,7 @@ test('v161 fails closed when the exact job row is unavailable', async () => {
         canonicalArtistId: 'iu',
         throughSlotStart: SLOT,
       },
-      { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://example.invalid/test' },
+      { FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:test@example.pooler.invalid/neondb' },
       {
         poolFactory: () => pool as any,
         now: () => new Date(EXECUTED_AT),
