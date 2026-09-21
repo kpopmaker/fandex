@@ -8,22 +8,28 @@ import {
   type FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
 } from '../lib/intelligence/fandexMomentumVerifierConfigurationMutationAuthorizationResearch';
 
-const EVALUATED_AT = '2026-09-21T23:35:00.000Z';
+const EVALUATED_AT = '2026-09-21T23:40:00.000Z';
 const V165_DIGEST =
   'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f';
 
-const validRecord: FandexMomentumVerifierConfigurationMutationAuthorizationRecord = {
+const approvedRecord: FandexMomentumVerifierConfigurationMutationAuthorizationRecord = {
   contractVersion:
     'v166_fandex_momentum_verifier_configuration_mutation_authorization_record_v1',
   authorizationId:
     '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+  upstreamV165PlanDigest: V165_DIGEST,
   authorizationStatement:
     FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_STATEMENT,
-  authority: 'explicit-user-authorization',
-  authorizedAt: '2026-09-21T23:34:00.000Z',
-  validFrom: '2026-09-21T23:34:00.000Z',
-  expiresAt: '2026-09-22T23:34:00.000Z',
-  revokedAt: null,
+  authority: 'explicit-user-decision',
+  decision: {
+    state: 'approved',
+    decidedAt: '2026-09-21T23:34:00.000Z',
+    decidedBy: 'synthetic-test-reviewer',
+    validFrom: '2026-09-21T23:34:00.000Z',
+    expiresAt: '2026-09-22T23:34:00.000Z',
+    revokedAt: null,
+    reason: 'synthetic approval fixture only',
+  },
   target: {
     teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs',
     projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v',
@@ -49,7 +55,13 @@ const validRecord: FandexMomentumVerifierConfigurationMutationAuthorizationRecor
       target: 'production',
       dedicatedSecretOnly: true,
       secretValueMayBeRecordedHere: false,
+      schedulerCredentialKey: 'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+      minimumUtf8Bytes: 24,
+      maximumUtf8Bytes: 512,
+      whitespaceOrControlCharactersForbidden: true,
       mustDifferFromSchedulerCredential: true,
+      separationProofMethod:
+        'trusted-environment-non-equality-attestation-without-secret-output',
     },
   ],
   forbiddenMutationScope: {
@@ -70,11 +82,29 @@ const validRecord: FandexMomentumVerifierConfigurationMutationAuthorizationRecor
   downstreamAuthorizations: {
     productionDeployment: 'not-authorized-by-this-record',
     verifierActivation: 'not-authorized-by-this-record',
+    nativeVerifierExecution: 'not-authorized-by-this-record',
     ledgerAdvance: 'not-authorized-by-this-record',
   },
 };
 
-test('v166 is authorization-record-only and performs no mutation', () => {
+function evaluate(
+  record: FandexMomentumVerifierConfigurationMutationAuthorizationRecord | null,
+  requestIntent:
+    | 'generic-continuation'
+    | 'research-authorization-record-evaluation'
+    | 'explicit-configuration-mutation-authorization',
+  evaluatedAt = EVALUATED_AT,
+) {
+  return evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
+    evaluatedAt,
+    requestIntent,
+    upstreamV165Digest: V165_DIGEST,
+    upstreamV165State: 'provisioning-plan-ready',
+    record,
+  });
+}
+
+test('v166 is authorization-record-only; generic continuation is never approval', () => {
   assert.equal(
     FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCRIPTOR
       .authorizationRecordOnly,
@@ -83,6 +113,11 @@ test('v166 is authorization-record-only and performs no mutation', () => {
   assert.equal(
     FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCRIPTOR
       .genericContinuationCountsAsAuthorization,
+    false,
+  );
+  assert.equal(
+    FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCRIPTOR
+      .autoApprovalAllowed,
     false,
   );
   assert.equal(
@@ -97,25 +132,24 @@ test('v166 is authorization-record-only and performs no mutation', () => {
   );
   assert.equal(
     FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCRIPTOR
+      .nativeVerifierExecutionPerformed,
+    false,
+  );
+  assert.equal(
+    FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_MUTATION_AUTHORIZATION_DESCRIPTOR
       .ledgerAdvancePerformed,
     false,
   );
 });
 
-test('generic continuation with no record remains authorization-pending', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'generic-continuation',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: null,
-    });
+test('current generic continuation with no explicit record remains pending and ungranted', () => {
+  const out = evaluate(null, 'generic-continuation');
 
   assert.equal(out.state, 'authorization-pending');
   assert.equal(out.configurationMutationAuthorized, false);
   assert.equal(out.productionDeploymentAuthorized, false);
   assert.equal(out.verifierActivationAuthorized, false);
+  assert.equal(out.nativeVerifierExecutionAuthorized, false);
   assert.equal(out.ledgerAdvanceAuthorized, false);
   assert.deepEqual(out.blockers, [
     'explicit-configuration-mutation-authorization-record-missing',
@@ -125,36 +159,26 @@ test('generic continuation with no record remains authorization-pending', () => 
   assert.equal(out.recordDigest, null);
 });
 
-test('research evaluation without a record is pending but not mistaken for explicit authorization', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'research-authorization-record-evaluation',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: null,
-    });
-
+test('research evaluation without a record is pending, not rejected or approved', () => {
+  const out = evaluate(null, 'research-authorization-record-evaluation');
   assert.equal(out.state, 'authorization-pending');
+  assert.equal(out.configurationMutationAuthorized, false);
   assert.deepEqual(out.blockers, [
     'explicit-configuration-mutation-authorization-record-missing',
   ]);
 });
 
-test('an exact explicit record can authorize only configuration mutation', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: validRecord,
-    });
+test('synthetic explicit approval is effective only inside its supplied validity window and only for configuration mutation', () => {
+  const out = evaluate(
+    approvedRecord,
+    'explicit-configuration-mutation-authorization',
+  );
 
   assert.equal(out.state, 'configuration-mutation-authorized');
   assert.equal(out.configurationMutationAuthorized, true);
   assert.equal(out.productionDeploymentAuthorized, false);
   assert.equal(out.verifierActivationAuthorized, false);
+  assert.equal(out.nativeVerifierExecutionAuthorized, false);
   assert.equal(out.ledgerAdvanceAuthorized, false);
   assert.deepEqual(out.blockers, []);
   assert.match(out.recordDigest ?? '', /^[0-9a-f]{64}$/);
@@ -176,17 +200,41 @@ test('an exact explicit record can authorize only configuration mutation', () =>
   });
 });
 
-test('a valid record presented under generic continuation is rejected', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'generic-continuation',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: validRecord,
-    });
+test('synthetic explicit rejection has a distinct rejected state and can never authorize mutation', () => {
+  const rejected: FandexMomentumVerifierConfigurationMutationAuthorizationRecord = {
+    ...approvedRecord,
+    decision: {
+      state: 'rejected',
+      decidedAt: '2026-09-21T23:34:00.000Z',
+      decidedBy: 'synthetic-test-reviewer',
+      validFrom: null,
+      expiresAt: null,
+      revokedAt: null,
+      reason: 'synthetic rejection fixture only',
+    },
+  };
 
+  const out = evaluate(rejected, 'research-authorization-record-evaluation');
   assert.equal(out.state, 'authorization-record-rejected');
+  assert.equal(out.configurationMutationAuthorized, false);
+  assert.deepEqual(out.blockers, []);
+});
+
+test('synthetic approved record has a distinct expired state at or after its supplied expiry', () => {
+  const out = evaluate(
+    approvedRecord,
+    'explicit-configuration-mutation-authorization',
+    '2026-09-22T23:34:00.000Z',
+  );
+
+  assert.equal(out.state, 'authorization-expired');
+  assert.equal(out.configurationMutationAuthorized, false);
+  assert.deepEqual(out.blockers, []);
+});
+
+test('a valid approval record under generic continuation is invalid, never implicit authorization', () => {
+  const out = evaluate(approvedRecord, 'generic-continuation');
+  assert.equal(out.state, 'authorization-record-invalid');
   assert.equal(out.configurationMutationAuthorized, false);
   assert.ok(
     out.blockers.includes(
@@ -195,125 +243,122 @@ test('a valid record presented under generic continuation is rejected', () => {
   );
 });
 
-test('expired or revoked authorization fails closed', () => {
-  const expired =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: '2026-09-23T00:00:00.000Z',
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: validRecord,
-    });
-  assert.equal(expired.state, 'authorization-record-rejected');
-  assert.ok(
-    expired.blockers.includes(
-      'authorization-record-outside-validity-window',
-    ),
+test('v166 binds the record to the exact upstream v165 plan digest', () => {
+  const out = evaluate(
+    {
+      ...approvedRecord,
+      upstreamV165PlanDigest: '1'.repeat(64),
+    },
+    'explicit-configuration-mutation-authorization',
   );
 
-  const revoked =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: {
-        ...validRecord,
-        revokedAt: '2026-09-21T23:34:30.000Z',
-      },
-    });
-  assert.equal(revoked.state, 'authorization-record-rejected');
-  assert.ok(revoked.blockers.includes('authorization-record-revoked'));
+  assert.equal(out.state, 'authorization-record-invalid');
+  assert.equal(out.configurationMutationAuthorized, false);
+  assert.ok(out.blockers.includes('authorization-v165-plan-digest-mismatch'));
 });
 
-test('target or configuration scope drift is rejected', () => {
-  const targetDrift =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: {
-        ...validRecord,
-        target: {
-          ...validRecord.target,
-          intendedDeploymentCommit:
-            '1111111111111111111111111111111111111111',
-        },
-      } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
-    });
-  assert.equal(targetDrift.state, 'authorization-record-rejected');
+test('target or authorized configuration drift is invalid', () => {
+  const targetDrift = evaluate(
+    {
+      ...approvedRecord,
+      target: {
+        ...approvedRecord.target,
+        intendedDeploymentCommit:
+          '1111111111111111111111111111111111111111',
+      },
+    } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
+    'explicit-configuration-mutation-authorization',
+  );
+  assert.equal(targetDrift.state, 'authorization-record-invalid');
   assert.ok(targetDrift.blockers.includes('authorization-target-mismatch'));
 
-  const scopeDrift =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: {
-        ...validRecord,
-        authorizedConfiguration: [
-          validRecord.authorizedConfiguration[1],
-          validRecord.authorizedConfiguration[0],
-          validRecord.authorizedConfiguration[2],
-        ],
-      } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
-    });
-  assert.equal(scopeDrift.state, 'authorization-record-rejected');
+  const scopeDrift = evaluate(
+    {
+      ...approvedRecord,
+      authorizedConfiguration: [
+        approvedRecord.authorizedConfiguration[1],
+        approvedRecord.authorizedConfiguration[0],
+        approvedRecord.authorizedConfiguration[2],
+      ],
+    } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
+    'explicit-configuration-mutation-authorization',
+  );
+  assert.equal(scopeDrift.state, 'authorization-record-invalid');
   assert.ok(
     scopeDrift.blockers.includes('authorization-configuration-scope-mismatch'),
   );
 });
 
-test('forbidden mutation boundaries and rollback acknowledgement are mandatory', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: {
-        ...validRecord,
-        forbiddenMutationScope: {
-          ...validRecord.forbiddenMutationScope,
-          schedulerCredentialMutation: false,
-        },
-        rollbackAcknowledgement: {
-          ...validRecord.rollbackAcknowledgement,
-          removeOrDisableVerifierRoute: false,
-        },
-      } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
-    });
-
-  assert.equal(out.state, 'authorization-record-rejected');
-  assert.ok(
-    out.blockers.includes('authorization-forbidden-scope-incomplete'),
+test('dedicated secret scope is exact and cannot expose or reuse scheduler credential', () => {
+  const secret = approvedRecord.authorizedConfiguration[2];
+  assert.equal(secret.secretValueMayBeRecordedHere, false);
+  assert.equal(
+    secret.schedulerCredentialKey,
+    'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
   );
-  assert.ok(
-    out.blockers.includes('authorization-rollback-acknowledgement-incomplete'),
+  assert.equal(secret.minimumUtf8Bytes, 24);
+  assert.equal(secret.maximumUtf8Bytes, 512);
+  assert.equal(secret.whitespaceOrControlCharactersForbidden, true);
+  assert.equal(secret.mustDifferFromSchedulerCredential, true);
+  assert.equal(
+    secret.separationProofMethod,
+    'trusted-environment-non-equality-attestation-without-secret-output',
   );
 });
 
-test('v166 never authorizes downstream deployment, activation, or ledger advance', () => {
-  const out =
-    evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
-      evaluatedAt: EVALUATED_AT,
-      requestIntent: 'explicit-configuration-mutation-authorization',
-      upstreamV165Digest: V165_DIGEST,
-      upstreamV165State: 'provisioning-plan-ready',
-      record: {
-        ...validRecord,
-        downstreamAuthorizations: {
-          productionDeployment: 'not-authorized-by-this-record',
-          verifierActivation: 'not-authorized-by-this-record',
-          ledgerAdvance: 'not-authorized-by-this-record',
-        },
-      },
-    });
-
+test('downstream deployment, activation, native read, ledger and excluded mutation scopes remain unauthorized', () => {
+  const out = evaluate(
+    approvedRecord,
+    'explicit-configuration-mutation-authorization',
+  );
   assert.equal(out.configurationMutationAuthorized, true);
   assert.equal(out.productionDeploymentAuthorized, false);
   assert.equal(out.verifierActivationAuthorized, false);
+  assert.equal(out.nativeVerifierExecutionAuthorized, false);
   assert.equal(out.ledgerAdvanceAuthorized, false);
+  assert.deepEqual(approvedRecord.downstreamAuthorizations, {
+    productionDeployment: 'not-authorized-by-this-record',
+    verifierActivation: 'not-authorized-by-this-record',
+    nativeVerifierExecution: 'not-authorized-by-this-record',
+    ledgerAdvance: 'not-authorized-by-this-record',
+  });
+  assert.deepEqual(approvedRecord.forbiddenMutationScope, {
+    runtimeDatabaseCredentialMutation: true,
+    schedulerCredentialMutation: true,
+    previewCredentialCopy: true,
+    productRegistryMutation: true,
+    productActivation: true,
+    researchLedgerAdvance: true,
+  });
+});
+
+test('revoked or malformed approval fails closed as invalid', () => {
+  const revoked = evaluate(
+    {
+      ...approvedRecord,
+      decision: {
+        ...approvedRecord.decision,
+        revokedAt: '2026-09-21T23:39:00.000Z',
+      },
+    } as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
+    'explicit-configuration-mutation-authorization',
+  );
+  assert.equal(revoked.state, 'authorization-record-invalid');
+  assert.ok(revoked.blockers.includes('authorization-record-revoked'));
+
+  const malformed = evaluate(
+    {
+      ...approvedRecord,
+      decision: {
+        ...approvedRecord.decision,
+        validFrom: '2026-09-22T23:34:00.000Z',
+        expiresAt: '2026-09-21T23:34:00.000Z',
+      },
+    } as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
+    'explicit-configuration-mutation-authorization',
+  );
+  assert.equal(malformed.state, 'authorization-record-invalid');
+  assert.ok(
+    malformed.blockers.includes('authorization-approval-time-boundary-invalid'),
+  );
 });
