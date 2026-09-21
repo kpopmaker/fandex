@@ -7,6 +7,7 @@ on:
     paths:
       - 'lib/intelligence/fandexMomentumVerifierOutputAttestationAdapterResearch.ts'
       - 'tests/fandex-momentum-verifier-output-attestation-v160.test.mts'
+      - 'tests/fandex-momentum-stored-evidence-attestation-v159.test.mts'
       - '.github/workflows/pr127-momentum-v160-verifier-output-adapter.yml'
 
 permissions:
