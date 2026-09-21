@@ -1,0 +1,73 @@
+{
+  "contractVersion": "v156_fandex_momentum_current_real_triple_artifact_acceptance_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "sourcePreflightAudit": "data/momentum-research/iu_manifest_guarded_preflight_v155_20260920T162000Z.json",
+  "artifacts": {
+    "history": "data/momentum-research/iu_cross_family_evidence_state_v147.jsonl",
+    "watermark": "data/momentum-research/iu_evaluation_watermark_v151.jsonl",
+    "manifest": "data/momentum-research/iu_paired_artifact_manifest_v154.jsonl"
+  },
+  "preflight": {
+    "digest": "c0e5283e3aeb5f2a43fd522c4c36fa74e4f75d1d3bcc23ab3039f9ca434dc3ae",
+    "proposedWrites": {
+      "historyWrites": 0,
+      "watermarkWrites": 0,
+      "manifestWrites": 1
+    },
+    "nextManifestSequence": 3,
+    "nextManifestDigest": "042728c223ed6107baba213e9fd0c6c5da3f190e885c602f7c76ae6153f9055b"
+  },
+  "beforePersistence": {
+    "historyRecordCount": 2,
+    "watermarkRecordCount": 2,
+    "manifestRecordCount": 2,
+    "state": "manifest-write-not-applied",
+    "readyForNextEvaluation": false,
+    "blockers": [
+      "triple-artifact-manifest-write-missing"
+    ],
+    "digest": "4641bc1cfcc2473c6ff4d94383f82daf91fecf83f9e79221808b98000835b192"
+  },
+  "persistence": {
+    "historyWritesApplied": 0,
+    "watermarkWritesApplied": 0,
+    "manifestWritesApplied": 1,
+    "manifestRecordCountBefore": 2,
+    "manifestRecordCountAfter": 3,
+    "physicalResearchArtifactPersistencePerformed": true,
+    "databaseWrites": 0
+  },
+  "afterPersistence": {
+    "historyRecordCount": 2,
+    "watermarkRecordCount": 2,
+    "manifestRecordCount": 3,
+    "state": "accepted-resulting-triple",
+    "pairAcceptanceState": "expected-no-write-pair",
+    "exactExpectedTripleObserved": true,
+    "readyForNextEvaluation": true,
+    "blockers": [],
+    "observedManifestDigest": "777757a2280c9a72f9f562d484418a39b5fe3da934ee27d90f806e164161eab4",
+    "digest": "f75a595132895744a3aaea317b80081cad1cb903a76ef5e27e39164faa85d825"
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0
+  },
+  "validation": {
+    "initialV156LogicRunId": 35546702762,
+    "currentRealPostPersistenceRunId": 35546851844,
+    "v156Passed": true,
+    "v155RegressionPassed": true,
+    "v154RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
