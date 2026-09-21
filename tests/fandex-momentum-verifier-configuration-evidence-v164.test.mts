@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -190,4 +191,44 @@ test('invalid project, team, deployment, or commit identity fails closed', () =>
   assert.ok(out.blockers.includes('verifier-team-id-invalid'));
   assert.ok(out.blockers.includes('intended-deployment-commit-invalid'));
   assert.ok(out.blockers.includes('intended-preview-deployment-id-invalid'));
+});
+
+
+test('committed current v164 configuration audit is exactly blocked', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_configuration_evidence_v164_20260921T151600Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out = evaluateFandexMomentumVerifierConfigurationEvidence(audit.evidence);
+
+  assert.equal(out.state, 'configuration-evidence-blocked');
+  assert.equal(out.readyToReevaluateV163, false);
+  assert.equal(
+    out.digest,
+    '1c9e88c409da2519b27b46e3eb30bfaac99120ca910333826c536a2b6e3b9c59',
+  );
+  assert.deepEqual(out.blockers, audit.result.blockers);
+  assert.equal(
+    audit.vercelInspection.intendedCommitPreviewDeploymentState,
+    'READY',
+  );
+  assert.equal(
+    audit.vercelInspection.connectedInterfaceEnvironmentInventoryAvailable,
+    false,
+  );
+  assert.equal(
+    audit.evidence.fieldSemantics,
+    'false means not proven by available evidence, not asserted absent from Vercel',
+  );
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretMutations, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.activationWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
