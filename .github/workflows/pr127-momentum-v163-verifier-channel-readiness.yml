@@ -1,0 +1,32 @@
+name: PR127 momentum v163 verifier channel readiness
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierChannelActivationReadinessResearch.ts'
+      - 'tests/fandex-momentum-verifier-channel-readiness-v163.test.mts'
+      - '.github/workflows/pr127-momentum-v163-verifier-channel-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v163 and v162/v161 regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-channel-readiness-v163.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-execution-channel-v162.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-native-verifier-output-v161.test.mts
+          npm run typecheck
+          git diff --check
