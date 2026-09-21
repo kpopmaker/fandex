@@ -777,3 +777,82 @@ test('committed current 00Z Neon read attestation reproduces exact v159 provenan
     databaseWrites: 0,
   });
 });
+
+
+test('committed attested 00Z live refresh audit matches current persisted transaction', async () => {
+  const [auditRaw, watermarkJsonl, manifestJsonl] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_attested_live_refresh_v159_20260921T013700Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkJsonl.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+  const manifests = manifestJsonl.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+
+  assert.equal(
+    audit.contractVersion,
+    'v159_fandex_momentum_current_attested_live_refresh_audit_v1',
+  );
+  assert.equal(audit.v159.attestationState, 'attested-provenance-ready');
+  assert.equal(audit.v159.provenanceState, 'stored-evidence-read-reproduced');
+  assert.equal(audit.v159.state, 'refresh-evaluated');
+  assert.equal(audit.v159.nestedV158State, 'refresh-prepared');
+  assert.equal(audit.v159.coordinatorState, 'watermark-only-appended');
+  assert.deepEqual(audit.v159.proposedWrites, {
+    historyWrites: 0,
+    watermarkWrites: 1,
+    manifestWrites: 1,
+  });
+  assert.equal(audit.v159.readyForPhysicalPersistence, true);
+
+  assert.equal(watermarks.length, 3);
+  assert.equal(manifests.length, 4);
+  assert.equal(
+    watermarks.at(-1).recordDigest,
+    '1dc564d7d5aba1be6aadd95da4b99f3caca85ebcfe656c3d8b0abc2066f6a9b0',
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverEvidenceId,
+    'dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d',
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    '2026-09-21T00:00:00.000Z',
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    '683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19',
+  );
+
+  assert.equal(audit.postPersistence.v156.state, 'accepted-resulting-triple');
+  assert.equal(audit.postPersistence.v156.readyForNextEvaluation, true);
+  assert.equal(audit.postPersistence.v157.state, 'no-recovery-needed');
+  assert.equal(audit.postPersistence.v157.readyForNextEvaluation, true);
+  assert.deepEqual(audit.postPersistence.v157.proposedWrites, {
+    historyWrites: 0,
+    watermarkWrites: 0,
+    manifestWrites: 0,
+  });
+  assert.equal(audit.effects.databaseWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
