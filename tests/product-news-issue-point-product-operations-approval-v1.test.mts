@@ -160,7 +160,7 @@ test('actual approval authorizes promotion control but still cannot activate or 
   assert.equal(control.lifecycleState, 'shadow');
 });
 
-test('canonical registry advances only to activation authorization blocker', () => {
+test('approval record remains registry-neutral until a separate registry integration gate', () => {
   assert.equal(
     NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE.lifecycle,
     'shadow',
@@ -172,7 +172,15 @@ test('canonical registry advances only to activation authorization blocker', () 
   );
   assert.deepEqual(
     NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE.blockers,
-    ['production-activation-not-authorized'],
+    ['production-promotion-not-authorized'],
+  );
+});
+
+test('approval evidence points to registry integration as the next gate', () => {
+  assert.equal(
+    NEWS_ISSUE_POINT_REAL_PRODUCT_OPERATIONS_APPROVAL_EVIDENCE
+      .productDecision.requiredNextGate,
+    'promotion-approval-registry-integration',
   );
 });
 
