@@ -27,7 +27,11 @@
     "priorStoredReadAuditTransferableToCurrentSource": false,
     "priorReproducedThroughSlotStart": "2026-09-20T15:00:00.000Z",
     "currentThroughSlotStart": "2026-09-21T00:00:00.000Z",
-    "blocker": "stored-evidence-live-reproduction-unavailable"
+    "blocker": "stored-evidence-live-reproduction-unavailable",
+    "githubActionsRuntimeDatabaseCredentialAvailable": false,
+    "githubActionsCredentialProbeRunId": 35548356651,
+    "vercelPreviewDeploymentAvailable": false,
+    "vercelPreviewBlocker": "build-rate-limit"
   },
   "provenance": {
     "contractVersion": "v153_fandex_momentum_source_provenance_research_v1",
