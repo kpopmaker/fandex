@@ -112,9 +112,9 @@ function source(input?: Readonly<{
       input?.lastfmEnd ?? '2026-09-20T01:59:13.000Z',
     naverEvidenceId:
       input?.naverId
-      ?? '39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c',
+      ?? 'dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d',
     naverThroughSlotStart:
-      input?.naverThrough ?? '2026-09-20T15:00:00.000Z',
+      input?.naverThrough ?? '2026-09-21T00:00:00.000Z',
   };
 }
 
@@ -135,9 +135,9 @@ async function currentPreflight() {
     manifestJsonl,
     result: result(),
     sourceEvidence: source(),
-    evaluatedAt: '2026-09-21T00:20:00.000Z',
-    recordedAt: '2026-09-21T00:20:00.000Z',
-    manifestedAt: '2026-09-21T00:20:00.000Z',
+    evaluatedAt: '2026-09-21T01:40:00.000Z',
+    recordedAt: '2026-09-21T01:40:00.000Z',
+    manifestedAt: '2026-09-21T01:40:00.000Z',
   });
   assert.equal(preflight.state, 'evaluation-prepared');
   return {
