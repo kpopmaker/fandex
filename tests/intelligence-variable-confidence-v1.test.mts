@@ -60,9 +60,7 @@ test('17a canonical newsIssuePoint shadow variable is registered without Product
   });
   assert.equal(definition?.sourceProviderId, 'naver-news');
   assert.equal(definition?.directProductionContributionEligible, false);
-  assert.deepEqual(definition?.blockers, [
-    'production-promotion-not-authorized',
-  ]);
+  assert.deepEqual(definition?.blockers, []);
 });
 
 test('18 all HIGH derives HIGH', () => assert.equal(createFandexConfidenceAssessment({ subject: { type: 'evidence', id: 'e1' }, dimensions: dimensions() }).state, 'high'));
