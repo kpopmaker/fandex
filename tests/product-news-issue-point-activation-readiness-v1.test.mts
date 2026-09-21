@@ -244,36 +244,11 @@ test('blocked promotion eligibility cannot create an owner-attestation candidate
   assert.equal(result.status, 'blocked');
 });
 
-test('current canonical registry blocks activation review until promotion blocker is explicitly cleared', () => {
+test('current canonical registry is eligible only for activation review after promotion approval integration', () => {
   const result = evaluateNewsIssuePointRealProductActivationReadiness({
     control: authorizedControl(),
     readModel: readyReadModel(),
     registryDefinition: NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
-  });
-
-  assert.deepEqual(result, {
-    contractVersion:
-      'v1_news_issue_point_real_product_activation_gate',
-    status: 'blocked',
-    activationAuthorized: false,
-    publicRouteActivated: false,
-    productScorePublished: false,
-    directProductionContributionEligible: false,
-    strictPublicationIntervalClaimAllowed: false,
-    reason: 'registry-promotion-not-authorized',
-  });
-});
-
-test('cleared shadow registry becomes eligible only for activation review, never activation', () => {
-  const registry: FandexVariableDefinitionV1 = {
-    ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
-    blockers: [],
-  };
-
-  const result = evaluateNewsIssuePointRealProductActivationReadiness({
-    control: authorizedControl(),
-    readModel: readyReadModel(),
-    registryDefinition: registry,
   });
 
   assert.deepEqual(result, {
@@ -288,6 +263,31 @@ test('cleared shadow registry becomes eligible only for activation review, never
     requiredNextGate:
       'explicit-production-activation-authorization',
     authorizationId: AUTHORIZATION_ID,
+  });
+});
+
+test('promotion blocker still fails closed if it is reintroduced', () => {
+  const registry: FandexVariableDefinitionV1 = {
+    ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
+    blockers: ['production-promotion-not-authorized'],
+  };
+
+  const result = evaluateNewsIssuePointRealProductActivationReadiness({
+    control: authorizedControl(),
+    readModel: readyReadModel(),
+    registryDefinition: registry,
+  });
+
+  assert.deepEqual(result, {
+    contractVersion:
+      'v1_news_issue_point_real_product_activation_gate',
+    status: 'blocked',
+    activationAuthorized: false,
+    publicRouteActivated: false,
+    productScorePublished: false,
+    directProductionContributionEligible: false,
+    strictPublicationIntervalClaimAllowed: false,
+    reason: 'registry-promotion-not-authorized',
   });
 });
 
