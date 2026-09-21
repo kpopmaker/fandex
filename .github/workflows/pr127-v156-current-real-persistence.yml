@@ -95,10 +95,13 @@ jobs:
             },
           };
 
+          const priorManifestJsonl =
+            manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
+
           const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
             historyJsonl,
             watermarkJsonl,
-            manifestJsonl,
+            manifestJsonl: priorManifestJsonl,
             result,
             sourceEvidence: {
               lastfmEvidenceId: audit.sourceEvidence.lastfmEvidenceId,
@@ -121,7 +124,7 @@ jobs:
             preflight,
             observedHistoryJsonl: historyJsonl,
             observedWatermarkJsonl: watermarkJsonl,
-            observedManifestJsonl: manifestJsonl,
+            observedManifestJsonl: priorManifestJsonl,
           });
           if (before.state !== 'manifest-write-not-applied' || before.readyForNextEvaluation) {
             throw new Error('unexpected pre-persistence state');
@@ -131,7 +134,7 @@ jobs:
             preflight,
             observedHistoryJsonl: historyJsonl,
             observedWatermarkJsonl: watermarkJsonl,
-            observedManifestJsonl: preflight.proposedManifestJsonl,
+            observedManifestJsonl: manifestJsonl,
           });
           if (after.state !== 'accepted-resulting-triple' || !after.readyForNextEvaluation) {
             throw new Error('expected exact triple acceptance');
@@ -155,9 +158,9 @@ jobs:
               observedManifestDigest: after.observedManifestDigest,
             },
           }, null, 2));
-          console.log('V156_MANIFEST_BEGIN');
-          process.stdout.write(preflight.proposedManifestJsonl);
-          console.log('V156_MANIFEST_END');
+          if (manifestJsonl !== preflight.proposedManifestJsonl) {
+            throw new Error('committed manifest does not equal v155 proposed manifest');
+          }
           TS
           npx tsx --conditions=react-server .tmp-v156-current-real.mts
           rm .tmp-v156-current-real.mts
