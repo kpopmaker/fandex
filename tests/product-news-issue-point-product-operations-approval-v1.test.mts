@@ -256,7 +256,7 @@ test('actual approval authorizes promotion control but still cannot activate or 
   assert.equal(control.lifecycleState, 'shadow');
 });
 
-test('registry integration advances only to activation authorization blocker', () => {
+test('registry integration clears only the promotion blocker and preserves shadow non-contributing state', () => {
   assert.equal(
     NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE.lifecycle,
     'shadow',
@@ -268,7 +268,7 @@ test('registry integration advances only to activation authorization blocker', (
   );
   assert.deepEqual(
     NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE.blockers,
-    ['production-activation-not-authorized'],
+    [],
   );
 });
 
@@ -280,7 +280,7 @@ test('approval evidence points to registry integration as the next gate', () => 
   );
 });
 
-test('actual approval drives current candidate through authorization, control, inactive read model, and activation review eligibility', () => {
+test('actual approval drives current candidate through authorization, control, inactive read model, and activation-review eligibility', () => {
   const eligibility = eligible();
   assert.equal(eligibility.status, 'eligible');
   assert.equal(eligibility.candidate.fact.availability, 'available');
@@ -347,7 +347,8 @@ test('actual approval drives current candidate through authorization, control, i
     productScorePublished: false,
     directProductionContributionEligible: false,
     strictPublicationIntervalClaimAllowed: false,
-    requiredNextGate: 'explicit-production-activation-authorization',
+    requiredNextGate:
+      'explicit-production-activation-authorization',
     authorizationId:
       NEWS_ISSUE_POINT_REAL_PRODUCT_OPERATIONS_APPROVAL.authorizationId,
   });
