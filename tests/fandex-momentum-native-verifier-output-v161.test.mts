@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -333,4 +334,101 @@ test('v161 fails closed when the exact job row is unavailable', async () => {
     /naver_news_momentum_native_verifier_job_missing/,
   );
   assert.equal(mock.queries.some((query) => query === 'COMMIT'), false);
+});
+
+
+test('committed v161 audit preserves the blocked fresh 12:00Z boundary without ledger advancement', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_native_verifier_output_v161_20260921T134000Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  assert.equal(
+    audit.contractVersion,
+    'v161_fandex_momentum_native_verifier_output_audit_v1',
+  );
+  assert.equal(
+    audit.sourceBoundary.naverThroughSlotStart,
+    '2026-09-21T12:00:00.000Z',
+  );
+  assert.equal(
+    audit.sourceBoundary.deterministicNaverEvidenceId,
+    'd76d5ee3ed512280f3b0055818c38f0c857d8a9e7c9d8621e826ca48b919fb58',
+  );
+  assert.equal(audit.productionRuntimeObservation.mapsToSourceBoundary, true);
+  assert.equal(audit.contractValidation.status, 'PASS');
+  assert.equal(audit.freshExecution.attempted, true);
+  assert.equal(audit.freshExecution.freshStoredEvidenceReadCompleted, false);
+  assert.equal(audit.freshExecution.nativeVerifierOutputProduced, false);
+  assert.equal(
+    audit.freshExecution.blocker,
+    'preview-runtime-database-url-unavailable-or-invalid',
+  );
+  assert.equal(
+    audit.freshExecution.credentialIsolationAttempt.probeBehavior,
+    'requireRuntimeDatabaseUrl(process.env)-only',
+  );
+  assert.equal(
+    audit.freshExecution.credentialIsolationAttempt.state,
+    'ERROR',
+  );
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.authoritativeLedgerBoundary.fresh1200ZAdvanced, false);
+  assert.equal(audit.effects.researchArtifactLedgerWritesForFresh1200Z, 0);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
