@@ -250,18 +250,16 @@ test('committed v165 audit reproduces the exact current authorization plan', asy
     'utf8',
   );
   const audit = JSON.parse(raw);
+
   const out = buildFandexMomentumVerifierProvisioningAuthorizationPlan(
     currentInput,
   );
 
+  assert.equal(out.state, 'provisioning-plan-ready');
+  assert.equal(out.planReadyForSeparateAuthorization, true);
   assert.equal(
     out.digest,
     'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f',
-  );
-  assert.equal(out.state, audit.result.state);
-  assert.equal(
-    out.planReadyForSeparateAuthorization,
-    audit.result.planReadyForSeparateAuthorization,
   );
   assert.deepEqual(out.authorizationSlots, audit.authorizationSlots);
   assert.deepEqual(
@@ -274,6 +272,8 @@ test('committed v165 audit reproduces the exact current authorization plan', asy
   );
   assert.deepEqual(out.ledgerGate, audit.ledgerGate);
   assert.deepEqual(out.rollbackPlan, audit.rollbackPlan);
+  assert.equal(audit.result.state, 'provisioning-plan-ready');
+  assert.equal(audit.result.planReadyForSeparateAuthorization, true);
   assert.deepEqual(audit.result.blockers, []);
   assert.equal(audit.effects.environmentMutations, 0);
   assert.equal(audit.effects.secretWrites, 0);
