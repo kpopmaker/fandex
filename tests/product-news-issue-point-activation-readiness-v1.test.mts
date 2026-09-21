@@ -244,11 +244,11 @@ test('blocked promotion eligibility cannot create an owner-attestation candidate
   assert.equal(result.status, 'blocked');
 });
 
-test('current canonical registry blocks activation review until promotion blocker is explicitly cleared', () => {
+test('historical promotion blocker still blocks activation review', () => {
   const result = evaluateNewsIssuePointRealProductActivationReadiness({
     control: authorizedControl(),
     readModel: readyReadModel(),
-    registryDefinition: NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
+    registryDefinition: { ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE, blockers: ['production-promotion-not-authorized'] },
   });
 
   assert.deepEqual(result, {
@@ -264,10 +264,10 @@ test('current canonical registry blocks activation review until promotion blocke
   });
 });
 
-test('cleared shadow registry becomes eligible only for activation review, never activation', () => {
+test('current activation-blocked shadow registry is eligible only for activation review, never activation', () => {
   const registry: FandexVariableDefinitionV1 = {
     ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
-    blockers: [],
+    blockers: ['production-activation-not-authorized'],
   };
 
   const result = evaluateNewsIssuePointRealProductActivationReadiness({
