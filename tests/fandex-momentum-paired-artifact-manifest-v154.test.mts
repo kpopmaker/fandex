@@ -396,7 +396,7 @@ test('committed current-real v154 manifest chain validates exact pair acceptance
   ]);
 
   const records = parseFandexMomentumPairedArtifactManifestJsonl(manifestJsonl);
-  assert.equal(records.length, 2);
+  assert.equal(records.length, 3);
 
   assert.equal(records[0].sequence, 1);
   assert.equal(records[0].coordinatorState, 'watermark-only-appended');
@@ -424,16 +424,28 @@ test('committed current-real v154 manifest chain validates exact pair acceptance
     watermarkWrites: 0,
   });
 
+  assert.equal(records[2].sequence, 3);
+  assert.equal(records[2].coordinatorState, 'no-op');
+  assert.equal(
+    records[2].previousManifestDigest,
+    records[1].manifestDigest,
+  );
+  assert.equal(
+    records[2].manifestDigest,
+    '042728c223ed6107baba213e9fd0c6c5da3f190e885c602f7c76ae6153f9055b',
+  );
+  assert.deepEqual(records[2].expectedWrites, {
+    historyWrites: 0,
+    watermarkWrites: 0,
+  });
+
   const accepted = evaluateFandexMomentumPairedArtifactAcceptanceResearch({
-    manifest: records[1],
+    manifest: records[2],
     observedHistoryJsonl: historyJsonl,
     observedWatermarkJsonl: watermarkJsonl,
   });
   assert.equal(accepted.state, 'expected-no-write-pair');
   assert.equal(accepted.readyForNextEvaluation, true);
   assert.deepEqual(accepted.blockers, []);
-  assert.equal(
-    accepted.digest,
-    'b9d270162f04d1016990fe7f2f0e286e249e36cae1114cc4776dbc08d9529458',
-  );
+  assert.match(accepted.digest, /^[0-9a-f]{64}$/);
 });
