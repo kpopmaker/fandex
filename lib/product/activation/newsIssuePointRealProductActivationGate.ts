@@ -128,13 +128,6 @@ export function evaluateNewsIssuePointRealProductActivationReadiness(
   }
 
   if (
-    registryDefinition.blockers.length !== 1
-    || registryDefinition.blockers[0] !== 'production-activation-not-authorized'
-  ) {
-    return blocked('registry-state-invalid');
-  }
-
-  if (
     registryDefinition.lifecycle !== 'shadow'
     || registryDefinition.directProductionContributionEligible !== false
   ) {
