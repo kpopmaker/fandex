@@ -182,7 +182,7 @@ export const NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE: FandexVariableDefinitio
   sourceProviderId: 'naver-news',
   directProductionContributionEligible: false,
   blockers: [
-    'production-activation-not-authorized',
+    'production-promotion-not-authorized',
   ],
   contractVersion: FANDEX_VARIABLE_REGISTRY_CONTRACT_VERSION,
 });
