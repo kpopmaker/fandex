@@ -1,0 +1,79 @@
+name: TEMP newsIssuePoint Product Operations Approval Record Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-approval-record-3afb2b
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "3afb2b04c8bda0665a9592d1f6d9235ec56df2c3"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Product Operations approval record
+        run: node --import tsx --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion and activation regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+
+      - name: Product read Evidence and scope regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          node --import tsx --test tests/product-variable-boundary-v1.test.mts
+          node --import tsx --test tests/product-evidence-boundary-v1.test.mts
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/temp-approval-record-other-six-isolation.test.mts
+
+      - name: Stored Evidence lineage regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/naver-news-canonical-job-evidence-v130.test.mts
+          node --import tsx --test tests/naver-news-canonical-observation-v130.test.mts
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Diff checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 6ff3641ab9dc62c44a5c79c990ef6184cfe4c826...3afb2b04c8bda0665a9592d1f6d9235ec56df2c3
+          git diff --check 3afb2b04c8bda0665a9592d1f6d9235ec56df2c3...HEAD
