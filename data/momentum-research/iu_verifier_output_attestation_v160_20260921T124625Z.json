@@ -1,0 +1,64 @@
+{
+  "contractVersion": "v160_fandex_momentum_verifier_output_attestation_adapter_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-21T12:46:25.858Z",
+  "purpose": "retrospective-compatibility-replay-only",
+  "freshStoredEvidenceReadPerformed": false,
+  "freshVerifierExecutionPerformed": false,
+  "sourceReadAudit": "data/momentum-research/iu_stored_evidence_attestation_v159_20260921T012400Z.json",
+  "sourceBoundary": {
+    "naverEvidenceId": "dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t000000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-21T00:00:00.000Z"
+  },
+  "retrospectiveVerifierEnvelope": {
+    "contractVersion": "v160_fandex_momentum_stored_evidence_verifier_output_v1",
+    "verifier": "neon-read-only-reproducer",
+    "executionId": "retrospective-compatibility:wild-tree-38937656:2026-09-21T01:24:00.000Z",
+    "executionIdRole": "deterministic-replay-label-not-original-provider-execution-id",
+    "executedAt": "2026-09-21T01:24:00.000Z",
+    "accessMode": "neon-read-only",
+    "databaseReadOnly": true,
+    "databaseWritesObserved": 0,
+    "reconstructedFromCommittedReadAudit": true
+  },
+  "adapterResult": {
+    "state": "attestation-adapted",
+    "verifierOutputAccepted": true,
+    "digest": "bc04510a9b1260a5d54fc852419da63280a9d4c7ddf8b15ea4763b755c5bce62",
+    "blockers": [],
+    "attestationMatchesCommittedV159": true
+  },
+  "downstreamV159": {
+    "state": "attested-provenance-ready",
+    "digest": "27f65870158f3eb6d8f639e307df5340afc950abbd13bf9a5b455663829711af",
+    "provenanceDigest": "9e7c1c47694d2ffa76f71818fecca565cf4f4c584db92d01708d15445a0e8f1d",
+    "futureLiveRefreshEligible": true
+  },
+  "negativeContractCoverage": {
+    "callerAssertedReproductionRejected": true,
+    "prebuiltAttestationAsVerifierOutputRejected": true,
+    "priorSourceReuseRejected": true,
+    "countOnlyOutputRejected": true,
+    "runtimeOnlyOutputRejected": true,
+    "readWriteExecutionRejected": true
+  },
+  "validation": {
+    "initialFullRegressionRunId": 35601274065,
+    "retrospectiveCompatibilityRunId": 35601393221,
+    "status": "PASS"
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0,
+    "physicalArtifactWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
