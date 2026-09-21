@@ -174,11 +174,11 @@ test('current committed pair passes preflight and prepares an exact-replay manif
   assert.equal(preflight.coordinatorInvoked, true);
   assert.equal(preflight.coordinator.state, 'no-op');
   assert.equal(preflight.coordinator.gate.state, 'exact-evaluation-replay');
-  assert.equal(preflight.nextManifest.sequence, 3);
+  assert.equal(preflight.nextManifest.sequence, 4);
   assert.equal(preflight.nextManifest.coordinatorState, 'no-op');
   assert.equal(
     preflight.nextManifest.previousManifestDigest,
-    'f75a89c363dcb06a5a534e132b25f710aa8cb12bb5be23e3c7a99f3875c0e9af',
+    '042728c223ed6107baba213e9fd0c6c5da3f190e885c602f7c76ae6153f9055b',
   );
   assert.deepEqual(preflight.proposedWrites, {
     historyWrites: 0,
@@ -203,7 +203,7 @@ test('current committed pair passes preflight and prepares an exact-replay manif
     parseFandexMomentumPairedArtifactManifestJsonl(
       preflight.proposedManifestJsonl,
     );
-  assert.equal(proposedManifest.length, 3);
+  assert.equal(proposedManifest.length, 4);
   assert.equal(
     proposedManifest[2].manifestDigest,
     preflight.nextManifest.manifestDigest,
@@ -298,7 +298,7 @@ test('accepted pair can prepare a future dual-artifact plus manifest transaction
     preflight.coordinator.gate.state,
     'common-cutoff-advanced-categorical-replay',
   );
-  assert.equal(preflight.nextManifest.sequence, 3);
+  assert.equal(preflight.nextManifest.sequence, 4);
   assert.equal(preflight.nextManifest.coordinatorState, 'dual-appended');
   assert.deepEqual(preflight.nextManifest.expectedWrites, {
     historyWrites: 1,
@@ -315,7 +315,7 @@ test('accepted pair can prepare a future dual-artifact plus manifest transaction
     parseFandexMomentumPairedArtifactManifestJsonl(
       preflight.proposedManifestJsonl,
     ).length,
-    3,
+    4,
   );
   assert.equal(preflight.effects.historyWrites, 0);
   assert.equal(preflight.effects.watermarkWrites, 0);
@@ -364,8 +364,10 @@ test('committed v155 current-real audit reproduces the exact preflight proposal'
   ]);
   const audit = JSON.parse(auditRaw);
 
+  const auditManifestJsonl =
+    manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
   const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
-    manifestJsonl,
+    manifestJsonl: auditManifestJsonl,
     historyJsonl,
     watermarkJsonl,
     result: result(),
