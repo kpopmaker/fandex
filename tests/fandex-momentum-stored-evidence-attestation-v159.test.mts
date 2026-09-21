@@ -549,3 +549,164 @@ test('v159 official refresh entrypoint passes only attestation-derived v153 prov
   assert.equal(out.readyForPhysicalPersistence, true);
   assert.deepEqual(out.blockers, []);
 });
+
+
+test('committed v159 current audit preserves the unattested 00Z block and rollback boundary', async () => {
+  const [auditRaw, watermarkJsonl, manifestJsonl] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_stored_evidence_attestation_v159_20260921T013500Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+  const audit = JSON.parse(auditRaw);
+
+  const out = evaluateFandexMomentumStoredEvidenceAttestationResearch({
+    snapshot: currentSnapshot,
+    runtimeObservation: currentRuntime,
+    readAttestation: null,
+  });
+
+  assert.equal(
+    audit.contractVersion,
+    'v159_fandex_momentum_current_stored_evidence_attestation_audit_v1',
+  );
+  assert.equal(
+    audit.attestationBoundary.callerSuppliedReproducedBooleanAllowed,
+    false,
+  );
+  assert.equal(audit.attestationBoundary.currentReadAttestationPresent, false);
+  assert.equal(audit.attestationBoundary.currentReadAttestationAccepted, false);
+  assert.equal(
+    audit.attestationBoundary.storedEvidenceReproducedThisEvaluation,
+    false,
+  );
+  assert.equal(out.provenance.digest, audit.derivedProvenance.digest);
+  assert.equal(out.provenance.state, audit.derivedProvenance.state);
+  assert.equal(out.provenance.futureLiveRefreshEligible, false);
+  assert.deepEqual(out.provenance.blockers, audit.derivedProvenance.blockers);
+
+  let refreshCalls = 0;
+  const official = evaluateFandexMomentumAttestedRefreshResearch(
+    {
+      snapshot: currentSnapshot,
+      runtimeObservation: currentRuntime,
+      readAttestation: null,
+      manifestJsonl,
+      historyJsonl: '',
+      watermarkJsonl,
+      result: {
+        contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
+        sourceContractVersion:
+          'v142_fandex_momentum_cross_family_combination_research_v1',
+        state: 'categorical-research-output-only',
+        canonicalArtistId: 'iu',
+        alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
+        currentResearchOutput: {
+          outputForm: 'structured-categorical-evidence',
+          directionalConsensus: 'direction-conflicted',
+          persistenceConsensus: 'persistence-not-applicable',
+          qualitativeDirectionEvidenceUsable: false,
+          levelPercentileSpreadDiagnostic: 100,
+          productMomentumScore: null,
+        },
+        numericEligibility: {
+          status: 'not-eligible',
+          unmetRequirements: [],
+          numericEstimand: null,
+          calibrationTarget: null,
+          mappingOrWeights: null,
+          outOfSampleValidation: null,
+          additionalFamiliesAloneSufficient: false,
+          legacyPreviewSeedCalibrationAllowed: false,
+        },
+        currentProductSchema: {
+          metricValueKind: 'number-or-null',
+          weightedScoreRequiresNumericValue: true,
+          currentMomentumSourceStage: 'derived_signal',
+          currentMomentumQualityLabel: 'preview',
+          previewFallbackEnabled: true,
+          previewFallbackExample: null,
+          categoricalEvidenceFitsCurrentMomentumSlot: false,
+        },
+        researchCarrier: {
+          observationContractVersion: 'fandex-observation-v1',
+          categoricalRawValueSupported: true,
+          recommendedVariableId:
+            'momentum.cross-family-evidence-state.research',
+          registryBindingEstablished: false,
+          productMetricBindingEstablished: false,
+        },
+        blockers: [],
+        digest: '8'.repeat(64),
+        effects: {
+          externalCalls: 0,
+          databaseReads: 0,
+          databaseWrites: 0,
+          masterScoreWrites: 0,
+          websiteWrites: 0,
+        },
+      },
+      sourceEvidence: {
+        lastfmEvidenceId:
+          '723cf73abb93882779edc0621a12381ab80e464c',
+        lastfmLatestComponentEndAt: '2026-09-20T01:59:13.000Z',
+        naverEvidenceId: currentSnapshot.naverEvidenceId,
+        naverThroughSlotStart: currentSnapshot.naverThroughSlotStart,
+      },
+      evaluatedAt: audit.auditedAt,
+      recordedAt: audit.auditedAt,
+      manifestedAt: audit.auditedAt,
+    },
+    {
+      evaluateRefresh: (() => {
+        refreshCalls += 1;
+        throw new Error('v158_must_not_run');
+      }) as any,
+    },
+  );
+
+  assert.equal(refreshCalls, 0);
+  assert.equal(official.state, audit.officialRefreshEntrypoint.state);
+  assert.equal(
+    official.refreshInvoked,
+    audit.officialRefreshEntrypoint.refreshInvoked,
+  );
+  assert.equal(
+    official.readyForPhysicalPersistence,
+    audit.officialRefreshEntrypoint.readyForPhysicalPersistence,
+  );
+  assert.deepEqual(official.blockers, audit.officialRefreshEntrypoint.blockers);
+
+  const watermarks = watermarkJsonl.split(/\r?\n/).filter(Boolean);
+  const manifests = manifestJsonl.split(/\r?\n/).filter(Boolean);
+  assert.equal(watermarks.length, audit.rollback.currentWatermarkRecordCount);
+  assert.equal(manifests.length, audit.rollback.currentManifestRecordCount);
+  assert.equal(
+    JSON.parse(watermarks.at(-1)!).sequence,
+    audit.rollback.currentWatermarkLatestSequence,
+  );
+  assert.equal(
+    JSON.parse(manifests.at(-1)!).sequence,
+    audit.rollback.currentManifestLatestSequence,
+  );
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
