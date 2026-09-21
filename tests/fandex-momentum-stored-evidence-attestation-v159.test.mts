@@ -4,7 +4,9 @@ import test from 'node:test';
 
 import {
   evaluateFandexMomentumStoredEvidenceAttestationResearch,
+  evaluateFandexMomentumAttestedRefreshResearch,
   FANDEX_MOMENTUM_STORED_EVIDENCE_ATTESTATION_RESEARCH_DESCRIPTOR,
+  FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_DESCRIPTOR,
   type FandexMomentumStoredEvidenceReadAttestation,
 } from '../lib/intelligence/fandexMomentumStoredEvidenceAttestationResearch';
 
@@ -255,4 +257,295 @@ test('incomplete row coverage or invalid fingerprints fail closed', () => {
   assert.ok(
     out.blockers.includes('stored-evidence-attestation-fingerprint-invalid'),
   );
+});
+
+
+test('v159 official refresh entrypoint never invokes v158 when current attestation is absent', () => {
+  assert.equal(
+    FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_DESCRIPTOR
+      .directV153BooleanInputAccepted,
+    false,
+  );
+  assert.equal(
+    FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_DESCRIPTOR
+      .blockedAttestationInvokesRefresh,
+    false,
+  );
+
+  let refreshCalls = 0;
+  const out = evaluateFandexMomentumAttestedRefreshResearch(
+    {
+      snapshot: currentSnapshot,
+      runtimeObservation: currentRuntime,
+      readAttestation: null,
+      manifestJsonl: '',
+      historyJsonl: '',
+      watermarkJsonl: '',
+      result: {
+        contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
+        sourceContractVersion:
+          'v142_fandex_momentum_cross_family_combination_research_v1',
+        state: 'categorical-research-output-only',
+        canonicalArtistId: 'iu',
+        alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
+        currentResearchOutput: {
+          outputForm: 'structured-categorical-evidence',
+          directionalConsensus: 'direction-conflicted',
+          persistenceConsensus: 'persistence-not-applicable',
+          qualitativeDirectionEvidenceUsable: false,
+          levelPercentileSpreadDiagnostic: 100,
+          productMomentumScore: null,
+        },
+        numericEligibility: {
+          status: 'not-eligible',
+          unmetRequirements: [],
+          numericEstimand: null,
+          calibrationTarget: null,
+          mappingOrWeights: null,
+          outOfSampleValidation: null,
+          additionalFamiliesAloneSufficient: false,
+          legacyPreviewSeedCalibrationAllowed: false,
+        },
+        currentProductSchema: {
+          metricValueKind: 'number-or-null',
+          weightedScoreRequiresNumericValue: true,
+          currentMomentumSourceStage: 'derived_signal',
+          currentMomentumQualityLabel: 'preview',
+          previewFallbackEnabled: true,
+          previewFallbackExample: null,
+          categoricalEvidenceFitsCurrentMomentumSlot: false,
+        },
+        researchCarrier: {
+          observationContractVersion: 'fandex-observation-v1',
+          categoricalRawValueSupported: true,
+          recommendedVariableId:
+            'momentum.cross-family-evidence-state.research',
+          registryBindingEstablished: false,
+          productMetricBindingEstablished: false,
+        },
+        blockers: [],
+        digest: '8'.repeat(64),
+        effects: {
+          externalCalls: 0,
+          databaseReads: 0,
+          databaseWrites: 0,
+          masterScoreWrites: 0,
+          websiteWrites: 0,
+        },
+      },
+      sourceEvidence: {
+        lastfmEvidenceId:
+          '723cf73abb93882779edc0621a12381ab80e464c',
+        lastfmLatestComponentEndAt: '2026-09-20T01:59:13.000Z',
+        naverEvidenceId: currentSnapshot.naverEvidenceId,
+        naverThroughSlotStart: currentSnapshot.naverThroughSlotStart,
+      },
+      evaluatedAt: '2026-09-21T01:30:00.000Z',
+      recordedAt: '2026-09-21T01:30:00.000Z',
+      manifestedAt: '2026-09-21T01:30:00.000Z',
+    },
+    {
+      evaluateRefresh: (() => {
+        refreshCalls += 1;
+        throw new Error('v158_must_not_run_without_attestation');
+      }) as any,
+    },
+  );
+
+  assert.equal(refreshCalls, 0);
+  assert.equal(out.state, 'attestation-blocked');
+  assert.equal(out.refreshInvoked, false);
+  assert.equal(out.refresh, null);
+  assert.equal(out.readyForPhysicalPersistence, false);
+  assert.ok(out.blockers.includes('stored-evidence-read-attestation-unavailable'));
+  assert.deepEqual(out.effects, {
+    productMetricReads: 0,
+    productMetricWrites: 0,
+    previewFallbackReads: 0,
+    databaseWrites: 0,
+    historyWrites: 0,
+    watermarkWrites: 0,
+    manifestWrites: 0,
+  });
+});
+
+test('v159 official refresh entrypoint passes only attestation-derived v153 provenance into v158', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_source_provenance_v153_live_reproduction_20260921T001447Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const readAttestation: FandexMomentumStoredEvidenceReadAttestation = {
+    contractVersion:
+      'v159_fandex_momentum_stored_evidence_read_attestation_payload_v1',
+    accessMode: audit.liveStoredEvidenceRead.accessMode,
+    canonicalArtistId: audit.canonicalArtistId,
+    naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+    naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+    readAt: audit.reproducedAt,
+    jobRowReproduced: true,
+    evidenceRows: audit.liveStoredEvidenceRead.evidenceRows,
+    distinctEvidenceIds: audit.liveStoredEvidenceRead.distinctEvidenceIds,
+    distinctItemIndexes: audit.liveStoredEvidenceRead.distinctItemIndexes,
+    minItemIndex: audit.liveStoredEvidenceRead.minItemIndex,
+    maxItemIndex: audit.liveStoredEvidenceRead.maxItemIndex,
+    normalizedOutcomes: audit.liveStoredEvidenceRead.normalizedOutcomes,
+    missingNormalizedIds: audit.liveStoredEvidenceRead.missingNormalizedIds,
+    missingNormalizedRecords:
+      audit.liveStoredEvidenceRead.missingNormalizedRecords,
+    distinctNormalizedRecords:
+      audit.liveStoredEvidenceRead.distinctNormalizedRecords,
+    joinedPayloadRows: audit.liveStoredEvidenceRead.joinedPayloadRows,
+    rawLinkageSetAuditMd5:
+      audit.liveStoredEvidenceRead.rawLinkageSetAuditMd5,
+    normalizedSetAuditMd5:
+      audit.liveStoredEvidenceRead.normalizedSetAuditMd5,
+    rawPayloadMaterializedAuditMd5:
+      audit.liveStoredEvidenceRead.rawPayloadMaterializedAuditMd5,
+    normalizedPayloadMaterializedAuditMd5:
+      audit.liveStoredEvidenceRead.normalizedPayloadMaterializedAuditMd5,
+    auditFingerprintPurpose:
+      audit.liveStoredEvidenceRead.auditFingerprintPurpose,
+  };
+
+  let refreshCalls = 0;
+  const out = evaluateFandexMomentumAttestedRefreshResearch(
+    {
+      snapshot: {
+        canonicalArtistId: audit.canonicalArtistId,
+        naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+        naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+        naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+        naverStatus: audit.sourceSnapshot.naverStatus,
+        naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+        naverNormalizedRecordCount:
+          audit.sourceSnapshot.naverNormalizedRecordCount,
+        naverDuplicateRecordCount:
+          audit.sourceSnapshot.naverDuplicateRecordCount,
+        naverRejectedItemCount:
+          audit.sourceSnapshot.naverRejectedItemCount,
+      },
+      runtimeObservation: {
+        observedAt: audit.productionRuntimeObservation.observedAt,
+        requestPath: audit.productionRuntimeObservation.requestPath,
+        httpStatus: audit.productionRuntimeObservation.httpStatus,
+        deploymentId: audit.productionRuntimeObservation.deploymentId,
+        branch: audit.productionRuntimeObservation.branch,
+      },
+      readAttestation,
+      manifestJsonl: 'manifest',
+      historyJsonl: 'history',
+      watermarkJsonl: 'watermark',
+      result: {
+        contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
+        sourceContractVersion:
+          'v142_fandex_momentum_cross_family_combination_research_v1',
+        state: 'categorical-research-output-only',
+        canonicalArtistId: 'iu',
+        alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
+        currentResearchOutput: {
+          outputForm: 'structured-categorical-evidence',
+          directionalConsensus: 'direction-conflicted',
+          persistenceConsensus: 'persistence-not-applicable',
+          qualitativeDirectionEvidenceUsable: false,
+          levelPercentileSpreadDiagnostic: 100,
+          productMomentumScore: null,
+        },
+        numericEligibility: {
+          status: 'not-eligible',
+          unmetRequirements: [],
+          numericEstimand: null,
+          calibrationTarget: null,
+          mappingOrWeights: null,
+          outOfSampleValidation: null,
+          additionalFamiliesAloneSufficient: false,
+          legacyPreviewSeedCalibrationAllowed: false,
+        },
+        currentProductSchema: {
+          metricValueKind: 'number-or-null',
+          weightedScoreRequiresNumericValue: true,
+          currentMomentumSourceStage: 'derived_signal',
+          currentMomentumQualityLabel: 'preview',
+          previewFallbackEnabled: true,
+          previewFallbackExample: null,
+          categoricalEvidenceFitsCurrentMomentumSlot: false,
+        },
+        researchCarrier: {
+          observationContractVersion: 'fandex-observation-v1',
+          categoricalRawValueSupported: true,
+          recommendedVariableId:
+            'momentum.cross-family-evidence-state.research',
+          registryBindingEstablished: false,
+          productMetricBindingEstablished: false,
+        },
+        blockers: [],
+        digest: '8'.repeat(64),
+        effects: {
+          externalCalls: 0,
+          databaseReads: 0,
+          databaseWrites: 0,
+          masterScoreWrites: 0,
+          websiteWrites: 0,
+        },
+      },
+      sourceEvidence: {
+        lastfmEvidenceId:
+          '723cf73abb93882779edc0621a12381ab80e464c',
+        lastfmLatestComponentEndAt: '2026-09-20T01:59:13.000Z',
+        naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+        naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+      },
+      evaluatedAt: audit.reproducedAt,
+      recordedAt: audit.reproducedAt,
+      manifestedAt: audit.reproducedAt,
+    },
+    {
+      evaluateRefresh: ((input: any) => {
+        refreshCalls += 1;
+        assert.equal(input.provenance.digest, audit.result.digest);
+        assert.equal(
+          input.provenance.state,
+          'stored-evidence-read-reproduced',
+        );
+        assert.equal(
+          input.provenance.storedEvidenceReproducedThisEvaluation,
+          true,
+        );
+        return {
+          contractVersion:
+            'v158_fandex_momentum_provenance_gated_current_live_refresh_research_v1',
+          state: 'refresh-prepared',
+          canonicalArtistId: 'iu',
+          provenanceDigest: input.provenance.digest,
+          provenanceState: input.provenance.state,
+          sourceEvidenceMatched: true,
+          preflightInvoked: true,
+          preflight: null,
+          readyForPhysicalPersistence: true,
+          blockers: [],
+          effects: {
+            productMetricReads: 0,
+            productMetricWrites: 0,
+            previewFallbackReads: 0,
+            databaseWrites: 0,
+            historyWrites: 0,
+            watermarkWrites: 0,
+            manifestWrites: 0,
+          },
+          digest: '9'.repeat(64),
+        };
+      }) as any,
+    },
+  );
+
+  assert.equal(refreshCalls, 1);
+  assert.equal(out.state, 'refresh-evaluated');
+  assert.equal(out.attestation.state, 'attested-provenance-ready');
+  assert.equal(out.refreshInvoked, true);
+  assert.equal(out.refresh?.state, 'refresh-prepared');
+  assert.equal(out.readyForPhysicalPersistence, true);
+  assert.deepEqual(out.blockers, []);
 });
