@@ -1,0 +1,96 @@
+{
+  "contractVersion": "v161_fandex_momentum_native_verifier_output_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-21T13:40:00.000Z",
+  "sourceBoundary": {
+    "naverThroughSlotStart": "2026-09-21T12:00:00.000Z",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t120000z-f1ed381d367d",
+    "deterministicNaverEvidenceId": "d76d5ee3ed512280f3b0055818c38f0c857d8a9e7c9d8621e826ca48b919fb58"
+  },
+  "productionRuntimeObservation": {
+    "observedAt": "2026-09-21T12:47:00.000Z",
+    "requestPath": "/api/internal/naver-news/shadow-scheduler",
+    "httpStatus": 200,
+    "deploymentId": "dpl_AfKF5z9aAvNxsa6gzCjXpEXengHt",
+    "branch": "main",
+    "mapsToSourceBoundary": true
+  },
+  "v161Contract": {
+    "contractVersion": "v161_naver_news_momentum_native_verifier_output_v1",
+    "nativeVerifierOutputImplemented": true,
+    "transactionMode": "read-only",
+    "emitsV160VerifierOutputContract": true,
+    "validatesRawPayloadHashes": true,
+    "validatesRawEvidenceIdentity": true,
+    "validatesNormalizedPayloadHashes": true,
+    "materializesRawAndNormalizedPayloads": true,
+    "verifierGeneratedExecutionId": true,
+    "databaseWritesAllowed": false,
+    "productionEligible": false
+  },
+  "contractValidation": {
+    "githubActionsRunId": 35606683751,
+    "status": "PASS",
+    "v161TestsPassed": true,
+    "v160RegressionPassed": true,
+    "v159RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "freshExecution": {
+    "attempted": true,
+    "freshStoredEvidenceReadCompleted": false,
+    "nativeVerifierOutputProduced": false,
+    "v160FreshAdaptationPerformed": false,
+    "v159FreshAttestationPerformed": false,
+    "baselinePreviewDeployment": {
+      "commit": "cc667958ec379aab6ce339c295f4cfc092a14cf6",
+      "deploymentId": "dpl_AWcFKD7Un1C5HnLPcJxXP7TRDs8V",
+      "state": "READY"
+    },
+    "nativePrebuildAttempt": {
+      "commit": "e4ce8121897ce65949f8075c558fb30eee6b7c2b",
+      "deploymentId": "dpl_9Vvj2qU7bFnhKnUSzCJgGcqbmh4z",
+      "state": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorStep": "buildStep"
+    },
+    "credentialIsolationAttempt": {
+      "commit": "7755d0003355ce3157a615641965ce735decd02e",
+      "deploymentId": "dpl_5yubMSTe2Y33CkSbPGvH5gFZ6zSd",
+      "state": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorStep": "buildStep",
+      "probeBehavior": "requireRuntimeDatabaseUrl(process.env)-only",
+      "conclusion": "preview-runtime-database-url-unavailable-or-invalid"
+    },
+    "blocker": "preview-runtime-database-url-unavailable-or-invalid"
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "cleanup": {
+    "temporaryPreviewProbeRemoved": true,
+    "temporaryPrebuildHookRemoved": true
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0,
+    "researchArtifactLedgerWritesForFresh1200Z": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
