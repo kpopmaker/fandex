@@ -28,5 +28,7 @@ jobs:
           npx tsx --conditions=react-server --test tests/fandex-momentum-stored-evidence-attestation-v159.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-source-provenance-v153.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-provenance-gated-refresh-v158.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-partial-persistence-recovery-v157.test.mts
           npm run typecheck
           git diff --check
