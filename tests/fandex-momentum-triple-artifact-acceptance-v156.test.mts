@@ -109,9 +109,9 @@ function source(input?: Readonly<{
       input?.lastfmEnd ?? '2026-09-20T01:59:13.000Z',
     naverEvidenceId:
       input?.naverId
-      ?? '39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c',
+      ?? 'dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d',
     naverThroughSlotStart:
-      input?.naverThrough ?? '2026-09-20T15:00:00.000Z',
+      input?.naverThrough ?? '2026-09-21T00:00:00.000Z',
   };
 }
 
@@ -132,9 +132,9 @@ async function currentPreflight() {
     watermarkJsonl,
     result: result(),
     sourceEvidence: source(),
-    evaluatedAt: '2026-09-20T16:20:00.000Z',
-    recordedAt: '2026-09-20T16:20:00.000Z',
-    manifestedAt: '2026-09-20T16:20:00.000Z',
+    evaluatedAt: '2026-09-21T01:30:00.000Z',
+    recordedAt: '2026-09-21T01:30:00.000Z',
+    manifestedAt: '2026-09-21T01:30:00.000Z',
   });
   assert.equal(preflight.state, 'evaluation-prepared');
   return {
@@ -209,8 +209,8 @@ test('current exact-replay proposal accepts only after the proposed next manifes
   const beforeManifest = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
     preflight,
     observedHistoryJsonl: historyJsonl,
-    observedWatermarkJsonl: watermarkJsonl,
-    observedManifestJsonl: manifestJsonl,
+    observedWatermarkJsonl: priorWatermarkJsonl,
+    observedManifestJsonl: acceptedManifestJsonl,
   });
   assert.equal(beforeManifest.state, 'manifest-write-not-applied');
   assert.equal(beforeManifest.readyForNextEvaluation, false);
@@ -432,13 +432,20 @@ test('committed v156 current-real audit reproduces the exact post-persistence tr
   const v155Audit = JSON.parse(v155AuditRaw);
   const priorManifestJsonl =
     manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
+  const acceptedManifestJsonl =
+    manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 3).join('\n') + '\n';
+  const priorWatermarkJsonl =
+    watermarkJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
 
   const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
     manifestJsonl: priorManifestJsonl,
     historyJsonl,
-    watermarkJsonl,
+    watermarkJsonl: priorWatermarkJsonl,
     result: result(),
-    sourceEvidence: source(),
+    sourceEvidence: source({
+      naverId: '39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c',
+      naverThrough: '2026-09-20T15:00:00.000Z',
+    }),
     evaluatedAt: v155Audit.evaluatedAt,
     recordedAt: v155Audit.recordedAt,
     manifestedAt: v155Audit.manifestedAt,
@@ -453,13 +460,13 @@ test('committed v156 current-real audit reproduces the exact post-persistence tr
   );
   assert.equal(
     preflight.proposedManifestJsonl,
-    manifestJsonl,
+    acceptedManifestJsonl,
   );
 
   const before = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
     preflight,
     observedHistoryJsonl: historyJsonl,
-    observedWatermarkJsonl: watermarkJsonl,
+    observedWatermarkJsonl: priorWatermarkJsonl,
     observedManifestJsonl: priorManifestJsonl,
   });
   assert.equal(before.state, audit.beforePersistence.state);
