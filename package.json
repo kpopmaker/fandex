@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "tsx --conditions=react-server scripts/ingestion/verify-momentum-v158-current-preview-build.mts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
