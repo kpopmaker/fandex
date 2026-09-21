@@ -209,8 +209,8 @@ test('current exact-replay proposal accepts only after the proposed next manifes
   const beforeManifest = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
     preflight,
     observedHistoryJsonl: historyJsonl,
-    observedWatermarkJsonl: priorWatermarkJsonl,
-    observedManifestJsonl: acceptedManifestJsonl,
+    observedWatermarkJsonl: watermarkJsonl,
+    observedManifestJsonl: manifestJsonl,
   });
   assert.equal(beforeManifest.state, 'manifest-write-not-applied');
   assert.equal(beforeManifest.readyForNextEvaluation, false);
@@ -477,8 +477,8 @@ test('committed v156 current-real audit reproduces the exact post-persistence tr
   const after = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
     preflight,
     observedHistoryJsonl: historyJsonl,
-    observedWatermarkJsonl: watermarkJsonl,
-    observedManifestJsonl: manifestJsonl,
+    observedWatermarkJsonl: priorWatermarkJsonl,
+    observedManifestJsonl: acceptedManifestJsonl,
   });
   assert.equal(after.state, audit.afterPersistence.state);
   assert.equal(after.digest, audit.afterPersistence.digest);
