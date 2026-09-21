@@ -1,0 +1,169 @@
+name: PR127 v156 current-real post-persistence validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Materialize current exact-replay manifest sequence 3 and verify v156
+        run: |
+          cat > .tmp-v156-current-real.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            evaluateFandexMomentumManifestGuardedPreflightResearch,
+          } from './lib/intelligence/fandexMomentumManifestGuardedPreflightResearch';
+          import {
+            evaluateFandexMomentumTripleArtifactAcceptanceResearch,
+          } from './lib/intelligence/fandexMomentumTripleArtifactAcceptanceResearch';
+
+          const [historyJsonl, watermarkJsonl, manifestJsonl, auditRaw] = await Promise.all([
+            readFile('./data/momentum-research/iu_cross_family_evidence_state_v147.jsonl', 'utf8'),
+            readFile('./data/momentum-research/iu_evaluation_watermark_v151.jsonl', 'utf8'),
+            readFile('./data/momentum-research/iu_paired_artifact_manifest_v154.jsonl', 'utf8'),
+            readFile('./data/momentum-research/iu_manifest_guarded_preflight_v155_20260920T162000Z.json', 'utf8'),
+          ]);
+          const audit = JSON.parse(auditRaw);
+
+          const result: any = {
+            contractVersion: 'v143_fandex_momentum_output_form_eligibility_research_v1',
+            sourceContractVersion: 'v142_fandex_momentum_cross_family_combination_research_v1',
+            state: 'categorical-research-output-only',
+            canonicalArtistId: 'iu',
+            alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
+            currentResearchOutput: {
+              outputForm: 'structured-categorical-evidence',
+              directionalConsensus: 'direction-conflicted',
+              persistenceConsensus: 'persistence-not-applicable',
+              qualitativeDirectionEvidenceUsable: false,
+              levelPercentileSpreadDiagnostic: 100,
+              productMomentumScore: null,
+            },
+            numericEligibility: {
+              status: 'not-eligible',
+              unmetRequirements: [
+                'numeric-estimand-defined',
+                'independent-calibration-target-established',
+                'non-circular-observed-calibration-dataset-available',
+                'data-derived-mapping-or-weights-established',
+                'out-of-sample-validation-passed',
+                'conflict-and-missingness-numeric-policy-validated',
+                'product-schema-migration-prevents-preview-fallback',
+              ],
+              numericEstimand: null,
+              calibrationTarget: null,
+              mappingOrWeights: null,
+              outOfSampleValidation: null,
+              additionalFamiliesAloneSufficient: false,
+              legacyPreviewSeedCalibrationAllowed: false,
+            },
+            currentProductSchema: {
+              metricValueKind: 'number-or-null',
+              weightedScoreRequiresNumericValue: true,
+              currentMomentumSourceStage: 'derived_signal',
+              currentMomentumQualityLabel: 'preview',
+              previewFallbackEnabled: true,
+              previewFallbackExample: null,
+              categoricalEvidenceFitsCurrentMomentumSlot: false,
+            },
+            researchCarrier: {
+              observationContractVersion: 'fandex-observation-v1',
+              categoricalRawValueSupported: true,
+              recommendedVariableId: 'momentum.cross-family-evidence-state.research',
+              registryBindingEstablished: false,
+              productMetricBindingEstablished: false,
+            },
+            blockers: [],
+            digest: audit.sourceEvidence.sourceV143Digest,
+            effects: {
+              externalCalls: 0,
+              databaseReads: 0,
+              databaseWrites: 0,
+              masterScoreWrites: 0,
+              websiteWrites: 0,
+            },
+          };
+
+          const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
+            historyJsonl,
+            watermarkJsonl,
+            manifestJsonl,
+            result,
+            sourceEvidence: {
+              lastfmEvidenceId: audit.sourceEvidence.lastfmEvidenceId,
+              lastfmLatestComponentEndAt: audit.sourceEvidence.lastfmLatestComponentEndAt,
+              naverEvidenceId: audit.sourceEvidence.naverEvidenceId,
+              naverThroughSlotStart: audit.sourceEvidence.naverThroughSlotStart,
+            },
+            evaluatedAt: audit.evaluatedAt,
+            recordedAt: audit.recordedAt,
+            manifestedAt: audit.manifestedAt,
+          });
+          if (preflight.state !== 'evaluation-prepared') throw new Error('preflight not prepared');
+          if (preflight.digest !== audit.preflight.digest) throw new Error('preflight digest mismatch');
+          if (preflight.nextManifest.manifestDigest !== audit.preflight.nextManifest.manifestDigest) {
+            throw new Error('next manifest digest mismatch');
+          }
+
+          const before = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
+            preflight,
+            observedHistoryJsonl: historyJsonl,
+            observedWatermarkJsonl: watermarkJsonl,
+            observedManifestJsonl: manifestJsonl,
+          });
+          if (before.state !== 'manifest-write-not-applied' || before.readyForNextEvaluation) {
+            throw new Error('unexpected pre-persistence state');
+          }
+
+          const after = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
+            preflight,
+            observedHistoryJsonl: historyJsonl,
+            observedWatermarkJsonl: watermarkJsonl,
+            observedManifestJsonl: preflight.proposedManifestJsonl,
+          });
+          if (after.state !== 'accepted-resulting-triple' || !after.readyForNextEvaluation) {
+            throw new Error('expected exact triple acceptance');
+          }
+
+          console.log(JSON.stringify({
+            preflightDigest: preflight.digest,
+            nextManifestSequence: preflight.nextManifest.sequence,
+            nextManifestDigest: preflight.nextManifest.manifestDigest,
+            proposedWrites: preflight.proposedWrites,
+            before: {
+              state: before.state,
+              digest: before.digest,
+              readyForNextEvaluation: before.readyForNextEvaluation,
+            },
+            after: {
+              state: after.state,
+              digest: after.digest,
+              readyForNextEvaluation: after.readyForNextEvaluation,
+              pairAcceptanceState: after.pairAcceptance.state,
+              observedManifestDigest: after.observedManifestDigest,
+            },
+          }, null, 2));
+          console.log('V156_MANIFEST_BEGIN');
+          process.stdout.write(preflight.proposedManifestJsonl);
+          console.log('V156_MANIFEST_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v156-current-real.mts
+          rm .tmp-v156-current-real.mts
+      - name: Run v156 regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-manifest-guarded-preflight-v155.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-paired-artifact-manifest-v154.test.mts
+          npm run typecheck
+          git diff --check
