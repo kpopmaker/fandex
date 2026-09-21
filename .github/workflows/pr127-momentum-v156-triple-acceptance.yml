@@ -7,6 +7,9 @@ on:
     paths:
       - 'lib/intelligence/fandexMomentumTripleArtifactAcceptanceResearch.ts'
       - 'tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts'
+      - 'tests/fandex-momentum-manifest-guarded-preflight-v155.test.mts'
+      - 'tests/fandex-momentum-paired-artifact-manifest-v154.test.mts'
+      - 'data/momentum-research/iu_paired_artifact_manifest_v154.jsonl'
       - '.github/workflows/pr127-momentum-v156-triple-acceptance.yml'
   workflow_dispatch:
 
