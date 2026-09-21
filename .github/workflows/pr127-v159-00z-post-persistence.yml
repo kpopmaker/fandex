@@ -1,0 +1,260 @@
+name: PR127 v159 attested 00Z post-persistence
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Reconstruct attested v159 proposal and verify committed triple
+        run: |
+          git show fec97d2962f8482c278afd7479dd8247f4e948c8:data/momentum-research/iu_evaluation_watermark_v151.jsonl > /tmp/prior-watermark.jsonl
+          git show fec97d2962f8482c278afd7479dd8247f4e948c8:data/momentum-research/iu_paired_artifact_manifest_v154.jsonl > /tmp/prior-manifest.jsonl
+
+          cat > .tmp-v159-post-persistence.mts <<'TS'
+          import { readFile } from 'node:fs/promises';
+          import {
+            evaluateFandexMomentumAttestedRefreshResearch,
+          } from './lib/intelligence/fandexMomentumStoredEvidenceAttestationResearch';
+          import {
+            evaluateFandexMomentumTripleArtifactAcceptanceResearch,
+          } from './lib/intelligence/fandexMomentumTripleArtifactAcceptanceResearch';
+          import {
+            planFandexMomentumPartialPersistenceRecoveryResearch,
+          } from './lib/intelligence/fandexMomentumPartialPersistenceRecoveryResearch';
+
+          const [
+            attestationRaw,
+            historyJsonl,
+            priorWatermarkJsonl,
+            priorManifestJsonl,
+            observedWatermarkJsonl,
+            observedManifestJsonl,
+          ] = await Promise.all([
+            readFile(
+              './data/momentum-research/iu_stored_evidence_attestation_v159_20260921T012400Z.json',
+              'utf8',
+            ),
+            readFile(
+              './data/momentum-research/iu_cross_family_evidence_state_v147.jsonl',
+              'utf8',
+            ),
+            readFile('/tmp/prior-watermark.jsonl', 'utf8'),
+            readFile('/tmp/prior-manifest.jsonl', 'utf8'),
+            readFile(
+              './data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+              'utf8',
+            ),
+            readFile(
+              './data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+              'utf8',
+            ),
+          ]);
+          const audit = JSON.parse(attestationRaw);
+
+          const result: any = {
+            contractVersion:
+              'v143_fandex_momentum_output_form_eligibility_research_v1',
+            sourceContractVersion:
+              'v142_fandex_momentum_cross_family_combination_research_v1',
+            state: 'categorical-research-output-only',
+            canonicalArtistId: 'iu',
+            alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
+            currentResearchOutput: {
+              outputForm: 'structured-categorical-evidence',
+              directionalConsensus: 'direction-conflicted',
+              persistenceConsensus: 'persistence-not-applicable',
+              qualitativeDirectionEvidenceUsable: false,
+              levelPercentileSpreadDiagnostic: 100,
+              productMomentumScore: null,
+            },
+            numericEligibility: {
+              status: 'not-eligible',
+              unmetRequirements: [
+                'numeric-estimand-defined',
+                'independent-calibration-target-established',
+                'non-circular-observed-calibration-dataset-available',
+                'data-derived-mapping-or-weights-established',
+                'out-of-sample-validation-passed',
+                'conflict-and-missingness-numeric-policy-validated',
+                'product-schema-migration-prevents-preview-fallback',
+              ],
+              numericEstimand: null,
+              calibrationTarget: null,
+              mappingOrWeights: null,
+              outOfSampleValidation: null,
+              additionalFamiliesAloneSufficient: false,
+              legacyPreviewSeedCalibrationAllowed: false,
+            },
+            currentProductSchema: {
+              metricValueKind: 'number-or-null',
+              weightedScoreRequiresNumericValue: true,
+              currentMomentumSourceStage: 'derived_signal',
+              currentMomentumQualityLabel: 'preview',
+              previewFallbackEnabled: true,
+              previewFallbackExample: null,
+              categoricalEvidenceFitsCurrentMomentumSlot: false,
+            },
+            researchCarrier: {
+              observationContractVersion: 'fandex-observation-v1',
+              categoricalRawValueSupported: true,
+              recommendedVariableId:
+                'momentum.cross-family-evidence-state.research',
+              registryBindingEstablished: false,
+              productMetricBindingEstablished: false,
+            },
+            blockers: [],
+            digest:
+              '87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a',
+            effects: {
+              externalCalls: 0,
+              databaseReads: 0,
+              databaseWrites: 0,
+              masterScoreWrites: 0,
+              websiteWrites: 0,
+            },
+          };
+
+          const v159 = evaluateFandexMomentumAttestedRefreshResearch({
+            snapshot: {
+              canonicalArtistId: audit.canonicalArtistId,
+              naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+              naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+              naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+              naverStatus: audit.sourceSnapshot.naverStatus,
+              naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+              naverNormalizedRecordCount:
+                audit.sourceSnapshot.naverNormalizedRecordCount,
+              naverDuplicateRecordCount:
+                audit.sourceSnapshot.naverDuplicateRecordCount,
+              naverRejectedItemCount:
+                audit.sourceSnapshot.naverRejectedItemCount,
+            },
+            runtimeObservation: {
+              observedAt: audit.productionRuntimeObservation.observedAt,
+              requestPath: audit.productionRuntimeObservation.requestPath,
+              httpStatus: audit.productionRuntimeObservation.httpStatus,
+              deploymentId: audit.productionRuntimeObservation.deploymentId,
+              branch: audit.productionRuntimeObservation.branch,
+            },
+            readAttestation: audit.readAttestation,
+            historyJsonl,
+            watermarkJsonl: priorWatermarkJsonl,
+            manifestJsonl: priorManifestJsonl,
+            result,
+            sourceEvidence: {
+              lastfmEvidenceId:
+                '723cf73abb93882779edc0621a12381ab80e464c',
+              lastfmLatestComponentEndAt: '2026-09-20T01:59:13.000Z',
+              naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+              naverThroughSlotStart:
+                audit.sourceSnapshot.naverThroughSlotStart,
+            },
+            evaluatedAt: '2026-09-21T01:37:00.000Z',
+            recordedAt: '2026-09-21T01:37:00.000Z',
+            manifestedAt: '2026-09-21T01:37:00.000Z',
+          });
+
+          if (
+            v159.state !== 'refresh-evaluated'
+            || v159.refresh?.state !== 'refresh-prepared'
+            || v159.refresh.preflight?.state !== 'evaluation-prepared'
+          ) {
+            throw new Error('attested refresh reconstruction failed');
+          }
+          const preflight = v159.refresh.preflight;
+
+          if (
+            preflight.proposedHistoryJsonl !== historyJsonl
+            || preflight.proposedWatermarkJsonl !== observedWatermarkJsonl
+            || preflight.proposedManifestJsonl !== observedManifestJsonl
+          ) {
+            throw new Error('committed artifacts differ from attested proposal');
+          }
+
+          const acceptance =
+            evaluateFandexMomentumTripleArtifactAcceptanceResearch({
+              preflight,
+              observedHistoryJsonl: historyJsonl,
+              observedWatermarkJsonl,
+              observedManifestJsonl,
+            });
+          if (
+            acceptance.state !== 'accepted-resulting-triple'
+            || !acceptance.readyForNextEvaluation
+          ) {
+            throw new Error('v156 did not accept attested 00Z triple');
+          }
+
+          const recovery =
+            planFandexMomentumPartialPersistenceRecoveryResearch({
+              preflight,
+              acceptance,
+            });
+          if (
+            recovery.state !== 'no-recovery-needed'
+            || !recovery.readyForNextEvaluation
+          ) {
+            throw new Error('v157 unexpectedly requires recovery');
+          }
+
+          console.log('V159_POST_PERSIST_BEGIN');
+          console.log(JSON.stringify({
+            attestationDigest: v159.attestation.digest,
+            provenanceDigest: v159.attestation.provenance.digest,
+            v159Digest: v159.digest,
+            v158Digest: v159.refresh.digest,
+            preflightDigest: preflight.digest,
+            coordinatorState: preflight.coordinator.state,
+            proposedWrites: preflight.proposedWrites,
+            historyRecordCount: preflight.coordinator.resultingHistoryRecordCount,
+            watermarkRecordCount: preflight.coordinator.resultingWatermarkRecordCount,
+            nextManifestSequence: preflight.nextManifest.sequence,
+            nextManifestDigest: preflight.nextManifest.manifestDigest,
+            v156: {
+              state: acceptance.state,
+              pairAcceptanceState: acceptance.pairAcceptance.state,
+              exactExpectedTripleObserved:
+                acceptance.exactExpectedTripleObserved,
+              readyForNextEvaluation: acceptance.readyForNextEvaluation,
+              observedManifestDigest: acceptance.observedManifestDigest,
+              digest: acceptance.digest,
+            },
+            v157: {
+              state: recovery.state,
+              readyForNextEvaluation: recovery.readyForNextEvaluation,
+              proposedWrites: recovery.proposedWrites,
+              digest: recovery.digest,
+            },
+            effects: {
+              productMetricReads: 0,
+              productMetricWrites: 0,
+              previewFallbackReads: 0,
+              databaseWrites: 0,
+            },
+          }));
+          console.log('V159_POST_PERSIST_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v159-post-persistence.mts
+          rm .tmp-v159-post-persistence.mts
+      - name: Regress current and historical transaction boundaries
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-stored-evidence-attestation-v159.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-provenance-gated-refresh-v158.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-partial-persistence-recovery-v157.test.mts
+          npm run typecheck
+          git diff --check
