@@ -18,6 +18,10 @@ export const FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_EVIDENCE_DESCRIPTOR =
     productionActivationAllowed: false as const,
     secretValueExposureAllowed: false as const,
     unknownConfigurationCountsAsReady: false as const,
+    rollbackProcedureRequired: true as const,
+    boundedResponseContractRequired: true as const,
+    runtimeDatabaseScopeEvidenceRequired: true as const,
+    separateActivationAuthorizationRecordRequired: true as const,
   });
 
 export type FandexMomentumVerifierConfigurationEvidence = Readonly<{
@@ -51,6 +55,45 @@ export type FandexMomentumVerifierConfigurationEvidence = Readonly<{
     valueExposed: false;
     secretContractSatisfiedWithoutExposure: boolean;
     distinctFromSchedulerCredentialProven: boolean;
+    minimumUtf8Bytes: 24;
+    maximumUtf8Bytes: 512;
+    whitespaceOrControlCharactersForbidden: true;
+  }>;
+  runtimeDatabaseScope: Readonly<{
+    key: 'FANDEX_RUNTIME_DATABASE_URL';
+    productionAccessObservedIndependently: boolean;
+    previewAccessObservedUnavailableOrInvalid: boolean;
+    productionScopedWithoutPreviewCopyProven: boolean;
+    credentialValueExposed: false;
+  }>;
+  boundedResponseContract: Readonly<{
+    contractVersion:
+      'v162_naver_news_momentum_native_verifier_execution_channel_v1';
+    exactRoutePath: '/api/internal/naver-news/momentum-verifier';
+    rawPayloadBodyAbsent: boolean;
+    normalizedPayloadBodyAbsent: boolean;
+    databaseCredentialAbsent: boolean;
+    authorizationSecretAbsent: boolean;
+    databaseWritesZero: boolean;
+    productWritesZero: boolean;
+    registryMutationsZero: boolean;
+    productionActivationsZero: boolean;
+  }>;
+  rollbackProcedure: Readonly<{
+    explicit: boolean;
+    disableEnableFlag: boolean;
+    removeOrDisableRoute: boolean;
+    noLedgerRollbackRequiredBeforeFirstSuccessfulExecution: boolean;
+  }>;
+  ledgerBoundary: Readonly<{
+    mutationBeforeSuccessfulNativeVerifierExecutionForbidden: boolean;
+    currentFreshSourceAdvanced: boolean;
+  }>;
+  activationAuthorizationRecord: Readonly<{
+    slotDefined: boolean;
+    separateFromReadiness: boolean;
+    authorizationGranted: false;
+    recordId: null;
   }>;
   previewCredentialInheritanceAbsent: boolean;
   evidenceBoundToProjectAndEnvironment: boolean;
@@ -62,6 +105,7 @@ export type FandexMomentumVerifierConfigurationEvidenceResult =
       typeof FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_EVIDENCE_VERSION;
     state: 'configuration-evidence-blocked' | 'configuration-evidence-ready';
     readyToReevaluateV163: boolean;
+    activationAuthorized: false;
     blockers: readonly string[];
     evidence: FandexMomentumVerifierConfigurationEvidence;
     effects: Readonly<{
@@ -74,6 +118,9 @@ export type FandexMomentumVerifierConfigurationEvidenceResult =
       databaseWrites: 0;
       productMetricWrites: 0;
       registryMutations: 0;
+      historyWrites: 0;
+      watermarkWrites: 0;
+      manifestWrites: 0;
     }>;
     digest: string;
   }>;
@@ -140,6 +187,79 @@ export function evaluateFandexMomentumVerifierConfigurationEvidence(
   if (!evidence.dedicatedSecret.distinctFromSchedulerCredentialProven) {
     blockers.push('dedicated-verifier-secret-separation-not-proven');
   }
+  if (
+    evidence.dedicatedSecret.minimumUtf8Bytes !== 24
+    || evidence.dedicatedSecret.maximumUtf8Bytes !== 512
+    || evidence.dedicatedSecret.whitespaceOrControlCharactersForbidden !== true
+  ) {
+    blockers.push('dedicated-verifier-secret-rules-mismatch');
+  }
+
+  if (!evidence.runtimeDatabaseScope.productionAccessObservedIndependently) {
+    blockers.push('runtime-database-production-access-not-proven');
+  }
+  if (!evidence.runtimeDatabaseScope.previewAccessObservedUnavailableOrInvalid) {
+    blockers.push('runtime-database-preview-isolation-not-observed');
+  }
+  if (!evidence.runtimeDatabaseScope.productionScopedWithoutPreviewCopyProven) {
+    blockers.push('runtime-database-production-scope-not-proven');
+  }
+  if (evidence.runtimeDatabaseScope.credentialValueExposed !== false) {
+    blockers.push('runtime-database-credential-exposure-forbidden');
+  }
+
+  if (
+    evidence.boundedResponseContract.contractVersion
+      !== 'v162_naver_news_momentum_native_verifier_execution_channel_v1'
+    || evidence.boundedResponseContract.exactRoutePath
+      !== '/api/internal/naver-news/momentum-verifier'
+  ) {
+    blockers.push('bounded-response-contract-mismatch');
+  }
+  if (
+    !evidence.boundedResponseContract.rawPayloadBodyAbsent
+    || !evidence.boundedResponseContract.normalizedPayloadBodyAbsent
+    || !evidence.boundedResponseContract.databaseCredentialAbsent
+    || !evidence.boundedResponseContract.authorizationSecretAbsent
+  ) {
+    blockers.push('bounded-response-sensitive-output-not-excluded');
+  }
+  if (
+    !evidence.boundedResponseContract.databaseWritesZero
+    || !evidence.boundedResponseContract.productWritesZero
+    || !evidence.boundedResponseContract.registryMutationsZero
+    || !evidence.boundedResponseContract.productionActivationsZero
+  ) {
+    blockers.push('bounded-response-side-effect-contract-not-zero');
+  }
+
+  if (
+    !evidence.rollbackProcedure.explicit
+    || !evidence.rollbackProcedure.disableEnableFlag
+    || !evidence.rollbackProcedure.removeOrDisableRoute
+    || !evidence.rollbackProcedure
+      .noLedgerRollbackRequiredBeforeFirstSuccessfulExecution
+  ) {
+    blockers.push('rollback-procedure-incomplete');
+  }
+
+  if (
+    !evidence.ledgerBoundary
+      .mutationBeforeSuccessfulNativeVerifierExecutionForbidden
+    || evidence.ledgerBoundary.currentFreshSourceAdvanced
+  ) {
+    blockers.push('ledger-boundary-not-safe');
+  }
+
+  if (
+    !evidence.activationAuthorizationRecord.slotDefined
+    || !evidence.activationAuthorizationRecord.separateFromReadiness
+    || evidence.activationAuthorizationRecord.authorizationGranted !== false
+    || evidence.activationAuthorizationRecord.recordId !== null
+  ) {
+    blockers.push('activation-authorization-record-slot-invalid');
+  }
+
   if (!evidence.previewCredentialInheritanceAbsent) {
     blockers.push('preview-credential-inheritance-not-excluded');
   }
@@ -154,6 +274,7 @@ export function evaluateFandexMomentumVerifierConfigurationEvidence(
     contractVersion: FANDEX_MOMENTUM_VERIFIER_CONFIGURATION_EVIDENCE_VERSION,
     state,
     readyToReevaluateV163,
+    activationAuthorized: false as const,
     blockers: uniqueBlockers,
     evidence,
   };
@@ -170,6 +291,9 @@ export function evaluateFandexMomentumVerifierConfigurationEvidence(
       databaseWrites: 0 as const,
       productMetricWrites: 0 as const,
       registryMutations: 0 as const,
+      historyWrites: 0 as const,
+      watermarkWrites: 0 as const,
+      manifestWrites: 0 as const,
     }),
     digest: sha256Canonical(payload),
   });
