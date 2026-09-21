@@ -244,36 +244,11 @@ test('blocked promotion eligibility cannot create an owner-attestation candidate
   assert.equal(result.status, 'blocked');
 });
 
-test('current canonical registry blocks activation review until promotion blocker is explicitly cleared', () => {
+test('promotion-integrated canonical registry is eligible only for activation review, never activation', () => {
   const result = evaluateNewsIssuePointRealProductActivationReadiness({
     control: authorizedControl(),
     readModel: readyReadModel(),
     registryDefinition: NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
-  });
-
-  assert.deepEqual(result, {
-    contractVersion:
-      'v1_news_issue_point_real_product_activation_gate',
-    status: 'blocked',
-    activationAuthorized: false,
-    publicRouteActivated: false,
-    productScorePublished: false,
-    directProductionContributionEligible: false,
-    strictPublicationIntervalClaimAllowed: false,
-    reason: 'registry-promotion-not-authorized',
-  });
-});
-
-test('cleared shadow registry becomes eligible only for activation review, never activation', () => {
-  const registry: FandexVariableDefinitionV1 = {
-    ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
-    blockers: [],
-  };
-
-  const result = evaluateNewsIssuePointRealProductActivationReadiness({
-    control: authorizedControl(),
-    readModel: readyReadModel(),
-    registryDefinition: registry,
   });
 
   assert.deepEqual(result, {
@@ -289,6 +264,24 @@ test('cleared shadow registry becomes eligible only for activation review, never
       'explicit-production-activation-authorization',
     authorizationId: AUTHORIZATION_ID,
   });
+});
+
+test('registry without the explicit activation blocker fails closed', () => {
+  const registry: FandexVariableDefinitionV1 = {
+    ...NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
+    blockers: [],
+  };
+
+  const result = evaluateNewsIssuePointRealProductActivationReadiness({
+    control: authorizedControl(),
+    readModel: readyReadModel(),
+    registryDefinition: registry,
+  });
+
+  assert.equal(result.status, 'blocked');
+  if (result.status === 'blocked') {
+    assert.equal(result.reason, 'registry-state-invalid');
+  }
 });
 
 test('disable control blocks activation review even with an otherwise ready read model', () => {
