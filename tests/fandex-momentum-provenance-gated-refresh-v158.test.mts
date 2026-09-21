@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -8,8 +9,9 @@ import {
 import type {
   FandexMomentumOutputFormEligibilityResearchResult,
 } from '../lib/intelligence/fandexMomentumOutputFormEligibilityResearch';
-import type {
-  FandexMomentumSourceProvenanceResearchResult,
+import {
+  evaluateFandexMomentumSourceProvenanceResearch,
+  type FandexMomentumSourceProvenanceResearchResult,
 } from '../lib/intelligence/fandexMomentumSourceProvenanceResearch';
 
 function categorical(): FandexMomentumOutputFormEligibilityResearchResult {
@@ -182,4 +184,90 @@ test('v158 preserves zero Product, preview, DB and artifact physical effects on 
     watermarkWrites: 0,
     manifestWrites: 0,
   });
+});
+
+
+test('committed v158 current audit reproduces fail-closed provenance gate without invoking v155', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_provenance_gated_refresh_v158_20260921T003602Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  assert.equal(
+    audit.contractVersion,
+    'v158_fandex_momentum_current_provenance_gate_audit_v1',
+  );
+  assert.equal(
+    audit.liveStoredEvidenceAccess.currentSourceStoredEvidenceReproducedThisEvaluation,
+    false,
+  );
+  assert.equal(audit.liveStoredEvidenceAccess.connectedNeonProjectVisible, false);
+  assert.equal(
+    audit.liveStoredEvidenceAccess.priorStoredReadAuditTransferableToCurrentSource,
+    false,
+  );
+
+  const currentProvenance = evaluateFandexMomentumSourceProvenanceResearch({
+    snapshot: {
+      canonicalArtistId: audit.canonicalArtistId,
+      naverEvidenceId: audit.sourceSnapshot.naverEvidenceId,
+      naverCollectionKey: audit.sourceSnapshot.naverCollectionKey,
+      naverThroughSlotStart: audit.sourceSnapshot.naverThroughSlotStart,
+      naverStatus: audit.sourceSnapshot.naverStatus,
+      naverRawEvidenceCount: audit.sourceSnapshot.naverRawEvidenceCount,
+      naverNormalizedRecordCount: audit.sourceSnapshot.naverNormalizedRecordCount,
+      naverDuplicateRecordCount: audit.sourceSnapshot.naverDuplicateRecordCount,
+      naverRejectedItemCount: audit.sourceSnapshot.naverRejectedItemCount,
+    },
+    runtimeObservation: {
+      observedAt: audit.productionRuntimeObservation.observedAt,
+      requestPath: audit.productionRuntimeObservation.requestPath,
+      httpStatus: audit.productionRuntimeObservation.httpStatus,
+      deploymentId: audit.productionRuntimeObservation.deploymentId,
+      branch: audit.productionRuntimeObservation.branch,
+    },
+    storedEvidenceReproducedThisEvaluation: false,
+  });
+
+  assert.equal(currentProvenance.digest, audit.provenance.digest);
+  assert.equal(currentProvenance.state, audit.provenance.state);
+  assert.equal(currentProvenance.futureLiveRefreshEligible, false);
+  assert.deepEqual(currentProvenance.blockers, audit.provenance.blockers);
+
+  let preflightCalls = 0;
+  const out = evaluateFandexMomentumProvenanceGatedRefreshResearch(
+    {
+      ...base,
+      provenance: currentProvenance,
+      evaluatedAt: audit.evaluatedAt,
+      recordedAt: audit.evaluatedAt,
+      manifestedAt: audit.evaluatedAt,
+    },
+    {
+      evaluatePreflight: (() => {
+        preflightCalls += 1;
+        throw new Error('v155_must_not_run');
+      }) as any,
+    },
+  );
+
+  assert.equal(preflightCalls, 0);
+  assert.equal(out.digest, audit.v158.digest);
+  assert.equal(out.state, 'provenance-blocked');
+  assert.equal(out.sourceEvidenceMatched, true);
+  assert.equal(out.preflightInvoked, false);
+  assert.equal(out.readyForPhysicalPersistence, false);
+  assert.deepEqual(out.blockers, audit.v158.blockers);
+  assert.deepEqual(out.effects, audit.v158.effects);
+  assert.equal(
+    audit.validation.priorRun35547522307AcceptedAsCurrentLiveEvidence,
+    false,
+  );
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
