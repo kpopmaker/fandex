@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -301,4 +302,62 @@ test('invalid project, team, deployment, or commit identity fails closed', () =>
   assert.ok(out.blockers.includes('verifier-team-id-invalid'));
   assert.ok(out.blockers.includes('intended-deployment-commit-invalid'));
   assert.ok(out.blockers.includes('intended-preview-deployment-id-invalid'));
+});
+
+
+test('committed v164 audit reproduces the exact current blocked packet', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_configuration_evidence_v164_20260921T151600Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out = evaluateFandexMomentumVerifierConfigurationEvidence(audit.evidence);
+
+  assert.equal(out.state, 'configuration-evidence-blocked');
+  assert.equal(out.readyToReevaluateV163, false);
+  assert.equal(out.activationAuthorized, false);
+  assert.equal(
+    out.digest,
+    '8fd9585c3b77396bde869a9aec80c022f9231fabf54fcac1cc6dffbeb738ba6c',
+  );
+  assert.deepEqual(out.blockers, audit.result.blockers);
+  assert.equal(
+    audit.vercelInspection.intendedCommitPreviewDeploymentState,
+    'READY',
+  );
+  assert.equal(
+    audit.vercelInspection.connectedInterfaceEnvironmentInventoryAvailable,
+    false,
+  );
+  assert.equal(
+    audit.repositoryEvidence.verifierVariablesDeclaredInEnvExample,
+    false,
+  );
+  assert.equal(
+    audit.evidence.runtimeDatabaseScope.productionAccessObservedIndependently,
+    true,
+  );
+  assert.equal(
+    audit.evidence.runtimeDatabaseScope.previewAccessObservedUnavailableOrInvalid,
+    true,
+  );
+  assert.equal(
+    audit.evidence.boundedResponseContract.rawPayloadBodyAbsent,
+    true,
+  );
+  assert.equal(audit.evidence.ledgerBoundary.currentFreshSourceAdvanced, false);
+  assert.equal(
+    audit.evidence.activationAuthorizationRecord.authorizationGranted,
+    false,
+  );
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretMutations, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.activationWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
