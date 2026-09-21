@@ -5,6 +5,16 @@ import {
   type FandexMomentumProductionRuntimeObservation,
   type FandexMomentumSourceProvenanceResearchResult,
 } from './fandexMomentumSourceProvenanceResearch';
+import {
+  evaluateFandexMomentumProvenanceGatedRefreshResearch,
+  type FandexMomentumProvenanceGatedRefreshResult,
+} from './fandexMomentumProvenanceGatedRefreshResearch';
+import type {
+  FandexMomentumOutputFormEligibilityResearchResult,
+} from './fandexMomentumOutputFormEligibilityResearch';
+import type {
+  FandexMomentumSourceEvidenceWatermark,
+} from './fandexMomentumCommonCutoffAdvancementGateResearch';
 
 export const FANDEX_MOMENTUM_STORED_EVIDENCE_ATTESTATION_RESEARCH_VERSION =
   'v159_fandex_momentum_stored_evidence_read_attestation_research_v1' as const;
@@ -254,6 +264,149 @@ export function evaluateFandexMomentumStoredEvidenceAttestationResearch(
       previewFallbackReads: 0 as const,
       databaseWrites: 0 as const,
     }),
+    digest: sha256Canonical(payload),
+  });
+}
+
+
+export const FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_VERSION =
+  'v159_fandex_momentum_attested_provenance_refresh_research_v1' as const;
+
+export const FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_DESCRIPTOR =
+  Object.freeze({
+    contractVersion: FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_VERSION,
+    lifecycle: 'research' as const,
+    attestationContract:
+      FANDEX_MOMENTUM_STORED_EVIDENCE_ATTESTATION_RESEARCH_VERSION,
+    refreshContract:
+      'v158_fandex_momentum_provenance_gated_current_live_refresh_research_v1' as const,
+    directV153BooleanInputAccepted: false as const,
+    blockedAttestationInvokesRefresh: false as const,
+    acceptedAttestationUsesDerivedProvenanceOnly: true as const,
+    physicalPersistencePerformed: false as const,
+    productMetricReadAllowed: false as const,
+    productMetricWriteAllowed: false as const,
+    previewFallbackReadAllowed: false as const,
+    databaseWriteAllowed: false as const,
+    productionEligible: false as const,
+  });
+
+export type FandexMomentumAttestedRefreshResearchResult = Readonly<{
+  contractVersion:
+    typeof FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_VERSION;
+  state: 'attestation-blocked' | 'refresh-evaluated';
+  attestation: FandexMomentumStoredEvidenceAttestationResearchResult;
+  refreshInvoked: boolean;
+  refresh: FandexMomentumProvenanceGatedRefreshResult | null;
+  readyForPhysicalPersistence: boolean;
+  blockers: readonly string[];
+  effects: Readonly<{
+    productMetricReads: 0;
+    productMetricWrites: 0;
+    previewFallbackReads: 0;
+    databaseWrites: 0;
+    historyWrites: 0;
+    watermarkWrites: 0;
+    manifestWrites: 0;
+  }>;
+  digest: string;
+}>;
+
+export type FandexMomentumAttestedRefreshResearchDependencies = Readonly<{
+  evaluateRefresh?: typeof evaluateFandexMomentumProvenanceGatedRefreshResearch;
+}>;
+
+function zeroRefreshEffects() {
+  return Object.freeze({
+    productMetricReads: 0 as const,
+    productMetricWrites: 0 as const,
+    previewFallbackReads: 0 as const,
+    databaseWrites: 0 as const,
+    historyWrites: 0 as const,
+    watermarkWrites: 0 as const,
+    manifestWrites: 0 as const,
+  });
+}
+
+export function evaluateFandexMomentumAttestedRefreshResearch(
+  input: Readonly<{
+    snapshot: FandexMomentumNaverSourceSnapshotEvidence;
+    runtimeObservation: FandexMomentumProductionRuntimeObservation;
+    readAttestation: FandexMomentumStoredEvidenceReadAttestation | null;
+    manifestJsonl: string;
+    historyJsonl: string;
+    watermarkJsonl: string;
+    result: FandexMomentumOutputFormEligibilityResearchResult;
+    sourceEvidence: FandexMomentumSourceEvidenceWatermark;
+    evaluatedAt: string;
+    recordedAt: string;
+    manifestedAt: string;
+  }>,
+  dependencies: FandexMomentumAttestedRefreshResearchDependencies = {},
+): FandexMomentumAttestedRefreshResearchResult {
+  const attestation =
+    evaluateFandexMomentumStoredEvidenceAttestationResearch({
+      snapshot: input.snapshot,
+      runtimeObservation: input.runtimeObservation,
+      readAttestation: input.readAttestation,
+    });
+
+  if (attestation.state !== 'attested-provenance-ready') {
+    const payload = {
+      contractVersion: FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_VERSION,
+      state: 'attestation-blocked' as const,
+      attestationDigest: attestation.digest,
+      refreshInvoked: false as const,
+      refreshDigest: null,
+      readyForPhysicalPersistence: false as const,
+      blockers: Object.freeze([...attestation.blockers]),
+    };
+    return Object.freeze({
+      contractVersion: payload.contractVersion,
+      state: payload.state,
+      attestation,
+      refreshInvoked: false,
+      refresh: null,
+      readyForPhysicalPersistence: false,
+      blockers: payload.blockers,
+      effects: zeroRefreshEffects(),
+      digest: sha256Canonical(payload),
+    });
+  }
+
+  const evaluateRefresh =
+    dependencies.evaluateRefresh
+    ?? evaluateFandexMomentumProvenanceGatedRefreshResearch;
+  const refresh = evaluateRefresh({
+    provenance: attestation.provenance,
+    manifestJsonl: input.manifestJsonl,
+    historyJsonl: input.historyJsonl,
+    watermarkJsonl: input.watermarkJsonl,
+    result: input.result,
+    sourceEvidence: input.sourceEvidence,
+    evaluatedAt: input.evaluatedAt,
+    recordedAt: input.recordedAt,
+    manifestedAt: input.manifestedAt,
+  });
+
+  const payload = {
+    contractVersion: FANDEX_MOMENTUM_ATTESTED_REFRESH_RESEARCH_VERSION,
+    state: 'refresh-evaluated' as const,
+    attestationDigest: attestation.digest,
+    refreshInvoked: true as const,
+    refreshDigest: refresh.digest,
+    readyForPhysicalPersistence: refresh.readyForPhysicalPersistence,
+    blockers: Object.freeze([...refresh.blockers]),
+  };
+  return Object.freeze({
+    contractVersion: payload.contractVersion,
+    state: payload.state,
+    attestation,
+    refreshInvoked: true,
+    refresh,
+    readyForPhysicalPersistence: refresh.readyForPhysicalPersistence,
+    blockers: payload.blockers,
+    effects: zeroRefreshEffects(),
     digest: sha256Canonical(payload),
   });
 }
