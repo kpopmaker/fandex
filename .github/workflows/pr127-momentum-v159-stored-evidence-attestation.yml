@@ -7,6 +7,10 @@ on:
     paths:
       - 'lib/intelligence/fandexMomentumStoredEvidenceAttestationResearch.ts'
       - 'tests/fandex-momentum-stored-evidence-attestation-v159.test.mts'
+      - 'tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts'
+      - 'tests/fandex-momentum-partial-persistence-recovery-v157.test.mts'
+      - 'data/momentum-research/iu_evaluation_watermark_v151.jsonl'
+      - 'data/momentum-research/iu_paired_artifact_manifest_v154.jsonl'
       - '.github/workflows/pr127-momentum-v159-stored-evidence-attestation.yml'
 
 permissions:
