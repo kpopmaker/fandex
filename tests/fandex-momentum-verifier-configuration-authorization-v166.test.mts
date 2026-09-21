@@ -258,7 +258,7 @@ test('target or configuration scope drift is rejected', () => {
           validRecord.authorizedConfiguration[0],
           validRecord.authorizedConfiguration[2],
         ],
-      } as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
+      } as unknown as FandexMomentumVerifierConfigurationMutationAuthorizationRecord,
     });
   assert.equal(scopeDrift.state, 'authorization-record-rejected');
   assert.ok(
