@@ -89,6 +89,6 @@ export const NEWS_ISSUE_POINT_REAL_PRODUCT_OPERATIONS_APPROVAL_EVIDENCE =
       productScorePublished: false as const,
       directProductionContributionEligible: false as const,
       requiredNextGate:
-        'explicit-production-activation-authorization' as const,
+        'promotion-approval-registry-integration' as const,
     }),
   });
