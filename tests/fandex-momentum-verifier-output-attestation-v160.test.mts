@@ -305,3 +305,123 @@ test('v160 adapter itself has zero Product, database, and physical artifact effe
     physicalArtifactWrites: 0,
   });
 });
+
+
+test('committed v160 audit reproduces the retrospective adapter result without claiming a fresh read', async () => {
+  const [v160AuditRaw, v159ReadAuditRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_output_attestation_v160_20260921T124625Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_stored_evidence_attestation_v159_20260921T012400Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+  const v160Audit = JSON.parse(v160AuditRaw);
+  const v159ReadAudit = JSON.parse(v159ReadAuditRaw);
+
+  assert.equal(
+    v160Audit.contractVersion,
+    'v160_fandex_momentum_verifier_output_attestation_adapter_audit_v1',
+  );
+  assert.equal(v160Audit.purpose, 'retrospective-compatibility-replay-only');
+  assert.equal(v160Audit.freshStoredEvidenceReadPerformed, false);
+  assert.equal(v160Audit.freshVerifierExecutionPerformed, false);
+  assert.equal(
+    v160Audit.retrospectiveVerifierEnvelope.executionIdRole,
+    'deterministic-replay-label-not-original-provider-execution-id',
+  );
+
+  const output: FandexMomentumStoredEvidenceVerifierOutput = {
+    contractVersion:
+      'v160_fandex_momentum_stored_evidence_verifier_output_v1',
+    verifier: v160Audit.retrospectiveVerifierEnvelope.verifier,
+    executionId: v160Audit.retrospectiveVerifierEnvelope.executionId,
+    executedAt: v160Audit.retrospectiveVerifierEnvelope.executedAt,
+    accessMode: v160Audit.retrospectiveVerifierEnvelope.accessMode,
+    databaseReadOnly: true,
+    databaseWritesObserved: 0,
+    canonicalArtistId: v159ReadAudit.canonicalArtistId,
+    naverEvidenceId: v159ReadAudit.sourceSnapshot.naverEvidenceId,
+    naverCollectionKey: v159ReadAudit.sourceSnapshot.naverCollectionKey,
+    naverThroughSlotStart: v159ReadAudit.sourceSnapshot.naverThroughSlotStart,
+    naverStatus: v159ReadAudit.sourceSnapshot.naverStatus,
+    jobRowReproduced:
+      v159ReadAudit.neonReadOnlyReproduction.jobRowReproduced,
+    evidenceRows: v159ReadAudit.neonReadOnlyReproduction.evidenceRows,
+    distinctEvidenceIds:
+      v159ReadAudit.neonReadOnlyReproduction.distinctEvidenceIds,
+    distinctItemIndexes:
+      v159ReadAudit.neonReadOnlyReproduction.distinctItemIndexes,
+    minItemIndex: v159ReadAudit.neonReadOnlyReproduction.minItemIndex,
+    maxItemIndex: v159ReadAudit.neonReadOnlyReproduction.maxItemIndex,
+    normalizedOutcomes:
+      v159ReadAudit.neonReadOnlyReproduction.normalizedOutcomes,
+    missingNormalizedIds:
+      v159ReadAudit.neonReadOnlyReproduction.missingNormalizedIds,
+    missingNormalizedRecords:
+      v159ReadAudit.neonReadOnlyReproduction.missingNormalizedRecords,
+    distinctNormalizedRecords:
+      v159ReadAudit.neonReadOnlyReproduction.distinctNormalizedRecords,
+    joinedPayloadRows:
+      v159ReadAudit.neonReadOnlyReproduction.joinedPayloadRows,
+    rawPayloadTextBytes:
+      v159ReadAudit.neonReadOnlyReproduction.rawPayloadTextBytes,
+    normalizedPayloadTextBytes:
+      v159ReadAudit.neonReadOnlyReproduction.normalizedPayloadTextBytes,
+    rawLinkageSetAuditMd5:
+      v159ReadAudit.neonReadOnlyReproduction.rawLinkageSetAuditMd5,
+    normalizedSetAuditMd5:
+      v159ReadAudit.neonReadOnlyReproduction.normalizedSetAuditMd5,
+    rawPayloadMaterializedAuditMd5:
+      v159ReadAudit.neonReadOnlyReproduction.rawPayloadMaterializedAuditMd5,
+    normalizedPayloadMaterializedAuditMd5:
+      v159ReadAudit.neonReadOnlyReproduction
+        .normalizedPayloadMaterializedAuditMd5,
+    auditFingerprintPurpose:
+      v159ReadAudit.neonReadOnlyReproduction.auditFingerprintPurpose,
+  };
+
+  const adapted =
+    adaptFandexMomentumVerifierOutputToStoredEvidenceAttestationResearch({
+      snapshot: currentSnapshot,
+      verifierOutput: output,
+    });
+
+  assert.equal(adapted.state, v160Audit.adapterResult.state);
+  assert.equal(
+    adapted.verifierOutputAccepted,
+    v160Audit.adapterResult.verifierOutputAccepted,
+  );
+  assert.equal(adapted.digest, v160Audit.adapterResult.digest);
+  assert.deepEqual(adapted.blockers, v160Audit.adapterResult.blockers);
+  assert.deepEqual(adapted.attestation, v159ReadAudit.readAttestation);
+
+  const downstream = evaluateFandexMomentumStoredEvidenceAttestationResearch({
+    snapshot: currentSnapshot,
+    runtimeObservation: currentRuntime,
+    readAttestation: adapted.attestation,
+  });
+  assert.equal(downstream.state, v160Audit.downstreamV159.state);
+  assert.equal(downstream.digest, v160Audit.downstreamV159.digest);
+  assert.equal(
+    downstream.provenance.digest,
+    v160Audit.downstreamV159.provenanceDigest,
+  );
+  assert.equal(
+    downstream.provenance.futureLiveRefreshEligible,
+    v160Audit.downstreamV159.futureLiveRefreshEligible,
+  );
+
+  assert.deepEqual(adapted.effects, v160Audit.effects);
+  assert.equal(v160Audit.productBoundary.productMomentumScore, null);
+  assert.equal(v160Audit.productBoundary.productionEligible, false);
+  assert.equal(v160Audit.productBoundary.productProductionActual, '0/7');
+});
