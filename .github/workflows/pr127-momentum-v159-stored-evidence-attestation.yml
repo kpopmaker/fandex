@@ -1,0 +1,32 @@
+name: PR127 momentum v159 stored evidence attestation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumStoredEvidenceAttestationResearch.ts'
+      - 'tests/fandex-momentum-stored-evidence-attestation-v159.test.mts'
+      - '.github/workflows/pr127-momentum-v159-stored-evidence-attestation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v159 and provenance/refresh regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-stored-evidence-attestation-v159.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-source-provenance-v153.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-provenance-gated-refresh-v158.test.mts
+          npm run typecheck
+          git diff --check
