@@ -1,0 +1,32 @@
+name: PR127 momentum v161 native verifier output
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/server/ingestion/naverNewsMomentumNativeVerifier.ts'
+      - 'tests/fandex-momentum-native-verifier-output-v161.test.mts'
+      - '.github/workflows/pr127-momentum-v161-native-verifier-output.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v161 and v160/v159 regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-native-verifier-output-v161.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-output-attestation-v160.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-stored-evidence-attestation-v159.test.mts
+          npm run typecheck
+          git diff --check
