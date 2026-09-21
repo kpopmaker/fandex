@@ -2,7 +2,7 @@
   "contractVersion": "v164_fandex_momentum_verifier_configuration_evidence_audit_v1",
   "lifecycle": "research",
   "canonicalArtistId": "iu",
-  "auditedAt": "2026-09-21T15:16:00.000Z",
+  "auditedAt": "2026-09-21T15:18:00.000Z",
   "vercelInspection": {
     "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
     "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
@@ -14,28 +14,13 @@
     "connectedInterfaceEnvironmentInventoryAvailable": false,
     "interpretation": "configuration-not-proven-not-asserted-absent"
   },
-  "repositoryConfigurationEvidence": {
+  "repositoryEvidence": {
     "envExamplePath": ".env.example",
-    "envExampleVerifierVariablesDeclared": false,
-    "executionChannelSource": "lib/server/ingestion/naverNewsMomentumVerifierExecutionChannel.ts",
-    "requiredConfiguration": [
-      {
-        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
-        "requiredTarget": "production",
-        "requiredExactValue": "approved-v162-research-read-only"
-      },
-      {
-        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
-        "requiredTarget": "production",
-        "requiredExactValue": "production"
-      },
-      {
-        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
-        "requiredTarget": "production",
-        "requiredSecretContract": "24-512 UTF-8 bytes, no whitespace/control characters, value must remain unexposed",
-        "mustBeDistinctFromSchedulerCredential": true
-      }
-    ]
+    "verifierVariablesDeclaredInEnvExample": false,
+    "v162Source": "lib/server/ingestion/naverNewsMomentumVerifierExecutionChannel.ts",
+    "v163Audit": "data/momentum-research/iu_verifier_channel_readiness_v163_20260921T151200Z.json",
+    "previewRuntimeDatabaseEvidence": "v161 Preview probe observed FANDEX_RUNTIME_DATABASE_URL unavailable-or-invalid",
+    "productionRuntimeDatabaseEvidence": "Production shadow scheduler succeeded independently of v162"
   },
   "evidence": {
     "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
@@ -67,16 +52,59 @@
       "productionTargeted": false,
       "valueExposed": false,
       "secretContractSatisfiedWithoutExposure": false,
-      "distinctFromSchedulerCredentialProven": false
+      "distinctFromSchedulerCredentialProven": false,
+      "minimumUtf8Bytes": 24,
+      "maximumUtf8Bytes": 512,
+      "whitespaceOrControlCharactersForbidden": true
+    },
+    "runtimeDatabaseScope": {
+      "key": "FANDEX_RUNTIME_DATABASE_URL",
+      "productionAccessObservedIndependently": true,
+      "previewAccessObservedUnavailableOrInvalid": true,
+      "productionScopedWithoutPreviewCopyProven": true,
+      "credentialValueExposed": false
+    },
+    "boundedResponseContract": {
+      "contractVersion": "v162_naver_news_momentum_native_verifier_execution_channel_v1",
+      "exactRoutePath": "/api/internal/naver-news/momentum-verifier",
+      "rawPayloadBodyAbsent": true,
+      "normalizedPayloadBodyAbsent": true,
+      "databaseCredentialAbsent": true,
+      "authorizationSecretAbsent": true,
+      "databaseWritesZero": true,
+      "productWritesZero": true,
+      "registryMutationsZero": true,
+      "productionActivationsZero": true
+    },
+    "rollbackProcedure": {
+      "explicit": true,
+      "disableEnableFlag": true,
+      "removeOrDisableRoute": true,
+      "noLedgerRollbackRequiredBeforeFirstSuccessfulExecution": true
+    },
+    "ledgerBoundary": {
+      "mutationBeforeSuccessfulNativeVerifierExecutionForbidden": true,
+      "currentFreshSourceAdvanced": false
+    },
+    "activationAuthorizationRecord": {
+      "slotDefined": true,
+      "separateFromReadiness": true,
+      "authorizationGranted": false,
+      "recordId": null
     },
     "previewCredentialInheritanceAbsent": true,
-    "evidenceBoundToProjectAndEnvironment": false,
-    "fieldSemantics": "false means not proven by available evidence, not asserted absent from Vercel"
+    "evidenceBoundToProjectAndEnvironment": false
+  },
+  "evidenceSemantics": {
+    "unprovenConfigurationFields": "false means not proven by connected evidence; it does not assert absence from Vercel",
+    "secretValueExposed": false,
+    "activationAuthorized": false
   },
   "result": {
     "contractVersion": "v164_fandex_momentum_verifier_configuration_evidence_closure_research_v1",
     "state": "configuration-evidence-blocked",
     "readyToReevaluateV163": false,
+    "activationAuthorized": false,
     "blockers": [
       "configuration-evidence-not-bound-to-project-environment",
       "production-environment-inventory-unavailable",
@@ -91,10 +119,10 @@
       "dedicated-verifier-secret-contract-not-proven",
       "dedicated-verifier-secret-separation-not-proven"
     ],
-    "digest": "1c9e88c409da2519b27b46e3eb30bfaac99120ca910333826c536a2b6e3b9c59"
+    "digest": "8fd9585c3b77396bde869a9aec80c022f9231fabf54fcac1cc6dffbeb738ba6c"
   },
   "validation": {
-    "runId": 35617691332,
+    "completeEvidenceRunId": 35617919358,
     "status": "PASS",
     "v164TestsPassed": true,
     "v163RegressionPassed": true,
@@ -111,9 +139,13 @@
     "activationWrites": 0,
     "databaseWrites": 0,
     "productMetricWrites": 0,
-    "registryMutations": 0
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
   },
   "productBoundary": {
+    "productMomentumScore": null,
     "productionEligible": false,
     "productProductionActual": "0/7"
   }
