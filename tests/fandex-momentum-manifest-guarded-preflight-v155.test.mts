@@ -205,7 +205,7 @@ test('current committed pair passes preflight and prepares an exact-replay manif
     );
   assert.equal(proposedManifest.length, 4);
   assert.equal(
-    proposedManifest[2].manifestDigest,
+    proposedManifest[3].manifestDigest,
     preflight.nextManifest.manifestDigest,
   );
 });
