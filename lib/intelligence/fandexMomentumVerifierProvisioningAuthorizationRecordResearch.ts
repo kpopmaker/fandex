@@ -159,6 +159,7 @@ function scopePayload(
 export function evaluateFandexMomentumVerifierProvisioningAuthorizationRecord(
   input: Readonly<{
     record: FandexMomentumVerifierProvisioningAuthorizationRecord;
+    expectedV165PlanDigest: string;
     evaluationAt: string;
   }>,
 ): FandexMomentumVerifierProvisioningAuthorizationEvaluation {
@@ -168,8 +169,13 @@ export function evaluateFandexMomentumVerifierProvisioningAuthorizationRecord(
   if (!exactIso(input.evaluationAt)) {
     blockers.push('authorization-evaluation-time-invalid');
   }
+  if (!/^[0-9a-f]{64}$/.test(input.expectedV165PlanDigest)) {
+    blockers.push('authorization-expected-v165-plan-digest-invalid');
+  }
   if (!/^[0-9a-f]{64}$/.test(record.upstreamV165PlanDigest)) {
     blockers.push('authorization-v165-plan-digest-invalid');
+  } else if (record.upstreamV165PlanDigest !== input.expectedV165PlanDigest) {
+    blockers.push('authorization-v165-plan-digest-mismatch');
   }
   if (!/^team_[A-Za-z0-9]+$/.test(record.target.teamId)) {
     blockers.push('authorization-target-team-invalid');
@@ -299,6 +305,7 @@ export function evaluateFandexMomentumVerifierProvisioningAuthorizationRecord(
     scopeDigest,
     blockers: uniqueBlockers,
     record,
+    expectedV165PlanDigest: input.expectedV165PlanDigest,
     evaluationAt: input.evaluationAt,
   };
 
