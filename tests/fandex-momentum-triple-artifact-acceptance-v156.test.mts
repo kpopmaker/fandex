@@ -202,7 +202,7 @@ test('v156 accepts only the exact expected history/watermark/manifest triple', (
   );
 });
 
-test('current exact-replay proposal accepts only after manifest sequence 3 is observed', async () => {
+test('current exact-replay proposal accepts only after the proposed next manifest is observed', async () => {
   const { manifestJsonl, historyJsonl, watermarkJsonl, preflight } =
     await currentPreflight();
 
@@ -403,4 +403,94 @@ test('tampered history, watermark, or manifest bytes fail closed', async () => {
     }),
     /momentum_v154_/,
   );
+});
+
+
+test('committed v156 current-real audit reproduces the exact post-persistence triple acceptance', async () => {
+  const [auditRaw, v155AuditRaw, manifestJsonl, historyJsonl, watermarkJsonl] =
+    await Promise.all([
+      readFile(
+        new URL(
+          '../data/momentum-research/iu_triple_artifact_acceptance_v156_20260921T001116Z.json',
+          import.meta.url,
+        ),
+        'utf8',
+      ),
+      readFile(
+        new URL(
+          '../data/momentum-research/iu_manifest_guarded_preflight_v155_20260920T162000Z.json',
+          import.meta.url,
+        ),
+        'utf8',
+      ),
+      readFile(manifestUrl, 'utf8'),
+      readFile(historyUrl, 'utf8'),
+      readFile(watermarkUrl, 'utf8'),
+    ]);
+
+  const audit = JSON.parse(auditRaw);
+  const v155Audit = JSON.parse(v155AuditRaw);
+  const priorManifestJsonl =
+    manifestJsonl.split(/\r?\n/).filter(Boolean).slice(0, 2).join('\n') + '\n';
+
+  const preflight = evaluateFandexMomentumManifestGuardedPreflightResearch({
+    manifestJsonl: priorManifestJsonl,
+    historyJsonl,
+    watermarkJsonl,
+    result: result(),
+    sourceEvidence: source(),
+    evaluatedAt: v155Audit.evaluatedAt,
+    recordedAt: v155Audit.recordedAt,
+    manifestedAt: v155Audit.manifestedAt,
+  });
+  assert.equal(preflight.state, 'evaluation-prepared');
+  if (preflight.state !== 'evaluation-prepared') return;
+
+  assert.equal(preflight.digest, audit.preflight.digest);
+  assert.equal(
+    preflight.nextManifest.manifestDigest,
+    audit.preflight.nextManifestDigest,
+  );
+  assert.equal(
+    preflight.proposedManifestJsonl,
+    manifestJsonl,
+  );
+
+  const before = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
+    preflight,
+    observedHistoryJsonl: historyJsonl,
+    observedWatermarkJsonl: watermarkJsonl,
+    observedManifestJsonl: priorManifestJsonl,
+  });
+  assert.equal(before.state, audit.beforePersistence.state);
+  assert.equal(before.digest, audit.beforePersistence.digest);
+  assert.equal(before.readyForNextEvaluation, false);
+  assert.deepEqual(before.blockers, audit.beforePersistence.blockers);
+
+  const after = evaluateFandexMomentumTripleArtifactAcceptanceResearch({
+    preflight,
+    observedHistoryJsonl: historyJsonl,
+    observedWatermarkJsonl: watermarkJsonl,
+    observedManifestJsonl: manifestJsonl,
+  });
+  assert.equal(after.state, audit.afterPersistence.state);
+  assert.equal(after.digest, audit.afterPersistence.digest);
+  assert.equal(
+    after.pairAcceptance.state,
+    audit.afterPersistence.pairAcceptanceState,
+  );
+  assert.equal(
+    after.observedManifestDigest,
+    audit.afterPersistence.observedManifestDigest,
+  );
+  assert.equal(after.exactExpectedTripleObserved, true);
+  assert.equal(after.readyForNextEvaluation, true);
+  assert.deepEqual(after.blockers, []);
+  assert.equal(audit.persistence.historyWritesApplied, 0);
+  assert.equal(audit.persistence.watermarkWritesApplied, 0);
+  assert.equal(audit.persistence.manifestWritesApplied, 1);
+  assert.equal(audit.effects.databaseWrites, 0);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
