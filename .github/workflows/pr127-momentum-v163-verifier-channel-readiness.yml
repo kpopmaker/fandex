@@ -23,6 +23,46 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Evaluate current v163 readiness
+        run: |
+          cat > .tmp-v163-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierChannelActivationReadiness,
+          } from './lib/intelligence/fandexMomentumVerifierChannelActivationReadinessResearch';
+
+          const result =
+            evaluateFandexMomentumVerifierChannelActivationReadiness({
+              intendedDeploymentCommit:
+                '7a1038226b07abf4a130986766ef114a43c1d638',
+              routePath: '/api/internal/naver-news/momentum-verifier',
+              routeExistsOnIntendedCommit: true,
+              intendedCommitPreviewDeploymentReady: true,
+              v162ValidationStatus: 'PASS',
+              dedicatedAuthorizationDistinctFromScheduler: true,
+              productionRuntimeDatabaseAccessObservedIndependently: true,
+              verifierEnableConfigurationExplicitlyAvailable: false,
+              verifierDeploymentConfigurationExplicitlyAvailable: false,
+              dedicatedVerifierSecretExplicitlyAvailable: false,
+              previewCredentialInheritanceRequired: false,
+              rawPayloadExposurePathAbsent: true,
+              databaseWritePathAbsent: true,
+              productRegistryActivationSideEffectsAbsent: true,
+              rollbackDisablePlanExplicit: true,
+              rollbackPlan: {
+                disableEnableFlag: true,
+                removeOrDisableRoute: true,
+                noLedgerRollbackRequiredBeforeFirstExecution: true,
+              },
+              activationAuthorizationGranted: false,
+            });
+
+          console.log('V163_CURRENT_BEGIN');
+          console.log(JSON.stringify(result, null, 2));
+          console.log('V163_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v163-current.mts
+          rm .tmp-v163-current.mts
+
       - name: Validate v163 and v162/v161 regressions
         run: |
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-channel-readiness-v163.test.mts
