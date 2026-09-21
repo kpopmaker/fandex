@@ -1,0 +1,83 @@
+name: TEMP newsIssuePoint Promotion Registry Integration Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-promotion-registry-a34efd
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify exact feature ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD~2)" = "a34efd4de1f114c4a0053b1873ef87eb5ed1240f"
+          test "$(git diff --name-only a34efd4de1f114c4a0053b1873ef87eb5ed1240f...HEAD | sort)" = "$(printf '%s\n' '.github/workflows/temp-news-issue-point-promotion-registry-validation.yml' 'tests/temp-promotion-registry-other-six-isolation.test.mts' | sort)"
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Registry and approval integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/intelligence-variable-confidence-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Promotion control and candidate regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-selector-v1.test.mts
+          node --import tsx --test tests/product-news-issue-point-real-candidate-v1.test.mts
+
+      - name: Product read Evidence and scope regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          node --import tsx --test tests/product-variable-boundary-v1.test.mts
+          node --import tsx --test tests/product-evidence-boundary-v1.test.mts
+          node --import tsx --test tests/temp-promotion-registry-other-six-isolation.test.mts
+
+      - name: Stored Evidence lineage regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import tsx --test tests/naver-news-canonical-job-evidence-v130.test.mts
+          node --import tsx --test tests/naver-news-canonical-observation-v130.test.mts
+
+      - name: Static checks
+        run: npm run typecheck && npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Diff checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 66c5b1332ba2f452b34211fcf681e591191dc304...a34efd4de1f114c4a0053b1873ef87eb5ed1240f
+          git diff --check a34efd4de1f114c4a0053b1873ef87eb5ed1240f...HEAD
