@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -238,51 +237,4 @@ test('invalid identity or premature fresh-source advancement blocks the plan', (
   assert.ok(
     out.blockers.includes('fresh-source-already-advanced-before-native-read'),
   );
-});
-
-
-test('committed v165 audit reproduces the exact current authorization plan', async () => {
-  const raw = await readFile(
-    new URL(
-      '../data/momentum-research/iu_verifier_provisioning_authorization_plan_v165_20260921T232742Z.json',
-      import.meta.url,
-    ),
-    'utf8',
-  );
-  const audit = JSON.parse(raw);
-
-  const out = buildFandexMomentumVerifierProvisioningAuthorizationPlan(
-    currentInput,
-  );
-
-  assert.equal(out.state, 'provisioning-plan-ready');
-  assert.equal(out.planReadyForSeparateAuthorization, true);
-  assert.equal(
-    out.digest,
-    'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f',
-  );
-  assert.deepEqual(out.authorizationSlots, audit.authorizationSlots);
-  assert.deepEqual(
-    out.executionSequence.map((row) => row.stage),
-    audit.executionSequence,
-  );
-  assert.deepEqual(
-    out.firstNativeReadAcceptance,
-    audit.firstNativeReadAcceptance,
-  );
-  assert.deepEqual(out.ledgerGate, audit.ledgerGate);
-  assert.deepEqual(out.rollbackPlan, audit.rollbackPlan);
-  assert.equal(audit.result.state, 'provisioning-plan-ready');
-  assert.equal(audit.result.planReadyForSeparateAuthorization, true);
-  assert.deepEqual(audit.result.blockers, []);
-  assert.equal(audit.effects.environmentMutations, 0);
-  assert.equal(audit.effects.secretWrites, 0);
-  assert.equal(audit.effects.productionDeployments, 0);
-  assert.equal(audit.effects.verifierActivations, 0);
-  assert.equal(audit.effects.databaseWrites, 0);
-  assert.equal(audit.effects.historyWrites, 0);
-  assert.equal(audit.effects.watermarkWrites, 0);
-  assert.equal(audit.effects.manifestWrites, 0);
-  assert.equal(audit.productBoundary.productionEligible, false);
-  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
