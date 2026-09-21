@@ -117,6 +117,9 @@ export type FandexMomentumVerifierProvisioningAuthorizationPlanResult =
       databaseWritesObservedMustBe: 0;
       v160StateMustBe: 'attestation-adapted';
       verifierOutputAcceptedMustBe: true;
+      v159StateMustBe: 'attested-provenance-ready';
+      v159ProvenanceStateMustBe: 'stored-evidence-read-reproduced';
+      v159FutureLiveRefreshEligibleMustBe: true;
       rawPayloadResponseForbidden: true;
       normalizedPayloadResponseForbidden: true;
       credentialOrSecretResponseForbidden: true;
@@ -330,7 +333,7 @@ export function buildFandexMomentumVerifierProvisioningAuthorizationPlan(
       order: 9,
       stage: 'accept-first-native-read' as const,
       requirement:
-        'accept only exact v162/v160 bounded result satisfying all first-read criteria',
+        'accept only exact v162/v160/v159 result satisfying all first-read criteria',
       mutating: false,
       allowedNow: false,
     }),
@@ -354,6 +357,9 @@ export function buildFandexMomentumVerifierProvisioningAuthorizationPlan(
     databaseWritesObservedMustBe: 0 as const,
     v160StateMustBe: 'attestation-adapted' as const,
     verifierOutputAcceptedMustBe: true as const,
+    v159StateMustBe: 'attested-provenance-ready' as const,
+    v159ProvenanceStateMustBe: 'stored-evidence-read-reproduced' as const,
+    v159FutureLiveRefreshEligibleMustBe: true as const,
     rawPayloadResponseForbidden: true as const,
     normalizedPayloadResponseForbidden: true as const,
     credentialOrSecretResponseForbidden: true as const,
