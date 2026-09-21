@@ -1,0 +1,57 @@
+name: PR127 momentum v166 configuration authorization
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierConfigurationMutationAuthorizationResearch.ts'
+      - 'tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts'
+      - '.github/workflows/pr127-momentum-v166-configuration-authorization.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Evaluate current v166 pending state
+        run: |
+          cat > .tmp-v166-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierConfigurationMutationAuthorization,
+          } from './lib/intelligence/fandexMomentumVerifierConfigurationMutationAuthorizationResearch';
+
+          const out =
+            evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
+              evaluatedAt: '2026-09-21T23:40:00.000Z',
+              requestIntent: 'generic-continuation',
+              upstreamV165Digest:
+                'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f',
+              upstreamV165State: 'provisioning-plan-ready',
+              record: null,
+            });
+
+          console.log('V166_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V166_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v166-current.mts
+          rm .tmp-v166-current.mts
+
+      - name: Validate v166 and v165/v164 regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-provisioning-authorization-plan-v165.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-evidence-v164.test.mts
+          npm run typecheck
+          git diff --check
