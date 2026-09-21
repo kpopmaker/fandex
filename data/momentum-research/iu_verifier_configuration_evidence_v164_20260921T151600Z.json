@@ -1,0 +1,120 @@
+{
+  "contractVersion": "v164_fandex_momentum_verifier_configuration_evidence_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-21T15:16:00.000Z",
+  "vercelInspection": {
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "projectName": "fandex",
+    "intendedDeploymentCommit": "7a1038226b07abf4a130986766ef114a43c1d638",
+    "intendedCommitPreviewDeploymentId": "dpl_FbqAfXBDTrZBPMEiwrYswmK5kNm8",
+    "intendedCommitPreviewDeploymentState": "READY",
+    "intendedCommitPreviewDeploymentUrl": "fandex-k7i9tp3nb-larva3203-1222s-projects.vercel.app",
+    "connectedInterfaceEnvironmentInventoryAvailable": false,
+    "interpretation": "configuration-not-proven-not-asserted-absent"
+  },
+  "repositoryConfigurationEvidence": {
+    "envExamplePath": ".env.example",
+    "envExampleVerifierVariablesDeclared": false,
+    "executionChannelSource": "lib/server/ingestion/naverNewsMomentumVerifierExecutionChannel.ts",
+    "requiredConfiguration": [
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+        "requiredTarget": "production",
+        "requiredExactValue": "approved-v162-research-read-only"
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+        "requiredTarget": "production",
+        "requiredExactValue": "production"
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+        "requiredTarget": "production",
+        "requiredSecretContract": "24-512 UTF-8 bytes, no whitespace/control characters, value must remain unexposed",
+        "mustBeDistinctFromSchedulerCredential": true
+      }
+    ]
+  },
+  "evidence": {
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "projectName": "fandex",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "environment": "production",
+    "intendedDeploymentCommit": "7a1038226b07abf4a130986766ef114a43c1d638",
+    "intendedRoutePath": "/api/internal/naver-news/momentum-verifier",
+    "intendedCommitPreviewDeploymentId": "dpl_FbqAfXBDTrZBPMEiwrYswmK5kNm8",
+    "intendedCommitPreviewDeploymentReady": true,
+    "productionEnvironmentInventoryQueryable": false,
+    "enableFlag": {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+      "present": false,
+      "productionTargeted": false,
+      "exactContractValueProven": false,
+      "expectedValue": "approved-v162-research-read-only"
+    },
+    "deploymentSelector": {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+      "present": false,
+      "productionTargeted": false,
+      "exactContractValueProven": false,
+      "expectedValue": "production"
+    },
+    "dedicatedSecret": {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+      "present": false,
+      "productionTargeted": false,
+      "valueExposed": false,
+      "secretContractSatisfiedWithoutExposure": false,
+      "distinctFromSchedulerCredentialProven": false
+    },
+    "previewCredentialInheritanceAbsent": true,
+    "evidenceBoundToProjectAndEnvironment": false,
+    "fieldSemantics": "false means not proven by available evidence, not asserted absent from Vercel"
+  },
+  "result": {
+    "contractVersion": "v164_fandex_momentum_verifier_configuration_evidence_closure_research_v1",
+    "state": "configuration-evidence-blocked",
+    "readyToReevaluateV163": false,
+    "blockers": [
+      "configuration-evidence-not-bound-to-project-environment",
+      "production-environment-inventory-unavailable",
+      "verifier-enable-flag-not-proven-present",
+      "verifier-enable-flag-production-target-not-proven",
+      "verifier-enable-flag-contract-value-not-proven",
+      "verifier-deployment-selector-not-proven-present",
+      "verifier-deployment-selector-production-target-not-proven",
+      "verifier-deployment-selector-contract-value-not-proven",
+      "dedicated-verifier-secret-not-proven-present",
+      "dedicated-verifier-secret-production-target-not-proven",
+      "dedicated-verifier-secret-contract-not-proven",
+      "dedicated-verifier-secret-separation-not-proven"
+    ],
+    "digest": "1c9e88c409da2519b27b46e3eb30bfaac99120ca910333826c536a2b6e3b9c59"
+  },
+  "validation": {
+    "runId": 35617691332,
+    "status": "PASS",
+    "v164TestsPassed": true,
+    "v163RegressionPassed": true,
+    "v162RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "effects": {
+    "environmentReads": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretMutations": 0,
+    "productionDeployments": 0,
+    "activationWrites": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0
+  },
+  "productBoundary": {
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
