@@ -30,8 +30,29 @@
     "blocker": "stored-evidence-live-reproduction-unavailable",
     "githubActionsRuntimeDatabaseCredentialAvailable": false,
     "githubActionsCredentialProbeRunId": 35548356651,
-    "vercelPreviewDeploymentAvailable": false,
-    "vercelPreviewBlocker": "build-rate-limit"
+    "vercelPreviewDeploymentAvailable": true,
+    "vercelPreviewBlocker": "deployment-protection-for-ready-verifier; subsequent-build-rate-limit-for-build-time-gate",
+    "previewReadOnlyVerifier": {
+      "deploymentCreated": true,
+      "deploymentId": "dpl_BjAb74ykzez1VJXQCFDSCv8EVA9n",
+      "deploymentCommit": "b2bcbdba94286d96856f8f36673fa1d07c43c1f5",
+      "deploymentState": "READY",
+      "target": "preview",
+      "rawPayloadExposed": false,
+      "exactBoundaryAssertionsEmbedded": true,
+      "githubActionsInvocationRunId": 35549693708,
+      "githubActionsInvocationHttpStatus": 302,
+      "invocationBlocker": "vercel-deployment-protection",
+      "vercelMcpProtectedFetchHttpStatus": 302,
+      "storedEvidenceReproducedThisEvaluation": false
+    },
+    "previewBuildTimeVerifier": {
+      "attempted": true,
+      "verifierCommit": "349197aab97aec11508a1b7e36d89ec71b0fab90",
+      "deploymentCreated": false,
+      "blocker": "vercel-build-rate-limit",
+      "storedEvidenceReproducedThisEvaluation": false
+    }
   },
   "provenance": {
     "contractVersion": "v153_fandex_momentum_source_provenance_research_v1",
