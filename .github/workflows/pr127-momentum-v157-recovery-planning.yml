@@ -1,0 +1,28 @@
+name: PR127 momentum v157 recovery planning validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v157 and upstream acceptance boundaries
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-partial-persistence-recovery-v157.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-triple-artifact-acceptance-v156.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-manifest-guarded-preflight-v155.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-paired-artifact-manifest-v154.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-source-provenance-v153.test.mts
+          npm run typecheck
+          git diff --check
