@@ -136,16 +136,16 @@ test('activation approval candidate layer cannot grant activation, publish Produ
     'utf8',
   );
 
-  assert.doesNotMatch(source, /activationAuthorized:\\s*true/);
-  assert.doesNotMatch(source, /publicRouteActivated:\\s*true/);
-  assert.doesNotMatch(source, /productScorePublished:\\s*true/);
+  assert.doesNotMatch(source, /activationAuthorized:\s*true/);
+  assert.doesNotMatch(source, /publicRouteActivated:\s*true/);
+  assert.doesNotMatch(source, /productScorePublished:\s*true/);
   assert.doesNotMatch(
     source,
-    /directProductionContributionEligible:\\s*true/,
+    /directProductionContributionEligible:\s*true/,
   );
   assert.doesNotMatch(
     source,
-    /strictPublicationIntervalClaimAllowed:\\s*true/,
+    /strictPublicationIntervalClaimAllowed:\s*true/,
   );
-  assert.doesNotMatch(source, /getArtistProductVariable\\s*\\(/);
+  assert.doesNotMatch(source, /getArtistProductVariable\s*\(/);
 });
