@@ -1,0 +1,73 @@
+name: PR127 momentum v172 inventory read-channel plan
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierVercelInventoryReadChannelPlanResearch.ts'
+      - 'tests/fandex-momentum-verifier-vercel-inventory-read-channel-plan-v172.test.mts'
+      - '.github/workflows/pr127-momentum-v172-inventory-read-channel-plan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Evaluate current v172 plan state
+        run: |
+          cat > .tmp-v172-current.mts <<'TS'
+          import {
+            buildFandexMomentumVerifierVercelInventoryReadChannelPlan,
+          } from './lib/intelligence/fandexMomentumVerifierVercelInventoryReadChannelPlanResearch';
+
+          const out =
+            buildFandexMomentumVerifierVercelInventoryReadChannelPlan({
+              evaluatedAt: '2026-09-22T00:35:00.000Z',
+              requestIntent: 'research-plan-evaluation',
+              authorization: {
+                state: 'pending',
+                authorizationId: null,
+                decidedAt: null,
+                decidedBy: null,
+                validFrom: null,
+                expiresAt: null,
+                revokedAt: null,
+              },
+              credentialHandle: null,
+            });
+
+          if (
+            out.state !== 'read-channel-plan-ready'
+            || !out.planReady
+            || out.provisioningAuthorized
+            || out.readExecutionAuthorized
+          ) {
+            throw new Error('current v172 must be plan-ready but unprovisioned and unread');
+          }
+
+          console.log('V172_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V172_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v172-current.mts
+          rm .tmp-v172-current.mts
+
+      - name: Validate v172 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-read-channel-plan-v172.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-acquisition-v171.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-adapter-v170.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-premutation-rollback-readiness-v169.test.mts
+          npm run typecheck
+          git diff --check
