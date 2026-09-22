@@ -1,0 +1,74 @@
+name: validate-news-issue-point-activation-approval-candidate-v2-current-main
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-activation-approval-candidate-v2-fe1856
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "fe1856a5f3c6145aa6d9f2bf679d72d2f7370700"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Activation approval candidate v2
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-candidate-v2.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization/control regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read and Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact candidate diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 922598061d226a797c64f213b450bcde0c4f6aab...fe1856a5f3c6145aa6d9f2bf679d72d2f7370700
+          git diff --name-only 922598061d226a797c64f213b450bcde0c4f6aab...fe1856a5f3c6145aa6d9f2bf679d72d2f7370700 > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointRealProductActivationApprovalCandidate.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-activation-approval-candidate-v2.test.mts" /tmp/files
