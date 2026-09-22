@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -291,4 +292,79 @@ test('v172 always has zero side effects', () => {
     watermarkWrites: 0,
     manifestWrites: 0,
   });
+});
+
+
+test('committed v172 audit reproduces the current plan-ready state', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_vercel_inventory_read_channel_plan_v172_20260922T003721Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out = buildFandexMomentumVerifierVercelInventoryReadChannelPlan({
+    evaluatedAt: '2026-09-22T00:35:00.000Z',
+    requestIntent: 'research-plan-evaluation',
+    authorization: pending,
+    credentialHandle: null,
+  });
+
+  assert.equal(out.state, 'read-channel-plan-ready');
+  assert.equal(out.planReady, true);
+  assert.equal(out.provisioningAuthorized, false);
+  assert.equal(out.readExecutionAuthorized, false);
+  assert.equal(out.credentialHandleAccepted, false);
+  assert.equal(
+    out.digest,
+    'e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(audit.currentAuthorization.state, 'pending');
+  assert.equal(audit.currentCredentialHandle, null);
+  assert.equal(
+    audit.providerAuthenticationBasis.providerLevelEndpointRestrictionConfirmed,
+    false,
+  );
+  assert.equal(
+    audit.channelContract.credentialBoundary.interfaceEnforcesRequestAllowlist,
+    true,
+  );
+  assert.equal(
+    audit.channelContract.credentialBoundary.providerCredentialValueMayEnterLog,
+    false,
+  );
+  assert.deepEqual(audit.channelContract.forbiddenMethods, [
+    'POST',
+    'PATCH',
+    'PUT',
+    'DELETE',
+  ]);
+  assert.equal(
+    audit.authorizationSemantics
+      .provisioningAuthorizationDoesNotAuthorizeInventoryRead,
+    true,
+  );
+  assert.equal(
+    audit.authorizationSemantics.automaticExpiryDurationInvented,
+    false,
+  );
+  assert.equal(audit.validation.realCredentialHandleUsed, false);
+  assert.equal(audit.validation.realReadChannelProvisioned, false);
+  assert.equal(audit.validation.realInventoryReadPerformed, false);
+  assert.equal(audit.effects.credentialCreates, 0);
+  assert.equal(audit.effects.channelCreates, 0);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
