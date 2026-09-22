@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -395,4 +396,63 @@ test('invalid secret attestation never leaks a secret and blocks the envelope', 
       'trusted-secret-handle-attestation-missing-or-invalid',
     ),
   );
+});
+
+
+test('committed v167 audit reproduces the current blocked guard state', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_configuration_mutation_guard_v167_20260922T000239Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const authorization = pendingAuthorization();
+  const out =
+    evaluateFandexMomentumVerifierConfigurationMutationExecutionGuard({
+      authorization,
+      expectedV165PlanDigest: V165_DIGEST,
+      expectedAuthorizationRecordDigest: null,
+      secretHandleAttestation: null,
+    });
+
+  assert.equal(out.state, 'mutation-envelope-blocked');
+  assert.equal(out.mutationEnvelopeReady, false);
+  assert.equal(out.configurationMutationAuthorized, false);
+  assert.equal(out.envelope, null);
+  assert.equal(
+    out.digest,
+    '3c911851c681a9b5f3142dd5856b9484c3d877218e14fee46c987d96a9296211',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(audit.upstream.v166State, 'authorization-pending');
+  assert.equal(audit.upstream.v166AuthorizationRecordDigest, null);
+  assert.equal(audit.currentInput.trustedSecretHandleAttestationPresent, false);
+  assert.equal(audit.readyEnvelopeRequirements.exactAuthorizationRecordDigestRequired, true);
+  assert.equal(audit.readyEnvelopeRequirements.trustedSecretHandleRequired, true);
+  assert.equal(audit.readyEnvelopeRequirements.trustedSecretHandleMayExposeValue, false);
+  assert.deepEqual(audit.readyEnvelopeRequirements.excludedKeys, [
+    'FANDEX_RUNTIME_DATABASE_URL',
+    'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+  ]);
+  assert.deepEqual(audit.readyEnvelopeRequirements.downstreamAuthorizations, {
+    productionDeployment: false,
+    verifierActivation: false,
+    nativeVerifierExecution: false,
+    ledgerAdvance: false,
+  });
+  assert.equal(audit.validation.realAuthorizationRecordUsed, false);
+  assert.equal(audit.validation.realSecretHandleUsed, false);
+  assert.equal(audit.effects.vercelCalls, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
