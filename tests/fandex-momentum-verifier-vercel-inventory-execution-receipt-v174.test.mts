@@ -433,3 +433,65 @@ test('committed v173 audit still blocks any v174 handoff under generic continuat
 });
 
 // v174 authoritative rerun after upstream path correction
+
+
+test('committed v174 audit reproduces the current blocked execution receipt', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_vercel_inventory_execution_receipt_v174_20260922T084251Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out =
+    evaluateFandexMomentumVerifierVercelInventoryExecutionReceipt({
+      evaluatedAt: '2026-09-22T08:20:00.000Z',
+      upstreamV173: blockedCurrentV173(),
+      execution: {
+        ...successExecution('1'.repeat(64)),
+        status: 'not-executed',
+        envelopeId: null,
+        interfaceName: null,
+        readCount: 0,
+        providerResponseReceived: false,
+        responseBoundToProjectAndTeam: false,
+        completeForProductionTarget: false,
+      },
+      providerRows: [],
+      opaqueSecretRollbackAttestation: null,
+    });
+
+  assert.equal(out.state, 'execution-receipt-blocked');
+  assert.equal(out.receiptReady, false);
+  assert.equal(out.v171HandoffInvoked, false);
+  assert.equal(out.v171, null);
+  assert.equal(
+    out.receipt.digest,
+    'f641cc04922eb664030f0ab3035dcd23552b77f7b2987d4eb830bdd429684662',
+  );
+  assert.equal(
+    out.digest,
+    'e7fdfc24328c9361653c3aec70f4f8eba1ef02f5c5b9c49b1badd26b82f0882a',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(audit.currentExecution.readCount, 0);
+  assert.equal(audit.currentExecution.providerResponseReceived, false);
+  assert.equal(audit.currentReceipt.state, 'execution-not-performed');
+  assert.equal(audit.currentResult.v171HandoffInvoked, false);
+  assert.equal(audit.handoffSemantics.exactlyOneReadRequired, true);
+  assert.equal(audit.handoffSemantics.v171InvokedOnlyAfterValidCompleteReceipt, true);
+  assert.equal(audit.validation.correctedRunId, 35706274011);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
