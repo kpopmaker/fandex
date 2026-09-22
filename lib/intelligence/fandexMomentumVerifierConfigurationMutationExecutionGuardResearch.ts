@@ -233,7 +233,7 @@ export function evaluateFandexMomentumVerifierConfigurationMutationExecutionGuar
           upstreamV165PlanDigest: input.expectedV165PlanDigest,
           upstreamV166ResultDigest: authorization.digest,
           authorizationRecordDigest: input.expectedAuthorizationRecordDigest as string,
-          operations: Object.freeze([
+          operations: [
             Object.freeze({
               order: 1 as const,
               key: 'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED' as const,
@@ -257,11 +257,11 @@ export function evaluateFandexMomentumVerifierConfigurationMutationExecutionGuar
               secretHandleId: input.secretHandleAttestation!.handleId,
               secretValueIncluded: false as const,
             }),
-          ]),
-          excludedKeys: Object.freeze([
-            'FANDEX_RUNTIME_DATABASE_URL' as const,
-            'FANDEX_NAVER_NEWS_SCHEDULER_SECRET' as const,
-          ]),
+          ] as const,
+          excludedKeys: [
+            'FANDEX_RUNTIME_DATABASE_URL',
+            'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+          ] as const,
           downstreamAuthorizations: Object.freeze({
             productionDeployment: false as const,
             verifierActivation: false as const,
