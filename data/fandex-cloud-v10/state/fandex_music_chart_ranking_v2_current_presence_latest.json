@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-21T11:00:22",
-  "snapshotDate": "2026-09-21",
+  "createdAt": "2026-09-22T11:06:53",
+  "snapshotDate": "2026-09-22",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "8",
+          "rank": "10",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -67,7 +67,7 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "32",
+          "rank": "28",
           "chartType": "daily",
           "point": 34.0
         },
@@ -95,7 +95,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "12",
+          "rank": "11",
           "chartType": "daily",
           "point": 72.0
         },
@@ -109,7 +109,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "15",
+          "rank": "19",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -144,7 +144,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "33",
+          "rank": "45",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -165,20 +165,20 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "95",
+          "rank": "94",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "119",
+          "rank": "118",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Hype Boy",
+          "trackTitle": "Ditto",
           "rank": "59",
           "chartType": "realtime",
           "point": 9.0
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "100",
+          "rank": "97",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "141",
+          "rank": "145",
           "chartType": "daily",
           "point": 6.8
         },
@@ -223,13 +223,13 @@
     },
     {
       "artist": "르세라핌",
-      "fandexMusicChartFinalPoint": 6.8,
-      "score": 6.8,
-      "rankedPlatformCount": 1,
+      "fandexMusicChartFinalPoint": 15.8,
+      "score": 15.8,
+      "rankedPlatformCount": 2,
       "platformPoints": {
         "melon": 0.0,
         "genie": 6.8,
-        "bugs": 0.0
+        "bugs": 9.0
       },
       "platformStatus": {
         "melon": {
@@ -247,11 +247,11 @@
           "point": 6.8
         },
         "bugs": {
-          "status": "NOT_RANKED",
-          "trackTitle": "",
-          "rank": "",
-          "chartType": "",
-          "point": 0.0
+          "status": "RANKED",
+          "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
+          "rank": "100",
+          "chartType": "realtime",
+          "point": 9.0
         }
       },
       "rank": 7
