@@ -431,3 +431,5 @@ test('committed v173 audit still blocks any v174 handoff under generic continuat
   assert.equal(out.v171, null);
   assert.equal(out.effects.vercelReads, 0);
 });
+
+// v174 authoritative rerun after upstream path correction
