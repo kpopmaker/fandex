@@ -1,0 +1,85 @@
+name: PR127 momentum v168 Vercel mutation dry-run adapter
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierVercelMutationDryRunResearch.ts'
+      - 'tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts'
+      - '.github/workflows/pr127-momentum-v168-vercel-mutation-dry-run.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Evaluate current v168 blocked state
+        run: |
+          cat > .tmp-v168-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierConfigurationMutationAuthorization,
+          } from './lib/intelligence/fandexMomentumVerifierConfigurationMutationAuthorizationResearch';
+          import {
+            evaluateFandexMomentumVerifierConfigurationMutationExecutionGuard,
+          } from './lib/intelligence/fandexMomentumVerifierConfigurationMutationExecutionGuardResearch';
+          import {
+            buildFandexMomentumVerifierVercelMutationDryRun,
+          } from './lib/intelligence/fandexMomentumVerifierVercelMutationDryRunResearch';
+
+          const v165 =
+            'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f';
+
+          const authorization =
+            evaluateFandexMomentumVerifierConfigurationMutationAuthorization({
+              evaluatedAt: '2026-09-21T23:40:00.000Z',
+              requestIntent: 'generic-continuation',
+              upstreamV165Digest: v165,
+              upstreamV165State: 'provisioning-plan-ready',
+              record: null,
+            });
+
+          const guard =
+            evaluateFandexMomentumVerifierConfigurationMutationExecutionGuard({
+              authorization,
+              expectedV165PlanDigest: v165,
+              expectedAuthorizationRecordDigest: null,
+              secretHandleAttestation: null,
+            });
+
+          const out =
+            buildFandexMomentumVerifierVercelMutationDryRun({ guard });
+
+          if (
+            out.state !== 'dry-run-blocked'
+            || out.dryRunReady
+            || out.plan !== null
+          ) {
+            throw new Error('current v168 must remain blocked while v167 has no ready envelope');
+          }
+
+          console.log('V168_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V168_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v168-current.mts
+          rm .tmp-v168-current.mts
+
+      - name: Validate v168 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-mutation-execution-guard-v167.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-provisioning-authorization-plan-v165.test.mts
+          npm run typecheck
+          git diff --check
