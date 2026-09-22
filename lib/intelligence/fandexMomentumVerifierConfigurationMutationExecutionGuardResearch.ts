@@ -221,6 +221,33 @@ export function evaluateFandexMomentumVerifierConfigurationMutationExecutionGuar
     ? 'mutation-envelope-ready' as const
     : 'mutation-envelope-blocked' as const;
 
+  const operations: FandexMomentumVerifierConfigurationMutationEnvelope['operations'] =
+    Object.freeze([
+      Object.freeze({
+        order: 1 as const,
+        key: 'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED' as const,
+        operation: 'set-exact-non-secret-value' as const,
+        exactValue: 'approved-v162-research-read-only' as const,
+        target: 'production' as const,
+      }),
+      Object.freeze({
+        order: 2 as const,
+        key: 'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT' as const,
+        operation: 'set-exact-non-secret-value' as const,
+        exactValue: 'production' as const,
+        target: 'production' as const,
+      }),
+      Object.freeze({
+        order: 3 as const,
+        key: 'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET' as const,
+        operation: 'set-from-trusted-secret-handle' as const,
+        exactValue: null,
+        target: 'production' as const,
+        secretHandleId: input.secretHandleAttestation?.handleId ?? '',
+        secretValueIncluded: false as const,
+      }),
+    ] as const);
+
   const envelope: FandexMomentumVerifierConfigurationMutationEnvelope | null =
     mutationEnvelopeReady
       ? Object.freeze({
