@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -413,4 +414,55 @@ test('v175 itself always has zero external and Product/ledger side effects', () 
     productionEligible: false,
     productProductionActual: '0/7',
   });
+});
+
+
+test('committed v175 audit reproduces the current blocker matrix', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_real_inventory_acquisition_readiness_v175_20260922T085101Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out =
+    evaluateFandexMomentumVerifierRealInventoryAcquisitionReadiness({
+      v172: currentV172(),
+      v173: currentV173(),
+      v174: blockedV174(),
+    });
+
+  assert.equal(out.state, 'real-acquisition-blocked');
+  assert.equal(out.realAcquisitionReady, false);
+  assert.equal(out.externalReadReady, false);
+  assert.equal(
+    out.digest,
+    'b2ce5a2cfb416964bada29c93db1fb05808a33abb6e7f3c8a340f6adc3c5464d',
+  );
+  assert.deepEqual(out.stages, audit.currentResult.stages);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(audit.upstream.v172.provisioningAuthorized, false);
+  assert.equal(audit.upstream.v173.readExecutionAuthorized, false);
+  assert.equal(audit.upstream.v174.receiptReady, false);
+  assert.equal(
+    audit.stagedTransitionSemantics.genericContinuationCountsAsAuthorization,
+    false,
+  );
+  assert.equal(audit.validation.correctedRunId, 35707023318);
+  assert.equal(audit.validation.realAuthorizationInvented, false);
+  assert.equal(audit.validation.realCredentialHandleInvented, false);
+  assert.equal(audit.validation.realInventoryReadPerformed, false);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
