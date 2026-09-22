@@ -115,7 +115,7 @@ export function evaluateFandexMomentumVerifierRealInventoryAcquisitionReadiness(
     && opaqueCredentialHandleAccepted;
 
   const readExecutionAuthorizationPresent =
-    input.v173.readExecutionAuthorization.state === 'approved';
+    input.v173.authorization.state === 'approved';
   const v173EnvelopePrepared = input.v173.envelopePrepared === true;
   const v173ReadExecutionAuthorized =
     input.v173.readExecutionAuthorized === true;
