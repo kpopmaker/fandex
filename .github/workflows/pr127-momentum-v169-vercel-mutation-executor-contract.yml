@@ -1,0 +1,90 @@
+name: PR127 momentum v169 Vercel mutation executor contract
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierVercelMutationExecutorContractResearch.ts'
+      - 'tests/fandex-momentum-verifier-vercel-mutation-executor-contract-v169.test.mts'
+      - '.github/workflows/pr127-momentum-v169-vercel-mutation-executor-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Evaluate current blocked v169 state
+        run: |
+          cat > .tmp-v169-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierVercelMutationExecutorContract,
+          } from './lib/intelligence/fandexMomentumVerifierVercelMutationExecutorContractResearch';
+
+          const out = evaluateFandexMomentumVerifierVercelMutationExecutorContract({
+            dryRun: {
+              contractVersion:
+                'v168_fandex_momentum_verifier_vercel_configuration_mutation_dry_run_research_v1',
+              state: 'dry-run-blocked',
+              dryRunReady: false,
+              plan: null,
+              blockers: ['v167-mutation-envelope-not-ready'],
+              effects: {
+                vercelCalls: 0,
+                environmentReads: 0,
+                environmentMutations: 0,
+                secretReads: 0,
+                secretWrites: 0,
+                productionDeployments: 0,
+                verifierActivations: 0,
+                nativeVerifierExecutions: 0,
+                databaseWrites: 0,
+                productMetricWrites: 0,
+                registryMutations: 0,
+                historyWrites: 0,
+                watermarkWrites: 0,
+                manifestWrites: 0,
+              },
+              digest:
+                '596cdd5ed06dda9f3bcb8327138f997a4bf70511e38b37b3841aabf926e2bcc2',
+            },
+            expectedDryRunDigest:
+              '596cdd5ed06dda9f3bcb8327138f997a4bf70511e38b37b3841aabf926e2bcc2',
+            preMutationStateCapture: null,
+          });
+
+          if (
+            out.state !== 'executor-contract-blocked'
+            || out.executorContractReady
+            || out.executorInterface !== null
+            || out.initialReceipt.state !== 'not-executed'
+          ) {
+            throw new Error('current v169 state must remain blocked');
+          }
+
+          console.log('V169_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V169_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v169-current.mts
+          rm .tmp-v169-current.mts
+
+      - name: Validate v169 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-mutation-executor-contract-v169.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-mutation-execution-guard-v167.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
+          npm run typecheck
+          git diff --check
