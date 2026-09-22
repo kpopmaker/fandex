@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -391,4 +392,68 @@ test('mutation-capable acquisition channel is forbidden even if a read could suc
     ),
   );
   assert.equal(out.effects.vercelWrites, 0);
+});
+
+
+test('committed v171 audit reproduces the current blocked acquisition state', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_vercel_inventory_acquisition_v171_20260922T003131Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out =
+    acquireFandexMomentumVerifierVercelInventoryResearch(baseInput);
+
+  assert.equal(out.state, 'inventory-acquisition-blocked');
+  assert.equal(out.acquisitionReady, false);
+  assert.equal(
+    out.digest,
+    'e4403b4cf5946f672996bd5c3ebde7e23fe60b7e5ae773ca4eebf1ae86ce4248',
+  );
+  assert.equal(
+    out.receipt.digest,
+    'a8f108d9577b0a085c3355a899fa24a682099062a29acb2bb6c29bc69551e1b0',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.deepEqual(
+    out.v170.evidence.observations.map((row) => row.presence),
+    audit.currentResult.keyPresence,
+  );
+  assert.equal(
+    audit.connectedInterface.environmentInventoryActionAvailable,
+    false,
+  );
+  assert.equal(
+    audit.connectedInterface.authenticatedReadOnlyChannelAvailable,
+    false,
+  );
+  assert.equal(audit.connectedInterface.readPerformed, false);
+  assert.equal(
+    audit.acquisitionSemantics.absenceMayBeConcludedOnlyAfterCompleteBoundInventory,
+    true,
+  );
+  assert.equal(
+    audit.acquisitionSemantics.providerReadErrorLeavesKeysUnknown,
+    true,
+  );
+  assert.equal(
+    audit.acquisitionSemantics.sensitiveValuesDiscardedBeforeBoundedOutput,
+    true,
+  );
+  assert.equal(audit.validation.realVercelInventoryReadPerformed, false);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
