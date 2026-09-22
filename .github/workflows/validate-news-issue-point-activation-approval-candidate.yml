@@ -1,0 +1,60 @@
+name: validate-news-issue-point-activation-approval-candidate
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-activation-approval-candidate-001ff6
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 001ff6a1aae99317a39daa3c54f33578039f0ac8
+          fetch-depth: 0
+
+      - name: Assert exact feature head
+        run: test "$(git rev-parse HEAD)" = "001ff6a1aae99317a39daa3c54f33578039f0ac8"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Activation approval candidate
+        run: npx tsx --test tests/product-news-issue-point-activation-approval-candidate-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization regression
+        run: npx tsx --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read boundary regression
+        run: npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Exact diff sanity
+        run: |
+          git diff --name-only 8b21cf717e82b6632dd874c01fc6c1f30c626692..001ff6a1aae99317a39daa3c54f33578039f0ac8 > /tmp/files
+          cat /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointRealProductActivationApprovalCandidate.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-activation-approval-candidate-v1.test.mts" /tmp/files
