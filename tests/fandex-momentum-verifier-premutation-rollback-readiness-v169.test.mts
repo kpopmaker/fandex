@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -346,4 +347,52 @@ test('runtime DB and scheduler credential must stay outside touched key set', ()
 
   assert.equal(out.state, 'rollback-readiness-blocked');
   assert.ok(out.blockers.includes('pre-mutation-touched-key-set-invalid'));
+});
+
+
+test('committed v169 audit reproduces the current blocked rollback state', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_premutation_rollback_readiness_v169_20260922T001941Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out =
+    evaluateFandexMomentumVerifierPreMutationRollbackReadiness(currentEvidence);
+
+  assert.equal(out.state, 'rollback-readiness-blocked');
+  assert.equal(out.rollbackReady, false);
+  assert.equal(
+    out.digest,
+    '926ee773c0f7bcc8bcc02166b5133e50d99c60132793e9b6f540a41db91e24e6',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.deepEqual(out.keyReadiness, audit.currentResult.keyReadiness);
+  assert.equal(audit.providerReadContract.connectedToolInventoryAvailable, false);
+  assert.equal(
+    audit.providerReadContract.interpretation,
+    'inventory could not be queried through the connected interface; key state is unknown, not absent',
+  );
+  assert.equal(audit.readinessSemantics.unknownIsAbsent, false);
+  assert.equal(audit.readinessSemantics.secretDecryptionRequested, false);
+  assert.deepEqual(audit.excludedKeys, [
+    'FANDEX_RUNTIME_DATABASE_URL',
+    'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+  ]);
+  assert.equal(audit.validation.realInventoryReadPerformed, false);
+  assert.equal(audit.validation.realSecretValueRead, false);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
