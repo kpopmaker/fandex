@@ -1,0 +1,63 @@
+name: validate-news-issue-point-activation-approval-candidate-v2
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-activation-approval-candidate-v2-99f846
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact feature head
+        uses: actions/checkout@v4
+        with:
+          ref: 99f846c8f215ec6ad4f9a6e1ab50d219849e22ed
+          fetch-depth: 0
+
+      - name: Assert exact feature head
+        run: test "$(git rev-parse HEAD)" = "99f846c8f215ec6ad4f9a6e1ab50d219849e22ed"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Activation approval candidate v2
+        run: npx tsx --test tests/product-news-issue-point-activation-approval-candidate-v2.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization regression
+        run: npx tsx --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read boundary regression
+        run: npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Exact candidate diff sanity
+        run: |
+          git diff --name-only 0e01ae0bfc6ad93c7ea1e4853f29bfef369ae4c3..99f846c8f215ec6ad4f9a6e1ab50d219849e22ed > /tmp/files
+          cat /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointRealProductActivationApprovalCandidate.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-activation-approval-candidate-v2.test.mts" /tmp/files
