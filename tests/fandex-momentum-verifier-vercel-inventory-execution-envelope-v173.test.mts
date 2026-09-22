@@ -13,10 +13,15 @@ import {
   type FandexMomentumVerifierVercelInventoryReadChannelAuthorization,
 } from '../lib/intelligence/fandexMomentumVerifierVercelInventoryReadChannelPlanResearch';
 
-const provisioningAuthorization: FandexMomentumVerifierVercelInventoryReadChannelAuthorization = {
+const PROVISIONING_AUTHORIZATION_ID =
+  '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+
+const provisioningAuthorization: Extract<
+  FandexMomentumVerifierVercelInventoryReadChannelAuthorization,
+  { state: 'approved' }
+> = {
   state: 'approved',
-  authorizationId:
-    '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+  authorizationId: PROVISIONING_AUTHORIZATION_ID,
   decidedAt: '2026-09-22T00:35:00.000Z',
   decidedBy: 'synthetic-test-reviewer',
   validFrom: '2026-09-22T00:35:00.000Z',
@@ -61,7 +66,10 @@ const pending: FandexMomentumVerifierVercelInventoryReadExecutionAuthorization =
 
 function approvedExecution(
   upstreamDigest: string,
-): FandexMomentumVerifierVercelInventoryReadExecutionAuthorization {
+): Extract<
+  FandexMomentumVerifierVercelInventoryReadExecutionAuthorization,
+  { state: 'approved' }
+> {
   return {
     state: 'approved',
     authorizationId:
@@ -72,8 +80,7 @@ function approvedExecution(
     expiresAt: '2026-09-22T01:15:00.000Z',
     revokedAt: null,
     upstreamV172Digest: upstreamDigest,
-    provisioningAuthorizationId:
-      provisioningAuthorization.authorizationId,
+    provisioningAuthorizationId: PROVISIONING_AUTHORIZATION_ID,
     credentialHandleId: credentialHandle.handleId,
   };
 }
