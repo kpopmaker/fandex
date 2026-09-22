@@ -149,7 +149,7 @@ test('synthetic complete inventory with all three keys absent is rollback-ready 
       ...row,
       presence: 'absent' as const,
       targetScope: 'production-only' as const,
-    })) as FandexMomentumVerifierPreMutationRollbackReadinessInput['observations'],
+    })) as unknown as FandexMomentumVerifierPreMutationRollbackReadinessInput['observations'],
   });
 
   assert.equal(out.state, 'rollback-readiness-ready');
