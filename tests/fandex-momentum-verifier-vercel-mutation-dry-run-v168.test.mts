@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -395,4 +396,78 @@ test('target drift, reordered operations, extra privilege, or excluded-key drift
     assert.equal(out.plan, null);
     assert.ok(out.blockers.length > 0);
   }
+});
+
+
+test('committed v168 audit reproduces the current blocked dry-run state', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_vercel_mutation_dry_run_v168_20260922T001023Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+  const out = buildFandexMomentumVerifierVercelMutationDryRun({
+    guard: pendingGuard(),
+  });
+
+  assert.equal(out.state, 'dry-run-blocked');
+  assert.equal(out.dryRunReady, false);
+  assert.equal(out.plan, null);
+  assert.equal(
+    out.digest,
+    '596cdd5ed06dda9f3bcb8327138f997a4bf70511e38b37b3841aabf926e2bcc2',
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(audit.upstream.v166State, 'authorization-pending');
+  assert.equal(audit.upstream.v167State, 'mutation-envelope-blocked');
+  assert.equal(audit.upstream.v167Envelope, null);
+  assert.equal(audit.providerContract.httpMethod, 'POST');
+  assert.equal(
+    audit.providerContract.endpoint,
+    '/v10/projects/{idOrName}/env',
+  );
+  assert.equal(audit.providerContract.upsertQuery, 'true');
+  assert.equal(audit.providerContract.providerBatchAtomicityAssumed, false);
+  assert.deepEqual(
+    audit.readyDryRunRequirements.exactOperationOrder,
+    [
+      'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED',
+      'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT',
+      'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET',
+    ],
+  );
+  assert.equal(
+    audit.readyDryRunRequirements.futureVercelIntent
+      .requestBodyIntent[2].apiValueIncludedInDryRun,
+    false,
+  );
+  assert.deepEqual(audit.readyDryRunRequirements.excludedKeys, [
+    'FANDEX_RUNTIME_DATABASE_URL',
+    'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+  ]);
+  assert.equal(audit.failureAndRollbackPolicy.partialFailureFailsClosed, true);
+  assert.equal(
+    audit.failureAndRollbackPolicy.preMutationStateCaptureRequired,
+    true,
+  );
+  assert.equal(
+    audit.failureAndRollbackPolicy.secretValueMayBeStoredInResearchArtifact,
+    false,
+  );
+  assert.equal(audit.validation.realV166AuthorizationRecordUsed, false);
+  assert.equal(audit.validation.realV167ReadyEnvelopeUsed, false);
+  assert.equal(audit.validation.realSecretHandleUsed, false);
+  assert.equal(audit.effects.vercelCalls, 0);
+  assert.equal(audit.effects.environmentMutations, 0);
+  assert.equal(audit.effects.secretReads, 0);
+  assert.equal(audit.effects.secretWrites, 0);
+  assert.equal(audit.effects.productionDeployments, 0);
+  assert.equal(audit.effects.nativeVerifierExecutions, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
