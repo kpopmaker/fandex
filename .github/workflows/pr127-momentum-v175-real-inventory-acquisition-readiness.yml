@@ -1,0 +1,138 @@
+name: PR127 momentum v175 real inventory acquisition readiness
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierRealInventoryAcquisitionReadinessResearch.ts'
+      - 'tests/fandex-momentum-verifier-real-inventory-acquisition-readiness-v175.test.mts'
+      - '.github/workflows/pr127-momentum-v175-real-inventory-acquisition-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Evaluate current v175 blocked readiness
+        run: |
+          cat > .tmp-v175-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierRealInventoryAcquisitionReadiness,
+          } from './lib/intelligence/fandexMomentumVerifierRealInventoryAcquisitionReadinessResearch';
+          import {
+            buildFandexMomentumVerifierVercelInventoryReadChannelPlan,
+          } from './lib/intelligence/fandexMomentumVerifierVercelInventoryReadChannelPlanResearch';
+          import {
+            buildFandexMomentumVerifierVercelInventoryExecutionEnvelope,
+          } from './lib/intelligence/fandexMomentumVerifierVercelInventoryExecutionEnvelopeResearch';
+          import {
+            evaluateFandexMomentumVerifierVercelInventoryExecutionReceipt,
+          } from './lib/intelligence/fandexMomentumVerifierVercelInventoryExecutionReceiptResearch';
+
+          const v172 =
+            buildFandexMomentumVerifierVercelInventoryReadChannelPlan({
+              evaluatedAt: '2026-09-22T00:35:00.000Z',
+              requestIntent: 'research-plan-evaluation',
+              authorization: {
+                state: 'pending',
+                authorizationId: null,
+                decidedAt: null,
+                decidedBy: null,
+                validFrom: null,
+                expiresAt: null,
+                revokedAt: null,
+              },
+              credentialHandle: null,
+            });
+
+          const v173 =
+            buildFandexMomentumVerifierVercelInventoryExecutionEnvelope({
+              evaluatedAt: '2026-09-22T08:07:00.000Z',
+              requestIntent: 'generic-continuation',
+              upstreamV172: v172,
+              readExecutionAuthorization: {
+                state: 'pending',
+                authorizationId: null,
+                decidedAt: null,
+                decidedBy: null,
+                validFrom: null,
+                expiresAt: null,
+                revokedAt: null,
+                upstreamV172Digest: null,
+                provisioningAuthorizationId: null,
+                credentialHandleId: null,
+              },
+            });
+
+          const v174 =
+            evaluateFandexMomentumVerifierVercelInventoryExecutionReceipt({
+              evaluatedAt: '2026-09-22T08:20:00.000Z',
+              upstreamV173: v173,
+              execution: {
+                status: 'not-executed',
+                envelopeId: null,
+                interfaceName: null,
+                method: 'GET',
+                endpoint: '/v10/projects/{idOrName}/env',
+                teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs',
+                projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v',
+                decryptRequested: false,
+                readCount: 0,
+                mutationCapabilityPresent: false,
+                decryptTruePathPresent: false,
+                decryptedValueEndpointPresent: false,
+                credentialValueExposed: false,
+                providerResponseReceived: false,
+                responseBoundToProjectAndTeam: false,
+                completeForProductionTarget: false,
+                truncationOrAdditionalPageRisk: false,
+                rawProviderResponsePersisted: false,
+                secretValueLogged: false,
+                secretValuePersisted: false,
+              },
+              providerRows: [],
+              opaqueSecretRollbackAttestation: null,
+            });
+
+          const out =
+            evaluateFandexMomentumVerifierRealInventoryAcquisitionReadiness({
+              v172,
+              v173,
+              v174,
+            });
+
+          if (
+            out.state !== 'real-acquisition-blocked'
+            || out.realAcquisitionReady
+            || out.externalReadReady
+          ) {
+            throw new Error('current v175 state must remain externally blocked');
+          }
+
+          console.log('V175_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V175_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v175-current.mts
+          rm .tmp-v175-current.mts
+
+      - name: Validate v175 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-real-inventory-acquisition-readiness-v175.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-receipt-v174.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-envelope-v173.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-read-channel-plan-v172.test.mts
+          npm run typecheck
+          git diff --check
