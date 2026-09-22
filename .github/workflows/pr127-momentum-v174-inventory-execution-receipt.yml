@@ -111,7 +111,7 @@ jobs:
         run: |
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-receipt-v174.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-envelope-v173.test.mts
-          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-read-channel-v172.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-read-channel-plan-v172.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-acquisition-v171.test.mts
           npm run typecheck
           git diff --check
