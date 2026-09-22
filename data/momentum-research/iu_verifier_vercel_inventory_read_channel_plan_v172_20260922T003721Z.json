@@ -1,0 +1,128 @@
+{
+  "contractVersion": "v172_fandex_momentum_verifier_vercel_inventory_read_channel_plan_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-22T00:37:21.949Z",
+  "providerAuthenticationBasis": {
+    "provider": "vercel",
+    "authentication": "Bearer access token",
+    "endpoint": "GET /v10/projects/{idOrName}/env",
+    "decrypt": "false",
+    "providerLevelEndpointRestrictionConfirmed": false,
+    "interpretation": "v172 does not assume a Vercel bearer credential is endpoint-limited; the execution interface must enforce the exact request allowlist"
+  },
+  "currentAuthorization": {
+    "state": "pending",
+    "authorizationId": null,
+    "decidedAt": null,
+    "decidedBy": null,
+    "validFrom": null,
+    "expiresAt": null,
+    "revokedAt": null
+  },
+  "currentCredentialHandle": null,
+  "currentResult": {
+    "contractVersion": "v172_fandex_momentum_verifier_vercel_inventory_read_channel_plan_research_v1",
+    "state": "read-channel-plan-ready",
+    "planReady": true,
+    "provisioningAuthorized": false,
+    "readExecutionAuthorized": false,
+    "credentialHandleAccepted": false,
+    "blockers": [],
+    "digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a"
+  },
+  "channelContract": {
+    "allowedRequest": {
+      "method": "GET",
+      "endpoint": "/v10/projects/{idOrName}/env",
+      "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+      "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+      "decrypt": "false",
+      "gitBranch": null,
+      "customEnvironmentId": null,
+      "customEnvironmentSlug": null
+    },
+    "forbiddenMethods": [
+      "POST",
+      "PATCH",
+      "PUT",
+      "DELETE"
+    ],
+    "forbiddenCapabilities": [
+      "environment-mutation",
+      "deployment",
+      "secret-decryption",
+      "decrypted-env-endpoint",
+      "credential-output",
+      "credential-rotation"
+    ],
+    "credentialBoundary": {
+      "opaqueHandleOnly": true,
+      "providerCredentialValueMayEnterResearchArtifact": false,
+      "providerCredentialValueMayEnterLog": false,
+      "providerLevelEndpointRestrictionAssumed": false,
+      "interfaceEnforcesRequestAllowlist": true,
+      "exactTeamProjectBindingRequired": true
+    },
+    "executionBoundary": {
+      "maxInventoryReadsPerEnvelope": 1,
+      "mutationMethodsExposed": false,
+      "decryptTrueAllowed": false,
+      "decryptedEnvValueEndpointAllowed": false,
+      "rawProviderResponsePersistenceAllowed": false,
+      "secretValuePersistenceAllowed": false
+    }
+  },
+  "authorizationSemantics": {
+    "genericContinuationCountsAsAuthorization": false,
+    "syntheticApprovedPathRequiresExplicitReadChannelAuthorizationIntent": true,
+    "syntheticApprovedPathRequiresValidOpaqueCredentialHandle": true,
+    "provisioningAuthorizationDoesNotAuthorizeInventoryRead": true,
+    "rejectedIsNonEffective": true,
+    "expiredIsNonEffective": true,
+    "revokedFailsClosed": true,
+    "automaticExpiryDurationInvented": false
+  },
+  "validation": {
+    "runId": 35672688275,
+    "status": "PASS",
+    "v172TestsPassed": true,
+    "v171RegressionPassed": true,
+    "v170RegressionPassed": true,
+    "v169RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true,
+    "syntheticProvisioningReadyCovered": true,
+    "syntheticRejectedCovered": true,
+    "syntheticExpiredCovered": true,
+    "syntheticRevokedCovered": true,
+    "realCredentialHandleUsed": false,
+    "realReadChannelProvisioned": false,
+    "realInventoryReadPerformed": false
+  },
+  "effects": {
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "channelCreates": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
