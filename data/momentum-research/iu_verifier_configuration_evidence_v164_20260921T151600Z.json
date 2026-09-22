@@ -122,7 +122,7 @@
     "digest": "8fd9585c3b77396bde869a9aec80c022f9231fabf54fcac1cc6dffbeb738ba6c"
   },
   "validation": {
-    "completeEvidenceRunId": 35617919358,
+    "runId": 35617919358,
     "status": "PASS",
     "v164TestsPassed": true,
     "v163RegressionPassed": true,
@@ -148,5 +148,15 @@
     "productMomentumScore": null,
     "productionEligible": false,
     "productProductionActual": "0/7"
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
   }
 }
