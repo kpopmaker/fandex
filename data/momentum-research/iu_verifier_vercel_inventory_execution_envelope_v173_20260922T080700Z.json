@@ -1,0 +1,108 @@
+{
+  "contractVersion": "v173_fandex_momentum_verifier_vercel_inventory_execution_envelope_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-22T08:07:00.000Z",
+  "upstreamV172": {
+    "contractVersion": "v172_fandex_momentum_verifier_vercel_inventory_read_channel_plan_research_v1",
+    "state": "read-channel-plan-ready",
+    "planReady": true,
+    "provisioningAuthorized": false,
+    "readExecutionAuthorized": false,
+    "credentialHandleAccepted": false,
+    "digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a",
+    "authorizationState": "pending",
+    "credentialHandle": null
+  },
+  "currentRequestIntent": "generic-continuation",
+  "currentReadExecutionAuthorization": {
+    "state": "pending",
+    "authorizationId": null,
+    "decidedAt": null,
+    "decidedBy": null,
+    "validFrom": null,
+    "expiresAt": null,
+    "revokedAt": null,
+    "upstreamV172Digest": null,
+    "provisioningAuthorizationId": null,
+    "credentialHandleId": null
+  },
+  "result": {
+    "contractVersion": "v173_fandex_momentum_verifier_vercel_inventory_execution_envelope_research_v1",
+    "state": "execution-envelope-blocked",
+    "envelopePrepared": false,
+    "readExecutionAuthorized": false,
+    "envelope": null,
+    "blockers": [
+      "upstream-v172-not-provisioning-ready"
+    ],
+    "digest": "58ba8bce3a9e9fbe01e9cc8e76fe93d2c7fb6b43f5c8d60ba7bdb229af18ecd5"
+  },
+  "securityBoundary": {
+    "genericContinuationCountsAsReadAuthorization": false,
+    "actualInventoryReadPerformed": false,
+    "credentialValueEnteredEnvelope": false,
+    "maxReadsPerEnvelope": 1,
+    "mutationMethodsAllowed": false,
+    "decryptTrueAllowed": false,
+    "providerCredentialReadAllowed": false,
+    "providerCredentialRotationAllowed": false
+  },
+  "syntheticCoverage": {
+    "provisioningReadyUpstreamCanPrepareBoundedEnvelope": true,
+    "pendingReadAuthorizationLeavesExecutionUnauthorized": true,
+    "explicitSyntheticReadAuthorizationCanMakeEnvelopeReadyWithoutExecuting": true,
+    "genericContinuationCannotUseEffectiveAuthorization": true,
+    "exactUpstreamDigestBindingRequired": true,
+    "exactProvisioningAuthorizationBindingRequired": true,
+    "exactCredentialHandleBindingRequired": true,
+    "expiredAuthorizationFailsClosed": true,
+    "revokedAuthorizationFailsClosed": true
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "validation": {
+    "initialRegressionRunId": 35702913651,
+    "currentStateRunId": 35702997818,
+    "status": "PASS",
+    "v173TestsPassed": true,
+    "v172RegressionPassed": true,
+    "v171RegressionPassed": true,
+    "v164RegressionPassed": true,
+    "v163RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "effects": {
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
