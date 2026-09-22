@@ -1,0 +1,88 @@
+name: PR127 momentum v171 Vercel inventory acquisition
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierVercelInventoryAcquisitionResearch.ts'
+      - 'tests/fandex-momentum-verifier-vercel-inventory-acquisition-v171.test.mts'
+      - '.github/workflows/pr127-momentum-v171-vercel-inventory-acquisition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Evaluate current v171 blocked acquisition state
+        run: |
+          cat > .tmp-v171-current.mts <<'TS'
+          import {
+            acquireFandexMomentumVerifierVercelInventoryResearch,
+          } from './lib/intelligence/fandexMomentumVerifierVercelInventoryAcquisitionResearch';
+
+          const out =
+            acquireFandexMomentumVerifierVercelInventoryResearch({
+              channel: {
+                available: false,
+                authenticatedReadOnly: false,
+                mutationCapabilityPresent: false,
+                interfaceName: null,
+              },
+              request: {
+                method: 'GET',
+                endpoint: '/v10/projects/{idOrName}/env',
+                teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs',
+                projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v',
+                decryptRequested: false,
+                gitBranchFilter: null,
+                customEnvironmentFilter: null,
+              },
+              execution: {
+                status: 'not-attempted',
+                readPerformed: false,
+                providerResponseReceived: false,
+                responseBoundToProjectAndTeam: false,
+                completeForProductionTarget: false,
+                truncationOrAdditionalPageRisk: false,
+                rawProviderResponsePersisted: false,
+                secretValueLogged: false,
+                secretValuePersisted: false,
+              },
+              rows: [],
+              opaqueSecretRollbackAttestation: null,
+            });
+
+          if (
+            out.state !== 'inventory-acquisition-blocked'
+            || out.acquisitionReady
+            || out.effects.vercelReads !== 0
+          ) {
+            throw new Error('current v171 state must remain blocked without a sanctioned inventory channel');
+          }
+
+          console.log('V171_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V171_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v171-current.mts
+          rm .tmp-v171-current.mts
+
+      - name: Validate v171 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-acquisition-v171.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-adapter-v170.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-premutation-rollback-readiness-v169.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
+          npm run typecheck
+          git diff --check
