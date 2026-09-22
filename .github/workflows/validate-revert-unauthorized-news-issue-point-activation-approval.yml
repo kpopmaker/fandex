@@ -1,0 +1,79 @@
+name: validate-revert-unauthorized-news-issue-point-activation-approval
+
+on:
+  push:
+    branches:
+      - validation/revert-unauthorized-news-issue-point-activation-approval-36b242
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "36b24241d4af4b938d5f91dd919d7de3cc2f9479"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Activation approval candidate regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-candidate-v2.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization/control regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Verify activation approval record absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e lib/product/activation/newsIssuePointRealProductActivationApproval.ts
+          test ! -e tests/product-news-issue-point-activation-approval-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact corrective diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 1edafb0a7323814d0928231c0e74f7d91815f5dc...36b24241d4af4b938d5f91dd919d7de3cc2f9479
+          git diff --name-status 1edafb0a7323814d0928231c0e74f7d91815f5dc...36b24241d4af4b938d5f91dd919d7de3cc2f9479 > /tmp/files
+          cat /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -F "D	lib/product/activation/newsIssuePointRealProductActivationApproval.ts" /tmp/files
+          grep -F "D	tests/product-news-issue-point-activation-approval-v1.test.mts" /tmp/files
