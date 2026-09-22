@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -247,4 +248,91 @@ test('v170 itself has zero provider/mutation/ledger effects', () => {
     watermarkWrites: 0,
     manifestWrites: 0,
   });
+});
+
+
+test('committed v170 audit reproduces blocked inventory adapter and preserves ledger boundary', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_vercel_inventory_adapter_v170_20260922T002509Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  const out = adaptFandexMomentumVerifierVercelInventoryResearch(base);
+
+  assert.equal(
+    audit.contractVersion,
+    'v170_fandex_momentum_verifier_vercel_inventory_adapter_audit_v1',
+  );
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(out.adapterReady, false);
+  assert.equal(
+    out.rollbackReadiness.state,
+    audit.currentResult.rollbackReadinessState,
+  );
+  assert.equal(out.rollbackReadiness.rollbackReady, false);
+  assert.equal(out.rollbackReadiness.digest, audit.currentResult.v169Digest);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.equal(audit.providerReadContract.decryptRequested, false);
+  assert.equal(audit.providerReadContract.sensitiveValuePersisted, false);
+  assert.equal(audit.validation.realInventoryReadPerformed, false);
+  assert.deepEqual(out.effects, audit.effects);
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.authoritativeLedgerBoundary.fresh1200ZAdvanced, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
