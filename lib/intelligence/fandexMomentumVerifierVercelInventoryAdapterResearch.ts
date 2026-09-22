@@ -93,11 +93,11 @@ export type FandexMomentumVerifierVercelInventoryAdapterResult =
     digest: string;
   }>;
 
-const TARGET_KEYS = Object.freeze([
+const TARGET_KEYS = [
   'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED',
   'FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT',
   'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET',
-] as const);
+] as const;
 
 function validProviderRow(row: FandexMomentumVerifierVercelInventoryRow): boolean {
   return (
@@ -267,10 +267,10 @@ export function adaptFandexMomentumVerifierVercelInventoryResearch(
       }),
       observations,
       touchedKeys: TARGET_KEYS,
-      excludedKeys: Object.freeze([
-        'FANDEX_RUNTIME_DATABASE_URL' as const,
-        'FANDEX_NAVER_NEWS_SCHEDULER_SECRET' as const,
-      ]),
+      excludedKeys: [
+        'FANDEX_RUNTIME_DATABASE_URL',
+        'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+      ] as const,
     });
 
   const rollbackReadiness =
