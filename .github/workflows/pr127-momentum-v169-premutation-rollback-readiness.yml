@@ -114,3 +114,4 @@ jobs:
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
           npm run typecheck
           git diff --check
+# authoritative v169 cleanup rerun
