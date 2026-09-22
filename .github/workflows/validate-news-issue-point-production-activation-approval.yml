@@ -1,0 +1,77 @@
+name: validate-news-issue-point-production-activation-approval
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-production-activation-approval-bba817
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "bba817588983d4cc9e8014418ffd6c6bb92f3554"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Activation approval record
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-v1.test.mts
+
+      - name: Activation approval candidate regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-candidate-v2.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization/control regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read and Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact approval diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check e79214da3032be4f0895ba6b79e6c0cc2ede4962...bba817588983d4cc9e8014418ffd6c6bb92f3554
+          git diff --name-only e79214da3032be4f0895ba6b79e6c0cc2ede4962...bba817588983d4cc9e8014418ffd6c6bb92f3554 > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointRealProductActivationApproval.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-activation-approval-v1.test.mts" /tmp/files
