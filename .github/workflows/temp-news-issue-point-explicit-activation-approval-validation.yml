@@ -1,0 +1,77 @@
+name: TEMP newsIssuePoint Explicit Activation Approval Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-activation-approval-72845c
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "72845c21d6f356281bf9cc4e5dad3af703c46a00"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Explicit activation approval
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-v1.test.mts
+
+      - name: Activation approval candidate regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-candidate-v2.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations promotion approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization control regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read and Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Promotion gate selector candidate regressions
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-promotion-gate-v1.test.mts tests/product-news-issue-point-real-selector-v1.test.mts tests/product-news-issue-point-real-candidate-v1.test.mts
+
+      - name: Registry and Product boundaries
+        run: npx tsx --conditions=react-server --test tests/intelligence-variable-confidence-v1.test.mts tests/product-variable-boundary-v1.test.mts tests/product-evidence-boundary-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check a96659a01f6090f8aac80ce9b27310ae9d8ca806...72845c21d6f356281bf9cc4e5dad3af703c46a00
+          git diff --check 72845c21d6f356281bf9cc4e5dad3af703c46a00...HEAD
