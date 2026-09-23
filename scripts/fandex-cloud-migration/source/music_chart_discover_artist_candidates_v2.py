@@ -392,6 +392,63 @@ def dedupe_chart_items(
     return list(selected.values())
 
 
+def build_catalog_candidates(
+    chart_items: list[dict[str, Any]],
+    chart_date: str,
+) -> list[dict[str, Any]]:
+    grouped: dict[str, dict[str, Any]] = {}
+
+    for item in chart_items:
+        chart_artist = str(item.get("artistName") or "").strip()
+        if not chart_artist or find_target_artist(chart_artist) is not None:
+            continue
+
+        normalized = compact_text(chart_artist)
+        if not normalized:
+            continue
+
+        key = normalized.casefold()
+        row = grouped.setdefault(
+            key,
+            {
+                "displayArtist": chart_artist,
+                "normalizedArtist": normalized,
+                "status": "identity_review_required",
+                "autoPromote": False,
+                "chartDate": chart_date,
+                "evidenceCount": 0,
+                "platforms": set(),
+                "sourceKeys": set(),
+                "sampleTracks": [],
+            },
+        )
+        row["evidenceCount"] += 1
+        row["platforms"].add(str(item.get("platform") or ""))
+        row["sourceKeys"].add(str(item.get("sourceKey") or ""))
+
+        title = str(item.get("trackTitle") or "").strip()
+        if title and title not in row["sampleTracks"] and len(row["sampleTracks"]) < 5:
+            row["sampleTracks"].append(title)
+
+    result = []
+    for row in grouped.values():
+        result.append(
+            {
+                **row,
+                "platforms": sorted(value for value in row["platforms"] if value),
+                "sourceKeys": sorted(value for value in row["sourceKeys"] if value),
+            }
+        )
+
+    result.sort(
+        key=lambda row: (
+            -int(row["evidenceCount"]),
+            str(row["normalizedArtist"]).casefold(),
+        )
+    )
+    return result
+
+
 def build_candidates(
     chart_items: list[dict[str, Any]],
     chart_date: str,
@@ -631,6 +688,10 @@ def main() -> int:
         deduped_items,
         chart_date,
     )
+    catalog_candidates = build_catalog_candidates(
+        deduped_items,
+        chart_date,
+    )
 
     timestamp_csv = Path(
         f"music_chart_artist_candidates_v2_{timestamp}.csv"
@@ -664,6 +725,8 @@ def main() -> int:
         "sourceCounts": source_counts,
         "candidateCount": len(candidates),
         "candidates": candidates,
+        "catalogCandidateCount": len(catalog_candidates),
+        "catalogCandidates": catalog_candidates,
         "fetchLogs": fetch_logs,
     }
 
@@ -710,7 +773,8 @@ def main() -> int:
     print("=" * 76)
     print("Music chart 신규 아티스트 후보 탐색 v2 완료")
     print("=" * 76)
-    print(f"후보 수: {len(candidates)}")
+    print(f"등록 아티스트 후보 수: {len(candidates)}")
+    print(f"미등록 catalog 후보 수: {len(catalog_candidates)}")
     print(f"최신 후보 CSV: {latest_csv}")
     print(f"최신 보고서: {latest_report}")
     print("seedModified: FALSE")
