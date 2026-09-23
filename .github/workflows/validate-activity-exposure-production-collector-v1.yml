@@ -1,0 +1,48 @@
+name: Validate Activity Exposure Production collector v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/activity-exposure-production-collector-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Activity Exposure Product contract
+        run: npx tsx --test tests/product-activity-exposure-contract-v1.test.mts
+      - name: Activity Exposure ingestion contract
+        run: npx tsx --test tests/activity-exposure-ingestion-contract-v1.test.mts
+      - name: MusicBrainz Production collector
+        run: npx tsx --test tests/activity-exposure-musicbrainz-production-collector-v1.test.mts
+      - name: YouTube Production collector
+        run: npx tsx --test tests/activity-exposure-youtube-production-collector-v1.test.mts
+      - name: Activity Exposure Production boundary
+        run: npx tsx --test tests/activity-exposure-production-boundary-v1.test.mts
+      - name: Existing Product state/time regression
+        run: |
+          npx tsx --test tests/product-state-foundation-v1.test.mts
+          npx tsx --test tests/product-time-foundation-v1.test.mts
+      - name: Existing newsIssuePoint regressions
+        run: |
+          npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
