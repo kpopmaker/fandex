@@ -13,7 +13,9 @@ from bs4 import BeautifulSoup
 
 
 VERSION = "music_chart_discover_artist_candidates_v2"
-COLLECTOR_FILE = Path("music_chart_collect_melon_genie_fallback_v1.py")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parents[2]
+COLLECTOR_FILE = SCRIPT_DIR / "music_chart_collect_melon_genie_fallback_v1.py"
 
 DEFAULT_TARGET_ARTISTS = {
     "아이유": [
@@ -65,8 +67,9 @@ DEFAULT_TARGET_ARTISTS = {
 }
 
 TARGET_ARTISTS_FILE = Path("music_chart_artist_targets_v1.json")
-REPO_TARGET_ARTISTS_FILE = Path(
-    "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json"
+REPO_TARGET_ARTISTS_FILE = (
+    REPO_ROOT
+    / "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json"
 )
 
 
