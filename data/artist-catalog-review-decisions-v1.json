@@ -960,6 +960,81 @@
           "note": "2026 report cites JAM Entertainment and identifies Jo Jung-suk as actor and singer releasing new music."
         }
       ]
+    },
+    {
+      "displayArtist": "머무르",
+      "decision": "special_ai_assisted_artist_project_review",
+      "relationResolution": "human_directed_project_with_suno_generated_vocals",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/20818608",
+          "note": "2026 album note states that artist 머무르 directly handles planning, lyrics and production direction while vocals are generated with Suno AI."
+        }
+      ]
+    },
+    {
+      "displayArtist": "거북이",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "legacy_korean_group_archive_candidate",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/9275",
+          "note": "Provider profile identifies Turtles as a Korean mixed group debuted in 2001."
+        }
+      ]
+    },
+    {
+      "displayArtist": "베스티",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "legacy_kpop_group_archive_candidate",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80159786/albums",
+          "note": "Provider discography establishes BESTie as a distinct K-pop group identity with releases from 2013 to 2015."
+        }
+      ]
+    },
+    {
+      "displayArtist": "브라운 아이즈",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "legacy_korean_duo_archive_candidate",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/3676",
+          "note": "Provider profile identifies Brown Eyes as a Korean male duo with members Naul and Yoon Gun."
+        }
+      ]
+    },
+    {
+      "displayArtist": "조선힙합",
+      "decision": "special_ai_assisted_group_project_review",
+      "relationResolution": "current_group_identity_with_ai_composition_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=4930791",
+          "note": "Provider profile identifies 조선힙합 as a Korean mixed group debuted in 2026 under Ajin Entertainment."
+        },
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/album/detail.htm?albumId=14171060",
+          "note": "2026 album credits list Suno AI alongside human producer Kim Sun-woo, requiring separate AI-assisted identity review before canonical promotion."
+        }
+      ]
     }
   ]
 }
