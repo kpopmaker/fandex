@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "activity-exposure-integration-preflight-v1",
+  "latestMainChecked": "d7ad96f9a207e35141104882972a97829400862c",
+  "researchHead": "a0a64b6fe0191cff4097b90df16fbb12fb78149a",
+  "compare": {
+    "aheadBy": 24,
+    "behindBy": 0,
+    "changedFiles": 16,
+    "allChangesAreAdditions": true
+  },
+  "classification": {
+    "reconstruct": [
+      "lib/research/activityExposure.ts",
+      "lib/research/activityExposureObservation.ts",
+      "lib/server/research/musicBrainzActivityCollector.ts",
+      "lib/server/research/youtubeActivityCollector.ts"
+    ],
+    "validationOnly": [
+      ".github/workflows/activity-exposure-research-validation.yml",
+      "tests/activity-exposure-event-contract-v1.test.mts",
+      "tests/activity-exposure-observation-v1.test.mts",
+      "tests/musicbrainz-activity-collector-v1.test.mts",
+      "tests/youtube-activity-collector-v1.test.mts",
+      "tests/iu-activity-exposure-end-to-end-v1.test.mts"
+    ],
+    "directResearchBranchMerge": false
+  },
+  "productContract": {
+    "currentVariableModelNumeric": true,
+    "currentMetricModelNumeric": true,
+    "nonNumericActivityExposureReadModelRequired": true,
+    "numericComebackActivityPointAllowed": false
+  },
+  "ingestion": {
+    "currentProductionPathProviderLockedToNaverNews": true,
+    "directReuseForActivityExposure": false
+  },
+  "persistence": {
+    "productionSchemaChangeRequired": true,
+    "neonMainMutationPerformed": false,
+    "explicitUserApprovalRequired": true
+  },
+  "liveGate": {
+    "musicbrainz": "pass_with_bounded_partial",
+    "youtube": "credential_blocked",
+    "overall": "blocked_by_youtube_credential"
+  },
+  "productionReady": false
+}
