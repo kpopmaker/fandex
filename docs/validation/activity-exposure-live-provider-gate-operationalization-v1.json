@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "activity-exposure-live-provider-gate-operationalization-v1",
+  "validationRunId": 35874852648,
+  "artifactId": 10757192719,
+  "workflowDispatchEnabled": true,
+  "credentialPreflight": {
+    "available": false,
+    "acceptedSecretNames": [
+      "YOUTUBE_API_KEY",
+      "YOUTUBE_DATA_API_KEY",
+      "GOOGLE_YOUTUBE_API_KEY"
+    ],
+    "valuesExposed": false
+  },
+  "musicbrainz": {
+    "state": "bounded_partial",
+    "providerReleaseGroupCount": 58,
+    "enumeratedReleaseGroupCount": 58,
+    "normalizedEventCount": 57,
+    "missingSourceDataCount": 1,
+    "collaborationEventCount": 12,
+    "collaborationCreditViolations": 0,
+    "officialReleaseSupportViolations": 0,
+    "validationIssueCount": 0
+  },
+  "youtube": {
+    "state": "credential_blocked",
+    "liveReplayExecuted": false
+  },
+  "enforcement": {
+    "liveProviderCoverageGate": "BLOCKED",
+    "workflowConclusion": "failure",
+    "intentionalGateFailure": true
+  },
+  "productionAuthority": {
+    "merge": false,
+    "activation": false,
+    "publication": false,
+    "neonMainSchemaMutation": false
+  }
+}
