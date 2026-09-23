@@ -76,8 +76,9 @@ export default function ArtistProductVariableDetail({
             변수
           </h2>
           <p className="mt-2 max-w-4xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
-            기존 FANDEX 산출 구조에서 의미와 시계열이 확인된 합성 미리보기
-            변수입니다. 소스에 없는 변화량이나 방향은 계산하지 않습니다.
+            변수별 Product 상태를 그대로 표시합니다. Real Production 변수는
+            관측값과 Stored Evidence를 사용하고, 나머지 변수는 미리보기 상태를
+            유지합니다. 소스에 없는 변화량이나 방향은 계산하지 않습니다.
           </p>
         </div>
         <span className="w-fit rounded-full bg-cyan-50 px-4 py-2 text-xs font-black text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-100">
@@ -155,11 +156,17 @@ export default function ArtistProductVariableDetail({
                     {model.definition.description}
                   </p>
                 </div>
-                {presentation.showPreviewBadge ? (
-                  <span className="w-fit shrink-0 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
-                    미리보기
-                  </span>
-                ) : null}
+                {model.dataOrigin === 'observed'
+                  && model.presentation === 'standard'
+                  && model.publication === 'production' ? (
+                    <span className="w-fit shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
+                      Real · Production
+                    </span>
+                  ) : presentation.showPreviewBadge ? (
+                    <span className="w-fit shrink-0 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
+                      미리보기
+                    </span>
+                  ) : null}
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -189,7 +196,7 @@ export default function ArtistProductVariableDetail({
               <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
                 <table className="min-w-max border-collapse text-left text-xs">
                   <caption className="px-4 py-3 text-left font-black text-slate-700 dark:text-slate-200">
-                    소스 월 라벨별 시계열
+                    관측 시점별 시계열
                   </caption>
                   <tbody>
                     <tr>
@@ -217,16 +224,50 @@ export default function ArtistProductVariableDetail({
                 </table>
               </div>
 
-              <ProductEvidenceList
-                collection={
-                  evidenceCollection ?? {
-                    status: 'data-issue',
-                    artistId,
-                    rawVariableId: model.identity.variableId,
-                    issues: [{ code: 'source-state-conflict' }],
-                  }
-                }
-              />
+              {model.evidenceTrace.kind
+                === 'naver-news-issue-point-stored-evidence' ? (
+                  <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-400/20 dark:bg-emerald-400/10">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-100">
+                        Stored Evidence trace
+                      </h4>
+                      <span className="rounded-full bg-white px-2.5 py-1 text-xs font-black text-emerald-700 dark:bg-slate-950 dark:text-emerald-200">
+                        current 8h · {model.evidenceTrace.currentWindow?.slotEvidence.length ?? 0} jobs
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xs font-bold leading-5 text-emerald-800 dark:text-emerald-200">
+                      원천 Evidence는 Shadow 수집 계보를 유지하며, Product 변수만
+                      Production으로 공개됩니다. 각 job에서 canonical observation과
+                      raw evidence lineage를 확인할 수 있습니다.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {model.evidenceTrace.currentWindow?.slotEvidence.map((slot) => (
+                        <Link
+                          key={slot.jobId}
+                          href={`/artists/${artistId}/evidence/${slot.jobId}`}
+                          className="rounded-full border border-emerald-300 bg-white px-3 py-1.5 font-mono text-xs font-black text-emerald-800 hover:border-emerald-500 dark:bg-slate-950 dark:text-emerald-200"
+                        >
+                          {slot.slotStart} · {slot.jobId.slice(0, 12)}…
+                        </Link>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                      prior windows {model.evidenceTrace.eligiblePriorWindows.length} ·
+                      traced jobs {model.evidenceTrace.storedEvidenceJobIds.length}
+                    </p>
+                  </div>
+                ) : (
+                  <ProductEvidenceList
+                    collection={
+                      evidenceCollection ?? {
+                        status: 'data-issue',
+                        artistId,
+                        rawVariableId: model.identity.variableId,
+                        issues: [{ code: 'source-state-conflict' }],
+                      }
+                    }
+                  />
+                )}
             </article>
           );
         })}

@@ -33,7 +33,9 @@ test('existing deep-link target now lands on the Product Variable surface', () =
 test('Product Variable surface exposes safe states without inference copy', () => {
   assert.match(variableComponentSource, /미리보기/);
   assert.match(variableComponentSource, /지원되지 않는 변수|presentation\.valueText/);
-  assert.match(variableComponentSource, /소스 월 라벨별 시계열/);
+  assert.match(variableComponentSource, /관측 시점별 시계열/);
+  assert.match(variableComponentSource, /Real · Production/);
+  assert.match(variableComponentSource, /Stored Evidence trace/);
   assert.match(variableComponentSource, /xl:grid-cols-2/);
   assert.doesNotMatch(variableComponentSource, /기여도/);
   assert.doesNotMatch(variableComponentSource, /Main Driver/);
@@ -41,4 +43,23 @@ test('Product Variable surface exposes safe states without inference copy', () =
   assert.doesNotMatch(variableComponentSource, /상승 원인/);
   assert.doesNotMatch(variableComponentSource, /sixMonthDelta/);
   assert.doesNotMatch(variableComponentSource, /percent change/i);
+});
+
+test('Real Production target exposes Stored Evidence verification without legacy evidence fallback', () => {
+  assert.match(
+    artistPageSource,
+    /profile\.artistId === 'iu' && variableId === 'newsIssuePoint'/,
+  );
+  assert.match(
+    artistPageSource,
+    /getNaverNewsIssuePointPublicRouteVariable/,
+  );
+  assert.match(
+    variableComponentSource,
+    /naver-news-issue-point-stored-evidence/,
+  );
+  assert.match(
+    variableComponentSource,
+    /\/artists\/\$\{artistId\}\/evidence\/\$\{slot\.jobId\}/,
+  );
 });

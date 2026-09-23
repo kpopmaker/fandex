@@ -164,13 +164,13 @@ export const NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE: FandexVariableDefinition
   contractVersion: FANDEX_VARIABLE_REGISTRY_CONTRACT_VERSION,
 });
 
-export const NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE: FandexVariableDefinitionV1 = validateFandexVariableDefinition({
+export const NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE: FandexVariableDefinitionV1 = validateFandexVariableDefinition({
   variableId: NAVER_NEWS_ISSUE_POINT_CONSTRUCT.variableId,
   kind: 'canonical',
   family: 'media',
   measureType: 'index',
   role: 'primary',
-  lifecycle: 'shadow',
+  lifecycle: 'production',
   construct: NAVER_NEWS_ISSUE_POINT_CONSTRUCT.construct,
   unit: null,
   supportedEntityTypes: ['artist'],
@@ -180,14 +180,18 @@ export const NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE: FandexVariableDefinitio
     collectionTimeRequired: true,
   },
   sourceProviderId: 'naver-news',
-  directProductionContributionEligible: false,
+  directProductionContributionEligible: true,
   blockers: [],
   contractVersion: FANDEX_VARIABLE_REGISTRY_CONTRACT_VERSION,
 });
 
+/** @deprecated Compatibility alias. Use NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE. */
+export const NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE =
+  NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE;
+
 export const FANDEX_VARIABLE_REGISTRY = createFandexVariableRegistry([
   NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE,
-  NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
+  NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE,
 ]);
 
 export function getFandexVariableDefinition(variableId: string): FandexVariableDefinitionV1 | null {

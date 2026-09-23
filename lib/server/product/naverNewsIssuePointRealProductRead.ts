@@ -5,6 +5,9 @@ import {
   type ProductVariableRealReadRuntime,
 } from '../../product/queries/getArtistProductVariableRealReadModel';
 import {
+  getArtistProductVariablePublicRoute,
+} from '../../product/queries/getArtistProductVariablePublicRoute';
+import {
   getArtistProductStoredEvidenceJob,
 } from '../../product/queries/getArtistProductStoredEvidenceJob';
 import {
@@ -17,6 +20,10 @@ import {
 import {
   assembleOfficialNaverNewsShadowFirstSeenSeries,
 } from '../ingestion/naverNewsShadowFirstSeenSeries';
+import {
+  createPostgresNaverNewsLatestOfficialShadowSlotRepository,
+  resolveLatestOfficialNaverNewsShadowThroughSlotStart,
+} from '../ingestion/naverNewsLatestOfficialShadowSlot';
 import { getRuntimeDatabasePool } from '../persistence/db';
 
 export type NaverNewsIssuePointRealProductReadInput = Readonly<{
@@ -55,6 +62,40 @@ export async function getNaverNewsIssuePointRealProductVariable(
   );
 }
 
+async function latestOfficialThroughSlotStart(): Promise<string | null> {
+  const repository =
+    createPostgresNaverNewsLatestOfficialShadowSlotRepository(
+      getRuntimeDatabasePool(),
+    );
+  const result =
+    await resolveLatestOfficialNaverNewsShadowThroughSlotStart(repository);
+  return result.status === 'ok' ? result.throughSlotStart : null;
+}
+
+export async function getNaverNewsIssuePointRealProductVariableAtLatestOfficialSlot() {
+  return getArtistProductVariableRealReadModel(
+    {
+      artistId: 'iu',
+      variableId: 'newsIssuePoint',
+      throughSlotStart: await latestOfficialThroughSlotStart(),
+    },
+    runtime(),
+  );
+}
+
+export async function getNaverNewsIssuePointPublicRouteVariable() {
+  return getArtistProductVariablePublicRoute(
+    {
+      artistId: 'iu',
+      variableId: 'newsIssuePoint',
+    },
+    Object.freeze({
+      readNewsIssuePointReal:
+        getNaverNewsIssuePointRealProductVariableAtLatestOfficialSlot,
+    }),
+  );
+}
+
 
 export type NaverNewsIssuePointRealProductStoredEvidenceInput = Readonly<{
   throughSlotStart: string;
@@ -67,6 +108,38 @@ export async function getNaverNewsIssuePointRealProductStoredEvidenceJob(
   const variableResult = await getNaverNewsIssuePointRealProductVariable({
     throughSlotStart: input.throughSlotStart,
   });
+  const repository =
+    createPostgresNaverNewsCanonicalJobEvidenceReadRepository(
+      getRuntimeDatabasePool(),
+    );
+
+  return getArtistProductStoredEvidenceJob(
+    {
+      variableResult,
+      jobId: input.jobId,
+    },
+    Object.freeze({
+      readCanonicalJobEvidence: (request) =>
+        assembleNaverNewsCanonicalJobEvidence(request, repository),
+    }),
+  );
+}
+
+export async function getNaverNewsIssuePointRealProductStoredEvidenceJobAtLatestOfficialSlot(
+  input: Readonly<{ jobId: string }>,
+) {
+  const throughSlotStart = await latestOfficialThroughSlotStart();
+  const variableResult = throughSlotStart === null
+    ? await getArtistProductVariableRealReadModel(
+        {
+          artistId: 'iu',
+          variableId: 'newsIssuePoint',
+          throughSlotStart: null,
+        },
+        runtime(),
+      )
+    : await getNaverNewsIssuePointRealProductVariable({ throughSlotStart });
+
   const repository =
     createPostgresNaverNewsCanonicalJobEvidenceReadRepository(
       getRuntimeDatabasePool(),
