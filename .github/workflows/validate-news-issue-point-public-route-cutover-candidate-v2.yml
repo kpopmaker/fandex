@@ -1,0 +1,90 @@
+name: validate-news-issue-point-public-route-cutover-candidate-v2
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-public-route-cutover-candidate-32f2de
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "32f2de5a0607a5ba1c1f34daa5961eba4ae319ab"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Public-route cutover candidate
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts
+
+      - name: Public-route cutover authorization contract
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+
+      - name: Activation approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-v1.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Activation readiness regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Product Operations approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-product-operations-approval-v1.test.mts
+
+      - name: Promotion authorization/control regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts
+
+      - name: Real Product read and Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Promotion/selector/registry/Product boundary regressions
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-news-issue-point-real-promotion-gate-v1.test.mts
+          tests/product-news-issue-point-real-selector-v1.test.mts
+          tests/product-news-issue-point-real-candidate-v1.test.mts
+          tests/intelligence-variable-confidence-v1.test.mts
+          tests/product-variable-boundary-v1.test.mts
+          tests/product-evidence-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact candidate diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 66b4a253c6cc049b7b25c7650b8c121e610e8629...32f2de5a0607a5ba1c1f34daa5961eba4ae319ab
+          git diff --name-only 66b4a253c6cc049b7b25c7650b8c121e610e8629...32f2de5a0607a5ba1c1f34daa5961eba4ae319ab > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointRealProductPublicRouteCutoverCandidate.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts" /tmp/files
