@@ -191,3 +191,25 @@ YouTube:
 - channel uploads are represented by an uploads playlist.
 - playlistItems.list can enumerate all playlist items through pageToken pagination.
 - maxResults supports up to 50 items per page.
+
+
+## 9. MusicBrainz collector execution verification
+
+The current branch source was reconstructed in an isolated local execution workspace and executed with Node's TypeScript type-stripping runtime.
+
+Result:
+
+`PASS_8_OF_8_MUSICBRAINZ_COLLECTOR_SCENARIOS`
+
+Covered:
+
+- concrete Official release required before observed event
+- release-group date alone does not create an event
+- partial release-date precision preserved
+- non-Official / undated releases do not confirm occurrence
+- artist-credit mismatch blocks normalization
+- release pagination advances by actual returned count
+- changing pagination totals fail closed
+- invalid artist MBID is rejected before provider fetch
+
+The local-only import extension adjustments were execution-environment compatibility changes; repository source semantics were not changed by the local harness.
