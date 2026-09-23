@@ -213,8 +213,8 @@ def main():
     ]
 
     if (
-        any(artist_set != sets[0] for artist_set in sets[1:])
-        or len(sets[0]) != 10
+        not sets[0]
+        or any(artist_set != sets[0] for artist_set in sets[1:])
     ):
         raise RuntimeError(
             "source artist set mismatch: "

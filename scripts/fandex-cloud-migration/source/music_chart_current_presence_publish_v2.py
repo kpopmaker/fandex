@@ -313,17 +313,36 @@ def main():
         )
 
 
-    if len(preview) != 30:
+    platforms = {
+        "melon",
+        "genie",
+        "bugs",
+    }
+    target_artists = sorted({
+        norm(row.get("artist"))
+        for row in preview
+        if norm(row.get("artist"))
+    })
+    if not target_artists:
         raise RuntimeError(
-            "Expected 30 "
-            "artist-platform rows, "
+            "Preview contains no artists."
+        )
+
+    expected_preview_rows = (
+        len(target_artists)
+        * len(platforms)
+    )
+    if len(preview) != expected_preview_rows:
+        raise RuntimeError(
+            "Unexpected artist-platform row count: "
+            f"expected {expected_preview_rows}, "
             f"got {len(preview)}."
         )
 
 
     artist_data = {}
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         artist_data[
             artist
@@ -365,11 +384,7 @@ def main():
                 f"Unexpected artist: {artist}"
             )
 
-        if platform not in {
-            "melon",
-            "genie",
-            "bugs",
-        }:
+        if platform not in platforms:
             raise RuntimeError(
                 f"Unexpected platform: {platform}"
             )
@@ -448,7 +463,7 @@ def main():
 
     ranking = []
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         data = artist_data[
             artist
