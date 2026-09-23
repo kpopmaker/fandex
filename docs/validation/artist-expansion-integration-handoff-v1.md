@@ -167,3 +167,52 @@ Updated genericity conclusion:
 - Cloud master cross-source cohort: PASS
 - YouTube source participation in >10 artist cohort: PASS
 - fixed 10-artist cloud blocker: REMOVED on validation branch
+
+
+## Music chart generic cohort validation
+
+Fixed 10-artist assumptions were found in the Music current-presence path.
+
+Validation-branch fixes:
+
+- `music_chart_current_presence_preview_v1.py`
+  - target cohort now derives from the current Music baseline ranking
+  - preview row denominator is dynamic: artist count × platform count
+  - no fixed 10/30 reporting denominator
+- `music_chart_current_presence_publish_v2.py`
+  - target cohort now derives from preview rows
+  - expected artist-platform row count is dynamic
+- `music_chart_discover_artist_candidates_v2.py`
+  - artist alias mapping can now be loaded from an external seed config
+  - default historical mappings remain as fallback only
+- seed config:
+  - `data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json`
+
+Runtime regression:
+
+- test: `tests/artist-expansion-music-generic-cohort-v1.py`
+- synthetic cohort size: 11 artists
+- covers:
+  - configurable discovery alias map
+  - 11th artist discovery
+  - Music preview generation
+  - 33 artist-platform rows (11 × 3)
+  - Music publish generation
+  - 11-artist output ranking
+- workflow run id: `35843637144`
+- head SHA: `45b85c82b78d498665a8933ec2e7fa058d97ca97`
+- job conclusion: `success`
+
+The earlier run `35843592147` failed only because the temporary validation workflow omitted `beautifulsoup4`; production Cloud v10 already installs that dependency. After matching the production dependency set, the regression passed.
+
+Temporary Music validation workflow cleanup:
+
+- `132f33b0948b4dfab1bfdee70d0417685771bf1d`
+
+Updated genericity conclusion:
+
+- NAVER genericity: PASS
+- Last.fm variable-count genericity: PASS
+- Cloud / YouTube cohort genericity: PASS
+- Music discovery target configuration: PASS
+- Music preview/publish >10 artist cohort: PASS
