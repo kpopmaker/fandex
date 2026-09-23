@@ -216,3 +216,54 @@ Updated genericity conclusion:
 - Cloud / YouTube cohort genericity: PASS
 - Music discovery target configuration: PASS
 - Music preview/publish >10 artist cohort: PASS
+
+
+## Status / health / Last.fm score generic cohort validation
+
+Additional fixed 10-artist assumptions were found in:
+
+- `fandex_python_health_check_v3.py`
+- `fandex_daily_summary_v3.py`
+- `lastfm_global_interest_score_preview_v1.py`
+- `lastfm_global_interest_rolling_score_preview_v1.py`
+
+Validation-branch fixes:
+
+- health check now validates non-empty unique master cohorts dynamically
+- rank sequence derives from the actual ranking length
+- Music cohort must match the master artist set instead of a fixed count
+- Last.fm scoreReadyCount must match the current master cohort size
+- daily summary compares dynamic Music/Master artist sets
+- Last.fm 1-day score preview accepts any non-empty cohort
+- Last.fm rolling-score preview accepts any non-empty cohort
+- rolling readiness and report denominators derive from current row count
+
+Static audit after edits:
+
+- no fixed `10`, `10/10`, `/10`, `expected=10`, or `Expected 10` cohort contract remains in these four files
+
+Runtime evidence:
+
+- test: `tests/artist-expansion-lastfm-score-generic-cohort-v1.py`
+- synthetic cohort size: 11 artists
+- workflow run id: `35845984187`
+- head SHA: `73f221f734db65f21908788417d9736dbf92e41a`
+
+Successful steps:
+
+1. Python syntax check for health, daily summary, Last.fm 1-day score, and Last.fm rolling score
+2. Last.fm 11-artist score regression
+
+Temporary workflow cleanup:
+
+- `ac1f5f5aa09ad02c8c06633f9a544f3f56dcad64`
+
+Updated genericity conclusion:
+
+- NAVER pipeline: PASS
+- Last.fm collection/delta/rolling: PASS
+- Last.fm score layers: PASS
+- Cloud master/runner: PASS
+- YouTube participation in expanded cohort: PASS
+- Music discovery/preview/publish: PASS
+- Cloud health/daily summary cohort handling: PASS
