@@ -179,3 +179,35 @@ Not performed here:
 
 Next authority:
 - `FANDEX 운영 표준`
+
+
+## Repo-wide residue audit follow-up — Last.fm Cloud sync
+
+After the initial final package was written, a wider production-path residue audit found one remaining fixed cohort contract in:
+
+- `scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py`
+
+Historical behavior:
+- every Cloud snapshot required exactly 10 rows
+- every Cloud snapshot required exactly 10 unique artists
+
+Validation-branch correction:
+- the first non-empty snapshot defines the expected artist set
+- later snapshots must match that exact artist set
+- row and artist counts derive dynamically from that set
+
+Regression coverage:
+- `tests/artist-expansion-lastfm-generic-count-v1.py` now includes Cloud sync validation
+- 11-artist complete snapshots are accepted
+- an intentionally incomplete later snapshot is rejected
+
+Runtime evidence:
+- Actions run `35847693563`
+- head SHA `f10c1217570c9c2bf08f7688cf20fd0010f6bfa8`
+- conclusion: `success`
+
+Temporary workflow cleanup:
+- `b222bd6efbdf6dbcf80d5008c6f5eff2703a9d97`
+
+The integration package must therefore also include:
+- `scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py`
