@@ -798,6 +798,81 @@
           "note": "Same MeloMance duo identity previously verified under the alternate-form review entry."
         }
       ]
+    },
+    {
+      "displayArtist": "Crush",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/5",
+          "note": "Official P NATION artist page lists CRUSH as a current artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "박재정",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Romantic Factory statement reported by Starnews",
+          "url": "https://www.starnewskorea.com/star/2026/06/20/2026062015280596333",
+          "note": "2026 agency statement explicitly identifies Romantic Factory as Park Jae-jung's agency."
+        }
+      ]
+    },
+    {
+      "displayArtist": "잔나비",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/gFfn8UUv591ADeKt",
+          "note": "Current profile identifies Jannabi as an active artist under Peponi Music."
+        }
+      ]
+    },
+    {
+      "displayArtist": "폴킴",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/yzmgeMtFLUy9z9Nt",
+          "note": "Current profile identifies Paul Kim under Whyes Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "볼빨간사춘기",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "one_person_artist_project_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BOL4 Official",
+          "url": "https://bol4.bstage.in/tag/notice",
+          "note": "Official BOL4 site carries active 2026 artist and agency notices."
+        },
+        {
+          "source": "Shofar Music official statement",
+          "url": "https://v.daum.net/v/jtoOX8hrmi",
+          "note": "Agency statement established BOL4's continuing one-person system under Ahn Ji-young."
+        }
+      ]
     }
   ]
 }
