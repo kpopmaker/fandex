@@ -53,17 +53,26 @@ MusicBrainz provider mapping:
 - providerArtistId: `b9545342-1e6d-4dae-84ac-013374ad8d7c`
 - evidence: https://musicbrainz.org/artist/b9545342-1e6d-4dae-84ac-013374ad8d7c/aliases
 
-YouTube provider identity candidate:
+YouTube provider mapping candidate:
 
+- provider: `youtube`
 - channel display: `이지금 [IU Official]`
-- handle evidence observed as `@dlwlrma`
-- the channel is surfaced as an Official Artist Channel.
-- stable `channelId` must be captured and stored before the YouTube provider mapping is marked `resolved/provider-verified`.
+- handle: `@dlwlrma`
+- providerArtistId / stable channelId: `UC3SyT4_WLHzN7JmHQwKQZww`
+- official-channel evidence:
+  - https://www.youtube.com/@dlwlrma
+  - public channel-ID corroboration retained as research evidence
+
+Identity status:
+
+- MusicBrainz: `CANDIDATE_READY_FOR_REVIEW`
+- YouTube: `CANDIDATE_READY_FOR_REVIEW`
+- neither mapping becomes `resolved/provider-verified` merely because a text alias matches.
 
 Identity rule:
 
 - aliases alone never resolve provider identity.
-- a provider mapping is eligible for Real event ingestion only after a stable provider entity ID is stored and the mapping is reviewed or provider-verified.
+- a provider mapping is eligible for Real event ingestion only after the stable provider entity ID is stored and the mapping is reviewed or provider-verified.
 - ambiguous collaborations must retain the artist-credit participants and must not be silently rewritten as IU-only releases.
 
 ## 4. MusicBrainz Confirmed Release Event source contract
@@ -126,7 +135,7 @@ MusicBrainz edits can change dates or entity relationships. A corrected event mu
 
 Channel discovery:
 
-1. Resolve the official IU channel to a stable YouTube `channelId`.
+1. Resolve IU to stable channelId `UC3SyT4_WLHzN7JmHQwKQZww`.
 2. Retrieve `channels.list(part=contentDetails)`.
 3. Use `contentDetails.relatedPlaylists.uploads` as the channel upload inventory.
 4. Enumerate playlist items and resolve video IDs.
@@ -151,7 +160,7 @@ Event construction:
 
 Required identity/evidence checks:
 
-- video `snippet.channelId` must equal the resolved IU official channel ID
+- video `snippet.channelId` must equal `UC3SyT4_WLHzN7JmHQwKQZww`
 - the source video ID must be stable
 - retain title and relevant snippet metadata as evidence, not as identity proof by text matching
 - do not ingest third-party uploads merely because their title contains IU
@@ -243,13 +252,18 @@ MusicBrainz Confirmed Release Event:
 `SOURCE_CONTRACT_READY_FOR_IU_EVIDENCE_VALIDATION`
 
 YouTube Confirmed Official Content Publication Event:
-`SOURCE_CONTRACT_READY_WITH_IDENTITY_BLOCKER`
+`SOURCE_CONTRACT_READY_FOR_IU_EVIDENCE_VALIDATION`
+
+Canonical provider identity:
+`STABLE_PROVIDER_IDS_CAPTURED_AS_RESEARCH_CANDIDATES`
 
 Remaining nearest blocker:
 
-`IU_YOUTUBE_STABLE_CHANNEL_ID_NOT_YET_CAPTURED_IN_CANONICAL_PROVIDER_MAPPING`
+`IU_PROVIDER_MAPPING_REVIEW_AND_FIRST_REAL_EVIDENCE_FIXTURE`
 
-After that blocker is cleared, the next research step is to build a small IU evidence fixture/event stream from both providers and test temporal precision, duplicate handling, identity, revision, and Missing/Invalid states.
+Next research step:
+
+Build a small IU Real-evidence fixture/event stream from both providers and test temporal precision, duplicate handling, identity, revision, and Missing/Invalid states. Provider identity must be reviewed as part of that fixture validation before any Product-readiness promotion.
 
 ## 10. Source references
 
@@ -259,6 +273,8 @@ After that blocker is cleared, the next research step is to build a small IU evi
   https://musicbrainz.org/doc/Style/Release
 - IU MusicBrainz artist identity:
   https://musicbrainz.org/artist/b9545342-1e6d-4dae-84ac-013374ad8d7c/aliases
+- YouTube IU official channel:
+  https://www.youtube.com/@dlwlrma
 - YouTube channels resource:
   https://developers.google.com/youtube/v3/docs/channels
 - YouTube upload playlist retrieval:
