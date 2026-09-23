@@ -27,4 +27,6 @@ jobs:
       - name: typecheck
         run: npm run typecheck
       - name: diff check
-        run: git diff --check HEAD^ HEAD
+        run: |
+          git fetch origin main --depth=1
+          git diff --check origin/main...HEAD
