@@ -1,0 +1,26 @@
+name: Validate Vercel deployment policy v1
+
+on:
+  push:
+    branches:
+      - validation/vercel-deployment-policy-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Vercel branch deployment policy
+        run: npx tsx --test tests/vercel-deployment-policy-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
