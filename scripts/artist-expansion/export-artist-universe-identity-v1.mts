@@ -17,6 +17,13 @@ const artists = artistUniverseV4.map((artist) => ({
       ...artist.profile.englishAliases,
     ].map((value) => value.trim()).filter(Boolean)),
   ),
+  keywords: Array.from(
+    new Set(
+      artist.profile.keywords
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  ),
 }));
 
 writeFileSync(
