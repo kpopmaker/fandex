@@ -1035,6 +1035,156 @@
           "note": "2026 album credits list Suno AI alongside human producer Kim Sun-woo, requiring separate AI-assisted identity review before canonical promotion."
         }
       ]
+    },
+    {
+      "displayArtist": "임현정",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/17887",
+          "note": "Provider profile identifies the chart-matched Lim Hyun-jung as a Korean female solo artist; current agency metadata remains unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "조째즈",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4112579",
+          "note": "Provider release explicitly identifies 조째즈 as the artist for 모르시나요 and describes 조째즈 as an artist stage name; current agency metadata remains unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Sondia",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80123962",
+          "note": "Provider profile identifies Sondia as a Korean female solo artist with continuing OST releases; current agency metadata remains unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "경서",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_disambiguated_from_gyeongseo_yeji_member",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/Ny8799snUyELAeef",
+          "note": "Current profile identifies 이경서/KyoungSeo, debut song 밤하늘의 별을, and agencies 꿈의엔진 and 알앤디컴퍼니."
+        }
+      ]
+    },
+    {
+      "displayArtist": "경서예지",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_duo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/20105641",
+          "note": "Provider profile identifies 경서예지 as a Korean female duo with members 경서 and 전예지 and active 2026 releases."
+        },
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/1739",
+          "note": "Current profile lists 경서예지 under Everglow."
+        }
+      ]
+    },
+    {
+      "displayArtist": "김필",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/mWs5YmmOW61nsoYW",
+          "note": "Current profile identifies Kim Feel under Pierrot Records with 2026 concert activity."
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80108222",
+          "note": "Provider profile identifies Kim Feel as a Korean male solo artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "임재현",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4150941",
+          "note": "2026 release credits 임재현 and planning company 디원미디어."
+        }
+      ]
+    },
+    {
+      "displayArtist": "임한별",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OS Projects",
+          "url": "https://www.osprojects.kr/news/?bmode=view&idx=169951663&q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&t=board",
+          "note": "Official OS Projects news documents Lim Han Byul's 2026 solo release."
+        }
+      ]
+    },
+    {
+      "displayArtist": "장범준",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80110450",
+          "note": "Provider profile identifies Jang Beom-june as a Korean male solo artist with monthly 2026 releases; current agency metadata remains unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "허각",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OS Projects",
+          "url": "https://www.osprojects.kr/",
+          "note": "Official OS Projects site publishes active 2026 Huh Gak releases and concert activity."
+        }
+      ]
     }
   ]
 }
