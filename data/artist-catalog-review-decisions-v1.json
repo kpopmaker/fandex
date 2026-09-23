@@ -127,6 +127,96 @@
           "note": "Official profile identifies N.Flying as its own Korean band identity."
         }
       ]
+    },
+    {
+      "displayArtist": "우디 (Woody)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Golden Moon Entertainment",
+          "url": "https://goldenmoon.co.kr/artists/woody/",
+          "note": "Official agency artist page identifies WOODY as its own active solo artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "YENA (최예나)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YUE HUA ENTERTAINMENT",
+          "url": "https://yhfamily.co.kr/index.php?CurrentPage=1&action=SiteBoardAt&iBrdContNo=1133&iBrdNo=8&module=Board&sAt=007&sBrdContRe=0&sMode=VIEW_FORM&sSearchField=&sSearchValue=",
+          "note": "Official agency news identifies YENA (최예나) as an active solo singer and solo concert artist."
+        },
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/artist/song.htm?artistId=2399724",
+          "note": "Provider artist page identifies YENA (최예나) as solo."
+        }
+      ]
+    },
+    {
+      "displayArtist": "김민석 (멜로망스)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80223134",
+          "note": "Provider artist profile identifies Kim Min-seok as a male solo artist and member of MeloMance."
+        },
+        {
+          "source": "Edaily",
+          "url": "https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=03850726645453840",
+          "note": "Agency-attributed report states Abyss Company represents Kim Min-seok and describes his independent solo releases."
+        }
+      ]
+    },
+    {
+      "displayArtist": "너드커넥션 (Nerd Connection)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NERD CONNECTION Official",
+          "url": "https://linktr.ee/nerdconnection_official",
+          "note": "Official artist hub identifies NERD CONNECTION and links official channels and schedule."
+        },
+        {
+          "source": "KBS WORLD",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_code=music_artist&board_seq=447262&id=&lang=j&menu_cate=artist&page=1",
+          "note": "KBS artist profile identifies Nerd Connection as a four-member Korean band under Your Summer."
+        }
+      ]
+    },
+    {
+      "displayArtist": "마크툽 (Maktub)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MAKTUB Official YouTube",
+          "url": "https://www.youtube.com/watch?v=3XDf5Ke2Zj8",
+          "note": "Official Artist Channel content identifies MAKTUB and Maktub Inc. production."
+        },
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=566431",
+          "note": "Provider artist page identifies MAKTUB as a male solo artist."
+        }
+      ]
     }
   ]
 }
