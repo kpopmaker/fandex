@@ -75,6 +75,58 @@
           "note": "Artist profile identifies DK(December) as a separate Korean male solo artist associated with December."
         }
       ]
+    },
+    {
+      "displayArtist": "에픽하이 (EPIK HIGH)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "EPIK HIGH Official",
+          "url": "https://epikhigh.com/community",
+          "note": "Official EPIK HIGH community establishes the group as its own active artist identity."
+        },
+        {
+          "source": "YGEX EPIK HIGH",
+          "url": "https://ygex.jp/epikhigh/profile/",
+          "note": "Artist profile identifies EPIK HIGH as a three-member hip-hop group."
+        }
+      ]
+    },
+    {
+      "displayArtist": "BIG Naughty (서동현)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "H1GHR MUSIC",
+          "url": "https://www.h1ghrmusic.com/bignaughty",
+          "note": "Official H1GHR MUSIC artist page identifies BIG Naughty and uses BIG Naughty (서동현) in official content."
+        }
+      ]
+    },
+    {
+      "displayArtist": "엔플라잉 (N.Flying)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment",
+          "url": "https://www.fncent.com/P1Harmony/b/gallery_01/61939",
+          "note": "Official FNC release material identifies N.Flying as a five-member band and active group."
+        },
+        {
+          "source": "N.Flying Official",
+          "url": "https://nflying-official.jp/feature/profile",
+          "note": "Official profile identifies N.Flying as its own Korean band identity."
+        }
+      ]
     }
   ]
 }
