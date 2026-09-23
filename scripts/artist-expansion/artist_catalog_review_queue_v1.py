@@ -123,9 +123,26 @@ def classify_display_artist(display_artist: str) -> tuple[str, list[str]]:
     return "single_identity_review", reasons
 
 
+def build_decision_index(decision_payload: dict[str, Any] | None):
+    result: dict[str, dict[str, Any]] = {}
+    if not decision_payload:
+        return result
+    rows = decision_payload.get("decisions")
+    if not isinstance(rows, list):
+        return result
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        display_artist = normalize_spaces(row.get("displayArtist", ""))
+        if display_artist:
+            result[display_artist] = row
+    return result
+
+
 def build_review_queue(
     payload: dict[str, Any],
     identity_payload: dict[str, Any] | None = None,
+    decision_payload: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     candidates = payload.get("catalogCandidates")
     if not isinstance(candidates, list):
@@ -133,6 +150,7 @@ def build_review_queue(
 
     queue = []
     counts: dict[str, int] = {}
+    decision_index = build_decision_index(decision_payload)
 
     for row in candidates:
         if not isinstance(row, dict):
@@ -143,6 +161,7 @@ def build_review_queue(
         counts[category] = counts.get(category, 0) + 1
 
         relation = relation_hints(display_artist, identity_payload)
+        decision = decision_index.get(display_artist)
 
         queue.append(
             {
@@ -154,6 +173,11 @@ def build_review_queue(
                 "scopeStatus": "unverified",
                 "autoPromote": False,
                 **relation,
+                "reviewDecision": None if decision is None else decision.get("decision"),
+                "relationResolution": None if decision is None else decision.get("relationResolution"),
+                "relatedCanonicalArtistIds": [] if decision is None else list(decision.get("relatedCanonicalArtistIds") or []),
+                "rejectedRelationCanonicalArtistIds": [] if decision is None else list(decision.get("rejectedRelationCanonicalArtistIds") or []),
+                "decisionEvidence": [] if decision is None else list(decision.get("evidence") or []),
                 "evidenceCount": int(row.get("evidenceCount") or 0),
                 "platforms": list(row.get("platforms") or []),
                 "sourceKeys": list(row.get("sourceKeys") or []),
@@ -190,6 +214,7 @@ def main() -> None:
     parser.add_argument("input_json", type=Path)
     parser.add_argument("output_json", type=Path)
     parser.add_argument("--identity-index", type=Path)
+    parser.add_argument("--decisions", type=Path)
     args = parser.parse_args()
 
     payload = json.loads(args.input_json.read_text(encoding="utf-8"))
@@ -198,7 +223,16 @@ def main() -> None:
         identity_payload = json.loads(
             args.identity_index.read_text(encoding="utf-8")
         )
-    output = build_review_queue(payload, identity_payload)
+    decision_payload = None
+    if args.decisions is not None:
+        decision_payload = json.loads(
+            args.decisions.read_text(encoding="utf-8")
+        )
+    output = build_review_queue(
+        payload,
+        identity_payload,
+        decision_payload,
+    )
     args.output_json.write_text(
         json.dumps(output, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
