@@ -263,6 +263,109 @@
           "url": "https://www.fantagio.kr/profiles/%EC%9D%B4%EC%B0%BD%EC%84%AD/"
         }
       ]
+    },
+    {
+      "id": "hanroro",
+      "ticker": "HANRORO",
+      "name": "HANRORO",
+      "agency": "authentic",
+      "entityType": "solo",
+      "naverNewsQuery": "한로로 HANRORO",
+      "koreanAliases": [
+        "한로로"
+      ],
+      "englishAliases": [
+        "HANRORO"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=82578300"
+        }
+      ]
+    },
+    {
+      "id": "sungsikyung",
+      "ticker": "SUNGSIKYUNG",
+      "name": "SUNG SI KYUNG",
+      "agency": "SK Jaewon",
+      "entityType": "solo",
+      "naverNewsQuery": "성시경 SUNG SI KYUNG",
+      "koreanAliases": [
+        "성시경"
+      ],
+      "englishAliases": [
+        "SUNG SI KYUNG",
+        "Sung Si Kyung"
+      ],
+      "identityEvidence": [
+        {
+          "source": "SUNG SI KYUNG Korea Official Fanclub",
+          "url": "https://ssk-purpleocean.kr/profiles/"
+        }
+      ]
+    },
+    {
+      "id": "choiyuree",
+      "ticker": "CHOIYUREE",
+      "name": "Choi Yu Ree",
+      "agency": "Nave",
+      "entityType": "solo",
+      "naverNewsQuery": "최유리 Choi Yu Ree",
+      "koreanAliases": [
+        "최유리"
+      ],
+      "englishAliases": [
+        "Choi Yu Ree",
+        "CHOI YU REE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Nave",
+          "url": "https://navywave.kr/artist"
+        }
+      ]
+    },
+    {
+      "id": "carthegarden",
+      "ticker": "CARTHEGARDEN",
+      "name": "Car, the garden",
+      "agency": "CAM WITH US",
+      "entityType": "solo",
+      "naverNewsQuery": "카더가든 Car the garden",
+      "koreanAliases": [
+        "카더가든"
+      ],
+      "englishAliases": [
+        "Car, the garden",
+        "Car the garden"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon Ticket",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=735506"
+        }
+      ]
+    },
+    {
+      "id": "hwanggaram",
+      "ticker": "HWANGGARAM",
+      "name": "Hwang Garam",
+      "agency": "Double X Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "황가람 Hwang Garam",
+      "koreanAliases": [
+        "황가람"
+      ],
+      "englishAliases": [
+        "Hwang Garam"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80145846"
+        }
+      ]
     }
   ]
 }
