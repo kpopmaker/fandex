@@ -1,0 +1,89 @@
+name: validate-news-issue-point-public-route-cutover-execution-current
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-public-route-cutover-execution-587a20
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact execution candidate parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "587a205f896579e74e1ae7eed747fc0a0b88093a"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Public-route cutover execution
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+
+      - name: Public-route approval lineage
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-news-issue-point-public-route-cutover-approval-v1.test.mts
+          tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+          tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts
+
+      - name: Real read and latest official slot regressions
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          tests/naver-news-latest-official-shadow-slot-v1.test.mts
+
+      - name: Public route and Product boundary regressions
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-artist-variable-route-integration-v1.test.mts
+          tests/product-variable-boundary-v1.test.mts
+          tests/product-evidence-boundary-v1.test.mts
+          tests/product-evidence-route-integration-v1.test.mts
+          tests/intelligence-variable-confidence-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact execution diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 930f5d692129e75f79ca3d74e99f6751cc12bb46...587a205f896579e74e1ae7eed747fc0a0b88093a
+          git diff --name-only 930f5d692129e75f79ca3d74e99f6751cc12bb46...587a205f896579e74e1ae7eed747fc0a0b88093a > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "10"
+          grep -Fx "app/artists/[artistId]/evidence/[evidenceId]/page.tsx" /tmp/files
+          grep -Fx "app/artists/[artistId]/page.tsx" /tmp/files
+          grep -Fx "app/components/product/ArtistProductVariableDetail.tsx" /tmp/files
+          grep -Fx "lib/intelligence/variableRegistry.ts" /tmp/files
+          grep -Fx "lib/product/activation/newsIssuePointPublicRouteCutoverExecution.ts" /tmp/files
+          grep -Fx "lib/product/queries/getArtistProductVariablePublicRoute.ts" /tmp/files
+          grep -Fx "lib/server/product/naverNewsIssuePointRealProductRead.ts" /tmp/files
+          grep -Fx "tests/product-artist-variable-route-integration-v1.test.mts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts" /tmp/files
