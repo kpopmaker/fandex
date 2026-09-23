@@ -70,3 +70,46 @@ The successful Actions run remains historical evidence.
 Next authority: `FANDEX 운영 표준`
 
 That chat should independently inspect the exact branch/head diff before deciding whether and how to integrate. This handoff does not authorize merge or Production activation.
+
+
+## Last.fm generic artist-count validation
+
+A second expansion blocker was found outside the NAVER path: Last.fm collection and migration scripts assumed exactly 10 artists.
+
+Validation-branch fixes:
+
+- `scripts/lastfm-cloud/lastfm_cloud_history_v1.py`
+  - seed count is now dynamic
+  - snapshot completeness denominator derives from the current seed set
+  - score readiness derives from the current delta row count
+- `scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py`
+  - removed exact 10-artist requirement
+- `scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py`
+  - first snapshot defines the expected artist set
+  - later snapshots must match that exact set and dynamic count
+  - readiness output denominator is dynamic
+
+Runtime regression:
+
+- test: `tests/artist-expansion-lastfm-generic-count-v1.py`
+- synthetic cohort size: 11 artists
+- workflow run id: `35840873344`
+- head SHA: `502af7fc6fae272da07cf350df33f22099a61ca9`
+- conclusion: `success`
+
+Successful steps:
+
+1. Python syntax check
+2. Generic 11-artist regression
+
+The temporary Last.fm validation workflow was removed after PASS.
+
+Cleanup commit:
+
+- `cb104d4b46f76002bc236750538d01083a22b0eb`
+
+Updated conclusion:
+
+- NAVER identity/pipeline genericity: PASS
+- Last.fm artist-count genericity: PASS
+- known fixed 10-artist blocker: REMOVED on validation branch
