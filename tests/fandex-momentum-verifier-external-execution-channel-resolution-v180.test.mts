@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -168,4 +169,37 @@ test('operator exchange preserves the exact v177/v178/v179 boundaries', () => {
     result.operatorExchange.postRead.absentDedicatedSecretRequiresRollbackAttestation,
     false,
   );
+});
+
+
+test('committed v180 audit records the current unavailable channel state', () => {
+  const audit = JSON.parse(
+    readFileSync(
+      new URL(
+        '../data/momentum-research/iu_verifier_external_execution_channel_resolution_v180_20260923T022430Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+
+  assert.equal(
+    audit.currentResult.state,
+    'external-execution-channel-unavailable',
+  );
+  assert.equal(audit.currentResult.executionChannelCandidateAvailable, false);
+  assert.deepEqual(audit.currentResult.candidateChannels, []);
+  assert.equal(
+    audit.currentResult.digest,
+    '66e38e1ff092131b3e1bb9761e7f173970e937386ef7e4336cb7271d19e7377c',
+  );
+  assert.equal(audit.capabilityEvidence.officialEndpointStillDocumented, true);
+  assert.equal(audit.capabilityEvidence.githubWorkflowVercelTokenReferenceFound, false);
+  assert.equal(audit.capabilityEvidence.localVercelCommandAvailable, false);
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
