@@ -4,8 +4,10 @@ import test from 'node:test';
 import {
   artistUniverseV4,
   buildExpandedArtistUniverseV4,
+  getArtistV4ById,
   ARTIST_UNIVERSE_V4_BASELINE_COUNT,
 } from '../app/data/v4/artistUniverse';
+import { bindCanonicalArtistToNaverNews } from '../lib/server/ingestion/naverNewsArtistBinding';
 
 const seed = (id: string, ticker: string) => ({
   id,
@@ -21,18 +23,27 @@ const seed = (id: string, ticker: string) => ({
   priorityScore: 50,
 });
 
-test('baseline remains 100 while expansion is unbounded', () => {
+test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(ARTIST_UNIVERSE_V4_BASELINE_COUNT, 100);
-  assert.equal(artistUniverseV4.length, 100);
+  assert.equal(artistUniverseV4.length, 103);
+
+  for (const artistId of ['kiiikiii', 'alldayproject', 'cortis']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing expanded artist: ${artistId}`);
+    const binding = bindCanonicalArtistToNaverNews(artistId);
+    assert.equal(binding.canonicalArtistId, artistId);
+    assert.equal(binding.provider, 'naver-news');
+    assert.ok(binding.query.trim());
+  }
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
-    [seed('expansion-101', 'EXP101'), seed('expansion-102', 'EXP102')],
+    [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
   );
 
-  assert.equal(expanded.length, 102);
-  assert.equal(expanded.at(-2)?.id, 'expansion-101');
-  assert.equal(expanded.at(-1)?.id, 'expansion-102');
+  assert.equal(expanded.length, 105);
+  assert.equal(expanded.at(-2)?.id, 'expansion-104');
+  assert.equal(expanded.at(-1)?.id, 'expansion-105');
 });
 
 test('duplicate canonical id is rejected', () => {
