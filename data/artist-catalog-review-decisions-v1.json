@@ -297,6 +297,161 @@
           "note": "Provider artist page identifies SHAUN as a Korean male solo artist."
         }
       ]
+    },
+    {
+      "displayArtist": "순순희 (지환)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80629890",
+          "note": "Provider artist page identifies 순순희 (지환) as a Korean male solo artist and lists participation in 순순희."
+        },
+        {
+          "source": "순순희 Official Artist Channel",
+          "url": "https://www.youtube.com/watch?v=hkROGL9id6Y",
+          "note": "Official Artist Channel publishes solo content explicitly credited to 순순희(지환)."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이클립스 (ECLIPSE)",
+      "decision": "exclude_from_real_artist_universe",
+      "relationResolution": "fictional_drama_band_ost_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/album/music.htm?albumId=11459325",
+          "note": "OST description explicitly identifies ECLIPSE as the band appearing inside the tvN drama Lovely Runner."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Standing Egg (스탠딩 에그)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80067125",
+          "note": "Provider artist page identifies Standing Egg as a Korean mixed group debuted in 2010."
+        }
+      ]
+    },
+    {
+      "displayArtist": "노아주다 (noahjooda)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/20075052",
+          "note": "Provider artist page shows repeated solo releases credited to noahjooda through 2026."
+        }
+      ]
+    },
+    {
+      "displayArtist": "더 넛츠 (The NuTs)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/73055",
+          "note": "Provider artist page identifies The NuTs as a Korean male group."
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=86030298",
+          "note": "Recent release credits The NuTs as the artist and The NuTs Company as planning label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "버즈 (Buzz)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=160091",
+          "note": "Provider artist profile identifies Buzz as a Korean male rock group debuted in 2003."
+        }
+      ]
+    },
+    {
+      "displayArtist": "썸데이 (Someday)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80052323",
+          "note": "Provider artist profile identifies Someday as a Korean male group debuted in 2009."
+        }
+      ]
+    },
+    {
+      "displayArtist": "씨야 (SeeYa)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80015692",
+          "note": "Provider artist profile identifies SeeYa as a Korean female group with members Nam Gyu-ri, Kim Yeon-ji and Lee Bo-ram."
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=87625110",
+          "note": "2026 album First, Again is credited to SeeYa under SeeYa Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "에일리 (Ailee)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=629831",
+          "note": "Provider artist profile identifies Ailee as a female solo singer."
+        }
+      ]
+    },
+    {
+      "displayArtist": "윤하 (YOUNHA)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/artist/album.htm?artistId=203912",
+          "note": "Provider artist profile identifies YOUNHA as a solo artist under C9 Entertainment."
+        }
+      ]
     }
   ]
 }
