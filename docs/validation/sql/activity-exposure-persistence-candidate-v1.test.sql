@@ -186,7 +186,23 @@ BEGIN
 END $$;
 
 -- YouTube retained raw payload requires a bounded refresh_due_at.
-DO $$
+INSERT INTO fandex.activity_exposure_provider_observations (
+  observation_id, run_id, artist_id, provider, provider_artist_id,
+  source_entity_type, source_entity_id, request_ref,
+  response_captured_at, collected_at, source_published_at,
+  provider_observed_at, evidence_ref, raw_payload_sha256,
+  normalization_outcome, revision_id
+) VALUES (
+  repeat('7',64), repeat('5',64), 'iu', 'youtube',
+  'UC3SyT4_WLHzN7JmHQwKQZww',
+  'video', 'lmnopqrstuv', 'youtube:videos:snippet:lmnopqrstuv',
+  now(), now(), now() - interval '2 days',
+  (now() - interval '2 days')::text,
+  'https://www.youtube.com/watch?v=lmnopqrstuv',
+  repeat('d',64), 'event_emitted', 'collection-1'
+);
+
+DO $
 BEGIN
   BEGIN
     INSERT INTO fandex.activity_exposure_raw_payloads (
@@ -198,8 +214,6 @@ BEGIN
     );
     RAISE EXCEPTION 'expected YouTube refresh boundary rejection';
   EXCEPTION
-    WHEN foreign_key_violation THEN
-      NULL;
     WHEN check_violation THEN
       NULL;
     WHEN raise_exception THEN
