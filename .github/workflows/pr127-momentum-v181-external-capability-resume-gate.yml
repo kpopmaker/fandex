@@ -23,6 +23,60 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Evaluate current v181 resume state
+        run: |
+          cat > .tmp-v181-current.mts <<'TS'
+          import {
+            evaluateFandexMomentumVerifierExternalCapabilityResumeGate,
+          } from './lib/intelligence/fandexMomentumVerifierExternalCapabilityResumeGateResearch';
+
+          const result =
+            evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+              observedAt: '2026-09-23T08:25:00.000Z',
+              upstreamV180Digest:
+                '66e38e1ff092131b3e1bb9761e7f173970e937386ef7e4336cb7271d19e7377c',
+              target: {
+                teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs',
+                projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v',
+                method: 'GET',
+                endpoint: '/v10/projects/{idOrName}/env',
+                decrypt: 'false',
+                maximumProviderCalls: 1,
+                maximumInventoryReads: 1,
+              },
+              connectedCapability: {
+                vercelPluginInstalled: true,
+                vercelPluginEnabled: true,
+                vercelSkillAdvertisesEnvironmentVariableSupport: true,
+                exactEnvInventoryReadToolExposed: false,
+                genericRestReadToolExposed: false,
+                projectMetadataToolExposed: true,
+                projectMetadataToolCallableForTarget: false,
+                projectMetadataToolFailure:
+                  'connector-schema-server-argument-mismatch',
+              },
+              localCapability: {
+                vercelCliInstalled: false,
+                vercelCliAuthenticated: false,
+                vercelTokenEnvironmentPresent: false,
+              },
+              browserCapability: {
+                executableBrowserAutomationToolExposed: false,
+                authenticatedVercelBrowserSessionAvailable: false,
+              },
+              externalOperator: {
+                validV177PreReadResponseAvailable: false,
+                validV179PostReadResponseAvailable: false,
+              },
+            });
+
+          console.log('V181_CURRENT_BEGIN');
+          console.log(JSON.stringify(result, null, 2));
+          console.log('V181_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v181-current.mts
+          rm .tmp-v181-current.mts
+
       - name: Validate v181 and upstream regressions
         run: |
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
