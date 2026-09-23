@@ -16,12 +16,23 @@ def load_module():
 def main():
     module = load_module()
 
+    module.KNOWN_ARTIST_ALIASES = {
+        **module.KNOWN_ARTIST_ALIASES,
+        "registered-outside-music-targets": ["등록90"],
+    }
+
     rows = [
         {
             "artistName": "aespa",
             "platform": "melon",
             "sourceKey": "melon_top100",
             "trackTitle": "Known Song",
+        },
+        {
+            "artistName": "등록90",
+            "platform": "melon",
+            "sourceKey": "melon_top100",
+            "trackTitle": "Already Registered Outside Target Set",
         },
         {
             "artistName": "UNREGISTERED ARTIST",
@@ -69,6 +80,7 @@ def main():
     assert second["autoPromote"] is False
 
     assert all(row["displayArtist"] != "aespa" for row in candidates)
+    assert all(row["displayArtist"] != "등록90" for row in candidates)
 
     print("PASS: unmatched chart artists become review-only catalog candidates")
 
