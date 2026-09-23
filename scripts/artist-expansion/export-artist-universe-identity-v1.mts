@@ -19,8 +19,11 @@ const artists = artistUniverseV4.map((artist) => ({
   ),
   keywords: Array.from(
     new Set(
-      artist.profile.keywords
-        .map((value) => value.trim())
+      [
+        ...artist.members,
+        ...artist.profile.includeKeywords,
+      ]
+        .map((value: string) => value.trim())
         .filter(Boolean),
     ),
   ),
