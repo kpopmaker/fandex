@@ -1,6 +1,7 @@
 name: Validate Activity Exposure live provider coverage v1
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - validation/activity-exposure-live-provider-coverage-v1
@@ -26,9 +27,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Credential preflight
+        shell: bash
+        run: |
+          if [[ -n "${YOUTUBE_API_KEY}" || -n "${YOUTUBE_DATA_API_KEY}" || -n "${GOOGLE_YOUTUBE_API_KEY}" ]]; then
+            echo "AUTHORIZED_YOUTUBE_CREDENTIAL_AVAILABLE=true"
+          else
+            echo "AUTHORIZED_YOUTUBE_CREDENTIAL_AVAILABLE=false"
+          fi
       - name: Execute live provider coverage gate
         run: npx tsx scripts/validation/activityExposureLiveProviderCoverageV1.ts
       - name: Upload live coverage report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: activity-exposure-live-provider-coverage-v1
@@ -37,3 +47,18 @@ jobs:
             activity-exposure-live-provider-coverage-v1.md
           if-no-files-found: error
           retention-days: 7
+      - name: Enforce live provider coverage gate
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(
+            fs.readFileSync('activity-exposure-live-provider-coverage-v1.json', 'utf8')
+          );
+          console.log('LIVE_PROVIDER_COVERAGE_GATE=' + report.liveCoverageGate);
+          console.log('MUSICBRAINZ_STATE=' + report.musicbrainz.state);
+          console.log('YOUTUBE_STATE=' + report.youtube.state);
+          if (report.liveCoverageGate !== 'PASS_WITH_TRUTHFUL_PROVIDER_COVERAGE') {
+            process.exit(1);
+          }
+          NODE
