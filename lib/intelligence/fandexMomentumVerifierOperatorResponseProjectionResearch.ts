@@ -3,9 +3,11 @@ import type {
   FandexMomentumVerifierOperatorResponse,
   FandexMomentumVerifierOperatorResponseIntakeResult,
 } from './fandexMomentumVerifierOperatorResponseIntakeResearch';
-import type {
-  FandexMomentumVerifierVercelInventoryCredentialHandle,
-  FandexMomentumVerifierVercelInventoryReadChannelAuthorization,
+import {
+  buildFandexMomentumVerifierVercelInventoryReadChannelPlan,
+  type FandexMomentumVerifierVercelInventoryCredentialHandle,
+  type FandexMomentumVerifierVercelInventoryReadChannelAuthorization,
+  type FandexMomentumVerifierVercelInventoryReadChannelPlanResult,
 } from './fandexMomentumVerifierVercelInventoryReadChannelPlanResearch';
 import type {
   FandexMomentumVerifierVercelInventoryReadExecutionAuthorization,
@@ -37,6 +39,8 @@ export type FandexMomentumVerifierOperatorResponseProjectionResult = Readonly<{
     FandexMomentumVerifierVercelInventoryReadChannelAuthorization | null;
   projectedV172CredentialHandle:
     FandexMomentumVerifierVercelInventoryCredentialHandle | null;
+  projectedV172:
+    FandexMomentumVerifierVercelInventoryReadChannelPlanResult | null;
   projectedV173ReadExecutionAuthorization:
     FandexMomentumVerifierVercelInventoryReadExecutionAuthorization | null;
   capability: Readonly<{
@@ -130,6 +134,8 @@ export function projectFandexMomentumVerifierOperatorResponse(
     FandexMomentumVerifierVercelInventoryReadChannelAuthorization | null = null;
   let projectedV172CredentialHandle:
     FandexMomentumVerifierVercelInventoryCredentialHandle | null = null;
+  let projectedV172:
+    FandexMomentumVerifierVercelInventoryReadChannelPlanResult | null = null;
   let projectedV173ReadExecutionAuthorization:
     FandexMomentumVerifierVercelInventoryReadExecutionAuthorization | null = null;
   let receiptId: string | null = null;
@@ -210,19 +216,36 @@ export function projectFandexMomentumVerifierOperatorResponse(
         providerLevelScopeRestrictedToInventoryRead: 'not-proven' as const,
       });
 
-      projectedV173ReadExecutionAuthorization = Object.freeze({
-        state: 'approved' as const,
-        authorizationId: response.readExecutionAuthorization.authorizationId,
-        decidedAt: response.readExecutionAuthorization.decidedAt,
-        decidedBy: response.readExecutionAuthorization.decidedBy,
-        validFrom: response.readExecutionAuthorization.validFrom,
-        expiresAt: response.readExecutionAuthorization.expiresAt,
-        revokedAt: response.readExecutionAuthorization.revokedAt,
-        upstreamV172Digest: response.upstreamV172Digest,
-        provisioningAuthorizationId:
-          response.provisioningAuthorization.authorizationId,
-        credentialHandleId: response.credentialHandle.handleId,
+      projectedV172 = buildFandexMomentumVerifierVercelInventoryReadChannelPlan({
+        evaluatedAt: input.evaluatedAt,
+        requestIntent: 'explicit-read-channel-authorization',
+        authorization: projectedV172Authorization,
+        credentialHandle: projectedV172CredentialHandle,
       });
+
+      if (
+        projectedV172.state !== 'read-channel-provisioning-ready'
+        || projectedV172.provisioningAuthorized !== true
+        || projectedV172.credentialHandleAccepted !== true
+        || projectedV172.readExecutionAuthorized !== false
+      ) {
+        blockers.push('projected-v172-not-provisioning-ready');
+        projectedV172 = null;
+      } else {
+        projectedV173ReadExecutionAuthorization = Object.freeze({
+          state: 'approved' as const,
+          authorizationId: response.readExecutionAuthorization.authorizationId,
+          decidedAt: response.readExecutionAuthorization.decidedAt,
+          decidedBy: response.readExecutionAuthorization.decidedBy,
+          validFrom: response.readExecutionAuthorization.validFrom,
+          expiresAt: response.readExecutionAuthorization.expiresAt,
+          revokedAt: response.readExecutionAuthorization.revokedAt,
+          upstreamV172Digest: projectedV172.digest,
+          provisioningAuthorizationId:
+            response.provisioningAuthorization.authorizationId,
+          credentialHandleId: response.credentialHandle.handleId,
+        });
+      }
     }
   }
 
@@ -230,6 +253,7 @@ export function projectFandexMomentumVerifierOperatorResponse(
   const projectionReady = uniqueBlockers.length === 0
     && projectedV172Authorization !== null
     && projectedV172CredentialHandle !== null
+    && projectedV172 !== null
     && projectedV173ReadExecutionAuthorization !== null;
 
   const payload = {
@@ -241,6 +265,7 @@ export function projectFandexMomentumVerifierOperatorResponse(
     upstreamV177Digest: input.upstreamV177.digest,
     projectedV172Authorization,
     projectedV172CredentialHandle,
+    projectedV172,
     projectedV173ReadExecutionAuthorization,
     capability: Object.freeze({
       receiptId,
