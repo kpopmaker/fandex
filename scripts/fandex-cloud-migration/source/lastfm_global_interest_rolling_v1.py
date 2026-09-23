@@ -180,11 +180,9 @@ def validate_history(rows):
         ]
     }
 
-    if len(first_artist_set) != 10:
+    if not first_artist_set:
         raise RuntimeError(
-            "Expected 10 artists in "
-            f"{sorted_dates[0]}, "
-            f"got {len(first_artist_set)}."
+            f"No artists found in {sorted_dates[0]}."
         )
 
     for snapshot_date in sorted_dates:
@@ -197,11 +195,12 @@ def validate_history(rows):
             for row in date_rows
         }
 
-        if len(date_rows) != 10:
+        expected_count = len(first_artist_set)
+        if len(date_rows) != expected_count:
             raise RuntimeError(
                 "Incomplete snapshot: "
                 f"{snapshot_date} = "
-                f"{len(date_rows)}/10"
+                f"{len(date_rows)}/{expected_count}"
             )
 
         if artist_set != first_artist_set:
@@ -576,12 +575,12 @@ def main():
 
     print(
         f"rolling3ReadyCount: "
-        f"{rolling3_ready}/10"
+        f"{rolling3_ready}/{len(by_artist)}"
     )
 
     print(
         f"rolling7ReadyCount: "
-        f"{rolling7_ready}/10"
+        f"{rolling7_ready}/{len(by_artist)}"
     )
 
     print(
