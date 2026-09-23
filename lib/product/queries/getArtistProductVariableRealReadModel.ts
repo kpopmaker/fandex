@@ -152,7 +152,13 @@ function realModel(
       variableId: 'newsIssuePoint' as const,
       sourceVariableKey: 'newsIssuePoint' as const,
     }),
-    definition,
+    definition: Object.freeze({
+      ...definition,
+      evidenceRelation: Object.freeze({
+        kind: 'stored-evidence-job-trace' as const,
+        sourceMetric: 'naverNewsShadowFirstSeenActivity' as const,
+      }),
+    }),
     fact: candidate.fact,
     series,
     observationTime: candidate.observationTime,
