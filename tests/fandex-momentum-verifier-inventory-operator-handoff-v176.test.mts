@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -319,4 +320,105 @@ test('v176 itself always has zero external, Product, ledger, and merge side effe
     pullRequestMerges: 0,
   });
   assert.equal(out.productBoundary.productProductionActual, '0/7');
+});
+
+
+test('committed v176 audit reproduces the current operator-capability-missing packet', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_inventory_operator_handoff_v176_20260923T004727Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  const out = buildFandexMomentumVerifierInventoryOperatorHandoff({
+    v175: currentV175(),
+    connectedExecutionCapability: {
+      exactVercelEnvironmentInventoryReadActionAvailable:
+        audit.connectedExecutionCapability
+          .exactVercelEnvironmentInventoryReadActionAvailable,
+      genericVercelRestActionAvailable:
+        audit.connectedExecutionCapability.genericVercelRestActionAvailable,
+    },
+  });
+
+  assert.equal(
+    audit.contractVersion,
+    'v176_fandex_momentum_verifier_inventory_operator_handoff_audit_v1',
+  );
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(out.handoffRequired, audit.currentResult.handoffRequired);
+  assert.equal(
+    out.readPrerequisitesReady,
+    audit.currentResult.readPrerequisitesReady,
+  );
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.deepEqual(
+    out.requiredAuthorizations,
+    audit.requiredAuthorizations,
+  );
+  assert.deepEqual(out.credentialRequirement, audit.credentialRequirement);
+  assert.deepEqual(out.exactReadRequest, audit.exactReadRequest);
+  assert.deepEqual(
+    out.expectedExecutionReceipt,
+    audit.expectedExecutionReceipt,
+  );
+  assert.deepEqual(out.forbiddenActions, audit.forbiddenActions);
+  assert.deepEqual(out.effects, audit.effects);
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.authoritativeLedgerBoundary.fresh1200ZAdvanced, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
