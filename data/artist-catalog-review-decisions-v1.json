@@ -1273,6 +1273,20 @@
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": []
+    },
+    {
+      "displayArtist": "박다혜",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/20009763",
+          "note": "Provider artist profile shows Park Da-hye with repeated solo releases through 2026, including Starting With You and later singles."
+        }
+      ]
     }
   ]
 }
