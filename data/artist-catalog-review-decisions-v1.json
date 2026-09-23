@@ -1,0 +1,80 @@
+{
+  "version": "artist_catalog_review_decisions_v1",
+  "decisions": [
+    {
+      "displayArtist": "도경수(D.O.)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "member_of_existing_artist_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "exo"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Company Soosoo",
+          "url": "https://companysoosoo.com/contents/curation",
+          "note": "Official artist content identifies Doh Kyung Soo."
+        },
+        {
+          "source": "Company Soosoo",
+          "url": "https://companysoosoo.com/notice/686b98a5c1ce9352856f7436",
+          "note": "Official notice for Doh Kyung Soo solo album BLISS."
+        }
+      ]
+    },
+    {
+      "displayArtist": "소연 (SOYEON)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "member_of_existing_artist_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "gidle"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Weverse i-dle",
+          "url": "https://weverse.io/i-dle/highlight?hl=ko",
+          "note": "Official community identifies SOYEON as an i-dle member."
+        },
+        {
+          "source": "Weverse Shop",
+          "url": "https://shop.weverse.io/en/shop/USD/artists/113/notices/14141",
+          "note": "Official store notice for SOYEON 1st full solo album."
+        }
+      ]
+    },
+    {
+      "displayArtist": "아이오아이 (I.O.I)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "distinct_group_not_alias_of_related_member",
+      "relatedCanonicalArtistIds": [
+        "jeonsomi"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/ioi10th/contents/69ca04f470ae59788cc27e0a",
+          "note": "Official I.O.I community notice identifies I.O.I as its own group identity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "DK (디셈버)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "false_positive_keyword_relation",
+      "relatedCanonicalArtistIds": [],
+      "rejectedRelationCanonicalArtistIds": [
+        "seventeen"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80094970",
+          "note": "Artist profile identifies DK(December) as a separate Korean male solo artist associated with December."
+        }
+      ]
+    }
+  ]
+}
