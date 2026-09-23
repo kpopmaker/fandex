@@ -1,0 +1,65 @@
+name: Validate Artist Expansion integration candidate
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-integration-candidate-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install beautifulsoup4 requests
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: NAVER generic pipeline
+        run: npx tsx --test tests/artist-expansion-generic-naver-pipeline-v1.test.mts
+      - name: NAVER full universe
+        run: npx tsx --test tests/artist-expansion-full-universe-generic-naver-v1.test.mts
+      - name: NAVER identity coverage
+        run: npx tsx --test tests/artist-expansion-naver-identity-coverage-v1.test.mts
+      - name: Last.fm generic count and cloud sync
+        run: python tests/artist-expansion-lastfm-generic-count-v1.py
+      - name: Last.fm score generic cohort
+        run: python tests/artist-expansion-lastfm-score-generic-cohort-v1.py
+      - name: Cloud and YouTube generic cohort
+        run: python tests/artist-expansion-cloud-youtube-generic-cohort-v1.py
+      - name: Music generic cohort
+        run: python tests/artist-expansion-music-generic-cohort-v1.py
+      - name: Python production path syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py \
+            scripts/fandex-cloud-migration/source/fandex_master_score_v10.py \
+            scripts/fandex-cloud-migration/source/fandex_python_health_check_v3.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_score_preview_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_score_preview_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py \
+            scripts/fandex-cloud-migration/source/music_chart_current_presence_preview_v1.py \
+            scripts/fandex-cloud-migration/source/music_chart_current_presence_publish_v2.py \
+            scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py \
+            scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py \
+            scripts/lastfm-cloud/lastfm_cloud_history_v1.py
+      - name: newsIssuePoint Product route regression
+        run: |
+          npx tsx --test tests/product-artist-variable-route-integration-v1.test.mts
+          npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
