@@ -46,7 +46,8 @@ jobs:
         run: |
           python scripts/artist-expansion/artist_catalog_review_queue_v1.py \
             music_chart_artist_candidates_v2_raw_latest.json \
-            artist_catalog_review_queue_v1_latest.json
+            artist_catalog_review_queue_v1_latest.json \
+            --identity-index artist_universe_identity_index_runtime.json
       - name: Upload catalog discovery evidence
         uses: actions/upload-artifact@v4
         with:
