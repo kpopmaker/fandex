@@ -366,6 +366,117 @@
           "url": "https://music.bugs.co.kr/artist/80145846"
         }
       ]
+    },
+    {
+      "id": "crush",
+      "ticker": "CRUSH",
+      "name": "Crush",
+      "agency": "P NATION",
+      "entityType": "solo",
+      "naverNewsQuery": "크러쉬 Crush",
+      "koreanAliases": [
+        "크러쉬"
+      ],
+      "englishAliases": [
+        "Crush",
+        "CRUSH"
+      ],
+      "identityEvidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/5"
+        }
+      ]
+    },
+    {
+      "id": "parkjaejung",
+      "ticker": "PARKJAEJUNG",
+      "name": "Park Jae-jung",
+      "agency": "Romantic Factory",
+      "entityType": "solo",
+      "naverNewsQuery": "박재정 Park Jae-jung",
+      "koreanAliases": [
+        "박재정"
+      ],
+      "englishAliases": [
+        "Park Jae-jung",
+        "Park Jae Jung"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Romantic Factory statement",
+          "url": "https://www.starnewskorea.com/star/2026/06/20/2026062015280596333"
+        }
+      ]
+    },
+    {
+      "id": "jannabi",
+      "ticker": "JANNABI",
+      "name": "Jannabi",
+      "agency": "Peponi Music",
+      "entityType": "group",
+      "naverNewsQuery": "잔나비 Jannabi",
+      "koreanAliases": [
+        "잔나비"
+      ],
+      "englishAliases": [
+        "Jannabi",
+        "JANNABI"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/gFfn8UUv591ADeKt"
+        }
+      ]
+    },
+    {
+      "id": "paulkim",
+      "ticker": "PAULKIM",
+      "name": "Paul Kim",
+      "agency": "Whyes Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "폴킴 Paul Kim",
+      "koreanAliases": [
+        "폴킴",
+        "김태형"
+      ],
+      "englishAliases": [
+        "Paul Kim",
+        "PAUL KIM"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/yzmgeMtFLUy9z9Nt"
+        }
+      ]
+    },
+    {
+      "id": "bol4",
+      "ticker": "BOL4",
+      "name": "BOL4",
+      "agency": "Shofar Music",
+      "entityType": "solo",
+      "naverNewsQuery": "볼빨간사춘기 BOL4 안지영",
+      "koreanAliases": [
+        "볼빨간사춘기",
+        "안지영"
+      ],
+      "englishAliases": [
+        "BOL4",
+        "Bolbbalgan4"
+      ],
+      "identityEvidence": [
+        {
+          "source": "BOL4 Official",
+          "url": "https://bol4.bstage.in/tag/notice"
+        },
+        {
+          "source": "Shofar Music statement",
+          "url": "https://v.daum.net/v/jtoOX8hrmi"
+        }
+      ]
     }
   ]
 }
