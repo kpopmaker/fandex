@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "activity-exposure-live-provider-coverage-v1",
+  "sourceResearchHead": "a0a64b6fe0191cff4097b90df16fbb12fb78149a",
+  "latestMainAtExecution": "d7ad96f9a207e35141104882972a97829400862c",
+  "validationRunId": 35867441636,
+  "generatedAt": "2026-09-23T13:31:08.112Z",
+  "artistId": "iu",
+  "construct": "Activity Exposure Event Stream",
+  "legacyNumericOutput": "NUMERIC_OUTPUT_NOT_JUSTIFIED",
+  "musicbrainz": {
+    "state": "bounded_partial",
+    "providerArtistId": "b9545342-1e6d-4dae-84ac-013374ad8d7c",
+    "providerReleaseGroupCount": 58,
+    "enumeratedReleaseGroupCount": 58,
+    "normalizedEventCount": 57,
+    "missingSourceDataReleaseGroups": [
+      {
+        "releaseGroupId": "1299e16d-133b-47b0-b991-36cf11eff7d7",
+        "title": "그대네요",
+        "firstReleaseDate": "2010-09-28",
+        "artistCreditCount": 2
+      }
+    ],
+    "collaborationEventCount": 12,
+    "collaborationCreditPreservationViolations": 0,
+    "officialReleaseSupportViolations": 0,
+    "validationIssueCount": 0
+  },
+  "youtube": {
+    "state": "credential_blocked",
+    "providerArtistId": "UC3SyT4_WLHzN7JmHQwKQZww",
+    "authorizedCredentialAvailable": false,
+    "checkedSecretNames": [
+      "YOUTUBE_API_KEY",
+      "YOUTUBE_DATA_API_KEY",
+      "GOOGLE_YOUTUBE_API_KEY"
+    ]
+  },
+  "invariants": {
+    "missingIsZero": false,
+    "missingIsInactive": false,
+    "numericComebackActivityPointIntroduced": false,
+    "arbitraryWeights": false,
+    "arbitraryThresholds": false,
+    "recencyDecay": false,
+    "arbitraryActiveWindow": false,
+    "collaborationCreditsPreserved": true
+  },
+  "liveProviderCoverageGate": "BLOCKED_BY_YOUTUBE_CREDENTIAL"
+}
