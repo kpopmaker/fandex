@@ -28,7 +28,7 @@ jobs:
         run: npx tsx --test tests/activity-exposure-production-boundary-v1.test.mts
       - name: Existing Product state/time regression
         run: |
-          npx tsx --test tests/product-state-contract-v1.test.mts
+          npx tsx --test tests/product-state-foundation-v1.test.mts
           npx tsx --test tests/product-time-foundation-v1.test.mts
       - name: Existing newsIssuePoint regressions
         run: |
