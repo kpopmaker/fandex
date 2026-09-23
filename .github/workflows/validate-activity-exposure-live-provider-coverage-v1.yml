@@ -1,0 +1,39 @@
+name: Validate Activity Exposure live provider coverage v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-live-provider-coverage-v1
+    paths:
+      - scripts/validation/activityExposureLiveProviderCoverageV1.ts
+      - .github/workflows/validate-activity-exposure-live-provider-coverage-v1.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      YOUTUBE_DATA_API_KEY: ${{ secrets.YOUTUBE_DATA_API_KEY }}
+      GOOGLE_YOUTUBE_API_KEY: ${{ secrets.GOOGLE_YOUTUBE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Execute live provider coverage gate
+        run: npx tsx scripts/validation/activityExposureLiveProviderCoverageV1.ts
+      - name: Upload live coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: activity-exposure-live-provider-coverage-v1
+          path: |
+            activity-exposure-live-provider-coverage-v1.json
+            activity-exposure-live-provider-coverage-v1.md
+          if-no-files-found: error
+          retention-days: 7
