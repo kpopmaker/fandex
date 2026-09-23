@@ -62,7 +62,24 @@ def main():
         ],
     }
 
-    output = module.build_review_queue(payload, identity_payload)
+    decision_payload = {
+        "decisions": [
+            {
+                "displayArtist": "도경수(D.O.)",
+                "decision": "new_canonical_solo_candidate",
+                "relationResolution": "member_of_existing_artist_and_independent_solo",
+                "relatedCanonicalArtistIds": ["exo"],
+                "autoPromote": False,
+                "evidence": [{"source": "fixture", "url": "https://example.com"}],
+            }
+        ]
+    }
+
+    output = module.build_review_queue(
+        payload,
+        identity_payload,
+        decision_payload,
+    )
 
     assert output["candidateCount"] == 3
     assert output["autoPromotionAllowed"] is False
@@ -76,6 +93,8 @@ def main():
     assert by_name["도경수(D.O.)"]["reviewCategory"] == "alternate_identity_review"
     assert by_name["도경수(D.O.)"]["relationStatus"] == "existing_artist_keyword_relation"
     assert by_name["도경수(D.O.)"]["keywordRelationMatches"] == ["exo"]
+    assert by_name["도경수(D.O.)"]["reviewDecision"] == "new_canonical_solo_candidate"
+    assert by_name["도경수(D.O.)"]["relatedCanonicalArtistIds"] == ["exo"]
     assert by_name["임영웅"]["reviewCategory"] == "single_identity_review"
     assert by_name["임영웅"]["relationStatus"] == "unresolved"
     assert by_name["Artist A & Artist B"]["reviewCategory"] == "composite_credit_review"
