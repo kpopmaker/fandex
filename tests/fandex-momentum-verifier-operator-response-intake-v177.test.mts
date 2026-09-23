@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -318,4 +319,100 @@ test('v177 always has zero provider, Product, ledger, and PR side effects', () =
     manifestWrites: 0,
     pullRequestMerges: 0,
   });
+});
+
+
+test('committed v177 audit reproduces the current missing-response block without ledger movement', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_operator_response_intake_v177_20260923T011700Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  const out = evaluateFandexMomentumVerifierOperatorResponseIntake({
+    evaluatedAt: '2026-09-23T01:10:00.000Z',
+    requestIntent: 'generic-continuation',
+    upstreamV176Digest: audit.upstream.v176Digest,
+    upstreamV172Digest: audit.upstream.v172Digest,
+    response: null,
+  });
+
+  assert.equal(
+    audit.contractVersion,
+    'v177_fandex_momentum_verifier_operator_response_intake_audit_v1',
+  );
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(out.intakeReady, audit.currentResult.intakeReady);
+  assert.equal(out.readExecutionAuthorizedByIntake, false);
+  assert.deepEqual(out.normalized, audit.currentResult.normalized);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.deepEqual(out.effects, audit.effects);
+
+  assert.equal(audit.currentOperatorResponse.present, false);
+  assert.equal(
+    audit.currentOperatorResponse.genericContinuationCountsAsOperatorResponse,
+    false,
+  );
+  assert.equal(audit.intakeContract.rawCredentialMaterialForbidden, true);
+  assert.equal(audit.intakeContract.exactV172BindingRequired, true);
+  assert.equal(audit.intakeContract.exactV176BindingRequired, true);
+  assert.equal(audit.intakeContract.exactCredentialHandleBindingRequired, true);
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.authoritativeLedgerBoundary.fresh1200ZAdvanced, false);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
