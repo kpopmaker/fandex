@@ -452,6 +452,86 @@
           "note": "Provider artist profile identifies YOUNHA as a solo artist under C9 Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "임영웅",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Mulgogi Music",
+          "url": "https://www.mulgogimusic.com/",
+          "note": "Official agency site publishes Lim Young-woong's discography and official videos through 2026."
+        }
+      ]
+    },
+    {
+      "displayArtist": "로이킴",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_agency_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/notice/",
+          "note": "Official notice records Roy Kim's exclusive contract ending in 2025; identity is established but current agency metadata must be refreshed before seed promotion."
+        },
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/news/%EB%A1%9C%EC%9D%B4%ED%82%B4-%EA%B0%90%EC%84%B1-%EC%9E%A5%EC%9D%B8%EC%9D%98-%EA%B7%80%ED%99%98%EC%98%A4%EB%8A%9814%EC%9D%BC-%EC%83%88-%EC%8B%B1%EA%B8%80-%EA%B7%B8%EB%95%8C%EB%A1%9C/",
+          "note": "Official label release establishes Roy Kim as an independent solo singer-songwriter identity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "10CM",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_project_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "10CM Weverse / CAM WITH US",
+          "url": "https://weverse.io/10cm/notice/34821",
+          "note": "2026 official notice is issued by CAM WITH US for the 10CM fanclub."
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80067149",
+          "note": "Provider profile identifies 10CM as a Korean male solo artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "다비치",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_duo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80041466",
+          "note": "Provider profile identifies Davichi as a Korean female duo with members Kang Min-kyung and Lee Hae-ri."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이창섭",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/profiles/%EC%9D%B4%EC%B0%BD%EC%84%AD/",
+          "note": "Official Fantagio profile identifies LEECHANGSUB, BTOB membership, and solo discography."
+        }
+      ]
     }
   ]
 }
