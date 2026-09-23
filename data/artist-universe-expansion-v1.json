@@ -727,6 +727,132 @@
           "url": "https://www.osprojects.kr/"
         }
       ]
+    },
+    {
+      "id": "dohkyungsoo",
+      "ticker": "DOHKYUNGSOO",
+      "name": "DOH KYUNG SOO",
+      "agency": "Company Soosoo",
+      "entityType": "solo",
+      "naverNewsQuery": "도경수 DOH KYUNG SOO D.O.",
+      "koreanAliases": [
+        "도경수"
+      ],
+      "englishAliases": [
+        "DOH KYUNG SOO",
+        "D.O.",
+        "D.O"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Company Soosoo",
+          "url": "https://companysoosoo.com/contents/curation"
+        },
+        {
+          "source": "Company Soosoo",
+          "url": "https://companysoosoo.com/notice"
+        }
+      ]
+    },
+    {
+      "id": "yena",
+      "ticker": "YENA",
+      "name": "YENA",
+      "agency": "YUE HUA ENTERTAINMENT",
+      "entityType": "solo",
+      "naverNewsQuery": "최예나 YENA",
+      "koreanAliases": [
+        "최예나",
+        "예나"
+      ],
+      "englishAliases": [
+        "YENA",
+        "Choi Yena",
+        "Choi Ye-na"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YUE HUA ENTERTAINMENT",
+          "url": "https://yhfamily.co.kr/index.php?CurrentPage=1&action=SiteBoardAt&iBrdContNo=1133&iBrdNo=8&module=Board&sAt=007&sBrdContRe=0&sMode=VIEW_FORM&sSearchField=&sSearchValue="
+        }
+      ]
+    },
+    {
+      "id": "nflying",
+      "ticker": "NFLYING",
+      "name": "N.Flying",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "엔플라잉 N.Flying",
+      "koreanAliases": [
+        "엔플라잉"
+      ],
+      "englishAliases": [
+        "N.Flying",
+        "N Flying",
+        "N.FLYING"
+      ],
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment",
+          "url": "https://www.fncent.com/P1Harmony/b/gallery_01/61939"
+        },
+        {
+          "source": "FNC Entertainment",
+          "url": "https://fncent.com/b/fnc_media/61758"
+        }
+      ]
+    },
+    {
+      "id": "bignaughty",
+      "ticker": "BIGNAUGHTY",
+      "name": "BIG Naughty",
+      "agency": "H1GHR MUSIC",
+      "entityType": "solo",
+      "naverNewsQuery": "BIG Naughty 서동현",
+      "koreanAliases": [
+        "서동현"
+      ],
+      "englishAliases": [
+        "BIG Naughty",
+        "Big Naughty",
+        "BIG NAUGHTY"
+      ],
+      "identityEvidence": [
+        {
+          "source": "H1GHR MUSIC",
+          "url": "https://www.h1ghrmusic.com/bignaughty"
+        },
+        {
+          "source": "H1GHR MUSIC",
+          "url": "https://h1ghrmusic.com/artist"
+        }
+      ]
+    },
+    {
+      "id": "woody",
+      "ticker": "WOODY",
+      "name": "WOODY",
+      "agency": "Golden Moon Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "우디 Woody 가수",
+      "koreanAliases": [
+        "우디"
+      ],
+      "englishAliases": [
+        "WOODY",
+        "Woody"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Golden Moon Entertainment",
+          "url": "https://goldenmoon.co.kr/artists/woody/"
+        },
+        {
+          "source": "Golden Moon Entertainment",
+          "url": "https://goldenmoon.co.kr/artists/"
+        }
+      ]
     }
   ]
 }
