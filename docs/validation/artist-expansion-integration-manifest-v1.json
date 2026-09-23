@@ -1,0 +1,78 @@
+{
+  "version": "artist_expansion_integration_manifest_v1",
+  "branch": "validation/artist-expansion-generic-naver-pipeline-v1",
+  "packageHead": "6fe19603bf706692473c46d3218c11e279bfa811",
+  "currentMain": "930f5d692129e75f79ca3d74e99f6751cc12bb46",
+  "mergeBase": "75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b",
+  "branchStatus": {
+    "status": "diverged",
+    "aheadBy": 52,
+    "behindBy": 2
+  },
+  "productionRelevantFiles": [
+    "app/data/v4/artistUniverse.ts",
+    "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
+    "scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py",
+    "scripts/fandex-cloud-migration/source/fandex_master_score_v10.py",
+    "scripts/fandex-cloud-migration/source/fandex_python_health_check_v3.py",
+    "scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py",
+    "scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_score_preview_v1.py",
+    "scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py",
+    "scripts/fandex-cloud-migration/source/lastfm_global_interest_score_preview_v1.py",
+    "scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py",
+    "scripts/fandex-cloud-migration/source/music_chart_current_presence_preview_v1.py",
+    "scripts/fandex-cloud-migration/source/music_chart_current_presence_publish_v2.py",
+    "scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py",
+    "scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py",
+    "scripts/lastfm-cloud/lastfm_cloud_history_v1.py"
+  ],
+  "validationOnlyFiles": [
+    "tests/artist-expansion-cloud-youtube-generic-cohort-v1.py",
+    "tests/artist-expansion-full-universe-generic-naver-v1.test.mts",
+    "tests/artist-expansion-generic-naver-pipeline-v1.test.mts",
+    "tests/artist-expansion-lastfm-generic-count-v1.py",
+    "tests/artist-expansion-lastfm-score-generic-cohort-v1.py",
+    "tests/artist-expansion-music-generic-cohort-v1.py",
+    "tests/artist-expansion-naver-identity-coverage-v1.test.mts",
+    "docs/validation/artist-expansion-final-integration-package-v1.md",
+    "docs/validation/artist-expansion-integration-handoff-v1.md",
+    "docs/validation/artist-expansion-naver-identity-coverage-v1.md"
+  ],
+  "infrastructureOnlyFiles": [
+    "vercel.json"
+  ],
+  "validationRuns": [
+    {
+      "id": 35840233909,
+      "scope": "NAVER generic pipeline",
+      "conclusion": "success"
+    },
+    {
+      "id": 35840873344,
+      "scope": "Last.fm generic count",
+      "conclusion": "success"
+    },
+    {
+      "id": 35842202477,
+      "scope": "Cloud/YouTube generic cohort",
+      "conclusion": "success"
+    },
+    {
+      "id": 35843637144,
+      "scope": "Music generic cohort",
+      "conclusion": "success"
+    },
+    {
+      "id": 35845984187,
+      "scope": "Status/health + Last.fm score",
+      "conclusion": "success"
+    },
+    {
+      "id": 35847693563,
+      "scope": "Last.fm cloud sync generic cohort",
+      "conclusion": "success"
+    }
+  ],
+  "integrationInstruction": "Rebuild from current main; do not blindly merge the long-lived validation branch.",
+  "authority": "FANDEX 운영 표준"
+}
