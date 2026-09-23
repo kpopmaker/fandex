@@ -219,6 +219,14 @@ function artistCreditContains(
   );
 }
 
+function normalizedArtistCredits(releaseGroup: MusicBrainzReleaseGroup) {
+  return Object.freeze((releaseGroup['artist-credit'] ?? []).map((credit) => Object.freeze({
+    providerArtistId: credit.artist?.id ?? null,
+    creditedName: credit.name ?? credit.artist?.name ?? null,
+    canonicalProviderName: credit.artist?.name ?? null,
+  })));
+}
+
 function earliestOfficialRelease(
   releases: readonly MusicBrainzRelease[],
 ): MusicBrainzRelease | null {
@@ -275,6 +283,11 @@ function normalizeReleaseGroupEvent(input: Readonly<{
     supportingReleaseId: input.supportingRelease.id,
     supportingReleaseStatus: input.supportingRelease.status ?? null,
     supportingReleaseCountry: input.supportingRelease.country ?? null,
+    providerArtistCredits: normalizedArtistCredits(input.releaseGroup),
+    participationScope:
+      (input.releaseGroup['artist-credit'] ?? []).filter((credit) => credit.artist?.id).length > 1
+        ? 'collaboration'
+        : 'solo',
   });
 }
 
