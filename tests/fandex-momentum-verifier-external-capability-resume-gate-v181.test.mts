@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -252,4 +253,139 @@ test('invalid target or upstream digest remains fail-closed even when a capabili
   assert.ok(
     out.blockers.includes('resume-gate-upstream-v180-digest-invalid'),
   );
+});
+
+
+test('committed v181 audit reproduces current blocked resume state and unchanged ledger', async () => {
+  const [auditRaw, watermarkRaw, manifestRaw] = await Promise.all([
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_verifier_external_capability_resume_gate_v181_20260923T082840Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_evaluation_watermark_v151.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../data/momentum-research/iu_paired_artifact_manifest_v154.jsonl',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  const audit = JSON.parse(auditRaw);
+  const watermarks = watermarkRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+  const manifests = manifestRaw
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      observedAt: '2026-09-23T08:25:00.000Z',
+      upstreamV180Digest: audit.upstream.v180Digest,
+      target: audit.target,
+      connectedCapability: {
+        vercelPluginInstalled:
+          audit.currentCapabilityEvidence.vercelPluginInstalled,
+        vercelPluginEnabled:
+          audit.currentCapabilityEvidence.vercelPluginEnabled,
+        vercelSkillAdvertisesEnvironmentVariableSupport:
+          audit.currentCapabilityEvidence
+            .vercelSkillAdvertisesEnvironmentVariableSupport,
+        exactEnvInventoryReadToolExposed:
+          audit.currentCapabilityEvidence.exactEnvInventoryReadToolExposed,
+        genericRestReadToolExposed:
+          audit.currentCapabilityEvidence.genericRestReadToolExposed,
+        projectMetadataToolExposed:
+          audit.currentCapabilityEvidence.projectMetadataToolExposed,
+        projectMetadataToolCallableForTarget:
+          audit.currentCapabilityEvidence.projectMetadataToolCallableForTarget,
+        projectMetadataToolFailure:
+          audit.currentCapabilityEvidence.projectMetadataToolFailure,
+      },
+      localCapability: {
+        vercelCliInstalled:
+          audit.currentCapabilityEvidence.localVercelCliInstalled,
+        vercelCliAuthenticated:
+          audit.currentCapabilityEvidence.localVercelCliAuthenticated,
+        vercelTokenEnvironmentPresent:
+          audit.currentCapabilityEvidence.vercelTokenEnvironmentPresent,
+      },
+      browserCapability: {
+        executableBrowserAutomationToolExposed:
+          audit.currentCapabilityEvidence
+            .executableBrowserAutomationToolExposed,
+        authenticatedVercelBrowserSessionAvailable:
+          audit.currentCapabilityEvidence
+            .authenticatedVercelBrowserSessionAvailable,
+      },
+      externalOperator: {
+        validV177PreReadResponseAvailable:
+          audit.currentCapabilityEvidence.validV177PreReadResponseAvailable,
+        validV179PostReadResponseAvailable:
+          audit.currentCapabilityEvidence.validV179PostReadResponseAvailable,
+      },
+    });
+
+  assert.equal(
+    audit.contractVersion,
+    'v181_fandex_momentum_verifier_external_capability_resume_gate_audit_v1',
+  );
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(
+    out.internalExecutionCanResume,
+    audit.currentResult.internalExecutionCanResume,
+  );
+  assert.equal(
+    out.separateAuthorizationStillRequired,
+    audit.currentResult.separateAuthorizationStillRequired,
+  );
+  assert.deepEqual(out.candidateChannels, audit.currentResult.candidateChannels);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.deepEqual(out.effects, audit.effects);
+  assert.equal(audit.capabilityChecks.localCliCommandAvailable, false);
+  assert.equal(audit.capabilityChecks.localTokenPresent, false);
+  assert.equal(audit.capabilityChecks.concreteEnvInventoryToolFound, false);
+  assert.equal(audit.capabilityChecks.executableBrowserToolFound, false);
+
+  assert.equal(
+    watermarks.length,
+    audit.authoritativeLedgerBoundary.v151WatermarkRecordCount,
+  );
+  assert.equal(
+    watermarks.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestWatermarkSequence,
+  );
+  assert.equal(
+    watermarks.at(-1).evaluationBoundary.sourceEvidence.naverThroughSlotStart,
+    audit.authoritativeLedgerBoundary.latestAcceptedNaverThroughSlotStart,
+  );
+  assert.equal(
+    manifests.length,
+    audit.authoritativeLedgerBoundary.v154ManifestRecordCount,
+  );
+  assert.equal(
+    manifests.at(-1).sequence,
+    audit.authoritativeLedgerBoundary.latestManifestSequence,
+  );
+  assert.equal(
+    manifests.at(-1).manifestDigest,
+    audit.authoritativeLedgerBoundary.latestManifestDigest,
+  );
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
