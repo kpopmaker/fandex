@@ -1,0 +1,28 @@
+name: Artist Expansion Last.fm Generic Count v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-generic-naver-pipeline-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-lastfm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Python syntax check
+        run: |
+          python -m py_compile scripts/lastfm-cloud/lastfm_cloud_history_v1.py
+          python -m py_compile scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py
+          python -m py_compile scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py
+      - name: Generic 11-artist regression
+        run: python tests/artist-expansion-lastfm-generic-count-v1.py
