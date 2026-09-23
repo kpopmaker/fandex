@@ -602,6 +602,202 @@
           "note": "Provider profile identifies Hwang Garam as Korean male solo under Double X Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "Charlie Puth",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "foreign_pop_artist",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Charlie Puth Official",
+          "url": "https://www.charlieputh.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Kenshi Yonezu",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Kenshi Yonezu Official",
+          "url": "https://reissuerecords.net/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Alan Walker",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "norwegian_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Alan Walker Official",
+          "url": "https://www.alanwalker.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Anne-Marie",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "uk_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Anne-Marie Official",
+          "url": "https://www.iamannemarie.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Benson Boone",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "us_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Benson Boone Official",
+          "url": "https://www.bensonboone.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Ed Sheeran",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "uk_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Ed Sheeran Official",
+          "url": "https://www.edsheeran.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Justin Bieber",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "canadian_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Justin Bieber Official",
+          "url": "https://www.justinbiebermusic.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lady Gaga",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "us_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Lady Gaga Official",
+          "url": "https://www.ladygaga.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "OFFICIAL HIGE DANDISM",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_band_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OFFICIAL HIGE DANDISM Official",
+          "url": "https://higedan.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Sasha Alex Sloan",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "us_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Sasha Alex Sloan Official",
+          "url": "https://www.sadgirlsloan.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Taylor Swift",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "us_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Taylor Swift Official",
+          "url": "https://www.taylorswift.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Yuuri",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_artist_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Yuuri Official",
+          "url": "https://www.yuuriweb.com/",
+          "note": "Official artist source confirms an established non-Korean artist identity outside FANDEX K-pop scope."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HUNTR/X",
+      "decision": "exclude_from_real_artist_universe",
+      "relationResolution": "fictional_kpop_demon_hunters_group",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Netflix",
+          "url": "https://www.netflix.com/kr-en/title/81498621",
+          "note": "Netflix describes Rumi, Mira and Zoey as the K-pop superstars in the fictional film KPop Demon Hunters."
+        }
+      ]
+    },
+    {
+      "displayArtist": "멜로망스",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "same_identity_as_reviewed_melomance_variant",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "KBS WORLD",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=240195&id=&lang=j&menu_cate=artist&page=2",
+          "note": "Same MeloMance duo identity previously verified under the alternate-form review entry."
+        }
+      ]
     }
   ]
 }
