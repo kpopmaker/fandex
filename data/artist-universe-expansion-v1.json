@@ -1,5 +1,69 @@
 {
   "version": "artist_universe_expansion_v1",
   "purpose": "Append verified expansion candidates without editing artistUniverse.ts",
-  "artists": []
+  "artists": [
+    {
+      "id": "kiiikiii",
+      "ticker": "KIIIKIII",
+      "name": "KiiiKiii",
+      "agency": "Starship Entertainment",
+      "entityType": "group",
+      "generation": "5th gen",
+      "naverNewsQuery": "키키 KiiiKiii",
+      "koreanAliases": [
+        "키키"
+      ],
+      "englishAliases": [
+        "KiiiKiii"
+      ],
+      "identityEvidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician/kiiikiii"
+        }
+      ]
+    },
+    {
+      "id": "alldayproject",
+      "ticker": "ADP",
+      "name": "ALLDAY PROJECT",
+      "agency": "THEBLACKLABEL",
+      "entityType": "group",
+      "generation": "5th gen",
+      "naverNewsQuery": "올데이 프로젝트 ALLDAY PROJECT",
+      "koreanAliases": [
+        "올데이 프로젝트"
+      ],
+      "englishAliases": [
+        "ALLDAY PROJECT"
+      ],
+      "identityEvidence": [
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/artists/allday-project/"
+        }
+      ]
+    },
+    {
+      "id": "cortis",
+      "ticker": "CORTIS",
+      "name": "CORTIS",
+      "agency": "BIGHIT MUSIC",
+      "entityType": "group",
+      "generation": "5th gen",
+      "naverNewsQuery": "코르티스 CORTIS",
+      "koreanAliases": [
+        "코르티스"
+      ],
+      "englishAliases": [
+        "CORTIS"
+      ],
+      "identityEvidence": [
+        {
+          "source": "BIGHIT MUSIC",
+          "url": "https://ibighit.com/legacy/cortis/color-outside-the-lines-ko.html"
+        }
+      ]
+    }
+  ]
 }
