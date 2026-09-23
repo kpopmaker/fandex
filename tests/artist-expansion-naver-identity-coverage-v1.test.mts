@@ -37,6 +37,6 @@ test('audit NAVER artist identity coverage across the full artist universe', () 
 
   assert.equal(rows.length, artistUniverseV4.length);
   assert.ok(rows.every((row) => row.query.trim().length > 0));
-  assert.ok(ready.length > 0);
-  assert.ok(blocked.length > 0);
+  assert.equal(ready.length, artistUniverseV4.length);
+  assert.equal(blocked.length, 0);
 });
