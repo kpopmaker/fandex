@@ -98,6 +98,8 @@ def main():
     assert by_name["임영웅"]["reviewCategory"] == "single_identity_review"
     assert by_name["임영웅"]["relationStatus"] == "unresolved"
     assert by_name["Artist A & Artist B"]["reviewCategory"] == "composite_credit_review"
+    assert [x["displayArtist"] for x in by_name["Artist A & Artist B"]["components"]] == ["Artist A", "Artist B"]
+    assert all(x["autoPromote"] is False for x in by_name["Artist A & Artist B"]["components"])
     assert all(row["autoPromote"] is False for row in output["queue"])
     assert all(row["identityStatus"] == "unverified" for row in output["queue"])
     assert all(row["scopeStatus"] == "unverified" for row in output["queue"])
