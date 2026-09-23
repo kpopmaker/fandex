@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import importlib.util
 import json
+import os
 import re
 import sys
 from datetime import datetime
@@ -113,6 +114,46 @@ def load_target_artists(path: Path | None = None):
 
 TARGET_ARTISTS = load_target_artists()
 
+
+def load_known_artist_aliases(path: Path | None = None):
+    candidate = path
+    if candidate is None:
+        env_path = os.environ.get("ARTIST_UNIVERSE_IDENTITY_FILE", "").strip()
+        if env_path:
+            candidate = Path(env_path)
+
+    if candidate is None or not candidate.exists():
+        return TARGET_ARTISTS.copy()
+
+    payload = json.loads(candidate.read_text(encoding="utf-8-sig"))
+    rows = payload.get("artists") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            f"Invalid artist universe identity index: {candidate}"
+        )
+
+    result = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        artist_id = str(row.get("id") or "").strip()
+        aliases = [
+            str(alias).strip()
+            for alias in (row.get("aliases") or [])
+            if str(alias).strip()
+        ]
+        if artist_id and aliases:
+            result[artist_id] = aliases
+
+    if not result:
+        raise RuntimeError(
+            f"Artist universe identity index has no artists: {candidate}"
+        )
+    return result
+
+
+KNOWN_ARTIST_ALIASES = load_known_artist_aliases()
+
 SOURCES = [
     {
         "sourceKey": "melon_top100",
@@ -193,20 +234,37 @@ def load_collector():
     return module
 
 
-def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+def find_artist_in_alias_map(
+    chart_artist: str,
+    alias_map: dict[str, list[str]],
+) -> tuple[str, str] | None:
     normalized_chart_artist = compact_text(chart_artist)
 
     if not normalized_chart_artist:
         return None
 
-    for target_artist, aliases in TARGET_ARTISTS.items():
+    for artist_key, aliases in alias_map.items():
         for alias in aliases:
             normalized_alias = compact_text(alias)
 
             if normalized_alias and normalized_alias in normalized_chart_artist:
-                return target_artist, alias
+                return artist_key, alias
 
     return None
+
+
+def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+    return find_artist_in_alias_map(
+        chart_artist,
+        TARGET_ARTISTS,
+    )
+
+
+def find_known_artist(chart_artist: str) -> tuple[str, str] | None:
+    return find_artist_in_alias_map(
+        chart_artist,
+        KNOWN_ARTIST_ALIASES,
+    )
 
 
 def extract_first_rank(number_tag) -> int | None:
@@ -403,7 +461,7 @@ def build_catalog_candidates(
 
     for item in chart_items:
         chart_artist = str(item.get("artistName") or "").strip()
-        if not chart_artist or find_target_artist(chart_artist) is not None:
+        if not chart_artist or find_known_artist(chart_artist) is not None:
             continue
 
         normalized = compact_text(chart_artist)
