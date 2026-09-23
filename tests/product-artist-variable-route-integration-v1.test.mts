@@ -33,7 +33,10 @@ test('existing deep-link target now lands on the Product Variable surface', () =
 test('Product Variable surface exposes safe states without inference copy', () => {
   assert.match(variableComponentSource, /미리보기/);
   assert.match(variableComponentSource, /지원되지 않는 변수|presentation\.valueText/);
-  assert.match(variableComponentSource, /관측 시점별 시계열/);
+  assert.match(variableComponentSource, /Product 시계열/);
+  assert.match(variableComponentSource, /getProductObservationTimePresentation/);
+  assert.match(variableComponentSource, /현재 8시간 window · 확인 불가/);
+  assert.doesNotMatch(variableComponentSource, /currentWindow\?\.slotEvidence\.length \?\? 0/);
   assert.match(variableComponentSource, /Real · Production/);
   assert.match(variableComponentSource, /Stored Evidence trace/);
   assert.match(variableComponentSource, /xl:grid-cols-2/);

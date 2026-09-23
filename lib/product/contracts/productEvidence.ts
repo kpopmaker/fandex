@@ -1,7 +1,6 @@
 import type {
   ProductDataOrigin,
   ProductPresentation,
-  ProductPublication,
 } from './productState';
 import type { ProductObservationTime } from './productTime';
 import type { ProductVariableId } from './productVariable';
@@ -97,9 +96,9 @@ export type ProductStoredEvidenceJobReadModel = Readonly<{
     jobId: string;
   }>;
   dataOrigin: ProductDataOrigin;
-  publication: ProductPublication;
   presentation: ProductPresentation;
   lineage: Readonly<{
+    collectionLifecycle: 'shadow';
     methodologyVersion: string;
     officialShadowEpoch: string;
     throughSlotStart: string;

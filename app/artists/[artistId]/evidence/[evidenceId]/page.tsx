@@ -5,6 +5,7 @@ import {
   getArtistProductEvidenceStaticParams,
 } from '../../../../../lib/product/queries/getArtistProductEvidence';
 import { getProductEvidencePresentation } from '../../../../../lib/product/presentation/productEvidencePresentation';
+import { getStoredEvidenceFailurePresentation } from '../../../../../lib/product/presentation/storedEvidenceFailurePresentation';
 import {
   getNaverNewsIssuePointRealProductStoredEvidenceJobAtLatestOfficialSlot,
 } from '../../../../../lib/server/product/naverNewsIssuePointRealProductRead';
@@ -30,7 +31,12 @@ export default async function ProductEvidencePage({ params }: PageProps) {
       });
 
     if (storedEvidence.status !== 'ok') {
-      notFound();
+      const failure = getStoredEvidenceFailurePresentation(storedEvidence.issues);
+      if (failure.kind === 'not-found') {
+        notFound();
+      }
+
+      return <StoredEvidenceFailureDetail presentation={failure} />;
     }
 
     return <StoredEvidenceDetail model={storedEvidence.model} />;
@@ -104,6 +110,41 @@ export default async function ProductEvidencePage({ params }: PageProps) {
   );
 }
 
+function StoredEvidenceFailureDetail({
+  presentation,
+}: {
+  presentation: ReturnType<typeof getStoredEvidenceFailurePresentation>;
+}) {
+  const variableHref =
+    '/artists/iu?variables=newsIssuePoint#variable-chart';
+
+  return (
+    <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 dark:bg-slate-950 dark:text-white sm:px-6 lg:px-8">
+      <article className="mx-auto w-full max-w-3xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <header className="border-b border-slate-200 p-5 dark:border-slate-800 sm:p-8">
+          <Link
+            href={variableHref}
+            className="inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
+          >
+            ← newsIssuePoint로 돌아가기
+          </Link>
+          <p className="mt-6 text-xs font-black uppercase tracking-[0.18em] text-amber-600 dark:text-amber-300">
+            Stored Evidence · Verify
+          </p>
+          <h1 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">
+            {presentation.title}
+          </h1>
+        </header>
+        <div className="p-5 sm:p-8">
+          <p className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-7 text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+            {presentation.description}
+          </p>
+        </div>
+      </article>
+    </main>
+  );
+}
+
 type StoredEvidenceModel = Extract<
   Awaited<
     ReturnType<
@@ -142,7 +183,7 @@ function StoredEvidenceDetail({
               Observed
             </span>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-              Source publication: Shadow
+              Evidence lineage · Shadow
             </span>
           </div>
         </header>
@@ -155,6 +196,7 @@ function StoredEvidenceDetail({
             <DetailItem label="throughSlotStart" value={model.lineage.throughSlotStart} />
             <DetailItem label="methodology" value={model.lineage.methodologyVersion} />
             <DetailItem label="official Shadow epoch" value={model.lineage.officialShadowEpoch} />
+            <DetailItem label="Collection lifecycle" value="Shadow" />
           </dl>
 
           <section>

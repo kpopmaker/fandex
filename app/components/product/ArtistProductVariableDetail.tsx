@@ -12,6 +12,7 @@ import {
   getArtistVariablePresentation,
 } from '../../../lib/product/presentation/artistVariablePresentation';
 import { PRODUCT_VARIABLE_DEFINITIONS } from '../../../lib/product/variables/productVariableDefinitions';
+import { getProductObservationTimePresentation } from '../../../lib/product/presentation/productObservationTimePresentation';
 
 function buildVariableHref(
   artistId: string,
@@ -136,6 +137,9 @@ export default function ArtistProductVariableDetail({
           }
 
           const { model } = result;
+          const observationPresentation = getProductObservationTimePresentation(
+            model.observationTime,
+          );
           const evidenceCollection = evidenceCollections.find(
             (collection) =>
               collection.status === 'ok' &&
@@ -169,7 +173,7 @@ export default function ArtistProductVariableDetail({
                   ) : null}
               </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl bg-white p-4 dark:bg-slate-950">
                   <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
                     현재 값
@@ -180,10 +184,18 @@ export default function ArtistProductVariableDetail({
                 </div>
                 <div className="rounded-2xl bg-white p-4 dark:bg-slate-950">
                   <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                    {observationPresentation.label}
+                  </p>
+                  <p className="mt-2 font-mono text-sm font-black text-slate-950 dark:text-white">
+                    {observationPresentation.value}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-white p-4 dark:bg-slate-950">
+                  <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
                     데이터 기준
                   </p>
                   <p className="mt-2 font-mono text-sm font-black text-slate-950 dark:text-white">
-                    {model.sourceMetadata.sourceTimeLabel ?? '관측 없음'}
+                    {model.sourceMetadata.sourceTimeLabel ?? '확인 불가'}
                   </p>
                 </div>
               </div>
@@ -196,7 +208,7 @@ export default function ArtistProductVariableDetail({
               <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
                 <table className="min-w-max border-collapse text-left text-xs">
                   <caption className="px-4 py-3 text-left font-black text-slate-700 dark:text-slate-200">
-                    관측 시점별 시계열
+                    Product 시계열
                   </caption>
                   <tbody>
                     <tr>
@@ -232,7 +244,9 @@ export default function ArtistProductVariableDetail({
                         Stored Evidence trace
                       </h4>
                       <span className="rounded-full bg-white px-2.5 py-1 text-xs font-black text-emerald-700 dark:bg-slate-950 dark:text-emerald-200">
-                        current 8h · {model.evidenceTrace.currentWindow?.slotEvidence.length ?? 0} jobs
+                        {model.evidenceTrace.currentWindow === null
+                          ? '현재 8시간 window · 확인 불가'
+                          : `current 8h · ${model.evidenceTrace.currentWindow.slotEvidence.length} jobs`}
                       </span>
                     </div>
                     <p className="mt-2 text-xs font-bold leading-5 text-emerald-800 dark:text-emerald-200">
