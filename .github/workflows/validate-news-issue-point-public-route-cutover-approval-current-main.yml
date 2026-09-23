@@ -1,0 +1,84 @@
+name: validate-news-issue-point-public-route-cutover-approval-current-main
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-public-route-cutover-approval-d1d7e6
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "d1d7e6c1f6546299ec29946db071a97249f5b7ce"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Public-route cutover approval
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-approval-v1.test.mts
+
+      - name: Cutover authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+
+      - name: Cutover candidate regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts
+
+      - name: Latest official slot resolver regression
+        run: npx tsx --conditions=react-server --test tests/naver-news-latest-official-shadow-slot-v1.test.mts
+
+      - name: Activation approval/authorization regressions
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-news-issue-point-activation-approval-v1.test.mts
+          tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Real Product read/Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Product boundary regression
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-variable-boundary-v1.test.mts
+          tests/product-evidence-boundary-v1.test.mts
+          tests/intelligence-variable-confidence-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact approval diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check c3ce0385645c789b721f61f688e2f825d6636ef9...d1d7e6c1f6546299ec29946db071a97249f5b7ce
+          git diff --name-only c3ce0385645c789b721f61f688e2f825d6636ef9...d1d7e6c1f6546299ec29946db071a97249f5b7ce > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointPublicRouteCutoverApproval.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-public-route-cutover-approval-v1.test.mts" /tmp/files
