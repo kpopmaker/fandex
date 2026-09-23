@@ -33,6 +33,8 @@ export type FandexMomentumVerifierOperatorAuthorizationRecord = Readonly<{
   targetTeamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs';
   targetProjectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v';
   upstreamV176Digest: string;
+  upstreamV172Digest: string;
+  credentialHandleId: string;
 }>;
 
 export type FandexMomentumVerifierOperatorOpaqueCredentialHandle = Readonly<{
@@ -71,6 +73,7 @@ export type FandexMomentumVerifierOperatorCapabilityReceipt = Readonly<{
   }>;
   credentialHandleId: string;
   upstreamV176Digest: string;
+  upstreamV172Digest: string;
 }>;
 
 export type FandexMomentumVerifierOperatorResponse = Readonly<{
@@ -78,6 +81,7 @@ export type FandexMomentumVerifierOperatorResponse = Readonly<{
   submittedAt: string;
   submittedBy: string;
   upstreamV176Digest: string;
+  upstreamV172Digest: string;
   provisioningAuthorization:
     FandexMomentumVerifierOperatorAuthorizationRecord;
   credentialHandle: FandexMomentumVerifierOperatorOpaqueCredentialHandle;
@@ -167,6 +171,8 @@ function validateAuthorization(
   kind: FandexMomentumVerifierOperatorAuthorizationRecord['kind'],
   evaluatedAt: string,
   upstreamV176Digest: string,
+  upstreamV172Digest: string,
+  credentialHandleId: string,
   blockers: string[],
 ): 'valid' | 'expired' | 'revoked' | 'invalid' {
   if (
@@ -181,6 +187,8 @@ function validateAuthorization(
     || record.targetTeamId !== 'team_OrRPxuBxMwCYU3kk0r76AfOs'
     || record.targetProjectId !== 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v'
     || record.upstreamV176Digest !== upstreamV176Digest
+    || record.upstreamV172Digest !== upstreamV172Digest
+    || record.credentialHandleId !== credentialHandleId
   ) {
     blockers.push(`${kind}-authorization-invalid`);
     return 'invalid';
@@ -214,6 +222,7 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
     evaluatedAt: string;
     requestIntent: 'generic-continuation' | 'operator-response-intake';
     upstreamV176Digest: string;
+    upstreamV172Digest: string;
     response: FandexMomentumVerifierOperatorResponse | null;
   }>,
 ): FandexMomentumVerifierOperatorResponseIntakeResult {
@@ -224,6 +233,9 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
   }
   if (!validDigest(input.upstreamV176Digest)) {
     blockers.push('upstream-v176-digest-invalid');
+  }
+  if (!validDigest(input.upstreamV172Digest)) {
+    blockers.push('upstream-v172-digest-invalid');
   }
 
   const response = input.response;
@@ -245,6 +257,7 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
       || !exactIso(response.submittedAt)
       || !nonEmptyIdentity(response.submittedBy)
       || response.upstreamV176Digest !== input.upstreamV176Digest
+      || response.upstreamV172Digest !== input.upstreamV172Digest
     ) {
       blockers.push('operator-response-binding-invalid');
     }
@@ -258,6 +271,8 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
       'read-channel-provisioning',
       input.evaluatedAt,
       input.upstreamV176Digest,
+      input.upstreamV172Digest,
+      response.credentialHandle.handleId,
       blockers,
     );
     const readExecutionState = validateAuthorization(
@@ -265,6 +280,8 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
       'inventory-read-execution',
       input.evaluatedAt,
       input.upstreamV176Digest,
+      input.upstreamV172Digest,
+      response.credentialHandle.handleId,
       blockers,
     );
 
@@ -320,6 +337,7 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
       || capability.request.customEnvironmentSlug !== null
       || capability.credentialHandleId !== handle.handleId
       || capability.upstreamV176Digest !== input.upstreamV176Digest
+      || capability.upstreamV172Digest !== input.upstreamV172Digest
     ) {
       blockers.push('operator-response-capability-receipt-invalid');
     }
@@ -360,6 +378,7 @@ export function evaluateFandexMomentumVerifierOperatorResponseIntake(
     intakeReady,
     readExecutionAuthorizedByIntake: false as const,
     upstreamV176Digest: input.upstreamV176Digest,
+    upstreamV172Digest: input.upstreamV172Digest,
     responseId: response?.responseId ?? null,
     normalized: Object.freeze({
       provisioningAuthorizationId,
