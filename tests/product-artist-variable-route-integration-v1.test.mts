@@ -63,3 +63,19 @@ test('Real Production target exposes Stored Evidence verification without legacy
     /\/artists\/\$\{artistId\}\/evidence\/\$\{slot\.jobId\}/,
   );
 });
+
+
+test('IU Real Product route remains reachable without inventing a synthetic chart profile', () => {
+  assert.match(
+    artistPageSource,
+    /if \(!profile && artistId === 'iu'\)/,
+  );
+  assert.match(
+    artistPageSource,
+    /canonical artist chart profile과 분리된 Real Product 진입점/,
+  );
+  assert.match(
+    artistPageSource,
+    /variableId === 'newsIssuePoint'[\s\S]*getNaverNewsIssuePointPublicRouteVariable\(\)/,
+  );
+});
