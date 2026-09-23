@@ -1,0 +1,30 @@
+name: temp-v180-validation
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate-v180:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: v180 tests
+        run: npx tsx --test tests/fandex-momentum-verifier-external-execution-channel-resolution-v180.test.mts
+      - name: v179 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-external-inventory-execution-response-intake-v179.test.mts
+      - name: v177 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-operator-response-intake-v177.test.mts
+      - name: typecheck
+        run: npm run typecheck
+      - name: diff check
+        run: git diff --check origin/main...HEAD
