@@ -137,3 +137,42 @@ Remaining identity-metadata-required artists:
 - bibi
 - day6
 - qwer
+
+
+## Full-universe identity completion validation
+
+The remaining 18 non-realtime artists received validation-branch-only canonical Korean aliases and explicit NAVER queries.
+
+Post-update static audit:
+
+- total artists: 100
+- canonical Korean alias ready: 100
+- explicit NAVER query ready: 100
+- full identity/query ready: 100
+- blocked: 0
+
+A full-universe regression test was added:
+
+- `tests/artist-expansion-full-universe-generic-naver-v1.test.mts`
+
+It iterates every artist in `artistUniverseV4` and exercises:
+
+canonical artist identity
+→ NAVER observation candidate
+→ relevance verification
+→ canonical observation promotion
+→ canonical artist read adapter
+
+Expected invariant for every artist:
+
+- accepted relevance from canonical Korean alias evidence
+- exact canonical artist ownership preserved
+- provider = `naver-news`
+- no fabricated variable binding
+- no fabricated metric binding
+
+Execution note:
+
+A local checkout/test run was attempted, but this execution environment could not resolve `github.com`; therefore no local runtime PASS is claimed here. The repository-side validation artifacts are committed, and runtime evidence remains a separate validation step.
+
+Production integration remains unauthorized in this validation branch.
