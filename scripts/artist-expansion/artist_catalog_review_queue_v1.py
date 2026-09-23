@@ -39,7 +39,7 @@ def identity_components(display_artist: str) -> list[str]:
 def composite_components(display_artist: str) -> list[str]:
     value = normalize_spaces(display_artist)
     outside = re.sub(r"\([^()]+\)", lambda m: f" {m.group(0)} ", value)
-    parts = re.split(r"\s*[&＋+]\s*|\s+[xX×]\s+|\s*/\s*", outside)
+    parts = re.split(r"\s*[&＋+]\s*|\s+[xX×]\s+", outside)
     result = []
     seen = set()
     for part in parts:
@@ -149,8 +149,9 @@ def build_decision_index(decision_payload: dict[str, Any] | None):
         if not isinstance(row, dict):
             continue
         display_artist = normalize_spaces(row.get("displayArtist", ""))
-        if display_artist:
-            result[display_artist] = row
+        key = compact_identity(display_artist)
+        if key:
+            result[key] = row
     return result
 
 
@@ -176,7 +177,7 @@ def build_review_queue(
         counts[category] = counts.get(category, 0) + 1
 
         relation = relation_hints(display_artist, identity_payload)
-        decision = decision_index.get(display_artist)
+        decision = decision_index.get(compact_identity(display_artist))
 
         components = []
         if category == "composite_credit_review":
