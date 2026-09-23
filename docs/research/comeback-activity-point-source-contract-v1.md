@@ -87,8 +87,9 @@ Authoritative entity boundary:
 Source semantics:
 
 - `release.date` = date the specific release was first made available for that release entity/territory.
-- `release-group.first-release-date` = earliest known release date across releases in the group.
-- both can be partial dates in MusicBrainz and therefore must preserve precision.
+- `release-group.first-release-date` = earliest known release date across releases in the group and is retained as release-family evidence, but it is not by itself sufficient to confirm an observed v1 release event.
+- a v1 `confirmed_release` requires at least one concrete MusicBrainz release with `status=Official` and a usable release date.
+- both release-group and release dates can be partial dates in MusicBrainz and therefore must preserve precision.
 
 Event construction:
 
@@ -100,7 +101,8 @@ Event construction:
   - canonical event key uses release-group MBID when representing the first public occurrence of the release family
   - evidence may include one or more release MBIDs that establish that date
 - occurredAt:
-  - earliest supported release occurrence represented by MusicBrainz release-group first-release-date
+  - earliest usable date among concrete `Official` release entities supporting the release group
+  - `release-group.first-release-date` remains comparison/provenance evidence and must not silently override the concrete Official-release evidence
   - preserve `YYYY`, `YYYY-MM`, or `YYYY-MM-DD` precision; never fabricate missing month/day
 - sourcePublishedAt: null unless the provider exposes a semantically valid source-publication timestamp distinct from release occurrence
 - collectedAt: ingestion observation timestamp
@@ -113,8 +115,9 @@ Required evidence fields:
 - primary type
 - secondary types when present
 - first-release-date
-- supporting release MBID(s) when available
-- supporting release date/territory/status when available
+- at least one supporting Official release MBID for an observed event
+- supporting release date/territory/status
+- release-group first-release-date retained separately for provenance/comparison
 - retrieval URL or canonical evidence reference
 - raw payload digest / revision identifier if available
 
@@ -123,7 +126,8 @@ Exclusions / blockers:
 - artist identity unresolved or ambiguous
 - only a recording date is available
 - only copyright/import metadata is available
-- no usable release date precision
+- no usable Official release date precision
+- no concrete Official release supports the release-group occurrence
 - release status/evidence indicates a planned future release rather than an observed release
 - conflicting dates that cannot be resolved without provenance loss
 
@@ -283,3 +287,7 @@ Build a small IU Real-evidence fixture/event stream from both providers and test
   https://developers.google.com/youtube/v3/docs/videos
 - YouTube playlistItems:
   https://developers.google.com/youtube/v3/docs/playlistItems
+
+## 11. Collector hardening note
+
+The research collector must follow MusicBrainz Web Service rate limiting. Requests are serialized with at least a 1,000 ms interval between calls, use a meaningful User-Agent, page by the actual number of returned entities, and fail closed if provider pagination counts change during one collection pass.
