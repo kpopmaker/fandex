@@ -202,7 +202,7 @@ INSERT INTO fandex.activity_exposure_provider_observations (
   repeat('d',64), 'event_emitted', 'collection-1'
 );
 
-DO $
+DO $$
 BEGIN
   BEGIN
     INSERT INTO fandex.activity_exposure_raw_payloads (
