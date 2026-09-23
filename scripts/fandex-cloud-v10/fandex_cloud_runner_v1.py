@@ -19,20 +19,6 @@ LASTFM_CLOUD_URL = (
 LASTFM_LOCAL = Path("lastfm_artist_interest_history_v1.csv")
 CLOUD_RUN_LATEST = Path("fandex_cloud_run_latest.json")
 
-EXPECTED_ARTISTS = {
-    "아이유",
-    "에스파",
-    "에이티즈",
-    "보이넥스트도어",
-    "아이브",
-    "르세라핌",
-    "뉴진스",
-    "세븐틴",
-    "스트레이키즈",
-    "투모로우바이투게더",
-}
-
-
 def norm(value):
     return "" if value is None else str(value).strip()
 
@@ -81,12 +67,19 @@ def bootstrap_lastfm_history():
             norm(row.get("artist"))
         )
 
-    for snapshot_date in sorted(counts):
+    snapshot_dates = sorted(counts)
+    expected_artists = by_date_artists[snapshot_dates[0]]
+    expected_count = len(expected_artists)
+    if expected_count == 0:
+        raise RuntimeError("Last.fm cloud history has no artists")
+
+    for snapshot_date in snapshot_dates:
         artists = by_date_artists[snapshot_date]
-        if counts[snapshot_date] != 10 or artists != EXPECTED_ARTISTS:
+        if counts[snapshot_date] != expected_count or artists != expected_artists:
             raise RuntimeError(
                 f"Incomplete Last.fm cloud snapshot: {snapshot_date} "
-                f"rows={counts[snapshot_date]} artists={len(artists)}"
+                f"rows={counts[snapshot_date]}/{expected_count} "
+                f"artists={len(artists)}"
             )
 
     output_rows = []
@@ -185,8 +178,8 @@ def main():
     bootstrap_lastfm_history()
 
     steps = [
-        (1, "Discover Melon + Genie current presence for all 10 artists", "music_chart_discover_artist_candidates_v2.py", []),
-        (2, "Discover Bugs current presence for all 10 artists", "music_chart_discover_bugs_all_targets_v1.py", []),
+        (1, "Discover Melon + Genie current presence for configured artists", "music_chart_discover_artist_candidates_v2.py", []),
+        (2, "Discover Bugs current presence for configured artists", "music_chart_discover_bugs_all_targets_v1.py", []),
         (3, "Update Music chart check history", "music_chart_check_history_v1.py", []),
         (4, "Build Music v2 current-presence preview", "music_chart_current_presence_preview_v1.py", []),
         (5, "Publish Music v2 current-presence snapshot", "music_chart_current_presence_publish_v2.py", []),
