@@ -1,0 +1,33 @@
+name: PR127 momentum v181 external capability resume gate
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierExternalCapabilityResumeGateResearch.ts'
+      - 'tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts'
+      - '.github/workflows/pr127-momentum-v181-external-capability-resume-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v181 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-execution-channel-resolution-v180.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-inventory-execution-response-intake-v179.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-evidence-v164.test.mts
+          npm run typecheck
+          git diff --check
