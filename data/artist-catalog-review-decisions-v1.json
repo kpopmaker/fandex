@@ -217,6 +217,86 @@
           "note": "Provider artist page identifies MAKTUB as a male solo artist."
         }
       ]
+    },
+    {
+      "displayArtist": "싸이 (Psy)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/1",
+          "note": "Official P NATION artist page identifies PSY as its own artist identity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "가호 (Gaho)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Gaho Official",
+          "url": "https://gaho-official.bitfan.id/contents/menu/6349",
+          "note": "Official Gaho site identifies Gaho as a singer-songwriter and PLT/Planetarium Records artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "릴러말즈 (Leellamarz)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Ambition Musik",
+          "url": "https://www.youtube.com/watch?v=c5IauUwFTOY",
+          "note": "Verified Ambition Musik channel publishes Leellamarz releases and official artist links."
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=84421099",
+          "note": "Provider album page identifies Leellamarz and AMBITION MUSIK as the planning label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "멜로망스 (MeloMance)",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "independent_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "KBS WORLD",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=240195&id=&lang=j&menu_cate=artist&page=2",
+          "note": "KBS artist profile identifies MeloMance as a male duo and lists Kim Min-seok and Jeong Dong-hwan."
+        }
+      ]
+    },
+    {
+      "displayArtist": "숀 (SHAUN)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Warner Music Japan",
+          "url": "https://wmg.jp/shaun",
+          "note": "Official Warner Music artist profile identifies SHAUN as a Korean singer-songwriter, producer and DJ."
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80451669",
+          "note": "Provider artist page identifies SHAUN as a Korean male solo artist."
+        }
+      ]
     }
   ]
 }
