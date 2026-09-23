@@ -34,3 +34,13 @@ jobs:
         run: python -m pip install --disable-pip-version-check beautifulsoup4
       - name: Catalog intake regression
         run: python tests/artist-catalog-intake-from-chart-v1.py
+      - name: Live chart catalog discovery
+        run: python scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py
+      - name: Upload catalog discovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-catalog-discovery-v1
+          path: |
+            music_chart_artist_candidates_v2_raw_latest.json
+            MUSIC_CHART_ARTIST_CANDIDATES_V2_REPORT_latest.txt
+          if-no-files-found: error
