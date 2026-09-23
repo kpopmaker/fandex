@@ -24,6 +24,10 @@ publish = load_module(
     "music_chart_current_presence_publish_v2",
     "scripts/fandex-cloud-migration/source/music_chart_current_presence_publish_v2.py",
 )
+discover = load_module(
+    "music_chart_discover_artist_candidates_v2",
+    "scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py",
+)
 
 
 def main():
@@ -31,6 +35,34 @@ def main():
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
+
+        target_config = tmp_path / "music_targets.json"
+        target_config.write_text(
+            json.dumps(
+                {
+                    "artists": [
+                        {
+                            "artist": artist,
+                            "aliases": [artist, f"alias-{i:02d}"],
+                        }
+                        for i, artist in enumerate(artists)
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        loaded_targets = discover.load_target_artists(target_config)
+        assert len(loaded_targets) == 11
+
+        original_targets = discover.TARGET_ARTISTS
+        discover.TARGET_ARTISTS = loaded_targets
+        try:
+            assert discover.find_target_artist("alias-10 featured track") == (
+                "artist-10",
+                "alias-10",
+            )
+        finally:
+            discover.TARGET_ARTISTS = original_targets
 
         mg_json = tmp_path / "mg.json"
         bugs_json = tmp_path / "bugs.json"
@@ -149,7 +181,7 @@ def main():
         assert len(payload["ranking"]) == 11
         assert {row["artist"] for row in payload["ranking"]} == set(artists)
 
-    print("PASS: Music preview/publish supports 11-artist cohort")
+    print("PASS: Music discovery + preview/publish supports 11-artist cohort")
 
 
 if __name__ == "__main__":
