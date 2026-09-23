@@ -1,0 +1,106 @@
+{
+  "contractVersion": "v177_fandex_momentum_verifier_operator_response_intake_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-23T01:17:00.000Z",
+  "upstream": {
+    "v172Digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a",
+    "v176Digest": "d66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5"
+  },
+  "currentOperatorResponse": {
+    "present": false,
+    "responseId": null,
+    "provisioningAuthorizationPresent": false,
+    "opaqueCredentialHandlePresent": false,
+    "readExecutionAuthorizationPresent": false,
+    "capabilityReceiptPresent": false,
+    "genericContinuationCountsAsOperatorResponse": false
+  },
+  "currentResult": {
+    "contractVersion": "v177_fandex_momentum_verifier_operator_response_intake_research_v1",
+    "state": "operator-response-missing",
+    "intakeReady": false,
+    "readExecutionAuthorizedByIntake": false,
+    "upstreamV176Digest": "d66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5",
+    "upstreamV172Digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a",
+    "responseId": null,
+    "normalized": {
+      "provisioningAuthorizationId": null,
+      "credentialHandleId": null,
+      "readExecutionAuthorizationId": null,
+      "capabilityReceiptId": null,
+      "capabilityCanExecuteExactRead": false
+    },
+    "blockers": [
+      "operator-response-missing"
+    ],
+    "digest": "3478a5aceced9142b647c8b43546edc9fd3b4f1c48793df9e91f462b1aa06671"
+  },
+  "intakeContract": {
+    "exactTeamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "exactProjectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "exactProvider": "vercel",
+    "exactCredentialKind": "opaque-bearer-credential-handle",
+    "exactReadMethod": "GET",
+    "exactReadEndpoint": "/v10/projects/{idOrName}/env",
+    "decrypt": "false",
+    "gitBranch": null,
+    "customEnvironmentId": null,
+    "customEnvironmentSlug": null,
+    "maximumProviderCalls": 1,
+    "maximumInventoryReads": 1,
+    "rawCredentialMaterialForbidden": true,
+    "authorizationValidityAndRevocationRequired": true,
+    "exactV172BindingRequired": true,
+    "exactV176BindingRequired": true,
+    "exactCredentialHandleBindingRequired": true,
+    "capabilityReceiptRequired": true,
+    "genericContinuationIsNotAuthorization": true
+  },
+  "validation": {
+    "runId": 35805558206,
+    "status": "PASS",
+    "v177TestsPassed": true,
+    "v176RegressionPassed": true,
+    "v175RegressionPassed": true,
+    "v173RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "effects": {
+    "authorizationWrites": 0,
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
