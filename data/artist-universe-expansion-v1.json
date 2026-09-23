@@ -64,6 +64,115 @@
           "url": "https://ibighit.com/legacy/cortis/color-outside-the-lines-ko.html"
         }
       ]
+    },
+    {
+      "id": "psy",
+      "ticker": "PSY",
+      "name": "PSY",
+      "agency": "P NATION",
+      "entityType": "solo",
+      "naverNewsQuery": "싸이 PSY",
+      "koreanAliases": [
+        "싸이"
+      ],
+      "englishAliases": [
+        "PSY",
+        "Psy"
+      ],
+      "identityEvidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/1"
+        }
+      ]
+    },
+    {
+      "id": "ailee",
+      "ticker": "AILEE",
+      "name": "Ailee",
+      "agency": "Pop Music",
+      "entityType": "solo",
+      "naverNewsQuery": "에일리 Ailee",
+      "koreanAliases": [
+        "에일리"
+      ],
+      "englishAliases": [
+        "Ailee",
+        "AILEE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=629831"
+        }
+      ]
+    },
+    {
+      "id": "younha",
+      "ticker": "YOUNHA",
+      "name": "YOUNHA",
+      "agency": "C9 Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "윤하 YOUNHA",
+      "koreanAliases": [
+        "윤하",
+        "고윤하"
+      ],
+      "englishAliases": [
+        "YOUNHA"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/artist/album.htm?artistId=203912"
+        }
+      ]
+    },
+    {
+      "id": "buzz",
+      "ticker": "BUZZ",
+      "name": "Buzz",
+      "agency": "inNextTrend",
+      "entityType": "group",
+      "naverNewsQuery": "버즈 Buzz 밴드",
+      "koreanAliases": [
+        "버즈"
+      ],
+      "englishAliases": [
+        "Buzz",
+        "BUZZ"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=160091"
+        }
+      ]
+    },
+    {
+      "id": "seeya",
+      "ticker": "SEEYA",
+      "name": "SeeYa",
+      "agency": "SeeYa Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "씨야 SeeYa",
+      "koreanAliases": [
+        "씨야"
+      ],
+      "englishAliases": [
+        "SeeYa",
+        "SEEYA"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80015692"
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=87625110"
+        }
+      ]
     }
   ]
 }
