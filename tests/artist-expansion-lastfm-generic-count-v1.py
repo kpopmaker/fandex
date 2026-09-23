@@ -23,6 +23,10 @@ rolling = load_module(
     "lastfm_global_interest_rolling_v1",
     "scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py",
 )
+sync = load_module(
+    "lastfm_sync_cloud_history_v1_1",
+    "scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py",
+)
 
 
 def main():
@@ -87,7 +91,24 @@ def main():
         dates = rolling.validate_history(rows)
         assert dates == ["2026-09-22", "2026-09-23"]
 
-    print("PASS: Last.fm generic artist-count regression supports 11 artists")
+        sync_rows = [
+            {
+                "snapshotDate": row["snapshotDate"],
+                "artist": row["artist"],
+            }
+            for row in rows
+        ]
+        sync_dates = sync.validate_cloud_dates(sync_rows)
+        assert sync_dates == ["2026-09-22", "2026-09-23"]
+
+        bad_sync_rows = sync_rows[:-1]
+        try:
+            sync.validate_cloud_dates(bad_sync_rows)
+            raise AssertionError("expected incomplete cohort rejection")
+        except RuntimeError as exc:
+            assert "Incomplete Cloud snapshot" in str(exc)
+
+    print("PASS: Last.fm generic artist-count regression supports 11 artists including cloud sync")
 
 
 if __name__ == "__main__":
