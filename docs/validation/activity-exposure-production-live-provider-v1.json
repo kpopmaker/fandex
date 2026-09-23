@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "activity-exposure-production-live-provider-v1",
+  "validationRunId": 35894200088,
+  "candidateHead": "fe0e7be0886c4264d1ad67f0916a51bd73ecb68f",
+  "productionCollectorParity": "pass",
+  "musicbrainz": {
+    "state": "bounded_partial",
+    "providerReleaseGroupCount": 58,
+    "enumeratedReleaseGroupCount": 58,
+    "eventCount": 57,
+    "missingSourceDataReleaseGroupCount": 1,
+    "missingSourceDataReleaseGroupIds": [
+      "1299e16d-133b-47b0-b991-36cf11eff7d7"
+    ],
+    "identityUnresolvedReleaseGroupCount": 0,
+    "collaborationEventCount": 12,
+    "collaborationCreditViolationCount": 0
+  },
+  "youtube": {
+    "state": "credential_blocked",
+    "credentialAvailable": false
+  },
+  "productReadModel": {
+    "status": "ok",
+    "eventCount": 57,
+    "numericFactPresent": false,
+    "youtubeCoverageState": "provider_unavailable"
+  },
+  "liveProviderCoverageGate": "blocked_by_youtube_credential",
+  "productionReady": false
+}
