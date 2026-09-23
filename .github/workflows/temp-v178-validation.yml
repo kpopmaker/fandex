@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -27,6 +27,4 @@ jobs:
       - name: typecheck
         run: npm run typecheck
       - name: diff check
-        run: |
-          git fetch origin main --depth=1
-          git diff --check origin/main...HEAD
+        run: git diff --check origin/main...HEAD
