@@ -532,6 +532,76 @@
           "note": "Official Fantagio profile identifies LEECHANGSUB, BTOB membership, and solo discography."
         }
       ]
+    },
+    {
+      "displayArtist": "한로로",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=82578300",
+          "note": "Debut release credits HANRORO and planning company authentic."
+        }
+      ]
+    },
+    {
+      "displayArtist": "성시경",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "SUNG SI KYUNG Korea Official Fanclub",
+          "url": "https://ssk-purpleocean.kr/profiles/",
+          "note": "Official profile identifies SUNG SI KYUNG and SK Jaewon as agency, with 2026 discography."
+        }
+      ]
+    },
+    {
+      "displayArtist": "최유리",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Nave",
+          "url": "https://navywave.kr/artist",
+          "note": "Official agency artist page identifies Choi Yu Ree and active releases/concerts."
+        }
+      ]
+    },
+    {
+      "displayArtist": "카더가든",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Melon Ticket",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=735506",
+          "note": "Provider artist profile identifies Car, the garden as Korean male solo under CAM WITH US."
+        }
+      ]
+    },
+    {
+      "displayArtist": "황가람",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80145846",
+          "note": "Provider profile identifies Hwang Garam as Korean male solo under Double X Entertainment."
+        }
+      ]
     }
   ]
 }
