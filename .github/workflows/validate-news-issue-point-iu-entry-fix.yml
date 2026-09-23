@@ -1,0 +1,27 @@
+name: Validate IU newsIssuePoint route fix
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-public-route-iu-entry-fix-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run security:audit:production
+      - run: npx tsx --test tests/product-artist-variable-route-integration-v1.test.mts
+      - run: npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
