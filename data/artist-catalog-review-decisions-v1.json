@@ -873,6 +873,93 @@
           "note": "Agency statement established BOL4's continuing one-person system under Ahn Ji-young."
         }
       ]
+    },
+    {
+      "displayArtist": "WOODZ",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "EDAM Entertainment",
+          "url": "https://www.madeedam.com/us/board/view.php?bdId=usnotice&sno=135",
+          "note": "2026 EDAM notice identifies WOODZ world tour and official artist merchandise."
+        },
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=2086047",
+          "note": "Current provider profile lists WOODZ as a male solo artist under EDAM Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이찬혁",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "akmu"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/en/artists/lee-chanhyuk/profile",
+          "note": "Official YG profile identifies LEE CHANHYUK as an artist."
+        },
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/en/artists/lee-chanhyuk/discography/1636",
+          "note": "Official discography identifies LEE CHANHYUK's solo full album EROS."
+        }
+      ]
+    },
+    {
+      "displayArtist": "정승환",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/JungSeungHwan",
+          "note": "Official Antenna artist profile identifies Jung Seung Hwan and active 2026 releases/events."
+        }
+      ]
+    },
+    {
+      "displayArtist": "김나영",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/TjpWYKg3RKgWUf8y",
+          "note": "Current profile identifies singer Kim Nayoung under Neverland Entertainment with 2026 performances."
+        }
+      ]
+    },
+    {
+      "displayArtist": "조정석",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "actor_and_independent_recording_artist",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JAM Entertainment",
+          "url": "https://www.jament.co.kr/",
+          "note": "Official agency site lists Cho Jung Seok as an artist and publishes his 2026 digital single release."
+        },
+        {
+          "source": "SBS",
+          "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008561697",
+          "note": "2026 report cites JAM Entertainment and identifies Jo Jung-suk as actor and singer releasing new music."
+        }
+      ]
     }
   ]
 }
