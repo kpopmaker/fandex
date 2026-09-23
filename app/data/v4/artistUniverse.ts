@@ -346,10 +346,39 @@ const baselineArtistUniverseV4: ArtistV4[] = [
   createArtist({ id: 'wjsn', ticker: 'WJSN', name: 'WJSN', agency: 'Starship Entertainment', debutDate: '2016-02-25', fandomName: 'Ujung', generation: '3rd gen', aliases: ['Cosmic Girls'], naverNewsQuery: '우주소녀 WJSN Cosmic Girls', koreanAliases: ['우주소녀'], englishAliases: ['WJSN', 'Cosmic Girls'], keywords: ['Seola', 'Bona', 'Exy', 'Starship'], disambiguationKeywords: ['Starship Entertainment'], markets: ['KR', 'CN', 'GLOBAL'], tier: 'standard', priorityScore: 71 }),
 ];
 
+type ExpansionIdentityEvidence = {
+  source: string;
+  url: string;
+};
+
+type ExpansionArtistSeedInput = ArtistSeedInput & {
+  identityEvidence: ExpansionIdentityEvidence[];
+};
+
 type ExpansionSeedFile = {
   version: string;
-  artists: ArtistSeedInput[];
+  artists: ExpansionArtistSeedInput[];
 };
+
+function validateExpansionIdentityEvidence(
+  expansion: readonly ExpansionArtistSeedInput[],
+) {
+  for (const seed of expansion) {
+    const evidence = seed.identityEvidence ?? [];
+    if (!evidence.length) {
+      throw new Error(`artist_universe_expansion_missing_identity_evidence:${seed.id}`);
+    }
+
+    for (const item of evidence) {
+      if (!item.source?.trim()) {
+        throw new Error(`artist_universe_expansion_missing_evidence_source:${seed.id}`);
+      }
+      if (!item.url?.trim().startsWith('http')) {
+        throw new Error(`artist_universe_expansion_invalid_evidence_url:${seed.id}`);
+      }
+    }
+  }
+}
 
 function validateExpansionSeeds(
   baseline: readonly ArtistV4[],
@@ -395,6 +424,7 @@ export function buildExpandedArtistUniverseV4(
 }
 
 const typedExpansionSeed = expansionSeed as ExpansionSeedFile;
+validateExpansionIdentityEvidence(typedExpansionSeed.artists);
 
 export const artistUniverseV4: ArtistV4[] = buildExpandedArtistUniverseV4(
   baselineArtistUniverseV4,
