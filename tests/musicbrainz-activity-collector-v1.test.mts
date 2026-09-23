@@ -311,3 +311,60 @@ test('invalid artist MBID is rejected before fetch', async () => {
   );
   assert.equal(calls, 0);
 });
+
+
+test('collaboration artist credits are preserved in normalized release event', async () => {
+  const collaboratorId = '11111111-1111-4111-8111-111111111111';
+  const result = await createMusicBrainzActivityResearchCollector({
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse(releaseGroupPage(0, [{
+          id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+          title: 'Joint Release',
+          'first-release-date': '2024-02-20',
+          'primary-type': 'Single',
+          'secondary-types': [],
+          'artist-credit': [
+            {
+              name: 'IU',
+              artist: { id: iuMbid, name: 'IU', 'sort-name': 'IU' },
+            },
+            {
+              name: 'Collaborator',
+              artist: {
+                id: collaboratorId,
+                name: 'Collaborator',
+                'sort-name': 'Collaborator',
+              },
+            },
+          ],
+        }]));
+      }
+      return jsonResponse(releasePage(0, [
+        officialRelease({
+          id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+          title: 'Joint Release',
+          date: '2024-02-20',
+        }),
+      ]));
+    },
+    sleep: async () => {},
+    now: () => new Date(collectedAt),
+  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
+
+  assert.equal(result.events.length, 1);
+  assert.equal(result.events[0].participationScope, 'collaboration');
+  assert.deepEqual(result.events[0].providerArtistCredits, [
+    {
+      providerArtistId: iuMbid,
+      creditedName: 'IU',
+      canonicalProviderName: 'IU',
+    },
+    {
+      providerArtistId: collaboratorId,
+      creditedName: 'Collaborator',
+      canonicalProviderName: 'Collaborator',
+    },
+  ]);
+});
