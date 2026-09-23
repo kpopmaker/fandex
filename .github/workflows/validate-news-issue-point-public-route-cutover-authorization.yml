@@ -1,0 +1,71 @@
+name: validate-news-issue-point-public-route-cutover-authorization
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-public-route-cutover-authorization-17be06
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "17be06a86eb1f89c05d8495fbfe8f7085bd4ea8e"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Public-route cutover authorization contract
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+
+      - name: Activation approval regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-v1.test.mts
+
+      - name: Activation authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-authorization-v1.test.mts
+
+      - name: Real Product read/Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Product boundary regression
+        run: npx tsx --conditions=react-server --test tests/product-variable-boundary-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact contract diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 91d310a25bc43ff32de741012f6649c95b827e88...17be06a86eb1f89c05d8495fbfe8f7085bd4ea8e
+          git diff --name-only 91d310a25bc43ff32de741012f6649c95b827e88...17be06a86eb1f89c05d8495fbfe8f7085bd4ea8e > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/product/activation/newsIssuePointPublicRouteCutoverAuthorization.ts" /tmp/files
+          grep -Fx "tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts" /tmp/files
