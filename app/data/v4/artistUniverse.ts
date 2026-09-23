@@ -4,6 +4,7 @@ import type {
   ArtistV4,
   RealDataSource,
 } from './types';
+import expansionSeed from '../../../data/artist-universe-expansion-v1.json';
 
 const defaultSources: RealDataSource[] = ['naver_news', 'youtube', 'official'];
 
@@ -88,7 +89,7 @@ function createArtist(input: ArtistSeedInput): ArtistV4 {
   };
 }
 
-export const artistUniverseV4: ArtistV4[] = [
+const baselineArtistUniverseV4: ArtistV4[] = [
   createArtist({
     id: 'aespa',
     ticker: 'AESPA',
@@ -345,7 +346,68 @@ export const artistUniverseV4: ArtistV4[] = [
   createArtist({ id: 'wjsn', ticker: 'WJSN', name: 'WJSN', agency: 'Starship Entertainment', debutDate: '2016-02-25', fandomName: 'Ujung', generation: '3rd gen', aliases: ['Cosmic Girls'], naverNewsQuery: '우주소녀 WJSN Cosmic Girls', koreanAliases: ['우주소녀'], englishAliases: ['WJSN', 'Cosmic Girls'], keywords: ['Seola', 'Bona', 'Exy', 'Starship'], disambiguationKeywords: ['Starship Entertainment'], markets: ['KR', 'CN', 'GLOBAL'], tier: 'standard', priorityScore: 71 }),
 ];
 
-export const ARTIST_UNIVERSE_V4_TARGET_COUNT = 100;
+type ExpansionSeedFile = {
+  version: string;
+  artists: ArtistSeedInput[];
+};
+
+function validateExpansionSeeds(
+  baseline: readonly ArtistV4[],
+  expansion: readonly ArtistSeedInput[],
+) {
+  const ids = new Set(baseline.map((artist) => artist.id));
+  const tickers = new Set(baseline.map((artist) => artist.ticker.toLowerCase()));
+
+  for (const seed of expansion) {
+    if (!seed.id.trim()) throw new Error('artist_universe_expansion_missing_id');
+    if (!seed.ticker.trim()) throw new Error(`artist_universe_expansion_missing_ticker:${seed.id}`);
+    if (!seed.name.trim()) throw new Error(`artist_universe_expansion_missing_name:${seed.id}`);
+    if (!seed.agency.trim()) throw new Error(`artist_universe_expansion_missing_agency:${seed.id}`);
+    if (!(seed.koreanAliases?.some((alias) => alias.trim()))) {
+      throw new Error(`artist_universe_expansion_missing_korean_alias:${seed.id}`);
+    }
+    if (!(seed.englishAliases?.some((alias) => alias.trim()))) {
+      throw new Error(`artist_universe_expansion_missing_english_alias:${seed.id}`);
+    }
+    if (!seed.naverNewsQuery?.trim()) {
+      throw new Error(`artist_universe_expansion_missing_naver_query:${seed.id}`);
+    }
+
+    const tickerKey = seed.ticker.toLowerCase();
+    if (ids.has(seed.id)) throw new Error(`artist_universe_expansion_duplicate_id:${seed.id}`);
+    if (tickers.has(tickerKey)) {
+      throw new Error(`artist_universe_expansion_duplicate_ticker:${seed.ticker}`);
+    }
+    ids.add(seed.id);
+    tickers.add(tickerKey);
+  }
+}
+
+export function buildExpandedArtistUniverseV4(
+  baseline: readonly ArtistV4[],
+  expansion: readonly ArtistSeedInput[],
+) {
+  validateExpansionSeeds(baseline, expansion);
+  return [
+    ...baseline,
+    ...expansion.map((seed) => createArtist(seed)),
+  ];
+}
+
+const typedExpansionSeed = expansionSeed as ExpansionSeedFile;
+
+export const artistUniverseV4: ArtistV4[] = buildExpandedArtistUniverseV4(
+  baselineArtistUniverseV4,
+  typedExpansionSeed.artists,
+);
+
+export const ARTIST_UNIVERSE_V4_BASELINE_COUNT = baselineArtistUniverseV4.length;
+
+/**
+ * @deprecated Use ARTIST_UNIVERSE_V4_BASELINE_COUNT for the historical baseline.
+ * The active universe is intentionally unbounded and may grow through expansion seeds.
+ */
+export const ARTIST_UNIVERSE_V4_TARGET_COUNT = ARTIST_UNIVERSE_V4_BASELINE_COUNT;
 
 export function getArtistUniverseV4Summary() {
   return {
