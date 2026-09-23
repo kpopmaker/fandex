@@ -21,10 +21,15 @@ export type ProductVariableDefinition = Readonly<{
   displayName: string;
   description: string;
   relatedSourceMetricKeys: readonly FandexVariableKey[];
-  evidenceRelation: Readonly<{
-    kind: 'legacy-issue-signal-key';
-    sourceKey: ArtistStockVariableKey;
-  }>;
+  evidenceRelation:
+    | Readonly<{
+        kind: 'legacy-issue-signal-key';
+        sourceKey: ArtistStockVariableKey;
+      }>
+    | Readonly<{
+        kind: 'stored-evidence-job-trace';
+        sourceMetric: 'naverNewsShadowFirstSeenActivity';
+      }>;
 }>;
 
 export type ProductVariableSeriesPoint = Readonly<{
@@ -128,7 +133,10 @@ export type ProductVariableDataIssue =
       reason:
         | 'runtime-read-failed'
         | 'selector-data-issue'
-        | 'methodology-candidate-mismatch';
+        | 'methodology-candidate-mismatch'
+        | 'public-route-cutover-not-authorized'
+        | 'public-route-cutover-data-issue'
+        | 'public-route-real-read-invalid';
     }>;
 
 export type ProductVariableReadModelResult =
