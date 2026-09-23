@@ -352,10 +352,11 @@ async function runYouTube(): Promise<YouTubeReport> {
   }
 }
 
-const musicbrainz = await runMusicBrainz();
-const youtube = await runYouTube();
+async function main() {
+  const musicbrainz = await runMusicBrainz();
+  const youtube = await runYouTube();
 
-const liveCoverageGate =
+  const liveCoverageGate =
   (musicbrainz.state === 'pass' || musicbrainz.state === 'bounded_partial')
   && (youtube.state === 'pass' || youtube.state === 'bounded_partial')
     ? 'PASS_WITH_TRUTHFUL_PROVIDER_COVERAGE'
@@ -429,6 +430,12 @@ const md = [
   '',
 ].join('\n');
 
-writeFileSync('activity-exposure-live-provider-coverage-v1.md', md);
-console.log(md);
-console.log('COVERAGE_REPORT_JSON=' + JSON.stringify(report));
+  writeFileSync('activity-exposure-live-provider-coverage-v1.md', md);
+  console.log(md);
+  console.log('COVERAGE_REPORT_JSON=' + JSON.stringify(report));
+}
+
+main().catch((error) => {
+  console.error('LIVE_PROVIDER_COVERAGE_RUNNER_FAILED', messageOf(error));
+  process.exitCode = 1;
+});
