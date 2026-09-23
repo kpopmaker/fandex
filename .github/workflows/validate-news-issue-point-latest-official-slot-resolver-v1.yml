@@ -1,0 +1,71 @@
+name: validate-news-issue-point-latest-official-slot-resolver-v1
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-latest-official-slot-resolver-f775e6
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "f775e62012844d82e167b113931e6ec9e918c86c"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Latest official shadow slot resolver
+        run: npx tsx --conditions=react-server --test tests/naver-news-latest-official-shadow-slot-v1.test.mts
+
+      - name: Shadow first-seen series regression
+        run: npx tsx --conditions=react-server --test tests/naver-news-shadow-first-seen-series-v1.test.mts
+
+      - name: Real Product read/Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Cutover authorization/candidate regressions
+        run: >-
+          npx tsx --conditions=react-server --test
+          tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+          tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Exact resolver diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check f1c32a298fb7d7155f1cb8358a7afdb22db8c7e0...f775e62012844d82e167b113931e6ec9e918c86c
+          git diff --name-only f1c32a298fb7d7155f1cb8358a7afdb22db8c7e0...f775e62012844d82e167b113931e6ec9e918c86c > /tmp/files
+          test "$(wc -l < /tmp/files | tr -d ' ')" = "2"
+          grep -Fx "lib/server/ingestion/naverNewsLatestOfficialShadowSlot.ts" /tmp/files
+          grep -Fx "tests/naver-news-latest-official-shadow-slot-v1.test.mts" /tmp/files
