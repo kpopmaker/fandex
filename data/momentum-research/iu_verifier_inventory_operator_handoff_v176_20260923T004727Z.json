@@ -1,0 +1,139 @@
+{
+  "contractVersion": "v176_fandex_momentum_verifier_inventory_operator_handoff_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-23T00:47:27.281Z",
+  "upstream": {
+    "v175State": "real-acquisition-blocked",
+    "v175Digest": "b2ce5a2cfb416964bada29c93db1fb05808a33abb6e7f3c8a340f6adc3c5464d",
+    "v175ExternalReadReady": false,
+    "v175RealAcquisitionReady": false
+  },
+  "connectedExecutionCapability": {
+    "exactVercelEnvironmentInventoryReadActionAvailable": false,
+    "genericVercelRestActionAvailable": false,
+    "currentConnectorCanExecuteRequiredRead": false,
+    "source": "connected-tool-surface-inspection",
+    "inspectedCapabilitySummary": "project/deployment/log access present; environment-inventory GET and generic Vercel REST request action absent"
+  },
+  "currentResult": {
+    "contractVersion": "v176_fandex_momentum_verifier_inventory_operator_handoff_research_v1",
+    "state": "operator-capability-missing",
+    "handoffRequired": true,
+    "readPrerequisitesReady": false,
+    "blockers": [
+      "operator-read-channel-provisioning-authorization-required",
+      "operator-opaque-vercel-credential-handle-required",
+      "operator-inventory-read-execution-authorization-required",
+      "operator-execution-capability-unavailable",
+      "v175-external-read-not-ready"
+    ],
+    "digest": "d66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5"
+  },
+  "requiredAuthorizations": {
+    "readChannelProvisioningAuthorization": {
+      "required": true,
+      "currentlyPresent": false,
+      "satisfiedByGenericContinuation": false
+    },
+    "inventoryReadExecutionAuthorization": {
+      "required": true,
+      "currentlyPresent": false,
+      "satisfiedByGenericContinuation": false
+    }
+  },
+  "credentialRequirement": {
+    "opaqueVercelBearerCredentialHandleRequired": true,
+    "currentlyPresent": false,
+    "currentlyAccepted": false,
+    "rawTokenMayBeProvidedToResearchArtifact": false,
+    "rawTokenMayBeLogged": false,
+    "rawTokenMayBePersisted": false
+  },
+  "exactReadRequest": {
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "decrypt": "false",
+    "gitBranch": null,
+    "customEnvironmentId": null,
+    "customEnvironmentSlug": null,
+    "maximumProviderCalls": 1,
+    "maximumInventoryReads": 1
+  },
+  "expectedExecutionReceipt": {
+    "exactEnvelopeBindingRequired": true,
+    "executionStatusRequired": "success",
+    "readCountRequired": 1,
+    "mutationCapabilityPresentRequired": false,
+    "decryptTruePathPresentRequired": false,
+    "decryptedValueEndpointPresentRequired": false,
+    "credentialValueExposedRequired": false,
+    "providerResponseReceivedRequired": true,
+    "responseBoundToProjectAndTeamRequired": true,
+    "completeForProductionTargetRequired": true,
+    "truncationOrAdditionalPageRiskRequired": false,
+    "rawProviderResponsePersistedRequired": false,
+    "secretValueLoggedRequired": false,
+    "secretValuePersistedRequired": false
+  },
+  "forbiddenActions": [
+    "create-or-rotate-vercel-credential",
+    "expose-vercel-credential-value",
+    "mutate-vercel-environment",
+    "deploy-production",
+    "activate-native-verifier",
+    "execute-native-verifier",
+    "advance-research-ledger",
+    "mutate-product-state",
+    "mutate-variable-registry",
+    "merge-pr-127"
+  ],
+  "validation": {
+    "runId": 35803551968,
+    "status": "PASS",
+    "v176TestsPassed": true,
+    "v175RegressionPassed": true,
+    "v174RegressionPassed": true,
+    "v173RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "effects": {
+    "authorizationWrites": 0,
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}
