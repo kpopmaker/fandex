@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "activity-exposure-persistence-schema-validation-v1",
+  "validationRunId": 35873969349,
+  "postgresVersion": "16",
+  "result": "PASS",
+  "existingNaverTablesPreserved": true,
+  "missingDoesNotFabricateEvent": true,
+  "collaborationCreditsPreserved": true,
+  "rawPayloadLifecycleSeparatedFromEventTruth": true,
+  "youtubeRefreshBoundaryEnforced": true,
+  "rawPayloadEvictionPreservesLineage": true,
+  "directRawPayloadReplacementRejected": true,
+  "eventAppendOnly": true,
+  "collectionRunAppendOnly": true,
+  "providerObservationAppendOnly": true,
+  "observedOccurrenceRequired": true,
+  "prohibitedNumericMethodologyColumns": [],
+  "productionMigrationCreated": false,
+  "neonMutationPerformed": false,
+  "productionReady": false,
+  "remainingBlockers": [
+    "youtube_authorized_api_credential",
+    "musicbrainz_production_commercial_service_access_review",
+    "explicit_authorization_before_neon_main_schema_change"
+  ]
+}
