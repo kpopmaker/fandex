@@ -160,6 +160,54 @@ test('Product Operations activation approval is explicit and fully bound', () =>
   );
 });
 
+test('owner authorization evidence is exact-bound to the approval event and authorized main', () => {
+  assert.deepEqual(
+    {
+      approvedAt:
+        NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.approvedAt,
+      authorizationEvidenceCommentId:
+        NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+          .authorizationEvidenceCommentId,
+      authorizedMain:
+        NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+          .authorizedMain,
+      activationAuthorizationId:
+        NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+          .activationAuthorizationId,
+      promotionAuthorizationId:
+        NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+          .promotionAuthorizationId,
+    },
+    {
+      approvedAt: '2026-09-22T08:35:54.000Z',
+      authorizationEvidenceCommentId: 5773535048,
+      authorizedMain:
+        'a96659a01f6090f8aac80ce9b27310ae9d8ca806',
+      activationAuthorizationId:
+        'ops-activation-newsissuepoint-20260922t083554z-v2',
+      promotionAuthorizationId:
+        'ops-approval-newsissuepoint-20260921t001840z-v1',
+    },
+  );
+
+  assert.equal(
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.approvedAt,
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL.authorizedAt,
+  );
+  assert.equal(
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+      .activationAuthorizationId,
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL
+      .activationAuthorizationId,
+  );
+  assert.equal(
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
+      .promotionAuthorizationId,
+    NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL
+      .binding.promotionAuthorizationId,
+  );
+});
+
 test('actual activation approval authorizes only the cutover review stage', () => {
   const result = authorizeNewsIssuePointRealProductActivation({
     readiness: readiness(),
