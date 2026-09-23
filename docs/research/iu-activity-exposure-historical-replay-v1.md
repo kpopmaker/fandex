@@ -213,3 +213,47 @@ Covered:
 - invalid artist MBID is rejected before provider fetch
 
 The local-only import extension adjustments were execution-environment compatibility changes; repository source semantics were not changed by the local harness.
+
+
+## 10. YouTube collector execution verification
+
+The current branch YouTube collector source was reconstructed in an isolated execution workspace and executed with Node's TypeScript type-stripping runtime.
+
+Result:
+
+`PASS_7_OF_7_YOUTUBE_COLLECTOR_SCENARIOS`
+
+Covered:
+
+- official channel -> uploads playlist -> paginated video IDs -> exact publication events
+- non-canonical channel video blocked from normalized event
+- duplicate video IDs deduplicated before video lookup
+- playlist pagination cycle fails closed
+- canonical channel response must resolve uniquely
+- invalid/non-exact publishedAt fails closed rather than downgrading to inferred day precision
+- API key and channel ID validated before provider fetch
+
+No views, likes, comments, engagement counts, weights, recency decay, or numeric activity score are collected.
+
+## 11. IU combined Activity Exposure stream validation
+
+A combined IU v1 stream was executed using:
+
+- validated MusicBrainz confirmed release output
+- validated YouTube official-content publication output
+- common Activity Exposure event validator
+- deterministic raw-observation replay contract
+
+Result:
+
+`PASS_COMBINED_IU_V1_ACTIVITY_EXPOSURE_STREAM`
+
+Validated properties:
+
+- release and official-content families coexist in one stream without numeric aggregation
+- same calendar date across different event families does not cause dedupe
+- provider-specific identity checks remain intact
+- no score / point / weight / decay / active-window / activity-count fields are present
+- retained raw observations remain deterministic-replay capable
+
+The combined validation does not imply that provider coverage is complete. It validates composition semantics only.
