@@ -546,11 +546,11 @@ def main():
         "",
         (
             f"rankedPlatformCount: "
-            f"{ranked_platform_count}/30"
+            f"{ranked_platform_count}/{len(target_artists) * len(PLATFORM_WEIGHTS)}"
         ),
         (
             f"zeroArtistCount: "
-            f"{zero_artist_count}/10"
+            f"{zero_artist_count}/{len(target_artists)}"
         ),
         "seedModified: FALSE",
         "masterModified: FALSE",
