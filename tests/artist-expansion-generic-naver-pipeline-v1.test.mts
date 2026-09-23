@@ -45,6 +45,22 @@ const representativeArtists = [
   ['nct127', '엔시티127'],
   ['jungkook', '정국'],
   ['jennie', '제니'],
+  ['aespa', '에스파'],
+  ['ive', '아이브'],
+  ['riize', '라이즈'],
+  ['illit', '아일릿'],
+  ['lesserafim', '르세라핌'],
+  ['newjeans', '뉴진스'],
+  ['babymonster', '베이비몬스터'],
+  ['straykids', '스트레이 키즈'],
+  ['seventeen', '세븐틴'],
+  ['bts', '방탄소년단'],
+  ['blackpink', '블랙핑크'],
+  ['twice', '트와이스'],
+  ['enhypen', '엔하이픈'],
+  ['ateez', '에이티즈'],
+  ['zerobaseone', '제로베이스원'],
+  ['jimin', '지민'],
 ] as const;
 
 for (const [artistId, koreanAlias] of representativeArtists) {
@@ -81,30 +97,6 @@ for (const [artistId, koreanAlias] of representativeArtists) {
     assert.equal(readEntry.semantic.metricId, null);
   });
 }
-
-test('artist without canonical Korean aliases stays unresolved instead of becoming zero/stable evidence', () => {
-  const artist = getArtistV4ById('aespa');
-  assert.ok(artist);
-  assert.deepEqual(artist.profile.koreanAliases, []);
-
-  const binding = bindCanonicalArtistToNaverNews('aespa');
-  assert.equal(binding.canonicalArtistId, 'aespa');
-  assert.ok(binding.query.length > 0);
-
-  const candidate = buildCanonicalNaverNewsObservationCandidate(
-    'aespa',
-    recordFor('aespa', 'aespa'),
-  );
-  const relevance = verifyNaverNewsArtistRelevance(candidate);
-
-  assert.equal(relevance.status, 'unknown');
-  assert.equal(relevance.reason, 'insufficient_identity_evidence');
-  assert.equal(relevance.matchedEvidence, null);
-  assert.throws(
-    () => promoteCanonicalNaverNewsObservation(candidate, relevance),
-    /naver_news_canonical_observation_verification_not_accepted/,
-  );
-});
 
 test('unknown artist fails closed at provider binding', () => {
   assert.throws(
