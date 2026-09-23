@@ -10,9 +10,6 @@ import {
   FANDEX_MOMENTUM_VERIFIER_OPERATOR_RESPONSE_PROJECTION_DESCRIPTOR,
 } from '../lib/intelligence/fandexMomentumVerifierOperatorResponseProjectionResearch';
 import {
-  buildFandexMomentumVerifierVercelInventoryReadChannelPlan,
-} from '../lib/intelligence/fandexMomentumVerifierVercelInventoryReadChannelPlanResearch';
-import {
   buildFandexMomentumVerifierVercelInventoryExecutionEnvelope,
 } from '../lib/intelligence/fandexMomentumVerifierVercelInventoryExecutionEnvelopeResearch';
 
@@ -146,13 +143,14 @@ test('current missing operator response remains blocked and projects nothing', (
   assert.equal(out.projectionReady, false);
   assert.equal(out.projectedV172Authorization, null);
   assert.equal(out.projectedV172CredentialHandle, null);
+  assert.equal(out.projectedV172, null);
   assert.equal(out.projectedV173ReadExecutionAuthorization, null);
   assert.ok(out.blockers.includes('upstream-v177-not-intake-ready'));
   assert.ok(out.blockers.includes('validated-operator-response-missing'));
   assert.equal(out.effects.vercelReads, 0);
 });
 
-test('valid v177 intake projects losslessly into v172 and v173 prerequisite shapes', () => {
+test('valid v177 intake projects into a provisioning-ready v172 and exact v173 prerequisite shape', () => {
   const response = validResponse();
   const intake = readyIntake(response);
   assert.equal(intake.intakeReady, true);
@@ -177,43 +175,38 @@ test('valid v177 intake projects losslessly into v172 and v173 prerequisite shap
     out.projectedV172CredentialHandle?.providerLevelScopeRestrictedToInventoryRead,
     'not-proven',
   );
+  assert.equal(out.projectedV172?.state, 'read-channel-provisioning-ready');
+  assert.equal(out.projectedV172?.readExecutionAuthorized, false);
   assert.equal(out.projectedV173ReadExecutionAuthorization?.state, 'approved');
   assert.equal(
     out.projectedV173ReadExecutionAuthorization?.authorizationId,
     response.readExecutionAuthorization.authorizationId,
   );
+  assert.equal(
+    out.projectedV173ReadExecutionAuthorization?.upstreamV172Digest,
+    out.projectedV172?.digest,
+  );
   assert.equal(out.capability.exactReadCapabilityValidated, true);
   assert.equal(JSON.stringify(out).includes('Bearer '), false);
 });
 
-test('projected shapes are accepted by v172 and v173 without performing the provider read', () => {
+test('projected v172 and v173 prerequisites are accepted without performing the provider read', () => {
   const response = validResponse();
-  const intake = readyIntake(response);
   const projection = projectFandexMomentumVerifierOperatorResponse({
     evaluatedAt: '2026-09-23T01:20:00.000Z',
     requestIntent: 'operator-response-projection',
-    upstreamV177: intake,
+    upstreamV177: readyIntake(response),
     response,
   });
   assert.equal(projection.projectionReady, true);
-
-  const v172 = buildFandexMomentumVerifierVercelInventoryReadChannelPlan({
-    evaluatedAt: '2026-09-23T01:20:00.000Z',
-    requestIntent: 'explicit-read-channel-authorization',
-    authorization: projection.projectedV172Authorization!,
-    credentialHandle: projection.projectedV172CredentialHandle!,
-  });
-  assert.equal(v172.state, 'read-channel-provisioning-ready');
-  assert.equal(v172.readExecutionAuthorized, false);
+  assert.notEqual(projection.projectedV172, null);
+  assert.notEqual(projection.projectedV173ReadExecutionAuthorization, null);
 
   const v173 = buildFandexMomentumVerifierVercelInventoryExecutionEnvelope({
     evaluatedAt: '2026-09-23T01:20:00.000Z',
     requestIntent: 'explicit-inventory-read-execution-authorization',
-    upstreamV172: v172,
-    readExecutionAuthorization: {
-      ...projection.projectedV173ReadExecutionAuthorization!,
-      upstreamV172Digest: v172.digest,
-    },
+    upstreamV172: projection.projectedV172!,
+    readExecutionAuthorization: projection.projectedV173ReadExecutionAuthorization!,
   });
   assert.equal(v173.state, 'read-execution-ready');
   assert.equal(v173.envelopePrepared, true);
