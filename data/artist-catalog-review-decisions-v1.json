@@ -1185,6 +1185,94 @@
           "note": "Official OS Projects site publishes active 2026 Huh Gak releases and concert activity."
         }
       ]
+    },
+    {
+      "displayArtist": "Christopher & 청하",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "mixed_scope_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "Disney & Shakira",
+      "decision": "exclude_composite_credit_noncanonical",
+      "relationResolution": "brand_or_label_plus_foreign_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "HUNTR/X & EJAE & Audrey Nuna & REI AMI & KPop Demon Hunters Cast",
+      "decision": "exclude_from_real_artist_universe",
+      "relationResolution": "fictional_cast_composite_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "Lady Gaga & Bruno Mars",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "foreign_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "MC 몽 & 서인영",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "korean_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "The Kid LAROI & Justin Bieber",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "foreign_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "먼데이 키즈 & 이이경",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "korean_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "박다혜 & 마크툽 (Maktub)",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "korean_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "순순희 (기태) & 백예슬",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "korean_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "아샤트리 & 이예은 & 전건호",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "korean_multi_artist_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
+    },
+    {
+      "displayArtist": "이예은 & 아샤트리 & 전건호",
+      "decision": "composite_credit_split_required",
+      "relationResolution": "same_component_set_reordered_credit",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": []
     }
   ]
 }
