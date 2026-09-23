@@ -47,7 +47,22 @@ def main():
         ],
     }
 
-    output = module.build_review_queue(payload)
+    identity_payload = {
+        "artists": [
+            {
+                "id": "exo",
+                "aliases": ["EXO", "엑소"],
+                "keywords": ["D.O.", "Baekhyun"],
+            },
+            {
+                "id": "existing-solo",
+                "aliases": ["Known Alias"],
+                "keywords": [],
+            },
+        ],
+    }
+
+    output = module.build_review_queue(payload, identity_payload)
 
     assert output["candidateCount"] == 3
     assert output["autoPromotionAllowed"] is False
@@ -59,7 +74,10 @@ def main():
 
     by_name = {row["displayArtist"]: row for row in output["queue"]}
     assert by_name["도경수(D.O.)"]["reviewCategory"] == "alternate_identity_review"
+    assert by_name["도경수(D.O.)"]["relationStatus"] == "existing_artist_keyword_relation"
+    assert by_name["도경수(D.O.)"]["keywordRelationMatches"] == ["exo"]
     assert by_name["임영웅"]["reviewCategory"] == "single_identity_review"
+    assert by_name["임영웅"]["relationStatus"] == "unresolved"
     assert by_name["Artist A & Artist B"]["reviewCategory"] == "composite_credit_review"
     assert all(row["autoPromote"] is False for row in output["queue"])
     assert all(row["identityStatus"] == "unverified" for row in output["queue"])
