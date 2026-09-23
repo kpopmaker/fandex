@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -84,4 +86,4 @@ jobs:
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-inventory-execution-response-intake-v179.test.mts
           npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-configuration-evidence-v164.test.mts
           npm run typecheck
-          git diff --check
+          git diff --check origin/main...HEAD
