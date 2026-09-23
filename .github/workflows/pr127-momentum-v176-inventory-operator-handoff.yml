@@ -1,0 +1,133 @@
+name: PR127 momentum v176 inventory operator handoff
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'lib/intelligence/fandexMomentumVerifierInventoryOperatorHandoffResearch.ts'
+      - 'tests/fandex-momentum-verifier-inventory-operator-handoff-v176.test.mts'
+      - '.github/workflows/pr127-momentum-v176-inventory-operator-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Evaluate current v176 handoff packet
+        run: |
+          cat > .tmp-v176-current.mts <<'TS'
+          import {
+            buildFandexMomentumVerifierInventoryOperatorHandoff,
+          } from './lib/intelligence/fandexMomentumVerifierInventoryOperatorHandoffResearch';
+
+          const v175 = {
+            contractVersion:
+              'v175_fandex_momentum_verifier_real_inventory_acquisition_readiness_research_v1',
+            state: 'real-acquisition-blocked',
+            realAcquisitionReady: false,
+            externalReadReady: false,
+            stages: {
+              v172PlanReady: true,
+              readChannelProvisioningAuthorizationPresent: false,
+              opaqueCredentialHandlePresent: false,
+              opaqueCredentialHandleAccepted: false,
+              v172ProvisioningReady: false,
+              readExecutionAuthorizationPresent: false,
+              v173EnvelopePrepared: false,
+              v173ReadExecutionAuthorized: false,
+              v173ReadExecutionReady: false,
+              actualReadReceiptPresent: false,
+              v174ReceiptReady: false,
+              v174HandoffInvoked: false,
+              v171HandoffReady: false,
+            },
+            upstreamDigests: {
+              v172: 'e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a',
+              v173: '58ba8bce3a9e9fbe01e9cc8e76fe93d2c7fb6b43f5c8d60ba7bdb229af18ecd5',
+              v174: 'e7fdfc24328c9361653c3aec70f4f8eba1ef02f5c5b9c49b1badd26b82f0882a',
+            },
+            blockers: [
+              'read-channel-provisioning-authorization-missing',
+              'opaque-vercel-credential-handle-missing',
+              'v172-read-channel-provisioning-not-ready',
+              'inventory-read-execution-authorization-missing',
+              'v173-execution-envelope-not-prepared',
+              'v173-read-execution-not-authorized',
+              'v173-read-execution-not-ready',
+              'actual-inventory-read-receipt-missing',
+              'v174-execution-receipt-not-ready',
+              'v174-v171-handoff-not-invoked',
+              'v171-handoff-not-ready',
+            ],
+            effects: {
+              credentialCreates: 0,
+              credentialReads: 0,
+              credentialRotations: 0,
+              vercelReads: 0,
+              vercelWrites: 0,
+              environmentMutations: 0,
+              secretReads: 0,
+              secretWrites: 0,
+              productionDeployments: 0,
+              verifierActivations: 0,
+              nativeVerifierExecutions: 0,
+              databaseWrites: 0,
+              productMetricWrites: 0,
+              registryMutations: 0,
+              historyWrites: 0,
+              watermarkWrites: 0,
+              manifestWrites: 0,
+            },
+            productBoundary: {
+              productMomentumScore: null,
+              productionEligible: false,
+              productProductionActual: '0/7',
+            },
+            digest: 'b2ce5a2cfb416964bada29c93db1fb05808a33abb6e7f3c8a340f6adc3c5464d',
+          } as const;
+
+          const out =
+            buildFandexMomentumVerifierInventoryOperatorHandoff({
+              v175,
+              connectedExecutionCapability: {
+                exactVercelEnvironmentInventoryReadActionAvailable: false,
+                genericVercelRestActionAvailable: false,
+              },
+            });
+
+          if (
+            out.state !== 'operator-capability-missing'
+            || !out.handoffRequired
+            || out.readPrerequisitesReady
+            || out.effects.vercelReads !== 0
+          ) {
+            throw new Error('current v176 state must remain operator capability-missing');
+          }
+
+          console.log('V176_CURRENT_BEGIN');
+          console.log(JSON.stringify(out, null, 2));
+          console.log('V176_CURRENT_END');
+          TS
+          npx tsx --conditions=react-server .tmp-v176-current.mts
+          rm .tmp-v176-current.mts
+
+      - name: Validate v176 and upstream regressions
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-inventory-operator-handoff-v176.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-real-inventory-acquisition-readiness-v175.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-receipt-v174.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-vercel-inventory-execution-envelope-v173.test.mts
+          npm run typecheck
+          git diff --check
