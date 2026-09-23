@@ -1,0 +1,27 @@
+name: Artist Expansion Music Generic Cohort v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-generic-naver-pipeline-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-music:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Python syntax check
+        run: |
+          python -m py_compile scripts/fandex-cloud-migration/source/music_chart_current_presence_preview_v1.py
+          python -m py_compile scripts/fandex-cloud-migration/source/music_chart_current_presence_publish_v2.py
+      - name: Generic 11-artist music cohort regression
+        run: python tests/artist-expansion-music-generic-cohort-v1.py
