@@ -34,7 +34,11 @@ jobs:
         run: python -m pip install --disable-pip-version-check beautifulsoup4 requests
       - name: Catalog intake regression
         run: python tests/artist-catalog-intake-from-chart-v1.py
+      - name: Export full artist universe identity index
+        run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
       - name: Live chart catalog discovery
+        env:
+          ARTIST_UNIVERSE_IDENTITY_FILE: artist_universe_identity_index_runtime.json
         run: python scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py
       - name: Upload catalog discovery evidence
         uses: actions/upload-artifact@v4
