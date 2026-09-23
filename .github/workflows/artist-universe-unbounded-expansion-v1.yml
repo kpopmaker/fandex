@@ -33,13 +33,20 @@ jobs:
       - name: Install chart discovery dependency
         run: python -m pip install --disable-pip-version-check beautifulsoup4 requests
       - name: Catalog intake regression
-        run: python tests/artist-catalog-intake-from-chart-v1.py
+        run: |
+          python tests/artist-catalog-intake-from-chart-v1.py
+          python tests/artist-catalog-review-queue-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
       - name: Live chart catalog discovery
         env:
           ARTIST_UNIVERSE_IDENTITY_FILE: artist_universe_identity_index_runtime.json
         run: python scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py
+      - name: Build catalog review queue
+        run: |
+          python scripts/artist-expansion/artist_catalog_review_queue_v1.py \
+            music_chart_artist_candidates_v2_raw_latest.json \
+            artist_catalog_review_queue_v1_latest.json
       - name: Upload catalog discovery evidence
         uses: actions/upload-artifact@v4
         with:
@@ -47,4 +54,5 @@ jobs:
           path: |
             music_chart_artist_candidates_v2_raw_latest.json
             MUSIC_CHART_ARTIST_CANDIDATES_V2_REPORT_latest.txt
+            artist_catalog_review_queue_v1_latest.json
           if-no-files-found: error
