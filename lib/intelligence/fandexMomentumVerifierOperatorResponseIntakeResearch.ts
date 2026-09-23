@@ -103,6 +103,7 @@ export type FandexMomentumVerifierOperatorResponseIntakeResult =
     intakeReady: boolean;
     readExecutionAuthorizedByIntake: false;
     upstreamV176Digest: string;
+    upstreamV172Digest: string;
     responseId: string | null;
     normalized: Readonly<{
       provisioningAuthorizationId: string | null;
