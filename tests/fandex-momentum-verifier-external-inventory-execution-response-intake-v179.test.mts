@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -259,4 +260,40 @@ test('secret-like provider values are rejected before v174 handoff', () => {
       'external-inventory-execution-response-sensitive-value-forbidden',
     ),
   );
+});
+
+
+test('committed v179 current-state audit remains fail-closed and ledger-isolated', () => {
+  const audit = JSON.parse(
+    readFileSync(
+      new URL(
+        '../data/momentum-research/iu_verifier_external_inventory_execution_response_intake_v179_20260923T015600Z.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+
+  assert.equal(
+    audit.contractVersion,
+    'v179_fandex_momentum_verifier_external_inventory_execution_response_intake_audit_v1',
+  );
+  assert.equal(
+    audit.currentResult.state,
+    'external-inventory-execution-response-missing',
+  );
+  assert.equal(audit.currentResult.intakeReady, false);
+  assert.equal(audit.currentResult.v171HandoffReady, false);
+  assert.equal(
+    audit.currentResult.digest,
+    'c95844f671fc62bc146fd4b0875ae433de605983389e16d52a8805c6709b889a',
+  );
+  assert.equal(audit.effects.vercelReads, 0);
+  assert.equal(audit.effects.vercelWrites, 0);
+  assert.equal(audit.effects.historyWrites, 0);
+  assert.equal(audit.effects.watermarkWrites, 0);
+  assert.equal(audit.effects.manifestWrites, 0);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
