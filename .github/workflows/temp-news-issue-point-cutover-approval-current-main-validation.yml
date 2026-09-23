@@ -1,0 +1,71 @@
+name: TEMP newsIssuePoint Cutover Approval Current-Main Validation
+
+on:
+  push:
+    branches:
+      - validation/news-issue-point-cutover-approval-6b72b8
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact feature parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "6b72b81b6a66a493a6b38285a8885d3a93eb5c79"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production dependency security
+        run: npm run security:audit:production
+
+      - name: Public route cutover approval record
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-approval-v1.test.mts
+
+      - name: Public route cutover authorization regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-authorization-v1.test.mts
+
+      - name: Public route cutover candidate regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-public-route-cutover-candidate-v1.test.mts
+
+      - name: Activation approval and authorization regressions
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-activation-approval-v1.test.mts tests/product-news-issue-point-activation-authorization-v1.test.mts tests/product-news-issue-point-activation-readiness-v1.test.mts
+
+      - name: Real Product read and Evidence regression
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+
+      - name: Latest official shadow slot resolver regression
+        run: npx tsx --conditions=react-server --test tests/naver-news-latest-official-shadow-slot-v1.test.mts
+
+      - name: Promotion selector registry and Product boundaries
+        run: npx tsx --conditions=react-server --test tests/product-news-issue-point-promotion-authorization-v1.test.mts tests/product-news-issue-point-real-promotion-gate-v1.test.mts tests/product-news-issue-point-real-selector-v1.test.mts tests/product-news-issue-point-real-candidate-v1.test.mts tests/intelligence-variable-confidence-v1.test.mts tests/product-variable-boundary-v1.test.mts tests/product-evidence-boundary-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+
+      - name: Production build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Diff sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check 75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b...6b72b81b6a66a493a6b38285a8885d3a93eb5c79
+          git diff --check 6b72b81b6a66a493a6b38285a8885d3a93eb5c79...HEAD
