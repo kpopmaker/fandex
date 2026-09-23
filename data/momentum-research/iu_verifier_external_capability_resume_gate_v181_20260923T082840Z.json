@@ -80,7 +80,10 @@
     "v179RegressionPassed": true,
     "v164RegressionPassed": true,
     "typecheckPassed": true,
-    "diffCheckPassed": true
+    "diffCheckPassed": true,
+    "committedAuditReplayRunId": 35837483223,
+    "fullPrDiffRunId": 35837583585,
+    "fullPrDiffCheckPassed": true
   },
   "authoritativeLedgerBoundary": {
     "v147HistoryRecordCount": 2,
