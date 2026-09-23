@@ -477,6 +477,121 @@
           "url": "https://v.daum.net/v/jtoOX8hrmi"
         }
       ]
+    },
+    {
+      "id": "woodz",
+      "ticker": "WOODZ",
+      "name": "WOODZ",
+      "agency": "EDAM Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "우즈 WOODZ 조승연",
+      "koreanAliases": [
+        "우즈",
+        "조승연"
+      ],
+      "englishAliases": [
+        "WOODZ",
+        "Woodz"
+      ],
+      "identityEvidence": [
+        {
+          "source": "EDAM Entertainment",
+          "url": "https://www.madeedam.com/us/board/view.php?bdId=usnotice&sno=135"
+        },
+        {
+          "source": "Melon",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=2086047"
+        }
+      ]
+    },
+    {
+      "id": "leechanhyuk",
+      "ticker": "LEECHANHYUK",
+      "name": "LEE CHANHYUK",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "이찬혁 LEE CHANHYUK",
+      "koreanAliases": [
+        "이찬혁"
+      ],
+      "englishAliases": [
+        "LEE CHANHYUK",
+        "Lee Chanhyuk"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/en/artists/lee-chanhyuk/profile"
+        }
+      ]
+    },
+    {
+      "id": "jungseunghwan",
+      "ticker": "JUNGSEUNGHWAN",
+      "name": "Jung Seung Hwan",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "naverNewsQuery": "정승환 Jung Seung Hwan",
+      "koreanAliases": [
+        "정승환"
+      ],
+      "englishAliases": [
+        "Jung Seung Hwan",
+        "JUNG SEUNG HWAN"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/JungSeungHwan"
+        }
+      ]
+    },
+    {
+      "id": "kimnayoung",
+      "ticker": "KIMNAYOUNG",
+      "name": "Kim Nayoung",
+      "agency": "Neverland Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "김나영 가수 Kim Nayoung",
+      "koreanAliases": [
+        "김나영"
+      ],
+      "englishAliases": [
+        "Kim Nayoung",
+        "Kim Na Young"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Stagepick",
+          "url": "https://www.stagepick.co.kr/artists/detail/TjpWYKg3RKgWUf8y"
+        }
+      ]
+    },
+    {
+      "id": "chojungseok",
+      "ticker": "CHOJUNGSEOK",
+      "name": "CHO JUNG SEOK",
+      "agency": "JAM Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "조정석 가수 CHO JUNG SEOK",
+      "koreanAliases": [
+        "조정석"
+      ],
+      "englishAliases": [
+        "CHO JUNG SEOK",
+        "Jo Jung-suk",
+        "Jo Jung Suk"
+      ],
+      "identityEvidence": [
+        {
+          "source": "JAM Entertainment",
+          "url": "https://www.jament.co.kr/"
+        },
+        {
+          "source": "SBS",
+          "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008561697"
+        }
+      ]
     }
   ]
 }
