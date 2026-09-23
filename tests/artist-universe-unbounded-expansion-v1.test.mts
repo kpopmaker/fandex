@@ -25,7 +25,7 @@ const seed = (id: string, ticker: string) => ({
 
 test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(ARTIST_UNIVERSE_V4_BASELINE_COUNT, 100);
-  assert.equal(artistUniverseV4.length, 127);
+  assert.equal(artistUniverseV4.length, 133);
 
   for (const artistId of [
     'kiiikiii',
@@ -55,6 +55,12 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'jungseunghwan',
     'kimnayoung',
     'chojungseok',
+    'kyoungseo',
+    'gyeongseoyeji',
+    'kimfeel',
+    'limjaehyun',
+    'limhanbyul',
+    'huhgak',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -69,7 +75,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
   );
 
-  assert.equal(expanded.length, 129);
+  assert.equal(expanded.length, 135);
   assert.equal(expanded.at(-2)?.id, 'expansion-104');
   assert.equal(expanded.at(-1)?.id, 'expansion-105');
 });
