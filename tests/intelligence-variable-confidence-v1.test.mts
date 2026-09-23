@@ -6,7 +6,7 @@ import {
   getFandexVariableDefinition,
   listFandexVariableDefinitions,
   NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE,
-  NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE,
+  NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE,
   validateFandexVariableDefinition,
   validateObservationVariableBinding,
 } from '../lib/intelligence/variableRegistry';
@@ -43,14 +43,14 @@ test('15 mismatched variable ID is rejected', () => { const o = projectNaverNews
 test('16 mismatched provider is rejected for intermediate variables', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.throws(() => validateObservationVariableBinding({ ...o, providerId: 'other' }, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE), /provider_mismatch/); });
 test('17 unsupported entity type is rejected', () => { const o = projectNaverNewsNormalizedRecord(naverRecord); assert.throws(() => validateObservationVariableBinding({ ...o, entity: { ...o.entity, entityType: 'artist' } }, NAVER_NORMALIZED_RECORD_PRESENCE_VARIABLE), /entity_type_unsupported/); });
 
-test('17a canonical newsIssuePoint shadow variable is registered without Production eligibility', () => {
+test('17a canonical newsIssuePoint variable is registered for exact authorized Production contribution', () => {
   const definition = getFandexVariableDefinition('newsIssuePoint');
-  assert.deepEqual(definition, NEWS_ISSUE_POINT_CANONICAL_SHADOW_VARIABLE);
+  assert.deepEqual(definition, NEWS_ISSUE_POINT_CANONICAL_PRODUCTION_VARIABLE);
   assert.equal(definition?.kind, 'canonical');
   assert.equal(definition?.family, 'media');
   assert.equal(definition?.measureType, 'index');
   assert.equal(definition?.role, 'primary');
-  assert.equal(definition?.lifecycle, 'shadow');
+  assert.equal(definition?.lifecycle, 'production');
   assert.equal(definition?.construct, 'protocol_conditioned_first_seen_canonical_media_activity');
   assert.deepEqual(definition?.supportedEntityTypes, ['artist']);
   assert.deepEqual(definition?.temporalSemantics, {
@@ -59,7 +59,7 @@ test('17a canonical newsIssuePoint shadow variable is registered without Product
     collectionTimeRequired: true,
   });
   assert.equal(definition?.sourceProviderId, 'naver-news');
-  assert.equal(definition?.directProductionContributionEligible, false);
+  assert.equal(definition?.directProductionContributionEligible, true);
   assert.deepEqual(definition?.blockers, []);
 });
 
