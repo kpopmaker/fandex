@@ -6,6 +6,9 @@ import type {
   ProductProviderPeriod,
   ProductTimeContext,
 } from '../lib/product/contracts/productTime';
+import {
+  getProductObservationTimePresentation,
+} from '../lib/product/presentation/productObservationTimePresentation';
 
 test('Product observation supports instant, period, and unknown semantics', () => {
   const instant = {
@@ -88,4 +91,38 @@ test('provider-native range labels do not fabricate observation dates', () => {
   assert.equal(context.providerPeriod.rawLabel, 'Aug 24-30');
   assert.equal(context.providerPeriod.start, null);
   assert.equal(context.providerPeriod.end, null);
+});
+
+
+test('Product observation presentation preserves period boundaries without promoting source labels', () => {
+  assert.deepEqual(
+    getProductObservationTimePresentation({
+      kind: 'period',
+      start: '2026-09-19T02:00:00.000Z',
+      end: '2026-09-19T09:00:00.000Z',
+    }),
+    {
+      label: '관측 기간',
+      value: '2026-09-19T02:00:00.000Z → 2026-09-19T09:00:00.000Z',
+    },
+  );
+
+  assert.deepEqual(
+    getProductObservationTimePresentation({
+      kind: 'instant',
+      observedAt: '2026-09-19T09:00:00.000Z',
+    }),
+    {
+      label: '관측 시점',
+      value: '2026-09-19T09:00:00.000Z',
+    },
+  );
+
+  assert.deepEqual(
+    getProductObservationTimePresentation({ kind: 'unknown' }),
+    {
+      label: '관측 정보',
+      value: '확인 불가',
+    },
+  );
 });
