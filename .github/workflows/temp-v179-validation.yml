@@ -1,0 +1,30 @@
+name: temp-v179-validation
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+
+jobs:
+  validate-v179:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: v179 tests
+        run: npx tsx --test tests/fandex-momentum-verifier-external-inventory-execution-response-intake-v179.test.mts
+      - name: v174 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-vercel-inventory-execution-receipt-v174.test.mts
+      - name: v178 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-operator-response-projection-v178.test.mts
+      - name: typecheck
+        run: npm run typecheck
+      - name: diff check
+        run: git diff --check origin/main...HEAD
