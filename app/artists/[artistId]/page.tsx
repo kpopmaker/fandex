@@ -252,15 +252,58 @@ export default async function ArtistDetailPage({
   searchParams,
 }: PageProps) {
   const { artistId } = await params;
+  const requestedProductVariableIds = parseRequestedProductVariableIds(
+    await searchParams,
+  );
   const profile = getSafeArtistProfile(artistId);
+
+  if (!profile && artistId === 'iu') {
+    const productVariableResults = await Promise.all(
+      requestedProductVariableIds.map(async (variableId) =>
+        variableId === 'newsIssuePoint'
+          ? getNaverNewsIssuePointPublicRouteVariable()
+          : getArtistProductVariable({
+              artistId,
+              variableId,
+            }),
+      ),
+    );
+    const productVariableEvidenceCollections = requestedProductVariableIds
+      .filter((variableId) => variableId !== 'newsIssuePoint')
+      .map((variableId) =>
+        getArtistProductVariableEvidence({
+          artistId,
+          variableId,
+        }),
+      );
+
+    return (
+      <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 dark:bg-slate-950 dark:text-white sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl gap-6">
+          <header className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+              Real Product
+            </p>
+            <h1 className="mt-2 text-3xl font-black">IU</h1>
+            <p className="mt-3 max-w-3xl text-sm font-bold leading-7 text-slate-600 dark:text-slate-300">
+              canonical artist chart profile과 분리된 Real Product 진입점입니다.
+              synthetic chart history를 만들지 않고 Stored Evidence 기반 변수 상태만
+              공개합니다.
+            </p>
+          </header>
+          <ArtistProductVariableDetail
+            artistId={artistId}
+            evidenceCollections={productVariableEvidenceCollections}
+            results={productVariableResults}
+          />
+        </div>
+      </main>
+    );
+  }
 
   if (!profile) {
     notFound();
   }
-
-  const requestedProductVariableIds = parseRequestedProductVariableIds(
-    await searchParams,
-  );
   const sixMonthHistory = getLastSixMonthHistory(profile);
   const oneYearHistory = getRecentOneYearHistory(profile);
   const latestPoint = getLatestHistoryPoint(profile);
