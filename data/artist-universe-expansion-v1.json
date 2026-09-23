@@ -173,6 +173,96 @@
           "url": "https://www.genie.co.kr/detail/albumInfo?axnm=87625110"
         }
       ]
+    },
+    {
+      "id": "limyoungwoong",
+      "ticker": "LIMYOUNGWOONG",
+      "name": "Lim Young-woong",
+      "agency": "Mulgogi Music",
+      "entityType": "solo",
+      "naverNewsQuery": "임영웅 Lim Young-woong",
+      "koreanAliases": [
+        "임영웅"
+      ],
+      "englishAliases": [
+        "Lim Young-woong",
+        "Lim Young Woong"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Mulgogi Music",
+          "url": "https://www.mulgogimusic.com/"
+        }
+      ]
+    },
+    {
+      "id": "10cm",
+      "ticker": "10CM",
+      "name": "10CM",
+      "agency": "CAM WITH US",
+      "entityType": "solo",
+      "naverNewsQuery": "10CM 십센치 권정열",
+      "koreanAliases": [
+        "십센치",
+        "권정열"
+      ],
+      "englishAliases": [
+        "10CM",
+        "10cm"
+      ],
+      "identityEvidence": [
+        {
+          "source": "10CM Weverse / CAM WITH US",
+          "url": "https://weverse.io/10cm/notice/34821"
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80067149"
+        }
+      ]
+    },
+    {
+      "id": "davichi",
+      "ticker": "DAVICHI",
+      "name": "Davichi",
+      "agency": "CAM WITH US",
+      "entityType": "group",
+      "naverNewsQuery": "다비치 Davichi",
+      "koreanAliases": [
+        "다비치"
+      ],
+      "englishAliases": [
+        "Davichi",
+        "DAVICHI"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80041466"
+        }
+      ]
+    },
+    {
+      "id": "leechangsub",
+      "ticker": "LEECHANGSUB",
+      "name": "LEE CHANGSUB",
+      "agency": "Fantagio",
+      "entityType": "solo",
+      "naverNewsQuery": "이창섭 LEECHANGSUB",
+      "koreanAliases": [
+        "이창섭"
+      ],
+      "englishAliases": [
+        "LEECHANGSUB",
+        "Lee Changsub",
+        "LEE CHANGSUB"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/profiles/%EC%9D%B4%EC%B0%BD%EC%84%AD/"
+        }
+      ]
     }
   ]
 }
