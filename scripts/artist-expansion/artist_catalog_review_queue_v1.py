@@ -36,6 +36,21 @@ def identity_components(display_artist: str) -> list[str]:
     return result
 
 
+def composite_components(display_artist: str) -> list[str]:
+    value = normalize_spaces(display_artist)
+    outside = re.sub(r"\([^()]+\)", lambda m: f" {m.group(0)} ", value)
+    parts = re.split(r"\s*[&＋+]\s*|\s+[xX×]\s+|\s*/\s*", outside)
+    result = []
+    seen = set()
+    for part in parts:
+        cleaned = normalize_spaces(part)
+        key = compact_identity(cleaned)
+        if cleaned and key and key not in seen:
+            seen.add(key)
+            result.append(cleaned)
+    return result
+
+
 def build_relation_index(identity_payload: dict[str, Any] | None):
     alias_index: dict[str, set[str]] = {}
     keyword_index: dict[str, set[str]] = {}
@@ -163,6 +178,21 @@ def build_review_queue(
         relation = relation_hints(display_artist, identity_payload)
         decision = decision_index.get(display_artist)
 
+        components = []
+        if category == "composite_credit_review":
+            for component in composite_components(display_artist):
+                component_relation = relation_hints(component, identity_payload)
+                components.append(
+                    {
+                        "displayArtist": component,
+                        **component_relation,
+                        "identityStatus": "unverified"
+                        if component_relation["relationStatus"] == "unresolved"
+                        else "known_relation",
+                        "autoPromote": False,
+                    }
+                )
+
         queue.append(
             {
                 "displayArtist": display_artist,
@@ -178,6 +208,7 @@ def build_review_queue(
                 "relatedCanonicalArtistIds": [] if decision is None else list(decision.get("relatedCanonicalArtistIds") or []),
                 "rejectedRelationCanonicalArtistIds": [] if decision is None else list(decision.get("rejectedRelationCanonicalArtistIds") or []),
                 "decisionEvidence": [] if decision is None else list(decision.get("evidence") or []),
+                "components": components,
                 "evidenceCount": int(row.get("evidenceCount") or 0),
                 "platforms": list(row.get("platforms") or []),
                 "sourceKeys": list(row.get("sourceKeys") or []),
