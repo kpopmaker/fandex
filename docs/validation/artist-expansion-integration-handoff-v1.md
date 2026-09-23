@@ -113,3 +113,57 @@ Updated conclusion:
 - NAVER identity/pipeline genericity: PASS
 - Last.fm artist-count genericity: PASS
 - known fixed 10-artist blocker: REMOVED on validation branch
+
+
+## Cloud / YouTube generic cohort validation
+
+A fixed-cohort blocker was found in the Cloud v10 integration path:
+
+- `fandex_master_score_v10.py` required all source sets to contain exactly 10 artists.
+- `fandex_cloud_runner_v1.py` hard-coded an exact 10-artist Last.fm set.
+
+Validation-branch fixes:
+
+- Cloud master now requires:
+  - non-empty source artist set
+  - exact artist-set parity across Naver / YouTube / Music / Last.fm
+  - no fixed cohort size
+- Cloud runner Last.fm bootstrap now:
+  - derives the expected cohort from the first snapshot
+  - requires subsequent snapshots to match the same exact artist set
+  - uses a dynamic expected count
+- step descriptions no longer claim a fixed 10-artist cohort.
+
+Runtime regression:
+
+- test: `tests/artist-expansion-cloud-youtube-generic-cohort-v1.py`
+- synthetic cohort size: 11 artists
+- covers:
+  - Naver source parity
+  - YouTube source parity
+  - Music source parity
+  - Last.fm source parity
+  - master ranking generation
+  - cloud runner Last.fm bootstrap
+- workflow run id: `35842202477`
+- head SHA: `2fdcb585207f1b1d708e20e8b3593c38fbd5bbcf`
+- conclusion: `success`
+
+Successful steps:
+
+1. Python syntax check
+2. Generic 11-artist cloud and YouTube cohort regression
+
+The temporary workflow was removed after PASS.
+
+Cleanup commit:
+
+- `7448fa3a956bc3146f479c6053cd6cc80a3495e4`
+
+Updated genericity conclusion:
+
+- NAVER pipeline: PASS
+- Last.fm variable-count path: PASS
+- Cloud master cross-source cohort: PASS
+- YouTube source participation in >10 artist cohort: PASS
+- fixed 10-artist cloud blocker: REMOVED on validation branch
