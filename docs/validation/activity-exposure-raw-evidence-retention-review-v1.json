@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "activity-exposure-retention-review-v1",
+  "latestMainReviewed": "d7ad96f9a207e35141104882972a97829400862c",
+  "construct": "Activity Exposure Event Stream",
+  "legacyNumericOutput": "NUMERIC_OUTPUT_NOT_JUSTIFIED",
+  "musicbrainz": {
+    "validationAcquisition": "allowed_for_current_validation_scope",
+    "productionRawStorage": "conditionally_eligible_pending_field_license_boundary",
+    "commercialServiceAccess": "unresolved",
+    "rawRedistribution": "not_required_not_authorized_by_review"
+  },
+  "youtube": {
+    "acquisition": "blocked_pending_authorized_api_credential",
+    "rawPayloadRetention": "not_eligible_as_indefinite_append_only_storage",
+    "requiredRetentionBehavior": "refresh_or_delete_within_provider_policy_limit",
+    "rawRedistribution": "forbidden_by_fandex_scope"
+  },
+  "currentSchema": {
+    "naverIngestionProviderLocked": true,
+    "rawEvidenceAppendOnly": true,
+    "normalizedRecordsProviderLocked": true,
+    "reusableForActivityExposure": false
+  },
+  "decision": {
+    "productionPersistenceSchemaChangeRequired": true,
+    "neonMainMutationPerformed": false,
+    "explicitUserApprovalRequiredBeforeNeonMainSchemaChange": true
+  }
+}
