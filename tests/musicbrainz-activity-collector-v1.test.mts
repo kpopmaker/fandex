@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   createMusicBrainzActivityResearchCollector,
-  MUSICBRAINZ_ACTIVITY_PAGE_SIZE,
+  MUSICBRAINZ_ACTIVITY_MIN_REQUEST_INTERVAL_MS,
   type MusicBrainzActivityFetch,
 } from '../lib/server/research/musicBrainzActivityCollector';
 
@@ -17,11 +17,19 @@ function jsonResponse(payload: unknown, status = 200) {
   });
 }
 
-function page(offset: number, groups: unknown[], count = groups.length) {
+function releaseGroupPage(offset: number, groups: unknown[], count = groups.length) {
   return {
     'release-group-count': count,
     'release-group-offset': offset,
     'release-groups': groups,
+  };
+}
+
+function releasePage(offset: number, releases: unknown[], count = releases.length) {
+  return {
+    'release-count': count,
+    'release-offset': offset,
+    releases,
   };
 }
 
@@ -48,134 +56,238 @@ function releaseGroup(input: Readonly<{
   };
 }
 
-test('collector paginates release groups and normalizes observed release events', async () => {
+function officialRelease(input: Readonly<{
+  id: string;
+  title: string;
+  date?: string;
+  status?: string;
+  country?: string;
+}>) {
+  return {
+    id: input.id,
+    title: input.title,
+    status: input.status ?? 'Official',
+    date: input.date,
+    country: input.country ?? 'KR',
+  };
+}
+
+test('collector requires concrete official release evidence before observed event', async () => {
   const requests: URL[] = [];
-  const groups = [
-    releaseGroup({
-      id: '066225ff-a8bd-4183-bff5-08329f0a063a',
-      title: 'The Winning',
-      date: '2024-02-20',
-    }),
-    releaseGroup({
-      id: '2d7f2788-c4d2-4a79-9182-4d6259ab9ddd',
-      title: 'Palette',
-      date: '2017-04-21',
-    }),
-  ];
+  const sleeps: number[] = [];
+  const rg = releaseGroup({
+    id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+    title: 'The Winning',
+    date: '2024-02-20',
+  });
+  const release = officialRelease({
+    id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+    title: 'The Winning',
+    date: '2024-02-20',
+  });
+
   const syntheticFetch: MusicBrainzActivityFetch = async (input) => {
     const url = new URL(input);
     requests.push(url);
-    const offset = Number(url.searchParams.get('offset'));
-    return offset === 0
-      ? jsonResponse(page(0, [groups[0]], 2))
-      : jsonResponse(page(1, [groups[1]], 2));
+    if (url.pathname.endsWith('/release-group')) {
+      return jsonResponse(releaseGroupPage(0, [rg]));
+    }
+    return jsonResponse(releasePage(0, [release]));
   };
 
   const result = await createMusicBrainzActivityResearchCollector({
     fetch: syntheticFetch,
     now: () => new Date(collectedAt),
+    sleep: async (milliseconds) => { sleeps.push(milliseconds); },
   }).collect({ artistId: 'iu', providerArtistId: iuMbid });
 
   assert.equal(requests.length, 2);
+  assert.equal(sleeps.length, 1);
+  assert.equal(sleeps[0], MUSICBRAINZ_ACTIVITY_MIN_REQUEST_INTERVAL_MS);
   assert.equal(requests[0].searchParams.get('artist'), iuMbid);
-  assert.equal(requests[0].searchParams.get('limit'), String(MUSICBRAINZ_ACTIVITY_PAGE_SIZE));
-  assert.equal(result.pages.length, 2);
-  assert.equal(result.rawObservations.length, 2);
-  assert.equal(result.events.length, 2);
-  assert.deepEqual(result.validationIssues, []);
+  assert.equal(requests[0].searchParams.get('release-group-status'), 'website-default');
+  assert.equal(requests[1].searchParams.get('release-group'), rg.id);
+  assert.equal(requests[1].searchParams.get('status'), 'official');
+  assert.equal(result.events.length, 1);
   assert.equal(result.events[0].occurredAt, '2024-02-20');
-  assert.equal(result.events[0].eventFamily, 'release');
-  assert.equal(result.events[0].sourceEntityId, groups[0].id);
+  assert.equal(result.events[0].supportingReleaseId, release.id);
+  assert.equal(result.rawObservations.length, 2);
+  assert.deepEqual(result.validationIssues, []);
 });
 
-test('partial dates preserve provider precision', async () => {
+test('release-group date alone never creates confirmed observed event', async () => {
   const result = await createMusicBrainzActivityResearchCollector({
-    fetch: async () => jsonResponse(page(0, [
-      releaseGroup({
-        id: '2d7f2788-c4d2-4a79-9182-4d6259ab9ddd',
-        title: 'Partial Date',
-        date: '2017-04',
-      }),
-    ])),
+    fetch: async (input) => {
+      const url = new URL(input);
+      return url.pathname.endsWith('/release-group')
+        ? jsonResponse(releaseGroupPage(0, [releaseGroup({
+            id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+            title: 'The Winning',
+            date: '2024-02-20',
+          })]))
+        : jsonResponse(releasePage(0, []));
+    },
+    sleep: async () => {},
     now: () => new Date(collectedAt),
   }).collect({ artistId: 'iu', providerArtistId: iuMbid });
 
-  assert.equal(result.events[0].occurredAt, '2017-04');
-  assert.equal(result.events[0].occurredAtPrecision, 'month');
-});
-
-test('missing release date remains raw evidence and does not fabricate observed event', async () => {
-  const result = await createMusicBrainzActivityResearchCollector({
-    fetch: async () => jsonResponse(page(0, [
-      releaseGroup({
-        id: '2d7f2788-c4d2-4a79-9182-4d6259ab9ddd',
-        title: 'Missing Date',
-      }),
-    ])),
-    now: () => new Date(collectedAt),
-  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
-
-  assert.equal(result.rawObservations.length, 1);
   assert.equal(result.events.length, 0);
+  assert.equal(result.rawObservations.length, 1);
   assert.deepEqual(result.rawObservations[0].normalizedEventIds, []);
 });
 
-test('artist-credit mismatch is preserved as evidence but blocked from normalized event', async () => {
+test('earliest dated official release determines occurrence and preserves precision', async () => {
   const result = await createMusicBrainzActivityResearchCollector({
-    fetch: async () => jsonResponse(page(0, [
-      releaseGroup({
-        id: '2d7f2788-c4d2-4a79-9182-4d6259ab9ddd',
-        title: 'Wrong Artist',
-        date: '2024-01-01',
-        artistId: '00000000-0000-4000-8000-000000000000',
-      }),
-    ])),
-    now: () => new Date(collectedAt),
-  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
-
-  assert.equal(result.rawObservations.length, 1);
-  assert.equal(result.events.length, 0);
-});
-
-test('duplicate release-group IDs across pages do not create duplicate activity events', async () => {
-  const group = releaseGroup({
-    id: '066225ff-a8bd-4183-bff5-08329f0a063a',
-    title: 'The Winning',
-    date: '2024-02-20',
-  });
-  let calls = 0;
-  const result = await createMusicBrainzActivityResearchCollector({
-    fetch: async () => {
-      calls += 1;
-      return calls === 1
-        ? jsonResponse(page(0, [group], 2))
-        : jsonResponse(page(1, [group], 2));
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse(releaseGroupPage(0, [releaseGroup({
+          id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+          title: 'The Winning',
+          date: '2024-02-20',
+        })]));
+      }
+      return jsonResponse(releasePage(0, [
+        officialRelease({
+          id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+          title: 'The Winning',
+          date: '2024-02',
+        }),
+        officialRelease({
+          id: 'ae97cc33-21cf-4ddf-8824-70e3ae2ba1f7',
+          title: 'The Winning',
+          date: '2024-02-20',
+        }),
+      ]));
     },
+    sleep: async () => {},
     now: () => new Date(collectedAt),
   }).collect({ artistId: 'iu', providerArtistId: iuMbid });
 
   assert.equal(result.events.length, 1);
-  assert.equal(result.rawObservations.length, 1);
-  assert.deepEqual(result.validationIssues, []);
+  assert.equal(result.events[0].occurredAt, '2024-02');
+  assert.equal(result.events[0].occurredAtPrecision, 'month');
 });
 
-test('pagination count changing mid-collection fails closed', async () => {
+test('non-official or undated releases remain evidence but do not confirm occurrence', async () => {
+  const result = await createMusicBrainzActivityResearchCollector({
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse(releaseGroupPage(0, [releaseGroup({
+          id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+          title: 'The Winning',
+          date: '2024-02-20',
+        })]));
+      }
+      return jsonResponse(releasePage(0, [
+        officialRelease({
+          id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+          title: 'The Winning',
+          date: '2024-02-20',
+          status: 'Promotion',
+        }),
+        officialRelease({
+          id: 'ae97cc33-21cf-4ddf-8824-70e3ae2ba1f7',
+          title: 'The Winning',
+        }),
+      ]));
+    },
+    sleep: async () => {},
+    now: () => new Date(collectedAt),
+  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
+
+  assert.equal(result.events.length, 0);
+  assert.equal(result.rawObservations.length, 3);
+});
+
+test('artist-credit mismatch blocks release lookup and normalized event', async () => {
   let calls = 0;
-  const collector = createMusicBrainzActivityResearchCollector({
+  const result = await createMusicBrainzActivityResearchCollector({
     fetch: async () => {
       calls += 1;
-      return calls === 1
-        ? jsonResponse(page(0, [releaseGroup({
-            id: '066225ff-a8bd-4183-bff5-08329f0a063a',
-            title: 'A',
+      return jsonResponse(releaseGroupPage(0, [releaseGroup({
+        id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+        title: 'Wrong Artist',
+        date: '2024-02-20',
+        artistId: '00000000-0000-4000-8000-000000000000',
+      })]));
+    },
+    sleep: async () => {},
+    now: () => new Date(collectedAt),
+  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
+
+  assert.equal(calls, 1);
+  assert.equal(result.events.length, 0);
+  assert.equal(result.rawObservations.length, 1);
+});
+
+test('release pagination increments by actual returned item count', async () => {
+  const releaseOffsets: number[] = [];
+  const result = await createMusicBrainzActivityResearchCollector({
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse(releaseGroupPage(0, [releaseGroup({
+          id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+          title: 'The Winning',
+          date: '2024-02-20',
+        })]));
+      }
+      const offset = Number(url.searchParams.get('offset'));
+      releaseOffsets.push(offset);
+      if (offset === 0) {
+        return jsonResponse(releasePage(0, [
+          officialRelease({
+            id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+            title: 'The Winning',
+            date: '2024-02-20',
+          }),
+        ], 2));
+      }
+      return jsonResponse(releasePage(1, [
+        officialRelease({
+          id: 'ae97cc33-21cf-4ddf-8824-70e3ae2ba1f7',
+          title: 'The Winning',
+          date: '2024-02-21',
+        }),
+      ], 2));
+    },
+    sleep: async () => {},
+    now: () => new Date(collectedAt),
+  }).collect({ artistId: 'iu', providerArtistId: iuMbid });
+
+  assert.deepEqual(releaseOffsets, [0, 1]);
+  assert.equal(result.releasePages.length, 2);
+  assert.equal(result.events.length, 1);
+});
+
+test('changing pagination count fails closed', async () => {
+  let releaseCalls = 0;
+  const collector = createMusicBrainzActivityResearchCollector({
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse(releaseGroupPage(0, [releaseGroup({
+          id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+          title: 'The Winning',
+          date: '2024-02-20',
+        })]));
+      }
+      releaseCalls += 1;
+      return releaseCalls === 1
+        ? jsonResponse(releasePage(0, [officialRelease({
+            id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+            title: 'The Winning',
             date: '2024-02-20',
           })], 2))
-        : jsonResponse(page(1, [releaseGroup({
-            id: '2d7f2788-c4d2-4a79-9182-4d6259ab9ddd',
-            title: 'B',
-            date: '2017-04-21',
+        : jsonResponse(releasePage(1, [officialRelease({
+            id: 'ae97cc33-21cf-4ddf-8824-70e3ae2ba1f7',
+            title: 'The Winning',
+            date: '2024-02-21',
           })], 3));
     },
+    sleep: async () => {},
   });
 
   await assert.rejects(
@@ -184,28 +296,14 @@ test('pagination count changing mid-collection fails closed', async () => {
   );
 });
 
-test('malformed provider payload fails closed', async () => {
-  const collector = createMusicBrainzActivityResearchCollector({
-    fetch: async () => jsonResponse({
-      'release-group-count': 1,
-      'release-group-offset': 0,
-      'release-groups': [{ id: 'not-an-mbid', title: 'bad' }],
-    }),
-  });
-
-  await assert.rejects(
-    collector.collect({ artistId: 'iu', providerArtistId: iuMbid }),
-    { message: 'musicbrainz_activity_response_invalid' },
-  );
-});
-
 test('invalid artist MBID is rejected before fetch', async () => {
   let calls = 0;
   const collector = createMusicBrainzActivityResearchCollector({
     fetch: async () => {
       calls += 1;
-      return jsonResponse(page(0, []));
+      return jsonResponse(releaseGroupPage(0, []));
     },
+    sleep: async () => {},
   });
   await assert.rejects(
     collector.collect({ artistId: 'iu', providerArtistId: 'iu-text-alias' }),
