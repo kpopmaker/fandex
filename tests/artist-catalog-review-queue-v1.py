@@ -21,6 +21,14 @@ def main():
         "createdAt": "2026-09-23T00:00:00Z",
         "catalogCandidates": [
             {
+                "displayArtist": "순순희(지환)",
+                "normalizedArtist": "순순희지환",
+                "evidenceCount": 1,
+                "platforms": ["melon"],
+                "sourceKeys": ["melon_top100"],
+                "sampleTracks": ["D"],
+            },
+            {
                 "displayArtist": "도경수(D.O.)",
                 "normalizedArtist": "도경수do",
                 "evidenceCount": 4,
@@ -71,7 +79,15 @@ def main():
                 "relatedCanonicalArtistIds": ["exo"],
                 "autoPromote": False,
                 "evidence": [{"source": "fixture", "url": "https://example.com"}],
-            }
+            },
+            {
+                "displayArtist": "순순희 (지환)",
+                "decision": "new_canonical_solo_candidate",
+                "relationResolution": "spacing_variant_fixture",
+                "relatedCanonicalArtistIds": [],
+                "autoPromote": False,
+                "evidence": [],
+            },
         ]
     }
 
@@ -81,15 +97,16 @@ def main():
         decision_payload,
     )
 
-    assert output["candidateCount"] == 3
+    assert output["candidateCount"] == 4
     assert output["autoPromotionAllowed"] is False
     assert output["categoryCounts"] == {
-        "alternate_identity_review": 1,
+        "alternate_identity_review": 2,
         "composite_credit_review": 1,
         "single_identity_review": 1,
     }
 
     by_name = {row["displayArtist"]: row for row in output["queue"]}
+    assert by_name["순순희(지환)"]["reviewDecision"] == "new_canonical_solo_candidate"
     assert by_name["도경수(D.O.)"]["reviewCategory"] == "alternate_identity_review"
     assert by_name["도경수(D.O.)"]["relationStatus"] == "existing_artist_keyword_relation"
     assert by_name["도경수(D.O.)"]["keywordRelationMatches"] == ["exo"]
@@ -99,6 +116,7 @@ def main():
     assert by_name["임영웅"]["relationStatus"] == "unresolved"
     assert by_name["Artist A & Artist B"]["reviewCategory"] == "composite_credit_review"
     assert [x["displayArtist"] for x in by_name["Artist A & Artist B"]["components"]] == ["Artist A", "Artist B"]
+    assert module.composite_components("HUNTR/X & EJAE") == ["HUNTR/X", "EJAE"]
     assert all(x["autoPromote"] is False for x in by_name["Artist A & Artist B"]["components"])
     assert all(row["autoPromote"] is False for row in output["queue"])
     assert all(row["identityStatus"] == "unverified" for row in output["queue"])
