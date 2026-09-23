@@ -1,0 +1,38 @@
+name: Artist Expansion Generic NAVER Validation v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-generic-naver-pipeline-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Generic multi-artist regression
+        run: npx tsx --test tests/artist-expansion-generic-naver-pipeline-v1.test.mts
+
+      - name: Full-universe identity coverage
+        run: npx tsx --test tests/artist-expansion-naver-identity-coverage-v1.test.mts
+
+      - name: Full-universe generic NAVER regression
+        run: npx tsx --test tests/artist-expansion-full-universe-generic-naver-v1.test.mts
