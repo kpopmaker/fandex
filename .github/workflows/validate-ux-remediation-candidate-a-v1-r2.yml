@@ -1,0 +1,43 @@
+name: Validate UX Remediation Candidate A v1 r2
+
+on:
+  push:
+    branches:
+      - validation/ux-remediation-candidate-a-truth-preservation-v1-r2
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Candidate A acceptance
+        run: |
+          npx tsx --test tests/product-ux-remediation-candidate-a-v1.test.mts
+          npx tsx --test tests/product-stored-evidence-failure-presentation-v1.test.mts
+      - name: Product time foundation
+        run: npx tsx --test tests/product-time-foundation-v1.test.mts
+      - name: Product variable route integration
+        run: npx tsx --test tests/product-artist-variable-route-integration-v1.test.mts
+      - name: Product evidence route integration
+        run: npx tsx --test tests/product-evidence-route-integration-v1.test.mts
+      - name: newsIssuePoint Real read boundary
+        run: npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+      - name: public-route cutover regression
+        run: npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
