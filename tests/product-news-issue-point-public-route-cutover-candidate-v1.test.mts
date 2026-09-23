@@ -13,10 +13,6 @@ import {
   NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL,
   NEWS_ISSUE_POINT_REAL_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE,
 } from '../lib/product/activation/newsIssuePointRealProductActivationApproval';
-import {
-  getFandexVariableDefinition,
-} from '../lib/intelligence/variableRegistry';
-
 test('cutover candidate is derived from the authoritative cutover approval contract', () => {
   const candidate =
     NEWS_ISSUE_POINT_REAL_PRODUCT_PUBLIC_ROUTE_CUTOVER_CANDIDATE;
@@ -84,7 +80,7 @@ test('candidate carries no cutover approval and authorization stays fail-closed'
   });
 });
 
-test('candidate preserves the pre-cutover Product state', () => {
+test('historical cutover candidate preserves its pre-cutover decision without constraining later execution state', () => {
   assert.deepEqual(
     NEWS_ISSUE_POINT_REAL_PRODUCT_PUBLIC_ROUTE_CUTOVER_CANDIDATE.decision,
     {
@@ -98,11 +94,6 @@ test('candidate preserves the pre-cutover Product state', () => {
       requiredNextGate: 'explicit-public-route-cutover',
     },
   );
-
-  const definition = getFandexVariableDefinition('newsIssuePoint');
-  assert.ok(definition);
-  assert.equal(definition.lifecycle, 'shadow');
-  assert.equal(definition.directProductionContributionEligible, false);
 });
 
 test('legacy public Product query remains untouched before explicit cutover execution', async () => {

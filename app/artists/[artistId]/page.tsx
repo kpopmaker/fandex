@@ -31,6 +31,9 @@ import {
 } from '../../../lib/product/presentation/dashboardPresentation';
 import { getArtistProductVariable } from '../../../lib/product/queries/getArtistProductVariable';
 import { getArtistProductVariableEvidence } from '../../../lib/product/queries/getArtistProductVariableEvidence';
+import {
+  getNaverNewsIssuePointPublicRouteVariable,
+} from '../../../lib/server/product/naverNewsIssuePointRealProductRead';
 import type { ProductVariableId } from '../../../lib/product/contracts/productVariable';
 import { PRODUCT_VARIABLE_DEFINITIONS } from '../../../lib/product/variables/productVariableDefinitions';
 
@@ -280,16 +283,27 @@ export default async function ArtistDetailPage({
     currentFandexEntry?.status === 'ok'
       ? currentFandexEntry.source?.sourceTimeLabel ?? null
       : null;
-  const productVariableResults = requestedProductVariableIds.map((variableId) =>
-    getArtistProductVariable({ artistId: profile.artistId, variableId }),
+  const productVariableResults = await Promise.all(
+    requestedProductVariableIds.map(async (variableId) =>
+      profile.artistId === 'iu' && variableId === 'newsIssuePoint'
+        ? getNaverNewsIssuePointPublicRouteVariable()
+        : getArtistProductVariable({
+            artistId: profile.artistId,
+            variableId,
+          }),
+    ),
   );
-  const productVariableEvidenceCollections = requestedProductVariableIds.map(
-    (variableId) =>
+  const productVariableEvidenceCollections = requestedProductVariableIds
+    .filter(
+      (variableId) =>
+        !(profile.artistId === 'iu' && variableId === 'newsIssuePoint'),
+    )
+    .map((variableId) =>
       getArtistProductVariableEvidence({
         artistId: profile.artistId,
         variableId,
       }),
-  );
+    );
   const recentIssues = getArtistRecentIssueSignals(profile.artistId, 10);
   const productMetricCollection = getArtistProductMetricCollection({
     artistId: profile.artistId,
