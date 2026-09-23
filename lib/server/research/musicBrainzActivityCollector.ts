@@ -7,14 +7,20 @@ import {
   type ActivityExposureEvent,
 } from '../../research/activityExposure';
 
-export const MUSICBRAINZ_ACTIVITY_BASE_URL = 'https://musicbrainz.org/ws/2/release-group';
-export const MUSICBRAINZ_ACTIVITY_USER_AGENT = 'FANDEX-Research/1.0 (https://github.com/kpopmaker/fandex)';
+export const MUSICBRAINZ_ACTIVITY_RELEASE_GROUP_URL =
+  'https://musicbrainz.org/ws/2/release-group';
+export const MUSICBRAINZ_ACTIVITY_RELEASE_URL =
+  'https://musicbrainz.org/ws/2/release';
+export const MUSICBRAINZ_ACTIVITY_USER_AGENT =
+  'FANDEX-Research/1.0 (https://github.com/kpopmaker/fandex)';
 export const MUSICBRAINZ_ACTIVITY_TIMEOUT_MS = 10_000;
 export const MUSICBRAINZ_ACTIVITY_PAGE_SIZE = 100;
+export const MUSICBRAINZ_ACTIVITY_MIN_REQUEST_INTERVAL_MS = 1_000;
 
 const MAX_RESPONSE_BYTES = 2_500_000;
 const MAX_TITLE_BYTES = 2_048;
-const MBID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const MBID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export type MusicBrainzReleaseGroup = Readonly<{
   id: string;
@@ -28,10 +34,24 @@ export type MusicBrainzReleaseGroup = Readonly<{
   }>[];
 }>;
 
+export type MusicBrainzRelease = Readonly<{
+  id: string;
+  title: string;
+  status?: string | null;
+  date?: string;
+  country?: string | null;
+}>;
+
 export type MusicBrainzReleaseGroupPage = Readonly<{
   'release-group-count': number;
   'release-group-offset': number;
   'release-groups': readonly MusicBrainzReleaseGroup[];
+}>;
+
+export type MusicBrainzReleasePage = Readonly<{
+  'release-count': number;
+  'release-offset': number;
+  releases: readonly MusicBrainzRelease[];
 }>;
 
 export type MusicBrainzActivityFetch = (
@@ -42,6 +62,7 @@ export type MusicBrainzActivityFetch = (
 export type MusicBrainzActivityCollectorOptions = Readonly<{
   fetch?: MusicBrainzActivityFetch;
   now?: () => Date;
+  sleep?: (milliseconds: number) => Promise<void>;
   timeoutMilliseconds?: number;
   userAgent?: string;
 }>;
@@ -50,7 +71,8 @@ export type MusicBrainzActivityCollection = Readonly<{
   artistId: string;
   providerArtistId: string;
   collectedAt: string;
-  pages: readonly MusicBrainzReleaseGroupPage[];
+  releaseGroupPages: readonly MusicBrainzReleaseGroupPage[];
+  releasePages: readonly MusicBrainzReleasePage[];
   rawObservations: readonly ActivityExposureRawObservation[];
   events: readonly ActivityExposureEvent[];
   validationIssues: readonly ReturnType<typeof validateActivityExposureStream>[number][];
@@ -73,6 +95,13 @@ function validateDatePrecision(value: string): 'year' | 'month' | 'day' | null {
   if (/^\d{4}-\d{2}$/.test(value)) return 'month';
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return 'day';
   return null;
+}
+
+function dateStartKey(value: string) {
+  const precision = validateDatePrecision(value);
+  if (precision === null) return null;
+  const [year, month = '01', day = '01'] = value.split('-');
+  return `${year}-${month}-${day}`;
 }
 
 function validateReleaseGroup(value: unknown): MusicBrainzReleaseGroup {
@@ -104,7 +133,33 @@ function validateReleaseGroup(value: unknown): MusicBrainzReleaseGroup {
   return item as MusicBrainzReleaseGroup;
 }
 
-function validatePage(value: unknown, expectedOffset: number): MusicBrainzReleaseGroupPage {
+function validateRelease(value: unknown): MusicBrainzRelease {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  const item = value as Record<string, unknown>;
+  if (typeof item.id !== 'string' || !MBID.test(item.id)) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  if (typeof item.title !== 'string' || byteLength(item.title) > MAX_TITLE_BYTES) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  if (item.status !== undefined && item.status !== null && typeof item.status !== 'string') {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  if (
+    item.date !== undefined
+    && (typeof item.date !== 'string' || validateDatePrecision(item.date) === null)
+  ) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  return item as MusicBrainzRelease;
+}
+
+function validateReleaseGroupPage(
+  value: unknown,
+  expectedOffset: number,
+): MusicBrainzReleaseGroupPage {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     return fail('musicbrainz_activity_response_invalid');
   }
@@ -112,7 +167,6 @@ function validatePage(value: unknown, expectedOffset: number): MusicBrainzReleas
   const count = page['release-group-count'];
   const offset = page['release-group-offset'];
   const groups = page['release-groups'];
-
   if (!Number.isInteger(count) || Number(count) < 0) {
     return fail('musicbrainz_activity_response_invalid');
   }
@@ -122,7 +176,6 @@ function validatePage(value: unknown, expectedOffset: number): MusicBrainzReleas
   if (!Array.isArray(groups) || groups.length > MUSICBRAINZ_ACTIVITY_PAGE_SIZE) {
     return fail('musicbrainz_activity_response_invalid');
   }
-
   return Object.freeze({
     'release-group-count': Number(count),
     'release-group-offset': Number(offset),
@@ -130,11 +183,30 @@ function validatePage(value: unknown, expectedOffset: number): MusicBrainzReleas
   });
 }
 
-function canonicalRawPayload(page: MusicBrainzReleaseGroupPage, releaseGroup: MusicBrainzReleaseGroup) {
-  return JSON.stringify({
-    provider: 'musicbrainz',
-    pageOffset: page['release-group-offset'],
-    releaseGroup,
+function validateReleasePage(
+  value: unknown,
+  expectedOffset: number,
+): MusicBrainzReleasePage {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  const page = value as Record<string, unknown>;
+  const count = page['release-count'];
+  const offset = page['release-offset'];
+  const releases = page.releases;
+  if (!Number.isInteger(count) || Number(count) < 0) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  if (!Number.isInteger(offset) || Number(offset) !== expectedOffset) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  if (!Array.isArray(releases) || releases.length > MUSICBRAINZ_ACTIVITY_PAGE_SIZE) {
+    return fail('musicbrainz_activity_response_invalid');
+  }
+  return Object.freeze({
+    'release-count': Number(count),
+    'release-offset': Number(offset),
+    releases: Object.freeze(releases.map(validateRelease)),
   });
 }
 
@@ -147,17 +219,30 @@ function artistCreditContains(
   );
 }
 
+function earliestOfficialRelease(
+  releases: readonly MusicBrainzRelease[],
+): MusicBrainzRelease | null {
+  const dated = releases
+    .filter((release) => release.status === 'Official' && release.date)
+    .filter((release) => dateStartKey(release.date!) !== null);
+  if (dated.length === 0) return null;
+  return [...dated].sort((a, b) => {
+    const aKey = dateStartKey(a.date!)!;
+    const bKey = dateStartKey(b.date!)!;
+    if (aKey !== bKey) return aKey.localeCompare(bKey);
+    return a.date!.length - b.date!.length;
+  })[0];
+}
+
 function normalizeReleaseGroupEvent(input: Readonly<{
   artistId: string;
   providerArtistId: string;
   collectedAt: string;
   releaseGroup: MusicBrainzReleaseGroup;
-}>): ActivityExposureEvent | null {
-  const occurredAt = input.releaseGroup['first-release-date'] ?? null;
-  if (occurredAt === null) return null;
-  const precision = validateDatePrecision(occurredAt);
-  if (precision === null) return null;
-
+  supportingRelease: MusicBrainzRelease;
+}>): ActivityExposureEvent {
+  const occurredAt = input.supportingRelease.date!;
+  const precision = validateDatePrecision(occurredAt)!;
   return Object.freeze({
     artistId: input.artistId,
     eventId: `activity:musicbrainz:release-group:${input.releaseGroup.id}`,
@@ -179,7 +264,7 @@ function normalizeReleaseGroupEvent(input: Readonly<{
     evidenceRef: `https://musicbrainz.org/release-group/${input.releaseGroup.id}`,
     identityState: 'resolved_for_research',
     missingState: 'covered',
-    evidenceState: 'direct_provider_evidence',
+    evidenceState: 'direct_provider_evidence_with_official_release_support',
     conflictState: 'clear',
     timeZoneState: 'not_applicable_date_only',
     revisionId: 'research-collection',
@@ -187,6 +272,9 @@ function normalizeReleaseGroupEvent(input: Readonly<{
     title: input.releaseGroup.title,
     primaryType: input.releaseGroup['primary-type'] ?? null,
     secondaryTypes: input.releaseGroup['secondary-types'] ?? [],
+    supportingReleaseId: input.supportingRelease.id,
+    supportingReleaseStatus: input.supportingRelease.status ?? null,
+    supportingReleaseCountry: input.supportingRelease.country ?? null,
   });
 }
 
@@ -195,25 +283,23 @@ export function createMusicBrainzActivityResearchCollector(
 ) {
   const externalFetch = options.fetch ?? fetch;
   const now = options.now ?? (() => new Date());
-  const timeoutMilliseconds = options.timeoutMilliseconds ?? MUSICBRAINZ_ACTIVITY_TIMEOUT_MS;
+  const sleep = options.sleep ?? (
+    (milliseconds: number) =>
+      new Promise<void>((resolve) => setTimeout(resolve, milliseconds))
+  );
+  const timeoutMilliseconds =
+    options.timeoutMilliseconds ?? MUSICBRAINZ_ACTIVITY_TIMEOUT_MS;
   const userAgent = options.userAgent ?? MUSICBRAINZ_ACTIVITY_USER_AGENT;
-
   if (!userAgent.trim() || byteLength(userAgent) > 512) {
     fail('musicbrainz_activity_config_invalid');
   }
 
-  async function fetchPage(
-    providerArtistId: string,
-    offset: number,
-  ): Promise<MusicBrainzReleaseGroupPage> {
-    if (!MBID.test(providerArtistId)) fail('musicbrainz_activity_artist_id_invalid');
-    if (!Number.isInteger(offset) || offset < 0) fail('musicbrainz_activity_offset_invalid');
-
-    const url = new URL(MUSICBRAINZ_ACTIVITY_BASE_URL);
-    url.searchParams.set('artist', providerArtistId);
-    url.searchParams.set('fmt', 'json');
-    url.searchParams.set('limit', String(MUSICBRAINZ_ACTIVITY_PAGE_SIZE));
-    url.searchParams.set('offset', String(offset));
+  let requestCount = 0;
+  async function rateLimitedFetch(url: URL): Promise<unknown> {
+    if (requestCount > 0) {
+      await sleep(MUSICBRAINZ_ACTIVITY_MIN_REQUEST_INTERVAL_MS);
+    }
+    requestCount += 1;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMilliseconds);
@@ -240,30 +326,71 @@ export function createMusicBrainzActivityResearchCollector(
       if (byteLength(body) > MAX_RESPONSE_BYTES) {
         fail('musicbrainz_activity_response_invalid');
       }
-      let parsed: unknown;
       try {
-        parsed = JSON.parse(body);
+        return JSON.parse(body);
       } catch {
-        fail('musicbrainz_activity_response_invalid');
+        return fail('musicbrainz_activity_response_invalid');
       }
-      return validatePage(parsed, offset);
     } catch (error) {
       if (error instanceof Error && error.message.startsWith('musicbrainz_activity_')) {
         throw error;
       }
-      fail('musicbrainz_activity_request_failed');
+      return fail('musicbrainz_activity_request_failed');
     } finally {
       clearTimeout(timeout);
     }
   }
 
+  async function fetchReleaseGroupPage(
+    providerArtistId: string,
+    offset: number,
+  ) {
+    if (!MBID.test(providerArtistId)) fail('musicbrainz_activity_artist_id_invalid');
+    const url = new URL(MUSICBRAINZ_ACTIVITY_RELEASE_GROUP_URL);
+    url.searchParams.set('artist', providerArtistId);
+    url.searchParams.set('fmt', 'json');
+    url.searchParams.set('inc', 'artist-credits');
+    url.searchParams.set('release-group-status', 'website-default');
+    url.searchParams.set('limit', String(MUSICBRAINZ_ACTIVITY_PAGE_SIZE));
+    url.searchParams.set('offset', String(offset));
+    return validateReleaseGroupPage(await rateLimitedFetch(url), offset);
+  }
+
+  async function fetchOfficialReleasePages(releaseGroupId: string) {
+    if (!MBID.test(releaseGroupId)) fail('musicbrainz_activity_release_group_id_invalid');
+    const pages: MusicBrainzReleasePage[] = [];
+    let offset = 0;
+    let expectedCount: number | null = null;
+    while (true) {
+      const url = new URL(MUSICBRAINZ_ACTIVITY_RELEASE_URL);
+      url.searchParams.set('release-group', releaseGroupId);
+      url.searchParams.set('status', 'official');
+      url.searchParams.set('fmt', 'json');
+      url.searchParams.set('limit', String(MUSICBRAINZ_ACTIVITY_PAGE_SIZE));
+      url.searchParams.set('offset', String(offset));
+      const page = validateReleasePage(await rateLimitedFetch(url), offset);
+      pages.push(page);
+      expectedCount ??= page['release-count'];
+      if (page['release-count'] !== expectedCount) {
+        fail('musicbrainz_activity_pagination_changed_during_collection');
+      }
+      offset += page.releases.length;
+      if (page.releases.length === 0 || offset >= page['release-count']) break;
+    }
+    return pages;
+  }
+
   return Object.freeze({
     mode: 'research-only' as const,
-    async collect(input: Readonly<{ artistId: string; providerArtistId: string }>): Promise<MusicBrainzActivityCollection> {
+    async collect(input: Readonly<{
+      artistId: string;
+      providerArtistId: string;
+    }>): Promise<MusicBrainzActivityCollection> {
       const collectedAt = now().toISOString();
       validateIsoCollectionTime(collectedAt);
 
-      const pages: MusicBrainzReleaseGroupPage[] = [];
+      const releaseGroupPages: MusicBrainzReleaseGroupPage[] = [];
+      const releasePages: MusicBrainzReleasePage[] = [];
       const rawObservations: ActivityExposureRawObservation[] = [];
       const events: ActivityExposureEvent[] = [];
       const seenReleaseGroupIds = new Set<string>();
@@ -272,8 +399,8 @@ export function createMusicBrainzActivityResearchCollector(
       let expectedCount: number | null = null;
 
       while (true) {
-        const page = await fetchPage(input.providerArtistId, offset);
-        pages.push(page);
+        const page = await fetchReleaseGroupPage(input.providerArtistId, offset);
+        releaseGroupPages.push(page);
         expectedCount ??= page['release-group-count'];
         if (page['release-group-count'] !== expectedCount) {
           fail('musicbrainz_activity_pagination_changed_during_collection');
@@ -283,17 +410,49 @@ export function createMusicBrainzActivityResearchCollector(
           if (seenReleaseGroupIds.has(releaseGroup.id)) continue;
           seenReleaseGroupIds.add(releaseGroup.id);
 
-          const identityMatches = artistCreditContains(releaseGroup, input.providerArtistId);
-          const event = identityMatches
+          const releaseGroupRaw = JSON.stringify({
+            provider: 'musicbrainz',
+            kind: 'release-group',
+            pageOffset: page['release-group-offset'],
+            releaseGroup,
+          });
+
+          if (!artistCreditContains(releaseGroup, input.providerArtistId)) {
+            rawObservations.push(createActivityExposureRawObservation({
+              scope: 'research',
+              artistId: input.artistId,
+              sourceProvider: 'musicbrainz',
+              providerArtistId: input.providerArtistId,
+              sourceEntityType: 'release-group',
+              sourceEntityId: releaseGroup.id,
+              requestRef: `musicbrainz:browse:artist:${input.providerArtistId}:offset:${page['release-group-offset']}`,
+              responseCapturedAt: collectedAt,
+              collectedAt,
+              providerObservedAt: releaseGroup['first-release-date'] ?? null,
+              rawPayloadCanonical: releaseGroupRaw,
+              rawPayloadRetentionState: 'retained',
+              evidenceRef: `https://musicbrainz.org/release-group/${releaseGroup.id}`,
+              revisionState: 'original',
+              authorizationState: 'research-allowed',
+              normalizedEventIds: [],
+            }));
+            continue;
+          }
+
+          const officialPages = await fetchOfficialReleasePages(releaseGroup.id);
+          releasePages.push(...officialPages);
+          const officialReleases = officialPages.flatMap((releasePage) => releasePage.releases);
+          const supportingRelease = earliestOfficialRelease(officialReleases);
+          const event = supportingRelease
             ? normalizeReleaseGroupEvent({
                 artistId: input.artistId,
                 providerArtistId: input.providerArtistId,
                 collectedAt,
                 releaseGroup,
+                supportingRelease,
               })
             : null;
 
-          const normalizedEventIds = event ? [event.eventId] : [];
           rawObservations.push(createActivityExposureRawObservation({
             scope: 'research',
             artistId: input.artistId,
@@ -304,15 +463,41 @@ export function createMusicBrainzActivityResearchCollector(
             requestRef: `musicbrainz:browse:artist:${input.providerArtistId}:offset:${page['release-group-offset']}`,
             responseCapturedAt: collectedAt,
             collectedAt,
-            sourcePublishedAt: null,
             providerObservedAt: releaseGroup['first-release-date'] ?? null,
-            rawPayloadCanonical: canonicalRawPayload(page, releaseGroup),
+            rawPayloadCanonical: releaseGroupRaw,
             rawPayloadRetentionState: 'retained',
             evidenceRef: `https://musicbrainz.org/release-group/${releaseGroup.id}`,
             revisionState: 'original',
             authorizationState: 'research-allowed',
-            normalizedEventIds,
+            normalizedEventIds: event ? [event.eventId] : [],
           }));
+
+          for (const release of officialReleases) {
+            rawObservations.push(createActivityExposureRawObservation({
+              scope: 'research',
+              artistId: input.artistId,
+              sourceProvider: 'musicbrainz',
+              providerArtistId: input.providerArtistId,
+              sourceEntityType: 'release',
+              sourceEntityId: release.id,
+              requestRef: `musicbrainz:browse:release-group:${releaseGroup.id}:status:official`,
+              responseCapturedAt: collectedAt,
+              collectedAt,
+              providerObservedAt: release.date ?? null,
+              rawPayloadCanonical: JSON.stringify({
+                provider: 'musicbrainz',
+                kind: 'release',
+                releaseGroupId: releaseGroup.id,
+                release,
+              }),
+              rawPayloadRetentionState: 'retained',
+              evidenceRef: `https://musicbrainz.org/release/${release.id}`,
+              revisionState: 'original',
+              authorizationState: 'research-allowed',
+              normalizedEventIds:
+                event && release.id === supportingRelease?.id ? [event.eventId] : [],
+            }));
+          }
 
           if (event) events.push(event);
         }
@@ -333,7 +518,8 @@ export function createMusicBrainzActivityResearchCollector(
         artistId: input.artistId,
         providerArtistId: input.providerArtistId,
         collectedAt,
-        pages: Object.freeze(pages),
+        releaseGroupPages: Object.freeze(releaseGroupPages),
+        releasePages: Object.freeze(releasePages),
         rawObservations: Object.freeze(rawObservations),
         events: Object.freeze(events),
         validationIssues: Object.freeze(validationIssues),
