@@ -36,8 +36,8 @@ export type ProductActivityExposureCollectionStatus =
 
 export type ProductActivityExposureProviderArtistCredit = Readonly<{
   providerArtistId: string;
-  creditedName: string;
-  canonicalProviderName: string;
+  creditedName: string | null;
+  canonicalProviderName: string | null;
 }>;
 
 export type ProductActivityExposureEvent = Readonly<{
