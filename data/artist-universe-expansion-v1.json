@@ -980,6 +980,117 @@
           "url": "https://www.ticketlink.co.kr/help/notice/64339"
         }
       ]
+    },
+    {
+      "id": "gaho",
+      "ticker": "GAHO",
+      "name": "Gaho",
+      "agency": "PLAN-G Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "가호 Gaho",
+      "koreanAliases": [
+        "가호"
+      ],
+      "englishAliases": [
+        "Gaho",
+        "GAHO"
+      ],
+      "identityEvidence": [
+        {
+          "source": "StagePick",
+          "url": "https://www.stagepick.co.kr/artists/detail/DXAWKvemX6TE38Lp"
+        }
+      ]
+    },
+    {
+      "id": "leellamarz",
+      "ticker": "LEELLAMARZ",
+      "name": "Leellamarz",
+      "agency": "AMBITION MUSIK",
+      "entityType": "solo",
+      "naverNewsQuery": "릴러말즈 Leellamarz",
+      "koreanAliases": [
+        "릴러말즈"
+      ],
+      "englishAliases": [
+        "Leellamarz",
+        "LEELLAMARZ"
+      ],
+      "identityEvidence": [
+        {
+          "source": "AMBITION MUSIK",
+          "url": "https://music.apple.com/us/label/ambition-musik/1871229223"
+        }
+      ]
+    },
+    {
+      "id": "shaun",
+      "ticker": "SHAUN",
+      "name": "SHAUN",
+      "agency": "하우뮤직프로덕션",
+      "entityType": "solo",
+      "naverNewsQuery": "숀 SHAUN 가수",
+      "koreanAliases": [
+        "숀"
+      ],
+      "englishAliases": [
+        "SHAUN",
+        "Shaun"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/artist/detail.htm?artistId=510242"
+        }
+      ]
+    },
+    {
+      "id": "dkdecember",
+      "ticker": "DKDECEMBER",
+      "name": "DK",
+      "agency": "MAJOR9",
+      "entityType": "solo",
+      "naverNewsQuery": "DK 디셈버 가수",
+      "koreanAliases": [
+        "디셈버 DK",
+        "DK 디셈버"
+      ],
+      "englishAliases": [
+        "DK",
+        "DK (December)"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Melon Ticket",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=524801"
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80127059"
+        }
+      ]
+    },
+    {
+      "id": "standingegg",
+      "ticker": "STANDINGEGG",
+      "name": "Standing Egg",
+      "agency": "본엔터테인먼트",
+      "entityType": "group",
+      "naverNewsQuery": "스탠딩에그 Standing Egg",
+      "koreanAliases": [
+        "스탠딩 에그",
+        "스탠딩에그"
+      ],
+      "englishAliases": [
+        "Standing Egg",
+        "STANDING EGG"
+      ],
+      "identityEvidence": [
+        {
+          "source": "StagePick",
+          "url": "https://en.stagepick.co.kr/artists/detail/3361"
+        }
+      ]
     }
   ]
 }
