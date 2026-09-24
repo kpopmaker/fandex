@@ -1519,6 +1519,32 @@
           "url": "https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=02545286645387912"
         }
       ]
+    },
+    {
+      "id": "bobby",
+      "ticker": "BOBBY",
+      "name": "BOBBY",
+      "agency": "143 Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "바비 BOBBY 아이콘",
+      "koreanAliases": [
+        "바비",
+        "김지원"
+      ],
+      "englishAliases": [
+        "BOBBY",
+        "Bobby"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80201170?wl_ref=list_ab_04"
+        },
+        {
+          "source": "Starnews / 143 Entertainment",
+          "url": "https://www.starnewskorea.com/music/2026/08/05/2026080511263941198"
+        }
+      ]
     }
   ]
 }
