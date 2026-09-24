@@ -1485,6 +1485,88 @@
           "note": "2026 official notice from GF Entertainment identifies BANG YEDAM as its artist."
         }
       ]
+    },
+    {
+      "displayArtist": "BOBBY",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo_current_management_review_required",
+      "relatedCanonicalArtistIds": [
+        "ikon"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80201170?wl_ref=list_ab_04",
+          "note": "Provider artist page verifies BOBBY as a distinct music artist identity."
+        },
+        {
+          "source": "143 Entertainment",
+          "url": "https://www.143inc.kr/ikon",
+          "note": "143 Entertainment currently manages iKON, the canonical group relation for BOBBY; solo-management semantics remain separately reviewable."
+        }
+      ]
+    },
+    {
+      "displayArtist": "VIINI",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_management_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80292720?wl_ref=list_ab_04",
+          "note": "Provider artist page verifies VIINI as a distinct music artist identity; current management remains unfrozen."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이성경",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "cross_domain_actor_singer_identity_scope_not_frozen",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/8059404?wl_ref=list_ab_04",
+          "note": "Provider artist page verifies Lee Sung-kyung has a distinct music catalog identity; FANDEX music-artist scope eligibility remains separate."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이하이",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "independent_solo_identity_current_management_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80123277?wl_ref=list_ab_04",
+          "note": "Provider artist page verifies LeeHi as a distinct solo artist identity."
+        },
+        {
+          "source": "2026 release catalog",
+          "url": "https://www.beatport.com/artist/leehi/1049390/releases",
+          "note": "2026 releases are labeled 808 HI Recordings; exact management semantics remain separately reviewable."
+        }
+      ]
+    },
+    {
+      "displayArtist": "젝스키스",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "legacy_group_identity_current_activity_review_required",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/1383?wl_ref=list_ab_04",
+          "note": "Provider artist page verifies SECHSKIES as a distinct group music identity; current activity and management remain separately reviewable."
+        }
+      ]
     }
   ]
 }
