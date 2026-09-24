@@ -70,9 +70,23 @@ test('not-retained raw evidence blocks deterministic replay', () => {
   assert.equal(canDeterministicallyReplay([observation]), false);
 });
 
-test('retained observation stream is replay-capable without database writes', () => {
+test('retained observation stream is replay-capable with retained canonical payload', () => {
   const observation = createActivityExposureRawObservation(base);
+  assert.equal(observation.rawPayloadCanonical, base.rawPayloadCanonical);
   assert.equal(canDeterministicallyReplay([observation]), true);
+});
+
+test('digest-only evidence verifies integrity but is not deterministically replayable', () => {
+  const observation = createActivityExposureRawObservation({
+    ...base,
+    rawPayloadRetentionState: 'digest-only',
+  });
+  assert.equal(observation.rawPayloadCanonical, null);
+  assert.ok(
+    validateActivityExposureObservation(observation)
+      .includes('deterministic-replay-raw-evidence-not-retained'),
+  );
+  assert.equal(canDeterministicallyReplay([observation]), false);
 });
 
 test('changed revision requires prior observation lineage', () => {
