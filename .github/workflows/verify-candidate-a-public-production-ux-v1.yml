@@ -52,8 +52,8 @@ jobs:
             page.on('pageerror', err => consoleErrors.push(String(err)));
 
             const response = await page.goto(productUrl, {
-              waitUntil: 'networkidle',
-              timeout: 90000,
+              waitUntil: 'domcontentloaded',
+              timeout: 120000,
             });
 
             if (!response) throw new Error('no_navigation_response');
@@ -61,6 +61,7 @@ jobs:
               throw new Error('product_http_' + response.status());
             }
 
+            await page.getByText('Real · Production', { exact: false }).first().waitFor({ timeout: 120000 });
             const body = (await page.locator('body').innerText()).trim();
 
             const checks = {
@@ -86,8 +87,8 @@ jobs:
             const evidenceUrl = new URL(evidenceLinks[0].href, productUrl).toString();
             const evidencePage = await browser.newPage();
             const evidenceResponse = await evidencePage.goto(evidenceUrl, {
-              waitUntil: 'networkidle',
-              timeout: 90000,
+              waitUntil: 'domcontentloaded',
+              timeout: 120000,
             });
 
             if (!evidenceResponse) throw new Error('no_evidence_navigation_response');
@@ -95,6 +96,7 @@ jobs:
               throw new Error('evidence_http_' + evidenceResponse.status());
             }
 
+            await evidencePage.getByText('Evidence lineage', { exact: false }).first().waitFor({ timeout: 120000 });
             const evidenceBody = (await evidencePage.locator('body').innerText()).trim();
 
             const evidenceChecks = {
