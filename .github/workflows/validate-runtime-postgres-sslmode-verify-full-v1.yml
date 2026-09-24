@@ -21,7 +21,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Managed Postgres persistence contract
-        run: npx tsx --test tests/managed-postgres-persistence.test.ts
+        run: npm run test:persistence
       - name: Production dependency security
         run: npm run security:audit:production
       - name: Typecheck
