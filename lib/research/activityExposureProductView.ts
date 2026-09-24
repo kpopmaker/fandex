@@ -48,6 +48,7 @@ export type ActivityExposureProductEvidenceTrace = Readonly<{
   sourceEntityType: string;
   sourceEntityId: string;
   evidenceRef: string;
+  responseCapturedAt: string;
   collectedAt: string;
   sourcePublishedAt: string | null;
   providerObservedAt: string | null;
@@ -89,6 +90,7 @@ export type ActivityExposureProductView = Readonly<{
     missingIsZero: false;
     missingIsInactive: false;
     observationTimeEqualsCollectionTime: false;
+    sourcePublishedTimeEqualsObservationTime: false;
     crossFamilyRawAggregationAllowed: false;
     completeMeansCompleteWithinDeclaredScope: true;
   }>;
@@ -132,14 +134,6 @@ export function validateActivityExposureProviderCoverage(
     && coverage.eventTimeEnd === null
   ) {
     issues.push('bounded-query-without-event-time-boundary');
-  }
-
-  if (
-    coverage.eventTimeStart !== null
-    && coverage.eventTimeEnd !== null
-    && coverage.eventTimeStart > coverage.eventTimeEnd
-  ) {
-    issues.push('event-time-boundary-reversed');
   }
 
   if (
@@ -213,6 +207,7 @@ function evidenceTraceForEvent(
         sourceEntityType: observation.sourceEntityType,
         sourceEntityId: observation.sourceEntityId,
         evidenceRef: observation.evidenceRef,
+        responseCapturedAt: observation.responseCapturedAt,
         collectedAt: observation.collectedAt,
         sourcePublishedAt: observation.sourcePublishedAt,
         providerObservedAt: observation.providerObservedAt,
@@ -269,6 +264,7 @@ export function buildActivityExposureProductView(input: Readonly<{
       missingIsZero: false,
       missingIsInactive: false,
       observationTimeEqualsCollectionTime: false,
+      sourcePublishedTimeEqualsObservationTime: false,
       crossFamilyRawAggregationAllowed: false,
       completeMeansCompleteWithinDeclaredScope: true,
     }),
