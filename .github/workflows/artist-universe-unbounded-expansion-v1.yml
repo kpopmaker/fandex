@@ -64,6 +64,7 @@ jobs:
             --snapshot starship_agency_roster_v1_latest.json \
             --snapshot yg_agency_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
+            --decisions data/artist-catalog-review-decisions-v1.json \
             --output artist_universe_multisource_discovery_v1_latest.json
       - name: Live chart catalog discovery
         env:
