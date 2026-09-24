@@ -78,7 +78,7 @@ test('complete declared scopes with retained evidence pass only to integration r
   assert.equal(manifest.numericScoreProduced, false);
 });
 
-test('partial coverage remains blocked instead of being treated as zero or success', () => {
+test('unbounded partial coverage remains blocked instead of being treated as zero or success', () => {
   const manifest = build([
     completeMusicBrainz,
     {
@@ -158,6 +158,35 @@ test('complete coverage cannot be claimed without inventory exhaustion', () => {
   assert.ok(
     manifest.gateReasons.some((reason) =>
       reason.includes('complete-coverage-without-inventory-exhaustion'),
+    ),
+  );
+});
+
+
+test('explicit bounded partial scope may advance only to bounded integration review', () => {
+  const manifest = build([
+    completeMusicBrainz,
+    {
+      ...completeYouTube,
+      coverage: {
+        ...completeYouTube.coverage,
+        state: 'partial',
+        reason: 'bounded historical evidence set does not claim all-history completeness',
+        coverageScope: 'stored_evidence_set',
+        observationBasis: 'stored_evidence',
+      },
+      inventoryExhausted: true,
+      missingEntityCount: 0,
+    },
+  ]);
+
+  assert.equal(
+    manifest.gateDecision,
+    'pass_bounded_partial_for_integration_review',
+  );
+  assert.ok(
+    manifest.gateReasons.includes(
+      'bounded-partial-provider-scopes-explicitly-preserved',
     ),
   );
 });
