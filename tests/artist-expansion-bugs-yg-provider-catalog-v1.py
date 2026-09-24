@@ -49,6 +49,8 @@ snapshot = module.build_snapshot(
 assert snapshot["source"]["type"] == "provider_catalog"
 assert snapshot["candidateCount"] == 6
 assert snapshot["contract"]["providerCatalogIsNotAgencyRoster"] is True
+assert snapshot["contract"]["currentAgencyRelationNotImplied"] is True
+assert snapshot["contract"]["historicalCatalogEntriesPossible"] is True
 assert snapshot["contract"]["autoPromote"] is False
 
 print("Bugs YG provider catalog adapter regression: PASS")
