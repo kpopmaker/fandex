@@ -113,6 +113,8 @@ def build_snapshot(rows: list[dict], source_url: str, observed_at: str) -> dict:
         "candidates": rows,
         "contract": {
             "providerCatalogIsNotAgencyRoster": True,
+            "currentAgencyRelationNotImplied": True,
+            "historicalCatalogEntriesPossible": True,
             "autoPromote": False,
             "identityReviewRequired": True,
             "scopeVerificationRequired": True,
