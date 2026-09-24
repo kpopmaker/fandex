@@ -46,8 +46,9 @@ test('observed event requires occurrence time', () => {
 test('partial date precision is preserved instead of fabricated', () => {
   const partial = {
     ...events[0],
-    eventId: 'valid:month-precision',
-    sourceEntityId: 'month-precision',
+    eventId: 'activity:musicbrainz:release-group:11111111-1111-4111-8111-111111111111',
+    sourceEntityId: '11111111-1111-4111-8111-111111111111',
+    canonicalFamilyId: '11111111-1111-4111-8111-111111111111',
     occurredAt: '2024-02',
     occurredAtPrecision: 'month',
   } as ActivityExposureEvent;
@@ -129,5 +130,73 @@ test('release and official-content events on same date remain distinct families'
   assert.deepEqual(
     new Set(sameDate.map((event) => event.eventFamily)),
     new Set(['release', 'official_content']),
+  );
+});
+
+
+test('canonical event id must match provider-native event entity', () => {
+  const invalid = {
+    ...events[2],
+    eventId: 'activity:youtube:video:WRONGVIDEO1',
+  } as ActivityExposureEvent;
+
+  assert.ok(
+    validateActivityExposureEvent(invalid, identity)
+      .some((issue) => issue.code === 'event_identity_mismatch'),
+  );
+});
+
+test('MusicBrainz concrete release edition cannot replace release-group as canonical event identity', () => {
+  const invalid = {
+    ...events[0],
+    eventId: 'activity:musicbrainz:release-group:1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+    sourceEntityType: 'release',
+    sourceEntityId: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+    canonicalFamilyId: '066225ff-a8bd-4183-bff5-08329f0a063a',
+  } as ActivityExposureEvent;
+
+  const issues = validateActivityExposureEvent(invalid, identity);
+  assert.ok(issues.some((issue) => issue.code === 'event_identity_mismatch'));
+  assert.ok(issues.some((issue) => issue.code === 'canonical_family_mismatch'));
+});
+
+test('same title and same date across different release groups remain distinct canonical events', () => {
+  const second = {
+    ...events[0],
+    eventId: 'activity:musicbrainz:release-group:22222222-2222-4222-8222-222222222222',
+    sourceEntityId: '22222222-2222-4222-8222-222222222222',
+    canonicalFamilyId: '22222222-2222-4222-8222-222222222222',
+    title: events[0].title,
+    occurredAt: events[0].occurredAt,
+  } as ActivityExposureEvent;
+
+  const issues = validateActivityExposureStream([events[0], second], identity);
+  assert.deepEqual(issues, []);
+  assert.notEqual(events[0].eventId, second.eventId);
+});
+
+test('revision metadata may change while canonical event identity stays stable', () => {
+  const revised = {
+    ...events[2],
+    revisionId: 'research-collection-v2',
+    supersedesRevisionId: events[2].revisionId,
+    title: 'Revised provider title',
+  } as ActivityExposureEvent;
+
+  assert.equal(revised.eventId, events[2].eventId);
+  assert.equal(revised.sourceEntityId, events[2].sourceEntityId);
+  assert.deepEqual(validateActivityExposureEvent(revised, identity), []);
+});
+
+test('revision cannot supersede itself', () => {
+  const invalid = {
+    ...events[2],
+    revisionId: 'same-revision',
+    supersedesRevisionId: 'same-revision',
+  } as ActivityExposureEvent;
+
+  assert.ok(
+    validateActivityExposureEvent(invalid, identity)
+      .some((issue) => issue.code === 'revision_lineage_invalid'),
   );
 });
