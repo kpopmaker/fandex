@@ -96,16 +96,35 @@ def main() -> None:
     parser.add_argument("--url", default=DEFAULT_URL)
     parser.add_argument("--html")
     parser.add_argument("--observed-at")
+    parser.add_argument("--fallback-snapshot")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
     html = Path(args.html).read_text(encoding="utf-8") if args.html else fetch(args.url)
     rows = parse_roster(html, args.url)
-    if not rows:
+
+    if rows:
+        observed_at = args.observed_at or datetime.now(timezone.utc).isoformat()
+        snapshot = build_snapshot(rows, args.url, observed_at)
+        snapshot["collectionStatus"] = "live_parse"
+    elif args.fallback_snapshot:
+        fallback_path = Path(args.fallback_snapshot)
+        snapshot = json.loads(fallback_path.read_text(encoding="utf-8-sig"))
+        source = snapshot.get("source") if isinstance(snapshot, dict) else None
+        if not isinstance(source, dict):
+            raise RuntimeError("STARSHIP fallback snapshot source object required")
+        if source.get("id") != "starship-official-musician-roster":
+            raise RuntimeError("STARSHIP fallback snapshot source id mismatch")
+        if source.get("type") != "agency_roster":
+            raise RuntimeError("STARSHIP fallback snapshot source type mismatch")
+        candidates = snapshot.get("candidates")
+        if not isinstance(candidates, list) or not candidates:
+            raise RuntimeError("STARSHIP fallback snapshot candidates required")
+        snapshot["collectionStatus"] = "verified_official_snapshot_fallback"
+        snapshot["liveFetchParsed"] = False
+    else:
         raise RuntimeError("STARSHIP roster adapter returned no artists")
 
-    observed_at = args.observed_at or datetime.now(timezone.utc).isoformat()
-    snapshot = build_snapshot(rows, args.url, observed_at)
     Path(args.output).write_text(
         json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
