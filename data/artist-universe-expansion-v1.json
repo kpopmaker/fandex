@@ -1191,6 +1191,93 @@
           "url": "https://www.genie.co.kr/detail/albumInfo?axnm=86030298"
         }
       ]
+    },
+    {
+      "id": "kwill",
+      "ticker": "KWILL",
+      "name": "K.Will",
+      "agency": "Starship Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "케이윌 K.Will",
+      "koreanAliases": [
+        "케이윌"
+      ],
+      "englishAliases": [
+        "K.Will",
+        "K.will",
+        "KWILL"
+      ],
+      "identityEvidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://starship-ent.com/musician/kwill"
+        }
+      ]
+    },
+    {
+      "id": "brothersu",
+      "ticker": "BROTHERSU",
+      "name": "Brother Su",
+      "agency": "Starship Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "브라더수 Brother Su",
+      "koreanAliases": [
+        "브라더수"
+      ],
+      "englishAliases": [
+        "Brother Su",
+        "BrotherSu"
+      ],
+      "identityEvidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "id": "idid",
+      "ticker": "IDID",
+      "name": "IDID",
+      "agency": "Starship Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "아이딧 IDID",
+      "koreanAliases": [
+        "아이딧"
+      ],
+      "englishAliases": [
+        "IDID"
+      ],
+      "identityEvidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician/idid"
+        }
+      ]
+    },
+    {
+      "id": "aen",
+      "ticker": "AEN",
+      "name": "AEN",
+      "agency": "Starship Entertainment / Amuse",
+      "entityType": "group",
+      "naverNewsQuery": "에이엔 AEN 스타쉽",
+      "koreanAliases": [
+        "에이엔"
+      ],
+      "englishAliases": [
+        "AEN"
+      ],
+      "identityEvidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician"
+        },
+        {
+          "source": "iMBC",
+          "url": "https://enews.imbc.com/M/Detail/506889"
+        }
+      ]
     }
   ]
 }
