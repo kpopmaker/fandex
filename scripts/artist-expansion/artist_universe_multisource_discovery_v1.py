@@ -96,12 +96,27 @@ def candidate_names(row: dict[str, Any]) -> list[str]:
     values.extend(row.get("aliases") or [])
     result: list[str] = []
     seen = set()
-    for value in values:
+
+    def add(value: Any) -> None:
         name = str(value or "").strip()
         key = compact_identity(name)
         if name and key and key not in seen:
             seen.add(key)
             result.append(name)
+
+    for value in values:
+        name = str(value or "").strip()
+        add(name)
+
+        # Providers commonly emit bilingual forms such as
+        # "BIGBANG (빅뱅)" or "TREASURE(트레저)". These must match the
+        # canonical aliases independently instead of becoming false unknowns.
+        for inner in re.findall(r"\(([^()]+)\)", name):
+            add(inner)
+
+        outside = re.sub(r"\([^()]+\)", " ", name)
+        add(outside)
+
     return result
 
 
