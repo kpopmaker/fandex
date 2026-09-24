@@ -215,3 +215,16 @@ test('multiple normalized revisions of one canonical provider entity cannot coex
   assert.ok(issues.some((issue) => issue.code === 'duplicate_event_id'));
   assert.ok(issues.some((issue) => issue.code === 'duplicate_provider_entity'));
 });
+
+
+test('event artist identity must match canonical FANDEX artist', () => {
+  const invalid = {
+    ...events[2],
+    artistId: 'not-iu',
+  } as ActivityExposureEvent;
+
+  assert.ok(
+    validateActivityExposureEvent(invalid, identity)
+      .some((issue) => issue.code === 'artist_identity_mismatch'),
+  );
+});
