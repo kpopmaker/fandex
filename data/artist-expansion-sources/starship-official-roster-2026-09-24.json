@@ -1,0 +1,127 @@
+{
+  "version": "starship_official_roster_snapshot_v1",
+  "source": {
+    "id": "starship-official-musician-roster",
+    "type": "agency_roster",
+    "name": "STARSHIP Entertainment Official Artist Roster",
+    "observedAt": "2026-09-24T02:20:00Z",
+    "url": "https://www.starship-ent.com/musician"
+  },
+  "candidateCount": 9,
+  "candidates": [
+    {
+      "displayArtist": "K.will",
+      "aliases": [
+        "케이윌"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "MONSTA X",
+      "aliases": [
+        "몬스타엑스"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "WJSN",
+      "aliases": [
+        "우주소녀"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Brother Su",
+      "aliases": [
+        "브라더수"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CRAVITY",
+      "aliases": [
+        "크래비티"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "IVE",
+      "aliases": [
+        "아이브"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KiiiKiii",
+      "aliases": [
+        "키키"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "IDID",
+      "aliases": [
+        "아이딧"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AEN",
+      "aliases": [
+        "에이엔"
+      ],
+      "evidence": [
+        {
+          "label": "STARSHIP official artist roster",
+          "url": "https://www.starship-ent.com/musician"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  }
+}
