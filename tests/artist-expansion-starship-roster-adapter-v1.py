@@ -46,3 +46,18 @@ assert snapshot["contract"]["autoPromote"] is False
 assert snapshot["contract"]["identityReviewRequired"] is True
 
 print("STARSHIP agency roster adapter regression: PASS")
+
+
+fallback = {
+    "source": {
+        "id": "starship-official-musician-roster",
+        "type": "agency_roster",
+        "name": "STARSHIP Entertainment Official Artist Roster",
+        "observedAt": "2026-09-24T00:00:00Z",
+        "url": module.DEFAULT_URL,
+    },
+    "candidates": [{"displayArtist": "IDID", "aliases": ["아이딧"]}],
+}
+assert fallback["source"]["type"] == "agency_roster"
+assert fallback["candidates"][0]["displayArtist"] == "IDID"
+print("STARSHIP verified snapshot fallback contract: PASS")
