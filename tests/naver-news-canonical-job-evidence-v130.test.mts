@@ -323,3 +323,35 @@ test('reader uses only read-only SQL actions', async () => {
   assert.ok(calls.includes('ROLLBACK'));
   assert.equal(calls.some((sql) => /\b(INSERT|UPDATE|DELETE|ALTER|CREATE)\b/i.test(sql)), false);
 });
+
+
+test('batch reader preserves canonical job evidence in one read-only transaction', async () => {
+  const { repository: readRepository, calls } = repository();
+  assert.ok(readRepository.readJobEvidenceBatch);
+
+  const result = await readRepository.readJobEvidenceBatch([identity.jobId]);
+  const stored = result.get(identity.jobId);
+
+  assert.ok(stored);
+  assert.equal(result.size, 1);
+  assert.equal(stored.job.jobId, identity.jobId);
+  assert.deepEqual(stored.normalizedRecords, plan.normalizedRecords);
+  assert.equal(calls.filter((sql) => sql === 'BEGIN READ ONLY').length, 1);
+  assert.equal(calls.filter((sql) => sql === 'ROLLBACK').length, 1);
+
+  const jobSql = calls.find((sql) =>
+    sql.includes('FROM fandex.source_ingestion_jobs')
+    && sql.includes('ANY($1::text[])')
+  );
+  const normalizedSql = calls.find((sql) =>
+    sql.includes('source_ingestion_normalized_records')
+    && sql.includes('ANY($1::text[])')
+  );
+
+  assert.ok(jobSql);
+  assert.ok(normalizedSql);
+  assert.equal(
+    calls.some((sql) => /\b(INSERT|UPDATE|DELETE|ALTER|CREATE)\b/i.test(sql)),
+    false,
+  );
+});

@@ -216,3 +216,79 @@ test('misaligned or reversed slot range is rejected before reading stored eviden
   );
   assert.deepEqual(source.reads, []);
 });
+
+
+test('batch-capable repository loads the full series once without single-read fallback', async () => {
+  const first = storedFor(slot0, [articleA]);
+  const second = storedFor(slot1, [articleA, articleB]);
+  const third = storedFor(slot2, [articleA, articleB]);
+  const entries = [first, second, third];
+  const byJobId = new Map(entries.map((entry) => [entry.jobId, entry.stored]));
+  const singleReads: string[] = [];
+  const batchReads: string[][] = [];
+
+  const batchRepository: NaverNewsCanonicalJobEvidenceReadRepository =
+    Object.freeze({
+      async readJobEvidence(jobId: string) {
+        singleReads.push(jobId);
+        return byJobId.get(jobId) ?? null;
+      },
+      async readJobEvidenceBatch(jobIds: readonly string[]) {
+        batchReads.push([...jobIds]);
+        return new Map(
+          jobIds.flatMap((jobId) => {
+            const stored = byJobId.get(jobId);
+            return stored ? [[jobId, stored] as const] : [];
+          }),
+        );
+      },
+    });
+
+  const result = await assembleNaverNewsShadowFirstSeenSeries({
+    canonicalArtistId: 'iu',
+    protocolStart: slot0,
+    throughSlotStart: slot2,
+  }, batchRepository);
+
+  assert.equal(result.status, 'available');
+  assert.deepEqual(
+    result.activity?.slots.map((slot) => slot.firstSeenObservationCount),
+    [null, 1, 0],
+  );
+  assert.deepEqual(batchReads, [[first.jobId, second.jobId, third.jobId]]);
+  assert.deepEqual(singleReads, []);
+});
+
+test('batch missing evidence preserves expected_job_missing instead of fabricating zero', async () => {
+  const first = storedFor(slot0, [articleA]);
+  const missing = storedFor(slot1, [articleA, articleB]);
+  const byJobId = new Map([[first.jobId, first.stored]]);
+
+  const batchRepository: NaverNewsCanonicalJobEvidenceReadRepository =
+    Object.freeze({
+      async readJobEvidence() {
+        throw new Error('single-read fallback must not run');
+      },
+      async readJobEvidenceBatch(jobIds: readonly string[]) {
+        return new Map(
+          jobIds.flatMap((jobId) => {
+            const stored = byJobId.get(jobId);
+            return stored ? [[jobId, stored] as const] : [];
+          }),
+        );
+      },
+    });
+
+  const result = await assembleNaverNewsShadowFirstSeenSeries({
+    canonicalArtistId: 'iu',
+    protocolStart: slot0,
+    throughSlotStart: slot1,
+  }, batchRepository);
+
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.reason, 'expected_job_missing');
+  assert.equal(result.missingSlotStart, slot1);
+  assert.equal(result.missingJobId, missing.jobId);
+  assert.equal(result.activity, null);
+  assert.equal(result.snapshots.length, 1);
+});

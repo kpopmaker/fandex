@@ -29,6 +29,9 @@ type Queryable = { query<T = Record<string, unknown>>(sql: string, values?: read
 
 export type NaverNewsCanonicalJobEvidenceReadRepository = Readonly<{
   readJobEvidence(jobId: string): Promise<NaverNewsCanonicalJobStoredEvidence | null>;
+  readJobEvidenceBatch?: (
+    jobIds: readonly string[],
+  ) => Promise<ReadonlyMap<string, NaverNewsCanonicalJobStoredEvidence>>;
 }>;
 
 export type NaverNewsCanonicalJobStoredEvidence = Readonly<{
@@ -111,6 +114,17 @@ JOIN fandex.source_ingestion_normalized_records AS nr
   ON nr.record_id = raw.normalized_record_id
 WHERE raw.job_id = $1 AND raw.normalization_outcome = 'normalized'
 ORDER BY nr.record_id`;
+
+const JOB_EVIDENCE_BATCH_SQL = JOB_EVIDENCE_SQL.replace(
+  'WHERE jobs.job_id = $1 AND jobs.provider = $2',
+  'WHERE jobs.job_id = ANY($1::text[]) AND jobs.provider = $2',
+);
+
+const NORMALIZED_RECORDS_BATCH_SQL = NORMALIZED_RECORDS_SQL.replace(
+  "WHERE raw.job_id = $1 AND raw.normalization_outcome = 'normalized'\nORDER BY nr.record_id",
+  "WHERE raw.job_id = ANY($1::text[]) AND raw.normalization_outcome = 'normalized'\nORDER BY raw.job_id, nr.record_id",
+);
+
 
 function asObject(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -200,54 +214,205 @@ function rehydrateNormalizedRecord(row: NormalizedDbRow, jobId: string): NaverNe
   return Object.freeze({ recordId, rawEvidenceId, provider: NAVER_NEWS_PROVIDER, sourceType: 'news_article', sourceUrl, naverUrl, sourceHost, title, summary, publishedAt, collectedAt: rawObservedAt, contentSha256, recordSha256, normalizedPayload: Object.freeze(expectedPayload) });
 }
 
+
+function rehydrateStoredEvidence(
+  jobId: string,
+  row: JobDbRow,
+  normalizedRows: readonly NormalizedDbRow[],
+): NaverNewsCanonicalJobStoredEvidence {
+  const request = asRequest(row.request_contract);
+  const identity = buildNaverNewsJobIdentity(request);
+  const normalizedRecordCount = asInteger(
+    row.normalized_record_count,
+    'naver_news_canonical_job_state_invalid',
+  );
+
+  if (
+    asString(row.job_id, 'naver_news_canonical_job_state_invalid') !== jobId
+    || asString(row.provider, 'naver_news_canonical_job_state_invalid')
+      !== NAVER_NEWS_PROVIDER
+    || asString(row.status, 'naver_news_canonical_job_state_invalid')
+      !== 'succeeded'
+    || canonicalJson(request) !== canonicalJson(identity.request)
+    || asString(
+      row.idempotency_key,
+      'naver_news_canonical_job_state_invalid',
+    ) !== identity.idempotencyKey
+    || asString(
+      row.request_sha256,
+      'naver_news_canonical_job_state_invalid',
+    ) !== identity.requestSha256
+    || identity.jobId !== jobId
+    || normalizedRecordCount !== normalizedRows.length
+  ) {
+    throw new Error('naver_news_canonical_job_state_invalid');
+  }
+
+  const normalizedRecords = Object.freeze(
+    normalizedRows.map((record) => rehydrateNormalizedRecord(record, jobId)),
+  );
+
+  return Object.freeze({
+    job: Object.freeze({
+      jobId,
+      idempotencyKey: identity.idempotencyKey,
+      requestSha256: identity.requestSha256,
+      request: identity.request,
+      provider: NAVER_NEWS_PROVIDER,
+      status: 'succeeded',
+      normalizedRecordCount,
+    }),
+    completenessEvidence: Object.freeze({
+      jobId,
+      provider: NAVER_NEWS_PROVIDER,
+      requestContract: identity.request,
+      rawEvidenceCount: row.raw_evidence_count,
+      collectionReceived:
+        row.collection_received_job_id === null
+          ? null
+          : Object.freeze({
+              jobId: asString(
+                row.collection_received_job_id,
+                'naver_news_canonical_job_audit_invalid',
+              ),
+              boundedPayload: row.collection_received_payload,
+            }),
+    }),
+    normalizedRecords,
+  });
+}
+
 export function createPostgresNaverNewsCanonicalJobEvidenceReadRepository(
   pool: NaverNewsIngestionPool,
 ): NaverNewsCanonicalJobEvidenceReadRepository {
-  return Object.freeze({
-    async readJobEvidence(jobId) {
-      if (!isSha256(jobId)) throw new Error('naver_news_canonical_job_id_invalid');
-      const client: Queryable & { release(): void } = await pool.connect();
-      try {
-        await client.query('BEGIN READ ONLY');
-        const jobResult = await client.query<JobDbRow>(JOB_EVIDENCE_SQL, [jobId, NAVER_NEWS_PROVIDER]);
-        if (jobResult.rows.length > 1) throw new Error('naver_news_canonical_job_evidence_ambiguous');
-        const row = jobResult.rows[0];
-        if (!row) {
-          await client.query('ROLLBACK');
-          return null;
-        }
-        const request = asRequest(row.request_contract);
-        const identity = buildNaverNewsJobIdentity(request);
-        const normalizedResult = await client.query<NormalizedDbRow>(NORMALIZED_RECORDS_SQL, [jobId]);
-        await client.query('ROLLBACK');
-        const normalizedRecordCount = asInteger(row.normalized_record_count, 'naver_news_canonical_job_state_invalid');
-        if (asString(row.job_id, 'naver_news_canonical_job_state_invalid') !== jobId
-            || asString(row.provider, 'naver_news_canonical_job_state_invalid') !== NAVER_NEWS_PROVIDER
-            || asString(row.status, 'naver_news_canonical_job_state_invalid') !== 'succeeded'
-            || canonicalJson(request) !== canonicalJson(identity.request)
-            || asString(row.idempotency_key, 'naver_news_canonical_job_state_invalid') !== identity.idempotencyKey
-            || asString(row.request_sha256, 'naver_news_canonical_job_state_invalid') !== identity.requestSha256
-            || identity.jobId !== jobId || normalizedRecordCount !== normalizedResult.rows.length) {
-          throw new Error('naver_news_canonical_job_state_invalid');
-        }
-        const normalizedRecords = Object.freeze(normalizedResult.rows.map((record) => rehydrateNormalizedRecord(record, jobId)));
-        return Object.freeze({
-          job: Object.freeze({ jobId, idempotencyKey: identity.idempotencyKey, requestSha256: identity.requestSha256, request: identity.request, provider: NAVER_NEWS_PROVIDER, status: 'succeeded', normalizedRecordCount }),
-          completenessEvidence: Object.freeze({
-            jobId, provider: NAVER_NEWS_PROVIDER, requestContract: identity.request,
-            rawEvidenceCount: row.raw_evidence_count,
-            collectionReceived: row.collection_received_job_id === null ? null : Object.freeze({ jobId: asString(row.collection_received_job_id, 'naver_news_canonical_job_audit_invalid'), boundedPayload: row.collection_received_payload }),
-          }),
-          normalizedRecords,
-        });
-      } catch (error) {
-        try { await client.query('ROLLBACK'); } catch { /* fail closed below */ }
-        if (error instanceof Error && /^naver_news_canonical_job_[a-z_]+$/.test(error.message)) throw error;
-        throw new Error('naver_news_canonical_job_read_failed');
-      } finally {
-        client.release();
+  async function readSingle(
+    jobId: string,
+  ): Promise<NaverNewsCanonicalJobStoredEvidence | null> {
+    if (!isSha256(jobId)) throw new Error('naver_news_canonical_job_id_invalid');
+    const client: Queryable & { release(): void } = await pool.connect();
+    try {
+      await client.query('BEGIN READ ONLY');
+      const jobResult = await client.query<JobDbRow>(
+        JOB_EVIDENCE_SQL,
+        [jobId, NAVER_NEWS_PROVIDER],
+      );
+      if (jobResult.rows.length > 1) {
+        throw new Error('naver_news_canonical_job_evidence_ambiguous');
       }
-    },
+      const row = jobResult.rows[0];
+      if (!row) {
+        await client.query('ROLLBACK');
+        return null;
+      }
+      const normalizedResult = await client.query<NormalizedDbRow>(
+        NORMALIZED_RECORDS_SQL,
+        [jobId],
+      );
+      await client.query('ROLLBACK');
+      return rehydrateStoredEvidence(jobId, row, normalizedResult.rows);
+    } catch (error) {
+      try { await client.query('ROLLBACK'); } catch { /* fail closed below */ }
+      if (
+        error instanceof Error
+        && /^naver_news_canonical_job_[a-z_]+$/.test(error.message)
+      ) {
+        throw error;
+      }
+      throw new Error('naver_news_canonical_job_read_failed');
+    } finally {
+      client.release();
+    }
+  }
+
+  async function readBatch(
+    jobIds: readonly string[],
+  ): Promise<ReadonlyMap<string, NaverNewsCanonicalJobStoredEvidence>> {
+    if (
+      !Array.isArray(jobIds)
+      || jobIds.some((jobId) => !isSha256(jobId))
+    ) {
+      throw new Error('naver_news_canonical_job_id_invalid');
+    }
+
+    const uniqueJobIds = [...new Set(jobIds)];
+    if (uniqueJobIds.length === 0) {
+      return new Map();
+    }
+
+    const client: Queryable & { release(): void } = await pool.connect();
+    try {
+      await client.query('BEGIN READ ONLY');
+      const jobResult = await client.query<JobDbRow>(
+        JOB_EVIDENCE_BATCH_SQL,
+        [uniqueJobIds, NAVER_NEWS_PROVIDER],
+      );
+      const normalizedResult = await client.query<NormalizedDbRow>(
+        NORMALIZED_RECORDS_BATCH_SQL,
+        [uniqueJobIds],
+      );
+      await client.query('ROLLBACK');
+
+      const jobRowsById = new Map<string, JobDbRow[]>();
+      for (const row of jobResult.rows) {
+        const jobId = asString(
+          row.job_id,
+          'naver_news_canonical_job_state_invalid',
+        );
+        const rows = jobRowsById.get(jobId) ?? [];
+        rows.push(row);
+        jobRowsById.set(jobId, rows);
+      }
+
+      const normalizedRowsByJobId = new Map<string, NormalizedDbRow[]>();
+      for (const row of normalizedResult.rows) {
+        const jobId = asString(
+          row.raw_job_id,
+          'naver_news_canonical_job_record_invalid',
+        );
+        const rows = normalizedRowsByJobId.get(jobId) ?? [];
+        rows.push(row);
+        normalizedRowsByJobId.set(jobId, rows);
+      }
+
+      const storedByJobId = new Map<
+        string,
+        NaverNewsCanonicalJobStoredEvidence
+      >();
+
+      for (const jobId of uniqueJobIds) {
+        const jobRows = jobRowsById.get(jobId) ?? [];
+        if (jobRows.length > 1) {
+          throw new Error('naver_news_canonical_job_evidence_ambiguous');
+        }
+        const row = jobRows[0];
+        if (!row) continue;
+
+        const stored = rehydrateStoredEvidence(
+          jobId,
+          row,
+          normalizedRowsByJobId.get(jobId) ?? [],
+        );
+        storedByJobId.set(jobId, stored);
+      }
+
+      return storedByJobId;
+    } catch (error) {
+      try { await client.query('ROLLBACK'); } catch { /* fail closed below */ }
+      if (
+        error instanceof Error
+        && /^naver_news_canonical_job_[a-z_]+$/.test(error.message)
+      ) {
+        throw error;
+      }
+      throw new Error('naver_news_canonical_job_read_failed');
+    } finally {
+      client.release();
+    }
+  }
+
+  return Object.freeze({
+    readJobEvidence: readSingle,
+    readJobEvidenceBatch: readBatch,
   });
 }
 

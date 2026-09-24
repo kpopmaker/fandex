@@ -107,8 +107,16 @@ export async function assembleNaverNewsShadowFirstSeenSeries(
   }
 
   const snapshots: NaverNewsShadowFirstSeenActivitySnapshot[] = [];
+  const batchedStoredEvidence = repository.readJobEvidenceBatch
+    ? await repository.readJobEvidenceBatch(
+        expectedSlots.map((expected) => expected.jobId),
+      )
+    : null;
+
   for (const expected of expectedSlots) {
-    const stored = await repository.readJobEvidence(expected.jobId);
+    const stored = batchedStoredEvidence
+      ? batchedStoredEvidence.get(expected.jobId) ?? null
+      : await repository.readJobEvidence(expected.jobId);
     if (!stored) {
       return Object.freeze({
         contractVersion: NAVER_NEWS_SHADOW_FIRST_SEEN_SERIES_CONTRACT_VERSION,
