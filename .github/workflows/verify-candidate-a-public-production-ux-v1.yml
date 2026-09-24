@@ -1,0 +1,137 @@
+name: Verify Candidate A public Production UX
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/candidate-a-public-production-ux-v1
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PRODUCT_URL: https://fandex-eta.vercel.app/artists/iu?variables=newsIssuePoint
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 09c7b4714c9f52b8534e43747a2582bc24102c8c
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Verify public Product rendered truth semantics
+        shell: bash
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+
+          const productUrl = process.env.PRODUCT_URL;
+          const forbiddenLegacyText = 'Source publication: Shadow';
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage();
+            const consoleErrors = [];
+            page.on('console', msg => {
+              if (msg.type() === 'error') consoleErrors.push(msg.text());
+            });
+            page.on('pageerror', err => consoleErrors.push(String(err)));
+
+            const response = await page.goto(productUrl, {
+              waitUntil: 'networkidle',
+              timeout: 90000,
+            });
+
+            if (!response) throw new Error('no_navigation_response');
+            if (response.status() !== 200) {
+              throw new Error('product_http_' + response.status());
+            }
+
+            const body = (await page.locator('body').innerText()).trim();
+
+            const checks = {
+              hasRealProduction: body.includes('Real · Production'),
+              hasObservationPeriod: body.includes('관측 기간'),
+              hasProductSeries: body.includes('Product 시계열'),
+              noLegacySourcePublicationShadow: !body.includes(forbiddenLegacyText),
+              no404: !body.includes('This page could not be found'),
+              noDataIssue: !body.includes('데이터 확인 필요'),
+            };
+
+            const evidenceLinks = await page.locator('a[href*="/evidence/"]').evaluateAll(
+              els => els.map(el => ({
+                href: el.getAttribute('href'),
+                text: (el.textContent || '').trim(),
+              }))
+            );
+
+            if (evidenceLinks.length === 0) {
+              throw new Error('stored_evidence_link_missing');
+            }
+
+            const evidenceUrl = new URL(evidenceLinks[0].href, productUrl).toString();
+            const evidencePage = await browser.newPage();
+            const evidenceResponse = await evidencePage.goto(evidenceUrl, {
+              waitUntil: 'networkidle',
+              timeout: 90000,
+            });
+
+            if (!evidenceResponse) throw new Error('no_evidence_navigation_response');
+            if (evidenceResponse.status() !== 200) {
+              throw new Error('evidence_http_' + evidenceResponse.status());
+            }
+
+            const evidenceBody = (await evidencePage.locator('body').innerText()).trim();
+
+            const evidenceChecks = {
+              hasEvidenceLineage: evidenceBody.includes('Evidence lineage'),
+              hasCollectionLifecycle: evidenceBody.includes('Collection lifecycle'),
+              hasShadow: evidenceBody.includes('Shadow'),
+              noLegacySourcePublicationShadow:
+                !evidenceBody.includes(forbiddenLegacyText),
+              no404: !evidenceBody.includes('This page could not be found'),
+            };
+
+            const result = {
+              productUrl,
+              productHttpStatus: response.status(),
+              checks,
+              evidenceLinkCount: evidenceLinks.length,
+              evidenceUrl,
+              evidenceHttpStatus: evidenceResponse.status(),
+              evidenceChecks,
+              consoleErrors,
+            };
+
+            console.log('PUBLIC_UX_RESULT=' + JSON.stringify(result));
+
+            for (const [key, value] of Object.entries(checks)) {
+              if (!value) throw new Error('product_check_failed:' + key);
+            }
+            for (const [key, value] of Object.entries(evidenceChecks)) {
+              if (!value) throw new Error('evidence_check_failed:' + key);
+            }
+            if (consoleErrors.length > 0) {
+              console.log('CONSOLE_ERRORS=' + JSON.stringify(consoleErrors));
+            }
+
+            await browser.close();
+          })().catch(err => {
+            console.error(err);
+            process.exit(1);
+          });
+          NODE
