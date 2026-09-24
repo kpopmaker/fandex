@@ -3,6 +3,16 @@ import { sha256Canonical } from '../shared/canonicalDigest';
 export const FANDEX_MOMENTUM_VERIFIER_EXTERNAL_CAPABILITY_RESUME_GATE_VERSION =
   'v181_fandex_momentum_verifier_external_capability_resume_gate_research_v1' as const;
 
+export type FandexProductProductionActual =
+  | '0/7'
+  | '1/7'
+  | '2/7'
+  | '3/7'
+  | '4/7'
+  | '5/7'
+  | '6/7'
+  | '7/7';
+
 export const FANDEX_MOMENTUM_VERIFIER_EXTERNAL_CAPABILITY_RESUME_GATE_DESCRIPTOR =
   Object.freeze({
     contractVersion:
@@ -32,6 +42,7 @@ export type FandexMomentumVerifierExternalCapabilityResumeGateInput =
   Readonly<{
     observedAt: string;
     upstreamV180Digest: string;
+    productProductionActual?: FandexProductProductionActual;
     target: Readonly<{
       teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs';
       projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v';
@@ -114,7 +125,7 @@ export type FandexMomentumVerifierExternalCapabilityResumeGateResult =
     productBoundary: Readonly<{
       productMomentumScore: null;
       productionEligible: false;
-      productProductionActual: '0/7';
+      productProductionActual: FandexProductProductionActual;
     }>;
     digest: string;
   }>;
@@ -244,6 +255,8 @@ export function evaluateFandexMomentumVerifierExternalCapabilityResumeGate(
     ? 'resume-capability-available' as const
     : 'resume-capability-blocked' as const;
 
+  const productProductionActual = input.productProductionActual ?? '0/7';
+
   const payload = {
     contractVersion:
       FANDEX_MOMENTUM_VERIFIER_EXTERNAL_CAPABILITY_RESUME_GATE_VERSION,
@@ -264,7 +277,7 @@ export function evaluateFandexMomentumVerifierExternalCapabilityResumeGate(
     productBoundary: Object.freeze({
       productMomentumScore: null,
       productionEligible: false as const,
-      productProductionActual: '0/7' as const,
+      productProductionActual,
     }),
   };
 

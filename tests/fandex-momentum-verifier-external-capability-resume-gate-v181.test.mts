@@ -111,6 +111,27 @@ test('current connected surface is blocked despite installed Vercel plugin and a
   assert.equal(out.productBoundary.productProductionActual, '0/7');
 });
 
+test('current main Product count can advance independently without changing v181 capability state', () => {
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      ...currentInput(),
+      observedAt: '2026-09-24T22:14:41.000Z',
+      productProductionActual: '1/7',
+    });
+
+  assert.equal(out.state, 'resume-capability-blocked');
+  assert.equal(out.internalExecutionCanResume, false);
+  assert.equal(out.separateAuthorizationStillRequired, true);
+  assert.deepEqual(out.candidateChannels, []);
+  assert.equal(out.productBoundary.productMomentumScore, null);
+  assert.equal(out.productBoundary.productionEligible, false);
+  assert.equal(out.productBoundary.productProductionActual, '1/7');
+  assert.equal(
+    out.digest,
+    '7509a29087e19ba37461abfc8461663089779890c7c742c68392b34ae4f1d3f5',
+  );
+});
+
 test('a concrete exact inventory read tool is enough to make capability resumable, but not authorized', () => {
   const input = currentInput();
   const out =
@@ -565,4 +586,92 @@ test('2026-09-25 live recheck preserves the blocked v181 digest after Vercel/Neo
   assert.equal(audit.productBoundary.productMomentumScore, null);
   assert.equal(audit.productBoundary.productionEligible, false);
   assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
+
+
+test('current-main reconciliation keeps v181 blocked while global Product actual advances to 1/7', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_external_capability_resume_gate_v181_main_reconciliation_920be35e.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      observedAt: audit.observedAt,
+      upstreamV180Digest: audit.upstream.v180Digest,
+      productProductionActual:
+        audit.currentGateInput.productProductionActual,
+      target: audit.target,
+      connectedCapability: audit.currentGateInput.connectedCapability,
+      localCapability: audit.currentGateInput.localCapability,
+      browserCapability: audit.currentGateInput.browserCapability,
+      externalOperator: audit.currentGateInput.externalOperator,
+    });
+
+  assert.equal(
+    audit.contractVersion,
+    'v181_fandex_momentum_verifier_external_capability_resume_gate_main_lineage_reconciliation_audit_v1',
+  );
+  assert.equal(
+    audit.mainLineage.currentMainSha,
+    '920be35ea3c3443c7045f290590803654c593d64',
+  );
+  assert.equal(audit.mainLineage.branchBehindMainBy, 97);
+  assert.equal(
+    audit.mainLineage.productionEvidence.newsIssuePointLifecycle,
+    'production',
+  );
+  assert.equal(
+    audit.mainLineage.productionEvidence.directProductionContributionEligible,
+    true,
+  );
+  assert.equal(
+    audit.mainLineage.productionEvidence.publicRouteActivated,
+    true,
+  );
+  assert.equal(
+    audit.mainLineage.productionEvidence.productScorePublished,
+    true,
+  );
+  assert.equal(
+    audit.interpretation.mainProductBoundaryAdvancedSincePriorAudit,
+    true,
+  );
+  assert.equal(
+    audit.interpretation.newResumeConditionSatisfied,
+    false,
+  );
+  assert.equal(
+    audit.interpretation.newMethodologyVersionRequired,
+    false,
+  );
+  assert.equal(
+    audit.interpretation.branchMergeOrRebasePerformed,
+    false,
+  );
+
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(
+    out.internalExecutionCanResume,
+    audit.currentResult.internalExecutionCanResume,
+  );
+  assert.equal(
+    out.separateAuthorizationStillRequired,
+    audit.currentResult.separateAuthorizationStillRequired,
+  );
+  assert.deepEqual(out.candidateChannels, audit.currentResult.candidateChannels);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.equal(
+    out.digest,
+    '7509a29087e19ba37461abfc8461663089779890c7c742c68392b34ae4f1d3f5',
+  );
+  assert.deepEqual(out.effects, audit.effects);
+  assert.equal(out.productBoundary.productMomentumScore, null);
+  assert.equal(out.productBoundary.productionEligible, false);
+  assert.equal(out.productBoundary.productProductionActual, '1/7');
 });
