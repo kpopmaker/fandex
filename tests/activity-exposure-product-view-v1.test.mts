@@ -62,8 +62,10 @@ const completeCoverage: ActivityExposureProviderCoverage[] = [
     provider: 'youtube',
     state: 'complete',
     reason: 'visible uploads inventory exhausted',
-    observationStart: null,
-    observationEnd: '2026-09-24T07:00:00Z',
+    coverageObservedAt: '2026-09-24T07:00:00Z',
+    coverageScope: 'current_visible_inventory',
+    eventTimeStart: null,
+    eventTimeEnd: null,
     observationBasis: 'provider_inventory',
   },
 ];
@@ -91,6 +93,7 @@ test('product view exposes timeline evidence without inventing a numeric score',
     missingIsInactive: false,
     observationTimeEqualsCollectionTime: false,
     crossFamilyRawAggregationAllowed: false,
+    completeMeansCompleteWithinDeclaredScope: true,
   });
 });
 
@@ -119,8 +122,10 @@ test('provider unavailable with no events is unavailable, not zero activity', ()
       provider: 'youtube',
       state: 'provider_unavailable',
       reason: 'provider request failed',
-      observationStart: null,
-      observationEnd: null,
+      coverageObservedAt: null,
+      coverageScope: 'not_available',
+      eventTimeStart: null,
+      eventTimeEnd: null,
       observationBasis: 'not_available',
     }],
   });
@@ -140,8 +145,10 @@ test('invalid coverage becomes data_issue instead of unavailable or zero', () =>
       provider: 'musicbrainz',
       state: 'invalid',
       reason: 'provider payload failed contract validation',
-      observationStart: null,
-      observationEnd: null,
+      coverageObservedAt: '2026-09-24T07:00:00Z',
+      coverageScope: 'bounded_provider_query',
+      eventTimeStart: '2024-01-01',
+      eventTimeEnd: '2024-12-31',
       observationBasis: 'provider_query',
     }],
   });
@@ -194,4 +201,61 @@ test('complete coverage with zero events is an available empty timeline, not a z
   assert.equal(view.timeline.length, 0);
   assert.equal(view.numericScore, null);
   assert.equal(view.numericScoreState, 'not_justified');
+});
+
+
+test('complete coverage is complete only within its declared scope', () => {
+  const view = buildActivityExposureProductView({
+    artistId: 'iu',
+    events: [event],
+    observations: [retainedObservation],
+    coverage: completeCoverage,
+  });
+
+  assert.equal(view.coverage[0].state, 'complete');
+  assert.equal(view.coverage[0].coverageScope, 'current_visible_inventory');
+  assert.equal(
+    view.truthSemantics.completeMeansCompleteWithinDeclaredScope,
+    true,
+  );
+});
+
+test('complete or partial coverage requires an observation timestamp', () => {
+  const view = buildActivityExposureProductView({
+    artistId: 'iu',
+    events: [],
+    observations: [],
+    coverage: [{
+      provider: 'musicbrainz',
+      state: 'complete',
+      reason: 'invalid synthetic completeness claim',
+      coverageObservedAt: null,
+      coverageScope: 'current_visible_inventory',
+      eventTimeStart: null,
+      eventTimeEnd: null,
+      observationBasis: 'provider_inventory',
+    }],
+  });
+
+  assert.equal(view.availability, 'data_issue');
+});
+
+test('bounded provider query must declare an event-time boundary', () => {
+  const view = buildActivityExposureProductView({
+    artistId: 'iu',
+    events: [],
+    observations: [],
+    coverage: [{
+      provider: 'musicbrainz',
+      state: 'partial',
+      reason: 'query executed without explicit event-time boundary',
+      coverageObservedAt: '2026-09-24T07:00:00Z',
+      coverageScope: 'bounded_provider_query',
+      eventTimeStart: null,
+      eventTimeEnd: null,
+      observationBasis: 'provider_query',
+    }],
+  });
+
+  assert.equal(view.availability, 'data_issue');
 });
