@@ -42,6 +42,7 @@ jobs:
           python tests/artist-expansion-starship-roster-adapter-v1.py
           python tests/artist-expansion-yg-roster-adapter-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
+          python tests/artist-expansion-weverse-con-roster-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
       - name: Collect STARSHIP official roster
@@ -57,6 +58,10 @@ jobs:
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
             --output bugs_yg_provider_catalog_v1_latest.json
+      - name: Collect Weverse Con event roster
+        run: |
+          python scripts/artist-expansion/collect_weverse_con_2026_roster_v1.py \
+            --output weverse_con_2026_roster_v1_latest.json
       - name: Stage 7 live multisource discovery
         run: |
           python scripts/artist-expansion/artist_universe_multisource_discovery_v1.py \
@@ -64,6 +69,7 @@ jobs:
             --snapshot starship_agency_roster_v1_latest.json \
             --snapshot yg_agency_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
+            --snapshot weverse_con_2026_roster_v1_latest.json \
             --decisions data/artist-catalog-review-decisions-v1.json \
             --output artist_universe_multisource_discovery_v1_latest.json
       - name: Live chart catalog discovery
@@ -88,5 +94,6 @@ jobs:
             starship_agency_roster_v1_latest.json
             yg_agency_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
+            weverse_con_2026_roster_v1_latest.json
             artist_universe_multisource_discovery_v1_latest.json
           if-no-files-found: error
