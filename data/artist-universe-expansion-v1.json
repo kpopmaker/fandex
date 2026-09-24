@@ -853,6 +853,133 @@
           "url": "https://goldenmoon.co.kr/artists/"
         }
       ]
+    },
+    {
+      "id": "soyeon",
+      "ticker": "SOYEON",
+      "name": "SOYEON",
+      "agency": "CUBE Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "소연 SOYEON 아이들",
+      "koreanAliases": [
+        "소연",
+        "전소연"
+      ],
+      "englishAliases": [
+        "SOYEON",
+        "Jeon Soyeon",
+        "Jeon So-yeon"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Weverse Shop",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/113/sales/67796"
+        },
+        {
+          "source": "Weverse i-dle",
+          "url": "https://weverse.io/i-dle/highlight?hl=ko"
+        }
+      ]
+    },
+    {
+      "id": "epikhigh",
+      "ticker": "EPIKHIGH",
+      "name": "EPIK HIGH",
+      "agency": "Ours Co.",
+      "entityType": "group",
+      "naverNewsQuery": "에픽하이 EPIK HIGH",
+      "koreanAliases": [
+        "에픽하이"
+      ],
+      "englishAliases": [
+        "EPIK HIGH",
+        "Epik High"
+      ],
+      "identityEvidence": [
+        {
+          "source": "EPIK HIGH Official",
+          "url": "https://epikhigh.com/community"
+        },
+        {
+          "source": "Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/who-is-epik-high/12761900"
+        }
+      ]
+    },
+    {
+      "id": "melomance",
+      "ticker": "MELOMANCE",
+      "name": "MeloMance",
+      "agency": "ABYSS COMPANY",
+      "entityType": "group",
+      "naverNewsQuery": "멜로망스 MeloMance",
+      "koreanAliases": [
+        "멜로망스"
+      ],
+      "englishAliases": [
+        "MeloMance",
+        "MELOMANCE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "MeloMance Official",
+          "url": "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26"
+        },
+        {
+          "source": "ABYSS COMPANY",
+          "url": "https://melomance.bstage.in/community"
+        }
+      ]
+    },
+    {
+      "id": "kimminseok",
+      "ticker": "KIMMINSEOK",
+      "name": "Kim Min-seok",
+      "agency": "ABYSS COMPANY",
+      "entityType": "solo",
+      "naverNewsQuery": "김민석 멜로망스 Kim Min-seok",
+      "koreanAliases": [
+        "김민석"
+      ],
+      "englishAliases": [
+        "Kim Min-seok",
+        "Kim Minseok"
+      ],
+      "identityEvidence": [
+        {
+          "source": "MeloMance Official",
+          "url": "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26"
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80223134"
+        }
+      ]
+    },
+    {
+      "id": "nerdconnection",
+      "ticker": "NERDCONNECTION",
+      "name": "Nerd Connection",
+      "agency": "Your Summer",
+      "entityType": "group",
+      "naverNewsQuery": "너드커넥션 Nerd Connection",
+      "koreanAliases": [
+        "너드커넥션"
+      ],
+      "englishAliases": [
+        "Nerd Connection",
+        "NERD CONNECTION"
+      ],
+      "identityEvidence": [
+        {
+          "source": "NERD CONNECTION Official",
+          "url": "https://linktr.ee/nerdconnection_official"
+        },
+        {
+          "source": "Ticketlink",
+          "url": "https://www.ticketlink.co.kr/help/notice/64339"
+        }
+      ]
     }
   ]
 }
