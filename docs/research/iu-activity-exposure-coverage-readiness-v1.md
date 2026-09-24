@@ -354,3 +354,38 @@ Current state:
 `LIVE_COVERAGE_BOUNDARY_SEMANTICS_LOCKED`
 
 This does not clear the external `LIVE_PROVIDER_COVERAGE_GATE`; it makes the eventual live result representable without overstating historical completeness.
+
+
+## 13. Current main re-check and CI confirmation
+
+Latest checked main:
+
+`658d10d94ef73ced0200961a25e742f2c203da1c`
+
+Current research divergence:
+
+- main advanced by 4 commits from the original research base
+- changed main paths are generated/state data plus Vercel deployment-policy files
+- no direct path overlap with Activity Exposure research implementation was found
+
+Compatibility state:
+
+`PASS_NO_DIRECT_CODE_CONFLICT_WITH_CURRENT_MAIN`
+
+Latest full research validation:
+
+- GitHub Actions run: `35995504797`
+- research head: `14c4bb8a3e76d96e8447a712934c59422c851a75`
+- event contract tests: PASS
+- observation contract tests: PASS
+- MusicBrainz collector tests: PASS
+- YouTube collector tests: PASS
+- IU end-to-end stream tests: PASS
+- Product-readable view tests: PASS
+- typecheck: PASS
+
+Observation / coverage semantics are therefore validated at the current research head.
+
+The remaining external blocker is still:
+
+`LIVE_PROVIDER_COVERAGE_GATE`
