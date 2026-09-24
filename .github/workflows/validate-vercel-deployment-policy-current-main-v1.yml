@@ -1,0 +1,32 @@
+name: Validate Vercel deployment policy current-main v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/vercel-deployment-policy-current-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Deployment policy contract
+        run: npx tsx --test tests/vercel-deployment-policy-v1.test.mts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
