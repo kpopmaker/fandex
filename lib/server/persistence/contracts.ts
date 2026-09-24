@@ -316,6 +316,16 @@ export function requireRuntimeDatabaseUrl(environment: Readonly<Record<string, s
   if (decodeURIComponent(parsed.username) !== 'fandex_runtime' || !parsed.hostname.toLowerCase().includes('pooler')) {
     throw new Error('runtime_database_url_invalid');
   }
+
+  // pg/pg-connection-string currently treats sslmode=require as certificate-
+  // verifying TLS, but its next major will adopt libpq semantics where require
+  // no longer verifies the peer. Preserve FANDEX's current verified-TLS
+  // behavior explicitly without changing role/host/database boundaries.
+  if (parsed.searchParams.get('sslmode') === 'require') {
+    parsed.searchParams.set('sslmode', 'verify-full');
+    return parsed.toString();
+  }
+
   return value as string;
 }
 
