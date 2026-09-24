@@ -1510,7 +1510,7 @@
     {
       "displayArtist": "VIINI",
       "decision": "new_canonical_solo_candidate",
-      "relationResolution": "independent_solo_identity_current_management_review_required",
+      "relationResolution": "independent_solo_identity_current_management_verified",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -1518,6 +1518,11 @@
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/80292720?wl_ref=list_ab_04",
           "note": "Provider artist page verifies VIINI as a distinct music artist identity; current management remains unfrozen."
+        },
+        {
+          "source": "Ghost Studio statement reported by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/481461",
+          "note": "2025 official enlistment notice identifies Kwon Hyun-bin (VIINI) as a Ghost Studio artist; current management verified."
         }
       ]
     },
@@ -1538,7 +1543,7 @@
     {
       "displayArtist": "이하이",
       "decision": "new_canonical_solo_candidate",
-      "relationResolution": "independent_solo_identity_current_management_review_required",
+      "relationResolution": "independent_solo_identity_current_management_verified",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -1551,6 +1556,16 @@
           "source": "2026 release catalog",
           "url": "https://www.beatport.com/artist/leehi/1049390/releases",
           "note": "2026 releases are labeled 808 HI Recordings; exact management semantics remain separately reviewable."
+        },
+        {
+          "source": "iMBC / 808 HI RECORDINGS statement",
+          "url": "https://enews.imbc.com/M/Detail/513700",
+          "note": "2026-08 official statement identifies 808 HI RECORDINGS as LeeHi's current agency."
+        },
+        {
+          "source": "Edaily",
+          "url": "https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=02545286645387912",
+          "note": "2026-03 report documents LeeHi and Dok2 jointly establishing 808 HI RECORDINGS."
         }
       ]
     },
