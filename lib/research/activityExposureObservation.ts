@@ -21,6 +21,7 @@ export type ActivityExposureRawObservation = Readonly<{
   sourcePublishedAt: string | null;
   providerObservedAt: string | null;
   rawPayloadDigest: string;
+  rawPayloadCanonical: string | null;
   rawPayloadRetentionState: 'retained' | 'digest-only' | 'not-retained';
   evidenceRef: string;
   priorObservationId: string | null;
@@ -105,6 +106,10 @@ export function createActivityExposureRawObservation(
     sourcePublishedAt: input.sourcePublishedAt ?? null,
     providerObservedAt: input.providerObservedAt ?? null,
     rawPayloadDigest,
+    rawPayloadCanonical:
+      (input.rawPayloadRetentionState ?? 'digest-only') === 'retained'
+        ? input.rawPayloadCanonical
+        : null,
     rawPayloadRetentionState: input.rawPayloadRetentionState ?? 'digest-only',
     evidenceRef: input.evidenceRef,
     priorObservationId: input.priorObservationId ?? null,
@@ -144,8 +149,30 @@ export function validateActivityExposureObservation(
     issues.push('supersession-without-revision');
   }
 
-  if (observation.rawPayloadRetentionState === 'not-retained') {
+  if (observation.rawPayloadRetentionState !== 'retained') {
     issues.push('deterministic-replay-raw-evidence-not-retained');
+  }
+
+  if (
+    observation.rawPayloadRetentionState === 'retained'
+    && observation.rawPayloadCanonical === null
+  ) {
+    issues.push('retained-payload-missing');
+  }
+
+  if (
+    observation.rawPayloadRetentionState === 'retained'
+    && observation.rawPayloadCanonical !== null
+    && digestActivityExposureRawPayload(observation.rawPayloadCanonical) !== observation.rawPayloadDigest
+  ) {
+    issues.push('retained-payload-digest-mismatch');
+  }
+
+  if (
+    observation.rawPayloadRetentionState !== 'retained'
+    && observation.rawPayloadCanonical !== null
+  ) {
+    issues.push('retention-state-payload-mismatch');
   }
 
   if (!/^[a-f0-9]{64}$/.test(observation.rawPayloadDigest)) {
@@ -165,9 +192,8 @@ export function canDeterministicallyReplay(
   return observations.length > 0
     && observations.every(
       (observation) =>
-        observation.rawPayloadRetentionState !== 'not-retained'
-        && validateActivityExposureObservation(observation).every(
-          (issue) => issue !== 'deterministic-replay-raw-evidence-not-retained',
-        ),
+        observation.rawPayloadRetentionState === 'retained'
+        && observation.rawPayloadCanonical !== null
+        && validateActivityExposureObservation(observation).length === 0,
     );
 }
