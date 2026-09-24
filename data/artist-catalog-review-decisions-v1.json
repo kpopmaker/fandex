@@ -1587,6 +1587,91 @@
           "note": "Provider artist page verifies SECHSKIES as a distinct group music identity; current activity and management remain separately reviewable."
         }
       ]
+    },
+    {
+      "displayArtist": "82MAJOR",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_discovered_current_agency_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Weverse Shop / GREAT M ENTERTAINMENT",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/248/sales/66978",
+          "note": "2026 82MAJOR release metadata lists GREAT M ENTERTAINMENT as label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HIGHLIGHT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_discovered_current_agency_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Around US Entertainment",
+          "url": "https://www.aroundusent.com/artistNotice/detail/554?artist_idx=&category_idx=&page=1",
+          "note": "Official 2026 HIGHLIGHT fan-con notice is issued by Around US Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM JAE JOONG",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_discovered_current_agency_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.co.kr/artist.html",
+          "note": "Official iNKODE artist roster lists KIM JAEJOONG as a solo singer."
+        },
+        {
+          "source": "Weverse / iNKODE Entertainment",
+          "url": "https://weverse.io/kimjaejoong/notice/34473?hl=ko",
+          "note": "2026 official notice is issued by iNKODE Entertainment for Kim Jae Joong."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HWANG MIN HYUN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_discovered_current_agency_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/",
+          "note": "Official PLEDIS artist roster lists HWANG MIN HYUN as singer and actor."
+        },
+        {
+          "source": "Weverse / PLEDIS Entertainment",
+          "url": "https://weverse.io/hwangminhyun/notice/33682",
+          "note": "2026 song-release notice is issued by PLEDIS Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "YOON SAN-HA",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_discovered_current_agency_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Official Fantagio artist roster lists YOON SAN-HA."
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/news/release/?p=372736",
+          "note": "2026 Fantagio release reports YOON SAN-HA's independent music performance activity."
+        }
+      ]
     }
   ]
 }
