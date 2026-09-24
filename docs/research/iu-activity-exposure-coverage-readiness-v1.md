@@ -7,15 +7,17 @@ Research branch: `research/comeback-activity-point-source-contract-v1`
 
 ## 1. Current main / branch drift
 
-Latest checked `main` remains:
+Latest checked `main` is now:
 
-`d7ad96f9a207e35141104882972a97829400862c`
+`c625d73241e799589f174e8dcfb3b8636e6f7899`
 
 Research branch status at this review:
 
-- ahead of main: 22 commits
-- behind main: 0 commits
-- merge base remains exact research base
+- research branch has diverged from current main
+- current main is 2 commits ahead of the original research base
+- those 2 main commits modify only generated/state data under `data/fandex-cloud-v10/state` and `data/lastfm-cloud`
+- no Activity Exposure research source/test path overlap was found
+- production-code compatibility therefore remains `PASS_NO_DIRECT_CODE_CONFLICT`, but integration must use latest main rather than the original research base
 
 No Production merge, activation, publication, route cutover, or Neon main-schema mutation has been performed from this chat.
 
@@ -125,6 +127,8 @@ Validated:
 - duplicate rules
 - revision/raw-observation contract
 - deterministic retained-evidence replay contract
+- retained raw payload must actually be present for replay; digest-only evidence is integrity-only and is not replay-capable
+- Product-readable Activity Exposure view with explicit availability / coverage / Stored Evidence trace
 - MusicBrainz research collector
 - YouTube research collector
 - combined IU stream
@@ -168,7 +172,8 @@ Open Production blockers:
 2. complete live YouTube uploads-playlist replay with a real authorized Data API credential
 3. persistence destination / authorization review for retained raw provider evidence
 4. integration against current Production architecture under the FANDEX operating-standard gate
-5. no Product UI/public route may treat partial provider coverage as zero or inactive
+5. latest-main reconstruction from `c625d73241e799589f174e8dcfb3b8636e6f7899` or later
+6. no Product UI/public route may treat partial provider coverage as zero or inactive
 
 ### Numeric legacy variable
 
@@ -198,3 +203,48 @@ It is a controlled live collector validation in an environment that can:
 Until that gate passes, the correct handoff state is:
 
 `INTEGRATION_CANDIDATE_WITH_LIVE_COVERAGE_GATE`
+
+
+## 8. Stored Evidence truth correction
+
+The research observation contract was tightened after the initial replay review.
+
+Previous problem:
+
+`rawPayloadRetentionState=retained` could be present while the observation object contained only a digest. That was not sufficient to justify deterministic replay.
+
+Current contract:
+
+- `retained` => canonical raw payload is present in the research observation and digest-verifiable
+- `digest-only` => integrity metadata only; deterministic replay = false
+- `not-retained` => deterministic replay = false
+- retained payload digest mismatch => validation issue
+
+Current state:
+
+`STORED_EVIDENCE_REPLAY_SEMANTICS_HARDENED`
+
+## 9. Product-readable Activity Exposure form
+
+Research-only Product DTO:
+
+`lib/research/activityExposureProductView.ts`
+
+It exposes:
+
+- construct = Activity Exposure
+- availability = available | partial | unavailable | data_issue
+- numericScore = null
+- numericScoreState = not_justified
+- provider coverage states
+- timeline event semantics
+- occurredAt / sourcePublishedAt / collectedAt separately
+- Stored Evidence trace per normalized event
+- retained_payload vs digest_only vs unavailable
+- explicit truth invariants preventing Missing -> 0 or Missing -> inactive
+
+A complete provider coverage result with zero events is represented as an available empty timeline, not as a zero score and not as missing data.
+
+Current state:
+
+`PRODUCT_READABLE_TRUTH_FORM_IMPLEMENTED`
