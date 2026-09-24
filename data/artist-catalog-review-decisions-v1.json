@@ -1489,7 +1489,7 @@
     {
       "displayArtist": "BOBBY",
       "decision": "new_canonical_solo_candidate",
-      "relationResolution": "provider_discovered_current_agency_verified_solo_identity",
+      "relationResolution": "group_member_and_independent_solo_current_management_verified",
       "relatedCanonicalArtistIds": [
         "ikon"
       ],
@@ -1504,6 +1504,11 @@
           "source": "Starnews / 143 Entertainment",
           "url": "https://www.starnewskorea.com/music/2026/08/05/2026080511263941198",
           "note": "2026 iKON world-tour report attributes the group to 143 Entertainment and explicitly names Bobby among the performing members."
+        },
+        {
+          "source": "Korea JoongAng Daily / 143 Entertainment",
+          "url": "https://www.koreajoongangdaily.com/entertainment/ikon-to-hold-concerts-in-may-first-shows-since-4-members-returned-from-military-service/12575497",
+          "note": "2026 report based on 143 Entertainment announcement confirms iKON, including BOBBY, remains actively managed by 143 Entertainment."
         }
       ]
     },
