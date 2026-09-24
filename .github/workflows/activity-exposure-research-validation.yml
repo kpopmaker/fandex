@@ -47,5 +47,8 @@ jobs:
       - name: Run live coverage manifest tests
         run: npx tsx --test tests/activity-exposure-coverage-manifest-v1.test.mts
 
+      - name: Run provider retention policy tests
+        run: npx tsx --test tests/activity-exposure-retention-policy-v1.test.mts
+
       - name: Typecheck
         run: npm run typecheck
