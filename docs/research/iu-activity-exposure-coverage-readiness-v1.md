@@ -473,3 +473,55 @@ Required preservation:
 - evidence not-found != evidence load error != evidence verification issue
 - Stored Evidence failure does not rewrite the Product activity timeline
 - Missing/Partial coverage does not become zero activity
+
+
+## 16. First live provider execution result
+
+Recorded in:
+
+`docs/research/iu-activity-exposure-live-coverage-run-v1.md`
+
+Live workflow:
+
+`36065220073`
+
+Current manifest verdict:
+
+`blocked_live_coverage`
+
+MusicBrainz:
+
+- inventory exhausted = true
+- discovered release groups = 58
+- normalized confirmed-release events = 57
+- missing = 1
+- invalid = 0
+- coverage = partial
+
+The single missing release group:
+
+`1299e16d-133b-47b0-b991-36cf11eff7d7 / 그대네요`
+
+Diagnostic:
+
+`no-official-release-returned`
+
+This missing state is preserved. The methodology is not weakened to force 58/58.
+
+YouTube:
+
+`provider_unavailable / youtube-api-credential-not-configured`
+
+No zero-activity inference is permitted.
+
+Raw evidence retention:
+
+`review_required`
+
+The workflow did not persist the raw evidence artifact because the explicit retention authorization flag was not enabled.
+
+The nearest remaining blockers are therefore concrete:
+
+1. MusicBrainz one-release-group missing Official support
+2. authorized YouTube Data API credential for live current-visible uploads replay
+3. raw provider evidence retention authorization for Stored Evidence integration review
