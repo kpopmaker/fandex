@@ -1,0 +1,138 @@
+{
+  "contractVersion": "fandex_momentum_current_main_source_lineage_compatibility_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "observedAt": "2026-09-24T23:15:35.000Z",
+  "localObservationDate": "2026-09-25",
+  "branch": {
+    "name": "v131-lastfm-real-signal-read-model",
+    "headBeforeAudit": "bf17c3caadcaa2e1e0d74356c3005c599c4d479a",
+    "mergeBaseSha": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "aheadOfMainBy": 495,
+    "behindMainBy": 99
+  },
+  "currentMain": {
+    "sha": "8d68d97a389522c268e976196bc342acc605fd7a",
+    "committedAt": "2026-09-24T22:37:49Z",
+    "latestMerge": {
+      "prNumber": 239,
+      "title": "security(db): preserve verified TLS for runtime Postgres URL"
+    }
+  },
+  "directMomentumSourceContracts": {
+    "construct": {
+      "path": "lib/intelligence/naverNewsIssuePointConstruct.ts",
+      "branchBlobSha": "5bbcc1ad6653974087149acf95d0eeea1bec46fa",
+      "mainBlobSha": "5bbcc1ad6653974087149acf95d0eeea1bec46fa",
+      "byteIdentical": true,
+      "methodologyVersion": "v1_naver_news_issue_point_real_methodology",
+      "selectedWindowSlotCount": 8,
+      "selectedWindowDurationHours": 8,
+      "normalizationType": "HISTORICAL_STRICT_EXCEEDANCE_SHARE",
+      "missingOrGapAsZeroAllowed": false,
+      "strictPublicationIntervalArticleCountClaimAllowed": false
+    },
+    "frozenMethodology": {
+      "path": "lib/server/ingestion/naverNewsIssuePointFrozenMethodology.ts",
+      "branchBlobSha": "c40f10848a65e5fad3d9744da30033297d9233fb",
+      "mainBlobSha": "c40f10848a65e5fad3d9744da30033297d9233fb",
+      "byteIdentical": true,
+      "contractVersion": "v1_naver_news_issue_point_frozen_methodology"
+    }
+  },
+  "lowerLevelReadDrift": {
+    "canonicalJobEvidence": {
+      "path": "lib/server/ingestion/naverNewsCanonicalJobEvidence.ts",
+      "branchBlobSha": "021873cb0c428cc7309954d5a885ee843614f7ea",
+      "mainBlobSha": "cd7ace77c81229a7537ae71b2b125a1ca1d91015",
+      "changed": true
+    },
+    "shadowFirstSeenSeries": {
+      "path": "lib/server/ingestion/naverNewsShadowFirstSeenSeries.ts",
+      "branchBlobSha": "03783d294a29e99268591db501573e2699d55bca",
+      "mainBlobSha": "b2706e4afd6935eeb80610d618fc0df5ca4e03c0",
+      "changed": true
+    },
+    "sourcePr238": {
+      "merged": true,
+      "title": "perf(product): batch newsIssuePoint stored-evidence reads",
+      "headSha": "3ceaa8a4c2ccad26afd536bfaa39228ccd7f0904",
+      "mergeCommitSha": "920be35ea3c3443c7045f290590803654c593d64",
+      "classification": "read-performance-only-with-semantic-fallback",
+      "facts": {
+        "readJobEvidenceSinglePathRetained": true,
+        "optionalBatchReadAdded": true,
+        "sharedRehydrateStoredEvidenceUsedBySingleAndBatch": true,
+        "seriesFallsBackToSingleReadWhenBatchUnavailable": true,
+        "frozenMethodologyChanged": false,
+        "constructChanged": false,
+        "databaseWriteAdded": false
+      }
+    },
+    "sourcePr239": {
+      "merged": true,
+      "title": "security(db): preserve verified TLS for runtime Postgres URL",
+      "headSha": "7721050b0ab430a5ccd2ec960106d42e4231ce8a",
+      "mergeCommitSha": "8d68d97a389522c268e976196bc342acc605fd7a",
+      "classification": "runtime-database-tls-hardening-outside-momentum-methodology",
+      "facts": {
+        "touchedMomentumConstruct": false,
+        "touchedFrozenMethodology": false,
+        "changesRuntimeDatabaseUrlSslmodeRequireToVerifyFull": true
+      }
+    }
+  },
+  "compatibilityResult": {
+    "state": "source-contract-compatible-runtime-equivalence-not-live-replayed",
+    "v140SourceContractCompatibleWithCurrentMain": true,
+    "v141MediaComponentContractCompatibleWithCurrentMain": true,
+    "methodologyVersionChanged": false,
+    "constructChanged": false,
+    "windowSemanticsChanged": false,
+    "normalizationChanged": false,
+    "missingnessSemanticsChanged": false,
+    "lowerLevelReadImplementationChanged": true,
+    "lowerLevelReadChangeIsSemanticMethodologyChange": false,
+    "liveDatabaseEquivalenceReplayed": false,
+    "branchRebaseOrMergeRequiredForResearchInterpretation": false,
+    "branchRebaseOrMergePerformed": false
+  },
+  "interpretation": {
+    "noNewMethodologyVersionRequired": true,
+    "currentMainProductionLifecycleDoesNotTurnMomentumIntoProduction": true,
+    "currentMainReadOptimizationDoesNotAuthorizeProviderRead": true,
+    "currentMainTlsHardeningDoesNotAuthorizeDatabaseRead": true,
+    "futureProductionDeploymentMustUseCurrentMainSecurityAndProductLineage": true,
+    "genericContinuationIsAuthorization": false
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7",
+    "productionReferenceVariable": "newsIssuePoint"
+  },
+  "effects": {
+    "providerReads": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "deployments": 0,
+    "productWrites": 0,
+    "registryMutations": 0,
+    "ledgerWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "validation": {
+    "githubActionsRunId": null,
+    "status": "PENDING",
+    "compatibilityReplayPassed": false,
+    "v140RegressionPassed": false,
+    "v141RegressionPassed": false,
+    "v181RegressionPassed": false,
+    "typecheckPassed": false,
+    "branchDiffCheckPassed": false,
+    "fullPrDiffCheckPassed": false,
+    "temporaryWorkflowRemoved": false
+  }
+}

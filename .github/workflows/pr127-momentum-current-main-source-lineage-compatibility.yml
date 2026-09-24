@@ -1,0 +1,37 @@
+name: PR127 momentum current-main source lineage compatibility
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - data/momentum-research/iu_momentum_current_main_source_lineage_compatibility_20260925T081535KST.json
+      - tests/fandex-momentum-current-main-source-lineage-compatibility.test.mts
+      - .github/workflows/pr127-momentum-current-main-source-lineage-compatibility.yml
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: current-main source lineage compatibility
+        run: npx tsx --test tests/fandex-momentum-current-main-source-lineage-compatibility.test.mts
+      - name: v140 regression
+        run: npx tsx --test tests/fandex-naver-media-attention-momentum-v140.test.mts
+      - name: v141 regression
+        run: npx tsx --test tests/fandex-momentum-temporal-normalization-v141.test.mts
+      - name: v181 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+      - name: typecheck
+        run: npm run typecheck
+      - name: branch diff check
+        run: git diff --check HEAD^..HEAD
+      - name: full PR diff check
+        run: git diff --check origin/main...HEAD
