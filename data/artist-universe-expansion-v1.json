@@ -1462,6 +1462,63 @@
           "url": "https://music.bugs.co.kr/label/3897"
         }
       ]
+    },
+    {
+      "id": "viini",
+      "ticker": "VIINI",
+      "name": "VIINI",
+      "agency": "Ghost Studio",
+      "entityType": "solo",
+      "naverNewsQuery": "권현빈 VIINI",
+      "koreanAliases": [
+        "권현빈",
+        "비니"
+      ],
+      "englishAliases": [
+        "VIINI",
+        "Kwon Hyun-bin",
+        "Kwon Hyunbin"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80292720?wl_ref=list_ab_04"
+        },
+        {
+          "source": "Ghost Studio statement reported by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/481461"
+        }
+      ]
+    },
+    {
+      "id": "leehi",
+      "ticker": "LEEHI",
+      "name": "LEEHI",
+      "agency": "808 HI RECORDINGS",
+      "entityType": "solo",
+      "naverNewsQuery": "이하이 LEEHI",
+      "koreanAliases": [
+        "이하이"
+      ],
+      "englishAliases": [
+        "LEEHI",
+        "LeeHi",
+        "Lee Hi"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/80123277?wl_ref=list_ab_04"
+        },
+        {
+          "source": "iMBC / 808 HI RECORDINGS statement",
+          "url": "https://enews.imbc.com/M/Detail/513700"
+        },
+        {
+          "source": "Edaily",
+          "url": "https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=02545286645387912"
+        }
+      ]
     }
   ]
 }
