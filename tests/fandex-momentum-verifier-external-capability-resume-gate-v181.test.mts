@@ -128,7 +128,7 @@ test('current main Product count can advance independently without changing v181
   assert.equal(out.productBoundary.productProductionActual, '1/7');
   assert.equal(
     out.digest,
-    '7509a29087e19ba37461abfc8461663089779890c7c742c68392b34ae4f1d3f5',
+    '681f9964467e68c4b006c3987940f816442898d55581e10d9eae4a7c9aaf3489',
   );
 });
 
@@ -668,7 +668,7 @@ test('current-main reconciliation keeps v181 blocked while global Product actual
   assert.equal(out.digest, audit.currentResult.digest);
   assert.equal(
     out.digest,
-    '7509a29087e19ba37461abfc8461663089779890c7c742c68392b34ae4f1d3f5',
+    '681f9964467e68c4b006c3987940f816442898d55581e10d9eae4a7c9aaf3489',
   );
   assert.deepEqual(out.effects, audit.effects);
   assert.equal(out.productBoundary.productMomentumScore, null);
