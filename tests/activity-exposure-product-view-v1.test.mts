@@ -180,3 +180,18 @@ test('digest-only evidence is distinguishable from retained Stored Evidence', ()
     'digest_only',
   );
 });
+
+
+test('complete coverage with zero events is an available empty timeline, not a zero score', () => {
+  const view = buildActivityExposureProductView({
+    artistId: 'iu',
+    events: [],
+    observations: [],
+    coverage: completeCoverage,
+  });
+
+  assert.equal(view.availability, 'available');
+  assert.equal(view.timeline.length, 0);
+  assert.equal(view.numericScore, null);
+  assert.equal(view.numericScoreState, 'not_justified');
+});
