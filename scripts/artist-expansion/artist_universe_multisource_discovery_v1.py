@@ -103,6 +103,7 @@ def build_discovery(
     known_index = build_known_index(identity_payload)
     grouped: dict[str, dict[str, Any]] = {}
     suppressed_known: list[dict[str, Any]] = []
+    known_coverage: dict[str, dict[str, Any]] = {}
     sources = []
 
     for source_path, payload in snapshot_payloads:
@@ -123,6 +124,25 @@ def build_discovery(
                     "sourceId": source["id"],
                     "sourceType": source["type"],
                 })
+                for canonical_id in known_matches:
+                    coverage = known_coverage.setdefault(
+                        canonical_id,
+                        {
+                            "canonicalArtistId": canonical_id,
+                            "sources": [],
+                            "observedDisplayArtists": [],
+                        },
+                    )
+                    source_row = {
+                        "sourceId": source["id"],
+                        "sourceType": source["type"],
+                        "sourceName": source["name"],
+                        "observedAt": source["observedAt"],
+                    }
+                    if source_row not in coverage["sources"]:
+                        coverage["sources"].append(source_row)
+                    if display_artist not in coverage["observedDisplayArtists"]:
+                        coverage["observedDisplayArtists"].append(display_artist)
                 continue
 
             item = grouped.setdefault(key, {
@@ -169,6 +189,16 @@ def build_discovery(
 
     candidates = sorted(grouped.values(), key=lambda row: row["normalizedArtist"])
 
+    known_canonical_coverage = []
+    for canonical_id in sorted(known_coverage):
+        row = known_coverage[canonical_id]
+        known_canonical_coverage.append(
+            {
+                **row,
+                "sourceCount": len(row["sources"]),
+            }
+        )
+
     return {
         "version": VERSION,
         "sourceCount": len(sources),
@@ -177,6 +207,8 @@ def build_discovery(
         "candidates": candidates,
         "knownSuppressionCount": len(suppressed_known),
         "knownSuppressions": suppressed_known,
+        "knownCanonicalCount": len(known_canonical_coverage),
+        "knownCanonicalCoverage": known_canonical_coverage,
         "contract": {
             "autoPromote": False,
             "identityResolutionRequired": True,
