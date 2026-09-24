@@ -1545,6 +1545,125 @@
           "url": "https://www.starnewskorea.com/music/2026/08/05/2026080511263941198"
         }
       ]
+    },
+    {
+      "id": "82major",
+      "ticker": "82MAJOR",
+      "name": "82MAJOR",
+      "agency": "GREAT M Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "82메이저 82MAJOR",
+      "koreanAliases": [
+        "82메이저"
+      ],
+      "englishAliases": [
+        "82MAJOR"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Weverse Shop / GREAT M ENTERTAINMENT",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/248/sales/66978"
+        }
+      ]
+    },
+    {
+      "id": "highlight",
+      "ticker": "HIGHLIGHT",
+      "name": "HIGHLIGHT",
+      "agency": "Around US Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "하이라이트 HIGHLIGHT",
+      "koreanAliases": [
+        "하이라이트"
+      ],
+      "englishAliases": [
+        "HIGHLIGHT",
+        "Highlight"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Around US Entertainment",
+          "url": "https://www.aroundusent.com/artistNotice/detail/554?artist_idx=&category_idx=&page=1"
+        }
+      ]
+    },
+    {
+      "id": "kimjaejoong",
+      "ticker": "KIMJAEJOONG",
+      "name": "KIM JAE JOONG",
+      "agency": "iNKODE Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "김재중 KIM JAE JOONG",
+      "koreanAliases": [
+        "김재중"
+      ],
+      "englishAliases": [
+        "KIM JAE JOONG",
+        "JAEJOONG",
+        "Kim Jaejoong"
+      ],
+      "identityEvidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.co.kr/artist.html"
+        },
+        {
+          "source": "Weverse / iNKODE Entertainment",
+          "url": "https://weverse.io/kimjaejoong/notice/34473?hl=ko"
+        }
+      ]
+    },
+    {
+      "id": "hwangminhyun",
+      "ticker": "HWANGMINHYUN",
+      "name": "HWANG MIN HYUN",
+      "agency": "PLEDIS Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "황민현 HWANG MIN HYUN",
+      "koreanAliases": [
+        "황민현"
+      ],
+      "englishAliases": [
+        "HWANG MIN HYUN",
+        "Hwang Minhyun",
+        "Hwang Min-hyun"
+      ],
+      "identityEvidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        },
+        {
+          "source": "Weverse / PLEDIS Entertainment",
+          "url": "https://weverse.io/hwangminhyun/notice/33682"
+        }
+      ]
+    },
+    {
+      "id": "yoonsanha",
+      "ticker": "YOONSANHA",
+      "name": "YOON SAN-HA",
+      "agency": "Fantagio",
+      "entityType": "solo",
+      "naverNewsQuery": "윤산하 YOON SAN-HA",
+      "koreanAliases": [
+        "윤산하"
+      ],
+      "englishAliases": [
+        "YOON SAN-HA",
+        "Yoon San-ha",
+        "Yoon Sanha"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/news/release/?p=372736"
+        }
+      ]
     }
   ]
 }
