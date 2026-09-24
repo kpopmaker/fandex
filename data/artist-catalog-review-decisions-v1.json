@@ -1287,6 +1287,67 @@
           "note": "Provider artist profile shows Park Da-hye with repeated solo releases through 2026, including Starting With You and later singles."
         }
       ]
+    },
+    {
+      "displayArtist": "K.will",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "agency_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://starship-ent.com/musician/kwill",
+          "note": "Official Starship artist profile identifies K.WILL and current 2026 releases."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Brother Su",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "agency_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician",
+          "note": "Official Starship artist roster lists Brother Su as a current musician."
+        }
+      ]
+    },
+    {
+      "displayArtist": "IDID",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "agency_roster_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician/idid",
+          "note": "Official Starship artist profile identifies IDID and 2025-2026 group releases."
+        }
+      ]
+    },
+    {
+      "displayArtist": "AEN",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "agency_roster_verified_joint_kpop_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "STARSHIP Entertainment",
+          "url": "https://www.starship-ent.com/musician",
+          "note": "Official Starship roster lists AEN as a current musician."
+        },
+        {
+          "source": "iMBC",
+          "url": "https://enews.imbc.com/M/Detail/506889",
+          "note": "2026 launch report identifies AEN as a seven-member Starship-Amuse joint boy group."
+        }
+      ]
     }
   ]
 }
