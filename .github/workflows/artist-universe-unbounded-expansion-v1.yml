@@ -45,6 +45,7 @@ jobs:
       - name: Collect STARSHIP official roster
         run: |
           python scripts/artist-expansion/collect_starship_agency_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/starship-official-roster-2026-09-24.json \
             --output starship_agency_roster_v1_latest.json
       - name: Stage 7 live agency roster discovery
         run: |
