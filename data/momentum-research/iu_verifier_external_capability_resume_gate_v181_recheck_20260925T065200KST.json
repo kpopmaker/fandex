@@ -141,7 +141,7 @@
     "typecheckPassed": true,
     "branchDiffCheckPassed": true,
     "fullPrDiffCheckPassed": true,
-    "temporaryWorkflowRemoved": false,
-    "temporaryWorkflowRemovalCommit": null
+    "temporaryWorkflowRemoved": true,
+    "temporaryWorkflowRemovalCommit": "fcdd8c4da16a8f863fe20c0586aa6bd7fe56060e"
   }
 }
