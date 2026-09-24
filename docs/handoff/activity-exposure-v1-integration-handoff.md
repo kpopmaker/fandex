@@ -506,3 +506,37 @@ Integration must preserve these exact identity rules:
 - FANDEX artist identity must match the canonical target artist
 
 Full research CI at head `4e49b19c53bfbefeb8482b1a8157084085a5475f` passed all research tests and typecheck in GitHub Actions run `35975266137`.
+
+
+## 19. Observation-time / coverage-boundary update
+
+Current research contract separates:
+
+- `occurredAt` = event occurrence
+- `sourcePublishedAt` = provider publication time when semantically available
+- `responseCapturedAt` = FANDEX provider-response observation time
+- `collectedAt` = later FANDEX ingestion/storage time
+- `providerObservedAt` = only an explicit provider-native observation timestamp; otherwise null
+
+Current MusicBrainz and YouTube v1 collectors do not populate `providerObservedAt` from release/publication dates.
+
+Observation identity is based on `responseCapturedAt` and payload digest, not `collectedAt`.
+
+Product coverage must declare:
+
+- coverageObservedAt
+- coverageScope
+- eventTimeStart / eventTimeEnd when applicable
+- observationBasis
+
+`complete` means complete within the declared coverage scope only.
+
+Latest checked main:
+`658d10d94ef73ced0200961a25e742f2c203da1c`
+
+No direct code-path conflict with the Activity Exposure research files was found.
+
+Latest full research CI:
+`35995504797 = PASS`
+at head
+`14c4bb8a3e76d96e8447a712934c59422c851a75`.
