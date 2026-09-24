@@ -1091,6 +1091,106 @@
           "url": "https://en.stagepick.co.kr/artists/detail/3361"
         }
       ]
+    },
+    {
+      "id": "ioi",
+      "ticker": "IOI",
+      "name": "I.O.I",
+      "agency": "Swing Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "아이오아이 I.O.I",
+      "koreanAliases": [
+        "아이오아이"
+      ],
+      "englishAliases": [
+        "I.O.I",
+        "IOI"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/ioi10th/contents/6a389a076edd9955ec8cc272"
+        },
+        {
+          "source": "Yonhap News",
+          "url": "https://en.yna.co.kr/view/AEN20260421003200315"
+        }
+      ]
+    },
+    {
+      "id": "maktub",
+      "ticker": "MAKTUB",
+      "name": "MAKTUB",
+      "agency": "Maktub Inc.",
+      "entityType": "solo",
+      "naverNewsQuery": "마크툽 MAKTUB",
+      "koreanAliases": [
+        "마크툽"
+      ],
+      "englishAliases": [
+        "MAKTUB",
+        "Maktub"
+      ],
+      "identityEvidence": [
+        {
+          "source": "MAKTUB Official YouTube",
+          "url": "https://www.youtube.com/watch?v=3XDf5Ke2Zj8"
+        },
+        {
+          "source": "Melon Ticket",
+          "url": "https://ticket.melon.com/artist/index.htm?artistId=566431"
+        }
+      ]
+    },
+    {
+      "id": "noahjooda",
+      "ticker": "NOAHJOODA",
+      "name": "noahjooda",
+      "agency": "Daytona Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "노아주다 noahjooda",
+      "koreanAliases": [
+        "노아주다"
+      ],
+      "englishAliases": [
+        "noahjooda",
+        "NOAHJOODA"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=87768906"
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4154139"
+        }
+      ]
+    },
+    {
+      "id": "thenuts",
+      "ticker": "THENUTS",
+      "name": "The NuTs",
+      "agency": "The NuTs Company",
+      "entityType": "group",
+      "naverNewsQuery": "더 넛츠 The NuTs",
+      "koreanAliases": [
+        "더 넛츠"
+      ],
+      "englishAliases": [
+        "The NuTs",
+        "The Nuts"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/73055"
+        },
+        {
+          "source": "Genie",
+          "url": "https://www.genie.co.kr/detail/albumInfo?axnm=86030298"
+        }
+      ]
     }
   ]
 }
