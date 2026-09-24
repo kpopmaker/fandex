@@ -1412,6 +1412,56 @@
           "url": "https://www.ygfamily.com/en/artists/lee-suhyun/profile"
         }
       ]
+    },
+    {
+      "id": "ikon",
+      "ticker": "IKON",
+      "name": "iKON",
+      "agency": "143 Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "아이콘 iKON 143엔터테인먼트",
+      "koreanAliases": [
+        "아이콘"
+      ],
+      "englishAliases": [
+        "iKON",
+        "IKON"
+      ],
+      "identityEvidence": [
+        {
+          "source": "143 Entertainment",
+          "url": "https://www.143inc.kr/ikon"
+        },
+        {
+          "source": "Bugs YG label catalog",
+          "url": "https://music.bugs.co.kr/label/3897"
+        }
+      ]
+    },
+    {
+      "id": "bangyedam",
+      "ticker": "BANGYEDAM",
+      "name": "BANG YEDAM",
+      "agency": "GF Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "방예담 BANG YEDAM",
+      "koreanAliases": [
+        "방예담"
+      ],
+      "englishAliases": [
+        "BANG YEDAM",
+        "Bang Yedam"
+      ],
+      "identityEvidence": [
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/bangyedam/notice/35283"
+        },
+        {
+          "source": "Bugs YG label catalog",
+          "url": "https://music.bugs.co.kr/label/3897"
+        }
+      ]
     }
   ]
 }
