@@ -613,3 +613,50 @@ Required integration mapping:
 - partial/missing provider coverage must remain explicit and must not be rendered as zero activity
 
 No direct source-path conflict was found, but Activity Exposure integration should reuse the current main Product truth-semantics presentation layer rather than introduce a parallel contradictory UX contract.
+
+
+## 22. First live coverage execution
+
+Research live workflow run:
+
+`36065220073`
+
+Result:
+
+`blocked_live_coverage`
+
+MusicBrainz current-visible inventory:
+
+- discovered = 58 release groups
+- normalized confirmed-release events = 57
+- missing = 1
+- invalid = 0
+- inventory exhausted = true
+
+Missing release group:
+
+`1299e16d-133b-47b0-b991-36cf11eff7d7 / 그대네요`
+
+Reason:
+
+`no-official-release-returned`
+
+Do not manufacture a confirmed release from release-group first-release-date merely to close this gap.
+
+YouTube:
+
+`provider_unavailable`
+
+Reason:
+
+`youtube-api-credential-not-configured`
+
+The GitHub Actions research environment did not expose `YOUTUBE_API_KEY`.
+
+Raw retention:
+
+`review_required`
+
+`ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED` was not enabled, so raw retained-evidence artifact upload was skipped.
+
+The live execution path itself is now proven operational. The remaining live blockers are provider/evidence inputs, not missing research runner architecture.
