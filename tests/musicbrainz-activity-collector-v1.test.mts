@@ -388,7 +388,7 @@ test('release with null status remains missing and does not become confirmed rel
             'primary-type': 'Single',
             'artist-credit': [{
               name: 'IU',
-              artist: { id: artistId, name: 'IU' },
+              artist: { id: iuMbid, name: 'IU' },
             }],
           }],
         });
@@ -407,7 +407,7 @@ test('release with null status remains missing and does not become confirmed rel
 
   const result = await collector.collect({
     artistId: 'iu',
-    providerArtistId: artistId,
+    providerArtistId: iuMbid,
   });
 
   assert.equal(result.events.length, 0);
