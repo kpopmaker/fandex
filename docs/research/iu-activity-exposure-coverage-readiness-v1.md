@@ -248,3 +248,76 @@ A complete provider coverage result with zero events is represented as an availa
 Current state:
 
 `PRODUCT_READABLE_TRUTH_FORM_IMPLEMENTED`
+
+
+## 10. Canonical event identity and deduplication
+
+Canonical event identity is now provider-native and title/date independent.
+
+MusicBrainz:
+
+`activity:musicbrainz:release-group:<release-group-mbid>`
+
+Rules:
+
+- release-group MBID is the canonical event entity
+- concrete release MBIDs remain supporting evidence only
+- multiple editions / territories under one release group do not create additional Activity Exposure events
+- same title/date across different release groups remains distinct
+- collaboration credits do not change canonical event identity
+
+YouTube:
+
+`activity:youtube:video:<video-id>`
+
+Rules:
+
+- video ID is the canonical event entity
+- playlist duplication does not create multiple events
+- title or metadata revision does not create a new canonical event
+
+Cross-family:
+
+- release and official-content events never dedupe merely because date/title overlap
+
+Revision handling:
+
+- normalized event identity remains stable across provider metadata revisions
+- historical revisions belong in Stored Evidence observation lineage
+- multiple normalized revisions of the same provider entity may not coexist as separate timeline events
+
+Canonical FANDEX artist identity is also validated so a provider event cannot be silently attached to a different FANDEX artist.
+
+Current state:
+
+`CANONICAL_EVENT_IDENTITY_AND_DEDUP_CONTRACT_LOCKED`
+
+## 11. Full research CI verification
+
+GitHub Actions workflow:
+
+`.github/workflows/activity-exposure-research-validation.yml`
+
+Run:
+
+`35975266137`
+
+Head:
+
+`4e49b19c53bfbefeb8482b1a8157084085a5475f`
+
+Result:
+
+`PASS`
+
+Successful steps:
+
+- Activity Exposure event contract tests
+- Activity Exposure observation tests
+- MusicBrainz collector tests
+- YouTube collector tests
+- IU end-to-end stream tests
+- Product-readable view tests
+- Typecheck
+
+This supersedes earlier partial/local-only execution claims for the current research head.
