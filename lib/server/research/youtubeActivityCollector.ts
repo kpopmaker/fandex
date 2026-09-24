@@ -380,7 +380,7 @@ export function createYouTubeActivityResearchCollector(
           responseCapturedAt: collectedAt,
           collectedAt,
           sourcePublishedAt: video.snippet?.publishedAt ?? null,
-          providerObservedAt: video.snippet?.publishedAt ?? null,
+          providerObservedAt: null,
           rawPayloadCanonical: JSON.stringify({
             provider: 'youtube',
             kind: 'video',
