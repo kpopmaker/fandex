@@ -1,16 +1,17 @@
 {
   "version": "artist_expansion_integration_manifest_v1",
   "branch": "validation/artist-expansion-generic-naver-pipeline-v1",
-  "packageHead": "6fe19603bf706692473c46d3218c11e279bfa811",
-  "currentMain": "930f5d692129e75f79ca3d74e99f6751cc12bb46",
+  "packageHead": "c591873dba0e25d29a1ecc1cf50629395ef38997",
+  "currentMain": "c625d73241e799589f174e8dcfb3b8636e6f7899",
   "mergeBase": "75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b",
   "branchStatus": {
     "status": "diverged",
-    "aheadBy": 52,
-    "behindBy": 2
+    "aheadBy": 125,
+    "behindBy": 11
   },
   "productionRelevantFiles": [
     "app/data/v4/artistUniverse.ts",
+    "data/artist-universe-expansion-v1.json",
     "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
     "scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py",
     "scripts/fandex-cloud-migration/source/fandex_master_score_v10.py",
@@ -27,6 +28,15 @@
     "scripts/lastfm-cloud/lastfm_cloud_history_v1.py"
   ],
   "validationOnlyFiles": [
+    ".github/workflows/artist-universe-unbounded-expansion-v1.yml",
+    "data/artist-catalog-review-decisions-v1.json",
+    "docs/validation/artist-expansion-final-integration-package-v1.md",
+    "docs/validation/artist-expansion-integration-handoff-v1.md",
+    "docs/validation/artist-expansion-naver-identity-coverage-v1.md",
+    "scripts/artist-expansion/artist_catalog_review_queue_v1.py",
+    "scripts/artist-expansion/export-artist-universe-identity-v1.mts",
+    "tests/artist-catalog-intake-from-chart-v1.py",
+    "tests/artist-catalog-review-queue-v1.py",
     "tests/artist-expansion-cloud-youtube-generic-cohort-v1.py",
     "tests/artist-expansion-full-universe-generic-naver-v1.test.mts",
     "tests/artist-expansion-generic-naver-pipeline-v1.test.mts",
@@ -34,9 +44,7 @@
     "tests/artist-expansion-lastfm-score-generic-cohort-v1.py",
     "tests/artist-expansion-music-generic-cohort-v1.py",
     "tests/artist-expansion-naver-identity-coverage-v1.test.mts",
-    "docs/validation/artist-expansion-final-integration-package-v1.md",
-    "docs/validation/artist-expansion-integration-handoff-v1.md",
-    "docs/validation/artist-expansion-naver-identity-coverage-v1.md"
+    "tests/artist-universe-unbounded-expansion-v1.test.mts"
   ],
   "infrastructureOnlyFiles": [
     "vercel.json"
@@ -71,8 +79,55 @@
       "id": 35847693563,
       "scope": "Last.fm cloud sync generic cohort",
       "conclusion": "success"
+    },
+    {
+      "id": 35857761630,
+      "scope": "Unbounded Artist Universe foundation",
+      "conclusion": "success"
+    },
+    {
+      "id": 35859446341,
+      "scope": "Catalog review queue",
+      "conclusion": "success"
+    },
+    {
+      "id": 35892871147,
+      "scope": "Live review queue unresolved zero",
+      "conclusion": "success"
+    },
+    {
+      "id": 35938268577,
+      "scope": "Eighth real expansion batch / 143 active",
+      "conclusion": "success"
+    },
+    {
+      "id": 35939844621,
+      "scope": "Ninth real expansion batch / 148 active",
+      "conclusion": "success"
+    },
+    {
+      "id": 35944189444,
+      "scope": "Tenth real expansion batch / 152 active",
+      "conclusion": "success"
     }
   ],
-  "integrationInstruction": "Rebuild from current main; do not blindly merge the long-lived validation branch.",
-  "authority": "FANDEX 운영 표준"
+  "integrationInstruction": "Start from current main and selectively rebuild approved Artist Expansion changes. Do not blindly merge the long-lived validation branch. Expansion identities require Product/Production scope approval before inclusion.",
+  "authority": "FANDEX 운영 표준",
+  "validatedExpansionHead": "ee23f7790015acb3bc8dc8e4b1cd4813af1df785",
+  "artistUniverseSnapshot": {
+    "baselineCount": 100,
+    "expansionSeedCount": 52,
+    "activeValidationCount": 152,
+    "reviewDecisionCount": 88,
+    "liveReviewUnresolvedCount": 0,
+    "automaticPromotion": false,
+    "snapshotRunId": 35944189444
+  },
+  "stage56Status": {
+    "automatedCatalogIntake": "VALIDATED",
+    "evidenceBackedIdentityReview": "VALIDATED",
+    "repeatedRealExpansionBatches": 10,
+    "liveReviewQueue": "UNRESOLVED_ZERO_AT_SNAPSHOT",
+    "fullKpopCoverage": "NOT_COMPLETE"
+  }
 }
