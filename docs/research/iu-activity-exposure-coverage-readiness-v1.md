@@ -525,3 +525,30 @@ The nearest remaining blockers are therefore concrete:
 1. MusicBrainz one-release-group missing Official support
 2. authorized YouTube Data API credential for live current-visible uploads replay
 3. raw provider evidence retention authorization for Stored Evidence integration review
+
+
+## 17. MusicBrainz one-gap root-cause verdict
+
+Follow-up diagnostic run `36066262307` confirmed the single missing release group is not a collector failure.
+
+`그대네요`
+
+- release-group MBID: `1299e16d-133b-47b0-b991-36cf11eff7d7`
+- concrete release MBID: `8634da4e-9649-4dcf-a901-2ed6dbb0f438`
+- date: `2010-09-28`
+- country: `KR`
+- concrete release status: `null`
+
+Verdict:
+
+`MUSICBRAINZ_SOURCE_LIMITATION_CONFIRMED`
+
+The current confirmed-release methodology remains unchanged.
+
+`status=null` is not treated as Official.
+
+The MusicBrainz live result therefore remains truthfully:
+
+`57 confirmed observed + 1 missing Official-status support`
+
+rather than an artificial 58/58.
