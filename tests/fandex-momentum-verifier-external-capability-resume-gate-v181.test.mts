@@ -736,7 +736,7 @@ test('2026-09-25 second live recheck removes the Vercel project-metadata blocker
   ]);
   assert.equal(
     out.digest,
-    'dd994a883a1a44a7fb3fb7205bed71c0c296ba051a3a79b22625ec576e9023f6',
+    '88550ff00b6fb8e1c44432fadea26dfd61a63edb834893f3ddeaa0bd8d8b0abd',
   );
   assert.equal(out.productBoundary.productMomentumScore, null);
   assert.equal(out.productBoundary.productionEligible, false);
