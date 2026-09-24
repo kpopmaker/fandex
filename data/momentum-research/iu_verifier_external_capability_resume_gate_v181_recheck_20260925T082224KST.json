@@ -144,13 +144,15 @@
     "productProductionActual": "1/7"
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "v181TestsPassed": false,
-    "v180RegressionPassed": false,
-    "typecheckPassed": false,
-    "branchDiffCheckPassed": false,
-    "fullPrDiffCheckPassed": false,
+    "githubActionsRunId": 36072624179,
+    "status": "PASS",
+    "initialFailedRunId": 36072544636,
+    "initialFailureScope": "expected-digest-fixture-only",
+    "v181TestsPassed": true,
+    "v180RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
     "temporaryWorkflowRemoved": false
   }
 }
