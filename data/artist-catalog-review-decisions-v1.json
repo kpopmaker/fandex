@@ -1348,6 +1348,20 @@
           "note": "2026 launch report identifies AEN as a seven-member Starship-Amuse joint boy group."
         }
       ]
+    },
+    {
+      "displayArtist": "EUN JIWON",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "agency_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/en/artists/eun-jiwon/profile",
+          "note": "YG Entertainment official current artist profile identifies EUN JIWON as an artist with an independent solo profile."
+        }
+      ]
     }
   ]
 }
