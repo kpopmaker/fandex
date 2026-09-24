@@ -135,5 +135,16 @@
     "productMomentumScore": null,
     "productionEligible": false,
     "productProductionActual": "0/7"
+  },
+  "validation": {
+    "githubActionsRunId": 35995446622,
+    "status": "PASS",
+    "v181TestsPassed": true,
+    "v180RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
+    "temporaryWorkflowRemoved": true,
+    "temporaryWorkflowRemovalCommit": "5aedfa5c2277cf9931fa2e8eca278cf176f8531e"
   }
 }
