@@ -389,3 +389,69 @@ Observation / coverage semantics are therefore validated at the current research
 The remaining external blocker is still:
 
 `LIVE_PROVIDER_COVERAGE_GATE`
+
+
+## 14. Live coverage manifest / integration acceptance contract
+
+Research manifest:
+
+`lib/research/activityExposureCoverageManifest.ts`
+
+Test:
+
+`tests/activity-exposure-coverage-manifest-v1.test.mts`
+
+The manifest records one explicit result per required provider.
+
+Provider result fields include:
+
+- provider / providerArtistId
+- declared coverage scope and observation time
+- inventoryExhausted
+- discoveredEntityCount
+- normalizedEventCount
+- excludedEntityCount
+- missingEntityCount
+- invalidEntityCount
+- retained / digest-only / unavailable observation counts
+- authorizationState
+- unresolvedIdentityCount
+- notes
+
+The manifest always records:
+
+`numericScoreProduced = false`
+
+and never produces a comebackActivityPoint score.
+
+Allowed gate decisions:
+
+- `pass_for_integration_review`
+- `pass_bounded_partial_for_integration_review`
+- `blocked_live_coverage`
+- `blocked_invalid_evidence`
+- `blocked_authorization`
+- `blocked_identity`
+
+A complete provider scope can pass only when:
+
+- the declared inventory/query scope was exhausted
+- no missing entities remain in that scope
+- no invalid entities remain
+- provider identity is resolved for the research use
+- retained evidence exists for integration review
+
+A partial result can advance only when the partiality is explicitly bounded by:
+
+- `bounded_provider_query`, or
+- `stored_evidence_set`
+
+and the bounded scope itself has no missing/invalid entities.
+
+An unbounded `current_visible_inventory` partial result remains blocked.
+
+This contract does not authorize merge, Production activation, or publication. A pass means only that the live coverage result may proceed to integration review.
+
+Current state:
+
+`LIVE_COVERAGE_ACCEPTANCE_CONTRACT_IMPLEMENTED`
