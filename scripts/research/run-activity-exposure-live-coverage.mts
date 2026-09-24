@@ -94,9 +94,38 @@ async function collectMusicBrainz(
     const discovered = new Set(
       releaseGroupObservations.map((item) => item.sourceEntityId),
     ).size;
-    const missing = releaseGroupObservations.filter(
+    const missingReleaseGroupObservations = releaseGroupObservations.filter(
       (item) => item.normalizedEventIds.length === 0,
-    ).length;
+    );
+    const missing = missingReleaseGroupObservations.length;
+    const missingDiagnostics = missingReleaseGroupObservations.map((observation) => {
+      const raw = observation.rawPayloadCanonical
+        ? JSON.parse(observation.rawPayloadCanonical) as {
+            releaseGroup?: {
+              title?: string;
+              'artist-credit'?: readonly {
+                artist?: { id?: string };
+              }[];
+            };
+          }
+        : {};
+      const releaseGroup = raw.releaseGroup;
+      const artistCreditMatches = (releaseGroup?.['artist-credit'] ?? []).some(
+        (credit) => credit.artist?.id === MUSICBRAINZ_ARTIST_ID,
+      );
+      const supportingReleases = result.rawObservations.filter(
+        (item) =>
+          item.sourceEntityType === 'release'
+          && item.requestRef.includes(observation.sourceEntityId),
+      );
+      const reason = !artistCreditMatches
+        ? 'artist-credit-mismatch'
+        : supportingReleases.length === 0
+          ? 'no-official-release-returned'
+          : 'official-release-without-usable-date';
+
+      return `missing-release-group:${observation.sourceEntityId}:${releaseGroup?.title ?? 'unknown-title'}:${reason}`;
+    });
     const invalid = result.validationIssues.length;
     const retention = retainedCounts(result.rawObservations, retentionAuthorized);
 
@@ -138,6 +167,7 @@ async function collectMusicBrainz(
       notes: Object.freeze([
         'release-group browse exhausted under MusicBrainz current provider revision',
         'release groups without normalized events remain missing rather than zero activity',
+        ...missingDiagnostics,
       ]),
     });
 
