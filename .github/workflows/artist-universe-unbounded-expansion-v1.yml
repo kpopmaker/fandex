@@ -36,6 +36,8 @@ jobs:
         run: |
           python tests/artist-catalog-intake-from-chart-v1.py
           python tests/artist-catalog-review-queue-v1.py
+      - name: Stage 7 multisource discovery regression
+        run: python tests/artist-universe-multisource-discovery-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
       - name: Live chart catalog discovery
