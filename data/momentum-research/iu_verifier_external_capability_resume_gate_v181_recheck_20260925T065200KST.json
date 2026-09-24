@@ -134,13 +134,14 @@
     "productProductionActual": "0/7"
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "v181TestsPassed": false,
-    "v180RegressionPassed": false,
-    "typecheckPassed": false,
-    "branchDiffCheckPassed": false,
-    "fullPrDiffCheckPassed": false,
-    "temporaryWorkflowRemoved": false
+    "githubActionsRunId": 36064485112,
+    "status": "PASS",
+    "v181TestsPassed": true,
+    "v180RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
+    "temporaryWorkflowRemoved": false,
+    "temporaryWorkflowRemovalCommit": null
   }
 }
