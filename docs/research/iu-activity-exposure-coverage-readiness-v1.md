@@ -321,3 +321,36 @@ Successful steps:
 - Typecheck
 
 This supersedes earlier partial/local-only execution claims for the current research head.
+
+
+## 12. Observation-time and live-coverage boundary lock
+
+The research contract now separates four temporal meanings:
+
+- event occurrence = `occurredAt`
+- provider publication = `sourcePublishedAt`
+- provider response capture / FANDEX observation = `responseCapturedAt`
+- FANDEX ingestion/storage = `collectedAt`
+
+`providerObservedAt` is reserved for a distinct provider-native observation timestamp and is null for current MusicBrainz/YouTube v1 evidence because neither current source field used by Activity Exposure has that semantic.
+
+Observation IDs now use `responseCapturedAt`, not `collectedAt`.
+
+Current state:
+
+`OBSERVATION_TIME_SEMANTICS_LOCKED`
+
+Product coverage now requires an explicit declared scope:
+
+- current visible inventory
+- bounded provider query
+- stored evidence set
+- unavailable
+
+A `complete` state means complete only within that declared scope.
+
+Current state:
+
+`LIVE_COVERAGE_BOUNDARY_SEMANTICS_LOCKED`
+
+This does not clear the external `LIVE_PROVIDER_COVERAGE_GATE`; it makes the eventual live result representable without overstating historical completeness.
