@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 
 export const ACTIVITY_EXPOSURE_OBSERVATION_CONTRACT_VERSION =
-  'activity-exposure-observation-v1-research' as const;
+  'activity-exposure-observation-v2-research' as const;
 
 export type ActivityExposureObservationProvider = 'musicbrainz' | 'youtube';
 export type ActivityExposureObservationScope = 'research' | 'shadow';
@@ -62,7 +62,7 @@ export function buildActivityExposureObservationId(input: Readonly<{
   sourceProvider: ActivityExposureObservationProvider;
   sourceEntityType: string;
   sourceEntityId: string;
-  collectedAt: string;
+  responseCapturedAt: string;
   rawPayloadDigest: string;
 }>) {
   return createHash('sha256')
@@ -72,7 +72,7 @@ export function buildActivityExposureObservationId(input: Readonly<{
       sourceProvider: input.sourceProvider,
       sourceEntityType: input.sourceEntityType,
       sourceEntityId: input.sourceEntityId,
-      collectedAt: input.collectedAt,
+      responseCapturedAt: input.responseCapturedAt,
       rawPayloadDigest: input.rawPayloadDigest,
     }))
     .digest('hex');
@@ -87,7 +87,7 @@ export function createActivityExposureRawObservation(
     sourceProvider: input.sourceProvider,
     sourceEntityType: input.sourceEntityType,
     sourceEntityId: input.sourceEntityId,
-    collectedAt: input.collectedAt,
+    responseCapturedAt: input.responseCapturedAt,
     rawPayloadDigest,
   });
 
@@ -128,10 +128,68 @@ export function classifyActivityExposureRevision(
   return previous.rawPayloadDigest === currentDigest ? 'unchanged-repeat' : 'changed';
 }
 
+
+function isRfc3339Timestamp(value: string) {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)
+    && Number.isFinite(Date.parse(value));
+}
+
+function compareTimestamp(left: string, right: string) {
+  return Date.parse(left) - Date.parse(right);
+}
+
 export function validateActivityExposureObservation(
   observation: ActivityExposureRawObservation,
 ) {
   const issues: string[] = [];
+
+  if (!isRfc3339Timestamp(observation.responseCapturedAt)) {
+    issues.push('invalid-response-captured-at');
+  }
+
+  if (!isRfc3339Timestamp(observation.collectedAt)) {
+    issues.push('invalid-collected-at');
+  }
+
+  if (
+    isRfc3339Timestamp(observation.responseCapturedAt)
+    && isRfc3339Timestamp(observation.collectedAt)
+    && compareTimestamp(observation.responseCapturedAt, observation.collectedAt) > 0
+  ) {
+    issues.push('response-captured-after-collected');
+  }
+
+  if (
+    observation.sourcePublishedAt !== null
+    && !isRfc3339Timestamp(observation.sourcePublishedAt)
+  ) {
+    issues.push('invalid-source-published-at');
+  }
+
+  if (
+    observation.providerObservedAt !== null
+    && !isRfc3339Timestamp(observation.providerObservedAt)
+  ) {
+    issues.push('invalid-provider-observed-at');
+  }
+
+  if (
+    observation.sourcePublishedAt !== null
+    && isRfc3339Timestamp(observation.sourcePublishedAt)
+    && isRfc3339Timestamp(observation.responseCapturedAt)
+    && compareTimestamp(observation.sourcePublishedAt, observation.responseCapturedAt) > 0
+  ) {
+    issues.push('source-published-after-response-capture');
+  }
+
+  if (
+    observation.providerObservedAt !== null
+    && isRfc3339Timestamp(observation.providerObservedAt)
+    && isRfc3339Timestamp(observation.responseCapturedAt)
+    && compareTimestamp(observation.providerObservedAt, observation.responseCapturedAt) > 0
+  ) {
+    issues.push('provider-observed-after-response-capture');
+  }
 
   if (observation.scope === 'research' && observation.authorizationState === 'blocked') {
     issues.push('authorization-blocked');
