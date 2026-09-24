@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "validation/*": false,
+      "research/*": false,
+      "verify/*": false,
+      "diagnostic/*": false,
+      "work/*": false,
+      "v131-lastfm-real-signal-read-model": false
+    }
+  }
+}
