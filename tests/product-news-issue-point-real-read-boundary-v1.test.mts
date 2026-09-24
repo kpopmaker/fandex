@@ -380,8 +380,9 @@ test('Product Stored Evidence query reverse-traces an authorized job to canonica
   assert.equal(result.status, 'ok');
   if (result.status !== 'ok') return;
   assert.equal(result.model.identity.jobId, jobId);
-  assert.equal(result.model.publication, 'shadow');
+  assert.equal('publication' in result.model, false);
   assert.equal(result.model.dataOrigin, 'observed');
+  assert.equal(result.model.lineage.collectionLifecycle, 'shadow');
   assert.equal(result.model.lineage.slotStart, CURRENT_END);
   assert.deepEqual(result.model.lineage.windowMemberships, [
     {
