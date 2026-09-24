@@ -1,0 +1,32 @@
+name: Validate runtime Postgres verify-full v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/runtime-postgres-sslmode-verify-full-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Managed Postgres persistence contract
+        run: npx tsx --test tests/managed-postgres-persistence.test.ts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
