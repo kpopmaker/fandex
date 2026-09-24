@@ -155,13 +155,15 @@
     "productionReferenceVariable": "newsIssuePoint"
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "v181TestsPassed": false,
-    "v180RegressionPassed": false,
-    "typecheckPassed": false,
-    "branchDiffCheckPassed": false,
-    "fullPrDiffCheckPassed": false,
-    "temporaryWorkflowRemoved": false
+    "githubActionsRunId": 36067476890,
+    "status": "PASS",
+    "initialFailedRunId": 36067298930,
+    "initialFailureScope": "expected-digest-fixture-only",
+    "v181TestsPassed": true,
+    "v180RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
+    "temporaryWorkflowRemoved": true
   }
 }
