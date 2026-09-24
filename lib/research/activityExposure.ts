@@ -52,6 +52,7 @@ export type ActivityExposureValidationIssue = Readonly<{
     | 'event_identity_mismatch'
     | 'canonical_family_mismatch'
     | 'revision_lineage_invalid'
+    | 'artist_identity_mismatch'
     | 'youtube_channel_mismatch'
     | 'musicbrainz_artist_mismatch'
     | 'prohibited_numeric_methodology_field'
@@ -144,6 +145,14 @@ export function validateActivityExposureEvent(
         message: 'occurredAt does not match occurredAtPrecision.',
       });
     }
+  }
+
+  if (event.artistId !== identity.artistId) {
+    issues.push({
+      code: 'artist_identity_mismatch',
+      eventId: event.eventId,
+      message: 'Event artistId must match the canonical FANDEX artist identity.',
+    });
   }
 
   const canonicalEventId = buildActivityExposureCanonicalEventId(event);
