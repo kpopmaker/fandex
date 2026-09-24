@@ -88,10 +88,25 @@ snapshots = [
     ),
 ]
 
-result = module.build_discovery(identity, snapshots)
+decisions = {
+    "decisions": [
+        {
+            "displayArtist": "신인가수 A",
+            "decision": "new_canonical_solo_candidate",
+            "relationResolution": "fixture_identity_verified",
+            "relatedCanonicalArtistIds": [],
+            "autoPromote": False,
+            "evidence": [{"source": "fixture", "url": "https://example.com/decision/a"}],
+        }
+    ]
+}
+
+result = module.build_discovery(identity, snapshots, decisions)
 
 assert result["sourceCount"] == 3
 assert result["candidateCount"] == 2
+assert result["candidateResolvedCount"] == 1
+assert result["candidateUnresolvedCount"] == 1
 assert result["knownSuppressionCount"] == 3
 assert result["contract"]["autoPromote"] is False
 assert result["contract"]["evidenceCountIsNotThreshold"] is True
@@ -109,6 +124,9 @@ assert len(by_name["신인가수 A"]["sources"]) == 2
 assert len(by_name["신인그룹 B"]["sources"]) == 2
 assert by_name["신인가수 A"]["autoPromote"] is False
 assert by_name["신인가수 A"]["scopeStatus"] == "unverified"
+assert by_name["신인가수 A"]["reviewStatus"] == "resolved"
+assert by_name["신인가수 A"]["reviewDecision"] == "new_canonical_solo_candidate"
+assert by_name["신인그룹 B"]["reviewStatus"] == "unresolved"
 
 bad = (
     Path("bad.json"),
