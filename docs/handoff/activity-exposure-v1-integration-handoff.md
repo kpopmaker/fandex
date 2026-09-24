@@ -490,3 +490,19 @@ not:
 and not:
 
 `NUMERIC comebackActivityPoint`.
+
+
+## 18. Canonical identity / dedup update
+
+Integration must preserve these exact identity rules:
+
+- MusicBrainz event ID = `activity:musicbrainz:release-group:<release-group-mbid>`
+- YouTube event ID = `activity:youtube:video:<video-id>`
+- release edition IDs are evidence, not separate canonical Activity events
+- titles and dates are attributes, never dedupe keys
+- provider metadata revisions retain the same canonical event identity
+- revision history belongs in Stored Evidence lineage, not as duplicate Product timeline rows
+- cross-family title/date overlap never implies dedupe
+- FANDEX artist identity must match the canonical target artist
+
+Full research CI at head `4e49b19c53bfbefeb8482b1a8157084085a5475f` passed all research tests and typecheck in GitHub Actions run `35975266137`.
