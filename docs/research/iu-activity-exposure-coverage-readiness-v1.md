@@ -455,3 +455,21 @@ This contract does not authorize merge, Production activation, or publication. A
 Current state:
 
 `LIVE_COVERAGE_ACCEPTANCE_CONTRACT_IMPLEMENTED`
+
+
+## 15. Current Product UX compatibility
+
+Current main `09c7b4714c9f52b8534e43747a2582bc24102c8c` contains truth-preserving Product presentation for observation time and Stored Evidence failures.
+
+Compatibility verdict:
+
+`PASS_PRODUCT_TRUTH_SEMANTICS_COMPATIBLE`
+
+Activity Exposure integration should reuse current Product presentation semantics rather than create a separate competing interpretation.
+
+Required preservation:
+
+- response capture != source publication != event occurrence != ingestion
+- evidence not-found != evidence load error != evidence verification issue
+- Stored Evidence failure does not rewrite the Product activity timeline
+- Missing/Partial coverage does not become zero activity
