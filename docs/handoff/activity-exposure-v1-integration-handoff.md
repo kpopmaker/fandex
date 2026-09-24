@@ -704,3 +704,42 @@ Recommended integration separation:
 `ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED=true` may authorize a bounded research artifact only. It does not authorize Production database persistence.
 
 For YouTube, any retained research artifact must stay inside the provider refresh/delete boundary. The current research workflow's 7-day artifact retention satisfies that research boundary, but Production persistence still requires a refresh/delete design.
+
+
+## 24. Final research readiness audit
+
+Final audit:
+
+`docs/research/activity-exposure-final-integration-readiness-audit-v1.md`
+
+Latest checked main:
+
+`8d68d97a389522c268e976196bc342acc605fd7a`
+
+Validated research head before final audit documentation:
+
+`8b64d0c66fa859d2a61ec1cc2020bd499ba489b5`
+
+Full research CI:
+
+`36067692273 = PASS`
+
+Final research classification:
+
+- internal research blockers = `NONE`
+- research = `COMPLETE`
+- handoff = `READY`
+- integration = `INTEGRATION_READY_WITH_EXTERNAL_PROVIDER_GATE`
+- Production = `NO`
+- numeric comebackActivityPoint = `NOT_JUSTIFIED`
+
+Open external/integration gates:
+
+1. authorized YouTube Data API credential
+2. Production-scope implementation of provider-specific Stored Evidence retention/refresh-delete
+3. latest-main reconstruction
+4. any required Neon main-schema change requires explicit user approval
+5. merge requires explicit user approval
+6. activation/publication remains a later explicit gate
+
+Do not continue redesigning the Activity Exposure research construct merely because the YouTube credential gate is open.
