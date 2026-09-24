@@ -59,27 +59,6 @@ function blockingDecision(
 ): Readonly<{ decision: ActivityExposureCoverageGateDecision; reasons: string[] }> {
   const reasons: string[] = [];
 
-  if (providers.some((item) => item.authorizationState === 'blocked')) {
-    reasons.push('provider-authorization-blocked');
-    return { decision: 'blocked_authorization', reasons };
-  }
-
-  if (
-    providers.some(
-      (item) =>
-        item.authorizationState === 'review_required'
-        || item.retainedObservationCount === 0,
-    )
-  ) {
-    if (providers.some((item) => item.authorizationState === 'review_required')) {
-      reasons.push('provider-authorization-review-required');
-    }
-    if (providers.some((item) => item.retainedObservationCount === 0)) {
-      reasons.push('retained-evidence-required-for-integration-review');
-    }
-    return { decision: 'blocked_authorization', reasons };
-  }
-
   if (
     providers.some(
       (item) =>
@@ -130,7 +109,30 @@ function blockingDecision(
       reasons.push('unbounded-partial-coverage');
       return { decision: 'blocked_live_coverage', reasons };
     }
+  }
 
+  if (providers.some((item) => item.authorizationState === 'blocked')) {
+    reasons.push('provider-authorization-blocked');
+    return { decision: 'blocked_authorization', reasons };
+  }
+
+  if (
+    providers.some(
+      (item) =>
+        item.authorizationState === 'review_required'
+        || item.retainedObservationCount === 0,
+    )
+  ) {
+    if (providers.some((item) => item.authorizationState === 'review_required')) {
+      reasons.push('provider-authorization-review-required');
+    }
+    if (providers.some((item) => item.retainedObservationCount === 0)) {
+      reasons.push('retained-evidence-required-for-integration-review');
+    }
+    return { decision: 'blocked_authorization', reasons };
+  }
+
+  if (partialProviders.length > 0) {
     return {
       decision: 'pass_bounded_partial_for_integration_review',
       reasons: ['bounded-partial-provider-scopes-explicitly-preserved'],
