@@ -49,6 +49,9 @@ export type ActivityExposureValidationIssue = Readonly<{
     | 'precision_mismatch'
     | 'duplicate_event_id'
     | 'duplicate_provider_entity'
+    | 'event_identity_mismatch'
+    | 'canonical_family_mismatch'
+    | 'revision_lineage_invalid'
     | 'youtube_channel_mismatch'
     | 'musicbrainz_artist_mismatch'
     | 'prohibited_numeric_methodology_field'
@@ -143,6 +146,54 @@ export function validateActivityExposureEvent(
     }
   }
 
+  const canonicalEventId = buildActivityExposureCanonicalEventId(event);
+  if (canonicalEventId === null || event.eventId !== canonicalEventId) {
+    issues.push({
+      code: 'event_identity_mismatch',
+      eventId: event.eventId,
+      message: 'eventId must be derived only from the provider-native canonical event entity.',
+    });
+  }
+
+  if (event.sourceProvider === 'musicbrainz') {
+    if (
+      event.sourceEntityType !== 'release-group'
+      || event.eventFamily !== 'release'
+      || event.canonicalFamilyId !== event.sourceEntityId
+    ) {
+      issues.push({
+        code: 'canonical_family_mismatch',
+        eventId: event.eventId,
+        message: 'MusicBrainz release events must be keyed by release-group identity.',
+      });
+    }
+  }
+
+  if (event.sourceProvider === 'youtube') {
+    if (
+      event.sourceEntityType !== 'video'
+      || event.eventFamily !== 'official_content'
+      || event.canonicalFamilyId !== null
+    ) {
+      issues.push({
+        code: 'canonical_family_mismatch',
+        eventId: event.eventId,
+        message: 'YouTube official-content events must be keyed by video identity.',
+      });
+    }
+  }
+
+  if (
+    event.supersedesRevisionId !== null
+    && event.supersedesRevisionId === event.revisionId
+  ) {
+    issues.push({
+      code: 'revision_lineage_invalid',
+      eventId: event.eventId,
+      message: 'A revision must not supersede itself.',
+    });
+  }
+
   if (
     event.sourceProvider === 'youtube'
     && identity.youtubeChannelId
@@ -215,7 +266,7 @@ export function validateActivityExposureStream(
     }
     eventIds.add(event.eventId);
 
-    const providerKey = `${event.sourceProvider}:${event.sourceEntityType}:${event.sourceEntityId}`;
+    const providerKey = buildActivityExposureCanonicalIdentityKey(event);
     if (providerEntityKeys.has(providerKey)) {
       issues.push({
         code: 'duplicate_provider_entity',
