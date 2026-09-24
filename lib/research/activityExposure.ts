@@ -80,6 +80,39 @@ function matchesPrecision(value: string, precision: ActivityExposurePrecision) {
   return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value);
 }
 
+
+export function buildActivityExposureCanonicalEventId(
+  event: Pick<
+    ActivityExposureEvent,
+    'sourceProvider' | 'sourceEntityType' | 'sourceEntityId'
+  >,
+) {
+  if (
+    event.sourceProvider === 'musicbrainz'
+    && event.sourceEntityType === 'release-group'
+  ) {
+    return `activity:musicbrainz:release-group:${event.sourceEntityId}`;
+  }
+
+  if (
+    event.sourceProvider === 'youtube'
+    && event.sourceEntityType === 'video'
+  ) {
+    return `activity:youtube:video:${event.sourceEntityId}`;
+  }
+
+  return null;
+}
+
+export function buildActivityExposureCanonicalIdentityKey(
+  event: Pick<
+    ActivityExposureEvent,
+    'sourceProvider' | 'sourceEntityType' | 'sourceEntityId'
+  >,
+) {
+  return `${event.sourceProvider}:${event.sourceEntityType}:${event.sourceEntityId}`;
+}
+
 export function validateActivityExposureEvent(
   event: ActivityExposureEvent,
   identity: Readonly<{
