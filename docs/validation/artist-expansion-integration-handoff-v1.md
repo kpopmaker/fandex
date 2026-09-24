@@ -1,3 +1,76 @@
+# 2026-09-24 Stage 5/6 Refresh — Superseding Snapshot
+
+This section supersedes older count/status snapshots below while preserving them as historical evidence.
+
+## Current exact validation state
+
+- validation branch: `validation/artist-expansion-generic-naver-pipeline-v1`
+- validated head before this documentation refresh: `ee23f7790015acb3bc8dc8e4b1cd4813af1df785`
+- current `main`: `c625d73241e799589f174e8dcfb3b8636e6f7899`
+- merge base: `75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b`
+- compare: `diverged`
+- validation branch ahead: 123 commits
+- validation branch behind: 11 commits
+
+## Artist Universe / onboarding state
+
+- historical baseline Universe: 100
+- expansion seed: 52
+- active validation Universe: **152**
+- review-decision registry entries: 88
+- live catalog review unresolved: **0**
+- automatic promotion: **disabled**
+- identity resolution remains separate from K-pop scope eligibility and Production activation
+
+The active Universe is defined as:
+
+`100 baseline + data/artist-universe-expansion-v1.json`
+
+There is no longer a hard 100-artist ceiling in the validated Artist Universe loader.
+
+## Stage 5/6 result
+
+Validated live loop:
+
+`music chart -> unknown catalog candidate -> review queue -> evidence-backed decision -> expansion seed -> canonical Universe -> NAVER identity index -> subsequent discovery suppression`
+
+The loop has been exercised repeatedly through ten real expansion batches.
+
+Latest successful end-to-end validation:
+
+- workflow: `Artist Universe Unbounded Expansion v1`
+- run: `35944189444`
+- head: `ee23f7790015acb3bc8dc8e4b1cd4813af1df785`
+- conclusion: `success`
+
+Successful gates:
+
+1. Typecheck
+2. Unbounded Universe regression
+3. Catalog intake regression
+4. Full Universe identity export
+5. Live chart catalog discovery
+6. Catalog review queue generation
+7. Artifact upload
+
+Latest validated active Universe: **152 artists**.
+
+## Current integration rule
+
+**Do not merge this long-lived validation branch wholesale.**
+
+Production integration authority remains `FANDEX 운영 표준`.
+
+That chat should:
+
+1. start from current `main`
+2. selectively rebuild approved Artist Expansion changes
+3. include the expansion seed only if Product/Production scope approves the expanded identities
+4. preserve current-main Product activation/cutover work
+5. rerun validation on the exact integration head
+6. perform merge/activation/cutover only under Production authority
+
+
 # FANDEX Artist Expansion — Integration-Ready Handoff v1
 
 Branch: `validation/artist-expansion-generic-naver-pipeline-v1`
