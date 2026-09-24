@@ -587,3 +587,29 @@ For blocked/review-required acquisition or insufficient retained evidence for th
 For unresolved provider identity.
 
 Neither PASS state authorizes Production merge, activation, Product publication, or numeric comebackActivityPoint generation.
+
+
+## 21. Current Product UX compatibility
+
+Latest checked main:
+
+`09c7b4714c9f52b8534e43747a2582bc24102c8c`
+
+This main includes Product UX truth-preservation work for:
+
+- observation period vs observation instant presentation
+- Stored Evidence not-found vs load-error vs verification-issue presentation
+- preservation of Product value/publication state when Stored Evidence verification fails
+
+Activity Exposure research semantics are compatible with that direction.
+
+Required integration mapping:
+
+- provider-response observation time -> Product observation instant when the Product surface is describing a specific capture
+- declared coverage event-time range -> Product observation period only when it is truly an event-time period, not collection time
+- sourcePublishedAt must remain source/publication metadata, not Product observation time
+- collectedAt must remain ingestion/storage lineage, not displayed as event occurrence
+- Stored Evidence trace failures must not mutate Activity Exposure timeline values, availability, or publication state
+- partial/missing provider coverage must remain explicit and must not be rendered as zero activity
+
+No direct source-path conflict was found, but Activity Exposure integration should reuse the current main Product truth-semantics presentation layer rather than introduce a parallel contradictory UX contract.
