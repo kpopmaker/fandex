@@ -675,3 +675,70 @@ test('current-main reconciliation keeps v181 blocked while global Product actual
   assert.equal(out.productBoundary.productionEligible, false);
   assert.equal(out.productBoundary.productProductionActual, '1/7');
 });
+
+
+test('2026-09-25 second live recheck removes the Vercel project-metadata blocker but remains blocked on env inventory read', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_external_capability_resume_gate_v181_recheck_20260925T082224KST.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      observedAt: audit.observedAt,
+      upstreamV180Digest: audit.upstream.v180Digest,
+      productProductionActual:
+        audit.currentGateInput.productProductionActual,
+      target: audit.target,
+      connectedCapability: audit.currentGateInput.connectedCapability,
+      localCapability: audit.currentGateInput.localCapability,
+      browserCapability: audit.currentGateInput.browserCapability,
+      externalOperator: audit.currentGateInput.externalOperator,
+    });
+
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.getProjectCallableForTarget,
+    true,
+  );
+  assert.equal(
+    audit.interpretation.projectMetadataWrapperBlockerResolved,
+    true,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.exactEnvInventoryReadToolExposed,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.genericRestReadToolExposed,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.exactDatabaseReadExecuted,
+    false,
+  );
+  assert.equal(audit.liveCapabilityChecks.branchIntegration.mergeable, false);
+  assert.equal(
+    audit.liveCapabilityChecks.branchIntegration.mergeableState,
+    'dirty',
+  );
+
+  assert.equal(out.state, 'resume-capability-blocked');
+  assert.equal(out.internalExecutionCanResume, false);
+  assert.equal(out.separateAuthorizationStillRequired, true);
+  assert.deepEqual(out.candidateChannels, []);
+  assert.deepEqual(out.blockers, [
+    'connected-vercel-env-read-capability-not-concretely-exposed',
+    'resume-gate-no-executable-exact-read-capability',
+  ]);
+  assert.equal(
+    out.digest,
+    'dd994a883a1a44a7fb3fb7205bed71c0c296ba051a3a79b22625ec576e9023f6',
+  );
+  assert.equal(out.productBoundary.productMomentumScore, null);
+  assert.equal(out.productBoundary.productionEligible, false);
+  assert.equal(out.productBoundary.productProductionActual, '1/7');
+});
