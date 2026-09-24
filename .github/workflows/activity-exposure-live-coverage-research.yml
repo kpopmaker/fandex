@@ -1,0 +1,58 @@
+name: Activity Exposure Live Coverage Research
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/comeback-activity-point-source-contract-v1
+    paths:
+      - scripts/research/run-activity-exposure-live-coverage.mts
+      - .github/workflows/activity-exposure-live-coverage-research.yml
+
+permissions:
+  contents: read
+
+jobs:
+  live-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED: ${{ vars.ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED }}
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch current main
+        run: git fetch origin main --no-tags
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run live provider coverage
+        run: npx tsx scripts/research/run-activity-exposure-live-coverage.mts
+
+      - name: Upload coverage manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: activity-exposure-live-coverage-manifest
+          path: artifacts/research/activity-exposure-live/coverage-manifest.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload retained research evidence
+        if: ${{ vars.ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: activity-exposure-live-retained-evidence
+          path: artifacts/research/activity-exposure-live/retained-evidence.json
+          if-no-files-found: error
+          retention-days: 7
