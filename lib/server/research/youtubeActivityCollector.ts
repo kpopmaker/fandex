@@ -65,6 +65,9 @@ export type YouTubeActivityCollection = Readonly<{
   providerArtistId: string;
   uploadsPlaylistId: string;
   collectedAt: string;
+  requestedVideoIds: readonly string[];
+  returnedVideoIds: readonly string[];
+  missingVideoIds: readonly string[];
   rawObservations: readonly ActivityExposureRawObservation[];
   events: readonly ActivityExposureEvent[];
   validationIssues: readonly ReturnType<typeof validateActivityExposureStream>[number][];
@@ -273,7 +276,13 @@ export function createYouTubeActivityResearchCollector(
 
   async function fetchAllUploadVideoIds(uploadsPlaylistId: string) {
     const videoIds: string[] = [];
+    const pages: Readonly<{
+      pageIndex: number;
+      pageToken: string | null;
+      response: YouTubePlaylistItemsResponse;
+    }>[] = [];
     let pageToken: string | undefined;
+    let pageIndex = 0;
     const seenPageTokens = new Set<string>();
 
     do {
@@ -284,7 +293,14 @@ export function createYouTubeActivityResearchCollector(
       url.searchParams.set('key', options.apiKey);
       if (pageToken) url.searchParams.set('pageToken', pageToken);
 
+      const requestedPageToken = pageToken ?? null;
       const page = validatePlaylistItemsResponse(await fetchJson(url));
+      pages.push(Object.freeze({
+        pageIndex,
+        pageToken: requestedPageToken,
+        response: page,
+      }));
+      pageIndex += 1;
       for (const item of page.items) {
         const videoId = item.contentDetails!.videoId!;
         if (!videoIds.includes(videoId)) videoIds.push(videoId);
@@ -298,7 +314,10 @@ export function createYouTubeActivityResearchCollector(
       pageToken = next;
     } while (pageToken);
 
-    return videoIds;
+    return Object.freeze({
+      videoIds: Object.freeze(videoIds),
+      pages: Object.freeze(pages),
+    });
   }
 
   async function fetchVideos(videoIds: readonly string[]) {
@@ -329,8 +348,14 @@ export function createYouTubeActivityResearchCollector(
       const channelResponse = await fetchChannel(input.providerArtistId);
       const channel = channelResponse.items[0];
       const uploadsPlaylistId = channel.contentDetails!.relatedPlaylists!.uploads!;
-      const videoIds = await fetchAllUploadVideoIds(uploadsPlaylistId);
+      const uploadInventory = await fetchAllUploadVideoIds(uploadsPlaylistId);
+      const videoIds = uploadInventory.videoIds;
       const videos = await fetchVideos(videoIds);
+      const returnedVideoIds = Object.freeze([...new Set(videos.map((video) => video.id))]);
+      const returnedVideoIdSet = new Set(returnedVideoIds);
+      const missingVideoIds = Object.freeze(
+        videoIds.filter((videoId) => !returnedVideoIdSet.has(videoId)),
+      );
 
       const rawObservations: ActivityExposureRawObservation[] = [];
       rawObservations.push(createActivityExposureRawObservation({
@@ -354,6 +379,33 @@ export function createYouTubeActivityResearchCollector(
         authorizationState: 'research-allowed',
         normalizedEventIds: [],
       }));
+
+      for (const page of uploadInventory.pages) {
+        rawObservations.push(createActivityExposureRawObservation({
+          scope: 'research',
+          artistId: input.artistId,
+          sourceProvider: 'youtube',
+          providerArtistId: input.providerArtistId,
+          sourceEntityType: 'uploads-playlist-page',
+          sourceEntityId: `${uploadsPlaylistId}:page:${page.pageIndex}`,
+          requestRef: `youtube:playlistItems:${uploadsPlaylistId}:page:${page.pageIndex}`,
+          responseCapturedAt: collectedAt,
+          collectedAt,
+          rawPayloadCanonical: JSON.stringify({
+            provider: 'youtube',
+            kind: 'uploads-playlist-page',
+            uploadsPlaylistId,
+            pageIndex: page.pageIndex,
+            pageToken: page.pageToken,
+            response: page.response,
+          }),
+          rawPayloadRetentionState: 'retained',
+          evidenceRef: `https://www.youtube.com/playlist?list=${uploadsPlaylistId}`,
+          revisionState: 'original',
+          authorizationState: 'research-allowed',
+          normalizedEventIds: [],
+        }));
+      }
 
       const events: ActivityExposureEvent[] = [];
       const seenVideoIds = new Set<string>();
@@ -406,6 +458,9 @@ export function createYouTubeActivityResearchCollector(
         providerArtistId: input.providerArtistId,
         uploadsPlaylistId,
         collectedAt,
+        requestedVideoIds: Object.freeze([...videoIds]),
+        returnedVideoIds,
+        missingVideoIds,
         rawObservations: Object.freeze(rawObservations),
         events: Object.freeze(events),
         validationIssues: Object.freeze(validationIssues),
