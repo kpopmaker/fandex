@@ -552,3 +552,29 @@ The MusicBrainz live result therefore remains truthfully:
 `57 confirmed observed + 1 missing Official-status support`
 
 rather than an artificial 58/58.
+
+
+## 18. Provider-specific Stored Evidence retention verdict
+
+Retention research is now documented in:
+
+`docs/research/activity-exposure-stored-evidence-retention-v1.md`
+
+Code contract:
+
+`lib/research/activityExposureRetentionPolicy.ts`
+
+Research verdict:
+
+- MusicBrainz minimized replay subset: `CONDITIONALLY_JUSTIFIED`
+- YouTube retained API replay evidence: `TEMPORARY_ONLY_WITH_30_DAY_REFRESH_OR_DELETE_BOUNDARY`
+- YouTube indefinite raw/API payload retention: `NOT_JUSTIFIED`
+- Product-persistent lineage without embedding raw provider payload: `JUSTIFIED_AS_INTEGRATION_PATTERN`
+
+Current FANDEX Stored Evidence read-model architecture is compatible because Product-facing evidence trace does not require raw provider response bodies.
+
+Research CI run `36067595924` passed the provider-retention policy test together with the existing Activity Exposure suite and typecheck.
+
+This closes the research-level retention-design blocker.
+
+Production persistence still requires integration-scope review of the actual storage destination and refresh/delete implementation.
