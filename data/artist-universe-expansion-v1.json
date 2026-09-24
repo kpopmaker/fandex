@@ -1278,6 +1278,28 @@
           "url": "https://enews.imbc.com/M/Detail/506889"
         }
       ]
+    },
+    {
+      "id": "eunjiwon",
+      "ticker": "EUNJIWON",
+      "name": "EUN JIWON",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "은지원 EUN JIWON",
+      "koreanAliases": [
+        "은지원"
+      ],
+      "englishAliases": [
+        "EUN JIWON",
+        "Eun Jiwon",
+        "Eun Ji-won"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/en/artists/eun-jiwon/profile"
+        }
+      ]
     }
   ]
 }
