@@ -403,6 +403,52 @@ test('missing runtime URL fails closed and errors are redacted', () => {
   assert.deepEqual(redactDatabaseError(Object.assign(new Error('postgres://secret'), { detail: 'password', code: 'XX000' })), { code: 'database_operation_failed' });
 });
 
+test('runtime database URL preserves current verified-TLS semantics explicitly', () => {
+  const input = 'postgresql://fandex_runtime:secret@ep-example-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
+  const normalized = requireRuntimeDatabaseUrl({
+    FANDEX_RUNTIME_DATABASE_URL: input,
+  });
+
+  const parsed = new URL(normalized);
+  assert.equal(parsed.protocol, 'postgresql:');
+  assert.equal(parsed.username, 'fandex_runtime');
+  assert.equal(parsed.password, 'secret');
+  assert.equal(parsed.hostname, 'ep-example-pooler.us-east-1.aws.neon.tech');
+  assert.equal(parsed.pathname, '/neondb');
+  assert.equal(parsed.searchParams.get('sslmode'), 'verify-full');
+  assert.equal(parsed.searchParams.get('channel_binding'), 'require');
+  assert.doesNotMatch(normalized, /sslmode=require(?:&|$)/);
+});
+
+test('runtime database URL keeps explicit verify-full unchanged', () => {
+  const input = 'postgresql://fandex_runtime:secret@ep-example-pooler.us-east-1.aws.neon.tech/neondb?sslmode=verify-full';
+  assert.equal(
+    requireRuntimeDatabaseUrl({ FANDEX_RUNTIME_DATABASE_URL: input }),
+    input,
+  );
+});
+
+test('runtime SSL normalization does not relax role, pooler, or database boundaries', () => {
+  assert.throws(
+    () => requireRuntimeDatabaseUrl({
+      FANDEX_RUNTIME_DATABASE_URL: 'postgresql://wrong_role:secret@ep-example-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require',
+    }),
+    /runtime_database_url_invalid/,
+  );
+  assert.throws(
+    () => requireRuntimeDatabaseUrl({
+      FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:secret@ep-example.us-east-1.aws.neon.tech/neondb?sslmode=require',
+    }),
+    /runtime_database_url_invalid/,
+  );
+  assert.throws(
+    () => requireRuntimeDatabaseUrl({
+      FANDEX_RUNTIME_DATABASE_URL: 'postgresql://fandex_runtime:secret@ep-example-pooler.us-east-1.aws.neon.tech/otherdb?sslmode=require',
+    }),
+    /runtime_database_url_invalid/,
+  );
+});
+
 test('runtime and migration environment boundaries do not cross', async () => {
   const db = await readFile(dbPath, 'utf8');
   const runner = await readFile(runnerPath, 'utf8');
