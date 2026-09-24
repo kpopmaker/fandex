@@ -124,15 +124,15 @@
     "pullRequestMerges": 0
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "compatibilityReplayPassed": false,
-    "v140RegressionPassed": false,
-    "v141RegressionPassed": false,
-    "v181RegressionPassed": false,
-    "typecheckPassed": false,
-    "branchDiffCheckPassed": false,
-    "fullPrDiffCheckPassed": false,
-    "temporaryWorkflowRemoved": false
+    "githubActionsRunId": 36072035178,
+    "status": "PASS",
+    "compatibilityReplayPassed": true,
+    "v140RegressionPassed": true,
+    "v141RegressionPassed": true,
+    "v181RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
+    "temporaryWorkflowRemoved": true
   }
 }
