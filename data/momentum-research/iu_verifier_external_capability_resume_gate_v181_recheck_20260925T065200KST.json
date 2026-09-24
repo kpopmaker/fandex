@@ -1,0 +1,146 @@
+{
+  "contractVersion": "v181_fandex_momentum_verifier_external_capability_resume_gate_recheck_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "observedAt": "2026-09-24T21:52:00.000Z",
+  "localObservationDate": "2026-09-25",
+  "upstream": {
+    "v180Digest": "66e38e1ff092131b3e1bb9761e7f173970e937386ef7e4336cb7271d19e7377c"
+  },
+  "target": {
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "decrypt": "false",
+    "maximumProviderCalls": 1,
+    "maximumInventoryReads": 1
+  },
+  "liveCapabilityChecks": {
+    "vercel": {
+      "exactEnvInventoryReadToolExposed": false,
+      "genericRestReadToolExposed": false,
+      "getProjectToolExposed": true,
+      "getProjectCallableForTarget": false,
+      "getProjectFailure": "wrapper-accepts-projectId-but-underlying-server-requires-idOrName",
+      "installedPluginSearchConfirmed": true,
+      "installedPluginId": "plugin_connector_690a90ec05c881918afb6a55dc9bbaa1",
+      "alternateInventoryReadPluginFound": false
+    },
+    "neon": {
+      "runSqlToolExposed": true,
+      "describeProjectToolExposed": true,
+      "listBranchesToolExposed": true,
+      "exactDatabaseReadCallable": false,
+      "wrapperAllowsProjectIdArgument": false,
+      "underlyingServerRequiresProjectId": true,
+      "runSqlFailure": "wrapper-schema-omits-project_id-but-server-requires-project_id",
+      "explicitProjectIdInjectionAttempted": true,
+      "explicitProjectIdInjectionFailure": "wrapper-additional-properties-forbidden",
+      "describeProjectFailure": "wrapper-schema-allows-empty-object-only",
+      "listBranchesFailure": "wrapper-schema-omits-project_id",
+      "previouslyRecordedProjectId": "wild-tree-38937656",
+      "previouslyRecordedProjectIdCouldBeSupplied": false
+    },
+    "local": {
+      "vercelCliInstalled": false,
+      "agentBrowserCliInstalled": false,
+      "vercelTokenEnvironmentPresent": false,
+      "vercelOidcTokenEnvironmentPresent": false
+    },
+    "externalOperator": {
+      "validV177PreReadResponseAvailable": false,
+      "validV179PostReadResponseAvailable": false
+    }
+  },
+  "currentGateInput": {
+    "connectedCapability": {
+      "vercelPluginInstalled": true,
+      "vercelPluginEnabled": true,
+      "vercelSkillAdvertisesEnvironmentVariableSupport": true,
+      "exactEnvInventoryReadToolExposed": false,
+      "genericRestReadToolExposed": false,
+      "projectMetadataToolExposed": true,
+      "projectMetadataToolCallableForTarget": false,
+      "projectMetadataToolFailure": "connector-schema-server-argument-mismatch"
+    },
+    "localCapability": {
+      "vercelCliInstalled": false,
+      "vercelCliAuthenticated": false,
+      "vercelTokenEnvironmentPresent": false
+    },
+    "browserCapability": {
+      "executableBrowserAutomationToolExposed": false,
+      "authenticatedVercelBrowserSessionAvailable": false
+    },
+    "externalOperator": {
+      "validV177PreReadResponseAvailable": false,
+      "validV179PostReadResponseAvailable": false
+    }
+  },
+  "currentResult": {
+    "contractVersion": "v181_fandex_momentum_verifier_external_capability_resume_gate_research_v1",
+    "state": "resume-capability-blocked",
+    "internalExecutionCanResume": false,
+    "separateAuthorizationStillRequired": true,
+    "candidateChannels": [],
+    "blockers": [
+      "connected-vercel-env-read-capability-not-concretely-exposed",
+      "connected-vercel-project-metadata-wrapper-mismatch",
+      "resume-gate-no-executable-exact-read-capability"
+    ],
+    "digest": "b574a2fbcd7cddb8e7d32e734da0810399776c5a1ecf92960fd114fd4b5ae0a6"
+  },
+  "interpretation": {
+    "neonToolExposureAloneCountsAsResumeCapability": false,
+    "reason": "connected-neon-read-tools-remain-non-callable-for-a-specific-project-because-required-project-id-cannot-cross-wrapper-schema",
+    "newResumeConditionSatisfied": false,
+    "newMethodologyVersionRequired": false,
+    "genericContinuationIsAuthorization": false
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19"
+  },
+  "effects": {
+    "authorizationWrites": 0,
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  },
+  "validation": {
+    "githubActionsRunId": null,
+    "status": "PENDING",
+    "v181TestsPassed": false,
+    "v180RegressionPassed": false,
+    "typecheckPassed": false,
+    "branchDiffCheckPassed": false,
+    "fullPrDiffCheckPassed": false,
+    "temporaryWorkflowRemoved": false
+  }
+}
