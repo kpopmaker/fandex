@@ -148,3 +148,34 @@ else:
     raise AssertionError("unsupported source type must fail")
 
 print("artist universe multisource discovery regression: PASS")
+
+
+bilingual_identity = {
+    "artists": [
+        {"id": "bigbang", "aliases": ["BIGBANG", "빅뱅"]},
+        {"id": "treasure", "aliases": ["TREASURE", "트레저"]},
+    ]
+}
+bilingual_snapshot = [
+    (
+        Path("provider-bilingual.json"),
+        {
+            "source": {
+                "id": "bugs-label",
+                "type": "provider_catalog",
+                "name": "Bugs Label",
+                "observedAt": "2026-09-24T00:20:00Z",
+            },
+            "candidates": [
+                {"displayArtist": "BIGBANG (빅뱅)", "aliases": []},
+                {"displayArtist": "TREASURE(트레저)", "aliases": []},
+                {"displayArtist": "신규 솔로", "aliases": []},
+            ],
+        },
+    )
+]
+bilingual_result = module.build_discovery(bilingual_identity, bilingual_snapshot)
+assert bilingual_result["candidateCount"] == 1
+assert bilingual_result["knownSuppressionCount"] == 2
+assert bilingual_result["candidates"][0]["displayArtist"] == "신규 솔로"
+print("bilingual provider identity suppression regression: PASS")
