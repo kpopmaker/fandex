@@ -1,0 +1,44 @@
+name: Validate newsIssuePoint live-read performance v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/news-issue-point-live-read-performance-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Canonical evidence repository
+        run: npx tsx --test tests/naver-news-canonical-job-evidence-v130.test.mts
+      - name: Shadow first-seen series
+        run: npx tsx --test tests/naver-news-shadow-first-seen-series-v1.test.mts
+      - name: Frozen methodology regression
+        run: npx tsx --test tests/naver-news-issue-point-frozen-methodology-v1.test.mts
+      - name: Real read boundary
+        run: npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+      - name: Public route cutover regression
+        run: npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - name: Candidate A regressions
+        run: |
+          npx tsx --test tests/product-ux-remediation-candidate-a-v1.test.mts
+          npx tsx --test tests/product-stored-evidence-failure-presentation-v1.test.mts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
