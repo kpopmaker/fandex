@@ -200,3 +200,18 @@ test('revision cannot supersede itself', () => {
       .some((issue) => issue.code === 'revision_lineage_invalid'),
   );
 });
+
+
+test('multiple normalized revisions of one canonical provider entity cannot coexist as separate timeline events', () => {
+  const first = events[2];
+  const revised = {
+    ...first,
+    revisionId: 'research-collection-v2',
+    supersedesRevisionId: first.revisionId,
+    title: 'Updated provider metadata',
+  } as ActivityExposureEvent;
+
+  const issues = validateActivityExposureStream([first, revised], identity);
+  assert.ok(issues.some((issue) => issue.code === 'duplicate_event_id'));
+  assert.ok(issues.some((issue) => issue.code === 'duplicate_provider_entity'));
+});
