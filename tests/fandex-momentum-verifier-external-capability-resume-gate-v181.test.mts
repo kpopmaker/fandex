@@ -453,3 +453,116 @@ test('2026-09-24 live recheck preserves the same blocked v181 digest despite new
   assert.equal(audit.productBoundary.productionEligible, false);
   assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
+
+
+test('2026-09-25 live recheck preserves the blocked v181 digest after Vercel/Neon wrapper and local capability probes', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_external_capability_resume_gate_v181_recheck_20260925T065200KST.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      observedAt: audit.observedAt,
+      upstreamV180Digest: audit.upstream.v180Digest,
+      target: audit.target,
+      connectedCapability: audit.currentGateInput.connectedCapability,
+      localCapability: audit.currentGateInput.localCapability,
+      browserCapability: audit.currentGateInput.browserCapability,
+      externalOperator: audit.currentGateInput.externalOperator,
+    });
+
+  assert.equal(
+    audit.contractVersion,
+    'v181_fandex_momentum_verifier_external_capability_resume_gate_recheck_audit_v1',
+  );
+  assert.equal(audit.localObservationDate, '2026-09-25');
+
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.exactEnvInventoryReadToolExposed,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.genericRestReadToolExposed,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.getProjectCallableForTarget,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.vercel.alternateInventoryReadPluginFound,
+    false,
+  );
+
+  assert.equal(audit.liveCapabilityChecks.neon.runSqlToolExposed, true);
+  assert.equal(
+    audit.liveCapabilityChecks.neon.exactDatabaseReadCallable,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.explicitProjectIdInjectionAttempted,
+    true,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.explicitProjectIdInjectionFailure,
+    'wrapper-additional-properties-forbidden',
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.wrapperAllowsProjectIdArgument,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.underlyingServerRequiresProjectId,
+    true,
+  );
+
+  assert.equal(audit.liveCapabilityChecks.local.vercelCliInstalled, false);
+  assert.equal(audit.liveCapabilityChecks.local.agentBrowserCliInstalled, false);
+  assert.equal(
+    audit.liveCapabilityChecks.local.vercelTokenEnvironmentPresent,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.local.vercelOidcTokenEnvironmentPresent,
+    false,
+  );
+
+  assert.equal(
+    audit.interpretation.newResumeConditionSatisfied,
+    false,
+  );
+  assert.equal(
+    audit.interpretation.newMethodologyVersionRequired,
+    false,
+  );
+  assert.equal(
+    audit.interpretation.genericContinuationIsAuthorization,
+    false,
+  );
+
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(
+    out.internalExecutionCanResume,
+    audit.currentResult.internalExecutionCanResume,
+  );
+  assert.equal(
+    out.separateAuthorizationStillRequired,
+    audit.currentResult.separateAuthorizationStillRequired,
+  );
+  assert.deepEqual(out.candidateChannels, audit.currentResult.candidateChannels);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.equal(
+    out.digest,
+    'b574a2fbcd7cddb8e7d32e734da0810399776c5a1ecf92960fd114fd4b5ae0a6',
+  );
+  assert.deepEqual(out.effects, audit.effects);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
