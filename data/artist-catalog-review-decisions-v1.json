@@ -1489,7 +1489,7 @@
     {
       "displayArtist": "BOBBY",
       "decision": "new_canonical_solo_candidate",
-      "relationResolution": "group_member_and_independent_solo_current_management_review_required",
+      "relationResolution": "provider_discovered_current_agency_verified_solo_identity",
       "relatedCanonicalArtistIds": [
         "ikon"
       ],
@@ -1498,12 +1498,12 @@
         {
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/80201170?wl_ref=list_ab_04",
-          "note": "Provider artist page verifies BOBBY as a distinct music artist identity."
+          "note": "Provider artist page verifies BOBBY as a distinct solo music artist identity."
         },
         {
-          "source": "143 Entertainment",
-          "url": "https://www.143inc.kr/ikon",
-          "note": "143 Entertainment currently manages iKON, the canonical group relation for BOBBY; solo-management semantics remain separately reviewable."
+          "source": "Starnews / 143 Entertainment",
+          "url": "https://www.starnewskorea.com/music/2026/08/05/2026080511263941198",
+          "note": "2026 iKON world-tour report attributes the group to 143 Entertainment and explicitly names Bobby among the performing members."
         }
       ]
     },
