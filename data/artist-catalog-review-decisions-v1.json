@@ -1362,6 +1362,91 @@
           "note": "YG Entertainment official current artist profile identifies EUN JIWON as an artist with an independent solo profile."
         }
       ]
+    },
+    {
+      "displayArtist": "강승윤",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "winner"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/kang-seung-yoon/main",
+          "note": "YG official individual artist page for KANG SEUNG YOON."
+        },
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/ko/artists/winner/notice",
+          "note": "2026 WINNER notice board includes KANG SEUNG YOON solo album and concert activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이승훈",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "winner"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/lee-seung-hoon/profile",
+          "note": "YG official HOONY profile identifies a 2024 solo debut."
+        }
+      ]
+    },
+    {
+      "displayArtist": "JINU",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "winner"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/jinu/profile",
+          "note": "YG official JINU individual artist profile."
+        }
+      ]
+    },
+    {
+      "displayArtist": "MINO",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "winner"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/ko/artists/mino/profile",
+          "note": "YG official MINO individual artist profile."
+        }
+      ]
+    },
+    {
+      "displayArtist": "이수현",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "akmu"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/en/artists/lee-suhyun/profile",
+          "note": "YG official LEE SUHYUN individual artist profile with solo debut."
+        }
+      ]
     }
   ]
 }
