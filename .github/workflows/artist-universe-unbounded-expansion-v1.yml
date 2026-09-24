@@ -37,9 +37,21 @@ jobs:
           python tests/artist-catalog-intake-from-chart-v1.py
           python tests/artist-catalog-review-queue-v1.py
       - name: Stage 7 multisource discovery regression
-        run: python tests/artist-universe-multisource-discovery-v1.py
+        run: |
+          python tests/artist-universe-multisource-discovery-v1.py
+          python tests/artist-expansion-starship-roster-adapter-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
+      - name: Collect STARSHIP official roster
+        run: |
+          python scripts/artist-expansion/collect_starship_agency_roster_v1.py \
+            --output starship_agency_roster_v1_latest.json
+      - name: Stage 7 live agency roster discovery
+        run: |
+          python scripts/artist-expansion/artist_universe_multisource_discovery_v1.py \
+            --identity-index artist_universe_identity_index_runtime.json \
+            --snapshot starship_agency_roster_v1_latest.json \
+            --output artist_universe_multisource_discovery_v1_latest.json
       - name: Live chart catalog discovery
         env:
           ARTIST_UNIVERSE_IDENTITY_FILE: artist_universe_identity_index_runtime.json
@@ -59,4 +71,6 @@ jobs:
             music_chart_artist_candidates_v2_raw_latest.json
             MUSIC_CHART_ARTIST_CANDIDATES_V2_REPORT_latest.txt
             artist_catalog_review_queue_v1_latest.json
+            starship_agency_roster_v1_latest.json
+            artist_universe_multisource_discovery_v1_latest.json
           if-no-files-found: error
