@@ -368,3 +368,60 @@ test('collaboration artist credits are preserved in normalized release event', a
     },
   ]);
 });
+
+
+test('release with null status remains missing and does not become confirmed release', async () => {
+  const releaseGroupId = '1299e16d-133b-47b0-b991-36cf11eff7d7';
+  const releaseId = '8634da4e-9649-4dcf-a901-2ed6dbb0f438';
+
+  const collector = createMusicBrainzActivityResearchCollector({
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/release-group')) {
+        return jsonResponse({
+          'release-group-count': 1,
+          'release-group-offset': 0,
+          'release-groups': [{
+            id: releaseGroupId,
+            title: '그대네요',
+            'first-release-date': '2010-09-28',
+            'primary-type': 'Single',
+            'artist-credit': [{
+              name: 'IU',
+              artist: { id: artistId, name: 'IU' },
+            }],
+          }],
+        });
+      }
+
+      assert.equal(url.searchParams.get('status'), 'official');
+      return jsonResponse({
+        'release-count': 0,
+        'release-offset': 0,
+        releases: [],
+      });
+    },
+    now: () => new Date('2026-09-24T22:14:34.050Z'),
+    sleep: async () => {},
+  });
+
+  const result = await collector.collect({
+    artistId: 'iu',
+    providerArtistId: artistId,
+  });
+
+  assert.equal(result.events.length, 0);
+  assert.equal(
+    result.rawObservations.filter(
+      (item) =>
+        item.sourceEntityType === 'release-group'
+        && item.sourceEntityId === releaseGroupId,
+    ).length,
+    1,
+  );
+
+  // Live diagnostic evidence for this provider revision found an unfiltered
+  // concrete release with this ID/date but status=null. The frozen collector
+  // must not silently reinterpret that as Official.
+  assert.match(releaseId, /^[0-9a-f-]{36}$/);
+});
