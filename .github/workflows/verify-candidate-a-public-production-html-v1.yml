@@ -1,0 +1,53 @@
+name: Verify Candidate A public Production HTML
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/candidate-a-public-html-v1
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Fetch public IU Product HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://fandex-eta.vercel.app/artists/iu?variables=newsIssuePoint'
+          curl -L --fail --silent --show-error --max-time 90 "$URL" -o product.html
+          test -s product.html
+          echo "bytes=$(wc -c < product.html)"
+          grep -Fq 'Real · Production' product.html
+          grep -Fq '관측 기간' product.html
+          grep -Fq 'Product 시계열' product.html
+          ! grep -Fq 'Source publication: Shadow' product.html
+          ! grep -Fq 'This page could not be found' product.html
+          ! grep -Fq '데이터 확인 필요' product.html
+
+          EVIDENCE_PATH="$(grep -oE 'href="[^"]*/evidence/[^"]+"' product.html | head -n1 | sed -E 's/^href="//;s/"$//' || true)"
+          if [ -z "$EVIDENCE_PATH" ]; then
+            echo "STORED_EVIDENCE_LINK_MISSING"
+            exit 1
+          fi
+
+          case "$EVIDENCE_PATH" in
+            http*) EVIDENCE_URL="$EVIDENCE_PATH" ;;
+            *) EVIDENCE_URL="https://fandex-eta.vercel.app$EVIDENCE_PATH" ;;
+          esac
+          echo "evidence_url=$EVIDENCE_URL"
+
+          curl -L --fail --silent --show-error --max-time 90 "$EVIDENCE_URL" -o evidence.html
+          test -s evidence.html
+          grep -Fq 'Evidence lineage' evidence.html
+          grep -Fq 'Collection lifecycle' evidence.html
+          grep -Fq 'Shadow' evidence.html
+          ! grep -Fq 'Source publication: Shadow' evidence.html
+          ! grep -Fq 'This page could not be found' evidence.html
+
+          echo 'PUBLIC_RENDERED_PRODUCT_TRUTH=PASS'
+          echo 'PUBLIC_RENDERED_EVIDENCE_LINEAGE=PASS'
