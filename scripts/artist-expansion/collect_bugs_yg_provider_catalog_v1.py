@@ -27,6 +27,21 @@ def artist_id_from_url(href: str) -> str:
     return parts[1].strip()
 
 
+def split_display_and_aliases(value: str) -> tuple[str, list[str]]:
+    text = normalize_spaces(value)
+    match = re.match(r"^(.*?)\s*\(([^()]+)\)\s*$", text)
+    if not match:
+        return text, []
+
+    outside = normalize_spaces(match.group(1))
+    inside = normalize_spaces(match.group(2))
+    if not outside or not inside:
+        return text, []
+
+    aliases = [inside] if inside.casefold() != outside.casefold() else []
+    return outside, aliases
+
+
 def parse_catalog(html: str, source_url: str = DEFAULT_URL) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     selected: dict[str, dict] = {}
@@ -42,11 +57,13 @@ def parse_catalog(html: str, source_url: str = DEFAULT_URL) -> list[dict]:
         if not text:
             continue
 
+        display_artist, aliases = split_display_and_aliases(text)
+
         selected.setdefault(
             artist_id,
             {
-                "displayArtist": text,
-                "aliases": [],
+                "displayArtist": display_artist,
+                "aliases": aliases,
                 "evidence": [
                     {
                         "label": "Bugs provider artist page from YG label catalog",
