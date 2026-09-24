@@ -1,6 +1,5 @@
 import type {
   ActivityExposureProviderCoverage,
-  ActivityExposureProviderCoverageState,
 } from './activityExposureProductView';
 
 export const ACTIVITY_EXPOSURE_COVERAGE_MANIFEST_VERSION =
@@ -8,6 +7,7 @@ export const ACTIVITY_EXPOSURE_COVERAGE_MANIFEST_VERSION =
 
 export type ActivityExposureCoverageGateDecision =
   | 'pass_for_integration_review'
+  | 'pass_bounded_partial_for_integration_review'
   | 'blocked_live_coverage'
   | 'blocked_invalid_evidence'
   | 'blocked_authorization'
@@ -107,13 +107,34 @@ function blockingDecision(
       (item) =>
         item.coverage.state === 'provider_unavailable'
         || item.coverage.state === 'not_in_scope'
-        || item.coverage.state === 'partial'
         || item.missingEntityCount > 0
         || item.inventoryExhausted === false,
     )
   ) {
     reasons.push('live-provider-coverage-incomplete');
     return { decision: 'blocked_live_coverage', reasons };
+  }
+
+  const partialProviders = providers.filter(
+    (item) => item.coverage.state === 'partial',
+  );
+
+  if (partialProviders.length > 0) {
+    const allBounded = partialProviders.every(
+      (item) =>
+        item.coverage.coverageScope === 'bounded_provider_query'
+        || item.coverage.coverageScope === 'stored_evidence_set',
+    );
+
+    if (!allBounded) {
+      reasons.push('unbounded-partial-coverage');
+      return { decision: 'blocked_live_coverage', reasons };
+    }
+
+    return {
+      decision: 'pass_bounded_partial_for_integration_review',
+      reasons: ['bounded-partial-provider-scopes-explicitly-preserved'],
+    };
   }
 
   return {
