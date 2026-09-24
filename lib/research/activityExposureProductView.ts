@@ -114,7 +114,7 @@ function overallAvailability(
   }
 
   if (usableCoverage.every((item) => item.state === 'complete')) {
-    return events.length > 0 ? 'available' : 'partial';
+    return 'available';
   }
 
   if (
