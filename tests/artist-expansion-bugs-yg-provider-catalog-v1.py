@@ -30,13 +30,15 @@ html = """
 
 rows = module.parse_catalog(html)
 assert [row["displayArtist"] for row in rows] == [
-    "BIGBANG (빅뱅)",
+    "BIGBANG",
     "BABYMONSTER",
-    "TREASURE(트레저)",
+    "TREASURE",
     "BLACKPINK",
     "강승윤",
     "이찬혁",
 ]
+assert rows[0]["aliases"] == ["빅뱅"]
+assert rows[2]["aliases"] == ["트레저"]
 assert rows[-1]["evidence"][0]["url"] == "https://music.bugs.co.kr/artist/80262511"
 
 snapshot = module.build_snapshot(
