@@ -80,6 +80,10 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'shaun',
     'dkdecember',
     'standingegg',
+    'ioi',
+    'maktub',
+    'noahjooda',
+    'thenuts',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
