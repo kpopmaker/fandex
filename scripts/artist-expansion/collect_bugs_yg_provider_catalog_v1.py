@@ -19,6 +19,17 @@ def normalize_spaces(value: str) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
 
 
+def split_artist_label(value: str) -> tuple[str, list[str]]:
+    text = normalize_spaces(value)
+    match = re.fullmatch(r"(.+?)\s*\(([^()]+)\)\s*", text)
+    if not match:
+        return text, []
+    primary = normalize_spaces(match.group(1))
+    alias = normalize_spaces(match.group(2))
+    aliases = [alias] if alias and alias != primary else []
+    return primary, aliases
+
+
 def artist_id_from_url(href: str) -> str:
     path = urlparse(href).path.rstrip("/")
     parts = [part for part in path.split("/") if part]
