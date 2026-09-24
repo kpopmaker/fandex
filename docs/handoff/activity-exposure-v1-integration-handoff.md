@@ -660,3 +660,47 @@ Raw retention:
 `ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED` was not enabled, so raw retained-evidence artifact upload was skipped.
 
 The live execution path itself is now proven operational. The remaining live blockers are provider/evidence inputs, not missing research runner architecture.
+
+
+## 23. Provider-specific Stored Evidence retention policy
+
+Research policy:
+
+`docs/research/activity-exposure-stored-evidence-retention-v1.md`
+
+Code:
+
+`lib/research/activityExposureRetentionPolicy.ts`
+
+The integration must not use one indefinite raw-payload retention rule for every provider.
+
+MusicBrainz:
+
+- use a minimized replay subset only
+- retain only metadata required to reconstruct the normalized event
+- do not assume every arbitrary response field is unrestricted
+- persistent replay remains conditional on field-level licensing review
+
+YouTube:
+
+- public/non-authorized API metadata is temporary provider evidence
+- retained replay payload must be refreshed or deleted within 30 calendar days
+- indefinite raw/API payload retention is not an accepted Product pattern
+- long-lived Product state must not claim an old YouTube raw payload remains currently verified
+
+Current FANDEX Product Stored Evidence architecture is compatible because the Product read model exposes evidence lineage/IDs rather than requiring raw provider response bodies.
+
+Recommended integration separation:
+
+1. Product-persistent lineage:
+   event identity, provider identity, observation IDs, source refs, timestamps, digest, coverage/revision state
+
+2. Provider replay evidence:
+   provider-specific, retention-policy-bound payload used for verification/replay
+
+3. Public Product presentation:
+   never expose API credentials or raw provider payloads; evidence availability failures remain truth-preserving
+
+`ACTIVITY_EXPOSURE_RAW_RETENTION_AUTHORIZED=true` may authorize a bounded research artifact only. It does not authorize Production database persistence.
+
+For YouTube, any retained research artifact must stay inside the provider refresh/delete boundary. The current research workflow's 7-day artifact retention satisfies that research boundary, but Production persistence still requires a refresh/delete design.
