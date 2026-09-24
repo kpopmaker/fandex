@@ -68,7 +68,14 @@ test('collector resolves uploads playlist, paginates, and emits exact publicatio
   assert.equal(result.events[0].occurredAtPrecision, 'timestamp');
   assert.equal(result.events[0].occurredAt, '2024-01-23T15:00:00Z');
   assert.deepEqual(result.validationIssues, []);
-  assert.equal(result.rawObservations.length, 3);
+  assert.equal(result.rawObservations.length, 5);
+  assert.deepEqual(result.requestedVideoIds, ['JleoAppaxi0', 'kHW-UVXOcLU']);
+  assert.deepEqual(result.returnedVideoIds, ['JleoAppaxi0', 'kHW-UVXOcLU']);
+  assert.deepEqual(result.missingVideoIds, []);
+  assert.equal(
+    result.rawObservations.filter((item) => item.sourceEntityType === 'uploads-playlist-page').length,
+    2,
+  );
   assert.ok(requests.every((url) => url.searchParams.get('key') === apiKey));
   assert.doesNotMatch(JSON.stringify(result), new RegExp(apiKey));
 });
@@ -100,7 +107,7 @@ test('video from non-canonical channel remains raw evidence but does not become 
   }).collect({ artistId: 'iu', providerArtistId: channelId });
 
   assert.equal(result.events.length, 0);
-  assert.equal(result.rawObservations.length, 2);
+  assert.equal(result.rawObservations.length, 3);
 });
 
 test('duplicate video IDs across playlist pages are deduplicated before video lookup', async () => {
@@ -231,4 +238,44 @@ test('api key and channel id are validated before provider fetch', async () => {
     { message: 'youtube_activity_channel_id_invalid' },
   );
   assert.equal(calls, 0);
+});
+
+
+test('playlist video IDs omitted by videos.list are reported as missing coverage', async () => {
+  const result = await createYouTubeActivityResearchCollector({
+    apiKey,
+    fetch: async (input) => {
+      const url = new URL(input);
+      if (url.pathname.endsWith('/channels')) {
+        return jsonResponse({ items: [{
+          id: channelId,
+          contentDetails: { relatedPlaylists: { uploads: 'UU3SyT4_WLHzN7JmHQwKQZww' } },
+        }] });
+      }
+      if (url.pathname.endsWith('/playlistItems')) {
+        return jsonResponse({ items: [
+          { contentDetails: { videoId: 'JleoAppaxi0' } },
+          { contentDetails: { videoId: 'kHW-UVXOcLU' } },
+        ] });
+      }
+      return jsonResponse({ items: [{
+        id: 'JleoAppaxi0',
+        snippet: {
+          channelId,
+          title: "IU 'Love wins all' MV",
+          publishedAt: '2024-01-23T15:00:00Z',
+        },
+      }] });
+    },
+    now: () => new Date(collectedAt),
+  }).collect({ artistId: 'iu', providerArtistId: channelId });
+
+  assert.deepEqual(result.requestedVideoIds, ['JleoAppaxi0', 'kHW-UVXOcLU']);
+  assert.deepEqual(result.returnedVideoIds, ['JleoAppaxi0']);
+  assert.deepEqual(result.missingVideoIds, ['kHW-UVXOcLU']);
+  assert.equal(result.events.length, 1);
+  assert.equal(
+    result.rawObservations.filter((item) => item.sourceEntityType === 'uploads-playlist-page').length,
+    1,
+  );
 });
