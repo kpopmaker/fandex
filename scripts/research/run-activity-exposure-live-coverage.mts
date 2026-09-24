@@ -79,6 +79,45 @@ function unavailableProvider(
   });
 }
 
+async function diagnoseMusicBrainzReleaseGroup(releaseGroupId: string) {
+  const url = new URL('https://musicbrainz.org/ws/2/release');
+  url.searchParams.set('release-group', releaseGroupId);
+  url.searchParams.set('fmt', 'json');
+  url.searchParams.set('limit', '100');
+  url.searchParams.set('offset', '0');
+
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'FANDEX-Research/1.0 (https://github.com/kpopmaker/fandex)',
+    },
+  });
+
+  if (!response.ok) {
+    return `unfiltered-release-diagnostic-http-${response.status}`;
+  }
+
+  const payload = await response.json() as {
+    releases?: readonly {
+      id?: string;
+      title?: string;
+      status?: string | null;
+      date?: string;
+      country?: string | null;
+    }[];
+  };
+
+  return JSON.stringify((payload.releases ?? []).map((release) => ({
+    id: release.id ?? null,
+    title: release.title ?? null,
+    status: release.status ?? null,
+    date: release.date ?? null,
+    country: release.country ?? null,
+  })));
+}
+
 async function collectMusicBrainz(
   retentionAuthorized: boolean,
 ) {
@@ -98,7 +137,7 @@ async function collectMusicBrainz(
       (item) => item.normalizedEventIds.length === 0,
     );
     const missing = missingReleaseGroupObservations.length;
-    const missingDiagnostics = missingReleaseGroupObservations.map((observation) => {
+    const missingDiagnostics = await Promise.all(missingReleaseGroupObservations.map(async (observation) => {
       const raw = observation.rawPayloadCanonical
         ? JSON.parse(observation.rawPayloadCanonical) as {
             releaseGroup?: {
@@ -124,8 +163,13 @@ async function collectMusicBrainz(
           ? 'no-official-release-returned'
           : 'official-release-without-usable-date';
 
-      return `missing-release-group:${observation.sourceEntityId}:${releaseGroup?.title ?? 'unknown-title'}:${reason}`;
-    });
+      const unfilteredReleaseDiagnostic =
+        reason === 'no-official-release-returned'
+          ? await diagnoseMusicBrainzReleaseGroup(observation.sourceEntityId)
+          : 'not-requested';
+
+      return `missing-release-group:${observation.sourceEntityId}:${releaseGroup?.title ?? 'unknown-title'}:${reason}:unfiltered=${unfilteredReleaseDiagnostic}`;
+    }));
     const invalid = result.validationIssues.length;
     const retention = retainedCounts(result.rawObservations, retentionAuthorized);
 
