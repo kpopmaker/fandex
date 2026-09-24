@@ -48,6 +48,22 @@ def build_known_index(identity_payload: dict[str, Any]) -> dict[str, set[str]]:
     return index
 
 
+def build_decision_index(decision_payload: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    if not decision_payload:
+        return result
+    rows = decision_payload.get("decisions")
+    if not isinstance(rows, list):
+        raise RuntimeError("decision registry decisions must be a list")
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        key = compact_identity(row.get("displayArtist"))
+        if key:
+            result[key] = row
+    return result
+
+
 def validate_snapshot(payload: dict[str, Any], source_path: Path) -> tuple[dict[str, str], list[dict[str, Any]]]:
     source = payload.get("source")
     candidates = payload.get("candidates")
@@ -99,8 +115,10 @@ def find_known_matches(row: dict[str, Any], known_index: dict[str, set[str]]) ->
 def build_discovery(
     identity_payload: dict[str, Any],
     snapshot_payloads: list[tuple[Path, dict[str, Any]]],
+    decision_payload: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     known_index = build_known_index(identity_payload)
+    decision_index = build_decision_index(decision_payload)
     grouped: dict[str, dict[str, Any]] = {}
     suppressed_known: list[dict[str, Any]] = []
     known_coverage: dict[str, dict[str, Any]] = {}
@@ -187,7 +205,37 @@ def build_discovery(
                         if normalized not in item["evidence"]:
                             item["evidence"].append(normalized)
 
-    candidates = sorted(grouped.values(), key=lambda row: row["normalizedArtist"])
+    candidates = []
+    resolved_count = 0
+    unresolved_count = 0
+    for item in sorted(grouped.values(), key=lambda row: row["normalizedArtist"]):
+        decision = None
+        for name in candidate_names(item):
+            decision = decision_index.get(compact_identity(name))
+            if decision is not None:
+                break
+
+        if decision is None:
+            item["reviewStatus"] = "unresolved"
+            item["reviewDecision"] = None
+            item["relationResolution"] = None
+            item["decisionEvidence"] = []
+            unresolved_count += 1
+        else:
+            item["reviewStatus"] = "resolved"
+            item["reviewDecision"] = decision.get("decision")
+            item["relationResolution"] = decision.get("relationResolution")
+            item["relatedCanonicalArtistIds"] = list(
+                decision.get("relatedCanonicalArtistIds") or []
+            )
+            item["rejectedRelationCanonicalArtistIds"] = list(
+                decision.get("rejectedRelationCanonicalArtistIds") or []
+            )
+            item["decisionEvidence"] = list(decision.get("evidence") or [])
+            item["decisionDisplayArtist"] = decision.get("displayArtist")
+            resolved_count += 1
+
+        candidates.append(item)
 
     known_canonical_coverage = []
     for canonical_id in sorted(known_coverage):
@@ -204,6 +252,8 @@ def build_discovery(
         "sourceCount": len(sources),
         "sources": sources,
         "candidateCount": len(candidates),
+        "candidateResolvedCount": resolved_count,
+        "candidateUnresolvedCount": unresolved_count,
         "candidates": candidates,
         "knownSuppressionCount": len(suppressed_known),
         "knownSuppressions": suppressed_known,
@@ -222,12 +272,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--identity-index", required=True)
     parser.add_argument("--snapshot", action="append", required=True)
+    parser.add_argument("--decisions")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
     identity_payload = load_json(Path(args.identity_index))
     snapshots = [(Path(path), load_json(Path(path))) for path in args.snapshot]
-    output = build_discovery(identity_payload, snapshots)
+    decision_payload = load_json(Path(args.decisions)) if args.decisions else None
+    output = build_discovery(identity_payload, snapshots, decision_payload)
     Path(args.output).write_text(
         json.dumps(output, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
