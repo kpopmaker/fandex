@@ -203,3 +203,43 @@ The remaining external blockers are now concrete:
 3. resolve intended raw-evidence retention authorization before integration review requiring retained Stored Evidence
 
 No methodology score/weight/threshold work remains.
+
+
+## 8. MusicBrainz missing-release root cause
+
+A follow-up live diagnostic removed the release-status filter only for the single missing release group.
+
+Diagnostic workflow run:
+
+`36066262307`
+
+Release group:
+
+`1299e16d-133b-47b0-b991-36cf11eff7d7 / 그대네요`
+
+Unfiltered concrete release:
+
+- release MBID: `8634da4e-9649-4dcf-a901-2ed6dbb0f438`
+- date: `2010-09-28`
+- country: `KR`
+- status: `null`
+
+Therefore:
+
+`COLLECTOR_DEFECT = NO`
+
+`SOURCE_METADATA_LIMITATION = YES`
+
+The release exists and has a usable date, but the current MusicBrainz concrete release entity does not assert `status=Official`.
+
+The frozen confirmed-release construct requires a concrete Official release. The release-group first-release-date or external historical evidence must not be silently substituted for that provider-native status requirement.
+
+Final classification for this release group:
+
+`MISSING_OFFICIAL_STATUS_SUPPORT`
+
+This missing state is legitimate under the current source contract.
+
+Changing the rule to treat `status=null` as Official solely to obtain 58/58 would weaken the construct and is not justified.
+
+Independent corroboration confirms the historical release occurred on 2010-09-28, but that does not repair the missing MusicBrainz release-status field inside the selected provider contract.
