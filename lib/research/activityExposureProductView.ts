@@ -16,8 +16,14 @@ export type ActivityExposureProviderCoverage = Readonly<{
   provider: 'musicbrainz' | 'youtube';
   state: ActivityExposureProviderCoverageState;
   reason: string;
-  observationStart: string | null;
-  observationEnd: string | null;
+  coverageObservedAt: string | null;
+  coverageScope:
+    | 'current_visible_inventory'
+    | 'bounded_provider_query'
+    | 'stored_evidence_set'
+    | 'not_available';
+  eventTimeStart: string | null;
+  eventTimeEnd: string | null;
   observationBasis:
     | 'provider_inventory'
     | 'provider_query'
@@ -84,8 +90,67 @@ export type ActivityExposureProductView = Readonly<{
     missingIsInactive: false;
     observationTimeEqualsCollectionTime: false;
     crossFamilyRawAggregationAllowed: false;
+    completeMeansCompleteWithinDeclaredScope: true;
   }>;
 }>;
+
+
+function isRfc3339Timestamp(value: string) {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)
+    && Number.isFinite(Date.parse(value));
+}
+
+export function validateActivityExposureProviderCoverage(
+  coverage: ActivityExposureProviderCoverage,
+) {
+  const issues: string[] = [];
+
+  if (
+    (coverage.state === 'complete' || coverage.state === 'partial')
+    && coverage.coverageObservedAt === null
+  ) {
+    issues.push('coverage-observation-time-required');
+  }
+
+  if (
+    coverage.coverageObservedAt !== null
+    && !isRfc3339Timestamp(coverage.coverageObservedAt)
+  ) {
+    issues.push('invalid-coverage-observed-at');
+  }
+
+  if (
+    coverage.state === 'complete'
+    && coverage.coverageScope === 'not_available'
+  ) {
+    issues.push('complete-coverage-without-scope');
+  }
+
+  if (
+    coverage.coverageScope === 'bounded_provider_query'
+    && coverage.eventTimeStart === null
+    && coverage.eventTimeEnd === null
+  ) {
+    issues.push('bounded-query-without-event-time-boundary');
+  }
+
+  if (
+    coverage.eventTimeStart !== null
+    && coverage.eventTimeEnd !== null
+    && coverage.eventTimeStart > coverage.eventTimeEnd
+  ) {
+    issues.push('event-time-boundary-reversed');
+  }
+
+  if (
+    coverage.state === 'provider_unavailable'
+    && coverage.observationBasis !== 'not_available'
+  ) {
+    issues.push('provider-unavailable-with-observation-basis');
+  }
+
+  return issues;
+}
 
 function storedEvidenceState(
   observation: ActivityExposureRawObservation,
@@ -106,7 +171,11 @@ function overallAvailability(
   coverage: readonly ActivityExposureProviderCoverage[],
   events: readonly ActivityExposureEvent[],
 ): ActivityExposureProductAvailability {
-  if (coverage.some((item) => item.state === 'invalid')) return 'data_issue';
+  if (
+    coverage.some(
+      (item) => item.state === 'invalid' || validateActivityExposureProviderCoverage(item).length > 0,
+    )
+  ) return 'data_issue';
 
   const usableCoverage = coverage.filter((item) => item.state !== 'not_in_scope');
   if (usableCoverage.length === 0) {
@@ -201,6 +270,7 @@ export function buildActivityExposureProductView(input: Readonly<{
       missingIsInactive: false,
       observationTimeEqualsCollectionTime: false,
       crossFamilyRawAggregationAllowed: false,
+      completeMeansCompleteWithinDeclaredScope: true,
     }),
   });
 }
