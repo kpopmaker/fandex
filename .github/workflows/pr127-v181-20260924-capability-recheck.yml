@@ -1,0 +1,35 @@
+name: PR127 v181 2026-09-24 capability recheck
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - 'data/momentum-research/iu_verifier_external_capability_resume_gate_v181_recheck_20260924T114700Z.json'
+      - 'tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts'
+      - '.github/workflows/pr127-v181-20260924-capability-recheck.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate v181 recheck and upstream regression
+        run: |
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+          npx tsx --conditions=react-server --test tests/fandex-momentum-verifier-external-execution-channel-resolution-v180.test.mts
+          npm run typecheck
+          git diff --check
+          git fetch origin main
+          git diff --check origin/main...HEAD
