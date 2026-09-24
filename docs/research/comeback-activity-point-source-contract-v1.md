@@ -291,3 +291,82 @@ Build a small IU Real-evidence fixture/event stream from both providers and test
 ## 11. Collector hardening note
 
 The research collector must follow MusicBrainz Web Service rate limiting. Requests are serialized with at least a 1,000 ms interval between calls, use a meaningful User-Agent, page by the actual number of returned entities, and fail closed if provider pagination counts change during one collection pass.
+
+
+## 12. Observation-time semantics
+
+Observation metadata uses distinct clocks.
+
+`responseCapturedAt`
+
+- the FANDEX observation time for a specific provider response/evidence capture
+- timestamp-only
+- provider payload capture semantics
+- part of deterministic observation identity
+
+`collectedAt`
+
+- the later FANDEX ingestion/storage time for that captured observation
+- timestamp-only
+- may equal responseCapturedAt in a synchronous collector, but equality is not assumed by the contract
+- must not precede responseCapturedAt
+
+`sourcePublishedAt`
+
+- provider publication timestamp only when the provider exposes that semantic directly
+- YouTube `snippet.publishedAt` qualifies for official-content publication
+- MusicBrainz release dates do not become sourcePublishedAt because they are release occurrence dates, not provider publication timestamps
+
+`providerObservedAt`
+
+- reserved for an explicit provider-native observation timestamp distinct from publication/occurrence
+- must remain null when no such provider field exists
+- MusicBrainz release / first-release dates must not be copied here
+- YouTube `snippet.publishedAt` must not be copied here
+
+Observation identity is based on:
+
+- artist
+- provider
+- provider entity
+- responseCapturedAt
+- raw payload digest
+
+It is not based on collectedAt. Re-ingesting the exact same captured evidence later must not create a new provider observation identity.
+
+Current contract:
+
+`activity-exposure-observation-v2-research`
+
+## 13. Live coverage boundary semantics
+
+Provider coverage claims must declare their scope.
+
+Allowed scope forms:
+
+- `current_visible_inventory`
+- `bounded_provider_query`
+- `stored_evidence_set`
+- `not_available`
+
+Coverage also records:
+
+- `coverageObservedAt`: when the coverage claim was established
+- `eventTimeStart` / `eventTimeEnd`: event-time query boundaries when applicable
+- `observationBasis`: provider inventory, provider query, stored evidence, or unavailable
+
+`complete` always means:
+
+`complete within the declared coverage scope`
+
+It never silently means:
+
+`complete historical truth for the artist`
+
+Therefore exhausting the current YouTube uploads playlist can justify completeness for the current visible inventory while historical deleted/private/unavailable videos can still prevent an all-history completeness claim.
+
+Likewise, a successful MusicBrainz current inventory pass only supports the declared current provider scope and revision state.
+
+Product truth invariant:
+
+`completeMeansCompleteWithinDeclaredScope = true`
