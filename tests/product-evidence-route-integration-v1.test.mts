@@ -29,12 +29,20 @@ test('Artist route maps selected Variables through the canonical Evidence query'
   assert.doesNotMatch(variableSource, /relatedVariableKey/);
 });
 
-test('Evidence detail route resolves via Product query and fails closed with 404', () => {
+test('Evidence detail route keeps legacy not-found behavior and classifies Stored Evidence failures', () => {
   assert.match(detailSource, /getArtistProductEvidence\(\{/);
   assert.match(detailSource, /if \(result\.status !== 'ok'\)/);
-  assert.match(detailSource, /notFound\(\)/);
+  assert.match(detailSource, /getStoredEvidenceFailurePresentation/);
+  assert.match(detailSource, /failure\.kind === 'not-found'/);
+  assert.match(detailSource, /<StoredEvidenceFailureDetail/);
   assert.doesNotMatch(detailSource, /getArtistRecentIssueSignals/);
   assert.doesNotMatch(detailSource, /\?\?[^\n]*(evidence|item)/i);
+});
+
+test('Stored Evidence UI separates Product publication from Shadow collection lineage', () => {
+  assert.match(detailSource, /Evidence lineage · Shadow/);
+  assert.match(detailSource, /Collection lifecycle/);
+  assert.doesNotMatch(detailSource, /Source publication: Shadow/);
 });
 
 test('Evidence back link preserves the existing Variable deep-link contract', () => {
