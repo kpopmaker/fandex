@@ -47,7 +47,7 @@ const retainedObservation = createActivityExposureRawObservation({
   sourceEntityId: 'kHW-UVXOcLU',
   requestRef: 'youtube:videos:snippet:kHW-UVXOcLU',
   responseCapturedAt: '2026-09-24T07:00:00Z',
-  collectedAt: '2026-09-24T07:00:00Z',
+  collectedAt: '2026-09-24T07:00:01Z',
   sourcePublishedAt: '2024-02-20T09:00:00Z',
   providerObservedAt: '2024-02-20T09:00:00Z',
   rawPayloadCanonical: '{"id":"kHW-UVXOcLU"}',
@@ -88,10 +88,19 @@ test('product view exposes timeline evidence without inventing a numeric score',
     view.timeline[0].evidenceTrace[0].storedEvidenceState,
     'retained_payload',
   );
+  assert.equal(
+    view.timeline[0].evidenceTrace[0].responseCapturedAt,
+    '2026-09-24T07:00:00Z',
+  );
+  assert.equal(
+    view.timeline[0].evidenceTrace[0].collectedAt,
+    '2026-09-24T07:00:01Z',
+  );
   assert.deepEqual(view.truthSemantics, {
     missingIsZero: false,
     missingIsInactive: false,
     observationTimeEqualsCollectionTime: false,
+    sourcePublishedTimeEqualsObservationTime: false,
     crossFamilyRawAggregationAllowed: false,
     completeMeansCompleteWithinDeclaredScope: true,
   });
