@@ -540,3 +540,50 @@ Latest full research CI:
 `35995504797 = PASS`
 at head
 `14c4bb8a3e76d96e8447a712934c59422c851a75`.
+
+
+## 20. Live coverage manifest contract
+
+Integration live runs must emit a manifest compatible with:
+
+`lib/research/activityExposureCoverageManifest.ts`
+
+The manifest is the handoff boundary between provider execution and integration review.
+
+Required provider-level evidence includes:
+
+- declared coverage scope / coverageObservedAt
+- provider identity
+- inventory/query exhaustion state
+- discovered / normalized / excluded / missing / invalid counts
+- retained / digest-only / unavailable evidence counts
+- authorization state
+- unresolved identity count
+
+Allowed decisions:
+
+`pass_for_integration_review`
+
+Only for complete declared provider scopes with exhausted inventory/query boundaries, no missing/invalid entities, resolved research authorization, resolved identity, and retained evidence.
+
+`pass_bounded_partial_for_integration_review`
+
+Only for explicitly bounded partial scopes such as `bounded_provider_query` or `stored_evidence_set`; it must not be presented as all-history completeness.
+
+`blocked_live_coverage`
+
+For unavailable, unbounded partial, missing-entity, or non-exhausted live coverage.
+
+`blocked_invalid_evidence`
+
+For invalid evidence or internally contradictory completeness claims.
+
+`blocked_authorization`
+
+For blocked/review-required acquisition or insufficient retained evidence for the intended integration review.
+
+`blocked_identity`
+
+For unresolved provider identity.
+
+Neither PASS state authorizes Production merge, activation, Product publication, or numeric comebackActivityPoint generation.
