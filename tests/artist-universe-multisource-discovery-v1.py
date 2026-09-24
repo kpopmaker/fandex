@@ -55,6 +55,11 @@ snapshots = [
             },
             "candidates": [
                 {
+                    "displayArtist": "IVE",
+                    "aliases": ["아이브"],
+                    "evidence": {"label": "artist page", "url": "https://example.com/provider/ive"},
+                },
+                {
                     "displayArtist": "신인가수 A",
                     "aliases": ["Rookie A"],
                     "evidence": {"label": "artist page", "url": "https://example.com/provider/a"},
@@ -87,9 +92,16 @@ result = module.build_discovery(identity, snapshots)
 
 assert result["sourceCount"] == 3
 assert result["candidateCount"] == 2
-assert result["knownSuppressionCount"] == 2
+assert result["knownSuppressionCount"] == 3
 assert result["contract"]["autoPromote"] is False
 assert result["contract"]["evidenceCountIsNotThreshold"] is True
+
+coverage = {row["canonicalArtistId"]: row for row in result["knownCanonicalCoverage"]}
+assert coverage["ive"]["sourceCount"] == 2
+assert {row["sourceType"] for row in coverage["ive"]["sources"]} == {
+    "provider_catalog",
+    "festival_or_event_roster",
+}
 
 by_name = {row["displayArtist"]: row for row in result["candidates"]}
 assert set(by_name) == {"신인가수 A", "신인그룹 B"}
