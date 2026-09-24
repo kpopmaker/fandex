@@ -389,3 +389,67 @@ test('committed v181 audit reproduces current blocked resume state and unchanged
   assert.equal(audit.productBoundary.productionEligible, false);
   assert.equal(audit.productBoundary.productProductionActual, '0/7');
 });
+
+
+test('2026-09-24 live recheck preserves the same blocked v181 digest despite newly exposed but unusable Neon read tools', async () => {
+  const raw = await readFile(
+    new URL(
+      '../data/momentum-research/iu_verifier_external_capability_resume_gate_v181_recheck_20260924T114700Z.json',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  const audit = JSON.parse(raw);
+
+  const out =
+    evaluateFandexMomentumVerifierExternalCapabilityResumeGate({
+      observedAt: audit.observedAt,
+      upstreamV180Digest: audit.upstream.v180Digest,
+      target: audit.target,
+      connectedCapability: audit.currentGateInput.connectedCapability,
+      localCapability: audit.currentGateInput.localCapability,
+      browserCapability: audit.currentGateInput.browserCapability,
+      externalOperator: audit.currentGateInput.externalOperator,
+    });
+
+  assert.equal(
+    audit.contractVersion,
+    'v181_fandex_momentum_verifier_external_capability_resume_gate_recheck_audit_v1',
+  );
+  assert.equal(audit.liveCapabilityChecks.neon.runSqlToolExposed, true);
+  assert.equal(
+    audit.liveCapabilityChecks.neon.exactDatabaseReadCallable,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.wrapperAllowsProjectIdArgument,
+    false,
+  );
+  assert.equal(
+    audit.liveCapabilityChecks.neon.underlyingServerRequiresProjectId,
+    true,
+  );
+  assert.equal(
+    audit.interpretation.neonToolExposureAloneCountsAsResumeCapability,
+    false,
+  );
+  assert.equal(audit.interpretation.newResumeConditionSatisfied, false);
+  assert.equal(audit.interpretation.newMethodologyVersionRequired, false);
+
+  assert.equal(out.state, audit.currentResult.state);
+  assert.equal(
+    out.internalExecutionCanResume,
+    audit.currentResult.internalExecutionCanResume,
+  );
+  assert.deepEqual(out.candidateChannels, audit.currentResult.candidateChannels);
+  assert.deepEqual(out.blockers, audit.currentResult.blockers);
+  assert.equal(out.digest, audit.currentResult.digest);
+  assert.equal(
+    out.digest,
+    'b574a2fbcd7cddb8e7d32e734da0810399776c5a1ecf92960fd114fd4b5ae0a6',
+  );
+  assert.deepEqual(out.effects, audit.effects);
+  assert.equal(audit.productBoundary.productMomentumScore, null);
+  assert.equal(audit.productBoundary.productionEligible, false);
+  assert.equal(audit.productBoundary.productProductionActual, '0/7');
+});
