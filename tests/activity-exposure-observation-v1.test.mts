@@ -99,3 +99,63 @@ test('changed revision requires prior observation lineage', () => {
       .includes('changed-without-prior-observation'),
   );
 });
+
+
+test('observation identity is based on response capture time, not later collection time', () => {
+  const first = createActivityExposureRawObservation({
+    ...base,
+    responseCapturedAt: '2026-09-23T12:00:29Z',
+    collectedAt: '2026-09-23T12:00:30Z',
+  });
+  const reingested = createActivityExposureRawObservation({
+    ...base,
+    responseCapturedAt: '2026-09-23T12:00:29Z',
+    collectedAt: '2026-09-23T12:05:00Z',
+  });
+
+  assert.equal(first.observationId, reingested.observationId);
+  assert.notEqual(first.collectedAt, reingested.collectedAt);
+});
+
+test('response capture must not occur after collection time', () => {
+  const observation = createActivityExposureRawObservation({
+    ...base,
+    responseCapturedAt: '2026-09-23T12:00:30Z',
+    collectedAt: '2026-09-23T12:00:29Z',
+  });
+
+  assert.ok(
+    validateActivityExposureObservation(observation)
+      .includes('response-captured-after-collected'),
+  );
+});
+
+test('provider occurrence/publication dates are not generic provider observation timestamps', () => {
+  const observation = createActivityExposureRawObservation({
+    ...base,
+    sourceProvider: 'youtube',
+    providerArtistId: 'UC3SyT4_WLHzN7JmHQwKQZww',
+    sourceEntityType: 'video',
+    sourceEntityId: 'kHW-UVXOcLU',
+    sourcePublishedAt: '2024-02-20T09:00:00Z',
+    providerObservedAt: null,
+    responseCapturedAt: '2026-09-23T12:00:29Z',
+    collectedAt: '2026-09-23T12:00:30Z',
+  });
+
+  assert.equal(observation.sourcePublishedAt, '2024-02-20T09:00:00Z');
+  assert.equal(observation.providerObservedAt, null);
+  assert.deepEqual(validateActivityExposureObservation(observation), []);
+});
+
+test('partial provider dates are invalid in timestamp-only observation metadata', () => {
+  const observation = createActivityExposureRawObservation({
+    ...base,
+    providerObservedAt: '2024-02-20',
+  });
+
+  assert.ok(
+    validateActivityExposureObservation(observation)
+      .includes('invalid-provider-observed-at'),
+  );
+});
