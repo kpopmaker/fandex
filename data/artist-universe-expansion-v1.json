@@ -1300,6 +1300,118 @@
           "url": "https://ygfamily.com/en/artists/eun-jiwon/profile"
         }
       ]
+    },
+    {
+      "id": "kangseungyoon",
+      "ticker": "KANGSEUNGYOON",
+      "name": "KANG SEUNG YOON",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "강승윤 KANG SEUNG YOON",
+      "koreanAliases": [
+        "강승윤"
+      ],
+      "englishAliases": [
+        "KANG SEUNG YOON",
+        "Kang Seung Yoon"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/kang-seung-yoon/main"
+        },
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/ko/artists/winner/notice"
+        }
+      ]
+    },
+    {
+      "id": "hoony",
+      "ticker": "HOONY",
+      "name": "HOONY",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "이승훈 HOONY WINNER",
+      "koreanAliases": [
+        "이승훈"
+      ],
+      "englishAliases": [
+        "HOONY",
+        "Lee Seung Hoon",
+        "Lee Seung-hoon"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/lee-seung-hoon/profile"
+        }
+      ]
+    },
+    {
+      "id": "jinu",
+      "ticker": "JINU",
+      "name": "JINU",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "김진우 JINU WINNER",
+      "koreanAliases": [
+        "김진우"
+      ],
+      "englishAliases": [
+        "JINU",
+        "Kim Jinwoo",
+        "Kim Jin-woo"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/artists/jinu/profile"
+        }
+      ]
+    },
+    {
+      "id": "mino",
+      "ticker": "MINO",
+      "name": "MINO",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "송민호 MINO WINNER",
+      "koreanAliases": [
+        "송민호"
+      ],
+      "englishAliases": [
+        "MINO",
+        "Song Mino",
+        "Song Min-ho"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/ko/artists/mino/profile"
+        }
+      ]
+    },
+    {
+      "id": "leesuhyun",
+      "ticker": "LEESUHYUN",
+      "name": "LEE SUHYUN",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "naverNewsQuery": "이수현 LEE SUHYUN AKMU",
+      "koreanAliases": [
+        "이수현"
+      ],
+      "englishAliases": [
+        "LEE SUHYUN",
+        "Lee Suhyun"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/en/artists/lee-suhyun/profile"
+        }
+      ]
     }
   ]
 }
