@@ -136,9 +136,9 @@ export async function getArtistProductStoredEvidenceJob(
         jobId,
       }),
       dataOrigin: 'observed' as const,
-      publication: 'shadow' as const,
       presentation: 'standard' as const,
       lineage: Object.freeze({
+        collectionLifecycle: 'shadow' as const,
         methodologyVersion: trace.methodologyVersion,
         officialShadowEpoch: trace.officialShadowEpoch,
         throughSlotStart: trace.throughSlotStart,
