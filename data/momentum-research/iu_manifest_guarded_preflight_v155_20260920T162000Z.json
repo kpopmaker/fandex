@@ -1,0 +1,81 @@
+{
+  "contractVersion": "v155_fandex_momentum_current_real_manifest_guarded_preflight_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-20T16:20:00.000Z",
+  "recordedAt": "2026-09-20T16:20:00.000Z",
+  "manifestedAt": "2026-09-20T16:20:00.000Z",
+  "inputs": {
+    "historyArtifact": "data/momentum-research/iu_cross_family_evidence_state_v147.jsonl",
+    "watermarkArtifact": "data/momentum-research/iu_evaluation_watermark_v151.jsonl",
+    "manifestArtifact": "data/momentum-research/iu_paired_artifact_manifest_v154.jsonl",
+    "committedHistoryRecordCount": 2,
+    "committedWatermarkRecordCount": 2,
+    "committedManifestRecordCount": 2,
+    "latestCommittedManifestDigest": "f75a89c363dcb06a5a534e132b25f710aa8cb12bb5be23e3c7a99f3875c0e9af"
+  },
+  "sourceEvidence": {
+    "lastfmEvidenceId": "723cf73abb93882779edc0621a12381ab80e464c",
+    "lastfmLatestComponentEndAt": "2026-09-20T01:59:13.000Z",
+    "naverEvidenceId": "39ec4ddeeda1eedd906bc33288e1550a6c8fd3aeb1f46be590e661fcb6c41a9c",
+    "naverThroughSlotStart": "2026-09-20T15:00:00.000Z",
+    "sourceV143Digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a"
+  },
+  "preflight": {
+    "state": "evaluation-prepared",
+    "currentPairAcceptance": {
+      "state": "expected-no-write-pair",
+      "readyForNextEvaluation": true,
+      "digest": "b9d270162f04d1016990fe7f2f0e286e249e36cae1114cc4776dbc08d9529458"
+    },
+    "coordinator": {
+      "state": "no-op",
+      "gateState": "exact-evaluation-replay",
+      "digest": "e30508d2eb3cf9b82249068963a2f02db43581f3b1eb45234d87cba4dd7d455b"
+    },
+    "nextManifest": {
+      "sequence": 3,
+      "coordinatorState": "no-op",
+      "previousManifestDigest": "f75a89c363dcb06a5a534e132b25f710aa8cb12bb5be23e3c7a99f3875c0e9af",
+      "expectedWrites": {
+        "historyWrites": 0,
+        "watermarkWrites": 0
+      },
+      "manifestDigest": "042728c223ed6107baba213e9fd0c6c5da3f190e885c602f7c76ae6153f9055b"
+    },
+    "proposedWrites": {
+      "historyWrites": 0,
+      "watermarkWrites": 0,
+      "manifestWrites": 1
+    },
+    "proposedHistoryChanged": false,
+    "proposedWatermarkChanged": false,
+    "proposedManifestRecordCount": 3,
+    "readyForPhysicalPersistence": true,
+    "blockers": [],
+    "physicalPersistencePerformed": false,
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "historyWrites": 0,
+      "watermarkWrites": 0,
+      "manifestWrites": 0
+    },
+    "digest": "c0e5283e3aeb5f2a43fd522c4c36fa74e4f75d1d3bcc23ab3039f9ca434dc3ae"
+  },
+  "validation": {
+    "runId": 35522100299,
+    "v155Passed": true,
+    "v154RegressionPassed": true,
+    "v152RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "contractVersion": "v170_fandex_momentum_verifier_vercel_inventory_adapter_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-22T00:25:09.190Z",
+  "providerReadContract": {
+    "provider": "vercel",
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "decryptRequested": false,
+    "connectedInventoryActionAvailable": false,
+    "rawProviderResponsePersisted": false,
+    "sensitiveValuePersisted": false,
+    "sensitiveValueReturned": false
+  },
+  "currentInput": {
+    "inventoryAvailable": false,
+    "inventoryBoundToProjectAndTeam": false,
+    "completeForProductionTarget": false,
+    "rowCount": 0,
+    "opaqueSecretRollbackAttestationPresent": false
+  },
+  "currentResult": {
+    "state": "inventory-adapter-blocked",
+    "adapterReady": false,
+    "rollbackReadinessState": "rollback-readiness-blocked",
+    "rollbackReady": false,
+    "v169Digest": "926ee773c0f7bcc8bcc02166b5133e50d99c60132793e9b6f540a41db91e24e6",
+    "blockers": [
+      "inventory-response-unavailable",
+      "inventory-response-not-bound-to-target",
+      "inventory-response-incomplete-for-production",
+      "pre-mutation-inventory-unavailable",
+      "pre-mutation-inventory-not-bound-to-target",
+      "pre-mutation-production-inventory-incomplete",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-target-scope-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-target-scope-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-target-scope-unknown"
+    ],
+    "digest": "5c45f9c28c5bc9a1076bc12eae4e17301a9821efd873141f2ae6ceddbb712172"
+  },
+  "adapterSemantics": {
+    "unknownInventoryNeverMeansAbsent": true,
+    "duplicateTargetRowsFailClosed": true,
+    "decryptedRowsForbidden": true,
+    "previewTargetFailsClosed": true,
+    "nonSecretPlainPriorValueMayBeCapturedForRollback": true,
+    "sensitiveProviderValueNeverPropagated": true,
+    "existingSecretRequiresOpaqueRollbackAttestation": true
+  },
+  "validation": {
+    "runId": 35671847435,
+    "status": "PASS",
+    "v170TestsPassed": true,
+    "v169RegressionPassed": true,
+    "v168RegressionPassed": true,
+    "v167RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true,
+    "syntheticEmptyInventoryCovered": true,
+    "syntheticPlainRestoreCovered": true,
+    "syntheticOpaqueSecretRollbackCovered": true,
+    "realInventoryReadPerformed": false
+  },
+  "authoritativeLedgerBoundary": {
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+    "fresh1200ZAdvanced": false
+  },
+  "effects": {
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

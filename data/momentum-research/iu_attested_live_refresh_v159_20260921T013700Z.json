@@ -1,0 +1,99 @@
+{
+  "contractVersion": "v159_fandex_momentum_current_attested_live_refresh_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "sourceBoundary": {
+    "naverEvidenceId": "dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t000000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "lastfmEvidenceId": "723cf73abb93882779edc0621a12381ab80e464c",
+    "lastfmLatestComponentEndAt": "2026-09-20T01:59:13.000Z"
+  },
+  "storedEvidenceReadAudit": "data/momentum-research/iu_stored_evidence_attestation_v159_20260921T012400Z.json",
+  "categoricalInput": {
+    "verificationRunId": 35550948449,
+    "commonAlignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "sourceV143Digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a",
+    "note": "categorical output reused from the previously verified current-real derivation; no new hardcoded NAVER anchor series was introduced for the attested refresh"
+  },
+  "v159": {
+    "evaluatedAt": "2026-09-21T01:37:00.000Z",
+    "attestationState": "attested-provenance-ready",
+    "attestationDigest": "27f65870158f3eb6d8f639e307df5340afc950abbd13bf9a5b455663829711af",
+    "provenanceState": "stored-evidence-read-reproduced",
+    "provenanceDigest": "9e7c1c47694d2ffa76f71818fecca565cf4f4c584db92d01708d15445a0e8f1d",
+    "state": "refresh-evaluated",
+    "digest": "10ef3bfe2c64d93f8cc3e1144a6cbe8ffc3da2ef78bb1b0b9b6efa80948b4f2b",
+    "nestedV158State": "refresh-prepared",
+    "nestedV158Digest": "2316145e304c757591eb8c0f95d93ec894c66b883e8f8d20f2bc0222d33d1e59",
+    "preflightDigest": "e4607145e6fd9e14e449f3e7ad7115a5f633679a0b72cfa6ae045d6c18d63d3c",
+    "coordinatorState": "watermark-only-appended",
+    "proposedWrites": {
+      "historyWrites": 0,
+      "watermarkWrites": 1,
+      "manifestWrites": 1
+    },
+    "readyForPhysicalPersistence": true,
+    "blockers": []
+  },
+  "persistedArtifacts": {
+    "history": {
+      "path": "data/momentum-research/iu_cross_family_evidence_state_v147.jsonl",
+      "recordCount": 2,
+      "changed": false,
+      "latestRecordDigest": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd"
+    },
+    "watermark": {
+      "path": "data/momentum-research/iu_evaluation_watermark_v151.jsonl",
+      "recordCount": 3,
+      "latestRecordDigest": "1dc564d7d5aba1be6aadd95da4b99f3caca85ebcfe656c3d8b0abc2066f6a9b0",
+      "sourceV150Digest": "a3b573c40a0513b1fc67670f420f6c92c202f742373eec8341298c996102d35f",
+      "semanticBoundaryDigest": "46731e9029a7e2556e7e6381198ffe1aa5e0f8c787ff8271d76dec7bc1ebc17e"
+    },
+    "manifest": {
+      "path": "data/momentum-research/iu_paired_artifact_manifest_v154.jsonl",
+      "recordCount": 4,
+      "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19",
+      "observedArtifactDigest": "881773bc5c672cb65079a366b4cc96a9cf550443c7c38dee5830d0f38f23d3df"
+    }
+  },
+  "postPersistence": {
+    "v156": {
+      "state": "accepted-resulting-triple",
+      "pairAcceptanceState": "accepted-resulting-pair",
+      "exactExpectedTripleObserved": true,
+      "readyForNextEvaluation": true,
+      "blockers": [],
+      "digest": "6571f8a0f05f50a732e2d73d976221397ae3770aa22e5467e3ef01ced7c057fd"
+    },
+    "v157": {
+      "state": "no-recovery-needed",
+      "readyForNextEvaluation": true,
+      "proposedWrites": {
+        "historyWrites": 0,
+        "watermarkWrites": 0,
+        "manifestWrites": 0
+      },
+      "digest": "738d6dc2ece783508be781e9cff9855551961fa82846196d3394f8e6abdd4144"
+    }
+  },
+  "validation": {
+    "v159AttestationRegressionRunId": 35551431942,
+    "v159AttestedRefreshRunId": 35551503325,
+    "postPersistenceRunId": 35551772693,
+    "status": "PASS"
+  },
+  "effects": {
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "databaseWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

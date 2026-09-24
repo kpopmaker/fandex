@@ -1,0 +1,109 @@
+{
+  "contractVersion": "v180_fandex_momentum_verifier_external_execution_channel_resolution_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-23T02:24:30.000Z",
+  "upstream": {
+    "v172Digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a",
+    "v176Digest": "d66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5",
+    "v177Digest": "3478a5aceced9142b647c8b43546edc9fd3b4f1c48793df9e91f462b1aa06671",
+    "v178Digest": "673f266e36cd51b42073f24f902e59f9b1dec24a3d2e0f8de424f553093555b3",
+    "v179Digest": "c95844f671fc62bc146fd4b0875ae433de605983389e16d52a8805c6709b889a"
+  },
+  "providerContract": {
+    "provider": "vercel",
+    "endpointConfirmedFromOfficialDocumentation": true,
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "decrypt": "false",
+    "maximumProviderCalls": 1,
+    "maximumInventoryReads": 1
+  },
+  "capabilityObservations": {
+    "connectedVercelExactInventoryReadAvailable": false,
+    "connectedVercelGenericRestReadAvailable": false,
+    "connectedVercelProjectMetadataReadAvailable": true,
+    "connectedVercelGetProjectCallable": false,
+    "githubActionsCredentialBackedVercelCliReadAvailable": false,
+    "localAuthenticatedVercelCliReadAvailable": false,
+    "authenticatedBrowserStructuredInventoryExportAvailable": false
+  },
+  "capabilityEvidence": {
+    "connectedVercelProjectListConfirmedTargetProject": true,
+    "connectedVercelProjectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "connectedVercelProjectName": "fandex",
+    "getProjectFailure": "connector-schema-server-argument-mismatch",
+    "githubWorkflowVercelTokenReferenceFound": false,
+    "githubWorkflowVercelApiReferenceFound": false,
+    "localVercelCommandAvailable": false,
+    "browserAutomationExecutionToolExposed": false,
+    "officialEndpointStillDocumented": true
+  },
+  "currentResult": {
+    "contractVersion": "v180_fandex_momentum_verifier_external_execution_channel_resolution_research_v1",
+    "state": "external-execution-channel-unavailable",
+    "executionChannelCandidateAvailable": false,
+    "candidateChannels": [],
+    "blockers": [
+      "execution-channel-no-authenticated-exact-read-capability"
+    ],
+    "digest": "66e38e1ff092131b3e1bb9761e7f173970e937386ef7e4336cb7271d19e7377c"
+  },
+  "operatorExchange": {
+    "preReadContract": "v177_fandex_momentum_verifier_operator_response_intake_research_v1",
+    "projectionContract": "v178_fandex_momentum_verifier_operator_response_projection_research_v1",
+    "postReadContract": "v179_fandex_momentum_verifier_external_inventory_execution_response_intake_research_v1",
+    "genericContinuationIsNotAuthorization": true,
+    "rawCredentialValueForbidden": true,
+    "exactlyOneBoundedReadRequired": true,
+    "runtimeCompletenessProofRequired": true,
+    "existingDedicatedSecretRequiresExactEnvIdBoundOpaqueRollbackAttestation": true
+  },
+  "validation": {
+    "initialRunId": 35810165515,
+    "initialRunStatus": "PASS",
+    "committedAuditReplayRunId": 35810276642,
+    "v180TestsPassed": true,
+    "v179RegressionPassed": true,
+    "v177RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "authoritativeLedgerBoundary": {
+    "v147HistoryRecordCount": 2,
+    "v151WatermarkRecordCount": 3,
+    "latestWatermarkSequence": 3,
+    "latestAcceptedNaverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "v154ManifestRecordCount": 4,
+    "latestManifestSequence": 4,
+    "latestManifestDigest": "683294b8c380c63f402a66327f4de578005abb0357c89d0549e7848c76172f19"
+  },
+  "effects": {
+    "authorizationWrites": 0,
+    "credentialCreates": 0,
+    "credentialReads": 0,
+    "credentialRotations": 0,
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

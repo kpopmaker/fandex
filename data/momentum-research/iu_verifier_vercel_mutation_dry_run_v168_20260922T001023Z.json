@@ -1,0 +1,160 @@
+{
+  "contractVersion": "v168_fandex_momentum_verifier_vercel_configuration_mutation_dry_run_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-22T00:10:23.397Z",
+  "providerContract": {
+    "provider": "vercel",
+    "sdkMethod": "vercel.projects.createProjectEnv",
+    "httpMethod": "POST",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "upsertQuery": "true",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "target": [
+      "production"
+    ],
+    "nonSecretType": "plain",
+    "dedicatedSecretType": "sensitive",
+    "providerBatchAtomicityAssumed": false,
+    "documentationBasis": "Vercel REST API create one or more project environment variables; upsert=true updates existing variables"
+  },
+  "upstream": {
+    "v165PlanDigest": "f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f",
+    "v166State": "authorization-pending",
+    "v166ResultDigest": "42de3a646177267d8f667f2e337e6b987c056ee35bb1083fe3b75169d48f73c0",
+    "v167State": "mutation-envelope-blocked",
+    "v167ResultDigest": "3c911851c681a9b5f3142dd5856b9484c3d877218e14fee46c987d96a9296211",
+    "v167Envelope": null
+  },
+  "currentResult": {
+    "contractVersion": "v168_fandex_momentum_verifier_vercel_configuration_mutation_dry_run_research_v1",
+    "state": "dry-run-blocked",
+    "dryRunReady": false,
+    "plan": null,
+    "blockers": [
+      "v167-mutation-envelope-not-ready"
+    ],
+    "digest": "596cdd5ed06dda9f3bcb8327138f997a4bf70511e38b37b3841aabf926e2bcc2"
+  },
+  "readyDryRunRequirements": {
+    "v167State": "mutation-envelope-ready",
+    "exactTarget": {
+      "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+      "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+      "projectName": "fandex",
+      "environment": "production"
+    },
+    "exactOperationOrder": [
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET"
+    ],
+    "futureVercelIntent": {
+      "sdkMethod": "vercel.projects.createProjectEnv",
+      "httpMethod": "POST",
+      "endpoint": "/v10/projects/{idOrName}/env",
+      "query": {
+        "upsert": "true",
+        "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs"
+      },
+      "requestBodyIntent": [
+        {
+          "order": 1,
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+          "type": "plain",
+          "target": [
+            "production"
+          ],
+          "valueSource": "literal",
+          "literalValue": "approved-v162-research-read-only",
+          "apiValueIncludedInDryRun": true
+        },
+        {
+          "order": 2,
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+          "type": "plain",
+          "target": [
+            "production"
+          ],
+          "valueSource": "literal",
+          "literalValue": "production",
+          "apiValueIncludedInDryRun": true
+        },
+        {
+          "order": 3,
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+          "type": "sensitive",
+          "target": [
+            "production"
+          ],
+          "valueSource": "trusted-secret-handle-runtime-resolution",
+          "literalValue": null,
+          "apiValueIncludedInDryRun": false
+        }
+      ]
+    },
+    "excludedKeys": [
+      "FANDEX_RUNTIME_DATABASE_URL",
+      "FANDEX_NAVER_NEWS_SCHEDULER_SECRET"
+    ],
+    "downstreamAuthorizations": {
+      "productionDeployment": false,
+      "verifierActivation": false,
+      "nativeVerifierExecution": false,
+      "ledgerAdvance": false
+    }
+  },
+  "failureAndRollbackPolicy": {
+    "singleBatchRequestRequired": true,
+    "providerBatchAtomicityAssumed": false,
+    "partialFailureFailsClosed": true,
+    "responseFailedEntriesMustBeEmptyForSuccess": true,
+    "preMutationStateCaptureRequired": true,
+    "preMutationSecretValueExposureForbidden": true,
+    "existingDedicatedSecretRequiresOpaqueRollbackCapability": true,
+    "rollbackIntentRequiredBeforeFutureMutation": true,
+    "noMutationMayStartWithoutRollbackReadiness": true,
+    "rollbackTouchedKeysOnly": true,
+    "restoreExactPreMutationState": true,
+    "removeKeysAbsentBeforeMutation": true,
+    "restoreKeysExistingBeforeMutation": true,
+    "secretRollbackMayUseOnlyOpaqueRestorableHandle": true,
+    "secretValueMayBeStoredInResearchArtifact": false
+  },
+  "validation": {
+    "runId": 35670791712,
+    "status": "PASS",
+    "v168TestsPassed": true,
+    "v167RegressionPassed": true,
+    "v166RegressionPassed": true,
+    "v165RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true,
+    "syntheticReadyDryRunCoverage": true,
+    "realV166AuthorizationRecordUsed": false,
+    "realV167ReadyEnvelopeUsed": false,
+    "realSecretHandleUsed": false
+  },
+  "effects": {
+    "vercelCalls": 0,
+    "environmentReads": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "contractVersion": "v159_fandex_momentum_current_stored_evidence_attestation_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "auditedAt": "2026-09-21T01:35:00.000Z",
+  "sourceSnapshot": {
+    "naverEvidenceId": "dae0750b1ad81f468f479328ef726e6344eaa31a62246cce3e4aeebc5d9a3f7d",
+    "naverCollectionKey": "sched-v125-naver-news-20260921t000000z-f1ed381d367d",
+    "naverThroughSlotStart": "2026-09-21T00:00:00.000Z",
+    "naverStatus": "succeeded",
+    "naverRawEvidenceCount": 100,
+    "naverNormalizedRecordCount": 100,
+    "naverDuplicateRecordCount": 0,
+    "naverRejectedItemCount": 0
+  },
+  "productionRuntimeObservation": {
+    "observedAt": "2026-09-21T00:02:01.000Z",
+    "requestPath": "/api/internal/naver-news/shadow-scheduler",
+    "httpStatus": 200,
+    "deploymentId": "dpl_6fmT3qKqeytud3kFCNVoArBGGK1K",
+    "branch": "main"
+  },
+  "attestationBoundary": {
+    "callerSuppliedReproducedBooleanAllowed": false,
+    "exactSourceBoundaryMatchRequired": true,
+    "fullStoredRowCoverageRequired": true,
+    "materializedPayloadFingerprintsRequired": true,
+    "currentReadAttestationPresent": false,
+    "currentReadAttestationAccepted": false,
+    "storedEvidenceReproducedThisEvaluation": false
+  },
+  "derivedProvenance": {
+    "contractVersion": "v153_fandex_momentum_source_provenance_research_v1",
+    "state": "lineage-runtime-verified-stored-evidence-not-reproduced",
+    "futureLiveRefreshEligible": false,
+    "blockers": [
+      "stored-evidence-live-reproduction-unavailable"
+    ],
+    "digest": "42a089fa8ba9bf61cdcc00b6f1aa376577c3fd15ca8609285fad21d76602810f"
+  },
+  "officialRefreshEntrypoint": {
+    "contractVersion": "v159_fandex_momentum_attested_provenance_refresh_research_v1",
+    "state": "attestation-blocked",
+    "refreshInvoked": false,
+    "readyForPhysicalPersistence": false,
+    "blockers": [
+      "stored-evidence-read-attestation-unavailable",
+      "stored-evidence-live-reproduction-unavailable"
+    ],
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "historyWrites": 0,
+      "watermarkWrites": 0,
+      "manifestWrites": 0
+    }
+  },
+  "rejectedCallerAssertedRuns": [
+    {
+      "runId": 35551003741,
+      "name": "PR127 v153 current 00Z stored-evidence reproduction",
+      "reason": "storedEvidenceReproducedThisEvaluation_was_directly_asserted_true_without_a_current_read_attestation"
+    },
+    {
+      "runId": 35551003777,
+      "name": "PR127 v158 current 00Z provenance-gated refresh",
+      "reason": "upstream_v153_provenance_was_built_from_a_directly_asserted_reproduction_boolean"
+    },
+    {
+      "runId": 35551128808,
+      "name": "PR127 v158 00Z post-persistence acceptance",
+      "reason": "transaction_was_derived_from_unattested_00Z_provenance"
+    }
+  ],
+  "rollback": {
+    "invalidWatermarkAppendCommit": "a87c249bf637e94ee05627268f28d3e864d3cd57",
+    "invalidManifestAppendCommit": "9ef3cc6cc6a0095e212efc36eee121bb56ac20b5",
+    "restoredWatermarkCommit": "0de8f137f175041ee26bc3f9ff61bc414eda364f",
+    "restoredManifestCommit": "f5d418feefeee64b2cadf854709ac44c1fdd46b2",
+    "restoredV156FixtureCommit": "7073daa7b17dcb41c8671837c6a12c76b9b6ab11",
+    "restoredV157FixtureCommit": "701a14ebee329b5e23ef2cad45ef8743503cb5f8",
+    "removedPostPersistenceWorkflowCommit": "81b2cdbdc5522cd27f953f26ff77542b731cee7b",
+    "currentWatermarkRecordCount": 2,
+    "currentManifestRecordCount": 3,
+    "currentWatermarkLatestSequence": 2,
+    "currentManifestLatestSequence": 3
+  },
+  "validation": {
+    "v159InitialRunId": 35551003766,
+    "v159FinalFullRegressionRunId": 35551329556,
+    "status": "PASS",
+    "v159Passed": true,
+    "v156Passed": true,
+    "v157Passed": true,
+    "v158Passed": true,
+    "v153Passed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "contractVersion": "v169_fandex_momentum_verifier_premutation_rollback_readiness_audit_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-22T00:19:41.340Z",
+  "providerReadContract": {
+    "provider": "vercel",
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "decryptRequested": false,
+    "documentationBasis": "Vercel project environment variable inventory endpoint",
+    "connectedToolInventoryAvailable": false,
+    "interpretation": "inventory could not be queried through the connected interface; key state is unknown, not absent"
+  },
+  "target": {
+    "projectName": "fandex",
+    "environment": "production"
+  },
+  "touchedKeys": [
+    "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+    "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+    "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET"
+  ],
+  "excludedKeys": [
+    "FANDEX_RUNTIME_DATABASE_URL",
+    "FANDEX_NAVER_NEWS_SCHEDULER_SECRET"
+  ],
+  "observations": [
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+      "presence": "unknown",
+      "targetScope": "unknown",
+      "providerType": "unknown",
+      "priorValueKnown": false,
+      "secretValueExposed": false,
+      "opaqueRollbackHandleId": null
+    },
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+      "presence": "unknown",
+      "targetScope": "unknown",
+      "providerType": "unknown",
+      "priorValueKnown": false,
+      "secretValueExposed": false,
+      "opaqueRollbackHandleId": null
+    },
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+      "presence": "unknown",
+      "targetScope": "unknown",
+      "providerType": "unknown",
+      "priorValueKnown": false,
+      "secretValueExposed": false,
+      "opaqueRollbackHandleId": null
+    }
+  ],
+  "readinessSemantics": {
+    "unknownIsAbsent": false,
+    "absentKeyRollbackAction": "remove-created-key",
+    "presentNonSecretRollbackRequirement": "exact prior value known and restorable",
+    "presentSecretRollbackRequirement": "opaque restorable handle/attestation; secret value may not be recorded",
+    "previewScopeForbidden": true,
+    "incompleteInventoryFailsClosed": true,
+    "secretDecryptionRequested": false
+  },
+  "currentResult": {
+    "contractVersion": "v169_fandex_momentum_verifier_premutation_rollback_readiness_research_v1",
+    "state": "rollback-readiness-blocked",
+    "rollbackReady": false,
+    "keyReadiness": [
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+        "presence": "unknown",
+        "ready": false,
+        "rollbackAction": null,
+        "priorValuePersistedInResearchArtifact": false,
+        "opaqueRollbackHandleId": null,
+        "blockers": [
+          "pre-mutation-inventory-unusable",
+          "pre-mutation-key-presence-unknown",
+          "pre-mutation-target-scope-unknown"
+        ]
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+        "presence": "unknown",
+        "ready": false,
+        "rollbackAction": null,
+        "priorValuePersistedInResearchArtifact": false,
+        "opaqueRollbackHandleId": null,
+        "blockers": [
+          "pre-mutation-inventory-unusable",
+          "pre-mutation-key-presence-unknown",
+          "pre-mutation-target-scope-unknown"
+        ]
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+        "presence": "unknown",
+        "ready": false,
+        "rollbackAction": null,
+        "priorValuePersistedInResearchArtifact": false,
+        "opaqueRollbackHandleId": null,
+        "blockers": [
+          "pre-mutation-inventory-unusable",
+          "pre-mutation-key-presence-unknown",
+          "pre-mutation-target-scope-unknown"
+        ]
+      }
+    ],
+    "blockers": [
+      "pre-mutation-inventory-unavailable",
+      "pre-mutation-inventory-not-bound-to-target",
+      "pre-mutation-production-inventory-incomplete",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:pre-mutation-target-scope-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT:pre-mutation-target-scope-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-inventory-unusable",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-key-presence-unknown",
+      "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET:pre-mutation-target-scope-unknown"
+    ],
+    "digest": "926ee773c0f7bcc8bcc02166b5133e50d99c60132793e9b6f540a41db91e24e6"
+  },
+  "validation": {
+    "runId": 35671459220,
+    "status": "PASS",
+    "v169TestsPassed": true,
+    "v168RegressionPassed": true,
+    "v167RegressionPassed": true,
+    "v166RegressionPassed": true,
+    "typecheckPassed": true,
+    "diffCheckPassed": true,
+    "syntheticAllAbsentReadinessCovered": true,
+    "syntheticExistingPlainRestoreCovered": true,
+    "syntheticOpaqueSecretRollbackCovered": true,
+    "realInventoryReadPerformed": false,
+    "realSecretValueRead": false
+  },
+  "effects": {
+    "vercelReads": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "secretRotations": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "0/7"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "contractVersion": "v149_fandex_momentum_current_real_artifact_update_research_v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "evaluatedAt": "2026-09-20T07:04:00.000Z",
+  "evidence": {
+    "naverThroughSlotStart": "2026-09-20T06:00:00.000Z",
+    "lastfmMainBlobSha": "723cf73abb93882779edc0621a12381ab80e464c",
+    "commonAlignmentCutoffAt": "2026-09-20T01:59:13.000Z"
+  },
+  "v140": {
+    "latestAnchor": {
+      "throughSlotStart": "2026-09-20T06:00:00.000Z",
+      "currentActivityRate": 0.00625,
+      "newsIssuePointScore": 71.56862745098,
+      "priorDefinedWindowCount": 102
+    },
+    "selectedAnchorCount": 9,
+    "latestDirection": "up",
+    "latestDirectionalRunTransitionCount": 1,
+    "persistenceObserved": false,
+    "digest": "825e1ac113c179faafa759e849068199397dbc11e83cb3e9951f33a533dbe4d0"
+  },
+  "v141": {
+    "state": "aligned-normalized-research",
+    "digest": "a88a653fee7cba69944faba0e3a6e421ba086c4c69334cbe4ce0e30bffabae60",
+    "audienceConsumption": {
+      "selectedComponentEndAt": "2026-09-20T10:59:13+09:00",
+      "nativeValue": 17.21,
+      "previousNativeValue": 15.5,
+      "nativeDelta": 1.71,
+      "direction": "up",
+      "historicalStrictExceedanceShare": 100
+    },
+    "mediaAttention": {
+      "selectedComponentEndAt": "2026-09-19T22:00:00.000Z",
+      "nativeValue": 0,
+      "previousNativeValue": 0,
+      "nativeDelta": 0,
+      "direction": "flat",
+      "historicalStrictExceedanceShare": 0
+    }
+  },
+  "v143": {
+    "state": "categorical-research-output-only",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a"
+  },
+  "v148": {
+    "state": "no-op",
+    "changeKind": "exact-replay",
+    "priorRecordCount": 2,
+    "resultingRecordCount": 2,
+    "priorLatestRecordDigest": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "resultingLatestRecordDigest": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "artifactUnchanged": true,
+    "effects": {
+      "productMetricReads": 0,
+      "productMetricWrites": 0,
+      "previewFallbackReads": 0,
+      "databaseWrites": 0,
+      "artifactAppends": 0
+    }
+  },
+  "validation": {
+    "githubActionsRunId": 35495882606,
+    "status": "PASS"
+  }
+}
