@@ -1447,6 +1447,44 @@
           "note": "YG official LEE SUHYUN individual artist profile with solo debut."
         }
       ]
+    },
+    {
+      "displayArtist": "iKON",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "provider_discovered_current_agency_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs YG label catalog",
+          "url": "https://music.bugs.co.kr/label/3897",
+          "note": "Provider catalog surfaced iKON as a historical YG catalog artist; provider evidence is discovery provenance only."
+        },
+        {
+          "source": "143 Entertainment",
+          "url": "https://www.143inc.kr/ikon",
+          "note": "Current official 143 Entertainment artist page identifies iKON as a managed group."
+        }
+      ]
+    },
+    {
+      "displayArtist": "방예담",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "provider_discovered_current_agency_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Bugs YG label catalog",
+          "url": "https://music.bugs.co.kr/label/3897",
+          "note": "Provider catalog surfaced Bang Yedam from historical YG releases; provider evidence is discovery provenance only."
+        },
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/bangyedam/notice/35283",
+          "note": "2026 official notice from GF Entertainment identifies BANG YEDAM as its artist."
+        }
+      ]
     }
   ]
 }
