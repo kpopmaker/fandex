@@ -36,11 +36,12 @@ Research branch:
 
 `research/comeback-activity-point-source-contract-v1`
 
-At handoff preparation time:
+Current re-check after handoff preparation:
 
-- latest checked main SHA = `d7ad96f9a207e35141104882972a97829400862c`
-- research branch is ahead of main
-- research branch is not behind main
+- latest checked main SHA = `c625d73241e799589f174e8dcfb3b8636e6f7899`
+- research branch is diverged from main because main advanced by 2 daily state-data commits
+- changed main paths are generated/state data only; no direct overlap with Activity Exposure research source/test paths was found
+- integration must nevertheless reconstruct from latest main, not merge the old research base blindly
 
 FANDEX 운영 표준 MUST re-check latest `main` before any integration work.
 
@@ -180,6 +181,10 @@ Raw observation / replay contract:
 
 `lib/research/activityExposureObservation.ts`
 
+Product-readable truth-preserving view:
+
+`lib/research/activityExposureProductView.ts`
+
 MusicBrainz research collector:
 
 `lib/server/research/musicBrainzActivityCollector.ts`
@@ -195,6 +200,7 @@ Tests:
 - `tests/musicbrainz-activity-collector-v1.test.mts`
 - `tests/youtube-activity-collector-v1.test.mts`
 - `tests/iu-activity-exposure-end-to-end-v1.test.mts`
+- `tests/activity-exposure-product-view-v1.test.mts`
 
 Research validation workflow candidate:
 
@@ -286,6 +292,10 @@ Required integration validation:
 
 Deterministic replay requires retained provider evidence.
 
+Research observation contract now distinguishes actual retained payload from digest-only evidence.
+
+Deterministic replay is allowed only when canonical raw payload is actually retained and digest-verifiable.
+
 Research observation contract retains:
 
 - observationId
@@ -299,6 +309,7 @@ Research observation contract retains:
 - sourcePublishedAt
 - providerObservedAt
 - rawPayloadDigest
+- rawPayloadCanonical when retention state is retained
 - rawPayloadRetentionState
 - evidenceRef
 - revision lineage
@@ -441,6 +452,8 @@ The candidate may advance beyond the live coverage gate only if all are true:
 - no numeric Activity methodology introduced
 - raw-evidence retention authorization resolved for intended persistence scope
 - Product-facing state can represent partial/missing/unavailable truthfully
+- digest-only evidence is never presented as replay-capable Stored Evidence
+- complete coverage with zero events is represented as an available empty timeline, not a zero score
 
 ## 16. Rejection conditions
 
