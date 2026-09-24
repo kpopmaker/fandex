@@ -25,7 +25,7 @@ jobs:
       - name: Shadow first-seen series
         run: npx tsx --test tests/naver-news-shadow-first-seen-series-v1.test.mts
       - name: Frozen methodology regression
-        run: npx tsx --test tests/naver-news-issue-point-frozen-methodology-v1.test.mts
+        run: npx tsx --test tests/naver-news-issue-point-frozen-methodology.test.mts
       - name: Real read boundary
         run: npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
       - name: Public route cutover regression
