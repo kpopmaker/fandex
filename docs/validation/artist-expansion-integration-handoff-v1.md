@@ -1,3 +1,77 @@
+# 2026-09-25 Stage 7 Closure Refresh — Current Source-Set Snapshot
+
+This section supersedes older count/status snapshots below while preserving them as historical evidence.
+
+## Exact validated state
+
+- validation branch: `validation/artist-expansion-generic-naver-pipeline-v1`
+- validated Artist Expansion head: `627fce03b0e95114e00289ccc3c56029821c8613`
+- current `main`: `1df5bc16056b8a618a99369a763e89e1f5c9e997`
+- merge base: `75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b`
+- compare: `diverged`
+- validation branch ahead: 227 commits
+- validation branch behind: 25 commits
+
+## Artist Universe
+
+- historical baseline: 100
+- expansion seed: 86
+- active validation Universe: **186**
+- review-decision registry entries: 125
+- automatic promotion: **disabled**
+- identity resolution, K-pop scope eligibility, onboarding, and Production activation remain separate states
+
+Newly closed Stage 7 onboarding cases:
+
+- SECHSKIES → canonical `sechskies`, `lifecycleStatus=inactive`, `tier=archive`
+- Lee Sung-kyung music identity → canonical `leesungkyung`, `entityType=solo`
+- HORI7ON → canonical `hori7on`, current management intentionally not guessed; `agency=""` with `agencyStatus=unresolved`
+
+The unresolved-agency state is fail-closed: a blank agency is rejected unless `agencyStatus=unresolved` is explicit, and a non-empty agency conflicts with that unresolved status.
+
+## Stage 7 multisource result
+
+Current source instances:
+
+1. Starship official roster — `agency_roster`
+2. YG official roster — `agency_roster`
+3. Bugs YG label catalog — `provider_catalog`
+4. 2026 Weverse Con official lineup — `festival_or_event_roster`
+5. Seoul Music Awards K-POP World Choice Group roster — `broadcast_or_award_roster`
+
+Latest successful end-to-end validation:
+
+- workflow: `Artist Universe Unbounded Expansion v1`
+- run: `36121402050` (#171)
+- head: `627fce03b0e95114e00289ccc3c56029821c8613`
+- conclusion: `success`
+- artifact id: `10858661013`
+- artifact digest: `sha256:9db6e3c70476fe2735a39e420e745dff1f4448b7c9a9a378e58cab5428e6b92d`
+
+Artifact state:
+
+- `sourceCount=5`
+- `candidateCount=0`
+- `candidateResolvedCount=0`
+- `candidateUnresolvedCount=0`
+- `scopeReviewCount=0`
+- `onboardingBlockerCount=0`
+- `knownSuppressionCount=74`
+- `knownCanonicalCount=66`
+- `autoPromote=false`
+
+HORI7ON is observed from the Seoul Music Awards source and is suppressed as known canonical `hori7on`.
+
+This closes the **current five-source Stage 7 blocker set**. It does **not** prove complete K-pop artist coverage; additional providers/agencies/events/awards can still expand discovery.
+
+## Production integration rule
+
+**Do not wholesale-merge this long-lived validation branch.**
+
+Production authority remains `FANDEX 운영 표준`. Integration must start from current `main` and selectively reconstruct approved changes, including the expanded identity seed and `agencyStatus` model only where required. Merge, activation, publication, and cutover remain outside this validation chat.
+
+---
+
 # 2026-09-24 Stage 5/6 Refresh — Superseding Snapshot
 
 This section supersedes older count/status snapshots below while preserving them as historical evidence.

@@ -1,15 +1,16 @@
 {
   "version": "artist_expansion_integration_manifest_v1",
   "branch": "validation/artist-expansion-generic-naver-pipeline-v1",
-  "packageHead": "c591873dba0e25d29a1ecc1cf50629395ef38997",
-  "currentMain": "c625d73241e799589f174e8dcfb3b8636e6f7899",
+  "packageHead": "627fce03b0e95114e00289ccc3c56029821c8613",
+  "currentMain": "1df5bc16056b8a618a99369a763e89e1f5c9e997",
   "mergeBase": "75b9e7c3d1f71e408d9bac0a45dd2857a9dac12b",
   "branchStatus": {
     "status": "diverged",
-    "aheadBy": 125,
-    "behindBy": 11
+    "aheadBy": 227,
+    "behindBy": 25
   },
   "productionRelevantFiles": [
+    "app/data/v4/types.ts",
     "app/data/v4/artistUniverse.ts",
     "data/artist-universe-expansion-v1.json",
     "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
@@ -44,7 +45,19 @@
     "tests/artist-expansion-lastfm-score-generic-cohort-v1.py",
     "tests/artist-expansion-music-generic-cohort-v1.py",
     "tests/artist-expansion-naver-identity-coverage-v1.test.mts",
-    "tests/artist-universe-unbounded-expansion-v1.test.mts"
+    "tests/artist-universe-unbounded-expansion-v1.test.mts",
+    "data/artist-expansion-sources/seoul-music-awards-world-choice-group-2026.json",
+    "scripts/artist-expansion/artist_onboarding_blocker_queue_v1.py",
+    "scripts/artist-expansion/artist_scope_review_queue_v1.py",
+    "scripts/artist-expansion/artist_universe_multisource_discovery_v1.py",
+    "scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py",
+    "scripts/artist-expansion/collect_seoul_music_awards_group_roster_v1.py",
+    "scripts/artist-expansion/collect_starship_agency_roster_v1.py",
+    "scripts/artist-expansion/collect_weverse_con_2026_roster_v1.py",
+    "scripts/artist-expansion/collect_yg_agency_roster_v1.py",
+    "tests/artist-onboarding-blocker-queue-v1.py",
+    "tests/artist-scope-review-queue-v1.py",
+    "tests/artist-universe-multisource-discovery-v1.py"
   ],
   "infrastructureOnlyFiles": [
     "vercel.json"
@@ -109,25 +122,67 @@
       "id": 35944189444,
       "scope": "Tenth real expansion batch / 152 active",
       "conclusion": "success"
+    },
+    {
+      "id": 36118714699,
+      "scope": "Stage 7 scope/onboarding state split and artifact",
+      "conclusion": "success"
+    },
+    {
+      "id": 36118982890,
+      "scope": "SECHSKIES inactive/archive canonical onboarding",
+      "conclusion": "success"
+    },
+    {
+      "id": 36121170046,
+      "scope": "Lee Sung-kyung cross-domain music identity onboarding",
+      "conclusion": "success"
+    },
+    {
+      "id": 36121402050,
+      "scope": "Stage 7 five-source closure / HORI7ON unresolved-agency onboarding",
+      "conclusion": "success"
     }
   ],
-  "integrationInstruction": "Start from current main and selectively rebuild approved Artist Expansion changes. Do not blindly merge the long-lived validation branch. Expansion identities require Product/Production scope approval before inclusion.",
+  "integrationInstruction": "Start from current main and selectively rebuild approved Artist Expansion changes. Do not blindly merge the long-lived validation branch. Preserve identity/scope/onboarding/Production separation, autoPromote=false, and explicit unresolved-agency semantics where management cannot be verified.",
   "authority": "FANDEX 운영 표준",
-  "validatedExpansionHead": "ee23f7790015acb3bc8dc8e4b1cd4813af1df785",
+  "validatedExpansionHead": "627fce03b0e95114e00289ccc3c56029821c8613",
   "artistUniverseSnapshot": {
     "baselineCount": 100,
-    "expansionSeedCount": 52,
-    "activeValidationCount": 152,
-    "reviewDecisionCount": 88,
+    "expansionSeedCount": 86,
+    "activeValidationCount": 186,
+    "reviewDecisionCount": 125,
     "liveReviewUnresolvedCount": 0,
+    "scopeReviewCount": 0,
+    "onboardingBlockerCount": 0,
     "automaticPromotion": false,
-    "snapshotRunId": 35944189444
+    "snapshotRunId": 36121402050,
+    "artifactId": 10858661013,
+    "artifactDigest": "sha256:9db6e3c70476fe2735a39e420e745dff1f4448b7c9a9a378e58cab5428e6b92d"
   },
   "stage56Status": {
     "automatedCatalogIntake": "VALIDATED",
     "evidenceBackedIdentityReview": "VALIDATED",
-    "repeatedRealExpansionBatches": 10,
+    "repeatedRealExpansionBatches": "10_PLUS_STAGE7_ONBOARDING",
     "liveReviewQueue": "UNRESOLVED_ZERO_AT_SNAPSHOT",
+    "fullKpopCoverage": "NOT_COMPLETE"
+  },
+  "stage7Status": {
+    "sourceCount": 5,
+    "sourceTypes": [
+      "agency_roster",
+      "provider_catalog",
+      "festival_or_event_roster",
+      "broadcast_or_award_roster"
+    ],
+    "candidateCount": 0,
+    "candidateUnresolvedCount": 0,
+    "scopeReviewCount": 0,
+    "onboardingBlockerCount": 0,
+    "knownSuppressionCount": 74,
+    "knownCanonicalCount": 66,
+    "automaticPromotion": false,
+    "currentSourceSetBlockers": "CLOSED",
     "fullKpopCoverage": "NOT_COMPLETE"
   }
 }
