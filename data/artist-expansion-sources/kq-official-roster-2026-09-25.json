@@ -1,0 +1,84 @@
+{
+  "version": "kq_agency_roster_adapter_v1",
+  "source": {
+    "id": "kq-entertainment-official-artist-roster",
+    "type": "agency_roster",
+    "name": "KQ Entertainment Official Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://kqent.com/kq-artist"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "ATEEZ",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "KQ Entertainment official KQ Ent. artist roster",
+          "url": "https://ateez.kqent.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "xikers",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "KQ Entertainment official KQ Ent. artist roster",
+          "url": "https://kqent.com/artist/1551"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BABYLON",
+      "aliases": [
+        "베이빌론"
+      ],
+      "evidence": [
+        {
+          "label": "KQ Entertainment official KQ PD artist profile",
+          "url": "https://kqent.com/producer/520"
+        }
+      ]
+    },
+    {
+      "displayArtist": "EDEN",
+      "aliases": [
+        "이든"
+      ],
+      "evidence": [
+        {
+          "label": "KQ Entertainment official KQ PD artist profile",
+          "url": "https://kqent.com/producer/519"
+        }
+      ]
+    },
+    {
+      "displayArtist": "MADDOX",
+      "aliases": [
+        "마독스"
+      ],
+      "evidence": [
+        {
+          "label": "KQ Entertainment official KQ PD artist profile",
+          "url": "https://kqent.com/producer/1660"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "kqEntAndKqPdSectionsCombined": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://kqent.com/kq-artist",
+      "https://kqent.com/kq-artist/kq-artist-pd"
+    ],
+    "verifiedAt": "2026-09-25"
+  }
+}

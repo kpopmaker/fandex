@@ -2550,6 +2550,120 @@
           "url": "https://pnation.com/releases/128"
         }
       ]
+    },
+    {
+      "id": "babylon",
+      "ticker": "BABYLON",
+      "name": "BABYLON",
+      "agency": "KQ Entertainment",
+      "entityType": "solo",
+      "debutDate": "2015-01-01",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "베이빌론 BABYLON 가수",
+      "koreanAliases": [
+        "베이빌론"
+      ],
+      "englishAliases": [
+        "BABYLON",
+        "Babylon"
+      ],
+      "keywords": [
+        "KQ Entertainment",
+        "KQ PD",
+        "R&B",
+        "베이빌론"
+      ],
+      "disambiguationKeywords": [
+        "KQ Entertainment",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/520"
+        }
+      ]
+    },
+    {
+      "id": "eden",
+      "ticker": "EDEN",
+      "name": "EDEN",
+      "agency": "KQ Entertainment",
+      "entityType": "solo",
+      "debutDate": "2017-02-17",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이든 EDEN 가수 KQ",
+      "koreanAliases": [
+        "이든"
+      ],
+      "englishAliases": [
+        "EDEN",
+        "Eden"
+      ],
+      "keywords": [
+        "KQ Entertainment",
+        "KQ PD",
+        "싱어송라이터",
+        "이든"
+      ],
+      "disambiguationKeywords": [
+        "KQ Entertainment",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/519"
+        }
+      ]
+    },
+    {
+      "id": "maddox",
+      "ticker": "MADDOX",
+      "name": "MADDOX",
+      "agency": "KQ Entertainment",
+      "entityType": "solo",
+      "debutDate": "2019-04-03",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "마독스 MADDOX 가수",
+      "koreanAliases": [
+        "마독스"
+      ],
+      "englishAliases": [
+        "MADDOX",
+        "Maddox"
+      ],
+      "keywords": [
+        "KQ Entertainment",
+        "KQ PD",
+        "싱어송라이터",
+        "마독스"
+      ],
+      "disambiguationKeywords": [
+        "KQ Entertainment",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/1660"
+        }
+      ]
     }
   ]
 }

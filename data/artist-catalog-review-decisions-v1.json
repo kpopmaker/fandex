@@ -2262,6 +2262,57 @@
           "note": "Official 2026 mini-album page confirms continuing group activity."
         }
       ]
+    },
+    {
+      "displayArtist": "BABYLON",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_kq_pd_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_kq_artist_profile_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/520",
+          "note": "Official KQ PD artist profile identifies BABYLON as an R&B artist and documents his 2015 debut."
+        }
+      ]
+    },
+    {
+      "displayArtist": "EDEN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_kq_pd_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_kq_artist_profile_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/519",
+          "note": "Official KQ PD artist profile identifies EDEN as a singer-songwriter and documents his 2017 single debut."
+        }
+      ]
+    },
+    {
+      "displayArtist": "MADDOX",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_kq_pd_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_kq_artist_profile_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "KQ Entertainment",
+          "url": "https://kqent.com/producer/1660",
+          "note": "Official KQ PD artist profile identifies MADDOX as a singer-songwriter and documents his 2019 debut single."
+        }
+      ]
     }
   ]
 }
