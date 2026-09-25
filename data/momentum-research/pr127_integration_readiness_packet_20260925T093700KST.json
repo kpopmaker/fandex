@@ -110,13 +110,13 @@
     "pullRequestMerges": 0
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "packetInvariantPassed": false,
-    "staleBaseAuditReplayPassed": false,
-    "v181RegressionPassed": false,
-    "typecheckPassed": false,
-    "fullPrDiffCheckPassed": false,
+    "githubActionsRunId": 36078492249,
+    "status": "PASS",
+    "packetInvariantPassed": true,
+    "staleBaseAuditReplayPassed": true,
+    "v181RegressionPassed": true,
+    "typecheckPassed": true,
+    "fullPrDiffCheckPassed": true,
     "temporaryWorkflowRemoved": false
   }
 }
