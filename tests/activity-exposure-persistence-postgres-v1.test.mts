@@ -14,6 +14,7 @@ import {
 } from '../lib/server/ingestion/activityExposurePersistenceBridge';
 import {
   readActivityExposureShadowProduct,
+  readActivityExposureStoredEvidence,
   type ActivityExposurePersistencePool,
 } from '../lib/server/ingestion/activityExposureRepository';
 import type {
@@ -202,6 +203,28 @@ run('PostgreSQL bridge persists semantic revisions and reads two-provider shadow
     assert.equal(model.model.publication, 'shadow');
     assert.equal(model.model.dataOrigin, 'observed');
     assert.equal(model.model.events.length, 1);
+    const storedTrace = model.model.events[0]?.storedEvidenceTrace;
+    assert.ok(storedTrace);
+    assert.match(storedTrace.eventRecordId, /^[0-9a-f]{64}$/);
+    assert.match(storedTrace.sourceObservationId, /^[0-9a-f]{64}$/);
+
+    const storedEvidence = await readActivityExposureStoredEvidence(
+      {
+        artistId: 'iu',
+        eventRecordId: storedTrace.eventRecordId,
+      },
+      pool as unknown as ActivityExposurePersistencePool,
+    );
+    assert.equal(storedEvidence.status, 'ok');
+    if (storedEvidence.status === 'ok') {
+      assert.equal(
+        storedEvidence.model.sourceObservationId,
+        storedTrace.sourceObservationId,
+      );
+      assert.equal(storedEvidence.model.providerObservedAt, null);
+      assert.equal('rawPayload' in storedEvidence.model, false);
+    }
+
     assert.equal(model.model.providerCoverage.length, 2);
     assert.equal(
       model.model.providerCoverage.find(({ provider }) => provider === 'musicbrainz')
