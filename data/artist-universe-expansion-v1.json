@@ -2058,6 +2058,88 @@
           "url": "https://billboardphilippines.com/market/industry-news/hori7on-departs-mld-entertainment-abs-cbn/"
         }
       ]
+    },
+    {
+      "id": "jypark",
+      "ticker": "JYPARK",
+      "name": "J.Y. Park",
+      "agency": "JYP Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "박진영 J.Y. Park 가수",
+      "koreanAliases": [
+        "박진영"
+      ],
+      "englishAliases": [
+        "J.Y. Park",
+        "Park Jin-young",
+        "JYP"
+      ],
+      "keywords": [
+        "JYP Entertainment",
+        "가수",
+        "J.Y. Park",
+        "박진영"
+      ],
+      "disambiguationKeywords": [
+        "가수",
+        "JYP Entertainment"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist"
+        },
+        {
+          "source": "J.Y. Park Official",
+          "url": "https://jyp.jype.com/"
+        }
+      ]
+    },
+    {
+      "id": "2pm",
+      "ticker": "2PM",
+      "name": "2PM",
+      "agency": "JYP Entertainment",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "2PM 투피엠",
+      "koreanAliases": [
+        "투피엠"
+      ],
+      "englishAliases": [
+        "2PM"
+      ],
+      "keywords": [
+        "JYP Entertainment",
+        "2PM",
+        "투피엠"
+      ],
+      "disambiguationKeywords": [
+        "JYP Entertainment",
+        "투피엠"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist"
+        },
+        {
+          "source": "2PM Official",
+          "url": "https://2pm.jype.com/"
+        }
+      ]
     }
   ]
 }

@@ -1947,6 +1947,146 @@
       "scopeDecision": "eligible",
       "scopeBasis": "official_kpop_award_roster",
       "onboardingBlocker": null
+    },
+    {
+      "displayArtist": "J.Y. Park",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_jyp_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://jyp.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        }
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_debuted_kpop_solo",
+      "onboardingBlocker": null
+    },
+    {
+      "displayArtist": "2PM",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_jyp_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://2pm.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        }
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_debuted_kpop_group",
+      "onboardingBlocker": null
+    },
+    {
+      "displayArtist": "BOY STORY",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "jyp_china_group_kpop_scope_boundary_not_frozen",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://boystory.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        },
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/JYP",
+          "note": "JYP company introduction classifies BOY STORY under its China artist roster; FANDEX K-pop scope must remain explicit rather than inferred from agency ownership."
+        }
+      ]
+    },
+    {
+      "displayArtist": "YAOCHEN",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "jyp_china_solo_kpop_scope_boundary_not_frozen",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://yaochen.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        },
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/JYP",
+          "note": "JYP company introduction classifies YAOCHEN under its China artist roster; FANDEX K-pop scope remains separate."
+        }
+      ]
+    },
+    {
+      "displayArtist": "GIRLSET",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "jyp_america_group_kpop_scope_boundary_not_frozen",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://girlset.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        },
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/JYP",
+          "note": "JYP company introduction classifies GIRLSET under its U.S. artist roster; FANDEX K-pop scope remains separate."
+        }
+      ]
+    },
+    {
+      "displayArtist": "CIIU",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "jyp_china_group_kpop_scope_boundary_not_frozen",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist",
+          "note": "Current official JYP artist roster lists this identity."
+        },
+        {
+          "source": "JYP Entertainment artist site",
+          "url": "https://ciiu.jype.com/",
+          "note": "Official artist site confirms the JYP-managed music identity."
+        },
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/JYP",
+          "note": "JYP company introduction classifies CIIU under its China artist roster; FANDEX K-pop scope remains separate."
+        }
+      ]
     }
   ]
 }
