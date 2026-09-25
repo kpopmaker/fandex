@@ -51,10 +51,16 @@
       "work/*": false,
       "v131-lastfm-real-signal-read-model": false
     },
-    "actualMergeSimulationPending": true,
+    "actualMergeSimulationPending": false,
     "mainIntegrationPerformed": false,
     "rebasePerformed": false,
-    "forcePushPerformed": false
+    "forcePushPerformed": false,
+    "actualMergeSimulationRunId": 36085622799,
+    "actualMergeConflictCount": 1,
+    "actualMergeConflictPaths": [
+      "vercel.json"
+    ],
+    "resolutionClearedAllUnmergedPaths": true
   },
   "externalCapability": {
     "vercelProjectMetadataCallable": true,
@@ -67,9 +73,9 @@
     "v181Digest": "88550ff00b6fb8e1c44432fadea26dfd61a63edb834893f3ddeaa0bd8d8b0abd"
   },
   "handoffDecision": {
-    "state": "revalidation-pending",
+    "state": "integration-resolution-ready-not-authorized",
     "priorPacketExpiredBecauseMainMoved": true,
-    "readyForProductionMasterControlReview": false,
+    "readyForProductionMasterControlReview": true,
     "actualMainIntegrationAuthorized": false,
     "pullRequestMergeAuthorized": false
   },
@@ -96,14 +102,14 @@
     "pullRequestMerges": 0
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "mergeSimulationPassed": false,
-    "soleConflictConfirmed": false,
-    "resolutionClearsAllUnmergedPaths": false,
-    "v181RegressionPassed": false,
-    "typecheckPassed": false,
-    "fullPrDiffCheckPassed": false,
+    "githubActionsRunId": 36085622799,
+    "status": "PASS",
+    "mergeSimulationPassed": true,
+    "soleConflictConfirmed": true,
+    "resolutionClearsAllUnmergedPaths": true,
+    "v181RegressionPassed": true,
+    "typecheckPassed": true,
+    "fullPrDiffCheckPassed": true,
     "temporaryWorkflowRemoved": false
   }
 }
