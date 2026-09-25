@@ -1,0 +1,79 @@
+name: PR127 momentum stale-base merge simulation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - .github/workflows/pr127-momentum-stale-base-merge-simulation.yml
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: simulate main merge and assert sole conflict
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp vercel.json /tmp/pr127-vercel.json
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+
+          set +e
+          git merge --no-commit --no-ff origin/main
+          merge_rc=$?
+          set -e
+
+          if [ "$merge_rc" -eq 0 ]; then
+            echo "expected current PR to require conflict resolution"
+            exit 1
+          fi
+
+          git diff --name-only --diff-filter=U | sort -u > /tmp/unmerged
+          echo "unmerged paths:"
+          cat /tmp/unmerged
+          test "$(wc -l < /tmp/unmerged | tr -d ' ')" = "1"
+          test "$(cat /tmp/unmerged)" = "vercel.json"
+
+          cp /tmp/pr127-vercel.json vercel.json
+          git add vercel.json
+
+          test -z "$(git diff --name-only --diff-filter=U)"
+          git diff --cached --check
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const merged = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+          const enabled = merged.git?.deploymentEnabled ?? {};
+          const required = [
+            'validation/*',
+            'research/*',
+            'verify/*',
+            'diagnostic/*',
+            'work/*',
+            'v131-lastfm-real-signal-read-model',
+          ];
+          for (const key of required) {
+            if (enabled[key] !== false) {
+              throw new Error(`missing deployment suppression: ${key}`);
+            }
+          }
+          NODE
+
+          git status --short
+          git merge --abort
+          test -z "$(git status --porcelain)"
+      - name: v181 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+      - name: typecheck
+        run: npm run typecheck
+      - name: full PR diff check
+        run: git diff --check origin/main...HEAD
