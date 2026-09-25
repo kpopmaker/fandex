@@ -5,6 +5,7 @@ import {
   buildActivityExposurePersistenceRunId,
   persistActivityExposureCollection,
   readActivityExposureShadowProduct,
+  readActivityExposureStoredEvidence,
   type ActivityExposurePersistenceInput,
   type ActivityExposurePersistencePool,
 } from '../lib/server/ingestion/activityExposureRepository';
@@ -278,6 +279,8 @@ test('shadow reader requires both provider coverage and returns non-numeric even
       return {
         rowCount: 1,
         rows: [{
+          event_record_id: 'e'.repeat(64),
+          source_observation_id: 'a'.repeat(64),
           event_id: musicEvent().eventId,
           revision_id: musicEvent().revisionId,
           supersedes_revision_id: null,
@@ -315,6 +318,13 @@ test('shadow reader requires both provider coverage and returns non-numeric even
   assert.equal(result.model.publication, 'shadow');
   assert.equal(result.model.dataOrigin, 'observed');
   assert.equal(result.model.events.length, 1);
+  assert.deepEqual(
+    result.model.events[0]?.storedEvidenceTrace,
+    {
+      eventRecordId: 'e'.repeat(64),
+      sourceObservationId: 'a'.repeat(64),
+    },
+  );
   assert.equal('fact' in result.model, false);
   assert.equal('score' in result.model, false);
 });
@@ -330,4 +340,102 @@ test('repository source contains no legacy numeric Activity output or arbitrary 
     source,
     /\b(?:comebackActivityPoint|activityScore|weight|decay|activeWindowDays)\b/,
   );
+});
+
+
+test('stored evidence reader returns lineage metadata without raw payload bytes', async () => {
+  const pool = {
+    async query<T = Record<string, unknown>>() {
+      return {
+        rowCount: 1,
+        rows: [{
+          event_record_id: 'e'.repeat(64),
+          event_id: musicEvent().eventId,
+          event_revision_id: musicEvent().revisionId,
+          source_observation_id: 'a'.repeat(64),
+          source_provider: 'musicbrainz',
+          source_entity_type: 'release-group',
+          source_entity_id: musicEvent().sourceEntityId,
+          evidence_ref: musicEvent().evidenceRef,
+          observation_revision_id: 'provider-revision:musicbrainz:fixture-v1',
+          normalization_outcome: 'event_emitted',
+          response_captured_at: collectedAt,
+          observation_collected_at: collectedAt,
+          source_published_at: null,
+          provider_observed_at: '2024-01-01',
+          raw_payload_sha256: 'b'.repeat(64),
+          retention_state: 'not_retained',
+          retention_policy_version: 'musicbrainz-core-field-review-v1',
+          retained_at: null,
+          refresh_due_at: null,
+          refreshed_at: null,
+          evicted_at: null,
+        }] as T[],
+      };
+    },
+  };
+
+  const result = await readActivityExposureStoredEvidence(
+    {
+      artistId: 'iu',
+      eventRecordId: 'e'.repeat(64),
+    },
+    pool,
+  );
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+  assert.equal(result.model.eventRecordId, 'e'.repeat(64));
+  assert.equal(result.model.sourceObservationId, 'a'.repeat(64));
+  assert.equal(result.model.providerObservedAt, '2024-01-01');
+  assert.equal(result.model.rawPayloadSha256, 'b'.repeat(64));
+  assert.equal(result.model.retentionState, 'not_retained');
+  assert.equal('rawPayload' in result.model, false);
+  assert.equal('raw_payload' in result.model, false);
+});
+
+test('stored evidence reader fails closed for invalid lineage ids', async () => {
+  const pool = {
+    async query<T = Record<string, unknown>>() {
+      return {
+        rowCount: 1,
+        rows: [{
+          event_record_id: 'e'.repeat(64),
+          event_id: musicEvent().eventId,
+          event_revision_id: musicEvent().revisionId,
+          source_observation_id: 'not-a-digest',
+          source_provider: 'musicbrainz',
+          source_entity_type: 'release-group',
+          source_entity_id: musicEvent().sourceEntityId,
+          evidence_ref: musicEvent().evidenceRef,
+          observation_revision_id: 'provider-revision:musicbrainz:fixture-v1',
+          normalization_outcome: 'event_emitted',
+          response_captured_at: collectedAt,
+          observation_collected_at: collectedAt,
+          source_published_at: null,
+          provider_observed_at: '2024-01-01',
+          raw_payload_sha256: 'b'.repeat(64),
+          retention_state: 'not_retained',
+          retention_policy_version: 'musicbrainz-core-field-review-v1',
+          retained_at: null,
+          refresh_due_at: null,
+          refreshed_at: null,
+          evicted_at: null,
+        }] as T[],
+      };
+    },
+  };
+
+  const result = await readActivityExposureStoredEvidence(
+    {
+      artistId: 'iu',
+      eventRecordId: 'e'.repeat(64),
+    },
+    pool,
+  );
+
+  assert.deepEqual(result, {
+    status: 'data-issue',
+    reason: 'invalid-lineage',
+  });
 });
