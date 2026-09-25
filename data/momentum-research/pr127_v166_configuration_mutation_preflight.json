@@ -112,7 +112,9 @@
     "configurationMutationAuthorized": false,
     "trustedSecretHandleAttestationAvailable": false,
     "mutationEnvelopeReady": false,
-    "providerMutationAllowedNow": false
+    "providerMutationAllowedNow": false,
+    "preflightValidated": true,
+    "nearestPrivilegedTransition": "AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION"
   },
   "effects": {
     "providerReads": 0,
@@ -137,5 +139,21 @@
     "productMomentumScore": null,
     "productionEligible": false,
     "productProductionActual": "1/7"
+  },
+  "validation": {
+    "runId": 36142239463,
+    "status": "PASS",
+    "validatedAgainstMainSha": "1df5bc16056b8a618a99369a763e89e1f5c9e997",
+    "preflightBindingPassed": true,
+    "v165RegressionPassed": true,
+    "v166RegressionPassed": true,
+    "v167RegressionPassed": true,
+    "v168RegressionPassed": true,
+    "v169RegressionPassed": true,
+    "typecheckPassed": true,
+    "providerMutationPerformed": false,
+    "vercelCalls": 0,
+    "environmentMutations": 0,
+    "secretWrites": 0
   }
 }
