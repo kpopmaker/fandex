@@ -24,6 +24,31 @@ const musicBrainzArtistId = 'b9545342-1e6d-4dae-84ac-013374ad8d7c';
 const youtubeChannelId = 'UC3SyT4_WLHzN7JmHQwKQZww';
 
 async function main() {
+  const rawDatabaseUrl = process.env.FANDEX_RUNTIME_DATABASE_URL?.trim();
+  if (!rawDatabaseUrl) {
+    throw new Error('activity_exposure_runtime_database_url_missing');
+  }
+  let diagnosticUrl: URL | null = null;
+  try {
+    diagnosticUrl = new URL(rawDatabaseUrl);
+  } catch {
+    console.log('ACTIVITY_EXPOSURE_RUNTIME_URL_SHAPE=' + JSON.stringify({
+      parseable: false,
+    }));
+    throw new Error('runtime_database_url_invalid');
+  }
+  console.log('ACTIVITY_EXPOSURE_RUNTIME_URL_SHAPE=' + JSON.stringify({
+    parseable: true,
+    protocolValid:
+      diagnosticUrl.protocol === 'postgres:' || diagnosticUrl.protocol === 'postgresql:',
+    usernameExact:
+      decodeURIComponent(diagnosticUrl.username) === 'fandex_runtime',
+    passwordPresent: diagnosticUrl.password.length > 0,
+    databaseExact:
+      decodeURIComponent(diagnosticUrl.pathname.slice(1)) === 'neondb',
+    pooledHost: diagnosticUrl.hostname.toLowerCase().includes('pooler'),
+    hashAbsent: diagnosticUrl.hash.length === 0,
+  }));
   const databaseUrl = requireRuntimeDatabaseUrl(process.env);
   const youtubeApiKey = process.env.YOUTUBE_API_KEY?.trim();
   if (!youtubeApiKey) {
