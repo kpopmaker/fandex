@@ -1,0 +1,31 @@
+name: TMP PR127 v180 v181 Post Read
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - .github/workflows/tmp-pr127-v180-v181-post-read.yml
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Evaluate frozen v180 and v181 contracts
+        run: npx tsx scripts/momentum-research/tmp-evaluate-v180-v181-after-external-read.mts
+      - name: Regression
+        run: |
+          npx tsx --test tests/fandex-momentum-verifier-external-execution-channel-resolution-v180.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+      - name: Typecheck
+        run: npm run typecheck
