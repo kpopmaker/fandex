@@ -71,6 +71,8 @@ type CollectionRunRow = {
 };
 
 type EventRow = {
+  event_record_id: string;
+  source_observation_id: string;
   event_id: string;
   revision_id: string;
   supersedes_revision_id: string | null;
@@ -577,6 +579,8 @@ export async function readActivityExposureShadowProduct(
       ),
       pool.query<EventRow>(
         `SELECT DISTINCT ON (events.event_id)
+            events.event_record_id,
+            events.source_observation_id,
             events.event_id,
             events.revision_id,
             superseded.revision_id AS supersedes_revision_id,
@@ -661,6 +665,10 @@ export async function readActivityExposureShadowProduct(
           timeZoneState: row.time_zone_state,
           revisionId: row.revision_id,
           supersedesRevisionId: row.supersedes_revision_id,
+          storedEvidenceTrace: Object.freeze({
+            eventRecordId: row.event_record_id,
+            sourceObservationId: row.source_observation_id,
+          }),
         }) satisfies ProductActivityExposureEvent;
       }),
     );
@@ -680,5 +688,175 @@ export async function readActivityExposureShadowProduct(
       throw error;
     }
     throw new Error('activity_exposure_repository_operation_failed');
+  }
+}
+
+
+export type ActivityExposureStoredEvidenceModel = Readonly<{
+  artistId: string;
+  eventRecordId: string;
+  eventId: string;
+  eventRevisionId: string;
+  sourceObservationId: string;
+  sourceProvider: ProductActivityExposureProvider;
+  sourceEntityType: ProductActivityExposureEvent['sourceEntityType'];
+  sourceEntityId: string;
+  evidenceRef: string;
+  observationRevisionId: string;
+  normalizationOutcome: ActivityExposureNormalizationOutcome;
+  responseCapturedAt: string;
+  collectedAt: string;
+  sourcePublishedAt: string | null;
+  providerObservedAt: string | null;
+  rawPayloadSha256: string;
+  retentionState: 'retained' | 'evicted' | 'not_retained';
+  retentionPolicyVersion: string;
+  retainedAt: string | null;
+  refreshDueAt: string | null;
+  refreshedAt: string | null;
+  evictedAt: string | null;
+}>;
+
+export type ActivityExposureStoredEvidenceReadResult =
+  | Readonly<{
+      status: 'ok';
+      model: ActivityExposureStoredEvidenceModel;
+    }>
+  | Readonly<{
+      status: 'not-found';
+    }>
+  | Readonly<{
+      status: 'data-issue';
+      reason: 'duplicate-record' | 'invalid-lineage' | 'runtime-read-failed';
+    }>;
+
+type StoredEvidenceRow = {
+  event_record_id: string;
+  event_id: string;
+  event_revision_id: string;
+  source_observation_id: string;
+  source_provider: ProductActivityExposureProvider;
+  source_entity_type: ProductActivityExposureEvent['sourceEntityType'];
+  source_entity_id: string;
+  evidence_ref: string;
+  observation_revision_id: string;
+  normalization_outcome: ActivityExposureNormalizationOutcome;
+  response_captured_at: string | Date;
+  observation_collected_at: string | Date;
+  source_published_at: string | Date | null;
+  provider_observed_at: string | Date | null;
+  raw_payload_sha256: string;
+  retention_state: 'retained' | 'evicted' | 'not_retained';
+  retention_policy_version: string;
+  retained_at: string | Date | null;
+  refresh_due_at: string | Date | null;
+  refreshed_at: string | Date | null;
+  evicted_at: string | Date | null;
+};
+
+export async function readActivityExposureStoredEvidence(
+  input: Readonly<{
+    artistId: string;
+    eventRecordId: string;
+  }>,
+  pool: Queryable,
+): Promise<ActivityExposureStoredEvidenceReadResult> {
+  const artistId = input.artistId.trim();
+  if (!artistId) {
+    throw new Error('activity_exposure_artist_id_invalid');
+  }
+  if (!isSha256(input.eventRecordId)) {
+    throw new Error('activity_exposure_event_record_id_invalid');
+  }
+
+  try {
+    const result = await pool.query<StoredEvidenceRow>(
+      `SELECT
+          events.event_record_id,
+          events.event_id,
+          events.revision_id AS event_revision_id,
+          events.source_observation_id,
+          events.source_provider,
+          events.source_entity_type,
+          events.source_entity_id,
+          events.evidence_ref,
+          observations.revision_id AS observation_revision_id,
+          observations.normalization_outcome,
+          observations.response_captured_at,
+          observations.collected_at AS observation_collected_at,
+          observations.source_published_at,
+          observations.provider_observed_at,
+          observations.raw_payload_sha256,
+          raw.retention_state,
+          raw.retention_policy_version,
+          raw.retained_at,
+          raw.refresh_due_at,
+          raw.refreshed_at,
+          raw.evicted_at
+       FROM fandex.activity_exposure_events events
+       JOIN fandex.activity_exposure_provider_observations observations
+         ON observations.observation_id = events.source_observation_id
+       JOIN fandex.activity_exposure_raw_payloads raw
+         ON raw.observation_id = observations.observation_id
+       WHERE events.artist_id = $1
+         AND events.event_record_id = $2`,
+      [artistId, input.eventRecordId],
+    );
+
+    if (result.rows.length === 0) {
+      return Object.freeze({ status: 'not-found' as const });
+    }
+    if (result.rows.length !== 1) {
+      return Object.freeze({
+        status: 'data-issue' as const,
+        reason: 'duplicate-record' as const,
+      });
+    }
+
+    const row = result.rows[0];
+    if (
+      row.event_record_id !== input.eventRecordId
+      || !isSha256(row.event_record_id)
+      || !isSha256(row.source_observation_id)
+      || !isSha256(row.raw_payload_sha256)
+    ) {
+      return Object.freeze({
+        status: 'data-issue' as const,
+        reason: 'invalid-lineage' as const,
+      });
+    }
+
+    return Object.freeze({
+      status: 'ok' as const,
+      model: Object.freeze({
+        artistId,
+        eventRecordId: row.event_record_id,
+        eventId: row.event_id,
+        eventRevisionId: row.event_revision_id,
+        sourceObservationId: row.source_observation_id,
+        sourceProvider: row.source_provider,
+        sourceEntityType: row.source_entity_type,
+        sourceEntityId: row.source_entity_id,
+        evidenceRef: row.evidence_ref,
+        observationRevisionId: row.observation_revision_id,
+        normalizationOutcome: row.normalization_outcome,
+        responseCapturedAt: isoFromDatabase(row.response_captured_at)!,
+        collectedAt: isoFromDatabase(row.observation_collected_at)!,
+        sourcePublishedAt: isoFromDatabase(row.source_published_at),
+        providerObservedAt: isoFromDatabase(row.provider_observed_at),
+        rawPayloadSha256: row.raw_payload_sha256,
+        retentionState: row.retention_state,
+        retentionPolicyVersion: row.retention_policy_version,
+        retainedAt: isoFromDatabase(row.retained_at),
+        refreshDueAt: isoFromDatabase(row.refresh_due_at),
+        refreshedAt: isoFromDatabase(row.refreshed_at),
+        evictedAt: isoFromDatabase(row.evicted_at),
+      }),
+    });
+  } catch {
+    return Object.freeze({
+      status: 'data-issue' as const,
+      reason: 'runtime-read-failed' as const,
+    });
   }
 }
