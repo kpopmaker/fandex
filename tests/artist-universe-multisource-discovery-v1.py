@@ -112,13 +112,14 @@ assert result["sourceCount"] == 3
 assert result["candidateCount"] == 2
 assert result["candidateResolvedCount"] == 1
 assert result["candidateUnresolvedCount"] == 1
-assert result["knownSuppressionCount"] == 3
+assert result["knownSuppressionCount"] == 4
 assert result["contract"]["autoPromote"] is False
 assert result["contract"]["evidenceCountIsNotThreshold"] is True
 
 coverage = {row["canonicalArtistId"]: row for row in result["knownCanonicalCoverage"]}
-assert coverage["ive"]["sourceCount"] == 2
+assert coverage["ive"]["sourceCount"] == 3
 assert {row["sourceType"] for row in coverage["ive"]["sources"]} == {
+    "agency_roster",
     "provider_catalog",
     "festival_or_event_roster",
 }
