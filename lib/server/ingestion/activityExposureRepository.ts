@@ -569,11 +569,7 @@ export async function readActivityExposureShadowProduct(
             runs.provider_artist_id,
             runs.collection_status,
             runs.coverage_state,
-            (
-              SELECT MAX(observations.collected_at)
-              FROM fandex.activity_exposure_provider_observations observations
-              WHERE observations.run_id = runs.run_id
-            ) AS collected_at
+            runs.completed_at AS collected_at
          FROM fandex.activity_exposure_collection_runs runs
          WHERE runs.artist_id = $1
          ORDER BY runs.provider, runs.completed_at DESC, runs.run_id DESC`,
