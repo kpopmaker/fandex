@@ -1,0 +1,94 @@
+{
+  "version": "pnation_agency_roster_adapter_v1",
+  "source": {
+    "id": "pnation-official-artist-roster",
+    "type": "agency_roster",
+    "name": "P NATION Official Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://pnation.com/artists"
+  },
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "displayArtist": "PSY",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/11"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CRUSH",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/12"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TNX",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/13"
+        }
+      ]
+    },
+    {
+      "displayArtist": "HWASA",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/14"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AN SHINAE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/15"
+        }
+      ]
+    },
+    {
+      "displayArtist": "DANIEL JIKAL",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/16"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Baby DONT Cry",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "P NATION official artist profile",
+          "url": "https://pnation.com/artists/17"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://pnation.com/artists",
+    "verifiedAt": "2026-09-25"
+  }
+}

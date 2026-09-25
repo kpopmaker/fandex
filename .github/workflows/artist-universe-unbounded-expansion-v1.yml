@@ -43,6 +43,7 @@ jobs:
           python tests/artist-expansion-yg-roster-adapter-v1.py
           python tests/artist-expansion-jyp-roster-adapter-v1.py
           python tests/artist-expansion-sm-roster-adapter-v1.py
+          python tests/artist-expansion-pnation-roster-adapter-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -70,6 +71,11 @@ jobs:
           python scripts/artist-expansion/collect_sm_agency_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/sm-official-featured-roster-2026-09-25.json \
             --output sm_agency_roster_v1_latest.json
+      - name: Collect P NATION official roster
+        run: |
+          python scripts/artist-expansion/collect_pnation_agency_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/pnation-official-roster-2026-09-25.json \
+            --output pnation_agency_roster_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -91,6 +97,7 @@ jobs:
             --snapshot yg_agency_roster_v1_latest.json \
             --snapshot jyp_agency_roster_v1_latest.json \
             --snapshot sm_agency_roster_v1_latest.json \
+            --snapshot pnation_agency_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -134,6 +141,7 @@ jobs:
             yg_agency_roster_v1_latest.json
             jyp_agency_roster_v1_latest.json
             sm_agency_roster_v1_latest.json
+            pnation_agency_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

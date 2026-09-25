@@ -2415,6 +2415,141 @@
           "url": "https://www.youtube.com/watch?v=n1bzcMrjZtk"
         }
       ]
+    },
+    {
+      "id": "anshinae",
+      "ticker": "ANSHINAE",
+      "name": "AN SHINAE",
+      "agency": "P NATION",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "안신애 AN SHINAE 가수",
+      "koreanAliases": [
+        "안신애"
+      ],
+      "englishAliases": [
+        "AN SHINAE",
+        "An Shinae"
+      ],
+      "keywords": [
+        "P NATION",
+        "피네이션",
+        "안신애",
+        "싱어송라이터"
+      ],
+      "disambiguationKeywords": [
+        "P NATION",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/15"
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/130"
+        }
+      ]
+    },
+    {
+      "id": "danieljikal",
+      "ticker": "DANIELJIKAL",
+      "name": "DANIEL JIKAL",
+      "agency": "P NATION",
+      "entityType": "solo",
+      "debutDate": "2024-03-05",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "다니엘 지칼 DANIEL JIKAL",
+      "koreanAliases": [
+        "다니엘 지칼"
+      ],
+      "englishAliases": [
+        "DANIEL JIKAL",
+        "Daniel Jikal"
+      ],
+      "keywords": [
+        "P NATION",
+        "피네이션",
+        "Fresh",
+        "힙합"
+      ],
+      "disambiguationKeywords": [
+        "P NATION",
+        "다니엘 지칼"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/16"
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/109"
+        }
+      ]
+    },
+    {
+      "id": "babydontcry",
+      "ticker": "BABYDONTCRY",
+      "name": "Baby DONT Cry",
+      "agency": "P NATION",
+      "entityType": "group",
+      "debutDate": "2025-06-23",
+      "lifecycleStatus": "active",
+      "members": [
+        "Yihyun",
+        "Kumi",
+        "Mia",
+        "Beni"
+      ],
+      "naverNewsQuery": "베이비돈크라이 Baby DONT Cry",
+      "koreanAliases": [
+        "베이비돈크라이"
+      ],
+      "englishAliases": [
+        "Baby DONT Cry",
+        "BABY DONT CRY"
+      ],
+      "keywords": [
+        "P NATION",
+        "피네이션",
+        "F Girl",
+        "베이비돈크라이"
+      ],
+      "disambiguationKeywords": [
+        "P NATION",
+        "베이비돈크라이"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/17"
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/119"
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/128"
+        }
+      ]
     }
   ]
 }

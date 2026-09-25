@@ -2191,6 +2191,77 @@
           "note": "Verified SMTOWN channel identifies 'Waste No Time' as XngHan&Xoul's debut single; canonical identity is modeled as solo XngHan with the artist-brand alias."
         }
       ]
+    },
+    {
+      "displayArtist": "AN SHINAE",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_pnation_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_agency_roster_and_current_korean_music_release",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/15",
+          "note": "Current official P NATION artist profile."
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/130",
+          "note": "Official 2026 release page identifies An Shinae as a singer-songwriter with a current Korean release."
+        }
+      ]
+    },
+    {
+      "displayArtist": "DANIEL JIKAL",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_pnation_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_agency_roster_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/16",
+          "note": "Current official P NATION artist profile."
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/109",
+          "note": "Official P NATION release page documents Daniel Jikal's debut digital single on 2024-03-05."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Baby DONT Cry",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_pnation_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_kpop_debut_and_current_korean_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "P NATION",
+          "url": "https://pnation.com/artists/17",
+          "note": "Current official P NATION artist profile."
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/119",
+          "note": "Official debut release states Baby DONT Cry entered the K-POP world with 'F Girl' in June 2025."
+        },
+        {
+          "source": "P NATION Releases",
+          "url": "https://pnation.com/releases/128",
+          "note": "Official 2026 mini-album page confirms continuing group activity."
+        }
+      ]
     }
   ]
 }

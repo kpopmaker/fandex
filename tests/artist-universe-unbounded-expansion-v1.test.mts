@@ -122,6 +122,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'kangta',
     'naevis',
     'xnghan',
+    'anshinae',
+    'danieljikal',
+    'babydontcry',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -130,6 +133,21 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const anShinae = getArtistV4ById('anshinae');
+  assert.ok(anShinae);
+  assert.equal(anShinae.entityType, 'solo');
+
+  const danielJikal = getArtistV4ById('danieljikal');
+  assert.ok(danielJikal);
+  assert.equal(danielJikal.entityType, 'solo');
+  assert.equal(danielJikal.debutDate, '2024-03-05');
+
+  const babyDontCry = getArtistV4ById('babydontcry');
+  assert.ok(babyDontCry);
+  assert.equal(babyDontCry.entityType, 'group');
+  assert.equal(babyDontCry.debutDate, '2025-06-23');
+  assert.equal(babyDontCry.profile.members.length, 4);
 
   const kangta = getArtistV4ById('kangta');
   assert.ok(kangta);
