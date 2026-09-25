@@ -1,0 +1,77 @@
+{
+  "contractVersion": "fandex_momentum_pr127_v166_explicit_authorization_audit_v1",
+  "lifecycle": "research-authorization",
+  "evaluatedAt": "2026-09-25T14:20:00.000Z",
+  "authorizationRecordPath": "data/momentum-research/pr127_v166_configuration_mutation_authorization_record.json",
+  "authorizationRecord": {
+    "authorizationId": "dcc6f2cfc3d213f797a53ca41685f3d8384e1c4bb9e3862be4e10bcd2bdc446e",
+    "statement": "AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION",
+    "authority": "explicit-user-decision",
+    "validFrom": "2026-09-25T14:13:28.000Z",
+    "expiresAt": "2026-09-25T14:43:28.000Z",
+    "upstreamV165PlanDigest": "f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f",
+    "recordDigest": "65a55a19fe628fcfc06ba24e15a7f2d7a036e78d8fcecceae08adb38f59309a1"
+  },
+  "v166": {
+    "state": "configuration-mutation-authorized",
+    "configurationMutationAuthorized": true,
+    "blockers": [],
+    "resultDigest": "63580cb5020f8f9b64b2ccc36e5a2de44ff063f4378737ede6e81df779b60d7c",
+    "productionDeploymentAuthorized": false,
+    "verifierActivationAuthorized": false,
+    "nativeVerifierExecutionAuthorized": false,
+    "ledgerAdvanceAuthorized": false
+  },
+  "v167": {
+    "state": "mutation-envelope-blocked",
+    "mutationEnvelopeReady": false,
+    "blockers": [
+      "trusted-secret-handle-attestation-missing-or-invalid"
+    ],
+    "digest": "ff421e723ccd04ce47ac1b939e98d2c485aeadf2b800f4aa52c09c4d9a45ad48"
+  },
+  "validation": {
+    "runId": 36146299696,
+    "status": "PASS",
+    "explicitV166AuthorizationPassed": true,
+    "v166RegressionPassed": true,
+    "v167RegressionPassed": true,
+    "v168RegressionPassed": true,
+    "v169RegressionPassed": true,
+    "typecheckPassed": true
+  },
+  "currentBlocker": {
+    "code": "trusted-secret-handle-attestation-missing-or-invalid",
+    "requirements": {
+      "dedicatedSecretKey": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+      "target": "production",
+      "minimumUtf8Bytes": 24,
+      "maximumUtf8Bytes": 512,
+      "whitespaceOrControlCharactersAbsent": true,
+      "schedulerCredentialKey": "FANDEX_NAVER_NEWS_SCHEDULER_SECRET",
+      "differsFromSchedulerCredential": true,
+      "attestationMethod": "trusted-environment-non-equality-attestation-without-secret-output"
+    }
+  },
+  "effects": {
+    "vercelCalls": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
