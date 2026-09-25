@@ -110,4 +110,5 @@ jobs:
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json
             artist_universe_multisource_discovery_v1_latest.json
+            artist_scope_review_queue_v1_latest.json
           if-no-files-found: error
