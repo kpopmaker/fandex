@@ -110,6 +110,7 @@
     "v181RegressionPassed": true,
     "typecheckPassed": true,
     "fullPrDiffCheckPassed": true,
-    "temporaryWorkflowRemoved": false
+    "temporaryWorkflowRemoved": true,
+    "workflowCleanupCommit": "b1f2b2b1701ff60d71ec9481819f9ed2e006acef"
   }
 }
