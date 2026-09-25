@@ -47,6 +47,31 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def build_decision_index(decision_payload: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    if not decision_payload:
+        return result
+
+    rows = decision_payload.get("decisions")
+    if not isinstance(rows, list):
+        return result
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        display_artist = str(row.get("displayArtist") or "").strip()
+        key = compact_identity(display_artist)
+        if key:
+            result[key] = row
+
+    return result
+
+
+def decision_closes_discovery(decision: str) -> bool:
+    value = str(decision or "").strip()
+    return value.startswith("exclude_") or value.startswith("existing_canonical_")
+
+
 def build_known_index(identity_payload: dict[str, Any]) -> dict[str, set[str]]:
     rows = identity_payload.get("artists")
     if not isinstance(rows, list):
