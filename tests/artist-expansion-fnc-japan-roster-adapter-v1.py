@@ -34,6 +34,16 @@ rows = module.parse_roster(html)
 assert [row["displayArtist"] for row in rows] == module.EXPECTED_MUSIC_ARTISTS
 assert all(row["evidence"][0]["url"] == module.DEFAULT_URL for row in rows)
 
+serialized_html = """
+<html><body>
+<script>
+window.__WIX_STATE__ = {"artistList":"FTISLAND CNBLUE N.Flying SF9 P1Harmony Hi-Fi Un!corn AMPERS&ONE AxMxP JUNG HAEIN ROWOON"};
+</script>
+</body></html>
+"""
+serialized_rows = module.parse_roster(serialized_html)
+assert [row["displayArtist"] for row in serialized_rows] == module.EXPECTED_MUSIC_ARTISTS
+
 snapshot = module.build_snapshot(
     rows,
     module.DEFAULT_URL,
@@ -43,6 +53,9 @@ assert snapshot["candidateCount"] == 8
 assert snapshot["contract"]["musicRosterOnly"] is True
 assert snapshot["contract"]["actorsExcluded"] is True
 assert snapshot["contract"]["autoPromote"] is False
+
+bad_serialized = serialized_html.replace("ROWOON", "")
+assert module.parse_roster(bad_serialized) == []
 
 bad_html = html.replace("<a>AxMxP</a>", "")
 assert module.parse_roster(bad_html) == []

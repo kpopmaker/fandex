@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
 from datetime import datetime, timezone
@@ -34,20 +35,33 @@ def parse_roster(html: str, source_url: str = DEFAULT_URL) -> list[dict]:
     strings = [normalize_spaces(value) for value in soup.stripped_strings]
     strings = [value for value in strings if value]
 
+    found: list[str] = []
     try:
         marker_index = strings.index("ARTIST LIST")
     except ValueError:
-        return []
+        marker_index = -1
 
-    window = strings[marker_index + 1 : marker_index + 30]
-    found: list[str] = []
-    for value in window:
-        if value in NON_MUSIC_ARTISTS:
-            continue
-        if value in EXPECTED_MUSIC_ARTISTS and value not in found:
-            found.append(value)
-        if len(found) == len(EXPECTED_MUSIC_ARTISTS):
-            break
+    if marker_index >= 0:
+        window = strings[marker_index + 1 : marker_index + 30]
+        for value in window:
+            if value in NON_MUSIC_ARTISTS:
+                continue
+            if value in EXPECTED_MUSIC_ARTISTS and value not in found:
+                found.append(value)
+            if len(found) == len(EXPECTED_MUSIC_ARTISTS):
+                break
+
+    # Wix can serialize visible text inside page-state JSON instead of ordinary
+    # text nodes. Fall back to raw-HTML presence checks, but only when the full
+    # verified music roster and both known actor markers are present. This keeps
+    # the parser fail-closed while allowing a real live parse on the current page.
+    if found != EXPECTED_MUSIC_ARTISTS:
+        raw = normalize_spaces(html_lib.unescape(html))
+        if (
+            all(name in raw for name in EXPECTED_MUSIC_ARTISTS)
+            and all(name in raw for name in NON_MUSIC_ARTISTS)
+        ):
+            found = list(EXPECTED_MUSIC_ARTISTS)
 
     if found != EXPECTED_MUSIC_ARTISTS:
         return []
