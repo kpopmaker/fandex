@@ -1672,6 +1672,76 @@
           "note": "2026 Fantagio release reports YOON SAN-HA's independent music performance activity."
         }
       ]
+    },
+    {
+      "displayArtist": "AHOF",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_roster_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "F&F Entertainment",
+          "url": "https://fnfent.com/sub/artist/artist_view.html?artist_idx=40",
+          "note": "Official F&F artist page identifies AHOF as a nine-member boy group."
+        }
+      ]
+    },
+    {
+      "displayArtist": "AMPER&ONE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_roster_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Weverse / FNC Entertainment",
+          "url": "https://weverse.io/ampersandone/notice/34672",
+          "note": "2026 official FNC notice confirms AMPERS&ONE live tour and current management."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PLAVE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "virtual_kpop_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "VLAST",
+          "url": "https://www.vlast.co.kr/plave/",
+          "note": "Official VLAST artist page identifies PLAVE members and 2026 releases."
+        }
+      ]
+    },
+    {
+      "displayArtist": "RAIN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RAINCOMPANY",
+          "url": "https://raincompany.co.kr/index.php/rain",
+          "note": "Official RAINCOMPANY profile identifies RAIN / Jung Ji-hoon as a solo singer."
+        }
+      ]
+    },
+    {
+      "displayArtist": "TOUCHED",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_roster_verified_band_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MPMG MUSIC",
+          "url": "https://www.mpmgmusic.com/touched",
+          "note": "Official MPMG artist page identifies TOUCHED as a four-member band."
+        }
+      ]
     }
   ]
 }
