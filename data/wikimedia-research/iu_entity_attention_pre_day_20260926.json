@@ -1,0 +1,79 @@
+{
+  "contractVersion": "v1_wikimedia_entity_attention_prospective_research",
+  "lifecycle": "research",
+  "directProductContributionEligible": false,
+  "productScorePublished": false,
+  "phase": "pre-day-identity-snapshot",
+  "observationDay": "2026-09-26",
+  "observationTime": {
+    "kind": "period",
+    "start": "2026-09-26T00:00:00.000Z",
+    "end": "2026-09-27T00:00:00.000Z"
+  },
+  "identity": {
+    "canonicalArtistId": "iu",
+    "wikidataQid": "Q20145",
+    "project": "en.wikipedia.org",
+    "capturedAt": "2026-09-25T07:09:56.394Z",
+    "canonicalPage": {
+      "pageId": 24385427,
+      "title": "IU (entertainer)"
+    },
+    "redirects": [
+      {
+        "pageId": 61849655,
+        "title": "2019 IU Tour Concert"
+      },
+      {
+        "pageId": 66444234,
+        "title": "Into the I-LAND"
+      },
+      {
+        "pageId": 75634194,
+        "title": "IU (actor)"
+      },
+      {
+        "pageId": 75634195,
+        "title": "IU (actress)"
+      },
+      {
+        "pageId": 80155192,
+        "title": "IU (singer)"
+      },
+      {
+        "pageId": 65923071,
+        "title": "IU (Singer)"
+      },
+      {
+        "pageId": 77447670,
+        "title": "IU (songwriter)"
+      },
+      {
+        "pageId": 74779644,
+        "title": "IU (vocalist)"
+      },
+      {
+        "pageId": 67441574,
+        "title": "Lee Ji-eun (actress, born 1993)"
+      },
+      {
+        "pageId": 53984451,
+        "title": "Lee Ji-eun (singer)"
+      },
+      {
+        "pageId": 61849652,
+        "title": "Love, Poem"
+      },
+      {
+        "pageId": 36032217,
+        "title": "아이유"
+      }
+    ]
+  },
+  "provenance": {
+    "githubActionsRunId": 36106205109,
+    "validatedHead": "e7fbde0a87d03ca32467778afebfd51c86a4e144",
+    "source": "live Wikidata Q20145 sitelink + enwiki direct namespace-0 redirects",
+    "note": "Research-only prospective pre-day identity evidence. Does not authorize Product or Production state."
+  }
+}
