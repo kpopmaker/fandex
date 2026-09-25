@@ -2,6 +2,7 @@ import type {
   ProductActivityExposureEvent,
   ProductActivityExposureProviderCoverage,
 } from '../../product/contracts/productActivityExposure';
+import { canonicalJson } from '../../shared/canonicalDigest';
 import {
   createActivityExposureProviderObservation,
   type ActivityExposureProviderObservation,
@@ -479,7 +480,7 @@ export function createMusicBrainzActivityExposureCollector(
           if (seenReleaseGroupIds.has(releaseGroup.id)) continue;
           seenReleaseGroupIds.add(releaseGroup.id);
 
-          const releaseGroupRaw = JSON.stringify({
+          const releaseGroupRaw = canonicalJson({
             provider: 'musicbrainz',
             kind: 'release-group',
             pageOffset: page['release-group-offset'],
@@ -564,7 +565,7 @@ export function createMusicBrainzActivityExposureCollector(
               responseCapturedAt: collectedAt,
               collectedAt,
               providerObservedAt: release.date ?? null,
-              rawPayloadCanonical: JSON.stringify({
+              rawPayloadCanonical: canonicalJson({
                 provider: 'musicbrainz',
                 kind: 'release',
                 releaseGroupId: releaseGroup.id,
