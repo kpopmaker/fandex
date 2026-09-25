@@ -143,6 +143,10 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'joyuri',
     'kimjaehwan',
     'leedaehwi',
+    'lun8',
+    'zoonizini',
+    'chaeunwoo',
+    'astro',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -151,6 +155,27 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const lun8 = getArtistV4ById('lun8');
+  assert.ok(lun8);
+  assert.equal(lun8.entityType, 'group');
+  assert.equal(lun8.agency, 'Fantagio');
+
+  const zoonizini = getArtistV4ById('zoonizini');
+  assert.ok(zoonizini);
+  assert.equal(zoonizini.entityType, 'unit');
+  assert.deepEqual(zoonizini.members, ['MJ', 'JINJIN']);
+
+  const chaEunWoo = getArtistV4ById('chaeunwoo');
+  assert.ok(chaEunWoo);
+  assert.equal(chaEunWoo.entityType, 'solo');
+  assert.equal(chaEunWoo.lifecycleStatus, 'military');
+
+  const astro = getArtistV4ById('astro');
+  assert.ok(astro);
+  assert.equal(astro.entityType, 'group');
+  assert.equal(astro.agency, 'Fantagio');
+  assert.equal(astro.members.length, 4);
 
   const alphaDriveOne = getArtistV4ById('alphadriveone');
   assert.ok(alphaDriveOne);

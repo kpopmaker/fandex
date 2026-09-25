@@ -1,0 +1,128 @@
+{
+  "version": "fantagio_music_identity_roster_adapter_v1",
+  "source": {
+    "id": "fantagio-official-music-identity-roster",
+    "type": "agency_roster",
+    "name": "Fantagio Official Music Identity Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.fantagio.kr/groups/"
+  },
+  "candidateCount": 10,
+  "candidates": [
+    {
+      "displayArtist": "LUN8",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ZOONIZINI",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LEECHANGSUB",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CHA EUN-WOO",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "YOON SAN-HA",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LUN8WAVE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "MOONBIN&SANHA",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "WEKIMEKI",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ASTRO",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "JINJIN&ROCKY",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Fantagio official music identity roster",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "identityRosterIsNotLifecycleTruth": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://www.fantagio.kr/groups/",
+      "https://www.fantagio.kr/"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

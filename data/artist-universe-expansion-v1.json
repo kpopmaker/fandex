@@ -3310,6 +3310,191 @@
           "url": "https://wake-one.com/artists/%EC%9D%B4%EB%8C%80%ED%9C%98/"
         }
       ]
+    },
+    {
+      "id": "lun8",
+      "ticker": "LUN8",
+      "name": "LUN8",
+      "agency": "Fantagio",
+      "entityType": "group",
+      "debutDate": "2023-06-15",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "루네이트 LUN8",
+      "koreanAliases": [
+        "루네이트"
+      ],
+      "englishAliases": [
+        "LUN8"
+      ],
+      "keywords": [
+        "Fantagio",
+        "판타지오",
+        "루네이트",
+        "Lost"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "루네이트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/"
+        }
+      ]
+    },
+    {
+      "id": "zoonizini",
+      "ticker": "ZOONIZINI",
+      "name": "ZOONIZINI",
+      "agency": "Fantagio",
+      "entityType": "unit",
+      "debutDate": "2025-08-13",
+      "lifecycleStatus": "active",
+      "members": [
+        "MJ",
+        "JINJIN"
+      ],
+      "naverNewsQuery": "주니지니 ZOONIZINI ASTRO",
+      "koreanAliases": [
+        "주니지니"
+      ],
+      "englishAliases": [
+        "ZOONIZINI"
+      ],
+      "keywords": [
+        "Fantagio",
+        "ASTRO",
+        "MJ",
+        "JINJIN",
+        "DICE"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "ASTRO",
+        "주니지니"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/"
+        }
+      ]
+    },
+    {
+      "id": "chaeunwoo",
+      "ticker": "CHAEUNWOO",
+      "name": "CHA EUN-WOO",
+      "agency": "Fantagio",
+      "entityType": "solo",
+      "debutDate": "2024-02-15",
+      "lifecycleStatus": "military",
+      "naverNewsQuery": "차은우 CHA EUN-WOO 가수",
+      "koreanAliases": [
+        "차은우"
+      ],
+      "englishAliases": [
+        "CHA EUN-WOO",
+        "CHA EUNWOO",
+        "Cha Eun-woo"
+      ],
+      "keywords": [
+        "Fantagio",
+        "ASTRO",
+        "ENTITY",
+        "SATURDAY PREACHER",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "ASTRO",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/"
+        }
+      ]
+    },
+    {
+      "id": "astro",
+      "ticker": "ASTRO",
+      "name": "ASTRO",
+      "agency": "Fantagio",
+      "entityType": "group",
+      "debutDate": "2016-02-23",
+      "lifecycleStatus": "active",
+      "members": [
+        "MJ",
+        "JINJIN",
+        "CHA EUN-WOO",
+        "YOON SAN-HA"
+      ],
+      "naverNewsQuery": "아스트로 ASTRO",
+      "koreanAliases": [
+        "아스트로"
+      ],
+      "englishAliases": [
+        "ASTRO",
+        "Astro"
+      ],
+      "keywords": [
+        "Fantagio",
+        "판타지오",
+        "아스트로",
+        "Twilight",
+        "AROHA"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "아스트로"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/"
+        }
+      ]
     }
   ]
 }

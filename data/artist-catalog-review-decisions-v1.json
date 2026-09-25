@@ -2652,6 +2652,182 @@
           "note": "FLARE U debuted May 13, 2026 as a duo consisting of Chuei Li Yu and Kang Woo Jin; independent solo canonical representation is not inferred."
         }
       ]
+    },
+    {
+      "displayArtist": "LUN8",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fantagio_group_identity_with_current_music_activity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_music_roster_and_current_korean_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Official Fantagio music identity roster lists LUN8."
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/",
+          "note": "Fantagio homepage lists LUN8's 2025 'Lost' music video and recent catalog activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "ZOONIZINI",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "official_astro_unit_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "astro"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_unit_roster_and_2025_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Official Fantagio roster lists ZOONIZINI as a separate music identity."
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/",
+          "note": "Fantagio homepage lists ZOONIZINI(ASTRO) 'Some Things Never Change' music video from August 2025."
+        }
+      ]
+    },
+    {
+      "displayArtist": "CHA EUN-WOO",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_fantagio_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "astro"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_solo_music_roster_and_solo_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Official Fantagio music roster lists CHA EUN-WOO as an individual music identity."
+        },
+        {
+          "source": "Yonhap",
+          "url": "https://en.yna.co.kr/view/AEN20250728001300315",
+          "note": "Fantagio confirmed Cha Eun-woo began mandatory military service on July 28, 2025; lifecycle is modeled as military rather than inactive."
+        }
+      ]
+    },
+    {
+      "displayArtist": "ASTRO",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fantagio_active_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_group_roster_and_2025_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Official Fantagio roster lists ASTRO."
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/",
+          "note": "Fantagio homepage lists ASTRO's 2025 'Twilight' music video, supporting current group activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LUN8WAVE",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "official_lun8_unit_identity_current_member_state_requires_resolution",
+      "relatedCanonicalArtistIds": [
+        "lun8"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_unit_identity_roster",
+      "onboardingBlocker": "current_unit_membership_and_lifecycle_resolution_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Fantagio lists LUN8WAVE as a distinct music identity, but the roster page alone does not establish current unit membership or lifecycle."
+        }
+      ]
+    },
+    {
+      "displayArtist": "WEKIMEKI",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "disbanded_group_identity_verified_archive_model_pending",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_historical_group_identity",
+      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Fantagio retains Weki Meki in its music identity roster."
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1681890wpp/weki-meki-officially-disbands-5-member",
+          "note": "Fantagio announced Weki Meki's official group activities ended August 8, 2024."
+        }
+      ]
+    },
+    {
+      "displayArtist": "MOONBIN&SANHA",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "inactive_astro_unit_identity_verified_archive_model_pending",
+      "relatedCanonicalArtistIds": [
+        "astro"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_historical_unit_identity",
+      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Fantagio retains MOONBIN&SANHA as a distinct unit identity; no current activity is inferred from roster presence."
+        }
+      ]
+    },
+    {
+      "displayArtist": "JINJIN&ROCKY",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "ended_astro_unit_identity_verified_archive_model_pending",
+      "relatedCanonicalArtistIds": [
+        "astro"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fantagio_historical_unit_identity",
+      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Fantagio retains JINJIN&ROCKY as a distinct historical unit identity."
+        },
+        {
+          "source": "Jinjin & Rocky reference",
+          "url": "https://en.wikipedia.org/wiki/Jinjin_%26_Rocky",
+          "note": "Rocky's February 2023 departure ended the duo unit; archive semantics are required before onboarding."
+        }
+      ]
     }
   ]
 }
