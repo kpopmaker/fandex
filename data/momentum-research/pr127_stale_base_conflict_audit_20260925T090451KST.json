@@ -91,6 +91,29 @@
     "typecheckPassed": true,
     "branchDiffCheckPassed": true,
     "fullPrDiffCheckPassed": true,
+    "mergeSimulationRunId": 36076140864,
+    "mergeSimulationPassed": true,
+    "mergeSimulationV181RegressionPassed": true,
+    "mergeSimulationTypecheckPassed": true,
+    "mergeSimulationFullPrDiffCheckPassed": true,
     "temporaryWorkflowRemoved": false
+  },
+  "mergeSimulation": {
+    "initialRunId": 36076079026,
+    "initialRunStatus": "FAILED",
+    "initialFailureScope": "merge-tree-wide-diff-check-surfaced-preexisting-trailing-whitespace-outside-vercel-json",
+    "correctedRunId": 36076140864,
+    "correctedRunStatus": "PASS",
+    "actualGitMergeConflictPaths": [
+      "vercel.json"
+    ],
+    "actualGitMergeConflictCount": 1,
+    "resolutionUsed": "current-research-branch-vercel-json",
+    "resolutionClearedAllUnmergedPaths": true,
+    "resolutionPreservedMainSuppression": true,
+    "resolutionPreservedExplicitPr127Suppression": true,
+    "mergeCommitCreated": false,
+    "mainMergedIntoResearchBranch": false,
+    "rebasePerformed": false
   }
 }
