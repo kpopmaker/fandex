@@ -1,0 +1,85 @@
+name: Validate Activity Exposure v004 migration current-main
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-persistence-migration-current-main-v4
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: fandex_validation
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fandex_validation"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGPASSWORD: postgres
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGDATABASE: fandex_validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify v004 migration plan
+        shell: bash
+        run: |
+          npx tsx scripts/database/run-postgres-migrations.mts > /tmp/plan.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const plan=JSON.parse(fs.readFileSync('/tmp/plan.json','utf8'));
+          const v4=plan.migrations.filter((m)=>m.version===4);
+          if (v4.length!==1) throw new Error('v004_plan_count_mismatch');
+          if (v4[0].fileName!=='004_activity_exposure_persistence_v1.sql') throw new Error('v004_filename_mismatch');
+          if (plan.migrations.some((m)=>m.version===3)) throw new Error('unexpected_repository_v003');
+          console.log('ACTIVITY_EXPOSURE_V004_PLAN=PASS');
+          console.log('ACTIVITY_EXPOSURE_V004_SHA256='+v4[0].sha256);
+          NODE
+      - name: Prepare runtime role
+        run: psql -v ON_ERROR_STOP=1 -c "CREATE ROLE fandex_runtime NOLOGIN;"
+      - name: Apply migrations 001 002 004
+        run: |
+          psql -v ON_ERROR_STOP=1 -f database/migrations/001_v114_managed_postgres_persistence.sql
+          psql -v ON_ERROR_STOP=1 -f database/migrations/002_v121_naver_news_operational_ingestion.sql
+          psql -v ON_ERROR_STOP=1 -f database/migrations/004_activity_exposure_persistence_v1.sql
+      - name: Execute Activity Exposure persistence invariants
+        run: psql -v ON_ERROR_STOP=1 -f docs/validation/sql/activity-exposure-persistence-candidate-v1.test.sql
+      - name: Activity Exposure contracts and collectors
+        run: |
+          npx tsx --test tests/product-activity-exposure-contract-v1.test.mts
+          npx tsx --test tests/activity-exposure-ingestion-contract-v1.test.mts
+          npx tsx --test tests/activity-exposure-musicbrainz-production-collector-v1.test.mts
+          npx tsx --test tests/activity-exposure-youtube-production-collector-v1.test.mts
+          npx tsx --test tests/activity-exposure-production-boundary-v1.test.mts
+      - name: Existing Product truth regressions
+        run: |
+          npx tsx --test tests/product-state-foundation-v1.test.mts
+          npx tsx --test tests/product-time-foundation-v1.test.mts
+          npx tsx --test tests/product-news-issue-point-real-read-boundary-v1.test.mts
+          npx tsx --test tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
