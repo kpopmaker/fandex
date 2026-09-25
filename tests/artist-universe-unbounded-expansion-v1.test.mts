@@ -147,7 +147,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(babyDontCry);
   assert.equal(babyDontCry.entityType, 'group');
   assert.equal(babyDontCry.debutDate, '2025-06-23');
-  assert.equal(babyDontCry.profile.members.length, 4);
+  assert.equal(babyDontCry.members.length, 4);
 
   const kangta = getArtistV4ById('kangta');
   assert.ok(kangta);
