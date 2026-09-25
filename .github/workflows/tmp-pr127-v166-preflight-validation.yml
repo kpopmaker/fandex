@@ -1,0 +1,73 @@
+name: TMP PR127 v166 Preflight Validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - .github/workflows/tmp-pr127-v166-preflight-validation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate preflight bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "1df5bc16056b8a618a99369a763e89e1f5c9e997"
+          node <<'NODE'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync(
+            'data/momentum-research/pr127_v166_configuration_mutation_preflight.json','utf8'
+          ));
+          const required = (cond, msg) => { if (!cond) throw new Error(msg); };
+          required(p.contractVersion === 'fandex_momentum_pr127_v166_configuration_mutation_preflight_v1','contract');
+          required(p.currentMainSha === '1df5bc16056b8a618a99369a763e89e1f5c9e997','main');
+          required(p.upstream.v165.state === 'provisioning-plan-ready','v165 state');
+          required(p.upstream.v165.planReadyForSeparateAuthorization === true,'v165 ready');
+          required(p.upstream.v165.digest === 'f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f','v165 digest');
+          required(p.upstream.v169.state === 'rollback-readiness-ready','v169 state');
+          required(p.upstream.v169.rollbackReady === true,'v169 ready');
+          required(p.upstream.v169.digest === 'eb567c5347320f58b0e47990d45800c401e6db092b329bed03d7dfd7ef7b96e2','v169 digest');
+          required(p.requestedAuthorization.statement === 'AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION','statement');
+          required(p.requestedAuthorization.genericContinuationCountsAsAuthorization === false,'generic continuation boundary');
+          required(p.requestedAuthorization.authorizationGranted === false,'must remain ungranted');
+          required(p.currentState.v166 === 'authorization-pending','v166 pending');
+          required(p.currentState.configurationMutationAuthorized === false,'no mutation authorization');
+          required(p.currentState.trustedSecretHandleAttestationAvailable === false,'no real secret handle');
+          required(p.currentState.mutationEnvelopeReady === false,'no envelope');
+          required(p.currentState.providerMutationAllowedNow === false,'provider mutation must remain blocked');
+          required(p.effects.vercelWrites === 0 && p.effects.environmentMutations === 0 && p.effects.secretWrites === 0,'zero mutation effects');
+          required(p.productBoundary.productMomentumScore === null,'score null');
+          required(p.productBoundary.productionEligible === false,'production ineligible');
+          required(p.productBoundary.productProductionActual === '1/7','product boundary');
+          console.log('v166 preflight binding validation: PASS');
+          NODE
+
+      - name: v165-v169 regression
+        run: |
+          npx tsx --test tests/fandex-momentum-verifier-provisioning-authorization-plan-v165.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-configuration-mutation-authorization-v166.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-configuration-mutation-execution-guard-v167.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-premutation-rollback-readiness-v169.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
