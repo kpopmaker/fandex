@@ -1918,8 +1918,8 @@
     },
     {
       "displayArtist": "HORI7ON",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "cross_border_group_scope_verified_current_management_unresolved",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "post_contract_group_identity_onboarding_verified",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -1937,11 +1937,16 @@
           "source": "GMA News",
           "url": "https://www.gmanetwork.com/news/showbiz/showbizabroad/1001140/hori7on-members-terminate-contracts-with-management-agency/story/",
           "note": "September 4, 2026 report quotes the members' counsel that all seven members terminated their management agreements effective August 13, 2026, corroborating that current management status must not be guessed."
+        },
+        {
+          "source": "Billboard Philippines",
+          "url": "https://billboardphilippines.com/market/industry-news/hori7on-departs-mld-entertainment-abs-cbn/",
+          "note": "Reports the management agreements ended effective August 13, 2026 and the members stated the group is not ending and intends to continue its career in the Philippines. No replacement management agency is asserted."
         }
       ],
       "scopeDecision": "eligible",
       "scopeBasis": "official_kpop_award_roster",
-      "onboardingBlocker": "current_management_unresolved_after_contract_termination"
+      "onboardingBlocker": null
     }
   ]
 }

@@ -1998,6 +1998,66 @@
           "url": "https://www.ygfamily.com/ko/actors/lee-sungkyoung/profile"
         }
       ]
+    },
+    {
+      "id": "hori7on",
+      "ticker": "HORI7ON",
+      "name": "HORI7ON",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "debutDate": "2023-07-24",
+      "lifecycleStatus": "active",
+      "members": [
+        "VINCI",
+        "KIM",
+        "KYLER",
+        "REYSTER",
+        "WINSTON",
+        "JEROMY",
+        "MARCUS"
+      ],
+      "fandomName": "ANCHOR",
+      "naverNewsQuery": "HORI7ON 호라이즌",
+      "koreanAliases": [
+        "호라이즌"
+      ],
+      "englishAliases": [
+        "HORI7ON",
+        "Hori7on"
+      ],
+      "keywords": [
+        "HORI7ON",
+        "호라이즌",
+        "MLD Entertainment",
+        "ABS-CBN",
+        "ANCHOR"
+      ],
+      "disambiguationKeywords": [
+        "HORI7ON",
+        "호라이즌",
+        "ANCHOR"
+      ],
+      "markets": [
+        "KR",
+        "SEA",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Seoul Music Awards",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        },
+        {
+          "source": "Atorni Law",
+          "url": "https://atorni.ai/notice/hori7on-management-agreement-termination"
+        },
+        {
+          "source": "Billboard Philippines",
+          "url": "https://billboardphilippines.com/market/industry-news/hori7on-departs-mld-entertainment-abs-cbn/"
+        }
+      ]
     }
   ]
 }

@@ -19,6 +19,10 @@ export type ArtistCollectionTier =
   | 'standard'
   | 'archive';
 
+export type ArtistAgencyStatus =
+  | 'verified'
+  | 'unresolved';
+
 export type ArtistVerificationStatus =
   | 'seed'
   | 'needs_verification'
@@ -77,6 +81,7 @@ export type ArtistV4 = {
   nameEn: string;
   entityType: ArtistEntityType;
   agency: string;
+  agencyStatus?: ArtistAgencyStatus;
   debutDate?: string;
   lifecycleStatus: ArtistLifecycleStatus;
   members: string[];

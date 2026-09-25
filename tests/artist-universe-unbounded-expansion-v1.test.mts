@@ -113,6 +113,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'nssign',
     'sechskies',
     'leesungkyung',
+    'hori7on',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -121,6 +122,14 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const hori7on = getArtistV4ById('hori7on');
+  assert.ok(hori7on);
+  assert.equal(hori7on.entityType, 'group');
+  assert.equal(hori7on.lifecycleStatus, 'active');
+  assert.equal(hori7on.agency, '');
+  assert.equal(hori7on.agencyStatus, 'unresolved');
+  assert.equal(hori7on.collection.tier, 'standard');
 
   const leeSungKyung = getArtistV4ById('leesungkyung');
   assert.ok(leeSungKyung);
@@ -161,6 +170,45 @@ test('duplicate ticker is rejected case-insensitively', () => {
       [seed('expansion-duplicate-ticker', 'iu')],
     ),
     /artist_universe_expansion_duplicate_ticker:iu/,
+  );
+});
+
+test('unresolved agency may be explicit without inventing a management company', () => {
+  const unresolvedAgency = {
+    ...seed('expansion-unresolved-agency', 'EXPUNRES'),
+    agency: '',
+    agencyStatus: 'unresolved' as const,
+  };
+
+  const expanded = buildExpandedArtistUniverseV4(
+    artistUniverseV4,
+    [unresolvedAgency],
+  );
+  assert.equal(expanded.at(-1)?.agency, '');
+  assert.equal(expanded.at(-1)?.agencyStatus, 'unresolved');
+});
+
+test('blank agency still fails unless unresolved status is explicit', () => {
+  const bad = {
+    ...seed('expansion-blank-agency', 'EXPBLANK'),
+    agency: '',
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_missing_agency:expansion-blank-agency/,
+  );
+});
+
+test('unresolved agency status rejects a non-empty agency guess', () => {
+  const bad = {
+    ...seed('expansion-conflicting-agency', 'EXPCONFLICT'),
+    agencyStatus: 'unresolved' as const,
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_conflicting_agency_status:expansion-conflicting-agency/,
   );
 });
 

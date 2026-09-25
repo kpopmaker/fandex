@@ -13,6 +13,7 @@ type ArtistSeedInput = {
   ticker: string;
   name: string;
   agency: string;
+  agencyStatus?: ArtistV4['agencyStatus'];
   entityType?: ArtistV4['entityType'];
   debutDate?: string;
   lifecycleStatus?: ArtistV4['lifecycleStatus'];
@@ -45,7 +46,7 @@ function createArtist(input: ArtistSeedInput): ArtistV4 {
   const includeKeywords = Array.from(
     new Set([
       input.name,
-      input.agency,
+      ...(input.agency.trim() ? [input.agency] : []),
       ...(input.keywords ?? []),
       ...(input.disambiguationKeywords ?? []),
       ...(input.fandomName ? [input.fandomName] : []),
@@ -59,6 +60,7 @@ function createArtist(input: ArtistSeedInput): ArtistV4 {
     nameEn: input.name,
     entityType: input.entityType ?? 'group',
     agency: input.agency,
+    agencyStatus: input.agencyStatus ?? 'verified',
     debutDate: input.debutDate,
     lifecycleStatus: input.lifecycleStatus ?? 'active',
     members: input.members ?? [],
@@ -391,7 +393,14 @@ function validateExpansionSeeds(
     if (!seed.id.trim()) throw new Error('artist_universe_expansion_missing_id');
     if (!seed.ticker.trim()) throw new Error(`artist_universe_expansion_missing_ticker:${seed.id}`);
     if (!seed.name.trim()) throw new Error(`artist_universe_expansion_missing_name:${seed.id}`);
-    if (!seed.agency.trim()) throw new Error(`artist_universe_expansion_missing_agency:${seed.id}`);
+    const agency = seed.agency.trim();
+    const agencyStatus = seed.agencyStatus ?? 'verified';
+    if (!agency && agencyStatus !== 'unresolved') {
+      throw new Error(`artist_universe_expansion_missing_agency:${seed.id}`);
+    }
+    if (agency && agencyStatus === 'unresolved') {
+      throw new Error(`artist_universe_expansion_conflicting_agency_status:${seed.id}`);
+    }
     if (!(seed.koreanAliases?.some((alias) => alias.trim()))) {
       throw new Error(`artist_universe_expansion_missing_korean_alias:${seed.id}`);
     }
