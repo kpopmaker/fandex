@@ -310,4 +310,3 @@ test('YouTube raw evidence digest is invariant to JSON object key order', async 
     evidenceDigests(reordered.rawObservations),
   );
 });
-
