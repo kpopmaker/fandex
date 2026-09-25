@@ -111,6 +111,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'lucy',
     'wendy',
     'nssign',
+    'sechskies',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -119,6 +120,11 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const sechskies = getArtistV4ById('sechskies');
+  assert.ok(sechskies);
+  assert.equal(sechskies.lifecycleStatus, 'inactive');
+  assert.equal(sechskies.collection.tier, 'archive');
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

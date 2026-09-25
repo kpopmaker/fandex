@@ -1584,8 +1584,8 @@
     },
     {
       "displayArtist": "젝스키스",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "legacy_group_scope_verified_current_activity_unresolved",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "legacy_group_archive_onboarding_verified",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -1607,7 +1607,7 @@
       ],
       "scopeDecision": "eligible",
       "scopeBasis": "official_debuted_kpop_group",
-      "onboardingBlocker": "current_group_activity_and_tracking_tier_unresolved"
+      "onboardingBlocker": null
     },
     {
       "displayArtist": "82MAJOR",
