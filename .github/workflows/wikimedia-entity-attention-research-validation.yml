@@ -1,3 +1,4 @@
+# Research-only validation; never authorizes Product or Production state.
 name: Wikimedia Entity Attention Research Validation
 
 on:
