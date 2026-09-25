@@ -153,6 +153,8 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'lun8wave',
     'flareu',
     'modyssey',
+    'lightsum',
+    'slay',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -161,6 +163,25 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const nowz = getArtistV4ById('nowadays');
+  assert.ok(nowz);
+  assert.equal(nowz.nameEn, 'NOWZ');
+  assert.ok(nowz.profile.englishAliases.includes('NOWADAYS'));
+  assert.ok(nowz.profile.englishAliases.includes('NOWZ'));
+  assert.ok(nowz.profile.koreanAliases.includes('나우어데이즈'));
+  assert.ok(nowz.profile.koreanAliases.includes('나우즈'));
+
+  const lightsum = getArtistV4ById('lightsum');
+  assert.ok(lightsum);
+  assert.equal(lightsum.entityType, 'group');
+  assert.equal(lightsum.agency, 'Cube Entertainment');
+  assert.equal(lightsum.members.length, 6);
+
+  const slay = getArtistV4ById('slay');
+  assert.ok(slay);
+  assert.equal(slay.entityType, 'solo');
+  assert.equal(slay.agency, 'Cube Entertainment');
 
   const flareu = getArtistV4ById('flareu');
   assert.ok(flareu);

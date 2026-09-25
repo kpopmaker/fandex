@@ -2916,6 +2916,96 @@
           "note": "CJ ENM's 2026 Q1 IR lists MODYSSEY under ONECEAD with an April 13 debut."
         }
       ]
+    },
+    {
+      "displayArtist": "NOWZ",
+      "decision": "existing_canonical_identity_variant",
+      "relationResolution": "current_name_of_existing_nowadays_canonical_identity",
+      "relatedCanonicalArtistIds": [
+        "nowadays"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_cube_current_artist_identity_and_name_transition",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://nowz.cubeent.co.jp/profile/",
+          "note": "Official NOWZ profile identifies the current five-member K-pop group identity."
+        },
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://nowz.cubeent.co.jp/discography/",
+          "note": "Official discography preserves the 2024 NOWADAYS releases under the current NOWZ identity, confirming name continuity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LIGHTSUM",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_cube_active_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_cube_music_roster_and_2026_current_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/",
+          "note": "Current official CUBE music taxonomy lists LIGHTSUM."
+        },
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%82%BF%E3%83%AA%E3%83%BC%E7%95%AA%E7%B5%84%E3%80%8Ereidol%E3%80%8F%E3%81%8C%E3%80%8Cabema%E3%80%8D/",
+          "note": "Official August 2026 notice documents LIGHTSUM continuing activities and a new Japan-focused project."
+        }
+      ]
+    },
+    {
+      "displayArtist": "SLAY",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cube_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_cube_music_roster_and_2026_korean_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/",
+          "note": "Current official CUBE music taxonomy lists SLAY as an artist."
+        },
+        {
+          "source": "STARNEWS",
+          "url": "https://www.starnewskorea.com/en/star/2026/03/27/2026032707321110027",
+          "note": "Cube Entertainment announced SLAY's April 2026 single and continuing singer-producer activities."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PENTAGON",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "official_cube_identity_roster_current_group_management_lifecycle_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_cube_music_identity_and_established_kpop_group",
+      "onboardingBlocker": "current_group_management_and_lifecycle_resolution_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/",
+          "note": "Current CUBE Japan music taxonomy still lists PENTAGON."
+        },
+        {
+          "source": "Weverse / CUBE Entertainment",
+          "url": "https://weverse.io/pentagon/notice/33247",
+          "note": "CUBE announced PENTAGON Weverse service ended on February 27, 2026 while asking for continued support; roster presence alone is therefore not treated as complete current-management/lifecycle truth."
+        }
+      ]
     }
   ]
 }

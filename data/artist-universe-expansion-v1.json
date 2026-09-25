@@ -3808,6 +3808,99 @@
           "url": "https://www.koreajoongangdaily.com/entertainment/boy-band-modyssey-set-to-release-new-music-in-october/12853944"
         }
       ]
+    },
+    {
+      "id": "lightsum",
+      "ticker": "LIGHTSUM",
+      "name": "LIGHTSUM",
+      "agency": "Cube Entertainment",
+      "entityType": "group",
+      "debutDate": "2021-06-10",
+      "lifecycleStatus": "active",
+      "members": [
+        "SANGAH",
+        "CHOWON",
+        "NAYOUNG",
+        "HINA",
+        "JUHYEON",
+        "YUJEONG"
+      ],
+      "naverNewsQuery": "라잇썸 LIGHTSUM",
+      "koreanAliases": [
+        "라잇썸"
+      ],
+      "englishAliases": [
+        "LIGHTSUM",
+        "Lightsum"
+      ],
+      "keywords": [
+        "Cube Entertainment",
+        "Re:idol",
+        "Beautiful Pain",
+        "라잇썸"
+      ],
+      "disambiguationKeywords": [
+        "Cube Entertainment",
+        "라잇썸"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        },
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%82%BF%E3%83%AA%E3%83%BC%E7%95%AA%E7%B5%84%E3%80%8Ereidol%E3%80%8F%E3%81%8C%E3%80%8Cabema%E3%80%8D/"
+        }
+      ]
+    },
+    {
+      "id": "slay",
+      "ticker": "SLAY",
+      "name": "SLAY",
+      "agency": "Cube Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "SLAY 슬레이 큐브 가수",
+      "koreanAliases": [
+        "슬레이"
+      ],
+      "englishAliases": [
+        "SLAY",
+        "Slay"
+      ],
+      "keywords": [
+        "Cube Entertainment",
+        "producer",
+        "singer-songwriter",
+        "Show Up",
+        "슬레이"
+      ],
+      "disambiguationKeywords": [
+        "Cube Entertainment",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        },
+        {
+          "source": "STARNEWS",
+          "url": "https://www.starnewskorea.com/en/star/2026/03/27/2026032707321110027"
+        }
+      ]
     }
   ]
 }

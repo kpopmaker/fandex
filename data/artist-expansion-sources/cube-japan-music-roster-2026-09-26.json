@@ -1,0 +1,79 @@
+{
+  "version": "cube_japan_music_roster_adapter_v1",
+  "source": {
+    "id": "cube-entertainment-japan-official-music-roster",
+    "type": "agency_roster",
+    "name": "CUBE Entertainment Japan Official Music Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "PENTAGON",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "CUBE Entertainment Japan official artist taxonomy",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "i-dle",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "CUBE Entertainment Japan official artist taxonomy",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LIGHTSUM",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "CUBE Entertainment Japan official artist taxonomy",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NOWZ",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "CUBE Entertainment Japan official artist taxonomy",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SLAY",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "CUBE Entertainment Japan official artist taxonomy",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicTaxonomyOnly": true,
+    "actorTalentTaxonomyExcluded": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://cubeent.co.jp/artist-taxonomy/artist/",
+      "https://cubeent.co.jp/artist-taxonomy/actor/"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
