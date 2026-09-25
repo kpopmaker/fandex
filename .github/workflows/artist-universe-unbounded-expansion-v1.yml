@@ -117,4 +117,5 @@ jobs:
             seoul_music_awards_group_roster_v1_latest.json
             artist_universe_multisource_discovery_v1_latest.json
             artist_scope_review_queue_v1_latest.json
+            artist_onboarding_blocker_queue_v1_latest.json
           if-no-files-found: error
