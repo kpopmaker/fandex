@@ -1,0 +1,28 @@
+name: Diagnose Neon endpoint id v1
+
+on:
+  push:
+    branches:
+      - validation/neon-endpoint-id-diagnostic-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - name: Extract non-secret endpoint id
+        shell: bash
+        run: |
+          node <<'NODE'
+          const raw = process.env.FANDEX_RUNTIME_DATABASE_URL;
+          if (!raw) process.exit(1);
+          const u = new URL(raw);
+          const first = u.hostname.split('.')[0].replace(/-pooler$/, '');
+          if (!/^ep-[a-z0-9-]+$/.test(first)) process.exit(1);
+          console.log('NEON_ENDPOINT_ID=' + first);
+          NODE
