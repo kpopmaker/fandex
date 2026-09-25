@@ -2313,6 +2313,96 @@
           "note": "Official KQ PD artist profile identifies MADDOX as a singer-songwriter and documents his 2019 debut single."
         }
       ]
+    },
+    {
+      "displayArtist": "FTISLAND",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fnc_korean_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_music_roster_and_korean_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist",
+          "note": "Official FNC artist profile identifies FTISLAND as a Korean band debuted in 2007."
+        }
+      ]
+    },
+    {
+      "displayArtist": "CNBLUE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fnc_korean_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_music_roster_and_korean_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist",
+          "note": "Official FNC artist profile identifies CNBLUE as a Korean rock band with a 2010 Korean debut."
+        }
+      ]
+    },
+    {
+      "displayArtist": "SF9",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fnc_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_music_roster_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist",
+          "note": "Official FNC artist profile documents SF9's 2016 Korean music-scene debut."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Hi-Fi Un!corn",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "cross_border_fnc_band_verified_korean_market_activity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_roster_and_verified_korean_market_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist",
+          "note": "Official FNC music artist roster and profile list Hi-Fi Un!corn."
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1857355wpp/winners-of-the-km-chart-awards-kma-2026",
+          "note": "2026 KM Chart Awards named Hi-Fi Un!corn the KM Band Icon, corroborating current Korean-market music recognition."
+        }
+      ]
+    },
+    {
+      "displayArtist": "AxMxP",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fnc_korean_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_music_roster_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist",
+          "note": "Official FNC profile states AxMxP debuted on September 10, 2025 with its first album."
+        }
+      ]
     }
   ]
 }

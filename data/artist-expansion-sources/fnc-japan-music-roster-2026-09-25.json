@@ -1,0 +1,106 @@
+{
+  "version": "fnc_japan_music_roster_adapter_v1",
+  "source": {
+    "id": "fnc-entertainment-japan-official-music-roster",
+    "type": "agency_roster",
+    "name": "FNC Entertainment Japan Official Music Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.fncent.co.jp/artist"
+  },
+  "candidateCount": 8,
+  "candidates": [
+    {
+      "displayArtist": "FTISLAND",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CNBLUE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "N.Flying",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SF9",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "P1Harmony",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Hi-Fi Un!corn",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AMPERS&ONE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AxMxP",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "FNC Entertainment Japan official music artist roster",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicRosterOnly": true,
+    "actorsExcluded": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.fncent.co.jp/artist",
+    "verifiedAt": "2026-09-25"
+  }
+}

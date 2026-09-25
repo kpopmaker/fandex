@@ -2664,6 +2664,205 @@
           "url": "https://kqent.com/producer/1660"
         }
       ]
+    },
+    {
+      "id": "ftisland",
+      "ticker": "FTISLAND",
+      "name": "FTISLAND",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "FT아일랜드 FTISLAND",
+      "koreanAliases": [
+        "FT아일랜드"
+      ],
+      "englishAliases": [
+        "FTISLAND",
+        "F.T. Island"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "밴드",
+        "FT아일랜드"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment",
+        "밴드"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "id": "cnblue",
+      "ticker": "CNBLUE",
+      "name": "CNBLUE",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "씨엔블루 CNBLUE",
+      "koreanAliases": [
+        "씨엔블루"
+      ],
+      "englishAliases": [
+        "CNBLUE"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "밴드",
+        "씨엔블루"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment",
+        "밴드"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "id": "sf9",
+      "ticker": "SF9",
+      "name": "SF9",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "SF9 에스에프나인",
+      "koreanAliases": [
+        "에스에프나인"
+      ],
+      "englishAliases": [
+        "SF9"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "SF9",
+        "에스에프나인"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
+    },
+    {
+      "id": "hifiunicorn",
+      "ticker": "HIFIUNICORN",
+      "name": "Hi-Fi Un!corn",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "debutDate": "2023-06-26",
+      "lifecycleStatus": "active",
+      "members": [
+        "UM TAEMIN",
+        "FUKUSHIMA SHUTO",
+        "KIM HYUNYUL",
+        "SON KIYOON",
+        "HEO MIN"
+      ],
+      "naverNewsQuery": "하이파이유니콘 Hi-Fi Un!corn",
+      "koreanAliases": [
+        "하이파이유니콘"
+      ],
+      "englishAliases": [
+        "Hi-Fi Un!corn",
+        "Hi-Fi Unicorn"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "band",
+        "하이파이유니콘",
+        "KM Band Icon"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment",
+        "band"
+      ],
+      "markets": [
+        "JP",
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist"
+        },
+        {
+          "source": "Hi-Fi Un!corn Official",
+          "url": "https://www.hifiunicorn.com/"
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1857355wpp/winners-of-the-km-chart-awards-kma-2026"
+        }
+      ]
+    },
+    {
+      "id": "axmxp",
+      "ticker": "AXMXP",
+      "name": "AxMxP",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "debutDate": "2025-09-10",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "AxMxP 에이엑스엠엑스피",
+      "koreanAliases": [
+        "에이엑스엠엑스피"
+      ],
+      "englishAliases": [
+        "AxMxP"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "band",
+        "AxMxP"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment",
+        "band"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC Entertainment Japan",
+          "url": "https://www.fncent.co.jp/artist"
+        }
+      ]
     }
   ]
 }
