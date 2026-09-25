@@ -1,6 +1,9 @@
 import 'server-only';
 
 import {
+  createActivityExposureProductionActivationApprovalCandidate,
+} from '../../product/activation/activityExposureProductionActivationApprovalCandidate';
+import {
   evaluateActivityExposureProductionReadiness,
 } from '../../product/activation/activityExposureProductionReadiness';
 import {
@@ -31,5 +34,12 @@ export async function getActivityExposureStoredEvidenceForIU(
 export async function getActivityExposureProductionReadinessForIU() {
   return evaluateActivityExposureProductionReadiness(
     await getActivityExposureShadowProductForIU(),
+  );
+}
+
+
+export async function getActivityExposureProductionActivationApprovalCandidateForIU() {
+  return createActivityExposureProductionActivationApprovalCandidate(
+    await getActivityExposureProductionReadinessForIU(),
   );
 }
