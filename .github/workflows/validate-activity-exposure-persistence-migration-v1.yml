@@ -70,19 +70,10 @@ jobs:
         shell: bash
         run: |
           DIGEST="$(sha256sum database/migrations/003_activity_exposure_persistence_v1.sql | awk '{print $1}')"
-          psql -v ON_ERROR_STOP=1 -v digest="$DIGEST" <<'SQL'
-          INSERT INTO fandex.schema_migrations(version, migration_sha256)
-          VALUES (3, :'digest');
-          DO $$
-          BEGIN
-            IF NOT EXISTS (
-              SELECT 1 FROM fandex.schema_migrations
-              WHERE version = 3 AND migration_sha256 = :'digest'
-            ) THEN
-              RAISE EXCEPTION 'migration registry digest mismatch';
-            END IF;
-          END $$;
-          SQL
+          psql -v ON_ERROR_STOP=1 -v digest="$DIGEST" -c "INSERT INTO fandex.schema_migrations(version, migration_sha256) VALUES (3, :'digest');"
+          STORED="$(psql -At -v ON_ERROR_STOP=1 -c "SELECT migration_sha256 FROM fandex.schema_migrations WHERE version = 3;")"
+          test "$STORED" = "$DIGEST"
+          echo "ACTIVITY_EXPOSURE_MIGRATION_REGISTRY_DIGEST=PASS"
       - name: Confirm NAVER schema remains intact
         run: |
           test "$(psql -At -v ON_ERROR_STOP=1 -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='fandex' AND table_name IN ('source_ingestion_jobs','source_ingestion_raw_evidence','source_ingestion_normalized_records');")" = "3"
