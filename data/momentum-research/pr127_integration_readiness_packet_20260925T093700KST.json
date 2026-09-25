@@ -1,0 +1,122 @@
+{
+  "contractVersion": "fandex_momentum_pr127_integration_readiness_packet_v1",
+  "lifecycle": "research-handoff",
+  "observedAt": "2026-09-25T00:37:00.000Z",
+  "localObservationDate": "2026-09-25",
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "headBeforePacket": "dfd5602eafab1a12f527bab4b2c77873555cce68",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "mergeable": false,
+    "mergeableState": "dirty"
+  },
+  "currentMain": {
+    "sha": "8d68d97a389522c268e976196bc342acc605fd7a",
+    "mergeBaseSha": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "branchAheadBy": 510,
+    "branchBehindBy": 99
+  },
+  "externalCapability": {
+    "vercelProjectMetadataCallable": true,
+    "exactEnvironmentInventoryReadToolExposed": false,
+    "genericRestReadToolExposed": false,
+    "v181State": "resume-capability-blocked",
+    "v181Digest": "88550ff00b6fb8e1c44432fadea26dfd61a63edb834893f3ddeaa0bd8d8b0abd",
+    "resumeAuthorized": false
+  },
+  "integrationConflict": {
+    "overlappingChangedPathCount": 1,
+    "overlappingChangedPaths": [
+      "vercel.json"
+    ],
+    "actualMergeConflictCount": 1,
+    "actualMergeConflictPaths": [
+      "vercel.json"
+    ],
+    "conflictKind": "add-add",
+    "validatedResolution": "keep-current-research-branch-vercel-json",
+    "resolutionMeaning": "preserve-current-main-deployment-suppression-plus-explicit-v131-branch-suppression",
+    "simulationRunId": 36076140864,
+    "simulationPassed": true
+  },
+  "testedResolutionPolicy": {
+    "requiredDeploymentSuppression": {
+      "validation/*": false,
+      "research/*": false,
+      "verify/*": false,
+      "diagnostic/*": false,
+      "work/*": false,
+      "v131-lastfm-real-signal-read-model": false
+    },
+    "clearsAllUnmergedPaths": true,
+    "v181RegressionPassed": true,
+    "typecheckPassed": true,
+    "fullPrDiffCheckPassed": true
+  },
+  "handoffDecision": {
+    "state": "integration-resolution-ready-not-authorized",
+    "internalResearchBlockerRemaining": false,
+    "externalInventoryCapabilityBlockerRemaining": true,
+    "staleBaseResolutionDesignBlockerRemaining": false,
+    "actualMainIntegrationAuthorized": false,
+    "actualRebaseAuthorized": false,
+    "pullRequestMergeAuthorized": false,
+    "readyForProductionMasterControlReview": true
+  },
+  "requiredExecutionOrderIfSeparatelyAuthorized": [
+    "re-read-current-main-and-pr127-head",
+    "confirm-current-main-sha-still-matches-or-rerun-conflict-audit",
+    "integrate-current-main-into-pr127-research-branch-without-force-push",
+    "resolve-only-vercel-json-using-tested-research-branch-content",
+    "run-v181-regression-typecheck-and-full-pr-diff-check",
+    "keep-pr127-draft-unless-separately-authorized",
+    "do-not-merge-pr127-without-explicit-merge-approval"
+  ],
+  "forbiddenByThisPacket": [
+    "vercel-environment-inventory-read",
+    "credential-read-create-or-rotation",
+    "neon-database-read",
+    "production-deployment",
+    "native-verifier-activation-or-execution",
+    "momentum-ledger-advancement",
+    "product-or-registry-mutation",
+    "pull-request-merge",
+    "force-push-or-history-rewrite"
+  ],
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  },
+  "effects": {
+    "providerReads": 0,
+    "vercelInventoryReads": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "deployments": 0,
+    "productionActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "productWrites": 0,
+    "registryMutations": 0,
+    "ledgerWrites": 0,
+    "mainIntoResearchBranchMerges": 0,
+    "rebases": 0,
+    "forcePushes": 0,
+    "pullRequestMerges": 0
+  },
+  "validation": {
+    "githubActionsRunId": null,
+    "status": "PENDING",
+    "packetInvariantPassed": false,
+    "staleBaseAuditReplayPassed": false,
+    "v181RegressionPassed": false,
+    "typecheckPassed": false,
+    "fullPrDiffCheckPassed": false,
+    "temporaryWorkflowRemoved": false
+  }
+}
