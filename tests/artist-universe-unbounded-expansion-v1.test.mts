@@ -155,6 +155,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'modyssey',
     'lightsum',
     'slay',
+    'pentagon',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -163,6 +164,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const pentagon = getArtistV4ById('pentagon');
+  assert.ok(pentagon);
+  assert.equal(pentagon.entityType, 'group');
+  assert.equal(pentagon.lifecycleStatus, 'active');
+  assert.equal(pentagon.agency, '');
+  assert.equal(pentagon.agencyStatus, 'unresolved');
+  assert.equal(pentagon.members.length, 7);
+  assert.deepEqual(pentagon.members, ['JINHO', 'HUI', 'HONGSEOK', 'SHINWON', 'YEOWON', 'KINO', 'WOOSEOK']);
 
   const nowz = getArtistV4ById('nowadays');
   assert.ok(nowz);

@@ -2987,12 +2987,12 @@
     },
     {
       "displayArtist": "PENTAGON",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "official_cube_identity_roster_current_group_management_lifecycle_unresolved",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_seven_member_anniversary_group_activity_verified_with_explicit_management_unresolved",
       "relatedCanonicalArtistIds": [],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_cube_music_identity_and_established_kpop_group",
-      "onboardingBlocker": "current_group_management_and_lifecycle_resolution_required",
+      "scopeBasis": "official_cube_identity_roster_and_verified_2026_group_music_tour_activity",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
@@ -3004,6 +3004,16 @@
           "source": "Weverse / CUBE Entertainment",
           "url": "https://weverse.io/pentagon/notice/33247",
           "note": "CUBE announced PENTAGON Weverse service ended on February 27, 2026 while asking for continued support; roster presence alone is therefore not treated as complete current-management/lifecycle truth."
+        },
+        {
+          "source": "PENTAGON Japan Official",
+          "url": "https://pentagon.cubeent.jp/news/",
+          "note": "Official PENTAGON Japan site announced the PENTAGON 10th Anniversary Tour <101010> in Japan for October 2026, confirming current group activity."
+        },
+        {
+          "source": "PENTAGON 10th Anniversary project reference",
+          "url": "https://kstationtv.com/2026/07/21/pentagon-for-their-10th-anniversary-the-members-reunite/?lang=en",
+          "note": "The 2026 anniversary project is described as a seven-member reunion with JINHO, HUI, HONGSEOK, SHINWON, YEOWON, KINO, and WOOSEOK; NAKED manages the anniversary project, but FANDEX does not infer a long-term group agency from that project role."
         }
       ]
     }

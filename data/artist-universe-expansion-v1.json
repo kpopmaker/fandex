@@ -3901,6 +3901,67 @@
           "url": "https://www.starnewskorea.com/en/star/2026/03/27/2026032707321110027"
         }
       ]
+    },
+    {
+      "id": "pentagon",
+      "ticker": "PENTAGON",
+      "name": "PENTAGON",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "debutDate": "2016-10-10",
+      "lifecycleStatus": "active",
+      "members": [
+        "JINHO",
+        "HUI",
+        "HONGSEOK",
+        "SHINWON",
+        "YEOWON",
+        "KINO",
+        "WOOSEOK"
+      ],
+      "fandomName": "UNIVERSE",
+      "naverNewsQuery": "펜타곤 PENTAGON 10주년",
+      "koreanAliases": [
+        "펜타곤"
+      ],
+      "englishAliases": [
+        "PENTAGON",
+        "Pentagon"
+      ],
+      "keywords": [
+        "PENTAGON",
+        "펜타곤",
+        "10th Anniversary",
+        "101010",
+        "NAKED",
+        "Cube Entertainment"
+      ],
+      "disambiguationKeywords": [
+        "펜타곤",
+        "10주년",
+        "101010"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CUBE Entertainment Japan",
+          "url": "https://cubeent.co.jp/artist-taxonomy/artist/"
+        },
+        {
+          "source": "PENTAGON Japan Official",
+          "url": "https://pentagon.cubeent.jp/news/"
+        },
+        {
+          "source": "PENTAGON 10th Anniversary project reference",
+          "url": "https://kstationtv.com/2026/07/21/pentagon-for-their-10th-anniversary-the-members-reunite/?lang=en"
+        }
+      ]
     }
   ]
 }
