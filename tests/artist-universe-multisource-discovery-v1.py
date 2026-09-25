@@ -37,6 +37,11 @@ snapshots = [
                     "evidence": {"label": "official profile", "url": "https://example.com/iu"},
                 },
                 {
+                    "displayArtist": "IVE (아이브)",
+                    "aliases": [],
+                    "evidence": {"label": "official profile", "url": "https://example.com/ive"},
+                },
+                {
                     "displayArtist": "신인가수 A",
                     "aliases": ["Rookie A"],
                     "evidence": {"label": "official profile", "url": "https://example.com/a"},
@@ -124,6 +129,8 @@ assert len(by_name["신인가수 A"]["sources"]) == 2
 assert len(by_name["신인그룹 B"]["sources"]) == 2
 assert by_name["신인가수 A"]["autoPromote"] is False
 assert by_name["신인가수 A"]["scopeStatus"] == "unverified"
+assert module.identity_components("BIGBANG (빅뱅)") == ["BIGBANG (빅뱅)", "빅뱅", "BIGBANG"]
+assert module.identity_components("TREASURE(트레저)") == ["TREASURE(트레저)", "트레저", "TREASURE"]
 assert by_name["신인가수 A"]["reviewStatus"] == "resolved"
 assert by_name["신인가수 A"]["reviewDecision"] == "new_canonical_solo_candidate"
 assert by_name["신인그룹 B"]["reviewStatus"] == "unresolved"
