@@ -150,6 +150,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'wekimeki',
     'moonbinsanha',
     'jinjinrocky',
+    'lun8wave',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -158,6 +159,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const lun8wave = getArtistV4ById('lun8wave');
+  assert.ok(lun8wave);
+  assert.equal(lun8wave.entityType, 'unit');
+  assert.equal(lun8wave.lifecycleStatus, 'active');
+  assert.deepEqual(lun8wave.members, ['TAKUMA', 'JUNWOO', 'DOHYUN']);
+  assert.equal(lun8wave.agency, 'Fantagio');
 
   for (const artistId of ['wekimeki', 'moonbinsanha', 'jinjinrocky']) {
     const artist = getArtistV4ById(artistId);

@@ -3647,6 +3647,58 @@
           "url": "https://www.fantagio.kr/groups/"
         }
       ]
+    },
+    {
+      "id": "lun8wave",
+      "ticker": "LUN8WAVE",
+      "name": "LUN8WAVE",
+      "agency": "Fantagio",
+      "entityType": "unit",
+      "debutDate": "2023-11-22",
+      "lifecycleStatus": "active",
+      "members": [
+        "TAKUMA",
+        "JUNWOO",
+        "DOHYUN"
+      ],
+      "naverNewsQuery": "루네이브 LUN8WAVE LUN8",
+      "koreanAliases": [
+        "루네이브",
+        "루네이트웨이브"
+      ],
+      "englishAliases": [
+        "LUN8WAVE",
+        "LUN8wave"
+      ],
+      "keywords": [
+        "Fantagio",
+        "LUN8",
+        "Playground",
+        "타쿠마",
+        "준우",
+        "도현"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "LUN8",
+        "루네이브"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "LUN8wave current profile reference",
+          "url": "https://kpop.fandom.com/wiki/LUN8wave"
+        }
+      ]
     }
   ]
 }

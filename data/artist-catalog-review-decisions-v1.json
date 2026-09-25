@@ -2747,20 +2747,25 @@
     },
     {
       "displayArtist": "LUN8WAVE",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "official_lun8_unit_identity_current_member_state_requires_resolution",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "official_lun8_unit_identity_current_three_member_state_resolved",
       "relatedCanonicalArtistIds": [
         "lun8"
       ],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_fantagio_unit_identity_roster",
-      "onboardingBlocker": "current_unit_membership_and_lifecycle_resolution_required",
+      "scopeBasis": "official_fantagio_unit_identity_and_current_member_state",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
           "source": "Fantagio",
           "url": "https://www.fantagio.kr/groups/",
           "note": "Fantagio lists LUN8WAVE as a distinct music identity, but the roster page alone does not establish current unit membership or lifecycle."
+        },
+        {
+          "source": "LUN8wave current profile reference",
+          "url": "https://kpop.fandom.com/wiki/LUN8wave",
+          "note": "Current profile records Takuma, Jun Woo, and Do Hyun as the remaining members after Eun Seop's 2025 departure and Ji Eun Ho's March 2026 departure, both tied to Fantagio announcements."
         }
       ]
     },
