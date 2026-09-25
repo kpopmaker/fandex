@@ -1,0 +1,78 @@
+{
+  "version": "mnh_agency_roster_adapter_v1",
+  "source": {
+    "id": "mnh-entertainment-official-artist-roster",
+    "type": "agency_roster",
+    "name": "MNH Entertainment Official Artist Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://mnhenter.com/ARTIST"
+  },
+  "candidateCount": 4,
+  "candidates": [
+    {
+      "displayArtist": "8TURN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "MNH Entertainment official artist roster",
+          "url": "https://mnhenter.com/ARTIST"
+        }
+      ]
+    },
+    {
+      "displayArtist": "EJel",
+      "aliases": [
+        "이젤",
+        "이젤 (EJel)"
+      ],
+      "evidence": [
+        {
+          "label": "MNH Entertainment official artist roster",
+          "url": "https://mnhenter.com/EJel"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LIM SANG HYUN",
+      "aliases": [
+        "임상현"
+      ],
+      "evidence": [
+        {
+          "label": "MNH Entertainment official artist roster",
+          "url": "https://mnhenter.com/LIMSANGHYUN"
+        }
+      ]
+    },
+    {
+      "displayArtist": "VVON",
+      "aliases": [
+        "본",
+        "VVON (본)"
+      ],
+      "evidence": [
+        {
+          "label": "MNH Entertainment official artist roster",
+          "url": "https://mnhenter.com/VVON"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "exactCurrentRosterRequired": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://mnhenter.com/ARTIST",
+      "https://mnhenter.com/EJel",
+      "https://mnhenter.com/LIMSANGHYUN",
+      "https://mnhenter.com/VVON"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

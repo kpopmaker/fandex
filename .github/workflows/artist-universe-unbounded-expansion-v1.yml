@@ -52,6 +52,7 @@ jobs:
           python tests/artist-expansion-wakeone-roster-adapter-v1.py
           python tests/artist-expansion-fantagio-roster-adapter-v1.py
           python tests/artist-expansion-cube-japan-roster-adapter-v1.py
+          python tests/artist-expansion-mnh-roster-adapter-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -124,6 +125,11 @@ jobs:
           python scripts/artist-expansion/collect_cube_japan_music_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/cube-japan-music-roster-2026-09-26.json \
             --output cube_japan_music_roster_v1_latest.json
+      - name: Collect MNH official artist roster
+        run: |
+          python scripts/artist-expansion/collect_mnh_agency_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/mnh-official-roster-2026-09-26.json \
+            --output mnh_agency_roster_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -154,6 +160,7 @@ jobs:
             --snapshot wakeone_agency_roster_v1_latest.json \
             --snapshot fantagio_music_roster_v1_latest.json \
             --snapshot cube_japan_music_roster_v1_latest.json \
+            --snapshot mnh_agency_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -206,6 +213,7 @@ jobs:
             wakeone_agency_roster_v1_latest.json
             fantagio_music_roster_v1_latest.json
             cube_japan_music_roster_v1_latest.json
+            mnh_agency_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

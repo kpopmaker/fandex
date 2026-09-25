@@ -3016,6 +3016,77 @@
           "note": "The 2026 anniversary project is described as a seven-member reunion with JINHO, HUI, HONGSEOK, SHINWON, YEOWON, KINO, and WOOSEOK; NAKED manages the anniversary project, but FANDEX does not infer a long-term group agency from that project role."
         }
       ]
+    },
+    {
+      "displayArtist": "EJel",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_mnh_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_mnh_artist_roster_and_korean_music_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/EJel",
+          "note": "MNH maintains a dedicated current artist profile for EJel."
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4149390",
+          "note": "2026 single '여름의 방정식' is credited to EJel with MNH Entertainment as planning agency."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LIM SANG HYUN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_mnh_ballad_solo_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_mnh_artist_roster_and_independent_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/LIMSANGHYUN",
+          "note": "MNH maintains a dedicated current artist profile for LIM SANG HYUN."
+        },
+        {
+          "source": "Star Today",
+          "url": "https://www.mk.co.kr/news/musics/9956819",
+          "note": "MNH introduced Lim Sang-hyun as its first ballad singer for his July 25, 2021 digital-single debut."
+        },
+        {
+          "source": "Current profile reference",
+          "url": "https://www.namu.moe/w/%EC%9E%84%EC%83%81%ED%98%84(%EA%B0%80%EC%88%98)",
+          "note": "Current profile records active military service from October 27, 2025 to April 26, 2027; lifecycle is represented as military while the MNH artist identity remains current."
+        }
+      ]
+    },
+    {
+      "displayArtist": "VVON",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_mnh_rnb_solo_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_mnh_artist_roster_and_independent_music_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/VVON",
+          "note": "MNH maintains a dedicated current artist profile for VVON."
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4134818",
+          "note": "VVON's first EP is listed as an independent artist release planned by MNH Entertainment."
+        }
+      ]
     }
   ]
 }

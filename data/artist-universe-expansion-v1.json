@@ -3962,6 +3962,132 @@
           "url": "https://kstationtv.com/2026/07/21/pentagon-for-their-10th-anniversary-the-members-reunite/?lang=en"
         }
       ]
+    },
+    {
+      "id": "ejel",
+      "ticker": "EJEL",
+      "name": "EJel",
+      "agency": "MNH Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이젤 EJel 가수",
+      "koreanAliases": [
+        "이젤"
+      ],
+      "englishAliases": [
+        "EJel",
+        "EJEL"
+      ],
+      "keywords": [
+        "MNH Entertainment",
+        "여름의 방정식",
+        "의리소녀",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "MNH Entertainment",
+        "가수",
+        "이젤"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/EJel"
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4149390"
+        }
+      ]
+    },
+    {
+      "id": "limsanghyun",
+      "ticker": "LIMSANGHYUN",
+      "name": "LIM SANG HYUN",
+      "agency": "MNH Entertainment",
+      "entityType": "solo",
+      "debutDate": "2021-07-25",
+      "lifecycleStatus": "military",
+      "naverNewsQuery": "임상현 LIM SANG HYUN 가수",
+      "koreanAliases": [
+        "임상현"
+      ],
+      "englishAliases": [
+        "LIM SANG HYUN",
+        "Lim Sang Hyun"
+      ],
+      "keywords": [
+        "MNH Entertainment",
+        "발라더",
+        "비가 오던 밤",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "MNH Entertainment",
+        "가수",
+        "임상현"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/LIMSANGHYUN"
+        },
+        {
+          "source": "Star Today",
+          "url": "https://www.mk.co.kr/news/musics/9956819"
+        }
+      ]
+    },
+    {
+      "id": "vvon",
+      "ticker": "VVON",
+      "name": "VVON",
+      "agency": "MNH Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "VVON 본 가수 MNH",
+      "koreanAliases": [
+        "본"
+      ],
+      "englishAliases": [
+        "VVON"
+      ],
+      "keywords": [
+        "MNH Entertainment",
+        "R&B",
+        "VVON ThiS VVAY",
+        "CITY"
+      ],
+      "disambiguationKeywords": [
+        "MNH Entertainment",
+        "VVON",
+        "본"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "MNH Entertainment",
+          "url": "https://mnhenter.com/VVON"
+        },
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/album/4134818"
+        }
+      ]
     }
   ]
 }

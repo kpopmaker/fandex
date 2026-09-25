@@ -156,6 +156,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'lightsum',
     'slay',
     'pentagon',
+    'ejel',
+    'limsanghyun',
+    'vvon',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -164,6 +167,25 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const ejel = getArtistV4ById('ejel');
+  assert.ok(ejel);
+  assert.equal(ejel.entityType, 'solo');
+  assert.equal(ejel.agency, 'MNH Entertainment');
+  assert.equal(ejel.lifecycleStatus, 'active');
+
+  const limSangHyun = getArtistV4ById('limsanghyun');
+  assert.ok(limSangHyun);
+  assert.equal(limSangHyun.entityType, 'solo');
+  assert.equal(limSangHyun.agency, 'MNH Entertainment');
+  assert.equal(limSangHyun.debutDate, '2021-07-25');
+  assert.equal(limSangHyun.lifecycleStatus, 'military');
+
+  const vvon = getArtistV4ById('vvon');
+  assert.ok(vvon);
+  assert.equal(vvon.entityType, 'solo');
+  assert.equal(vvon.agency, 'MNH Entertainment');
+  assert.equal(vvon.lifecycleStatus, 'active');
 
   const pentagon = getArtistV4ById('pentagon');
   assert.ok(pentagon);
