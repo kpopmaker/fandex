@@ -1,13 +1,13 @@
 {
   "contractVersion": "fandex_momentum_external_operator_execution_request_v1",
   "lifecycle": "research-execution-gate",
-  "authorized": true,
-  "confirm": "EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ",
-  "requestId": "pr127-vercel-env-read-20260925T100413Z",
-  "authorizedBy": "kpopmaker",
-  "decidedAt": "2026-09-25T10:04:13.000Z",
-  "validFrom": "2026-09-25T10:04:13.000Z",
-  "expiresAt": "2026-09-25T10:34:13.000Z",
+  "authorized": false,
+  "confirm": "NOT_AUTHORIZED",
+  "requestId": null,
+  "authorizedBy": null,
+  "decidedAt": null,
+  "validFrom": null,
+  "expiresAt": null,
   "opaqueSecretRollbackHandleId": null,
   "opaqueSecretRollbackRestorableAttested": false,
   "exactRead": {
@@ -29,5 +29,5 @@
     "productionEligible": false,
     "productProductionActual": "1/7"
   },
-  "note": "Changing authorized to true is insufficient by itself: confirm, IDs, identity, and unexpired exact ISO authorization window are all required. Raw Vercel credential material must never be stored in this file."
+  "note": "Locked after bounded-read attempt run 36122850192 failed closed before any provider read because the GitHub Actions VERCEL_TOKEN secret was unavailable. A new explicit authorization is required for any future read attempt."
 }
