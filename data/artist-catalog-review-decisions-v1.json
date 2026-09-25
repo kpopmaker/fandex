@@ -2120,6 +2120,77 @@
       "scopeBasis": "localized_china_identity_without_verified_kr_market_or_explicit_kpop_evidence",
       "scopeRecheckTrigger": "verified_korean_market_music_activity_or_explicit_official_kpop_classification",
       "onboardingBlocker": null
+    },
+    {
+      "displayArtist": "KANGTA",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_sm_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_sm_artist_roster_and_korean_music_career",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/",
+          "note": "Current official featured artist roster lists KANGTA."
+        },
+        {
+          "source": "SM Entertainment Newsroom",
+          "url": "https://www.smentertainment.com/newsroom/%EA%B0%95%ED%83%80-%EC%A0%95%EA%B7%9C-4%EC%A7%91-eyes-on-you-9%EC%9B%94-7%EC%9D%BC-%EB%B0%9C%EB%A7%A4/",
+          "note": "Official newsroom documents KANGTA's solo music releases and singer-songwriter career."
+        }
+      ]
+    },
+    {
+      "displayArtist": "nævis",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_sm_virtual_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_sm_artist_roster_and_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/",
+          "note": "Current official featured artist roster lists nævis."
+        },
+        {
+          "source": "SM Entertainment Sustainability Report",
+          "url": "https://cdn2.smentertainment.com/wp-content/uploads/2025/07/2024-SM-Entertainment-Sustainability-Report_EN-1.pdf",
+          "note": "Official artist overview lists nævis with debut date 2024-09-10 and signature song 'Done'."
+        }
+      ]
+    },
+    {
+      "displayArtist": "XngHan&Xoul",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "artist_brand_resolved_to_solo_xnghan",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_sm_music_lineup_and_korean_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/",
+          "note": "Current official featured artist roster lists XngHan&Xoul."
+        },
+        {
+          "source": "SM Entertainment 1Q26 Earnings",
+          "url": "https://cdn2.smentertainment.com/wp-content/uploads/2026/05/06114939/1Q26_%EC%8B%A4%EC%A0%81%EB%B0%9C%ED%91%9C_Eng_F-1.pdf",
+          "note": "Official 2026 music lineup lists XngHan&Xoul and a South Korea fanmeeting."
+        },
+        {
+          "source": "SMTOWN",
+          "url": "https://www.youtube.com/watch?v=n1bzcMrjZtk",
+          "note": "Verified SMTOWN channel identifies 'Waste No Time' as XngHan&Xoul's debut single; canonical identity is modeled as solo XngHan with the artist-brand alias."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,186 @@
+{
+  "version": "sm_agency_roster_adapter_v1",
+  "source": {
+    "id": "sm-entertainment-official-featured-artist-roster",
+    "type": "agency_roster",
+    "name": "SM Entertainment Official Featured Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.smentertainment.com/artist/"
+  },
+  "candidateCount": 16,
+  "candidates": [
+    {
+      "displayArtist": "KANGTA",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TVXQ!",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SUPER JUNIOR",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "GIRLS’ GENERATION",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SHINee",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "EXO",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Red Velvet",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NCT 127",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NCT DREAM",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "WayV",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "aespa",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "RIIZE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NCT WISH",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "nævis",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Hearts2Hearts",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "XngHan&Xoul",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "SM Entertainment official featured artist roster",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "featuredRosterOnly": true,
+    "memberDirectoryExcluded": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.smentertainment.com/artist/",
+    "verifiedAt": "2026-09-25"
+  }
+}

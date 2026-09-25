@@ -2281,6 +2281,140 @@
           "url": "https://en.edaily.co.kr/news/eda202607175170/"
         }
       ]
+    },
+    {
+      "id": "kangta",
+      "ticker": "KANGTA",
+      "name": "KANGTA",
+      "agency": "SM Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "강타 KANGTA 가수",
+      "koreanAliases": [
+        "강타"
+      ],
+      "englishAliases": [
+        "KANGTA",
+        "Kangta"
+      ],
+      "keywords": [
+        "SM Entertainment",
+        "H.O.T.",
+        "강타",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "SM Entertainment",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "CN",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/"
+        },
+        {
+          "source": "SM Entertainment Newsroom",
+          "url": "https://www.smentertainment.com/newsroom/%EA%B0%95%ED%83%80-%EC%A0%95%EA%B7%9C-4%EC%A7%91-eyes-on-you-9%EC%9B%94-7%EC%9D%BC-%EB%B0%9C%EB%A7%A4/"
+        }
+      ]
+    },
+    {
+      "id": "naevis",
+      "ticker": "NAEVIS",
+      "name": "nævis",
+      "agency": "SM Entertainment",
+      "entityType": "solo",
+      "debutDate": "2024-09-10",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "나이비스 nævis",
+      "koreanAliases": [
+        "나이비스"
+      ],
+      "englishAliases": [
+        "nævis",
+        "naevis"
+      ],
+      "keywords": [
+        "SM Entertainment",
+        "virtual artist",
+        "Done",
+        "나이비스"
+      ],
+      "disambiguationKeywords": [
+        "SM Entertainment",
+        "virtual artist"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/"
+        },
+        {
+          "source": "SM Entertainment Sustainability Report",
+          "url": "https://cdn2.smentertainment.com/wp-content/uploads/2025/07/2024-SM-Entertainment-Sustainability-Report_EN-1.pdf"
+        }
+      ]
+    },
+    {
+      "id": "xnghan",
+      "ticker": "XNGHAN",
+      "name": "XngHan",
+      "agency": "SM Entertainment",
+      "entityType": "solo",
+      "debutDate": "2025-07-31",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "승한 XngHan 승한앤소울",
+      "koreanAliases": [
+        "승한",
+        "승한앤소울"
+      ],
+      "englishAliases": [
+        "XngHan",
+        "XngHan&Xoul",
+        "XngHan & Xoul"
+      ],
+      "keywords": [
+        "SM Entertainment",
+        "XngHan&Xoul",
+        "Waste No Time",
+        "Glow",
+        "승한"
+      ],
+      "disambiguationKeywords": [
+        "SM Entertainment",
+        "승한앤소울"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "SM Entertainment",
+          "url": "https://www.smentertainment.com/artist/"
+        },
+        {
+          "source": "SM Entertainment 1Q26 Earnings",
+          "url": "https://cdn2.smentertainment.com/wp-content/uploads/2026/05/06114939/1Q26_%EC%8B%A4%EC%A0%81%EB%B0%9C%ED%91%9C_Eng_F-1.pdf"
+        },
+        {
+          "source": "SMTOWN",
+          "url": "https://www.youtube.com/watch?v=n1bzcMrjZtk"
+        }
+      ]
     }
   ]
 }

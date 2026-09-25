@@ -119,6 +119,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'boystory',
     'yaochen',
     'girlset',
+    'kangta',
+    'naevis',
+    'xnghan',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -127,6 +130,22 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const kangta = getArtistV4ById('kangta');
+  assert.ok(kangta);
+  assert.equal(kangta.entityType, 'solo');
+  assert.ok(kangta.profile.markets.includes('KR'));
+
+  const naevis = getArtistV4ById('naevis');
+  assert.ok(naevis);
+  assert.equal(naevis.entityType, 'solo');
+  assert.equal(naevis.debutDate, '2024-09-10');
+
+  const xnghan = getArtistV4ById('xnghan');
+  assert.ok(xnghan);
+  assert.equal(xnghan.entityType, 'solo');
+  assert.ok(xnghan.profile.englishAliases.includes('XngHan&Xoul'));
+  assert.ok(xnghan.profile.koreanAliases.includes('승한앤소울'));
 
   for (const artistId of ['boystory', 'yaochen', 'girlset']) {
     const artist = getArtistV4ById(artistId);
