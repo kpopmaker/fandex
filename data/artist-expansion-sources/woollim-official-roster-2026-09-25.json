@@ -1,0 +1,45 @@
+{
+  "version": "woollim_agency_roster_adapter_v1",
+  "source": {
+    "id": "woollim-entertainment-official-artist-roster",
+    "type": "agency_roster",
+    "name": "Woollim Entertainment Official Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.woolliment.com/artists-woolim"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "GOLDEN CHILD",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Woollim Entertainment official artist roster",
+          "url": "https://www.woolliment.com/artists-woolim"
+        }
+      ]
+    },
+    {
+      "displayArtist": "DRIPPIN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Woollim Entertainment official artist roster",
+          "url": "https://www.woolliment.com/artists-woolim"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "exactCurrentRosterRequired": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.woolliment.com/artists-woolim",
+    "verifiedAt": "2026-09-25"
+  }
+}

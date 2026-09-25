@@ -2863,6 +2863,107 @@
           "url": "https://www.fncent.co.jp/artist"
         }
       ]
+    },
+    {
+      "id": "goldenchild",
+      "ticker": "GOLDENCHILD",
+      "name": "GOLDEN CHILD",
+      "agency": "Woollim Entertainment",
+      "entityType": "group",
+      "debutDate": "2017-08-28",
+      "lifecycleStatus": "active",
+      "members": [
+        "LEE DAEYEOL",
+        "Y",
+        "LEE JANGJUN",
+        "BAE SEUNGMIN",
+        "BONG JAEHYUN",
+        "KIM DONGHYUN",
+        "HONG JOOCHAN"
+      ],
+      "naverNewsQuery": "골든차일드 GOLDEN CHILD",
+      "koreanAliases": [
+        "골든차일드"
+      ],
+      "englishAliases": [
+        "GOLDEN CHILD",
+        "Golden Child"
+      ],
+      "keywords": [
+        "Woollim Entertainment",
+        "울림엔터테인먼트",
+        "골든차일드"
+      ],
+      "disambiguationKeywords": [
+        "Woollim Entertainment",
+        "골든차일드"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Woollim Entertainment",
+          "url": "https://www.woolliment.com/artists-woolim"
+        },
+        {
+          "source": "Woollim Entertainment",
+          "url": "https://www.woolliment.com/arsits/golden-child"
+        }
+      ]
+    },
+    {
+      "id": "drippin",
+      "ticker": "DRIPPIN",
+      "name": "DRIPPIN",
+      "agency": "Woollim Entertainment",
+      "entityType": "group",
+      "debutDate": "2020-10-28",
+      "lifecycleStatus": "active",
+      "members": [
+        "HWANG YUNSEONG",
+        "LEE HYEOP",
+        "JOO CHANGUK",
+        "KIM DONGYUN",
+        "KIM MINSEO",
+        "CHA JUNHO"
+      ],
+      "naverNewsQuery": "드리핀 DRIPPIN",
+      "koreanAliases": [
+        "드리핀"
+      ],
+      "englishAliases": [
+        "DRIPPIN",
+        "Drippin"
+      ],
+      "keywords": [
+        "Woollim Entertainment",
+        "울림엔터테인먼트",
+        "드리핀"
+      ],
+      "disambiguationKeywords": [
+        "Woollim Entertainment",
+        "드리핀"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Woollim Entertainment",
+          "url": "https://www.woolliment.com/artists-woolim"
+        },
+        {
+          "source": "Woollim Entertainment",
+          "url": "https://www.woolliment.com/arsits/drippin"
+        }
+      ]
     }
   ]
 }
