@@ -1,0 +1,90 @@
+{
+  "contractVersion": "fandex_momentum_pr127_current_main_deployment_handoff_preflight_v1",
+  "lifecycle": "research-to-production-master-control-handoff",
+  "evaluatedAt": "2026-09-25T21:26:00.000Z",
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "validatedHead": "fe5a08f0118a511db438d8aee49d7b58e75795f0",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "currentMain": {
+    "sha": "b1a0ca1cd47113595d4584fb66a3444188eeb29e",
+    "momentumVerifierFilesPresent": {
+      "route": false,
+      "executionChannel": false,
+      "nativeVerifier": false
+    }
+  },
+  "priorDeploymentTarget": {
+    "sha": "7a1038226b07abf4a130986766ef114a43c1d638",
+    "statusRelativeToCurrentMain": "diverged",
+    "currentMainAheadBy": 127,
+    "priorTargetAheadBy": 294,
+    "mergeBase": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "directProductionDeploymentSafe": false,
+    "blocker": "stale-deployment-target-would-not-preserve-current-main"
+  },
+  "configurationReadiness": {
+    "v166MutationState": "configuration-mutation-succeeded",
+    "v164State": "configuration-evidence-ready",
+    "v163State": "activation-readiness-pass",
+    "productionConfigurationPresent": true,
+    "activationAuthorized": false
+  },
+  "currentMainIntegrationSimulation": {
+    "workflowRunId": 36191486958,
+    "status": "PASS",
+    "simulatedOnly": true,
+    "mergeCommitted": false,
+    "remoteBranchMutatedByMerge": false,
+    "exactMainSha": "b1a0ca1cd47113595d4584fb66a3444188eeb29e",
+    "conflictCount": 1,
+    "conflicts": [
+      "vercel.json"
+    ],
+    "resolutionValidated": "preserve-research-branch-vercel-json-with-exact-v131-preview-suppression",
+    "momentumVerifierRegressionPassed": true,
+    "currentMainActivityExposureRegressionPassed": true,
+    "activityExposureProductionReadinessRegressionPassed": true,
+    "typecheckPassed": true,
+    "simulatedMergeAborted": true
+  },
+  "requiredNextLifecycleStep": {
+    "owner": "FANDEX Production Master Control",
+    "state": "integration-candidate-required-before-production-deployment-authorization",
+    "requirement": "Create or approve a fresh integration candidate based on current main b1a0ca1cd47113595d4584fb66a3444188eeb29e that includes the reviewed Momentum verifier route and required server modules while preserving current-main Activity Exposure behavior and the exact v131 Vercel preview suppression.",
+    "productionDeploymentAuthorizationMayBeEvaluatedOnlyAfterFreshCandidatePinned": true,
+    "oldV165IntendedDeploymentCommitMustNotBeDeployedDirectly": true
+  },
+  "forbiddenWithoutSeparateAuthorization": [
+    "merge-or-rebase-pr-127",
+    "create-production-integration-cutover",
+    "production-deployment",
+    "verifier-activation",
+    "native-verifier-execution",
+    "research-ledger-advance",
+    "product-or-registry-mutation"
+  ],
+  "effects": {
+    "githubMergeSimulationRuns": 1,
+    "actualMerges": 0,
+    "productionDeployments": 0,
+    "vercelEnvironmentMutations": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
