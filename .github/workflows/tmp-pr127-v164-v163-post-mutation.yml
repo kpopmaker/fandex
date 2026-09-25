@@ -1,0 +1,31 @@
+name: TMP PR127 v164 v163 Post Mutation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - .github/workflows/tmp-pr127-v164-v163-post-mutation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Evaluate v164 and v163 after successful v166 mutation
+        run: npx tsx scripts/momentum-research/tmp-evaluate-v164-v163-after-v166-mutation.mts
+      - name: Regression
+        run: |
+          npx tsx --test tests/fandex-momentum-verifier-configuration-evidence-v164.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-channel-activation-readiness-v163.test.mts
+      - name: Typecheck
+        run: npm run typecheck
