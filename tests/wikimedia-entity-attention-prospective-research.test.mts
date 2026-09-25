@@ -203,10 +203,13 @@ test('post-day phase emits one bounded provider-native observation when identity
 });
 
 test('post-day phase fails closed when redirect membership changes during the observed day', async () => {
+  const fetch = buildFetch({
+    afterRedirects: [{ pageid: 80155192, title: 'IU (singer)' }],
+  });
   const before = await captureWikimediaEntityAttentionPreDayResearch(
     '2026-09-26',
     {
-      fetch: buildFetch(),
+      fetch,
       now: () => new Date('2026-09-25T12:00:00.000Z'),
     },
   );
@@ -217,9 +220,7 @@ test('post-day phase fails closed when redirect membership changes during the ob
       beforeIdentity: before.identity,
     },
     {
-      fetch: buildFetch({
-        afterRedirects: [{ pageid: 80155192, title: 'IU (singer)' }],
-      }),
+      fetch,
       now: () => new Date('2026-09-27T03:00:00.000Z'),
     },
   );
