@@ -485,6 +485,23 @@ async function run(): Promise<void> {
       : null;
 
   const hasPaginationRisk = paginationRisk(body, envs.length);
+  if (hasPaginationRisk) {
+    await writeResult({
+      contractVersion: 'fandex_momentum_external_operator_execution_result_v1',
+      state: 'provider-response-incomplete',
+      requestId: request.requestId,
+      providerReads: providerReadCount,
+      httpStatus: res.status,
+      blocker: 'vercel-inventory-pagination-or-additional-page-risk',
+      productBoundary: {
+        productMomentumScore: null,
+        productionEligible: false,
+        productProductionActual: '1/7',
+      },
+    });
+    throw new Error('vercel-inventory-pagination-or-additional-page-risk');
+  }
+
   const v179Response: FandexMomentumVerifierExternalInventoryExecutionResponse = {
     responseId: `external-inventory-response:v179:gha:${runId}:${runAttempt}`,
     submittedAt: new Date().toISOString(),
@@ -506,8 +523,8 @@ async function run(): Promise<void> {
       credentialValueExposed: false,
       providerResponseReceived: true,
       responseBoundToProjectAndTeam: true,
-      completeForProductionTarget: !hasPaginationRisk,
-      truncationOrAdditionalPageRisk: hasPaginationRisk,
+      completeForProductionTarget: true,
+      truncationOrAdditionalPageRisk: false,
       rawProviderResponsePersisted: false,
       secretValueLogged: false,
       secretValuePersisted: false,
