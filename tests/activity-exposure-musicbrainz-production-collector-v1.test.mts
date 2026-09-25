@@ -214,3 +214,90 @@ test('MusicBrainz changing pagination count fails closed', async () => {
     { message: 'musicbrainz_activity_exposure_pagination_changed' },
   );
 });
+
+test('MusicBrainz raw evidence digest is invariant to JSON object key order', async () => {
+  const groupA = {
+    id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+    title: 'The Winning',
+    'first-release-date': '2024-02-20',
+    'artist-credit': [{
+      name: 'IU',
+      artist: {
+        id: iuMbid,
+        name: 'IU',
+        'sort-name': 'IU',
+      },
+    }],
+  };
+  const groupB = {
+    'artist-credit': [{
+      artist: {
+        'sort-name': 'IU',
+        name: 'IU',
+        id: iuMbid,
+      },
+      name: 'IU',
+    }],
+    'first-release-date': '2024-02-20',
+    title: 'The Winning',
+    id: '066225ff-a8bd-4183-bff5-08329f0a063a',
+  };
+  const releaseA = {
+    id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+    title: 'The Winning',
+    status: 'Official',
+    date: '2024-02-20',
+    country: 'KR',
+  };
+  const releaseB = {
+    country: 'KR',
+    date: '2024-02-20',
+    status: 'Official',
+    title: 'The Winning',
+    id: '1b43c9e0-31d4-48ae-92bc-541a6aaf4eb3',
+  };
+
+  async function collect(
+    group: Record<string, unknown>,
+    providerRelease: Record<string, unknown>,
+  ) {
+    return createMusicBrainzActivityExposureCollector({
+      fetch: async (input) => {
+        const url = new URL(input);
+        return url.pathname.endsWith('/release-group')
+          ? jsonResponse({
+              'release-group-count': 1,
+              'release-group-offset': 0,
+              'release-groups': [group],
+            })
+          : jsonResponse({
+              'release-count': 1,
+              'release-offset': 0,
+              releases: [providerRelease],
+            });
+      },
+      now: () => new Date(collectedAt),
+      sleep: async () => {},
+    }).collect({
+      artistId: 'iu',
+      providerArtistId: iuMbid,
+    });
+  }
+
+  const first = await collect(groupA, releaseA);
+  const reordered = await collect(groupB, releaseB);
+  const evidenceDigests = (
+    observations: typeof first.rawObservations,
+  ) => observations
+    .map((observation) => [
+      observation.sourceEntityType,
+      observation.sourceEntityId,
+      observation.rawPayloadDigest,
+    ].join(':'))
+    .sort();
+
+  assert.deepEqual(
+    evidenceDigests(first.rawObservations),
+    evidenceDigests(reordered.rawObservations),
+  );
+});

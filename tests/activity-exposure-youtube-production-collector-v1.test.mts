@@ -230,3 +230,83 @@ test('invalid exact publishedAt fails closed without rendered-date fallback', as
     { message: 'youtube_activity_exposure_response_invalid' },
   );
 });
+
+test('YouTube raw evidence digest is invariant to JSON object key order', async () => {
+  const videoId = 'JleoAppaxi0';
+  const uploads = 'UU3SyT4_WLHzN7JmHQwKQZww';
+
+  async function collect(reordered: boolean) {
+    return createYouTubeActivityExposureCollector({
+      apiKey,
+      now: () => new Date(collectedAt),
+      fetch: async (input) => {
+        const url = new URL(input);
+        if (url.pathname.endsWith('/channels')) {
+          return jsonResponse({
+            items: [
+              reordered
+                ? {
+                    contentDetails: {
+                      relatedPlaylists: { uploads },
+                    },
+                    id: channelId,
+                  }
+                : {
+                    id: channelId,
+                    contentDetails: {
+                      relatedPlaylists: { uploads },
+                    },
+                  },
+            ],
+          });
+        }
+        if (url.pathname.endsWith('/playlistItems')) {
+          return jsonResponse({
+            items: [{ contentDetails: { videoId } }],
+          });
+        }
+        return jsonResponse({
+          items: [
+            reordered
+              ? {
+                  snippet: {
+                    publishedAt: '2024-01-23T15:00:00Z',
+                    title: "IU 'Love wins all' MV",
+                    channelId,
+                  },
+                  id: videoId,
+                }
+              : {
+                  id: videoId,
+                  snippet: {
+                    channelId,
+                    title: "IU 'Love wins all' MV",
+                    publishedAt: '2024-01-23T15:00:00Z',
+                  },
+                },
+          ],
+        });
+      },
+    }).collect({
+      artistId: 'iu',
+      providerArtistId: channelId,
+    });
+  }
+
+  const first = await collect(false);
+  const reordered = await collect(true);
+  const evidenceDigests = (
+    observations: typeof first.rawObservations,
+  ) => observations
+    .map((observation) => [
+      observation.sourceEntityType,
+      observation.sourceEntityId,
+      observation.rawPayloadDigest,
+    ].join(':'))
+    .sort();
+
+  assert.deepEqual(
+    evidenceDigests(first.rawObservations),
+    evidenceDigests(reordered.rawObservations),
+  );
+});
