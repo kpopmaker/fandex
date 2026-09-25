@@ -1,0 +1,66 @@
+name: Diagnose Activity Exposure Neon shadow progress v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-neon-shadow-progress-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only runtime state
+        shell: bash
+        run: |
+          node <<'NODE'
+          const { Client } = require('pg');
+          const raw = process.env.FANDEX_RUNTIME_DATABASE_URL;
+          if (!raw) process.exit(1);
+          const u = new URL(raw);
+          const client = new Client({
+            connectionString: raw,
+            connectionTimeoutMillis: 10000,
+            query_timeout: 30000,
+            statement_timeout: 30000,
+          });
+          (async () => {
+            await client.connect();
+            try {
+              const auth = await client.query(`
+                SELECT
+                  current_user = 'fandex_runtime' AS exact_runtime_role,
+                  session_user = current_user AS direct_runtime_session,
+                  has_schema_privilege(current_user, 'fandex', 'CREATE') AS schema_create
+              `);
+              const counts = await client.query(`
+                SELECT
+                  (SELECT count(*)::int FROM fandex.activity_exposure_collection_runs WHERE artist_id='iu') AS runs,
+                  (SELECT count(*)::int FROM fandex.activity_exposure_provider_observations WHERE artist_id='iu') AS observations,
+                  (SELECT count(*)::int FROM fandex.activity_exposure_events WHERE artist_id='iu') AS events
+              `);
+              console.log('ACTIVITY_EXPOSURE_RUNTIME_READONLY=' + JSON.stringify({
+                exactRuntimeRole: auth.rows[0]?.exact_runtime_role === true,
+                directRuntimeSession: auth.rows[0]?.direct_runtime_session === true,
+                schemaCreate: auth.rows[0]?.schema_create === true,
+                counts: counts.rows[0],
+              }));
+            } finally {
+              await client.end();
+            }
+          })().catch((e) => {
+            console.error('activity_exposure_readonly_diagnostic_failed');
+            process.exitCode = 1;
+          });
+          NODE
