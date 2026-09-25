@@ -1,0 +1,97 @@
+{
+  "contractVersion": "fandex_momentum_pr127_v166_configuration_mutation_execution_audit_v1",
+  "lifecycle": "research-configuration-mutation",
+  "executedAt": "2026-09-25T14:20:59.114Z",
+  "workflow": {
+    "runId": 36146845023,
+    "headSha": "8faf9ed364774f81e19a7512ae10073cd1ae6793",
+    "artifactId": 10869936111,
+    "artifactDigest": "sha256:2776cde0c672d56472ca5d6c55a2613ea890f93d4d42de380ed5138a8132fb91"
+  },
+  "authorization": {
+    "authorizationId": "dcc6f2cfc3d213f797a53ca41685f3d8384e1c4bb9e3862be4e10bcd2bdc446e",
+    "v166RecordDigest": "65a55a19fe628fcfc06ba24e15a7f2d7a036e78d8fcecceae08adb38f59309a1",
+    "v166ResultDigest": "67bba1226c7e88d603269fdf7a2a28b1e549c407f6ad1305765a8fe73374ce9a"
+  },
+  "result": {
+    "state": "configuration-mutation-succeeded",
+    "v167": {
+      "state": "mutation-envelope-ready",
+      "digest": "9c81e8b3d8be329b3e540944dd11d77f428d0345ae7b5ba5fb7d4e0633ae11cb",
+      "mutationEnvelopeReady": true,
+      "trustedSecretHandleId": "github-actions-ephemeral:v167:36146845023",
+      "secretValueExposed": false,
+      "secretContractSatisfied": true,
+      "differsFromSchedulerCredential": true,
+      "attestationMethod": "trusted-environment-non-equality-attestation-without-secret-output"
+    },
+    "v168": {
+      "state": "dry-run-ready",
+      "dryRunReady": true,
+      "digest": "e32134715c4f983fc3df82c089b032cba7e042b581ba8bbeddc984a63a81083d"
+    },
+    "v169": {
+      "state": "rollback-readiness-ready",
+      "rollbackReady": true,
+      "digest": "eb567c5347320f58b0e47990d45800c401e6db092b329bed03d7dfd7ef7b96e2"
+    },
+    "provider": {
+      "batchPostStatus": 201,
+      "failedCount": 0,
+      "created": [
+        {
+          "id": "hq2YXwGI2sOg3mpV",
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+          "type": "plain",
+          "target": [
+            "production"
+          ]
+        },
+        {
+          "id": "MzKOyQFbPhOlpCmE",
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+          "type": "plain",
+          "target": [
+            "production"
+          ]
+        },
+        {
+          "id": "Noky29xWTJIErfr4",
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+          "type": "sensitive",
+          "target": [
+            "production"
+          ]
+        }
+      ],
+      "rawProviderResponsePersisted": false,
+      "secretValueLogged": false,
+      "secretValuePersistedInArtifact": false
+    },
+    "rollback": []
+  },
+  "effects": {
+    "vercelCalls": 1,
+    "environmentMutations": 1,
+    "verifierKeysCreatedOrUpserted": 3,
+    "secretWrites": 1,
+    "schedulerCredentialMutations": 0,
+    "runtimeDatabaseCredentialMutations": 0,
+    "previewCredentialCopies": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
