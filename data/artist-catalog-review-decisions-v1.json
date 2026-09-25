@@ -1576,15 +1576,20 @@
     },
     {
       "displayArtist": "젝스키스",
-      "decision": "new_canonical_group_candidate",
-      "relationResolution": "legacy_group_identity_current_activity_review_required",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "legacy_group_identity_verified_current_group_activity_not_established",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
         {
-          "source": "Bugs",
-          "url": "https://music.bugs.co.kr/artist/1383?wl_ref=list_ab_04",
-          "note": "Provider artist page verifies SECHSKIES as a distinct group music identity; current activity and management remain separately reviewable."
+          "source": "YG Entertainment",
+          "url": "https://ygfamily.com/ko/artists/sechskies/discography/153",
+          "note": "YG continues to host an official SECHSKIES artist/discography profile; latest listed group release is from 2021."
+        },
+        {
+          "source": "YG LIFE",
+          "url": "https://yg-life.com/archives/196778?lang=en",
+          "note": "YG's 2026 company retrospective describes current group activity oversight for BIGBANG and BLACKPINK and separately lists EUN JIWON as remaining under YG, without establishing current SECHSKIES group activity."
         }
       ]
     },
