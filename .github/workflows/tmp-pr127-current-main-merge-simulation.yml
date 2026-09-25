@@ -38,6 +38,8 @@ jobs:
           [[ "$actual_main" == "$expected_main" ]]
 
           cp vercel.json /tmp/pr127-vercel.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           set +e
           git merge --no-commit --no-ff origin/main > /tmp/merge.log 2>&1
