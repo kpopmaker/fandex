@@ -22,6 +22,24 @@ def compact_identity(value: Any) -> str:
     return re.sub(r"[^0-9a-z가-힣]+", "", text)
 
 
+def identity_components(value: Any) -> list[str]:
+    text = str(value or "").strip()
+    parts = [text]
+    parts.extend(re.findall(r"\(([^()]+)\)", text))
+    outside = re.sub(r"\([^()]+\)", " ", text)
+    parts.extend(re.split(r"\s*[&＋+,]\s*|\s+[xX×]\s+", outside))
+
+    result: list[str] = []
+    seen = set()
+    for part in parts:
+        cleaned = re.sub(r"\s+", " ", str(part or "")).strip()
+        key = compact_identity(cleaned)
+        if cleaned and key and key not in seen:
+            seen.add(key)
+            result.append(cleaned)
+    return result
+
+
 def load_json(path: Path) -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(payload, dict):
@@ -123,7 +141,8 @@ def candidate_names(row: dict[str, Any]) -> list[str]:
 def find_known_matches(row: dict[str, Any], known_index: dict[str, set[str]]) -> set[str]:
     result: set[str] = set()
     for name in candidate_names(row):
-        result.update(known_index.get(compact_identity(name), set()))
+        for component in identity_components(name):
+            result.update(known_index.get(compact_identity(component), set()))
     return result
 
 
