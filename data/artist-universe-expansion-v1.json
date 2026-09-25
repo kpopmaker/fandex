@@ -1768,6 +1768,115 @@
           "url": "https://www.mpmgmusic.com/touched"
         }
       ]
+    },
+    {
+      "id": "and2ble",
+      "ticker": "AND2BLE",
+      "name": "AND2BLE",
+      "agency": "YH Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "앤더블 AND2BLE",
+      "koreanAliases": [
+        "앤더블"
+      ],
+      "englishAliases": [
+        "AND2BLE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "YH ENTERTAINMENT",
+          "url": "https://yhent.co.kr/en/artist/and2ble/"
+        },
+        {
+          "source": "Weverse",
+          "url": "https://weverse.io/and2ble/notice/35302"
+        }
+      ]
+    },
+    {
+      "id": "hahyunsang",
+      "ticker": "HAHYUNSANG",
+      "name": "HA HYUN SANG",
+      "agency": "WAKEONE",
+      "entityType": "solo",
+      "naverNewsQuery": "하현상 HA HYUN SANG",
+      "koreanAliases": [
+        "하현상"
+      ],
+      "englishAliases": [
+        "HA HYUN SANG",
+        "Ha Hyun Sang"
+      ],
+      "identityEvidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/en/artists/%ED%95%98%ED%98%84%EC%83%81/"
+        }
+      ]
+    },
+    {
+      "id": "kwonjinnah",
+      "ticker": "KWONJINAH",
+      "name": "KWON JIN AH",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "naverNewsQuery": "권진아 KWON JIN AH",
+      "koreanAliases": [
+        "권진아"
+      ],
+      "englishAliases": [
+        "KWON JIN AH",
+        "Kwon Jin Ah"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/KwonJinAh"
+        }
+      ]
+    },
+    {
+      "id": "lucy",
+      "ticker": "LUCY",
+      "name": "LUCY",
+      "agency": "MYSTIC STORY",
+      "entityType": "group",
+      "naverNewsQuery": "루시 LUCY 밴드",
+      "koreanAliases": [
+        "루시"
+      ],
+      "englishAliases": [
+        "LUCY"
+      ],
+      "identityEvidence": [
+        {
+          "source": "MYSTIC STORY",
+          "url": "https://www.mystic89.net/artist/lucy"
+        }
+      ]
+    },
+    {
+      "id": "wendy",
+      "ticker": "WENDY",
+      "name": "WENDY",
+      "agency": "ASND",
+      "entityType": "solo",
+      "naverNewsQuery": "웬디 WENDY 레드벨벳",
+      "koreanAliases": [
+        "웬디",
+        "손승완"
+      ],
+      "englishAliases": [
+        "WENDY",
+        "Wendy",
+        "Wendy Shon"
+      ],
+      "identityEvidence": [
+        {
+          "source": "SBS Entertainment News",
+          "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008077429"
+        }
+      ]
     }
   ]
 }
