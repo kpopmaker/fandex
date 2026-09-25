@@ -30,7 +30,7 @@ jobs:
           set -euo pipefail
           expected_main='1df5bc16056b8a618a99369a763e89e1f5c9e997'
           branch_head="$(git rev-parse HEAD)"
-          [[ "$branch_head" == '6b495ca73fbea18e7ae19cf4f5f6e5452bb84d92' || "$branch_head" != "" ]]
+          printf '%s\n' "$branch_head" > /tmp/pr127-start-head
 
           git fetch origin main
           actual_main="$(git rev-parse origin/main)"
@@ -100,7 +100,8 @@ jobs:
         shell: bash
         run: |
           git merge --abort || true
-          test "$(git rev-parse HEAD)" = '6b495ca73fbea18e7ae19cf4f5f6e5452bb84d92' || {
+          start_head="$(cat /tmp/pr127-start-head)"
+          test "$(git rev-parse HEAD)" = "$start_head" || {
             echo "Branch HEAD changed during simulation."
             exit 1
           }
