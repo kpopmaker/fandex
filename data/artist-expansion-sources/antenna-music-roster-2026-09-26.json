@@ -1,0 +1,161 @@
+{
+  "version": "antenna_music_roster_adapter_v1",
+  "source": {
+    "id": "antenna-official-music-artist-roster",
+    "type": "agency_roster",
+    "name": "Antenna Official Music Artist Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://antenna.co.kr/Artist"
+  },
+  "candidateCount": 10,
+  "candidates": [
+    {
+      "displayArtist": "You Hee Yul (TOY)",
+      "aliases": [
+        "유희열",
+        "유희열 (TOY)",
+        "TOY",
+        "Toy"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jung Jae Hyung",
+      "aliases": [
+        "정재형"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lucid Fall",
+      "aliases": [
+        "루시드폴"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "PEPPERTONES",
+      "aliases": [
+        "페퍼톤스"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lee Sang Soon",
+      "aliases": [
+        "이상순"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lee Hyo Ri",
+      "aliases": [
+        "이효리"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jung Seung Hwan",
+      "aliases": [
+        "정승환"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Park Sae Byul",
+      "aliases": [
+        "박새별"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KYUHYUN",
+      "aliases": [
+        "규현"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Dragon Pony",
+      "aliases": [
+        "드래곤포니",
+        "Dragon Pony (드래곤포니)"
+      ],
+      "evidence": [
+        {
+          "label": "Antenna official artist roster",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicIdentitiesOnly": true,
+    "nonMusicProfilesExcluded": [
+      "Yu Jae Seok",
+      "Lee Seo Jin",
+      "Yang Se Chan"
+    ],
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://antenna.co.kr/Artist",
+      "https://antenna.co.kr/About",
+      "https://antenna.co.kr/Toy",
+      "https://antenna.co.kr/Peppertones",
+      "https://antenna.co.kr/242",
+      "https://antenna.co.kr/252"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

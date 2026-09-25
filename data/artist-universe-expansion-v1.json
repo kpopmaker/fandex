@@ -4088,6 +4088,321 @@
           "url": "https://music.bugs.co.kr/album/4134818"
         }
       ]
+    },
+    {
+      "id": "jungjaehyung",
+      "ticker": "JUNGJAEHYUNG",
+      "name": "Jung Jae Hyung",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "정재형 Jung Jae Hyung 뮤지션",
+      "koreanAliases": [
+        "정재형"
+      ],
+      "englishAliases": [
+        "Jung Jae Hyung",
+        "Jung Jae-hyung"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "정재형",
+        "뮤지션",
+        "작곡가"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "뮤지션"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "id": "lucidfall",
+      "ticker": "LUCIDFALL",
+      "name": "Lucid Fall",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "루시드폴 Lucid Fall 가수",
+      "koreanAliases": [
+        "루시드폴"
+      ],
+      "englishAliases": [
+        "Lucid Fall"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "루시드폴",
+        "싱어송라이터"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "루시드폴"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "id": "peppertones",
+      "ticker": "PEPPERTONES",
+      "name": "PEPPERTONES",
+      "agency": "Antenna",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "신재평",
+        "이장원"
+      ],
+      "naverNewsQuery": "페퍼톤스 PEPPERTONES",
+      "koreanAliases": [
+        "페퍼톤스"
+      ],
+      "englishAliases": [
+        "PEPPERTONES",
+        "Peppertones"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "신재평",
+        "이장원",
+        "밴드"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "페퍼톤스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Peppertones"
+        }
+      ]
+    },
+    {
+      "id": "leesangsoon",
+      "ticker": "LEESANGSOON",
+      "name": "Lee Sang Soon",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이상순 Lee Sang Soon 뮤지션",
+      "koreanAliases": [
+        "이상순"
+      ],
+      "englishAliases": [
+        "Lee Sang Soon",
+        "Lee Sang-soon"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "이상순",
+        "뮤지션",
+        "기타리스트"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "뮤지션"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "id": "leehyori",
+      "ticker": "LEEHYORI",
+      "name": "Lee Hyo Ri",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이효리 Lee Hyo Ri 가수",
+      "koreanAliases": [
+        "이효리"
+      ],
+      "englishAliases": [
+        "Lee Hyo Ri",
+        "Lee Hyori",
+        "LEE HYO RI"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "이효리",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "id": "parksaebyul",
+      "ticker": "PARKSAEBYUL",
+      "name": "Park Sae Byul",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "박새별 Park Sae Byul 가수",
+      "koreanAliases": [
+        "박새별"
+      ],
+      "englishAliases": [
+        "Park Sae Byul",
+        "Park Sae-byul"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "박새별",
+        "싱어송라이터"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "박새별"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist"
+        }
+      ]
+    },
+    {
+      "id": "kyuhyun",
+      "ticker": "KYUHYUN",
+      "name": "KYUHYUN",
+      "agency": "Antenna",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "규현 KYUHYUN 솔로 가수",
+      "koreanAliases": [
+        "규현"
+      ],
+      "englishAliases": [
+        "KYUHYUN",
+        "Kyuhyun",
+        "Cho Kyuhyun"
+      ],
+      "keywords": [
+        "Antenna",
+        "SUPER JUNIOR",
+        "규현",
+        "솔로",
+        "광화문에서"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "솔로",
+        "규현"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://www.antenna.co.kr/242"
+        }
+      ]
+    },
+    {
+      "id": "dragonpony",
+      "ticker": "DRAGONPONY",
+      "name": "Dragon Pony",
+      "agency": "Antenna",
+      "entityType": "group",
+      "debutDate": "2024-09-26",
+      "lifecycleStatus": "active",
+      "members": [
+        "안태규",
+        "권세혁",
+        "고강훈"
+      ],
+      "naverNewsQuery": "드래곤포니 Dragon Pony",
+      "koreanAliases": [
+        "드래곤포니"
+      ],
+      "englishAliases": [
+        "Dragon Pony",
+        "DRAGON PONY"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "밴드",
+        "Run to Win",
+        "RUN RUN RUN"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "드래곤포니"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/252"
+        }
+      ]
     }
   ]
 }

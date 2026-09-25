@@ -3087,6 +3087,159 @@
           "note": "VVON's first EP is listed as an independent artist release planned by MNH Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "Jung Jae Hyung",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists Jung Jae Hyung as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lucid Fall",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists Lucid Fall as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lee Sang Soon",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists Lee Sang Soon as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lee Hyo Ri",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists Lee Hyo Ri as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Park Sae Byul",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists Park Sae Byul as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KYUHYUN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_antenna_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_antenna_music_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Artist",
+          "note": "Antenna's current official artist page lists KYUHYUN as an artist under the label."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PEPPERTONES",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_antenna_duo_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_antenna_music_profile_and_2026_concert_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Peppertones",
+          "note": "Official Antenna profile identifies PEPPERTONES as the two-member band/producers Shin Jae Pyung and Lee Jang Won and lists 2026 concerts."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Dragon Pony",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_antenna_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_antenna_band_profile_and_2026_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/252",
+          "note": "Official Antenna profile identifies Dragon Pony as a three-member band, documents the September 26, 2024 debut, and lists 2026 releases and concerts."
+        }
+      ]
+    },
+    {
+      "displayArtist": "You Hee Yul (TOY)",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "official_antenna_combined_person_and_toy_project_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_antenna_music_profile_and_toy_catalog",
+      "onboardingBlocker": "person_vs_toy_project_canonical_representation_required",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Toy",
+          "note": "Official Antenna profile combines You Hee Yul with the project band Toy and catalogs Toy releases under the same profile; FANDEX does not collapse person and project without an explicit representation decision."
+        }
+      ]
     }
   ]
 }

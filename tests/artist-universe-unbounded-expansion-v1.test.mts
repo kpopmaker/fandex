@@ -159,6 +159,14 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'ejel',
     'limsanghyun',
     'vvon',
+    'jungjaehyung',
+    'lucidfall',
+    'peppertones',
+    'leesangsoon',
+    'leehyori',
+    'parksaebyul',
+    'kyuhyun',
+    'dragonpony',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -167,6 +175,27 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  for (const artistId of ['jungjaehyung', 'lucidfall', 'leesangsoon', 'leehyori', 'parksaebyul', 'kyuhyun']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'Antenna');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const peppertones = getArtistV4ById('peppertones');
+  assert.ok(peppertones);
+  assert.equal(peppertones.entityType, 'group');
+  assert.equal(peppertones.agency, 'Antenna');
+  assert.deepEqual(peppertones.members, ['신재평', '이장원']);
+
+  const dragonPony = getArtistV4ById('dragonpony');
+  assert.ok(dragonPony);
+  assert.equal(dragonPony.entityType, 'group');
+  assert.equal(dragonPony.agency, 'Antenna');
+  assert.equal(dragonPony.debutDate, '2024-09-26');
+  assert.deepEqual(dragonPony.members, ['안태규', '권세혁', '고강훈']);
 
   const ejel = getArtistV4ById('ejel');
   assert.ok(ejel);
