@@ -2611,12 +2611,14 @@
     },
     {
       "displayArtist": "YICHEN",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "wakeone_individual_profile_overlaps_current_modyssey_member_identity",
-      "relatedCanonicalArtistIds": [],
+      "decision": "existing_canonical_member_credit",
+      "relationResolution": "current_modyssey_member_not_independent_solo_identity",
+      "relatedCanonicalArtistIds": [
+        "modyssey"
+      ],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_wakeone_artist_profile_and_current_kpop_group_activity",
-      "onboardingBlocker": "independent_solo_identity_vs_modyssey_member_representation_unresolved",
+      "scopeBasis": "verified_current_modyssey_member_credit",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
@@ -2628,17 +2630,29 @@
           "source": "MK",
           "url": "https://www.mk.co.kr/en/entertain/12145928",
           "note": "Current 2026 K-pop awards coverage identifies YICHEN as a MODYSSEY member. Independent solo canonical representation is therefore not inferred."
+        },
+        {
+          "source": "Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/boy-band-modyssey-set-to-release-new-music-in-october/12853944",
+          "note": "September 2026 coverage attributes MODYSSEY to agency ONECEAD and lists Yichen among the seven current members."
+        },
+        {
+          "source": "CJ ENM 2026 1Q IR",
+          "url": "https://kind.krx.co.kr/external/dst/irReference/18462/CJ_ENM_2026_1Q_Kor.pdf",
+          "note": "CJ ENM's 2026 Q1 IR lists MODYSSEY under ONECEAD with an April 13 debut."
         }
       ]
     },
     {
       "displayArtist": "KANG WOO JIN",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "wakeone_individual_profile_overlaps_current_flareu_member_identity",
-      "relatedCanonicalArtistIds": [],
+      "decision": "existing_canonical_member_credit",
+      "relationResolution": "current_flareu_member_not_independent_solo_identity",
+      "relatedCanonicalArtistIds": [
+        "flareu"
+      ],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_wakeone_artist_roster_and_verified_kpop_duo_debut",
-      "onboardingBlocker": "independent_solo_identity_vs_flareu_member_representation_unresolved",
+      "scopeBasis": "verified_current_flareu_member_credit",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
@@ -2650,6 +2664,16 @@
           "source": "Soompi",
           "url": "https://www.soompi.com/article/1840805wpp/watch-flare-u-finds-their-way-2-u-in-lovable-and-youthful-debut-mv",
           "note": "FLARE U debuted May 13, 2026 as a duo consisting of Chuei Li Yu and Kang Woo Jin; independent solo canonical representation is not inferred."
+        },
+        {
+          "source": "FNC STORE",
+          "url": "https://www.fncstore.com/product/detail.html?cate_no=127&display_group=1&product_no=1710",
+          "note": "FNC identifies FLARE U as the two-member duo CHUEI LI YU and KANG WOO JIN, debuting May 13, 2026 with YOUTH ERROR."
+        },
+        {
+          "source": "FNC / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/flareu/contents/6a016c92c67d6774385b0e1e",
+          "note": "FNC's official FLARE U notice confirms the active artist identity under FNC Entertainment."
         }
       ]
     },
@@ -2846,6 +2870,50 @@
           "source": "Jinjin & Rocky reference",
           "url": "https://en.wikipedia.org/wiki/Jinjin_%26_Rocky",
           "note": "The unit ended after Rocky's 2023 departure; Fantagio is stored only as historical agency provenance."
+        }
+      ]
+    },
+    {
+      "displayArtist": "FLARE U",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_fnc_duo_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_fnc_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FNC STORE",
+          "url": "https://www.fncstore.com/product/detail.html?cate_no=127&display_group=1&product_no=1710",
+          "note": "FNC identifies FLARE U as the two-member duo CHUEI LI YU and KANG WOO JIN, debuting May 13, 2026 with YOUTH ERROR."
+        },
+        {
+          "source": "FNC / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/flareu/contents/6a016c92c67d6774385b0e1e",
+          "note": "FNC's official FLARE U notice confirms the active artist identity under FNC Entertainment."
+        }
+      ]
+    },
+    {
+      "displayArtist": "MODYSSEY",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "onecead_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "onecead_debut_and_current_korean_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/boy-band-modyssey-set-to-release-new-music-in-october/12853944",
+          "note": "September 2026 coverage attributes MODYSSEY to agency ONECEAD and lists Yichen among the seven current members."
+        },
+        {
+          "source": "CJ ENM 2026 1Q IR",
+          "url": "https://kind.krx.co.kr/external/dst/irReference/18462/CJ_ENM_2026_1Q_Kor.pdf",
+          "note": "CJ ENM's 2026 Q1 IR lists MODYSSEY under ONECEAD with an April 13 debut."
         }
       ]
     }

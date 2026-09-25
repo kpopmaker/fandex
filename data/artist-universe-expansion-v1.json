@@ -3699,6 +3699,115 @@
           "url": "https://kpop.fandom.com/wiki/LUN8wave"
         }
       ]
+    },
+    {
+      "id": "flareu",
+      "ticker": "FLAREU",
+      "name": "FLARE U",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "debutDate": "2026-05-13",
+      "lifecycleStatus": "active",
+      "members": [
+        "CHUEI LI YU",
+        "KANG WOO JIN"
+      ],
+      "fandomName": "U'RE",
+      "naverNewsQuery": "플레어 유 FLARE U",
+      "koreanAliases": [
+        "플레어 유",
+        "플레어유"
+      ],
+      "englishAliases": [
+        "FLARE U",
+        "Flare U"
+      ],
+      "keywords": [
+        "FNC Entertainment",
+        "YOUTH ERROR",
+        "CHUEI LI YU",
+        "KANG WOO JIN",
+        "최립우",
+        "강우진"
+      ],
+      "disambiguationKeywords": [
+        "FNC Entertainment",
+        "플레어 유"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FNC STORE",
+          "url": "https://www.fncstore.com/product/detail.html?cate_no=127&display_group=1&product_no=1710"
+        },
+        {
+          "source": "FNC / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/flareu/contents/6a016c92c67d6774385b0e1e"
+        }
+      ]
+    },
+    {
+      "id": "modyssey",
+      "ticker": "MODYSSEY",
+      "name": "MODYSSEY",
+      "agency": "ONECEAD",
+      "entityType": "group",
+      "debutDate": "2026-04-13",
+      "lifecycleStatus": "active",
+      "members": [
+        "YICHEN",
+        "HENGYU",
+        "ROWAN",
+        "LYNNLYNN",
+        "LI ZIHAO",
+        "SUREN",
+        "FAN ZHEYI"
+      ],
+      "fandomName": "MODU",
+      "naverNewsQuery": "모디세이 MODYSSEY",
+      "koreanAliases": [
+        "모디세이"
+      ],
+      "englishAliases": [
+        "MODYSSEY",
+        "Modyssey"
+      ],
+      "keywords": [
+        "ONECEAD",
+        "Planet C",
+        "HOOK",
+        "YICHEN",
+        "모디세이"
+      ],
+      "disambiguationKeywords": [
+        "ONECEAD",
+        "모디세이"
+      ],
+      "markets": [
+        "KR",
+        "CN",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CJ ENM 2026 1Q IR",
+          "url": "https://kind.krx.co.kr/external/dst/irReference/18462/CJ_ENM_2026_1Q_Kor.pdf"
+        },
+        {
+          "source": "Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/modyssey/contents/69dcc0553dcd586c158517ce"
+        },
+        {
+          "source": "Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/boy-band-modyssey-set-to-release-new-music-in-october/12853944"
+        }
+      ]
     }
   ]
 }

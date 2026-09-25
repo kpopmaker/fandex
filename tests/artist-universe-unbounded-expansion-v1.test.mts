@@ -151,6 +151,8 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'moonbinsanha',
     'jinjinrocky',
     'lun8wave',
+    'flareu',
+    'modyssey',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -159,6 +161,21 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const flareu = getArtistV4ById('flareu');
+  assert.ok(flareu);
+  assert.equal(flareu.entityType, 'group');
+  assert.equal(flareu.agency, 'FNC Entertainment');
+  assert.equal(flareu.debutDate, '2026-05-13');
+  assert.deepEqual(flareu.members, ['CHUEI LI YU', 'KANG WOO JIN']);
+
+  const modyssey = getArtistV4ById('modyssey');
+  assert.ok(modyssey);
+  assert.equal(modyssey.entityType, 'group');
+  assert.equal(modyssey.agency, 'ONECEAD');
+  assert.equal(modyssey.debutDate, '2026-04-13');
+  assert.equal(modyssey.members.length, 7);
+  assert.ok(modyssey.members.includes('YICHEN'));
 
   const lun8wave = getArtistV4ById('lun8wave');
   assert.ok(lun8wave);
