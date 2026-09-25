@@ -2447,6 +2447,28 @@
           "note": "Official profile documents the group's October 28, 2020 debut and current discography through May 2026."
         }
       ]
+    },
+    {
+      "displayArtist": "UNCHILD",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_highup_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_highup_roster_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "High Up Entertainment",
+          "url": "https://www.highup-ent.com/en/unchild/",
+          "note": "Official profile identifies UNCHILD as a six-member girl group under High Up Entertainment and documents the April 21, 2026 debut single."
+        },
+        {
+          "source": "High Up Entertainment",
+          "url": "https://www.highup-ent.com/en/unchild-announces-first-comeback-for-september-as-they-celebrate-100-days-since-debut-teasing-an-evolved-rule-breaker-identity/",
+          "note": "Official July 2026 news confirms continuing group activity and a September comeback."
+        }
+      ]
     }
   ]
 }

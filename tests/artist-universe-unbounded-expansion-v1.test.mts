@@ -135,6 +135,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'axmxp',
     'goldenchild',
     'drippin',
+    'unchild',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -143,6 +144,14 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const unchild = getArtistV4ById('unchild');
+  assert.ok(unchild);
+  assert.equal(unchild.entityType, 'group');
+  assert.equal(unchild.agency, 'High Up Entertainment');
+  assert.equal(unchild.debutDate, '2026-04-21');
+  assert.equal(unchild.members.length, 6);
+  assert.ok(unchild.profile.markets.includes('KR'));
 
   for (const artistId of ['goldenchild', 'drippin']) {
     const artist = getArtistV4ById(artistId);

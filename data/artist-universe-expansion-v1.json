@@ -2964,6 +2964,55 @@
           "url": "https://www.woolliment.com/arsits/drippin"
         }
       ]
+    },
+    {
+      "id": "unchild",
+      "ticker": "UNCHILD",
+      "name": "UNCHILD",
+      "agency": "High Up Entertainment",
+      "entityType": "group",
+      "debutDate": "2026-04-21",
+      "lifecycleStatus": "active",
+      "members": [
+        "YEEUN",
+        "HEEKIE",
+        "TINA",
+        "AKO",
+        "EVON",
+        "HAEUN"
+      ],
+      "naverNewsQuery": "언차일드 UNCHILD",
+      "koreanAliases": [
+        "언차일드"
+      ],
+      "englishAliases": [
+        "UNCHILD"
+      ],
+      "keywords": [
+        "High Up Entertainment",
+        "하이업엔터테인먼트",
+        "We Are UNCHILD",
+        "TiNG TiNG"
+      ],
+      "disambiguationKeywords": [
+        "High Up Entertainment",
+        "언차일드"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "High Up Entertainment",
+          "url": "https://www.highup-ent.com/en/"
+        },
+        {
+          "source": "High Up Entertainment",
+          "url": "https://www.highup-ent.com/en/unchild/"
+        }
+      ]
     }
   ]
 }

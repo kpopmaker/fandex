@@ -1,0 +1,50 @@
+{
+  "version": "highup_agency_roster_adapter_v1",
+  "source": {
+    "id": "highup-entertainment-official-artist-roster",
+    "type": "agency_roster",
+    "name": "High Up Entertainment Official Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.highup-ent.com/en/"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "STAYC",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "High Up Entertainment official artist site",
+          "url": "https://www.highup-ent.com/en/stayc/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "UNCHILD",
+      "aliases": [
+        "언차일드"
+      ],
+      "evidence": [
+        {
+          "label": "High Up Entertainment official artist site",
+          "url": "https://www.highup-ent.com/en/unchild/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "exactCurrentRosterRequired": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://www.highup-ent.com/en/",
+      "https://www.highup-ent.com/en/unchild/"
+    ],
+    "verifiedAt": "2026-09-25"
+  }
+}
