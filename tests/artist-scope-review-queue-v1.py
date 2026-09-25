@@ -33,6 +33,14 @@ payload = {
             "reviewDecision": None,
         },
         {
+            "displayArtist": "SECHSKIES",
+            "normalizedArtist": "sechskies",
+            "scopeStatus": "review_required",
+            "reviewDecision": "identity_verified_scope_review_required",
+            "relationResolution": "legacy_group_identity_verified_current_group_activity_not_established",
+            "sources": [{"sourceId": "provider", "sourceType": "provider_catalog"}],
+        },
+        {
             "displayArtist": "Lee Sung-kyung",
             "normalizedArtist": "leesungkyung",
             "scopeStatus": "review_required",
@@ -49,9 +57,15 @@ assert result["scopeReviewCount"] == 3
 assert [row["displayArtist"] for row in result["items"]] == [
     "HORI7ON",
     "Lee Sung-kyung",
+    "SECHSKIES",
 ]
 assert all(row["identityStatus"] == "verified" for row in result["items"])
 assert all(row["autoPromote"] is False for row in result["items"])
+assert {row["relationResolution"] for row in result["items"]} == {
+    "cross_border_group_current_management_status_requires_review",
+    "cross_domain_actor_singer_identity_scope_not_frozen",
+    "legacy_group_identity_verified_current_group_activity_not_established",
+}
 assert result["contract"]["identityVerificationDoesNotImplyScopeEligibility"] is True
 assert result["contract"]["scopeDecisionMustBeExplicit"] is True
 assert result["contract"]["noImplicitGenreBoundary"] is True
