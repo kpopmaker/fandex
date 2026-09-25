@@ -1,13 +1,13 @@
 {
   "contractVersion": "fandex_momentum_external_operator_execution_request_v1",
   "lifecycle": "research-execution-gate",
-  "authorized": true,
-  "confirm": "EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ",
-  "requestId": "pr127-vercel-env-read-20260925T121551Z",
-  "authorizedBy": "kpopmaker",
-  "decidedAt": "2026-09-25T12:15:51.000Z",
-  "validFrom": "2026-09-25T12:15:51.000Z",
-  "expiresAt": "2026-09-25T12:45:51.000Z",
+  "authorized": false,
+  "confirm": "NOT_AUTHORIZED",
+  "requestId": null,
+  "authorizedBy": null,
+  "decidedAt": null,
+  "validFrom": null,
+  "expiresAt": null,
   "opaqueSecretRollbackHandleId": null,
   "opaqueSecretRollbackRestorableAttested": false,
   "exactRead": {
@@ -29,5 +29,5 @@
     "productionEligible": false,
     "productProductionActual": "1/7"
   },
-  "note": "Explicitly authorized by the user for one bounded Vercel environment-inventory read. No secret or decrypted value may be persisted."
+  "note": "Locked after successful bounded Vercel environment-inventory read run 36133975493. Exactly one provider read was performed. Any future read requires a new explicit authorization."
 }
