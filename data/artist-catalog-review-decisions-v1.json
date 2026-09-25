@@ -2540,6 +2540,118 @@
           "note": "RBW current roster explicitly labels NXD as PRE-DEBUT; identity is verified but debuted-artist scope is intentionally deferred."
         }
       ]
+    },
+    {
+      "displayArtist": "ALPHA DRIVE ONE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_wakeone_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_wakeone_artist_profile_explicit_kpop_group",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/en/artists/alpha-drive-one/",
+          "note": "Official profile identifies ALPHA DRIVE ONE as a K-pop group and lists eight members and current 2026 discography."
+        }
+      ]
+    },
+    {
+      "displayArtist": "JO YURI",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_wakeone_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_wakeone_solo_artist_profile_and_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/en/artists/jo-yuri/",
+          "note": "Official profile explicitly describes JO YURI as a solo artist and lists her solo discography."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM JAE HWAN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_wakeone_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_wakeone_kpop_solo_artist_profile",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/en/artists/kim-jae-hwan/",
+          "note": "Official profile describes KIM JAE HWAN as a representative K-pop all-rounder and lists solo discography."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LEE DAE HWI",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_wakeone_individual_music_artist_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_wakeone_individual_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/%EC%9D%B4%EB%8C%80%ED%9C%98/",
+          "note": "WAKEONE maintains a dedicated current individual artist profile for LEE DAE HWI and describes ongoing musical activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "YICHEN",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "wakeone_individual_profile_overlaps_current_modyssey_member_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_wakeone_artist_profile_and_current_kpop_group_activity",
+      "onboardingBlocker": "independent_solo_identity_vs_modyssey_member_representation_unresolved",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/%EC%9D%B4%EC%B2%B8/",
+          "note": "Current official WAKEONE individual artist profile lists YICHEN with birth date 1998-09-24."
+        },
+        {
+          "source": "MK",
+          "url": "https://www.mk.co.kr/en/entertain/12145928",
+          "note": "Current 2026 K-pop awards coverage identifies YICHEN as a MODYSSEY member. Independent solo canonical representation is therefore not inferred."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KANG WOO JIN",
+      "decision": "identity_verified_scope_eligible_onboarding_blocked",
+      "relationResolution": "wakeone_individual_profile_overlaps_current_flareu_member_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_wakeone_artist_roster_and_verified_kpop_duo_debut",
+      "onboardingBlocker": "independent_solo_identity_vs_flareu_member_representation_unresolved",
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/",
+          "note": "Current official WAKEONE artists page lists KANG WOO JIN."
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1840805wpp/watch-flare-u-finds-their-way-2-u-in-lovable-and-youthful-debut-mv",
+          "note": "FLARE U debuted May 13, 2026 as a duo consisting of Chuei Li Yu and Kang Woo Jin; independent solo canonical representation is not inferred."
+        }
+      ]
     }
   ]
 }

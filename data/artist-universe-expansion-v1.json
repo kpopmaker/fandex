@@ -3152,6 +3152,164 @@
           "url": "https://www.rbbridge.com/?page_id=25130"
         }
       ]
+    },
+    {
+      "id": "alphadriveone",
+      "ticker": "ALPHADRIVEONE",
+      "name": "ALPHA DRIVE ONE",
+      "agency": "WAKEONE",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "LEO",
+        "JUNSEO",
+        "ARNO",
+        "GEONWOO",
+        "SANGWON",
+        "XINLONG",
+        "ANXIN",
+        "SANGHYEON"
+      ],
+      "naverNewsQuery": "알파드라이브원 ALPHA DRIVE ONE",
+      "koreanAliases": [
+        "알파드라이브원"
+      ],
+      "englishAliases": [
+        "ALPHA DRIVE ONE"
+      ],
+      "keywords": [
+        "WAKEONE",
+        "웨이크원",
+        "K-pop",
+        "EUPHORIA"
+      ],
+      "disambiguationKeywords": [
+        "WAKEONE",
+        "알파드라이브원"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/alpha-drive-one/"
+        }
+      ]
+    },
+    {
+      "id": "joyuri",
+      "ticker": "JOYURI",
+      "name": "JO YURI",
+      "agency": "WAKEONE",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "조유리 JO YURI 가수",
+      "koreanAliases": [
+        "조유리"
+      ],
+      "englishAliases": [
+        "JO YURI",
+        "Jo Yuri"
+      ],
+      "keywords": [
+        "WAKEONE",
+        "웨이크원",
+        "GLASSY",
+        "가수"
+      ],
+      "disambiguationKeywords": [
+        "WAKEONE",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/joyuri/"
+        }
+      ]
+    },
+    {
+      "id": "kimjaehwan",
+      "ticker": "KIMJAEHWAN",
+      "name": "KIM JAE HWAN",
+      "agency": "WAKEONE",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "김재환 KIM JAE HWAN 가수",
+      "koreanAliases": [
+        "김재환"
+      ],
+      "englishAliases": [
+        "KIM JAE HWAN",
+        "Kim Jae Hwan"
+      ],
+      "keywords": [
+        "WAKEONE",
+        "웨이크원",
+        "가수",
+        "K-pop"
+      ],
+      "disambiguationKeywords": [
+        "WAKEONE",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/%EA%B9%80%EC%9E%AC/"
+        }
+      ]
+    },
+    {
+      "id": "leedaehwi",
+      "ticker": "LEEDAEHWI",
+      "name": "LEE DAE HWI",
+      "agency": "WAKEONE",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이대휘 LEE DAE HWI 가수",
+      "koreanAliases": [
+        "이대휘"
+      ],
+      "englishAliases": [
+        "LEE DAE HWI",
+        "Lee Dae Hwi"
+      ],
+      "keywords": [
+        "WAKEONE",
+        "웨이크원",
+        "가수",
+        "아티스트"
+      ],
+      "disambiguationKeywords": [
+        "WAKEONE",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/artists/%EC%9D%B4%EB%8C%80%ED%9C%98/"
+        }
+      ]
     }
   ]
 }

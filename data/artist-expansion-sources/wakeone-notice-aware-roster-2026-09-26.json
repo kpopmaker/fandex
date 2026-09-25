@@ -1,0 +1,135 @@
+{
+  "version": "wakeone_notice_aware_roster_adapter_v1",
+  "source": {
+    "id": "wakeone-official-artist-roster-notice-aware",
+    "type": "agency_roster",
+    "name": "WAKEONE Official Artist Roster (Notice-Aware)",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://wake-one.com/artists/"
+  },
+  "candidateCount": 10,
+  "candidates": [
+    {
+      "displayArtist": "YICHEN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KANG WOO JIN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ALPHA DRIVE ONE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM FEEL",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ZEROBASEONE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "izna",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Kep1er",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "JO YURI",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM JAE HWAN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LEE DAE HWI",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "WAKEONE official artists page",
+          "url": "https://wake-one.com/artists/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "officialNoticeOverridesRosterPage": true,
+    "terminatedArtistsExcluded": [
+      "HA HYUN SANG"
+    ],
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot_with_notice_override",
+    "verifiedFrom": [
+      "https://wake-one.com/artists/",
+      "https://wake-one.com/notice/"
+    ],
+    "override": {
+      "displayArtist": "HA HYUN SANG",
+      "reason": "exclusive_contract_ended_2026-09-18"
+    },
+    "verifiedAt": "2026-09-26"
+  }
+}
