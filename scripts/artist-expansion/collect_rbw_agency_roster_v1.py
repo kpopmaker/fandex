@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 
 VERSION = "rbw_agency_roster_adapter_v1"
-DEFAULT_URL = "https://www.rbbridge.com/?page_id=17131"
+DEFAULT_URL = "https://www.rbbridge.com/"
 EXPECTED_ARTISTS = ["MAMAMOO+", "ONEWE", "PURPLE KISS", "NXD"]
 
 

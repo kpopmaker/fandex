@@ -5,7 +5,7 @@
     "type": "agency_roster",
     "name": "RBW Official Exclusive Artist Roster",
     "observedAt": "2026-09-25T00:00:00Z",
-    "url": "https://www.rbbridge.com/?page_id=17131"
+    "url": "https://www.rbbridge.com/"
   },
   "candidateCount": 4,
   "candidates": [
@@ -17,7 +17,7 @@
       "evidence": [
         {
           "label": "RBW official exclusive artist roster",
-          "url": "https://www.rbbridge.com/?page_id=17131"
+          "url": "https://www.rbbridge.com/"
         }
       ]
     },
@@ -29,7 +29,7 @@
       "evidence": [
         {
           "label": "RBW official exclusive artist roster",
-          "url": "https://www.rbbridge.com/?page_id=17131"
+          "url": "https://www.rbbridge.com/"
         }
       ]
     },
@@ -41,7 +41,7 @@
       "evidence": [
         {
           "label": "RBW official exclusive artist roster",
-          "url": "https://www.rbbridge.com/?page_id=17131"
+          "url": "https://www.rbbridge.com/"
         }
       ]
     },
@@ -53,7 +53,7 @@
       "evidence": [
         {
           "label": "RBW official exclusive artist roster",
-          "url": "https://www.rbbridge.com/?page_id=17131"
+          "url": "https://www.rbbridge.com/"
         }
       ]
     }
@@ -67,7 +67,10 @@
   },
   "provenance": {
     "snapshotType": "verified_official_page_snapshot",
-    "verifiedFrom": "https://www.rbbridge.com/?page_id=17131",
+    "verifiedFrom": [
+      "https://www.rbbridge.com/",
+      "https://www.rbbridge.com/?page_id=17131"
+    ],
     "verifiedAt": "2026-09-25"
   }
 }
