@@ -1,0 +1,96 @@
+{
+  "contractVersion": "fandex_momentum_pr127_stale_base_conflict_audit_v1",
+  "lifecycle": "research",
+  "observedAt": "2026-09-25T00:04:51.000Z",
+  "localObservationDate": "2026-09-25",
+  "pullRequest": {
+    "number": 127,
+    "headBeforeAudit": "8c4c7e1394a11194e045151d75be3f9a3ed6b9c7",
+    "baseBranch": "main",
+    "mergeBaseSha": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "currentMainSha": "8d68d97a389522c268e976196bc342acc605fd7a",
+    "mergeable": false,
+    "mergeableState": "dirty"
+  },
+  "diffInventory": {
+    "mainChangedFilesSinceMergeBase": 74,
+    "branchChangedFilesSinceMergeBase": 161,
+    "overlappingChangedFileCount": 1,
+    "overlappingChangedFiles": [
+      "vercel.json"
+    ]
+  },
+  "conflict": {
+    "path": "vercel.json",
+    "kind": "add-add",
+    "mergeBaseContainsPath": false,
+    "currentMainBlobSha": "31c4fc9eeb0f7f4e91b7aefc4781efea32858ac5",
+    "researchBranchBlobSha": "09b2866e996975785c6f5a2bab906be026786a97",
+    "mainPolicy": {
+      "deploymentEnabled": {
+        "validation/*": false,
+        "research/*": false,
+        "verify/*": false,
+        "diagnostic/*": false,
+        "work/*": false
+      }
+    },
+    "branchPolicy": {
+      "deploymentEnabled": {
+        "validation/*": false,
+        "research/*": false,
+        "verify/*": false,
+        "diagnostic/*": false,
+        "work/*": false,
+        "v131-lastfm-real-signal-read-model": false
+      }
+    }
+  },
+  "resolutionCandidate": {
+    "state": "resolution-candidate-defined-not-applied",
+    "strategy": "preserve-current-main-policy-plus-explicit-pr127-branch-suppression",
+    "candidateEqualsCurrentResearchBranchVercelJson": true,
+    "removesAnyCurrentMainSuppression": false,
+    "preservesExplicitLegacyResearchBranchSuppression": true,
+    "mergeOrRebasePerformed": false,
+    "prHeadMovedByIntegration": false
+  },
+  "externalCapabilityBoundary": {
+    "exactVercelEnvironmentInventoryReadToolExposed": false,
+    "genericVercelRestReadToolExposed": false,
+    "vercelProjectMetadataCallable": true,
+    "v181ResumeConditionSatisfied": false
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  },
+  "effects": {
+    "providerReads": 0,
+    "vercelInventoryReads": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "deployments": 0,
+    "productionActivations": 0,
+    "productWrites": 0,
+    "registryMutations": 0,
+    "ledgerWrites": 0,
+    "pullRequestMerges": 0,
+    "mainIntoResearchBranchMerges": 0,
+    "rebases": 0
+  },
+  "validation": {
+    "githubActionsRunId": null,
+    "status": "PENDING",
+    "conflictInventoryPassed": false,
+    "resolutionPolicyPassed": false,
+    "v181RegressionPassed": false,
+    "typecheckPassed": false,
+    "branchDiffCheckPassed": false,
+    "fullPrDiffCheckPassed": false,
+    "temporaryWorkflowRemoved": false
+  }
+}

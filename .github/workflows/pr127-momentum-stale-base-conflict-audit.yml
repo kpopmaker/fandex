@@ -1,0 +1,76 @@
+name: PR127 momentum stale-base conflict audit
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - data/momentum-research/pr127_stale_base_conflict_audit_20260925T090451KST.json
+      - tests/fandex-momentum-pr127-stale-base-conflict-audit.test.mts
+      - .github/workflows/pr127-momentum-stale-base-conflict-audit.yml
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: deterministic stale-base audit tests
+        run: npx tsx --test tests/fandex-momentum-pr127-stale-base-conflict-audit.test.mts
+      - name: verify exact overlap against current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="$(git merge-base origin/main HEAD)"
+          test "$base" = "2cb01343ae2cb51b551ceb7f873442e310217ba7"
+          git diff --name-only "$base"..origin/main | sort -u > /tmp/main-files
+          git diff --name-only "$base"..HEAD | sort -u > /tmp/branch-files
+          comm -12 /tmp/main-files /tmp/branch-files > /tmp/overlap
+          printf '%s\n' "overlap:"
+          cat /tmp/overlap
+          test "$(wc -l < /tmp/overlap | tr -d ' ')" = "1"
+          test "$(cat /tmp/overlap)" = "vercel.json"
+          if git cat-file -e "$base:vercel.json" 2>/dev/null; then
+            echo "merge base unexpectedly contains vercel.json"
+            exit 1
+          fi
+      - name: verify candidate preserves current-main Vercel suppression
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const { execFileSync } = require('node:child_process');
+          const fs = require('node:fs');
+          const main = JSON.parse(
+            execFileSync('git', ['show', 'origin/main:vercel.json'], { encoding: 'utf8' }),
+          );
+          const branch = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+          const mainEnabled = main.git?.deploymentEnabled ?? {};
+          const branchEnabled = branch.git?.deploymentEnabled ?? {};
+          for (const [key, value] of Object.entries(mainEnabled)) {
+            if (branchEnabled[key] !== value) {
+              throw new Error(`branch changes main deployment suppression for ${key}`);
+            }
+          }
+          if (branchEnabled['v131-lastfm-real-signal-read-model'] !== false) {
+            throw new Error('explicit PR127 branch suppression missing');
+          }
+          const extras = Object.keys(branchEnabled).filter((key) => !(key in mainEnabled));
+          if (extras.length !== 1 || extras[0] !== 'v131-lastfm-real-signal-read-model') {
+            throw new Error(`unexpected extra deployment policy: ${extras.join(',')}`);
+          }
+          NODE
+      - name: v181 regression
+        run: npx tsx --test tests/fandex-momentum-verifier-external-capability-resume-gate-v181.test.mts
+      - name: typecheck
+        run: npm run typecheck
+      - name: branch diff check
+        run: git diff --check HEAD^..HEAD
+      - name: full PR diff check
+        run: git diff --check origin/main...HEAD
