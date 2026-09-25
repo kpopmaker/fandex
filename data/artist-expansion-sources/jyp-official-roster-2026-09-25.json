@@ -1,0 +1,174 @@
+{
+  "version": "jyp_agency_roster_adapter_v1",
+  "source": {
+    "id": "jyp-entertainment-official-artist-roster",
+    "type": "agency_roster",
+    "name": "JYP Entertainment Official Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.jype.com/ko/Artist"
+  },
+  "candidateCount": 15,
+  "candidates": [
+    {
+      "displayArtist": "J.Y. Park",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://jyp.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "2PM",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://2pm.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "DAY6",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://day6.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TWICE",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://twice.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Stray Kids",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://straykids.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BOY STORY",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://boystory.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ITZY",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://itzy.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "YAOCHEN",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://yaochen.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NiziU",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://niziu.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Xdinary Heroes",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://xdinaryheroes.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NMIXX",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://nmixx.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "GIRLSET",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://girlset.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NEXZ",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://nexz.jype.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KickFlip",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://www.kick-flip.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CIIU",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "JYP Entertainment official artist roster/profile",
+          "url": "https://ciiu.jype.com/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.jype.com/ko/Artist",
+    "verifiedAt": "2026-09-25"
+  }
+}
