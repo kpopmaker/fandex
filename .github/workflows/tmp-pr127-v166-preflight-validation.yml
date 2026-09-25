@@ -64,7 +64,7 @@ jobs:
       - name: v165-v169 regression
         run: |
           npx tsx --test tests/fandex-momentum-verifier-provisioning-authorization-plan-v165.test.mts
-          npx tsx --test tests/fandex-momentum-verifier-configuration-mutation-authorization-v166.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
           npx tsx --test tests/fandex-momentum-verifier-configuration-mutation-execution-guard-v167.test.mts
           npx tsx --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
           npx tsx --test tests/fandex-momentum-verifier-premutation-rollback-readiness-v169.test.mts
