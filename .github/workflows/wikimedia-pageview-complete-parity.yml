@@ -1,0 +1,98 @@
+name: Wikimedia Pageview Complete Parity Spike
+
+on:
+  push:
+    branches:
+      - research/wikimedia-entity-attention-v1
+    paths:
+      - ".github/workflows/wikimedia-pageview-complete-parity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Stream one user daily dump and extract IU entity titles
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DUMP_URL="https://dumps.wikimedia.org/other/pageview_complete/2026/2026-09/pageviews-20260923-user.bz2"
+
+          headers="$(curl --fail --silent --show-error --location --head "$DUMP_URL")"
+          content_length="$(awk 'BEGIN{IGNORECASE=1} /^content-length:/ {gsub("\r","",$2); print $2}' <<<"$headers" | tail -1)"
+          echo "DUMP_CONTENT_LENGTH=${content_length:-unknown}"
+
+          cat > targets.txt <<'EOF'
+          en.wikipedia IU_(entertainer) 
+          en.wikipedia 아이유 
+          en.wikipedia Lee_Ji-eun_(singer) 
+          en.wikipedia Love,_Poem 
+          en.wikipedia 2019_IU_Tour_Concert 
+          en.wikipedia IU_(Singer) 
+          en.wikipedia Into_the_I-LAND 
+          en.wikipedia Lee_Ji-eun_(actress,_born_1993) 
+          en.wikipedia IU_(vocalist) 
+          en.wikipedia IU_(actor) 
+          en.wikipedia IU_(actress) 
+          en.wikipedia IU_(songwriter) 
+          en.wikipedia IU_(singer) 
+          EOF
+
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --location \
+            --retry 3 \
+            --retry-delay 3 \
+            --connect-timeout 20 \
+            "$DUMP_URL" \
+            | bzip2 -dc \
+            | grep -F -f targets.txt \
+            > matched.txt
+
+          echo "MATCHED_LINE_COUNT=$(wc -l < matched.txt | tr -d ' ')"
+          echo "MATCHED_LINES_BEGIN"
+          cat matched.txt
+          echo "MATCHED_LINES_END"
+
+          python3 <<'PY'
+          import json
+
+          wanted = {
+              "IU_(entertainer)",
+              "아이유",
+              "Lee_Ji-eun_(singer)",
+              "Love,_Poem",
+              "2019_IU_Tour_Concert",
+              "IU_(Singer)",
+              "Into_the_I-LAND",
+              "Lee_Ji-eun_(actress,_born_1993)",
+              "IU_(vocalist)",
+              "IU_(actor)",
+              "IU_(actress)",
+              "IU_(songwriter)",
+              "IU_(singer)",
+          }
+
+          rows = []
+          with open("matched.txt", "r", encoding="utf-8") as handle:
+              for raw in handle:
+                  line = raw.rstrip("\n")
+                  fields = line.split(" ")
+                  if len(fields) < 4:
+                      raise SystemExit(f"unexpected row: {line!r}")
+                  if fields[0] != "en.wikipedia" or fields[1] not in wanted:
+                      continue
+                  rows.append({
+                      "title": fields[1],
+                      "fields": fields,
+                      "raw": line,
+                  })
+
+          print("PARITY_RAW_JSON=" + json.dumps(rows, ensure_ascii=False, separators=(",", ":")))
+          PY
