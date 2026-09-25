@@ -1,0 +1,90 @@
+{
+  "contractVersion": "fandex_momentum_pr127_external_operator_read_attempt_audit_v1",
+  "lifecycle": "research-execution-audit",
+  "observedAt": "2026-09-25T10:16:13.000Z",
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "headAfterRelock": "01bf9408d47944ec256f293b3cb5e649b7607dde",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "authorizationAttempt": {
+    "explicitUserApprovalReceived": true,
+    "requestCommit": "3ac363c7668588a34751b70156ebb9bf062779ad",
+    "requestId": "pr127-vercel-env-read-20260925T100413Z",
+    "authorizedBy": "kpopmaker",
+    "validFrom": "2026-09-25T10:04:13.000Z",
+    "expiresAt": "2026-09-25T10:34:13.000Z",
+    "exactRead": {
+      "provider": "vercel",
+      "method": "GET",
+      "endpoint": "/v10/projects/{idOrName}/env",
+      "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+      "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+      "decrypt": "false",
+      "maximumProviderCalls": 1,
+      "maximumInventoryReads": 1
+    }
+  },
+  "executionAttempt": {
+    "workflowRunId": 36122850192,
+    "state": "failed-closed-before-provider-read",
+    "gatePassed": true,
+    "contractRegressionPassed": true,
+    "externalOperatorJobStarted": true,
+    "credentialMaterialAvailableToJob": false,
+    "blocker": "github-actions-vercel-token-secret-unavailable",
+    "providerReadAttempted": false,
+    "providerReadCount": 0,
+    "v177Executed": false,
+    "v178Executed": false,
+    "v173Executed": false,
+    "v179Executed": false,
+    "sanitizedArtifact": {
+      "artifactId": 10858568682,
+      "name": "pr127-momentum-external-operator-36122850192",
+      "sizeBytes": 439,
+      "uploaded": true
+    }
+  },
+  "relock": {
+    "commit": "01bf9408d47944ec256f293b3cb5e649b7607dde",
+    "authorized": false,
+    "confirm": "NOT_AUTHORIZED",
+    "requestId": null,
+    "authorizationWindowCleared": true,
+    "verificationWorkflowRunId": 36123003441,
+    "verificationWorkflowConclusion": "success",
+    "verificationExternalOperatorJob": "skipped"
+  },
+  "currentBlocker": {
+    "code": "github-actions-vercel-token-secret-unavailable",
+    "description": "The research execution channel is ready, but the GitHub Actions repository does not expose a VERCEL_TOKEN secret to this workflow.",
+    "nextRequiredExternalAction": "Provision repository Actions secret VERCEL_TOKEN without sharing its value in chat, then obtain a fresh explicit one-read authorization."
+  },
+  "effects": {
+    "vercelInventoryReads": 0,
+    "credentialReads": 0,
+    "credentialCreates": 0,
+    "credentialRotations": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "productionDeployments": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
