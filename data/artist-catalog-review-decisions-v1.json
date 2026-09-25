@@ -3226,18 +3226,23 @@
     },
     {
       "displayArtist": "You Hee Yul (TOY)",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "official_antenna_combined_person_and_toy_project_identity",
+      "decision": "new_canonical_project_candidate",
+      "relationResolution": "official_antenna_profile_resolved_to_toy_project_with_you_hee_yul_aliases",
       "relatedCanonicalArtistIds": [],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_antenna_music_profile_and_toy_catalog",
-      "onboardingBlocker": "person_vs_toy_project_canonical_representation_required",
+      "scopeBasis": "official_antenna_toy_project_profile_and_catalog",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
           "source": "Antenna",
           "url": "https://antenna.co.kr/Toy",
           "note": "Official Antenna profile combines You Hee Yul with the project band Toy and catalogs Toy releases under the same profile; FANDEX does not collapse person and project without an explicit representation decision."
+        },
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Toy",
+          "note": "Antenna's official profile describes You Hee Yul as the founder/leader of the project band Toy and places the Toy catalog under this combined profile. FANDEX represents the music identity canonically as project TOY while preserving You Hee Yul aliases rather than creating a separate inferred solo music identity."
         }
       ]
     }

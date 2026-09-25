@@ -4403,6 +4403,52 @@
           "url": "https://antenna.co.kr/252"
         }
       ]
+    },
+    {
+      "id": "toy",
+      "ticker": "TOY",
+      "name": "TOY",
+      "agency": "Antenna",
+      "entityType": "project",
+      "lifecycleStatus": "active",
+      "aliases": [
+        "You Hee Yul (TOY)",
+        "유희열 (TOY)"
+      ],
+      "naverNewsQuery": "토이 TOY 유희열",
+      "koreanAliases": [
+        "토이",
+        "유희열"
+      ],
+      "englishAliases": [
+        "TOY",
+        "Toy",
+        "You Hee Yul",
+        "You Hee-yeol"
+      ],
+      "keywords": [
+        "Antenna",
+        "안테나",
+        "유희열",
+        "프로젝트 밴드",
+        "Da Capo"
+      ],
+      "disambiguationKeywords": [
+        "Antenna",
+        "유희열",
+        "토이"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/Toy"
+        }
+      ]
     }
   ]
 }

@@ -167,6 +167,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'parksaebyul',
     'kyuhyun',
     'dragonpony',
+    'toy',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -189,6 +190,14 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(peppertones.entityType, 'group');
   assert.equal(peppertones.agency, 'Antenna');
   assert.deepEqual(peppertones.members, ['신재평', '이장원']);
+
+  const toy = getArtistV4ById('toy');
+  assert.ok(toy);
+  assert.equal(toy.entityType, 'project');
+  assert.equal(toy.agency, 'Antenna');
+  assert.equal(toy.lifecycleStatus, 'active');
+  assert.ok(toy.profile.englishAliases.includes('You Hee Yul'));
+  assert.ok(toy.profile.koreanAliases.includes('유희열'));
 
   const dragonPony = getArtistV4ById('dragonpony');
   assert.ok(dragonPony);
