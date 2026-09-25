@@ -232,9 +232,12 @@ decision_payload = {
         },
         {
             "displayArtist": "HORI7ON",
-            "decision": "identity_verified_scope_review_required",
-            "relationResolution": "cross_border_group_current_management_status_requires_review",
+            "decision": "identity_verified_scope_eligible_onboarding_blocked",
+            "relationResolution": "cross_border_group_scope_verified_current_management_unresolved",
             "relatedCanonicalArtistIds": [],
+            "scopeDecision": "eligible",
+            "scopeBasis": "official_kpop_award_roster",
+            "onboardingBlocker": "current_management_unresolved_after_contract_termination",
             "autoPromote": False,
             "evidence": [],
         },
@@ -248,8 +251,12 @@ decision_result = module.build_discovery(
 assert decision_result["candidateCount"] == 1
 assert decision_result["decisionSuppressionCount"] == 2
 assert decision_result["candidates"][0]["displayArtist"] == "HORI7ON"
-assert decision_result["candidates"][0]["status"] == "scope_review_required"
-assert decision_result["candidates"][0]["reviewDecision"] == "identity_verified_scope_review_required"
+assert decision_result["candidates"][0]["status"] == "identity_verified_onboarding_blocked"
+assert decision_result["candidates"][0]["scopeStatus"] == "eligible"
+assert decision_result["candidates"][0]["scopeDecision"] == "eligible"
+assert decision_result["candidates"][0]["scopeBasis"] == "official_kpop_award_roster"
+assert decision_result["candidates"][0]["onboardingBlocker"] == "current_management_unresolved_after_contract_termination"
+assert decision_result["candidates"][0]["reviewDecision"] == "identity_verified_scope_eligible_onboarding_blocked"
 assert {row["displayArtist"] for row in decision_result["decisionSuppressions"]} == {
     "CUTIE STREET",
     "SOOBIN of TXT",

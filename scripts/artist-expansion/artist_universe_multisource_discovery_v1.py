@@ -293,8 +293,23 @@ def build_discovery(
         )
         item["decisionEvidence"] = list(decision.get("evidence") or [])
         item["decisionDisplayArtist"] = decision.get("displayArtist")
+        item["scopeDecision"] = decision.get("scopeDecision")
+        item["scopeBasis"] = decision.get("scopeBasis")
+        item["onboardingBlocker"] = decision.get("onboardingBlocker")
 
-        if decision_name == "identity_verified_scope_review_required":
+        scope_decision = str(decision.get("scopeDecision") or "").strip()
+        onboarding_blocker = str(decision.get("onboardingBlocker") or "").strip()
+        if scope_decision == "eligible":
+            item["scopeStatus"] = "eligible"
+            item["status"] = (
+                "identity_verified_onboarding_blocked"
+                if onboarding_blocker
+                else "identity_verified_onboarding_pending"
+            )
+        elif scope_decision == "excluded":
+            item["scopeStatus"] = "excluded"
+            item["status"] = "scope_excluded"
+        elif decision_name == "identity_verified_scope_review_required":
             item["status"] = "scope_review_required"
             item["scopeStatus"] = "review_required"
         elif decision_name.startswith("new_canonical_"):
