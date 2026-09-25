@@ -1880,6 +1880,44 @@
           "note": "ASND announced an exclusive contract with WENDY for solo activities while supporting Red Velvet activities."
         }
       ]
+    },
+    {
+      "displayArtist": "n.SSign",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "award_roster_verified_active_kpop_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "n.SSign Weverse / nCH Entertainment",
+          "url": "https://weverse.io/nssign/notice/38960",
+          "note": "nCH Entertainment announced n.SSign Special Session 2026 TWO ROOMS ticketing and October 2026 performances."
+        },
+        {
+          "source": "n.SSign Official Site",
+          "url": "https://nssignworld.com/profile/",
+          "note": "Official n.SSign profile identifies the group and its concert/award history."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HORI7ON",
+      "decision": "identity_verified_scope_review_required",
+      "relationResolution": "cross_border_group_current_management_status_requires_review",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Seoul Music Awards",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group",
+          "note": "Official K-POP World Choice Group roster lists HORI7ON."
+        },
+        {
+          "source": "Atorni Law",
+          "url": "https://atorni.ai/notice/hori7on-management-agreement-termination",
+          "note": "Members' counsel states the seven members terminated management agreements with MLD Entertainment and ABS-CBN effective August 13, 2026."
+        }
+      ]
     }
   ]
 }
