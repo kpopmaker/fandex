@@ -744,7 +744,7 @@ type StoredEvidenceRow = {
   response_captured_at: string | Date;
   observation_collected_at: string | Date;
   source_published_at: string | Date | null;
-  provider_observed_at: string | Date | null;
+  provider_observed_at: string | null;
   raw_payload_sha256: string;
   retention_state: 'retained' | 'evicted' | 'not_retained';
   retention_policy_version: string;
@@ -843,7 +843,7 @@ export async function readActivityExposureStoredEvidence(
         responseCapturedAt: isoFromDatabase(row.response_captured_at)!,
         collectedAt: isoFromDatabase(row.observation_collected_at)!,
         sourcePublishedAt: isoFromDatabase(row.source_published_at),
-        providerObservedAt: isoFromDatabase(row.provider_observed_at),
+        providerObservedAt: row.provider_observed_at,
         rawPayloadSha256: row.raw_payload_sha256,
         retentionState: row.retention_state,
         retentionPolicyVersion: row.retention_policy_version,
