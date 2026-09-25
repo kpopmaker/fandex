@@ -3013,6 +3013,145 @@
           "url": "https://www.highup-ent.com/en/unchild/"
         }
       ]
+    },
+    {
+      "id": "mamamooplus",
+      "ticker": "MAMAMOOPLUS",
+      "name": "MAMAMOO+",
+      "agency": "RBW",
+      "entityType": "unit",
+      "lifecycleStatus": "active",
+      "members": [
+        "SOLAR",
+        "MOON BYUL"
+      ],
+      "naverNewsQuery": "마마무+ MAMAMOO+",
+      "koreanAliases": [
+        "마마무+"
+      ],
+      "englishAliases": [
+        "MAMAMOO+",
+        "MAMAMOO＋"
+      ],
+      "keywords": [
+        "RBW",
+        "Solar",
+        "Moon Byul",
+        "솔라",
+        "문별",
+        "마마무+"
+      ],
+      "disambiguationKeywords": [
+        "RBW",
+        "마마무+"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        }
+      ]
+    },
+    {
+      "id": "onewe",
+      "ticker": "ONEWE",
+      "name": "ONEWE",
+      "agency": "RBW",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "YONGHOON",
+        "KANGHYUN",
+        "HARIN",
+        "DONGMYEONG",
+        "GIUK"
+      ],
+      "naverNewsQuery": "원위 ONEWE",
+      "koreanAliases": [
+        "원위"
+      ],
+      "englishAliases": [
+        "ONEWE"
+      ],
+      "keywords": [
+        "RBW",
+        "band",
+        "원위"
+      ],
+      "disambiguationKeywords": [
+        "RBW",
+        "원위"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        },
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=23508"
+        }
+      ]
+    },
+    {
+      "id": "purplekiss",
+      "ticker": "PURPLEKISS",
+      "name": "PURPLE KISS",
+      "agency": "RBW",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "NA GOEUN",
+        "DOSIE",
+        "IREH",
+        "YUKI",
+        "CHAEIN",
+        "SWAN"
+      ],
+      "naverNewsQuery": "퍼플키스 PURPLE KISS",
+      "koreanAliases": [
+        "퍼플키스"
+      ],
+      "englishAliases": [
+        "PURPLE KISS",
+        "PURPLE K!SS"
+      ],
+      "keywords": [
+        "RBW",
+        "퍼플키스",
+        "K-pop"
+      ],
+      "disambiguationKeywords": [
+        "RBW",
+        "퍼플키스"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        },
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=25130"
+        }
+      ]
     }
   ]
 }

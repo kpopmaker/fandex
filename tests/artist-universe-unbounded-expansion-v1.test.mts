@@ -136,6 +136,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'goldenchild',
     'drippin',
     'unchild',
+    'mamamooplus',
+    'onewe',
+    'purplekiss',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -143,6 +146,21 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.canonicalArtistId, artistId);
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
+  }
+
+  const mamamooPlus = getArtistV4ById('mamamooplus');
+  assert.ok(mamamooPlus);
+  assert.equal(mamamooPlus.entityType, 'unit');
+  assert.equal(mamamooPlus.agency, 'RBW');
+  assert.equal(mamamooPlus.members.length, 2);
+  assert.ok(mamamooPlus.profile.englishAliases.includes('MAMAMOO+'));
+
+  for (const artistId of ['onewe', 'purplekiss']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'RBW');
+    assert.ok(artist.profile.markets.includes('KR'));
   }
 
   const unchild = getArtistV4ById('unchild');

@@ -189,6 +189,38 @@ assert bilingual_result["candidates"][0]["displayArtist"] == "신규 솔로"
 print("bilingual provider identity suppression regression: PASS")
 
 
+unit_identity = {
+    "artists": [
+        {"id": "mamamoo", "aliases": ["MAMAMOO", "마마무"]},
+        {"id": "mamamooplus", "aliases": ["MAMAMOO+", "MAMAMOO＋", "마마무+"]},
+    ]
+}
+unit_snapshot = [
+    (
+        Path("rbw-unit.json"),
+        {
+            "source": {
+                "id": "rbw",
+                "type": "agency_roster",
+                "name": "RBW",
+                "observedAt": "2026-09-25T00:00:00Z",
+            },
+            "candidates": [
+                {"displayArtist": "MAMAMOO+", "aliases": []},
+            ],
+        },
+    )
+]
+unit_result = module.build_discovery(unit_identity, unit_snapshot)
+assert module.compact_identity("MAMAMOO") != module.compact_identity("MAMAMOO+")
+assert module.compact_identity("MAMAMOO+") == module.compact_identity("MAMAMOO＋")
+assert module.identity_components("MAMAMOO+") == ["MAMAMOO+"]
+assert unit_result["candidateCount"] == 0
+assert unit_result["knownSuppressionCount"] == 1
+assert unit_result["knownSuppressions"][0]["canonicalArtistIds"] == ["mamamooplus"]
+print("trailing-plus unit identity regression: PASS")
+
+
 decision_identity = {
     "artists": [
         {"id": "txt", "aliases": ["TXT", "TOMORROW X TOGETHER"]},

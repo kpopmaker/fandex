@@ -2469,6 +2469,77 @@
           "note": "Official July 2026 news confirms continuing group activity and a September comeback."
         }
       ]
+    },
+    {
+      "displayArtist": "MAMAMOO+",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "official_rbw_unit_identity_distinct_from_parent_mamamoo",
+      "relatedCanonicalArtistIds": [
+        "mamamoo"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_rbw_exclusive_artist_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=17131",
+          "note": "RBW current exclusive artist roster lists MAMAMOO+ separately from the parent group identity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "ONEWE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_rbw_band_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_rbw_roster_and_korean_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=23508",
+          "note": "Official profile identifies ONEWE as a five-member band and documents 2026 releases, concerts, and Korean live performances."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PURPLE KISS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_rbw_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_rbw_roster_and_korean_music_debut",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=25130",
+          "note": "Official RBW profile identifies PURPLE KISS as a six-member RBW girl group with Korean discography through late 2025."
+        }
+      ]
+    },
+    {
+      "displayArtist": "NXD",
+      "decision": "identity_verified_scope_deferred",
+      "relationResolution": "official_rbw_predebut_group_identity_scope_deferred_until_debut",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "deferred",
+      "scopeBasis": "official_rbw_predebut_artist_roster",
+      "scopeRecheckTrigger": "official_music_debut_or_explicit_post_debut_kpop_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/?page_id=17131",
+          "note": "RBW current roster explicitly labels NXD as PRE-DEBUT; identity is verified but debuted-artist scope is intentionally deferred."
+        }
+      ]
     }
   ]
 }

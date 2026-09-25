@@ -18,16 +18,23 @@ ALLOWED_SOURCE_TYPES = {
 
 
 def compact_identity(value: Any) -> str:
-    text = str(value or "").strip().casefold()
-    return re.sub(r"[^0-9a-z가-힣]+", "", text)
+    text = str(value or "").strip().casefold().replace("＋", "+")
+    trailing_plus = text.endswith("+")
+    compact = re.sub(r"[^0-9a-z가-힣]+", "", text)
+    if trailing_plus and compact:
+        return compact + "plus"
+    return compact
 
 
 def identity_components(value: Any) -> list[str]:
     text = str(value or "").strip()
     parts = [text]
     parts.extend(re.findall(r"\(([^()]+)\)", text))
-    outside = re.sub(r"\([^()]+\)", " ", text)
-    parts.extend(re.split(r"\s*[&＋+,]\s*|\s+[xX×]\s+", outside))
+    outside = re.sub(r"\([^()]+\)", " ", text).replace("＋", "+")
+    # A trailing plus is part of a canonical unit name (for example MAMAMOO+)
+    # and must not collapse to the parent group. Internal + still acts as a
+    # composite separator when another token follows it.
+    parts.extend(re.split(r"\s*&\s*|\s*,\s*|\s+[xX×]\s+|\+(?=\s*\S)", outside))
 
     result: list[str] = []
     seen = set()

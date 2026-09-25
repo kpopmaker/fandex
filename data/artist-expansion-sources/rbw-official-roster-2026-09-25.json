@@ -1,0 +1,73 @@
+{
+  "version": "rbw_agency_roster_adapter_v1",
+  "source": {
+    "id": "rbw-official-exclusive-artist-roster",
+    "type": "agency_roster",
+    "name": "RBW Official Exclusive Artist Roster",
+    "observedAt": "2026-09-25T00:00:00Z",
+    "url": "https://www.rbbridge.com/?page_id=17131"
+  },
+  "candidateCount": 4,
+  "candidates": [
+    {
+      "displayArtist": "MAMAMOO+",
+      "aliases": [
+        "마마무+"
+      ],
+      "evidence": [
+        {
+          "label": "RBW official exclusive artist roster",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ONEWE",
+      "aliases": [
+        "원위"
+      ],
+      "evidence": [
+        {
+          "label": "RBW official exclusive artist roster",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        }
+      ]
+    },
+    {
+      "displayArtist": "PURPLE KISS",
+      "aliases": [
+        "퍼플키스"
+      ],
+      "evidence": [
+        {
+          "label": "RBW official exclusive artist roster",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NXD",
+      "aliases": [
+        "[PRE-DEBUT] NXD"
+      ],
+      "evidence": [
+        {
+          "label": "RBW official exclusive artist roster",
+          "url": "https://www.rbbridge.com/?page_id=17131"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "preDebutStatusPreserved": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.rbbridge.com/?page_id=17131",
+    "verifiedAt": "2026-09-25"
+  }
+}
