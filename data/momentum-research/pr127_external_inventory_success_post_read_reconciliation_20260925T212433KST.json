@@ -1,0 +1,165 @@
+{
+  "contractVersion": "fandex_momentum_pr127_external_inventory_success_post_read_reconciliation_v1",
+  "lifecycle": "research-post-read-reconciliation",
+  "observedAt": "2026-09-25T12:24:33.992Z",
+  "canonicalArtistId": "iu",
+  "sourceRead": {
+    "authorizationCommit": "04ac631f81c3269e7cef7bbd42b38f8d4fbe5129",
+    "workflowRunId": 36133975493,
+    "artifactId": 10863128899,
+    "artifactDigest": "sha256:7c4b45e62a9a7747a0973301575026bd30532b7ee1d58b444908beee6c43008c",
+    "requestId": "pr127-vercel-env-read-20260925T121551Z",
+    "providerReadCount": 1,
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "decryptRequested": false,
+    "responseBoundToProjectAndTeam": true,
+    "completeForProductionTarget": true,
+    "truncationOrAdditionalPageRisk": false,
+    "rawProviderResponsePersisted": false,
+    "credentialValueExposed": false,
+    "secretValuePersisted": false,
+    "providerRows": []
+  },
+  "frozenChain": {
+    "v177": {
+      "state": "operator-response-intake-ready",
+      "intakeReady": true,
+      "digest": "169c1f11b946521e986ec0f33ee4de444a681f867cfb008bf6dea6c77f526d69",
+      "blockers": []
+    },
+    "v178": {
+      "state": "operator-response-projection-ready",
+      "projectionReady": true,
+      "digest": "812aaa8508662a84d6fbbc63469cb29599cbfc017f754bdce3c5e1a4b0a155e1",
+      "blockers": []
+    },
+    "v173": {
+      "state": "read-execution-ready",
+      "envelopePrepared": true,
+      "readExecutionAuthorized": true,
+      "digest": "bcd2e9b4c38a11b0fa478a021f67c56a386478bf1435a8a6e1b10aa5d8af4282",
+      "blockers": []
+    },
+    "v179": {
+      "state": "v171-handoff-ready",
+      "intakeReady": true,
+      "v171HandoffReady": true,
+      "digest": "0913a2ef4f129509aac65494ef923851e0dcd30a4764c02df31c1302576bc315",
+      "blockers": [],
+      "dedicatedSecretRowPresent": false,
+      "opaqueRollbackAttestationRequired": false
+    }
+  },
+  "postReadCapability": {
+    "v180": {
+      "state": "external-execution-channel-unavailable",
+      "digest": "cb6bd8b6cbeb0a7df4dab89a68ef6d50b45217d3c56778019e95b4f8f5858a12",
+      "interpretation": "connected Vercel tool surface still lacks a concrete exact inventory read action; this does not invalidate the completed external operator read"
+    },
+    "v181": {
+      "state": "resume-capability-available",
+      "internalExecutionCanResume": true,
+      "separateAuthorizationStillRequired": true,
+      "candidateChannels": [
+        "validated-external-operator-exchange"
+      ],
+      "blockers": [
+        "connected-vercel-env-read-capability-not-concretely-exposed"
+      ],
+      "digest": "f2a9aa3e9bd62d8d3146f3189fa98d543e197a984da73e936616b886781e556f"
+    }
+  },
+  "configurationEvidence": {
+    "v164": {
+      "state": "configuration-evidence-blocked",
+      "readyToReevaluateV163": false,
+      "activationAuthorized": false,
+      "digest": "a25376562e08903a9dbbcf4cf4b6b923a1c3278fb8d9942f6d82a05f54718993",
+      "productionEnvironmentInventoryQueryable": true,
+      "evidenceBoundToProjectAndEnvironment": true,
+      "observedVerifierConfiguration": {
+        "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED": "absent",
+        "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT": "absent",
+        "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET": "absent"
+      },
+      "blockers": [
+        "verifier-enable-flag-not-proven-present",
+        "verifier-enable-flag-production-target-not-proven",
+        "verifier-enable-flag-contract-value-not-proven",
+        "verifier-deployment-selector-not-proven-present",
+        "verifier-deployment-selector-production-target-not-proven",
+        "verifier-deployment-selector-contract-value-not-proven",
+        "dedicated-verifier-secret-not-proven-present",
+        "dedicated-verifier-secret-production-target-not-proven",
+        "dedicated-verifier-secret-contract-not-proven",
+        "dedicated-verifier-secret-separation-not-proven"
+      ]
+    },
+    "v170": {
+      "state": "inventory-adapter-ready",
+      "adapterReady": true,
+      "digest": "3d6122ac3c3e1adfc64c564d017fa6e8498d43978ac5164edbcab43b9df406b6",
+      "blockers": []
+    },
+    "v169": {
+      "state": "rollback-readiness-ready",
+      "rollbackReady": true,
+      "digest": "eb567c5347320f58b0e47990d45800c401e6db092b329bed03d7dfd7ef7b96e2",
+      "blockers": [],
+      "keys": [
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        },
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        },
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        }
+      ]
+    }
+  },
+  "existingProvisioningPlan": {
+    "v165State": "provisioning-plan-ready",
+    "v165PlanReadyForSeparateAuthorization": true,
+    "v165Digest": "f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f",
+    "v166State": "authorization-pending",
+    "configurationMutationAuthorized": false,
+    "requiredAuthorizationStatement": "AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION"
+  },
+  "currentBlocker": {
+    "code": "explicit-production-verifier-configuration-mutation-authorization-required",
+    "detail": "The three verifier-specific Production settings are confirmed absent. Rollback is ready because any newly created verifier keys can be removed. Actual Vercel environment mutation remains separately unauthorized."
+  },
+  "effects": {
+    "vercelInventoryReads": 1,
+    "additionalVercelReadsAfterSourceRead": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "credentialValueExposures": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
