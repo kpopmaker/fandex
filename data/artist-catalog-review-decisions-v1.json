@@ -1994,8 +1994,8 @@
     },
     {
       "displayArtist": "BOY STORY",
-      "decision": "identity_verified_scope_review_required",
-      "relationResolution": "jyp_china_group_kpop_scope_boundary_not_frozen",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "localized_china_group_verified_korean_market_activity",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -2013,13 +2013,21 @@
           "source": "JYP Entertainment",
           "url": "https://www.jype.com/ko/JYP",
           "note": "JYP company introduction classifies BOY STORY under its China artist roster; FANDEX K-pop scope must remain explicit rather than inferred from agency ownership."
+        },
+        {
+          "source": "iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/410993",
+          "note": "Reports BOY STORY released 'Alpha (Korean Ver.)' and promoted it on Mnet M Countdown, KBS Music Bank, MBC Show! Music Core, and SBS Inkigayo in March 2024, establishing verified Korean-market music activity."
         }
-      ]
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "verified_korean_music_release_and_broadcast_activity",
+      "onboardingBlocker": null
     },
     {
       "displayArtist": "YAOCHEN",
-      "decision": "identity_verified_scope_review_required",
-      "relationResolution": "jyp_china_solo_kpop_scope_boundary_not_frozen",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "localized_china_solo_verified_korean_market_activity",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -2037,13 +2045,21 @@
           "source": "JYP Entertainment",
           "url": "https://www.jype.com/ko/JYP",
           "note": "JYP company introduction classifies YAOCHEN under its China artist roster; FANDEX K-pop scope remains separate."
+        },
+        {
+          "source": "Sports Kyunghyang",
+          "url": "https://sports.khan.co.kr/article/202312011703003",
+          "note": "Reports YAOCHEN appeared on KBS Music Bank, MBC Show! Music Core, and SBS Inkigayo in December 2023, establishing verified Korean-market music activity."
         }
-      ]
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "verified_korean_music_broadcast_activity",
+      "onboardingBlocker": null
     },
     {
       "displayArtist": "GIRLSET",
-      "decision": "identity_verified_scope_review_required",
-      "relationResolution": "jyp_america_group_kpop_scope_boundary_not_frozen",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "localized_us_group_verified_korean_market_activity",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -2061,13 +2077,21 @@
           "source": "JYP Entertainment",
           "url": "https://www.jype.com/ko/JYP",
           "note": "JYP company introduction classifies GIRLSET under its U.S. artist roster; FANDEX K-pop scope remains separate."
+        },
+        {
+          "source": "EDAILY",
+          "url": "https://en.edaily.co.kr/news/eda202607175170/",
+          "note": "Reports GIRLSET began domestic Korean music-show promotions in July 2026 on Music Bank, Show! Music Core, and Inkigayo, establishing verified Korean-market music activity."
         }
-      ]
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "verified_korean_music_broadcast_activity",
+      "onboardingBlocker": null
     },
     {
       "displayArtist": "CIIU",
       "decision": "identity_verified_scope_review_required",
-      "relationResolution": "jyp_china_group_kpop_scope_boundary_not_frozen",
+      "relationResolution": "localized_china_group_no_verified_korean_market_activity_yet",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -2085,6 +2109,11 @@
           "source": "JYP Entertainment",
           "url": "https://www.jype.com/ko/JYP",
           "note": "JYP company introduction classifies CIIU under its China artist roster; FANDEX K-pop scope remains separate."
+        },
+        {
+          "source": "JYP Entertainment 25Q4 Results",
+          "url": "https://kind.krx.co.kr/external/dst/irReference/18198/%5BJYP%20ENT%5D%2025Q4_Result_ENG_v.F.pdf",
+          "note": "JYP's 2026 localized-artist plan places CIIU in China and describes China showcase touring. This does not establish Korean-market music activity, so scope remains under review rather than being inferred from agency ownership."
         }
       ]
     }

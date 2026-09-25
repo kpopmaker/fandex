@@ -2140,6 +2140,147 @@
           "url": "https://2pm.jype.com/"
         }
       ]
+    },
+    {
+      "id": "boystory",
+      "ticker": "BOYSTORY",
+      "name": "BOY STORY",
+      "agency": "JYP Entertainment China",
+      "entityType": "group",
+      "debutDate": "2018-09-21",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "BOY STORY 보이스토리",
+      "koreanAliases": [
+        "보이스토리"
+      ],
+      "englishAliases": [
+        "BOY STORY",
+        "Boy Story"
+      ],
+      "keywords": [
+        "JYP Entertainment",
+        "JYP China",
+        "보이스토리",
+        "한국어 버전",
+        "음악방송"
+      ],
+      "disambiguationKeywords": [
+        "JYP",
+        "보이스토리"
+      ],
+      "markets": [
+        "CN",
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist"
+        },
+        {
+          "source": "BOY STORY Official",
+          "url": "https://boystory.jype.com/"
+        },
+        {
+          "source": "iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/410993"
+        }
+      ]
+    },
+    {
+      "id": "yaochen",
+      "ticker": "YAOCHEN",
+      "name": "YAOCHEN",
+      "agency": "JYP Entertainment China",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "야오천 YAOCHEN",
+      "koreanAliases": [
+        "야오천"
+      ],
+      "englishAliases": [
+        "YAOCHEN",
+        "Yaochen"
+      ],
+      "keywords": [
+        "JYP Entertainment",
+        "JYP China",
+        "야오천",
+        "음악방송"
+      ],
+      "disambiguationKeywords": [
+        "JYP",
+        "야오천"
+      ],
+      "markets": [
+        "CN",
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist"
+        },
+        {
+          "source": "YAOCHEN Official",
+          "url": "https://yaochen.jype.com/"
+        },
+        {
+          "source": "Sports Kyunghyang",
+          "url": "https://sports.khan.co.kr/article/202312011703003"
+        }
+      ]
+    },
+    {
+      "id": "girlset",
+      "ticker": "GIRLSET",
+      "name": "GIRLSET",
+      "agency": "JYP Entertainment America",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "GIRLSET 걸셋",
+      "koreanAliases": [
+        "걸셋"
+      ],
+      "englishAliases": [
+        "GIRLSET",
+        "Girlset"
+      ],
+      "keywords": [
+        "JYP Entertainment",
+        "JYP America",
+        "GIRLSET",
+        "걸셋",
+        "음악방송"
+      ],
+      "disambiguationKeywords": [
+        "JYP",
+        "걸셋"
+      ],
+      "markets": [
+        "US",
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JYP Entertainment",
+          "url": "https://www.jype.com/ko/Artist"
+        },
+        {
+          "source": "GIRLSET Official",
+          "url": "https://girlset.jype.com/"
+        },
+        {
+          "source": "EDAILY",
+          "url": "https://en.edaily.co.kr/news/eda202607175170/"
+        }
+      ]
     }
   ]
 }
