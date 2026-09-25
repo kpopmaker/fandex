@@ -32,7 +32,7 @@ jobs:
           git config user.email "fandex-preflight@example.invalid"
           git fetch origin main
 
-          EXPECTED_MAIN="560b70b43b839300ac20139b7fbf131d0ef97489"
+          EXPECTED_MAIN="b1a0ca1cd47113595d4584fb66a3444188eeb29e"
           ACTUAL_MAIN="$(git rev-parse origin/main)"
           test "$ACTUAL_MAIN" = "$EXPECTED_MAIN"
 
@@ -82,6 +82,7 @@ jobs:
         run: |
           npx tsx --conditions=react-server --test tests/activity-exposure-persistence-repository-v1.test.mts
           npx tsx --conditions=react-server --test tests/activity-exposure-persistence-bridge-v1.test.mts
+          npx tsx --conditions=react-server --test tests/activity-exposure-production-readiness-v1.test.mts
 
       - name: Typecheck
         run: npm run typecheck
