@@ -2,6 +2,7 @@ import type {
   ProductActivityExposureEvent,
   ProductActivityExposureProviderCoverage,
 } from '../../product/contracts/productActivityExposure';
+import { canonicalJson } from '../../shared/canonicalDigest';
 import {
   createActivityExposureProviderObservation,
   type ActivityExposureProviderObservation,
@@ -423,7 +424,7 @@ export function createYouTubeActivityExposureCollector(
           `youtube:channels:contentDetails:${input.providerArtistId}`,
         responseCapturedAt: collectedAt,
         collectedAt,
-        rawPayloadCanonical: JSON.stringify({
+        rawPayloadCanonical: canonicalJson({
           provider: 'youtube',
           kind: 'channel-content-details',
           channel,
@@ -464,7 +465,7 @@ export function createYouTubeActivityExposureCollector(
           collectedAt,
           sourcePublishedAt: video.snippet?.publishedAt ?? null,
           providerObservedAt: video.snippet?.publishedAt ?? null,
-          rawPayloadCanonical: JSON.stringify({
+          rawPayloadCanonical: canonicalJson({
             provider: 'youtube',
             kind: 'video',
             video,
@@ -490,7 +491,7 @@ export function createYouTubeActivityExposureCollector(
           requestRef: `youtube:videos:snippet:${videoId}`,
           responseCapturedAt: collectedAt,
           collectedAt,
-          rawPayloadCanonical: JSON.stringify({
+          rawPayloadCanonical: canonicalJson({
             provider: 'youtube',
             kind: 'video-unresolved',
             videoId,
