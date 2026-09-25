@@ -1,0 +1,141 @@
+{
+  "contractVersion": "fandex_momentum_pr127_v166_configuration_mutation_preflight_v1",
+  "lifecycle": "research-preauthorization",
+  "canonicalArtistId": "iu",
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "head": "3acbf2b21d5e2af9b4ecfb3eaffc65bd4242af78",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "currentMainSha": "1df5bc16056b8a618a99369a763e89e1f5c9e997",
+  "upstream": {
+    "v165": {
+      "state": "provisioning-plan-ready",
+      "planReadyForSeparateAuthorization": true,
+      "digest": "f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f"
+    },
+    "externalInventory": {
+      "workflowRunId": 36133975493,
+      "artifactId": 10863128899,
+      "v179Digest": "0913a2ef4f129509aac65494ef923851e0dcd30a4764c02df31c1302576bc315",
+      "providerReadCount": 1,
+      "providerRowsMatchingVerifierKeys": 0
+    },
+    "v169": {
+      "state": "rollback-readiness-ready",
+      "rollbackReady": true,
+      "digest": "eb567c5347320f58b0e47990d45800c401e6db092b329bed03d7dfd7ef7b96e2",
+      "keyState": [
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        },
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        },
+        {
+          "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+          "presence": "absent",
+          "rollbackAction": "remove-created-key"
+        }
+      ]
+    }
+  },
+  "requestedAuthorization": {
+    "statement": "AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION",
+    "genericContinuationCountsAsAuthorization": false,
+    "authorizationGranted": false,
+    "target": {
+      "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+      "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+      "projectName": "fandex",
+      "environment": "production",
+      "intendedDeploymentCommit": "7a1038226b07abf4a130986766ef114a43c1d638",
+      "routePath": "/api/internal/naver-news/momentum-verifier"
+    },
+    "exactConfigurationScope": [
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+        "exactValue": "approved-v162-research-read-only",
+        "target": "production"
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+        "exactValue": "production",
+        "target": "production"
+      },
+      {
+        "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+        "exactValue": null,
+        "target": "production",
+        "dedicatedSecretOnly": true,
+        "secretValueMayBeRecordedInResearchArtifact": false
+      }
+    ]
+  },
+  "forbiddenByThisAuthorization": [
+    "mutate-FANDEX_RUNTIME_DATABASE_URL",
+    "mutate-FANDEX_NAVER_NEWS_SCHEDULER_SECRET",
+    "copy-credentials-to-preview",
+    "production-deployment",
+    "verifier-activation",
+    "native-verifier-execution",
+    "research-ledger-advance",
+    "product-or-registry-mutation",
+    "merge-pr-127"
+  ],
+  "postAuthorizationPreconditionsBeforeAnyMutation": {
+    "v166AuthorizationRecordMustValidate": true,
+    "v167TrustedSecretHandleAttestationRequired": true,
+    "trustedSecretRequirements": {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+      "target": "production",
+      "secretValueMayBeExposed": false,
+      "minimumUtf8Bytes": 24,
+      "maximumUtf8Bytes": 512,
+      "whitespaceOrControlCharactersForbidden": true,
+      "mustDifferFromSchedulerCredential": true,
+      "comparisonMustNotExposeEitherSecret": true
+    },
+    "v167MutationEnvelopeMustBeReady": true,
+    "v168DryRunMustBeReady": true,
+    "v169RollbackReadinessMustRemainReady": true
+  },
+  "currentState": {
+    "v166": "authorization-pending",
+    "configurationMutationAuthorized": false,
+    "trustedSecretHandleAttestationAvailable": false,
+    "mutationEnvelopeReady": false,
+    "providerMutationAllowedNow": false
+  },
+  "effects": {
+    "providerReads": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "secretReads": 0,
+    "secretWrites": 0,
+    "productionDeployments": 0,
+    "verifierActivations": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
