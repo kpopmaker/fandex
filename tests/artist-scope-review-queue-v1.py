@@ -45,7 +45,7 @@ payload = {
 
 result = module.build_scope_review_queue(payload)
 
-assert result["scopeReviewCount"] == 2
+assert result["scopeReviewCount"] == 3
 assert [row["displayArtist"] for row in result["items"]] == [
     "HORI7ON",
     "Lee Sung-kyung",

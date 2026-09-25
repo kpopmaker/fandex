@@ -1542,6 +1542,11 @@
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/8059404?wl_ref=list_ab_04",
           "note": "Provider artist page verifies Lee Sung-kyung has a distinct music catalog identity; FANDEX music-artist scope eligibility remains separate."
+        },
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/actors/lee-sungkyoung/profile",
+          "note": "Official YG profile classifies Lee Sung-kyung in its actor roster while also documenting digital singles, OSTs, and music-program activity. This strengthens the cross-domain identity evidence without resolving FANDEX K-pop scope eligibility."
         }
       ]
     },
@@ -1590,6 +1595,11 @@
           "source": "YG LIFE",
           "url": "https://yg-life.com/archives/196778?lang=en",
           "note": "YG's 2026 company retrospective describes current group activity oversight for BIGBANG and BLACKPINK and separately lists EUN JIWON as remaining under YG, without establishing current SECHSKIES group activity."
+        },
+        {
+          "source": "SECHSKIES Official Website / YGEX",
+          "url": "https://ygex.jp/sechskies/profile/",
+          "note": "Official SECHSKIES profile confirms the Korean dance-vocal group identity and its 2016 restart through YG; it does not by itself establish current 2026 group activity."
         }
       ]
     },
@@ -1916,6 +1926,11 @@
           "source": "Atorni Law",
           "url": "https://atorni.ai/notice/hori7on-management-agreement-termination",
           "note": "Members' counsel states the seven members terminated management agreements with MLD Entertainment and ABS-CBN effective August 13, 2026."
+        },
+        {
+          "source": "GMA News",
+          "url": "https://www.gmanetwork.com/news/showbiz/showbizabroad/1001140/hori7on-members-terminate-contracts-with-management-agency/story/",
+          "note": "September 4, 2026 report quotes the members' counsel that all seven members terminated their management agreements effective August 13, 2026, corroborating that current management status must not be guessed."
         }
       ]
     }
