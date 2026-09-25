@@ -1,0 +1,126 @@
+{
+  "version": "seoul_music_awards_world_choice_group_snapshot_v1",
+  "source": {
+    "id": "seoul-music-awards-world-choice-group-2026",
+    "type": "broadcast_or_award_roster",
+    "name": "Seoul Music Awards Official K-POP World Choice Group Vote Roster",
+    "observedAt": "2026-09-25T02:20:00Z",
+    "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+  },
+  "candidateCount": 9,
+  "candidates": [
+    {
+      "displayArtist": "SUPER JUNIOR",
+      "aliases": [
+        "슈퍼주니어"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "EXO",
+      "aliases": [
+        "엑소"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AHOF",
+      "aliases": [
+        "아홉"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "WayV",
+      "aliases": [],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BTS",
+      "aliases": [
+        "방탄소년단"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "MONSTA X",
+      "aliases": [
+        "몬스타엑스"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "n.SSign",
+      "aliases": [
+        "엔싸인"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ONEUS",
+      "aliases": [
+        "원어스"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "HORI7ON",
+      "aliases": [
+        "호라이즌"
+      ],
+      "evidence": [
+        {
+          "label": "Seoul Music Awards official vote roster",
+          "url": "https://seoulmusicawards.com/en/vote-status?round=2&tab=world-choice-group"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true,
+    "voteRankIsNotEligibilityThreshold": true
+  }
+}
