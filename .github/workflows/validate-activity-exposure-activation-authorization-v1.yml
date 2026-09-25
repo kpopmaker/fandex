@@ -1,0 +1,77 @@
+name: Validate Activity Exposure activation authorization v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-activation-authorization-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: fandex_validation
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fandex_validation"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGPASSWORD: postgres
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGDATABASE: fandex_validation
+      ACTIVITY_EXPOSURE_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/fandex_validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Prepare PostgreSQL schema
+        run: |
+          psql -v ON_ERROR_STOP=1 -c "CREATE ROLE fandex_runtime NOLOGIN;"
+          psql -v ON_ERROR_STOP=1 -f database/migrations/001_v114_managed_postgres_persistence.sql
+          psql -v ON_ERROR_STOP=1 -f database/migrations/002_v121_naver_news_operational_ingestion.sql
+          psql -v ON_ERROR_STOP=1 -f database/migrations/004_activity_exposure_persistence_v1.sql
+      - name: Activity Exposure authorization gates
+        run: |
+          npx tsx --test tests/activity-exposure-activation-authorization-v1.test.mts
+          npx tsx --test tests/activity-exposure-production-readiness-v1.test.mts
+          npx tsx --test tests/activity-exposure-persistence-repository-v1.test.mts
+          npx tsx --test tests/activity-exposure-persistence-postgres-v1.test.mts
+      - name: Existing Activity Exposure regressions
+        run: |
+          npx tsx --test tests/product-activity-exposure-contract-v1.test.mts
+          npx tsx --test tests/activity-exposure-ingestion-contract-v1.test.mts
+          npx tsx --test tests/activity-exposure-persistence-bridge-v1.test.mts
+          npx tsx --test tests/activity-exposure-musicbrainz-production-collector-v1.test.mts
+          npx tsx --test tests/activity-exposure-youtube-production-collector-v1.test.mts
+          npx tsx --test tests/activity-exposure-production-boundary-v1.test.mts
+      - name: Existing Product and persistence regressions
+        run: |
+          npx tsx --test tests/product-state-foundation-v1.test.mts
+          npx tsx --test tests/product-time-foundation-v1.test.mts
+          npm run test:persistence
+          npm run test:ingestion:v121
+          npm run test:role-bootstrap
+      - name: Production dependency security
+        run: npm run security:audit:production
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
