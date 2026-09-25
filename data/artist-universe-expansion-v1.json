@@ -1664,6 +1664,110 @@
           "url": "https://www.fantagio.kr/news/release/?p=372736"
         }
       ]
+    },
+    {
+      "id": "ahof",
+      "ticker": "AHOF",
+      "name": "AHOF",
+      "agency": "F&F Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "아홉 AHOF",
+      "koreanAliases": [
+        "아홉"
+      ],
+      "englishAliases": [
+        "AHOF"
+      ],
+      "identityEvidence": [
+        {
+          "source": "F&F Entertainment",
+          "url": "https://fnfent.com/sub/artist/artist_view.html?artist_idx=40"
+        }
+      ]
+    },
+    {
+      "id": "ampersandone",
+      "ticker": "AMPERSONE",
+      "name": "AMPERS&ONE",
+      "agency": "FNC Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "앰퍼샌드원 AMPERS&ONE",
+      "koreanAliases": [
+        "앰퍼샌드원"
+      ],
+      "englishAliases": [
+        "AMPERS&ONE",
+        "AMPERSAND ONE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "Weverse / FNC Entertainment",
+          "url": "https://weverse.io/ampersandone/notice/34672"
+        }
+      ]
+    },
+    {
+      "id": "plave",
+      "ticker": "PLAVE",
+      "name": "PLAVE",
+      "agency": "VLAST",
+      "entityType": "group",
+      "naverNewsQuery": "플레이브 PLAVE",
+      "koreanAliases": [
+        "플레이브"
+      ],
+      "englishAliases": [
+        "PLAVE"
+      ],
+      "identityEvidence": [
+        {
+          "source": "VLAST",
+          "url": "https://www.vlast.co.kr/plave/"
+        }
+      ]
+    },
+    {
+      "id": "rain",
+      "ticker": "RAIN",
+      "name": "RAIN",
+      "agency": "RAINCOMPANY",
+      "entityType": "solo",
+      "naverNewsQuery": "비 정지훈 RAIN",
+      "koreanAliases": [
+        "비",
+        "정지훈"
+      ],
+      "englishAliases": [
+        "RAIN",
+        "Rain"
+      ],
+      "identityEvidence": [
+        {
+          "source": "RAINCOMPANY",
+          "url": "https://raincompany.co.kr/index.php/rain"
+        }
+      ]
+    },
+    {
+      "id": "touched",
+      "ticker": "TOUCHED",
+      "name": "TOUCHED",
+      "agency": "MPMG MUSIC",
+      "entityType": "group",
+      "naverNewsQuery": "터치드 TOUCHED",
+      "koreanAliases": [
+        "터치드"
+      ],
+      "englishAliases": [
+        "TOUCHED",
+        "Touched"
+      ],
+      "identityEvidence": [
+        {
+          "source": "MPMG MUSIC",
+          "url": "https://www.mpmgmusic.com/touched"
+        }
+      ]
     }
   ]
 }
