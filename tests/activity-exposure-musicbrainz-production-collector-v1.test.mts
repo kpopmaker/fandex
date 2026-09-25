@@ -301,4 +301,3 @@ test('MusicBrainz raw evidence digest is invariant to JSON object key order', as
     evidenceDigests(reordered.rawObservations),
   );
 });
-
