@@ -58,7 +58,10 @@ test('runtime and migration URLs are role- and pooling-specific without legacy f
   const runtime = 'postgresql://fandex_runtime:runtime-secret@ep-safe-pooler.example.test/neondb?sslmode=require';
   const migration = 'postgresql://fandex_migrator:migration-secret@ep-safe.example.test/neondb?sslmode=require';
   const owner = 'postgresql://owner:owner-secret@ep-safe.example.test/neondb?sslmode=require';
-  assert.equal(requireRuntimeDatabaseUrl({ FANDEX_RUNTIME_DATABASE_URL: runtime }), runtime);
+  assert.equal(
+    requireRuntimeDatabaseUrl({ FANDEX_RUNTIME_DATABASE_URL: runtime }),
+    runtime.replace('sslmode=require', 'sslmode=verify-full'),
+  );
   assert.equal(requireMigrationDatabaseUrl({ FANDEX_MIGRATION_DATABASE_URL: migration }), migration);
   assert.throws(() => requireMigrationDatabaseUrl({ FANDEX_MIGRATION_DATABASE_URL: runtime }), /migration_database_url_invalid/);
   assert.throws(() => requireMigrationDatabaseUrl({ FANDEX_MIGRATION_DATABASE_URL: migration.replace('ep-safe.', 'ep-safe-pooler.') }), /migration_database_url_invalid/);
