@@ -1,0 +1,33 @@
+{
+  "contractVersion": "fandex_momentum_external_operator_execution_request_v1",
+  "lifecycle": "research-execution-gate",
+  "authorized": false,
+  "confirm": "NOT_AUTHORIZED",
+  "requestId": null,
+  "authorizedBy": null,
+  "decidedAt": null,
+  "validFrom": null,
+  "expiresAt": null,
+  "opaqueSecretRollbackHandleId": null,
+  "opaqueSecretRollbackRestorableAttested": false,
+  "exactRead": {
+    "provider": "vercel",
+    "method": "GET",
+    "endpoint": "/v10/projects/{idOrName}/env",
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "decrypt": "false",
+    "maximumProviderCalls": 1,
+    "maximumInventoryReads": 1
+  },
+  "upstream": {
+    "v172Digest": "e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a",
+    "v176Digest": "d66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5"
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  },
+  "note": "Changing authorized to true is insufficient by itself: confirm, IDs, identity, and unexpired exact ISO authorization window are all required. Raw Vercel credential material must never be stored in this file."
+}

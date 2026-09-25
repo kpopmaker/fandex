@@ -1,0 +1,110 @@
+name: PR127 Momentum External Operator Read
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - data/momentum-research/pr127_external_operator_execution_request.json
+      - scripts/momentum-research/pr127-external-operator-inventory-read.mts
+      - .github/workflows/pr127-momentum-external-operator-read.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr127-momentum-external-operator-read
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      authorized: ${{ steps.gate.outputs.authorized }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: gate
+        name: Fail-closed authorization gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'data/momentum-research/pr127_external_operator_execution_request.json';
+          const request = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+          const exactIso = (value) => {
+            if (typeof value !== 'string') return false;
+            const t = Date.parse(value);
+            return Number.isFinite(t) && new Date(t).toISOString() === value;
+          };
+
+          let authorized = request?.contractVersion === 'fandex_momentum_external_operator_execution_request_v1'
+            && request?.authorized === true
+            && request?.confirm === 'EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ'
+            && typeof request?.requestId === 'string'
+            && /^[A-Za-z0-9._:-]{8,256}$/.test(request.requestId)
+            && typeof request?.authorizedBy === 'string'
+            && request.authorizedBy.trim().length > 0
+            && exactIso(request?.decidedAt)
+            && exactIso(request?.validFrom)
+            && exactIso(request?.expiresAt)
+            && Date.parse(request.decidedAt) <= Date.parse(request.validFrom)
+            && Date.parse(request.validFrom) < Date.parse(request.expiresAt)
+            && Date.now() >= Date.parse(request.validFrom)
+            && Date.now() < Date.parse(request.expiresAt);
+
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `authorized=${authorized ? 'true' : 'false'}\n`);
+          console.log(authorized
+            ? 'Explicit bounded read request is effective.'
+            : 'No effective explicit bounded read request; provider job will remain skipped.');
+          NODE
+
+  validate-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: v177 / v178 / v179 regression
+        run: |
+          npx tsx --test tests/fandex-momentum-verifier-operator-response-intake-v177.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-operator-response-projection-v178.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-external-inventory-execution-response-intake-v179.test.mts
+      - name: Typecheck external operator runner
+        run: npm run typecheck
+
+  external-operator-read:
+    needs:
+      - gate
+      - validate-contracts
+    if: needs.gate.outputs.authorized == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      MOMENTUM_OPERATOR_REQUEST_PATH: data/momentum-research/pr127_external_operator_execution_request.json
+      MOMENTUM_OPERATOR_RESULT_PATH: operator-result/pr127_external_operator_result.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Execute exactly one bounded Vercel environment inventory read
+        run: npx tsx scripts/momentum-research/pr127-external-operator-inventory-read.mts
+
+      - name: Upload sanitized operator result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr127-momentum-external-operator-${{ github.run_id }}
+          path: operator-result/pr127_external_operator_result.json
+          if-no-files-found: error
+          retention-days: 7
