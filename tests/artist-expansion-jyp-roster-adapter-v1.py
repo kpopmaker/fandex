@@ -22,6 +22,9 @@ html = """
   <a href="https://niziu.com/">NiziU</a>
   <a href="https://www.kick-flip.com/">KickFlip</a>
   <a href="https://www.instagram.com/jypentertainment/">instagram</a>
+  <a href="https://audition.jype.com/">AUDITION</a>
+  <a href="https://recruit.jype.com/">RECRUIT</a>
+  <a href="https://privacy.jype.com/">개인정보처리방침</a>
   <a href="/ko/Artist/Album">ALBUM</a>
 </body></html>
 """
@@ -52,6 +55,9 @@ assert snapshot["contract"]["scopeVerificationRequired"] is True
 
 assert module.is_artist_profile_url("https://www.instagram.com/jypentertainment/") is False
 assert module.is_artist_profile_url("https://www.jype.com/ko/Artist/Album") is False
+assert module.is_artist_profile_url("https://audition.jype.com/") is False
+assert module.is_artist_profile_url("https://recruit.jype.com/") is False
+assert module.is_artist_profile_url("https://privacy.jype.com/") is False
 assert module.is_artist_profile_url("https://ciiu.jype.com/") is True
 
 print("JYP agency roster adapter regression: PASS")

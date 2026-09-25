@@ -19,6 +19,11 @@ EXTERNAL_ARTIST_HOSTS = {
     "kick-flip.com",
     "www.kick-flip.com",
 }
+NON_ARTIST_JYPE_HOSTS = {
+    "audition.jype.com",
+    "recruit.jype.com",
+    "privacy.jype.com",
+}
 
 
 def normalize_spaces(value: str) -> str:
@@ -32,6 +37,9 @@ def is_artist_profile_url(href: str, source_url: str = DEFAULT_URL) -> bool:
 
     if host in EXTERNAL_ARTIST_HOSTS:
         return True
+
+    if host in NON_ARTIST_JYPE_HOSTS:
+        return False
 
     if host.endswith(".jype.com") and host not in {"www.jype.com", "jype.com"}:
         return True
