@@ -1,0 +1,115 @@
+name: Apply Activity Exposure Neon main migration v2
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-neon-main-migration-v2
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FANDEX_MIGRATION_DATABASE_URL: ${{ secrets.FANDEX_MIGRATION_DATABASE_URL }}
+      FANDEX_APPROVE_V114_MIGRATION: approved-v114-managed-postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Credential preflight
+        shell: bash
+        run: |
+          if [[ -z "${FANDEX_MIGRATION_DATABASE_URL}" ]]; then
+            echo "FANDEX_MIGRATION_DATABASE_URL_AVAILABLE=false"
+            exit 1
+          fi
+          echo "FANDEX_MIGRATION_DATABASE_URL_AVAILABLE=true"
+      - name: Verify exact v004 migration plan
+        shell: bash
+        run: |
+          npx tsx scripts/database/run-postgres-migrations.mts > /tmp/plan.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const plan=JSON.parse(fs.readFileSync('/tmp/plan.json','utf8'));
+          const v4=plan.migrations.filter((m)=>m.version===4);
+          if (v4.length!==1) throw new Error('v004_plan_count_mismatch');
+          if (v4[0].fileName!=='004_activity_exposure_persistence_v1.sql') throw new Error('v004_filename_mismatch');
+          if (plan.migrations.some((m)=>m.version===3)) throw new Error('unexpected_repo_v003');
+          console.log('V004_PLAN_SHA256='+v4[0].sha256);
+          NODE
+      - name: Apply approved Neon main migration v004
+        run: npx tsx scripts/database/run-postgres-migrations.mts --apply
+      - name: Verify Neon main v004 post-state
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile } from 'node:fs/promises';
+          import pg from 'pg';
+          const { Client } = pg;
+          const sql=(await readFile('database/migrations/004_activity_exposure_persistence_v1.sql','utf8')).replace(/\r\n/g,'\n');
+          const expected=createHash('sha256').update(sql,'utf8').digest('hex');
+          const client=new Client({
+            connectionString:process.env.FANDEX_MIGRATION_DATABASE_URL,
+            ssl:{rejectUnauthorized:true},
+          });
+          await client.connect();
+          try {
+            const versions=await client.query(
+              'SELECT version, migration_sha256 FROM fandex.schema_migrations WHERE version IN (1,2,3,4) ORDER BY version'
+            );
+            const byVersion=Object.fromEntries(versions.rows.map(r=>[String(r.version),r.migration_sha256]));
+            if (!byVersion['3']) throw new Error('preexisting_v003_missing');
+            if (byVersion['4']!==expected) throw new Error('v004_digest_mismatch');
+            const tables=await client.query(`
+              SELECT
+                to_regclass('fandex.activity_exposure_collection_runs') IS NOT NULL AS runs,
+                to_regclass('fandex.activity_exposure_provider_observations') IS NOT NULL AS observations,
+                to_regclass('fandex.activity_exposure_raw_payloads') IS NOT NULL AS raw_payloads,
+                to_regclass('fandex.activity_exposure_events') IS NOT NULL AS events,
+                to_regclass('fandex.source_ingestion_jobs') IS NOT NULL AS naver_jobs,
+                to_regclass('fandex.source_ingestion_raw_evidence') IS NOT NULL AS naver_raw,
+                to_regclass('fandex.source_ingestion_normalized_records') IS NOT NULL AS naver_normalized
+            `);
+            if (!Object.values(tables.rows[0]).every(Boolean)) throw new Error('required_table_missing');
+            const numeric=await client.query(`
+              SELECT count(*)::int AS count
+              FROM information_schema.columns
+              WHERE table_schema='fandex'
+                AND table_name LIKE 'activity_exposure_%'
+                AND column_name ~* '(score|point|weight|decay|active_window|active_until)'
+            `);
+            if (numeric.rows[0].count!==0) throw new Error('prohibited_numeric_methodology_column');
+            const grants=await client.query(`
+              SELECT table_name, privilege_type
+              FROM information_schema.role_table_grants
+              WHERE grantee='fandex_runtime'
+                AND table_schema='fandex'
+                AND table_name IN (
+                  'activity_exposure_collection_runs',
+                  'activity_exposure_provider_observations',
+                  'activity_exposure_raw_payloads',
+                  'activity_exposure_events'
+                )
+            `);
+            const required=[
+              'activity_exposure_collection_runs:SELECT','activity_exposure_collection_runs:INSERT',
+              'activity_exposure_provider_observations:SELECT','activity_exposure_provider_observations:INSERT',
+              'activity_exposure_raw_payloads:SELECT','activity_exposure_raw_payloads:INSERT','activity_exposure_raw_payloads:UPDATE',
+              'activity_exposure_events:SELECT','activity_exposure_events:INSERT'
+            ];
+            const actual=new Set(grants.rows.map(r=>r.table_name+':'+r.privilege_type));
+            if (!required.every(x=>actual.has(x))) throw new Error('runtime_grants_incomplete');
+            console.log('ACTIVITY_EXPOSURE_NEON_MAIN_V004=PASS');
+            console.log('V004_APPLIED_SHA256='+expected);
+            console.log('PREEXISTING_V003_PRESERVED=true');
+          } finally {
+            await client.end();
+          }
+          NODE
