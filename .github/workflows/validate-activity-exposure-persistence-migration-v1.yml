@@ -1,0 +1,97 @@
+name: Validate Activity Exposure migration candidate v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-persistence-migration-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: fandex_validation
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fandex_validation"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGPASSWORD: postgres
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGDATABASE: fandex_validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify migration runner plan discovers v003 exactly once
+        shell: bash
+        run: |
+          npx tsx scripts/database/run-postgres-migrations.mts > /tmp/fandex-migration-plan.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const plan = JSON.parse(fs.readFileSync('/tmp/fandex-migration-plan.json', 'utf8'));
+          if (plan.mode !== 'plan') throw new Error('migration plan mode mismatch');
+          const v3 = plan.migrations.filter((m) => m.version === 3);
+          if (v3.length !== 1) throw new Error('migration v003 count mismatch');
+          if (v3[0].fileName !== '003_activity_exposure_persistence_v1.sql') {
+            throw new Error('migration v003 filename mismatch');
+          }
+          if (!/^[0-9a-f]{64}$/.test(v3[0].sha256)) throw new Error('migration v003 digest invalid');
+          console.log('ACTIVITY_EXPOSURE_MIGRATION_PLAN_V003=PASS');
+          console.log('ACTIVITY_EXPOSURE_MIGRATION_V003_SHA256=' + v3[0].sha256);
+          NODE
+      - name: Prepare runtime role
+        run: psql -v ON_ERROR_STOP=1 -c "CREATE ROLE fandex_runtime NOLOGIN;"
+      - name: Apply existing FANDEX migrations
+        run: |
+          psql -v ON_ERROR_STOP=1 -f database/migrations/001_v114_managed_postgres_persistence.sql
+          psql -v ON_ERROR_STOP=1 -f database/migrations/002_v121_naver_news_operational_ingestion.sql
+      - name: Apply Activity Exposure migration candidate
+        run: psql -v ON_ERROR_STOP=1 -f database/migrations/003_activity_exposure_persistence_v1.sql
+      - name: Execute Activity Exposure persistence invariants
+        run: psql -v ON_ERROR_STOP=1 -f docs/validation/sql/activity-exposure-persistence-candidate-v1.test.sql
+      - name: Validate migration registry compatibility
+        shell: bash
+        run: |
+          DIGEST="$(sha256sum database/migrations/003_activity_exposure_persistence_v1.sql | awk '{print $1}')"
+          psql -v ON_ERROR_STOP=1 -v digest="$DIGEST" <<'SQL'
+          INSERT INTO fandex.schema_migrations(version, migration_sha256)
+          VALUES (3, :'digest');
+          DO $$
+          BEGIN
+            IF NOT EXISTS (
+              SELECT 1 FROM fandex.schema_migrations
+              WHERE version = 3 AND migration_sha256 = :'digest'
+            ) THEN
+              RAISE EXCEPTION 'migration registry digest mismatch';
+            END IF;
+          END $$;
+          SQL
+      - name: Confirm NAVER schema remains intact
+        run: |
+          test "$(psql -At -v ON_ERROR_STOP=1 -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='fandex' AND table_name IN ('source_ingestion_jobs','source_ingestion_raw_evidence','source_ingestion_normalized_records');")" = "3"
+      - name: Confirm no numeric Activity Exposure methodology columns
+        run: |
+          test -z "$(psql -At -v ON_ERROR_STOP=1 -c "SELECT column_name FROM information_schema.columns WHERE table_schema='fandex' AND table_name LIKE 'activity_exposure_%' AND column_name ~* '(score|point|weight|decay|active_window|active_until)';")"
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
