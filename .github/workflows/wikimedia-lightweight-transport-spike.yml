@@ -1,0 +1,118 @@
+name: Wikimedia Lightweight Transport Spike
+
+on:
+  push:
+    branches:
+      - research/wikimedia-entity-attention-v1
+    paths:
+      - ".github/workflows/wikimedia-lightweight-transport-spike.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe MediaWiki PageViewInfo and AQS
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const UA = 'FANDEX Wikimedia entity-attention research (https://github.com/kpopmaker/fandex/issues/240)';
+          const headers = { 'User-Agent': UA, 'Accept': 'application/json' };
+
+          async function getJson(url) {
+            const response = await fetch(url, { headers });
+            const text = await response.text();
+            let json = null;
+            try { json = JSON.parse(text); } catch {}
+            return { status: response.status, json };
+          }
+
+          const mw = new URL('https://en.wikipedia.org/w/api.php');
+          mw.searchParams.set('action', 'query');
+          mw.searchParams.set('format', 'json');
+          mw.searchParams.set('formatversion', '2');
+          mw.searchParams.set('titles', 'IU (entertainer)');
+          mw.searchParams.set('prop', 'info|redirects');
+          mw.searchParams.set('rdnamespace', '0');
+          mw.searchParams.set('rdlimit', 'max');
+
+          const identity = await getJson(mw);
+          if (identity.status !== 200) {
+            throw new Error('identity request failed: ' + identity.status);
+          }
+          const page = identity.json?.query?.pages?.[0];
+          if (!page || page.missing) throw new Error('canonical page missing');
+
+          const titleRows = [
+            { pageId: page.pageid, title: page.title, role: 'canonical' },
+            ...(page.redirects ?? []).map(r => ({ pageId: r.pageid, title: r.title, role: 'redirect' })),
+          ];
+          const seenTitles = new Set();
+          const titles = titleRows.filter(row => {
+            if (seenTitles.has(row.title)) return false;
+            seenTitles.add(row.title);
+            return true;
+          });
+
+          const pvi = new URL('https://en.wikipedia.org/w/api.php');
+          pvi.searchParams.set('action', 'query');
+          pvi.searchParams.set('format', 'json');
+          pvi.searchParams.set('formatversion', '2');
+          pvi.searchParams.set('titles', titles.map(x => x.title).join('|'));
+          pvi.searchParams.set('prop', 'pageviews');
+          pvi.searchParams.set('pvipdays', '10');
+
+          const pageViewInfo = await getJson(pvi);
+
+          const start = '2026091500';
+          const end = '2026092400';
+          const aqRows = [];
+          for (const row of titles) {
+            const article = encodeURIComponent(row.title.replace(/ /g, '_'));
+            const url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia.org/all-access/user/'
+              + article + '/daily/' + start + '/' + end;
+            const result = await getJson(url);
+            aqRows.push({
+              role: row.role,
+              pageId: row.pageId,
+              title: row.title,
+              httpStatus: result.status,
+              items: (result.json?.items ?? []).map(item => ({
+                timestamp: item.timestamp,
+                views: item.views,
+              })),
+            });
+          }
+
+          const aggregateUrl =
+            'https://wikimedia.org/api/rest_v1/metrics/pageviews/aggregate/en.wikipedia.org/all-access/user/daily/'
+            + start + '/' + end;
+          const aggregate = await getJson(aggregateUrl);
+
+          const pviPages = (pageViewInfo.json?.query?.pages ?? []).map(p => ({
+            pageId: p.pageid,
+            title: p.title,
+            pageviews: p.pageviews ?? null,
+          }));
+
+          const summary = {
+            identityHttpStatus: identity.status,
+            canonical: { pageId: page.pageid, title: page.title },
+            redirectCount: Math.max(0, titles.length - 1),
+            titles,
+            pageViewInfoHttpStatus: pageViewInfo.status,
+            pageViewInfoPages: pviPages,
+            aqsPerTitle: aqRows,
+            aggregateHttpStatus: aggregate.status,
+            aggregateItems: (aggregate.json?.items ?? []).map(item => ({
+              timestamp: item.timestamp,
+              views: item.views,
+            })),
+          };
+
+          console.log(JSON.stringify(summary, null, 2));
+          NODE
