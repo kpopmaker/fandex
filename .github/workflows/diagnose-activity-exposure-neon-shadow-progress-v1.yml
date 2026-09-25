@@ -64,3 +64,5 @@ jobs:
             process.exitCode = 1;
           });
           NODE
+
+# progress-check: 2
