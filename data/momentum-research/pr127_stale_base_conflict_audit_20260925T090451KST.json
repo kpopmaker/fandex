@@ -83,14 +83,14 @@
     "rebases": 0
   },
   "validation": {
-    "githubActionsRunId": null,
-    "status": "PENDING",
-    "conflictInventoryPassed": false,
-    "resolutionPolicyPassed": false,
-    "v181RegressionPassed": false,
-    "typecheckPassed": false,
-    "branchDiffCheckPassed": false,
-    "fullPrDiffCheckPassed": false,
+    "githubActionsRunId": 36075922794,
+    "status": "PASS",
+    "conflictInventoryPassed": true,
+    "resolutionPolicyPassed": true,
+    "v181RegressionPassed": true,
+    "typecheckPassed": true,
+    "branchDiffCheckPassed": true,
+    "fullPrDiffCheckPassed": true,
     "temporaryWorkflowRemoved": false
   }
 }
