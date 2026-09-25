@@ -40,6 +40,11 @@ export type ProductActivityExposureProviderArtistCredit = Readonly<{
   canonicalProviderName: string | null;
 }>;
 
+export type ProductActivityExposureStoredEvidenceTrace = Readonly<{
+  eventRecordId: string;
+  sourceObservationId: string;
+}>;
+
 export type ProductActivityExposureEvent = Readonly<{
   artistId: string;
   eventId: string;
@@ -68,6 +73,7 @@ export type ProductActivityExposureEvent = Readonly<{
   timeZoneState: string;
   revisionId: string;
   supersedesRevisionId: string | null;
+  storedEvidenceTrace?: ProductActivityExposureStoredEvidenceTrace;
 }>;
 
 export type ProductActivityExposureProviderCoverage = Readonly<{
