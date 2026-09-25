@@ -119,6 +119,15 @@ async function main() {
         ) AS events_runtime
     `);
     const auth = authority.rows[0];
+    console.log('ACTIVITY_EXPOSURE_RUNTIME_AUTHORITY_CHECK=' + JSON.stringify({
+      exactRuntimeRole: auth?.exact_runtime_role === true,
+      directRuntimeSession: auth?.direct_runtime_session === true,
+      schemaCreate: auth?.schema_create === true,
+      runsRuntime: auth?.runs_runtime === true,
+      observationsRuntime: auth?.observations_runtime === true,
+      rawRuntime: auth?.raw_runtime === true,
+      eventsRuntime: auth?.events_runtime === true,
+    }));
     if (
       auth?.exact_runtime_role !== true
       || auth?.direct_runtime_session !== true
