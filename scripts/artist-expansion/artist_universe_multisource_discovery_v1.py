@@ -47,26 +47,6 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def build_decision_index(decision_payload: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
-    result: dict[str, dict[str, Any]] = {}
-    if not decision_payload:
-        return result
-
-    rows = decision_payload.get("decisions")
-    if not isinstance(rows, list):
-        return result
-
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        display_artist = str(row.get("displayArtist") or "").strip()
-        key = compact_identity(display_artist)
-        if key:
-            result[key] = row
-
-    return result
-
-
 def decision_closes_discovery(decision: str) -> bool:
     value = str(decision or "").strip()
     return value.startswith("exclude_") or value.startswith("existing_canonical_")
@@ -265,6 +245,7 @@ def build_discovery(
                             item["evidence"].append(normalized)
 
     candidates = []
+    suppressed_decisions: list[dict[str, Any]] = []
     resolved_count = 0
     unresolved_count = 0
     for item in sorted(grouped.values(), key=lambda row: row["normalizedArtist"]):
@@ -280,20 +261,46 @@ def build_discovery(
             item["relationResolution"] = None
             item["decisionEvidence"] = []
             unresolved_count += 1
-        else:
-            item["reviewStatus"] = "resolved"
-            item["reviewDecision"] = decision.get("decision")
-            item["relationResolution"] = decision.get("relationResolution")
-            item["relatedCanonicalArtistIds"] = list(
-                decision.get("relatedCanonicalArtistIds") or []
-            )
-            item["rejectedRelationCanonicalArtistIds"] = list(
-                decision.get("rejectedRelationCanonicalArtistIds") or []
-            )
-            item["decisionEvidence"] = list(decision.get("evidence") or [])
-            item["decisionDisplayArtist"] = decision.get("displayArtist")
-            resolved_count += 1
+            candidates.append(item)
+            continue
 
+        decision_name = str(decision.get("decision") or "").strip()
+        if decision_closes_discovery(decision_name):
+            suppressed_decisions.append(
+                {
+                    "displayArtist": item["displayArtist"],
+                    "normalizedArtist": item["normalizedArtist"],
+                    "decision": decision_name,
+                    "relationResolution": decision.get("relationResolution"),
+                    "relatedCanonicalArtistIds": list(
+                        decision.get("relatedCanonicalArtistIds") or []
+                    ),
+                    "decisionDisplayArtist": decision.get("displayArtist"),
+                    "sources": list(item.get("sources") or []),
+                    "autoPromote": False,
+                }
+            )
+            continue
+
+        item["reviewStatus"] = "resolved"
+        item["reviewDecision"] = decision_name
+        item["relationResolution"] = decision.get("relationResolution")
+        item["relatedCanonicalArtistIds"] = list(
+            decision.get("relatedCanonicalArtistIds") or []
+        )
+        item["rejectedRelationCanonicalArtistIds"] = list(
+            decision.get("rejectedRelationCanonicalArtistIds") or []
+        )
+        item["decisionEvidence"] = list(decision.get("evidence") or [])
+        item["decisionDisplayArtist"] = decision.get("displayArtist")
+
+        if decision_name == "identity_verified_scope_review_required":
+            item["status"] = "scope_review_required"
+            item["scopeStatus"] = "review_required"
+        elif decision_name.startswith("new_canonical_"):
+            item["status"] = "identity_verified_onboarding_pending"
+
+        resolved_count += 1
         candidates.append(item)
 
     known_canonical_coverage = []
@@ -314,6 +321,8 @@ def build_discovery(
         "candidateResolvedCount": resolved_count,
         "candidateUnresolvedCount": unresolved_count,
         "candidates": candidates,
+        "decisionSuppressionCount": len(suppressed_decisions),
+        "decisionSuppressions": suppressed_decisions,
         "knownSuppressionCount": len(suppressed_known),
         "knownSuppressions": suppressed_known,
         "knownCanonicalCount": len(known_canonical_coverage),
