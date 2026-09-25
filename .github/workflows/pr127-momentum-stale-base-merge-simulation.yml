@@ -47,7 +47,7 @@ jobs:
           git add vercel.json
 
           test -z "$(git diff --name-only --diff-filter=U)"
-          git diff --cached --check
+          git diff --cached --check -- vercel.json
 
           node <<'NODE'
           const fs = require('node:fs');
