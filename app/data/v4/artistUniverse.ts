@@ -401,6 +401,9 @@ function validateExpansionSeeds(
     if (agency && agencyStatus === 'unresolved') {
       throw new Error(`artist_universe_expansion_conflicting_agency_status:${seed.id}`);
     }
+    if (agencyStatus === 'historical' && (seed.lifecycleStatus ?? 'active') !== 'inactive') {
+      throw new Error(`artist_universe_expansion_historical_agency_requires_inactive:${seed.id}`);
+    }
     if (!(seed.koreanAliases?.some((alias) => alias.trim()))) {
       throw new Error(`artist_universe_expansion_missing_korean_alias:${seed.id}`);
     }

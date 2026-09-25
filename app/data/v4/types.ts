@@ -21,7 +21,8 @@ export type ArtistCollectionTier =
 
 export type ArtistAgencyStatus =
   | 'verified'
-  | 'unresolved';
+  | 'unresolved'
+  | 'historical';
 
 export type ArtistVerificationStatus =
   | 'seed'

@@ -147,6 +147,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'zoonizini',
     'chaeunwoo',
     'astro',
+    'wekimeki',
+    'moonbinsanha',
+    'jinjinrocky',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -154,6 +157,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.canonicalArtistId, artistId);
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
+  }
+
+  for (const artistId of ['wekimeki', 'moonbinsanha', 'jinjinrocky']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.lifecycleStatus, 'inactive');
+    assert.equal(artist.agencyStatus, 'historical');
+    assert.equal(artist.collection.tier, 'archive');
+    assert.equal(artist.agency, 'Fantagio');
   }
 
   const lun8 = getArtistV4ById('lun8');
@@ -352,6 +364,36 @@ test('unresolved agency may be explicit without inventing a management company',
   );
   assert.equal(expanded.at(-1)?.agency, '');
   assert.equal(expanded.at(-1)?.agencyStatus, 'unresolved');
+});
+
+test('historical agency is allowed only for inactive archive-style identities', () => {
+  const historicalAgency = {
+    ...seed('expansion-historical-agency', 'EXPHIST'),
+    agency: 'Historical Label',
+    agencyStatus: 'historical' as const,
+    lifecycleStatus: 'inactive' as const,
+    tier: 'archive' as const,
+  };
+
+  const expanded = buildExpandedArtistUniverseV4(
+    artistUniverseV4,
+    [historicalAgency],
+  );
+  assert.equal(expanded.at(-1)?.agency, 'Historical Label');
+  assert.equal(expanded.at(-1)?.agencyStatus, 'historical');
+  assert.equal(expanded.at(-1)?.lifecycleStatus, 'inactive');
+});
+
+test('historical agency cannot be attached to an active identity', () => {
+  const bad = {
+    ...seed('expansion-active-historical-agency', 'EXPACTHIST'),
+    agencyStatus: 'historical' as const,
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_historical_agency_requires_inactive:expansion-active-historical-agency/,
+  );
 });
 
 test('blank agency still fails unless unresolved status is explicit', () => {

@@ -2766,12 +2766,12 @@
     },
     {
       "displayArtist": "WEKIMEKI",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "disbanded_group_identity_verified_archive_model_pending",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "disbanded_group_archive_identity_with_historical_agency_verified",
       "relatedCanonicalArtistIds": [],
       "scopeDecision": "eligible",
       "scopeBasis": "official_fantagio_historical_group_identity",
-      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
@@ -2783,38 +2783,48 @@
           "source": "Soompi",
           "url": "https://www.soompi.com/article/1681890wpp/weki-meki-officially-disbands-5-member",
           "note": "Fantagio announced Weki Meki's official group activities ended August 8, 2024."
+        },
+        {
+          "source": "Weki Meki Japan Official",
+          "url": "https://wekimeki-official.jp/",
+          "note": "Official Japan site states the fan club closes following the group's disbandment; Fantagio is retained as historical agency provenance, not current management."
         }
       ]
     },
     {
       "displayArtist": "MOONBIN&SANHA",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "inactive_astro_unit_identity_verified_archive_model_pending",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "inactive_astro_unit_archive_identity_with_historical_agency_verified",
       "relatedCanonicalArtistIds": [
         "astro"
       ],
       "scopeDecision": "eligible",
       "scopeBasis": "official_fantagio_historical_unit_identity",
-      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
           "source": "Fantagio",
           "url": "https://www.fantagio.kr/groups/",
           "note": "Fantagio retains MOONBIN&SANHA as a distinct unit identity; no current activity is inferred from roster presence."
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/",
+          "note": "Fantagio retains MOONBIN&SANHA as a distinct historical music identity. agencyStatus=historical prevents this from being interpreted as current management."
         }
       ]
     },
     {
       "displayArtist": "JINJIN&ROCKY",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "ended_astro_unit_identity_verified_archive_model_pending",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "ended_astro_unit_archive_identity_with_historical_agency_verified",
       "relatedCanonicalArtistIds": [
         "astro"
       ],
       "scopeDecision": "eligible",
       "scopeBasis": "official_fantagio_historical_unit_identity",
-      "onboardingBlocker": "inactive_archive_historical_agency_semantics_required",
+      "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
@@ -2826,6 +2836,11 @@
           "source": "Jinjin & Rocky reference",
           "url": "https://en.wikipedia.org/wiki/Jinjin_%26_Rocky",
           "note": "Rocky's February 2023 departure ended the duo unit; archive semantics are required before onboarding."
+        },
+        {
+          "source": "Jinjin & Rocky reference",
+          "url": "https://en.wikipedia.org/wiki/Jinjin_%26_Rocky",
+          "note": "The unit ended after Rocky's 2023 departure; Fantagio is stored only as historical agency provenance."
         }
       ]
     }

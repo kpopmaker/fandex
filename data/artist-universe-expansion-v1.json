@@ -3495,6 +3495,158 @@
           "url": "https://www.fantagio.kr/"
         }
       ]
+    },
+    {
+      "id": "wekimeki",
+      "ticker": "WEKIMEKI",
+      "name": "WEKIMEKI",
+      "agency": "Fantagio",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2017-08-08",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "JI SUYEON",
+        "ELLY",
+        "CHOI YOOJUNG",
+        "KIM DOYEON",
+        "SEI",
+        "LUA",
+        "RINA",
+        "LUCY"
+      ],
+      "naverNewsQuery": "위키미키 WEKIMEKI",
+      "koreanAliases": [
+        "위키미키"
+      ],
+      "englishAliases": [
+        "WEKIMEKI",
+        "Weki Meki"
+      ],
+      "keywords": [
+        "Fantagio",
+        "판타지오",
+        "위키미키",
+        "Weki Meki"
+      ],
+      "disambiguationKeywords": [
+        "Fantagio",
+        "위키미키"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Weki Meki Japan Official",
+          "url": "https://wekimeki-official.jp/"
+        }
+      ]
+    },
+    {
+      "id": "moonbinsanha",
+      "ticker": "MOONBINSANHA",
+      "name": "MOONBIN&SANHA",
+      "agency": "Fantagio",
+      "agencyStatus": "historical",
+      "entityType": "unit",
+      "debutDate": "2020-09-14",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "MOONBIN",
+        "YOON SAN-HA"
+      ],
+      "naverNewsQuery": "문빈&산하 MOONBIN SANHA",
+      "koreanAliases": [
+        "문빈&산하",
+        "문빈 산하"
+      ],
+      "englishAliases": [
+        "MOONBIN&SANHA",
+        "MOONBIN & SANHA"
+      ],
+      "keywords": [
+        "Fantagio",
+        "ASTRO",
+        "문빈",
+        "산하",
+        "Bad Idea",
+        "WHO"
+      ],
+      "disambiguationKeywords": [
+        "ASTRO",
+        "문빈&산하"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        },
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/"
+        }
+      ]
+    },
+    {
+      "id": "jinjinrocky",
+      "ticker": "JINJINROCKY",
+      "name": "JINJIN&ROCKY",
+      "agency": "Fantagio",
+      "agencyStatus": "historical",
+      "entityType": "unit",
+      "debutDate": "2022-01-17",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "JINJIN",
+        "ROCKY"
+      ],
+      "naverNewsQuery": "진진&라키 JINJIN ROCKY",
+      "koreanAliases": [
+        "진진&라키",
+        "진진 라키"
+      ],
+      "englishAliases": [
+        "JINJIN&ROCKY",
+        "JINJIN & ROCKY"
+      ],
+      "keywords": [
+        "Fantagio",
+        "ASTRO",
+        "진진",
+        "라키",
+        "Restore",
+        "숨 좀 쉬자"
+      ],
+      "disambiguationKeywords": [
+        "ASTRO",
+        "진진&라키"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Fantagio",
+          "url": "https://www.fantagio.kr/groups/"
+        }
+      ]
     }
   ]
 }
