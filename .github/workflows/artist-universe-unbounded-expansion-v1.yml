@@ -44,6 +44,7 @@ jobs:
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
+          python tests/artist-scope-review-queue-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
       - name: Collect STARSHIP official roster
@@ -79,6 +80,11 @@ jobs:
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
             --decisions data/artist-catalog-review-decisions-v1.json \
             --output artist_universe_multisource_discovery_v1_latest.json
+      - name: Build Stage 7 scope review queue
+        run: |
+          python scripts/artist-expansion/artist_scope_review_queue_v1.py \
+            artist_universe_multisource_discovery_v1_latest.json \
+            artist_scope_review_queue_v1_latest.json
       - name: Live chart catalog discovery
         env:
           ARTIST_UNIVERSE_IDENTITY_FILE: artist_universe_identity_index_runtime.json
