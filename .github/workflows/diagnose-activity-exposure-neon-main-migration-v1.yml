@@ -1,0 +1,130 @@
+name: Diagnose Activity Exposure Neon main migration v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-neon-main-migration-diagnostic-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FANDEX_MIGRATION_DATABASE_URL: ${{ secrets.FANDEX_MIGRATION_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only Neon migration diagnostic
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile } from 'node:fs/promises';
+          import pg from 'pg';
+          const { Client } = pg;
+
+          const result = {
+            credentialAvailable: Boolean(process.env.FANDEX_MIGRATION_DATABASE_URL),
+            connection: 'unknown',
+            migrationRoleExact: null,
+            schemaExists: null,
+            migrationRegistryExists: null,
+            migrationVersions: [],
+            migrationDigests: {},
+            expectedDigests: {},
+            activityExposureTablesPresent: {},
+            naverTablesPresent: {},
+            privileges: {},
+            errorCode: null,
+          };
+
+          for (const [version, file] of [
+            [1, 'database/migrations/001_v114_managed_postgres_persistence.sql'],
+            [2, 'database/migrations/002_v121_naver_news_operational_ingestion.sql'],
+            [3, 'database/migrations/003_activity_exposure_persistence_v1.sql'],
+          ]) {
+            const sql = (await readFile(file,'utf8')).replace(/\r\n/g,'\n');
+            result.expectedDigests[version] = createHash('sha256').update(sql,'utf8').digest('hex');
+          }
+
+          const client = new Client({
+            connectionString: process.env.FANDEX_MIGRATION_DATABASE_URL,
+            ssl: { rejectUnauthorized: true },
+          });
+
+          try {
+            await client.connect();
+            result.connection = 'ok';
+
+            const who = await client.query("SELECT current_user = 'fandex_migrator' AS exact_role");
+            result.migrationRoleExact = who.rows[0]?.exact_role ?? false;
+
+            const schema = await client.query(
+              "SELECT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname='fandex') AS exists"
+            );
+            result.schemaExists = schema.rows[0]?.exists ?? false;
+
+            const registry = await client.query(
+              "SELECT to_regclass('fandex.schema_migrations') IS NOT NULL AS exists"
+            );
+            result.migrationRegistryExists = registry.rows[0]?.exists ?? false;
+
+            if (result.migrationRegistryExists) {
+              const migrations = await client.query(
+                "SELECT version, migration_sha256 FROM fandex.schema_migrations ORDER BY version"
+              );
+              result.migrationVersions = migrations.rows.map((r) => Number(r.version));
+              result.migrationDigests = Object.fromEntries(
+                migrations.rows.map((r) => [String(r.version), r.migration_sha256])
+              );
+            }
+
+            const tables = await client.query(`
+              SELECT
+                to_regclass('fandex.activity_exposure_collection_runs') IS NOT NULL AS ae_runs,
+                to_regclass('fandex.activity_exposure_provider_observations') IS NOT NULL AS ae_obs,
+                to_regclass('fandex.activity_exposure_raw_payloads') IS NOT NULL AS ae_raw,
+                to_regclass('fandex.activity_exposure_events') IS NOT NULL AS ae_events,
+                to_regclass('fandex.source_ingestion_jobs') IS NOT NULL AS naver_jobs,
+                to_regclass('fandex.source_ingestion_raw_evidence') IS NOT NULL AS naver_raw,
+                to_regclass('fandex.source_ingestion_normalized_records') IS NOT NULL AS naver_normalized
+            `);
+            const row = tables.rows[0] ?? {};
+            result.activityExposureTablesPresent = {
+              runs: Boolean(row.ae_runs),
+              observations: Boolean(row.ae_obs),
+              rawPayloads: Boolean(row.ae_raw),
+              events: Boolean(row.ae_events),
+            };
+            result.naverTablesPresent = {
+              jobs: Boolean(row.naver_jobs),
+              rawEvidence: Boolean(row.naver_raw),
+              normalized: Boolean(row.naver_normalized),
+            };
+
+            const priv = await client.query(`
+              SELECT
+                has_schema_privilege(current_user, 'fandex', 'USAGE') AS schema_usage,
+                has_schema_privilege(current_user, 'fandex', 'CREATE') AS schema_create
+            `);
+            result.privileges = priv.rows[0] ?? {};
+          } catch (error) {
+            result.connection = result.connection === 'ok' ? 'query_failed' : 'failed';
+            result.errorCode =
+              error && typeof error === 'object' && 'code' in error
+                ? String(error.code)
+                : 'unknown';
+          } finally {
+            try { await client.end(); } catch {}
+          }
+
+          console.log('NEON_MIGRATION_DIAGNOSTIC=' + JSON.stringify(result));
+          if (result.connection !== 'ok') process.exit(1);
+          NODE
