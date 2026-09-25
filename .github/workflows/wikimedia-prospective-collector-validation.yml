@@ -1,0 +1,68 @@
+name: Wikimedia Prospective Collector Validation
+
+on:
+  push:
+    branches:
+      - research/wikimedia-entity-attention-v1
+    paths:
+      - ".github/workflows/wikimedia-prospective-collector-validation.yml"
+      - "lib/alternative-evidence/wikimediaEntityAttentionProspectiveResearch.ts"
+      - "scripts/research/wikimedia-entity-attention-prospective.mts"
+      - "tests/wikimedia-entity-attention-prospective-research.test.mts"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run prospective collector tests
+        run: npx tsx --test tests/wikimedia-entity-attention-prospective-research.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Capture real pre-day IU identity snapshot for 2026-09-26 UTC
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/research/wikimedia-entity-attention-prospective.mts snapshot --day 2026-09-26             | tee prospective-snapshot.json
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = JSON.parse(fs.readFileSync('prospective-snapshot.json', 'utf8'));
+          const summary = {
+            contractVersion: value.contractVersion,
+            phase: value.phase,
+            observationDay: value.observationDay,
+            observationStart: value.observationTime?.start,
+            observationEnd: value.observationTime?.end,
+            capturedAt: value.identity?.capturedAt,
+            canonicalArtistId: value.identity?.canonicalArtistId,
+            wikidataQid: value.identity?.wikidataQid,
+            project: value.identity?.project,
+            canonicalPage: value.identity?.canonicalPage,
+            redirectCount: value.identity?.redirects?.length,
+            redirects: value.identity?.redirects,
+          };
+          console.log('WIKIMEDIA_PROSPECTIVE_SNAPSHOT=' + JSON.stringify(summary));
+          NODE
