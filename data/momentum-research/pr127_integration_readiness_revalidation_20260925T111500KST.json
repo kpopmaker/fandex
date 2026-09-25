@@ -1,0 +1,109 @@
+{
+  "contractVersion": "fandex_momentum_pr127_integration_readiness_revalidation_v1",
+  "lifecycle": "research-handoff-revalidation",
+  "observedAt": "2026-09-25T02:15:00.000Z",
+  "localObservationDate": "2026-09-25",
+  "supersedes": {
+    "priorPacket": "data/momentum-research/pr127_integration_readiness_packet_20260925T093700KST.json",
+    "priorMainSha": "8d68d97a389522c268e976196bc342acc605fd7a"
+  },
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "headBeforeRevalidation": "be5809229196088f2b172e61daca7102c7061779",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "currentMain": {
+    "sha": "f6cd81625c2cfb3b03d54bfc087b78efcc8af24f",
+    "previousMainSha": "8d68d97a389522c268e976196bc342acc605fd7a",
+    "commitsSincePreviousMain": [
+      {
+        "sha": "556ca52d737fceed7bfcab446cabdf023ad3a613",
+        "message": "chore(lastfm): append daily cloud history"
+      },
+      {
+        "sha": "f6cd81625c2cfb3b03d54bfc087b78efcc8af24f",
+        "message": "chore(fandex-cloud): update daily v10 state"
+      }
+    ],
+    "mergeBaseSha": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "mainAheadOfMergeBase": 101,
+    "branchAheadOfMergeBase": 514
+  },
+  "conflictInventory": {
+    "currentMainChangedFilesSinceMergeBase": 74,
+    "branchChangedFilesSinceMergeBase": 165,
+    "overlappingChangedPathCount": 1,
+    "overlappingChangedPaths": [
+      "vercel.json"
+    ],
+    "priorResolutionCandidateStillStructurallyApplicable": true
+  },
+  "resolutionCandidate": {
+    "strategy": "keep-current-research-branch-vercel-json",
+    "requiredDeploymentSuppression": {
+      "validation/*": false,
+      "research/*": false,
+      "verify/*": false,
+      "diagnostic/*": false,
+      "work/*": false,
+      "v131-lastfm-real-signal-read-model": false
+    },
+    "actualMergeSimulationPending": true,
+    "mainIntegrationPerformed": false,
+    "rebasePerformed": false,
+    "forcePushPerformed": false
+  },
+  "externalCapability": {
+    "vercelProjectMetadataCallable": true,
+    "exactEnvironmentInventoryReadToolExposed": false,
+    "genericRestReadToolExposed": false,
+    "newPrCommentAuthorizationFound": false,
+    "validExternalV177ResponseFound": false,
+    "validExternalV179ResponseFound": false,
+    "v181State": "resume-capability-blocked",
+    "v181Digest": "88550ff00b6fb8e1c44432fadea26dfd61a63edb834893f3ddeaa0bd8d8b0abd"
+  },
+  "handoffDecision": {
+    "state": "revalidation-pending",
+    "priorPacketExpiredBecauseMainMoved": true,
+    "readyForProductionMasterControlReview": false,
+    "actualMainIntegrationAuthorized": false,
+    "pullRequestMergeAuthorized": false
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  },
+  "effects": {
+    "providerReads": 0,
+    "vercelInventoryReads": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "deployments": 0,
+    "nativeVerifierExecutions": 0,
+    "productWrites": 0,
+    "registryMutations": 0,
+    "ledgerWrites": 0,
+    "mainIntoResearchBranchMerges": 0,
+    "rebases": 0,
+    "forcePushes": 0,
+    "pullRequestMerges": 0
+  },
+  "validation": {
+    "githubActionsRunId": null,
+    "status": "PENDING",
+    "mergeSimulationPassed": false,
+    "soleConflictConfirmed": false,
+    "resolutionClearsAllUnmergedPaths": false,
+    "v181RegressionPassed": false,
+    "typecheckPassed": false,
+    "fullPrDiffCheckPassed": false,
+    "temporaryWorkflowRemoved": false
+  }
+}
