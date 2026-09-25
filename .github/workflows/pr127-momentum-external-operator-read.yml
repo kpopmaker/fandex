@@ -8,6 +8,16 @@ on:
       - data/momentum-research/pr127_external_operator_execution_request.json
       - scripts/momentum-research/pr127-external-operator-inventory-read.mts
       - .github/workflows/pr127-momentum-external-operator-read.yml
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ to authorize exactly one bounded read.'
+        required: true
+        default: 'DO_NOT_EXECUTE'
+      authorized_by:
+        description: 'Identity of the human/operator granting this bounded read authorization.'
+        required: true
+        default: ''
 
 permissions:
   contents: read
@@ -21,44 +31,69 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       authorized: ${{ steps.gate.outputs.authorized }}
+      source: ${{ steps.gate.outputs.source }}
     steps:
       - uses: actions/checkout@v4
 
       - id: gate
         name: Fail-closed authorization gate
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          MANUAL_CONFIRM: ${{ inputs.confirm }}
+          MANUAL_AUTHORIZED_BY: ${{ inputs.authorized_by }}
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs = require('node:fs');
-          const path = 'data/momentum-research/pr127_external_operator_execution_request.json';
-          const request = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const eventName = process.env.EVENT_NAME;
+          const refName = process.env.REF_NAME;
+          const exactConfirm = 'EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ';
 
-          const exactIso = (value) => {
-            if (typeof value !== 'string') return false;
-            const t = Date.parse(value);
-            return Number.isFinite(t) && new Date(t).toISOString() === value;
-          };
+          let authorized = false;
+          let source = 'committed-request';
 
-          let authorized = request?.contractVersion === 'fandex_momentum_external_operator_execution_request_v1'
-            && request?.authorized === true
-            && request?.confirm === 'EXECUTE_ONE_VERCEL_ENV_INVENTORY_READ'
-            && typeof request?.requestId === 'string'
-            && /^[A-Za-z0-9._:-]{8,256}$/.test(request.requestId)
-            && typeof request?.authorizedBy === 'string'
-            && request.authorizedBy.trim().length > 0
-            && exactIso(request?.decidedAt)
-            && exactIso(request?.validFrom)
-            && exactIso(request?.expiresAt)
-            && Date.parse(request.decidedAt) <= Date.parse(request.validFrom)
-            && Date.parse(request.validFrom) < Date.parse(request.expiresAt)
-            && Date.now() >= Date.parse(request.validFrom)
-            && Date.now() < Date.parse(request.expiresAt);
+          if (eventName === 'workflow_dispatch') {
+            source = 'workflow-dispatch';
+            const identity = process.env.MANUAL_AUTHORIZED_BY ?? '';
+            authorized =
+              refName === 'v131-lastfm-real-signal-read-model'
+              && process.env.MANUAL_CONFIRM === exactConfirm
+              && identity.trim().length > 0
+              && identity.length <= 256;
+          } else {
+            const path = 'data/momentum-research/pr127_external_operator_execution_request.json';
+            const request = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+            const exactIso = (value) => {
+              if (typeof value !== 'string') return false;
+              const t = Date.parse(value);
+              return Number.isFinite(t) && new Date(t).toISOString() === value;
+            };
+
+            authorized = request?.contractVersion === 'fandex_momentum_external_operator_execution_request_v1'
+              && request?.authorized === true
+              && request?.confirm === exactConfirm
+              && typeof request?.requestId === 'string'
+              && /^[A-Za-z0-9._:-]{8,256}$/.test(request.requestId)
+              && typeof request?.authorizedBy === 'string'
+              && request.authorizedBy.trim().length > 0
+              && request.authorizedBy.length <= 256
+              && exactIso(request?.decidedAt)
+              && exactIso(request?.validFrom)
+              && exactIso(request?.expiresAt)
+              && Date.parse(request.decidedAt) <= Date.parse(request.validFrom)
+              && Date.parse(request.validFrom) < Date.parse(request.expiresAt)
+              && Date.now() >= Date.parse(request.validFrom)
+              && Date.now() < Date.parse(request.expiresAt);
+          }
 
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `authorized=${authorized ? 'true' : 'false'}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `source=${source}\n`);
           console.log(authorized
-            ? 'Explicit bounded read request is effective.'
-            : 'No effective explicit bounded read request; provider job will remain skipped.');
+            ? `Explicit bounded read authorization accepted from ${source}.`
+            : `No effective explicit bounded read authorization from ${source}; provider job will remain skipped.`);
           NODE
 
   validate-contracts:
@@ -91,6 +126,59 @@ jobs:
       MOMENTUM_OPERATOR_RESULT_PATH: operator-result/pr127_external_operator_result.json
     steps:
       - uses: actions/checkout@v4
+
+      - name: Materialize ephemeral workflow-dispatch authorization
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          AUTHORIZED_BY: ${{ inputs.authorized_by }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const now = new Date();
+          const expires = new Date(now.getTime() + 30 * 60 * 1000);
+          const request = {
+            contractVersion: 'fandex_momentum_external_operator_execution_request_v1',
+            lifecycle: 'research-execution-gate',
+            authorized: true,
+            confirm: process.env.CONFIRM,
+            requestId: `workflow-dispatch:${process.env.GITHUB_RUN_ID}:${process.env.GITHUB_RUN_ATTEMPT ?? '1'}`,
+            authorizedBy: process.env.AUTHORIZED_BY,
+            decidedAt: now.toISOString(),
+            validFrom: now.toISOString(),
+            expiresAt: expires.toISOString(),
+            opaqueSecretRollbackHandleId: null,
+            opaqueSecretRollbackRestorableAttested: false,
+            exactRead: {
+              provider: 'vercel',
+              method: 'GET',
+              endpoint: '/v10/projects/{idOrName}/env',
+              teamId: 'team_OrRPxuBxMwCYU3kk0r76AfOs',
+              projectId: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v',
+              decrypt: 'false',
+              maximumProviderCalls: 1,
+              maximumInventoryReads: 1
+            },
+            upstream: {
+              v172Digest: 'e779f7386db56d4fff7202d45a82c35c522036748018071b8205523a843f4b2a',
+              v176Digest: 'd66383659245ec10012bfd3575fe4cf16a89299784580a2a5159638d4e146ed5'
+            },
+            productBoundary: {
+              productMomentumScore: null,
+              productionEligible: false,
+              productProductionActual: '1/7'
+            },
+            note: 'Ephemeral workflow_dispatch authorization. Never persist raw Vercel credential material.'
+          };
+          fs.writeFileSync(
+            'data/momentum-research/pr127_external_operator_execution_request.json',
+            JSON.stringify(request, null, 2) + '\n',
+          );
+          console.log('Ephemeral 30-minute bounded authorization materialized without credential material.');
+          NODE
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
