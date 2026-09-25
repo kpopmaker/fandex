@@ -112,6 +112,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'wendy',
     'nssign',
     'sechskies',
+    'leesungkyung',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -120,6 +121,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const leeSungKyung = getArtistV4ById('leesungkyung');
+  assert.ok(leeSungKyung);
+  assert.equal(leeSungKyung.entityType, 'solo');
+  assert.equal(leeSungKyung.lifecycleStatus, 'active');
+  assert.equal(leeSungKyung.collection.tier, 'standard');
+  assert.match(leeSungKyung.profile.naverNewsQuery ?? '', /가수/);
 
   const sechskies = getArtistV4ById('sechskies');
   assert.ok(sechskies);

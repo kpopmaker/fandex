@@ -1953,6 +1953,51 @@
           "url": "https://ygfamily.com/ko/artists/sechskies/discography"
         }
       ]
+    },
+    {
+      "id": "leesungkyung",
+      "ticker": "LEESUNGKYUNG",
+      "name": "LEE SUNG KYOUNG",
+      "agency": "YG Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이성경 가수 LEE SUNG KYOUNG",
+      "koreanAliases": [
+        "이성경"
+      ],
+      "englishAliases": [
+        "LEE SUNG KYOUNG",
+        "Lee Sung Kyung",
+        "Lee Sung-kyung"
+      ],
+      "keywords": [
+        "YG Entertainment",
+        "디지털 싱글",
+        "OST",
+        "가수",
+        "음악"
+      ],
+      "disambiguationKeywords": [
+        "가수",
+        "음악",
+        "OST",
+        "디지털 싱글"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Bugs",
+          "url": "https://music.bugs.co.kr/artist/8059404?wl_ref=list_ab_04"
+        },
+        {
+          "source": "YG Entertainment",
+          "url": "https://www.ygfamily.com/ko/actors/lee-sungkyoung/profile"
+        }
+      ]
     }
   ]
 }

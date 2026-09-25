@@ -1533,8 +1533,8 @@
     },
     {
       "displayArtist": "이성경",
-      "decision": "identity_verified_scope_eligible_onboarding_blocked",
-      "relationResolution": "cross_domain_actor_singer_scope_verified_representation_review",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "cross_domain_music_identity_onboarding_verified",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -1551,7 +1551,7 @@
       ],
       "scopeDecision": "eligible",
       "scopeBasis": "official_music_discography_registration",
-      "onboardingBlocker": "cross_domain_entity_representation_unresolved"
+      "onboardingBlocker": null
     },
     {
       "displayArtist": "이하이",
