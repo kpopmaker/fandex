@@ -1,0 +1,125 @@
+{
+  "contractVersion": "fandex_momentum_pr127_integration_readiness_revalidation_v2",
+  "lifecycle": "research-handoff-revalidation",
+  "observedAt": "2026-09-25T09:28:32.000Z",
+  "canonicalArtistId": "iu",
+  "pullRequest": {
+    "number": 127,
+    "branch": "v131-lastfm-real-signal-read-model",
+    "headBeforePacket": "a918fa936aefc0c54ce1d17948bcd023f3622a4c",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "mergeable": false,
+    "mergeableState": "dirty"
+  },
+  "main": {
+    "priorMainSha": "f6cd81625c2cfb3b03d54bfc087b78efcc8af24f",
+    "currentMainSha": "1df5bc16056b8a618a99369a763e89e1f5c9e997",
+    "moveReason": "Merge guarded version PR #241",
+    "mergeBaseSha": "2cb01343ae2cb51b551ceb7f873442e310217ba7",
+    "mainAheadOfMergeBase": 105,
+    "branchAheadOfMergeBase": 525
+  },
+  "changedFiles": {
+    "mainCount": 87,
+    "branchCount": 170,
+    "overlapCount": 1,
+    "overlapPaths": [
+      "vercel.json"
+    ]
+  },
+  "mergeSimulation": {
+    "runId": 36118569625,
+    "runHeadSha": "847f20acbfbbccfc946744fbcdabc9f10745bf37",
+    "status": "PASS",
+    "actualMainSha": "1df5bc16056b8a618a99369a763e89e1f5c9e997",
+    "actualConflictCount": 1,
+    "actualConflictPaths": [
+      "vercel.json"
+    ],
+    "conflictKind": "add-add",
+    "validatedResolution": "keep-current-research-branch-vercel-json",
+    "resolutionMeaning": "preserve-current-main-deployment-suppression-plus-explicit-v131-branch-suppression",
+    "requiredSuppressions": [
+      "validation/*",
+      "research/*",
+      "verify/*",
+      "diagnostic/*",
+      "work/*",
+      "v131-lastfm-real-signal-read-model"
+    ],
+    "v181RegressionPassed": true,
+    "externalOperatorRegressionPassed": true,
+    "typecheckPassed": true,
+    "conflictResolutionDiffCheckPassed": true,
+    "mergeAborted": true,
+    "branchHistoryUnchangedBySimulation": true
+  },
+  "externalOperatorPath": {
+    "workflow": ".github/workflows/pr127-momentum-external-operator-read.yml",
+    "requestFile": "data/momentum-research/pr127_external_operator_execution_request.json",
+    "runner": "scripts/momentum-research/pr127-external-operator-inventory-read.mts",
+    "explicitManualAuthorizationPathReady": true,
+    "workflowDispatchRunsObserved": 0,
+    "providerReadPerformed": false,
+    "providerReadCount": 0,
+    "separateReadAuthorizationStillRequired": true
+  },
+  "handoff": {
+    "state": "integration-resolution-ready-not-authorized",
+    "internalResearchBlockerRemaining": false,
+    "staleBaseResolutionDesignBlockerRemaining": false,
+    "currentMainSimulationPassed": true,
+    "externalInventoryReadAuthorizationPending": true,
+    "actualMainIntegrationAuthorized": false,
+    "actualRebaseAuthorized": false,
+    "pullRequestMergeAuthorized": false,
+    "readyForProductionMasterControlReview": true
+  },
+  "requiredExecutionOrderIfSeparatelyAuthorized": [
+    "re-read current main and PR127 head",
+    "confirm current main SHA still matches or rerun conflict simulation",
+    "integrate current main into PR127 research branch without force-push",
+    "resolve only vercel.json with validated research-branch content if conflict set remains exact",
+    "run v181 regression, external-operator regression, typecheck, and scoped/full diff checks",
+    "keep PR127 Draft unless separately authorized",
+    "do not merge PR127 without explicit merge approval"
+  ],
+  "forbiddenWithoutSeparateAuthorization": [
+    "execute-vercel-environment-inventory-read",
+    "read-or-expose-vercel-credential-value",
+    "create-or-rotate-vercel-credential",
+    "mutate-vercel-environment",
+    "deploy-production",
+    "activate-or-execute-native-verifier",
+    "advance-momentum-ledgers",
+    "mutate-product-state",
+    "mutate-variable-registry",
+    "merge-pr-127",
+    "force-push-or-history-rewrite"
+  ],
+  "effects": {
+    "vercelInventoryReads": 0,
+    "credentialReads": 0,
+    "credentialCreates": 0,
+    "credentialRotations": 0,
+    "vercelWrites": 0,
+    "environmentMutations": 0,
+    "productionDeployments": 0,
+    "nativeVerifierExecutions": 0,
+    "databaseReads": 0,
+    "databaseWrites": 0,
+    "historyWrites": 0,
+    "watermarkWrites": 0,
+    "manifestWrites": 0,
+    "productMetricWrites": 0,
+    "registryMutations": 0,
+    "pullRequestMerges": 0
+  },
+  "productBoundary": {
+    "productMomentumScore": null,
+    "productionEligible": false,
+    "productProductionActual": "1/7"
+  }
+}
