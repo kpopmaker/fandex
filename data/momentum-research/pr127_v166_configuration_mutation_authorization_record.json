@@ -1,0 +1,70 @@
+{
+  "contractVersion": "v166_fandex_momentum_verifier_configuration_mutation_authorization_record_v1",
+  "authorizationId": "dcc6f2cfc3d213f797a53ca41685f3d8384e1c4bb9e3862be4e10bcd2bdc446e",
+  "upstreamV165PlanDigest": "f75d091666f2f8e9109918e8857cb0e0941c1a641cac8dd86660ba45cb10734f",
+  "authorizationStatement": "AUTHORIZE_FANDEX_V166_PRODUCTION_VERIFIER_CONFIGURATION_MUTATION",
+  "authority": "explicit-user-decision",
+  "decision": {
+    "state": "approved",
+    "decidedAt": "2026-09-25T14:13:28.000Z",
+    "decidedBy": "project-owner-chat-authorization",
+    "validFrom": "2026-09-25T14:13:28.000Z",
+    "expiresAt": "2026-09-25T14:43:28.000Z",
+    "revokedAt": null,
+    "reason": "Explicit project-owner authorization in chat for the frozen v166 Production verifier configuration mutation scope only."
+  },
+  "target": {
+    "teamId": "team_OrRPxuBxMwCYU3kk0r76AfOs",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "projectName": "fandex",
+    "environment": "production",
+    "intendedDeploymentCommit": "7a1038226b07abf4a130986766ef114a43c1d638",
+    "routePath": "/api/internal/naver-news/momentum-verifier"
+  },
+  "authorizedConfiguration": [
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED",
+      "exactValue": "approved-v162-research-read-only",
+      "target": "production"
+    },
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT",
+      "exactValue": "production",
+      "target": "production"
+    },
+    {
+      "key": "FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET",
+      "exactValue": null,
+      "target": "production",
+      "dedicatedSecretOnly": true,
+      "secretValueMayBeRecordedHere": false,
+      "schedulerCredentialKey": "FANDEX_NAVER_NEWS_SCHEDULER_SECRET",
+      "minimumUtf8Bytes": 24,
+      "maximumUtf8Bytes": 512,
+      "whitespaceOrControlCharactersForbidden": true,
+      "mustDifferFromSchedulerCredential": true,
+      "separationProofMethod": "trusted-environment-non-equality-attestation-without-secret-output"
+    }
+  ],
+  "forbiddenMutationScope": {
+    "runtimeDatabaseCredentialMutation": true,
+    "schedulerCredentialMutation": true,
+    "previewCredentialCopy": true,
+    "productRegistryMutation": true,
+    "productActivation": true,
+    "researchLedgerAdvance": true
+  },
+  "rollbackAcknowledgement": {
+    "disableVerifierEnableFlag": true,
+    "removeOrDisableVerifierRoute": true,
+    "removeVerifierDeploymentSelectorIfProvisioned": true,
+    "revokeOrRotateDedicatedVerifierSecretIfProvisioned": true,
+    "noLedgerRollbackRequiredBeforeFirstAcceptedNativeRead": true
+  },
+  "downstreamAuthorizations": {
+    "productionDeployment": "not-authorized-by-this-record",
+    "verifierActivation": "not-authorized-by-this-record",
+    "nativeVerifierExecution": "not-authorized-by-this-record",
+    "ledgerAdvance": "not-authorized-by-this-record"
+  }
+}
