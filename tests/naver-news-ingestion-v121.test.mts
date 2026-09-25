@@ -163,6 +163,7 @@ test('v121 migration is additive, bounded, append-only, and least-privileged', a
   assert.deepEqual(plan.map(({ version, fileName }) => [version, fileName]), [
     [1, '001_v114_managed_postgres_persistence.sql'],
     [2, '002_v121_naver_news_operational_ingestion.sql'],
+    [4, '004_activity_exposure_persistence_v1.sql'],
   ]);
   assert.ok(isSha256(plan[1]?.sha256));
 });
