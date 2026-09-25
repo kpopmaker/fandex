@@ -1,0 +1,73 @@
+name: Diagnose latest Activity Exposure revision v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-latest-revision-diagnostic-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read latest YouTube revision entity
+        shell: bash
+        run: |
+          node <<'NODE'
+          const { Client } = require('pg');
+          const raw = process.env.FANDEX_RUNTIME_DATABASE_URL;
+          if (!raw) process.exit(1);
+          const client = new Client({
+            connectionString: raw,
+            connectionTimeoutMillis: 10000,
+            query_timeout: 30000,
+            statement_timeout: 30000,
+          });
+          (async () => {
+            await client.connect();
+            try {
+              const result = await client.query(`
+                SELECT
+                  obs.source_entity_type,
+                  obs.source_entity_id,
+                  obs.normalization_outcome,
+                  obs.revision_id,
+                  obs.supersedes_observation_id IS NOT NULL AS supersedes_prior,
+                  obs.collected_at
+                FROM fandex.activity_exposure_provider_observations obs
+                WHERE obs.run_id = $1
+                ORDER BY obs.source_entity_type, obs.source_entity_id
+              `, ['c5cc9863204d737b245c1f6357cdb63bedc21084732943a663c0661ae7f06126']);
+              console.log('ACTIVITY_EXPOSURE_LATEST_REVISION=' + JSON.stringify({
+                count: result.rowCount,
+                rows: result.rows.map((row) => ({
+                  sourceEntityType: row.source_entity_type,
+                  sourceEntityId: row.source_entity_id,
+                  normalizationOutcome: row.normalization_outcome,
+                  revisionIdPrefix:
+                    typeof row.revision_id === 'string'
+                      ? row.revision_id.split(':')[0]
+                      : null,
+                  supersedesPrior: row.supersedes_prior === true,
+                  collectedAt: row.collected_at,
+                })),
+              }));
+            } finally {
+              await client.end();
+            }
+          })().catch(() => {
+            console.error('activity_exposure_latest_revision_diagnostic_failed');
+            process.exitCode = 1;
+          });
+          NODE
