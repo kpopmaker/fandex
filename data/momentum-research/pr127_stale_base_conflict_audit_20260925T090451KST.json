@@ -96,7 +96,8 @@
     "mergeSimulationV181RegressionPassed": true,
     "mergeSimulationTypecheckPassed": true,
     "mergeSimulationFullPrDiffCheckPassed": true,
-    "temporaryWorkflowRemoved": false
+    "temporaryWorkflowRemoved": true,
+    "workflowCleanupCommit": "78749f2be8929e818fc11d05ceac87e31aa3788f"
   },
   "mergeSimulation": {
     "initialRunId": 36076079026,
