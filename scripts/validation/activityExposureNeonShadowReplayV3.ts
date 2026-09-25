@@ -31,12 +31,10 @@ async function main() {
   if (parsed.hostname.includes('-pooler.')) {
     throw new Error('activity_exposure_runtime_database_must_be_direct');
   }
-  if (parsed.searchParams.get('sslmode') !== 'verify-full') {
-    throw new Error('activity_exposure_runtime_sslmode_must_be_verify_full');
-  }
+  parsed.searchParams.set('sslmode', 'verify-full');
 
   const client = new Client({
-    connectionString: databaseUrl,
+    connectionString: parsed.toString(),
     connectionTimeoutMillis: 10_000,
     query_timeout: 60_000,
     statement_timeout: 60_000,
