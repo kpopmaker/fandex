@@ -187,3 +187,72 @@ assert bilingual_result["candidateCount"] == 1
 assert bilingual_result["knownSuppressionCount"] == 2
 assert bilingual_result["candidates"][0]["displayArtist"] == "신규 솔로"
 print("bilingual provider identity suppression regression: PASS")
+
+
+decision_identity = {
+    "artists": [
+        {"id": "txt", "aliases": ["TXT", "TOMORROW X TOGETHER"]},
+    ]
+}
+decision_snapshot = [
+    (
+        Path("decision-aware.json"),
+        {
+            "source": {
+                "id": "decision-aware",
+                "type": "festival_or_event_roster",
+                "name": "Decision Aware",
+                "observedAt": "2026-09-24T00:30:00Z",
+            },
+            "candidates": [
+                {"displayArtist": "CUTIE STREET", "aliases": []},
+                {"displayArtist": "SOOBIN of TXT", "aliases": []},
+                {"displayArtist": "HORI7ON", "aliases": []},
+            ],
+        },
+    )
+]
+decision_payload = {
+    "decisions": [
+        {
+            "displayArtist": "CUTIE STREET",
+            "decision": "exclude_non_kpop_scope",
+            "relationResolution": "japanese_idol_group_non_kpop_scope",
+            "relatedCanonicalArtistIds": [],
+            "autoPromote": False,
+            "evidence": [],
+        },
+        {
+            "displayArtist": "SOOBIN of TXT",
+            "decision": "existing_canonical_member_credit",
+            "relationResolution": "member_specific_event_credit_not_independent_artist",
+            "relatedCanonicalArtistIds": ["txt"],
+            "autoPromote": False,
+            "evidence": [],
+        },
+        {
+            "displayArtist": "HORI7ON",
+            "decision": "identity_verified_scope_review_required",
+            "relationResolution": "cross_border_group_current_management_status_requires_review",
+            "relatedCanonicalArtistIds": [],
+            "autoPromote": False,
+            "evidence": [],
+        },
+    ]
+}
+decision_result = module.build_discovery(
+    decision_identity,
+    decision_snapshot,
+    decision_payload,
+)
+assert decision_result["candidateCount"] == 1
+assert decision_result["decisionSuppressionCount"] == 2
+assert decision_result["candidates"][0]["displayArtist"] == "HORI7ON"
+assert decision_result["candidates"][0]["status"] == "scope_review_required"
+assert decision_result["candidates"][0]["reviewDecision"] == "identity_verified_scope_review_required"
+assert {row["displayArtist"] for row in decision_result["decisionSuppressions"]} == {
+    "CUTIE STREET",
+    "SOOBIN of TXT",
+}
+
+print("decision-aware Stage 7 discovery: PASS")
