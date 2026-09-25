@@ -138,8 +138,15 @@ test('run identity is deterministic and binds explicit revision semantics', () =
     buildActivityExposurePersistenceRunId(replay),
   );
 
-  const changed = structuredClone(first);
-  changed.observations[0].revisionId = 'provider-revision:musicbrainz:fixture-v2';
+  const changed: ActivityExposurePersistenceInput = {
+    ...first,
+    observations: [
+      {
+        ...first.observations[0],
+        revisionId: 'provider-revision:musicbrainz:fixture-v2',
+      },
+    ],
+  };
   assert.notEqual(
     buildActivityExposurePersistenceRunId(first),
     buildActivityExposurePersistenceRunId(changed),
@@ -180,15 +187,30 @@ test('repository writes run, observation, digest-only raw lineage, and event ato
 });
 
 test('repository never infers revision identity or stores non-retained raw payload bytes', async () => {
-  const missingRevision = structuredClone(persistenceInput());
-  missingRevision.observations[0].revisionId = '';
+  const valid = persistenceInput();
+  const missingRevision: ActivityExposurePersistenceInput = {
+    ...valid,
+    observations: [
+      {
+        ...valid.observations[0],
+        revisionId: '',
+      },
+    ],
+  };
   await assert.rejects(
     persistActivityExposureCollection(missingRevision, persistencePool([])),
     /activity_exposure_observation_revision_invalid/,
   );
 
-  const rawLeak = structuredClone(persistenceInput());
-  rawLeak.observations[0].rawPayloadCanonical = '{"should":"not persist"}';
+  const rawLeak: ActivityExposurePersistenceInput = {
+    ...valid,
+    observations: [
+      {
+        ...valid.observations[0],
+        rawPayloadCanonical: '{"should":"not persist"}',
+      },
+    ],
+  };
   await assert.rejects(
     persistActivityExposureCollection(rawLeak, persistencePool([])),
     /activity_exposure_nonretained_payload_present/,
