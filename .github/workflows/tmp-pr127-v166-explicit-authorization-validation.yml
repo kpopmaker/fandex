@@ -1,0 +1,33 @@
+name: TMP PR127 v166 Explicit Authorization Validation
+
+on:
+  push:
+    branches:
+      - v131-lastfm-real-signal-read-model
+    paths:
+      - .github/workflows/tmp-pr127-v166-explicit-authorization-validation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Validate explicit v166 authorization and v167 next blocker
+        run: npx tsx scripts/momentum-research/tmp-validate-v166-explicit-authorization.mts
+      - name: Regression
+        run: |
+          npx tsx --test tests/fandex-momentum-verifier-configuration-authorization-v166.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-configuration-mutation-execution-guard-v167.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-vercel-mutation-dry-run-v168.test.mts
+          npx tsx --test tests/fandex-momentum-verifier-premutation-rollback-readiness-v169.test.mts
+      - name: Typecheck
+        run: npm run typecheck
