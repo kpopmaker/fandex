@@ -68,7 +68,6 @@ jobs:
           grep -Fq "v131-lastfm-real-signal-read-model" vercel.json
 
           git status --short
-          git merge --abort
 
       - run: npm ci
 
@@ -86,3 +85,8 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Abort simulated merge
+        if: always()
+        shell: bash
+        run: git merge --abort || true
