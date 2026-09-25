@@ -1,0 +1,77 @@
+{
+  "contractVersion": "v1_wikimedia_entity_attention_cross_source_parity_research",
+  "lifecycle": "research",
+  "directProductContributionEligible": false,
+  "productScorePublished": false,
+  "observationDay": "2026-09-23",
+  "canonicalArtistId": "iu",
+  "wikidataQid": "Q20145",
+  "project": "en.wikipedia.org",
+  "aqsValidationRunId": 36085915930,
+  "pageviewCompleteParityRunId": 36086141552,
+  "aqs": {
+    "sourceSemantics": "wikimedia-aqs-per-article-loaded-day",
+    "loadedDayProof": true,
+    "eligibleTitleCount": 13,
+    "explicitTitleCount": 9,
+    "zeroOmissionTitleCount": 4,
+    "entityViews": 2027
+  },
+  "pageviewComplete": {
+    "dump": "pageviews-20260923-user.bz2",
+    "compressedContentLengthBytes": 734958067,
+    "matchedRowCount": 10,
+    "matchedDistinctTitleCount": 6,
+    "entityViews": 2027
+  },
+  "parity": {
+    "exactEntityTotalMatch": true,
+    "inferredZeroTitlesAbsentFromDump": [
+      "Lee Ji-eun (singer)",
+      "Love, Poem",
+      "2019 IU Tour Concert",
+      "IU (Singer)"
+    ],
+    "explicitZeroTitlesAbsentFromDump": [
+      "Lee Ji-eun (actress, born 1993)",
+      "IU (actor)",
+      "IU (songwriter)"
+    ],
+    "positiveTitleTotals": {
+      "IU (entertainer)": 1982,
+      "아이유": 3,
+      "Into the I-LAND": 1,
+      "IU (vocalist)": 1,
+      "IU (actress)": 1,
+      "IU (singer)": 39
+    }
+  },
+  "redirectPageIdFinding": {
+    "title": "IU (singer)",
+    "identitySnapshotRedirectPageId": 80155192,
+    "dumpRows": [
+      {
+        "pageId": 80155192,
+        "accessMethod": "desktop",
+        "views": 2
+      },
+      {
+        "pageId": 24385427,
+        "accessMethod": "desktop",
+        "views": 18
+      },
+      {
+        "pageId": 24385427,
+        "accessMethod": "mobile-web",
+        "views": 19
+      }
+    ],
+    "conclusion": "count-by-title-not-page-id"
+  },
+  "researchDecision": "lightweight-aqs-transport-cross-source-parity-validated-for-observed-day",
+  "limitations": [
+    "retrospective parity does not satisfy prospective pre-day identity snapshot requirement",
+    "single-day parity does not authorize Product binding or Production publication",
+    "provider incidents and transport errors must continue to fail closed"
+  ]
+}
