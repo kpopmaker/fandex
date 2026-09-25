@@ -1689,15 +1689,22 @@
     },
     {
       "displayArtist": "AMPER&ONE",
-      "decision": "new_canonical_group_candidate",
-      "relationResolution": "event_roster_verified_group_identity",
-      "relatedCanonicalArtistIds": [],
+      "decision": "existing_canonical_identity_variant",
+      "relationResolution": "same_identity_as_existing_ampersandone_event_variant",
+      "relatedCanonicalArtistIds": [
+        "ampersandone"
+      ],
       "autoPromote": false,
       "evidence": [
         {
+          "source": "2026 Weverse Con Festival",
+          "url": "https://weverseconfestival.weverse.io/en/lineup/",
+          "note": "Event lineup uses AMPER&ONE while the official FNC/Weverse artist identity is AMPERS&ONE."
+        },
+        {
           "source": "Weverse / FNC Entertainment",
           "url": "https://weverse.io/ampersandone/notice/34672",
-          "note": "2026 official FNC notice confirms AMPERS&ONE live tour and current management."
+          "note": "Official AMPERS&ONE notice confirms the canonical group identity."
         }
       ]
     },
@@ -1740,6 +1747,132 @@
           "source": "MPMG MUSIC",
           "url": "https://www.mpmgmusic.com/touched",
           "note": "Official MPMG artist page identifies TOUCHED as a four-member band."
+        }
+      ]
+    },
+    {
+      "displayArtist": "AND2BLE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_roster_verified_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YH ENTERTAINMENT",
+          "url": "https://yhent.co.kr/en/artist/and2ble/",
+          "note": "Official YH artist page identifies AND2BLE as a five-member group debuted in 2026."
+        },
+        {
+          "source": "Weverse",
+          "url": "https://weverse.io/and2ble/notice/35302",
+          "note": "Official YH notice confirms the 2026 debut mini album."
+        }
+      ]
+    },
+    {
+      "displayArtist": "aoen",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_pop_group_non_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "UNIVERSAL MUSIC JAPAN",
+          "url": "https://www.universal-music.co.jp/aoen/",
+          "note": "Official Japan label page shows aoen's Japan-based singles and 2026 nationwide live tour."
+        }
+      ]
+    },
+    {
+      "displayArtist": "CUTIE STREET",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_idol_group_non_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "ASOBISYSTEM",
+          "url": "https://asobisystem.com/en/talent/cutiestreet/",
+          "note": "Official profile identifies CUTIE STREET as a Japanese KAWAII LAB idol group launched in Japan."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HA HYUN SANG",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE",
+          "url": "https://wake-one.com/en/artists/%ED%95%98%ED%98%84%EC%83%81/",
+          "note": "Official WAKEONE artist page identifies Ha Hyun Sang as a singer-songwriter and shows 2026 activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KWON JIN AH",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "event_roster_verified_solo_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Antenna",
+          "url": "https://antenna.co.kr/KwonJinAh",
+          "note": "Official Antenna artist page identifies Kwon Jin Ah as an independent singer-songwriter."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LUCY",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "event_roster_verified_korean_band_identity",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MYSTIC STORY",
+          "url": "https://www.mystic89.net/artist/lucy",
+          "note": "Official Mystic Story artist page identifies LUCY as a four-member Korean band."
+        }
+      ]
+    },
+    {
+      "displayArtist": "SOOBIN of TXT",
+      "decision": "existing_canonical_member_credit",
+      "relationResolution": "member_specific_event_credit_not_independent_artist",
+      "relatedCanonicalArtistIds": [
+        "txt"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BIGHIT MUSIC",
+          "url": "https://bighitsmusic.com/txt/profile",
+          "note": "Official TXT profile identifies SOOBIN as a member of TOMORROW X TOGETHER."
+        },
+        {
+          "source": "2026 Weverse Con Festival",
+          "url": "https://weverseconfestival.weverse.io/en/lineup/",
+          "note": "Festival billing is explicitly 'SOOBIN of TXT', preserving the member-credit relationship."
+        }
+      ]
+    },
+    {
+      "displayArtist": "WENDY",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "group_member_and_independent_solo",
+      "relatedCanonicalArtistIds": [
+        "redvelvet"
+      ],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "SBS Entertainment News",
+          "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008077429",
+          "note": "ASND announced an exclusive contract with WENDY for solo activities while supporting Red Velvet activities."
         }
       ]
     }
