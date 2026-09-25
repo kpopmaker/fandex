@@ -2090,8 +2090,8 @@
     },
     {
       "displayArtist": "CIIU",
-      "decision": "identity_verified_scope_review_required",
-      "relationResolution": "localized_china_group_no_verified_korean_market_activity_yet",
+      "decision": "identity_verified_scope_deferred",
+      "relationResolution": "localized_china_group_scope_deferred_pending_kr_or_kpop_evidence",
       "relatedCanonicalArtistIds": [],
       "autoPromote": false,
       "evidence": [
@@ -2115,7 +2115,11 @@
           "url": "https://kind.krx.co.kr/external/dst/irReference/18198/%5BJYP%20ENT%5D%2025Q4_Result_ENG_v.F.pdf",
           "note": "JYP's 2026 localized-artist plan places CIIU in China and describes China showcase touring. This does not establish Korean-market music activity, so scope remains under review rather than being inferred from agency ownership."
         }
-      ]
+      ],
+      "scopeDecision": "deferred",
+      "scopeBasis": "localized_china_identity_without_verified_kr_market_or_explicit_kpop_evidence",
+      "scopeRecheckTrigger": "verified_korean_market_music_activity_or_explicit_official_kpop_classification",
+      "onboardingBlocker": null
     }
   ]
 }

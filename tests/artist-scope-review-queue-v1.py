@@ -44,6 +44,15 @@ payload = {
             "relationResolution": "cross_domain_actor_singer_scope_verified_representation_review",
         },
         {
+            "displayArtist": "CIIU",
+            "normalizedArtist": "ciiu",
+            "scopeStatus": "deferred",
+            "scopeDecision": "deferred",
+            "reviewDecision": "identity_verified_scope_deferred",
+            "relationResolution": "localized_china_group_scope_deferred_pending_kr_or_kpop_evidence",
+            "scopeRecheckTrigger": "verified_korean_market_music_activity_or_explicit_official_kpop_classification",
+        },
+        {
             "displayArtist": "Scope Pending",
             "normalizedArtist": "scopepending",
             "scopeStatus": "review_required",

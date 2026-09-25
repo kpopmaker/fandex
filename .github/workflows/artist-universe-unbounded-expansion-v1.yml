@@ -46,6 +46,7 @@ jobs:
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
           python tests/artist-scope-review-queue-v1.py
+          python tests/artist-scope-deferred-queue-v1.py
           python tests/artist-onboarding-blocker-queue-v1.py
       - name: Export full artist universe identity index
         run: npx tsx scripts/artist-expansion/export-artist-universe-identity-v1.mts artist_universe_identity_index_runtime.json
@@ -93,6 +94,12 @@ jobs:
           python scripts/artist-expansion/artist_scope_review_queue_v1.py \
             artist_universe_multisource_discovery_v1_latest.json \
             artist_scope_review_queue_v1_latest.json
+            artist_scope_deferred_queue_v1_latest.json
+      - name: Build Stage 7 scope deferred queue
+        run: |
+          python scripts/artist-expansion/artist_scope_deferred_queue_v1.py \
+            artist_universe_multisource_discovery_v1_latest.json \
+            artist_scope_deferred_queue_v1_latest.json
       - name: Build Stage 7 onboarding blocker queue
         run: |
           python scripts/artist-expansion/artist_onboarding_blocker_queue_v1.py \

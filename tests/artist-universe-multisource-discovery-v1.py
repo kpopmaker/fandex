@@ -208,6 +208,7 @@ decision_snapshot = [
                 {"displayArtist": "CUTIE STREET", "aliases": []},
                 {"displayArtist": "SOOBIN of TXT", "aliases": []},
                 {"displayArtist": "HORI7ON", "aliases": []},
+                {"displayArtist": "CIIU", "aliases": []},
             ],
         },
     )
@@ -231,6 +232,18 @@ decision_payload = {
             "evidence": [],
         },
         {
+            "displayArtist": "CIIU",
+            "decision": "identity_verified_scope_deferred",
+            "relationResolution": "localized_china_group_scope_deferred_pending_kr_or_kpop_evidence",
+            "relatedCanonicalArtistIds": [],
+            "scopeDecision": "deferred",
+            "scopeBasis": "localized_china_identity_without_verified_kr_market_or_explicit_kpop_evidence",
+            "scopeRecheckTrigger": "verified_korean_market_music_activity_or_explicit_official_kpop_classification",
+            "onboardingBlocker": None,
+            "autoPromote": False,
+            "evidence": [],
+        },
+        {
             "displayArtist": "HORI7ON",
             "decision": "identity_verified_scope_eligible_onboarding_blocked",
             "relationResolution": "cross_border_group_scope_verified_current_management_unresolved",
@@ -248,15 +261,20 @@ decision_result = module.build_discovery(
     decision_snapshot,
     decision_payload,
 )
-assert decision_result["candidateCount"] == 1
+assert decision_result["candidateCount"] == 2
 assert decision_result["decisionSuppressionCount"] == 2
-assert decision_result["candidates"][0]["displayArtist"] == "HORI7ON"
-assert decision_result["candidates"][0]["status"] == "identity_verified_onboarding_blocked"
-assert decision_result["candidates"][0]["scopeStatus"] == "eligible"
-assert decision_result["candidates"][0]["scopeDecision"] == "eligible"
-assert decision_result["candidates"][0]["scopeBasis"] == "official_kpop_award_roster"
-assert decision_result["candidates"][0]["onboardingBlocker"] == "current_management_unresolved_after_contract_termination"
-assert decision_result["candidates"][0]["reviewDecision"] == "identity_verified_scope_eligible_onboarding_blocked"
+decision_by_name = {row["displayArtist"]: row for row in decision_result["candidates"]}
+assert decision_by_name["HORI7ON"]["status"] == "identity_verified_onboarding_blocked"
+assert decision_by_name["HORI7ON"]["scopeStatus"] == "eligible"
+assert decision_by_name["HORI7ON"]["scopeDecision"] == "eligible"
+assert decision_by_name["HORI7ON"]["scopeBasis"] == "official_kpop_award_roster"
+assert decision_by_name["HORI7ON"]["onboardingBlocker"] == "current_management_unresolved_after_contract_termination"
+assert decision_by_name["HORI7ON"]["reviewDecision"] == "identity_verified_scope_eligible_onboarding_blocked"
+assert decision_by_name["CIIU"]["status"] == "scope_deferred"
+assert decision_by_name["CIIU"]["scopeStatus"] == "deferred"
+assert decision_by_name["CIIU"]["scopeDecision"] == "deferred"
+assert decision_by_name["CIIU"]["scopeRecheckTrigger"] == "verified_korean_market_music_activity_or_explicit_official_kpop_classification"
+assert decision_by_name["CIIU"]["autoPromote"] is False
 assert {row["displayArtist"] for row in decision_result["decisionSuppressions"]} == {
     "CUTIE STREET",
     "SOOBIN of TXT",

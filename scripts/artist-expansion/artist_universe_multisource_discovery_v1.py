@@ -295,6 +295,7 @@ def build_discovery(
         item["decisionDisplayArtist"] = decision.get("displayArtist")
         item["scopeDecision"] = decision.get("scopeDecision")
         item["scopeBasis"] = decision.get("scopeBasis")
+        item["scopeRecheckTrigger"] = decision.get("scopeRecheckTrigger")
         item["onboardingBlocker"] = decision.get("onboardingBlocker")
 
         scope_decision = str(decision.get("scopeDecision") or "").strip()
@@ -309,6 +310,9 @@ def build_discovery(
         elif scope_decision == "excluded":
             item["scopeStatus"] = "excluded"
             item["status"] = "scope_excluded"
+        elif scope_decision == "deferred":
+            item["scopeStatus"] = "deferred"
+            item["status"] = "scope_deferred"
         elif decision_name == "identity_verified_scope_review_required":
             item["status"] = "scope_review_required"
             item["scopeStatus"] = "review_required"
