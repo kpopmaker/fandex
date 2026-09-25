@@ -1877,6 +1877,32 @@
           "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008077429"
         }
       ]
+    },
+    {
+      "id": "nssign",
+      "ticker": "NSSIGN",
+      "name": "n.SSign",
+      "agency": "nCH Entertainment",
+      "entityType": "group",
+      "naverNewsQuery": "엔싸인 n.SSign",
+      "koreanAliases": [
+        "엔싸인"
+      ],
+      "englishAliases": [
+        "n.SSign",
+        "nSSign",
+        "N.SSIGN"
+      ],
+      "identityEvidence": [
+        {
+          "source": "n.SSign Weverse / nCH Entertainment",
+          "url": "https://weverse.io/nssign/notice/38960"
+        },
+        {
+          "source": "n.SSign Official Site",
+          "url": "https://nssignworld.com/profile/"
+        }
+      ]
     }
   ]
 }
