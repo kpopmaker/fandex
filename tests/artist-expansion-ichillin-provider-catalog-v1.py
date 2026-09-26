@@ -34,6 +34,6 @@ assert snapshot["contract"]["unitIdentityDoesNotReplaceParentGroup"] is True
 assert snapshot["contract"]["autoPromote"] is False
 
 assert module.parse_live_pages(group.replace("<div>JIYOON</div><div>E.JI</div><div>JACKIE</div>", ""), unit) == []
-assert module.parse_live_pages(group, unit.replace("Look At Me!", "No release")) == []
+assert module.parse_live_pages(group, unit.replace("Look At Me!", "No release").replace("BANANA", "No track")) == []
 
 print("ICHILLIN official current provider catalog adapter regression: PASS")
