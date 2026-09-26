@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
 from datetime import datetime, timezone
@@ -43,7 +44,19 @@ def parse_roster(html: str, source_url: str = DEFAULT_URL) -> list[dict]:
     strings = [normalize_spaces(value) for value in soup.stripped_strings]
     strings = [value for value in strings if value]
 
-    if not all(page_contains_artist(strings, name) for name in EXPECTED_ARTISTS):
+    visible_match = all(page_contains_artist(strings, name) for name in EXPECTED_ARTISTS)
+
+    # The current PLEDIS site can serialize artist-card data into client-rendered
+    # page state rather than ordinary text nodes. Accept the live page only when
+    # every expected music identity and the PLEDIS brand marker are present in
+    # the raw official HTML; otherwise fail closed to the verified snapshot.
+    raw = compact(html_lib.unescape(html))
+    raw_match = (
+        compact("PLEDIS Entertainment") in raw
+        and all(compact(name) in raw for name in EXPECTED_ARTISTS)
+    )
+
+    if not (visible_match or raw_match):
         return []
 
     aliases = {

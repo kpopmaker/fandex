@@ -29,6 +29,19 @@ rows = module.parse_roster(html)
 assert [row["displayArtist"] for row in rows] == module.EXPECTED_ARTISTS
 assert "뉴이스트" in rows[3]["aliases"]
 
+serialized_html = """
+<html><body>
+<script>
+window.__PLEDIS_STATE__ = {
+  "brand":"PLEDIS Entertainment",
+  "artists":"AFTER SCHOOL ORANGE CARAMEL BUMZU NU`EST HWANG MIN HYUN SEVENTEEN TWS"
+};
+</script>
+</body></html>
+"""
+serialized_rows = module.parse_roster(serialized_html)
+assert [row["displayArtist"] for row in serialized_rows] == module.EXPECTED_ARTISTS
+
 snapshot = module.build_snapshot(
     rows,
     module.DEFAULT_URL,
@@ -39,5 +52,6 @@ assert snapshot["contract"]["identityRosterIsNotLifecycleTruth"] is True
 assert snapshot["contract"]["autoPromote"] is False
 
 assert module.parse_roster(html.replace("<div>BUMZU</div>", "")) == []
+assert module.parse_roster(serialized_html.replace("TWS", "")) == []
 
 print("PLEDIS music identity roster adapter regression: PASS")
