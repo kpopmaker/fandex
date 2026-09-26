@@ -42,7 +42,7 @@ test('post-execution readiness accepts current evidence but refuses numeric Prod
     result.contractVersion,
     MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION,
   );
-  assert.equal(result.state, 'categorical-runtime-evidence-required');
+  assert.equal(result.state, 'current-categorical-evaluation-required');
   assert.equal(result.productActivationReady, false);
   assert.equal(result.productPublicationReady, false);
   assert.equal(result.numericProductEligible, false);
@@ -145,9 +145,9 @@ test('PR 254 Product contract and adapter are no longer reported as missing', as
       PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
     separateNonNumericContractImplemented: true,
     storedEvidenceReadModelAdapterImplemented: true,
-    runtimeCarrierRepositoryImplemented: false,
-    runtimeStoredEvidenceReadPathImplemented: false,
-    liveIUShadowReadVerified: false,
+    runtimeCarrierRepositoryImplemented: true,
+    runtimeStoredEvidenceReadPathImplemented: true,
+    liveIUShadowReadVerified: true,
     publicRouteImplemented: false,
   });
 
@@ -161,7 +161,7 @@ test('PR 254 Product contract and adapter are no longer reported as missing', as
   );
 });
 
-test('remaining blocker is runtime categorical evidence, not numeric weighting', async () => {
+test('remaining blocker is current categorical reevaluation, not runtime wiring or numeric weighting', async () => {
   const status = await currentLastfmStatus();
   const result = evaluateMomentumPostExecutionProductReadiness({
     lastfmSnapshotDate: status.snapshotDate,
@@ -180,22 +180,34 @@ test('remaining blocker is runtime categorical evidence, not numeric weighting',
   );
   assert.ok(
     result.blockers.includes(
-      'categorical-live-carrier-repository-not-implemented',
+      'current-dual-source-categorical-evaluation-not-performed',
     ),
   );
   assert.ok(
     result.blockers.includes(
+      'current-naver-stored-evidence-not-reproduced-for-readiness',
+    ),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'historical-carrier-not-current-activation-evidence',
+    ),
+  );
+  assert.ok(result.blockers.includes('categorical-public-route-not-implemented'));
+
+  assert.ok(
+    !result.blockers.includes(
+      'categorical-live-carrier-repository-not-implemented',
+    ),
+  );
+  assert.ok(
+    !result.blockers.includes(
       'categorical-runtime-stored-evidence-read-path-not-implemented',
     ),
   );
   assert.ok(
-    result.blockers.includes('live-iu-shadow-product-read-not-verified'),
+    !result.blockers.includes('live-iu-shadow-product-read-not-verified'),
   );
-  assert.ok(
-    result.blockers.includes('live-carrier-product-readiness-not-evaluated'),
-  );
-  assert.ok(result.blockers.includes('categorical-public-route-not-implemented'));
-
   assert.ok(!result.blockers.includes('component-weighting-not-frozen'));
   assert.ok(!result.blockers.includes('composite-score-formula-not-frozen'));
 });

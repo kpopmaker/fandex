@@ -1,0 +1,54 @@
+{
+  "contractVersion": "momentum-live-shadow-source-currentness-audit-v1",
+  "evaluatedAgainstMain": "e5d828d3cf8a198c17e0983b8b3d7c3722e4d571",
+  "canonicalArtistId": "iu",
+  "carrier": {
+    "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "historicalOnly": true
+  },
+  "lastfm": {
+    "snapshotDate": "2026-09-26",
+    "historyRowCount": 480,
+    "snapshotDateCount": 48,
+    "deltaReadyCount": 10,
+    "needsReviewCount": 0,
+    "sourceAdvancedBeyondCarrierCutoff": true
+  },
+  "naverRuntime": {
+    "schedulerRouteObservedAt": "2026-09-26T14:22:00.000Z",
+    "deploymentId": "dpl_9CGFYLpGx2naCLtUNMrzZbr2eTUd",
+    "deploymentCommit": "e5d828d3cf8a198c17e0983b8b3d7c3722e4d571",
+    "requestPath": "/api/internal/naver-news/shadow-scheduler",
+    "httpStatus": 200,
+    "schedulerObservedAfterCarrierCutoff": true,
+    "currentStoredEvidenceReproducedForReadiness": false
+  },
+  "freshnessPolicy": {
+    "arbitraryAgeThresholdAllowed": false,
+    "maximumAgeDays": null,
+    "sourceAdvancementRequiresCurrentCategoricalReevaluation": true,
+    "historyAppendRequiredBeforeReevaluation": false,
+    "historyAppendDecision": "defer-until-current-evaluation"
+  },
+  "currentEvaluation": {
+    "currentDualSourceCategoricalEvaluationPerformed": false,
+    "currentCarrierProduced": false,
+    "currentNoOpEvaluationAttested": false
+  },
+  "decision": {
+    "state": "current-categorical-evaluation-required",
+    "productActivationReady": false,
+    "productPublicationReady": false,
+    "publicRouteDesignReady": false,
+    "reasons": [
+      "lastfm-source-advanced-since-carrier",
+      "naver-scheduler-runtime-observed-after-carrier",
+      "current-naver-stored-evidence-not-reproduced-for-readiness",
+      "current-dual-source-categorical-evaluation-not-performed",
+      "historical-carrier-not-current-activation-evidence"
+    ]
+  }
+}
