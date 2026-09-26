@@ -783,6 +783,17 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(onePact.members.length, 0);
   assert.ok(onePact.profile.koreanAliases.includes('원팩트'));
 
+  const theKingDom = getArtistV4ById('thekingdom');
+  assert.ok(theKingDom);
+  assert.equal(theKingDom.entityType, 'group');
+  assert.equal(theKingDom.agency, 'GF Entertainment');
+  assert.equal(theKingDom.debutDate, '2021-02-18');
+  assert.equal(theKingDom.lifecycleStatus, 'inactive');
+  assert.deepEqual(theKingDom.members, ['DANN', 'ARTHUR', 'MUJIN', 'LOUIS', 'IVAN', 'JAHAN']);
+  assert.equal(theKingDom.fandomName, 'KINGMAKER');
+  assert.ok(theKingDom.profile.koreanAliases.includes('킹덤'));
+  assert.ok(theKingDom.profile.englishAliases.includes('KINGDOM'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

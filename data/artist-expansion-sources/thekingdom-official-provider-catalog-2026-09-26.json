@@ -1,0 +1,55 @@
+{
+  "version": "thekingdom_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "thekingdom-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "The KingDom Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://weverse.io/kingdom/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "The KingDom",
+      "aliases": [
+        "더킹덤",
+        "킹덤",
+        "KINGDOM"
+      ],
+      "evidence": [
+        {
+          "label": "GF Entertainment official group halt notice",
+          "url": "https://weverse.io/kingdom/notice/33746"
+        },
+        {
+          "label": "The KingDom current official Weverse surface",
+          "url": "https://weverse.io/kingdom/highlight?hl=ko"
+        },
+        {
+          "label": "GF Entertainment official 2026 fan-con notice",
+          "url": "https://weverse.io/kingdom/notice/33410"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialPlatformOnly": true,
+    "singleGroupIdentityOnly": true,
+    "renameContinuityPreserved": true,
+    "temporaryGroupHaltMapsToInactiveLifecycle": true,
+    "currentAgencySupportDoesNotBecomeHistorical": true,
+    "militaryStatusDoesNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/kingdom/notice/33746",
+      "https://weverse.io/kingdom/highlight?hl=ko",
+      "https://weverse.io/kingdom/notice/33410"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

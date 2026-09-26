@@ -4278,6 +4278,38 @@
           "note": "Contemporary debut report records the 2023-11-30 debut under ARMADA ENT."
         }
       ]
+    },
+    {
+      "displayArtist": "The KingDom",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "kingdom_rename_continuity_and_current_gf_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_gf_weverse_group_identity_2026_fancon_and_formal_temporary_group_halt_notice",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/kingdom/notice/33746",
+          "note": "GF Entertainment officially states The KingDom will halt group activities after the 2026-02-28 fan-con while the company continues to support members."
+        },
+        {
+          "source": "The KingDom Weverse",
+          "url": "https://weverse.io/kingdom/highlight?hl=ko",
+          "note": "Current official Weverse surface preserves The KingDom identity and six-member current media tagging."
+        },
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/kingdom/notice/33410",
+          "note": "Official 2026 fan-con notice confirms group activity immediately before the announced halt."
+        },
+        {
+          "source": "GF Entertainment",
+          "url": "https://www.tenasia.co.kr/article/2024040497914",
+          "note": "GF Entertainment's official 2024 statement records rename continuity from KINGDOM to The KingDom rather than a new group identity."
+        }
+      ]
     }
   ]
 }

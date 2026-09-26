@@ -6620,6 +6620,71 @@
           "url": "https://artist.mnetplus.world/main/stg/0nepact/surveys/6a68b2de8f20217aae9945aa"
         }
       ]
+    },
+    {
+      "id": "thekingdom",
+      "ticker": "THEKINGDOM",
+      "name": "The KingDom",
+      "agency": "GF Entertainment",
+      "entityType": "group",
+      "debutDate": "2021-02-18",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "DANN",
+        "ARTHUR",
+        "MUJIN",
+        "LOUIS",
+        "IVAN",
+        "JAHAN"
+      ],
+      "fandomName": "KINGMAKER",
+      "naverNewsQuery": "더킹덤 The KingDom GF엔터테인먼트",
+      "koreanAliases": [
+        "더킹덤",
+        "킹덤"
+      ],
+      "englishAliases": [
+        "The KingDom",
+        "KINGDOM"
+      ],
+      "keywords": [
+        "GF Entertainment",
+        "GF엔터테인먼트",
+        "DANN",
+        "ARTHUR",
+        "MUJIN",
+        "LOUIS",
+        "IVAN",
+        "JAHAN",
+        "THE QUINQUENNIUM",
+        "KINGMAKER"
+      ],
+      "disambiguationKeywords": [
+        "GF Entertainment",
+        "GF엔터테인먼트",
+        "더킹덤",
+        "킹덤"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/kingdom/notice/33746"
+        },
+        {
+          "source": "The KingDom Weverse",
+          "url": "https://weverse.io/kingdom/highlight?hl=ko"
+        },
+        {
+          "source": "GF Entertainment / Weverse",
+          "url": "https://weverse.io/kingdom/notice/33410"
+        }
+      ]
     }
   ]
 }
