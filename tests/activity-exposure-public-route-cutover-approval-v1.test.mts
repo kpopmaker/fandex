@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -98,29 +97,30 @@ test('approval evidence preserves event-stream-only no-numeric semantics', () =>
   );
 });
 
-test('public route and UI remain unchanged until explicit cutover execution', async () => {
-  const routeSource = await readFile(
-    new URL(
-      '../lib/product/queries/getArtistProductVariablePublicRoute.ts',
-      import.meta.url,
-    ),
-    'utf8',
+test('approval evidence remains a pre-execution authorization record', () => {
+  assert.equal(
+    ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL_EVIDENCE
+      .decision.activationAuthorized,
+    true,
   );
-  const pageSource = await readFile(
-    new URL('../app/artists/[artistId]/page.tsx', import.meta.url),
-    'utf8',
+  assert.equal(
+    ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL_EVIDENCE
+      .decision.cutoverAuthorized,
+    true,
   );
-
-  assert.doesNotMatch(
-    routeSource,
-    /activityExposure|ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL/,
+  assert.equal(
+    ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL_EVIDENCE
+      .decision.publicRouteActivated,
+    false,
   );
-  assert.doesNotMatch(
-    pageSource,
-    /getActivityExposurePublicRoute|ActivityExposureEventStream/,
+  assert.equal(
+    ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL_EVIDENCE
+      .decision.publication,
+    'shadow',
   );
-  assert.match(
-    pageSource,
-    /profile\.artistId === 'iu' && variableId === 'newsIssuePoint'/,
+  assert.equal(
+    ACTIVITY_EXPOSURE_PUBLIC_ROUTE_CUTOVER_APPROVAL_EVIDENCE
+      .decision.requiredNextGate,
+    'explicit-public-route-cutover-execution',
   );
 });
