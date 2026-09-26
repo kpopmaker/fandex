@@ -347,7 +347,7 @@ export async function runNaverNewsMomentumVerifierExecutionChannel(
 
   const adaptVerifierOutput =
     dependencies.adaptVerifierOutput
-    ?? adaptFandexMomentumVerifierOutputToStoredEvidenceAttestationResearch;
+    ?? adaptFandexMomentumVerifierOutputToStoredEvidenceAttestationRuntime;
   const adapted = adaptVerifierOutput({
     snapshot: native.snapshot,
     verifierOutput: native.verifierOutput,
