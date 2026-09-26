@@ -57,6 +57,7 @@ jobs:
           python tests/artist-expansion-pledis-roster-adapter-v1.py
           python tests/artist-expansion-topmedia-roster-adapter-v1.py
           python tests/artist-expansion-rbw-japan-provider-catalog-v1.py
+          python tests/artist-expansion-belift-roster-adapter-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -154,6 +155,11 @@ jobs:
           python scripts/artist-expansion/collect_rbw_japan_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/rbw-japan-artist-catalog-2026-09-26.json \
             --output rbw_japan_provider_catalog_v1_latest.json
+      - name: Collect BELIFT LAB official music roster
+        run: |
+          python scripts/artist-expansion/collect_belift_agency_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/belift-official-roster-2026-09-26.json \
+            --output belift_agency_roster_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -189,6 +195,7 @@ jobs:
             --snapshot pledis_music_roster_v1_latest.json \
             --snapshot topmedia_music_roster_v1_latest.json \
             --snapshot rbw_japan_provider_catalog_v1_latest.json \
+            --snapshot belift_agency_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -246,6 +253,7 @@ jobs:
             pledis_music_roster_v1_latest.json
             topmedia_music_roster_v1_latest.json
             rbw_japan_provider_catalog_v1_latest.json
+            belift_agency_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

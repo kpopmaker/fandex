@@ -5334,6 +5334,50 @@
           "url": "https://secretofficial.jp/"
         }
       ]
+    },
+    {
+      "id": "evan",
+      "ticker": "EVAN",
+      "name": "EVAN",
+      "agency": "BELIFT LAB",
+      "entityType": "solo",
+      "debutDate": "2026-06-22",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "에반 EVAN 빌리프랩 가수",
+      "koreanAliases": [
+        "에반"
+      ],
+      "englishAliases": [
+        "EVAN"
+      ],
+      "keywords": [
+        "BELIFT LAB",
+        "빌리프랩",
+        "Ride or Die",
+        "DEATH OF ME",
+        "희승"
+      ],
+      "disambiguationKeywords": [
+        "BELIFT LAB",
+        "빌리프랩",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BELIFT LAB",
+          "url": "https://beliftlab.com/artist/profile/EVAN"
+        },
+        {
+          "source": "Melon",
+          "url": "https://www.melon.com/album/detail.htm?albumId=14522361"
+        }
+      ]
     }
   ]
 }

@@ -3640,6 +3640,35 @@
           "note": "Current official fan site is active in 2026; FANDEX keeps primary agency unresolved rather than inferring it from Japan management."
         }
       ]
+    },
+    {
+      "displayArtist": "EVAN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "former_enhypen_member_independent_solo_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "enhypen"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_belift_solo_profile_and_current_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BELIFT LAB",
+          "url": "https://beliftlab.com/artist/profile/EVAN",
+          "note": "Current official BELIFT LAB profile identifies EVAN as a solo artist and records a 2026-06-22 debut."
+        },
+        {
+          "source": "Weverse / BELIFT LAB",
+          "url": "https://weverse.io/evan/notice/36110",
+          "note": "Official BELIFT LAB notice documents EVAN's first digital single RIDE OR DIE released on 2026-06-22."
+        },
+        {
+          "source": "Yonhap News Agency",
+          "url": "https://www.yna.co.kr/view/AKR20260611154600005",
+          "note": "Contemporary report documents that former ENHYPEN member HEESEUNG began an independent solo identity under the activity name EVAN; FANDEX does not treat prior member credit as a solo alias."
+        }
+      ]
     }
   ]
 }

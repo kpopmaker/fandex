@@ -559,6 +559,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(sechskies.lifecycleStatus, 'inactive');
   assert.equal(sechskies.collection.tier, 'archive');
 
+  const evan = getArtistV4ById('evan');
+  assert.ok(evan);
+  assert.equal(evan.entityType, 'solo');
+  assert.equal(evan.agency, 'BELIFT LAB');
+  assert.equal(evan.debutDate, '2026-06-22');
+  assert.equal(evan.lifecycleStatus, 'active');
+  assert.ok(evan.profile.koreanAliases.includes('에반'));
+  assert.ok(!evan.profile.englishAliases.includes('HEESEUNG'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
