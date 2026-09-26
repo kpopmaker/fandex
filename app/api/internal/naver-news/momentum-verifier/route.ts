@@ -1,8 +1,10 @@
 import 'server-only';
 
 import {
+  isMomentumProductionVerifierExecutionAuthorizationHeaderValid,
+  isMomentumProductionVerifierExecutionRequestAuthorized,
   isMomentumProductionVerifierNativeExecutionAuthorized,
-} from '@/lib/server/ingestion/momentumProductionVerifierActivationApproval';
+} from '@/lib/server/ingestion/momentumNativeVerifierProductionExecutionAuthorization';
 import {
   runNaverNewsMomentumVerifierExecutionChannel,
   type NaverNewsMomentumVerifierExecutionChannelDependencies,
@@ -20,7 +22,17 @@ export async function handleNaverNewsMomentumVerifierExecutionRequest(
     if (
       request.method !== 'POST'
       || !isMomentumProductionVerifierNativeExecutionAuthorized()
+      || !isMomentumProductionVerifierExecutionAuthorizationHeaderValid(
+        request.headers.get('x-fandex-execution-authorization-id'),
+      )
     ) {
+      throw new Error(
+        'naver_news_momentum_verifier_execution_channel_rejected',
+      );
+    }
+
+    const requestBody: unknown = await request.json();
+    if (!isMomentumProductionVerifierExecutionRequestAuthorized(requestBody)) {
       throw new Error(
         'naver_news_momentum_verifier_execution_channel_rejected',
       );
@@ -30,7 +42,7 @@ export async function handleNaverNewsMomentumVerifierExecutionRequest(
       {
         environment,
         authorizationHeader: request.headers.get('authorization'),
-        requestBody: await request.json(),
+        requestBody,
       },
       dependencies,
     );
