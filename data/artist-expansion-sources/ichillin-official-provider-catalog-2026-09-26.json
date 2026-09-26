@@ -1,0 +1,62 @@
+{
+  "version": "ichillin_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "ichillin-official-current-music-identity-catalog",
+    "type": "provider_catalog",
+    "name": "ICHILLIN Official Current Music Identity Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://kment.kr/?page_id=2054"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "ICHILLIN'",
+      "aliases": [
+        "아이칠린",
+        "ICHILLIN"
+      ],
+      "evidence": [
+        {
+          "label": "KM Entertainment official ICHILLIN profile",
+          "url": "https://kment.kr/?page_id=2054"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ICHILLIN' J",
+      "aliases": [
+        "아이칠린 제이",
+        "아이칠린J",
+        "ICHILLIN J"
+      ],
+      "evidence": [
+        {
+          "label": "ICHILLIN official unit MV",
+          "url": "https://www.youtube.com/watch?v=C1ILOsm8Zmc"
+        },
+        {
+          "label": "ICHILLIN official unit visual teaser",
+          "url": "https://www.youtube.com/watch?v=2SkU72Hnj_8"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "parentGroupAndOfficialUnitOnly": true,
+    "unitMembersDoNotCreateSoloCanonicals": true,
+    "unitIdentityDoesNotReplaceParentGroup": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_group_and_unit_snapshot",
+    "verifiedFrom": [
+      "https://kment.kr/?page_id=2054",
+      "https://www.youtube.com/watch?v=C1ILOsm8Zmc",
+      "https://www.youtube.com/watch?v=2SkU72Hnj_8"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

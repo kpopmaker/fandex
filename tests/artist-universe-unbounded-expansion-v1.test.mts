@@ -713,6 +713,24 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(fiftyFifty.fandomName, 'TWENY');
   assert.ok(fiftyFifty.profile.koreanAliases.includes('피프티피프티'));
 
+  const ichillin = getArtistV4ById('ichillin');
+  assert.ok(ichillin);
+  assert.equal(ichillin.entityType, 'group');
+  assert.equal(ichillin.agency, 'KM Entertainment');
+  assert.equal(ichillin.debutDate, '2021-09-08');
+  assert.equal(ichillin.lifecycleStatus, 'active');
+  assert.deepEqual(ichillin.members, ['JIYOON', 'E.JI', 'JACKIE', 'JOONIE', 'CHAERIN', 'YEJU', 'CHOWON']);
+  assert.equal(ichillin.fandomName, 'WILLING');
+
+  const ichillinJ = getArtistV4ById('ichillinj');
+  assert.ok(ichillinJ);
+  assert.equal(ichillinJ.entityType, 'unit');
+  assert.equal(ichillinJ.agency, 'KM Entertainment');
+  assert.equal(ichillinJ.debutDate, '2026-09-02');
+  assert.equal(ichillinJ.lifecycleStatus, 'active');
+  assert.deepEqual(ichillinJ.members, ['E.JI', 'JOONIE', 'YEJU']);
+  assert.ok(ichillinJ.profile.koreanAliases.includes('아이칠린 제이'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

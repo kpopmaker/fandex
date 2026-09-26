@@ -6206,6 +6206,122 @@
           "url": "https://weverse.io/fiftyfifty/notice/37103?hl=ko"
         }
       ]
+    },
+    {
+      "id": "ichillin",
+      "ticker": "ICHILLIN",
+      "name": "ICHILLIN'",
+      "agency": "KM Entertainment",
+      "entityType": "group",
+      "debutDate": "2021-09-08",
+      "lifecycleStatus": "active",
+      "members": [
+        "JIYOON",
+        "E.JI",
+        "JACKIE",
+        "JOONIE",
+        "CHAERIN",
+        "YEJU",
+        "CHOWON"
+      ],
+      "fandomName": "WILLING",
+      "naverNewsQuery": "아이칠린 ICHILLIN KM엔터테인먼트",
+      "koreanAliases": [
+        "아이칠린"
+      ],
+      "englishAliases": [
+        "ICHILLIN'",
+        "ICHILLIN"
+      ],
+      "keywords": [
+        "KM Entertainment",
+        "KM엔터테인먼트",
+        "JIYOON",
+        "E.JI",
+        "JACKIE",
+        "JOONIE",
+        "CHAERIN",
+        "YEJU",
+        "CHOWON",
+        "WILLING",
+        "WILD CHERRY",
+        "XL (Extra Love)"
+      ],
+      "disambiguationKeywords": [
+        "KM Entertainment",
+        "KM엔터테인먼트",
+        "아이칠린"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "KM Entertainment",
+          "url": "https://kment.kr/?page_id=2054"
+        },
+        {
+          "source": "ICHILLIN Official YouTube",
+          "url": "https://www.youtube.com/c/ICHILLIN"
+        }
+      ]
+    },
+    {
+      "id": "ichillinj",
+      "ticker": "ICHILLINJ",
+      "name": "ICHILLIN' J",
+      "agency": "KM Entertainment",
+      "entityType": "unit",
+      "debutDate": "2026-09-02",
+      "lifecycleStatus": "active",
+      "members": [
+        "E.JI",
+        "JOONIE",
+        "YEJU"
+      ],
+      "fandomName": "WILLING",
+      "naverNewsQuery": "아이칠린 제이 ICHILLIN J Look At Me",
+      "koreanAliases": [
+        "아이칠린 제이",
+        "아이칠린J"
+      ],
+      "englishAliases": [
+        "ICHILLIN' J",
+        "ICHILLIN J"
+      ],
+      "keywords": [
+        "KM Entertainment",
+        "KM엔터테인먼트",
+        "E.JI",
+        "JOONIE",
+        "YEJU",
+        "Look At Me!",
+        "BANANA"
+      ],
+      "disambiguationKeywords": [
+        "ICHILLIN",
+        "아이칠린",
+        "KM Entertainment",
+        "KM엔터테인먼트"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "ICHILLIN Official YouTube",
+          "url": "https://www.youtube.com/watch?v=C1ILOsm8Zmc"
+        },
+        {
+          "source": "ICHILLIN Official YouTube",
+          "url": "https://www.youtube.com/watch?v=2SkU72Hnj_8"
+        }
+      ]
     }
   ]
 }
