@@ -674,6 +674,35 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(newbeat.members.length, 7);
   assert.ok(newbeat.profile.koreanAliases.includes('뉴비트'));
 
+  const nicole = getArtistV4ById('nicole');
+  assert.ok(nicole);
+  assert.equal(nicole.entityType, 'solo');
+  assert.equal(nicole.agency, 'iNKODE Entertainment');
+  assert.equal(nicole.lifecycleStatus, 'active');
+  assert.equal(nicole.debutDate, undefined);
+  assert.ok(nicole.profile.koreanAliases.includes('니콜'));
+
+  const sayMyName = getArtistV4ById('saymyname');
+  assert.ok(sayMyName);
+  assert.equal(sayMyName.entityType, 'group');
+  assert.equal(sayMyName.agency, 'iNKODE Entertainment');
+  assert.equal(sayMyName.debutDate, '2024-10-16');
+  assert.equal(sayMyName.members.length, 8);
+
+  const keyvitup = getArtistV4ById('keyvitup');
+  assert.ok(keyvitup);
+  assert.equal(keyvitup.entityType, 'group');
+  assert.equal(keyvitup.agency, 'iNKODE Entertainment');
+  assert.equal(keyvitup.debutDate, '2026-04-08');
+  assert.deepEqual(keyvitup.members, ['TAEHWAN', 'HYUNMIN', 'SENA', 'JAEIN', 'RUKIA']);
+
+  const vayonn = getArtistV4ById('vayonn');
+  assert.ok(vayonn);
+  assert.equal(vayonn.entityType, 'group');
+  assert.equal(vayonn.agency, 'iNKODE Entertainment');
+  assert.equal(vayonn.debutDate, '2026-07-06');
+  assert.deepEqual(vayonn.members, ['MASATO', 'SEN', 'AYANG', 'JINYU', 'TERU', 'MANO']);
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

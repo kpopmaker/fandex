@@ -5916,6 +5916,232 @@
           "url": "https://sssk-hd.com/contents/989299"
         }
       ]
+    },
+    {
+      "id": "nicole",
+      "ticker": "NICOLE",
+      "name": "NICOLE",
+      "agency": "iNKODE Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "니콜 NICOLE 인코드 가수",
+      "koreanAliases": [
+        "니콜"
+      ],
+      "englishAliases": [
+        "NICOLE",
+        "Nicole Jung",
+        "Nicole Yongju Jung"
+      ],
+      "keywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "KARA",
+        "카라",
+        "First Romance",
+        "YOU.F.O",
+        "Mysterious",
+        "5!6!7!8!"
+      ],
+      "disambiguationKeywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "KARA",
+        "카라",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/nicole.html"
+        }
+      ]
+    },
+    {
+      "id": "saymyname",
+      "ticker": "SAYMYNAME",
+      "name": "SAY MY NAME",
+      "agency": "iNKODE Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-10-16",
+      "lifecycleStatus": "active",
+      "members": [
+        "HITOMI",
+        "DOHEE",
+        "KANNY",
+        "SEUNGJOO",
+        "MEI",
+        "JUNHWI",
+        "SOHA",
+        "SHUIE"
+      ],
+      "naverNewsQuery": "세이마이네임 SAY MY NAME 인코드",
+      "koreanAliases": [
+        "세이마이네임"
+      ],
+      "englishAliases": [
+        "SAY MY NAME",
+        "Say My Name"
+      ],
+      "keywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "HITOMI",
+        "DOHEE",
+        "KANNY",
+        "SEUNGJOO",
+        "MEI",
+        "JUNHWI",
+        "SOHA",
+        "SHUIE",
+        "WaveWay",
+        "iLy",
+        "&Our Vibe"
+      ],
+      "disambiguationKeywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "세이마이네임"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/say_my_name.html"
+        },
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "source": "Weverse / iNKODE Entertainment",
+          "url": "https://weverse.io/saymyname/notice/38283"
+        }
+      ]
+    },
+    {
+      "id": "keyvitup",
+      "ticker": "KEYVITUP",
+      "name": "KEYVITUP",
+      "agency": "iNKODE Entertainment",
+      "entityType": "group",
+      "debutDate": "2026-04-08",
+      "lifecycleStatus": "active",
+      "members": [
+        "TAEHWAN",
+        "HYUNMIN",
+        "SENA",
+        "JAEIN",
+        "RUKIA"
+      ],
+      "naverNewsQuery": "키빗업 KEYVITUP 인코드",
+      "koreanAliases": [
+        "키빗업"
+      ],
+      "englishAliases": [
+        "KEYVITUP"
+      ],
+      "keywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "TAEHWAN",
+        "HYUNMIN",
+        "SENA",
+        "JAEIN",
+        "RUKIA",
+        "BEST ONE"
+      ],
+      "disambiguationKeywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "키빗업"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/keyvitup.html"
+        },
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/video.html"
+        }
+      ]
+    },
+    {
+      "id": "vayonn",
+      "ticker": "VAYONN",
+      "name": "VAYONN",
+      "agency": "iNKODE Entertainment",
+      "entityType": "group",
+      "debutDate": "2026-07-06",
+      "lifecycleStatus": "active",
+      "members": [
+        "MASATO",
+        "SEN",
+        "AYANG",
+        "JINYU",
+        "TERU",
+        "MANO"
+      ],
+      "naverNewsQuery": "베이온 VAYONN 인코드",
+      "koreanAliases": [
+        "베이온"
+      ],
+      "englishAliases": [
+        "VAYONN"
+      ],
+      "keywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "MASATO",
+        "SEN",
+        "AYANG",
+        "JINYU",
+        "TERU",
+        "MANO"
+      ],
+      "disambiguationKeywords": [
+        "iNKODE Entertainment",
+        "인코드엔터테인먼트",
+        "베이온"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/vayonn.html"
+        },
+        {
+          "source": "iNKODE JAPAN",
+          "url": "https://in-kode.jp/home/"
+        }
+      ]
     }
   ]
 }

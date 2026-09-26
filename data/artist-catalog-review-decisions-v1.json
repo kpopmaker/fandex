@@ -3953,6 +3953,96 @@
           "note": "Official site operator announcement identifies NEWBEAT as a seven-member group under BEAT INTERACTIVE."
         }
       ]
+    },
+    {
+      "displayArtist": "NICOLE",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "kara_member_independent_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "kara"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_inkode_solo_singer_directory_and_official_solo_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/artist.html",
+          "note": "Current iNKODE artist directory classifies NICOLE as a Solo Singer."
+        },
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/nicole.html",
+          "note": "Official NICOLE page documents independent Korean and Japanese solo discography. The page's 2007 career debut is not reused as a solo debut date."
+        }
+      ]
+    },
+    {
+      "displayArtist": "SAY MY NAME",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_inkode_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_inkode_girl_group_directory_official_member_profile_and_2026_fanclub_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/say_my_name.html",
+          "note": "Official profile records 2024-10-16 debut and current eight-member group identity."
+        },
+        {
+          "source": "Weverse / iNKODE Entertainment",
+          "url": "https://weverse.io/saymyname/notice/38283",
+          "note": "August 2026 official fanclub notice from iNKODE confirms continuing group activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KEYVITUP",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_inkode_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_inkode_boy_group_directory_official_member_profile_and_music_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/keyvitup.html",
+          "note": "Official profile records 2026-04-08 debut and five-member group identity."
+        },
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/video.html",
+          "note": "Official video catalog contains current KEYVITUP music and performance videos."
+        }
+      ]
+    },
+    {
+      "displayArtist": "VAYONN",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_inkode_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_inkode_boy_group_directory_official_member_profile_and_2026_japan_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "iNKODE Entertainment",
+          "url": "https://www.in-kode.com/vayonn.html",
+          "note": "Official profile records 2026-07-06 debut and six-member group identity."
+        },
+        {
+          "source": "iNKODE JAPAN",
+          "url": "https://in-kode.jp/home/",
+          "note": "Current official Japan site carries September 2026 VAYONN fanmeeting activity."
+        }
+      ]
     }
   ]
 }

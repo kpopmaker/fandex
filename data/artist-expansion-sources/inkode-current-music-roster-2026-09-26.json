@@ -1,0 +1,114 @@
+{
+  "version": "inkode_current_music_roster_adapter_v1",
+  "source": {
+    "id": "inkode-current-official-music-roster",
+    "type": "agency_roster",
+    "name": "iNKODE Current Official Music Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.in-kode.com/artist.html"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "KIM JAEJOONG",
+      "aliases": [
+        "김재중",
+        "JAEJOONG"
+      ],
+      "evidence": [
+        {
+          "label": "iNKODE current official artist directory",
+          "url": "https://www.in-kode.com/artist.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NICOLE",
+      "aliases": [
+        "니콜"
+      ],
+      "evidence": [
+        {
+          "label": "iNKODE current official artist directory",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "label": "iNKODE official artist detail",
+          "url": "https://www.in-kode.com/nicole.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SAY MY NAME",
+      "aliases": [
+        "세이마이네임"
+      ],
+      "evidence": [
+        {
+          "label": "iNKODE current official artist directory",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "label": "iNKODE official artist detail",
+          "url": "https://www.in-kode.com/say_my_name.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KEYVITUP",
+      "aliases": [
+        "키빗업"
+      ],
+      "evidence": [
+        {
+          "label": "iNKODE current official artist directory",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "label": "iNKODE official artist detail",
+          "url": "https://www.in-kode.com/keyvitup.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "VAYONN",
+      "aliases": [
+        "베이온"
+      ],
+      "evidence": [
+        {
+          "label": "iNKODE current official artist directory",
+          "url": "https://www.in-kode.com/artist.html"
+        },
+        {
+          "label": "iNKODE official artist detail",
+          "url": "https://www.in-kode.com/vayonn.html"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicIdentitiesOnly": true,
+    "exactCurrentDirectoryRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "careerDebutDoesNotAutomaticallyEqualSoloDebut": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_roster_snapshot",
+    "verifiedFrom": [
+      "https://www.in-kode.com/artist.html",
+      "https://www.in-kode.com/nicole.html",
+      "https://www.in-kode.com/say_my_name.html",
+      "https://www.in-kode.com/keyvitup.html",
+      "https://www.in-kode.com/vayonn.html",
+      "https://www.in-kode.com/video.html",
+      "https://in-kode.jp/home/",
+      "https://weverse.io/saymyname/notice/38283"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
