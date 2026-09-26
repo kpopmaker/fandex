@@ -4224,6 +4224,28 @@
           "note": "Official company history records VERIVERY 2025 single Lost and Found and 2026 Kangmin activity under the VERIVERY identity."
         }
       ]
+    },
+    {
+      "displayArtist": "idntt",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_modhaus_parent_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_idntt_modhaus_site_current_group_mv_and_modhaus_owned_cosmo_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "idntt Official",
+          "url": "https://www.idntt-cosmo.com/",
+          "note": "Current official idntt site displays the group identity, current Kids Return MV, and Modhaus ownership footer."
+        },
+        {
+          "source": "Cosmo Official Web Shop",
+          "url": "https://shop.cosmo.fans/en/shop/list",
+          "note": "Modhaus-operated Cosmo shop currently carries idntt catalog items and identifies Modhaus Inc. as the operator."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "version": "idntt_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "idntt-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "idntt Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.idntt-cosmo.com/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "idntt",
+      "aliases": [
+        "아이덴티티",
+        "IDNTT"
+      ],
+      "evidence": [
+        {
+          "label": "idntt current official site",
+          "url": "https://www.idntt-cosmo.com/"
+        },
+        {
+          "label": "Modhaus-operated Cosmo current catalog",
+          "url": "https://shop.cosmo.fans/en/shop/list"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleParentGroupIdentityOnly": true,
+    "currentMusicActivityEvidenceRequired": true,
+    "unitDebutDoesNotEqualParentGroupDebut": true,
+    "plannedFinalMemberCountDoesNotEqualCurrentLineup": true,
+    "unitMembersDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.idntt-cosmo.com/",
+      "https://shop.cosmo.fans/en/shop/list"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

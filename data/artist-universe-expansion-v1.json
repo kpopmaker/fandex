@@ -6524,6 +6524,52 @@
           "url": "https://www.jelly-fish.co.kr/sub/company.html"
         }
       ]
+    },
+    {
+      "id": "idntt",
+      "ticker": "IDNTT",
+      "name": "idntt",
+      "agency": "MODHAUS",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "아이덴티티 idntt 모드하우스",
+      "koreanAliases": [
+        "아이덴티티"
+      ],
+      "englishAliases": [
+        "idntt",
+        "IDNTT"
+      ],
+      "keywords": [
+        "MODHAUS",
+        "모드하우스",
+        "Kids Return",
+        "unevermet",
+        "yesweare",
+        "itsnotover",
+        "Cosmo"
+      ],
+      "disambiguationKeywords": [
+        "MODHAUS",
+        "모드하우스",
+        "아이덴티티"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "idntt Official",
+          "url": "https://www.idntt-cosmo.com/"
+        },
+        {
+          "source": "Cosmo Official Web Shop",
+          "url": "https://shop.cosmo.fans/en/shop/list"
+        }
+      ]
     }
   ]
 }
