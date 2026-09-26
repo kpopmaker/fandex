@@ -38,10 +38,14 @@ jobs:
           diff -u /tmp/allowed.txt /tmp/changed.txt
       - run: npm ci
       - name: Momentum runtime regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
         run: npx tsx --test tests/momentum-native-verifier-current-main-v1.test.mts
       - name: Activity Exposure Production regression
         run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
       - name: Live Neon historical verifier replay
+        env:
+          NODE_OPTIONS: --conditions=react-server
         run: |
           npx tsx -e "
             import { runNaverNewsMomentumNativeVerifier } from './lib/server/ingestion/naverNewsMomentumNativeVerifier.ts';
