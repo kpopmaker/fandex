@@ -172,6 +172,11 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'orangecaramel',
     'bumzu',
     'nuest',
+    'oddyouth',
+    'mcnd',
+    'teentop',
+    'up10tion',
+    '100percent',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -180,6 +185,41 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  const oddYouth = getArtistV4ById('oddyouth');
+  assert.ok(oddYouth);
+  assert.equal(oddYouth.entityType, 'group');
+  assert.equal(oddYouth.agency, 'TOP Media');
+  assert.equal(oddYouth.debutDate, '2024-11-01');
+  assert.equal(oddYouth.members.length, 5);
+
+  const mcnd = getArtistV4ById('mcnd');
+  assert.ok(mcnd);
+  assert.equal(mcnd.entityType, 'group');
+  assert.equal(mcnd.agency, 'TOP Media');
+  assert.equal(mcnd.debutDate, '2020-02-27');
+  assert.equal(mcnd.members.length, 5);
+
+  const teenTop = getArtistV4ById('teentop');
+  assert.ok(teenTop);
+  assert.equal(teenTop.lifecycleStatus, 'active');
+  assert.equal(teenTop.agency, '');
+  assert.equal(teenTop.agencyStatus, 'unresolved');
+  assert.deepEqual(teenTop.members, ['CHUNJI', 'NIEL', 'RICKY', 'CHANGJO']);
+
+  const up10tion = getArtistV4ById('up10tion');
+  assert.ok(up10tion);
+  assert.equal(up10tion.lifecycleStatus, 'hiatus');
+  assert.equal(up10tion.agency, '');
+  assert.equal(up10tion.agencyStatus, 'unresolved');
+  assert.equal(up10tion.members.length, 7);
+
+  const hundredPercent = getArtistV4ById('100percent');
+  assert.ok(hundredPercent);
+  assert.equal(hundredPercent.lifecycleStatus, 'inactive');
+  assert.equal(hundredPercent.agency, 'TOP Media');
+  assert.equal(hundredPercent.agencyStatus, 'historical');
+  assert.equal(hundredPercent.collection.tier, 'archive');
 
   for (const artistId of ['afterschool', 'orangecaramel', 'nuest']) {
     const artist = getArtistV4ById(artistId);

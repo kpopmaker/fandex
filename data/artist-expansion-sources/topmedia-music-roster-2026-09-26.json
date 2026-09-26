@@ -1,0 +1,90 @@
+{
+  "version": "topmedia_music_identity_roster_adapter_v1",
+  "source": {
+    "id": "topmedia-official-music-identity-roster",
+    "type": "agency_roster",
+    "name": "TOP Media Official Music Identity Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "ODD YOUTH",
+      "aliases": [
+        "오드유스"
+      ],
+      "evidence": [
+        {
+          "label": "TOP Media official artist identity roster",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=ODDYOUTH_profile"
+        }
+      ]
+    },
+    {
+      "displayArtist": "MCND",
+      "aliases": [
+        "엠씨엔디"
+      ],
+      "evidence": [
+        {
+          "label": "TOP Media official artist identity roster",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TEEN TOP",
+      "aliases": [
+        "틴탑"
+      ],
+      "evidence": [
+        {
+          "label": "TOP Media official artist identity roster",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        }
+      ]
+    },
+    {
+      "displayArtist": "UP10TION",
+      "aliases": [
+        "업텐션"
+      ],
+      "evidence": [
+        {
+          "label": "TOP Media official artist identity roster",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        }
+      ]
+    },
+    {
+      "displayArtist": "100%",
+      "aliases": [
+        "백퍼센트",
+        "100PERCENT"
+      ],
+      "evidence": [
+        {
+          "label": "TOP Media official artist identity roster",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "identityRosterIsNotLifecycleTruth": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://www.itopgroup.com/",
+      "https://www.itopgroup.com/bbs/page.php?hid=MCND",
+      "https://www.itopgroup.com/bbs/page.php?hid=ODDYOUTH_profile"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

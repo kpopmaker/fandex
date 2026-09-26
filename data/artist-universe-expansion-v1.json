@@ -4639,6 +4639,257 @@
           "url": "https://weverse.io/nuest/notice/2244"
         }
       ]
+    },
+    {
+      "id": "oddyouth",
+      "ticker": "ODDYOUTH",
+      "name": "ODD YOUTH",
+      "agency": "TOP Media",
+      "entityType": "group",
+      "debutDate": "2024-11-01",
+      "lifecycleStatus": "active",
+      "members": [
+        "SUMMER",
+        "MYAH",
+        "MAIKA",
+        "KANIE",
+        "YE EUM"
+      ],
+      "naverNewsQuery": "오드유스 ODD YOUTH",
+      "koreanAliases": [
+        "오드유스"
+      ],
+      "englishAliases": [
+        "ODD YOUTH",
+        "Odd Youth"
+      ],
+      "keywords": [
+        "TOP Media",
+        "티오피미디어",
+        "can't go back",
+        "Baby Face"
+      ],
+      "disambiguationKeywords": [
+        "TOP Media",
+        "오드유스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=ODDYOUTH_profile"
+        },
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/"
+        }
+      ]
+    },
+    {
+      "id": "mcnd",
+      "ticker": "MCND",
+      "name": "MCND",
+      "agency": "TOP Media",
+      "entityType": "group",
+      "debutDate": "2020-02-27",
+      "lifecycleStatus": "active",
+      "members": [
+        "CASTLE J",
+        "BIC",
+        "MINJAE",
+        "HUIJUN",
+        "WIN"
+      ],
+      "fandomName": "GEM",
+      "naverNewsQuery": "MCND 엠씨엔디",
+      "koreanAliases": [
+        "엠씨엔디"
+      ],
+      "englishAliases": [
+        "MCND"
+      ],
+      "keywords": [
+        "TOP Media",
+        "Devil Youth Club",
+        "ICE AGE",
+        "GEM"
+      ],
+      "disambiguationKeywords": [
+        "TOP Media",
+        "MCND"
+      ],
+      "markets": [
+        "KR",
+        "EU",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        },
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/"
+        }
+      ]
+    },
+    {
+      "id": "teentop",
+      "ticker": "TEENTOP",
+      "name": "TEEN TOP",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "CHUNJI",
+        "NIEL",
+        "RICKY",
+        "CHANGJO"
+      ],
+      "fandomName": "ANGEL",
+      "naverNewsQuery": "틴탑 TEEN TOP",
+      "koreanAliases": [
+        "틴탑"
+      ],
+      "englishAliases": [
+        "TEEN TOP",
+        "TEENTOP"
+      ],
+      "keywords": [
+        "TEEN TOP",
+        "틴탑",
+        "Cherry Pie",
+        "ANGEL"
+      ],
+      "disambiguationKeywords": [
+        "TEEN TOP",
+        "틴탑"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://itopgroup.com/bbs/board.php?bo_table=teentop_multimedia"
+        },
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        }
+      ]
+    },
+    {
+      "id": "up10tion",
+      "ticker": "UP10TION",
+      "name": "UP10TION",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "lifecycleStatus": "hiatus",
+      "members": [
+        "KUHN",
+        "KOGYEOL",
+        "BITTO",
+        "SUNYOUL",
+        "GYUJIN",
+        "HWANHEE",
+        "XIAO"
+      ],
+      "fandomName": "HONEY10",
+      "naverNewsQuery": "업텐션 UP10TION",
+      "koreanAliases": [
+        "업텐션"
+      ],
+      "englishAliases": [
+        "UP10TION"
+      ],
+      "keywords": [
+        "UP10TION",
+        "업텐션",
+        "HONEY10"
+      ],
+      "disambiguationKeywords": [
+        "UP10TION",
+        "업텐션"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        },
+        {
+          "source": "TOP Media statement reference",
+          "url": "https://www.soompi.com/article/1569403wpp/5-up10tion-members-and-lee-jin-hyuk-leave-top-media-up10tion-to-continue-as-7-members"
+        }
+      ]
+    },
+    {
+      "id": "100percent",
+      "ticker": "100PERCENT",
+      "name": "100%",
+      "agency": "TOP Media",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "ROCKHYUN",
+        "JONGHWAN",
+        "CHANYONG",
+        "HYUKJIN"
+      ],
+      "fandomName": "PERFECTION",
+      "naverNewsQuery": "백퍼센트 100% 그룹",
+      "koreanAliases": [
+        "백퍼센트"
+      ],
+      "englishAliases": [
+        "100%",
+        "100PERCENT",
+        "100 Percent"
+      ],
+      "keywords": [
+        "TOP Media",
+        "백퍼센트",
+        "PERFECTION"
+      ],
+      "disambiguationKeywords": [
+        "TOP Media",
+        "백퍼센트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND"
+        },
+        {
+          "source": "TOP Media disbandment statement reference",
+          "url": "https://www.soompi.com/article/1489816wpp/100-announces-disbandment"
+        }
+      ]
     }
   ]
 }

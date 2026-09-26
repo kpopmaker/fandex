@@ -3335,6 +3335,116 @@
           "note": "PLEDIS announced official NU'EST social, website, fan cafe, Weverse, YouTube, and V LIVE updates would cease from March 31, 2022 while channels remain as archives."
         }
       ]
+    },
+    {
+      "displayArtist": "ODD YOUTH",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_topmedia_active_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_topmedia_roster_and_2026_korean_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=ODDYOUTH_profile",
+          "note": "Official TOP Media profile lists the five current ODD YOUTH members."
+        },
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/shop/item.php?it_id=1787708551",
+          "note": "Official TOP Media site lists ODD YOUTH's 2026-08-19 release 'can't go back'."
+        }
+      ]
+    },
+    {
+      "displayArtist": "MCND",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_topmedia_active_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_topmedia_roster_and_2026_current_album_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND",
+          "note": "Official TOP Media profile lists MCND as an artist identity."
+        },
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/",
+          "note": "Official homepage lists MCND's 7th mini album 'Devil Youth Club' with 2026-09-10 release date."
+        }
+      ]
+    },
+    {
+      "displayArtist": "TEEN TOP",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "active_four_member_group_identity_with_management_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_topmedia_identity_roster_and_recent_group_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://itopgroup.com/bbs/board.php?bo_table=teentop_multimedia",
+          "note": "TOP Media's official TEEN TOP multimedia page includes the group's 2025 'Cherry Pie' MV."
+        },
+        {
+          "source": "TOP Media statement reference",
+          "url": "https://www.soompi.com/article/1633891wpp/teen-tops-ricky-and-chunji-part-ways-with-top-media-to-continue-group-activities",
+          "note": "TOP Media stated the four members would continue TEEN TOP group activities after all individual exclusive contracts ended; FANDEX therefore keeps group management explicitly unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "UP10TION",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "seven_member_group_identity_preserved_with_current_management_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_topmedia_identity_roster_and_non_disbandment_statement",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND",
+          "note": "TOP Media's current site retains UP10TION in the artist identity roster."
+        },
+        {
+          "source": "TOP Media statement reference",
+          "url": "https://www.soompi.com/article/1569403wpp/5-up10tion-members-and-lee-jin-hyuk-leave-top-media-up10tion-to-continue-as-7-members",
+          "note": "TOP Media stated UP10TION would remain as a seven-member group despite contract expirations. No current 2026 activity or exclusive group agency is inferred; lifecycle is hiatus and agency unresolved."
+        }
+      ]
+    },
+    {
+      "displayArtist": "100%",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "disbanded_group_archive_identity_with_historical_agency_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_topmedia_historical_group_identity_and_disbandment_statement",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TOP Media",
+          "url": "https://www.itopgroup.com/bbs/page.php?hid=MCND",
+          "note": "TOP Media retains 100% in its artist identity navigation."
+        },
+        {
+          "source": "TOP Media disbandment statement reference",
+          "url": "https://www.soompi.com/article/1489816wpp/100-announces-disbandment",
+          "note": "TOP Media announced 100%'s activities ended in 2021; FANDEX stores TOP Media only as historical agency provenance."
+        }
+      ]
     }
   ]
 }
