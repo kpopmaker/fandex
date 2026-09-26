@@ -6142,6 +6142,70 @@
           "url": "https://in-kode.jp/home/"
         }
       ]
+    },
+    {
+      "id": "fiftyfifty",
+      "ticker": "FIFTYFIFTY",
+      "name": "FIFTY FIFTY",
+      "agency": "ATTRAKT",
+      "entityType": "group",
+      "debutDate": "2022-11-18",
+      "lifecycleStatus": "active",
+      "members": [
+        "KEENA",
+        "CHANELLE MOON",
+        "YEWON",
+        "HANA",
+        "ATHENA"
+      ],
+      "fandomName": "TWENY",
+      "naverNewsQuery": "피프티피프티 FIFTY FIFTY 어트랙트",
+      "koreanAliases": [
+        "피프티피프티",
+        "피프티 피프티"
+      ],
+      "englishAliases": [
+        "FIFTY FIFTY",
+        "FIFTYFIFTY"
+      ],
+      "keywords": [
+        "ATTRAKT",
+        "어트랙트",
+        "KEENA",
+        "CHANELLE MOON",
+        "YEWON",
+        "HANA",
+        "ATHENA",
+        "TWENY",
+        "Like a Bubble",
+        "Imperfect-I'mperfect"
+      ],
+      "disambiguationKeywords": [
+        "ATTRAKT",
+        "어트랙트",
+        "피프티피프티"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "ATTRAKT",
+          "url": "https://www.theattrakt.com/en/artist/list.php"
+        },
+        {
+          "source": "FIFTY FIFTY Weverse",
+          "url": "https://weverse.io/fiftyfifty/highlight"
+        },
+        {
+          "source": "ATTRAKT / FIFTY FIFTY Weverse",
+          "url": "https://weverse.io/fiftyfifty/notice/37103?hl=ko"
+        }
+      ]
     }
   ]
 }

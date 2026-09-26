@@ -1,0 +1,57 @@
+{
+  "version": "attrakt_current_fiftyfifty_roster_adapter_v1",
+  "source": {
+    "id": "attrakt-current-fiftyfifty-roster",
+    "type": "agency_roster",
+    "name": "ATTRAKT Current FIFTY FIFTY Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.theattrakt.com/en/artist/list.php"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "FIFTY FIFTY",
+      "aliases": [
+        "피프티피프티",
+        "피프티 피프티",
+        "FIFTYFIFTY"
+      ],
+      "evidence": [
+        {
+          "label": "ATTRAKT current official artist directory",
+          "url": "https://www.theattrakt.com/en/artist/list.php"
+        },
+        {
+          "label": "FIFTY FIFTY current official profile",
+          "url": "https://weverse.io/fiftyfifty/highlight"
+        },
+        {
+          "label": "ATTRAKT current 2026 FIFTY FIFTY activity",
+          "url": "https://weverse.io/fiftyfifty/notice/37103?hl=ko"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "exactCurrentDirectoryRequired": true,
+    "currentLineupEvidenceRequired": true,
+    "memberHiatusDoesNotOverrideGroupLifecycle": true,
+    "formerMemberIdentityDoesNotReplaceCurrentGroupIdentity": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_roster_snapshot",
+    "verifiedFrom": [
+      "https://www.theattrakt.com/en/artist/list.php",
+      "https://www.theattrakt.com/en/artist/view.php?artistSeq=9",
+      "https://weverse.io/fiftyfifty/highlight",
+      "https://weverse.io/fiftyfifty/notice/37103?hl=ko",
+      "https://weverse.io/fiftyfifty/notice/35566"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

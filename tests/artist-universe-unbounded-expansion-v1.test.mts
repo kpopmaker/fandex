@@ -703,6 +703,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(vayonn.debutDate, '2026-07-06');
   assert.deepEqual(vayonn.members, ['MASATO', 'SEN', 'AYANG', 'JINYU', 'TERU', 'MANO']);
 
+  const fiftyFifty = getArtistV4ById('fiftyfifty');
+  assert.ok(fiftyFifty);
+  assert.equal(fiftyFifty.entityType, 'group');
+  assert.equal(fiftyFifty.agency, 'ATTRAKT');
+  assert.equal(fiftyFifty.debutDate, '2022-11-18');
+  assert.equal(fiftyFifty.lifecycleStatus, 'active');
+  assert.deepEqual(fiftyFifty.members, ['KEENA', 'CHANELLE MOON', 'YEWON', 'HANA', 'ATHENA']);
+  assert.equal(fiftyFifty.fandomName, 'TWENY');
+  assert.ok(fiftyFifty.profile.koreanAliases.includes('피프티피프티'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

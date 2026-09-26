@@ -4043,6 +4043,38 @@
           "note": "Current official Japan site carries September 2026 VAYONN fanmeeting activity."
         }
       ]
+    },
+    {
+      "displayArtist": "FIFTY FIFTY",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_attrakt_group_identity_with_lineup_continuity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_attrakt_artist_directory_current_five_member_official_profile_and_2026_music_fancon_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "ATTRAKT",
+          "url": "https://www.theattrakt.com/en/artist/list.php",
+          "note": "Current ATTRAKT artist directory lists FIFTY FIFTY as its artist."
+        },
+        {
+          "source": "FIFTY FIFTY Weverse",
+          "url": "https://weverse.io/fiftyfifty/highlight",
+          "note": "Current official FIFTY FIFTY profile surface identifies KEENA, CHANELLE MOON, YEWON, HANA, and ATHENA."
+        },
+        {
+          "source": "ATTRAKT / FIFTY FIFTY Weverse",
+          "url": "https://weverse.io/fiftyfifty/notice/37103?hl=ko",
+          "note": "Official 2026 Seoul Asia Fancon notice confirms continuing group activity."
+        },
+        {
+          "source": "ATTRAKT / FIFTY FIFTY Weverse",
+          "url": "https://weverse.io/fiftyfifty/notice/35566",
+          "note": "Official 2026 comeback notice treats HANA's temporary hiatus as member-level activity status while the group continues promotions."
+        }
+      ]
     }
   ]
 }
