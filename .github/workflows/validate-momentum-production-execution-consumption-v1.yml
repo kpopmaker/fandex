@@ -1,0 +1,53 @@
+name: Validate Momentum Production execution consumption v1
+
+on:
+  push:
+    branches:
+      - work/momentum-native-verifier-production-execution-consumption-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 55a962cf9ca1e6260b0ce99858af8021ef8d6b4b...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-production-execution-consumption-v1.yml
+          lib/server/ingestion/momentumNativeVerifierProductionExecutionAuthorization.ts
+          tests/momentum-native-verifier-production-execution-authorization-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Consumed execution authorization regression
+        run: npx tsx --test tests/momentum-native-verifier-production-execution-authorization-v1.test.mts
+
+      - name: Activation regression
+        run: npx tsx --test tests/momentum-production-verifier-activation-approval-v1.test.mts
+
+      - name: Momentum verifier regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-native-verifier-current-main-v1.test.mts
+
+      - name: Activity Exposure Production regression
+        run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
