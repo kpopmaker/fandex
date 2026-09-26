@@ -32,13 +32,16 @@ export async function getMomentumEvidenceConsensusShadowProductForIU():
   const jsonl = await readIUArtifact();
 
   if (jsonl === null) {
+    const issues = Object.freeze([
+      Object.freeze({
+        code: 'runtime-read-failed' as const,
+      }),
+    ]) as readonly [
+      Readonly<{ code: 'runtime-read-failed' }>,
+    ];
     return Object.freeze({
       status: 'data-issue' as const,
-      issues: Object.freeze([
-        Object.freeze({
-          code: 'runtime-read-failed' as const,
-        }),
-      ]),
+      issues,
       previewFallbackUsed: false as const,
       productMetricReadPerformed: false as const,
     });
