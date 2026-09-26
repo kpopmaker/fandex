@@ -1,0 +1,35 @@
+name: Validate Activity Exposure public-route cutover candidate v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-public-route-cutover-candidate-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Activity Exposure cutover contract tests
+        run: >
+          npx tsx --test
+          tests/activity-exposure-activation-authorization-v1.test.mts
+          tests/activity-exposure-production-activation-approval-v1.test.mts
+          tests/activity-exposure-production-readiness-v1.test.mts
+          tests/product-activity-exposure-contract-v1.test.mts
+      - name: Live Neon cutover candidate audit
+        run: npx tsx scripts/validation/activityExposurePublicRouteCutoverCandidateV1.ts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
