@@ -1,0 +1,53 @@
+{
+  "version": "onepact_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "onepact-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "ONE PACT Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://onepact.bstage.in/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ONE PACT",
+      "aliases": [
+        "원팩트",
+        "ONEPACT"
+      ],
+      "evidence": [
+        {
+          "label": "ARMADA current official site",
+          "url": "https://armada-ent.com/"
+        },
+        {
+          "label": "ONE PACT current official platform",
+          "url": "https://onepact.bstage.in/"
+        },
+        {
+          "label": "ARMADA current 2026 group activity",
+          "url": "https://artist.mnetplus.world/main/stg/0nepact/surveys/6a68b2de8f20217aae9945aa"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentActivityEvidenceRequired": true,
+    "memberLineupNotInferredWithoutCurrentOfficialRoster": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://armada-ent.com/",
+      "https://onepact.bstage.in/",
+      "https://artist.mnetplus.world/main/stg/0nepact/surveys/6a68b2de8f20217aae9945aa"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

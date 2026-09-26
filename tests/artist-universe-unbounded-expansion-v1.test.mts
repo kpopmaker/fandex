@@ -774,6 +774,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(idntt.profile.koreanAliases.includes('아이덴티티'));
   assert.ok(idntt.profile.englishAliases.includes('idntt'));
 
+  const onePact = getArtistV4ById('onepact');
+  assert.ok(onePact);
+  assert.equal(onePact.entityType, 'group');
+  assert.equal(onePact.agency, 'ARMADA ENT');
+  assert.equal(onePact.debutDate, '2023-11-30');
+  assert.equal(onePact.lifecycleStatus, 'active');
+  assert.equal(onePact.members.length, 0);
+  assert.ok(onePact.profile.koreanAliases.includes('원팩트'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

@@ -6570,6 +6570,56 @@
           "url": "https://shop.cosmo.fans/en/shop/list"
         }
       ]
+    },
+    {
+      "id": "onepact",
+      "ticker": "ONEPACT",
+      "name": "ONE PACT",
+      "agency": "ARMADA ENT",
+      "entityType": "group",
+      "debutDate": "2023-11-30",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "원팩트 ONE PACT ARMADA ENT",
+      "koreanAliases": [
+        "원팩트"
+      ],
+      "englishAliases": [
+        "ONE PACT",
+        "ONEPACT"
+      ],
+      "keywords": [
+        "ARMADA ENT",
+        "ARMADA Entertainment",
+        "&HEART",
+        "TUNED IN",
+        "U so hot",
+        "1'ONLY"
+      ],
+      "disambiguationKeywords": [
+        "ARMADA ENT",
+        "원팩트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "ARMADA ENT",
+          "url": "https://armada-ent.com/"
+        },
+        {
+          "source": "ONE PACT Official Platform",
+          "url": "https://onepact.bstage.in/"
+        },
+        {
+          "source": "ARMADA ENT / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/0nepact/surveys/6a68b2de8f20217aae9945aa"
+        }
+      ]
     }
   ]
 }

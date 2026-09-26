@@ -4246,6 +4246,38 @@
           "note": "Modhaus-operated Cosmo shop currently carries idntt catalog items and identifies Modhaus Inc. as the operator."
         }
       ]
+    },
+    {
+      "displayArtist": "ONE PACT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_armada_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "armada_official_site_official_group_platform_and_2026_armada_managed_broadcast_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "ARMADA ENT",
+          "url": "https://armada-ent.com/",
+          "note": "Current ARMADA official site presents the ONE PACT name concept and ARMADA contact identity."
+        },
+        {
+          "source": "ONE PACT Official Platform",
+          "url": "https://onepact.bstage.in/",
+          "note": "Current official ONE PACT platform remains active."
+        },
+        {
+          "source": "ARMADA ENT / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/0nepact/surveys/6a68b2de8f20217aae9945aa",
+          "note": "ARMADA ENT official notice confirms ONE PACT M Countdown activity on 2026-07-30."
+        },
+        {
+          "source": "Korea Times",
+          "url": "https://www.koreatimes.co.kr/entertainment/k-pop/20231201/one-pact-debuts-hoping-to-leave-big-impact-on-k-pop-scene",
+          "note": "Contemporary debut report records the 2023-11-30 debut under ARMADA ENT."
+        }
+      ]
     }
   ]
 }
