@@ -4342,6 +4342,38 @@
           "note": "143 Entertainment's December 2025 notice states Yeseo and Suhye suspended activities while MADEIN continues promotions as four; this is treated as promotion-lineup status rather than automatic membership removal."
         }
       ]
+    },
+    {
+      "displayArtist": "WAKER",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_howling_group_identity_and_full_roster_renewal_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_2026_howling_full_group_contract_renewal_and_current_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Howling Entertainment / WAKER Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/6a9e383cdc57f3123077b548",
+          "note": "Official 2026-09-07 notice states all WAKER members renewed exclusive contracts with Howling Entertainment."
+        },
+        {
+          "source": "WAKER Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/695e0f9f7dd68046c78e00ba",
+          "note": "Official 2026-01-08 activity notice records the WAKER single LiKE THAT and third mini album activity."
+        },
+        {
+          "source": "Howling Entertainment / WAKER Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/69f581408c35c558d12746e1",
+          "note": "Official May 2026 notice treats Sebeom's health-related non-participation as member-level status while WAKER continues group activity."
+        },
+        {
+          "source": "KBS WORLD",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=448560&id=&lang=k&menu_cate=enternews&page=",
+          "note": "Contemporary KBS report records WAKER's official debut on 2024-01-08."
+        }
+      ]
     }
   ]
 }

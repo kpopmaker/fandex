@@ -6751,6 +6751,56 @@
           "url": "https://mabyjapan.jp/schedule"
         }
       ]
+    },
+    {
+      "id": "waker",
+      "ticker": "WAKER",
+      "name": "WAKER",
+      "agency": "Howling Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-01-08",
+      "lifecycleStatus": "active",
+      "fandomName": "Sleeper",
+      "naverNewsQuery": "웨이커 WAKER 하울링엔터테인먼트",
+      "koreanAliases": [
+        "웨이커"
+      ],
+      "englishAliases": [
+        "WAKER"
+      ],
+      "keywords": [
+        "Howling Entertainment",
+        "하울링엔터테인먼트",
+        "Sleeper",
+        "LiKE THAT",
+        "In Elixir: Spellbound",
+        "WAKER CRUSH"
+      ],
+      "disambiguationKeywords": [
+        "Howling Entertainment",
+        "하울링엔터테인먼트",
+        "웨이커"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WAKER Official / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/6a9e383cdc57f3123077b548"
+        },
+        {
+          "source": "WAKER Official / Mnet Plus",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/695e0f9f7dd68046c78e00ba"
+        },
+        {
+          "source": "KBS WORLD",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=448560&id=&lang=k&menu_cate=enternews&page="
+        }
+      ]
     }
   ]
 }

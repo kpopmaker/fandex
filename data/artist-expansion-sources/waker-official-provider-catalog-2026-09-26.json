@@ -1,0 +1,53 @@
+{
+  "version": "waker_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "waker-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "WAKER Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://artist.mnetplus.world/main/stg/waker/contents/6a9e383cdc57f3123077b548"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "WAKER",
+      "aliases": [
+        "웨이커"
+      ],
+      "evidence": [
+        {
+          "label": "Howling Entertainment current full-group renewal notice",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/6a9e383cdc57f3123077b548"
+        },
+        {
+          "label": "WAKER official 2026 music activity",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/695e0f9f7dd68046c78e00ba"
+        },
+        {
+          "label": "Howling member-level hiatus notice",
+          "url": "https://artist.mnetplus.world/main/stg/waker/contents/69f581408c35c558d12746e1"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "fullGroupRenewalIsCurrentManagementEvidence": true,
+    "memberLineupNotInferredWithoutCurrentOfficialEnumeration": true,
+    "memberHealthOrParticipationStatusDoesNotOverrideGroupLifecycle": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://artist.mnetplus.world/main/stg/waker/contents/6a9e383cdc57f3123077b548",
+      "https://artist.mnetplus.world/main/stg/waker/contents/695e0f9f7dd68046c78e00ba",
+      "https://artist.mnetplus.world/main/stg/waker/contents/69f581408c35c558d12746e1"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

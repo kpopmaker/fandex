@@ -805,6 +805,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(madein.profile.englishAliases.includes('LIMELIGHT'));
   assert.ok(madein.profile.koreanAliases.includes('라임라잇'));
 
+  const waker = getArtistV4ById('waker');
+  assert.ok(waker);
+  assert.equal(waker.entityType, 'group');
+  assert.equal(waker.agency, 'Howling Entertainment');
+  assert.equal(waker.debutDate, '2024-01-08');
+  assert.equal(waker.lifecycleStatus, 'active');
+  assert.equal(waker.members.length, 0);
+  assert.equal(waker.fandomName, 'Sleeper');
+  assert.ok(waker.profile.koreanAliases.includes('웨이커'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
