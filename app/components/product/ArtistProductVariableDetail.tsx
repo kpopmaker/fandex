@@ -50,14 +50,13 @@ export default function ArtistProductVariableDetail({
   artistId,
   evidenceCollections,
   results,
+  selectedVariableIds,
 }: {
   artistId: string;
   evidenceCollections: readonly ProductVariableEvidenceCollectionResult[];
   results: readonly ProductVariableReadModelResult[];
+  selectedVariableIds: readonly ProductVariableId[];
 }) {
-  const selectedVariableIds = results.flatMap((result) =>
-    result.status === 'ok' ? [result.model.identity.variableId] : [],
-  );
 
   return (
     <section
