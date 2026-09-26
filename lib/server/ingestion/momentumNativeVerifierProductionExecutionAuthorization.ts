@@ -121,3 +121,14 @@ export function isMomentumProductionVerifierExecutionRequestAuthorized(
     && row.throughSlotStart === target.throughSlotStart
   );
 }
+
+export function isMomentumProductionVerifierExecutionAuthorizationHeaderValid(
+  value: unknown,
+): boolean {
+  return (
+    typeof value === 'string'
+    && value
+      === MOMENTUM_NATIVE_VERIFIER_PRODUCTION_EXECUTION_AUTHORIZATION
+        .executionAuthorizationId
+  );
+}
