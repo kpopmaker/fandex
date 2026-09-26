@@ -23,7 +23,7 @@ jobs:
 
       - name: Scope allowlist
         run: |
-          git diff --name-only 5e9d14019c4dee0cc8983a2caf00ac8cbcb4b98f...HEAD | sort > /tmp/changed.txt
+          git diff --name-only 52636ed26bd0855813d81c2491f1f653964fc5a2...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-evidence-consensus-runtime-read-v1.yml
           data/momentum-product/iu_momentum_evidence_consensus_v147.jsonl
