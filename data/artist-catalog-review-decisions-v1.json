@@ -3445,6 +3445,201 @@
           "note": "TOP Media announced 100%'s activities ended in 2021; FANDEX stores TOP Media only as historical agency provenance."
         }
       ]
+    },
+    {
+      "displayArtist": "KARA",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_rbw_japan_current_group_identity_with_primary_agency_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_catalog_identity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/kara.php",
+          "note": "Current official RBW JAPAN artist catalog maintains KARA as a music identity and links the official KARA site."
+        }
+      ]
+    },
+    {
+      "displayArtist": "B1A4",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_three_member_group_identity_and_2026_agency_transfer_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Weverse",
+          "url": "https://weverse.io/b1a4/notice/34519",
+          "note": "Official Weverse notice states B1A4's exclusive contract moved to Hieutpieup Co., Ltd. on April 6, 2026."
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/news/detail.php?nid=RWo%2FLCvv5gY%3D",
+          "note": "RBW JAPAN announced B1A4's 15th anniversary Japan concerts in September 2026, confirming current group activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Solar",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "mamamoo_member_independent_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_rbw_solo_catalog_and_2026_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/",
+          "note": "RBW official site carries Solar's solo release catalog."
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/mamamoo.php",
+          "note": "RBW JAPAN's official MAMAMOO catalog separately records Solar solo releases through 2026."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Moon Byul",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "mamamoo_member_independent_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_solo_catalog_and_tour_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/moonbyul.php",
+          "note": "Official Moon Byul profile documents independent solo debut, current 2026 release REV, and active concert tour."
+        }
+      ]
+    },
+    {
+      "displayArtist": "KARD",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_dsp_coed_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/kard.php",
+          "note": "Official profile identifies KARD as BM, J.seph, Somin, and Jiwoo and documents continuing 2025-2026 releases."
+        }
+      ]
+    },
+    {
+      "displayArtist": "CSR",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_music_identity_with_primary_agency_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_catalog_identity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/",
+          "note": "Current RBW JAPAN official artist catalog lists CSR as a managed music identity; FANDEX does not infer a Korean primary agency from Japan catalog presence."
+        }
+      ]
+    },
+    {
+      "displayArtist": "AHN YEEUN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_current_korean_solo_music_identity_with_primary_agency_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_music_catalog_and_2026_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/",
+          "note": "RBW JAPAN's current official site lists AHN YEEUN and a May 28, 2026 release."
+        }
+      ]
+    },
+    {
+      "displayArtist": "YOUNG POSSE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_jointly_managed_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_and_2026_live_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/youngposse.php",
+          "note": "Official artist profile documents YOUNG POSSE's catalog and ongoing activity."
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/news/detail.php?nid=C7ZFb%2FEbjMY%3D",
+          "note": "September 2026 Japan live notice credits DSPmedia and BEATS ENTERTAINMENT alongside RBW JAPAN."
+        }
+      ]
+    },
+    {
+      "displayArtist": "XLOV",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_strangelab_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_kpop_group_identity_and_current_agency_notice",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "XLOV Official",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb",
+          "note": "Official August 2026 notice states XLOV's agency is now StrangeLab following the RBW group label restructuring."
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/",
+          "note": "Current RBW JAPAN official artist catalog lists XLOV."
+        }
+      ]
+    },
+    {
+      "displayArtist": "SECRET",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_2026_relaunched_group_identity_with_primary_agency_unresolved",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_relaunch_and_2026_release",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/secret.php",
+          "note": "Official profile states SECRET restarted in 2026 as a three-member group with Jun Hyo Seong, ZINGER, and YEBIN and released Secret Flavor."
+        },
+        {
+          "source": "SECRET Japan Official",
+          "url": "https://secretofficial.jp/",
+          "note": "Current official fan site is active in 2026; FANDEX keeps primary agency unresolved rather than inferring it from Japan management."
+        }
+      ]
     }
   ]
 }

@@ -4890,6 +4890,450 @@
           "url": "https://www.soompi.com/article/1489816wpp/100-announces-disbandment"
         }
       ]
+    },
+    {
+      "id": "kara",
+      "ticker": "KARA",
+      "name": "KARA",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "카라 KARA 걸그룹",
+      "koreanAliases": [
+        "카라"
+      ],
+      "englishAliases": [
+        "KARA",
+        "Kara"
+      ],
+      "keywords": [
+        "K-pop",
+        "KAMILIA",
+        "카라",
+        "RBW JAPAN"
+      ],
+      "disambiguationKeywords": [
+        "걸그룹",
+        "K-pop",
+        "카라"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/kara.php"
+        },
+        {
+          "source": "KARA Japan Official",
+          "url": "https://karaweb.jp/"
+        }
+      ]
+    },
+    {
+      "id": "b1a4",
+      "ticker": "B1A4",
+      "name": "B1A4",
+      "agency": "Hieutpieup Co., Ltd.",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "CNU",
+        "SANDEUL",
+        "GONGCHAN"
+      ],
+      "naverNewsQuery": "비원에이포 B1A4",
+      "koreanAliases": [
+        "비원에이포"
+      ],
+      "englishAliases": [
+        "B1A4"
+      ],
+      "keywords": [
+        "Hieutpieup",
+        "히읗피읖",
+        "SET",
+        "BANA"
+      ],
+      "disambiguationKeywords": [
+        "비원에이포",
+        "B1A4"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/"
+        },
+        {
+          "source": "Weverse",
+          "url": "https://weverse.io/b1a4/notice/34519"
+        }
+      ]
+    },
+    {
+      "id": "solar",
+      "ticker": "SOLAR",
+      "name": "Solar",
+      "agency": "RBW",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "솔라 Solar 마마무 가수",
+      "koreanAliases": [
+        "솔라"
+      ],
+      "englishAliases": [
+        "Solar",
+        "SOLAR"
+      ],
+      "keywords": [
+        "RBW",
+        "MAMAMOO",
+        "마마무",
+        "솔라",
+        "WANT"
+      ],
+      "disambiguationKeywords": [
+        "RBW",
+        "MAMAMOO",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW",
+          "url": "https://www.rbbridge.com/"
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/"
+        }
+      ]
+    },
+    {
+      "id": "moonbyul",
+      "ticker": "MOONBYUL",
+      "name": "Moon Byul",
+      "agency": "RBW",
+      "entityType": "solo",
+      "debutDate": "2018-05-23",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "문별 Moon Byul 가수",
+      "koreanAliases": [
+        "문별"
+      ],
+      "englishAliases": [
+        "Moon Byul",
+        "Moonbyul",
+        "MOON BYUL"
+      ],
+      "keywords": [
+        "RBW",
+        "MAMAMOO",
+        "REV",
+        "문별"
+      ],
+      "disambiguationKeywords": [
+        "RBW",
+        "MAMAMOO",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/moonbyul.php"
+        }
+      ]
+    },
+    {
+      "id": "kard",
+      "ticker": "KARD",
+      "name": "KARD",
+      "agency": "DSP Media",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "BM",
+        "J.SEPH",
+        "SOMIN",
+        "JIWOO"
+      ],
+      "naverNewsQuery": "카드 KARD 혼성그룹",
+      "koreanAliases": [
+        "카드"
+      ],
+      "englishAliases": [
+        "KARD"
+      ],
+      "keywords": [
+        "DSP Media",
+        "BM",
+        "J.seph",
+        "Somin",
+        "Jiwoo",
+        "DRIFT"
+      ],
+      "disambiguationKeywords": [
+        "DSP Media",
+        "혼성그룹",
+        "카드"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/kard.php"
+        }
+      ]
+    },
+    {
+      "id": "csr",
+      "ticker": "CSR",
+      "name": "CSR",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "debutDate": "2022-07-27",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "첫사랑 CSR 걸그룹",
+      "koreanAliases": [
+        "첫사랑"
+      ],
+      "englishAliases": [
+        "CSR"
+      ],
+      "keywords": [
+        "첫사랑",
+        "K-pop",
+        "걸그룹",
+        "RBW JAPAN"
+      ],
+      "disambiguationKeywords": [
+        "첫사랑",
+        "걸그룹",
+        "K-pop"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/"
+        }
+      ]
+    },
+    {
+      "id": "ahnyeeun",
+      "ticker": "AHNYEEUN",
+      "name": "AHN YEEUN",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "안예은 AHN YEEUN 가수",
+      "koreanAliases": [
+        "안예은"
+      ],
+      "englishAliases": [
+        "AHN YEEUN",
+        "Ahn Ye Eun",
+        "Ahn Yeeun"
+      ],
+      "keywords": [
+        "안예은",
+        "싱어송라이터",
+        "가수",
+        "RBW JAPAN"
+      ],
+      "disambiguationKeywords": [
+        "안예은",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/"
+        }
+      ]
+    },
+    {
+      "id": "youngposse",
+      "ticker": "YOUNGPOSSE",
+      "name": "YOUNG POSSE",
+      "agency": "DSP Media / BEATS Entertainment",
+      "entityType": "group",
+      "debutDate": "2023-10-18",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "영파씨 YOUNG POSSE",
+      "koreanAliases": [
+        "영파씨"
+      ],
+      "englishAliases": [
+        "YOUNG POSSE",
+        "Young Posse"
+      ],
+      "keywords": [
+        "DSP Media",
+        "BEATS Entertainment",
+        "TELEPOSSE",
+        "영파씨"
+      ],
+      "disambiguationKeywords": [
+        "DSP Media",
+        "BEATS Entertainment",
+        "영파씨"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/youngposse.php"
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/news/detail.php?nid=C7ZFb%2FEbjMY%3D"
+        }
+      ]
+    },
+    {
+      "id": "xlov",
+      "ticker": "XLOV",
+      "name": "XLOV",
+      "agency": "StrangeLab",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "RUI",
+        "HARU",
+        "WUMUTI",
+        "HYUN"
+      ],
+      "naverNewsQuery": "엑스러브 XLOV",
+      "koreanAliases": [
+        "엑스러브"
+      ],
+      "englishAliases": [
+        "XLOV"
+      ],
+      "keywords": [
+        "StrangeLab",
+        "스트레인지랩",
+        "I, God",
+        "EVOL"
+      ],
+      "disambiguationKeywords": [
+        "StrangeLab",
+        "엑스러브"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "XLOV Official",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb"
+        },
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/"
+        }
+      ]
+    },
+    {
+      "id": "secret",
+      "ticker": "SECRET",
+      "name": "SECRET",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "JUN HYO SEONG",
+        "ZINGER",
+        "YEBIN"
+      ],
+      "naverNewsQuery": "시크릿 SECRET 걸그룹 2026",
+      "koreanAliases": [
+        "시크릿"
+      ],
+      "englishAliases": [
+        "SECRET",
+        "Secret"
+      ],
+      "keywords": [
+        "시크릿",
+        "Secret Flavor",
+        "Jun Hyo Seong",
+        "ZINGER",
+        "YEBIN"
+      ],
+      "disambiguationKeywords": [
+        "걸그룹",
+        "시크릿",
+        "Secret Flavor"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "RBW JAPAN",
+          "url": "https://rbwjapan.jp/artist/secret.php"
+        },
+        {
+          "source": "SECRET Japan Official",
+          "url": "https://secretofficial.jp/"
+        }
+      ]
     }
   ]
 }

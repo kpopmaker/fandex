@@ -177,6 +177,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'teentop',
     'up10tion',
     '100percent',
+    'kara',
+    'b1a4',
+    'solar',
+    'moonbyul',
+    'kard',
+    'csr',
+    'ahnyeeun',
+    'youngposse',
+    'xlov',
+    'secret',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -185,6 +195,48 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  for (const artistId of ['kara', 'csr', 'ahnyeeun', 'secret']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.agency, '');
+    assert.equal(artist.agencyStatus, 'unresolved');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const b1a4 = getArtistV4ById('b1a4');
+  assert.ok(b1a4);
+  assert.equal(b1a4.entityType, 'group');
+  assert.equal(b1a4.agency, 'Hieutpieup Co., Ltd.');
+  assert.deepEqual(b1a4.members, ['CNU', 'SANDEUL', 'GONGCHAN']);
+
+  for (const artistId of ['solar', 'moonbyul']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'RBW');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const kard = getArtistV4ById('kard');
+  assert.ok(kard);
+  assert.equal(kard.entityType, 'group');
+  assert.equal(kard.agency, 'DSP Media');
+  assert.deepEqual(kard.members, ['BM', 'J.SEPH', 'SOMIN', 'JIWOO']);
+
+  const youngPosse = getArtistV4ById('youngposse');
+  assert.ok(youngPosse);
+  assert.equal(youngPosse.agency, 'DSP Media / BEATS Entertainment');
+  assert.equal(youngPosse.lifecycleStatus, 'active');
+
+  const xlov = getArtistV4ById('xlov');
+  assert.ok(xlov);
+  assert.equal(xlov.agency, 'StrangeLab');
+  assert.deepEqual(xlov.members, ['RUI', 'HARU', 'WUMUTI', 'HYUN']);
+
+  const secret = getArtistV4ById('secret');
+  assert.ok(secret);
+  assert.deepEqual(secret.members, ['JUN HYO SEONG', 'ZINGER', 'YEBIN']);
 
   const oddYouth = getArtistV4ById('oddyouth');
   assert.ok(oddYouth);
