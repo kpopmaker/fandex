@@ -6,7 +6,8 @@
       "research/*": false,
       "verify/*": false,
       "diagnostic/*": false,
-      "work/*": false
+      "work/*": false,
+      "v131-lastfm-real-signal-read-model": false
     }
   }
 }
