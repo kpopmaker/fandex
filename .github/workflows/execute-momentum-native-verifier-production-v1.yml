@@ -36,6 +36,7 @@ jobs:
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET: ${{ secrets.FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET }}
       EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
       EXPECTED_DEPLOYMENT_ID: ${{ inputs.expected_deployment_id }}
       EXECUTION_AUTHORIZATION_ID: ${{ inputs.execution_authorization_id }}
