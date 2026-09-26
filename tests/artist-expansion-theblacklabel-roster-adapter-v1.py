@@ -52,4 +52,14 @@ assert snapshot["contract"]["autoPromote"] is False
 assert module.parse_roster(html.replace("<div>Vince</div>", "")) == []
 assert module.parse_roster(html.replace("<div>PARK BO GUM</div>", "")) == []
 
+script_only_html = """
+<html><body><div id="app"></div>
+<script type="application/json">
+{"artists":["YIM SI WAN","KWAK DONG YEON","MEOVV","TAEYANG","PARK BO GUM",
+"ALLDAY PROJECT","Vince","JEON SOMI","LEEJUNG LEE","ROSE\\u0301","LEE JONG WON"]}
+</script></body></html>
+"""
+script_rows = module.parse_roster(script_only_html)
+assert [row["displayArtist"] for row in script_rows] == module.MUSIC_ARTISTS
+
 print("THEBLACKLABEL music roster adapter regression: PASS")

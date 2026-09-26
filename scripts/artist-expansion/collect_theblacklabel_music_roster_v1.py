@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
 import unicodedata
@@ -60,12 +61,24 @@ def normalize_spaces(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def page_contains_artist(strings: list[str], raw_text: str, expected: str) -> bool:
+    variants = {normalize_spaces(expected)}
+    if expected == "ROSÉ":
+        variants.update({"ROSÉ", "ROSE\\u0301", "ROS\\u00c9", "ROS\\u00e9"})
+    return any(
+        any(variant == value or variant in value for value in strings)
+        or variant in raw_text
+        for variant in variants
+    )
+
+
 def parse_roster(html: str, source_url: str = DEFAULT_URL) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     strings = [normalize_spaces(value) for value in soup.stripped_strings]
     strings = [value for value in strings if value]
+    raw_text = normalize_spaces(html_lib.unescape(html))
 
-    if not all(any(expected == value or expected in value for value in strings) for expected in PAGE_ARTISTS):
+    if not all(page_contains_artist(strings, raw_text, expected) for expected in PAGE_ARTISTS):
         return []
 
     rows = [
