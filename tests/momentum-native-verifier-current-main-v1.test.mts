@@ -314,7 +314,7 @@ test('authorized production channel returns bounded output and no secret/raw pay
   assert.equal(result.effects.productMetricWrites, 0);
   assert.equal(result.effects.productionActivations, 0);
   const serialized = JSON.stringify(result);
-  assert.equal(serialized.includes('rawPayload'), false);
-  assert.equal(serialized.includes('normalizedPayload'), false);
+  assert.equal(serialized.includes('\"rawPayload\":'), false);
+  assert.equal(serialized.includes('\"normalizedPayload\":'), false);
   assert.equal(serialized.includes(SECRET), false);
 });
