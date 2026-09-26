@@ -637,7 +637,7 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   const onf = getArtistV4ById('onf');
   assert.ok(onf);
   assert.equal(onf.agency, 'KI Entertainment');
-  assert.ok(onf.profile.keywords.includes('Yuto'));
+  assert.ok(onf.profile.includeKeywords.includes('Yuto'));
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
