@@ -1,0 +1,25 @@
+name: Validate Activity Exposure live Production activation v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-live-production-activation-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only live activation boundary
+        run: npx tsx scripts/validation/activityExposureLiveProductionActivationV1.ts
