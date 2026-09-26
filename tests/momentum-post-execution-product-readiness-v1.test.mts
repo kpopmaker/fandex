@@ -3,6 +3,10 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
+} from '../lib/product/contracts/productMomentumEvidenceConsensus';
+import {
   MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION,
   MOMENTUM_RESEARCH_OUTPUT_BOUNDARY,
   evaluateMomentumPostExecutionProductReadiness,
@@ -38,7 +42,7 @@ test('post-execution readiness accepts current evidence but refuses numeric Prod
     result.contractVersion,
     MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION,
   );
-  assert.equal(result.state, 'categorical-product-contract-required');
+  assert.equal(result.state, 'categorical-runtime-evidence-required');
   assert.equal(result.productActivationReady, false);
   assert.equal(result.productPublicationReady, false);
   assert.equal(result.numericProductEligible, false);
@@ -123,7 +127,7 @@ test('v142-v144 research boundary remains evidence-consensus-not-score', () => {
   );
 });
 
-test('current legacy growthMomentumPoint cannot silently carry categorical evidence', async () => {
+test('PR 254 Product contract and adapter are no longer reported as missing', async () => {
   const status = await currentLastfmStatus();
   const result = evaluateMomentumPostExecutionProductReadiness({
     lastfmSnapshotDate: status.snapshotDate,
@@ -134,49 +138,66 @@ test('current legacy growthMomentumPoint cannot silently carry categorical evide
     lastfmScoreUsage: status.scoreUsage,
   });
 
-  assert.equal(result.currentProductSchema.legacyVariablePresent, true);
-  assert.equal(result.currentProductSchema.momentumSourceStage, 'derived_signal');
-  assert.equal(result.currentProductSchema.momentumQualityLabel, 'preview');
-  assert.equal(
-    result.currentProductSchema.numericSlotCompatibleWithResearchOutput,
-    false,
+  assert.deepEqual(result.productShapeImplementation, {
+    contractVersion:
+      PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
+    constructId:
+      PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
+    separateNonNumericContractImplemented: true,
+    storedEvidenceReadModelAdapterImplemented: true,
+    runtimeCarrierRepositoryImplemented: false,
+    runtimeStoredEvidenceReadPathImplemented: false,
+    liveIUShadowReadVerified: false,
+    publicRouteImplemented: false,
+  });
+
+  assert.ok(
+    !result.blockers.includes('categorical-product-contract-not-implemented'),
   );
   assert.ok(
-    result.blockers.includes('current-momentum-product-slot-numeric-only'),
+    !result.blockers.includes(
+      'categorical-stored-evidence-read-model-not-implemented',
+    ),
   );
+});
+
+test('remaining blocker is runtime categorical evidence, not numeric weighting', async () => {
+  const status = await currentLastfmStatus();
+  const result = evaluateMomentumPostExecutionProductReadiness({
+    lastfmSnapshotDate: status.snapshotDate,
+    lastfmHistoryRowCount: status.historyRowCount,
+    lastfmSnapshotDateCount: status.snapshotDateCount,
+    lastfmDeltaReadyCount: status.deltaReadyCount,
+    lastfmNeedsReviewCount: status.needsReviewCount,
+    lastfmScoreUsage: status.scoreUsage,
+  });
+
+  assert.ok(result.blockers.includes('current-momentum-product-slot-numeric-only'));
   assert.ok(
     result.blockers.includes(
       'legacy-preview-fallback-would-mask-real-momentum-state',
     ),
   );
-});
-
-test('next Product shape is a separate non-numeric evidence-consensus contract', async () => {
-  const status = await currentLastfmStatus();
-  const result = evaluateMomentumPostExecutionProductReadiness({
-    lastfmSnapshotDate: status.snapshotDate,
-    lastfmHistoryRowCount: status.historyRowCount,
-    lastfmSnapshotDateCount: status.snapshotDateCount,
-    lastfmDeltaReadyCount: status.deltaReadyCount,
-    lastfmNeedsReviewCount: status.needsReviewCount,
-    lastfmScoreUsage: status.scoreUsage,
-  });
-
-  assert.deepEqual(result.requiredProductShape, {
-    constructId: 'momentumEvidenceConsensus',
-    outputForm: 'structured-categorical-evidence',
-    separateNonNumericContractRequired: true,
-    storedEvidenceTraceRequired: true,
-    noSyntheticFallbackRequired: true,
-    publicRouteRequiredBeforeProductionActual: true,
-  });
-  assert.ok(result.blockers.includes('categorical-product-contract-not-implemented'));
   assert.ok(
     result.blockers.includes(
-      'categorical-stored-evidence-read-model-not-implemented',
+      'categorical-live-carrier-repository-not-implemented',
     ),
   );
+  assert.ok(
+    result.blockers.includes(
+      'categorical-runtime-stored-evidence-read-path-not-implemented',
+    ),
+  );
+  assert.ok(
+    result.blockers.includes('live-iu-shadow-product-read-not-verified'),
+  );
+  assert.ok(
+    result.blockers.includes('live-carrier-product-readiness-not-evaluated'),
+  );
   assert.ok(result.blockers.includes('categorical-public-route-not-implemented'));
+
+  assert.ok(!result.blockers.includes('component-weighting-not-frozen'));
+  assert.ok(!result.blockers.includes('composite-score-formula-not-frozen'));
 });
 
 test('invalid execution/source evidence blocks readiness instead of becoming missing/zero', () => {

@@ -2,6 +2,10 @@ import {
   PRODUCT_SAFE_VARIABLE_IDS,
 } from '../variables/productVariableDefinitions';
 import {
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
+} from '../contracts/productMomentumEvidenceConsensus';
+import {
   getMetricSourceInfo,
 } from '../../../app/data/v4/metrics/fandexMetricSourceRegistry';
 import {
@@ -9,7 +13,7 @@ import {
 } from '../../server/ingestion/momentumNativeVerifierProductionExecutionAuthorization';
 
 export const MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION =
-  'momentum-post-execution-product-readiness-v1' as const;
+  'momentum-post-execution-product-readiness-v2' as const;
 
 export const MOMENTUM_RESEARCH_OUTPUT_BOUNDARY = Object.freeze({
   crossFamilyCombinationContractVersion:
@@ -42,7 +46,7 @@ export type MomentumPostExecutionProductReadinessInput = Readonly<{
 export type MomentumPostExecutionProductReadinessResult = Readonly<{
   contractVersion: typeof MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION;
   state:
-    | 'categorical-product-contract-required'
+    | 'categorical-runtime-evidence-required'
     | 'blocked';
   productActivationReady: false;
   productPublicationReady: false;
@@ -76,13 +80,17 @@ export type MomentumPostExecutionProductReadinessResult = Readonly<{
     momentumQualityLabel: string;
     numericSlotCompatibleWithResearchOutput: false;
   }>;
-  requiredProductShape: Readonly<{
-    constructId: 'momentumEvidenceConsensus';
-    outputForm: 'structured-categorical-evidence';
-    separateNonNumericContractRequired: true;
-    storedEvidenceTraceRequired: true;
-    noSyntheticFallbackRequired: true;
-    publicRouteRequiredBeforeProductionActual: true;
+  productShapeImplementation: Readonly<{
+    contractVersion:
+      typeof PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION;
+    constructId:
+      typeof PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID;
+    separateNonNumericContractImplemented: true;
+    storedEvidenceReadModelAdapterImplemented: true;
+    runtimeCarrierRepositoryImplemented: false;
+    runtimeStoredEvidenceReadPathImplemented: false;
+    liveIUShadowReadVerified: false;
+    publicRouteImplemented: false;
   }>;
   blockers: readonly string[];
 }>;
@@ -148,15 +156,17 @@ export function evaluateMomentumPostExecutionProductReadiness(
     ...hardBlockers,
     'current-momentum-product-slot-numeric-only',
     'legacy-preview-fallback-would-mask-real-momentum-state',
-    'categorical-product-contract-not-implemented',
-    'categorical-stored-evidence-read-model-not-implemented',
+    'categorical-live-carrier-repository-not-implemented',
+    'categorical-runtime-stored-evidence-read-path-not-implemented',
+    'live-iu-shadow-product-read-not-verified',
+    'live-carrier-product-readiness-not-evaluated',
     'categorical-public-route-not-implemented',
   ]);
 
   return Object.freeze({
     contractVersion: MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION,
     state: hardBlockers.length === 0
-      ? 'categorical-product-contract-required' as const
+      ? 'categorical-runtime-evidence-required' as const
       : 'blocked' as const,
     productActivationReady: false as const,
     productPublicationReady: false as const,
@@ -195,13 +205,17 @@ export function evaluateMomentumPostExecutionProductReadiness(
       momentumQualityLabel: metricSource.qualityLabel,
       numericSlotCompatibleWithResearchOutput: false as const,
     }),
-    requiredProductShape: Object.freeze({
-      constructId: 'momentumEvidenceConsensus' as const,
-      outputForm: 'structured-categorical-evidence' as const,
-      separateNonNumericContractRequired: true as const,
-      storedEvidenceTraceRequired: true as const,
-      noSyntheticFallbackRequired: true as const,
-      publicRouteRequiredBeforeProductionActual: true as const,
+    productShapeImplementation: Object.freeze({
+      contractVersion:
+        PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
+      constructId:
+        PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
+      separateNonNumericContractImplemented: true as const,
+      storedEvidenceReadModelAdapterImplemented: true as const,
+      runtimeCarrierRepositoryImplemented: false as const,
+      runtimeStoredEvidenceReadPathImplemented: false as const,
+      liveIUShadowReadVerified: false as const,
+      publicRouteImplemented: false as const,
     }),
     blockers,
   });
