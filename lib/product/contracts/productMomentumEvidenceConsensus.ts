@@ -94,7 +94,8 @@ export type ProductMomentumEvidenceConsensusDataIssue = Readonly<{
     | 'invalid-directional-consensus'
     | 'invalid-persistence-consensus'
     | 'raw-value-consensus-mismatch'
-    | 'invalid-stored-evidence-trace';
+    | 'invalid-stored-evidence-trace'
+    | 'runtime-read-failed';
   recordId?: string;
 }>;
 

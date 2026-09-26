@@ -1,0 +1,59 @@
+name: Validate Momentum evidence consensus runtime read v1
+
+on:
+  push:
+    branches:
+      - work/momentum-evidence-consensus-runtime-read-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 52636ed26bd0855813d81c2491f1f653964fc5a2...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-evidence-consensus-runtime-read-v1.yml
+          data/momentum-product/iu_momentum_evidence_consensus_v147.jsonl
+          lib/product/contracts/productMomentumEvidenceConsensus.ts
+          lib/server/ingestion/momentumEvidenceConsensusRepository.ts
+          lib/server/product/momentumEvidenceConsensusRealProductRead.ts
+          tests/momentum-evidence-consensus-runtime-read-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Real IU runtime Stored Evidence read
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-evidence-consensus-runtime-read-v1.test.mts
+
+      - name: Momentum evidence consensus Product contract regression
+        run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
+
+      - name: Momentum post-execution readiness regression
+        run: npx tsx --test tests/momentum-post-execution-product-readiness-v1.test.mts
+
+      - name: Consumed execution regression
+        run: npx tsx --test tests/momentum-native-verifier-production-execution-authorization-v1.test.mts
+
+      - name: Activity Exposure Production regression
+        run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
