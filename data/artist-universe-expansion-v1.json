@@ -6378,6 +6378,152 @@
           "url": "https://www.newways.co.kr/new/?bmode=view&idx=170176714"
         }
       ]
+    },
+    {
+      "id": "evnne",
+      "ticker": "EVNNE",
+      "name": "EVNNE",
+      "agency": "Jellyfish Entertainment",
+      "entityType": "group",
+      "debutDate": "2023-09-19",
+      "lifecycleStatus": "active",
+      "members": [
+        "KEITA",
+        "PARK HANBIN",
+        "LEE JEONGHYEON",
+        "YOO SEUNGEON",
+        "JI YUNSEO",
+        "MUN JUNGHYUN",
+        "PARK JIHOO"
+      ],
+      "naverNewsQuery": "이븐 EVNNE 젤리피쉬엔터테인먼트",
+      "koreanAliases": [
+        "이븐"
+      ],
+      "englishAliases": [
+        "EVNNE"
+      ],
+      "keywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "KEITA",
+        "PARK HANBIN",
+        "LEE JEONGHYEON",
+        "YOO SEUNGEON",
+        "JI YUNSEO",
+        "MUN JUNGHYUN",
+        "PARK JIHOO",
+        "LOVE ANECDOTE(S)",
+        "OUR EVNNEing"
+      ],
+      "disambiguationKeywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "이븐"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://jelly-fish.co.kr/sub/artist/view.html?idx=51"
+        }
+      ]
+    },
+    {
+      "id": "vixx",
+      "ticker": "VIXX",
+      "name": "VIXX",
+      "agency": "Jellyfish Entertainment",
+      "entityType": "group",
+      "debutDate": "2012-05-24",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "빅스 VIXX 젤리피쉬엔터테인먼트",
+      "koreanAliases": [
+        "빅스"
+      ],
+      "englishAliases": [
+        "VIXX"
+      ],
+      "keywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "Case No. VIXX",
+        "CONTINUUM"
+      ],
+      "disambiguationKeywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "빅스"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html"
+        }
+      ]
+    },
+    {
+      "id": "verivery",
+      "ticker": "VERIVERY",
+      "name": "VERIVERY",
+      "agency": "Jellyfish Entertainment",
+      "entityType": "group",
+      "debutDate": "2019-01-09",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "베리베리 VERIVERY 젤리피쉬엔터테인먼트",
+      "koreanAliases": [
+        "베리베리"
+      ],
+      "englishAliases": [
+        "VERIVERY"
+      ],
+      "keywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "Lost and Found",
+        "Hello VERI Long Time",
+        "KANGMIN"
+      ],
+      "disambiguationKeywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬엔터테인먼트",
+        "베리베리"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html"
+        }
+      ]
     }
   ]
 }

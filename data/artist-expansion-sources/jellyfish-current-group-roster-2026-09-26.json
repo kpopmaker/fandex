@@ -1,0 +1,81 @@
+{
+  "version": "jellyfish_current_group_roster_adapter_v1",
+  "source": {
+    "id": "jellyfish-current-official-group-roster",
+    "type": "agency_roster",
+    "name": "Jellyfish Entertainment Current Official Group Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "EVNNE",
+      "aliases": [
+        "이븐"
+      ],
+      "evidence": [
+        {
+          "label": "Jellyfish current official artist directory",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "label": "Jellyfish current/recent group history",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "VIXX",
+      "aliases": [
+        "빅스"
+      ],
+      "evidence": [
+        {
+          "label": "Jellyfish current official artist directory",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "label": "Jellyfish 2026 group activity",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "VERIVERY",
+      "aliases": [
+        "베리베리"
+      ],
+      "evidence": [
+        {
+          "label": "Jellyfish current official artist directory",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html"
+        },
+        {
+          "label": "Jellyfish recent group history",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "currentMusicGroupsOnly": true,
+    "nonGroupArtistRowsExcluded": true,
+    "currentDirectoryIsPrimaryLifecycleSignal": true,
+    "individualMemberAgencyDoesNotOverrideGroupManagement": true,
+    "memberActivityDoesNotCreateSoloCanonical": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_group_roster_snapshot",
+    "verifiedFrom": [
+      "https://www.jelly-fish.co.kr/sub/artist/list.html",
+      "https://www.jelly-fish.co.kr/sub/company.html",
+      "https://jelly-fish.co.kr/sub/artist/view.html?idx=51"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

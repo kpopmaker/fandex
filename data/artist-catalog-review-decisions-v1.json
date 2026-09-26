@@ -4153,6 +4153,77 @@
           "note": "Official company news records completion of ASC2NT's 2026 mini-album broadcast promotions on 2026-03-13."
         }
       ]
+    },
+    {
+      "displayArtist": "EVNNE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_jellyfish_managed_project_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_jellyfish_artist_directory_official_seven_member_debut_catalog_and_2026_fanmeeting_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html",
+          "note": "Current official artist directory lists EVNNE."
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://jelly-fish.co.kr/sub/artist/view.html?idx=51",
+          "note": "Official EVNNE catalog records the seven-member group and 2023-09-19 debut release."
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html",
+          "note": "Official company history records EVNNE 2026 Korea/Japan fanmeeting activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "VIXX",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_jellyfish_group_management_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_jellyfish_artist_directory_and_2026_group_fanconcert_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html",
+          "note": "Current official artist directory lists VIXX as a group identity."
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html",
+          "note": "Official company history records 2026 VIXX fan concert Case No. VIXX."
+        }
+      ]
+    },
+    {
+      "displayArtist": "VERIVERY",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_jellyfish_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_jellyfish_artist_directory_recent_group_release_and_current_member_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/artist/list.html",
+          "note": "Current official artist directory lists VERIVERY."
+        },
+        {
+          "source": "Jellyfish Entertainment",
+          "url": "https://www.jelly-fish.co.kr/sub/company.html",
+          "note": "Official company history records VERIVERY 2025 single Lost and Found and 2026 Kangmin activity under the VERIVERY identity."
+        }
+      ]
     }
   ]
 }

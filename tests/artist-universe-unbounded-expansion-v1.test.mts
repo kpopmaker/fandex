@@ -740,6 +740,31 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(asc2nt.members, ['KARAM', 'REON', 'JAY', 'KYLE', 'HYOWON']);
   assert.ok(asc2nt.profile.koreanAliases.includes('어센트'));
 
+  const evnne = getArtistV4ById('evnne');
+  assert.ok(evnne);
+  assert.equal(evnne.entityType, 'group');
+  assert.equal(evnne.agency, 'Jellyfish Entertainment');
+  assert.equal(evnne.debutDate, '2023-09-19');
+  assert.equal(evnne.lifecycleStatus, 'active');
+  assert.equal(evnne.members.length, 7);
+  assert.ok(evnne.profile.koreanAliases.includes('이븐'));
+
+  const vixx = getArtistV4ById('vixx');
+  assert.ok(vixx);
+  assert.equal(vixx.entityType, 'group');
+  assert.equal(vixx.agency, 'Jellyfish Entertainment');
+  assert.equal(vixx.debutDate, '2012-05-24');
+  assert.equal(vixx.lifecycleStatus, 'active');
+  assert.ok(vixx.profile.koreanAliases.includes('빅스'));
+
+  const verivery = getArtistV4ById('verivery');
+  assert.ok(verivery);
+  assert.equal(verivery.entityType, 'group');
+  assert.equal(verivery.agency, 'Jellyfish Entertainment');
+  assert.equal(verivery.debutDate, '2019-01-09');
+  assert.equal(verivery.lifecycleStatus, 'active');
+  assert.ok(verivery.profile.koreanAliases.includes('베리베리'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
