@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-09-25T11:10:48",
+  "createdAt": "2026-09-26T11:16:17",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -11,9 +11,9 @@
       "rank": 1,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 356.63,
-      "previousMasterPoint": 361.27,
-      "deltaFromPreviousMaster": -4.64,
+      "fandexFinalPoint": 357.15,
+      "previousMasterPoint": 356.63,
+      "deltaFromPreviousMaster": 0.52,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -33,8 +33,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 22.62,
-          "rawPoint": 90.4746,
+          "cumulativePoint": 23.14,
+          "rawPoint": 92.5524,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -47,9 +47,9 @@
       "rank": 2,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 339.34,
-      "previousMasterPoint": 339.4,
-      "deltaFromPreviousMaster": -0.06,
+      "fandexFinalPoint": 340.03,
+      "previousMasterPoint": 339.34,
+      "deltaFromPreviousMaster": 0.69,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -69,8 +69,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 13.69,
-          "rawPoint": 54.776,
+          "cumulativePoint": 14.38,
+          "rawPoint": 57.5118,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -83,9 +83,9 @@
       "rank": 3,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 336.47,
-      "previousMasterPoint": 334.73,
-      "deltaFromPreviousMaster": 1.74,
+      "fandexFinalPoint": 335.18,
+      "previousMasterPoint": 336.47,
+      "deltaFromPreviousMaster": -1.29,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 244.89,
@@ -98,15 +98,15 @@
           "sourceReadMode": "latest_direct"
         },
         "musicChart": {
-          "cumulativePoint": 36.62,
-          "rawPoint": 146.5,
+          "cumulativePoint": 34.94,
+          "rawPoint": 139.75,
           "scale": 0.25,
           "sourceVersion": "fandex_music_chart_v2_current_presence_parallel_v1",
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 5.33,
-          "rawPoint": 21.3103,
+          "cumulativePoint": 5.72,
+          "rawPoint": 22.8691,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -119,9 +119,9 @@
       "rank": 4,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 262.75,
-      "previousMasterPoint": 260.56,
-      "deltaFromPreviousMaster": 2.19,
+      "fandexFinalPoint": 262.67,
+      "previousMasterPoint": 262.75,
+      "deltaFromPreviousMaster": -0.08,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 182.26,
@@ -141,8 +141,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 23.78,
-          "rawPoint": 95.1218,
+          "cumulativePoint": 23.7,
+          "rawPoint": 94.8137,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -155,9 +155,9 @@
       "rank": 5,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 252.62,
-      "previousMasterPoint": 252.25,
-      "deltaFromPreviousMaster": 0.37,
+      "fandexFinalPoint": 253.29,
+      "previousMasterPoint": 252.62,
+      "deltaFromPreviousMaster": 0.67,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -177,8 +177,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 19.47,
-          "rawPoint": 77.8992,
+          "cumulativePoint": 20.14,
+          "rawPoint": 80.5627,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -191,9 +191,9 @@
       "rank": 6,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 238.55,
-      "previousMasterPoint": 238.56,
-      "deltaFromPreviousMaster": -0.01,
+      "fandexFinalPoint": 239.17,
+      "previousMasterPoint": 238.55,
+      "deltaFromPreviousMaster": 0.62,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 166.58,
@@ -213,8 +213,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 9.77,
-          "rawPoint": 39.0624,
+          "cumulativePoint": 10.39,
+          "rawPoint": 41.5615,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -227,9 +227,9 @@
       "rank": 7,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 234.08,
-      "previousMasterPoint": 234.07,
-      "deltaFromPreviousMaster": 0.01,
+      "fandexFinalPoint": 233.91,
+      "previousMasterPoint": 234.08,
+      "deltaFromPreviousMaster": -0.17,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 187.53,
@@ -249,8 +249,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 3.43,
-          "rawPoint": 13.7039,
+          "cumulativePoint": 3.26,
+          "rawPoint": 13.0328,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -263,9 +263,9 @@
       "rank": 8,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 229.0,
-      "previousMasterPoint": 229.19,
-      "deltaFromPreviousMaster": -0.19,
+      "fandexFinalPoint": 229.28,
+      "previousMasterPoint": 229.0,
+      "deltaFromPreviousMaster": 0.28,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 163.02,
@@ -285,8 +285,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 16.27,
-          "rawPoint": 65.0733,
+          "cumulativePoint": 16.55,
+          "rawPoint": 66.203,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -299,9 +299,9 @@
       "rank": 9,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 221.86,
-      "previousMasterPoint": 221.75,
-      "deltaFromPreviousMaster": 0.11,
+      "fandexFinalPoint": 222.28,
+      "previousMasterPoint": 221.86,
+      "deltaFromPreviousMaster": 0.42,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 173.12,
@@ -321,8 +321,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 5.89,
-          "rawPoint": 23.5761,
+          "cumulativePoint": 6.31,
+          "rawPoint": 25.2334,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
@@ -335,9 +335,9 @@
       "rank": 10,
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
-      "fandexFinalPoint": 156.75,
-      "previousMasterPoint": 156.57,
-      "deltaFromPreviousMaster": 0.18,
+      "fandexFinalPoint": 157.18,
+      "previousMasterPoint": 156.75,
+      "deltaFromPreviousMaster": 0.43,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 90.6,
@@ -357,8 +357,8 @@
           "sourceReadMode": "validated_current_presence_x0_25"
         },
         "lastfm": {
-          "cumulativePoint": 18.16,
-          "rawPoint": 72.6443,
+          "cumulativePoint": 18.59,
+          "rawPoint": 74.369,
           "scale": 0.25,
           "activeMode": "rolling3_50_rolling7_50",
           "sourceVersion": "lastfm_global_interest_rolling_score_preview_v1",
