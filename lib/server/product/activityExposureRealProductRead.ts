@@ -4,6 +4,12 @@ import {
   createActivityExposureProductionActivationApprovalCandidate,
 } from '../../product/activation/activityExposureProductionActivationApprovalCandidate';
 import {
+  authorizeActivityExposureProductionActivationWithApproval,
+} from '../../product/activation/activityExposureProductionActivationApproval';
+import {
+  createActivityExposurePublicRouteCutoverCandidate,
+} from '../../product/activation/activityExposurePublicRouteCutoverCandidate';
+import {
   evaluateActivityExposureProductionReadiness,
 } from '../../product/activation/activityExposureProductionReadiness';
 import {
@@ -40,6 +46,19 @@ export async function getActivityExposureProductionReadinessForIU() {
 
 export async function getActivityExposureProductionActivationApprovalCandidateForIU() {
   return createActivityExposureProductionActivationApprovalCandidate(
+    await getActivityExposureProductionReadinessForIU(),
+  );
+}
+
+
+export async function getActivityExposureProductionActivationAuthorizationForIU() {
+  return authorizeActivityExposureProductionActivationWithApproval(
+    await getActivityExposureProductionReadinessForIU(),
+  );
+}
+
+export async function getActivityExposurePublicRouteCutoverCandidateForIU() {
+  return createActivityExposurePublicRouteCutoverCandidate(
     await getActivityExposureProductionReadinessForIU(),
   );
 }
