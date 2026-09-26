@@ -50,13 +50,19 @@ export default function ArtistProductVariableDetail({
   artistId,
   evidenceCollections,
   results,
-  selectedVariableIds,
+  requestedVariableIds,
 }: {
   artistId: string;
   evidenceCollections: readonly ProductVariableEvidenceCollectionResult[];
   results: readonly ProductVariableReadModelResult[];
-  selectedVariableIds: readonly ProductVariableId[];
+  requestedVariableIds: readonly string[];
 }) {
+  const selectedVariableIds = requestedVariableIds.filter(
+    (value): value is ProductVariableId =>
+      PRODUCT_VARIABLE_DEFINITIONS.some(
+        (definition) => definition.variableId === value,
+      ),
+  );
 
   return (
     <section
