@@ -108,11 +108,15 @@ function activationBindingValid(): boolean {
 export function isMomentumProductionVerifierNativeExecutionAuthorized(): boolean {
   const authorization =
     MOMENTUM_NATIVE_VERIFIER_PRODUCTION_EXECUTION_AUTHORIZATION;
+  const decision: Readonly<{
+    nativeVerifierExecutionAuthorized: boolean;
+    nativeVerifierExecutionPerformed: boolean;
+  }> = authorization.decision;
 
   return (
     activationBindingValid()
-    && authorization.decision.nativeVerifierExecutionAuthorized === true
-    && authorization.decision.nativeVerifierExecutionPerformed === false
+    && decision.nativeVerifierExecutionAuthorized
+    && !decision.nativeVerifierExecutionPerformed
     && authorization.target.maximumExecutions === 1
   );
 }
