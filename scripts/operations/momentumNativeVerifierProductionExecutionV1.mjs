@@ -2,7 +2,6 @@ const TEAM_ID = 'team_OrRPxuBxMwCYU3kk0r76AfOs';
 const PROJECT_ID = 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v';
 const PRODUCTION_URL = 'https://fandex-eta.vercel.app';
 const ROUTE = '/api/internal/naver-news/momentum-verifier';
-const ENV_KEY = 'FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET';
 const AUTHORIZATION_ID =
   'ops-execution-momentum-verifier-20260926t082730z-v1';
 const CONFIRM =
@@ -63,6 +62,7 @@ async function assertNoPriorSuccessfulExecution(githubToken) {
 async function main() {
   const vercelToken = required('VERCEL_TOKEN');
   const githubToken = required('GITHUB_TOKEN');
+  const verifierSecret = required('FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET');
   const githubSha = required('GITHUB_SHA');
   const expectedMainSha = required('EXPECTED_MAIN_SHA');
   const expectedDeploymentId = required('EXPECTED_DEPLOYMENT_ID');
@@ -96,26 +96,8 @@ async function main() {
     'production_deployment_not_ready',
   );
 
-  const inventory = await vercelJson(
-    '/v10/projects/'
-      + encodeURIComponent(PROJECT_ID)
-      + '/env?decrypt=true&teamId='
-      + encodeURIComponent(TEAM_ID),
-    vercelToken,
-  );
-  const envs = Array.isArray(inventory?.envs) ? inventory.envs : [];
-  const matches = envs.filter((row) => {
-    if (row?.key !== ENV_KEY) return false;
-    const target = row?.target;
-    return Array.isArray(target)
-      ? target.includes('production')
-      : target === 'production';
-  });
-  assert(matches.length === 1, 'dedicated_verifier_secret_not_exactly_one');
-  const verifierSecret = matches[0]?.value;
   assert(
-    typeof verifierSecret === 'string'
-      && verifierSecret.length >= 24
+    verifierSecret.length >= 24
       && Buffer.byteLength(verifierSecret, 'utf8') <= 512,
     'dedicated_verifier_secret_invalid',
   );

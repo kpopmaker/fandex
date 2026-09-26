@@ -147,7 +147,7 @@ test('one-shot executor is workflow-dispatched and does not persist dedicated se
   );
 
   assert.match(source, /execution_authorization_already_consumed/);
-  assert.match(source, /decrypt=true/);
+  assert.doesNotMatch(source, /decrypt=true/);
   assert.match(source, /FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET/);
   assert.match(source, /MOMENTUM_NATIVE_VERIFIER_PRODUCTION_EXECUTION=SUCCESS/);
   assert.doesNotMatch(source, /writeFile|appendFile|createWriteStream/);
