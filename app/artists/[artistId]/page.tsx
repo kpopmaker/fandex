@@ -310,7 +310,7 @@ export default async function ArtistDetailPage({
             artistId={artistId}
             evidenceCollections={productVariableEvidenceCollections}
             results={productVariableResults}
-            selectedVariableIds={requestedProductVariableIds}
+            requestedVariableIds={requestedProductVariableIds}
           />
         </div>
       </main>
@@ -755,7 +755,7 @@ export default async function ArtistDetailPage({
           artistId={profile.artistId}
           evidenceCollections={productVariableEvidenceCollections}
           results={productVariableResults}
-          selectedVariableIds={requestedProductVariableIds}
+          requestedVariableIds={requestedProductVariableIds}
         />
 
         <ArtistMetricOverview collection={productMetricCollection} />
