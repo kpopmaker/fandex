@@ -1,0 +1,34 @@
+name: Validate Momentum post-execution readiness post-merge v1
+
+on:
+  push:
+    branches:
+      - validation/momentum-post-execution-readiness-post-merge-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Verify merged main parent
+        run: test "$(git rev-parse HEAD^)" = "32dbbac844306f38b0dd33792265d24d439394f2"
+      - run: npm ci
+      - name: Momentum post-execution readiness regression
+        run: npx tsx --test tests/momentum-post-execution-product-readiness-v1.test.mts
+      - name: Consumed execution regression
+        run: npx tsx --test tests/momentum-native-verifier-production-execution-authorization-v1.test.mts
+      - name: Activity Exposure Production regression
+        run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
