@@ -3720,6 +3720,60 @@
           "note": "Contemporary profile identifies Vince as a THEBLACKLABEL music producer and recording artist with direct solo releases."
         }
       ]
+    },
+    {
+      "displayArtist": "DKB",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_brave_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_kpop_group_and_2026_release_tour_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "DKB Japan Official",
+          "url": "https://dkb.jp/",
+          "note": "Current official DKB site lists the active group profile and September 2026 notices."
+        },
+        {
+          "source": "DKB Japan Official",
+          "url": "https://dkb.jp/pages/discography",
+          "note": "Official discography records DKB's Korean debut release Youth on 2020-02-03 and current 2026 releases."
+        },
+        {
+          "source": "DKB Japan Official",
+          "url": "https://dkb.jp/blogs/infomation/0091",
+          "note": "Official 2026 Japan tour notice confirms continuing group activity; individual military or participation status does not make the group inactive."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Candy Shop",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_brave_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_brave_kpop_group_debut_and_current_2026_official_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Candy Shop Japan Official",
+          "url": "https://candy-shop.jp/",
+          "note": "Current official Candy Shop site remains active through September 2026."
+        },
+        {
+          "source": "Candy Shop Japan Official",
+          "url": "https://candy-shop.jp/discography/detail/5855",
+          "note": "Official discography states Candy Shop is Brave Entertainment's K-pop girl group and records debut album Hashtag# on 2024-03-27."
+        },
+        {
+          "source": "Candy Shop Japan Official",
+          "url": "https://candy-shop.jp/about",
+          "note": "Current official profile lists the present four-member group identity."
+        }
+      ]
     }
   ]
 }

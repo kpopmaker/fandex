@@ -1,0 +1,58 @@
+{
+  "version": "brave_music_group_roster_adapter_v1",
+  "source": {
+    "id": "brave-entertainment-official-music-group-roster",
+    "type": "agency_roster",
+    "name": "Brave Entertainment Official Music Group Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.bravesound.com/"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "DKB",
+      "aliases": [
+        "다크비"
+      ],
+      "evidence": [
+        {
+          "label": "Brave Entertainment current official group identity",
+          "url": "https://dkb.jp/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Candy Shop",
+      "aliases": [
+        "캔디샵",
+        "CANDY SHOP"
+      ],
+      "evidence": [
+        {
+          "label": "Brave Entertainment current official group identity",
+          "url": "https://candy-shop.jp/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicGroupsOnly": true,
+    "individualMemberStatusDoesNotOverrideGroupLifecycle": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_channel_snapshot",
+    "verifiedFrom": [
+      "https://www.bravesound.com/",
+      "https://dkb.jp/",
+      "https://dkb.jp/pages/discography",
+      "https://candy-shop.jp/",
+      "https://candy-shop.jp/about",
+      "https://candy-shop.jp/discography/detail/5855"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

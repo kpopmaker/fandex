@@ -582,6 +582,22 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(vince.lifecycleStatus, 'active');
   assert.ok(vince.profile.koreanAliases.includes('빈스'));
 
+  const dkb = getArtistV4ById('dkb');
+  assert.ok(dkb);
+  assert.equal(dkb.entityType, 'group');
+  assert.equal(dkb.agency, 'Brave Entertainment');
+  assert.equal(dkb.debutDate, '2020-02-03');
+  assert.equal(dkb.lifecycleStatus, 'active');
+  assert.ok(dkb.profile.koreanAliases.includes('다크비'));
+
+  const candyShop = getArtistV4ById('candyshop');
+  assert.ok(candyShop);
+  assert.equal(candyShop.entityType, 'group');
+  assert.equal(candyShop.agency, 'Brave Entertainment');
+  assert.equal(candyShop.debutDate, '2024-03-27');
+  assert.equal(candyShop.lifecycleStatus, 'active');
+  assert.ok(candyShop.profile.koreanAliases.includes('캔디샵'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

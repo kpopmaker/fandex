@@ -5468,6 +5468,95 @@
           "url": "https://theblacklabel.com/artists/vince/"
         }
       ]
+    },
+    {
+      "id": "dkb",
+      "ticker": "DKB",
+      "name": "DKB",
+      "agency": "Brave Entertainment",
+      "entityType": "group",
+      "debutDate": "2020-02-03",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "다크비 DKB 브레이브엔터테인먼트",
+      "koreanAliases": [
+        "다크비"
+      ],
+      "englishAliases": [
+        "DKB"
+      ],
+      "keywords": [
+        "Brave Entertainment",
+        "브레이브엔터테인먼트",
+        "BB",
+        "Emotion",
+        "かけがえのない君へ"
+      ],
+      "disambiguationKeywords": [
+        "Brave Entertainment",
+        "브레이브엔터테인먼트",
+        "다크비"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "DKB Japan Official",
+          "url": "https://dkb.jp/"
+        },
+        {
+          "source": "DKB Japan Official",
+          "url": "https://dkb.jp/pages/discography"
+        }
+      ]
+    },
+    {
+      "id": "candyshop",
+      "ticker": "CANDYSHOP",
+      "name": "Candy Shop",
+      "agency": "Brave Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-03-27",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "캔디샵 Candy Shop 브레이브엔터테인먼트",
+      "koreanAliases": [
+        "캔디샵"
+      ],
+      "englishAliases": [
+        "Candy Shop",
+        "CANDY SHOP"
+      ],
+      "keywords": [
+        "Brave Entertainment",
+        "브레이브엔터테인먼트",
+        "Hashtag#",
+        "Good Girl",
+        "TIP TOE"
+      ],
+      "disambiguationKeywords": [
+        "Brave Entertainment",
+        "브레이브엔터테인먼트",
+        "캔디샵"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Candy Shop Japan Official",
+          "url": "https://candy-shop.jp/"
+        },
+        {
+          "source": "Candy Shop Japan Official",
+          "url": "https://candy-shop.jp/about"
+        }
+      ]
     }
   ]
 }
