@@ -1,0 +1,82 @@
+{
+  "contractVersion": "album-provider-final-decision-v1",
+  "metric": "Album",
+  "construct": "physical album completed-purchase-class sales/reaction",
+  "selectedPrimaryProvider": "circle-retail",
+  "primaryCapability": "Circle Retail Album Chart",
+  "secondaryVerificationProvider": "hanteo",
+  "secondaryCapability": "Hanteo Album Chart",
+  "circleVerdict": "PASS",
+  "hanteoVerdict": "CONDITIONAL_PASS_SECONDARY",
+  "primaryEligibility": {
+    "circle-retail": "PASS",
+    "hanteo": "NOT_QUALIFIED"
+  },
+  "hardGates": {
+    "circle-retail": {
+      "nativeExactCopies": "PASS",
+      "historicalExactCopies": "PASS",
+      "entityMapping": "PASS_CONDITIONAL",
+      "missingErrorSemantics": "PASS",
+      "noCircumventionRequired": "PASS",
+      "revisionReconciliation": "PASS"
+    },
+    "hanteo": {
+      "nativeExactCopies": "PASS",
+      "historicalExactCopies": "UNVERIFIED",
+      "entityMapping": "CONDITIONAL_PASS_CURRENT",
+      "missingErrorSemantics": "PARTIAL_PASS_CURRENT",
+      "noCircumventionRequired": "PASS_CURRENT",
+      "revisionReconciliation": "NOT_QUALIFIED"
+    }
+  },
+  "selectionConfidence": "HIGH",
+  "decisionState": "primary-finalized-technical",
+  "authorization": {
+    "collectorEngineeringAuthorized": true,
+    "implementationAuthorized": true,
+    "productionRuntimeCollectionAuthorized": false,
+    "productionPublicationAuthorized": false,
+    "commercialRightsCleared": false
+  },
+  "nonSummationRules": [
+    "circle-retail+hanteo-prohibited",
+    "circle-retail+hanteo-average-prohibited",
+    "circle-retail+circle-album-prohibited",
+    "certification-to-exact-quantity-prohibited",
+    "rank-or-index-to-sales-prohibited",
+    "missing-to-zero-prohibited"
+  ],
+  "reselectionTriggers": [
+    "circle-exact-copy-semantic-failure",
+    "circle-historical-acquisition-failure",
+    "circle-identity-operational-failure",
+    "circle-persistent-schema-instability",
+    "hanteo-historical-exact-copy-direct-qualification",
+    "hanteo-revision-reconciliation-qualification",
+    "provider-public-access-material-change"
+  ],
+  "evidence": {
+    "circlePullRequest": 130,
+    "hanteoPullRequest": 131,
+    "circleValidationRuns": [
+      33419496120,
+      33419576107,
+      33420003465,
+      33421361137,
+      33422606710,
+      33422703085,
+      33423012619
+    ],
+    "hanteoValidationRuns": [
+      33423596518,
+      33423664416,
+      33423845891,
+      33425415089,
+      33425610457,
+      33425787804,
+      33426524892
+    ]
+  },
+  "nextArtifact": "FANDEX Album — Production Collector Contract v1.0"
+}
