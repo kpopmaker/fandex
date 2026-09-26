@@ -78,6 +78,7 @@ jobs:
           python tests/artist-expansion-waker-provider-catalog-v1.py
           python tests/artist-expansion-dxmon-provider-catalog-v1.py
           python tests/artist-expansion-classy-provider-catalog-v1.py
+          python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -280,6 +281,11 @@ jobs:
           python scripts/artist-expansion/collect_classy_official_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/classy-official-provider-catalog-2026-09-26.json \
             --output classy_official_provider_catalog_v1_latest.json
+      - name: Collect NOMAD Entertainment current artist roster
+        run: |
+          python scripts/artist-expansion/collect_nomad_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/nomad-current-roster-2026-09-26.json \
+            --output nomad_roster_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -336,6 +342,7 @@ jobs:
             --snapshot waker_official_provider_catalog_v1_latest.json \
             --snapshot dxmon_official_provider_catalog_v1_latest.json \
             --snapshot classy_official_provider_catalog_v1_latest.json \
+            --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -414,6 +421,7 @@ jobs:
             waker_official_provider_catalog_v1_latest.json
             dxmon_official_provider_catalog_v1_latest.json
             classy_official_provider_catalog_v1_latest.json
+            nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

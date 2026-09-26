@@ -4438,6 +4438,33 @@
           "note": "K-TIGERS official notice records CLASS:y Fan Concert ROLL CALL on 2026-01-25."
         }
       ]
+    },
+    {
+      "displayArtist": "NOMAD",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_nomad_entertainment_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_company_artist_profile_with_explicit_kpop_description_debut_date_and_five_member_roster",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NOMAD Entertainment",
+          "url": "https://nomadent.co.kr/",
+          "note": "Current official company homepage identifies NOMAD as its K-pop artist, records 2024-02-28 debut, and lists DOY, SANGHA, ONE, RIVR, and JUNHO."
+        },
+        {
+          "source": "NOMAD Entertainment",
+          "url": "https://nomadent.co.kr/introduce/",
+          "note": "Official artist page independently exposes the same five-member roster and debut information."
+        },
+        {
+          "source": "NOMAD Entertainment",
+          "url": "https://nomadent.co.kr/discography/",
+          "note": "Official discography records the debut EP and first comeback single Call Me Back."
+        }
+      ]
     }
   ]
 }

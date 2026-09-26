@@ -835,6 +835,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(classy.fandomName, 'CLIKE:y');
   assert.ok(classy.profile.koreanAliases.includes('클라씨'));
 
+  const nomad = getArtistV4ById('nomad');
+  assert.ok(nomad);
+  assert.equal(nomad.entityType, 'group');
+  assert.equal(nomad.agency, 'NOMAD Entertainment');
+  assert.equal(nomad.debutDate, '2024-02-28');
+  assert.equal(nomad.lifecycleStatus, 'active');
+  assert.deepEqual(nomad.members, ['DOY', 'SANGHA', 'ONE', 'RIVR', 'JUNHO']);
+  assert.ok(nomad.profile.koreanAliases.includes('노매드'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

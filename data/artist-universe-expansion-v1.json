@@ -6927,6 +6927,61 @@
           "url": "https://weverse.io/classy/media"
         }
       ]
+    },
+    {
+      "id": "nomad",
+      "ticker": "NOMAD",
+      "name": "NOMAD",
+      "agency": "NOMAD Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-02-28",
+      "lifecycleStatus": "active",
+      "members": [
+        "DOY",
+        "SANGHA",
+        "ONE",
+        "RIVR",
+        "JUNHO"
+      ],
+      "naverNewsQuery": "노매드 NOMAD 엔터테인먼트",
+      "koreanAliases": [
+        "노매드"
+      ],
+      "englishAliases": [
+        "NOMAD"
+      ],
+      "keywords": [
+        "NOMAD Entertainment",
+        "노매드 엔터테인먼트",
+        "DOY",
+        "SANGHA",
+        "ONE",
+        "RIVR",
+        "JUNHO",
+        "No pressure",
+        "California love",
+        "Call Me Back"
+      ],
+      "disambiguationKeywords": [
+        "NOMAD Entertainment",
+        "노매드 엔터테인먼트",
+        "노매드"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "NOMAD Entertainment",
+          "url": "https://nomadent.co.kr/"
+        },
+        {
+          "source": "NOMAD Entertainment",
+          "url": "https://nomadent.co.kr/introduce/"
+        }
+      ]
     }
   ]
 }
