@@ -5378,6 +5378,96 @@
           "url": "https://www.melon.com/album/detail.htm?albumId=14522361"
         }
       ]
+    },
+    {
+      "id": "taeyang",
+      "ticker": "TAEYANG",
+      "name": "TAEYANG",
+      "agency": "THEBLACKLABEL",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "태양 TAEYANG 더블랙레이블 솔로",
+      "koreanAliases": [
+        "태양"
+      ],
+      "englishAliases": [
+        "TAEYANG",
+        "Taeyang"
+      ],
+      "keywords": [
+        "THEBLACKLABEL",
+        "더블랙레이블",
+        "BIGBANG",
+        "빅뱅",
+        "VIBE",
+        "Seed"
+      ],
+      "disambiguationKeywords": [
+        "BIGBANG",
+        "빅뱅",
+        "THEBLACKLABEL",
+        "솔로"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/"
+        },
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/artists/taeyang-old/"
+        }
+      ]
+    },
+    {
+      "id": "vince",
+      "ticker": "VINCE",
+      "name": "Vince",
+      "agency": "THEBLACKLABEL",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "빈스 Vince 더블랙레이블 가수",
+      "koreanAliases": [
+        "빈스"
+      ],
+      "englishAliases": [
+        "Vince",
+        "VINCE"
+      ],
+      "keywords": [
+        "THEBLACKLABEL",
+        "더블랙레이블",
+        "CHA CHA CHA",
+        "MENNAL",
+        "R&B"
+      ],
+      "disambiguationKeywords": [
+        "THEBLACKLABEL",
+        "더블랙레이블",
+        "가수",
+        "프로듀서"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/"
+        },
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/artists/vince/"
+        }
+      ]
     }
   ]
 }

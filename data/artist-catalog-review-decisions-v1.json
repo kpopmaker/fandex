@@ -3669,6 +3669,57 @@
           "note": "Contemporary report documents that former ENHYPEN member HEESEUNG began an independent solo identity under the activity name EVAN; FANDEX does not treat prior member credit as a solo alias."
         }
       ]
+    },
+    {
+      "displayArtist": "TAEYANG",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "bigbang_member_independent_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "bigbang"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_theblacklabel_solo_profile_and_kpop_solo_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/",
+          "note": "Current official THEBLACKLABEL roster lists TAEYANG as a music artist and highlights current solo content."
+        },
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/artists/taeyang-old/",
+          "note": "Official profile explicitly identifies TAEYANG as both a BIGBANG member and a representative K-pop solo artist, supporting a distinct solo canonical."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Vince",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_current_theblacklabel_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_theblacklabel_music_roster_and_current_solo_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/",
+          "note": "Current official THEBLACKLABEL roster lists Vince as a music identity and highlights CHA CHA CHA (feat. G-DRAGON)."
+        },
+        {
+          "source": "THEBLACKLABEL",
+          "url": "https://theblacklabel.com/artists/vince/",
+          "note": "Official THEBLACKLABEL artist page preserves Vince as an independent artist identity."
+        },
+        {
+          "source": "Yonhap News Agency",
+          "url": "https://www.yna.co.kr/amp/view/AKR20250817030100005",
+          "note": "Contemporary profile identifies Vince as a THEBLACKLABEL music producer and recording artist with direct solo releases."
+        }
+      ]
     }
   ]
 }

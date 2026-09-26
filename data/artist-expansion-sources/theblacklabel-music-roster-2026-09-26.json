@@ -1,0 +1,112 @@
+{
+  "version": "theblacklabel_music_roster_adapter_v1",
+  "source": {
+    "id": "theblacklabel-official-music-artist-roster",
+    "type": "agency_roster",
+    "name": "THEBLACKLABEL Official Music Artist Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://theblacklabel.com/"
+  },
+  "candidateCount": 6,
+  "candidates": [
+    {
+      "displayArtist": "MEOVV",
+      "aliases": [
+        "미야오"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TAEYANG",
+      "aliases": [
+        "태양"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ALLDAY PROJECT",
+      "aliases": [
+        "올데이 프로젝트"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Vince",
+      "aliases": [
+        "빈스"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "JEON SOMI",
+      "aliases": [
+        "전소미",
+        "SOMI"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ROSÉ",
+      "aliases": [
+        "로제",
+        "ROSE"
+      ],
+      "evidence": [
+        {
+          "label": "THEBLACKLABEL official artist roster",
+          "url": "https://theblacklabel.com/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "musicIdentitiesOnly": true,
+    "nonMusicProfilesExcluded": [
+      "YIM SI WAN",
+      "KWAK DONG YEON",
+      "PARK BO GUM",
+      "LEEJUNG LEE",
+      "LEE JONG WON"
+    ],
+    "rosterPresenceDoesNotCreateMemberSoloIdentity": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": [
+      "https://theblacklabel.com/",
+      "https://theblacklabel.com/artists/taeyang-old/",
+      "https://theblacklabel.com/artists/vince/",
+      "https://theblacklabel.com/artists/allday-project/"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
