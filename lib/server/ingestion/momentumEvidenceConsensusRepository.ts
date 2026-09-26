@@ -331,13 +331,16 @@ export function readMomentumEvidenceConsensusShadowProductFromJsonl(
   try {
     records = parseMomentumEvidenceConsensusHistory(input.jsonl);
   } catch {
+    const issues = Object.freeze([
+      Object.freeze({
+        code: 'invalid-stored-evidence-trace' as const,
+      }),
+    ]) as readonly [
+      Readonly<{ code: 'invalid-stored-evidence-trace' }>,
+    ];
     return Object.freeze({
       status: 'data-issue' as const,
-      issues: Object.freeze([
-        Object.freeze({
-          code: 'invalid-stored-evidence-trace' as const,
-        }),
-      ]),
+      issues,
       previewFallbackUsed: false as const,
       productMetricReadPerformed: false as const,
     });
