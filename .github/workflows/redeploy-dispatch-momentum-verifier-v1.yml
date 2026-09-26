@@ -1,0 +1,117 @@
+name: Redeploy Momentum verifier credential and dispatch v1
+
+on:
+  push:
+    branches:
+      - work/momentum-verifier-redeploy-dispatch-v1
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: momentum-verifier-redeploy-dispatch-v1
+  cancel-in-progress: false
+
+jobs:
+  redeploy-dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TEAM_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      EXPECTED_MAIN_SHA: 55a962cf9ca1e6260b0ce99858af8021ef8d6b4b
+      SOURCE_DEPLOYMENT_ID: dpl_CwABSn9ocSguLdbKaD34NifPisgA
+      EXECUTION_AUTHORIZATION_ID: ops-execution-momentum-verifier-20260926t082730z-v1
+      EXECUTION_CONFIRM: EXECUTE_ONE_MOMENTUM_NATIVE_VERIFIER_PRODUCTION_READ_ONLY
+      TARGET_WORKFLOW: execute-momentum-native-verifier-production-v1.yml
+
+    steps:
+      - name: Verify exact main and unconsumed authorization
+        run: |
+          set -euo pipefail
+
+          current_main="$(
+            curl --fail-with-body -sS               -H "Authorization: Bearer $GITHUB_TOKEN"               -H "Accept: application/vnd.github+json"               -H "X-GitHub-Api-Version: 2022-11-28"               "https://api.github.com/repos/kpopmaker/fandex/branches/main"             | jq -r '.commit.sha'
+          )"
+          test "$current_main" = "$EXPECTED_MAIN_SHA"
+
+          prior_success="$(
+            curl --fail-with-body -sS               -H "Authorization: Bearer $GITHUB_TOKEN"               -H "Accept: application/vnd.github+json"               -H "X-GitHub-Api-Version: 2022-11-28"               "https://api.github.com/repos/kpopmaker/fandex/actions/workflows/$TARGET_WORKFLOW/runs?event=workflow_dispatch&status=completed&per_page=100"             | jq '[.workflow_runs[] | select(.conclusion == "success")] | length'
+          )"
+          test "$prior_success" = "0"
+
+      - name: Force Production redeploy with current environment
+        id: redeploy
+        run: |
+          set -euo pipefail
+
+          response="$(
+            curl --fail-with-body -sS               -X POST               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Content-Type: application/json"               "https://api.vercel.com/v13/deployments?forceNew=1&teamId=$TEAM_ID"               -d "$(
+                jq -nc                   --arg deploymentId "$SOURCE_DEPLOYMENT_ID"                   '{
+                    name: "fandex",
+                    deploymentId: $deploymentId,
+                    target: "production"
+                  }'
+              )"
+          )"
+
+          deployment_id="$(printf '%s' "$response" | jq -r '.id')"
+          test -n "$deployment_id"
+          test "$deployment_id" != "null"
+          echo "deployment_id=$deployment_id" >> "$GITHUB_OUTPUT"
+          echo "MOMENTUM_VERIFIER_REDEPLOYMENT_CREATED=$deployment_id"
+
+      - name: Wait for exact Production deployment READY
+        run: |
+          set -euo pipefail
+          deployment_id="${{ steps.redeploy.outputs.deployment_id }}"
+
+          for attempt in $(seq 1 80); do
+            response="$(
+              curl --fail-with-body -sS                 -H "Authorization: Bearer $VERCEL_TOKEN"                 "https://api.vercel.com/v13/deployments/$deployment_id?teamId=$TEAM_ID"
+            )"
+
+            state="$(printf '%s' "$response" | jq -r '.readyState // .state // empty')"
+            commit="$(printf '%s' "$response" | jq -r '.meta.githubCommitSha // empty')"
+            target="$(printf '%s' "$response" | jq -r '.target // empty')"
+
+            if [ "$state" = "READY" ]; then
+              test "$commit" = "$EXPECTED_MAIN_SHA"
+              test "$target" = "production"
+              echo "MOMENTUM_VERIFIER_REDEPLOYMENT_READY=$deployment_id"
+              exit 0
+            fi
+
+            if [ "$state" = "ERROR" ] || [ "$state" = "CANCELED" ] || [ "$state" = "CANCELLED" ]; then
+              echo "redeployment terminal state: $state"
+              exit 1
+            fi
+
+            sleep 7
+          done
+
+          echo "redeployment timeout"
+          exit 1
+
+      - name: Dispatch exact one-shot Production verifier workflow
+        run: |
+          set -euo pipefail
+          deployment_id="${{ steps.redeploy.outputs.deployment_id }}"
+
+          payload="$(
+            jq -nc               --arg ref "main"               --arg expected_main_sha "$EXPECTED_MAIN_SHA"               --arg expected_deployment_id "$deployment_id"               --arg execution_authorization_id "$EXECUTION_AUTHORIZATION_ID"               --arg confirm "$EXECUTION_CONFIRM"               '{
+                ref: $ref,
+                inputs: {
+                  expected_main_sha: $expected_main_sha,
+                  expected_deployment_id: $expected_deployment_id,
+                  execution_authorization_id: $execution_authorization_id,
+                  confirm: $confirm
+                }
+              }'
+          )"
+
+          curl --fail-with-body -sS             -X POST             -H "Authorization: Bearer $GITHUB_TOKEN"             -H "Accept: application/vnd.github+json"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/kpopmaker/fandex/actions/workflows/$TARGET_WORKFLOW/dispatches"             -d "$payload"
+
+          echo "MOMENTUM_NATIVE_VERIFIER_PRODUCTION_DISPATCH=ACCEPTED"
