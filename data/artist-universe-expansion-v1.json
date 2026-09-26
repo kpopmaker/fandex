@@ -4449,6 +4449,196 @@
           "url": "https://antenna.co.kr/Toy"
         }
       ]
+    },
+    {
+      "id": "afterschool",
+      "ticker": "AFTERSCHOOL",
+      "name": "AFTER SCHOOL",
+      "agency": "PLEDIS Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2009-01-17",
+      "lifecycleStatus": "inactive",
+      "naverNewsQuery": "애프터스쿨 AFTER SCHOOL",
+      "koreanAliases": [
+        "애프터스쿨"
+      ],
+      "englishAliases": [
+        "AFTER SCHOOL",
+        "After School"
+      ],
+      "keywords": [
+        "PLEDIS Entertainment",
+        "애프터스쿨",
+        "AH",
+        "Bang!",
+        "Shampoo"
+      ],
+      "disambiguationKeywords": [
+        "PLEDIS Entertainment",
+        "애프터스쿨"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        },
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/en/artist/detail/afterschool/gallery/"
+        }
+      ]
+    },
+    {
+      "id": "orangecaramel",
+      "ticker": "ORANGECARAMEL",
+      "name": "ORANGE CARAMEL",
+      "agency": "PLEDIS Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "unit",
+      "debutDate": "2010-06-16",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "RAINA",
+        "NANA",
+        "LIZZY"
+      ],
+      "naverNewsQuery": "오렌지캬라멜 ORANGE CARAMEL",
+      "koreanAliases": [
+        "오렌지캬라멜"
+      ],
+      "englishAliases": [
+        "ORANGE CARAMEL",
+        "Orange Caramel"
+      ],
+      "keywords": [
+        "PLEDIS Entertainment",
+        "After School",
+        "까탈레나",
+        "Catallena",
+        "오렌지캬라멜"
+      ],
+      "disambiguationKeywords": [
+        "PLEDIS Entertainment",
+        "After School",
+        "오렌지캬라멜"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        },
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/detail/orangecaramel/notice/"
+        }
+      ]
+    },
+    {
+      "id": "bumzu",
+      "ticker": "BUMZU",
+      "name": "BUMZU",
+      "agency": "PLEDIS Entertainment",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "범주 BUMZU 가수",
+      "koreanAliases": [
+        "범주"
+      ],
+      "englishAliases": [
+        "BUMZU",
+        "Bumzu"
+      ],
+      "keywords": [
+        "PLEDIS Entertainment",
+        "범주",
+        "가수",
+        "프로듀서",
+        "싱어송라이터"
+      ],
+      "disambiguationKeywords": [
+        "PLEDIS Entertainment",
+        "범주",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        },
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/ko/artist/detail/bumzu/profile/"
+        }
+      ]
+    },
+    {
+      "id": "nuest",
+      "ticker": "NUEST",
+      "name": "NU'EST",
+      "agency": "PLEDIS Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2012-03-15",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "JR",
+        "ARON",
+        "BAEKHO",
+        "MINHYUN",
+        "REN"
+      ],
+      "naverNewsQuery": "뉴이스트 NU'EST",
+      "koreanAliases": [
+        "뉴이스트"
+      ],
+      "englishAliases": [
+        "NU'EST",
+        "NU’EST"
+      ],
+      "keywords": [
+        "PLEDIS Entertainment",
+        "뉴이스트",
+        "FACE",
+        "L.O.Λ.E"
+      ],
+      "disambiguationKeywords": [
+        "PLEDIS Entertainment",
+        "뉴이스트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        },
+        {
+          "source": "Weverse / PLEDIS Entertainment",
+          "url": "https://weverse.io/nuest/notice/2244"
+        }
+      ]
     }
   ]
 }

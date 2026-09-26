@@ -1,0 +1,110 @@
+{
+  "version": "pledis_music_identity_roster_adapter_v1",
+  "source": {
+    "id": "pledis-official-music-identity-roster",
+    "type": "agency_roster",
+    "name": "PLEDIS Entertainment Official Music Identity Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.pledis.co.kr/artist/all/"
+  },
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "displayArtist": "AFTER SCHOOL",
+      "aliases": [
+        "애프터스쿨"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "ORANGE CARAMEL",
+      "aliases": [
+        "오렌지캬라멜"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BUMZU",
+      "aliases": [
+        "범주"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NU'EST",
+      "aliases": [
+        "NU’EST",
+        "뉴이스트"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "HWANG MIN HYUN",
+      "aliases": [
+        "황민현"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SEVENTEEN",
+      "aliases": [
+        "세븐틴"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TWS",
+      "aliases": [
+        "투어스"
+      ],
+      "evidence": [
+        {
+          "label": "PLEDIS Entertainment official artist identity roster",
+          "url": "https://www.pledis.co.kr/artist/all/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "identityRosterIsNotLifecycleTruth": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_page_snapshot",
+    "verifiedFrom": "https://www.pledis.co.kr/artist/all/",
+    "verifiedAt": "2026-09-26"
+  }
+}

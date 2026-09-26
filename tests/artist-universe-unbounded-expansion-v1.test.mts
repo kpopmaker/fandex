@@ -168,6 +168,10 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     'kyuhyun',
     'dragonpony',
     'toy',
+    'afterschool',
+    'orangecaramel',
+    'bumzu',
+    'nuest',
   ]) {
     const artist = getArtistV4ById(artistId);
     assert.ok(artist, `missing expanded artist: ${artistId}`);
@@ -176,6 +180,32 @@ test('baseline remains 100 while active universe expands beyond it', () => {
     assert.equal(binding.provider, 'naver-news');
     assert.ok(binding.query.trim());
   }
+
+  for (const artistId of ['afterschool', 'orangecaramel', 'nuest']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.lifecycleStatus, 'inactive');
+    assert.equal(artist.agencyStatus, 'historical');
+    assert.equal(artist.agency, 'PLEDIS Entertainment');
+    assert.equal(artist.collection.tier, 'archive');
+  }
+
+  const orangeCaramel = getArtistV4ById('orangecaramel');
+  assert.ok(orangeCaramel);
+  assert.equal(orangeCaramel.entityType, 'unit');
+  assert.deepEqual(orangeCaramel.members, ['RAINA', 'NANA', 'LIZZY']);
+
+  const nuest = getArtistV4ById('nuest');
+  assert.ok(nuest);
+  assert.equal(nuest.entityType, 'group');
+  assert.equal(nuest.debutDate, '2012-03-15');
+  assert.equal(nuest.members.length, 5);
+
+  const bumzu = getArtistV4ById('bumzu');
+  assert.ok(bumzu);
+  assert.equal(bumzu.entityType, 'solo');
+  assert.equal(bumzu.lifecycleStatus, 'active');
+  assert.equal(bumzu.agency, 'PLEDIS Entertainment');
 
   for (const artistId of ['jungjaehyung', 'lucidfall', 'leesangsoon', 'leehyori', 'parksaebyul', 'kyuhyun']) {
     const artist = getArtistV4ById(artistId);

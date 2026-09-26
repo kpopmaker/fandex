@@ -3245,6 +3245,96 @@
           "note": "Antenna's official profile describes You Hee Yul as the founder/leader of the project band Toy and places the Toy catalog under this combined profile. FANDEX represents the music identity canonically as project TOY while preserving You Hee Yul aliases rather than creating a separate inferred solo music identity."
         }
       ]
+    },
+    {
+      "displayArtist": "AFTER SCHOOL",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "inactive_after_school_archive_identity_with_historical_pledis_provenance",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_pledis_music_identity_and_established_kpop_group",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/",
+          "note": "PLEDIS retains AFTER SCHOOL as a distinct official music identity."
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1685482wpp/nana-signs-with-new-agency-after-15-years-at-pledis",
+          "note": "Nana, the final long-running PLEDIS member, left PLEDIS in September 2024; the group is modeled inactive and PLEDIS is retained only as historical agency provenance."
+        }
+      ]
+    },
+    {
+      "displayArtist": "ORANGE CARAMEL",
+      "decision": "new_canonical_unit_candidate",
+      "relationResolution": "inactive_after_school_unit_archive_identity_with_historical_pledis_provenance",
+      "relatedCanonicalArtistIds": [
+        "afterschool"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_pledis_unit_identity_and_established_kpop_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/",
+          "note": "PLEDIS retains ORANGE CARAMEL as a distinct official music identity."
+        },
+        {
+          "source": "Soompi",
+          "url": "https://www.soompi.com/article/1163419wpp/pledis-entertainment-clarifies-future-orange-caramel-lizzys-graduation",
+          "note": "PLEDIS stated in 2018 that Orange Caramel had not formally disbanded but members were pursuing separate activities; with all members later outside PLEDIS, FANDEX models the unit as inactive archive with historical agency provenance."
+        }
+      ]
+    },
+    {
+      "displayArtist": "BUMZU",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "current_official_pledis_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_pledis_artist_roster_and_solo_music_identity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/",
+          "note": "Current PLEDIS ARTISTS page lists BUMZU as a distinct music artist."
+        },
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/ko/artist/detail/bumzu/profile/",
+          "note": "PLEDIS maintains a dedicated current BUMZU artist profile."
+        }
+      ]
+    },
+    {
+      "displayArtist": "NU'EST",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "inactive_nuest_archive_identity_with_historical_pledis_provenance",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_pledis_group_identity_and_completed_kpop_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PLEDIS Entertainment",
+          "url": "https://www.pledis.co.kr/artist/all/",
+          "note": "PLEDIS retains NU'EST as a distinct official music identity."
+        },
+        {
+          "source": "Weverse / PLEDIS Entertainment",
+          "url": "https://weverse.io/nuest/notice/2244",
+          "note": "PLEDIS announced official NU'EST social, website, fan cafe, Weverse, YouTube, and V LIVE updates would cease from March 31, 2022 while channels remain as archives."
+        }
+      ]
     }
   ]
 }
