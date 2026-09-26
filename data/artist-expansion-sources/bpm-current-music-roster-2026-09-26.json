@@ -1,0 +1,65 @@
+{
+  "version": "bpm_current_verified_music_roster_adapter_v1",
+  "source": {
+    "id": "bpm-current-verified-music-identities",
+    "type": "agency_roster",
+    "name": "Big Planet Made Current Verified Music Identities",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.bpment.co.kr/"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "HA SUNG WOON",
+      "aliases": [
+        "하성운"
+      ],
+      "evidence": [
+        {
+          "label": "Big Planet Made current official profile",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=291"
+        },
+        {
+          "label": "Big Planet Made 2026 official activity",
+          "url": "https://www.bpment.co.kr/artist/video.php?idx=291"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BADVILLAIN",
+      "aliases": [
+        "배드빌런"
+      ],
+      "evidence": [
+        {
+          "label": "Big Planet Made current official profile",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=290"
+        },
+        {
+          "label": "Big Planet Made official active discography",
+          "url": "https://www.bpment.co.kr/artist/discography.php?idx=290"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "notExhaustiveLabelRoster": true,
+    "currentActivityEvidenceRequired": true,
+    "historicalOrStaleProfilesExcludedByDefault": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_activity_snapshot",
+    "verifiedFrom": [
+      "https://www.bpment.co.kr/artist/profile.php?idx=291",
+      "https://www.bpment.co.kr/artist/video.php?idx=291",
+      "https://bpment.co.kr/page/discography_detail.php?idx=379",
+      "https://www.bpment.co.kr/artist/profile.php?idx=290",
+      "https://www.bpment.co.kr/artist/discography.php?idx=290"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

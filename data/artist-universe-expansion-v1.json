@@ -5614,6 +5614,92 @@
           "url": "https://istent.co.kr/news/36d7836f601e806abd06c65010780261"
         }
       ]
+    },
+    {
+      "id": "hasungwoon",
+      "ticker": "HASUNGWOON",
+      "name": "HA SUNG WOON",
+      "agency": "Big Planet Made",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "하성운 HA SUNG WOON 빅플래닛메이드",
+      "koreanAliases": [
+        "하성운"
+      ],
+      "englishAliases": [
+        "HA SUNG WOON",
+        "Ha Sung Woon"
+      ],
+      "keywords": [
+        "Big Planet Made",
+        "빅플래닛메이드",
+        "Tell The World",
+        "Blessed"
+      ],
+      "disambiguationKeywords": [
+        "빅플래닛메이드",
+        "HA SUNG WOON",
+        "하성운"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=291"
+        },
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/video.php?idx=291"
+        }
+      ]
+    },
+    {
+      "id": "badvillain",
+      "ticker": "BADVILLAIN",
+      "name": "BADVILLAIN",
+      "agency": "Big Planet Made",
+      "entityType": "group",
+      "debutDate": "2024-06-03",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "배드빌런 BADVILLAIN 빅플래닛메이드",
+      "koreanAliases": [
+        "배드빌런"
+      ],
+      "englishAliases": [
+        "BADVILLAIN"
+      ],
+      "keywords": [
+        "Big Planet Made",
+        "빅플래닛메이드",
+        "OVERSTEP",
+        "THRILLER",
+        "숨 ZOOM"
+      ],
+      "disambiguationKeywords": [
+        "빅플래닛메이드",
+        "BADVILLAIN",
+        "배드빌런"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=290"
+        },
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/discography.php?idx=290"
+        }
+      ]
     }
   ]
 }

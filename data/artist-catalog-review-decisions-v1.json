@@ -3801,6 +3801,55 @@
           "note": "Official September 2026 release notice confirms continuing group activity with the second mini album BLUE MODE."
         }
       ]
+    },
+    {
+      "displayArtist": "HA SUNG WOON",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_current_bpm_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_bpm_profile_and_2026_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=291",
+          "note": "Current official BPM artist profile identifies HA SUNG WOON."
+        },
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/video.php?idx=291",
+          "note": "Official BPM video page carries HA SUNG WOON's 2026-01-09 Tell The World special clip."
+        },
+        {
+          "source": "Big Planet Made",
+          "url": "https://bpment.co.kr/page/discography_detail.php?idx=379",
+          "note": "Official BPM discography records Tell The World on 2026-01-05."
+        }
+      ]
+    },
+    {
+      "displayArtist": "BADVILLAIN",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_bpm_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_bpm_group_profile_and_active_music_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=290",
+          "note": "Current official BPM profile identifies BADVILLAIN as the group identity."
+        },
+        {
+          "source": "Big Planet Made",
+          "url": "https://www.bpment.co.kr/artist/discography.php?idx=290",
+          "note": "Official BPM discography records BADVILLAIN releases from debut through THRILLER."
+        }
+      ]
     }
   ]
 }
