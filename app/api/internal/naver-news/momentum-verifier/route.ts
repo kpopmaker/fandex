@@ -1,8 +1,9 @@
 import 'server-only';
 
 import {
+  isMomentumProductionVerifierExecutionRequestAuthorized,
   isMomentumProductionVerifierNativeExecutionAuthorized,
-} from '@/lib/server/ingestion/momentumProductionVerifierActivationApproval';
+} from '@/lib/server/ingestion/momentumNativeVerifierProductionExecutionAuthorization';
 import {
   runNaverNewsMomentumVerifierExecutionChannel,
   type NaverNewsMomentumVerifierExecutionChannelDependencies,
@@ -26,11 +27,18 @@ export async function handleNaverNewsMomentumVerifierExecutionRequest(
       );
     }
 
+    const requestBody: unknown = await request.json();
+    if (!isMomentumProductionVerifierExecutionRequestAuthorized(requestBody)) {
+      throw new Error(
+        'naver_news_momentum_verifier_execution_channel_rejected',
+      );
+    }
+
     const result = await runNaverNewsMomentumVerifierExecutionChannel(
       {
         environment,
         authorizationHeader: request.headers.get('authorization'),
-        requestBody: await request.json(),
+        requestBody,
       },
       dependencies,
     );
