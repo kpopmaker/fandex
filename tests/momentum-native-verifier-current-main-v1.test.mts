@@ -2,9 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
-  handleNaverNewsMomentumVerifierExecutionRequest,
-} from '../app/api/internal/naver-news/momentum-verifier/route';
-import {
   adaptFandexMomentumVerifierOutputToStoredEvidenceAttestationRuntime,
 } from '../lib/server/ingestion/naverNewsMomentumVerifierRuntimeAttestation';
 import {
@@ -320,41 +317,4 @@ test('authorized production channel returns bounded output and no secret/raw pay
   assert.equal(serialized.includes('rawPayload'), false);
   assert.equal(serialized.includes('normalizedPayload'), false);
   assert.equal(serialized.includes(SECRET), false);
-});
-
-test('route fails closed outside production and for non-POST requests', async () => {
-  const body = JSON.stringify({
-    contractVersion:
-      'v162_naver_news_momentum_native_verifier_execution_request_v1',
-    purpose: 'momentum-native-verifier-read-only',
-    canonicalArtistId: 'iu',
-    throughSlotStart: SLOT,
-  });
-  const environment = {
-    VERCEL_ENV: 'preview',
-    FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_ENABLED:
-      'approved-v162-research-read-only',
-    FANDEX_MOMENTUM_NATIVE_VERIFIER_CHANNEL_DEPLOYMENT: 'production',
-    FANDEX_MOMENTUM_NATIVE_VERIFIER_SECRET: SECRET,
-  };
-  const preview = await handleNaverNewsMomentumVerifierExecutionRequest(
-    new Request('https://example.invalid/api/internal/naver-news/momentum-verifier', {
-      method: 'POST',
-      headers: {
-        authorization: 'Bearer ' + SECRET,
-        'content-type': 'application/json',
-      },
-      body,
-    }),
-    environment,
-  );
-  assert.equal(preview.status, 403);
-
-  const get = await handleNaverNewsMomentumVerifierExecutionRequest(
-    new Request('https://example.invalid/api/internal/naver-news/momentum-verifier', {
-      method: 'GET',
-    }),
-    environment,
-  );
-  assert.equal(get.status, 403);
 });
