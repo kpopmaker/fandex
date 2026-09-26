@@ -1,0 +1,56 @@
+{
+  "version": "classy_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "classy-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "CLASS:y Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://weverse.io/classy/media"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "CLASS:y",
+      "aliases": [
+        "클라씨",
+        "CLASSy",
+        "CLASS:Y"
+      ],
+      "evidence": [
+        {
+          "label": "K-TIGERS official management history",
+          "url": "https://www.ktigers.com/95"
+        },
+        {
+          "label": "CLASS:y official management notice",
+          "url": "https://weverse.io/classy/notice/31776?hl=ko"
+        },
+        {
+          "label": "CLASS:y current 2026 official media",
+          "url": "https://weverse.io/classy/media"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "currentSevenMemberContentEvidenceRequired": true,
+    "memberSoloContentDoesNotCreateSoloCanonicals": true,
+    "debutDateNotInferredFromAnniversaryContent": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.ktigers.com/95",
+      "https://weverse.io/classy/notice/31776?hl=ko",
+      "https://weverse.io/classy/media",
+      "https://weverse.io/classy/notice/32791"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

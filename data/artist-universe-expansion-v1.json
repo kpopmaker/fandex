@@ -6862,6 +6862,71 @@
           "url": "https://weverse.io/dxmon/notice/36204"
         }
       ]
+    },
+    {
+      "id": "classy",
+      "ticker": "CLASSY",
+      "name": "CLASS:y",
+      "agency": "K-TIGERS Entertainment",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "members": [
+        "MYUNG HYUNGSEO",
+        "YOON CHAEWON",
+        "HONG HYEJU",
+        "KIM RIWON",
+        "WON JIMIN",
+        "PARK BOEUN",
+        "KIM SEONYOU"
+      ],
+      "fandomName": "CLIKE:y",
+      "naverNewsQuery": "클라씨 CLASS:y K타이거즈 엔터테인먼트",
+      "koreanAliases": [
+        "클라씨"
+      ],
+      "englishAliases": [
+        "CLASS:y",
+        "CLASSy",
+        "CLASS:Y"
+      ],
+      "keywords": [
+        "K-TIGERS Entertainment",
+        "K타이거즈 엔터테인먼트",
+        "MYUNG HYUNGSEO",
+        "YOON CHAEWON",
+        "HONG HYEJU",
+        "KIM RIWON",
+        "WON JIMIN",
+        "PARK BOEUN",
+        "KIM SEONYOU",
+        "RE:BOOT",
+        "ROLL CALL"
+      ],
+      "disambiguationKeywords": [
+        "K-TIGERS Entertainment",
+        "K타이거즈",
+        "클라씨"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "K-TIGERS",
+          "url": "https://www.ktigers.com/95"
+        },
+        {
+          "source": "CLASS:y Weverse",
+          "url": "https://weverse.io/classy/notice/31776?hl=ko"
+        },
+        {
+          "source": "CLASS:y Weverse",
+          "url": "https://weverse.io/classy/media"
+        }
+      ]
     }
   ]
 }

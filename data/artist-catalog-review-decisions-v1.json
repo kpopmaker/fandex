@@ -4406,6 +4406,38 @@
           "note": "Official July 2026 HyperLink_Vol3 streaming event confirms current music activity."
         }
       ]
+    },
+    {
+      "displayArtist": "CLASS:y",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_ktigers_group_management_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "ktigers_official_contract_history_and_official_weverse_2026_full_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "K-TIGERS",
+          "url": "https://www.ktigers.com/95",
+          "note": "Official K-TIGERS history records the 2025 CLASS:y exclusive contract."
+        },
+        {
+          "source": "CLASS:y Weverse",
+          "url": "https://weverse.io/classy/notice/31776?hl=ko",
+          "note": "Official management notice identifies K-TIGERS Entertainment as CLASS:y management and states all members are participating in a new album."
+        },
+        {
+          "source": "CLASS:y Weverse",
+          "url": "https://weverse.io/classy/media",
+          "note": "Official 2026 media contains RE:BOOT, Water Bomb Busan 2026, and solo content for the seven current members."
+        },
+        {
+          "source": "CLASS:y Weverse",
+          "url": "https://weverse.io/classy/notice/32791",
+          "note": "K-TIGERS official notice records CLASS:y Fan Concert ROLL CALL on 2026-01-25."
+        }
+      ]
     }
   ]
 }

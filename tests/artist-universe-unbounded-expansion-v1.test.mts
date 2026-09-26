@@ -825,6 +825,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(dxmon.fandomName, 'MONs');
   assert.ok(dxmon.profile.koreanAliases.includes('다이몬'));
 
+  const classy = getArtistV4ById('classy');
+  assert.ok(classy);
+  assert.equal(classy.entityType, 'group');
+  assert.equal(classy.agency, 'K-TIGERS Entertainment');
+  assert.equal(classy.lifecycleStatus, 'active');
+  assert.equal(classy.debutDate, undefined);
+  assert.deepEqual(classy.members, ['MYUNG HYUNGSEO', 'YOON CHAEWON', 'HONG HYEJU', 'KIM RIWON', 'WON JIMIN', 'PARK BOEUN', 'KIM SEONYOU']);
+  assert.equal(classy.fandomName, 'CLIKE:y');
+  assert.ok(classy.profile.koreanAliases.includes('클라씨'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
