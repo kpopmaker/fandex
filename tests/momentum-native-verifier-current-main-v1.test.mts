@@ -8,11 +8,13 @@ import {
   NAVER_NEWS_MOMENTUM_NATIVE_VERIFIER_OUTPUT_DESCRIPTOR,
   parseNaverNewsMomentumNativeVerifierCommand,
   runNaverNewsMomentumNativeVerifier,
+  type NaverNewsMomentumNativeVerifierDependencies,
 } from '../lib/server/ingestion/naverNewsMomentumNativeVerifier';
 import {
   NAVER_NEWS_MOMENTUM_VERIFIER_EXECUTION_CHANNEL_DESCRIPTOR,
   readNaverNewsMomentumVerifierExecutionChannelConfig,
   runNaverNewsMomentumVerifierExecutionChannel,
+  type NaverNewsMomentumVerifierExecutionChannelDependencies,
 } from '../lib/server/ingestion/naverNewsMomentumVerifierExecutionChannel';
 import { bindCanonicalArtistToNaverNews } from '../lib/server/ingestion/naverNewsArtistBinding';
 import {
@@ -29,6 +31,13 @@ import {
 const SLOT = '2026-09-21T12:00:00.000Z';
 const EXECUTED_AT = '2026-09-21T12:50:00.000Z';
 const SECRET = 'current-main-runtime-verifier-secret';
+
+type NativeVerifierPool = ReturnType<
+  NonNullable<NaverNewsMomentumNativeVerifierDependencies['poolFactory']>
+>;
+type ExecuteNativeVerifier = NonNullable<
+  NaverNewsMomentumVerifierExecutionChannelDependencies['executeNativeVerifier']
+>;
 
 function fixture() {
   const binding = bindCanonicalArtistToNaverNews('iu');
@@ -205,7 +214,7 @@ test('native verifier reproduces Stored Evidence read-only and v160 runtime atte
         'postgresql://fandex_runtime:test@example.pooler.invalid/neondb',
     },
     {
-      poolFactory: () => mock.pool as any,
+      poolFactory: () => mock.pool as unknown as NativeVerifierPool,
       now: () => new Date(EXECUTED_AT),
     },
   );
@@ -262,7 +271,7 @@ test('execution channel rejects Preview before verifier invocation', async () =>
         executeNativeVerifier: (async () => {
           calls += 1;
           throw new Error('must-not-run');
-        }) as any,
+        }) as ExecuteNativeVerifier,
       },
     ),
     /naver_news_momentum_verifier_execution_channel_rejected/,
@@ -279,7 +288,7 @@ test('authorized production channel returns bounded output and no secret/raw pay
         'postgresql://fandex_runtime:test@example.pooler.invalid/neondb',
     },
     {
-      poolFactory: () => mock.pool as any,
+      poolFactory: () => mock.pool as unknown as NativeVerifierPool,
       now: () => new Date(EXECUTED_AT),
     },
   );
@@ -304,7 +313,7 @@ test('authorized production channel returns bounded output and no secret/raw pay
         throughSlotStart: SLOT,
       },
     },
-    { executeNativeVerifier: (async () => native) as any },
+    { executeNativeVerifier: (async () => native) as ExecuteNativeVerifier },
   );
 
   assert.equal(result.state, 'executed');
