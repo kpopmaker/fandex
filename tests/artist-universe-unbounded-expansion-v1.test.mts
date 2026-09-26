@@ -639,6 +639,23 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(onf.agency, 'KI Entertainment');
   assert.ok(onf.profile.includeKeywords.includes('Yuto'));
 
+  const naze = getArtistV4ById('naze');
+  assert.ok(naze);
+  assert.equal(naze.entityType, 'group');
+  assert.equal(naze.agency, 'C9 Entertainment');
+  assert.equal(naze.debutDate, '2026-05-04');
+  assert.equal(naze.lifecycleStatus, 'active');
+  assert.equal(naze.members.length, 7);
+  assert.ok(naze.profile.koreanAliases.includes('네이즈'));
+
+  const cix = getArtistV4ById('cix');
+  assert.ok(cix);
+  assert.equal(cix.lifecycleStatus, 'inactive');
+  assert.equal(cix.agency, 'C9 Entertainment');
+  assert.equal(cix.agencyStatus, 'historical');
+  assert.equal(cix.collection.tier, 'archive');
+  assert.deepEqual(cix.members, ['BX', 'SEUNGHUN', 'YONGHEE', 'HYUNSUK']);
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

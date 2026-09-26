@@ -63,6 +63,7 @@ jobs:
           python tests/artist-expansion-ist-roster-adapter-v1.py
           python tests/artist-expansion-bpm-current-music-roster-v1.py
           python tests/artist-expansion-strangelab-current-music-roster-v1.py
+          python tests/artist-expansion-naze-official-provider-catalog-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -190,6 +191,11 @@ jobs:
           python scripts/artist-expansion/collect_strangelab_current_music_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/strangelab-current-music-roster-2026-09-26.json \
             --output strangelab_current_music_roster_v1_latest.json
+      - name: Collect NAZE official current provider catalog
+        run: |
+          python scripts/artist-expansion/collect_naze_official_provider_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/naze-official-provider-catalog-2026-09-26.json \
+            --output naze_official_provider_catalog_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -231,6 +237,7 @@ jobs:
             --snapshot ist_artist_roster_v1_latest.json \
             --snapshot bpm_current_music_roster_v1_latest.json \
             --snapshot strangelab_current_music_roster_v1_latest.json \
+            --snapshot naze_official_provider_catalog_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -294,6 +301,7 @@ jobs:
             ist_artist_roster_v1_latest.json
             bpm_current_music_roster_v1_latest.json
             strangelab_current_music_roster_v1_latest.json
+            naze_official_provider_catalog_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

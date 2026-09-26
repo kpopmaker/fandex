@@ -3872,6 +3872,33 @@
           "note": "Official August 2026 restructuring notice states StrangeLab will oversee artist activities for XLOV and LU."
         }
       ]
+    },
+    {
+      "displayArtist": "NAZE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_c9_multinational_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_naze_profile_c9_affiliation_and_current_2026_music_release_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NAZE Japan Official",
+          "url": "https://naze-official.jp/profile",
+          "note": "Official profile identifies NAZE as a seven-member group affiliated with C9 Entertainment and lists all seven members."
+        },
+        {
+          "source": "NAZE Japan Official",
+          "url": "https://1st.naze-official.jp/",
+          "note": "Official 2026 Japan debut site confirms active music release I LIKE IT on 2026-09-14."
+        },
+        {
+          "source": "Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/multinational-boy-band-naze-to-debut-with-ep-naze-in-may/12589408",
+          "note": "Contemporary report citing C9 Entertainment records NAZE's first EP debut on 2026-05-04."
+        }
+      ]
     }
   ]
 }

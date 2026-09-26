@@ -1,0 +1,47 @@
+{
+  "version": "naze_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "naze-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "NAZE Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://naze-official.jp/profile"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "NAZE",
+      "aliases": [
+        "네이즈"
+      ],
+      "evidence": [
+        {
+          "label": "NAZE official profile",
+          "url": "https://naze-official.jp/profile"
+        },
+        {
+          "label": "NAZE official current release site",
+          "url": "https://1st.naze-official.jp/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleActOfficialCatalog": true,
+    "currentReleaseEvidenceRequired": true,
+    "catalogPresenceDoesNotImplyBroaderC9Roster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://naze-official.jp/profile",
+      "https://1st.naze-official.jp/",
+      "https://naze-official.jp/news"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
