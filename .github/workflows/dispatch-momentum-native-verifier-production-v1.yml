@@ -1,0 +1,65 @@
+name: Dispatch Momentum native verifier Production execution v1
+
+on:
+  push:
+    branches:
+      - work/momentum-native-verifier-production-execution-dispatch-v1
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: momentum-native-verifier-production-dispatch-bridge-v1
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      EXPECTED_MAIN_SHA: 9b417a76e4fffbb125e1b37c7d17a0afc434580b
+      EXPECTED_DEPLOYMENT_ID: dpl_CijkFJybbCtbgM7p8CXAy8MG7KhZ
+      EXECUTION_AUTHORIZATION_ID: ops-execution-momentum-verifier-20260926t082730z-v1
+      EXECUTION_CONFIRM: EXECUTE_ONE_MOMENTUM_NATIVE_VERIFIER_PRODUCTION_READ_ONLY
+      TARGET_WORKFLOW: execute-momentum-native-verifier-production-v1.yml
+    steps:
+      - name: Verify exact main and unconsumed execution authorization
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          current_main="$(
+            curl --fail-with-body -sS               -H "Authorization: Bearer $GH_TOKEN"               -H "Accept: application/vnd.github+json"               -H "X-GitHub-Api-Version: 2022-11-28"               "https://api.github.com/repos/kpopmaker/fandex/branches/main"             | jq -r '.commit.sha'
+          )"
+
+          test "$current_main" = "$EXPECTED_MAIN_SHA"
+
+          prior_success="$(
+            curl --fail-with-body -sS               -H "Authorization: Bearer $GH_TOKEN"               -H "Accept: application/vnd.github+json"               -H "X-GitHub-Api-Version: 2022-11-28"               "https://api.github.com/repos/kpopmaker/fandex/actions/runs?event=workflow_dispatch&per_page=100"             | jq --arg path ".github/workflows/$TARGET_WORKFLOW"               '[.workflow_runs[] | select(.path == $path and .conclusion == "success")] | length'
+          )"
+
+          test "$prior_success" = "0"
+
+      - name: Dispatch exact reviewed main workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          payload="$(
+            jq -nc               --arg ref "main"               --arg expected_main_sha "$EXPECTED_MAIN_SHA"               --arg expected_deployment_id "$EXPECTED_DEPLOYMENT_ID"               --arg execution_authorization_id "$EXECUTION_AUTHORIZATION_ID"               --arg confirm "$EXECUTION_CONFIRM"               '{
+                ref: $ref,
+                inputs: {
+                  expected_main_sha: $expected_main_sha,
+                  expected_deployment_id: $expected_deployment_id,
+                  execution_authorization_id: $execution_authorization_id,
+                  confirm: $confirm
+                }
+              }'
+          )"
+
+          curl --fail-with-body -sS             -X POST             -H "Authorization: Bearer $GH_TOKEN"             -H "Accept: application/vnd.github+json"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/kpopmaker/fandex/actions/workflows/$TARGET_WORKFLOW/dispatches"             -d "$payload"
+
+          echo "MOMENTUM_PRODUCTION_VERIFIER_DISPATCH_REQUEST=ACCEPTED"
