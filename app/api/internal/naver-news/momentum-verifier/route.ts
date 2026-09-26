@@ -1,6 +1,7 @@
 import 'server-only';
 
 import {
+  isMomentumProductionVerifierExecutionAuthorizationHeaderValid,
   isMomentumProductionVerifierExecutionRequestAuthorized,
   isMomentumProductionVerifierNativeExecutionAuthorized,
 } from '@/lib/server/ingestion/momentumNativeVerifierProductionExecutionAuthorization';
@@ -21,6 +22,9 @@ export async function handleNaverNewsMomentumVerifierExecutionRequest(
     if (
       request.method !== 'POST'
       || !isMomentumProductionVerifierNativeExecutionAuthorized()
+      || !isMomentumProductionVerifierExecutionAuthorizationHeaderValid(
+        request.headers.get('x-fandex-execution-authorization-id'),
+      )
     ) {
       throw new Error(
         'naver_news_momentum_verifier_execution_channel_rejected',
