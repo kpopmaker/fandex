@@ -9,20 +9,52 @@ import { getStoredEvidenceFailurePresentation } from '../../../../../lib/product
 import {
   getNaverNewsIssuePointRealProductStoredEvidenceJobAtLatestOfficialSlot,
 } from '../../../../../lib/server/product/naverNewsIssuePointRealProductRead';
+import {
+  getActivityExposureStoredEvidenceForIU,
+} from '../../../../../lib/server/product/activityExposureRealProductRead';
 
 type PageProps = {
   params: Promise<{
     artistId: string;
     evidenceId: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export function generateStaticParams() {
   return getArtistProductEvidenceStaticParams();
 }
 
-export default async function ProductEvidencePage({ params }: PageProps) {
+export default async function ProductEvidencePage({
+  params,
+  searchParams,
+}: PageProps) {
   const { artistId, evidenceId } = await params;
+  const query = await searchParams;
+  const evidenceKind = Array.isArray(query.kind) ? query.kind[0] : query.kind;
+
+  if (
+    artistId === 'iu'
+    && evidenceKind === 'activity-exposure'
+    && /^[0-9a-f]{64}$/.test(evidenceId)
+  ) {
+    const storedEvidence = await getActivityExposureStoredEvidenceForIU(
+      evidenceId,
+    );
+
+    if (storedEvidence.status === 'not-found') {
+      notFound();
+    }
+    if (storedEvidence.status === 'data-issue') {
+      return (
+        <ActivityExposureStoredEvidenceFailureDetail
+          reason={storedEvidence.reason}
+        />
+      );
+    }
+
+    return <ActivityExposureStoredEvidenceDetail model={storedEvidence.model} />;
+  }
 
   if (artistId === 'iu' && /^[0-9a-f]{64}$/.test(evidenceId)) {
     const storedEvidence =
@@ -103,6 +135,119 @@ export default async function ProductEvidencePage({ params }: PageProps) {
 
           <p className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-7 text-cyan-900 dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
             {evidencePresentation.disclosureText}
+          </p>
+        </div>
+      </article>
+    </main>
+  );
+}
+
+type ActivityExposureStoredEvidenceModel = Extract<
+  Awaited<ReturnType<typeof getActivityExposureStoredEvidenceForIU>>,
+  { status: 'ok' }
+>['model'];
+
+function ActivityExposureStoredEvidenceFailureDetail({
+  reason,
+}: {
+  reason: 'duplicate-record' | 'invalid-lineage' | 'runtime-read-failed';
+}) {
+  const variableHref =
+    '/artists/iu?variables=comebackActivityPoint#activity-exposure';
+
+  return (
+    <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 dark:bg-slate-950 dark:text-white sm:px-6 lg:px-8">
+      <article className="mx-auto w-full max-w-3xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <header className="border-b border-slate-200 p-5 dark:border-slate-800 sm:p-8">
+          <Link
+            href={variableHref}
+            className="inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
+          >
+            ← Activity Exposure로 돌아가기
+          </Link>
+          <p className="mt-6 text-xs font-black uppercase tracking-[0.18em] text-amber-600 dark:text-amber-300">
+            Stored Evidence · Verify
+          </p>
+          <h1 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">
+            Stored Evidence 확인 필요
+          </h1>
+        </header>
+        <div className="p-5 sm:p-8">
+          <p className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-7 text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+            {reason}. 이 상태는 활동 없음이나 점수 0으로 해석하지 않습니다.
+          </p>
+        </div>
+      </article>
+    </main>
+  );
+}
+
+function ActivityExposureStoredEvidenceDetail({
+  model,
+}: {
+  model: ActivityExposureStoredEvidenceModel;
+}) {
+  const variableHref =
+    '/artists/iu?variables=comebackActivityPoint#activity-exposure';
+
+  return (
+    <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 dark:bg-slate-950 dark:text-white sm:px-6 lg:px-8">
+      <article className="mx-auto w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <header className="border-b border-slate-200 p-5 dark:border-slate-800 sm:p-8">
+          <Link
+            href={variableHref}
+            className="inline-flex text-sm font-black text-cyan-700 hover:text-cyan-500 dark:text-cyan-300"
+          >
+            ← Activity Exposure로 돌아가기
+          </Link>
+          <p className="mt-6 text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            Stored Evidence · Activity Exposure
+          </p>
+          <h1 className="mt-3 break-all font-mono text-2xl font-black leading-tight sm:text-3xl">
+            {model.eventId}
+          </h1>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
+              Observed
+            </span>
+            <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-400/15 dark:text-cyan-200">
+              Product · Production
+            </span>
+            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+              Source lineage retained
+            </span>
+          </div>
+        </header>
+
+        <div className="grid min-w-0 gap-6 p-5 sm:p-8">
+          <dl className="grid min-w-0 gap-3 sm:grid-cols-2">
+            <DetailItem label="관련 아티스트" value="IU" />
+            <DetailItem
+              label="관련 변수"
+              value="Activity Exposure"
+              href={variableHref}
+            />
+            <DetailItem label="provider" value={model.sourceProvider} />
+            <DetailItem label="sourceEntityType" value={model.sourceEntityType} />
+            <DetailItem label="sourceEntityId" value={model.sourceEntityId} />
+            <DetailItem label="eventRecordId" value={model.eventRecordId} />
+            <DetailItem label="eventRevisionId" value={model.eventRevisionId} />
+            <DetailItem label="sourceObservationId" value={model.sourceObservationId} />
+            <DetailItem label="observationRevisionId" value={model.observationRevisionId} />
+            <DetailItem label="normalizationOutcome" value={model.normalizationOutcome} />
+            <DetailItem label="providerObservedAt" value={model.providerObservedAt ?? '없음'} />
+            <DetailItem label="sourcePublishedAt" value={model.sourcePublishedAt ?? '없음'} />
+            <DetailItem label="collectedAt" value={model.collectedAt} />
+            <DetailItem label="responseCapturedAt" value={model.responseCapturedAt} />
+            <DetailItem label="retentionState" value={model.retentionState} />
+            <DetailItem label="retentionPolicyVersion" value={model.retentionPolicyVersion} />
+          </dl>
+
+          <p className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold leading-7 text-emerald-900 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-100">
+            Product publication은 Production이지만 Stored Evidence의 수집 lineage는
+            별도로 보존됩니다. providerObservedAt, sourcePublishedAt, collectedAt,
+            responseCapturedAt은 서로 다른 시간 의미를 가지며 대체하지 않습니다.
+            Raw payload 본문은 공개하지 않습니다.
           </p>
         </div>
       </article>
