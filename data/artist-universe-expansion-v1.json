@@ -5803,6 +5803,60 @@
           "url": "https://1st.naze-official.jp/"
         }
       ]
+    },
+    {
+      "id": "h1key",
+      "ticker": "H1KEY",
+      "name": "H1-KEY",
+      "agency": "CHOI CREATIVE LAB",
+      "entityType": "group",
+      "debutDate": "2022-01-05",
+      "lifecycleStatus": "active",
+      "members": [
+        "SEOI",
+        "RIINA",
+        "HWISEO",
+        "YEL"
+      ],
+      "naverNewsQuery": "하이키 H1-KEY 초이크리에이티브랩",
+      "koreanAliases": [
+        "하이키"
+      ],
+      "englishAliases": [
+        "H1-KEY",
+        "H1KEY"
+      ],
+      "keywords": [
+        "CHOI CREATIVE LAB",
+        "초이크리에이티브랩",
+        "SEOI",
+        "RIINA",
+        "HWISEO",
+        "YEL",
+        "LOVECHAPTER",
+        "세상은 영화 같지 않더라"
+      ],
+      "disambiguationKeywords": [
+        "CHOI CREATIVE LAB",
+        "초이크리에이티브랩",
+        "하이키"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CHOI CREATIVE LAB",
+          "url": "https://www.choicreativelab.com/Entertainers"
+        },
+        {
+          "source": "H1-KEY Official",
+          "url": "https://h1key-official.com/"
+        }
+      ]
     }
   ]
 }

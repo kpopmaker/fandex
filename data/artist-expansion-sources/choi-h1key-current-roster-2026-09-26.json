@@ -1,0 +1,53 @@
+{
+  "version": "choi_creative_lab_current_h1key_roster_adapter_v1",
+  "source": {
+    "id": "choi-creative-lab-current-h1key-identity",
+    "type": "agency_roster",
+    "name": "CHOI CREATIVE LAB Current H1-KEY Identity",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.choicreativelab.com/Entertainers"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "H1-KEY",
+      "aliases": [
+        "하이키",
+        "H1KEY"
+      ],
+      "evidence": [
+        {
+          "label": "CHOI CREATIVE LAB current official artist directory",
+          "url": "https://www.choicreativelab.com/Entertainers"
+        },
+        {
+          "label": "H1-KEY current official platform",
+          "url": "https://h1key-official.com/"
+        },
+        {
+          "label": "CHOI CREATIVE LAB current official activity",
+          "url": "https://www.choicreativelab.com/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "notExhaustiveLabelRoster": true,
+    "currentGroupActivityEvidenceRequired": true,
+    "memberDirectoryDoesNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_group_snapshot",
+    "verifiedFrom": [
+      "https://www.choicreativelab.com/Entertainers",
+      "https://h1key-official.com/",
+      "https://www.choicreativelab.com/",
+      "https://www.choicreativelab.com/45/?bmode=view&idx=170380083"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

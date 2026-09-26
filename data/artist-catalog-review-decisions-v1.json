@@ -3899,6 +3899,33 @@
           "note": "Contemporary report citing C9 Entertainment records NAZE's first EP debut on 2026-05-04."
         }
       ]
+    },
+    {
+      "displayArtist": "H1-KEY",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_choi_creative_lab_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_company_member_directory_group_platform_and_2026_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CHOI CREATIVE LAB",
+          "url": "https://www.choicreativelab.com/Entertainers",
+          "note": "Current official artist directory lists SEOI, RIINA, HWISEO, and YEL as H1-KEY members."
+        },
+        {
+          "source": "H1-KEY Official",
+          "url": "https://h1key-official.com/",
+          "note": "Official H1-KEY platform identifies CHOI CREATIVE LAB as the operating business."
+        },
+        {
+          "source": "CHOI CREATIVE LAB",
+          "url": "https://www.choicreativelab.com/45/?bmode=view&idx=170380083",
+          "note": "Official company news records H1-KEY's 2026 fifth mini album LOVECHAPTER and the four-member lineup."
+        }
+      ]
     }
   ]
 }

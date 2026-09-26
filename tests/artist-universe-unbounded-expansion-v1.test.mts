@@ -656,6 +656,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(cix.collection.tier, 'archive');
   assert.deepEqual(cix.members, ['BX', 'SEUNGHUN', 'YONGHEE', 'HYUNSUK']);
 
+  const h1key = getArtistV4ById('h1key');
+  assert.ok(h1key);
+  assert.equal(h1key.entityType, 'group');
+  assert.equal(h1key.agency, 'CHOI CREATIVE LAB');
+  assert.equal(h1key.debutDate, '2022-01-05');
+  assert.equal(h1key.lifecycleStatus, 'active');
+  assert.deepEqual(h1key.members, ['SEOI', 'RIINA', 'HWISEO', 'YEL']);
+  assert.ok(h1key.profile.koreanAliases.includes('하이키'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
