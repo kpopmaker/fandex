@@ -141,7 +141,7 @@ def read_json(path):
         return json.load(file)
 
 
-def select_best(rows):
+def select_best(rows, target_artists):
     best = {}
 
     for row in rows:
@@ -158,7 +158,7 @@ def select_best(rows):
         )
 
         if (
-            artist not in TARGET_ARTISTS
+            artist not in target_artists
             or platform
             not in PLATFORM_WEIGHTS
             or rank == 999999
@@ -270,14 +270,23 @@ def main():
     )
 
 
-    best = select_best(
-        rows
-    )
-
     current_points = (
         current_music_points(
             current_music
         )
+    )
+
+    target_artists = list(
+        current_points.keys()
+    )
+    if not target_artists:
+        raise RuntimeError(
+            "Current music ranking has no artists."
+        )
+
+    best = select_best(
+        rows,
+        set(target_artists),
     )
 
 
@@ -285,11 +294,11 @@ def main():
 
     proposed_totals = {
         artist: 0.0
-        for artist in TARGET_ARTISTS
+        for artist in target_artists
     }
 
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         for platform in [
             "melon",
@@ -443,7 +452,7 @@ def main():
 
 
     sorted_artists = sorted(
-        TARGET_ARTISTS,
+        target_artists,
         key=lambda artist:
             proposed_totals[
                 artist
@@ -497,7 +506,7 @@ def main():
 
     zero_artist_count = sum(
         1
-        for artist in TARGET_ARTISTS
+        for artist in target_artists
         if proposed_totals[
             artist
         ] == 0
@@ -508,11 +517,11 @@ def main():
     print("=" * 84)
     print(
         f"rankedPlatformCount: "
-        f"{ranked_platform_count}/30"
+        f"{ranked_platform_count}/{len(target_artists) * len(PLATFORM_WEIGHTS)}"
     )
     print(
         f"zeroArtistCount: "
-        f"{zero_artist_count}/10"
+        f"{zero_artist_count}/{len(target_artists)}"
     )
     print(
         f"previewCSV: "
@@ -537,11 +546,11 @@ def main():
         "",
         (
             f"rankedPlatformCount: "
-            f"{ranked_platform_count}/30"
+            f"{ranked_platform_count}/{len(target_artists) * len(PLATFORM_WEIGHTS)}"
         ),
         (
             f"zeroArtistCount: "
-            f"{zero_artist_count}/10"
+            f"{zero_artist_count}/{len(target_artists)}"
         ),
         "seedModified: FALSE",
         "masterModified: FALSE",

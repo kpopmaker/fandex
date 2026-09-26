@@ -1,0 +1,81 @@
+{
+  "version": "music_chart_artist_targets_v1",
+  "artists": [
+    {
+      "artist": "아이유",
+      "aliases": [
+        "아이유",
+        "IU"
+      ]
+    },
+    {
+      "artist": "에스파",
+      "aliases": [
+        "에스파",
+        "aespa"
+      ]
+    },
+    {
+      "artist": "에이티즈",
+      "aliases": [
+        "에이티즈",
+        "ATEEZ"
+      ]
+    },
+    {
+      "artist": "보이넥스트도어",
+      "aliases": [
+        "보이넥스트도어",
+        "BOYNEXTDOOR",
+        "BOY NEXT DOOR",
+        "BND"
+      ]
+    },
+    {
+      "artist": "아이브",
+      "aliases": [
+        "아이브",
+        "IVE"
+      ]
+    },
+    {
+      "artist": "르세라핌",
+      "aliases": [
+        "르세라핌",
+        "LE SSERAFIM",
+        "LESSERAFIM"
+      ]
+    },
+    {
+      "artist": "뉴진스",
+      "aliases": [
+        "뉴진스",
+        "NewJeans"
+      ]
+    },
+    {
+      "artist": "세븐틴",
+      "aliases": [
+        "세븐틴",
+        "SEVENTEEN"
+      ]
+    },
+    {
+      "artist": "스트레이키즈",
+      "aliases": [
+        "스트레이키즈",
+        "스트레이 키즈",
+        "Stray Kids",
+        "SKZ"
+      ]
+    },
+    {
+      "artist": "투모로우바이투게더",
+      "aliases": [
+        "투모로우바이투게더",
+        "TOMORROW X TOGETHER",
+        "TXT"
+      ]
+    }
+  ]
+}
