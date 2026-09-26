@@ -13,7 +13,7 @@ import {
 } from '../../server/ingestion/momentumNativeVerifierProductionExecutionAuthorization';
 
 export const MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION =
-  'momentum-post-execution-product-readiness-v2' as const;
+  'momentum-post-execution-product-readiness-v3' as const;
 
 export const MOMENTUM_RESEARCH_OUTPUT_BOUNDARY = Object.freeze({
   crossFamilyCombinationContractVersion:
@@ -46,7 +46,7 @@ export type MomentumPostExecutionProductReadinessInput = Readonly<{
 export type MomentumPostExecutionProductReadinessResult = Readonly<{
   contractVersion: typeof MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION;
   state:
-    | 'categorical-runtime-evidence-required'
+    | 'current-categorical-evaluation-required'
     | 'blocked';
   productActivationReady: false;
   productPublicationReady: false;
@@ -87,9 +87,9 @@ export type MomentumPostExecutionProductReadinessResult = Readonly<{
       typeof PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID;
     separateNonNumericContractImplemented: true;
     storedEvidenceReadModelAdapterImplemented: true;
-    runtimeCarrierRepositoryImplemented: false;
-    runtimeStoredEvidenceReadPathImplemented: false;
-    liveIUShadowReadVerified: false;
+    runtimeCarrierRepositoryImplemented: true;
+    runtimeStoredEvidenceReadPathImplemented: true;
+    liveIUShadowReadVerified: true;
     publicRouteImplemented: false;
   }>;
   blockers: readonly string[];
@@ -156,17 +156,16 @@ export function evaluateMomentumPostExecutionProductReadiness(
     ...hardBlockers,
     'current-momentum-product-slot-numeric-only',
     'legacy-preview-fallback-would-mask-real-momentum-state',
-    'categorical-live-carrier-repository-not-implemented',
-    'categorical-runtime-stored-evidence-read-path-not-implemented',
-    'live-iu-shadow-product-read-not-verified',
-    'live-carrier-product-readiness-not-evaluated',
+    'current-dual-source-categorical-evaluation-not-performed',
+    'current-naver-stored-evidence-not-reproduced-for-readiness',
+    'historical-carrier-not-current-activation-evidence',
     'categorical-public-route-not-implemented',
   ]);
 
   return Object.freeze({
     contractVersion: MOMENTUM_POST_EXECUTION_PRODUCT_READINESS_VERSION,
     state: hardBlockers.length === 0
-      ? 'categorical-runtime-evidence-required' as const
+      ? 'current-categorical-evaluation-required' as const
       : 'blocked' as const,
     productActivationReady: false as const,
     productPublicationReady: false as const,
@@ -212,9 +211,9 @@ export function evaluateMomentumPostExecutionProductReadiness(
         PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
       separateNonNumericContractImplemented: true as const,
       storedEvidenceReadModelAdapterImplemented: true as const,
-      runtimeCarrierRepositoryImplemented: false as const,
-      runtimeStoredEvidenceReadPathImplemented: false as const,
-      liveIUShadowReadVerified: false as const,
+      runtimeCarrierRepositoryImplemented: true as const,
+      runtimeStoredEvidenceReadPathImplemented: true as const,
+      liveIUShadowReadVerified: true as const,
       publicRouteImplemented: false as const,
     }),
     blockers,
