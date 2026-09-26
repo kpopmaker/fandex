@@ -55,10 +55,13 @@ export const MOMENTUM_PRODUCTION_VERIFIER_ACTIVATION_APPROVAL =
   });
 
 export function isMomentumProductionVerifierNativeExecutionAuthorized(): boolean {
+  const decision: Readonly<{
+    activationAuthorized: boolean;
+    nativeVerifierExecutionAuthorized: boolean;
+  }> = MOMENTUM_PRODUCTION_VERIFIER_ACTIVATION_APPROVAL.decision;
+
   return (
-    MOMENTUM_PRODUCTION_VERIFIER_ACTIVATION_APPROVAL
-      .decision.activationAuthorized === true
-    && MOMENTUM_PRODUCTION_VERIFIER_ACTIVATION_APPROVAL
-      .decision.nativeVerifierExecutionAuthorized === true
+    decision.activationAuthorized
+    && decision.nativeVerifierExecutionAuthorized
   );
 }
