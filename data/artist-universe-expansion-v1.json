@@ -5700,6 +5700,50 @@
           "url": "https://www.bpment.co.kr/artist/discography.php?idx=290"
         }
       ]
+    },
+    {
+      "id": "lu",
+      "ticker": "LU",
+      "name": "LU",
+      "agency": "StrangeLab",
+      "entityType": "solo",
+      "debutDate": "2026-03-28",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "LU 강하윤 스트레인지랩 가수",
+      "koreanAliases": [
+        "강하윤"
+      ],
+      "englishAliases": [
+        "LU"
+      ],
+      "keywords": [
+        "StrangeLab",
+        "스트레인지랩",
+        "UNFOLD",
+        "Red Flowers In My Garden",
+        "강하윤"
+      ],
+      "disambiguationKeywords": [
+        "StrangeLab",
+        "스트레인지랩",
+        "강하윤",
+        "가수"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "StrangeLab",
+          "url": "https://strangelab.co.kr/product/item.php?it_id=1776925385"
+        },
+        {
+          "source": "XLOV Official",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb"
+        }
+      ]
     }
   ]
 }

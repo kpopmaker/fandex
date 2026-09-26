@@ -1,0 +1,65 @@
+{
+  "version": "strangelab_current_verified_music_roster_adapter_v1",
+  "source": {
+    "id": "strangelab-current-verified-music-identities",
+    "type": "agency_roster",
+    "name": "StrangeLab Current Verified Music Identities",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://strangelab.co.kr/"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "XLOV",
+      "aliases": [
+        "엑스러브"
+      ],
+      "evidence": [
+        {
+          "label": "StrangeLab current official artist directory",
+          "url": "https://strangelab.co.kr/"
+        },
+        {
+          "label": "XLOV official agency restructuring notice",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LU",
+      "aliases": [
+        "강하윤"
+      ],
+      "evidence": [
+        {
+          "label": "StrangeLab current official artist profile",
+          "url": "https://strangelab.co.kr/product/item.php?it_id=1776925385"
+        },
+        {
+          "label": "XLOV official agency restructuring notice",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "homepageDirectoryAloneIsNotLifecycleTruth": true,
+    "transferredArtistExcluded": [
+      "OH MY GIRL"
+    ],
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_management_snapshot",
+    "verifiedFrom": [
+      "https://strangelab.co.kr/",
+      "https://strangelab.co.kr/product/item.php?it_id=1776925385",
+      "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

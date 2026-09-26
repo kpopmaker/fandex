@@ -3850,6 +3850,28 @@
           "note": "Official BPM discography records BADVILLAIN releases from debut through THRILLER."
         }
       ]
+    },
+    {
+      "displayArtist": "LU",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_current_strangelab_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_strangelab_profile_and_group_restructuring_notice",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "StrangeLab",
+          "url": "https://strangelab.co.kr/product/item.php?it_id=1776925385",
+          "note": "Current official StrangeLab profile identifies LU as an active solo artist and records the 2026-03-28 EP UNFOLD."
+        },
+        {
+          "source": "XLOV Official",
+          "url": "https://xlov.bstage.in/community/board/6936950ed5ea7d083d8908f5/post/6a7aac6a4d3d9a091d38f7eb",
+          "note": "Official August 2026 restructuring notice states StrangeLab will oversee artist activities for XLOV and LU."
+        }
+      ]
     }
   ]
 }
