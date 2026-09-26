@@ -74,6 +74,7 @@ jobs:
           python tests/artist-expansion-idntt-provider-catalog-v1.py
           python tests/artist-expansion-onepact-provider-catalog-v1.py
           python tests/artist-expansion-thekingdom-provider-catalog-v1.py
+          python tests/artist-expansion-madein-provider-catalog-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -256,6 +257,11 @@ jobs:
           python scripts/artist-expansion/collect_thekingdom_official_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/thekingdom-official-provider-catalog-2026-09-26.json \
             --output thekingdom_official_provider_catalog_v1_latest.json
+      - name: Collect MADEIN official current provider catalog
+        run: |
+          python scripts/artist-expansion/collect_madein_official_provider_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/madein-official-provider-catalog-2026-09-26.json \
+            --output madein_official_provider_catalog_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -308,6 +314,7 @@ jobs:
             --snapshot idntt_official_provider_catalog_v1_latest.json \
             --snapshot onepact_official_provider_catalog_v1_latest.json \
             --snapshot thekingdom_official_provider_catalog_v1_latest.json \
+            --snapshot madein_official_provider_catalog_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -382,6 +389,7 @@ jobs:
             idntt_official_provider_catalog_v1_latest.json
             onepact_official_provider_catalog_v1_latest.json
             thekingdom_official_provider_catalog_v1_latest.json
+            madein_official_provider_catalog_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

@@ -6685,6 +6685,72 @@
           "url": "https://weverse.io/kingdom/notice/33410"
         }
       ]
+    },
+    {
+      "id": "madein",
+      "ticker": "MADEIN",
+      "name": "MADEIN",
+      "agency": "143 Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-09-03",
+      "lifecycleStatus": "active",
+      "members": [
+        "MASHIRO",
+        "MiU",
+        "SUHYE",
+        "YESEO",
+        "SERINA",
+        "NAGOMI"
+      ],
+      "fandomName": "MABY",
+      "naverNewsQuery": "메이딘 MADEIN 143엔터테인먼트",
+      "koreanAliases": [
+        "메이딘",
+        "라임라잇"
+      ],
+      "englishAliases": [
+        "MADEIN",
+        "LIMELIGHT",
+        "Limelight"
+      ],
+      "keywords": [
+        "143 Entertainment",
+        "143엔터테인먼트",
+        "MASHIRO",
+        "MiU",
+        "SUHYE",
+        "YESEO",
+        "SERINA",
+        "NAGOMI",
+        "MABY",
+        "Girl Meets Boy",
+        "LIMELIGHT"
+      ],
+      "disambiguationKeywords": [
+        "143 Entertainment",
+        "143엔터테인먼트",
+        "메이딘"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "MADEIN Official",
+          "url": "https://madein-official.net/profile/"
+        },
+        {
+          "source": "MADEIN Official Fanclub MABY JAPAN",
+          "url": "https://mabyjapan.jp/blog"
+        },
+        {
+          "source": "MADEIN Official Fanclub MABY JAPAN",
+          "url": "https://mabyjapan.jp/schedule"
+        }
+      ]
     }
   ]
 }

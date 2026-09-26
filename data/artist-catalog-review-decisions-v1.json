@@ -4310,6 +4310,38 @@
           "note": "GF Entertainment's official 2024 statement records rename continuity from KINGDOM to The KingDom rather than a new group identity."
         }
       ]
+    },
+    {
+      "displayArtist": "MADEIN",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "limelight_to_madein_restructure_continuity_with_current_143_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_madein_profile_current_143_operated_fanclub_and_2026_four_member_promotion_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MADEIN Official",
+          "url": "https://madein-official.net/profile/",
+          "note": "Current official profile preserves six MADEIN members: MASHIRO, MiU, SUHYE, YESEO, SERINA, and NAGOMI."
+        },
+        {
+          "source": "MADEIN Official Fanclub MABY JAPAN",
+          "url": "https://mabyjapan.jp/blog",
+          "note": "Current official fanclub blog shows 2026 active promotion content from MASHIRO, MiU, SERINA, and NAGOMI while remaining operated by 143 Entertainment Inc."
+        },
+        {
+          "source": "MADEIN Official Fanclub MABY JAPAN",
+          "url": "https://mabyjapan.jp/schedule",
+          "note": "Official schedule/discography records 2026 MADEIN release Girl Meets Boy and continuing group activity."
+        },
+        {
+          "source": "Soompi citing 143 Entertainment",
+          "url": "https://www.soompi.com/article/1807827wpp/madeins-yeseo-and-suhye-to-suspend-group-activities-as-group-continues-as-4-members",
+          "note": "143 Entertainment's December 2025 notice states Yeseo and Suhye suspended activities while MADEIN continues promotions as four; this is treated as promotion-lineup status rather than automatic membership removal."
+        }
+      ]
     }
   ]
 }

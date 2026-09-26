@@ -1,0 +1,57 @@
+{
+  "version": "madein_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "madein-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "MADEIN Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://madein-official.net/profile/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "MADEIN",
+      "aliases": [
+        "메이딘",
+        "LIMELIGHT",
+        "라임라잇"
+      ],
+      "evidence": [
+        {
+          "label": "MADEIN current official member profile",
+          "url": "https://madein-official.net/profile/"
+        },
+        {
+          "label": "143-operated MADEIN current fanclub activity",
+          "url": "https://mabyjapan.jp/blog"
+        },
+        {
+          "label": "MADEIN current official schedule and discography",
+          "url": "https://mabyjapan.jp/schedule"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "historicalLimelightContinuityPreserved": true,
+    "temporaryPromotionLineupDoesNotOverrideCanonicalMembership": true,
+    "departedFormerMemberExcluded": [
+      "GAEUN"
+    ],
+    "current2026ActivityEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://madein-official.net/profile/",
+      "https://mabyjapan.jp/blog",
+      "https://mabyjapan.jp/schedule"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
