@@ -4374,6 +4374,38 @@
           "note": "Contemporary KBS report records WAKER's official debut on 2024-01-08."
         }
       ]
+    },
+    {
+      "displayArtist": "DXMON",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_h_music_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_weverse_five_member_profile_h_music_agency_notice_and_2026_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "DXMON Weverse",
+          "url": "https://weverse.io/dxmon/highlight?hl=ko",
+          "note": "Current official profile presents DXMON as a five-member group: MINJAE, SEITA, HEE, TK, and REX."
+        },
+        {
+          "source": "H Music Entertainment / DXMON Weverse",
+          "url": "https://weverse.io/dxmon/notice/25096?hl=ko",
+          "note": "Official H Music notice explicitly identifies DXMON as its artist."
+        },
+        {
+          "source": "DXMON Weverse",
+          "url": "https://weverse.io/dxmon/notice/36204",
+          "note": "Official 2026 fanmeeting notice confirms continuing group activity."
+        },
+        {
+          "source": "DXMON Weverse",
+          "url": "https://weverse.io/dxmon/notice/37240?hl=ko",
+          "note": "Official July 2026 HyperLink_Vol3 streaming event confirms current music activity."
+        }
+      ]
     }
   ]
 }

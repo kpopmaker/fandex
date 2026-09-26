@@ -1,0 +1,54 @@
+{
+  "version": "dxmon_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "dxmon-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "DXMON Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://weverse.io/dxmon/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "DXMON",
+      "aliases": [
+        "다이몬"
+      ],
+      "evidence": [
+        {
+          "label": "DXMON current official Weverse profile",
+          "url": "https://weverse.io/dxmon/highlight?hl=ko"
+        },
+        {
+          "label": "H Music official DXMON agency notice",
+          "url": "https://weverse.io/dxmon/notice/25096?hl=ko"
+        },
+        {
+          "label": "DXMON official 2026 activity notice",
+          "url": "https://weverse.io/dxmon/notice/36204"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentFiveMemberLineupRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "formerMemberExcludedFromCurrentLineup": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/dxmon/highlight?hl=ko",
+      "https://weverse.io/dxmon/notice/25096?hl=ko",
+      "https://weverse.io/dxmon/notice/36204",
+      "https://weverse.io/dxmon/notice/37240?hl=ko"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

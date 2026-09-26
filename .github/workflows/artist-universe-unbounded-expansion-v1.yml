@@ -76,6 +76,7 @@ jobs:
           python tests/artist-expansion-thekingdom-provider-catalog-v1.py
           python tests/artist-expansion-madein-provider-catalog-v1.py
           python tests/artist-expansion-waker-provider-catalog-v1.py
+          python tests/artist-expansion-dxmon-provider-catalog-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -268,6 +269,11 @@ jobs:
           python scripts/artist-expansion/collect_waker_official_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/waker-official-provider-catalog-2026-09-26.json \
             --output waker_official_provider_catalog_v1_latest.json
+      - name: Collect DXMON official current provider catalog
+        run: |
+          python scripts/artist-expansion/collect_dxmon_official_provider_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/dxmon-official-provider-catalog-2026-09-26.json \
+            --output dxmon_official_provider_catalog_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -322,6 +328,7 @@ jobs:
             --snapshot thekingdom_official_provider_catalog_v1_latest.json \
             --snapshot madein_official_provider_catalog_v1_latest.json \
             --snapshot waker_official_provider_catalog_v1_latest.json \
+            --snapshot dxmon_official_provider_catalog_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -398,6 +405,7 @@ jobs:
             thekingdom_official_provider_catalog_v1_latest.json
             madein_official_provider_catalog_v1_latest.json
             waker_official_provider_catalog_v1_latest.json
+            dxmon_official_provider_catalog_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

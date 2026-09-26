@@ -6801,6 +6801,67 @@
           "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=448560&id=&lang=k&menu_cate=enternews&page="
         }
       ]
+    },
+    {
+      "id": "dxmon",
+      "ticker": "DXMON",
+      "name": "DXMON",
+      "agency": "H Music Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-01-17",
+      "lifecycleStatus": "active",
+      "members": [
+        "SEITA",
+        "MINJAE",
+        "HEE",
+        "TK",
+        "REX"
+      ],
+      "fandomName": "MONs",
+      "naverNewsQuery": "다이몬 DXMON 에이치뮤직엔터테인먼트",
+      "koreanAliases": [
+        "다이몬"
+      ],
+      "englishAliases": [
+        "DXMON"
+      ],
+      "keywords": [
+        "H Music Entertainment",
+        "에이치뮤직엔터테인먼트",
+        "SEITA",
+        "MINJAE",
+        "HEE",
+        "TK",
+        "REX",
+        "MONs",
+        "HyperLink",
+        "CHEESE"
+      ],
+      "disambiguationKeywords": [
+        "H Music Entertainment",
+        "에이치뮤직엔터테인먼트",
+        "다이몬"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "DXMON Weverse",
+          "url": "https://weverse.io/dxmon/highlight?hl=ko"
+        },
+        {
+          "source": "H Music Entertainment / DXMON Weverse",
+          "url": "https://weverse.io/dxmon/notice/25096?hl=ko"
+        },
+        {
+          "source": "DXMON Weverse",
+          "url": "https://weverse.io/dxmon/notice/36204"
+        }
+      ]
     }
   ]
 }

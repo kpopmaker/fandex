@@ -815,6 +815,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(waker.fandomName, 'Sleeper');
   assert.ok(waker.profile.koreanAliases.includes('웨이커'));
 
+  const dxmon = getArtistV4ById('dxmon');
+  assert.ok(dxmon);
+  assert.equal(dxmon.entityType, 'group');
+  assert.equal(dxmon.agency, 'H Music Entertainment');
+  assert.equal(dxmon.debutDate, '2024-01-17');
+  assert.equal(dxmon.lifecycleStatus, 'active');
+  assert.deepEqual(dxmon.members, ['SEITA', 'MINJAE', 'HEE', 'TK', 'REX']);
+  assert.equal(dxmon.fandomName, 'MONs');
+  assert.ok(dxmon.profile.koreanAliases.includes('다이몬'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
