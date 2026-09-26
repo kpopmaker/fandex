@@ -1,0 +1,41 @@
+name: Validate Activity Exposure post-merge public-route execution v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-post-merge-public-route-execution-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Verify merged main parent
+        run: |
+          test "$(git rev-parse HEAD^)" = "ee1ed4f00fc414a421becfce5efbb4cafb901088"
+      - run: npm ci
+      - name: Activity Exposure execution regression
+        run: >
+          npx tsx --test
+          tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+          tests/activity-exposure-public-route-cutover-approval-v1.test.mts
+          tests/activity-exposure-production-activation-approval-v1.test.mts
+          tests/activity-exposure-production-readiness-v1.test.mts
+          tests/product-activity-exposure-contract-v1.test.mts
+      - name: Live Neon execution audit
+        run: npx tsx scripts/validation/activityExposurePublicRouteCutoverExecutionV1.ts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
