@@ -49,16 +49,35 @@ export const MOMENTUM_NATIVE_VERIFIER_PRODUCTION_EXECUTION_AUTHORIZATION =
       rawSecretPersistenceAllowed: false as const,
       credentialMutationAllowed: false as const,
     }),
+    executionConsumption: Object.freeze({
+      consumed: true as const,
+      successEvidenceCommentId: 5845561224 as const,
+      workflowRunId: 36236503946 as const,
+      workflowJobId: 108389136137 as const,
+      executionDeploymentId:
+        'dpl_CaPUF257kAeyAHAeUtjyjNkJm93r' as const,
+      executionMain:
+        '55a962cf9ca1e6260b0ce99858af8021ef8d6b4b' as const,
+      executionId:
+        '0255b08297f5422f61bcbaffa5139f6173a6996a97a175558421ed978bc80d0d' as const,
+      executedAt: '2026-09-26T10:40:43.243Z' as const,
+      evidenceRows: 100 as const,
+      normalizedRecords: 100 as const,
+      databaseReadOnly: true as const,
+      databaseWritesObserved: 0 as const,
+      verifierOutputAccepted: true as const,
+      attestationState: 'attestation-adapted' as const,
+    }),
     decision: Object.freeze({
       activationAuthorized: true as const,
       nativeVerifierExecutionAuthorized: true as const,
-      nativeVerifierExecutionPerformed: false as const,
+      nativeVerifierExecutionPerformed: true as const,
       ledgerAdvancementAuthorized: false as const,
       productMetricPublicationAuthorized: false as const,
       registryMutationAuthorized: false as const,
       publicRoutePublicationAuthorized: false as const,
       requiredNextGate:
-        'single-production-verifier-execution-consumption' as const,
+        'post-execution-product-readiness-review' as const,
     }),
     expectedEffects: Object.freeze({
       databaseWrites: 0 as const,
@@ -89,11 +108,15 @@ function activationBindingValid(): boolean {
 export function isMomentumProductionVerifierNativeExecutionAuthorized(): boolean {
   const authorization =
     MOMENTUM_NATIVE_VERIFIER_PRODUCTION_EXECUTION_AUTHORIZATION;
+  const decision: Readonly<{
+    nativeVerifierExecutionAuthorized: boolean;
+    nativeVerifierExecutionPerformed: boolean;
+  }> = authorization.decision;
 
   return (
     activationBindingValid()
-    && authorization.decision.nativeVerifierExecutionAuthorized === true
-    && authorization.decision.nativeVerifierExecutionPerformed === false
+    && decision.nativeVerifierExecutionAuthorized
+    && !decision.nativeVerifierExecutionPerformed
     && authorization.target.maximumExecutions === 1
   );
 }
