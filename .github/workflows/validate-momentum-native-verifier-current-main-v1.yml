@@ -49,24 +49,26 @@ jobs:
         run: |
           npx tsx -e "
             import { runNaverNewsMomentumNativeVerifier } from './lib/server/ingestion/naverNewsMomentumNativeVerifier.ts';
-            const result = await runNaverNewsMomentumNativeVerifier(
-              { canonicalArtistId: 'iu', throughSlotStart: '2026-09-21T12:00:00.000Z' },
-              process.env
-            );
-            if (result.effects.databaseWrites !== 0) throw new Error('database_write_detected');
-            if (result.effects.productMetricReads !== 0 || result.effects.productMetricWrites !== 0) {
-              throw new Error('product_metric_access_detected');
-            }
-            if (result.verifierOutput.databaseReadOnly !== true) throw new Error('not_read_only');
-            console.log(JSON.stringify({
-              canonicalArtistId: result.canonicalArtistId,
-              throughSlotStart: result.snapshot.naverThroughSlotStart,
-              evidenceRows: result.verifierOutput.evidenceRows,
-              normalizedRecords: result.verifierOutput.distinctNormalizedRecords,
-              databaseWrites: result.effects.databaseWrites,
-              productMetricReads: result.effects.productMetricReads,
-              productMetricWrites: result.effects.productMetricWrites
-            }));
+            void (async () => {
+              const result = await runNaverNewsMomentumNativeVerifier(
+                { canonicalArtistId: 'iu', throughSlotStart: '2026-09-21T12:00:00.000Z' },
+                process.env
+              );
+              if (result.effects.databaseWrites !== 0) throw new Error('database_write_detected');
+              if (result.effects.productMetricReads !== 0 || result.effects.productMetricWrites !== 0) {
+                throw new Error('product_metric_access_detected');
+              }
+              if (result.verifierOutput.databaseReadOnly !== true) throw new Error('not_read_only');
+              console.log(JSON.stringify({
+                canonicalArtistId: result.canonicalArtistId,
+                throughSlotStart: result.snapshot.naverThroughSlotStart,
+                evidenceRows: result.verifierOutput.evidenceRows,
+                normalizedRecords: result.verifierOutput.distinctNormalizedRecords,
+                databaseWrites: result.effects.databaseWrites,
+                productMetricReads: result.effects.productMetricReads,
+                productMetricWrites: result.effects.productMetricWrites
+              }));
+            })();
           "
       - run: npm run typecheck
       - run: npm run lint
