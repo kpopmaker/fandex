@@ -1,6 +1,9 @@
 import 'server-only';
 
 import {
+  isMomentumProductionVerifierNativeExecutionAuthorized,
+} from '@/lib/server/ingestion/momentumProductionVerifierActivationApproval';
+import {
   runNaverNewsMomentumVerifierExecutionChannel,
   type NaverNewsMomentumVerifierExecutionChannelDependencies,
 } from '@/lib/server/ingestion/naverNewsMomentumVerifierExecutionChannel';
@@ -14,7 +17,10 @@ export async function handleNaverNewsMomentumVerifierExecutionRequest(
   dependencies: NaverNewsMomentumVerifierExecutionChannelDependencies = {},
 ): Promise<Response> {
   try {
-    if (request.method !== 'POST') {
+    if (
+      request.method !== 'POST'
+      || !isMomentumProductionVerifierNativeExecutionAuthorized()
+    ) {
       throw new Error(
         'naver_news_momentum_verifier_execution_channel_rejected',
       );

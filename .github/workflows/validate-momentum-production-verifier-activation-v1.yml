@@ -1,0 +1,74 @@
+name: Validate Momentum Production verifier activation v1
+
+on:
+  push:
+    branches:
+      - work/momentum-production-verifier-activation-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 7a38ceb1b23d75e950b8108ae8b680ab347d1686...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-production-verifier-activation-v1.yml
+          app/api/internal/naver-news/momentum-verifier/route.ts
+          lib/server/ingestion/momentumProductionVerifierActivationApproval.ts
+          tests/momentum-production-verifier-activation-approval-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+      - run: npm ci
+      - name: Activation approval regression
+        run: >
+          npx tsx --test
+          tests/momentum-production-verifier-activation-approval-v1.test.mts
+      - name: Momentum verifier regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-native-verifier-current-main-v1.test.mts
+      - name: Activity Exposure Production regression
+        run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+      - name: Live Neon historical read-only replay
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: |
+          npx tsx -e "
+            import { runNaverNewsMomentumNativeVerifier } from './lib/server/ingestion/naverNewsMomentumNativeVerifier.ts';
+            void (async () => {
+              const result = await runNaverNewsMomentumNativeVerifier(
+                { canonicalArtistId: 'iu', throughSlotStart: '2026-09-21T12:00:00.000Z' },
+                process.env
+              );
+              if (result.effects.databaseWrites !== 0) throw new Error('database_write_detected');
+              if (result.effects.productMetricReads !== 0 || result.effects.productMetricWrites !== 0) {
+                throw new Error('product_metric_access_detected');
+              }
+              if (result.verifierOutput.databaseReadOnly !== true) throw new Error('not_read_only');
+              console.log(JSON.stringify({
+                evidenceRows: result.verifierOutput.evidenceRows,
+                normalizedRecords: result.verifierOutput.distinctNormalizedRecords,
+                databaseWrites: result.effects.databaseWrites,
+                productMetricReads: result.effects.productMetricReads,
+                productMetricWrites: result.effects.productMetricWrites
+              }));
+            })();
+          "
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
