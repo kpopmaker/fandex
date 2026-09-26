@@ -5557,6 +5557,63 @@
           "url": "https://candy-shop.jp/about"
         }
       ]
+    },
+    {
+      "id": "tunexx",
+      "ticker": "TUNEXX",
+      "name": "TUNEXX",
+      "agency": "IST Entertainment",
+      "entityType": "group",
+      "debutDate": "2026-03-03",
+      "lifecycleStatus": "active",
+      "members": [
+        "Donggyu",
+        "Inhu",
+        "Taira",
+        "Sungjun",
+        "Zeon",
+        "Sihwan",
+        "Arctic"
+      ],
+      "naverNewsQuery": "튜넥스 TUNEXX IST엔터테인먼트",
+      "koreanAliases": [
+        "튜넥스"
+      ],
+      "englishAliases": [
+        "TUNEXX"
+      ],
+      "keywords": [
+        "IST Entertainment",
+        "IST엔터테인먼트",
+        "Donggyu",
+        "Inhu",
+        "Taira",
+        "Sungjun",
+        "Zeon",
+        "Sihwan",
+        "Arctic",
+        "BLUE MODE"
+      ],
+      "disambiguationKeywords": [
+        "IST Entertainment",
+        "IST엔터테인먼트",
+        "튜넥스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "IST Entertainment",
+          "url": "https://istent.co.kr/artist/tunexx"
+        },
+        {
+          "source": "IST Entertainment",
+          "url": "https://istent.co.kr/news/36d7836f601e806abd06c65010780261"
+        }
+      ]
     }
   ]
 }

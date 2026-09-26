@@ -1,0 +1,45 @@
+{
+  "version": "ist_current_artist_roster_adapter_v1",
+  "source": {
+    "id": "ist-current-official-artist-directory",
+    "type": "agency_roster",
+    "name": "IST Entertainment Current Official Artist Directory",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://istent.co.kr/artist",
+    "resolvedUrl": "https://istent.co.kr/artist/tunexx"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TUNEXX",
+      "aliases": [
+        "튜넥스"
+      ],
+      "evidence": [
+        {
+          "label": "IST Entertainment current official artist directory",
+          "url": "https://istent.co.kr/artist/tunexx"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "currentDirectoryOnly": true,
+    "directoryRedirectMustResolveToArtistProfile": true,
+    "formerHistoricActsAreNotCurrentRoster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_directory_snapshot",
+    "verifiedFrom": [
+      "https://istent.co.kr/artist",
+      "https://istent.co.kr/artist/tunexx",
+      "https://istent.co.kr/news/36d7836f601e806abd06c65010780261",
+      "https://istent.co.kr/news/3d17836f601e805eacb9c69cd4c08df0"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

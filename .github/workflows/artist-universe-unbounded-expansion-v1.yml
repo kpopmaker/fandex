@@ -60,6 +60,7 @@ jobs:
           python tests/artist-expansion-belift-roster-adapter-v1.py
           python tests/artist-expansion-theblacklabel-roster-adapter-v1.py
           python tests/artist-expansion-brave-roster-adapter-v1.py
+          python tests/artist-expansion-ist-roster-adapter-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
           python tests/artist-expansion-seoul-music-awards-roster-v1.py
@@ -172,6 +173,11 @@ jobs:
           python scripts/artist-expansion/collect_brave_music_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/brave-music-roster-2026-09-26.json \
             --output brave_music_roster_v1_latest.json
+      - name: Collect IST Entertainment current artist directory
+        run: |
+          python scripts/artist-expansion/collect_ist_artist_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/ist-current-artist-roster-2026-09-26.json \
+            --output ist_artist_roster_v1_latest.json
       - name: Collect Bugs YG provider catalog
         run: |
           python scripts/artist-expansion/collect_bugs_yg_provider_catalog_v1.py \
@@ -210,6 +216,7 @@ jobs:
             --snapshot belift_agency_roster_v1_latest.json \
             --snapshot theblacklabel_music_roster_v1_latest.json \
             --snapshot brave_music_roster_v1_latest.json \
+            --snapshot ist_artist_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
             --snapshot seoul_music_awards_group_roster_v1_latest.json \
@@ -270,6 +277,7 @@ jobs:
             belift_agency_roster_v1_latest.json
             theblacklabel_music_roster_v1_latest.json
             brave_music_roster_v1_latest.json
+            ist_artist_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
             seoul_music_awards_group_roster_v1_latest.json

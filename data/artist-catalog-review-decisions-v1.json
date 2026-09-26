@@ -3774,6 +3774,33 @@
           "note": "Current official profile lists the present four-member group identity."
         }
       ]
+    },
+    {
+      "displayArtist": "TUNEXX",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_ist_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_ist_artist_directory_and_2026_debut_current_comeback_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "IST Entertainment",
+          "url": "https://istent.co.kr/artist/tunexx",
+          "note": "Current IST Entertainment artist directory resolves to TUNEXX and lists the seven-member group, albums, and current official videos."
+        },
+        {
+          "source": "IST Entertainment",
+          "url": "https://istent.co.kr/news/36d7836f601e806abd06c65010780261",
+          "note": "Official February 2026 debut material identifies TUNEXX as IST Entertainment's new boy group with a March 3 debut."
+        },
+        {
+          "source": "IST Entertainment",
+          "url": "https://istent.co.kr/news/3d17836f601e805eacb9c69cd4c08df0",
+          "note": "Official September 2026 release notice confirms continuing group activity with the second mini album BLUE MODE."
+        }
+      ]
     }
   ]
 }
