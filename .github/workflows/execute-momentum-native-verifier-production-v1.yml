@@ -1,0 +1,49 @@
+name: Execute Momentum native verifier Production v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_main_sha:
+        description: Exact main SHA deployed to Production
+        required: true
+        type: string
+      expected_deployment_id:
+        description: Exact READY Production deployment ID
+        required: true
+        type: string
+      execution_authorization_id:
+        description: Exact owner execution authorization ID
+        required: true
+        type: string
+      confirm:
+        description: Exact one-shot execution confirmation
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: momentum-native-verifier-production-execution-v1
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+      EXPECTED_DEPLOYMENT_ID: ${{ inputs.expected_deployment_id }}
+      EXECUTION_AUTHORIZATION_ID: ${{ inputs.execution_authorization_id }}
+      EXECUTION_CONFIRM: ${{ inputs.confirm }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Execute exactly one authorized Production verifier read
+        run: node scripts/operations/momentumNativeVerifierProductionExecutionV1.mjs
