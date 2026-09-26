@@ -66,17 +66,46 @@ test('execution authorization is layered on the historical activation approval',
     false,
   );
   assert.equal(auth.decision.nativeVerifierExecutionAuthorized, true);
-  assert.equal(auth.decision.nativeVerifierExecutionPerformed, false);
+  assert.equal(auth.decision.nativeVerifierExecutionPerformed, true);
+  assert.equal(auth.executionConsumption.consumed, true);
+  assert.equal(auth.executionConsumption.successEvidenceCommentId, 5845561224);
+  assert.equal(auth.executionConsumption.workflowRunId, 36236503946);
+  assert.equal(auth.executionConsumption.workflowJobId, 108389136137);
+  assert.equal(
+    auth.executionConsumption.executionDeploymentId,
+    'dpl_CaPUF257kAeyAHAeUtjyjNkJm93r',
+  );
+  assert.equal(
+    auth.executionConsumption.executionMain,
+    '55a962cf9ca1e6260b0ce99858af8021ef8d6b4b',
+  );
+  assert.equal(
+    auth.executionConsumption.executionId,
+    '0255b08297f5422f61bcbaffa5139f6173a6996a97a175558421ed978bc80d0d',
+  );
+  assert.equal(
+    auth.executionConsumption.executedAt,
+    '2026-09-26T10:40:43.243Z',
+  );
+  assert.equal(auth.executionConsumption.evidenceRows, 100);
+  assert.equal(auth.executionConsumption.normalizedRecords, 100);
+  assert.equal(auth.executionConsumption.databaseReadOnly, true);
+  assert.equal(auth.executionConsumption.databaseWritesObserved, 0);
+  assert.equal(auth.executionConsumption.verifierOutputAccepted, true);
+  assert.equal(
+    auth.decision.requiredNextGate,
+    'post-execution-product-readiness-review',
+  );
   assert.equal(auth.decision.ledgerAdvancementAuthorized, false);
   assert.equal(auth.decision.productMetricPublicationAuthorized, false);
   assert.equal(auth.decision.registryMutationAuthorized, false);
 });
 
-test('only the exact artist and historical slot are execution-authorized', () => {
-  assert.equal(isMomentumProductionVerifierNativeExecutionAuthorized(), true);
+test('consumed execution authorization fails closed for every request', () => {
+  assert.equal(isMomentumProductionVerifierNativeExecutionAuthorized(), false);
   assert.equal(
     isMomentumProductionVerifierExecutionRequestAuthorized(EXACT_REQUEST),
-    true,
+    false,
   );
   assert.equal(
     isMomentumProductionVerifierExecutionRequestAuthorized({
