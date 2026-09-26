@@ -665,6 +665,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(h1key.members, ['SEOI', 'RIINA', 'HWISEO', 'YEL']);
   assert.ok(h1key.profile.koreanAliases.includes('하이키'));
 
+  const newbeat = getArtistV4ById('newbeat');
+  assert.ok(newbeat);
+  assert.equal(newbeat.entityType, 'group');
+  assert.equal(newbeat.agency, 'BEAT INTERACTIVE');
+  assert.equal(newbeat.debutDate, '2025-03-24');
+  assert.equal(newbeat.lifecycleStatus, 'active');
+  assert.equal(newbeat.members.length, 7);
+  assert.ok(newbeat.profile.koreanAliases.includes('뉴비트'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

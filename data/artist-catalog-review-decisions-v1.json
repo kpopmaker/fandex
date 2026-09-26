@@ -3926,6 +3926,33 @@
           "note": "Official company news records H1-KEY's 2026 fifth mini album LOVECHAPTER and the four-member lineup."
         }
       ]
+    },
+    {
+      "displayArtist": "NEWBEAT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_beat_interactive_kpop_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_group_profile_current_2026_official_activity_and_verified_beat_interactive_affiliation",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NEWBEAT Japan Official",
+          "url": "https://newbeat-official.jp/profiles",
+          "note": "Official profile records NEWBEAT's seven-member identity and 2025-03-24 debut."
+        },
+        {
+          "source": "NEWBEAT Japan Official",
+          "url": "https://newbeat-official.jp/",
+          "note": "Official site remains actively updated through 2026-09-25."
+        },
+        {
+          "source": "Space Shower SKIYAKI Holdings",
+          "url": "https://sssk-hd.com/contents/989299",
+          "note": "Official site operator announcement identifies NEWBEAT as a seven-member group under BEAT INTERACTIVE."
+        }
+      ]
     }
   ]
 }

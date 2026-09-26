@@ -5857,6 +5857,65 @@
           "url": "https://h1key-official.com/"
         }
       ]
+    },
+    {
+      "id": "newbeat",
+      "ticker": "NEWBEAT",
+      "name": "NEWBEAT",
+      "agency": "BEAT INTERACTIVE",
+      "entityType": "group",
+      "debutDate": "2025-03-24",
+      "lifecycleStatus": "active",
+      "members": [
+        "Minseok Park",
+        "Minsung Hong",
+        "Yeoyeojeong Jeon",
+        "Seohyun Choi",
+        "Taeyang Kim",
+        "Yunhu Jo",
+        "Riwoo Kim"
+      ],
+      "naverNewsQuery": "뉴비트 NEWBEAT 비트인터렉티브",
+      "koreanAliases": [
+        "뉴비트"
+      ],
+      "englishAliases": [
+        "NEWBEAT"
+      ],
+      "keywords": [
+        "BEAT INTERACTIVE",
+        "비트인터렉티브",
+        "RAW AND RAD",
+        "NEURO",
+        "Minseok Park",
+        "Minsung Hong",
+        "Yeoyeojeong Jeon",
+        "Seohyun Choi",
+        "Taeyang Kim",
+        "Yunhu Jo",
+        "Riwoo Kim"
+      ],
+      "disambiguationKeywords": [
+        "BEAT INTERACTIVE",
+        "비트인터렉티브",
+        "뉴비트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "NEWBEAT Japan Official",
+          "url": "https://newbeat-official.jp/profiles"
+        },
+        {
+          "source": "Space Shower SKIYAKI Holdings",
+          "url": "https://sssk-hd.com/contents/989299"
+        }
+      ]
     }
   ]
 }

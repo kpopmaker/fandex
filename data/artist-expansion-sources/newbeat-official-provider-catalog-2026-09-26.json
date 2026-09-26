@@ -1,0 +1,48 @@
+{
+  "version": "newbeat_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "newbeat-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "NEWBEAT Official Current Provider Catalog",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://newbeat-official.jp/profiles"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "NEWBEAT",
+      "aliases": [
+        "뉴비트"
+      ],
+      "evidence": [
+        {
+          "label": "NEWBEAT Japan official profile",
+          "url": "https://newbeat-official.jp/profiles"
+        },
+        {
+          "label": "NEWBEAT Japan current official site",
+          "url": "https://newbeat-official.jp/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleActOfficialCatalog": true,
+    "currentActivityEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "catalogPresenceDoesNotImplyBroaderBeatInteractiveRoster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://newbeat-official.jp/profiles",
+      "https://newbeat-official.jp/",
+      "https://sssk-hd.com/contents/989299"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}
