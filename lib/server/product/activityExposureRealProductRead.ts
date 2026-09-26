@@ -13,6 +13,9 @@ import {
   evaluateActivityExposureProductionReadiness,
 } from '../../product/activation/activityExposureProductionReadiness';
 import {
+  getActivityExposurePublicRoute,
+} from '../../product/queries/getActivityExposurePublicRoute';
+import {
   readActivityExposureShadowProduct,
   readActivityExposureStoredEvidence,
 } from '../ingestion/activityExposureRepository';
@@ -61,4 +64,11 @@ export async function getActivityExposurePublicRouteCutoverCandidateForIU() {
   return createActivityExposurePublicRouteCutoverCandidate(
     await getActivityExposureProductionReadinessForIU(),
   );
+}
+
+
+export async function getActivityExposurePublicRouteForIU() {
+  return getActivityExposurePublicRoute({
+    readActivityExposureReal: getActivityExposureShadowProductForIU,
+  });
 }

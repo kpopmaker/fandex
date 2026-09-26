@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ArtistMetricOverview from '../../components/product/ArtistMetricOverview';
+import ArtistActivityExposureDetail from '../../components/product/ArtistActivityExposureDetail';
 import ArtistProductVariableDetail from '../../components/product/ArtistProductVariableDetail';
 import {
   artistIndexChartProfiles,
@@ -34,6 +35,9 @@ import { getArtistProductVariableEvidence } from '../../../lib/product/queries/g
 import {
   getNaverNewsIssuePointPublicRouteVariable,
 } from '../../../lib/server/product/naverNewsIssuePointRealProductRead';
+import {
+  getActivityExposurePublicRouteForIU,
+} from '../../../lib/server/product/activityExposureRealProductRead';
 import type { ProductVariableId } from '../../../lib/product/contracts/productVariable';
 import { PRODUCT_VARIABLE_DEFINITIONS } from '../../../lib/product/variables/productVariableDefinitions';
 
@@ -258,18 +262,28 @@ export default async function ArtistDetailPage({
   const profile = getSafeArtistProfile(artistId);
 
   if (!profile && artistId === 'iu') {
+    const activityExposureResult =
+      requestedProductVariableIds.includes('comebackActivityPoint')
+        ? await getActivityExposurePublicRouteForIU()
+        : null;
     const productVariableResults = await Promise.all(
-      requestedProductVariableIds.map(async (variableId) =>
-        variableId === 'newsIssuePoint'
-          ? getNaverNewsIssuePointPublicRouteVariable()
-          : getArtistProductVariable({
-              artistId,
-              variableId,
-            }),
-      ),
+      requestedProductVariableIds
+        .filter((variableId) => variableId !== 'comebackActivityPoint')
+        .map(async (variableId) =>
+          variableId === 'newsIssuePoint'
+            ? getNaverNewsIssuePointPublicRouteVariable()
+            : getArtistProductVariable({
+                artistId,
+                variableId,
+              }),
+        ),
     );
     const productVariableEvidenceCollections = requestedProductVariableIds
-      .filter((variableId) => variableId !== 'newsIssuePoint')
+      .filter(
+        (variableId) =>
+          variableId !== 'newsIssuePoint'
+          && variableId !== 'comebackActivityPoint',
+      )
       .map((variableId) =>
         getArtistProductVariableEvidence({
           artistId,
@@ -291,10 +305,12 @@ export default async function ArtistDetailPage({
               공개합니다.
             </p>
           </header>
+          <ArtistActivityExposureDetail result={activityExposureResult} />
           <ArtistProductVariableDetail
             artistId={artistId}
             evidenceCollections={productVariableEvidenceCollections}
             results={productVariableResults}
+            requestedVariableIds={requestedProductVariableIds}
           />
         </div>
       </main>
@@ -326,20 +342,31 @@ export default async function ArtistDetailPage({
     currentFandexEntry?.status === 'ok'
       ? currentFandexEntry.source?.sourceTimeLabel ?? null
       : null;
+  const activityExposureResult =
+    profile.artistId === 'iu'
+    && requestedProductVariableIds.includes('comebackActivityPoint')
+      ? await getActivityExposurePublicRouteForIU()
+      : null;
   const productVariableResults = await Promise.all(
-    requestedProductVariableIds.map(async (variableId) =>
-      profile.artistId === 'iu' && variableId === 'newsIssuePoint'
-        ? getNaverNewsIssuePointPublicRouteVariable()
-        : getArtistProductVariable({
-            artistId: profile.artistId,
-            variableId,
-          }),
-    ),
+    requestedProductVariableIds
+      .filter(
+        (variableId) =>
+          !(profile.artistId === 'iu' && variableId === 'comebackActivityPoint'),
+      )
+      .map(async (variableId) =>
+        profile.artistId === 'iu' && variableId === 'newsIssuePoint'
+          ? getNaverNewsIssuePointPublicRouteVariable()
+          : getArtistProductVariable({
+              artistId: profile.artistId,
+              variableId,
+            }),
+      ),
   );
   const productVariableEvidenceCollections = requestedProductVariableIds
     .filter(
       (variableId) =>
-        !(profile.artistId === 'iu' && variableId === 'newsIssuePoint'),
+        !(profile.artistId === 'iu' && variableId === 'newsIssuePoint')
+        && !(profile.artistId === 'iu' && variableId === 'comebackActivityPoint'),
     )
     .map((variableId) =>
       getArtistProductVariableEvidence({
@@ -723,10 +750,12 @@ export default async function ArtistDetailPage({
           )}
         </section>
 
+        <ArtistActivityExposureDetail result={activityExposureResult} />
         <ArtistProductVariableDetail
           artistId={profile.artistId}
           evidenceCollections={productVariableEvidenceCollections}
           results={productVariableResults}
+          requestedVariableIds={requestedProductVariableIds}
         />
 
         <ArtistMetricOverview collection={productMetricCollection} />
