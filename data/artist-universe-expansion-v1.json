@@ -6322,6 +6322,62 @@
           "url": "https://www.youtube.com/watch?v=2SkU72Hnj_8"
         }
       ]
+    },
+    {
+      "id": "asc2nt",
+      "ticker": "ASC2NT",
+      "name": "ASC2NT",
+      "agency": "NEW WAYS COMPANY",
+      "entityType": "group",
+      "debutDate": "2024-05-07",
+      "lifecycleStatus": "active",
+      "members": [
+        "KARAM",
+        "REON",
+        "JAY",
+        "KYLE",
+        "HYOWON"
+      ],
+      "naverNewsQuery": "어센트 ASC2NT 뉴웨이즈컴퍼니",
+      "koreanAliases": [
+        "어센트"
+      ],
+      "englishAliases": [
+        "ASC2NT"
+      ],
+      "keywords": [
+        "NEW WAYS COMPANY",
+        "뉴웨이즈컴퍼니",
+        "KARAM",
+        "REON",
+        "JAY",
+        "KYLE",
+        "HYOWON",
+        "STILL : I",
+        "Still Rose",
+        "Replay"
+      ],
+      "disambiguationKeywords": [
+        "NEW WAYS COMPANY",
+        "뉴웨이즈컴퍼니",
+        "어센트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "NEW WAYS COMPANY",
+          "url": "https://www.newways.co.kr/artists"
+        },
+        {
+          "source": "NEW WAYS COMPANY",
+          "url": "https://www.newways.co.kr/new/?bmode=view&idx=170176714"
+        }
+      ]
     }
   ]
 }

@@ -731,6 +731,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(ichillinJ.members, ['E.JI', 'JOONIE', 'YEJU']);
   assert.ok(ichillinJ.profile.koreanAliases.includes('아이칠린 제이'));
 
+  const asc2nt = getArtistV4ById('asc2nt');
+  assert.ok(asc2nt);
+  assert.equal(asc2nt.entityType, 'group');
+  assert.equal(asc2nt.agency, 'NEW WAYS COMPANY');
+  assert.equal(asc2nt.debutDate, '2024-05-07');
+  assert.equal(asc2nt.lifecycleStatus, 'active');
+  assert.deepEqual(asc2nt.members, ['KARAM', 'REON', 'JAY', 'KYLE', 'HYOWON']);
+  assert.ok(asc2nt.profile.koreanAliases.includes('어센트'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

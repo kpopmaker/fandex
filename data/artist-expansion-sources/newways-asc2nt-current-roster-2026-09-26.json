@@ -1,0 +1,48 @@
+{
+  "version": "newways_current_asc2nt_roster_adapter_v1",
+  "source": {
+    "id": "newways-current-asc2nt-roster",
+    "type": "agency_roster",
+    "name": "NEW WAYS COMPANY Current ASC2NT Roster",
+    "observedAt": "2026-09-26T00:00:00Z",
+    "url": "https://www.newways.co.kr/artists"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ASC2NT",
+      "aliases": [
+        "어센트"
+      ],
+      "evidence": [
+        {
+          "label": "NEW WAYS COMPANY current official artist page",
+          "url": "https://www.newways.co.kr/artists"
+        },
+        {
+          "label": "NEW WAYS COMPANY official 2026 activity",
+          "url": "https://www.newways.co.kr/new/?bmode=view&idx=170176714"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "currentOfficialLineupOnly": true,
+    "currentActivityEvidenceRequired": true,
+    "historicalLineupDoesNotOverrideCurrentProfile": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_group_snapshot",
+    "verifiedFrom": [
+      "https://www.newways.co.kr/artists",
+      "https://www.newways.co.kr/new/?bmode=view&idx=170176714",
+      "https://www.newways.co.kr/new/?bmode=view&idx=170386553"
+    ],
+    "verifiedAt": "2026-09-26"
+  }
+}

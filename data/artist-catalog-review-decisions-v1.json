@@ -4126,6 +4126,33 @@
           "note": "Contemporary report citing KM Entertainment confirms ICHILLIN' J as ICHILLIN's first unit."
         }
       ]
+    },
+    {
+      "displayArtist": "ASC2NT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_newways_company_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_newways_artist_page_and_2026_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NEW WAYS COMPANY",
+          "url": "https://www.newways.co.kr/artists",
+          "note": "Current official artist page identifies ASC2NT as a five-member South Korean male group with KARAM, REON, JAY, KYLE, and HYOWON."
+        },
+        {
+          "source": "NEW WAYS COMPANY",
+          "url": "https://www.newways.co.kr/new/?bmode=view&idx=170176714",
+          "note": "Official company news records ASC2NT's 2026-02-26 first mini album STILL : I comeback."
+        },
+        {
+          "source": "NEW WAYS COMPANY",
+          "url": "https://www.newways.co.kr/new/?bmode=view&idx=170386553",
+          "note": "Official company news records completion of ASC2NT's 2026 mini-album broadcast promotions on 2026-03-13."
+        }
+      ]
     }
   ]
 }
