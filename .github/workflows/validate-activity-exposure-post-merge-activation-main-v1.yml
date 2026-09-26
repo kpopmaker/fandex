@@ -1,0 +1,25 @@
+name: Validate Activity Exposure post-merge Production activation v1
+
+on:
+  push:
+    branches:
+      - validation/activity-exposure-post-merge-activation-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only post-merge activation boundary
+        run: npx tsx scripts/validation/activityExposurePostMergeActivationMainV1.ts
