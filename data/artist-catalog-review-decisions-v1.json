@@ -4536,34 +4536,34 @@
       ]
     },
     {
-      "displayArtist": "ALL(H)OURS",
+      "displayArtist": "ARrC",
       "decision": "new_canonical_group_candidate",
-      "relationResolution": "official_current_seven_member_group_identity_and_eden_management_verified",
+      "relationResolution": "official_terminal_notice_resolves_group_identity_last_seven_member_roster_and_ended_activity",
       "relatedCanonicalArtistIds": [],
       "scopeDecision": "eligible",
-      "scopeBasis": "official_korean_profile_japan_profile_and_2026_09_eden_managed_music_activity",
+      "scopeBasis": "mystic_story_official_debut_identity_seven_member_continuity_and_2026_06_22_terminal_activity_notice",
       "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
-          "source": "ALL(H)OURS Official",
-          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea",
-          "note": "Official group intro exposes the seven current member identities: KUNHO, YOUMIN, XAYDEN, MINJE, MASAMI, HYUNBIN, and ON:N."
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/36951",
+          "note": "MYSTIC STORY officially concludes ARrC group activities as of 2026-06-22 and names the terminal seven members: ANDY, CHOI HAN, DOHA, HYUNMIN, JIBEEN, KIEN, and RIOTO."
         },
         {
-          "source": "ALL(H)OURS Japan Official Fanclub",
-          "url": "https://all-h-ours.fanpla.jp/news/2/",
-          "note": "Official Japan profile identifies ALL(H)OURS as a seven-member Korean group under EDEN Entertainment and records the 2024-01-10 debut."
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/21665",
+          "note": "Official debut showcase notice records ARrC's debut showcase on 2024-08-19 for THE 1ST EP [AR^C]."
         },
         {
-          "source": "EDEN Entertainment / ALL(H)OURS Official",
-          "url": "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa",
-          "note": "EDEN Entertainment official notice dated 2026-09-16 documents active SIXTH MINI ALBUM [UNBOUND] promotions."
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/24934?hl=ko",
+          "note": "Official notice records Andy joining and ARrC continuing as a seven-member group before the later terminal notice."
         },
         {
-          "source": "EDEN Entertainment / ALL(H)OURS Official",
-          "url": "https://all-h-ours.com/surveys/6aa240c24d9bf56d90b20a79",
-          "note": "Additional September 2026 official broadcast notice independently confirms current group activity under EDEN Entertainment."
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/24431",
+          "note": "Official fan-club notice confirms ARrC identity and the fandom name ARrCer."
         }
       ]
     }

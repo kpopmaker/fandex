@@ -877,15 +877,17 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(fantasyBoys.fandomName, 'Bandi');
   assert.ok(fantasyBoys.profile.koreanAliases.includes('판타지 보이즈'));
 
-  const allHours = getArtistV4ById('allhours');
-  assert.ok(allHours);
-  assert.equal(allHours.entityType, 'group');
-  assert.equal(allHours.agency, 'EDEN Entertainment');
-  assert.equal(allHours.debutDate, '2024-01-10');
-  assert.equal(allHours.lifecycleStatus, 'active');
-  assert.deepEqual(allHours.members, ['KUNHO', 'YOUMIN', 'XAYDEN', 'MINJE', 'MASAMI', 'HYUNBIN', 'ON:N']);
-  assert.ok(allHours.profile.koreanAliases.includes('올아워즈'));
-  assert.ok(allHours.profile.englishAliases.includes('ALL HOURS'));
+  const arrc = getArtistV4ById('arrc');
+  assert.ok(arrc);
+  assert.equal(arrc.entityType, 'group');
+  assert.equal(arrc.agency, 'MYSTIC STORY');
+  assert.equal(arrc.agencyStatus, 'historical');
+  assert.equal(arrc.debutDate, '2024-08-19');
+  assert.equal(arrc.lifecycleStatus, 'inactive');
+  assert.equal(arrc.collection.tier, 'archive');
+  assert.deepEqual(arrc.members, ['ANDY', 'CHOI HAN', 'DOHA', 'HYUNMIN', 'JIBEEN', 'KIEN', 'RIOTO']);
+  assert.equal(arrc.fandomName, 'ARrCer');
+  assert.ok(arrc.profile.koreanAliases.includes('아크'));
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

@@ -7123,66 +7123,71 @@
       ]
     },
     {
-      "id": "allhours",
-      "ticker": "ALLHOURS",
-      "name": "ALL(H)OURS",
-      "agency": "EDEN Entertainment",
+      "id": "arrc",
+      "ticker": "ARRC",
+      "name": "ARrC",
+      "agency": "MYSTIC STORY",
+      "agencyStatus": "historical",
       "entityType": "group",
-      "debutDate": "2024-01-10",
-      "lifecycleStatus": "active",
+      "debutDate": "2024-08-19",
+      "lifecycleStatus": "inactive",
       "members": [
-        "KUNHO",
-        "YOUMIN",
-        "XAYDEN",
-        "MINJE",
-        "MASAMI",
-        "HYUNBIN",
-        "ON:N"
+        "ANDY",
+        "CHOI HAN",
+        "DOHA",
+        "HYUNMIN",
+        "JIBEEN",
+        "KIEN",
+        "RIOTO"
       ],
-      "naverNewsQuery": "올아워즈 ALL(H)OURS 이든엔터테인먼트",
+      "fandomName": "ARrCer",
+      "naverNewsQuery": "아크 ARrC 미스틱스토리",
       "koreanAliases": [
-        "올아워즈"
+        "아크"
       ],
       "englishAliases": [
-        "ALL(H)OURS",
-        "ALL HOURS",
-        "ALLHOURS"
+        "ARrC",
+        "ARRC"
       ],
       "keywords": [
-        "EDEN Entertainment",
-        "이든엔터테인먼트",
-        "KUNHO",
-        "YOUMIN",
-        "XAYDEN",
-        "MINJE",
-        "MASAMI",
-        "HYUNBIN",
-        "ON:N",
-        "UNBOUND"
+        "MYSTIC STORY",
+        "미스틱스토리",
+        "ANDY",
+        "CHOI HAN",
+        "DOHA",
+        "HYUNMIN",
+        "JIBEEN",
+        "KIEN",
+        "RIOTO",
+        "AR^C",
+        "ARrCer"
       ],
       "disambiguationKeywords": [
-        "EDEN Entertainment",
-        "이든엔터테인먼트",
-        "올아워즈"
+        "MYSTIC STORY",
+        "미스틱스토리",
+        "아크"
       ],
       "markets": [
         "KR",
-        "JP",
         "GLOBAL"
       ],
-      "tier": "standard",
+      "tier": "archive",
       "identityEvidence": [
         {
-          "source": "ALL(H)OURS Official",
-          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/36951"
         },
         {
-          "source": "ALL(H)OURS Japan Official Fanclub",
-          "url": "https://all-h-ours.fanpla.jp/news/2/"
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/21665"
         },
         {
-          "source": "EDEN Entertainment / ALL(H)OURS Official",
-          "url": "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa"
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/24934?hl=ko"
+        },
+        {
+          "source": "MYSTIC STORY / ARrC Weverse",
+          "url": "https://weverse.io/arrc/notice/24431"
         }
       ]
     }

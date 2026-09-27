@@ -1,0 +1,76 @@
+{
+  "version": "arrc_official_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "arrc-official-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "ARrC Official Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/arrc/notice/36951"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ARrC",
+      "aliases": [
+        "아크",
+        "ARRC"
+      ],
+      "evidence": [
+        {
+          "label": "MYSTIC STORY official ARrC terminal activity notice",
+          "url": "https://weverse.io/arrc/notice/36951"
+        },
+        {
+          "label": "MYSTIC STORY official ARrC debut showcase notice",
+          "url": "https://weverse.io/arrc/notice/21665"
+        },
+        {
+          "label": "MYSTIC STORY official seven-member continuity notice",
+          "url": "https://weverse.io/arrc/notice/24934?hl=ko"
+        },
+        {
+          "label": "MYSTIC STORY official ARrCer fandom notice",
+          "url": "https://weverse.io/arrc/notice/24431"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "terminalLifecycleEvidenceRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "terminalNoticeOverridesEarlierActiveEvidence": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "formerMemberDoesNotRemainInTerminalRoster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "effectiveDate": "2026-06-22",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "MYSTIC STORY",
+    "terminalMembers": [
+      "ANDY",
+      "CHOI HAN",
+      "DOHA",
+      "HYUNMIN",
+      "JIBEEN",
+      "KIEN",
+      "RIOTO"
+    ]
+  },
+  "provenance": {
+    "snapshotType": "verified_official_terminal_lifecycle_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/arrc/notice/36951",
+      "https://weverse.io/arrc/notice/21665",
+      "https://weverse.io/arrc/notice/24934?hl=ko",
+      "https://weverse.io/arrc/notice/24431"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}
