@@ -1,0 +1,48 @@
+{
+  "contractVersion": "momentum-categorical-output-attestation-v1",
+  "lifecycle": "research",
+  "canonicalArtistId": "iu",
+  "sourceLineage": {
+    "kind": "preview-independent-v142-current-evaluation",
+    "sourceContractVersion": "v142_fandex_momentum_cross_family_combination_research_v1",
+    "sourceV142Digest": "3ac534dd6afc2e75f534cf4bc98ce6fb33fdd22e081eaae9aedcf97a90fd6721",
+    "legacySourceV143Required": false,
+    "legacySourceV143Digest": null
+  },
+  "categoricalOutput": {
+    "alignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "qualitativeDirectionEvidenceUsable": false,
+    "productMomentumScore": null
+  },
+  "evaluationEvidence": {
+    "evaluatedAgainstMain": "8c766ce1c4706941cf16472b0a861dcdc4e6a497",
+    "evaluationHead": "0c9d0140bf61180510dce720cfaea8809d160279",
+    "workflowRunId": 36290882671,
+    "workflowJobId": 108540600155,
+    "evaluatedAt": "2026-09-27T03:16:07.0487083Z",
+    "latestNaverThroughSlotStart": "2026-09-27T03:00:00.000Z",
+    "latestNaverJobId": "362b77504d31b89d9f9a5b66a1216c6adb59be376b2ae811d664f351929677f2",
+    "exactOfficialProtocol": true,
+    "reproducedStoredEvidence": true,
+    "evaluationClassification": "new-carrier-cutoff-advanced-same-state",
+    "evaluationEvidenceDigest": "aef8a7e60d475d1d5c1d7d05746e0b748cb1e7aa32246ec4a2f98efea285ffe0"
+  },
+  "isolation": {
+    "databaseMode": "read-only",
+    "databaseWrites": 0,
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "registryMutations": 0,
+    "productionActivations": 0
+  },
+  "carrierLineageEligibility": {
+    "eligible": true,
+    "sourceDigestField": "sourceAttestationDigest",
+    "sourceContractField": "sourceAttestationContractVersion",
+    "existingSourceV143FieldMustNotBeReused": true
+  },
+  "attestationDigest": "03888fbf16462320cb4fcd70c2f237f62a7f18e80f0f964d956fb75732af4582"
+}
