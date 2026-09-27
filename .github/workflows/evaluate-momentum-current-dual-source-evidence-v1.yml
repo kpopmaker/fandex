@@ -30,9 +30,12 @@ jobs:
           git diff --name-only dd05caeab4682a642cf63e61f4f12b67182ecc9e...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/evaluate-momentum-current-dual-source-evidence-v1.yml
+          lib/intelligence/fandexMomentumCategoricalCarrierResearch.ts
+          lib/intelligence/fandexMomentumCarrierChangeResearch.ts
           lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
           lib/intelligence/fandexMomentumOutputFormEligibilityResearch.ts
           lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
+          lib/intelligence/fandexMomentumUnifiedHistoryResearch.ts
           lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts
           lib/lastfm-signal/contracts.ts
           lib/lastfm-signal/csv.ts
