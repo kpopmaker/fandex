@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: momentum-current-dual-source-evaluation-v1
+  cancel-in-progress: true
+
 jobs:
   evaluate:
     runs-on: ubuntu-latest
