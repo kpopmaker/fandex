@@ -1,9 +1,9 @@
-name: Validate Momentum public route design v1
+name: Validate Momentum product activation readiness v1
 
 on:
   push:
     branches:
-      - integration/momentum-public-route-design-v1
+      - integration/momentum-product-activation-readiness-v1
   pull_request:
     branches:
       - main
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   validate:
-    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-public-route-design-v1'
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-product-activation-readiness-v1'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -27,18 +27,23 @@ jobs:
 
       - name: Scope allowlist
         run: |
-          git diff --name-only f9163ceba5f60291bac28fa64e4a701e2ac44512...HEAD | sort > /tmp/changed.txt
+          git diff --name-only 6834738c6a6845a84619ca87f8fad728a46f041b...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
-          .github/workflows/validate-momentum-current-dual-source-evaluation-v1.yml
+          .github/workflows/validate-momentum-product-activation-readiness-v1.yml
           .github/workflows/validate-momentum-public-route-design-v1.yml
-          lib/product/readiness/momentumPublicRouteDesignCandidate.ts
-          lib/server/product/momentumPublicRouteDesignCandidate.ts
-          tests/momentum-public-route-design-v1.test.mts
+          lib/product/activation/momentumProductActivationReadiness.ts
+          lib/server/product/momentumProductActivationReadiness.ts
+          tests/momentum-product-activation-readiness-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           diff -u /tmp/allowed.txt /tmp/changed.txt
 
       - run: npm ci
+
+      - name: Momentum activation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
 
       - name: Momentum public route design regression
         env:
@@ -52,11 +57,6 @@ jobs:
 
       - name: Momentum Product contract regression
         run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
-
-      - name: Momentum runtime Stored Evidence regression
-        env:
-          NODE_OPTIONS: --conditions=react-server
-        run: npx tsx --test tests/momentum-evidence-consensus-runtime-read-v1.test.mts
 
       - run: npm run typecheck
       - run: npm run lint
