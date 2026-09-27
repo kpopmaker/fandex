@@ -70,11 +70,11 @@ test('current IU live-shadow readiness requires persistence of the newly evaluat
     currentCarrierProduced: false,
     currentNoOpEvaluationAttested: false,
     classification: 'new-carrier-cutoff-advanced-same-state',
-    alignmentCutoffAt: '2026-09-26T02:15:48.000Z',
+    alignmentCutoffAt: '2026-09-27T02:10:05.000Z',
     directionalConsensus: 'direction-conflicted',
     persistenceConsensus: 'persistence-not-applicable',
     categoricalEvaluationDigest:
-      '11ce6df788a9f3f44cc96a1ce8693a7ebb58e684b251027a7af7055d45346dd9',
+      '3ac534dd6afc2e75f534cf4bc98ce6fb33fdd22e081eaae9aedcf97a90fd6721',
     newHistoryObservationRequired: true,
     satisfiesFreshness: false,
   });
@@ -116,11 +116,11 @@ test('current source audit records exact current NAVER Stored Evidence reproduct
 
   assert.equal(
     audit.evaluatedAgainstMain,
-    'dd05caeab4682a642cf63e61f4f12b67182ecc9e',
+    '8c766ce1c4706941cf16472b0a861dcdc4e6a497',
   );
-  assert.equal(audit.lastfm.snapshotDate, '2026-09-26');
-  assert.equal(audit.lastfm.historyRowCount, 480);
-  assert.equal(audit.lastfm.snapshotDateCount, 48);
+  assert.equal(audit.lastfm.snapshotDate, '2026-09-27');
+  assert.equal(audit.lastfm.historyRowCount, 490);
+  assert.equal(audit.lastfm.snapshotDateCount, 49);
   assert.equal(audit.lastfm.deltaReadyCount, 10);
   assert.equal(audit.lastfm.needsReviewCount, 0);
 
@@ -130,14 +130,14 @@ test('current source audit records exact current NAVER Stored Evidence reproduct
   );
   assert.equal(
     audit.naverRuntime.latestStoredEvidenceThroughSlotStart,
-    '2026-09-27T00:00:00.000Z',
+    '2026-09-27T03:00:00.000Z',
   );
   assert.equal(
     audit.naverRuntime.latestStoredEvidenceJobId,
-    '495b3cb12feef467824be1ede6b1ff541036c6a2a2f203a3c4e60def66490d8b',
+    '362b77504d31b89d9f9a5b66a1216c6adb59be376b2ae811d664f351929677f2',
   );
-  assert.equal(audit.naverRuntime.reproducedSnapshotCount, 273);
-  assert.equal(audit.naverRuntime.evaluationWorkflowRunId, 36281349343);
+  assert.equal(audit.naverRuntime.reproducedSnapshotCount, 276);
+  assert.equal(audit.naverRuntime.evaluationWorkflowRunId, 36290882671);
 });
 
 test('recorded evaluation evidence matches the currentness audit classification', async () => {
@@ -171,7 +171,7 @@ test('recorded evaluation evidence matches the currentness audit classification'
   };
 
   assert.equal(evidence.evaluatedAgainstMain, audit.evaluatedAgainstMain);
-  assert.equal(evidence.workflowRunId, 36281349343);
+  assert.equal(evidence.workflowRunId, 36290882671);
   assert.equal(
     evidence.categoricalEvaluation.alignmentCutoffAt,
     audit.currentEvaluation.alignmentCutoffAt,
