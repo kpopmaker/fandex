@@ -71,6 +71,11 @@ export async function getMomentumLiveShadowProductReadinessForIU():
         currentCarrierProduced: false,
         currentNoOpEvaluationAttested: false,
         satisfiesFreshness: false,
+        evaluatedAlignmentCutoffAt: null,
+        directionalConsensus: null,
+        persistenceConsensus: null,
+        attestationPath: null,
+        attestationDigest: null,
       }),
       blockers: Object.freeze(['source-currentness-audit-read-failed']),
     });

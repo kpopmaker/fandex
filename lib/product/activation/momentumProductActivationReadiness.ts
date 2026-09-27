@@ -19,6 +19,7 @@ export type MomentumProductActivationReadinessCheck =
   | 'route-design-ready'
   | 'target-identity'
   | 'current-freshness'
+  | 'current-attestation-binding'
   | 'categorical-product-contract'
   | 'shadow-publication-boundary'
   | 'stored-evidence-binding'
@@ -41,6 +42,14 @@ export type MomentumProductActivationReadiness =
     alignmentCutoffAt: string | null;
     directionalConsensus: string | null;
     persistenceConsensus: string | null;
+    freshnessAttestation: Readonly<{
+      currentNoOpEvaluationAttested: boolean;
+      evaluatedAlignmentCutoffAt: string | null;
+      directionalConsensus: string | null;
+      persistenceConsensus: string | null;
+      attestationPath: string | null;
+      attestationDigest: string | null;
+    }>;
     productActivationAuthorized: false;
     productPublicationAuthorized: false;
     publicRouteActivated: false;
@@ -61,6 +70,7 @@ function defaultChecks():
     'route-design-ready': false,
     'target-identity': false,
     'current-freshness': false,
+    'current-attestation-binding': false,
     'categorical-product-contract': false,
     'shadow-publication-boundary': false,
     'stored-evidence-binding': false,
@@ -172,6 +182,29 @@ export function evaluateMomentumProductActivationReadiness(
       .naverCurrentStoredEvidenceReproducedForReadiness === true
     && input.liveReadiness.blockers.length === 0;
 
+  const currentEvaluation = input.liveReadiness.currentEvaluation;
+  const carrier = input.liveReadiness.currentCarrier;
+  checks['current-attestation-binding'] =
+    currentEvaluation.currentNoOpEvaluationAttested === true
+    && currentEvaluation.currentCarrierProduced === false
+    && currentEvaluation.evaluatedAlignmentCutoffAt !== null
+    && Number.isFinite(Date.parse(
+      currentEvaluation.evaluatedAlignmentCutoffAt,
+    ))
+    && carrier.alignmentCutoffAt !== null
+    && Date.parse(currentEvaluation.evaluatedAlignmentCutoffAt)
+      > Date.parse(carrier.alignmentCutoffAt)
+    && currentEvaluation.directionalConsensus !== null
+    && currentEvaluation.directionalConsensus
+      === carrier.directionalConsensus
+    && currentEvaluation.persistenceConsensus !== null
+    && currentEvaluation.persistenceConsensus
+      === carrier.persistenceConsensus
+    && currentEvaluation.attestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && typeof currentEvaluation.attestationDigest === 'string'
+    && /^[0-9a-f]{64}$/.test(currentEvaluation.attestationDigest);
+
   const eligible = Object.values(checks).every(Boolean);
   const currentCarrier =
     input.source.status === 'ok'
@@ -198,6 +231,20 @@ export function evaluateMomentumProductActivationReadiness(
       currentCarrier?.evidence.directionalConsensus ?? null,
     persistenceConsensus:
       currentCarrier?.evidence.persistenceConsensus ?? null,
+    freshnessAttestation: Object.freeze({
+      currentNoOpEvaluationAttested:
+        input.liveReadiness.currentEvaluation.currentNoOpEvaluationAttested,
+      evaluatedAlignmentCutoffAt:
+        input.liveReadiness.currentEvaluation.evaluatedAlignmentCutoffAt,
+      directionalConsensus:
+        input.liveReadiness.currentEvaluation.directionalConsensus,
+      persistenceConsensus:
+        input.liveReadiness.currentEvaluation.persistenceConsensus,
+      attestationPath:
+        input.liveReadiness.currentEvaluation.attestationPath,
+      attestationDigest:
+        input.liveReadiness.currentEvaluation.attestationDigest,
+    }),
     productActivationAuthorized: false as const,
     productPublicationAuthorized: false as const,
     publicRouteActivated: false as const,

@@ -95,6 +95,14 @@ export function createMomentumProductActivationApprovalCandidate(
     || readiness.alignmentCutoffAt === null
     || readiness.directionalConsensus === null
     || readiness.persistenceConsensus === null
+    || readiness.freshnessAttestation.currentNoOpEvaluationAttested !== true
+    || readiness.freshnessAttestation.evaluatedAlignmentCutoffAt === null
+    || readiness.freshnessAttestation.attestationPath === null
+    || readiness.freshnessAttestation.attestationDigest === null
+    || readiness.freshnessAttestation.directionalConsensus
+      !== readiness.directionalConsensus
+    || readiness.freshnessAttestation.persistenceConsensus
+      !== readiness.persistenceConsensus
     || readiness.productActivationAuthorized !== false
     || readiness.productPublicationAuthorized !== false
     || readiness.publicRouteActivated !== false
@@ -136,6 +144,14 @@ export function createMomentumProductActivationApprovalCandidate(
       alignmentCutoffAt: readiness.alignmentCutoffAt,
       directionalConsensus: readiness.directionalConsensus,
       persistenceConsensus: readiness.persistenceConsensus,
+      currentNoOpEvaluationAttested: true as const,
+      evaluatedAlignmentCutoffAt:
+        readiness.freshnessAttestation.evaluatedAlignmentCutoffAt,
+      currentEvaluationAttestationPath:
+        readiness.freshnessAttestation.attestationPath as
+          'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+      currentEvaluationAttestationDigest:
+        readiness.freshnessAttestation.attestationDigest,
     }),
   });
 
