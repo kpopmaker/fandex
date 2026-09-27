@@ -7886,6 +7886,73 @@
           "url": "https://www.soompi.com/article/1421908wpp/maroo-entertainment-announces-plans-to-debut-new-boy-group-including-teen-teen-members"
         }
       ]
+    },
+    {
+      "id": "wei",
+      "ticker": "WEI",
+      "name": "WEi",
+      "agency": "OUI Entertainment",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "debutDate": "2020-10-05",
+      "lifecycleStatus": "active",
+      "members": [
+        "JANG DAE HYEON",
+        "KIM DONG HAN",
+        "YOO YONG HA",
+        "KIM YO HAN",
+        "KANG SEOK HWA",
+        "KIM JUN SEO"
+      ],
+      "naverNewsQuery": "위아이 WEi 위엔터테인먼트",
+      "koreanAliases": [
+        "위아이"
+      ],
+      "englishAliases": [
+        "WEi",
+        "WEI"
+      ],
+      "keywords": [
+        "OUI Entertainment",
+        "위엔터테인먼트",
+        "JANG DAE HYEON",
+        "KIM DONG HAN",
+        "YOO YONG HA",
+        "KIM YO HAN",
+        "KANG SEOK HWA",
+        "KIM JUN SEO",
+        "IDENTITY : First Sight",
+        "Wonderland"
+      ],
+      "disambiguationKeywords": [
+        "OUI Entertainment",
+        "위엔터테인먼트",
+        "위아이"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "OUI Entertainment current singer directory",
+          "url": "https://ouient.com/27"
+        },
+        {
+          "source": "OUI Entertainment current schedule surface",
+          "url": "https://ouient.com/SCHEDULE"
+        },
+        {
+          "source": "OUI Entertainment 2026 WEi member notice",
+          "url": "https://ouient.com/35"
+        },
+        {
+          "source": "OUI Entertainment KANG SEOK HWA profile",
+          "url": "https://ouient.com/48"
+        }
+      ]
     }
   ]
 }

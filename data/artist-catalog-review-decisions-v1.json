@@ -4921,6 +4921,38 @@
           "note": "The preserved official debut announcement sets GHOST9's debut to September 23, 2020."
         }
       ]
+    },
+    {
+      "displayArtist": "WEi",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_oui_singer_directory_and_group_surfaces_resolve_six_member_wei_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_oui_singer_directory_current_wei_schedule_2026_member_notice_and_official_debut_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OUI Entertainment current singer directory",
+          "url": "https://ouient.com/27",
+          "note": "Current OUI singer directory lists exactly JANG DAE HYEON, KIM DONG HAN, YOO YONG HA, KIM YO HAN, KANG SEOK HWA, and KIM JUN SEO."
+        },
+        {
+          "source": "OUI Entertainment current schedule surface",
+          "url": "https://ouient.com/SCHEDULE",
+          "note": "OUI's current schedule surface includes WEi and states that schedules are updated weekly, supporting a current group surface rather than a stale archived profile."
+        },
+        {
+          "source": "OUI Entertainment 2026 WEi member notice",
+          "url": "https://ouient.com/35",
+          "note": "OUI's 2026-05-06 notice explicitly identifies KANG SEOK HWA as a WEi member, confirming continuing group-member identity under the current company surface."
+        },
+        {
+          "source": "OUI Entertainment KANG SEOK HWA profile",
+          "url": "https://ouient.com/48",
+          "note": "Official member profile records WEi's first mini album IDENTITY : First Sight on 2020-10-05 and the 2025-10-29 WEi 8th mini album Wonderland."
+        }
+      ]
     }
   ]
 }

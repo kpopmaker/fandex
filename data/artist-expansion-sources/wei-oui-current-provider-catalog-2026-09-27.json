@@ -1,0 +1,82 @@
+{
+  "version": "wei_oui_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "wei-oui-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "WEi OUI Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://ouient.com/27"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "WEi",
+      "aliases": [
+        "위아이",
+        "WEI"
+      ],
+      "evidence": [
+        {
+          "label": "OUI current six-singer directory",
+          "url": "https://ouient.com/27"
+        },
+        {
+          "label": "OUI current WEi schedule surface",
+          "url": "https://ouient.com/SCHEDULE"
+        },
+        {
+          "label": "OUI 2026 WEi member continuity notice",
+          "url": "https://ouient.com/35"
+        },
+        {
+          "label": "OUI member profile with WEi debut and current discography",
+          "url": "https://ouient.com/48"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentAgencySingerDirectoryRequired": true,
+    "currentGroupSurfaceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentOfficialMemberContinuityEvidenceRequired": true,
+    "currentDirectoryPresenceSupportsActiveLifecycle": true,
+    "individualSchedulesDoNotTerminateMembership": true,
+    "activitySubsetDoesNotChangeCanonicalMembership": true,
+    "explicitTerminalDepartureEvidenceRequiredForMemberRemoval": true,
+    "officialDebutDateEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "OUI Entertainment",
+    "agencyStatus": "verified",
+    "members": [
+      "JANG DAE HYEON",
+      "KIM DONG HAN",
+      "YOO YONG HA",
+      "KIM YO HAN",
+      "KANG SEOK HWA",
+      "KIM JUN SEO"
+    ],
+    "currentMemberCount": 6,
+    "lifecycleStatus": "active",
+    "debutDate": "2020-10-05",
+    "latestVerifiedGroupReleaseDate": "2025-10-29",
+    "currentContinuityNoticeDate": "2026-05-06"
+  },
+  "provenance": {
+    "snapshotType": "verified_current_official_directory_plus_current_group_surfaces",
+    "verifiedFrom": [
+      "https://ouient.com/27",
+      "https://ouient.com/SCHEDULE",
+      "https://ouient.com/35",
+      "https://ouient.com/48"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}
