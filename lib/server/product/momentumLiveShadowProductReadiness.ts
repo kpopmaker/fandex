@@ -35,7 +35,7 @@ export async function getMomentumLiveShadowProductReadinessForIU():
 
   if (sourceAudit === null) {
     return Object.freeze({
-      contractVersion: 'momentum-live-shadow-product-readiness-v1' as const,
+      contractVersion: 'momentum-live-shadow-product-readiness-v2' as const,
       state: 'blocked' as const,
       productActivationReady: false as const,
       productPublicationReady: false as const,
@@ -70,6 +70,12 @@ export async function getMomentumLiveShadowProductReadinessForIU():
         performed: false,
         currentCarrierProduced: false,
         currentNoOpEvaluationAttested: false,
+        classification: 'not-performed' as const,
+        alignmentCutoffAt: null,
+        directionalConsensus: null,
+        persistenceConsensus: null,
+        categoricalEvaluationDigest: null,
+        newHistoryObservationRequired: false,
         satisfiesFreshness: false,
       }),
       blockers: Object.freeze(['source-currentness-audit-read-failed']),
