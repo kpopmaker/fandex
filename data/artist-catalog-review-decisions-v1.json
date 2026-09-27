@@ -4778,6 +4778,43 @@
           "note": "Official 2026 fifth-anniversary event specifies six photocard variants, 6:1 group photography, and a full-group stage, confirming current six-member lifecycle."
         }
       ]
+    },
+    {
+      "displayArtist": "JUST B",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_official_six_member_profile_plus_bluedot_temporary_medical_hiatus_notice_preserve_membership_while_activity_lineup_is_five",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_debut_identity_current_bluedot_management_current_six_member_profile_and_2026_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "JUST B Weverse Highlight",
+          "url": "https://weverse.io/justb/highlight",
+          "note": "Current official member section lists LIM JIMIN, GEONU, Bain, SIWOO, DY, and SANGWOO as JUST B artists."
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/34389",
+          "note": "Official 2026 notice places LIM JIMIN on temporary medical hiatus and explicitly states the group will temporarily promote as five; it does not announce membership termination."
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/34712",
+          "note": "Official 2026 JUST B LIVE IN JAPAN notice is issued by BLUEDOT Entertainment, supporting current management and active lifecycle."
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/29977",
+          "note": "Official 2025 album notice describes JUST B as a six-member K-pop group and records the official debut date as June 30, 2021."
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/12657",
+          "note": "Official fanclub notice identifies ONLY B as JUST B's official fanclub."
+        }
+      ]
     }
   ]
 }

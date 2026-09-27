@@ -1,0 +1,93 @@
+{
+  "version": "justb_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "justb-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "JUST B Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/justb/highlight"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "JUST B",
+      "aliases": [
+        "저스트비",
+        "JUSTB"
+      ],
+      "evidence": [
+        {
+          "label": "JUST B current official six-member Weverse profile",
+          "url": "https://weverse.io/justb/highlight"
+        },
+        {
+          "label": "BLUEDOT official LIM JIMIN temporary medical hiatus notice",
+          "url": "https://weverse.io/justb/notice/34389"
+        },
+        {
+          "label": "BLUEDOT official 2026 JUST B Japan activity notice",
+          "url": "https://weverse.io/justb/notice/34712"
+        },
+        {
+          "label": "BLUEDOT official six-member identity and debut notice",
+          "url": "https://weverse.io/justb/notice/29977"
+        },
+        {
+          "label": "BLUEDOT official ONLY B fanclub notice",
+          "url": "https://weverse.io/justb/notice/12657"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "currentOfficialMemberSectionControlsMembership": true,
+    "temporaryMedicalHiatusDoesNotTerminateMembership": true,
+    "activityLineupMayBeSubsetOfCanonicalMembership": true,
+    "explicitTerminalDepartureEvidenceRequiredForMemberRemoval": true,
+    "officialDebutDateEvidenceRequired": true,
+    "fandomEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "BLUEDOT Entertainment",
+    "members": [
+      "LIM JIMIN",
+      "GEONU",
+      "BAIN",
+      "SIWOO",
+      "DY",
+      "SANGWOO"
+    ],
+    "temporaryHiatusMember": "LIM JIMIN",
+    "temporaryActivityLineup": [
+      "GEONU",
+      "BAIN",
+      "SIWOO",
+      "DY",
+      "SANGWOO"
+    ],
+    "currentMemberCount": 6,
+    "temporaryActivityMemberCount": 5,
+    "debutDate": "2021-06-30",
+    "fandomName": "ONLY B"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/justb/highlight",
+      "https://weverse.io/justb/notice/34389",
+      "https://weverse.io/justb/notice/34712",
+      "https://weverse.io/justb/notice/29977",
+      "https://weverse.io/justb/notice/12657"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

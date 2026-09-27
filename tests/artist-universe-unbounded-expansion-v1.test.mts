@@ -951,6 +951,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(blitzers.profile.koreanAliases.includes('블리처스'));
   assert.ok(!blitzers.members.includes('GO_U'));
 
+  const justb = getArtistV4ById('justb');
+  assert.ok(justb);
+  assert.equal(justb.entityType, 'group');
+  assert.equal(justb.agency, 'BLUEDOT Entertainment');
+  assert.equal(justb.debutDate, '2021-06-30');
+  assert.equal(justb.lifecycleStatus, 'active');
+  assert.deepEqual(justb.members, ['LIM JIMIN', 'GEONU', 'BAIN', 'SIWOO', 'DY', 'SANGWOO']);
+  assert.equal(justb.fandomName, 'ONLY B');
+  assert.ok(justb.profile.koreanAliases.includes('저스트비'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

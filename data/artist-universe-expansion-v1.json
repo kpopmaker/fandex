@@ -7604,6 +7604,77 @@
           "url": "https://weverse.io/blitzers/notice/35604"
         }
       ]
+    },
+    {
+      "id": "justb",
+      "ticker": "JUSTB",
+      "name": "JUST B",
+      "agency": "BLUEDOT Entertainment",
+      "entityType": "group",
+      "debutDate": "2021-06-30",
+      "lifecycleStatus": "active",
+      "members": [
+        "LIM JIMIN",
+        "GEONU",
+        "BAIN",
+        "SIWOO",
+        "DY",
+        "SANGWOO"
+      ],
+      "fandomName": "ONLY B",
+      "naverNewsQuery": "저스트비 JUST B 블루닷엔터테인먼트",
+      "koreanAliases": [
+        "저스트비"
+      ],
+      "englishAliases": [
+        "JUST B",
+        "JUSTB"
+      ],
+      "keywords": [
+        "BLUEDOT Entertainment",
+        "블루닷엔터테인먼트",
+        "LIM JIMIN",
+        "GEONU",
+        "BAIN",
+        "SIWOO",
+        "DY",
+        "SANGWOO",
+        "ONLY B",
+        "SNOW ANGEL"
+      ],
+      "disambiguationKeywords": [
+        "BLUEDOT Entertainment",
+        "블루닷엔터테인먼트",
+        "저스트비"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "JUST B Weverse Highlight",
+          "url": "https://weverse.io/justb/highlight"
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/34389"
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/34712"
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/29977"
+        },
+        {
+          "source": "BLUEDOT Entertainment / JUST B Weverse",
+          "url": "https://weverse.io/justb/notice/12657"
+        }
+      ]
     }
   ]
 }
