@@ -7,6 +7,26 @@ import {
 } from '../lib/server/product/momentumProductActivationAuthorizationExecutionCandidate';
 import { sha256Canonical } from '../lib/shared/canonicalDigest';
 
+type AuthorizationExecutionCandidateEvidence = Readonly<{
+  contractVersion: string;
+  preparedFromMain: string;
+  canonicalArtistId: string;
+  executionCandidate: unknown;
+  safetyBoundary: Readonly<{
+    ownerApprovalRecorded: boolean;
+    activationAuthorizationId: string | null;
+    authorizedAt: string | null;
+    productActivationAuthorized: boolean;
+    productPublicationAuthorized: boolean;
+    publicRouteActivated: boolean;
+    databaseWrites: number;
+    registryMutations: number;
+    productionVerifierExecutions: number;
+  }>;
+  requiredNextGate: string;
+  evidenceDigest: string;
+}>;
+
 const EVIDENCE_URL = new URL(
   '../data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json',
   import.meta.url,
@@ -17,7 +37,8 @@ test('authorization execution-candidate evidence matches current runtime candida
     readFile(EVIDENCE_URL, 'utf8'),
     getMomentumProductActivationAuthorizationExecutionCandidateForIU(),
   ]);
-  const evidence = JSON.parse(raw) as Record<string, any>;
+  const evidence =
+    JSON.parse(raw) as AuthorizationExecutionCandidateEvidence;
 
   assert.equal(
     evidence.contractVersion,
@@ -45,5 +66,8 @@ test('authorization execution-candidate evidence matches current runtime candida
 
   const { evidenceDigest, ...digestInput } = evidence;
   assert.equal(sha256Canonical(digestInput), evidenceDigest);
-  assert.equal(evidenceDigest, 'dcee9cfa8525dfa4bc3be0961e38e0678baba599c207fa04f2b8e0911087d473');
+  assert.equal(
+    evidenceDigest,
+    'dcee9cfa8525dfa4bc3be0961e38e0678baba599c207fa04f2b8e0911087d473',
+  );
 });
