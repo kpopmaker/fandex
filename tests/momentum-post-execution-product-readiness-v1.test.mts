@@ -83,9 +83,9 @@ test('current Last.fm history is evidence but its preview score is never Product
     lastfmScoreUsage: status.scoreUsage,
   });
 
-  assert.equal(result.lastfmEvidence.snapshotDate, '2026-09-26');
-  assert.equal(result.lastfmEvidence.historyRowCount, 480);
-  assert.equal(result.lastfmEvidence.snapshotDateCount, 48);
+  assert.equal(result.lastfmEvidence.snapshotDate, '2026-09-27');
+  assert.equal(result.lastfmEvidence.historyRowCount, 490);
+  assert.equal(result.lastfmEvidence.snapshotDateCount, 49);
   assert.equal(result.lastfmEvidence.deltaReadyCount, 10);
   assert.equal(result.lastfmEvidence.needsReviewCount, 0);
   assert.equal(

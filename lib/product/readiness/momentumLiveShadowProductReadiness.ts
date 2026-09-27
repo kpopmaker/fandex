@@ -44,6 +44,11 @@ export type MomentumLiveShadowSourceCurrentnessAudit = Readonly<{
     currentDualSourceCategoricalEvaluationPerformed: boolean;
     currentCarrierProduced: boolean;
     currentNoOpEvaluationAttested: boolean;
+    evaluatedAlignmentCutoffAt: string | null;
+    directionalConsensus: string | null;
+    persistenceConsensus: string | null;
+    attestationPath: string | null;
+    attestationDigest: string | null;
   }>;
 }>;
 
@@ -96,6 +101,26 @@ function validIso(value: string): boolean {
 function validAudit(
   audit: MomentumLiveShadowSourceCurrentnessAudit,
 ): boolean {
+  const noOpAttestationValid =
+    !audit.currentEvaluation.currentNoOpEvaluationAttested
+    || (
+      audit.currentEvaluation.currentDualSourceCategoricalEvaluationPerformed
+      && audit.currentEvaluation.currentCarrierProduced === false
+      && audit.carrier.historicalOnly === false
+      && audit.currentEvaluation.evaluatedAlignmentCutoffAt !== null
+      && validIso(audit.currentEvaluation.evaluatedAlignmentCutoffAt)
+      && Date.parse(audit.currentEvaluation.evaluatedAlignmentCutoffAt)
+        > Date.parse(audit.carrier.alignmentCutoffAt)
+      && audit.currentEvaluation.directionalConsensus
+        === audit.carrier.directionalConsensus
+      && audit.currentEvaluation.persistenceConsensus
+        === audit.carrier.persistenceConsensus
+      && audit.currentEvaluation.attestationPath
+        === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+      && typeof audit.currentEvaluation.attestationDigest === 'string'
+      && /^[0-9a-f]{64}$/.test(audit.currentEvaluation.attestationDigest)
+    );
+
   return (
     audit.contractVersion
       === 'momentum-live-shadow-source-currentness-audit-v1'
@@ -119,6 +144,7 @@ function validAudit(
     && audit.freshnessPolicy.historyAppendRequiredBeforeReevaluation === false
     && audit.freshnessPolicy.historyAppendDecision
       === 'defer-until-current-evaluation'
+    && noOpAttestationValid
   );
 }
 
