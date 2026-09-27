@@ -42,6 +42,11 @@ export type MomentumProductActivationApproval = Readonly<{
     alignmentCutoffAt: string;
     directionalConsensus: string;
     persistenceConsensus: string;
+    currentNoOpEvaluationAttested: true;
+    evaluatedAlignmentCutoffAt: string;
+    currentEvaluationAttestationPath:
+      'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json';
+    currentEvaluationAttestationDigest: string;
   }>;
 }>;
 
@@ -178,6 +183,11 @@ function approvalContractValid(
     && exactIso(approval.binding.alignmentCutoffAt)
     && approval.binding.directionalConsensus.trim().length > 0
     && approval.binding.persistenceConsensus.trim().length > 0
+    && approval.binding.currentNoOpEvaluationAttested === true
+    && exactIso(approval.binding.evaluatedAlignmentCutoffAt)
+    && approval.binding.currentEvaluationAttestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && sha256(approval.binding.currentEvaluationAttestationDigest)
   );
 }
 
@@ -204,6 +214,20 @@ function approvalMatches(
     && readiness.persistenceConsensus !== null
     && readiness.persistenceConsensus
       === approval.binding.persistenceConsensus
+    && readiness.freshnessAttestation.currentNoOpEvaluationAttested === true
+    && approval.binding.currentNoOpEvaluationAttested === true
+    && readiness.freshnessAttestation.evaluatedAlignmentCutoffAt !== null
+    && readiness.freshnessAttestation.evaluatedAlignmentCutoffAt
+      === approval.binding.evaluatedAlignmentCutoffAt
+    && readiness.freshnessAttestation.attestationPath
+      === approval.binding.currentEvaluationAttestationPath
+    && readiness.freshnessAttestation.attestationDigest !== null
+    && readiness.freshnessAttestation.attestationDigest
+      === approval.binding.currentEvaluationAttestationDigest
+    && readiness.freshnessAttestation.directionalConsensus
+      === readiness.directionalConsensus
+    && readiness.freshnessAttestation.persistenceConsensus
+      === readiness.persistenceConsensus
     && readiness.productActivationAuthorized === false
     && readiness.productPublicationAuthorized === false
     && readiness.publicRouteActivated === false
