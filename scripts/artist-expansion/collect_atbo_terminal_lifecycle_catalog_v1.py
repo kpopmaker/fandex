@@ -45,7 +45,7 @@ def parse_live_pages(terminal_html: str, departure_html: str, debut_html: str) -
         return []
     if not contains_any(terminal, "terminate", "termination", "전속계약", "contract"):
         return []
-    if not contains_any(terminal, "journey", "여정", "comes to an end", "end"):
+    if not contains_any(terminal, "journey comes to an end", "journey has come to an end", "end of the ATBO journey", "여정의 끝"):
         return []
 
     terminal_member_tokens = [
