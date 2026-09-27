@@ -1,0 +1,79 @@
+{
+  "version": "blitzers_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "blitzers-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "BLITZERS Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/blitzers/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "BLITZERS",
+      "aliases": [
+        "블리처스"
+      ],
+      "evidence": [
+        {
+          "label": "BLITZERS current official six-member Weverse profile",
+          "url": "https://weverse.io/blitzers/highlight?hl=ko"
+        },
+        {
+          "label": "WUZO official GO_U terminal membership notice",
+          "url": "https://weverse.io/blitzers/notice/17469"
+        },
+        {
+          "label": "WUZO current 2026 BLITZERS management notice",
+          "url": "https://weverse.io/blitzers/notice/36399"
+        },
+        {
+          "label": "BLITZERS official 2026 fifth-anniversary six-member event",
+          "url": "https://weverse.io/blitzers/notice/35604"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "explicitDepartureNoticeControlsFormerMemberExclusion": true,
+    "currentOfficialMemberSectionControlsRoster": true,
+    "sixMemberContinuationRequired": true,
+    "formerMemberDoesNotRemainInCurrentRoster": true,
+    "officialDebutDateEvidenceRequired": true,
+    "fandomEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "WUZO Entertainment",
+    "members": [
+      "JINHWA",
+      "JUHAN",
+      "SYA",
+      "CHRIS",
+      "LUTAN",
+      "WOOJU"
+    ],
+    "departedMember": "GO_U",
+    "currentMemberCount": 6,
+    "debutDate": "2021-05-12",
+    "fandomName": "BLEE"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/blitzers/highlight?hl=ko",
+      "https://weverse.io/blitzers/notice/17469",
+      "https://weverse.io/blitzers/notice/36399",
+      "https://weverse.io/blitzers/notice/35604"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

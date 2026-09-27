@@ -940,6 +940,17 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(tiot.fandomName, 'LOTI');
   assert.ok(tiot.profile.koreanAliases.includes('티아이오티'));
 
+  const blitzers = getArtistV4ById('blitzers');
+  assert.ok(blitzers);
+  assert.equal(blitzers.entityType, 'group');
+  assert.equal(blitzers.agency, 'WUZO Entertainment');
+  assert.equal(blitzers.debutDate, '2021-05-12');
+  assert.equal(blitzers.lifecycleStatus, 'active');
+  assert.deepEqual(blitzers.members, ['JINHWA', 'JUHAN', 'SYA', 'CHRIS', 'LUTAN', 'WOOJU']);
+  assert.equal(blitzers.fandomName, 'BLEE');
+  assert.ok(blitzers.profile.koreanAliases.includes('블리처스'));
+  assert.ok(!blitzers.members.includes('GO_U'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

@@ -4746,6 +4746,38 @@
           "note": "Official community opening event identifies LOTI as the global official fan community."
         }
       ]
+    },
+    {
+      "displayArtist": "BLITZERS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_official_weverse_six_member_profile_plus_wuzo_terminal_departure_notice_resolve_current_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_debut_identity_current_wuzo_management_current_six_member_profile_and_2026_full_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BLITZERS Weverse Highlight",
+          "url": "https://weverse.io/blitzers/highlight?hl=ko",
+          "note": "Current official member section lists WOOJU, SYA, CHRIS, LUTAN, JUHAN, and JINHWA; it also exposes the official debut event and BLEE-facing current activity."
+        },
+        {
+          "source": "WUZO Entertainment / BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/17469",
+          "note": "Official WUZO notice terminates GO_U's BLITZERS membership and explicitly states BLITZERS will continue with a six-member lineup."
+        },
+        {
+          "source": "WUZO Entertainment / BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/36399",
+          "note": "Current 2026 official notice is issued directly by WUZO Entertainment, confirming current management continuity."
+        },
+        {
+          "source": "BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/35604",
+          "note": "Official 2026 fifth-anniversary event specifies six photocard variants, 6:1 group photography, and a full-group stage, confirming current six-member lifecycle."
+        }
+      ]
     }
   ]
 }

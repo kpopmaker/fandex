@@ -7539,6 +7539,71 @@
           "url": "https://weverse.io/tiot/notice/20696"
         }
       ]
+    },
+    {
+      "id": "blitzers",
+      "ticker": "BLITZERS",
+      "name": "BLITZERS",
+      "agency": "WUZO Entertainment",
+      "entityType": "group",
+      "debutDate": "2021-05-12",
+      "lifecycleStatus": "active",
+      "members": [
+        "JINHWA",
+        "JUHAN",
+        "SYA",
+        "CHRIS",
+        "LUTAN",
+        "WOOJU"
+      ],
+      "fandomName": "BLEE",
+      "naverNewsQuery": "블리처스 BLITZERS 우조엔터테인먼트",
+      "koreanAliases": [
+        "블리처스"
+      ],
+      "englishAliases": [
+        "BLITZERS"
+      ],
+      "keywords": [
+        "WUZO Entertainment",
+        "우조엔터테인먼트",
+        "JINHWA",
+        "JUHAN",
+        "SYA",
+        "CHRIS",
+        "LUTAN",
+        "WOOJU",
+        "BLEE",
+        "5th ANNIVERSARY"
+      ],
+      "disambiguationKeywords": [
+        "WUZO Entertainment",
+        "우조엔터테인먼트",
+        "블리처스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BLITZERS Weverse Highlight",
+          "url": "https://weverse.io/blitzers/highlight?hl=ko"
+        },
+        {
+          "source": "WUZO Entertainment / BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/17469"
+        },
+        {
+          "source": "WUZO Entertainment / BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/36399"
+        },
+        {
+          "source": "BLITZERS Weverse",
+          "url": "https://weverse.io/blitzers/notice/35604"
+        }
+      ]
     }
   ]
 }
