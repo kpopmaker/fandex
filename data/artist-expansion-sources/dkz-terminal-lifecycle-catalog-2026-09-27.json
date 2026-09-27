@@ -1,0 +1,95 @@
+{
+  "version": "dkz_official_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "dkz-official-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "DKZ Official Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://enews.imbc.com/News/RetrieveNewsInfo/501748"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "DKZ",
+      "aliases": [
+        "디케이지",
+        "DONGKIZ",
+        "동키즈"
+      ],
+      "evidence": [
+        {
+          "label": "Dongyo official terminal statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/501748"
+        },
+        {
+          "label": "Dongyo official DONGKIZ to DKZ continuity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1518069wpp/dongkiz-changes-group-name-announces-wondaes-departure-and-addition-of-new-members?mobile-app=true&theme=wiki"
+        },
+        {
+          "label": "Dongyo official JONGHYEONG to JUONE rename statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/489705"
+        },
+        {
+          "label": "Official 2026 DKZ FAN-CON ticketing and DONG-ARI membership",
+          "url": "https://www.ticketlink.co.kr/global/en/help/notice/64366"
+        },
+        {
+          "label": "Jaechan terminal letter with debut date",
+          "url": "https://www.mk.co.kr/en/hot-issues/12017857"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialStatementEvidenceRequired": true,
+    "terminalLifecycleEvidenceRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "terminalNoticeOverridesEarlierActiveEvidence": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "groupRenameContinuityRequired": true,
+    "memberStageNameRenameContinuityRequired": true,
+    "individualPostGroupActivitiesDoNotReactivateGroup": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "formerMemberDoesNotRemainInTerminalRoster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "identityContinuity": {
+    "formerGroupName": "DONGKIZ",
+    "currentCanonicalName": "DKZ",
+    "groupRenameEffectiveYear": 2022,
+    "renamedMember": {
+      "formerStageName": "JONGHYEONG",
+      "currentStageName": "JUONE",
+      "effectiveDate": "2026-01-02"
+    }
+  },
+  "terminalLifecycle": {
+    "effectiveDate": "2026-05-31",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "Dongyo Entertainment",
+    "terminalMembers": [
+      "SEHYEON",
+      "MINGYU",
+      "JAECHAN",
+      "JUONE",
+      "GISEOK"
+    ],
+    "fandomName": "DONG-ARI",
+    "debutDate": "2019-04-24"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_terminal_statement_snapshot",
+    "officialStatementPreservation": "publisher_preserved_full_or_substantive_official_statement",
+    "verifiedFrom": [
+      "https://enews.imbc.com/News/RetrieveNewsInfo/501748",
+      "https://www.soompi.com/article/1518069wpp/dongkiz-changes-group-name-announces-wondaes-departure-and-addition-of-new-members?mobile-app=true&theme=wiki",
+      "https://enews.imbc.com/News/RetrieveNewsInfo/489705",
+      "https://www.ticketlink.co.kr/global/en/help/notice/64366",
+      "https://www.mk.co.kr/en/hot-issues/12017857"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

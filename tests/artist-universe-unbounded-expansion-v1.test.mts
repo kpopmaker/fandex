@@ -961,6 +961,19 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(justb.fandomName, 'ONLY B');
   assert.ok(justb.profile.koreanAliases.includes('저스트비'));
 
+  const dkz = getArtistV4ById('dkz');
+  assert.ok(dkz);
+  assert.equal(dkz.entityType, 'group');
+  assert.equal(dkz.agency, 'Dongyo Entertainment');
+  assert.equal(dkz.agencyStatus, 'historical');
+  assert.equal(dkz.debutDate, '2019-04-24');
+  assert.equal(dkz.lifecycleStatus, 'inactive');
+  assert.deepEqual(dkz.members, ['SEHYEON', 'MINGYU', 'JAECHAN', 'JUONE', 'GISEOK']);
+  assert.equal(dkz.fandomName, 'DONG-ARI');
+  assert.ok(dkz.profile.koreanAliases.includes('동키즈'));
+  assert.ok(dkz.profile.englishAliases.includes('DONGKIZ'));
+  assert.ok(!dkz.members.includes('JONGHYEONG'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

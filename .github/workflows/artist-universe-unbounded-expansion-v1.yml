@@ -88,6 +88,7 @@ jobs:
           python tests/artist-expansion-tiot-provider-catalog-v1.py
           python tests/artist-expansion-blitzers-provider-catalog-v1.py
           python tests/artist-expansion-justb-provider-catalog-v1.py
+          python tests/artist-expansion-dkz-terminal-lifecycle-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -341,6 +342,11 @@ jobs:
           python scripts/artist-expansion/collect_justb_official_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/justb-official-provider-catalog-2026-09-27.json \
             --output justb_official_provider_catalog_v1_latest.json
+      - name: Collect DKZ official terminal lifecycle catalog
+        run: |
+          python scripts/artist-expansion/collect_dkz_terminal_lifecycle_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/dkz-terminal-lifecycle-catalog-2026-09-27.json \
+            --output dkz_terminal_lifecycle_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -412,6 +418,7 @@ jobs:
             --snapshot tiot_official_provider_catalog_v1_latest.json \
             --snapshot blitzers_official_provider_catalog_v1_latest.json \
             --snapshot justb_official_provider_catalog_v1_latest.json \
+            --snapshot dkz_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -501,6 +508,7 @@ jobs:
             tiot_official_provider_catalog_v1_latest.json
             blitzers_official_provider_catalog_v1_latest.json
             justb_official_provider_catalog_v1_latest.json
+            dkz_terminal_lifecycle_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

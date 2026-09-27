@@ -4815,6 +4815,43 @@
           "note": "Official fanclub notice identifies ONLY B as JUST B's official fanclub."
         }
       ]
+    },
+    {
+      "displayArtist": "DKZ",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "dongkiz_to_dkz_group_rename_and_jonghyeong_to_juone_member_rename_preserve_identity_through_terminal_five_member_roster",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_group_identity_terminal_dongyo_statement_exact_terminal_roster_and_pre_terminal_2026_fancon_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Dongyo Entertainment official terminal statement (preserved by iMBC)",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/501748",
+          "note": "Full Dongyo Entertainment statement ends DKZ group activities after the May 31, 2026 schedule and names terminal five members Jaechan, Juone, Sehyeon, Mingyu, and Giseok."
+        },
+        {
+          "source": "Dongyo Entertainment official DONGKIZ→DKZ rename statement (preserved by Soompi)",
+          "url": "https://www.soompi.com/article/1518069wpp/dongkiz-changes-group-name-announces-wondaes-departure-and-addition-of-new-members?mobile-app=true&theme=wiki",
+          "note": "Official 2022 statement explicitly asks fans to treat DONGKIZ and DKZ as one continuous group identity."
+        },
+        {
+          "source": "Dongyo Entertainment official JONGHYEONG→JUONE rename statement (preserved by iMBC)",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/489705",
+          "note": "Official January 2026 statement changes Jonghyeong's stage name to Juone without creating a new member identity."
+        },
+        {
+          "source": "2026 DKZ FAN-CON official ticketing notice",
+          "url": "https://www.ticketlink.co.kr/global/en/help/notice/64366",
+          "note": "Official 2026 fan-con ticketing identifies DONG-ARI membership and Dongyo Entertainment as organizer/promoter."
+        },
+        {
+          "source": "JAECHAN terminal letter preserving debut date",
+          "url": "https://www.mk.co.kr/en/hot-issues/12017857",
+          "note": "Jaechan's terminal letter references his DKZ/DONGKIZ journey beginning with debut on April 24, 2019."
+        }
+      ]
     }
   ]
 }

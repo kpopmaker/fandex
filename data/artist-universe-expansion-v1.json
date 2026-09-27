@@ -7675,6 +7675,78 @@
           "url": "https://weverse.io/justb/notice/12657"
         }
       ]
+    },
+    {
+      "id": "dkz",
+      "ticker": "DKZ",
+      "name": "DKZ",
+      "agency": "Dongyo Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-04-24",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "SEHYEON",
+        "MINGYU",
+        "JAECHAN",
+        "JUONE",
+        "GISEOK"
+      ],
+      "fandomName": "DONG-ARI",
+      "naverNewsQuery": "디케이지 DKZ 동요엔터테인먼트",
+      "koreanAliases": [
+        "디케이지",
+        "동키즈"
+      ],
+      "englishAliases": [
+        "DKZ",
+        "DONGKIZ"
+      ],
+      "keywords": [
+        "Dongyo Entertainment",
+        "동요엔터테인먼트",
+        "SEHYEON",
+        "MINGYU",
+        "JAECHAN",
+        "JUONE",
+        "JONGHYEONG",
+        "GISEOK",
+        "DONG-ARI",
+        "DONGKIZ"
+      ],
+      "disambiguationKeywords": [
+        "Dongyo Entertainment",
+        "동요엔터테인먼트",
+        "DKZ",
+        "동키즈"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Dongyo Entertainment official terminal statement (preserved by iMBC)",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/501748"
+        },
+        {
+          "source": "Dongyo Entertainment official DONGKIZ→DKZ rename statement (preserved by Soompi)",
+          "url": "https://www.soompi.com/article/1518069wpp/dongkiz-changes-group-name-announces-wondaes-departure-and-addition-of-new-members?mobile-app=true&theme=wiki"
+        },
+        {
+          "source": "Dongyo Entertainment official JONGHYEONG→JUONE rename statement (preserved by iMBC)",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/489705"
+        },
+        {
+          "source": "2026 DKZ FAN-CON official ticketing notice",
+          "url": "https://www.ticketlink.co.kr/global/en/help/notice/64366"
+        },
+        {
+          "source": "JAECHAN terminal letter preserving debut date",
+          "url": "https://www.mk.co.kr/en/hot-issues/12017857"
+        }
+      ]
     }
   ]
 }
