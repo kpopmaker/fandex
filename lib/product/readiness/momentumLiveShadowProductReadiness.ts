@@ -90,6 +90,11 @@ export type MomentumLiveShadowProductReadinessResult = Readonly<{
     currentCarrierProduced: boolean;
     currentNoOpEvaluationAttested: boolean;
     satisfiesFreshness: boolean;
+    evaluatedAlignmentCutoffAt: string | null;
+    directionalConsensus: string | null;
+    persistenceConsensus: string | null;
+    attestationPath: string | null;
+    attestationDigest: string | null;
   }>;
   blockers: readonly string[];
 }>;
@@ -276,6 +281,16 @@ export function evaluateMomentumLiveShadowProductReadiness(
       currentNoOpEvaluationAttested:
         audit.currentEvaluation.currentNoOpEvaluationAttested,
       satisfiesFreshness,
+      evaluatedAlignmentCutoffAt:
+        audit.currentEvaluation.evaluatedAlignmentCutoffAt,
+      directionalConsensus:
+        audit.currentEvaluation.directionalConsensus,
+      persistenceConsensus:
+        audit.currentEvaluation.persistenceConsensus,
+      attestationPath:
+        audit.currentEvaluation.attestationPath,
+      attestationDigest:
+        audit.currentEvaluation.attestationDigest,
     }),
     blockers: Object.freeze(blockers),
   });
