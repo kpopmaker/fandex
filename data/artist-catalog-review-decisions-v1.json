@@ -5007,6 +5007,33 @@
           "note": "The official MIRAE Weverse Shop product identifies KILLA as MIRAE's first mini album under DSP MEDIA."
         }
       ]
+    },
+    {
+      "displayArtist": "LUMINOUS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "preserved_barunson_terminal_statement_resolves_four_member_contract_and_group_activity_end_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_barunson_terminal_statement_plus_provider_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Barunson Double IP terminal statement preserved by PTKOREA",
+          "url": "https://www.ptkorea.com/368937/",
+          "note": "The preserved company statement says Barunson Double IP and LUMINOUS decided to terminate the contract and activities of LUMINOUS and names Youngbin, Sooil, Steven, and Woobin."
+        },
+        {
+          "source": "Apple Music licensed LUMINOUS YOUTH catalog",
+          "url": "https://music.apple.com/us/album/youth-ep/1584270399",
+          "note": "Provider catalog dates LUMINOUS EP YOUTH to 2021-09-09 and credits BarunsonWip Entertainment under license to Kakao Entertainment."
+        },
+        {
+          "source": "The Korea Times debut report based on Barunson WIP statement",
+          "url": "https://www.koreatimes.co.kr/entertainment/k-pop/20210909/k-pop-boy-group-luminous-debuts-with-first-album-youth",
+          "note": "Contemporaneous debut report identifies LUMINOUS as the four-member group Suil, Steven, Youngbin, and Woobin and states that YOUTH was released on 2021-09-09."
+        }
+      ]
     }
   ]
 }

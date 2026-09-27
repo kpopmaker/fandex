@@ -1031,6 +1031,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(mirae.members, ['LEE JUN HYUK', 'LIEN', 'YOO DOHYUN', 'KHAEL', 'SON DONG PYO', 'PARK SI YOUNG', 'JANG YU BIN']);
   assert.ok(mirae.profile.koreanAliases.includes('미래소년'));
 
+  const luminous = getArtistV4ById('luminous');
+  assert.ok(luminous);
+  assert.equal(luminous.entityType, 'group');
+  assert.equal(luminous.agency, 'Barunson Double IP');
+  assert.equal(luminous.agencyStatus, 'historical');
+  assert.equal(luminous.debutDate, '2021-09-09');
+  assert.equal(luminous.lifecycleStatus, 'inactive');
+  assert.deepEqual(luminous.members, ['YOUNGBIN', 'SUIL', 'STEVEN', 'WOOBIN']);
+  assert.ok(luminous.profile.koreanAliases.includes('루미너스'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

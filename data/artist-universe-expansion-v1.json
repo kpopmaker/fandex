@@ -8080,6 +8080,67 @@
           "url": "https://shop.weverse.io/ko/shop/KRW/artists/54/sales/9909"
         }
       ]
+    },
+    {
+      "id": "luminous",
+      "ticker": "LUMINOUS",
+      "name": "LUMINOUS",
+      "agency": "Barunson Double IP",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2021-09-09",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "YOUNGBIN",
+        "SUIL",
+        "STEVEN",
+        "WOOBIN"
+      ],
+      "fandomName": "Lumini",
+      "naverNewsQuery": "루미너스 LUMINOUS 바른손더블유아이피",
+      "koreanAliases": [
+        "루미너스"
+      ],
+      "englishAliases": [
+        "LUMINOUS"
+      ],
+      "keywords": [
+        "Barunson Double IP",
+        "Barunson WIP",
+        "바른손더블유아이피",
+        "YOUNGBIN",
+        "SUIL",
+        "STEVEN",
+        "WOOBIN",
+        "YOUTH",
+        "RUN",
+        "Lumini"
+      ],
+      "disambiguationKeywords": [
+        "Barunson Double IP",
+        "Barunson WIP",
+        "바른손더블유아이피",
+        "루미너스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Barunson Double IP terminal statement preserved by PTKOREA",
+          "url": "https://www.ptkorea.com/368937/"
+        },
+        {
+          "source": "Apple Music licensed LUMINOUS YOUTH catalog",
+          "url": "https://music.apple.com/us/album/youth-ep/1584270399"
+        },
+        {
+          "source": "The Korea Times debut report based on Barunson WIP statement",
+          "url": "https://www.koreatimes.co.kr/entertainment/k-pop/20210909/k-pop-boy-group-luminous-debuts-with-first-album-youth"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,77 @@
+{
+  "version": "luminous_barunson_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "luminous-barunson-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "LUMINOUS Barunson Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://www.ptkorea.com/368937/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "LUMINOUS",
+      "aliases": [
+        "루미너스"
+      ],
+      "evidence": [
+        {
+          "label": "Barunson Double IP terminal statement preserved by PTKOREA",
+          "url": "https://www.ptkorea.com/368937/"
+        },
+        {
+          "label": "Apple Music licensed YOUTH debut catalog",
+          "url": "https://music.apple.com/us/album/youth-ep/1584270399"
+        },
+        {
+          "label": "Barunson-sourced LUMINOUS debut report",
+          "url": "https://www.koreatimes.co.kr/entertainment/k-pop/20210909/k-pop-boy-group-luminous-debuts-with-first-album-youth"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "terminalContractEvidenceRequired": true,
+    "explicitGroupActivityTerminationRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "groupActivityTerminationDoesNotInferIndividualCareerEnd": true,
+    "laterMemberActivityDoesNotReactivateGroup": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "effectiveDate": "2025-02-09",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "Barunson Double IP",
+    "terminalMembers": [
+      "YOUNGBIN",
+      "SUIL",
+      "STEVEN",
+      "WOOBIN"
+    ],
+    "terminalMemberCount": 4,
+    "contractAndGroupActivitiesEnded": true,
+    "debutDate": "2021-09-09",
+    "debutRelease": "YOUTH",
+    "fandomName": "Lumini"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_plus_licensed_provider_snapshot",
+    "legalEntityDissolutionAsserted": false,
+    "verifiedFrom": [
+      "https://www.ptkorea.com/368937/",
+      "https://music.apple.com/us/album/youth-ep/1584270399",
+      "https://www.koreatimes.co.kr/entertainment/k-pop/20210909/k-pop-boy-group-luminous-debuts-with-first-album-youth"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}
