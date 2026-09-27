@@ -7121,6 +7121,70 @@
           "url": "https://columbia.jp/artist-info/fantasyboys/prof.html"
         }
       ]
+    },
+    {
+      "id": "allhours",
+      "ticker": "ALLHOURS",
+      "name": "ALL(H)OURS",
+      "agency": "EDEN Entertainment",
+      "entityType": "group",
+      "debutDate": "2024-01-10",
+      "lifecycleStatus": "active",
+      "members": [
+        "KUNHO",
+        "YOUMIN",
+        "XAYDEN",
+        "MINJE",
+        "MASAMI",
+        "HYUNBIN",
+        "ON:N"
+      ],
+      "naverNewsQuery": "올아워즈 ALL(H)OURS 이든엔터테인먼트",
+      "koreanAliases": [
+        "올아워즈"
+      ],
+      "englishAliases": [
+        "ALL(H)OURS",
+        "ALL HOURS",
+        "ALLHOURS"
+      ],
+      "keywords": [
+        "EDEN Entertainment",
+        "이든엔터테인먼트",
+        "KUNHO",
+        "YOUMIN",
+        "XAYDEN",
+        "MINJE",
+        "MASAMI",
+        "HYUNBIN",
+        "ON:N",
+        "UNBOUND"
+      ],
+      "disambiguationKeywords": [
+        "EDEN Entertainment",
+        "이든엔터테인먼트",
+        "올아워즈"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "ALL(H)OURS Official",
+          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+        },
+        {
+          "source": "ALL(H)OURS Japan Official Fanclub",
+          "url": "https://all-h-ours.fanpla.jp/news/2/"
+        },
+        {
+          "source": "EDEN Entertainment / ALL(H)OURS Official",
+          "url": "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa"
+        }
+      ]
     }
   ]
 }

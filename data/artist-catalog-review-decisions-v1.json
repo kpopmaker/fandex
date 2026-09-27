@@ -4534,6 +4534,38 @@
           "note": "The official site remains operational in 2026, with a 2026-08-27 maintenance notice; lifecycle is not inferred from lack of September schedules."
         }
       ]
+    },
+    {
+      "displayArtist": "ALL(H)OURS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_current_seven_member_group_identity_and_eden_management_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_profile_japan_profile_and_2026_09_eden_managed_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "ALL(H)OURS Official",
+          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea",
+          "note": "Official group intro exposes the seven current member identities: KUNHO, YOUMIN, XAYDEN, MINJE, MASAMI, HYUNBIN, and ON:N."
+        },
+        {
+          "source": "ALL(H)OURS Japan Official Fanclub",
+          "url": "https://all-h-ours.fanpla.jp/news/2/",
+          "note": "Official Japan profile identifies ALL(H)OURS as a seven-member Korean group under EDEN Entertainment and records the 2024-01-10 debut."
+        },
+        {
+          "source": "EDEN Entertainment / ALL(H)OURS Official",
+          "url": "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa",
+          "note": "EDEN Entertainment official notice dated 2026-09-16 documents active SIXTH MINI ALBUM [UNBOUND] promotions."
+        },
+        {
+          "source": "EDEN Entertainment / ALL(H)OURS Official",
+          "url": "https://all-h-ours.com/surveys/6aa240c24d9bf56d90b20a79",
+          "note": "Additional September 2026 official broadcast notice independently confirms current group activity under EDEN Entertainment."
+        }
+      ]
     }
   ]
 }

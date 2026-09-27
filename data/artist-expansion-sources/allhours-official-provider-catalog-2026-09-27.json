@@ -1,0 +1,62 @@
+{
+  "version": "allhours_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "allhours-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "ALL(H)OURS Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ALL(H)OURS",
+      "aliases": [
+        "올아워즈",
+        "ALL HOURS",
+        "ALLHOURS"
+      ],
+      "evidence": [
+        {
+          "label": "ALL(H)OURS current official seven-member intro",
+          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+        },
+        {
+          "label": "ALL(H)OURS Japan official profile",
+          "url": "https://all-h-ours.fanpla.jp/news/2/"
+        },
+        {
+          "label": "EDEN Entertainment current UNBOUND activity notice",
+          "url": "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa"
+        },
+        {
+          "label": "EDEN Entertainment September 2026 broadcast notice",
+          "url": "https://all-h-ours.com/surveys/6aa240c24d9bf56d90b20a79"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "koreanAndJapanOfficialProfilesMustAgree": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "currentPromotionsDoNotCreateUnitCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://all-h-ours.com/contents/section/65892d155660697e81e136ea",
+      "https://all-h-ours.fanpla.jp/news/2/",
+      "https://all-h-ours.com/surveys/6aaa4a3142c05b4a22e229fa",
+      "https://all-h-ours.com/surveys/6aa240c24d9bf56d90b20a79"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

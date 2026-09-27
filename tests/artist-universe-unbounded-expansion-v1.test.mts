@@ -877,6 +877,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(fantasyBoys.fandomName, 'Bandi');
   assert.ok(fantasyBoys.profile.koreanAliases.includes('판타지 보이즈'));
 
+  const allHours = getArtistV4ById('allhours');
+  assert.ok(allHours);
+  assert.equal(allHours.entityType, 'group');
+  assert.equal(allHours.agency, 'EDEN Entertainment');
+  assert.equal(allHours.debutDate, '2024-01-10');
+  assert.equal(allHours.lifecycleStatus, 'active');
+  assert.deepEqual(allHours.members, ['KUNHO', 'YOUMIN', 'XAYDEN', 'MINJE', 'MASAMI', 'HYUNBIN', 'ON:N']);
+  assert.ok(allHours.profile.koreanAliases.includes('올아워즈'));
+  assert.ok(allHours.profile.englishAliases.includes('ALL HOURS'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
