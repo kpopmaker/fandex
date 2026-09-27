@@ -7255,6 +7255,79 @@
           "url": "https://www.powofficial.jp/news?page=1"
         }
       ]
+    },
+    {
+      "id": "whib",
+      "ticker": "WHIB",
+      "name": "WHIB",
+      "agency": "C-JeS Studio",
+      "entityType": "group",
+      "debutDate": "2023-11-08",
+      "lifecycleStatus": "active",
+      "members": [
+        "KIM JUN MIN",
+        "HASEUNG",
+        "JINBEOM",
+        "UGEON",
+        "LEEJEONG",
+        "JAEHA",
+        "WONJUN"
+      ],
+      "fandomName": "AnD",
+      "naverNewsQuery": "휘브 WHIB 씨제스 스튜디오",
+      "koreanAliases": [
+        "휘브"
+      ],
+      "englishAliases": [
+        "WHIB"
+      ],
+      "keywords": [
+        "C-JeS Studio",
+        "씨제스 스튜디오",
+        "KIM JUN MIN",
+        "JAYDER",
+        "HASEUNG",
+        "JINBEOM",
+        "UGEON",
+        "LEEJEONG",
+        "JAEHA",
+        "WONJUN",
+        "CHERRY PIE",
+        "AnD"
+      ],
+      "disambiguationKeywords": [
+        "C-JeS Studio",
+        "씨제스 스튜디오",
+        "휘브"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "WHIB Weverse Highlight",
+          "url": "https://weverse.io/whib/highlight?hl=ko"
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/30852"
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/30588?hl=ko"
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/38208"
+        },
+        {
+          "source": "WHIB Weverse",
+          "url": "https://weverse.io/whib/fanpost/3-137292337?hl=ko"
+        }
+      ]
     }
   ]
 }

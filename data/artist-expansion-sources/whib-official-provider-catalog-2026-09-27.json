@@ -1,0 +1,76 @@
+{
+  "version": "whib_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "whib-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "WHIB Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/whib/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "WHIB",
+      "aliases": [
+        "휘브"
+      ],
+      "evidence": [
+        {
+          "label": "WHIB current official seven-member Weverse profile",
+          "url": "https://weverse.io/whib/highlight?hl=ko"
+        },
+        {
+          "label": "C-JeS official Inhong departure and seven-member continuation notice",
+          "url": "https://weverse.io/whib/notice/30852"
+        },
+        {
+          "label": "C-JeS official JAYDER to KIMJUNMIN rename notice",
+          "url": "https://weverse.io/whib/notice/30588?hl=ko"
+        },
+        {
+          "label": "C-JeS current 2026 WHIB fan concert notice",
+          "url": "https://weverse.io/whib/notice/38208"
+        },
+        {
+          "label": "WHIB official Weverse debut-date post",
+          "url": "https://weverse.io/whib/fanpost/3-137292337?hl=ko"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "formerMemberExcludedByOfficialDepartureNotice": true,
+    "renameContinuityRequired": true,
+    "renamedMemberDoesNotCreateNewCanonical": true,
+    "temporaryScheduleAbsenceDoesNotChangeMembership": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "identityContinuity": {
+    "renamedMember": {
+      "formerStageName": "JAYDER",
+      "currentName": "KIM JUN MIN",
+      "effectiveDate": "2025-10-02"
+    },
+    "departedMember": "INHONG",
+    "currentMemberCount": 7
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/whib/highlight?hl=ko",
+      "https://weverse.io/whib/notice/30852",
+      "https://weverse.io/whib/notice/30588?hl=ko",
+      "https://weverse.io/whib/notice/38208",
+      "https://weverse.io/whib/fanpost/3-137292337?hl=ko"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

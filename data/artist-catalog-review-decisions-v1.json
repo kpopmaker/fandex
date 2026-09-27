@@ -4598,6 +4598,43 @@
           "note": "Official news page contains member and fanclub activity through July 2026 and carries GRID / CJ ENM Japan official footer."
         }
       ]
+    },
+    {
+      "displayArtist": "WHIB",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_cjes_departure_and_rename_notices_plus_current_weverse_profile_resolve_seven_member_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_debut_identity_current_cjes_management_seven_member_continuity_and_2026_fan_concert_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WHIB Weverse Highlight",
+          "url": "https://weverse.io/whib/highlight?hl=ko",
+          "note": "Current official WHIB profile exposes exactly seven current identities: KIM JUN MIN, HASEUNG, JINBEOM, UGeon, LEEJEONG, JAEHA, and WONJUN."
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/30852",
+          "note": "C-JeS officially records Inhong's departure and explicitly states that WHIB will continue activities as a seven-member group."
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/30588?hl=ko",
+          "note": "C-JeS officially records JAYDER changing his stage name to KIMJUNMIN from 2025-10-02, preserving identity continuity rather than creating a new canonical artist."
+        },
+        {
+          "source": "C-JeS Studio / WHIB Weverse",
+          "url": "https://weverse.io/whib/notice/38208",
+          "note": "C-JeS's 2026-09-12 WHIB fan concert notice provides current management and active lifecycle evidence."
+        },
+        {
+          "source": "WHIB Weverse",
+          "url": "https://weverse.io/whib/fanpost/3-137292337?hl=ko",
+          "note": "Official community opening post records the WHIB debut date as 2023-11-08."
+        }
+      ]
     }
   ]
 }

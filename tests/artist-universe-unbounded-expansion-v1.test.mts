@@ -899,6 +899,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(pow.fandomName, 'POWER');
   assert.ok(pow.profile.koreanAliases.includes('파우'));
 
+  const whib = getArtistV4ById('whib');
+  assert.ok(whib);
+  assert.equal(whib.entityType, 'group');
+  assert.equal(whib.agency, 'C-JeS Studio');
+  assert.equal(whib.debutDate, '2023-11-08');
+  assert.equal(whib.lifecycleStatus, 'active');
+  assert.deepEqual(whib.members, ['KIM JUN MIN', 'HASEUNG', 'JINBEOM', 'UGEON', 'LEEJEONG', 'JAEHA', 'WONJUN']);
+  assert.equal(whib.fandomName, 'AnD');
+  assert.ok(whib.profile.koreanAliases.includes('휘브'));
+  assert.ok(whib.profile.keywords.includes('JAYDER'));
+  assert.ok(!whib.members.includes('INHONG'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
