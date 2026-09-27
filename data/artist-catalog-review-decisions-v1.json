@@ -4442,27 +4442,27 @@
     {
       "displayArtist": "NOMAD",
       "decision": "new_canonical_group_candidate",
-      "relationResolution": "official_current_nomad_entertainment_group_identity_verified",
+      "relationResolution": "official_nomad_group_identity_verified_terminal_lifecycle_resolved",
       "relatedCanonicalArtistIds": [],
       "scopeDecision": "eligible",
-      "scopeBasis": "current_official_company_artist_profile_with_explicit_kpop_description_debut_date_and_five_member_roster",
+      "scopeBasis": "official_kpop_group_identity_with_2026_04_24_terminal_contract_and_activity_notice",
       "onboardingBlocker": null,
       "autoPromote": false,
       "evidence": [
         {
           "source": "NOMAD Entertainment",
           "url": "https://nomadent.co.kr/",
-          "note": "Current official company homepage identifies NOMAD as its K-pop artist, records 2024-02-28 debut, and lists DOY, SANGHA, ONE, RIVR, and JUNHO."
+          "note": "Official company site preserves the NOMAD K-pop group identity, debut information, and historical profile. It is not treated as current-lifecycle evidence because a later terminal notice controls."
         },
         {
           "source": "NOMAD Entertainment",
           "url": "https://nomadent.co.kr/introduce/",
-          "note": "Official artist page independently exposes the same five-member roster and debut information."
+          "note": "Official artist page preserves the five-member NOMAD profile and 2024-02-28 debut. The page is treated as identity/last-lineup evidence, not proof of current activity."
         },
         {
-          "source": "NOMAD Entertainment",
-          "url": "https://nomadent.co.kr/discography/",
-          "note": "Official discography records the debut EP and first comeback single Call Me Back."
+          "source": "NOMAD Entertainment official SNS terminal notice (preserved by StarNews)",
+          "url": "https://www.starnewskorea.com/en/music/2026/04/24/2026042415553078379",
+          "note": "The agency's 2026-04-24 official SNS statement says the exclusive contracts were concluded and NOMAD activities ended; this later evidence controls lifecycle and agency semantics."
         }
       ]
     }

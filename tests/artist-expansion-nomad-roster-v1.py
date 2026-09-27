@@ -12,16 +12,21 @@ spec.loader.exec_module(module)
 home="<html><body>NOMAD K-POP artist</body></html>"
 artist="<html><body>NOMAD 2024.02.28 DOY SANGHA ONE RIVR JUNHO</body></html>"
 disco="<html><body>Call Me Back 2024.10.09</body></html>"
-rows=module.parse_live_pages(home,artist,disco)
+rows=module.parse_live_identity_pages(home,artist,disco)
 assert [row["displayArtist"] for row in rows]==["NOMAD"]
-snapshot=module.build_snapshot(rows,"2026-09-26T00:00:00+00:00")
+snapshot=module.build_snapshot(rows,"2026-09-27T00:00:00+00:00")
 assert snapshot["candidateCount"]==1
 assert snapshot["source"]["type"]=="agency_roster"
-assert snapshot["contract"]["singleCurrentMusicGroupOnly"] is True
-assert snapshot["contract"]["exactCurrentMemberRosterRequired"] is True
-assert snapshot["contract"]["officialKpopDescriptionRequired"] is True
+assert snapshot["source"]["id"]=="nomad-entertainment-official-group-lifecycle"
+assert snapshot["contract"]["currentRosterClaimAllowed"] is False
+assert snapshot["contract"]["terminalLifecycleEvidenceRequired"] is True
+assert snapshot["contract"]["staleOfficialProfileDoesNotOverrideTerminalNotice"] is True
+assert snapshot["contract"]["exactLastPublishedMemberRosterRequired"] is True
 assert snapshot["contract"]["memberProfilesDoNotCreateSoloCanonicals"] is True
 assert snapshot["contract"]["autoPromote"] is False
-assert module.parse_live_pages(home,artist.replace("JUNHO",""),disco)==[]
-assert module.parse_live_pages(home,artist,disco.replace("Call Me Back","Other"))==[]
-print("NOMAD Entertainment current roster adapter regression: PASS")
+assert snapshot["terminalLifecycle"]["lifecycleStatus"]=="inactive"
+assert snapshot["terminalLifecycle"]["agencyStatus"]=="historical"
+assert snapshot["terminalLifecycle"]["effectiveDate"]=="2026-04-24"
+assert module.parse_live_identity_pages(home,artist.replace("JUNHO",""),disco)==[]
+assert module.parse_live_identity_pages(home,artist,disco.replace("Call Me Back","Other"))==[]
+print("NOMAD terminal lifecycle adapter regression: PASS")

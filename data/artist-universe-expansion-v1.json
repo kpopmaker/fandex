@@ -6935,7 +6935,7 @@
       "agency": "NOMAD Entertainment",
       "entityType": "group",
       "debutDate": "2024-02-28",
-      "lifecycleStatus": "active",
+      "lifecycleStatus": "inactive",
       "members": [
         "DOY",
         "SANGHA",
@@ -6971,7 +6971,7 @@
         "KR",
         "GLOBAL"
       ],
-      "tier": "standard",
+      "tier": "archive",
       "identityEvidence": [
         {
           "source": "NOMAD Entertainment",
@@ -6980,8 +6980,13 @@
         {
           "source": "NOMAD Entertainment",
           "url": "https://nomadent.co.kr/introduce/"
+        },
+        {
+          "source": "NOMAD Entertainment official SNS terminal notice (preserved by StarNews)",
+          "url": "https://www.starnewskorea.com/en/music/2026/04/24/2026042415553078379"
         }
-      ]
+      ],
+      "agencyStatus": "historical"
     }
   ]
 }

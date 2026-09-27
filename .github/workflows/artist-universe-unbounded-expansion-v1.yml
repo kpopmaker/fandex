@@ -281,7 +281,7 @@ jobs:
           python scripts/artist-expansion/collect_classy_official_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/classy-official-provider-catalog-2026-09-26.json \
             --output classy_official_provider_catalog_v1_latest.json
-      - name: Collect NOMAD Entertainment current artist roster
+      - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/nomad-current-roster-2026-09-26.json \

@@ -840,7 +840,9 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(nomad.entityType, 'group');
   assert.equal(nomad.agency, 'NOMAD Entertainment');
   assert.equal(nomad.debutDate, '2024-02-28');
-  assert.equal(nomad.lifecycleStatus, 'active');
+  assert.equal(nomad.lifecycleStatus, 'inactive');
+  assert.equal(nomad.agencyStatus, 'historical');
+  assert.equal(nomad.collection.tier, 'archive');
   assert.deepEqual(nomad.members, ['DOY', 'SANGHA', 'ONE', 'RIVR', 'JUNHO']);
   assert.ok(nomad.profile.koreanAliases.includes('노매드'));
 

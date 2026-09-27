@@ -1,10 +1,10 @@
 {
-  "version": "nomad_entertainment_current_roster_adapter_v1",
+  "version": "nomad_entertainment_terminal_lifecycle_adapter_v2",
   "source": {
-    "id": "nomad-entertainment-current-roster",
+    "id": "nomad-entertainment-official-group-lifecycle",
     "type": "agency_roster",
-    "name": "NOMAD Entertainment Current Artist Roster",
-    "observedAt": "2026-09-26T00:00:00Z",
+    "name": "NOMAD Entertainment Official Group Lifecycle Snapshot",
+    "observedAt": "2026-09-27T00:00:00Z",
     "url": "https://nomadent.co.kr/introduce/"
   },
   "candidateCount": 1,
@@ -16,37 +16,51 @@
       ],
       "evidence": [
         {
-          "label": "NOMAD Entertainment current official homepage",
+          "label": "NOMAD Entertainment official homepage (identity preserved)",
           "url": "https://nomadent.co.kr/"
         },
         {
-          "label": "NOMAD Entertainment official artist profile",
+          "label": "NOMAD Entertainment official artist profile (last published five-member lineup)",
           "url": "https://nomadent.co.kr/introduce/"
         },
         {
           "label": "NOMAD Entertainment official discography",
           "url": "https://nomadent.co.kr/discography/"
+        },
+        {
+          "label": "NOMAD Entertainment official SNS terminal notice, preserved verbatim by StarNews",
+          "url": "https://www.starnewskorea.com/en/music/2026/04/24/2026042415553078379"
         }
       ]
     }
   ],
   "contract": {
-    "officialSourceOnly": true,
-    "singleCurrentMusicGroupOnly": true,
-    "exactCurrentMemberRosterRequired": true,
-    "officialKpopDescriptionRequired": true,
+    "officialIdentitySourceOnly": true,
+    "currentRosterClaimAllowed": false,
+    "terminalLifecycleEvidenceRequired": true,
+    "staleOfficialProfileDoesNotOverrideTerminalNotice": true,
+    "exactLastPublishedMemberRosterRequired": true,
     "memberProfilesDoNotCreateSoloCanonicals": true,
     "autoPromote": false,
     "identityReviewRequired": true,
     "scopeVerificationRequired": true
   },
+  "terminalLifecycle": {
+    "effectiveDate": "2026-04-24",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "basis": "NOMAD Entertainment official SNS statement concludes exclusive contracts and NOMAD activities",
+    "preservedAt": "https://www.starnewskorea.com/en/music/2026/04/24/2026042415553078379"
+  },
   "provenance": {
-    "snapshotType": "verified_official_current_group_snapshot",
+    "snapshotType": "verified_terminal_lifecycle_snapshot",
     "verifiedFrom": [
       "https://nomadent.co.kr/",
       "https://nomadent.co.kr/introduce/",
-      "https://nomadent.co.kr/discography/"
+      "https://nomadent.co.kr/discography/",
+      "https://www.starnewskorea.com/en/music/2026/04/24/2026042415553078379"
     ],
-    "verifiedAt": "2026-09-26"
+    "verifiedAt": "2026-09-27",
+    "officialProfileStaleAfterTerminalNotice": true
   }
 }
