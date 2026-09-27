@@ -112,10 +112,52 @@ test('current source audit records current Last.fm and NAVER Stored Evidence rep
 test('current dual-source attestation preserves the v140 to v143 non-numeric boundary', async () => {
   const attestation = JSON.parse(
     await readFile(ATTESTATION_URL, 'utf8'),
-  ) as Record<string, any>;
+  ) as Readonly<{
+    attestationDigest: string;
+    lastfm: Readonly<{
+      nativeValue: number;
+      previousNativeValue: number;
+      direction: string;
+    }>;
+    naver: Readonly<{
+      latestOfficialThroughSlotStart: string;
+      continuityVerification: Readonly<{
+        verifiedJobCount: number;
+        allCanonicalObservationSetsIdentical: boolean;
+      }>;
+      v140: Readonly<{
+        selectedForV141ThroughSlotStart: string;
+        selectedDirection: string;
+      }>;
+    }>;
+    v141: Readonly<{
+      state: string;
+      futureEvidenceUsed: boolean;
+    }>;
+    v142: Readonly<{
+      directionalConsensus: string;
+      persistenceConsensus: string;
+      productMomentumScore: null;
+    }>;
+    v143: Readonly<{
+      outputForm: string;
+      productMomentumScore: null;
+    }>;
+    comparison: Readonly<{
+      classification: string;
+      newHistoryObservationRequired: boolean;
+    }>;
+    boundary: Readonly<{
+      databaseWrites: number;
+      productActivations: number;
+      productPublications: number;
+      publicRouteCutovers: number;
+      productionVerifierExecutions: number;
+    }>;
+  }> & Record<string, unknown>;
 
   const digest = attestation.attestationDigest;
-  const payload = { ...attestation };
+  const payload: Record<string, unknown> = { ...attestation };
   delete payload.attestationDigest;
 
   assert.equal(
