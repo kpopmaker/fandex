@@ -1,0 +1,81 @@
+{
+  "version": "trendz_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "trendz-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "TRENDZ Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://avex.jp/trendz/profile/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TRENDZ",
+      "aliases": [
+        "트렌드지"
+      ],
+      "evidence": [
+        {
+          "label": "TRENDZ Avex current official seven-member profile",
+          "url": "https://avex.jp/trendz/profile/"
+        },
+        {
+          "label": "Global H Media current TRENDZ management notice",
+          "url": "https://trendz.kr/community/board/63719da2c82cfb7148f768d3/post/69608adfb83ac17fd034cb3c"
+        },
+        {
+          "label": "TRENDZ current Korean On My Knees activity notice",
+          "url": "https://trendz.kr/notice/6a3e5f9e13a113154417dfeb"
+        },
+        {
+          "label": "TRENDZ official FRIENDZ membership notice",
+          "url": "https://trendz.kr/notice/664ad4a3d55cbe6fce2fbcb3"
+        },
+        {
+          "label": "TRENDZ official debut-date member content",
+          "url": "https://trendz.kr/contents/6475eeb5f5f8936722ef890e"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "koreanAndJapanOfficialSurfacesMustAgree": true,
+    "officialDebutDateEvidenceRequired": true,
+    "fandomEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "Global H Media",
+    "members": [
+      "HANKOOK",
+      "HAVIT",
+      "LEON",
+      "YOONWOO",
+      "ra.L",
+      "EUNIL",
+      "YECHAN"
+    ],
+    "currentMemberCount": 7,
+    "debutDate": "2022-01-05",
+    "fandomName": "FRIENDZ"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://avex.jp/trendz/profile/",
+      "https://trendz.kr/community/board/63719da2c82cfb7148f768d3/post/69608adfb83ac17fd034cb3c",
+      "https://trendz.kr/notice/6a3e5f9e13a113154417dfeb",
+      "https://trendz.kr/notice/664ad4a3d55cbe6fce2fbcb3",
+      "https://trendz.kr/contents/6475eeb5f5f8936722ef890e"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

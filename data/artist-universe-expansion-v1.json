@@ -7399,6 +7399,79 @@
           "url": "https://aimers-official.jp/blogs/news/0023"
         }
       ]
+    },
+    {
+      "id": "trendz",
+      "ticker": "TRENDZ",
+      "name": "TRENDZ",
+      "agency": "Global H Media",
+      "entityType": "group",
+      "debutDate": "2022-01-05",
+      "lifecycleStatus": "active",
+      "members": [
+        "HANKOOK",
+        "HAVIT",
+        "LEON",
+        "YOONWOO",
+        "ra.L",
+        "EUNIL",
+        "YECHAN"
+      ],
+      "fandomName": "FRIENDZ",
+      "naverNewsQuery": "트렌드지 TRENDZ 글로벌에이치미디어",
+      "koreanAliases": [
+        "트렌드지"
+      ],
+      "englishAliases": [
+        "TRENDZ"
+      ],
+      "keywords": [
+        "Global H Media",
+        "글로벌에이치미디어",
+        "HANKOOK",
+        "HAVIT",
+        "LEON",
+        "YOONWOO",
+        "ra.L",
+        "EUNIL",
+        "YECHAN",
+        "FRIENDZ",
+        "On My Knees",
+        "Which Way is Love?"
+      ],
+      "disambiguationKeywords": [
+        "Global H Media",
+        "글로벌에이치미디어",
+        "트렌드지"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TRENDZ Avex Official Site",
+          "url": "https://avex.jp/trendz/profile/"
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/community/board/63719da2c82cfb7148f768d3/post/69608adfb83ac17fd034cb3c"
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/notice/6a3e5f9e13a113154417dfeb"
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/notice/664ad4a3d55cbe6fce2fbcb3"
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/contents/6475eeb5f5f8936722ef890e"
+        }
+      ]
     }
   ]
 }

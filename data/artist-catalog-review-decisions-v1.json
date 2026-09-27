@@ -4672,6 +4672,43 @@
           "note": "Official 2026 summer live notice explicitly marks SEUNGHYUN and EUNJUN as non-participants for those performances; temporary schedule absence is not treated as membership termination."
         }
       ]
+    },
+    {
+      "displayArtist": "TRENDZ",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_avex_seven_member_profile_and_current_global_h_media_notices_resolve_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_debut_identity_current_global_h_media_management_seven_member_profile_and_2026_korean_japanese_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TRENDZ Avex Official Site",
+          "url": "https://avex.jp/trendz/profile/",
+          "note": "Current official profile lists exactly HANKOOK, HAVIT, LEON, YOONWOO, ra.L, EUNIL, and YECHAN and documents 2026 Korean and Japanese releases."
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/community/board/63719da2c82cfb7148f768d3/post/69608adfb83ac17fd034cb3c",
+          "note": "Official 2026 fan meeting notice is issued by Global H Media, establishing current management."
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/notice/6a3e5f9e13a113154417dfeb",
+          "note": "Official 2026 On My Knees broadcast notice confirms active Korean music promotion."
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/notice/664ad4a3d55cbe6fce2fbcb3",
+          "note": "Official membership notice identifies the fandom as FRIENDZ."
+        },
+        {
+          "source": "TRENDZ Official Homepage",
+          "url": "https://trendz.kr/contents/6475eeb5f5f8936722ef890e",
+          "note": "Official member content anchors the debut date to 2022-01-05."
+        }
+      ]
     }
   ]
 }
