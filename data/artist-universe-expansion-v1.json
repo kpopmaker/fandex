@@ -7328,6 +7328,77 @@
           "url": "https://weverse.io/whib/fanpost/3-137292337?hl=ko"
         }
       ]
+    },
+    {
+      "id": "aimers",
+      "ticker": "AIMERS",
+      "name": "AIMERS",
+      "agency": "HYPER RHYTHM",
+      "entityType": "group",
+      "debutDate": "2022-11-17",
+      "lifecycleStatus": "active",
+      "members": [
+        "SEUNGHYUN",
+        "EUNJUN",
+        "DORYUN",
+        "YOEL",
+        "SEUNGHWAN",
+        "WOOYOUNG"
+      ],
+      "fandomName": "AIMING",
+      "naverNewsQuery": "에이머스 AIMERS 하이퍼리듬",
+      "koreanAliases": [
+        "에이머스"
+      ],
+      "englishAliases": [
+        "AIMERS"
+      ],
+      "keywords": [
+        "HYPER RHYTHM",
+        "하이퍼리듬",
+        "SEUNGHYUN",
+        "EUNJUN",
+        "DORYUN",
+        "YOEL",
+        "SEUNGHWAN",
+        "WOOYOUNG",
+        "AIMING",
+        "BETTING STARTS",
+        "FULL COUNT"
+      ],
+      "disambiguationKeywords": [
+        "HYPER RHYTHM",
+        "하이퍼리듬",
+        "에이머스"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/"
+        },
+        {
+          "source": "AIMERS Japan Official Fansite FAQ",
+          "url": "https://aimers-official.jp/pages/faq"
+        },
+        {
+          "source": "AIMERS Japan Official Fansite Discography",
+          "url": "https://aimers-official.jp/pages/discography"
+        },
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/blogs/news/0019"
+        },
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/blogs/news/0023"
+        }
+      ]
     }
   ]
 }

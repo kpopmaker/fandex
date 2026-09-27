@@ -1,0 +1,82 @@
+{
+  "version": "aimers_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "aimers-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "AIMERS Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://aimers-official.jp/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "AIMERS",
+      "aliases": [
+        "에이머스"
+      ],
+      "evidence": [
+        {
+          "label": "AIMERS current official six-member profile",
+          "url": "https://aimers-official.jp/"
+        },
+        {
+          "label": "AIMERS official HYPER RHYTHM fan-letter address",
+          "url": "https://aimers-official.jp/pages/faq"
+        },
+        {
+          "label": "AIMERS official debut discography",
+          "url": "https://aimers-official.jp/pages/discography"
+        },
+        {
+          "label": "AIMERS official SEUNGHYUN enlistment notice",
+          "url": "https://aimers-official.jp/blogs/news/0019"
+        },
+        {
+          "label": "AIMERS official temporary performance absence notice",
+          "url": "https://aimers-official.jp/blogs/news/0023"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "militaryServiceDoesNotImplyMembershipTermination": true,
+    "temporaryEventAbsenceDoesNotChangeMembership": true,
+    "currentOfficialMemberSectionControlsRoster": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "membershipContinuity": {
+    "currentMembers": [
+      "SEUNGHYUN",
+      "EUNJUN",
+      "DORYUN",
+      "YOEL",
+      "SEUNGHWAN",
+      "WOOYOUNG"
+    ],
+    "militaryServiceMember": "SEUNGHYUN",
+    "temporaryEventAbsenceMembers": [
+      "SEUNGHYUN",
+      "EUNJUN"
+    ],
+    "currentMemberCount": 6
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://aimers-official.jp/",
+      "https://aimers-official.jp/pages/faq",
+      "https://aimers-official.jp/pages/discography",
+      "https://aimers-official.jp/blogs/news/0019",
+      "https://aimers-official.jp/blogs/news/0023"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

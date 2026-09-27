@@ -4635,6 +4635,43 @@
           "note": "Official community opening post records the WHIB debut date as 2023-11-08."
         }
       ]
+    },
+    {
+      "displayArtist": "AIMERS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_official_six_member_profile_and_hyper_rhythm_management_resolve_identity_while_military_and_event_absence_do_not_change_membership",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_member_profile_hyper_rhythm_management_debut_discography_and_2026_active_fan_event_surface",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/",
+          "note": "Current official member section lists exactly SEUNGHYUN, EUNJUN, DORYUN, YOEL, SEUNGHWAN, and WOOYOUNG and carries September 2026 activity notices."
+        },
+        {
+          "source": "AIMERS Japan Official Fansite FAQ",
+          "url": "https://aimers-official.jp/pages/faq",
+          "note": "Official fan-letter address identifies AIMERS under HYPER RHYTHM in Seoul."
+        },
+        {
+          "source": "AIMERS Japan Official Fansite Discography",
+          "url": "https://aimers-official.jp/pages/discography",
+          "note": "Official discography records 1st Mini Album [BETTING STARTS] on 2022-11-17."
+        },
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/blogs/news/0019",
+          "note": "Official 2026 enlistment notice states HYPER RHYTHM's announcement for SEUNGHYUN and continues to refer to him as an AIMERS member."
+        },
+        {
+          "source": "AIMERS Japan Official Fansite",
+          "url": "https://aimers-official.jp/blogs/news/0023",
+          "note": "Official 2026 summer live notice explicitly marks SEUNGHYUN and EUNJUN as non-participants for those performances; temporary schedule absence is not treated as membership termination."
+        }
+      ]
     }
   ]
 }
