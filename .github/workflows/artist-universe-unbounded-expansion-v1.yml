@@ -98,6 +98,7 @@ jobs:
           python tests/artist-expansion-ntx-victory-provider-catalog-v1.py
           python tests/artist-expansion-ninei-pause-identity-v1.py
           python tests/artist-expansion-omegax-ipq-provider-catalog-v1.py
+          python tests/artist-expansion-ab6ix-group-pause-identity-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -401,6 +402,11 @@ jobs:
           python scripts/artist-expansion/collect_omegax_ipq_current_provider_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/omegax-ipq-current-provider-catalog-2026-09-28.json \
             --output omegax_ipq_current_provider_catalog_v1_latest.json
+      - name: Collect AB6IX group pause identity catalog
+        run: |
+          python scripts/artist-expansion/collect_ab6ix_group_pause_identity_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/ab6ix-group-pause-identity-catalog-2026-09-28.json \
+            --output ab6ix_group_pause_identity_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -482,6 +488,7 @@ jobs:
             --snapshot ntx_victory_current_provider_catalog_v1_latest.json \
             --snapshot ninei_official_pause_identity_catalog_v1_latest.json \
             --snapshot omegax_ipq_current_provider_catalog_v1_latest.json \
+            --snapshot ab6ix_group_pause_identity_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -581,6 +588,7 @@ jobs:
             ntx_victory_current_provider_catalog_v1_latest.json
             ninei_official_pause_identity_catalog_v1_latest.json
             omegax_ipq_current_provider_catalog_v1_latest.json
+            ab6ix_group_pause_identity_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

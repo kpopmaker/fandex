@@ -1077,6 +1077,17 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(omegax.profile.koreanAliases.includes('오메가엑스'));
   assert.ok(!omegax.members.includes('JUNGHOON'));
 
+  const ab6ix = getArtistV4ById('ab6ix');
+  assert.ok(ab6ix);
+  assert.equal(ab6ix.entityType, 'group');
+  assert.equal(ab6ix.agency, '');
+  assert.equal(ab6ix.agencyStatus, 'unresolved');
+  assert.equal(ab6ix.debutDate, '2019-05-22');
+  assert.equal(ab6ix.lifecycleStatus, 'active');
+  assert.deepEqual(ab6ix.members, ['JEON WOONG', 'KIM DONG HYUN', 'PARK WOO JIN', 'LEE DAE HWI']);
+  assert.ok(ab6ix.profile.koreanAliases.includes('에이비식스'));
+  assert.ok(!ab6ix.members.includes('LIM YOUNG MIN'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

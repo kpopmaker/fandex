@@ -5150,6 +5150,43 @@
           "note": "Provider catalog dates OMEGA X's first mini album VAMOS to June 30, 2021."
         }
       ]
+    },
+    {
+      "displayArtist": "AB6IX",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_temporary_group_hiatus_statement_current_four_member_profile_prior_departure_and_individual_agency_divergence_resolve_ab6ix_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_group_pause_notice_current_official_japan_profile_explicit_prior_departure_and_current_individual_agency_evidence",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "AB6IX Japan official fanclub / BRANDNEW MUSIC group-activity notice",
+          "url": "https://ab6ix.jp/contents/1064085?tag=all",
+          "note": "BRANDNEW MUSIC states AB6IX's group exclusive contract ends May 25, 2026 and group activities enter a temporary hiatus after the May 23-24 6IX TO SEVEN concerts. The notice names JEON WOONG, KIM DONG HYUN, PARK WOO JIN, and LEE DAE HWI."
+        },
+        {
+          "source": "Victor Entertainment current AB6IX profile",
+          "url": "https://www.jvcmusic.co.jp/-/Profile/A027034.html",
+          "note": "Current official Japanese label profile describes AB6IX as the four-member group JEON WOONG, KIM DONG HYUN, PARK WOO JIN, and LEE DAE HWI."
+        },
+        {
+          "source": "BRANDNEW MUSIC LIM YOUNG MIN departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1405421wpp/breaking-lim-young-min-officially-leaves-ab6ix-following-dui",
+          "note": "BRANDNEW MUSIC explicitly announced LIM YOUNG MIN's departure on June 8, 2020 and continuation as a four-member group."
+        },
+        {
+          "source": "Apple Music B:COMPLETE provider catalog",
+          "url": "https://music.apple.com/us/album/b-complete/1463405545",
+          "note": "Provider catalog dates debut EP B:COMPLETE to May 22, 2019 and credits BRANDNEW MUSIC."
+        },
+        {
+          "source": "Current individual agency divergence",
+          "url": "https://www.soompi.com/article/1848723wpp/ab6ixs-jeon-woong-renews-contract-with-brandnew-music",
+          "note": "After the group contract ended, JEON WOONG renewed individually with BRANDNEW MUSIC while PARK WOO JIN, LEE DAE HWI, and KIM DONG HYUN moved to separate agencies. Individual agency contracts therefore do not resolve a single current AB6IX group agency."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,133 @@
+{
+  "version": "ab6ix_group_pause_identity_catalog_adapter_v1",
+  "source": {
+    "id": "ab6ix-group-pause-identity-catalog",
+    "type": "provider_catalog",
+    "name": "AB6IX Group Pause Identity Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://ab6ix.jp/contents/1064085?tag=all"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "AB6IX",
+      "aliases": [
+        "에이비식스"
+      ],
+      "evidence": [
+        {
+          "label": "AB6IX official Japan / BRANDNEW MUSIC temporary group-hiatus notice",
+          "url": "https://ab6ix.jp/contents/1064085?tag=all"
+        },
+        {
+          "label": "Victor Entertainment current four-member AB6IX profile",
+          "url": "https://www.jvcmusic.co.jp/-/Profile/A027034.html"
+        },
+        {
+          "label": "BRANDNEW MUSIC LIM YOUNG MIN departure statement",
+          "url": "https://www.soompi.com/article/1405421wpp/breaking-lim-young-min-officially-leaves-ab6ix-following-dui"
+        },
+        {
+          "label": "Apple Music B:COMPLETE debut catalog",
+          "url": "https://music.apple.com/us/album/b-complete/1463405545"
+        },
+        {
+          "label": "BRANDNEW MUSIC JEON WOONG individual renewal",
+          "url": "https://www.soompi.com/article/1848723wpp/ab6ixs-jeon-woong-renews-contract-with-brandnew-music"
+        },
+        {
+          "label": "PARA MUSIC PARK WOO JIN profile",
+          "url": "https://www.paramusic.co.kr/subPage/artist/member/?no=15"
+        },
+        {
+          "label": "Off The Record LEE DAE HWI signing",
+          "url": "https://www.soompi.com/article/1860806wpp/lee-dae-hwi-signs-with-wanna-one-bandmate-kim-jae-hwans-agency"
+        },
+        {
+          "label": "AER Entertainment KIM DONG HYUN signing",
+          "url": "https://www.newsen.com/news_view.php?code=100100&uid=202609100746082410"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "explicitTemporaryGroupHiatusEvidenceRequired": true,
+    "groupContractEndDoesNotEqualGroupTermination": true,
+    "groupActivityPauseDoesNotEqualDisbandment": true,
+    "pausedGroupRetainsActiveLifecycle": true,
+    "exactCurrentMemberRosterRequired": true,
+    "explicitFormerMemberDepartureEvidenceRequired": true,
+    "individualAgencyContractsDoNotResolveGroupAgency": true,
+    "individualAgencyChangesDoNotChangeCanonicalMembership": true,
+    "blankAgencyRequiredWhenGroupAgencyUnresolved": true,
+    "currentOfficialProfileRequired": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentIdentity": {
+    "lifecycleStatus": "active",
+    "groupActivityPaused": true,
+    "groupDisbanded": false,
+    "groupAgency": "",
+    "groupAgencyStatus": "unresolved",
+    "members": [
+      "JEON WOONG",
+      "KIM DONG HYUN",
+      "PARK WOO JIN",
+      "LEE DAE HWI"
+    ],
+    "currentMemberCount": 4,
+    "priorExitedMembers": [
+      {
+        "member": "LIM YOUNG MIN",
+        "effectiveDate": "2020-06-08",
+        "resolution": "explicit_team_departure"
+      }
+    ],
+    "groupPauseEffectiveDate": "2026-05-24",
+    "groupContractEndDate": "2026-05-25",
+    "groupPauseResolution": "temporary_group_hiatus_after_6ix_to_seven_without_group_termination",
+    "individualAgencyState": [
+      {
+        "member": "JEON WOONG",
+        "agency": "BRANDNEW MUSIC",
+        "status": "verified_individual"
+      },
+      {
+        "member": "PARK WOO JIN",
+        "agency": "PARA MUSIC",
+        "status": "verified_individual"
+      },
+      {
+        "member": "LEE DAE HWI",
+        "agency": "Off The Record Entertainment",
+        "status": "verified_individual"
+      },
+      {
+        "member": "KIM DONG HYUN",
+        "agency": "AER Entertainment",
+        "status": "verified_individual"
+      }
+    ],
+    "debutDate": "2019-05-22",
+    "debutRelease": "B:COMPLETE",
+    "fandomName": "ABNEW"
+  },
+  "provenance": {
+    "snapshotType": "verified_current_group_pause_plus_individual_agency_divergence_snapshot",
+    "verifiedFrom": [
+      "https://ab6ix.jp/contents/1064085?tag=all",
+      "https://www.jvcmusic.co.jp/-/Profile/A027034.html",
+      "https://www.soompi.com/article/1405421wpp/breaking-lim-young-min-officially-leaves-ab6ix-following-dui",
+      "https://music.apple.com/us/album/b-complete/1463405545",
+      "https://www.soompi.com/article/1848723wpp/ab6ixs-jeon-woong-renews-contract-with-brandnew-music",
+      "https://www.paramusic.co.kr/subPage/artist/member/?no=15",
+      "https://www.soompi.com/article/1860806wpp/lee-dae-hwi-signs-with-wanna-one-bandmate-kim-jae-hwans-agency",
+      "https://www.newsen.com/news_view.php?code=100100&uid=202609100746082410"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

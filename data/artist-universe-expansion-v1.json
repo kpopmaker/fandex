@@ -8396,6 +8396,89 @@
           "url": "https://music.apple.com/us/album/1st-mini-album-vamos-ep/1632712469"
         }
       ]
+    },
+    {
+      "id": "ab6ix",
+      "ticker": "AB6IX",
+      "name": "AB6IX",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "debutDate": "2019-05-22",
+      "lifecycleStatus": "active",
+      "members": [
+        "JEON WOONG",
+        "KIM DONG HYUN",
+        "PARK WOO JIN",
+        "LEE DAE HWI"
+      ],
+      "fandomName": "ABNEW",
+      "naverNewsQuery": "에이비식스 AB6IX",
+      "koreanAliases": [
+        "에이비식스"
+      ],
+      "englishAliases": [
+        "AB6IX"
+      ],
+      "keywords": [
+        "JEON WOONG",
+        "KIM DONG HYUN",
+        "PARK WOO JIN",
+        "LEE DAE HWI",
+        "LIM YOUNG MIN",
+        "임영민",
+        "B:COMPLETE",
+        "BREATHE",
+        "6IX TO SEVEN",
+        "ABNEW",
+        "group hiatus",
+        "temporary hiatus"
+      ],
+      "disambiguationKeywords": [
+        "AB6IX",
+        "에이비식스",
+        "B:COMPLETE"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "AB6IX Japan official fanclub group-activity notice reproducing BRANDNEW MUSIC statement",
+          "url": "https://ab6ix.jp/contents/1064085?tag=all"
+        },
+        {
+          "source": "Victor Entertainment current AB6IX profile",
+          "url": "https://www.jvcmusic.co.jp/-/Profile/A027034.html"
+        },
+        {
+          "source": "BRANDNEW MUSIC LIM YOUNG MIN departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1405421wpp/breaking-lim-young-min-officially-leaves-ab6ix-following-dui"
+        },
+        {
+          "source": "Apple Music B:COMPLETE provider catalog",
+          "url": "https://music.apple.com/us/album/b-complete/1463405545"
+        },
+        {
+          "source": "BRANDNEW MUSIC JEON WOONG individual renewal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1848723wpp/ab6ixs-jeon-woong-renews-contract-with-brandnew-music"
+        },
+        {
+          "source": "PARA MUSIC current PARK WOO JIN profile",
+          "url": "https://www.paramusic.co.kr/subPage/artist/member/?no=15"
+        },
+        {
+          "source": "Off The Record LEE DAE HWI signing statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1860806wpp/lee-dae-hwi-signs-with-wanna-one-bandmate-kim-jae-hwans-agency"
+        },
+        {
+          "source": "AER Entertainment KIM DONG HYUN signing statement preserved by Newsen",
+          "url": "https://www.newsen.com/news_view.php?code=100100&uid=202609100746082410"
+        }
+      ]
     }
   ]
 }
