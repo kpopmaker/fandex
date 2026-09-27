@@ -34,6 +34,19 @@ jobs:
           lib/intelligence/fandexMomentumOutputFormEligibilityResearch.ts
           lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
           lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts
+          lib/lastfm-signal/contracts.ts
+          lib/lastfm-signal/csv.ts
+          lib/lastfm-signal/historicalShadowCheckpoint.ts
+          lib/lastfm-signal/historicalWindow.ts
+          lib/lastfm-signal/identityQualityGate.ts
+          lib/lastfm-signal/index.ts
+          lib/lastfm-signal/momentumConstructAlignment.ts
+          lib/lastfm-signal/momentumProductConstructResearch.ts
+          lib/lastfm-signal/readModel.ts
+          lib/lastfm-signal/repeatedShadowReconciliation.ts
+          lib/lastfm-signal/repositorySnapshot.ts
+          lib/lastfm-signal/shadowScoringReconciliation.ts
+          lib/lastfm-signal/shadowVariableAdapter.ts
           scripts/validation/momentumCurrentDualSourceEvaluationV1.ts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
