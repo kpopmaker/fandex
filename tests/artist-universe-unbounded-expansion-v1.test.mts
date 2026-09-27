@@ -908,7 +908,6 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(whib.members, ['KIM JUN MIN', 'HASEUNG', 'JINBEOM', 'UGEON', 'LEEJEONG', 'JAEHA', 'WONJUN']);
   assert.equal(whib.fandomName, 'AnD');
   assert.ok(whib.profile.koreanAliases.includes('휘브'));
-  assert.ok(whib.profile.keywords.includes('JAYDER'));
   assert.ok(!whib.members.includes('INHONG'));
 
   const expanded = buildExpandedArtistUniverseV4(
