@@ -846,6 +846,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(nomad.members, ['DOY', 'SANGHA', 'ONE', 'RIVR', 'JUNHO']);
   assert.ok(nomad.profile.koreanAliases.includes('노매드'));
 
+  const vvup = getArtistV4ById('vvup');
+  assert.ok(vvup);
+  assert.equal(vvup.entityType, 'group');
+  assert.equal(vvup.agency, 'egoENT');
+  assert.equal(vvup.debutDate, '2024-04-01');
+  assert.equal(vvup.lifecycleStatus, 'active');
+  assert.deepEqual(vvup.members, ['KIM', 'PAAN', 'SUYEON', 'JIYOON']);
+  assert.equal(vvup.fandomName, 'VVinie');
+  assert.ok(vvup.profile.koreanAliases.includes('비비업'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

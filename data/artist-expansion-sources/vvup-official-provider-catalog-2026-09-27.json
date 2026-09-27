@@ -1,0 +1,61 @@
+{
+  "version": "vvup_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "vvup-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "VVUP Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/vvup/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "VVUP",
+      "aliases": [
+        "비비업"
+      ],
+      "evidence": [
+        {
+          "label": "VVUP current official Weverse member profiles",
+          "url": "https://weverse.io/vvup/highlight?hl=ko"
+        },
+        {
+          "label": "egoENT official VVUP management notice",
+          "url": "https://weverse.io/vvup/notice/32285?hl=ko"
+        },
+        {
+          "label": "VVUP current 2026 official media",
+          "url": "https://weverse.io/vvup/media?hl=ko"
+        },
+        {
+          "label": "Weverse Global current VVON release notice",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/181/notices/12244"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "currentRosterDerivedFromOfficialArtistProfilesOnly": true,
+    "historicalMemberContentDoesNotOverrideCurrentProfiles": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "debutDateFromOfficialCommunityEvent": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/vvup/highlight?hl=ko",
+      "https://weverse.io/vvup/notice/32285?hl=ko",
+      "https://weverse.io/vvup/media?hl=ko",
+      "https://shop.weverse.io/ko/shop/KRW/artists/181/notices/12244"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

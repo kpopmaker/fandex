@@ -4465,6 +4465,38 @@
           "note": "The agency's 2026-04-24 official SNS statement says the exclusive contracts were concluded and NOMAD activities ended; this later evidence controls lifecycle and agency semantics."
         }
       ]
+    },
+    {
+      "displayArtist": "VVUP",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_weverse_current_four_member_group_and_egoent_management_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_weverse_current_four_member_group_identity_egoent_management_and_2026_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "VVUP Weverse",
+          "url": "https://weverse.io/vvup/highlight?hl=ko",
+          "note": "Current official Weverse artist profiles expose exactly KIM, PAAN, SUYEON, and JIYOON, and the official community event records the debut date as 2024-04-01 KST."
+        },
+        {
+          "source": "egoENT / VVUP Weverse",
+          "url": "https://weverse.io/vvup/notice/32285?hl=ko",
+          "note": "Official VVUP notice is signed by egoENT and documents group promotion activity under current management."
+        },
+        {
+          "source": "VVUP Weverse",
+          "url": "https://weverse.io/vvup/media?hl=ko",
+          "note": "Current official media contains 2026 VVUP group activity, including the second anniversary and VVON-era content, with the four current members."
+        },
+        {
+          "source": "Weverse Global",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/181/notices/12244",
+          "note": "Official Weverse Global notice updated 2026-09-02 records VVUP's first mini album VVON with an adjusted 2026-10-29 release date."
+        }
+      ]
     }
   ]
 }
