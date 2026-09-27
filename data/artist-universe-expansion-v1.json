@@ -7747,6 +7747,79 @@
           "url": "https://www.mk.co.kr/en/hot-issues/12017857"
         }
       ]
+    },
+    {
+      "id": "elast",
+      "ticker": "ELAST",
+      "name": "E'LAST",
+      "agency": "E Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2020-06-09",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "RANO",
+        "BAEKGYEUL",
+        "ROMIN",
+        "WONHYUK",
+        "WONJUN",
+        "YEJUN"
+      ],
+      "fandomName": "ELRING",
+      "naverNewsQuery": "엘라스트 E'LAST 이엔터테인먼트",
+      "koreanAliases": [
+        "엘라스트"
+      ],
+      "englishAliases": [
+        "E'LAST",
+        "ELAST"
+      ],
+      "keywords": [
+        "E Entertainment",
+        "이엔터테인먼트",
+        "RANO",
+        "BAEKGYEUL",
+        "ROMIN",
+        "WONHYUK",
+        "WONJUN",
+        "YEJUN",
+        "ELRING",
+        "DAY DREAM",
+        "Tame"
+      ],
+      "disambiguationKeywords": [
+        "E Entertainment",
+        "이엔터테인먼트",
+        "엘라스트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "E Entertainment terminal management notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&sca=E%E2%80%99LAST&wr_id=65"
+        },
+        {
+          "source": "E Entertainment CHOI IN contract-end notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&wr_id=63"
+        },
+        {
+          "source": "E Entertainment SEUNGYEOP departure notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&wr_id=54"
+        },
+        {
+          "source": "E Entertainment BAEKGYEUL profile / group debut evidence",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=musician&wr_id=6"
+        },
+        {
+          "source": "E'LAST ELRING Weverse Membership",
+          "url": "https://shop.weverse.io/en/shop/KRW/artists/105/sales/54943"
+        }
+      ]
     }
   ]
 }

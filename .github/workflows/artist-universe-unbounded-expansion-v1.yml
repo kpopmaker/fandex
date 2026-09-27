@@ -89,6 +89,7 @@ jobs:
           python tests/artist-expansion-blitzers-provider-catalog-v1.py
           python tests/artist-expansion-justb-provider-catalog-v1.py
           python tests/artist-expansion-dkz-terminal-lifecycle-v1.py
+          python tests/artist-expansion-elast-terminal-management-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -347,6 +348,11 @@ jobs:
           python scripts/artist-expansion/collect_dkz_terminal_lifecycle_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/dkz-terminal-lifecycle-catalog-2026-09-27.json \
             --output dkz_terminal_lifecycle_catalog_v1_latest.json
+      - name: Collect E'LAST official terminal management catalog
+        run: |
+          python scripts/artist-expansion/collect_elast_terminal_management_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/elast-terminal-management-catalog-2026-09-27.json \
+            --output elast_terminal_management_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -419,6 +425,7 @@ jobs:
             --snapshot blitzers_official_provider_catalog_v1_latest.json \
             --snapshot justb_official_provider_catalog_v1_latest.json \
             --snapshot dkz_terminal_lifecycle_catalog_v1_latest.json \
+            --snapshot elast_terminal_management_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -509,6 +516,7 @@ jobs:
             blitzers_official_provider_catalog_v1_latest.json
             justb_official_provider_catalog_v1_latest.json
             dkz_terminal_lifecycle_catalog_v1_latest.json
+            elast_terminal_management_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

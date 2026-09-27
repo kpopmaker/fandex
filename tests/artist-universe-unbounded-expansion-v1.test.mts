@@ -974,6 +974,19 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(dkz.profile.englishAliases.includes('DONGKIZ'));
   assert.ok(!dkz.members.includes('JONGHYEONG'));
 
+  const elast = getArtistV4ById('elast');
+  assert.ok(elast);
+  assert.equal(elast.entityType, 'group');
+  assert.equal(elast.agency, 'E Entertainment');
+  assert.equal(elast.agencyStatus, 'historical');
+  assert.equal(elast.debutDate, '2020-06-09');
+  assert.equal(elast.lifecycleStatus, 'inactive');
+  assert.deepEqual(elast.members, ['RANO', 'BAEKGYEUL', 'ROMIN', 'WONHYUK', 'WONJUN', 'YEJUN']);
+  assert.equal(elast.fandomName, 'ELRING');
+  assert.ok(elast.profile.koreanAliases.includes('엘라스트'));
+  assert.ok(!elast.members.includes('SEUNGYEOP'));
+  assert.ok(!elast.members.includes('CHOI IN'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

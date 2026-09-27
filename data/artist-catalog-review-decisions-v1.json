@@ -4852,6 +4852,43 @@
           "note": "Jaechan's terminal letter references his DKZ/DONGKIZ journey beginning with debut on April 24, 2019."
         }
       ]
+    },
+    {
+      "displayArtist": "E'LAST",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_terminal_management_notice_closes_all_remaining_six_e_entertainment_contracts_after_prior_seungyeop_and_choi_in_exits",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_group_identity_terminal_management_relationship_exact_terminal_six_member_roster_and_documented_2026_activity_before_contract_end",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "E Entertainment terminal management notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&sca=E%E2%80%99LAST&wr_id=65",
+          "note": "Official August 31, 2026 notice ends the exclusive contracts of remaining members Rano, Baekgyeul, Romin, Wonhyuk, Wonjun, and Yejun."
+        },
+        {
+          "source": "E Entertainment CHOI IN contract-end notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&wr_id=63",
+          "note": "Official April 30, 2026 notice ends Choi In's contract, excluding him from the terminal six-member management roster."
+        },
+        {
+          "source": "E Entertainment SEUNGYEOP departure notice",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=notice&wr_id=54",
+          "note": "Official notice confirms Seungyeop's contract termination and team departure effective June 5, 2025."
+        },
+        {
+          "source": "E Entertainment BAEKGYEUL profile",
+          "url": "https://eent.co.kr/bbs/board.php?bo_table=musician&wr_id=6",
+          "note": "Official E Entertainment member profile records E'LAST debut on June 9, 2020 with DAY DREAM."
+        },
+        {
+          "source": "E'LAST ELRING Weverse Membership",
+          "url": "https://shop.weverse.io/en/shop/KRW/artists/105/sales/54943",
+          "note": "Official Weverse membership identifies ELRING as E'LAST's membership/fandom identity."
+        }
+      ]
     }
   ]
 }
