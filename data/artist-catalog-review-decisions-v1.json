@@ -4889,6 +4889,38 @@
           "note": "Official Weverse membership identifies ELRING as E'LAST's membership/fandom identity."
         }
       ]
+    },
+    {
+      "displayArtist": "GHOST9",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_maroo_official_artist_profile_resolves_exact_seven_member_identity_after_two_explicit_2021_departures",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_maroo_artist_directory_exact_seven_member_roster_and_officially_preserved_korean_debut_identity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Maroo Entertainment current GHOST9 profile",
+          "url": "https://maroocorp.com/artist_view.php?pk=8",
+          "note": "Current Maroo artist profile lists exactly SHIN, SON JUNHYUNG, LEE KANGSUNG, CHOI JUNSEONG, PRINCE, LEE WOOJIN, and LEE JINWOO."
+        },
+        {
+          "source": "Maroo Entertainment current corporate notice surface",
+          "url": "https://www.maroocorp.com/bbs/board.php?bo_table=notice&page=2&wr_id=25",
+          "note": "Maroo's 2026 corporate notice establishes that the same official company website is a current surface, not an abandoned historical snapshot."
+        },
+        {
+          "source": "Maroo Entertainment departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1487219wpp/ghost9s-lee-tae-seung-and-hwang-dong-jun-announced-to-leave-the-group?mobile-app=true&theme=false",
+          "note": "The preserved Maroo statement explicitly removes HWANG DONG JUN and LEE TAE SEUNG and says GHOST9 continues without them."
+        },
+        {
+          "source": "Maroo Entertainment debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1421908wpp/maroo-entertainment-announces-plans-to-debut-new-boy-group-including-teen-teen-members",
+          "note": "The preserved official debut announcement sets GHOST9's debut to September 23, 2020."
+        }
+      ]
     }
   ]
 }

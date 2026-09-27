@@ -1,0 +1,82 @@
+{
+  "version": "ghost9_maroo_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "ghost9-maroo-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "GHOST9 Maroo Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://maroocorp.com/artist_view.php?pk=8"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "GHOST9",
+      "aliases": [
+        "고스트나인"
+      ],
+      "evidence": [
+        {
+          "label": "Maroo current exact seven-member GHOST9 profile",
+          "url": "https://maroocorp.com/artist_view.php?pk=8"
+        },
+        {
+          "label": "Maroo 2026 current corporate website evidence",
+          "url": "https://www.maroocorp.com/bbs/board.php?bo_table=notice&page=2&wr_id=25"
+        },
+        {
+          "label": "Maroo two-member departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1487219wpp/ghost9s-lee-tae-seung-and-hwang-dong-jun-announced-to-leave-the-group?mobile-app=true&theme=false"
+        },
+        {
+          "label": "Maroo GHOST9 debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1421908wpp/maroo-entertainment-announces-plans-to-debut-new-boy-group-including-teen-teen-members"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "currentOfficialArtistDirectoryRequired": true,
+    "currentOfficialCompanySurfaceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "explicitDepartureEvidenceRequiredForFormerMemberExclusion": true,
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "currentDirectoryPresenceSupportsActiveLifecycle": true,
+    "currentAgencyEvidenceRequired": true,
+    "officialDebutDateEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "Maroo Entertainment",
+    "agencyStatus": "verified",
+    "members": [
+      "SHIN",
+      "SON JUNHYUNG",
+      "LEE KANGSUNG",
+      "CHOI JUNSEONG",
+      "PRINCE",
+      "LEE WOOJIN",
+      "LEE JINWOO"
+    ],
+    "formerMembers": [
+      "HWANG DONG JUN",
+      "LEE TAE SEUNG"
+    ],
+    "currentMemberCount": 7,
+    "lifecycleStatus": "active",
+    "debutDate": "2020-09-23"
+  },
+  "provenance": {
+    "snapshotType": "verified_current_official_directory_plus_preserved_official_history",
+    "verifiedFrom": [
+      "https://maroocorp.com/artist_view.php?pk=8",
+      "https://www.maroocorp.com/bbs/board.php?bo_table=notice&page=2&wr_id=25",
+      "https://www.soompi.com/article/1487219wpp/ghost9s-lee-tae-seung-and-hwang-dong-jun-announced-to-leave-the-group?mobile-app=true&theme=false",
+      "https://www.soompi.com/article/1421908wpp/maroo-entertainment-announces-plans-to-debut-new-boy-group-including-teen-teen-members"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

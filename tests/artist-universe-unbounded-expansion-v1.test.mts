@@ -987,6 +987,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(!elast.members.includes('SEUNGYEOP'));
   assert.ok(!elast.members.includes('CHOI IN'));
 
+  const ghost9 = getArtistV4ById('ghost9');
+  assert.ok(ghost9);
+  assert.equal(ghost9.entityType, 'group');
+  assert.equal(ghost9.agency, 'Maroo Entertainment');
+  assert.equal(ghost9.agencyStatus, 'verified');
+  assert.equal(ghost9.debutDate, '2020-09-23');
+  assert.equal(ghost9.lifecycleStatus, 'active');
+  assert.deepEqual(ghost9.members, ['SHIN', 'SON JUNHYUNG', 'LEE KANGSUNG', 'CHOI JUNSEONG', 'PRINCE', 'LEE WOOJIN', 'LEE JINWOO']);
+  assert.ok(ghost9.profile.koreanAliases.includes('고스트나인'));
+  assert.ok(!ghost9.members.includes('HWANG DONG JUN'));
+  assert.ok(!ghost9.members.includes('LEE TAE SEUNG'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

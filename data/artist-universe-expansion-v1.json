@@ -7820,6 +7820,72 @@
           "url": "https://shop.weverse.io/en/shop/KRW/artists/105/sales/54943"
         }
       ]
+    },
+    {
+      "id": "ghost9",
+      "ticker": "GHOST9",
+      "name": "GHOST9",
+      "agency": "Maroo Entertainment",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "debutDate": "2020-09-23",
+      "lifecycleStatus": "active",
+      "members": [
+        "SHIN",
+        "SON JUNHYUNG",
+        "LEE KANGSUNG",
+        "CHOI JUNSEONG",
+        "PRINCE",
+        "LEE WOOJIN",
+        "LEE JINWOO"
+      ],
+      "naverNewsQuery": "고스트나인 GHOST9 마루기획",
+      "koreanAliases": [
+        "고스트나인"
+      ],
+      "englishAliases": [
+        "GHOST9"
+      ],
+      "keywords": [
+        "Maroo Entertainment",
+        "마루기획",
+        "SHIN",
+        "SON JUNHYUNG",
+        "LEE KANGSUNG",
+        "CHOI JUNSEONG",
+        "PRINCE",
+        "LEE WOOJIN",
+        "LEE JINWOO",
+        "PRE EPISODE 1 : DOOR"
+      ],
+      "disambiguationKeywords": [
+        "Maroo Entertainment",
+        "마루기획",
+        "고스트나인"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Maroo Entertainment current GHOST9 profile",
+          "url": "https://maroocorp.com/artist_view.php?pk=8"
+        },
+        {
+          "source": "Maroo Entertainment current corporate notice surface",
+          "url": "https://www.maroocorp.com/bbs/board.php?bo_table=notice&page=2&wr_id=25"
+        },
+        {
+          "source": "Maroo Entertainment departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1487219wpp/ghost9s-lee-tae-seung-and-hwang-dong-jun-announced-to-leave-the-group?mobile-app=true&theme=false"
+        },
+        {
+          "source": "Maroo Entertainment debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1421908wpp/maroo-entertainment-announces-plans-to-debut-new-boy-group-including-teen-teen-members"
+        }
+      ]
     }
   ]
 }
