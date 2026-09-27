@@ -2,7 +2,7 @@ import { sha256Canonical } from '../shared/canonicalDigest';
 import { parseCsvRows, requireCsvColumns } from '../lastfm-signal/csv';
 import {
   buildLastfmHistoricalReplaySourceBundle,
-} from '../lastfm-signal/historicalShadowCheckpoint';
+} from '../lastfm-signal/historicalReplaySourceBundle';
 import { buildLastfmRealSignalReadModel } from '../lastfm-signal/readModel';
 import {
   LASTFM_CANONICAL_IDENTITIES,
