@@ -1,0 +1,61 @@
+{
+  "version": "pow_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "pow-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "POW Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://grident.net/product/pow/28/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "POW",
+      "aliases": [
+        "파우"
+      ],
+      "evidence": [
+        {
+          "label": "GRID Entertainment official POW profile",
+          "url": "https://grident.net/product/pow/28/"
+        },
+        {
+          "label": "POW current official Japan five-member profile",
+          "url": "https://powofficial.jp/profile"
+        },
+        {
+          "label": "POW official Japan discography through 2026",
+          "url": "https://powofficial.jp/discography"
+        },
+        {
+          "label": "POW official Japan current news index",
+          "url": "https://www.powofficial.jp/news?page=1"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "gridAndJapanOfficialProfilesMustAgree": true,
+    "officialDebutDateFromGridProfile": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "releaseEntriesDoNotCreateSeparateArtistCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://grident.net/product/pow/28/",
+      "https://powofficial.jp/profile",
+      "https://powofficial.jp/discography",
+      "https://www.powofficial.jp/news?page=1"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

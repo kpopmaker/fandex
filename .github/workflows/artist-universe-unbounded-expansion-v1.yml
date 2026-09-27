@@ -81,6 +81,7 @@ jobs:
           python tests/artist-expansion-vvup-provider-catalog-v1.py
           python tests/artist-expansion-fantasyboys-provider-catalog-v1.py
           python tests/artist-expansion-arrc-terminal-lifecycle-v1.py
+          python tests/artist-expansion-pow-provider-catalog-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -299,6 +300,11 @@ jobs:
           python scripts/artist-expansion/collect_arrc_terminal_lifecycle_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/arrc-terminal-lifecycle-catalog-2026-09-27.json \
             --output arrc_terminal_lifecycle_catalog_v1_latest.json
+      - name: Collect POW official current provider catalog
+        run: |
+          python scripts/artist-expansion/collect_pow_official_provider_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/pow-official-provider-catalog-2026-09-27.json \
+            --output pow_official_provider_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -363,6 +369,7 @@ jobs:
             --snapshot vvup_official_provider_catalog_v1_latest.json \
             --snapshot fantasyboys_official_provider_catalog_v1_latest.json \
             --snapshot arrc_terminal_lifecycle_catalog_v1_latest.json \
+            --snapshot pow_official_provider_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -445,6 +452,7 @@ jobs:
             vvup_official_provider_catalog_v1_latest.json
             fantasyboys_official_provider_catalog_v1_latest.json
             arrc_terminal_lifecycle_catalog_v1_latest.json
+            pow_official_provider_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

@@ -7190,6 +7190,71 @@
           "url": "https://weverse.io/arrc/notice/24431"
         }
       ]
+    },
+    {
+      "id": "pow",
+      "ticker": "POW",
+      "name": "POW",
+      "agency": "GRID Entertainment",
+      "entityType": "group",
+      "debutDate": "2023-10-11",
+      "lifecycleStatus": "active",
+      "members": [
+        "YORCH",
+        "HYUNBIN",
+        "JUNGBIN",
+        "DONGYEON",
+        "HONG"
+      ],
+      "fandomName": "POWER",
+      "naverNewsQuery": "파우 POW 그리드 엔터테인먼트",
+      "koreanAliases": [
+        "파우"
+      ],
+      "englishAliases": [
+        "POW"
+      ],
+      "keywords": [
+        "GRID Entertainment",
+        "그리드 엔터테인먼트",
+        "YORCH",
+        "HYUNBIN",
+        "JUNGBIN",
+        "DONGYEON",
+        "HONG",
+        "POWER",
+        "FLAVOR",
+        "COME TRUE"
+      ],
+      "disambiguationKeywords": [
+        "GRID Entertainment",
+        "그리드 엔터테인먼트",
+        "파우"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "GRID Entertainment",
+          "url": "https://grident.net/product/pow/28/"
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://powofficial.jp/profile"
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://powofficial.jp/discography"
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://www.powofficial.jp/news?page=1"
+        }
+      ]
     }
   ]
 }

@@ -889,6 +889,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(arrc.fandomName, 'ARrCer');
   assert.ok(arrc.profile.koreanAliases.includes('아크'));
 
+  const pow = getArtistV4ById('pow');
+  assert.ok(pow);
+  assert.equal(pow.entityType, 'group');
+  assert.equal(pow.agency, 'GRID Entertainment');
+  assert.equal(pow.debutDate, '2023-10-11');
+  assert.equal(pow.lifecycleStatus, 'active');
+  assert.deepEqual(pow.members, ['YORCH', 'HYUNBIN', 'JUNGBIN', 'DONGYEON', 'HONG']);
+  assert.equal(pow.fandomName, 'POWER');
+  assert.ok(pow.profile.koreanAliases.includes('파우'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

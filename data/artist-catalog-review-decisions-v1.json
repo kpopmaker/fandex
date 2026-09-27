@@ -4566,6 +4566,38 @@
           "note": "Official fan-club notice confirms ARrC identity and the fandom name ARrCer."
         }
       ]
+    },
+    {
+      "displayArtist": "POW",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "grid_official_profile_and_current_japan_official_surface_resolve_five_member_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "grid_official_korean_artist_profile_plus_current_2026_official_japan_activity_and_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "GRID Entertainment",
+          "url": "https://grident.net/product/pow/28/",
+          "note": "GRID's official POW profile identifies the group as a five-member act under GRID Entertainment and records the official debut date as 2023-10-11."
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://powofficial.jp/profile",
+          "note": "Current official Japan profile lists exactly YORCH, HYUNBIN, JUNGBIN, DONGYEON, and HONG and describes POW as a GRID Entertainment five-member group."
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://powofficial.jp/discography",
+          "note": "Official discography continues through 2026 releases including COME TRUE and FLAVOR, supporting active lifecycle."
+        },
+        {
+          "source": "POW Japan Official Fanclub",
+          "url": "https://www.powofficial.jp/news?page=1",
+          "note": "Official news page contains member and fanclub activity through July 2026 and carries GRID / CJ ENM Japan official footer."
+        }
+      ]
     }
   ]
 }
