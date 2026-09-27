@@ -99,7 +99,7 @@ def parse_live_pages(
 
     if not contains_any(debut, "FULL OF LOVESCAPES"):
         return []
-    if not contains_any(debut, "March 30, 2021", "2021"):
+    if not contains_any(debut, "March 30, 2021", "2021-03-30"):
         return []
     if not contains_any(debut, "VICTORY COMPANY", "Victory Company"):
         return []
