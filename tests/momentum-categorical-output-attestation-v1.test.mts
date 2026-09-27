@@ -164,3 +164,28 @@ test('attestation digest is deterministic for the same authoritative evidence', 
     right.evaluationEvidence.evaluationEvidenceDigest,
   );
 });
+
+
+test('recorded attestation artifact exactly matches the deterministic builder output', async () => {
+  const source = await evidence();
+  const built = buildFandexMomentumCategoricalOutputAttestation(source);
+  const recorded = JSON.parse(
+    await readFile(
+      new URL(
+        '../data/momentum-product/iu_momentum_categorical_output_attestation_v1.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+
+  assert.deepEqual(recorded, built);
+  assert.equal(
+    recorded.attestationDigest,
+    '03888fbf16462320cb4fcd70c2f237f62a7f18e80f0f964d956fb75732af4582',
+  );
+  assert.equal(
+    recorded.evaluationEvidence.evaluationEvidenceDigest,
+    'aef8a7e60d475d1d5c1d7d05746e0b748cb1e7aa32246ec4a2f98efea285ffe0',
+  );
+});
