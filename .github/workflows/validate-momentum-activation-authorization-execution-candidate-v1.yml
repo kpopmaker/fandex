@@ -1,0 +1,71 @@
+name: Validate Momentum activation authorization execution candidate v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-activation-authorization-execution-candidate-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-activation-authorization-execution-candidate-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 62607244ffff012543d95460bc8e3612453dca66...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-activation-authorization-execution-candidate-v1.yml
+          data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
+          lib/product/activation/momentumProductActivationAuthorizationExecutionCandidate.ts
+          lib/server/product/momentumProductActivationAuthorizationExecutionCandidate.ts
+          tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+          tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum authorization execution candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+
+      - name: Momentum authorization execution candidate evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+
+      - name: Momentum owner-attestation evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+
+      - name: Momentum activation approval candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-approval-candidate-v1.test.mts
+
+      - name: Momentum activation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
