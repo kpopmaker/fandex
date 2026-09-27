@@ -5123,6 +5123,33 @@
           "note": "Provider catalog dates NEW WORLD to March 30, 2022."
         }
       ]
+    },
+    {
+      "displayArtist": "OMEGA X",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "post_departure_ipq_supplied_current_roster_resolves_ten_member_identity_while_seven_member_uncapped_lineup_remains_activity_subset",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_ipq_supplied_ten_member_group_description_explicit_junghoon_departure_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "IPQ-supplied UNCAPPED press release",
+          "url": "https://www.einpresswire.com/article/920787896/omega-x-makes-a-comeback-with-their-4th-mini-album-uncapped",
+          "note": "The June 19, 2026 release describes OMEGA X as a current 10-member K-pop group under IPQ and explicitly lists Jaehan, Hwichan, Sebin, Hangyeom, Taedong, Xen, Jehyun, Kevin, Hyuk, and Yechan. The same release identifies the UNCAPPED participating lineup as seven members, so the album lineup is not treated as the canonical member roster."
+        },
+        {
+          "source": "IPQ JUNGHOON departure statement preserved by SportsToday/Daum",
+          "url": "https://v.daum.net/v/20260602084104178",
+          "note": "IPQ states JUNGHOON officially concluded activities as an OMEGA X member effective June 1, 2026 and says the remaining members will continue under the OMEGA X name."
+        },
+        {
+          "source": "Apple Music VAMOS provider catalog",
+          "url": "https://music.apple.com/us/album/1st-mini-album-vamos-ep/1632712469",
+          "note": "Provider catalog dates OMEGA X's first mini album VAMOS to June 30, 2021."
+        }
+      ]
     }
   ]
 }

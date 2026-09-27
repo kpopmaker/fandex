@@ -8318,6 +8318,84 @@
           "url": "https://music.apple.com/us/album/new-world-ep/1743962739"
         }
       ]
+    },
+    {
+      "id": "omegax",
+      "ticker": "OMEGAX",
+      "name": "OMEGA X",
+      "agency": "IPQ",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "debutDate": "2021-06-30",
+      "lifecycleStatus": "active",
+      "members": [
+        "JAEHAN",
+        "HWICHAN",
+        "SEBIN",
+        "HANGYEOM",
+        "TAEDONG",
+        "XEN",
+        "JEHYUN",
+        "KEVIN",
+        "HYUK",
+        "YECHAN"
+      ],
+      "fandomName": "FOR X",
+      "naverNewsQuery": "오메가엑스 OMEGA X 아이피큐 IPQ",
+      "koreanAliases": [
+        "오메가엑스"
+      ],
+      "englishAliases": [
+        "OMEGA X",
+        "OMEGAX"
+      ],
+      "keywords": [
+        "IPQ",
+        "아이피큐",
+        "JAEHAN",
+        "HWICHAN",
+        "SEBIN",
+        "HANGYEOM",
+        "TAEDONG",
+        "XEN",
+        "JEHYUN",
+        "KEVIN",
+        "HYUK",
+        "YECHAN",
+        "JUNGHOON",
+        "정훈",
+        "UNCAPPED",
+        "VAMOS",
+        "FOR X",
+        "NO LIMIT",
+        "OX:N"
+      ],
+      "disambiguationKeywords": [
+        "IPQ",
+        "아이피큐",
+        "오메가엑스"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "US",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "IPQ-supplied OMEGA X UNCAPPED press release",
+          "url": "https://www.einpresswire.com/article/920787896/omega-x-makes-a-comeback-with-their-4th-mini-album-uncapped"
+        },
+        {
+          "source": "IPQ JUNGHOON departure statement preserved by SportsToday/Daum",
+          "url": "https://v.daum.net/v/20260602084104178"
+        },
+        {
+          "source": "Apple Music OMEGA X VAMOS debut catalog",
+          "url": "https://music.apple.com/us/album/1st-mini-album-vamos-ep/1632712469"
+        }
+      ]
     }
   ]
 }

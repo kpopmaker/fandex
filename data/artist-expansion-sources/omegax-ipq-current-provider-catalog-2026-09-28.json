@@ -1,0 +1,103 @@
+{
+  "version": "omegax_ipq_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "omegax-ipq-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "OMEGA X IPQ Current Provider Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.einpresswire.com/article/920787896/omega-x-makes-a-comeback-with-their-4th-mini-album-uncapped"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "OMEGA X",
+      "aliases": [
+        "오메가엑스",
+        "OMEGAX"
+      ],
+      "evidence": [
+        {
+          "label": "IPQ-supplied current 10-member OMEGA X release",
+          "url": "https://www.einpresswire.com/article/920787896/omega-x-makes-a-comeback-with-their-4th-mini-album-uncapped"
+        },
+        {
+          "label": "IPQ JUNGHOON explicit departure statement",
+          "url": "https://v.daum.net/v/20260602084104178"
+        },
+        {
+          "label": "Apple Music VAMOS debut catalog",
+          "url": "https://music.apple.com/us/album/1st-mini-album-vamos-ep/1632712469"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "currentAgencyEvidenceRequired": true,
+    "currentTenMemberRosterRequired": true,
+    "activitySubsetDoesNotChangeCanonicalRoster": true,
+    "sevenMemberAlbumLineupIsPromotionSubset": true,
+    "militaryServiceDoesNotTerminateMembership": true,
+    "individualScheduleDoesNotTerminateMembership": true,
+    "healthNonparticipationDoesNotTerminateMembership": true,
+    "explicitDepartureRequiredForMemberRemoval": true,
+    "priorExplicitDepartureExcludedFromCurrentRoster": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "currentAgencyVerifiedFromIPQSuppliedRelease": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "lifecycleStatus": "active",
+    "agencyStatus": "verified",
+    "agency": "IPQ",
+    "members": [
+      "JAEHAN",
+      "HWICHAN",
+      "SEBIN",
+      "HANGYEOM",
+      "TAEDONG",
+      "XEN",
+      "JEHYUN",
+      "KEVIN",
+      "HYUK",
+      "YECHAN"
+    ],
+    "currentMemberCount": 10,
+    "priorExitedMembers": [
+      {
+        "member": "JUNGHOON",
+        "effectiveDate": "2026-06-01",
+        "resolution": "explicit_member_activity_conclusion_and_team_departure"
+      }
+    ],
+    "currentPromotionSubset": {
+      "project": "UNCAPPED",
+      "releaseDate": "2026-06-19",
+      "members": [
+        "JAEHAN",
+        "HWICHAN",
+        "SEBIN",
+        "XEN",
+        "JEHYUN",
+        "KEVIN",
+        "YECHAN"
+      ],
+      "memberCount": 7,
+      "resolution": "promotion_subset_not_canonical_roster"
+    },
+    "debutDate": "2021-06-30",
+    "debutRelease": "VAMOS",
+    "fandomName": "FOR X"
+  },
+  "provenance": {
+    "snapshotType": "verified_current_ipq_supplied_roster_plus_explicit_departure_snapshot",
+    "verifiedFrom": [
+      "https://www.einpresswire.com/article/920787896/omega-x-makes-a-comeback-with-their-4th-mini-album-uncapped",
+      "https://v.daum.net/v/20260602084104178",
+      "https://music.apple.com/us/album/1st-mini-album-vamos-ep/1632712469"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}
