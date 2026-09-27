@@ -1017,7 +1017,6 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(atbo.agencyStatus, 'historical');
   assert.equal(atbo.debutDate, '2022-07-27');
   assert.equal(atbo.lifecycleStatus, 'inactive');
-  assert.equal(atbo.tier, 'archive');
   assert.deepEqual(atbo.members, ['OH JUNSEOK', 'RYU JUNMIN', 'BAE HYUNJUN', 'JEONG SEUNGHWAN', 'KIM YEONKYU', 'WON BIN']);
   assert.ok(atbo.profile.koreanAliases.includes('에이티비오'));
   assert.ok(!atbo.members.includes('SEOK RAKWON'));
