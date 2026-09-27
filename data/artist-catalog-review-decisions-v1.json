@@ -5081,6 +5081,48 @@
           "note": "Victory Company explicitly states JISEONG withdrew from NTX and ended his exclusive contract on December 11, 2024."
         }
       ]
+    },
+    {
+      "displayArtist": "NINE.i",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_group_statements_resolve_seven_member_identity_after_three_explicit_departures_and_non_disbanding_activity_pause",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_group_direction_and_departure_statements_plus_debut_provider_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "NINE.i official group-direction statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1805366wpp/nine-i-to-pause-group-activities-focus-on-individual-careers-for-time-being",
+          "note": "The December 12, 2025 group statement says NINE.i will focus on individual activities for the time being and explicitly says the group is not disbanding."
+        },
+        {
+          "source": "NINE.i seven-member continuation statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/464803",
+          "note": "The June 13, 2025 official group notice says SEOWON left and NINE.i would continue as seven members; iMBC also reports the group was communicating without a Korean agency."
+        },
+        {
+          "source": "NINE.i JOOHYOUNG departure statement preserved by StarNews",
+          "url": "https://www.starnewskorea.com/music/2025/03/11/2025031119491388539",
+          "note": "The March 11, 2025 official group notice records JOOHYOUNG's departure and continuation as eight members."
+        },
+        {
+          "source": "FirstOne WINNIE departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1640059wpp/former-boys-planet-contestant-winnie-to-leave-nine-i-due-to-injury",
+          "note": "FirstOne's January 28, 2024 statement explicitly ends WINNIE's NINE.i activities and says the group would continue with nine members."
+        },
+        {
+          "source": "FirstOne debut statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/342516",
+          "note": "FirstOne's debut statement identifies the original ten members and the March 30, 2022 NEW WORLD debut."
+        },
+        {
+          "source": "Apple Music NEW WORLD provider catalog",
+          "url": "https://music.apple.com/us/album/new-world-ep/1743962739",
+          "note": "Provider catalog dates NEW WORLD to March 30, 2022."
+        }
+      ]
     }
   ]
 }

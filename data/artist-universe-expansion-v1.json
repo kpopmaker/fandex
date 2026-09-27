@@ -8232,6 +8232,92 @@
           "url": "https://www.koreaboo.com/news/jiseong-tan-part-ways-ntx-differences-victory-company/"
         }
       ]
+    },
+    {
+      "id": "ninei",
+      "ticker": "NINEI",
+      "name": "NINE.i",
+      "agency": "",
+      "agencyStatus": "unresolved",
+      "entityType": "group",
+      "debutDate": "2022-03-30",
+      "lifecycleStatus": "active",
+      "members": [
+        "JEWON",
+        "EDEN",
+        "MINJUN",
+        "VAHN",
+        "VARI",
+        "TAEHUN",
+        "JIHO"
+      ],
+      "fandomName": "i.ENIN",
+      "naverNewsQuery": "나인아이 NINE.i",
+      "koreanAliases": [
+        "나인아이"
+      ],
+      "englishAliases": [
+        "NINE.i",
+        "NINEI",
+        "NINE I"
+      ],
+      "keywords": [
+        "JEWON",
+        "EDEN",
+        "MINJUN",
+        "VAHN",
+        "VARI",
+        "TAEHUN",
+        "JIHO",
+        "WINNIE",
+        "위니",
+        "JOOHYOUNG",
+        "주형",
+        "SEOWON",
+        "서원",
+        "NEW WORLD",
+        "Parallel Universe",
+        "i.ENIN",
+        "group activities paused",
+        "not disbanding"
+      ],
+      "disambiguationKeywords": [
+        "나인아이",
+        "NINE.i",
+        "NEW WORLD"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "NINE.i official group-direction statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1805366wpp/nine-i-to-pause-group-activities-focus-on-individual-careers-for-time-being"
+        },
+        {
+          "source": "NINE.i seven-member continuation statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/464803"
+        },
+        {
+          "source": "NINE.i JOOHYOUNG departure statement preserved by StarNews",
+          "url": "https://www.starnewskorea.com/music/2025/03/11/2025031119491388539"
+        },
+        {
+          "source": "FirstOne WINNIE departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1640059wpp/former-boys-planet-contestant-winnie-to-leave-nine-i-due-to-injury"
+        },
+        {
+          "source": "FirstOne debut statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/342516"
+        },
+        {
+          "source": "Apple Music NEW WORLD provider catalog",
+          "url": "https://music.apple.com/us/album/new-world-ep/1743962739"
+        }
+      ]
     }
   ]
 }

@@ -1053,6 +1053,19 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(!ntx.members.includes('GIHYUN'));
   assert.ok(!ntx.members.includes('JISEONG'));
 
+  const ninei = getArtistV4ById('ninei');
+  assert.ok(ninei);
+  assert.equal(ninei.entityType, 'group');
+  assert.equal(ninei.agency, '');
+  assert.equal(ninei.agencyStatus, 'unresolved');
+  assert.equal(ninei.debutDate, '2022-03-30');
+  assert.equal(ninei.lifecycleStatus, 'active');
+  assert.deepEqual(ninei.members, ['JEWON', 'EDEN', 'MINJUN', 'VAHN', 'VARI', 'TAEHUN', 'JIHO']);
+  assert.ok(ninei.profile.koreanAliases.includes('나인아이'));
+  assert.ok(!ninei.members.includes('WINNIE'));
+  assert.ok(!ninei.members.includes('JOOHYOUNG'));
+  assert.ok(!ninei.members.includes('SEOWON'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

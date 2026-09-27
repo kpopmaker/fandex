@@ -1,0 +1,113 @@
+{
+  "version": "ninei_official_pause_identity_catalog_adapter_v1",
+  "source": {
+    "id": "ninei-official-pause-identity-catalog",
+    "type": "provider_catalog",
+    "name": "NINE.i Official Pause Identity Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1805366wpp/nine-i-to-pause-group-activities-focus-on-individual-careers-for-time-being"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "NINE.i",
+      "aliases": [
+        "나인아이",
+        "NINEI"
+      ],
+      "evidence": [
+        {
+          "label": "NINE.i non-disbanding group-activity pause statement",
+          "url": "https://www.soompi.com/article/1805366wpp/nine-i-to-pause-group-activities-focus-on-individual-careers-for-time-being"
+        },
+        {
+          "label": "NINE.i seven-member continuation / agency-unresolved evidence",
+          "url": "https://enews.imbc.com/News/ViewAmp/464803"
+        },
+        {
+          "label": "NINE.i JOOHYOUNG departure statement",
+          "url": "https://www.starnewskorea.com/music/2025/03/11/2025031119491388539"
+        },
+        {
+          "label": "FirstOne WINNIE departure statement",
+          "url": "https://www.soompi.com/article/1640059wpp/former-boys-planet-contestant-winnie-to-leave-nine-i-due-to-injury"
+        },
+        {
+          "label": "FirstOne NINE.i debut statement",
+          "url": "https://enews.imbc.com/News/RetrieveNewsInfo/342516"
+        },
+        {
+          "label": "Apple Music NEW WORLD provider catalog",
+          "url": "https://music.apple.com/us/album/new-world-ep/1743962739"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialGroupDirectionEvidenceRequired": true,
+    "explicitNonDisbandingStatementRequired": true,
+    "groupActivityPauseDoesNotEqualTermination": true,
+    "pausedGroupRetainsActiveLifecycle": true,
+    "exactCurrentMemberRosterRequired": true,
+    "explicitFormerMemberDepartureEvidenceRequired": true,
+    "currentAgencyAbsenceMustRemainUnresolved": true,
+    "blankAgencyRequiredWhenAgencyStatusUnresolved": true,
+    "individualActivitiesDoNotTerminateGroupIdentity": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentIdentity": {
+    "lifecycleStatus": "active",
+    "groupActivityPaused": true,
+    "groupDisbanded": false,
+    "agency": "",
+    "agencyStatus": "unresolved",
+    "members": [
+      "JEWON",
+      "EDEN",
+      "MINJUN",
+      "VAHN",
+      "VARI",
+      "TAEHUN",
+      "JIHO"
+    ],
+    "currentMemberCount": 7,
+    "priorExitedMembers": [
+      {
+        "member": "WINNIE",
+        "effectiveDate": "2024-01-28",
+        "resolution": "explicit_team_departure_after_injury_hiatus"
+      },
+      {
+        "member": "JOOHYOUNG",
+        "effectiveDate": "2025-03-11",
+        "resolution": "explicit_team_departure_for_new_challenge"
+      },
+      {
+        "member": "SEOWON",
+        "effectiveDate": "2025-06-13",
+        "resolution": "explicit_team_departure_for_personal_reasons"
+      }
+    ],
+    "groupPauseEffectiveDate": "2025-12-12",
+    "groupPauseResolution": "individual_activity_focus_without_disbandment",
+    "debutDate": "2022-03-30",
+    "debutRelease": "NEW WORLD",
+    "fandomName": "i.ENIN"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_group_direction_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1805366wpp/nine-i-to-pause-group-activities-focus-on-individual-careers-for-time-being",
+      "https://enews.imbc.com/News/ViewAmp/464803",
+      "https://www.starnewskorea.com/music/2025/03/11/2025031119491388539",
+      "https://www.soompi.com/article/1640059wpp/former-boys-planet-contestant-winnie-to-leave-nine-i-due-to-injury",
+      "https://enews.imbc.com/News/RetrieveNewsInfo/342516",
+      "https://music.apple.com/us/album/new-world-ep/1743962739"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}
