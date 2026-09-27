@@ -7953,6 +7953,69 @@
           "url": "https://ouient.com/48"
         }
       ]
+    },
+    {
+      "id": "atbo",
+      "ticker": "ATBO",
+      "name": "ATBO",
+      "agency": "IST Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2022-07-27",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "OH JUNSEOK",
+        "RYU JUNMIN",
+        "BAE HYUNJUN",
+        "JEONG SEUNGHWAN",
+        "KIM YEONKYU",
+        "WON BIN"
+      ],
+      "naverNewsQuery": "에이티비오 ATBO IST엔터테인먼트",
+      "koreanAliases": [
+        "에이티비오"
+      ],
+      "englishAliases": [
+        "ATBO"
+      ],
+      "keywords": [
+        "IST Entertainment",
+        "IST엔터테인먼트",
+        "OH JUNSEOK",
+        "RYU JUNMIN",
+        "BAE HYUNJUN",
+        "JEONG SEUNGHWAN",
+        "KIM YEONKYU",
+        "WON BIN",
+        "SEOK RAKWON",
+        "석락원",
+        "The Beginning : 開花",
+        "Monochrome (Color)"
+      ],
+      "disambiguationKeywords": [
+        "IST Entertainment",
+        "IST엔터테인먼트",
+        "에이티비오"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "IST Entertainment ATBO terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1806092wpp/atbo-announces-disbandment"
+        },
+        {
+          "source": "IST Entertainment SEOK RAKWON departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1659346wpp/atbo-announces-seok-rakwons-departure-from-group?mobile-app=true&theme=false"
+        },
+        {
+          "source": "ATBO official Weverse debut showcase",
+          "url": "https://weverse.io/atbo/live/1-101510922"
+        }
+      ]
     }
   ]
 }

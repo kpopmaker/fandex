@@ -4953,6 +4953,33 @@
           "note": "Official member profile records WEi's first mini album IDENTITY : First Sight on 2020-10-05 and the 2025-10-29 WEi 8th mini album Wonderland."
         }
       ]
+    },
+    {
+      "displayArtist": "ATBO",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "terminal_ist_statement_resolves_six_member_end_state_after_explicit_seok_rakwon_departure",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_ist_terminal_statement_explicit_2024_departure_and_official_weverse_debut_evidence",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "IST Entertainment terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1806092wpp/atbo-announces-disbandment",
+          "note": "The preserved IST statement ends the agency relationship and names the six terminal ATBO members: OH JUNSEOK, RYU JUNMIN, BAE HYUNJUN, JEONG SEUNGHWAN, KIM YEONKYU, and WON BIN. It describes the ATBO journey as ending and says the members will continue under their own names."
+        },
+        {
+          "source": "IST Entertainment SEOK RAKWON departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1659346wpp/atbo-announces-seok-rakwons-departure-from-group?mobile-app=true&theme=false",
+          "note": "The preserved IST statement explicitly says SEOK RAKWON departed ATBO on 2024-05-06 and that ATBO would continue with six members."
+        },
+        {
+          "source": "ATBO official Weverse debut showcase",
+          "url": "https://weverse.io/atbo/live/1-101510922",
+          "note": "The official ATBO Weverse debut showcase is dated 2022-07-27 and identifies the debut album The Beginning : 開花."
+        }
+      ]
     }
   ]
 }

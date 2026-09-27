@@ -1010,6 +1010,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(wei.profile.koreanAliases.includes('위아이'));
   assert.ok(wei.profile.englishAliases.includes('WEi'));
 
+  const atbo = getArtistV4ById('atbo');
+  assert.ok(atbo);
+  assert.equal(atbo.entityType, 'group');
+  assert.equal(atbo.agency, 'IST Entertainment');
+  assert.equal(atbo.agencyStatus, 'historical');
+  assert.equal(atbo.debutDate, '2022-07-27');
+  assert.equal(atbo.lifecycleStatus, 'inactive');
+  assert.equal(atbo.tier, 'archive');
+  assert.deepEqual(atbo.members, ['OH JUNSEOK', 'RYU JUNMIN', 'BAE HYUNJUN', 'JEONG SEUNGHWAN', 'KIM YEONKYU', 'WON BIN']);
+  assert.ok(atbo.profile.koreanAliases.includes('에이티비오'));
+  assert.ok(!atbo.members.includes('SEOK RAKWON'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

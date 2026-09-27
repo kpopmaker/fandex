@@ -1,0 +1,87 @@
+{
+  "version": "atbo_official_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "atbo-official-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "ATBO Official Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://www.soompi.com/article/1806092wpp/atbo-announces-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ATBO",
+      "aliases": [
+        "에이티비오"
+      ],
+      "evidence": [
+        {
+          "label": "IST terminal ATBO statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1806092wpp/atbo-announces-disbandment"
+        },
+        {
+          "label": "IST SEOK RAKWON departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1659346wpp/atbo-announces-seok-rakwons-departure-from-group?mobile-app=true&theme=false"
+        },
+        {
+          "label": "ATBO official Weverse debut showcase",
+          "url": "https://weverse.io/atbo/live/1-101510922"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "terminalManagementEvidenceRequired": true,
+    "explicitGroupJourneyEndEvidenceRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "priorExplicitDepartureExcludedFromTerminalRoster": true,
+    "militaryServiceDoesNotTerminateMembership": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "managementTerminationAloneDoesNotAssertLegalDisbandment": true,
+    "explicitJourneyEndSupportsInactiveLifecycle": true,
+    "postTerminationIndividualActivityDoesNotReactivateGroup": true,
+    "officialDebutDateEvidenceRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "effectiveDate": "2025-12-17",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "IST Entertainment",
+    "terminalMembers": [
+      "OH JUNSEOK",
+      "RYU JUNMIN",
+      "BAE HYUNJUN",
+      "JEONG SEUNGHWAN",
+      "KIM YEONKYU",
+      "WON BIN"
+    ],
+    "terminalMemberCount": 6,
+    "priorExitedMembers": [
+      {
+        "member": "SEOK RAKWON",
+        "effectiveDate": "2024-05-06",
+        "resolution": "explicit_team_departure_after_health_hiatus"
+      }
+    ],
+    "militaryServiceAtTerminal": [
+      "JEONG SEUNGHWAN"
+    ],
+    "debutDate": "2022-07-27"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_lifecycle_snapshot",
+    "legalDisbandmentAsserted": false,
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1806092wpp/atbo-announces-disbandment",
+      "https://www.soompi.com/article/1659346wpp/atbo-announces-seok-rakwons-departure-from-group?mobile-app=true&theme=false",
+      "https://weverse.io/atbo/live/1-101510922"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}
