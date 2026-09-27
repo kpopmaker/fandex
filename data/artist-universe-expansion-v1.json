@@ -7472,6 +7472,73 @@
           "url": "https://trendz.kr/contents/6475eeb5f5f8936722ef890e"
         }
       ]
+    },
+    {
+      "id": "tiot",
+      "ticker": "TIOT",
+      "name": "TIOT",
+      "agency": "Redstart ENM",
+      "entityType": "group",
+      "debutDate": "2024-04-22",
+      "lifecycleStatus": "active",
+      "members": [
+        "KIM MIN SEOUNG",
+        "KUM JUN HYEON",
+        "HONG KEON HEE",
+        "CHOI WOO JIN",
+        "SHIN YE CHAN"
+      ],
+      "fandomName": "LOTI",
+      "naverNewsQuery": "티아이오티 TIOT 레드스타트이엔엠",
+      "koreanAliases": [
+        "티아이오티"
+      ],
+      "englishAliases": [
+        "TIOT"
+      ],
+      "keywords": [
+        "Redstart ENM",
+        "레드스타트이엔엠",
+        "KIM MIN SEOUNG",
+        "KUM JUN HYEON",
+        "HONG KEON HEE",
+        "CHOI WOO JIN",
+        "SHIN YE CHAN",
+        "LOTI",
+        "Kick-START"
+      ],
+      "disambiguationKeywords": [
+        "Redstart ENM",
+        "레드스타트이엔엠",
+        "티아이오티"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "TIOT Weverse Highlight",
+          "url": "https://weverse.io/tiot/highlight?hl=ko"
+        },
+        {
+          "source": "Redstart ENM / TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/21020?hl=ko"
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/36378?hl=ko"
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/fanpost/4-170239066?hl=ko"
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/20696"
+        }
+      ]
     }
   ]
 }

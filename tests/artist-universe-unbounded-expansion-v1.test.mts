@@ -930,6 +930,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(trendz.fandomName, 'FRIENDZ');
   assert.ok(trendz.profile.koreanAliases.includes('트렌드지'));
 
+  const tiot = getArtistV4ById('tiot');
+  assert.ok(tiot);
+  assert.equal(tiot.entityType, 'group');
+  assert.equal(tiot.agency, 'Redstart ENM');
+  assert.equal(tiot.debutDate, '2024-04-22');
+  assert.equal(tiot.lifecycleStatus, 'active');
+  assert.deepEqual(tiot.members, ['KIM MIN SEOUNG', 'KUM JUN HYEON', 'HONG KEON HEE', 'CHOI WOO JIN', 'SHIN YE CHAN']);
+  assert.equal(tiot.fandomName, 'LOTI');
+  assert.ok(tiot.profile.koreanAliases.includes('티아이오티'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

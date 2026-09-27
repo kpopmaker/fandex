@@ -4709,6 +4709,43 @@
           "note": "Official member content anchors the debut date to 2022-01-05."
         }
       ]
+    },
+    {
+      "displayArtist": "TIOT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_official_weverse_member_section_resolves_five_member_identity_with_redstart_management",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_korean_debut_identity_current_redstart_management_current_five_member_profile_and_2026_group_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TIOT Weverse Highlight",
+          "url": "https://weverse.io/tiot/highlight?hl=ko",
+          "note": "Current official member section lists KIM MIN SEOUNG, KUM JUN HYEON, HONG KEON HEE, CHOI WOO JIN, and SHIN YE CHAN as TIOT artists."
+        },
+        {
+          "source": "Redstart ENM / TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/21020?hl=ko",
+          "note": "Official TIOT community rules are issued by Redstart ENM and refer to TIOT members under the agency-managed official community."
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/36378?hl=ko",
+          "note": "Official 2026 Hong Kong fan meeting notice confirms active group lifecycle and explicitly offers a 1:5 group polaroid with all members."
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/fanpost/4-170239066?hl=ko",
+          "note": "Official community introduction records debut date 2024-04-22 and the five-member group identity."
+        },
+        {
+          "source": "TIOT Weverse",
+          "url": "https://weverse.io/tiot/notice/20696",
+          "note": "Official community opening event identifies LOTI as the global official fan community."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,81 @@
+{
+  "version": "tiot_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "tiot-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "TIOT Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://weverse.io/tiot/highlight?hl=ko"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TIOT",
+      "aliases": [
+        "티아이오티"
+      ],
+      "evidence": [
+        {
+          "label": "TIOT current official five-member Weverse profile",
+          "url": "https://weverse.io/tiot/highlight?hl=ko"
+        },
+        {
+          "label": "Redstart ENM official TIOT community management rules",
+          "url": "https://weverse.io/tiot/notice/21020?hl=ko"
+        },
+        {
+          "label": "TIOT official 2026 Hong Kong fan meeting notice",
+          "url": "https://weverse.io/tiot/notice/36378?hl=ko"
+        },
+        {
+          "label": "TIOT official debut and five-member introduction",
+          "url": "https://weverse.io/tiot/fanpost/4-170239066?hl=ko"
+        },
+        {
+          "label": "TIOT official LOTI community event",
+          "url": "https://weverse.io/tiot/notice/20696"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "currentActivityEvidenceRequired": true,
+    "currentOfficialMemberSectionControlsRoster": true,
+    "scheduleParticipationDoesNotDefineMembership": true,
+    "explicitTerminalDepartureEvidenceRequiredForMemberRemoval": true,
+    "officialDebutDateEvidenceRequired": true,
+    "fandomEvidenceRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "agency": "Redstart ENM",
+    "members": [
+      "KIM MIN SEOUNG",
+      "KUM JUN HYEON",
+      "HONG KEON HEE",
+      "CHOI WOO JIN",
+      "SHIN YE CHAN"
+    ],
+    "currentMemberCount": 5,
+    "debutDate": "2024-04-22",
+    "fandomName": "LOTI"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/tiot/highlight?hl=ko",
+      "https://weverse.io/tiot/notice/21020?hl=ko",
+      "https://weverse.io/tiot/notice/36378?hl=ko",
+      "https://weverse.io/tiot/fanpost/4-170239066?hl=ko",
+      "https://weverse.io/tiot/notice/20696"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}
