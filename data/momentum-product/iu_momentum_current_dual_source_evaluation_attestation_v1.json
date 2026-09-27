@@ -1,0 +1,114 @@
+{
+  "contractVersion": "momentum-current-dual-source-evaluation-attestation-v1",
+  "evaluatedAgainstMain": "8c766ce1c4706941cf16472b0a861dcdc4e6a497",
+  "canonicalArtistId": "iu",
+  "historicalCarrier": {
+    "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable"
+  },
+  "lastfm": {
+    "sourcePath": "data/lastfm-cloud/lastfm_artist_interest_history_v1.csv",
+    "sourceGitBlobSha": "6eb29eac4776d8655ea45076ff2235a7dd5852c7",
+    "snapshotDate": "2026-09-27",
+    "historyRowCount": 490,
+    "snapshotDateCount": 49,
+    "deltaReadyCount": 10,
+    "needsReviewCount": 0,
+    "componentEndAt": "2026-09-27T02:10:05.000Z",
+    "replayPointCount": 43,
+    "nativeValue": 20.78,
+    "previousNativeValue": 20.27,
+    "nativeDelta": 0.51,
+    "direction": "up",
+    "latestDirectionalRunTransitionCount": 3,
+    "latestDirectionalRunDurationHours": 72,
+    "historicalStrictExceedanceShare": 100,
+    "previewScoreAcceptedAsProductTruth": false
+  },
+  "naver": {
+    "runtimeDeploymentId": "dpl_65pZp1xsKQRRmY2xwqXDDKGNFDjx",
+    "runtimeDeploymentCommit": "8c766ce1c4706941cf16472b0a861dcdc4e6a497",
+    "schedulerRouteObservedAt": "2026-09-27T11:27:01.000Z",
+    "latestOfficialThroughSlotStart": "2026-09-27T11:00:00.000Z",
+    "latestWindowStartSlotStart": "2026-09-27T04:00:00.000Z",
+    "latestWindowEndSlotStart": "2026-09-27T11:00:00.000Z",
+    "latestWindowJobCount": 8,
+    "latestWindowCanonicalObservationCountPerJob": 100,
+    "latestWindowFirstSeenObservationCount": 0,
+    "latestCurrentActivityRate": 0,
+    "continuityVerification": {
+      "baselineSlotStart": "2026-09-26T03:00:00.000Z",
+      "throughSlotStart": "2026-09-27T11:00:00.000Z",
+      "verifiedJobCount": 33,
+      "allCanonicalObservationSetsIdentical": true,
+      "canonicalObservationCountPerJob": 100
+    },
+    "v140": {
+      "state": "flat-observed",
+      "latestDirection": "flat",
+      "latestActivityRateDelta": 0,
+      "selectedForV141ThroughSlotStart": "2026-09-26T19:00:00.000Z",
+      "selectedCurrentActivityRate": 0,
+      "selectedPreviousAnchorThroughSlotStart": "2026-09-26T11:00:00.000Z",
+      "selectedPreviousActivityRate": 0,
+      "selectedNativeDelta": 0,
+      "selectedDirection": "flat"
+    }
+  },
+  "v141": {
+    "state": "aligned-normalized-research",
+    "alignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+    "alignmentPolicy": "latest-common-component-end-cutoff-without-lookahead",
+    "futureEvidenceUsed": false,
+    "audienceConsumptionDirection": "up",
+    "mediaAttentionDirection": "flat",
+    "mediaAttentionFreshnessLagHours": 7.168056,
+    "mediaAttentionFreshnessWithinNativeCadence": true,
+    "crossFamilyRawAveragingApplied": false,
+    "crossFamilyNormalizedAveragingApplied": false,
+    "componentWeights": null,
+    "compositeScore": null
+  },
+  "v142": {
+    "state": "cross-family-direction-conflicted",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "qualitativeDirectionEvidenceUsable": false,
+    "lowestHistoricalStrictExceedanceShare": 0,
+    "highestHistoricalStrictExceedanceShare": 100,
+    "absoluteHistoricalPercentileSpread": 100,
+    "productMomentumScore": null
+  },
+  "v143": {
+    "state": "categorical-research-output-only",
+    "outputForm": "structured-categorical-evidence",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "qualitativeDirectionEvidenceUsable": false,
+    "productMomentumScore": null,
+    "numericEligibility": "not-eligible"
+  },
+  "comparison": {
+    "categoricalStateChanged": false,
+    "alignmentCutoffAdvanced": true,
+    "classification": "attested-current-no-op",
+    "newHistoryObservationRequired": false,
+    "currentCarrierProduced": false,
+    "currentNoOpEvaluationAttested": true,
+    "freshnessSatisfied": true
+  },
+  "boundary": {
+    "databaseWrites": 0,
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "registryMutations": 0,
+    "productActivations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  },
+  "attestationDigest": "3a0a567c78875f7fabc7b2b0a56dd3540978a609b156a2a117afaeeb07171f04"
+}
