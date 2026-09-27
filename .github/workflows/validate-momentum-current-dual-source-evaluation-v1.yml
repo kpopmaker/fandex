@@ -39,10 +39,35 @@ jobs:
 
       - run: npm ci
 
-      - name: Momentum current dual-source evaluation readiness
+      - name: Readiness state regression
         env:
           NODE_OPTIONS: --conditions=react-server
-        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+        run: npx tsx --test --test-name-pattern="current IU live-shadow readiness" tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Freshness policy regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test --test-name-pattern="freshness policy" tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Current source audit regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test --test-name-pattern="current source audit" tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Dual-source attestation regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test --test-name-pattern="current dual-source attestation" tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: No-op mismatch regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test --test-name-pattern="mismatched no-op attestation" tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Runtime carrier mismatch regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test --test-name-pattern="runtime carrier and currentness audit mismatch" tests/momentum-live-shadow-product-readiness-v1.test.mts
 
       - name: Momentum post-execution readiness regression
         run: npx tsx --test tests/momentum-post-execution-product-readiness-v1.test.mts
