@@ -5034,6 +5034,53 @@
           "note": "Contemporaneous debut report identifies LUMINOUS as the four-member group Suil, Steven, Youngbin, and Woobin and states that YOUTH was released on 2021-09-09."
         }
       ]
+    },
+    {
+      "displayArtist": "NTX",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_victory_activity_plus_eight_member_provider_roster_explicit_departures_and_jaemin_to_xiha_rename_resolve_current_ntx_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_victory_tour_and_management_notices_provider_roster_debut_catalog_and_explicit_historical_departures",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Victory Company 2026 NTX Asia Tour official notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/6a9ffd5d81a8b9027b94b1a0",
+          "note": "Victory Company announced the 2026 NTX Asia Tour with September-December 2026 dates and a 2027 Europe tour continuation, supporting current active group lifecycle and current management."
+        },
+        {
+          "source": "Victory Company NTX current leadership notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/68f6244409905c7c4be7ca60",
+          "note": "Victory Company identifies Hyeongjin and Yunhyeok as NTX members and states future activities will proceed under Hyeongjin's sole leadership."
+        },
+        {
+          "source": "YES24 current NTX artist profile",
+          "url": "https://www.yes24.com/product/author/337539",
+          "note": "Current provider profile lists the eight-member roster as Hyeongjin, Yunhyeok, Xiha, Changhun, Hojun, Rawhyun, Eunho, and Seungwon."
+        },
+        {
+          "source": "NTX official Mnet Plus index",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/tag/NTX",
+          "note": "Current official community exposes XIHA content and preserves the JAEMIN name-change notice, resolving JAEMIN to XIHA as rename continuity rather than a new identity."
+        },
+        {
+          "source": "Apple Music licensed debut catalog",
+          "url": "https://music.apple.com/us/album/full-of-lovescapes/1824137170",
+          "note": "FULL OF LOVESCAPES is dated March 30, 2021 and credited to Victory Company."
+        },
+        {
+          "source": "Victory Company GIHYUN departure statement preserved by iMBC",
+          "url": "https://enews.imbc.com/M/Detail/364454",
+          "note": "Victory Company explicitly ended GIHYUN's NTX membership and exclusive contract in November 2022."
+        },
+        {
+          "source": "Victory Company JISEONG departure statement preserved by Koreaboo",
+          "url": "https://www.koreaboo.com/news/jiseong-tan-part-ways-ntx-differences-victory-company/",
+          "note": "Victory Company explicitly states JISEONG withdrew from NTX and ended his exclusive contract on December 11, 2024."
+        }
+      ]
     }
   ]
 }

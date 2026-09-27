@@ -8141,6 +8141,97 @@
           "url": "https://www.koreatimes.co.kr/entertainment/k-pop/20210909/k-pop-boy-group-luminous-debuts-with-first-album-youth"
         }
       ]
+    },
+    {
+      "id": "ntx",
+      "ticker": "NTX",
+      "name": "NTX",
+      "agency": "Victory Company",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "debutDate": "2021-03-30",
+      "lifecycleStatus": "active",
+      "members": [
+        "HYEONGJIN",
+        "YUNHYEOK",
+        "XIHA",
+        "CHANGHUN",
+        "HOJUN",
+        "RAWHYUN",
+        "EUNHO",
+        "SEUNGWON"
+      ],
+      "fandomName": "NTFUL",
+      "naverNewsQuery": "엔티엑스 NTX 빅토리컴퍼니",
+      "koreanAliases": [
+        "엔티엑스"
+      ],
+      "englishAliases": [
+        "NTX"
+      ],
+      "keywords": [
+        "Victory Company",
+        "빅토리컴퍼니",
+        "HYEONGJIN",
+        "YUNHYEOK",
+        "XIHA",
+        "CHANGHUN",
+        "HOJUN",
+        "RAWHYUN",
+        "EUNHO",
+        "SEUNGWON",
+        "JAEMIN",
+        "재민",
+        "시하",
+        "GIHYUN",
+        "기현",
+        "JISEONG",
+        "지성",
+        "FULL OF LOVESCAPES",
+        "KISS THE WORLD",
+        "NTFUL"
+      ],
+      "disambiguationKeywords": [
+        "Victory Company",
+        "빅토리컴퍼니",
+        "엔티엑스"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Victory Company 2026 NTX Asia Tour official notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/6a9ffd5d81a8b9027b94b1a0"
+        },
+        {
+          "source": "Victory Company NTX current leadership notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/68f6244409905c7c4be7ca60"
+        },
+        {
+          "source": "NTX current Mnet Plus official community index",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/tag/NTX"
+        },
+        {
+          "source": "YES24 current NTX eight-member artist profile",
+          "url": "https://www.yes24.com/product/author/337539"
+        },
+        {
+          "source": "Apple Music FULL OF LOVESCAPES licensed provider catalog",
+          "url": "https://music.apple.com/us/album/full-of-lovescapes/1824137170"
+        },
+        {
+          "source": "Victory Company GIHYUN departure statement preserved by iMBC",
+          "url": "https://enews.imbc.com/M/Detail/364454"
+        },
+        {
+          "source": "Victory Company JISEONG departure statement preserved by Koreaboo",
+          "url": "https://www.koreaboo.com/news/jiseong-tan-part-ways-ntx-differences-victory-company/"
+        }
+      ]
     }
   ]
 }

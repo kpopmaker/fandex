@@ -1,0 +1,119 @@
+{
+  "version": "ntx_victory_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "ntx-victory-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "NTX Victory Current Provider Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/6a9ffd5d81a8b9027b94b1a0"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "NTX",
+      "aliases": [
+        "엔티엑스"
+      ],
+      "evidence": [
+        {
+          "label": "Victory Company 2026 NTX Asia Tour official notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/6a9ffd5d81a8b9027b94b1a0"
+        },
+        {
+          "label": "Victory Company current NTX leadership notice",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/contents/68f6244409905c7c4be7ca60"
+        },
+        {
+          "label": "NTX current official community index and JAEMIN to XIHA continuity",
+          "url": "https://artist.mnetplus.world/main/stg/ntx-official/tag/NTX"
+        },
+        {
+          "label": "YES24 current eight-member NTX artist profile",
+          "url": "https://www.yes24.com/product/author/337539"
+        },
+        {
+          "label": "Apple Music FULL OF LOVESCAPES licensed provider catalog",
+          "url": "https://music.apple.com/us/album/full-of-lovescapes/1824137170"
+        },
+        {
+          "label": "Victory Company GIHYUN departure statement preserved by iMBC",
+          "url": "https://enews.imbc.com/M/Detail/364454"
+        },
+        {
+          "label": "Victory Company JISEONG departure statement preserved by Koreaboo",
+          "url": "https://www.koreaboo.com/news/jiseong-tan-part-ways-ntx-differences-victory-company/"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialCurrentActivityRequired": true,
+    "currentAgencyManagementEvidenceRequired": true,
+    "exactCurrentMemberRosterRequired": true,
+    "providerRosterMustBeCrossCheckedWithOfficialActivity": true,
+    "explicitFormerMemberDepartureEvidenceRequired": true,
+    "renameContinuityRequired": true,
+    "renameDoesNotCreateNewMember": true,
+    "temporaryNonparticipationDoesNotEqualDeparture": true,
+    "historicalProjectGroupActivityDoesNotRemoveMembershipWithoutDeparture": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "secondaryProviderCannotOverrideOfficialLifecycle": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "currentRoster": {
+    "lifecycleStatus": "active",
+    "agencyStatus": "verified",
+    "agency": "Victory Company",
+    "members": [
+      "HYEONGJIN",
+      "YUNHYEOK",
+      "XIHA",
+      "CHANGHUN",
+      "HOJUN",
+      "RAWHYUN",
+      "EUNHO",
+      "SEUNGWON"
+    ],
+    "currentMemberCount": 8,
+    "renameContinuity": [
+      {
+        "from": "JAEMIN",
+        "to": "XIHA",
+        "resolution": "same_member_stage_name_change"
+      }
+    ],
+    "priorExitedMembers": [
+      {
+        "member": "GIHYUN",
+        "effectiveDate": "2022-11-06",
+        "resolution": "explicit_team_and_exclusive_contract_departure"
+      },
+      {
+        "member": "JISEONG",
+        "effectiveDate": "2024-12-11",
+        "resolution": "explicit_team_withdrawal_and_exclusive_contract_termination"
+      }
+    ],
+    "debutDate": "2021-03-30",
+    "debutRelease": "FULL OF LOVESCAPES",
+    "currentOfficialActivity": "2026 NTX ASIA TOUR",
+    "currentOfficialActivityAnnouncedAt": "2026-09-08",
+    "fandomName": "NTFUL"
+  },
+  "provenance": {
+    "snapshotType": "verified_current_official_activity_plus_provider_roster_snapshot",
+    "verifiedFrom": [
+      "https://artist.mnetplus.world/main/stg/ntx-official/contents/6a9ffd5d81a8b9027b94b1a0",
+      "https://artist.mnetplus.world/main/stg/ntx-official/contents/68f6244409905c7c4be7ca60",
+      "https://artist.mnetplus.world/main/stg/ntx-official/tag/NTX",
+      "https://www.yes24.com/product/author/337539",
+      "https://music.apple.com/us/album/full-of-lovescapes/1824137170",
+      "https://enews.imbc.com/M/Detail/364454",
+      "https://www.koreaboo.com/news/jiseong-tan-part-ways-ntx-differences-victory-company/"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}
