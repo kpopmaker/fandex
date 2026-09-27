@@ -32,8 +32,8 @@ assert snapshot["identityContinuity"]["renamedMember"]["formerStageName"] == "JA
 assert snapshot["identityContinuity"]["renamedMember"]["currentName"] == "KIM JUN MIN"
 assert module.parse_live_pages(profile + " INHONG", departure, rename, activity, debut) == []
 assert module.parse_live_pages(profile + " JAYDER", departure, rename, activity, debut) == []
-assert module.parse_live_pages(profile.replace("WONJUN", ""), departure, rename, activity, debut) == []
+assert module.parse_live_pages(profile.replace("WONJUN", "").replace("원준", ""), departure, rename, activity, debut) == []
 assert module.parse_live_pages(profile, departure.replace("7-member", "8-member"), rename, activity, debut) == []
-assert module.parse_live_pages(profile, departure, rename.replace("KIMJUNMIN", "OTHER"), activity, debut) == []
+assert module.parse_live_pages(profile, departure, rename.replace("KIMJUNMIN", "OTHER").replace("김준민", "다른이름"), activity, debut) == []
 assert module.parse_live_pages(profile, departure, rename, activity.replace("2026", "2025"), debut) == []
 print("WHIB official current provider catalog adapter regression: PASS")
