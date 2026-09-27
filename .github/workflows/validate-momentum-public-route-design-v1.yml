@@ -28,6 +28,7 @@ jobs:
         run: |
           git diff --name-only f9163ceba5f60291bac28fa64e4a701e2ac44512...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-current-dual-source-evaluation-v1.yml
           .github/workflows/validate-momentum-public-route-design-v1.yml
           lib/product/readiness/momentumPublicRouteDesignCandidate.ts
           lib/server/product/momentumPublicRouteDesignCandidate.ts
