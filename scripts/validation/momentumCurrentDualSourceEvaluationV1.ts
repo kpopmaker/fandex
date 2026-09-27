@@ -15,6 +15,17 @@ import {
   evaluateFandexMomentumOutputFormEligibilityResearch,
 } from '../../lib/intelligence/fandexMomentumOutputFormEligibilityResearch';
 import {
+  evaluateFandexMomentumCarrierChangeResearch,
+} from '../../lib/intelligence/fandexMomentumCarrierChangeResearch';
+import type {
+  FandexMomentumCategoricalCarrierStoredRecord,
+} from '../../lib/intelligence/fandexMomentumCategoricalCarrierResearch';
+import {
+  buildFandexMomentumUnifiedHistoryRecord,
+  parseFandexMomentumUnifiedHistoryJsonl,
+} from '../../lib/intelligence/fandexMomentumUnifiedHistoryResearch';
+import { sha256Canonical } from '../../lib/shared/canonicalDigest';
+import {
   assembleOfficialNaverNewsShadowFirstSeenSeries,
 } from '../../lib/server/ingestion/naverNewsShadowFirstSeenSeries';
 import {
@@ -34,6 +45,10 @@ import { getRuntimeDatabasePool } from '../../lib/server/persistence/db';
 const EIGHT_HOURS_MS = 8 * 60 * 60 * 1_000;
 const LASTFM_HISTORY_URL = new URL(
   '../../data/lastfm-cloud/lastfm_artist_interest_history_v1.csv',
+  import.meta.url,
+);
+const MOMENTUM_HISTORY_URL = new URL(
+  '../../data/momentum-product/iu_momentum_evidence_consensus_v147.jsonl',
   import.meta.url,
 );
 
@@ -172,6 +187,44 @@ async function main(): Promise<void> {
     evaluateFandexMomentumOutputFormEligibilityResearch(combination);
 
   const current = output.currentResearchOutput;
+  const historyJsonl = await readFile(MOMENTUM_HISTORY_URL, 'utf8');
+  const history = parseFandexMomentumUnifiedHistoryJsonl(historyJsonl);
+  const previousHistory = history.at(-1);
+  if (!previousHistory) {
+    throw new Error('momentum_current_evaluation_history_missing');
+  }
+
+  const previousCarrier: FandexMomentumCategoricalCarrierStoredRecord =
+    Object.freeze({
+      recordId: previousHistory.recordDigest,
+      observationId: previousHistory.observation.observationId,
+      canonicalArtistId: previousHistory.canonicalArtistId,
+      variableId: 'momentum.cross-family-evidence-state.research' as const,
+      alignmentCutoffAt: previousHistory.alignmentCutoffAt,
+      directionalConsensus: previousHistory.directionalConsensus,
+      persistenceConsensus: previousHistory.persistenceConsensus,
+      sourceV143Digest: previousHistory.sourceV143Digest,
+      observationDigest: sha256Canonical(previousHistory.observation),
+      payload: previousHistory.observation,
+    });
+
+  const carrierDecision =
+    evaluateFandexMomentumCarrierChangeResearch({
+      result: output,
+      previous: previousCarrier,
+    });
+  const recordedAt = new Date().toISOString();
+  const candidateCarrierRecord =
+    carrierDecision.state === 'append'
+      ? buildFandexMomentumUnifiedHistoryRecord({
+          result: output,
+          decision: carrierDecision,
+          sequence: previousHistory.sequence + 1,
+          recordedAt,
+          previousRecord: previousHistory,
+        })
+      : null;
+
   const evaluationChanged =
     output.alignmentCutoffAt !== HISTORICAL_CARRIER.alignmentCutoffAt
     || current.directionalConsensus
@@ -250,10 +303,28 @@ async function main(): Promise<void> {
     }),
     historicalCarrier: HISTORICAL_CARRIER,
     evaluationChanged,
+    carrierDecision: Object.freeze({
+      state: carrierDecision.state,
+      changeKind: carrierDecision.changeKind,
+      appendRequired: carrierDecision.appendRequired,
+      previousRecordId: carrierDecision.previousRecordId,
+      previousAlignmentCutoffAt:
+        carrierDecision.previousAlignmentCutoffAt,
+      nextAlignmentCutoffAt: carrierDecision.nextAlignmentCutoffAt,
+      directionalConsensusChanged:
+        carrierDecision.directionalConsensusChanged,
+      persistenceConsensusChanged:
+        carrierDecision.persistenceConsensusChanged,
+      sourceDigestChanged: carrierDecision.sourceDigestChanged,
+      digest: carrierDecision.digest,
+    }),
     historyDecision:
-      evaluationChanged
+      carrierDecision.state === 'append'
         ? 'new-carrier-observation-candidate'
-        : 'attested-no-op-candidate',
+        : carrierDecision.state === 'no-op'
+          ? 'attested-no-op-candidate'
+          : 'blocked',
+    candidateCarrierRecord,
     databaseReadMode: 'read-only',
     databaseWrites: 0,
     productMetricWrites: 0,
@@ -264,6 +335,10 @@ async function main(): Promise<void> {
     throw new Error(
       'momentum_current_evaluation_stored_evidence_count_mismatch',
     );
+  }
+  if (carrierDecision.state === 'blocked') {
+    process.stdout.write(JSON.stringify(result) + '\n');
+    throw new Error('momentum_current_evaluation_carrier_decision_blocked');
   }
   if (output.state === 'blocked') {
     process.stdout.write(JSON.stringify(result) + '\n');
