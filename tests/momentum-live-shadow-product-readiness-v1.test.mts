@@ -196,6 +196,7 @@ test('recorded evaluation evidence matches the currentness audit classification'
   assert.equal(evidence.decision.newHistoryObservationRequired, true);
   assert.equal(evidence.decision.attestedNoOp, false);
   assert.deepEqual(evidence.safety, {
+    databaseMode: 'read-only',
     databaseWrites: 0,
     productMetricReads: 0,
     productMetricWrites: 0,
