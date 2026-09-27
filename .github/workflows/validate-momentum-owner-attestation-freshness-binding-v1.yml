@@ -1,0 +1,76 @@
+name: Validate Momentum owner-attestation freshness binding v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-owner-attestation-freshness-binding-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-owner-attestation-freshness-binding-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 5432eb814d8c2e97e25339406b116c98c0851039...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-owner-attestation-freshness-binding-v1.yml
+          data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json
+          lib/product/activation/momentumProductActivationApprovalCandidate.ts
+          lib/product/activation/momentumProductActivationAuthorization.ts
+          lib/product/activation/momentumProductActivationReadiness.ts
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          lib/server/product/momentumLiveShadowProductReadiness.ts
+          tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum owner-attestation evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+
+      - name: Momentum activation approval candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-approval-candidate-v1.test.mts
+
+      - name: Momentum activation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
+
+      - name: Momentum live-shadow readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Momentum public route design regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-public-route-design-v1.test.mts
+
+      - name: Momentum Product contract regression
+        run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
