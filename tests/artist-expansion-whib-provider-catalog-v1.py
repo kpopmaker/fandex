@@ -11,7 +11,7 @@ spec.loader.exec_module(module)
 
 profile = "<html><body>WHIB 김준민 KIM JUN MIN 하승 HASEUNG 진범 JINBEOM 유건 UGeon 이정 LEEJEONG 재하 JAEHA 원준 WONJUN</body></html>"
 departure = "<html><body>C-JeS Studio WHIB INHONG leaves the group. WHIB will continue activities as a 7-member group.</body></html>"
-rename = "<html><body>C-JeS Studio JAYDER 제이더 will change stage name to KIMJUNMIN 김준민 from 2025 October 2.</body></html>"
+rename = "<html><body>C-JeS Studio JAYDER 제이더 will change stage name to KIMJUNMIN 김준민 from 2025 10 2.</body></html>"
 activity = "<html><body>C-JeS Studio 2026 WHIB FAN CONCERT BLUE HOUR</body></html>"
 debut = "<html><body>WHIB 데뷔일 2023.11.08</body></html>"
 
