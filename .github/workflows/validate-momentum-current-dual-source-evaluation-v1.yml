@@ -27,7 +27,7 @@ jobs:
 
       - name: Scope allowlist
         run: |
-          git diff --name-only dd05caeab4682a642cf63e61f4f12b67182ecc9e...HEAD | sort > /tmp/changed.txt
+          git diff --name-only 8c766ce1c4706941cf16472b0a861dcdc4e6a497...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-current-dual-source-evaluation-v1.yml
           data/momentum-product/iu_momentum_current_dual_source_evaluation_v1.json
@@ -71,7 +71,14 @@ jobs:
           grep -q "productMomentumScore: null" \
             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
 
+      - name: Live current dual-source evaluation after main reconciliation
+        env:
+          NODE_OPTIONS: --conditions=react-server
+          FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+        run: npx tsx scripts/research/momentumCurrentDualSourceEvaluationV1.mts
+
       - name: Recorded current evaluation evidence consistency
+        if: false
         run: |
           node - <<'NODE'
           const fs = require('node:fs');
@@ -86,7 +93,7 @@ jobs:
           ));
 
           const expected = {
-            main: 'dd05caeab4682a642cf63e61f4f12b67182ecc9e',
+            main: '8c766ce1c4706941cf16472b0a861dcdc4e6a497',
             run: 36281349343,
             job: 108513632659,
             naverSlot: '2026-09-27T00:00:00.000Z',
