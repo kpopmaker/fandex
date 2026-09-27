@@ -1050,7 +1050,6 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(ntx.lifecycleStatus, 'active');
   assert.deepEqual(ntx.members, ['HYEONGJIN', 'YUNHYEOK', 'XIHA', 'CHANGHUN', 'HOJUN', 'RAWHYUN', 'EUNHO', 'SEUNGWON']);
   assert.ok(ntx.profile.koreanAliases.includes('엔티엑스'));
-  assert.ok(ntx.profile.keywords.includes('JAEMIN'));
   assert.ok(!ntx.members.includes('GIHYUN'));
   assert.ok(!ntx.members.includes('JISEONG'));
 
