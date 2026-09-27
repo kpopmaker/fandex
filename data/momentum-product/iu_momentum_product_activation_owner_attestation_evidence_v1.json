@@ -1,0 +1,78 @@
+{
+  "contractVersion": "momentum-product-activation-owner-attestation-evidence-v1",
+  "evaluatedAgainstMain": "5432eb814d8c2e97e25339406b116c98c0851039",
+  "canonicalArtistId": "iu",
+  "candidate": {
+    "contractVersion": "momentum-product-activation-approval-candidate-v1",
+    "status": "ready-for-owner-attestation",
+    "approvalDraft": {
+      "contractVersion": "momentum-product-activation-approval-v1",
+      "action": "authorize-momentum-product-activation",
+      "authority": "product-operations-owner",
+      "activationAuthorizationId": null,
+      "authorizedAt": null,
+      "target": {
+        "artistId": "iu",
+        "legacyVariableId": "growthMomentumPoint",
+        "constructId": "momentumEvidenceConsensus"
+      },
+      "binding": {
+        "readinessContractVersion": "momentum-product-activation-readiness-v1",
+        "routeDesignContractVersion": "momentum-public-route-design-candidate-v1",
+        "productContractVersion": "product-momentum-evidence-consensus-v1",
+        "sourcePublication": "shadow",
+        "claimScope": "structured-categorical-evidence-only-no-numeric-score",
+        "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+        "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+        "directionalConsensus": "direction-conflicted",
+        "persistenceConsensus": "persistence-not-applicable",
+        "currentNoOpEvaluationAttested": true,
+        "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+        "currentEvaluationAttestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
+        "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+      }
+    },
+    "authorizationWithoutApproval": {
+      "contractVersion": "momentum-product-activation-authorization-v1",
+      "status": "not-authorized",
+      "reason": "activation-approval-absent",
+      "activationAuthorized": false,
+      "productPublicationAuthorized": false,
+      "publicRouteActivated": false,
+      "publication": "shadow",
+      "productMomentumScore": null,
+      "numericProductEligible": false,
+      "legacyGrowthMomentumPointReuseAllowed": false,
+      "previewFallbackAllowed": false,
+      "directProductionContributionEligible": false
+    }
+  },
+  "freshnessEvidence": {
+    "historicalCarrier": {
+      "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+      "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+      "directionalConsensus": "direction-conflicted",
+      "persistenceConsensus": "persistence-not-applicable"
+    },
+    "currentNoOpEvaluation": {
+      "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+      "directionalConsensus": "direction-conflicted",
+      "persistenceConsensus": "persistence-not-applicable",
+      "attestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
+      "attestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+    }
+  },
+  "boundary": {
+    "ownerApprovalRecorded": false,
+    "activationAuthorizationId": null,
+    "authorizedAt": null,
+    "productActivationAuthorized": false,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productionVerifierExecutions": 0
+  },
+  "requiredNextGate": "explicit-momentum-product-activation-authorization",
+  "evidenceDigest": "cd3cabbd37c603d6094c0add2fc000011897123ec82501d23b32bbe872258ce1"
+}
