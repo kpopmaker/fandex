@@ -32,7 +32,7 @@ assert snapshot["terminalLifecycle"]["individualContinuationAtTerminal"][0]["mem
 assert snapshot["terminalLifecycle"]["debutDate"] == "2021-03-17"
 assert module.parse_live_pages(terminal.replace("Jang Yu Bin", ""), debut, album) == []
 assert module.parse_live_pages(terminal.replace("conclude their group activities", "continue their group activities").replace("group activities will be coming to an end", "group activities continue"), debut, album) == []
-assert module.parse_live_pages(terminal.replace("Son Dong Pyo will continue", "Son Dong Pyo"), debut, album) == []
+assert module.parse_live_pages(terminal.replace("Son Dong Pyo will continue with individual activities under DSP Media.", "Son Dong Pyo."), debut, album) == []
 assert module.parse_live_pages(terminal, debut.replace("March 17", "March 18"), album) == []
 assert module.parse_live_pages(terminal, debut, album.replace("DSP MEDIA", "OTHER")) == []
 print("MIRAE official terminal lifecycle catalog adapter regression: PASS")
