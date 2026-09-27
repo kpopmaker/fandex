@@ -59,6 +59,13 @@ test('current IU live-shadow readiness accepts the attested current no-op evalua
     currentCarrierProduced: false,
     currentNoOpEvaluationAttested: true,
     satisfiesFreshness: true,
+    evaluatedAlignmentCutoffAt: '2026-09-27T02:10:05.000Z',
+    directionalConsensus: 'direction-conflicted',
+    persistenceConsensus: 'persistence-not-applicable',
+    attestationPath:
+      'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+    attestationDigest:
+      'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
   });
   assert.deepEqual(result.blockers, []);
 });
