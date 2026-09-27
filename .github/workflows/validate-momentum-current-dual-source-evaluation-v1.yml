@@ -71,14 +71,7 @@ jobs:
           grep -q "productMomentumScore: null" \
             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
 
-      - name: Live current dual-source evaluation after main reconciliation
-        env:
-          NODE_OPTIONS: --conditions=react-server
-          FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
-        run: npx tsx scripts/research/momentumCurrentDualSourceEvaluationV1.mts
-
       - name: Recorded current evaluation evidence consistency
-        if: false
         run: |
           node - <<'NODE'
           const fs = require('node:fs');
@@ -94,15 +87,15 @@ jobs:
 
           const expected = {
             main: '8c766ce1c4706941cf16472b0a861dcdc4e6a497',
-            run: 36281349343,
-            job: 108513632659,
-            naverSlot: '2026-09-27T00:00:00.000Z',
-            naverJob: '495b3cb12feef467824be1ede6b1ff541036c6a2a2f203a3c4e60def66490d8b',
-            snapshots: 273,
-            cutoff: '2026-09-26T02:15:48.000Z',
+            run: 36290882671,
+            job: 108540600155,
+            naverSlot: '2026-09-27T03:00:00.000Z',
+            naverJob: '362b77504d31b89d9f9a5b66a1216c6adb59be376b2ae811d664f351929677f2',
+            snapshots: 276,
+            cutoff: '2026-09-27T02:10:05.000Z',
             direction: 'direction-conflicted',
             persistence: 'persistence-not-applicable',
-            digest: '11ce6df788a9f3f44cc96a1ce8693a7ebb58e684b251027a7af7055d45346dd9',
+            digest: '3ac534dd6afc2e75f534cf4bc98ce6fb33fdd22e081eaae9aedcf97a90fd6721',
             classification: 'new-carrier-cutoff-advanced-same-state',
           };
 
