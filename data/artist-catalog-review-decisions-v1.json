@@ -4497,6 +4497,43 @@
           "note": "Official Weverse Global notice updated 2026-09-02 records VVUP's first mini album VVON with an adjusted 2026-10-29 release date."
         }
       ]
+    },
+    {
+      "displayArtist": "FANTASY BOYS",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "current_official_japan_profile_resolves_ten_member_promotional_roster_and_pocketdol_management",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_current_profile_pocketdol_hosted_activity_and_korean_debut_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/profiles",
+          "note": "Current official profile exposes exactly ten member profiles: Kang Minseo, Lee Hanbin, Hikari, Ling Qi, Hikaru, Kim Wooseok, Hong Sungmin, Oh Hyeontae, Kim Gyurae, and Kaedan."
+        },
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/contents/920939",
+          "note": "Official 2025 FAN-CON notice identifies POCKETDOL STUDIO as organizer, providing current management evidence for the group."
+        },
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/discography",
+          "note": "Official discography records NEW TOMORROW as the first mini album on 2023-09-21 and current 2025 releases."
+        },
+        {
+          "source": "Nippon Columbia",
+          "url": "https://columbia.jp/artist-info/fantasyboys/prof.html",
+          "note": "Official Japanese label profile independently describes FANTASY BOYS as a ten-member group and matches the ten current profile names."
+        },
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/contents/news",
+          "note": "The official site remains operational in 2026, with a 2026-08-27 maintenance notice; lifecycle is not inferred from lack of September schedules."
+        }
+      ]
     }
   ]
 }

@@ -856,6 +856,27 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(vvup.fandomName, 'VVinie');
   assert.ok(vvup.profile.koreanAliases.includes('비비업'));
 
+  const fantasyBoys = getArtistV4ById('fantasyboys');
+  assert.ok(fantasyBoys);
+  assert.equal(fantasyBoys.entityType, 'group');
+  assert.equal(fantasyBoys.agency, 'PocketDol Studio');
+  assert.equal(fantasyBoys.debutDate, '2023-09-21');
+  assert.equal(fantasyBoys.lifecycleStatus, 'active');
+  assert.deepEqual(fantasyBoys.members, [
+    'KANG MINSEO',
+    'LEE HANBIN',
+    'HIKARI',
+    'LING QI',
+    'HIKARU',
+    'KIM WOOSEOK',
+    'HONG SUNGMIN',
+    'OH HYEONTAE',
+    'KIM GYURAE',
+    'KAEDAN',
+  ]);
+  assert.equal(fantasyBoys.fandomName, 'Bandi');
+  assert.ok(fantasyBoys.profile.koreanAliases.includes('판타지 보이즈'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

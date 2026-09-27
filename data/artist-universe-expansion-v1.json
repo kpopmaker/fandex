@@ -7047,6 +7047,80 @@
           "url": "https://shop.weverse.io/ko/shop/KRW/artists/181/notices/12244"
         }
       ]
+    },
+    {
+      "id": "fantasyboys",
+      "ticker": "FANTASYBOYS",
+      "name": "FANTASY BOYS",
+      "agency": "PocketDol Studio",
+      "entityType": "group",
+      "debutDate": "2023-09-21",
+      "lifecycleStatus": "active",
+      "members": [
+        "KANG MINSEO",
+        "LEE HANBIN",
+        "HIKARI",
+        "LING QI",
+        "HIKARU",
+        "KIM WOOSEOK",
+        "HONG SUNGMIN",
+        "OH HYEONTAE",
+        "KIM GYURAE",
+        "KAEDAN"
+      ],
+      "fandomName": "Bandi",
+      "naverNewsQuery": "판타지 보이즈 FANTASY BOYS 포켓돌스튜디오",
+      "koreanAliases": [
+        "판타지 보이즈"
+      ],
+      "englishAliases": [
+        "FANTASY BOYS"
+      ],
+      "keywords": [
+        "PocketDol Studio",
+        "포켓돌스튜디오",
+        "KANG MINSEO",
+        "LEE HANBIN",
+        "HIKARI",
+        "LING QI",
+        "HIKARU",
+        "KIM WOOSEOK",
+        "HONG SUNGMIN",
+        "OH HYEONTAE",
+        "KIM GYURAE",
+        "KAEDAN",
+        "UNDENIABLE",
+        "SHINE THE WAY"
+      ],
+      "disambiguationKeywords": [
+        "PocketDol Studio",
+        "포켓돌스튜디오",
+        "판타지 보이즈"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/profiles"
+        },
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/contents/920939"
+        },
+        {
+          "source": "FANTASY BOYS Japan Official Site",
+          "url": "https://fantasyboys.jp/discography"
+        },
+        {
+          "source": "Nippon Columbia",
+          "url": "https://columbia.jp/artist-info/fantasyboys/prof.html"
+        }
+      ]
     }
   ]
 }

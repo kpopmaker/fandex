@@ -1,0 +1,68 @@
+{
+  "version": "fantasyboys_official_current_provider_catalog_adapter_v1",
+  "source": {
+    "id": "fantasyboys-official-current-provider-catalog",
+    "type": "provider_catalog",
+    "name": "FANTASY BOYS Official Current Provider Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://fantasyboys.jp/profiles"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "FANTASY BOYS",
+      "aliases": [
+        "판타지 보이즈"
+      ],
+      "evidence": [
+        {
+          "label": "FANTASY BOYS current official Japan profile",
+          "url": "https://fantasyboys.jp/profiles"
+        },
+        {
+          "label": "FANTASY BOYS official PocketDol-hosted 2025 FAN-CON notice",
+          "url": "https://fantasyboys.jp/contents/920939"
+        },
+        {
+          "label": "FANTASY BOYS official discography",
+          "url": "https://fantasyboys.jp/discography"
+        },
+        {
+          "label": "Nippon Columbia official ten-member profile",
+          "url": "https://columbia.jp/artist-info/fantasyboys/prof.html"
+        },
+        {
+          "label": "FANTASY BOYS current official news index",
+          "url": "https://fantasyboys.jp/contents/news"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "singleGroupIdentityOnly": true,
+    "currentManagementEvidenceRequired": true,
+    "exactCurrentProfileRosterRequired": true,
+    "currentOfficialProfileControlsRoster": true,
+    "staleKoreanArtistPageDoesNotOverrideCurrentProfile": true,
+    "historicalHiatusNoticeDoesNotOverrideCurrentProfile": true,
+    "absenceOfScheduleDoesNotImplyInactiveLifecycle": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "debutDateFromOfficialDiscography": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_official_current_provider_snapshot",
+    "verifiedFrom": [
+      "https://fantasyboys.jp/profiles",
+      "https://fantasyboys.jp/contents/920939",
+      "https://fantasyboys.jp/discography",
+      "https://columbia.jp/artist-info/fantasyboys/prof.html",
+      "https://fantasyboys.jp/contents/news"
+    ],
+    "verifiedAt": "2026-09-27",
+    "staleConflictingSourceExcluded": "https://pocketdol.co.kr/artist/FANTASY%20BOYS"
+  }
+}
