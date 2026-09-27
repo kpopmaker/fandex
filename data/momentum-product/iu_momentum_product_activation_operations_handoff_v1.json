@@ -1,0 +1,72 @@
+{
+  "contractVersion": "momentum-product-activation-operations-handoff-v1",
+  "preparedAgainstMain": "1f799902528663c35537050cf7a0b5a1a0d2a1af",
+  "canonicalArtistId": "iu",
+  "target": {
+    "legacyVariableId": "growthMomentumPoint",
+    "constructId": "momentumEvidenceConsensus"
+  },
+  "productionDeployment": {
+    "deploymentId": "dpl_DhMkvyh9dn2Y8RDGj6P6WS5NCKVo",
+    "state": "READY",
+    "target": "production",
+    "githubCommitRef": "main",
+    "githubCommitSha": "1f799902528663c35537050cf7a0b5a1a0d2a1af"
+  },
+  "evidenceBindings": {
+    "currentEvaluationAttestation": {
+      "path": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
+      "digest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93",
+      "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z"
+    },
+    "ownerAttestationCandidateEvidence": {
+      "path": "data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json",
+      "digest": "cd3cabbd37c603d6094c0add2fc000011897123ec82501d23b32bbe872258ce1"
+    },
+    "authorizationExecutionCandidateEvidence": {
+      "path": "data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json",
+      "digest": "dcee9cfa8525dfa4bc3be0961e38e0678baba599c207fa04f2b8e0911087d473"
+    }
+  },
+  "handoffDecision": {
+    "status": "ready-for-operations-authorization-review",
+    "authority": "product-operations-owner",
+    "ownerApprovalRecorded": false,
+    "activationAuthorizationId": null,
+    "authorizedAt": null,
+    "productActivationAuthorized": false,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null,
+    "numericProductEligible": false,
+    "legacyGrowthMomentumPointReuseAllowed": false,
+    "previewFallbackAllowed": false,
+    "directProductionContributionEligible": false,
+    "requiredNextGate": "explicit-momentum-product-activation-authorization"
+  },
+  "operationsBoundary": {
+    "allowedBeforeExplicitAuthorization": [
+      "review-current-handoff-evidence",
+      "verify-bound-evidence-digests",
+      "verify-main-and-production-deployment-binding"
+    ],
+    "requiresSeparateExplicitAuthorization": [
+      "record-owner-activation-approval",
+      "materialize-activation-authorization-id",
+      "materialize-authorized-at",
+      "execute-product-activation-authorization"
+    ],
+    "notAuthorizedByThisHandoff": [
+      "product-publication-authorization",
+      "public-route-cutover",
+      "numeric-momentum-score-publication",
+      "legacy-growth-momentum-point-numeric-reuse",
+      "preview-or-synthetic-fallback",
+      "database-mutation",
+      "registry-mutation",
+      "production-verifier-rerun"
+    ]
+  },
+  "handoffDigest": "dca053af60e05e22ea30d45e030c31f85cea2931d448ef7dc108942bcc309d76"
+}
