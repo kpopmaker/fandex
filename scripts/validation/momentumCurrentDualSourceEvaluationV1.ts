@@ -90,7 +90,8 @@ function memoryRepository(
 
 async function main(): Promise<void> {
   const pool = getRuntimeDatabasePool();
-  const latestRepository =
+  try {
+    const latestRepository =
     createPostgresNaverNewsLatestOfficialShadowSlotRepository(pool);
   const latest =
     await resolveLatestOfficialNaverNewsShadowThroughSlotStart(
@@ -277,7 +278,10 @@ async function main(): Promise<void> {
     throw new Error('momentum_current_evaluation_numeric_boundary_violated');
   }
 
-  process.stdout.write(JSON.stringify(result) + '\n');
+    process.stdout.write(JSON.stringify(result) + '\n');
+  } finally {
+    await pool.end();
+  }
 }
 
 main().catch((error) => {
