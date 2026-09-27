@@ -31,6 +31,13 @@ jobs:
           lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
           lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
           lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts
+          lib/lastfm-signal/contracts.ts
+          lib/lastfm-signal/csv.ts
+          lib/lastfm-signal/historicalReplaySourceBundle.ts
+          lib/lastfm-signal/historicalWindow.ts
+          lib/lastfm-signal/identityQualityGate.ts
+          lib/lastfm-signal/readModel.ts
+          lib/lastfm-signal/shadowVariableAdapter.ts
           scripts/research/momentumCurrentDualSourceEvaluationV1.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
@@ -40,7 +47,14 @@ jobs:
 
       - name: Static no-Product/no-write boundary
         run: |
-          ! grep -R "getResolvedMetricScore\|artistMonthlyMetricSeed\|metricScoringPipeline"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts             lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts             lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
+          ! grep -R "getResolvedMetricScore\|artistMonthlyMetricSeed\|metricScoringPipeline"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts             lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts             lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts \
+            lib/lastfm-signal/historicalReplaySourceBundle.ts \
+            lib/lastfm-signal/contracts.ts \
+            lib/lastfm-signal/csv.ts \
+            lib/lastfm-signal/readModel.ts \
+            lib/lastfm-signal/identityQualityGate.ts \
+            lib/lastfm-signal/historicalWindow.ts \
+            lib/lastfm-signal/shadowVariableAdapter.ts
           ! grep -R "INSERT INTO\|UPDATE .* SET\|DELETE FROM"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts
           grep -q "productMomentumScore: null"             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts
 
