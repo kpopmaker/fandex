@@ -4980,6 +4980,33 @@
           "note": "The official ATBO Weverse debut showcase is dated 2022-07-27 and identifies the debut album The Beginning : 開花."
         }
       ]
+    },
+    {
+      "displayArtist": "MIRAE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "terminal_dsp_statement_resolves_exact_seven_member_group_activity_end_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_dsp_terminal_statement_exact_terminal_roster_and_preserved_official_debut_evidence",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "DSP Media terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1673593wpp/mirae-kondigt-officieel-ontbinding-aan",
+          "note": "DSP Media's preserved official statement names Lee Jun Hyuk, Lien, Yoo Dohyun, Khael, Son Dong Pyo, Park Si Young, and Jang Yu Bin and states that MIRAE group activities are concluded."
+        },
+        {
+          "source": "DSP Media debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1455795wpp/dsp-medias-new-boy-group-mirae-announces-debut-date-and-more?mobile-app=true&theme=false%29",
+          "note": "The preserved DSP debut rollout records MIRAE's debut with KILLA on March 17, 2021."
+        },
+        {
+          "source": "MIRAE official Weverse Shop KILLA album",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/54/sales/9909",
+          "note": "The official MIRAE Weverse Shop product identifies KILLA as MIRAE's first mini album under DSP MEDIA."
+        }
+      ]
     }
   ]
 }

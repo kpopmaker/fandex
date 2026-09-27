@@ -1,0 +1,81 @@
+{
+  "version": "mirae_official_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "mirae-official-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "MIRAE Official Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-27T00:00:00Z",
+    "url": "https://www.soompi.com/article/1673593wpp/mirae-kondigt-officieel-ontbinding-aan"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "MIRAE",
+      "aliases": [
+        "미래소년"
+      ],
+      "evidence": [
+        {
+          "label": "DSP MIRAE terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1673593wpp/mirae-kondigt-officieel-ontbinding-aan"
+        },
+        {
+          "label": "DSP MIRAE debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1455795wpp/dsp-medias-new-boy-group-mirae-announces-debut-date-and-more?mobile-app=true&theme=false%29"
+        },
+        {
+          "label": "MIRAE official Weverse Shop KILLA album",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/54/sales/9909"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "explicitGroupActivityTerminationRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "individualMemberContinuationDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotImplyAllIndividualContractsEnded": true,
+    "officialDebutDateEvidenceRequired": true,
+    "officialDebutAlbumIdentityRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "effectiveDate": "2024-07-09",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "DSP Media",
+    "terminalMembers": [
+      "LEE JUN HYUK",
+      "LIEN",
+      "YOO DOHYUN",
+      "KHAEL",
+      "SON DONG PYO",
+      "PARK SI YOUNG",
+      "JANG YU BIN"
+    ],
+    "terminalMemberCount": 7,
+    "individualContinuationAtTerminal": [
+      {
+        "member": "SON DONG PYO",
+        "resolution": "continued_individual_activities_under_dsp_after_group_activity_end"
+      }
+    ],
+    "debutDate": "2021-03-17",
+    "debutRelease": "KILLA"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_lifecycle_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1673593wpp/mirae-kondigt-officieel-ontbinding-aan",
+      "https://www.soompi.com/article/1455795wpp/dsp-medias-new-boy-group-mirae-announces-debut-date-and-more?mobile-app=true&theme=false%29",
+      "https://shop.weverse.io/ko/shop/KRW/artists/54/sales/9909"
+    ],
+    "verifiedAt": "2026-09-27"
+  }
+}

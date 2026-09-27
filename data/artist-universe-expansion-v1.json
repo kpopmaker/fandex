@@ -8016,6 +8016,70 @@
           "url": "https://weverse.io/atbo/live/1-101510922"
         }
       ]
+    },
+    {
+      "id": "mirae",
+      "ticker": "MIRAE",
+      "name": "MIRAE",
+      "agency": "DSP Media",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2021-03-17",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "LEE JUN HYUK",
+        "LIEN",
+        "YOO DOHYUN",
+        "KHAEL",
+        "SON DONG PYO",
+        "PARK SI YOUNG",
+        "JANG YU BIN"
+      ],
+      "naverNewsQuery": "미래소년 MIRAE DSP미디어",
+      "koreanAliases": [
+        "미래소년"
+      ],
+      "englishAliases": [
+        "MIRAE"
+      ],
+      "keywords": [
+        "DSP Media",
+        "DSP미디어",
+        "LEE JUN HYUK",
+        "LIEN",
+        "YOO DOHYUN",
+        "KHAEL",
+        "SON DONG PYO",
+        "PARK SI YOUNG",
+        "JANG YU BIN",
+        "KILLA",
+        "Boys will be Boys"
+      ],
+      "disambiguationKeywords": [
+        "DSP Media",
+        "DSP미디어",
+        "미래소년"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "DSP Media MIRAE terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1673593wpp/mirae-kondigt-officieel-ontbinding-aan"
+        },
+        {
+          "source": "DSP Media MIRAE debut announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1455795wpp/dsp-medias-new-boy-group-mirae-announces-debut-date-and-more?mobile-app=true&theme=false%29"
+        },
+        {
+          "source": "MIRAE official Weverse Shop KILLA album",
+          "url": "https://shop.weverse.io/ko/shop/KRW/artists/54/sales/9909"
+        }
+      ]
     }
   ]
 }

@@ -93,6 +93,7 @@ jobs:
           python tests/artist-expansion-ghost9-provider-catalog-v1.py
           python tests/artist-expansion-wei-provider-catalog-v1.py
           python tests/artist-expansion-atbo-terminal-lifecycle-v1.py
+          python tests/artist-expansion-mirae-terminal-lifecycle-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -371,6 +372,11 @@ jobs:
           python scripts/artist-expansion/collect_atbo_terminal_lifecycle_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/atbo-terminal-lifecycle-catalog-2026-09-27.json \
             --output atbo_terminal_lifecycle_catalog_v1_latest.json
+      - name: Collect MIRAE official terminal lifecycle catalog
+        run: |
+          python scripts/artist-expansion/collect_mirae_terminal_lifecycle_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/mirae-terminal-lifecycle-catalog-2026-09-27.json \
+            --output mirae_terminal_lifecycle_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -447,6 +453,7 @@ jobs:
             --snapshot ghost9_maroo_current_provider_catalog_v1_latest.json \
             --snapshot wei_oui_current_provider_catalog_v1_latest.json \
             --snapshot atbo_terminal_lifecycle_catalog_v1_latest.json \
+            --snapshot mirae_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -541,6 +548,7 @@ jobs:
             ghost9_maroo_current_provider_catalog_v1_latest.json
             wei_oui_current_provider_catalog_v1_latest.json
             atbo_terminal_lifecycle_catalog_v1_latest.json
+            mirae_terminal_lifecycle_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

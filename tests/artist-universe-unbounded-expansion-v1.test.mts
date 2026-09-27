@@ -1021,6 +1021,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(atbo.profile.koreanAliases.includes('에이티비오'));
   assert.ok(!atbo.members.includes('SEOK RAKWON'));
 
+  const mirae = getArtistV4ById('mirae');
+  assert.ok(mirae);
+  assert.equal(mirae.entityType, 'group');
+  assert.equal(mirae.agency, 'DSP Media');
+  assert.equal(mirae.agencyStatus, 'historical');
+  assert.equal(mirae.debutDate, '2021-03-17');
+  assert.equal(mirae.lifecycleStatus, 'inactive');
+  assert.deepEqual(mirae.members, ['LEE JUN HYUK', 'LIEN', 'YOO DOHYUN', 'KHAEL', 'SON DONG PYO', 'PARK SI YOUNG', 'JANG YU BIN']);
+  assert.ok(mirae.profile.koreanAliases.includes('미래소년'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
