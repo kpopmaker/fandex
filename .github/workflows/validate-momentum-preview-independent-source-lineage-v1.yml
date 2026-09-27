@@ -1,0 +1,59 @@
+name: Validate Momentum preview-independent source lineage v1
+
+on:
+  push:
+    branches:
+      - work/momentum-preview-independent-source-lineage-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 6c6c6b9d12911a1eae401b38bddc922c1a8bdf94...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-preview-independent-source-lineage-v1.yml
+          lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts
+          scripts/research/momentumCategoricalOutputAttestationV1.mts
+          tests/momentum-categorical-output-attestation-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum categorical output attestation
+        run: npx tsx --test tests/momentum-categorical-output-attestation-v1.test.mts
+
+      - name: Emit exact attestation
+        run: npx tsx scripts/research/momentumCategoricalOutputAttestationV1.mts
+
+      - name: Current evaluation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Runtime Stored Evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-evidence-consensus-runtime-read-v1.test.mts
+
+      - name: Activity Exposure Production regression
+        run: npx tsx --test tests/activity-exposure-public-route-cutover-execution-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
