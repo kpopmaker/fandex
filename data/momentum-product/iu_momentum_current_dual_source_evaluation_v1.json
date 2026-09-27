@@ -1,19 +1,19 @@
 {
   "contractVersion": "momentum-current-dual-source-categorical-evaluation-evidence-v1",
-  "evaluatedAgainstMain": "dd05caeab4682a642cf63e61f4f12b67182ecc9e",
-  "evaluationHead": "2963b9844d6a65976a4e71695ea5513de49d422e",
-  "workflowRunId": 36281349343,
-  "workflowJobId": 108513632659,
-  "evaluatedAt": "2026-09-27T00:04:28.0129434Z",
+  "evaluatedAgainstMain": "8c766ce1c4706941cf16472b0a861dcdc4e6a497",
+  "evaluationHead": "0c9d0140bf61180510dce720cfaea8809d160279",
+  "workflowRunId": 36290882671,
+  "workflowJobId": 108540600155,
+  "evaluatedAt": "2026-09-27T03:16:07.0487083Z",
   "canonicalArtistId": "iu",
   "latestNaverStoredEvidence": {
-    "throughSlotStart": "2026-09-27T00:00:00.000Z",
-    "jobId": "495b3cb12feef467824be1ede6b1ff541036c6a2a2f203a3c4e60def66490d8b",
-    "collectionKey": "sched-v125-naver-news-20260927t000000z-f1ed381d367d",
+    "throughSlotStart": "2026-09-27T03:00:00.000Z",
+    "jobId": "362b77504d31b89d9f9a5b66a1216c6adb59be376b2ae811d664f351929677f2",
+    "collectionKey": "sched-v125-naver-news-20260927t030000z-f1ed381d367d",
     "exactOfficialProtocol": true,
     "seriesStatus": "available",
-    "expectedSlotCount": 273,
-    "reproducedSnapshotCount": 273
+    "expectedSlotCount": 276,
+    "reproducedSnapshotCount": 276
   },
   "naverComponent": {
     "state": "flat-observed",
@@ -21,52 +21,52 @@
     "usableAvailablePointCount": 29,
     "nonOverlappingAnchorCount": 29,
     "latestDirection": "flat",
-    "latestDirectionalRunTransitionCount": 1,
-    "latestDirectionalRunDurationHours": 8,
+    "latestDirectionalRunTransitionCount": 2,
+    "latestDirectionalRunDurationHours": 16,
     "persistenceObserved": false,
-    "digest": "487f679980fa3ffd28d1f4cd1e920e2e927ef6a20f674d170270c4df5b5751ec"
+    "digest": "203425c76fae67e38d9d69a2d504b794050c690e2f8a1760fad99ece8b565e3b"
   },
   "temporalNormalization": {
     "state": "aligned-normalized-research",
-    "alignmentCutoffAt": "2026-09-26T02:15:48.000Z",
+    "alignmentCutoffAt": "2026-09-27T02:10:05.000Z",
     "componentCount": 2,
     "normalizedComponentCount": 2,
     "components": [
       {
         "family": "audience-consumption",
-        "selectedKey": "2026-09-26",
-        "selectedComponentEndAt": "2026-09-26T11:15:48+09:00",
+        "selectedKey": "2026-09-27",
+        "selectedComponentEndAt": "2026-09-27T11:10:05+09:00",
         "freshnessLagHours": 0,
         "freshnessWithinNativeCadence": true,
         "direction": "up",
-        "nativeDelta": 0.28,
-        "latestDirectionalRunTransitionCount": 2,
-        "latestDirectionalRunDurationHours": 48,
+        "nativeDelta": 0.51,
+        "latestDirectionalRunTransitionCount": 3,
+        "latestDirectionalRunDurationHours": 72,
         "historicalStrictExceedanceShare": 100
       },
       {
         "family": "media-attention",
-        "selectedKey": "2026-09-26T00:00:00.000Z",
-        "selectedComponentEndAt": "2026-09-26T00:00:00.000Z",
-        "freshnessLagHours": 2.263333,
+        "selectedKey": "2026-09-26T19:00:00.000Z",
+        "selectedComponentEndAt": "2026-09-26T19:00:00.000Z",
+        "freshnessLagHours": 7.168056,
         "freshnessWithinNativeCadence": true,
-        "direction": "down",
-        "nativeDelta": -0.00125,
+        "direction": "flat",
+        "nativeDelta": 0,
         "latestDirectionalRunTransitionCount": 1,
         "latestDirectionalRunDurationHours": 8,
         "historicalStrictExceedanceShare": 0
       }
     ],
-    "digest": "a44fc3ba5002736f465c1882fe6a1b1dc4de0f432bbc218b8240ede74aa56a37"
+    "digest": "a9c3de870f2c6d5928e924bdb0503d207a8fcaa01667943716dfa542590477a5"
   },
   "categoricalEvaluation": {
     "state": "cross-family-direction-conflicted",
-    "alignmentCutoffAt": "2026-09-26T02:15:48.000Z",
+    "alignmentCutoffAt": "2026-09-27T02:10:05.000Z",
     "directionalConsensus": "direction-conflicted",
     "persistenceConsensus": "persistence-not-applicable",
     "qualitativeDirectionEvidenceUsable": false,
     "productMomentumScore": null,
-    "digest": "11ce6df788a9f3f44cc96a1ce8693a7ebb58e684b251027a7af7055d45346dd9"
+    "digest": "3ac534dd6afc2e75f534cf4bc98ce6fb33fdd22e081eaae9aedcf97a90fd6721"
   },
   "previousCarrier": {
     "recordDigest": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
