@@ -36,6 +36,7 @@ jobs:
           lib/product/activation/momentumProductActivationReadiness.ts
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
           lib/server/product/momentumLiveShadowProductReadiness.ts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
