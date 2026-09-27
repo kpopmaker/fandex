@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - integration/momentum-current-dual-source-evaluation-v1
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
