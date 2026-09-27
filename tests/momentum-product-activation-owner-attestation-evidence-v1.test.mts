@@ -14,6 +14,39 @@ import {
 } from '../lib/server/product/momentumProductActivationReadiness';
 import { sha256Canonical } from '../lib/shared/canonicalDigest';
 
+type OwnerAttestationEvidence = Readonly<{
+  contractVersion: string;
+  evaluatedAgainstMain: string;
+  canonicalArtistId: string;
+  candidate: Readonly<{
+    status: string;
+    approvalDraft: unknown;
+    authorizationWithoutApproval: unknown;
+  }>;
+  freshnessEvidence: Readonly<{
+    historicalCarrier: Readonly<{
+      alignmentCutoffAt: string;
+    }>;
+    currentNoOpEvaluation: Readonly<{
+      evaluatedAlignmentCutoffAt: string;
+      attestationDigest: string;
+    }>;
+  }>;
+  boundary: Readonly<{
+    ownerApprovalRecorded: boolean;
+    activationAuthorizationId: string | null;
+    authorizedAt: string | null;
+    productActivationAuthorized: boolean;
+    productPublicationAuthorized: boolean;
+    publicRouteActivated: boolean;
+    databaseWrites: number;
+    registryMutations: number;
+    productionVerifierExecutions: number;
+  }>;
+  requiredNextGate: string;
+  evidenceDigest: string;
+}>;
+
 const EVIDENCE_URL = new URL(
   '../data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json',
   import.meta.url,
@@ -24,7 +57,7 @@ test('owner-attestation evidence package exactly matches the current candidate',
     readFile(EVIDENCE_URL, 'utf8'),
     getMomentumProductActivationApprovalCandidateForIU(),
   ]);
-  const evidence = JSON.parse(raw) as Record<string, any>;
+  const evidence = JSON.parse(raw) as OwnerAttestationEvidence;
 
   assert.equal(candidate.status, 'ready-for-owner-attestation');
   if (candidate.status !== 'ready-for-owner-attestation') return;
