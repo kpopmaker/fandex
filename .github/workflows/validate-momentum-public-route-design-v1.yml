@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-public-route-design-v1'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
