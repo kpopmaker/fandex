@@ -26,6 +26,7 @@ jobs:
           git diff --name-only 6c6c6b9d12911a1eae401b38bddc922c1a8bdf94...HEAD | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-preview-independent-source-lineage-v1.yml
+          data/momentum-product/iu_momentum_categorical_output_attestation_v1.json
           lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts
           scripts/research/momentumCategoricalOutputAttestationV1.mts
           tests/momentum-categorical-output-attestation-v1.test.mts
