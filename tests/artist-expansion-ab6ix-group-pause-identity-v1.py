@@ -45,5 +45,5 @@ assert module.parse_live_pages(pause, profile, departure, debut.replace("May 22,
 assert module.parse_live_pages(pause, profile, departure, debut, woong.replace("renewed his contract", "ended his contract"), woojin, daehwi, donghyun) == []
 assert module.parse_live_pages(pause, profile, departure, debut, woong, woojin.replace("PARA MUSIC", "OTHER"), daehwi, donghyun) == []
 assert module.parse_live_pages(pause, profile, departure, debut, woong, woojin, daehwi.replace("Off The Record", "OTHER"), donghyun) == []
-assert module.parse_live_pages(pause, profile, departure, debut, woong, woojin, daehwi, donghyun.replace("아에르엔터테인먼트", "OTHER")) == []
+assert module.parse_live_pages(pause, profile, departure, debut, woong, woojin, daehwi, donghyun.replace("아에르엔터테인먼트", "OTHER").replace("AER Entertainment", "OTHER")) == []
 print("AB6IX group pause identity catalog adapter regression: PASS")
