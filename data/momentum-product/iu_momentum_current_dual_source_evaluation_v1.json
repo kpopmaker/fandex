@@ -1,0 +1,94 @@
+{
+  "contractVersion": "momentum-current-dual-source-categorical-evaluation-evidence-v1",
+  "evaluatedAgainstMain": "dd05caeab4682a642cf63e61f4f12b67182ecc9e",
+  "evaluationHead": "2963b9844d6a65976a4e71695ea5513de49d422e",
+  "workflowRunId": 36281349343,
+  "workflowJobId": 108513632659,
+  "evaluatedAt": "2026-09-27T00:04:28.0129434Z",
+  "canonicalArtistId": "iu",
+  "latestNaverStoredEvidence": {
+    "throughSlotStart": "2026-09-27T00:00:00.000Z",
+    "jobId": "495b3cb12feef467824be1ede6b1ff541036c6a2a2f203a3c4e60def66490d8b",
+    "collectionKey": "sched-v125-naver-news-20260927t000000z-f1ed381d367d",
+    "exactOfficialProtocol": true,
+    "seriesStatus": "available",
+    "expectedSlotCount": 273,
+    "reproducedSnapshotCount": 273
+  },
+  "naverComponent": {
+    "state": "flat-observed",
+    "sourcePointCount": 35,
+    "usableAvailablePointCount": 29,
+    "nonOverlappingAnchorCount": 29,
+    "latestDirection": "flat",
+    "latestDirectionalRunTransitionCount": 1,
+    "latestDirectionalRunDurationHours": 8,
+    "persistenceObserved": false,
+    "digest": "487f679980fa3ffd28d1f4cd1e920e2e927ef6a20f674d170270c4df5b5751ec"
+  },
+  "temporalNormalization": {
+    "state": "aligned-normalized-research",
+    "alignmentCutoffAt": "2026-09-26T02:15:48.000Z",
+    "componentCount": 2,
+    "normalizedComponentCount": 2,
+    "components": [
+      {
+        "family": "audience-consumption",
+        "selectedKey": "2026-09-26",
+        "selectedComponentEndAt": "2026-09-26T11:15:48+09:00",
+        "freshnessLagHours": 0,
+        "freshnessWithinNativeCadence": true,
+        "direction": "up",
+        "nativeDelta": 0.28,
+        "latestDirectionalRunTransitionCount": 2,
+        "latestDirectionalRunDurationHours": 48,
+        "historicalStrictExceedanceShare": 100
+      },
+      {
+        "family": "media-attention",
+        "selectedKey": "2026-09-26T00:00:00.000Z",
+        "selectedComponentEndAt": "2026-09-26T00:00:00.000Z",
+        "freshnessLagHours": 2.263333,
+        "freshnessWithinNativeCadence": true,
+        "direction": "down",
+        "nativeDelta": -0.00125,
+        "latestDirectionalRunTransitionCount": 1,
+        "latestDirectionalRunDurationHours": 8,
+        "historicalStrictExceedanceShare": 0
+      }
+    ],
+    "digest": "a44fc3ba5002736f465c1882fe6a1b1dc4de0f432bbc218b8240ede74aa56a37"
+  },
+  "categoricalEvaluation": {
+    "state": "cross-family-direction-conflicted",
+    "alignmentCutoffAt": "2026-09-26T02:15:48.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "qualitativeDirectionEvidenceUsable": false,
+    "productMomentumScore": null,
+    "digest": "11ce6df788a9f3f44cc96a1ce8693a7ebb58e684b251027a7af7055d45346dd9"
+  },
+  "previousCarrier": {
+    "recordDigest": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "sourceV143Digest": "87edf2884c2f35a3a5819349ebb374012926f103fdeb3d41af10da59ca68de7a"
+  },
+  "decision": {
+    "classification": "new-carrier-cutoff-advanced-same-state",
+    "currentDualSourceCategoricalEvaluationPerformed": true,
+    "currentNaverStoredEvidenceReproducedForReadiness": true,
+    "newHistoryObservationRequired": true,
+    "attestedNoOp": false
+  },
+  "safety": {
+    "databaseMode": "read-only",
+    "databaseWrites": 0,
+    "productMetricReads": 0,
+    "productMetricWrites": 0,
+    "previewFallbackReads": 0,
+    "registryMutations": 0,
+    "productionActivations": 0
+  }
+}
