@@ -1,0 +1,96 @@
+{
+  "version": "x1_swing_terminal_disbandment_catalog_adapter_v1",
+  "source": {
+    "id": "x1-swing-terminal-disbandment-catalog",
+    "type": "provider_catalog",
+    "name": "X1 Swing Terminal Disbandment Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1375470wpp/breaking-x1-members-agencies-announce-groups-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "X1",
+      "aliases": [
+        "엑스원"
+      ],
+      "evidence": [
+        {
+          "label": "Joint member-agency explicit disbandment statement",
+          "url": "https://www.soompi.com/article/1375470wpp/breaking-x1-members-agencies-announce-groups-disbandment"
+        },
+        {
+          "label": "Exact eleven-member agency mapping and Swing management",
+          "url": "https://www.soompi.com/article/1375971wpp/dispatch-reports-details-of-how-x1-members-agencies-came-to-decision-to-disband"
+        },
+        {
+          "label": "Official fan cafe activity-conclusion notice",
+          "url": "https://www.soompi.com/article/1375586wpp/x1-"
+        },
+        {
+          "label": "Swing Entertainment official activity-conclusion notice",
+          "url": "https://www.soompi.com/article/1376147wpp/x1s-agency-to-provide-full-refunds-for-fan-club-membership"
+        },
+        {
+          "label": "Apple Music QUANTUM LEAP debut catalog",
+          "url": "https://music.apple.com/us/album/quantum-leap-ep/1579995230"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitJointAgencyDisbandmentDecisionRequired": true,
+    "explicitOfficialActivityConclusionRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "managementAgencyMustRemainDistinctFromMemberAgencies": true,
+    "legalDisbandmentAssertionRequiresExplicitJointStatement": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "postDisbandmentIndividualActivityDoesNotReactivateGroup": true,
+    "memberAgencyActivityDoesNotReactivateGroup": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2020-01-06",
+    "effectiveDate": "2020-01-06",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "Swing Entertainment",
+    "terminalMembers": [
+      "HAN SEUNG WOO",
+      "CHO SEUNG YOUN",
+      "KIM WOO SEOK",
+      "KIM YO HAN",
+      "LEE HAN GYUL",
+      "CHA JUN HO",
+      "SON DONG PYO",
+      "KANG MIN HEE",
+      "LEE EUN SANG",
+      "SONG HYEONG JUN",
+      "NAM DO HYON"
+    ],
+    "terminalMemberCount": 11,
+    "explicitDisbandmentDecision": true,
+    "officialActivitiesConcluded": true,
+    "legalDisbandmentAsserted": true,
+    "debutDate": "2019-08-27",
+    "debutRelease": "QUANTUM LEAP",
+    "fandomName": "ONE IT"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_joint_agency_disbandment_plus_swing_activity_conclusion_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1375470wpp/breaking-x1-members-agencies-announce-groups-disbandment",
+      "https://www.soompi.com/article/1375971wpp/dispatch-reports-details-of-how-x1-members-agencies-came-to-decision-to-disband",
+      "https://www.soompi.com/article/1375586wpp/x1-",
+      "https://www.soompi.com/article/1376147wpp/x1s-agency-to-provide-full-refunds-for-fan-club-membership",
+      "https://music.apple.com/us/album/quantum-leap-ep/1579995230"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

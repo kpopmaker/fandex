@@ -5401,6 +5401,43 @@
           "note": "Provider profile lists D-CRUNCH as K-Pop and gives the formed date as August 6, 2018."
         }
       ]
+    },
+    {
+      "displayArtist": "X1",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "joint_member_agency_disbandment_statement_plus_swing_activity_conclusion_resolves_terminal_eleven_member_project_group_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "explicit_joint_agency_disbandment_official_activity_conclusion_exact_eleven_member_mapping_and_swing_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "X1 member agencies joint disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1375470wpp/breaking-x1-members-agencies-announce-groups-disbandment",
+          "note": "Play M, Yuehua, TOP Media, OUI, MBK, Woollim, DSP, Starship, and Brand New Music jointly announced on January 6, 2020 that unanimous agreement could not be reached and they decided on X1's disbandment."
+        },
+        {
+          "source": "Dispatch roster-to-agency mapping preserved by Soompi",
+          "url": "https://www.soompi.com/article/1375971wpp/dispatch-reports-details-of-how-x1-members-agencies-came-to-decision-to-disband",
+          "note": "The report maps the nine agencies to all eleven X1 members and identifies Swing Entertainment as X1's management agency, closing the terminal roster without converting individual member agencies into the group agency."
+        },
+        {
+          "source": "X1 official fan cafe activity-conclusion notice preserved by Soompi",
+          "url": "https://www.soompi.com/article/1375586wpp/x1-",
+          "note": "The official fan club notice explicitly states that X1's official activities have concluded and refers to the futures of the eleven members."
+        },
+        {
+          "source": "Swing Entertainment fanclub refund notice preserved by Soompi",
+          "url": "https://www.soompi.com/article/1376147wpp/x1s-agency-to-provide-full-refunds-for-fan-club-membership",
+          "note": "Swing Entertainment separately states that X1's activities have officially concluded."
+        },
+        {
+          "source": "Apple Music QUANTUM LEAP debut catalog",
+          "url": "https://music.apple.com/us/album/quantum-leap-ep/1579995230",
+          "note": "The licensed provider catalog dates QUANTUM LEAP to August 27, 2019 and credits SWING Entertainment and Stone Music Entertainment."
+        }
+      ]
     }
   ]
 }

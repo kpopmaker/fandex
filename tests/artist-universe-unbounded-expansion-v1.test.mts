@@ -1161,6 +1161,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(!dcrunch.members.includes('HYUNWOO'));
   assert.ok(!dcrunch.members.includes('MINHYUK'));
   assert.ok(!dcrunch.members.includes('DYLAN'));
+  const x1 = getArtistV4ById('x1');
+  assert.ok(x1);
+  assert.equal(x1.entityType, 'group');
+  assert.equal(x1.agency, 'Swing Entertainment');
+  assert.equal(x1.agencyStatus, 'historical');
+  assert.equal(x1.debutDate, '2019-08-27');
+  assert.equal(x1.lifecycleStatus, 'inactive');
+  assert.deepEqual(x1.members, ['HAN SEUNG WOO', 'CHO SEUNG YOUN', 'KIM WOO SEOK', 'KIM YO HAN', 'LEE HAN GYUL', 'CHA JUN HO', 'SON DONG PYO', 'KANG MIN HEE', 'LEE EUN SANG', 'SONG HYEONG JUN', 'NAM DO HYON']);
+  assert.ok(x1.profile.koreanAliases.includes('엑스원'));
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
