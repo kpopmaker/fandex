@@ -75,7 +75,7 @@ export function resolveVercelBlobPrivateStoreConfig(
   const oidcToken = cleanOptional(environment.VERCEL_OIDC_TOKEN);
   const storeId = cleanOptional(
     environment.FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID,
-  );
+  ) ?? cleanOptional(environment.BLOB_STORE_ID);
 
   if (token) {
     return Object.freeze({ token, oidcToken: null, storeId });
