@@ -106,6 +106,9 @@ function validatePathname(pathname: string, errorCode: string): string {
 }
 
 function validatePrefix(prefix: string): string {
+  const segments = prefix.endsWith('/')
+    ? prefix.slice(0, -1).split('/')
+    : prefix.split('/');
   if (
     typeof prefix !== 'string'
     || prefix.length < 1
@@ -114,7 +117,7 @@ function validatePrefix(prefix: string): string {
     || prefix.startsWith('/')
     || prefix.includes('\\')
     || prefix.includes('//')
-    || prefix.split('/').some((segment) =>
+    || segments.some((segment) =>
       segment.length === 0 || segment === '.' || segment === '..')
   ) {
     throw new Error('naver_evidence_blob_prefix_invalid');
