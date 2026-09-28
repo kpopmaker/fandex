@@ -43,7 +43,7 @@ def parse_live_pages(terminal_html: str, debut_profile_html: str, debut_catalog_
 
     if not contains_any(terminal, "ATEAM Entertainment", "A TEAM ENTERTAINMENT"):
         return []
-    if not contains_any(terminal, "halting group activities from today", "halt group activities"):
+    if not contains_any(terminal, "halting group activities from today"):
         return []
     if not contains_any(terminal, "terminate all the members' contracts", "terminate all the members’ contracts"):
         return []
