@@ -1,0 +1,50 @@
+{
+  "contractVersion": "momentum-vercel-blob-private-adapter-candidate-v1",
+  "target": {
+    "provider": "naver-news",
+    "canonicalArtistId": "iu",
+    "consumer": "momentumEvidenceConsensus"
+  },
+  "base": {
+    "main": "c4c1ac8191669a760d68091647ebac57a41d71c0",
+    "mergedFoundationPr": 271,
+    "foundationContract": "naver-news-stored-evidence-mirror-v1"
+  },
+  "adapter": {
+    "provider": "vercel-blob",
+    "access": "private",
+    "sdkOperations": [
+      "get",
+      "list",
+      "put"
+    ],
+    "freshReadsUseCache": false,
+    "listPagination": true,
+    "deterministicPathnames": true,
+    "addRandomSuffix": false,
+    "allowOverwrite": false,
+    "raceReclassification": true,
+    "staticTokenSupported": true,
+    "oidcTokenSupported": true,
+    "oidcRequiresStoreId": true,
+    "rawCredentialLoggingAllowed": false
+  },
+  "currentBoundary": {
+    "blobStoreProvisionedByThisCandidate": false,
+    "productionBlobCredentialBound": false,
+    "liveMirrorWritesEnabled": false,
+    "productionMirrorReadsEnabled": false,
+    "historicalBackfillComplete": false,
+    "current20260928ReevaluationUnblocked": false,
+    "neonRemoved": false
+  },
+  "productionSafety": {
+    "externalStorageWrites": 0,
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  },
+  "requiredNextGate": "explicit-private-vercel-blob-store-provisioning-and-binding"
+}
