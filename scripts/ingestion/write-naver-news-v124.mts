@@ -18,8 +18,12 @@ import {
 } from '../../lib/server/ingestion/naverNewsRepository';
 import {
   runNaverNewsIngestionWorker,
+  type NaverNewsAppliedEvidenceMirror,
   type NaverNewsWorkerResult,
 } from '../../lib/server/ingestion/naverNewsWorker';
+import {
+  createProductionNaverNewsBlobEvidenceMirror,
+} from '../../lib/server/ingestion/naverNewsBlobMirrorRuntime';
 import { requireRuntimeDatabaseUrl } from '../../lib/server/persistence/contracts';
 
 export const NAVER_NEWS_V124_APPROVAL_ENV = 'FANDEX_APPROVE_V124_NAVER_NEWS_PRODUCTION_WRITE';
@@ -51,6 +55,9 @@ export type NaverNewsProductionWritePool = NaverNewsIngestionPool & Readonly<{
 export type NaverNewsProductionWriteDependencies = Readonly<{
   poolFactory?: (config: NaverNewsProductionWritePoolConfig) => NaverNewsProductionWritePool;
   collectorOptions?: Omit<NaverNewsExternalCollectorOptions, 'environment'>;
+  evidenceMirrorFactory?: (
+    environment: Readonly<Record<string, string | undefined>>,
+  ) => NaverNewsAppliedEvidenceMirror | null;
   now?: () => string;
 }>;
 
@@ -172,11 +179,16 @@ export async function runNaverNewsProductionWrite(
   let failed = false;
   try {
     const repository = createPostgresNaverNewsIngestionRepository(pool);
+    const evidenceMirror = (
+      dependencies.evidenceMirrorFactory
+      ?? createProductionNaverNewsBlobEvidenceMirror
+    )(environment);
     result = await runNaverNewsIngestionWorker({
       command: parsed.command,
       workerId: parsed.workerId,
       collector,
       repository,
+      ...(evidenceMirror ? { evidenceMirror } : {}),
       now: dependencies.now ?? (() => new Date().toISOString()),
     });
   } catch {

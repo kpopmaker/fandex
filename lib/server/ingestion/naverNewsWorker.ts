@@ -4,6 +4,8 @@ import {
   NAVER_NEWS_INGESTION_CONTRACT_VERSION,
   type NaverNewsCollection,
   type NaverNewsIngestionCommand,
+  type NaverNewsIngestionWritePlan,
+  type NaverNewsJobIdentity,
   type NaverNewsRequestContract,
 } from './naverNewsContracts';
 import type { NaverNewsIngestionRepository } from './naverNewsRepository';
@@ -13,11 +15,17 @@ export type NaverNewsCollector = Readonly<{
   collect(request: NaverNewsRequestContract): Promise<NaverNewsCollection>;
 }>;
 
+export type NaverNewsAppliedEvidenceMirror = Readonly<{
+  stage(plan: NaverNewsIngestionWritePlan): Promise<void>;
+  finalize(identity: NaverNewsJobIdentity, resultSha256: string): Promise<void>;
+}>;
+
 export type NaverNewsWorkerInput = Readonly<{
   command: NaverNewsIngestionCommand;
   workerId: string;
   collector: NaverNewsCollector;
   repository: NaverNewsIngestionRepository;
+  evidenceMirror?: NaverNewsAppliedEvidenceMirror;
   now(): string;
 }>;
 
@@ -76,6 +84,13 @@ export async function runNaverNewsIngestionWorker(
   const identity = buildNaverNewsJobIdentity(input.command);
   const ensured = await input.repository.ensureJob(identity, input.now());
   if (ensured.status === 'idempotent_succeeded') {
+    if (input.evidenceMirror) {
+      try {
+        await input.evidenceMirror.finalize(identity, ensured.resultSha256);
+      } catch {
+        throw new Error('naver_news_evidence_mirror_finalize_failed');
+      }
+    }
     return terminalResult('idempotent_succeeded', identity, { resultSha256: ensured.resultSha256 });
   }
   if (ensured.status === 'conflict' || ensured.status === 'dead_letter') {
@@ -84,6 +99,13 @@ export async function runNaverNewsIngestionWorker(
 
   const claimed = await input.repository.claimJob(identity, input.workerId, input.now());
   if (claimed.status === 'idempotent_succeeded') {
+    if (input.evidenceMirror) {
+      try {
+        await input.evidenceMirror.finalize(identity, claimed.resultSha256);
+      } catch {
+        throw new Error('naver_news_evidence_mirror_finalize_failed');
+      }
+    }
     return terminalResult('idempotent_succeeded', identity, { resultSha256: claimed.resultSha256 });
   }
   if (claimed.status !== 'claimed') return terminalResult(claimed.status, identity);
@@ -116,6 +138,21 @@ export async function runNaverNewsIngestionWorker(
     return terminalResult(failed.status, identity, { attempt: claimed.attempt });
   }
 
+  if (input.evidenceMirror) {
+    try {
+      await input.evidenceMirror.stage(plan);
+    } catch {
+      const failed = await input.repository.failJob(
+        identity,
+        input.workerId,
+        claimed.claimToken,
+        'naver_news_evidence_mirror_stage_failed',
+        input.now(),
+      );
+      return terminalResult(failed.status, identity, { attempt: claimed.attempt });
+    }
+  }
+
   const completed = await input.repository.completeJob(
     identity,
     input.workerId,
@@ -125,6 +162,13 @@ export async function runNaverNewsIngestionWorker(
   );
   if (!('resultSha256' in completed)) {
     return terminalResult(completed.status, identity, { attempt: claimed.attempt });
+  }
+  if (input.evidenceMirror) {
+    try {
+      await input.evidenceMirror.finalize(identity, completed.resultSha256);
+    } catch {
+      throw new Error('naver_news_evidence_mirror_finalize_failed');
+    }
   }
   return terminalResult(completed.status, identity, {
     resultSha256: completed.resultSha256,

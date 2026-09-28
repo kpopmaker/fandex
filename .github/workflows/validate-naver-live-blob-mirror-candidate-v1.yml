@@ -1,0 +1,32 @@
+name: Validate NAVER live Blob mirror candidate v1
+
+on:
+  push:
+    branches:
+      - integration/naver-live-blob-mirror-candidate-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/naver-live-blob-mirror-candidate-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/naver-news-live-blob-mirror-v1.test.mts
+      - run: npx tsx --test tests/naver-news-worker-mirror-lifecycle-v1.test.mts
+      - run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+      - run: npx tsx --test tests/naver-news-production-write-v124.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
