@@ -1,0 +1,61 @@
+name: Validate Momentum explicitly authorized activation approval v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-product-activation-authorization-authorized-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-product-activation-authorization-authorized-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 7b9899e3a85f82c4e82cde1d8383f97d62765d49...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-product-activation-authorization-approved-v1.yml
+          data/momentum-product/iu_momentum_product_activation_authorization_approved_v1.json
+          lib/product/activation/momentumProductActivationApproval.ts
+          lib/server/product/momentumProductActivationAuthorization.ts
+          tests/momentum-product-activation-authorization-approved-evidence-v1.test.mts
+          tests/momentum-product-activation-authorization-approved-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum authorized activation approval regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-v1.test.mts
+
+      - name: Momentum authorized activation evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-evidence-v1.test.mts
+
+      - name: Existing Momentum execution-candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
