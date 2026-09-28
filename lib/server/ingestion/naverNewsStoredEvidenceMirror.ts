@@ -3,6 +3,7 @@ import {
   canonicalJson,
   isSha256,
   NAVER_NEWS_PROVIDER,
+  NAVER_NEWS_INGESTION_CONTRACT_VERSION,
   sha256Canonical,
   validateNaverNewsIngestionWritePlan,
   type NaverNewsIngestionWritePlan,
@@ -161,7 +162,7 @@ function validateNormalizedRecord(record: unknown): NaverNewsNormalizedRecord {
   });
   const expectedRecordSha = sha256Canonical(expectedPayload);
   const expectedRecordId = sha256Canonical({
-    contractVersion: 'v121_naver_news_ingestion',
+    contractVersion: NAVER_NEWS_INGESTION_CONTRACT_VERSION,
     provider: NAVER_NEWS_PROVIDER,
     recordSha256: expectedRecordSha,
   });
