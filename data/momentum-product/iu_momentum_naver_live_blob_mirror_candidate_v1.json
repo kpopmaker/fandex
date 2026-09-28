@@ -11,7 +11,9 @@
     "packageVersion": "2.8.0",
     "access": "private",
     "binding": "production-only",
-    "authentication": "oidc-with-BLOB_STORE_ID"
+    "authentication": "oidc-with-BLOB_STORE_ID",
+    "dependencyLockResolved": true,
+    "resolvedVersion": "2.8.0"
   },
   "lifecycle": {
     "stageBeforeDatabaseCompletion": true,
