@@ -39,6 +39,20 @@ jobs:
           grep -q -- '--access' /tmp/blob-create-help.txt
           grep -q -- '--region' /tmp/blob-create-help.txt
 
+      - name: Verify Vercel REST project access
+        run: |
+          HTTP_CODE=$(curl -sS -o /tmp/project.json -w '%{http_code}' \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_VERCEL_PROJECT_READ_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          node -e '
+            const fs=require("fs");
+            const p=JSON.parse(fs.readFileSync("/tmp/project.json","utf8"));
+            if (p.id !== process.env.VERCEL_PROJECT_ID) process.exit(2);
+            console.log("FANDEX_VERCEL_PROJECT_READ=verified");
+          '
+
       - name: Inspect existing Blob stores
         id: inspect
         run: |
