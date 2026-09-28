@@ -84,7 +84,7 @@ def parse_live_pages(
 
     if not contains_any(provider, "D-CRUNCH"):
         return []
-    if not contains_any(provider, "August 6, 2018", "FORMED"):
+    if not contains_any(provider, "August 6, 2018", "2018-08-06"):
         return []
     if not contains_any(provider, "K-Pop"):
         return []
