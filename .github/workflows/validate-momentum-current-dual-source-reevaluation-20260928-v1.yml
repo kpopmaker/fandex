@@ -23,6 +23,16 @@ jobs:
         run: |
           ! grep -R "INSERT INTO\|UPDATE .* SET\|DELETE FROM" scripts/research/momentumCurrentDualSourceEvaluationV1.mts
           ! grep -R "getResolvedMetricScore\|artistMonthlyMetricSeed\|metricScoringPipeline"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts             lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
+      - name: Identify Neon endpoint without exposing credentials
+        env:
+          FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+        run: |
+          node - <<'NODE'
+          const url = new URL(process.env.FANDEX_RUNTIME_DATABASE_URL);
+          const endpoint = url.hostname.match(/^(ep-[a-z0-9-]+)/)?.[1] ?? null;
+          console.log('FANDEX_NEON_ENDPOINT_ID=' + (endpoint ?? 'unresolved'));
+          NODE
+
       - name: Read-only DB compatibility diagnostic
         env:
           FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
