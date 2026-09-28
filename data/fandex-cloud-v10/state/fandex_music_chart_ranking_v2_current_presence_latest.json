@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-09-27T11:10:34",
-  "snapshotDate": "2026-09-27",
+  "createdAt": "2026-09-28T11:14:47",
+  "snapshotDate": "2026-09-28",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "5",
+          "rank": "6",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -48,11 +48,11 @@
     },
     {
       "artist": "에스파",
-      "fandexMusicChartFinalPoint": 162.75,
-      "score": 162.75,
+      "fandexMusicChartFinalPoint": 180.75,
+      "score": 180.75,
       "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 72.0,
+        "melon": 90.0,
         "genie": 63.75,
         "bugs": 27.0
       },
@@ -60,9 +60,9 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "11",
+          "rank": "10",
           "chartType": "daily",
-          "point": 72.0
+          "point": 90.0
         },
         "genie": {
           "status": "RANKED",
@@ -74,7 +74,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "16",
+          "rank": "12",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -83,25 +83,25 @@
     },
     {
       "artist": "아이유",
-      "fandexMusicChartFinalPoint": 146.5,
-      "score": 146.5,
+      "fandexMusicChartFinalPoint": 139.75,
+      "score": 139.75,
       "rankedPlatformCount": 3,
       "platformPoints": {
         "melon": 72.0,
         "genie": 34.0,
-        "bugs": 40.5
+        "bugs": 33.75
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "이 별로부터",
-          "rank": "18",
+          "rank": "12",
           "chartType": "daily",
           "point": 72.0
         },
         "genie": {
           "status": "RANKED",
-          "trackTitle": "이 별로부터",
+          "trackTitle": "Dear my crazy soulmate",
           "rank": "41",
           "chartType": "daily",
           "point": 34.0
@@ -109,9 +109,9 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "3",
+          "rank": "4",
           "chartType": "realtime",
-          "point": 40.5
+          "point": 33.75
         }
       },
       "rank": 3
@@ -130,21 +130,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "49",
+          "rank": "46",
           "chartType": "daily",
           "point": 48.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "26",
+          "rank": "25",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "41",
+          "rank": "31",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -165,21 +165,21 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "96",
+          "rank": "93",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "118",
+          "rank": "120",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
-          "trackTitle": "Hype Boy",
-          "rank": "59",
+          "trackTitle": "Ditto",
+          "rank": "71",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -200,14 +200,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "86",
+          "rank": "91",
           "chartType": "daily",
           "point": 24.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "134",
+          "rank": "133",
           "chartType": "daily",
           "point": 6.8
         },
@@ -242,14 +242,14 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "161",
+          "rank": "154",
           "chartType": "daily",
           "point": 6.8
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (feat. j-hope of BTS)",
-          "rank": "76",
+          "rank": "99",
           "chartType": "realtime",
           "point": 9.0
         }
