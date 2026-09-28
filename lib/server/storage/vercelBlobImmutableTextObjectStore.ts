@@ -15,9 +15,19 @@ export type VercelBlobPrivateStoreConfig = Readonly<{
   storeId: string | null;
 }>;
 
+export type VercelBlobByteStream = Readonly<{
+  getReader(): Readonly<{
+    read(): Promise<Readonly<{
+      done: boolean;
+      value?: Uint8Array;
+    }>>;
+    releaseLock(): void;
+  }>;
+}>;
+
 export type VercelBlobSdkGetResult =
   | null
-  | Readonly<{ stream: ReadableStream<Uint8Array> }>;
+  | Readonly<{ stream: VercelBlobByteStream }>;
 
 export type VercelBlobSdkListResult = Readonly<{
   blobs: readonly Readonly<{ pathname: string }>[];
@@ -146,7 +156,7 @@ function authOptions(config: VercelBlobPrivateStoreConfig): Readonly<{
 }
 
 async function streamToText(
-  stream: ReadableStream<Uint8Array>,
+  stream: VercelBlobByteStream,
 ): Promise<string> {
   const reader = stream.getReader();
   const decoder = new TextDecoder();
