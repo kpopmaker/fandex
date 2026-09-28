@@ -1,0 +1,53 @@
+name: Validate Momentum operations handoff production attestation v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-operations-handoff-production-attestation-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-operations-handoff-production-attestation-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 7e72c65951bee61e8e528ae2719f090efc662dba...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-operations-handoff-production-attestation-v1.yml
+          data/momentum-product/iu_momentum_product_activation_operations_handoff_production_attestation_v1.json
+          tests/momentum-product-activation-operations-handoff-production-attestation-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum operations handoff production attestation regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-operations-handoff-production-attestation-v1.test.mts
+
+      - name: Momentum activation operations handoff regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-operations-handoff-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
