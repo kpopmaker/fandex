@@ -40,6 +40,33 @@ jobs:
             console.log("FANDEX_VERCEL_PROJECT_READ=verified");
           '
 
+      - name: Verify Blob project environment binding read-only
+        run: |
+          HTTP_CODE=$(curl -sS -o /tmp/project-env.json -w '%{http_code}' \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?teamId=$VERCEL_ORG_ID&decrypt=false")
+          echo "FANDEX_PROJECT_ENV_READ_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+
+          node <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/project-env.json', 'utf8'));
+          const envs = Array.isArray(data.envs) ? data.envs : Array.isArray(data) ? data : [];
+          const blob = envs
+            .filter(e => e && ['BLOB_READ_WRITE_TOKEN','BLOB_STORE_ID'].includes(e.key))
+            .map(e => ({
+              key: e.key,
+              target: Array.isArray(e.target) ? [...e.target].sort() : e.target,
+              type: e.type ?? null,
+            }))
+            .sort((a,b)=>a.key.localeCompare(b.key));
+          console.log('FANDEX_BLOB_ENV_BINDING=' + JSON.stringify(blob));
+          if (blob.length === 0) {
+            console.error('blob_project_binding_env_absent');
+            process.exit(2);
+          }
+        NODE
+
       - name: Inspect existing Blob stores through REST
         id: inspect
         run: |
