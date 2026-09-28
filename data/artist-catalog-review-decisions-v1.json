@@ -5566,6 +5566,33 @@
           "note": "Provider catalog dates Act.1 The Little Mermaid to June 28, 2016 and credits JELLYFISH ENTERTAINMENT."
         }
       ]
+    },
+    {
+      "displayArtist": "HINAPIA",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "osr_explicit_disbandment_and_all_five_contract_termination_plus_five_member_debut_identity_resolve_terminal_hinapia_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_osr_disbandment_statement_exact_five_member_debut_identity_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OSR Entertainment HINAPIA disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1420662wpp/hinapia-announces-official-disbandment-and-termination-of-all-members-contracts",
+          "note": "OSR Entertainment explicitly states that HINAPIA will disband and that exclusive contracts with all five members are terminated effective August 21, 2020."
+        },
+        {
+          "source": "HINAPIA five-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1363421wpp/watch-hinapia-with-former-pristin-members-makes-debut-with-sophisticated-drip-mv",
+          "note": "The debut profile identifies MINKYEUNG, GYEONGWON, YAEBIN, EUNWOO, and BADA as HINAPIA's five members and records the November 3, 2019 debut."
+        },
+        {
+          "source": "Apple Music DRIP provider catalog",
+          "url": "https://music.apple.com/us/album/drip-single/1486120995",
+          "note": "Provider catalog dates DRIP to November 3, 2019 and credits OSR Entertainment under license to Kakao M."
+        }
+      ]
     }
   ]
 }

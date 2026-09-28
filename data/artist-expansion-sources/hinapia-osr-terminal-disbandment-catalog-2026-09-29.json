@@ -1,0 +1,78 @@
+{
+  "version": "hinapia_osr_terminal_disbandment_catalog_adapter_v1",
+  "source": {
+    "id": "hinapia-osr-terminal-disbandment-catalog",
+    "type": "provider_catalog",
+    "name": "HINAPIA OSR Terminal Disbandment Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1420662wpp/hinapia-announces-official-disbandment-and-termination-of-all-members-contracts"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "HINAPIA",
+      "aliases": [
+        "희나피아"
+      ],
+      "evidence": [
+        {
+          "label": "OSR Entertainment explicit HINAPIA disbandment and all-five contract termination statement",
+          "url": "https://www.soompi.com/article/1420662wpp/hinapia-announces-official-disbandment-and-termination-of-all-members-contracts"
+        },
+        {
+          "label": "HINAPIA five-member debut profile",
+          "url": "https://www.soompi.com/article/1363421wpp/watch-hinapia-with-former-pristin-members-makes-debut-with-sophisticated-drip-mv"
+        },
+        {
+          "label": "Apple Music DRIP licensed debut catalog",
+          "url": "https://music.apple.com/us/album/drip-single/1486120995"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitGroupDisbandmentEvidenceRequired": true,
+    "allFiveMemberExclusiveContractTerminationRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "legalEntityDissolutionNotInferred": true,
+    "priorGroupMembershipDoesNotMergeGroupCanonicals": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2020-08-21",
+    "effectiveDate": "2020-08-21",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "OSR Entertainment",
+    "terminalMembers": [
+      "MINKYEUNG",
+      "GYEONGWON",
+      "EUNWOO",
+      "YAEBIN",
+      "BADA"
+    ],
+    "terminalMemberCount": 5,
+    "explicitGroupDisbandmentAnnounced": true,
+    "allMemberExclusiveContractsTerminated": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2019-11-03",
+    "debutRelease": "DRIP"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_osr_disbandment_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1420662wpp/hinapia-announces-official-disbandment-and-termination-of-all-members-contracts",
+      "https://www.soompi.com/article/1363421wpp/watch-hinapia-with-former-pristin-members-makes-debut-with-sophisticated-drip-mv",
+      "https://music.apple.com/us/album/drip-single/1486120995"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

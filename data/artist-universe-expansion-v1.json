@@ -9349,6 +9349,71 @@
           "url": "https://music.apple.com/us/album/act-1-the-little-mermaid-ep/1527029899"
         }
       ]
+    },
+    {
+      "id": "hinapia",
+      "ticker": "HINAPIA",
+      "name": "HINAPIA",
+      "agency": "OSR Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-11-03",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "MINKYEUNG",
+        "GYEONGWON",
+        "EUNWOO",
+        "YAEBIN",
+        "BADA"
+      ],
+      "naverNewsQuery": "희나피아 HINAPIA OSR 엔터테인먼트",
+      "koreanAliases": [
+        "희나피아"
+      ],
+      "englishAliases": [
+        "HINAPIA"
+      ],
+      "keywords": [
+        "OSR Entertainment",
+        "OSR 엔터테인먼트",
+        "MINKYEUNG",
+        "GYEONGWON",
+        "EUNWOO",
+        "YAEBIN",
+        "BADA",
+        "MINKYUNG",
+        "KYUNGWON",
+        "YEBIN",
+        "ROA",
+        "YUHA",
+        "RENA",
+        "DRIP",
+        "New Start"
+      ],
+      "disambiguationKeywords": [
+        "OSR Entertainment",
+        "OSR 엔터테인먼트",
+        "희나피아"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "OSR Entertainment HINAPIA disbandment and all-member contract termination statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1420662wpp/hinapia-announces-official-disbandment-and-termination-of-all-members-contracts"
+        },
+        {
+          "source": "HINAPIA five-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1363421wpp/watch-hinapia-with-former-pristin-members-makes-debut-with-sophisticated-drip-mv"
+        },
+        {
+          "source": "Apple Music DRIP licensed debut catalog",
+          "url": "https://music.apple.com/us/album/drip-single/1486120995"
+        }
+      ]
     }
   ]
 }

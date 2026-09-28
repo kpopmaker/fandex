@@ -1204,6 +1204,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(gugudan.members, ['HANA', 'MIMI', 'NAYOUNG', 'HAEBIN', 'KIM SEJEONG', 'SOYEE', 'SALLY', 'MINA']);
   assert.ok(gugudan.profile.koreanAliases.includes('구구단'));
   assert.ok(!gugudan.members.includes('HYEYEON'));
+
+  const hinapia = getArtistV4ById('hinapia');
+  assert.ok(hinapia);
+  assert.equal(hinapia.entityType, 'group');
+  assert.equal(hinapia.agency, 'OSR Entertainment');
+  assert.equal(hinapia.agencyStatus, 'historical');
+  assert.equal(hinapia.debutDate, '2019-11-03');
+  assert.equal(hinapia.lifecycleStatus, 'inactive');
+  assert.deepEqual(hinapia.members, ['MINKYEUNG', 'GYEONGWON', 'EUNWOO', 'YAEBIN', 'BADA']);
+  assert.ok(hinapia.profile.koreanAliases.includes('희나피아'));
   const oneTheNine = getArtistV4ById('1the9');
   assert.ok(oneTheNine);
   assert.equal(oneTheNine.entityType, 'group');
