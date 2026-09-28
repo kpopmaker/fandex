@@ -23,6 +23,11 @@ jobs:
         run: |
           ! grep -R "INSERT INTO\|UPDATE .* SET\|DELETE FROM" scripts/research/momentumCurrentDualSourceEvaluationV1.mts
           ! grep -R "getResolvedMetricScore\|artistMonthlyMetricSeed\|metricScoringPipeline"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts             lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
+      - name: Read-only DB compatibility diagnostic
+        env:
+          FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+        run: npx tsx scripts/research/momentumCurrentDatabaseDiagnosticV1.mts
+
       - name: Live current dual-source reevaluation
         env:
           NODE_OPTIONS: --conditions=react-server
