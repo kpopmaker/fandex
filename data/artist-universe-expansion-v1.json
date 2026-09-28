@@ -9279,6 +9279,76 @@
           "url": "https://music.apple.com/us/album/trcng-1st-mini-album-new-generation-ep/1294608588"
         }
       ]
+    },
+    {
+      "id": "gugudan",
+      "ticker": "GUGUDAN",
+      "name": "gugudan",
+      "agency": "Jellyfish Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2016-06-28",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "HANA",
+        "MIMI",
+        "NAYOUNG",
+        "HAEBIN",
+        "KIM SEJEONG",
+        "SOYEE",
+        "SALLY",
+        "MINA"
+      ],
+      "naverNewsQuery": "구구단 gugudan 젤리피쉬",
+      "koreanAliases": [
+        "구구단"
+      ],
+      "englishAliases": [
+        "gugudan",
+        "GUGUDAN"
+      ],
+      "keywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬",
+        "HANA",
+        "MIMI",
+        "NAYOUNG",
+        "HAEBIN",
+        "KIM SEJEONG",
+        "SOYEE",
+        "SALLY",
+        "MINA",
+        "HYEYEON",
+        "혜연",
+        "Act.1 The Little Mermaid",
+        "Wonderland",
+        "Dear Friend",
+        "Danjjag"
+      ],
+      "disambiguationKeywords": [
+        "Jellyfish Entertainment",
+        "젤리피쉬",
+        "구구단"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "Jellyfish official group-activity end statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1446032wpp/breaking-gugudan-announces-official-disbandment"
+        },
+        {
+          "source": "Jellyfish HYEYEON departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1251679wpp/gugudans-hyeyeon-announces-departure-group"
+        },
+        {
+          "source": "Apple Music Act.1 The Little Mermaid provider catalog",
+          "url": "https://music.apple.com/us/album/act-1-the-little-mermaid-ep/1527029899"
+        }
+      ]
     }
   ]
 }

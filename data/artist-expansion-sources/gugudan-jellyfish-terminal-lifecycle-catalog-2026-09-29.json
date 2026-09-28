@@ -1,0 +1,89 @@
+{
+  "version": "gugudan_jellyfish_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "gugudan-jellyfish-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "gugudan Jellyfish Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1446032wpp/breaking-gugudan-announces-official-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "gugudan",
+      "aliases": [
+        "구구단",
+        "GUGUDAN"
+      ],
+      "evidence": [
+        {
+          "label": "Jellyfish official group-activity end statement",
+          "url": "https://www.soompi.com/article/1446032wpp/breaking-gugudan-announces-official-disbandment"
+        },
+        {
+          "label": "Jellyfish HYEYEON explicit departure statement",
+          "url": "https://www.soompi.com/article/1251679wpp/gugudans-hyeyeon-announces-departure-group"
+        },
+        {
+          "label": "Apple Music Act.1 The Little Mermaid debut catalog",
+          "url": "https://music.apple.com/us/album/act-1-the-little-mermaid-ep/1527029899"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitGroupActivityEndEvidenceRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "priorExplicitMemberDepartureRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "groupActivityEndDoesNotInferIndividualCareerEnd": true,
+    "memberIndividualActivityDoesNotReactivateGroup": true,
+    "legalDisbandmentNotIndependentlyAsserted": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2020-12-30",
+    "effectiveDate": "2020-12-31",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "Jellyfish Entertainment",
+    "terminalMembers": [
+      "HANA",
+      "MIMI",
+      "NAYOUNG",
+      "HAEBIN",
+      "KIM SEJEONG",
+      "SOYEE",
+      "SALLY",
+      "MINA"
+    ],
+    "terminalMemberCount": 8,
+    "groupActivitiesEnded": true,
+    "legalDisbandmentAsserted": false,
+    "priorExitedMembers": [
+      {
+        "member": "HYEYEON",
+        "effectiveDate": "2018-10-25",
+        "resolution": "explicit_end_of_gugudan_activities"
+      }
+    ],
+    "debutDate": "2016-06-28",
+    "debutRelease": "Act.1 The Little Mermaid"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_lifecycle_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1446032wpp/breaking-gugudan-announces-official-disbandment",
+      "https://www.soompi.com/article/1251679wpp/gugudans-hyeyeon-announces-departure-group",
+      "https://music.apple.com/us/album/act-1-the-little-mermaid-ep/1527029899"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

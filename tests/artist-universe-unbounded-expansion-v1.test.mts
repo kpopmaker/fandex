@@ -1193,6 +1193,17 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(trcng.profile.koreanAliases.includes('티알씨엔지'));
   assert.ok(!trcng.members.includes('TAESEON'));
   assert.ok(!trcng.members.includes('WOOYEOP'));
+
+  const gugudan = getArtistV4ById('gugudan');
+  assert.ok(gugudan);
+  assert.equal(gugudan.entityType, 'group');
+  assert.equal(gugudan.agency, 'Jellyfish Entertainment');
+  assert.equal(gugudan.agencyStatus, 'historical');
+  assert.equal(gugudan.debutDate, '2016-06-28');
+  assert.equal(gugudan.lifecycleStatus, 'inactive');
+  assert.deepEqual(gugudan.members, ['HANA', 'MIMI', 'NAYOUNG', 'HAEBIN', 'KIM SEJEONG', 'SOYEE', 'SALLY', 'MINA']);
+  assert.ok(gugudan.profile.koreanAliases.includes('구구단'));
+  assert.ok(!gugudan.members.includes('HYEYEON'));
   const oneTheNine = getArtistV4ById('1the9');
   assert.ok(oneTheNine);
   assert.equal(oneTheNine.entityType, 'group');

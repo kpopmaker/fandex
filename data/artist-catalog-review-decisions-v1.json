@@ -5539,6 +5539,33 @@
           "note": "Provider catalog dates TRCNG's first mini album New Generation to October 10, 2017 and credits TS ENTER."
         }
       ]
+    },
+    {
+      "displayArtist": "gugudan",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "jellyfish_terminal_group_activity_statement_plus_prior_hyeyeon_departure_resolves_eight_member_terminal_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_jellyfish_group_activity_end_statement_prior_explicit_member_departure_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Jellyfish official group-activity end statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1446032wpp/breaking-gugudan-announces-official-disbandment",
+          "note": "Jellyfish Entertainment states that after discussion, gugudan will officially end group activities on December 31, 2020 while supporting members' individual activities."
+        },
+        {
+          "source": "Jellyfish HYEYEON departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1251679wpp/gugudans-hyeyeon-announces-departure-group",
+          "note": "Jellyfish explicitly ended HYEYEON's gugudan activities on October 25, 2018 and identified the remaining eight members as HANA, MIMI, NAYOUNG, HAEBIN, KIM SEJEONG, SOYEE, SALLY, and MINA."
+        },
+        {
+          "source": "Apple Music Act.1 The Little Mermaid provider catalog",
+          "url": "https://music.apple.com/us/album/act-1-the-little-mermaid-ep/1527029899",
+          "note": "Provider catalog dates Act.1 The Little Mermaid to June 28, 2016 and credits JELLYFISH ENTERTAINMENT."
+        }
+      ]
     }
   ]
 }
