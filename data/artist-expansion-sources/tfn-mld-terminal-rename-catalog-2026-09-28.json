@@ -1,0 +1,98 @@
+{
+  "version": "tfn_mld_terminal_rename_catalog_adapter_v1",
+  "source": {
+    "id": "tfn-mld-terminal-rename-catalog",
+    "type": "provider_catalog",
+    "name": "TFN MLD Terminal Rename Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1645748wpp/mld-boy-group-tfn-disbands-after-3-years"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TFN",
+      "aliases": [
+        "T1419",
+        "티에프앤",
+        "티일사일구"
+      ],
+      "evidence": [
+        {
+          "label": "MLD terminal contract and group-activity statement",
+          "url": "https://www.soompi.com/article/1645748wpp/mld-boy-group-tfn-disbands-after-3-years"
+        },
+        {
+          "label": "Sony Music official T1419 to TFN rename notice",
+          "url": "https://www.sonymusic.co.jp/artist/T1419/info/546092"
+        },
+        {
+          "label": "TFN Japan official nine-member profile",
+          "url": "https://www.t1419japan.com/"
+        },
+        {
+          "label": "Apple Music BEFORE SUNRISE Pt. 1 debut catalog",
+          "url": "https://music.apple.com/us/album/before-sunrise-pt-1-single/1547593325"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "renameContinuityRequired": true,
+    "renameDoesNotCreateNewCanonical": true,
+    "exactTerminalMemberRosterRequired": true,
+    "exclusiveContractEndEvidenceRequired": true,
+    "groupActivityEndEvidenceRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "managementClosureDoesNotAssertLegalEntityDissolution": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "laterIndividualActivityDoesNotReactivateGroup": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "officialProfileRosterAllowedForTerminalIdentity": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "renameContinuity": {
+    "from": "T1419",
+    "to": "TFN",
+    "effectiveDate": "2022-10-17",
+    "resolution": "same_group_identity_official_name_change"
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2024-02-29",
+    "effectiveDate": "2024-02-29",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "MLD Entertainment",
+    "terminalMembers": [
+      "NOA",
+      "SIAN",
+      "KEVIN",
+      "GUNWOO",
+      "LEO",
+      "ON",
+      "ZERO",
+      "KAIRI",
+      "KIO"
+    ],
+    "terminalMemberCount": 9,
+    "exclusiveContractsEnded": true,
+    "groupActivitiesEnded": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2021-01-11",
+    "debutRelease": "BEFORE SUNRISE Part. 1",
+    "fandomName": "EDELWEISS"
+  },
+  "provenance": {
+    "snapshotType": "verified_official_rename_plus_terminal_management_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1645748wpp/mld-boy-group-tfn-disbands-after-3-years",
+      "https://www.sonymusic.co.jp/artist/T1419/info/546092",
+      "https://www.t1419japan.com/",
+      "https://music.apple.com/us/album/before-sunrise-pt-1-single/1547593325"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

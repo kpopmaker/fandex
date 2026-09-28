@@ -5327,6 +5327,38 @@
           "note": "Provider catalog dates ISSUE MAKER to April 28, 2021 and lists S2 Entertainment as the planning agency."
         }
       ]
+    },
+    {
+      "displayArtist": "TFN",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "t1419_to_tfn_rename_continuity_plus_mld_terminal_contract_and_group_activity_end_resolve_single_nine_member_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_sony_rename_continuity_official_japan_nine_member_profile_mld_terminal_statement_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MLD terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1645748wpp/mld-boy-group-tfn-disbands-after-3-years",
+          "note": "On February 29, 2024 MLD Entertainment confirmed that TFN's exclusive contracts and group activities had ended."
+        },
+        {
+          "source": "Sony Music official rename notice",
+          "url": "https://www.sonymusic.co.jp/artist/T1419/info/546092",
+          "note": "Sony Music's official TFN page states that T1419 changed its group name to TFN effective October 17, 2022, resolving both names as one continuous group identity."
+        },
+        {
+          "source": "TFN Japan official profile",
+          "url": "https://www.t1419japan.com/",
+          "note": "Official profile identifies the nine-member roster as NOA, SIAN, KEVIN, GUNWOO, LEO, ON, ZERO, KAIRI, and KIO under MLD Entertainment."
+        },
+        {
+          "source": "Apple Music BEFORE SUNRISE Pt. 1 provider catalog",
+          "url": "https://music.apple.com/us/album/before-sunrise-pt-1-single/1547593325",
+          "note": "Licensed provider catalog dates the debut release to January 11, 2021 and credits MLD entertainment."
+        }
+      ]
     }
   ]
 }

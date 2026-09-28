@@ -8789,6 +8789,86 @@
           "url": "https://music.bugs.co.kr/album/4042514"
         }
       ]
+    },
+    {
+      "id": "tfn",
+      "ticker": "TFN",
+      "name": "TFN",
+      "agency": "MLD Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2021-01-11",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "NOA",
+        "SIAN",
+        "KEVIN",
+        "GUNWOO",
+        "LEO",
+        "ON",
+        "ZERO",
+        "KAIRI",
+        "KIO"
+      ],
+      "fandomName": "EDELWEISS",
+      "naverNewsQuery": "TFN T1419 티에프앤 티일사일구 MLD",
+      "koreanAliases": [
+        "티에프앤",
+        "티일사일구"
+      ],
+      "englishAliases": [
+        "TFN",
+        "T1419"
+      ],
+      "keywords": [
+        "MLD Entertainment",
+        "MLD엔터테인먼트",
+        "NOA",
+        "SIAN",
+        "KEVIN",
+        "GUNWOO",
+        "LEO",
+        "ON",
+        "ZERO",
+        "KAIRI",
+        "KIO",
+        "BEFORE SUNRISE Part. 1",
+        "ASURABALBALTA",
+        "EDELWEISS",
+        "Teenager Fourteen Nineteen",
+        "Try For New"
+      ],
+      "disambiguationKeywords": [
+        "MLD Entertainment",
+        "MLD엔터테인먼트",
+        "T1419",
+        "TFN"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "LATAM",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "MLD TFN terminal contract/activity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1645748wpp/mld-boy-group-tfn-disbands-after-3-years"
+        },
+        {
+          "source": "Sony Music official T1419 to TFN rename notice",
+          "url": "https://www.sonymusic.co.jp/artist/T1419/info/546092"
+        },
+        {
+          "source": "TFN Japan official nine-member profile",
+          "url": "https://www.t1419japan.com/"
+        },
+        {
+          "source": "Apple Music BEFORE SUNRISE Pt. 1 debut catalog",
+          "url": "https://music.apple.com/us/album/before-sunrise-pt-1-single/1547593325"
+        }
+      ]
     }
   ]
 }
