@@ -1,0 +1,41 @@
+{
+  "contractVersion": "momentum-private-blob-provisioning-readiness-candidate-v1",
+  "target": {
+    "provider": "naver-news",
+    "canonicalArtistId": "iu",
+    "consumer": "momentumEvidenceConsensus"
+  },
+  "base": {
+    "main": "f9c9a168a73b5253d2dc1ba7373e3ac48fecb29b",
+    "mergedAdapterPr": 272,
+    "adapterVersion": "naver-evidence-vercel-blob-adapter-v1"
+  },
+  "provisioningPlan": {
+    "provider": "vercel-blob",
+    "storeName": "fandex-naver-evidence",
+    "access": "private",
+    "region": "iad1",
+    "projectId": "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v",
+    "allowedEnvironments": [
+      "production"
+    ],
+    "preferredAuthentication": "oidc",
+    "staticTokenFallbackAllowed": true,
+    "connectedGenericStoreIdEnv": "BLOB_STORE_ID",
+    "fandexSpecificStoreIdEnv": "FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID",
+    "staticTokenEnv": "BLOB_READ_WRITE_TOKEN",
+    "oidcTokenEnv": "VERCEL_OIDC_TOKEN"
+  },
+  "currentBoundary": {
+    "storeProvisioned": false,
+    "projectBindingMutated": false,
+    "environmentVariablesMutated": false,
+    "externalStorageWrites": 0,
+    "liveMirrorWritesEnabled": false,
+    "productionMirrorReadsEnabled": false,
+    "historicalBackfillComplete": false,
+    "current20260928ReevaluationUnblocked": false,
+    "neonRemoved": false
+  },
+  "nextExplicitGate": "provision-private-vercel-blob-store-and-bind-production"
+}

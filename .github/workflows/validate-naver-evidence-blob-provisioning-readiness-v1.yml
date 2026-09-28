@@ -1,0 +1,58 @@
+name: Validate NAVER evidence Blob provisioning readiness v1
+
+on:
+  push:
+    branches:
+      - integration/naver-evidence-blob-provisioning-readiness-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/naver-evidence-blob-provisioning-readiness-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only f9c9a168a73b5253d2dc1ba7373e3ac48fecb29b...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-naver-evidence-blob-provisioning-readiness-v1.yml
+          data/momentum-product/iu_momentum_private_blob_provisioning_readiness_candidate_v1.json
+          lib/server/storage/naverEvidenceBlobProvisioningReadiness.ts
+          lib/server/storage/vercelBlobImmutableTextObjectStore.ts
+          tests/momentum-private-blob-provisioning-readiness-candidate-v1.test.mts
+          tests/naver-evidence-blob-provisioning-readiness-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Blob provisioning readiness regression
+        run: npx tsx --test tests/naver-evidence-blob-provisioning-readiness-v1.test.mts
+
+      - name: Blob provisioning evidence regression
+        run: npx tsx --test tests/momentum-private-blob-provisioning-readiness-candidate-v1.test.mts
+
+      - name: Existing Blob adapter regression
+        run: npx tsx --test tests/naver-evidence-vercel-blob-adapter-v1.test.mts
+
+      - name: Existing object mirror regression
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
