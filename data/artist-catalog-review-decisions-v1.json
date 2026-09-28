@@ -5593,6 +5593,38 @@
           "note": "Provider catalog dates DRIP to November 3, 2019 and credits OSR Entertainment under license to Kakao M."
         }
       ]
+    },
+    {
+      "displayArtist": "D1CE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "d1ce_entertainment_terminal_announcement_resolves_exact_five_member_contract_expiry_and_group_end_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_d1ce_entertainment_terminal_announcement_plus_exact_debut_identity_and_provider_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "D1CE Entertainment terminal announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1563804wpp/d1ce-officially-announces-disbandment",
+          "note": "D1CE Entertainment names Woo Jin Young, Park Woo Dam, Kim Hyun Soo, Jung Yoo Jun, and Jo Yong Geun and states all five exclusive contracts expired on January 20, 2023 after mutual agreement."
+        },
+        {
+          "source": "D1CE debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1342746wpp/watch-d1ce-makes-the-world-wake-up-with-powerful-debut-mv",
+          "note": "Debut coverage identifies the same five members and records D1CE's August 1, 2019 debut with Wake Up : Roll the World."
+        },
+        {
+          "source": "Apple Music Wake Up provider catalog",
+          "url": "https://music.apple.com/us/song/1475189864",
+          "note": "Apple Music dates Wake Up and the Wake Up : Roll the World EP to August 1, 2019."
+        },
+        {
+          "source": "Bugs Wake Up : Roll the World provider catalog",
+          "url": "https://music.bugs.co.kr/album/20268984",
+          "note": "Bugs dates the EP to August 1, 2019 and lists D1CE ENTERTAINMENT as the planning agency."
+        }
+      ]
     }
   ]
 }

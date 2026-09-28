@@ -9414,6 +9414,69 @@
           "url": "https://music.apple.com/us/album/drip-single/1486120995"
         }
       ]
+    },
+    {
+      "id": "d1ce",
+      "ticker": "D1CE",
+      "name": "D1CE",
+      "agency": "D1CE Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-08-01",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "WOO JIN YOUNG",
+        "PARK WOO DAM",
+        "KIM HYUN SOO",
+        "JUNG YOO JUN",
+        "JO YONG GEUN"
+      ],
+      "naverNewsQuery": "디원스 D1CE 디원스엔터테인먼트",
+      "koreanAliases": [
+        "디원스"
+      ],
+      "englishAliases": [
+        "D1CE"
+      ],
+      "keywords": [
+        "D1CE Entertainment",
+        "디원스엔터테인먼트",
+        "WOO JIN YOUNG",
+        "PARK WOO DAM",
+        "KIM HYUN SOO",
+        "JUNG YOO JUN",
+        "JO YONG GEUN",
+        "Wake Up",
+        "Wake Up : Roll the World"
+      ],
+      "disambiguationKeywords": [
+        "D1CE Entertainment",
+        "디원스엔터테인먼트",
+        "디원스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "D1CE Entertainment terminal announcement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1563804wpp/d1ce-officially-announces-disbandment"
+        },
+        {
+          "source": "D1CE debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1342746wpp/watch-d1ce-makes-the-world-wake-up-with-powerful-debut-mv"
+        },
+        {
+          "source": "Apple Music Wake Up provider catalog",
+          "url": "https://music.apple.com/us/song/1475189864"
+        },
+        {
+          "source": "Bugs Wake Up : Roll the World provider catalog",
+          "url": "https://music.bugs.co.kr/album/20268984"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,84 @@
+{
+  "version": "d1ce_terminal_management_catalog_adapter_v1",
+  "source": {
+    "id": "d1ce-terminal-management-catalog",
+    "type": "provider_catalog",
+    "name": "D1CE Entertainment Terminal Management Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1563804wpp/d1ce-officially-announces-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "D1CE",
+      "aliases": [
+        "디원스"
+      ],
+      "evidence": [
+        {
+          "label": "D1CE Entertainment terminal five-member contract announcement",
+          "url": "https://www.soompi.com/article/1563804wpp/d1ce-officially-announces-disbandment"
+        },
+        {
+          "label": "D1CE five-member debut profile",
+          "url": "https://www.soompi.com/article/1342746wpp/watch-d1ce-makes-the-world-wake-up-with-powerful-debut-mv"
+        },
+        {
+          "label": "Apple Music Wake Up debut catalog",
+          "url": "https://music.apple.com/us/song/1475189864"
+        },
+        {
+          "label": "Bugs Wake Up : Roll the World agency catalog",
+          "url": "https://music.bugs.co.kr/album/20268984"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "allMemberExclusiveContractExpiryRequired": true,
+    "agencyAnnouncementClassifiedAsGroupDisbandmentByPreservedSource": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2023-01-20",
+    "effectiveDate": "2023-01-20",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "D1CE Entertainment",
+    "terminalMembers": [
+      "WOO JIN YOUNG",
+      "PARK WOO DAM",
+      "KIM HYUN SOO",
+      "JUNG YOO JUN",
+      "JO YONG GEUN"
+    ],
+    "terminalMemberCount": 5,
+    "allMemberExclusiveContractsExpired": true,
+    "groupDisbandmentAnnouncementPreserved": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2019-08-01",
+    "debutRelease": "Wake Up : Roll the World"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_management_plus_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1563804wpp/d1ce-officially-announces-disbandment",
+      "https://www.soompi.com/article/1342746wpp/watch-d1ce-makes-the-world-wake-up-with-powerful-debut-mv",
+      "https://music.apple.com/us/song/1475189864",
+      "https://music.bugs.co.kr/album/20268984"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
