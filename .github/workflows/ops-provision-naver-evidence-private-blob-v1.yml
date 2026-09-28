@@ -45,7 +45,7 @@ jobs:
         run: |
           HTTP_CODE=$(curl -sS -o /tmp/stores.json -w '%{http_code}' \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v1/storage/stores?teamId=$VERCEL_ORG_ID")
+            "https://api.vercel.com/v1/storage/stores")
           echo "FANDEX_BLOB_STORE_LIST_HTTP=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
 
@@ -80,7 +80,7 @@ jobs:
             -X POST \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
             -H "Content-Type: application/json" \
-            "https://api.vercel.com/v1/storage/stores/blob?teamId=$VERCEL_ORG_ID" \
+            "https://api.vercel.com/v1/storage/stores/blob" \
             --data '{"name":"fandex-naver-evidence","region":"iad1","access":"private"}')
           echo "FANDEX_BLOB_CREATE_HTTP=$HTTP_CODE"
           test "$HTTP_CODE" = "200" -o "$HTTP_CODE" = "201"
@@ -135,7 +135,7 @@ jobs:
             -X POST \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
             -H "Content-Type: application/json" \
-            "https://api.vercel.com/v1/storage/stores/$STORE_ID/connections?teamId=$VERCEL_ORG_ID" \
+            "https://api.vercel.com/v1/storage/stores/$STORE_ID/connections" \
             --data '{"envVarEnvironments":["production"],"projectId":"prj_aT3p8zmjyochu8iGmFOuNR1lSU7v","type":"integration"}')
           echo "FANDEX_BLOB_CONNECT_HTTP=$HTTP_CODE"
           test "$HTTP_CODE" = "200" -o "$HTTP_CODE" = "201"
@@ -146,13 +146,13 @@ jobs:
 
           HTTP_CODE=$(curl -sS -o /tmp/store-detail.json -w '%{http_code}' \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v1/storage/stores/$STORE_ID?teamId=$VERCEL_ORG_ID")
+            "https://api.vercel.com/v1/storage/stores/$STORE_ID")
           echo "FANDEX_BLOB_DETAIL_HTTP=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
 
           HTTP_CODE=$(curl -sS -o /tmp/stores-after.json -w '%{http_code}' \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v1/storage/stores?teamId=$VERCEL_ORG_ID")
+            "https://api.vercel.com/v1/storage/stores")
           echo "FANDEX_BLOB_STORE_LIST_AFTER_HTTP=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
 
