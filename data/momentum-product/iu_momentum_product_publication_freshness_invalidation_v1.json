@@ -1,0 +1,45 @@
+{
+  "contractVersion": "momentum-product-publication-freshness-invalidation-v1",
+  "canonicalArtistId": "iu",
+  "target": {
+    "legacyVariableId": "growthMomentumPoint",
+    "constructId": "momentumEvidenceConsensus"
+  },
+  "priorPublicationCandidate": {
+    "pullRequestNumber": 269,
+    "mergeCommitSha": "7afa75984ff6beabcb9b5c0f106f5dc16f8c8cac",
+    "productionDeploymentId": "dpl_91PwYoJerrvmUpemFPE56v65bVAe",
+    "productionDeploymentState": "READY",
+    "candidateStatusAtPreparation": "ready-for-owner-attestation",
+    "boundCurrentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+  },
+  "sourceAdvancement": {
+    "observedOnMain": "3c3fd54e0bad7c8b328d4a62a21884ca58abc9a1",
+    "lastfmSnapshotDate": "2026-09-28",
+    "lastfmHistoryRowCount": 500,
+    "lastfmSnapshotDateCount": 50,
+    "lastfmDeltaReadyCount": 10,
+    "lastfmNeedsReviewCount": 0,
+    "lastfmHistoryBlobSha": "a48d22dd4d9e5b5fc6153dd54b5a3b42c90a4749",
+    "sourceAdvancedAfterBoundAttestation": true
+  },
+  "freshnessDecision": {
+    "priorPublicationApprovalCandidateMayBeReused": false,
+    "currentDualSourceCategoricalEvaluationRequired": true,
+    "currentNaverStoredEvidenceReproductionRequired": true,
+    "ownerPublicationApprovalRecorded": false,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null,
+    "previewFallbackAllowed": false,
+    "requiredNextGate": "current-dual-source-categorical-reevaluation"
+  },
+  "boundary": {
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  }
+}

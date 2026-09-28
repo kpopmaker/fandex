@@ -1,18 +1,18 @@
 {
   "contractVersion": "momentum-live-shadow-source-currentness-audit-v1",
-  "evaluatedAgainstMain": "8c766ce1c4706941cf16472b0a861dcdc4e6a497",
+  "evaluatedAgainstMain": "3c3fd54e0bad7c8b328d4a62a21884ca58abc9a1",
   "canonicalArtistId": "iu",
   "carrier": {
     "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
     "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
     "directionalConsensus": "direction-conflicted",
     "persistenceConsensus": "persistence-not-applicable",
-    "historicalOnly": false
+    "historicalOnly": true
   },
   "lastfm": {
-    "snapshotDate": "2026-09-27",
-    "historyRowCount": 490,
-    "snapshotDateCount": 49,
+    "snapshotDate": "2026-09-28",
+    "historyRowCount": 500,
+    "snapshotDateCount": 50,
     "deltaReadyCount": 10,
     "needsReviewCount": 0,
     "sourceAdvancedBeyondCarrierCutoff": true
@@ -24,7 +24,7 @@
     "requestPath": "/api/internal/naver-news/shadow-scheduler",
     "httpStatus": 200,
     "schedulerObservedAfterCarrierCutoff": true,
-    "currentStoredEvidenceReproducedForReadiness": true
+    "currentStoredEvidenceReproducedForReadiness": false
   },
   "freshnessPolicy": {
     "arbitraryAgeThresholdAllowed": false,
@@ -34,25 +34,25 @@
     "historyAppendDecision": "defer-until-current-evaluation"
   },
   "currentEvaluation": {
-    "currentDualSourceCategoricalEvaluationPerformed": true,
+    "currentDualSourceCategoricalEvaluationPerformed": false,
     "currentCarrierProduced": false,
-    "currentNoOpEvaluationAttested": true,
-    "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
-    "directionalConsensus": "direction-conflicted",
-    "persistenceConsensus": "persistence-not-applicable",
-    "attestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
-    "attestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+    "currentNoOpEvaluationAttested": false,
+    "evaluatedAlignmentCutoffAt": null,
+    "directionalConsensus": null,
+    "persistenceConsensus": null,
+    "attestationPath": null,
+    "attestationDigest": null
   },
   "decision": {
-    "state": "public-route-candidate",
+    "state": "current-categorical-evaluation-required",
     "productActivationReady": false,
     "productPublicationReady": false,
-    "publicRouteDesignReady": true,
+    "publicRouteDesignReady": false,
     "reasons": [
-      "current-naver-stored-evidence-reproduced-for-readiness",
-      "current-dual-source-categorical-evaluation-attested-no-op",
-      "categorical-state-unchanged-from-carrier",
-      "new-history-observation-not-required-before-route-design"
+      "lastfm-source-advanced-after-2026-09-27-attestation",
+      "current-naver-stored-evidence-reproduction-required-for-new-evaluation",
+      "current-dual-source-categorical-evaluation-not-performed",
+      "historical-carrier-not-current-publication-evidence"
     ]
   }
 }
