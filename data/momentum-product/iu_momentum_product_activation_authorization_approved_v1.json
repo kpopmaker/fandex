@@ -1,0 +1,54 @@
+{
+  "contractVersion": "momentum-product-activation-authorization-approved-evidence-v1",
+  "canonicalArtistId": "iu",
+  "target": {
+    "legacyVariableId": "growthMomentumPoint",
+    "constructId": "momentumEvidenceConsensus"
+  },
+  "approval": {
+    "contractVersion": "momentum-product-activation-approval-v1",
+    "action": "authorize-momentum-product-activation",
+    "authority": "product-operations-owner",
+    "activationAuthorizationId": "ops-activation-momentum-evidence-consensus-20260928t012306z-v1",
+    "authorizedAt": "2026-09-28T01:23:06.000Z",
+    "authorizationEvidenceCommentId": 5861676033,
+    "authorizationEvidenceCommentUrl": "https://github.com/kpopmaker/fandex/pull/267#issuecomment-5861676033",
+    "authorizedMain": "7b9899e3a85f82c4e82cde1d8383f97d62765d49"
+  },
+  "binding": {
+    "readinessContractVersion": "momentum-product-activation-readiness-v1",
+    "routeDesignContractVersion": "momentum-public-route-design-candidate-v1",
+    "productContractVersion": "product-momentum-evidence-consensus-v1",
+    "sourcePublication": "shadow",
+    "claimScope": "structured-categorical-evidence-only-no-numeric-score",
+    "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
+    "alignmentCutoffAt": "2026-09-20T01:59:13.000Z",
+    "directionalConsensus": "direction-conflicted",
+    "persistenceConsensus": "persistence-not-applicable",
+    "currentNoOpEvaluationAttested": true,
+    "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+    "currentEvaluationAttestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
+    "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93",
+    "operationsHandoffDigest": "dca053af60e05e22ea30d45e030c31f85cea2931d448ef7dc108942bcc309d76",
+    "operationsHandoffProductionAttestationDigest": "eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9"
+  },
+  "authorizationDecision": {
+    "activationAuthorized": true,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null,
+    "numericProductEligible": false,
+    "legacyGrowthMomentumPointReuseAllowed": false,
+    "previewFallbackAllowed": false,
+    "directProductionContributionEligible": false,
+    "requiredNextGate": "explicit-momentum-product-publication-authorization"
+  },
+  "safetyBoundary": {
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  }
+}
