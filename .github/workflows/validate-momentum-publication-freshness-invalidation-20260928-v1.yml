@@ -1,0 +1,68 @@
+name: Validate Momentum publication freshness invalidation 2026-09-28 v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-publication-freshness-invalidation-20260928-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-publication-freshness-invalidation-20260928-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 3c3fd54e0bad7c8b328d4a62a21884ca58abc9a1...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-publication-freshness-invalidation-20260928-v1.yml
+          data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
+          data/momentum-product/iu_momentum_product_publication_freshness_invalidation_v1.json
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-post-execution-product-readiness-v1.test.mts
+          tests/momentum-product-publication-current-freshness-v1.test.mts
+          tests/momentum-product-publication-freshness-invalidation-evidence-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum live-shadow freshness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Momentum post-execution current Last.fm regression
+        run: npx tsx --test tests/momentum-post-execution-product-readiness-v1.test.mts
+
+      - name: Momentum publication live freshness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-current-freshness-v1.test.mts
+
+      - name: Momentum publication freshness invalidation evidence
+        run: npx tsx --test tests/momentum-product-publication-freshness-invalidation-evidence-v1.test.mts
+
+      - name: Momentum publication contract regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-approval-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

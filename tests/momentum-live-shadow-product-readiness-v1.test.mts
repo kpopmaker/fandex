@@ -29,14 +29,14 @@ async function readAudit(): Promise<MomentumLiveShadowSourceCurrentnessAudit> {
   ) as MomentumLiveShadowSourceCurrentnessAudit;
 }
 
-test('current IU live-shadow readiness accepts the attested current no-op evaluation', async () => {
+test('current IU live-shadow readiness fails closed after the 2026-09-28 Last.fm source advance', async () => {
   const result = await getMomentumLiveShadowProductReadinessForIU();
 
-  assert.equal(result.state, 'public-route-candidate');
+  assert.equal(result.state, 'current-categorical-evaluation-required');
   assert.equal(result.runtimeShadowReadVerified, true);
   assert.equal(result.productActivationReady, false);
   assert.equal(result.productPublicationReady, false);
-  assert.equal(result.publicRouteDesignReady, true);
+  assert.equal(result.publicRouteDesignReady, false);
   assert.equal(result.productMomentumScore, null);
   assert.equal(result.numericProductEligible, false);
   assert.equal(result.previewFallbackAllowed, false);
@@ -47,27 +47,33 @@ test('current IU live-shadow readiness accepts the attested current no-op evalua
     alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
     directionalConsensus: 'direction-conflicted',
     persistenceConsensus: 'persistence-not-applicable',
-    historicalOnly: false,
+    historicalOnly: true,
   });
 
   assert.equal(
-    result.sourceCurrentness.naverCurrentStoredEvidenceReproducedForReadiness,
+    result.sourceCurrentness.lastfmSourceAdvancedBeyondCarrierCutoff,
     true,
   );
+  assert.equal(
+    result.sourceCurrentness.naverCurrentStoredEvidenceReproducedForReadiness,
+    false,
+  );
   assert.deepEqual(result.currentEvaluation, {
-    performed: true,
+    performed: false,
     currentCarrierProduced: false,
-    currentNoOpEvaluationAttested: true,
-    satisfiesFreshness: true,
-    evaluatedAlignmentCutoffAt: '2026-09-27T02:10:05.000Z',
-    directionalConsensus: 'direction-conflicted',
-    persistenceConsensus: 'persistence-not-applicable',
-    attestationPath:
-      'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
-    attestationDigest:
-      'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+    currentNoOpEvaluationAttested: false,
+    satisfiesFreshness: false,
+    evaluatedAlignmentCutoffAt: null,
+    directionalConsensus: null,
+    persistenceConsensus: null,
+    attestationPath: null,
+    attestationDigest: null,
   });
-  assert.deepEqual(result.blockers, []);
+  assert.deepEqual(result.blockers, [
+    'current-naver-stored-evidence-not-reproduced-for-readiness',
+    'current-dual-source-categorical-evaluation-not-performed',
+    'historical-carrier-not-current-activation-evidence',
+  ]);
 });
 
 test('freshness policy still forbids arbitrary age thresholds and does not require a history append', async () => {
@@ -82,38 +88,29 @@ test('freshness policy still forbids arbitrary age thresholds and does not requi
   });
 });
 
-test('current source audit records current Last.fm and NAVER Stored Evidence reproduction', async () => {
+test('current source audit records the 2026-09-28 Last.fm advance and requires reevaluation', async () => {
   const audit = await readAudit();
 
   assert.equal(
     audit.evaluatedAgainstMain,
-    '8c766ce1c4706941cf16472b0a861dcdc4e6a497',
+    '3c3fd54e0bad7c8b328d4a62a21884ca58abc9a1',
   );
-  assert.equal(audit.lastfm.snapshotDate, '2026-09-27');
-  assert.equal(audit.lastfm.historyRowCount, 490);
-  assert.equal(audit.lastfm.snapshotDateCount, 49);
+  assert.equal(audit.lastfm.snapshotDate, '2026-09-28');
+  assert.equal(audit.lastfm.historyRowCount, 500);
+  assert.equal(audit.lastfm.snapshotDateCount, 50);
   assert.equal(audit.lastfm.deltaReadyCount, 10);
   assert.equal(audit.lastfm.needsReviewCount, 0);
   assert.equal(
-    audit.naverRuntime.deploymentId,
-    'dpl_65pZp1xsKQRRmY2xwqXDDKGNFDjx',
-  );
-  assert.equal(
     audit.naverRuntime.currentStoredEvidenceReproducedForReadiness,
-    true,
+    false,
   );
   assert.equal(
-    audit.currentEvaluation.evaluatedAlignmentCutoffAt,
-    '2026-09-27T02:10:05.000Z',
+    audit.currentEvaluation.currentDualSourceCategoricalEvaluationPerformed,
+    false,
   );
-  assert.equal(
-    audit.currentEvaluation.directionalConsensus,
-    'direction-conflicted',
-  );
-  assert.equal(
-    audit.currentEvaluation.persistenceConsensus,
-    'persistence-not-applicable',
-  );
+  assert.equal(audit.currentEvaluation.currentNoOpEvaluationAttested, false);
+  assert.equal(audit.currentEvaluation.evaluatedAlignmentCutoffAt, null);
+  assert.equal(audit.currentEvaluation.attestationDigest, null);
 });
 
 test('current dual-source attestation preserves the v140 to v143 non-numeric boundary', async () => {
@@ -195,7 +192,7 @@ test('current dual-source attestation preserves the v140 to v143 non-numeric bou
   assert.equal(attestation.boundary.productionVerifierExecutions, 0);
 });
 
-test('a mismatched no-op attestation fails closed', async () => {
+test('a mismatched future no-op attestation still fails closed', async () => {
   const [runtimeShadow, audit] = await Promise.all([
     getMomentumEvidenceConsensusShadowProductForIU(),
     readAudit(),
@@ -203,9 +200,21 @@ test('a mismatched no-op attestation fails closed', async () => {
 
   const mismatchedAudit: MomentumLiveShadowSourceCurrentnessAudit = {
     ...audit,
+    carrier: {
+      ...audit.carrier,
+      historicalOnly: false,
+    },
     currentEvaluation: {
-      ...audit.currentEvaluation,
+      currentDualSourceCategoricalEvaluationPerformed: true,
+      currentCarrierProduced: false,
+      currentNoOpEvaluationAttested: true,
+      evaluatedAlignmentCutoffAt: '2026-09-28T02:14:17.000Z',
       directionalConsensus: 'direction-corroborated-up',
+      persistenceConsensus: audit.carrier.persistenceConsensus,
+      attestationPath:
+        'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+      attestationDigest:
+        'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
     },
   };
 
