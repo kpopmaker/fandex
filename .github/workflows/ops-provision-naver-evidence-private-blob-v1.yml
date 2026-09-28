@@ -1,0 +1,102 @@
+name: OPS Provision FANDEX NAVER Evidence private Blob v1
+
+on:
+  push:
+    branches:
+      - ops/provision-naver-evidence-private-blob-v1
+
+permissions:
+  contents: read
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+      VERCEL_TEAM_SLUG: larva3203-1222s-projects
+      STORE_NAME: fandex-naver-evidence
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Approval scope guard
+        run: |
+          test -n "$VERCEL_TOKEN"
+          test "$VERCEL_PROJECT_ID" = "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v"
+          test "$STORE_NAME" = "fandex-naver-evidence"
+
+      - name: Link exact FANDEX project locally
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Verify CLI supports Production-only Blob provisioning
+        run: |
+          npx --yes vercel@latest blob create-store --help > /tmp/blob-create-help.txt
+          grep -q -- '--environment' /tmp/blob-create-help.txt
+          grep -q -- '--access' /tmp/blob-create-help.txt
+          grep -q -- '--region' /tmp/blob-create-help.txt
+
+      - name: Inspect existing Blob stores
+        id: inspect
+        run: |
+          npx --yes vercel@latest blob list-stores --all             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/all-stores.txt
+
+          npx --yes vercel@latest blob list-stores             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/connected-stores.txt
+
+          if grep -Fq "$STORE_NAME" /tmp/connected-stores.txt; then
+            echo "state=already-connected" >> "$GITHUB_OUTPUT"
+          elif grep -Fq "$STORE_NAME" /tmp/all-stores.txt; then
+            echo "Existing same-name Blob store is not connected to this project; refusing duplicate creation."
+            exit 42
+          else
+            echo "state=absent" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create private Blob store and bind Production only
+        if: steps.inspect.outputs.state == 'absent'
+        run: |
+          npx --yes vercel@latest blob create-store "$STORE_NAME"             --access private             --region iad1             --environment production             --yes             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color
+
+      - name: Verify connected store
+        run: |
+          npx --yes vercel@latest blob list-stores             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/connected-after.txt
+          grep -F "$STORE_NAME" /tmp/connected-after.txt
+          grep -F "$STORE_NAME" /tmp/connected-after.txt | grep -i 'private'
+          grep -F "$STORE_NAME" /tmp/connected-after.txt | grep -i 'iad1'
+
+      - name: Verify Production-only environment binding
+        run: |
+          npx --yes vercel@latest env ls production             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-production.txt
+
+          npx --yes vercel@latest env ls preview             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-preview.txt
+
+          npx --yes vercel@latest env ls development             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-development.txt
+
+          grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-production.txt
+
+          if grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-preview.txt; then
+            echo "BLOB_READ_WRITE_TOKEN unexpectedly present in Preview."
+            exit 43
+          fi
+
+          if grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-development.txt; then
+            echo "BLOB_READ_WRITE_TOKEN unexpectedly present in Development."
+            exit 44
+          fi
+
+          echo "FANDEX_BLOB_BINDING_VERIFIED=production-only"
+          echo "FANDEX_BLOB_STORE_NAME=$STORE_NAME"
+          echo "FANDEX_BLOB_ACCESS=private"
+          echo "FANDEX_BLOB_REGION=iad1"
+
+      - name: Safety boundary
+        run: |
+          echo "liveMirrorWritesEnabled=false"
+          echo "historicalBackfillPerformed=false"
+          echo "productionMirrorReadCutover=false"
+          echo "productionVerifierExecutions=0"
+          echo "productPublication=false"
+          echo "publicRouteCutover=false"
