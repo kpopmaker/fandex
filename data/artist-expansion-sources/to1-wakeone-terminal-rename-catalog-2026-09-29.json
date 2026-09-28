@@ -1,0 +1,142 @@
+{
+  "version": "to1_wakeone_terminal_rename_catalog_adapter_v1",
+  "source": {
+    "id": "to1-wakeone-terminal-rename-catalog",
+    "type": "provider_catalog",
+    "name": "TO1 WAKEONE Terminal Rename Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.starnewskorea.com/star/2023/12/17/2023121710263313337"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TO1",
+      "aliases": [
+        "티오원",
+        "TOO",
+        "티오오"
+      ],
+      "evidence": [
+        {
+          "label": "WAKEONE terminal eight-member contract/group-future statement",
+          "url": "https://www.starnewskorea.com/star/2023/12/17/2023121710263313337"
+        },
+        {
+          "label": "WAKEONE terminal statement English preservation",
+          "url": "https://www.soompi.com/article/1632072wpp/all-to1-members-to-part-ways-with-agency-wakeone"
+        },
+        {
+          "label": "TOO to TO1 official rename continuity",
+          "url": "https://www.soompi.com/article/1461508wpp/too-changes-their-group-name-to-to1"
+        },
+        {
+          "label": "WAKEONE Chi Hoon explicit departure",
+          "url": "https://www.soompi.com/article/1524342wpp/to1s-chi-hoon-leaves-group-terminates-contract-with-his-agency"
+        },
+        {
+          "label": "WAKEONE 2022 roster reorganization",
+          "url": "https://www.soompi.com/article/1531421wpp/to1s-agency-announces-group-will-make-comeback-with-3-new-members-min-su-jerome-and-woong-gi-depart-group"
+        },
+        {
+          "label": "Renta explicit TO1 activity end",
+          "url": "https://www.soompi.com/article/1615625wpp/to1s-renta-announces-departure-from-group-with-handwritten-letter-to-fans"
+        },
+        {
+          "label": "Apple Music original TOO debut catalog",
+          "url": "https://music.apple.com/us/album/reason-for-being-benevolence-ep/1605126003"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "renameContinuityRequired": true,
+    "renameDoesNotCreateNewCanonical": true,
+    "exactTerminalMemberRosterRequired": true,
+    "allTerminalExclusiveContractsEndEvidenceRequired": true,
+    "explicitNonTO1FutureEvidenceRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "priorExitedMembersExcludedFromTerminalRoster": true,
+    "memberReorganizationMustNotCreateNewCanonical": true,
+    "legalDisbandmentNotIndependentlyAsserted": true,
+    "licensedOriginalDebutCatalogAllowed": true,
+    "debutDateCrossRenameConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2023-12-17",
+    "effectiveDate": "2023-12-31",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "WAKEONE",
+    "terminalMembers": [
+      "DONGGEON",
+      "CHAN",
+      "JISU",
+      "JAEYUN",
+      "J.YOU",
+      "KYUNGHO",
+      "DAIGO",
+      "YEOJEONG"
+    ],
+    "terminalMemberCount": 8,
+    "allTerminalExclusiveContractsEnded": true,
+    "terminalFutureResolution": "members_follow_new_paths_not_as_TO1",
+    "legalDisbandmentAsserted": false,
+    "renameContinuity": [
+      {
+        "from": "TOO",
+        "to": "TO1",
+        "effectiveDate": "2021-03-28",
+        "resolution": "same_group_official_name_change"
+      }
+    ],
+    "priorExitedMembers": [
+      {
+        "member": "CHI HOON",
+        "effectiveDate": "2022-04-30",
+        "resolution": "explicit_team_and_exclusive_contract_departure"
+      },
+      {
+        "member": "MIN SU",
+        "effectiveDate": "2022-06-17",
+        "resolution": "explicit_team_departure"
+      },
+      {
+        "member": "JEROME",
+        "effectiveDate": "2022-06-17",
+        "resolution": "explicit_team_departure"
+      },
+      {
+        "member": "WOONG GI",
+        "effectiveDate": "2022-06-17",
+        "resolution": "explicit_team_departure"
+      },
+      {
+        "member": "RENTA",
+        "effectiveDate": "2023-09-22",
+        "resolution": "explicit_TO1_activity_end"
+      }
+    ],
+    "debutDate": "2020-04-01",
+    "debutName": "TOO",
+    "debutRelease": "REASON FOR BEING : Benevolence",
+    "fandomName": "TOgether"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_plus_rename_and_provider_debut_snapshot",
+    "verifiedFrom": [
+      "https://www.starnewskorea.com/star/2023/12/17/2023121710263313337",
+      "https://www.soompi.com/article/1632072wpp/all-to1-members-to-part-ways-with-agency-wakeone",
+      "https://www.soompi.com/article/1461508wpp/too-changes-their-group-name-to-to1",
+      "https://www.soompi.com/article/1524342wpp/to1s-chi-hoon-leaves-group-terminates-contract-with-his-agency",
+      "https://www.soompi.com/article/1531421wpp/to1s-agency-announces-group-will-make-comeback-with-3-new-members-min-su-jerome-and-woong-gi-depart-group",
+      "https://www.soompi.com/article/1615625wpp/to1s-renta-announces-departure-from-group-with-handwritten-letter-to-fans",
+      "https://music.apple.com/us/album/reason-for-being-benevolence-ep/1605126003"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

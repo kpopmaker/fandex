@@ -5465,6 +5465,48 @@
           "note": "Provider catalog dates XIX to April 13, 2019 and credits PocketDol Studio."
         }
       ]
+    },
+    {
+      "displayArtist": "TO1",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "too_to_to1_rename_continuity_plus_wakeone_terminal_eight_member_contract_and_non_to1_future_statement_resolve_single_terminal_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_rename_continuity_terminal_wakeone_statement_prior_departure_history_and_licensed_original_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "WAKEONE terminal statement preserved by StarNews Korea",
+          "url": "https://www.starnewskorea.com/star/2023/12/17/2023121710263313337",
+          "note": "WAKEONE names DONGGEON, CHAN, JISU, JAEYUN, J.YOU, KYUNGHO, DAIGO, and YEOJEONG, mutually ends their exclusive contracts effective December 31, 2023, and asks fans to support the members as they walk new paths not as TO1."
+        },
+        {
+          "source": "TOO to TO1 rename continuity preserved by Soompi",
+          "url": "https://www.soompi.com/article/1461508wpp/too-changes-their-group-name-to-to1",
+          "note": "The group officially changed its name from TOO to TO1 on March 28, 2021, so FANDEX preserves one canonical identity."
+        },
+        {
+          "source": "WAKEONE Chi Hoon departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1524342wpp/to1s-chi-hoon-leaves-group-terminates-contract-with-his-agency",
+          "note": "WAKEONE explicitly states CHI HOON left the team when his exclusive contract ended on April 30, 2022."
+        },
+        {
+          "source": "WAKEONE 2022 roster reorganization statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1531421wpp/to1s-agency-announces-group-will-make-comeback-with-3-new-members-min-su-jerome-and-woong-gi-depart-group",
+          "note": "WAKEONE explicitly states MIN SU, JEROME, and WOONG GI left while DAIGO, RENTA, and YEOJEONG joined."
+        },
+        {
+          "source": "Renta departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1615625wpp/to1s-renta-announces-departure-from-group-with-handwritten-letter-to-fans",
+          "note": "RENTA states his activities as TO1's Renta ended in September 2023."
+        },
+        {
+          "source": "Apple Music original TOO debut catalog",
+          "url": "https://music.apple.com/us/album/reason-for-being-benevolence-ep/1605126003",
+          "note": "The original TOO debut EP REASON FOR BEING : Benevolence is dated April 1, 2020."
+        }
+      ]
     }
   ]
 }
