@@ -8544,6 +8544,69 @@
           "url": "https://www.soompi.com/article/1359376wpp/brand-new-music-trainees-from-produce-x-101-announce-unit-name-and-details-for-1st-single"
         }
       ]
+    },
+    {
+      "id": "bugaboo",
+      "ticker": "BUGABOO",
+      "name": "bugAboo",
+      "agency": "ATEAM Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2021-10-25",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "CHOYEON",
+        "YOONA",
+        "RAINIE",
+        "ZIN",
+        "EUNCHAE",
+        "CYAN"
+      ],
+      "naverNewsQuery": "버가부 bugAboo 에이팀엔터테인먼트",
+      "koreanAliases": [
+        "버가부"
+      ],
+      "englishAliases": [
+        "bugAboo",
+        "BUGABOO"
+      ],
+      "keywords": [
+        "ATEAM Entertainment",
+        "A TEAM ENTERTAINMENT",
+        "에이팀엔터테인먼트",
+        "CHOYEON",
+        "YOONA",
+        "RAINIE",
+        "ZIN",
+        "EUNCHAE",
+        "CYAN",
+        "POP",
+        "bugAboo"
+      ],
+      "disambiguationKeywords": [
+        "ATEAM Entertainment",
+        "에이팀엔터테인먼트",
+        "버가부"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "ATEAM terminal group-activity and contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1557636wpp/bugaboo-announces-disbandment"
+        },
+        {
+          "source": "bugAboo six-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1486572wpp/watch-producer-ryan-jhuns-new-girl-group-bugaboo-reveals-1st-glimpse-of-members"
+        },
+        {
+          "source": "Apple Music bugAboo debut single catalog",
+          "url": "https://music.apple.com/us/album/bugaboo-single/1590957051"
+        }
+      ]
     }
   ]
 }

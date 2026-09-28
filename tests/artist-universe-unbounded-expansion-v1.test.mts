@@ -1098,6 +1098,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(bdc.members, ['KIM SI HUN', 'HONG SEONG JUN', 'YUN JUNG HWAN']);
   assert.ok(bdc.profile.koreanAliases.includes('비디씨'));
 
+  const bugaboo = getArtistV4ById('bugaboo');
+  assert.ok(bugaboo);
+  assert.equal(bugaboo.entityType, 'group');
+  assert.equal(bugaboo.agency, 'ATEAM Entertainment');
+  assert.equal(bugaboo.agencyStatus, 'historical');
+  assert.equal(bugaboo.debutDate, '2021-10-25');
+  assert.equal(bugaboo.lifecycleStatus, 'inactive');
+  assert.deepEqual(bugaboo.members, ['CHOYEON', 'YOONA', 'RAINIE', 'ZIN', 'EUNCHAE', 'CYAN']);
+  assert.ok(bugaboo.profile.koreanAliases.includes('버가부'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

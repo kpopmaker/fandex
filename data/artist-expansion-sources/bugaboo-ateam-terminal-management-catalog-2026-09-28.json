@@ -1,0 +1,82 @@
+{
+  "version": "bugaboo_ateam_terminal_management_catalog_adapter_v1",
+  "source": {
+    "id": "bugaboo-ateam-terminal-management-catalog",
+    "type": "provider_catalog",
+    "name": "bugAboo ATEAM Terminal Management Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1557636wpp/bugaboo-announces-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "bugAboo",
+      "aliases": [
+        "버가부",
+        "BUGABOO"
+      ],
+      "evidence": [
+        {
+          "label": "ATEAM terminal group-activity and all-member contract statement",
+          "url": "https://www.soompi.com/article/1557636wpp/bugaboo-announces-disbandment"
+        },
+        {
+          "label": "bugAboo six-member debut profile",
+          "url": "https://www.soompi.com/article/1486572wpp/watch-producer-ryan-jhuns-new-girl-group-bugaboo-reveals-1st-glimpse-of-members"
+        },
+        {
+          "label": "Apple Music bugAboo debut single catalog",
+          "url": "https://music.apple.com/us/album/bugaboo-single/1590957051"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "groupActivityHaltEvidenceRequired": true,
+    "allMemberExclusiveContractTerminationRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "headlineDisbandmentDoesNotCreateLegalConclusion": true,
+    "legalDisbandmentNotIndependentlyAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2022-12-08",
+    "effectiveDate": "2022-12-08",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "ATEAM Entertainment",
+    "terminalMembers": [
+      "CHOYEON",
+      "YOONA",
+      "RAINIE",
+      "ZIN",
+      "EUNCHAE",
+      "CYAN"
+    ],
+    "terminalMemberCount": 6,
+    "groupActivitiesHalted": true,
+    "allMemberExclusiveContractsTerminated": true,
+    "legalDisbandmentAsserted": false,
+    "debutDate": "2021-10-25",
+    "debutRelease": "bugAboo"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_management_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1557636wpp/bugaboo-announces-disbandment",
+      "https://www.soompi.com/article/1486572wpp/watch-producer-ryan-jhuns-new-girl-group-bugaboo-reveals-1st-glimpse-of-members",
+      "https://music.apple.com/us/album/bugaboo-single/1590957051"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

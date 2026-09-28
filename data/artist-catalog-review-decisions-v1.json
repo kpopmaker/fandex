@@ -5219,6 +5219,33 @@
           "note": "The debut rollout identifies KIM SI HUN, HONG SEONG JUN, and YUN JUNG HWAN as BDC and records the October 29 debut release."
         }
       ]
+    },
+    {
+      "displayArtist": "bugAboo",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "ateam_terminal_statement_resolves_six_member_group_activity_halt_and_all_member_contract_termination",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_ateam_terminal_statement_plus_six_member_debut_identity_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "ATEAM terminal group-activity and contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1557636wpp/bugaboo-announces-disbandment",
+          "note": "ATEAM states bugAboo will halt group activities from December 8, 2022 and that the agency and all members decided to terminate every member's exclusive contract."
+        },
+        {
+          "source": "bugAboo six-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1486572wpp/watch-producer-ryan-jhuns-new-girl-group-bugaboo-reveals-1st-glimpse-of-members",
+          "note": "Debut coverage identifies CHOYEON, YOONA, RAINIE, ZIN, EUNCHAE, and CYAN as the six members and records the October 25, 2021 debut."
+        },
+        {
+          "source": "Apple Music bugAboo licensed debut catalog",
+          "url": "https://music.apple.com/us/album/bugaboo-single/1590957051",
+          "note": "Provider catalog dates the bugAboo debut single to October 25, 2021 and credits A TEAM ENTERTAINMENT under license to Kakao Entertainment."
+        }
+      ]
     }
   ]
 }
