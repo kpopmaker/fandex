@@ -1,0 +1,36 @@
+{
+  "contractVersion": "momentum-neon-independent-stored-evidence-mirror-candidate-v1",
+  "scope": {
+    "provider": "naver-news",
+    "consumer": "momentumEvidenceConsensus",
+    "canonicalArtistId": "iu",
+    "purpose": "remove Neon as a mandatory read dependency for future current dual-source categorical reevaluation"
+  },
+  "implementation": {
+    "immutableObjectStorePort": true,
+    "writePlanToMirrorBundle": true,
+    "canonicalJobEvidenceReadRepository": true,
+    "latestOfficialShadowSlotReadRepository": true,
+    "batchRead": true,
+    "integrityDigest": true,
+    "overwriteConflictFailsClosed": true,
+    "postgresDependencyInMirror": false
+  },
+  "currentBoundary": {
+    "durableObjectStoreAdapterBound": false,
+    "vercelBlobBound": false,
+    "liveMirrorWritesEnabled": false,
+    "historicalBackfillComplete": false,
+    "productionReadCutover": false,
+    "neonDependencyRemovedFromCurrentProduction": false,
+    "current20260928ReevaluationUnblocked": false
+  },
+  "productionSafety": {
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  },
+  "requiredNextGate": "bind-durable-private-object-store-adapter-and-establish-mirror-from-new-ingestion"
+}

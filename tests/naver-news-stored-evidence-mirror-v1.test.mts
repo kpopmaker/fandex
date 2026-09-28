@@ -1,0 +1,202 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+
+import type {
+  ImmutableTextObjectPutResult,
+  ImmutableTextObjectStore,
+} from '../lib/server/storage/immutableTextObjectStore';
+import {
+  buildNaverNewsIngestionWritePlan,
+  buildNaverNewsJobIdentity,
+} from '../lib/server/ingestion/naverNewsContracts';
+import {
+  buildNaverNewsSchedulerPlan,
+} from '../lib/server/ingestion/naverNewsScheduler';
+import {
+  buildNaverNewsStoredEvidenceMirrorObjects,
+  createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
+  createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  mirrorNaverNewsStoredEvidence,
+} from '../lib/server/ingestion/naverNewsStoredEvidenceMirror';
+import {
+  resolveLatestOfficialNaverNewsShadowThroughSlotStart,
+} from '../lib/server/ingestion/naverNewsLatestOfficialShadowSlot';
+
+class MemoryImmutableStore implements ImmutableTextObjectStore {
+  readonly values = new Map<string, string>();
+
+  async readText(pathname: string) {
+    return this.values.get(pathname) ?? null;
+  }
+
+  async listPathnames(prefix: string) {
+    return [...this.values.keys()]
+      .filter((pathname) => pathname.startsWith(prefix))
+      .sort();
+  }
+
+  async putTextIfAbsent(
+    pathname: string,
+    body: string,
+  ): Promise<ImmutableTextObjectPutResult> {
+    const existing = this.values.get(pathname);
+    if (existing === undefined) {
+      this.values.set(pathname, body);
+      return { status: 'created', pathname };
+    }
+    if (existing === body) {
+      return { status: 'idempotent-existing', pathname };
+    }
+    return { status: 'conflict', pathname };
+  }
+}
+
+function planAt(slotStart: string) {
+  const scheduler = buildNaverNewsSchedulerPlan({
+    query: '아이유 IU',
+    at: slotStart,
+    display: 100,
+  });
+  const identity = buildNaverNewsJobIdentity(scheduler.command);
+  return buildNaverNewsIngestionWritePlan(identity, {
+    fetchedAt: new Date(Date.parse(slotStart) + 5 * 60_000).toISOString(),
+    response: {
+      lastBuildDate: new Date(Date.parse(slotStart) + 4 * 60_000).toISOString(),
+      total: 2,
+      start: 1,
+      display: 2,
+      items: [
+        {
+          title: '아이유 새 소식 A',
+          originallink: 'https://news.example.test/iu-a',
+          description: '아이유 관련 기사 A',
+          pubDate: new Date(Date.parse(slotStart) - 30 * 60_000).toISOString(),
+        },
+        {
+          title: '아이유 새 소식 B',
+          originallink: 'https://news.example.test/iu-b',
+          description: '아이유 관련 기사 B',
+          pubDate: new Date(Date.parse(slotStart) - 20 * 60_000).toISOString(),
+        },
+      ],
+    },
+  });
+}
+
+test('validated NAVER write plan becomes immutable mirror evidence without Postgres', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-09-28T03:00:00.000Z');
+
+  const first = await mirrorNaverNewsStoredEvidence(plan, store);
+  assert.equal(first.job.status, 'created');
+  assert.equal(first.schedulerManifest?.status, 'created');
+
+  const second = await mirrorNaverNewsStoredEvidence(plan, store);
+  assert.equal(second.job.status, 'idempotent-existing');
+  assert.equal(second.schedulerManifest?.status, 'idempotent-existing');
+
+  const reader =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
+  const stored = await reader.readJobEvidence(plan.identity.jobId);
+
+  assert.ok(stored);
+  assert.equal(stored.job.jobId, plan.identity.jobId);
+  assert.equal(stored.job.idempotencyKey, plan.identity.idempotencyKey);
+  assert.equal(stored.job.requestSha256, plan.identity.requestSha256);
+  assert.equal(stored.job.status, 'succeeded');
+  assert.equal(stored.completenessEvidence.rawEvidenceCount, 2);
+  assert.equal(stored.normalizedRecords.length, 2);
+  assert.deepEqual(
+    stored.normalizedRecords.map((record) => record.recordId),
+    plan.normalizedRecords.map((record) => record.recordId),
+  );
+});
+
+test('mirror-backed latest official slot repository resolves exact scheduler protocol', async () => {
+  const store = new MemoryImmutableStore();
+  const first = planAt('2026-09-28T02:00:00.000Z');
+  const latest = planAt('2026-09-28T03:00:00.000Z');
+
+  await mirrorNaverNewsStoredEvidence(first, store);
+  await mirrorNaverNewsStoredEvidence(latest, store);
+
+  const result =
+    await resolveLatestOfficialNaverNewsShadowThroughSlotStart(
+      createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(store),
+    );
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+  assert.equal(result.throughSlotStart, '2026-09-28T03:00:00.000Z');
+  assert.equal(result.jobId, latest.identity.jobId);
+  assert.equal(result.collectionKey, latest.identity.request.collectionKey);
+});
+
+test('batch read reproduces available mirrored jobs and preserves missing jobs', async () => {
+  const store = new MemoryImmutableStore();
+  const first = planAt('2026-09-28T02:00:00.000Z');
+  const second = planAt('2026-09-28T03:00:00.000Z');
+  await mirrorNaverNewsStoredEvidence(first, store);
+  await mirrorNaverNewsStoredEvidence(second, store);
+
+  const reader =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
+  assert.ok(reader.readJobEvidenceBatch);
+  const result = await reader.readJobEvidenceBatch([
+    first.identity.jobId,
+    second.identity.jobId,
+    'f'.repeat(64),
+  ]);
+
+  assert.equal(result.size, 2);
+  assert.ok(result.has(first.identity.jobId));
+  assert.ok(result.has(second.identity.jobId));
+  assert.equal(result.has('f'.repeat(64)), false);
+});
+
+test('tampered mirror payload fails closed', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-09-28T03:00:00.000Z');
+  const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
+  const parsed = JSON.parse(objects.jobBody);
+  parsed.storedEvidence.normalizedRecords[0].title = 'tampered';
+
+  store.values.set(objects.jobPathname, JSON.stringify(parsed));
+
+  const reader =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
+  await assert.rejects(
+    () => reader.readJobEvidence(plan.identity.jobId),
+    /naver_news_mirror_job_payload_invalid/,
+  );
+});
+
+test('immutable conflict rejects overwrite instead of replacing evidence', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-09-28T03:00:00.000Z');
+  const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
+
+  store.values.set(objects.jobPathname, '{"conflict":true}');
+
+  await assert.rejects(
+    () => mirrorNaverNewsStoredEvidence(plan, store),
+    /naver_news_stored_evidence_mirror_conflict/,
+  );
+});
+
+test('mirror implementation has no Postgres or runtime database dependency', async () => {
+  const source = await readFile(
+    new URL(
+      '../lib/server/ingestion/naverNewsStoredEvidenceMirror.ts',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.doesNotMatch(source, /\bpg\b/);
+  assert.doesNotMatch(source, /FANDEX_RUNTIME_DATABASE_URL/);
+  assert.doesNotMatch(source, /source_ingestion_jobs/);
+  assert.doesNotMatch(source, /BEGIN READ ONLY/);
+  assert.doesNotMatch(source, /INSERT INTO|UPDATE .* SET|DELETE FROM/);
+});
