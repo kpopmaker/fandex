@@ -16,7 +16,6 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
       VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
-      VERCEL_TEAM_SLUG: larva3203-1222s-projects
       STORE_NAME: fandex-naver-evidence
     steps:
       - uses: actions/checkout@v4
@@ -27,19 +26,7 @@ jobs:
           test "$VERCEL_PROJECT_ID" = "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v"
           test "$STORE_NAME" = "fandex-naver-evidence"
 
-      - name: Link exact FANDEX project locally
-        run: |
-          mkdir -p .vercel
-          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
-
-      - name: Verify CLI supports Production-only Blob provisioning
-        run: |
-          npx --yes vercel@latest blob create-store --help > /tmp/blob-create-help.txt 2>&1 || true
-          grep -q -- '--environment' /tmp/blob-create-help.txt
-          grep -q -- '--access' /tmp/blob-create-help.txt
-          grep -q -- '--region' /tmp/blob-create-help.txt
-
-      - name: Verify Vercel REST project access
+      - name: Verify exact FANDEX project access
         run: |
           HTTP_CODE=$(curl -sS -o /tmp/project.json -w '%{http_code}' \
             -H "Authorization: Bearer $VERCEL_TOKEN" \
@@ -53,58 +40,169 @@ jobs:
             console.log("FANDEX_VERCEL_PROJECT_READ=verified");
           '
 
-      - name: Inspect existing Blob stores
+      - name: Inspect existing Blob stores through REST
         id: inspect
         run: |
-          npx --yes vercel@latest blob list-stores --all             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/all-stores.txt
+          HTTP_CODE=$(curl -sS -o /tmp/stores.json -w '%{http_code}' \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v1/storage/stores?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_BLOB_STORE_LIST_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
 
-          npx --yes vercel@latest blob list-stores             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/connected-stores.txt
+          node <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/stores.json', 'utf8'));
+          const stores = Array.isArray(data.stores) ? data.stores : [];
+          const matches = stores.filter(s => s && s.name === process.env.STORE_NAME);
+          if (matches.length > 1) {
+            console.error('duplicate_same_name_blob_stores');
+            process.exit(42);
+          }
+          if (matches.length === 0) {
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'state=absent\n');
+            process.exit(0);
+          }
+          const store = matches[0];
+          const projects = Array.isArray(store.projectsMetadata) ? store.projectsMetadata : [];
+          const bound = projects.find(p => p && p.projectId === process.env.VERCEL_PROJECT_ID);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'state=existing\n');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `store_id=${store.id}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `already_bound=${bound ? 'true' : 'false'}\n`);
+          console.log('FANDEX_BLOB_EXISTING_STORE_ID=' + store.id);
+          console.log('FANDEX_BLOB_EXISTING_BOUND=' + (bound ? 'true' : 'false'));
+          NODE
 
-          if grep -Fq "$STORE_NAME" /tmp/connected-stores.txt; then
-            echo "state=already-connected" >> "$GITHUB_OUTPUT"
-          elif grep -Fq "$STORE_NAME" /tmp/all-stores.txt; then
-            echo "Existing same-name Blob store is not connected to this project; refusing duplicate creation."
-            exit 42
-          else
-            echo "state=absent" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create private Blob store and bind Production only
+      - name: Create private Blob store
+        id: create
         if: steps.inspect.outputs.state == 'absent'
         run: |
-          npx --yes vercel@latest blob create-store "$STORE_NAME"             --access private             --region iad1             --environment production             --yes             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color
+          HTTP_CODE=$(curl -sS -o /tmp/create.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.vercel.com/v1/storage/stores/blob?teamId=$VERCEL_ORG_ID" \
+            --data '{"name":"fandex-naver-evidence","region":"iad1","access":"private"}')
+          echo "FANDEX_BLOB_CREATE_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200" -o "$HTTP_CODE" = "201"
 
-      - name: Verify connected store
+          node <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/create.json', 'utf8'));
+          const store = data.store;
+          if (!store || typeof store.id !== 'string') {
+            console.error('blob_create_response_invalid');
+            process.exit(2);
+          }
+          if (store.name && store.name !== process.env.STORE_NAME) {
+            console.error('blob_create_name_mismatch');
+            process.exit(3);
+          }
+          if (store.region && store.region !== 'iad1') {
+            console.error('blob_create_region_mismatch');
+            process.exit(4);
+          }
+          if (store.access && store.access !== 'private') {
+            console.error('blob_create_access_mismatch');
+            process.exit(5);
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `store_id=${store.id}\n`);
+          console.log('FANDEX_BLOB_CREATED_STORE_ID=' + store.id);
+          console.log('FANDEX_BLOB_CREATED_ACCESS=private');
+          console.log('FANDEX_BLOB_CREATED_REGION=iad1');
+          NODE
+
+      - name: Resolve exact Blob store id
+        id: store
         run: |
-          npx --yes vercel@latest blob list-stores             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/connected-after.txt
-          grep -F "$STORE_NAME" /tmp/connected-after.txt
-          grep -F "$STORE_NAME" /tmp/connected-after.txt | grep -i 'private'
-          grep -F "$STORE_NAME" /tmp/connected-after.txt | grep -i 'iad1'
+          if [ -n "${{ steps.create.outputs.store_id }}" ]; then
+            STORE_ID="${{ steps.create.outputs.store_id }}"
+          else
+            STORE_ID="${{ steps.inspect.outputs.store_id }}"
+          fi
+          test -n "$STORE_ID"
+          case "$STORE_ID" in
+            store_*|blob_*) ;;
+            *) echo "unexpected Blob store id format"; exit 6 ;;
+          esac
+          echo "store_id=$STORE_ID" >> "$GITHUB_OUTPUT"
+          echo "FANDEX_BLOB_STORE_ID=$STORE_ID"
 
-      - name: Verify Production-only environment binding
+      - name: Bind Blob store to Production only
+        if: steps.inspect.outputs.already_bound != 'true'
         run: |
-          npx --yes vercel@latest env ls production             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-production.txt
+          STORE_ID="${{ steps.store.outputs.store_id }}"
+          HTTP_CODE=$(curl -sS -o /tmp/connect.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.vercel.com/v1/storage/stores/$STORE_ID/connections?teamId=$VERCEL_ORG_ID" \
+            --data '{"envVarEnvironments":["production"],"projectId":"prj_aT3p8zmjyochu8iGmFOuNR1lSU7v","type":"integration"}')
+          echo "FANDEX_BLOB_CONNECT_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200" -o "$HTTP_CODE" = "201"
 
-          npx --yes vercel@latest env ls preview             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-preview.txt
+      - name: Verify private store and Production-only binding
+        run: |
+          STORE_ID="${{ steps.store.outputs.store_id }}"
 
-          npx --yes vercel@latest env ls development             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --no-color > /tmp/env-development.txt
+          HTTP_CODE=$(curl -sS -o /tmp/store-detail.json -w '%{http_code}' \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v1/storage/stores/$STORE_ID?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_BLOB_DETAIL_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
 
-          grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-production.txt
+          HTTP_CODE=$(curl -sS -o /tmp/stores-after.json -w '%{http_code}' \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v1/storage/stores?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_BLOB_STORE_LIST_AFTER_HTTP=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
 
-          if grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-preview.txt; then
-            echo "BLOB_READ_WRITE_TOKEN unexpectedly present in Preview."
-            exit 43
-          fi
+          node <<'NODE'
+          const fs = require('fs');
+          const detailData = JSON.parse(fs.readFileSync('/tmp/store-detail.json', 'utf8'));
+          const store = detailData.store || detailData;
+          if (!store || store.id !== process.env.STORE_ID) {
+            console.error('blob_store_detail_identity_mismatch');
+            process.exit(2);
+          }
+          if (store.name !== process.env.STORE_NAME) {
+            console.error('blob_store_detail_name_mismatch');
+            process.exit(3);
+          }
+          if (store.region !== 'iad1') {
+            console.error('blob_store_detail_region_mismatch');
+            process.exit(4);
+          }
+          if (store.access !== 'private') {
+            console.error('blob_store_detail_access_not_private');
+            process.exit(5);
+          }
 
-          if grep -Fq 'BLOB_READ_WRITE_TOKEN' /tmp/env-development.txt; then
-            echo "BLOB_READ_WRITE_TOKEN unexpectedly present in Development."
-            exit 44
-          fi
+          const listData = JSON.parse(fs.readFileSync('/tmp/stores-after.json', 'utf8'));
+          const stores = Array.isArray(listData.stores) ? listData.stores : [];
+          const listed = stores.find(s => s && s.id === process.env.STORE_ID);
+          if (!listed) {
+            console.error('blob_store_not_listed_after_binding');
+            process.exit(6);
+          }
+          const projects = Array.isArray(listed.projectsMetadata) ? listed.projectsMetadata : [];
+          const project = projects.find(p => p && p.projectId === process.env.VERCEL_PROJECT_ID);
+          if (!project) {
+            console.error('blob_store_project_binding_missing');
+            process.exit(7);
+          }
+          const environments = Array.isArray(project.environments) ? [...project.environments].sort() : [];
+          if (JSON.stringify(environments) !== JSON.stringify(['production'])) {
+            console.error('blob_store_binding_not_production_only:' + JSON.stringify(environments));
+            process.exit(8);
+          }
 
-          echo "FANDEX_BLOB_BINDING_VERIFIED=production-only"
-          echo "FANDEX_BLOB_STORE_NAME=$STORE_NAME"
-          echo "FANDEX_BLOB_ACCESS=private"
-          echo "FANDEX_BLOB_REGION=iad1"
+          console.log('FANDEX_BLOB_BINDING_VERIFIED=production-only');
+          console.log('FANDEX_BLOB_STORE_NAME=' + process.env.STORE_NAME);
+          console.log('FANDEX_BLOB_ACCESS=private');
+          console.log('FANDEX_BLOB_REGION=iad1');
+          NODE
+        env:
+          STORE_ID: ${{ steps.store.outputs.store_id }}
 
       - name: Safety boundary
         run: |
