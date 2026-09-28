@@ -1,0 +1,58 @@
+name: Validate NAVER Stored Evidence object mirror v1
+
+on:
+  push:
+    branches:
+      - integration/naver-stored-evidence-object-mirror-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/naver-stored-evidence-object-mirror-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only 26631c9829fc232aa040bd2f4eee6e0d8e80488b...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-naver-stored-evidence-object-mirror-v1.yml
+          data/momentum-product/iu_momentum_neon_independent_stored_evidence_mirror_candidate_v1.json
+          lib/server/ingestion/naverNewsStoredEvidenceMirror.ts
+          lib/server/storage/immutableTextObjectStore.ts
+          tests/naver-news-stored-evidence-mirror-v1.test.mts
+          tests/momentum-neon-independent-stored-evidence-mirror-candidate-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: NAVER Stored Evidence mirror regression
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+
+      - name: Momentum mirror candidate evidence regression
+        run: npx tsx --test tests/momentum-neon-independent-stored-evidence-mirror-candidate-v1.test.mts
+
+      - name: Existing NAVER canonical evidence regression
+        run: npx tsx --test tests/naver-news-canonical-job-evidence-v130.test.mts
+
+      - name: Existing latest official slot regression
+        run: npx tsx --test tests/naver-news-latest-official-shadow-slot-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
