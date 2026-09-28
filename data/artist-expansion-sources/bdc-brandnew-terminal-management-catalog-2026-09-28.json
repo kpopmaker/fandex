@@ -1,0 +1,85 @@
+{
+  "version": "bdc_brandnew_terminal_management_catalog_adapter_v1",
+  "source": {
+    "id": "bdc-brandnew-terminal-management-catalog",
+    "type": "provider_catalog",
+    "name": "BDC BRANDNEW MUSIC Terminal Management Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1607835wpp/bdc-to-part-ways-with-brandnew-music-after-4-years"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "BDC",
+      "aliases": [
+        "비디씨",
+        "BOYS DA CAPO"
+      ],
+      "evidence": [
+        {
+          "label": "BRANDNEW MUSIC terminal contract/activity statement",
+          "url": "https://www.soompi.com/article/1607835wpp/bdc-to-part-ways-with-brandnew-music-after-4-years"
+        },
+        {
+          "label": "BRANDNEW MUSIC terminal statement Korean preservation",
+          "url": "https://www.starnewskorea.com/music/2023/08/18/2023081814474222005"
+        },
+        {
+          "label": "Apple Music BOYS DA CAPO debut catalog",
+          "url": "https://music.apple.com/us/album/boys-da-capo-ep/1485382550"
+        },
+        {
+          "label": "Brand New Music BDC debut rollout",
+          "url": "https://www.soompi.com/article/1359376wpp/brand-new-music-trainees-from-produce-x-101-announce-unit-name-and-details-for-1st-single"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "exclusiveContractEndEvidenceRequired": true,
+    "officialPromotionEndEvidenceRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "managementClosureDoesNotAssertLegalDisbandment": true,
+    "postAgencyReactivationRequiresNewExplicitGroupEvidence": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "officialActivityEndDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2023-08-18",
+    "effectiveDate": "2023-08-26",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "BRANDNEW MUSIC",
+    "terminalMembers": [
+      "KIM SI HUN",
+      "HONG SEONG JUN",
+      "YUN JUNG HWAN"
+    ],
+    "terminalMemberCount": 3,
+    "exclusiveContractEnded": true,
+    "officialPromotionsUnderAgencyEnded": true,
+    "legalDisbandmentAsserted": false,
+    "debutDate": "2019-10-29",
+    "debutRelease": "BOYS DA CAPO",
+    "fandomName": "FINE"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_management_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1607835wpp/bdc-to-part-ways-with-brandnew-music-after-4-years",
+      "https://www.starnewskorea.com/music/2023/08/18/2023081814474222005",
+      "https://music.apple.com/us/album/boys-da-capo-ep/1485382550",
+      "https://www.soompi.com/article/1359376wpp/brand-new-music-trainees-from-produce-x-101-announce-unit-name-and-details-for-1st-single"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

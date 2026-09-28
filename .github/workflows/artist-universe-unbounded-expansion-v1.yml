@@ -99,6 +99,7 @@ jobs:
           python tests/artist-expansion-ninei-pause-identity-v1.py
           python tests/artist-expansion-omegax-ipq-provider-catalog-v1.py
           python tests/artist-expansion-ab6ix-group-pause-identity-v1.py
+          python tests/artist-expansion-bdc-terminal-management-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -407,6 +408,11 @@ jobs:
           python scripts/artist-expansion/collect_ab6ix_group_pause_identity_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/ab6ix-group-pause-identity-catalog-2026-09-28.json \
             --output ab6ix_group_pause_identity_catalog_v1_latest.json
+      - name: Collect BDC BRANDNEW MUSIC terminal management catalog
+        run: |
+          python scripts/artist-expansion/collect_bdc_brandnew_terminal_management_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/bdc-brandnew-terminal-management-catalog-2026-09-28.json \
+            --output bdc_brandnew_terminal_management_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -489,6 +495,7 @@ jobs:
             --snapshot ninei_official_pause_identity_catalog_v1_latest.json \
             --snapshot omegax_ipq_current_provider_catalog_v1_latest.json \
             --snapshot ab6ix_group_pause_identity_catalog_v1_latest.json \
+            --snapshot bdc_brandnew_terminal_management_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -589,6 +596,7 @@ jobs:
             ninei_official_pause_identity_catalog_v1_latest.json
             omegax_ipq_current_provider_catalog_v1_latest.json
             ab6ix_group_pause_identity_catalog_v1_latest.json
+            bdc_brandnew_terminal_management_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

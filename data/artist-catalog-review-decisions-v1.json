@@ -5187,6 +5187,38 @@
           "note": "After the group contract ended, JEON WOONG renewed individually with BRANDNEW MUSIC while PARK WOO JIN, LEE DAE HWI, and KIM DONG HYUN moved to separate agencies. Individual agency contracts therefore do not resolve a single current AB6IX group agency."
         }
       ]
+    },
+    {
+      "displayArtist": "BDC",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "brandnew_terminal_statement_resolves_exact_three_member_management_and_official_promotion_end_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_brandnew_terminal_statement_exact_three_member_identity_and_provider_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BRANDNEW MUSIC terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1607835wpp/bdc-to-part-ways-with-brandnew-music-after-4-years",
+          "note": "BRANDNEW MUSIC names KIM SI HUN, HONG SEONG JUN, and YUN JUNG HWAN, mutually ends the exclusive contract, and states BDC will end all official promotions as artists under BRANDNEW MUSIC after the August 26, 2023 digital single."
+        },
+        {
+          "source": "BRANDNEW MUSIC terminal statement preserved by StarNews Korea",
+          "url": "https://www.starnewskorea.com/music/2023/08/18/2023081814474222005",
+          "note": "Independent preservation of the company statement confirms the same three-member terminal roster and official-activity closure wording."
+        },
+        {
+          "source": "Apple Music Boys Da Capo provider catalog",
+          "url": "https://music.apple.com/us/album/boys-da-capo-ep/1485382550",
+          "note": "Provider catalog dates BOYS DA CAPO to October 29, 2019 and credits BRANDNEW MUSIC."
+        },
+        {
+          "source": "Brand New Music BDC debut rollout preserved by Soompi",
+          "url": "https://www.soompi.com/article/1359376wpp/brand-new-music-trainees-from-produce-x-101-announce-unit-name-and-details-for-1st-single",
+          "note": "The debut rollout identifies KIM SI HUN, HONG SEONG JUN, and YUN JUNG HWAN as BDC and records the October 29 debut release."
+        }
+      ]
     }
   ]
 }

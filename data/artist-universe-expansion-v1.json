@@ -8479,6 +8479,71 @@
           "url": "https://www.newsen.com/news_view.php?code=100100&uid=202609100746082410"
         }
       ]
+    },
+    {
+      "id": "bdc",
+      "ticker": "BDC",
+      "name": "BDC",
+      "agency": "BRANDNEW MUSIC",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-10-29",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "KIM SI HUN",
+        "HONG SEONG JUN",
+        "YUN JUNG HWAN"
+      ],
+      "fandomName": "FINE",
+      "naverNewsQuery": "BDC 김시훈 홍성준 윤정환 브랜뉴뮤직",
+      "koreanAliases": [
+        "비디씨"
+      ],
+      "englishAliases": [
+        "BDC",
+        "BOYS DA CAPO"
+      ],
+      "keywords": [
+        "BRANDNEW MUSIC",
+        "브랜뉴뮤직",
+        "KIM SI HUN",
+        "HONG SEONG JUN",
+        "YUN JUNG HWAN",
+        "BOYS DA CAPO",
+        "REMEMBER ME",
+        "쉼표",
+        "Rest",
+        "FINE"
+      ],
+      "disambiguationKeywords": [
+        "BRANDNEW MUSIC",
+        "브랜뉴뮤직",
+        "BOYS DA CAPO"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "BRANDNEW MUSIC terminal contract/activity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1607835wpp/bdc-to-part-ways-with-brandnew-music-after-4-years"
+        },
+        {
+          "source": "BRANDNEW MUSIC terminal statement preserved by StarNews Korea",
+          "url": "https://www.starnewskorea.com/music/2023/08/18/2023081814474222005"
+        },
+        {
+          "source": "Apple Music Boys Da Capo debut catalog",
+          "url": "https://music.apple.com/us/album/boys-da-capo-ep/1485382550"
+        },
+        {
+          "source": "Brand New Music BDC debut rollout preserved by Soompi",
+          "url": "https://www.soompi.com/article/1359376wpp/brand-new-music-trainees-from-produce-x-101-announce-unit-name-and-details-for-1st-single"
+        }
+      ]
     }
   ]
 }
