@@ -9477,6 +9477,72 @@
           "url": "https://music.bugs.co.kr/album/20268984"
         }
       ]
+    },
+    {
+      "id": "boy",
+      "ticker": "BOY",
+      "name": "B.O.Y",
+      "agency": "The Music Works Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2020-01-07",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "KIM KOOK HEON",
+        "SONG YU VIN"
+      ],
+      "fandomName": "Meet You",
+      "naverNewsQuery": "비오브유 B.O.Y 김국헌 송유빈 더뮤직웍스",
+      "koreanAliases": [
+        "비오브유"
+      ],
+      "englishAliases": [
+        "B.O.Y",
+        "B Of You",
+        "Best Of You",
+        "Both Of You"
+      ],
+      "keywords": [
+        "The Music Works Entertainment",
+        "The Music Works",
+        "더뮤직웍스",
+        "KIM KOOK HEON",
+        "SONG YU VIN",
+        "Phase One : YOU",
+        "Phase One: YOU",
+        "My Angel",
+        "Meet You"
+      ],
+      "disambiguationKeywords": [
+        "B.O.Y",
+        "비오브유",
+        "김국헌",
+        "송유빈",
+        "더뮤직웍스"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "The Music Works B.O.Y activity-wrap statement and Song Yu Vin direct disbandment confirmation preserved by Soompi",
+          "url": "https://www.soompi.com/article/1466688wpp/b-o-y-announces-disbandment-song-yu-vin-leaves-the-music-works-and-clarifies-details-in-agencys-statement"
+        },
+        {
+          "source": "B.O.Y two-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1375500wpp/b-o-y-talks-about-their-re-debut-role-models-and-goals-for-2020"
+        },
+        {
+          "source": "Apple Music Phase One : YOU licensed debut catalog",
+          "url": "https://music.apple.com/kr/album/phase-one-you-ep/1493753394"
+        },
+        {
+          "source": "Bugs Phase One : YOU agency catalog",
+          "url": "https://music.bugs.co.kr/album/20298791"
+        }
+      ]
     }
   ]
 }

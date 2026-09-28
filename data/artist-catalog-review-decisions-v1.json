@@ -5625,6 +5625,38 @@
           "note": "Bugs dates the EP to August 1, 2019 and lists D1CE ENTERTAINMENT as the planning agency."
         }
       ]
+    },
+    {
+      "displayArtist": "B.O.Y",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "musicworks_group_activity_wrap_plus_song_yu_vin_direct_disbandment_confirmation_resolve_two_member_terminal_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_musicworks_group_activity_end_statement_member_direct_disbandment_confirmation_two_member_debut_profile_and_licensed_provider_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "The Music Works B.O.Y terminal statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1466688wpp/b-o-y-announces-disbandment-song-yu-vin-leaves-the-music-works-and-clarifies-details-in-agencys-statement",
+          "note": "The Music Works states that after deliberation it decided to wrap up B.O.Y's activities. Song Yu Vin separately confirms that B.O.Y's disbandment was decided after sufficient discussion with Kim Kook Heon."
+        },
+        {
+          "source": "B.O.Y two-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1375500wpp/b-o-y-talks-about-their-re-debut-role-models-and-goals-for-2020",
+          "note": "The debut profile identifies B.O.Y as the duo Kim Kook Heon and Song Yu Vin and records the January 7, 2020 release of Phase One : YOU."
+        },
+        {
+          "source": "Apple Music Phase One : YOU provider catalog",
+          "url": "https://music.apple.com/kr/album/phase-one-you-ep/1493753394",
+          "note": "Licensed provider catalog dates Phase One : YOU to January 7, 2020 and credits The Music Works."
+        },
+        {
+          "source": "Bugs Phase One : YOU agency catalog",
+          "url": "https://music.bugs.co.kr/album/20298791",
+          "note": "Bugs identifies artist 비오브유(B.O.Y), release date 2020-01-07, and agency 더뮤직웍스."
+        }
+      ]
     }
   ]
 }

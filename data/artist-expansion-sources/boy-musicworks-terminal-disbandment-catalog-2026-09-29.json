@@ -1,0 +1,88 @@
+{
+  "version": "boy_musicworks_terminal_disbandment_catalog_adapter_v1",
+  "source": {
+    "id": "boy-musicworks-terminal-disbandment-catalog",
+    "type": "provider_catalog",
+    "name": "B.O.Y The Music Works Terminal Disbandment Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1466688wpp/b-o-y-announces-disbandment-song-yu-vin-leaves-the-music-works-and-clarifies-details-in-agencys-statement"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "B.O.Y",
+      "aliases": [
+        "비오브유",
+        "B Of You"
+      ],
+      "evidence": [
+        {
+          "label": "The Music Works group activity-wrap statement and member direct disbandment confirmation",
+          "url": "https://www.soompi.com/article/1466688wpp/b-o-y-announces-disbandment-song-yu-vin-leaves-the-music-works-and-clarifies-details-in-agencys-statement"
+        },
+        {
+          "label": "B.O.Y two-member debut profile",
+          "url": "https://www.soompi.com/article/1375500wpp/b-o-y-talks-about-their-re-debut-role-models-and-goals-for-2020"
+        },
+        {
+          "label": "Apple Music Phase One : YOU licensed debut catalog",
+          "url": "https://music.apple.com/kr/album/phase-one-you-ep/1493753394"
+        },
+        {
+          "label": "Bugs Phase One : YOU agency catalog",
+          "url": "https://music.bugs.co.kr/album/20298791"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "agencyGroupActivityWrapUpRequired": true,
+    "memberDirectDisbandmentConfirmationRequired": true,
+    "individualContractTerminationDoesNotInferOtherMemberContractEnd": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "groupDisbandmentConfirmed": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2021-04-30",
+    "effectiveDate": "2021-04-30",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "The Music Works Entertainment",
+    "terminalMembers": [
+      "KIM KOOK HEON",
+      "SONG YU VIN"
+    ],
+    "terminalMemberCount": 2,
+    "groupActivitiesWrappedUp": true,
+    "memberDirectDisbandmentConfirmed": true,
+    "songYuVinAgencyContractTerminated": true,
+    "kimKookHeonContractEndNotInferred": true,
+    "groupDisbandmentConfirmed": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2020-01-07",
+    "debutRelease": "Phase One : YOU",
+    "fandomName": "Meet You"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_group_activity_end_plus_member_direct_disbandment_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1466688wpp/b-o-y-announces-disbandment-song-yu-vin-leaves-the-music-works-and-clarifies-details-in-agencys-statement",
+      "https://www.soompi.com/article/1375500wpp/b-o-y-talks-about-their-re-debut-role-models-and-goals-for-2020",
+      "https://music.apple.com/kr/album/phase-one-you-ep/1493753394",
+      "https://music.bugs.co.kr/album/20298791"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

@@ -113,6 +113,7 @@ jobs:
           python tests/artist-expansion-gugudan-terminal-lifecycle-v1.py
           python tests/artist-expansion-hinapia-terminal-disbandment-v1.py
           python tests/artist-expansion-d1ce-terminal-management-v1.py
+          python tests/artist-expansion-boy-terminal-disbandment-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -491,6 +492,11 @@ jobs:
           python scripts/artist-expansion/collect_d1ce_terminal_management_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/d1ce-terminal-management-catalog-2026-09-29.json \
             --output d1ce_terminal_management_catalog_v1_latest.json
+      - name: Collect B.O.Y The Music Works terminal disbandment catalog
+        run: |
+          python scripts/artist-expansion/collect_boy_musicworks_terminal_disbandment_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/boy-musicworks-terminal-disbandment-catalog-2026-09-29.json \
+            --output boy_musicworks_terminal_disbandment_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -587,6 +593,7 @@ jobs:
             --snapshot gugudan_jellyfish_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot hinapia_osr_terminal_disbandment_catalog_v1_latest.json \
             --snapshot d1ce_terminal_management_catalog_v1_latest.json \
+            --snapshot boy_musicworks_terminal_disbandment_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -701,6 +708,7 @@ jobs:
             gugudan_jellyfish_terminal_lifecycle_catalog_v1_latest.json
             hinapia_osr_terminal_disbandment_catalog_v1_latest.json
             d1ce_terminal_management_catalog_v1_latest.json
+            boy_musicworks_terminal_disbandment_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
