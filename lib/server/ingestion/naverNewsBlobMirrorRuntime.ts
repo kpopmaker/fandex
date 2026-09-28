@@ -19,7 +19,9 @@ export const NAVER_NEWS_BLOB_MIRROR_MODE_SHADOW_WRITE =
 const blobSdk: VercelBlobSdkPort = Object.freeze({
   async get(urlOrPathname, options) {
     const result = await get(urlOrPathname, options);
-    return result === null ? null : { stream: result.stream };
+    return result === null || result.stream === null
+      ? null
+      : { stream: result.stream };
   },
   async list(options) {
     const result = await list(options);
