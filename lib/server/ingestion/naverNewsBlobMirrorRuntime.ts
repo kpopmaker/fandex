@@ -17,9 +17,22 @@ export const NAVER_NEWS_BLOB_MIRROR_MODE_SHADOW_WRITE =
   'shadow-write-v1' as const;
 
 const blobSdk: VercelBlobSdkPort = Object.freeze({
-  get,
-  list,
-  put,
+  async get(urlOrPathname, options) {
+    const result = await get(urlOrPathname, options);
+    return result === null ? null : { stream: result.stream };
+  },
+  async list(options) {
+    const result = await list(options);
+    return {
+      blobs: result.blobs.map((blob) => ({ pathname: blob.pathname })),
+      ...(result.cursor ? { cursor: result.cursor } : {}),
+      hasMore: result.hasMore,
+    };
+  },
+  async put(pathname, body, options) {
+    const result = await put(pathname, body, options);
+    return { pathname: result.pathname };
+  },
 });
 
 export function createProductionNaverNewsBlobEvidenceMirror(
