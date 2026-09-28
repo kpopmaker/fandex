@@ -1149,6 +1149,19 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(tfn.profile.koreanAliases.includes('티에프앤'));
   assert.ok(tfn.profile.englishAliases.includes('T1419'));
 
+  const dcrunch = getArtistV4ById('dcrunch');
+  assert.ok(dcrunch);
+  assert.equal(dcrunch.entityType, 'group');
+  assert.equal(dcrunch.agency, 'AI Grand Korea');
+  assert.equal(dcrunch.agencyStatus, 'historical');
+  assert.equal(dcrunch.debutDate, '2018-08-06');
+  assert.equal(dcrunch.lifecycleStatus, 'inactive');
+  assert.deepEqual(dcrunch.members, ['HYUNWOOK', 'HYUNHO', 'HYUNOH', 'O.V', 'CHANYOUNG', 'JUNGSEUNG']);
+  assert.ok(dcrunch.profile.koreanAliases.includes('디크런치'));
+  assert.ok(!dcrunch.members.includes('HYUNWOO'));
+  assert.ok(!dcrunch.members.includes('MINHYUK'));
+  assert.ok(!dcrunch.members.includes('DYLAN'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

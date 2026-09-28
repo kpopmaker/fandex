@@ -1,0 +1,116 @@
+{
+  "version": "dcrunch_ai_grand_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "dcrunch-ai-grand-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "D-CRUNCH AI Grand Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1553405wpp/d-crunch-announces-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "D-CRUNCH",
+      "aliases": [
+        "디크런치",
+        "DCRUNCH",
+        "DIAMOND-CRUNCH"
+      ],
+      "evidence": [
+        {
+          "label": "AI Grand Korea explicit D-CRUNCH disbandment statement",
+          "url": "https://www.soompi.com/article/1553405wpp/d-crunch-announces-disbandment"
+        },
+        {
+          "label": "AI Grand Korea DYLAN departure and six-member continuation statement",
+          "url": "https://www.soompi.com/article/1550794wpp/d-crunch-announces-dylans-departure-from-the-group"
+        },
+        {
+          "label": "AI Grand Korea MINHYUK departure statement",
+          "url": "https://www.soompi.com/article/1497929wpp/d-crunchs-minhyuk-leaves-the-group-dylan-temporarily-halts-activities"
+        },
+        {
+          "label": "AI Grand Korea HYUNWOO departure statement",
+          "url": "https://www.soompi.com/article/1445723wpp/d-crunch-announces-hyunwoos-departure-from-group"
+        },
+        {
+          "label": "D-CRUNCH original nine-member debut report",
+          "url": "https://www.soompi.com/article/1210859wpp/watch-d-crunch-makes-powerful-debut-palace-mv"
+        },
+        {
+          "label": "Apple Music D-CRUNCH provider profile",
+          "url": "https://music.apple.com/us/artist/d-crunch/1423014634"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitGroupDisbandmentRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "priorDepartureChainRequired": true,
+    "explicitDepartureRequiredForMemberRemoval": true,
+    "temporaryHiatusDoesNotEqualDeparture": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "individualContractsEndedNotInferred": true,
+    "individualCareersEndedNotInferred": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "providerDebutDateCrossCheckRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2022-11-09",
+    "effectiveDate": "2022-11-09",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "AI Grand Korea",
+    "terminalMembers": [
+      "HYUNWOOK",
+      "HYUNHO",
+      "HYUNOH",
+      "O.V",
+      "CHANYOUNG",
+      "JUNGSEUNG"
+    ],
+    "terminalMemberCount": 6,
+    "groupDisbandmentExplicit": true,
+    "legalEntityDissolutionAsserted": false,
+    "individualContractsEndedNotInferred": true,
+    "individualCareersEndedNotInferred": true,
+    "priorExitedMembers": [
+      {
+        "member": "HYUNWOO",
+        "effectiveDate": "2020-12-28",
+        "resolution": "explicit_team_departure_and_contract_termination"
+      },
+      {
+        "member": "MINHYUK",
+        "effectiveDate": "2021-11-09",
+        "resolution": "explicit_team_departure"
+      },
+      {
+        "member": "DYLAN",
+        "effectiveDate": "2022-10-21",
+        "resolution": "explicit_team_departure_after_prior_temporary_hiatus"
+      }
+    ],
+    "debutDate": "2018-08-06",
+    "debutRelease": "0806",
+    "fandomName": "DIANA"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_disbandment_plus_departure_chain_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1553405wpp/d-crunch-announces-disbandment",
+      "https://www.soompi.com/article/1550794wpp/d-crunch-announces-dylans-departure-from-the-group",
+      "https://www.soompi.com/article/1497929wpp/d-crunchs-minhyuk-leaves-the-group-dylan-temporarily-halts-activities",
+      "https://www.soompi.com/article/1445723wpp/d-crunch-announces-hyunwoos-departure-from-group",
+      "https://www.soompi.com/article/1210859wpp/watch-d-crunch-makes-powerful-debut-palace-mv",
+      "https://music.apple.com/us/artist/d-crunch/1423014634"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

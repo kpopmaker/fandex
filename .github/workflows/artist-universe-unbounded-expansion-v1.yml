@@ -105,6 +105,7 @@ jobs:
           python tests/artist-expansion-bvndit-terminal-management-v1.py
           python tests/artist-expansion-hotissue-terminal-lifecycle-v1.py
           python tests/artist-expansion-tfn-terminal-rename-v1.py
+          python tests/artist-expansion-dcrunch-terminal-lifecycle-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -443,6 +444,11 @@ jobs:
           python scripts/artist-expansion/collect_tfn_mld_terminal_rename_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/tfn-mld-terminal-rename-catalog-2026-09-28.json \
             --output tfn_mld_terminal_rename_catalog_v1_latest.json
+      - name: Collect D-CRUNCH AI Grand terminal lifecycle catalog
+        run: |
+          python scripts/artist-expansion/collect_dcrunch_ai_grand_terminal_lifecycle_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/dcrunch-ai-grand-terminal-lifecycle-catalog-2026-09-28.json \
+            --output dcrunch_ai_grand_terminal_lifecycle_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -531,6 +537,7 @@ jobs:
             --snapshot bvndit_mnh_terminal_management_catalog_v1_latest.json \
             --snapshot hotissue_s2_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot tfn_mld_terminal_rename_catalog_v1_latest.json \
+            --snapshot dcrunch_ai_grand_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -637,6 +644,7 @@ jobs:
             bvndit_mnh_terminal_management_catalog_v1_latest.json
             hotissue_s2_terminal_lifecycle_catalog_v1_latest.json
             tfn_mld_terminal_rename_catalog_v1_latest.json
+            dcrunch_ai_grand_terminal_lifecycle_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

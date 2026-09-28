@@ -8869,6 +8869,88 @@
           "url": "https://music.apple.com/us/album/before-sunrise-pt-1-single/1547593325"
         }
       ]
+    },
+    {
+      "id": "dcrunch",
+      "ticker": "DCRUNCH",
+      "name": "D-CRUNCH",
+      "agency": "AI Grand Korea",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2018-08-06",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "HYUNWOOK",
+        "HYUNHO",
+        "HYUNOH",
+        "O.V",
+        "CHANYOUNG",
+        "JUNGSEUNG"
+      ],
+      "fandomName": "DIANA",
+      "naverNewsQuery": "디크런치 D-CRUNCH AI그랜드코리아",
+      "koreanAliases": [
+        "디크런치"
+      ],
+      "englishAliases": [
+        "D-CRUNCH",
+        "DCRUNCH",
+        "DIAMOND-CRUNCH"
+      ],
+      "keywords": [
+        "AI Grand Korea",
+        "AIG KOREA",
+        "All-S Company",
+        "HYUNWOOK",
+        "HYUNHO",
+        "HYUNOH",
+        "O.V",
+        "CHANYOUNG",
+        "JUNGSEUNG",
+        "HYUNWOO",
+        "MINHYUK",
+        "DYLAN",
+        "0806",
+        "Palace",
+        "Addiction",
+        "DIANA"
+      ],
+      "disambiguationKeywords": [
+        "AI Grand Korea",
+        "D-CRUNCH",
+        "디크런치"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "AI Grand Korea explicit D-CRUNCH disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1553405wpp/d-crunch-announces-disbandment"
+        },
+        {
+          "source": "AI Grand Korea DYLAN departure and six-member continuation statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1550794wpp/d-crunch-announces-dylans-departure-from-the-group"
+        },
+        {
+          "source": "AI Grand Korea MINHYUK departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1497929wpp/d-crunchs-minhyuk-leaves-the-group-dylan-temporarily-halts-activities"
+        },
+        {
+          "source": "AI Grand Korea HYUNWOO departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1445723wpp/d-crunch-announces-hyunwoos-departure-from-group"
+        },
+        {
+          "source": "D-CRUNCH nine-member debut report",
+          "url": "https://www.soompi.com/article/1210859wpp/watch-d-crunch-makes-powerful-debut-palace-mv"
+        },
+        {
+          "source": "Apple Music D-CRUNCH provider profile",
+          "url": "https://music.apple.com/us/artist/d-crunch/1423014634"
+        }
+      ]
     }
   ]
 }

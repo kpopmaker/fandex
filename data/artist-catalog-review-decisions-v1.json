@@ -5359,6 +5359,48 @@
           "note": "Licensed provider catalog dates the debut release to January 11, 2021 and credits MLD entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "D-CRUNCH",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "explicit_ai_grand_korea_disbandment_plus_three_explicit_prior_departures_resolve_six_member_terminal_roster",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_disbandment_statement_prior_departure_chain_nine_member_debut_identity_and_provider_debut_date",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "AI Grand Korea explicit D-CRUNCH disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1553405wpp/d-crunch-announces-disbandment",
+          "note": "AI Grand Korea explicitly states that after discussion with the members it decided to disband D-CRUNCH on November 9, 2022 and would close the official fan cafe and social accounts."
+        },
+        {
+          "source": "AI Grand Korea DYLAN departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1550794wpp/d-crunch-announces-dylans-departure-from-the-group",
+          "note": "The October 21, 2022 company statement explicitly removes DYLAN and states D-CRUNCH will continue as six members, directly fixing the terminal member count before disbandment."
+        },
+        {
+          "source": "AI Grand Korea MINHYUK departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1497929wpp/d-crunchs-minhyuk-leaves-the-group-dylan-temporarily-halts-activities",
+          "note": "The November 2021 company statement explicitly removes MINHYUK; DYLAN's temporary hiatus in the same notice is not treated as departure until the later explicit October 2022 statement."
+        },
+        {
+          "source": "AI Grand Korea HYUNWOO departure statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1445723wpp/d-crunch-announces-hyunwoos-departure-from-group",
+          "note": "The December 28, 2020 company statement explicitly removes HYUNWOO and records termination of his contract."
+        },
+        {
+          "source": "D-CRUNCH nine-member debut report",
+          "url": "https://www.soompi.com/article/1210859wpp/watch-d-crunch-makes-powerful-debut-palace-mv",
+          "note": "Debut coverage identifies the original nine-member roster and August 6, 2018 debut with 0806/Palace."
+        },
+        {
+          "source": "Apple Music D-CRUNCH provider profile",
+          "url": "https://music.apple.com/us/artist/d-crunch/1423014634",
+          "note": "Provider profile lists D-CRUNCH as K-Pop and gives the formed date as August 6, 2018."
+        }
+      ]
     }
   ]
 }
