@@ -1,0 +1,55 @@
+{
+  "contractVersion": "momentum-product-publication-approval-candidate-evidence-v1",
+  "canonicalArtistId": "iu",
+  "target": {
+    "legacyVariableId": "growthMomentumPoint",
+    "constructId": "momentumEvidenceConsensus"
+  },
+  "activationProduction": {
+    "authorizedMain": "a3d5db92206f027be6a015baddb0ac0ce2044348",
+    "deploymentId": "dpl_BX5qkSxZfAztKJpSn3e852i8A4U2",
+    "deploymentState": "READY",
+    "deploymentTarget": "production",
+    "deploymentCommitSha": "a3d5db92206f027be6a015baddb0ac0ce2044348"
+  },
+  "candidate": {
+    "status": "ready-for-owner-attestation",
+    "publicationAuthorizationId": null,
+    "authorizedAt": null,
+    "activationAuthorized": true,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null,
+    "numericProductEligible": false,
+    "legacyGrowthMomentumPointReuseAllowed": false,
+    "previewFallbackAllowed": false,
+    "directProductionContributionEligible": false,
+    "requiredNextGate": "explicit-momentum-product-publication-authorization"
+  },
+  "binding": {
+    "activationAuthorizationId": "ops-activation-momentum-evidence-consensus-20260928t012306z-v1",
+    "activationApprovalContractVersion": "momentum-product-activation-approval-v1",
+    "activationAuthorizationContractVersion": "momentum-product-activation-authorization-v1",
+    "productContractVersion": "product-momentum-evidence-consensus-v1",
+    "claimScope": "structured-categorical-evidence-only-no-numeric-score",
+    "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+  },
+  "authorizationWithoutApproval": {
+    "status": "not-authorized",
+    "reason": "publication-approval-absent",
+    "activationAuthorized": true,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null
+  },
+  "safetyBoundary": {
+    "ownerPublicationApprovalRecorded": false,
+    "databaseWrites": 0,
+    "registryMutations": 0,
+    "productPublications": 0,
+    "publicRouteCutovers": 0,
+    "productionVerifierExecutions": 0
+  }
+}

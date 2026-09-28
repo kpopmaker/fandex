@@ -1,0 +1,62 @@
+name: Validate Momentum product publication approval candidate v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-product-publication-authorization-candidate-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/momentum-product-publication-authorization-candidate-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        run: |
+          git diff --name-only a3d5db92206f027be6a015baddb0ac0ce2044348...HEAD | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-product-publication-approval-candidate-v1.yml
+          data/momentum-product/iu_momentum_product_publication_approval_candidate_v1.json
+          lib/product/activation/momentumProductPublicationApprovalCandidate.ts
+          lib/product/activation/momentumProductPublicationAuthorization.ts
+          lib/server/product/momentumProductPublicationApprovalCandidate.ts
+          tests/momentum-product-publication-approval-candidate-evidence-v1.test.mts
+          tests/momentum-product-publication-approval-candidate-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Momentum publication approval candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-approval-candidate-v1.test.mts
+
+      - name: Momentum publication approval candidate evidence regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-approval-candidate-evidence-v1.test.mts
+
+      - name: Momentum activation approval regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
