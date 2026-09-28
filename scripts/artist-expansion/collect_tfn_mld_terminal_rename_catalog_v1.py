@@ -45,7 +45,7 @@ def parse_live_pages(terminal_html: str, rename_html: str, profile_html: str, de
 
     if not contains_any(terminal, "MLD Entertainment", "MLD"):
         return []
-    if not contains_any(terminal, "exclusive contracts and group activities have ended", "exclusive contracts", "group activities have ended"):
+    if not contains_any(terminal, "exclusive contracts and group activities have ended"):
         return []
     if not contains_any(terminal, "February 29", "Feb 29", "2024"):
         return []
