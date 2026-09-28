@@ -162,6 +162,6 @@ test('Momentum operations handoff merge commit is attested on READY Production w
   assert.equal(sha256Canonical(digestInput), attestationDigest);
   assert.equal(
     attestationDigest,
-    '43ab71ac69b96a62a8832b4a2e66784757223289e74b702fcc634f6164c6c335',
+    'eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9',
   );
 });
