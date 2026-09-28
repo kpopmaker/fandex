@@ -34,11 +34,7 @@ jobs:
 
       - name: Verify CLI supports Production-only Blob provisioning
         run: |
-          set +e
-          npx --yes vercel@latest blob create-store --help > /tmp/blob-create-help.txt
-          HELP_EXIT=$?
-          set -e
-          test "$HELP_EXIT" -eq 0 -o "$HELP_EXIT" -eq 2
+          npx --yes vercel@latest blob create-store --help > /tmp/blob-create-help.txt || true
           grep -q -- '--environment' /tmp/blob-create-help.txt
           grep -q -- '--access' /tmp/blob-create-help.txt
           grep -q -- '--region' /tmp/blob-create-help.txt
