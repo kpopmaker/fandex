@@ -1,0 +1,37 @@
+{
+  "contractVersion": "momentum-product-activation-operations-handoff-production-attestation-v1",
+  "attestedHandoff": {
+    "path": "data/momentum-product/iu_momentum_product_activation_operations_handoff_v1.json",
+    "handoffDigest": "dca053af60e05e22ea30d45e030c31f85cea2931d448ef7dc108942bcc309d76",
+    "mergeCommitSha": "7e72c65951bee61e8e528ae2719f090efc662dba",
+    "pullRequestNumber": 266
+  },
+  "productionDeployment": {
+    "deploymentId": "dpl_dr9sYi2UE89UzLDdgH96btEj7goJ",
+    "state": "READY",
+    "target": "production",
+    "githubCommitRef": "main",
+    "githubCommitSha": "7e72c65951bee61e8e528ae2719f090efc662dba",
+    "aliasError": null
+  },
+  "verification": {
+    "handoffMergeCommitDeployedToProduction": true,
+    "productionDeploymentReady": true,
+    "productionCommitMatchesHandoffMergeCommit": true,
+    "handoffEvidenceDigestLocked": true,
+    "ownerApprovalRecorded": false,
+    "activationAuthorizationId": null,
+    "authorizedAt": null,
+    "productActivationAuthorized": false,
+    "productPublicationAuthorized": false,
+    "publicRouteActivated": false,
+    "publication": "shadow",
+    "productMomentumScore": null,
+    "numericProductEligible": false,
+    "legacyGrowthMomentumPointReuseAllowed": false,
+    "previewFallbackAllowed": false,
+    "productionVerifierRerunPerformed": false
+  },
+  "requiredNextGate": "explicit-momentum-product-activation-authorization",
+  "attestationDigest": "43ab71ac69b96a62a8832b4a2e66784757223289e74b702fcc634f6164c6c335"
+}
