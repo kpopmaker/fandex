@@ -1,0 +1,37 @@
+{
+  "contractVersion": "momentum-naver-live-blob-mirror-candidate-v1",
+  "target": {
+    "provider": "naver-news",
+    "canonicalArtistId": "iu",
+    "consumer": "momentumEvidenceConsensus"
+  },
+  "storage": {
+    "provider": "vercel-blob",
+    "package": "@vercel/blob",
+    "packageVersion": "2.8.0",
+    "access": "private",
+    "binding": "production-only",
+    "authentication": "oidc-with-BLOB_STORE_ID"
+  },
+  "lifecycle": {
+    "stageBeforeDatabaseCompletion": true,
+    "schedulerManifestAfterDatabaseCompletion": true,
+    "stageFailureUsesExistingRetryableFailurePath": true,
+    "idempotentReplayCanRepairFinalization": true,
+    "overwriteConflictFailsClosed": true
+  },
+  "activation": {
+    "env": "FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE",
+    "requiredValue": "shadow-write-v1",
+    "defaultEnabled": false,
+    "productionEnvMutatedByCandidate": false,
+    "liveWritesEnabledByCandidate": false
+  },
+  "currentBoundary": {
+    "historicalBackfillComplete": false,
+    "productionMirrorReadCutover": false,
+    "currentMomentumReevaluationUnblocked": false,
+    "neonRemoved": false
+  },
+  "nextGate": "merge-code-candidate-then-explicit-live-mirror-write-activation"
+}

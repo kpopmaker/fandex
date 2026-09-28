@@ -7,6 +7,7 @@ import {
   sha256Canonical,
   validateNaverNewsIngestionWritePlan,
   type NaverNewsIngestionWritePlan,
+  type NaverNewsJobIdentity,
   type NaverNewsNormalizedRecord,
   type NaverNewsRequestContract,
 } from './naverNewsContracts';
@@ -397,10 +398,13 @@ export function buildNaverNewsStoredEvidenceMirrorObjects(
   });
 }
 
-export async function mirrorNaverNewsStoredEvidence(
+export async function stageNaverNewsStoredEvidenceMirror(
   plan: NaverNewsIngestionWritePlan,
   store: ImmutableTextObjectStore,
-): Promise<NaverNewsStoredEvidenceMirrorWriteResult> {
+): Promise<Readonly<{
+  job: ImmutableTextObjectPutResult;
+  jobPayloadDigest: string;
+}>> {
   const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
   const job = await store.putTextIfAbsent(
     objects.jobPathname,
@@ -409,24 +413,91 @@ export async function mirrorNaverNewsStoredEvidence(
   if (job.status === 'conflict') {
     throw new Error('naver_news_stored_evidence_mirror_conflict');
   }
-
-  let schedulerManifest: ImmutableTextObjectPutResult | null = null;
-  if (objects.schedulerManifestPathname && objects.schedulerManifestBody) {
-    schedulerManifest = await store.putTextIfAbsent(
-      objects.schedulerManifestPathname,
-      objects.schedulerManifestBody,
-    );
-    if (schedulerManifest.status === 'conflict') {
-      throw new Error('naver_news_stored_evidence_mirror_conflict');
-    }
-  }
-
   return Object.freeze({
     job,
-    schedulerManifest,
     jobPayloadDigest: objects.jobPayloadDigest,
+  });
+}
+
+export async function finalizeNaverNewsStoredEvidenceMirror(
+  identity: NaverNewsJobIdentity,
+  resultSha256: string,
+  store: ImmutableTextObjectStore,
+): Promise<Readonly<{
+  schedulerManifest: ImmutableTextObjectPutResult | null;
+  schedulerManifestPayloadDigest: string | null;
+}>> {
+  if (!isSha256(resultSha256)) {
+    throw new Error('naver_news_stored_evidence_mirror_finalize_invalid');
+  }
+  const body = await store.readText(objectPathForJob(identity.jobId));
+  if (body === null) {
+    throw new Error('naver_news_stored_evidence_mirror_stage_missing');
+  }
+  const job = decodeJobEnvelope(body);
+  if (
+    job.jobId !== identity.jobId
+    || job.resultSha256 !== resultSha256
+    || canonicalJson(job.requestContract) !== canonicalJson(identity.request)
+  ) {
+    throw new Error('naver_news_stored_evidence_mirror_finalize_invalid');
+  }
+
+  if (!SCHEDULER_COLLECTION_KEY_PATTERN.test(identity.request.collectionKey)) {
+    return Object.freeze({
+      schedulerManifest: null,
+      schedulerManifestPayloadDigest: null,
+    });
+  }
+
+  const manifestPayload: SchedulerManifestPayload = Object.freeze({
+    contractVersion: NAVER_NEWS_STORED_EVIDENCE_MIRROR_VERSION,
+    kind: 'official-scheduler-manifest',
+    canonicalArtistId: 'iu',
+    jobId: identity.jobId,
+    collectionKey: identity.request.collectionKey,
+    requestContract: identity.request,
+    jobObjectPath: objectPathForJob(identity.jobId),
+    jobPayloadDigest: job.payloadDigest,
+  });
+  const schedulerManifestPayloadDigest = sha256Canonical(manifestPayload);
+  const manifestEnvelope: SchedulerManifestEnvelope = Object.freeze({
+    ...manifestPayload,
+    payloadDigest: schedulerManifestPayloadDigest,
+  });
+  const pathname = objectPathForManifest(
+    identity.request.collectionKey,
+    identity.jobId,
+  );
+  const schedulerManifest = await store.putTextIfAbsent(
+    pathname,
+    canonicalJson(manifestEnvelope),
+  );
+  if (schedulerManifest.status === 'conflict') {
+    throw new Error('naver_news_stored_evidence_mirror_conflict');
+  }
+  return Object.freeze({
+    schedulerManifest,
+    schedulerManifestPayloadDigest,
+  });
+}
+
+export async function mirrorNaverNewsStoredEvidence(
+  plan: NaverNewsIngestionWritePlan,
+  store: ImmutableTextObjectStore,
+): Promise<NaverNewsStoredEvidenceMirrorWriteResult> {
+  const staged = await stageNaverNewsStoredEvidenceMirror(plan, store);
+  const finalized = await finalizeNaverNewsStoredEvidenceMirror(
+    plan.identity,
+    plan.resultSha256,
+    store,
+  );
+  return Object.freeze({
+    job: staged.job,
+    schedulerManifest: finalized.schedulerManifest,
+    jobPayloadDigest: staged.jobPayloadDigest,
     schedulerManifestPayloadDigest:
-      objects.schedulerManifestPayloadDigest,
+      finalized.schedulerManifestPayloadDigest,
   });
 }
 
