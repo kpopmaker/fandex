@@ -138,7 +138,13 @@ async function main(): Promise<void> {
       );
 
     if (latest.status !== 'ok') {
-      throw new Error('momentum_current_latest_naver_slot_unavailable');
+      console.error(
+        'FANDEX_MOMENTUM_CURRENT_LATEST_NAVER_SLOT='
+          + JSON.stringify(latest),
+      );
+      throw new Error(
+        'momentum_current_latest_naver_slot_unavailable:' + latest.reason,
+      );
     }
 
     const evidenceRepository =
