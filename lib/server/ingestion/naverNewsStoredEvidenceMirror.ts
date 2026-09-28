@@ -143,9 +143,9 @@ function validateNormalizedRecord(record: unknown): NaverNewsNormalizedRecord {
     throw new Error('naver_news_mirror_job_payload_invalid');
   }
 
-  const expectedPayload = {
+  const expectedPayload: NaverNewsNormalizedRecord['normalizedPayload'] = {
     provider: NAVER_NEWS_PROVIDER,
-    sourceType: 'news_article' as const,
+    sourceType: 'news_article',
     sourceUrl: row.sourceUrl,
     naverUrl: row.naverUrl,
     sourceHost: row.sourceHost,
@@ -193,6 +193,7 @@ function validateStoredEvidence(
   }
   const stored = value as NaverNewsCanonicalJobStoredEvidence;
   const identity = buildNaverNewsJobIdentity(request);
+  const rawEvidenceCount = stored.completenessEvidence?.rawEvidenceCount;
 
   if (
     !stored.job
@@ -209,8 +210,9 @@ function validateStoredEvidence(
     || stored.completenessEvidence.provider !== NAVER_NEWS_PROVIDER
     || canonicalJson(stored.completenessEvidence.requestContract)
       !== canonicalJson(identity.request)
-    || !Number.isInteger(stored.completenessEvidence.rawEvidenceCount)
-    || stored.completenessEvidence.rawEvidenceCount < 0
+    || typeof rawEvidenceCount !== 'number'
+    || !Number.isSafeInteger(rawEvidenceCount)
+    || rawEvidenceCount < 0
     || !stored.completenessEvidence.collectionReceived
     || stored.completenessEvidence.collectionReceived.jobId !== identity.jobId
     || !Array.isArray(stored.normalizedRecords)
