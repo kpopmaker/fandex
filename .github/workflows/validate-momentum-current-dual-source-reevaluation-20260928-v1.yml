@@ -1,0 +1,30 @@
+name: Validate Momentum current dual-source reevaluation 2026-09-28 v1
+
+on:
+  push:
+    branches:
+      - validation/momentum-current-dual-source-reevaluation-20260928-v1
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Static read-only boundary
+        run: |
+          ! grep -R "INSERT INTO\|UPDATE .* SET\|DELETE FROM" scripts/research/momentumCurrentDualSourceEvaluationV1.mts
+          ! grep -R "getResolvedMetricScore\|artistMonthlyMetricSeed\|metricScoringPipeline"             scripts/research/momentumCurrentDualSourceEvaluationV1.mts             lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts             lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts
+      - name: Live current dual-source reevaluation
+        env:
+          NODE_OPTIONS: --conditions=react-server
+          FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+        run: npx tsx scripts/research/momentumCurrentDualSourceEvaluationV1.mts
