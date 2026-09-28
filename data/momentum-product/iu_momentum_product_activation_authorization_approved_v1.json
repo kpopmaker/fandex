@@ -33,7 +33,6 @@
     "operationsHandoffProductionAttestationDigest": "eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9"
   },
   "authorizationDecision": {
-    "status": "authorized-for-publication-review",
     "activationAuthorized": true,
     "productPublicationAuthorized": false,
     "publicRouteActivated": false,
