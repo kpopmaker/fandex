@@ -9201,6 +9201,84 @@
           "url": "https://music.apple.com/us/album/reason-for-being-benevolence-ep/1605126003"
         }
       ]
+    },
+    {
+      "id": "trcng",
+      "ticker": "TRCNG",
+      "name": "TRCNG",
+      "agency": "TS Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2017-10-10",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "JIHUN",
+        "HAYOUNG",
+        "HAKMIN",
+        "JISUNG",
+        "HYUNWOO",
+        "SIWOO",
+        "HOHYEON",
+        "KANGMIN"
+      ],
+      "fandomName": "CHAMPION",
+      "naverNewsQuery": "TRCNG 티알씨엔지 TS엔터테인먼트",
+      "koreanAliases": [
+        "티알씨엔지"
+      ],
+      "englishAliases": [
+        "TRCNG",
+        "Teen Rising Champion in a New Generation"
+      ],
+      "keywords": [
+        "TS Entertainment",
+        "TS엔터테인먼트",
+        "JIHUN",
+        "HAYOUNG",
+        "HAKMIN",
+        "JISUNG",
+        "HYUNWOO",
+        "SIWOO",
+        "HOHYEON",
+        "KANGMIN",
+        "TAESEON",
+        "태선",
+        "WOOYEOP",
+        "우엽",
+        "NEW GENERATION",
+        "Spectrum",
+        "CHAMPION"
+      ],
+      "disambiguationKeywords": [
+        "TRCNG",
+        "티알씨엔지",
+        "TS Entertainment",
+        "TS엔터테인먼트"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "TRCNG member disbandment statements preserved by Soompi",
+          "url": "https://www.soompi.com/article/1519487wpp/trcng-shares-individual-statements-to-officially-announce-groups-disbandment"
+        },
+        {
+          "source": "TS Entertainment eight-member continuation statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1366540wpp/trcng-to-promote-as-8-member-group-after-taeseon-and-wooyeop-sue-ts-entertainment"
+        },
+        {
+          "source": "TS Entertainment ten-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1045779wpp/ts-entertainments-new-boy-group"
+        },
+        {
+          "source": "Apple Music New Generation debut catalog",
+          "url": "https://music.apple.com/us/album/trcng-1st-mini-album-new-generation-ep/1294608588"
+        }
+      ]
     }
   ]
 }

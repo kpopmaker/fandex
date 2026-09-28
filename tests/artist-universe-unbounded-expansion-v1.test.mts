@@ -1181,6 +1181,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(to1.members, ['DONGGEON', 'CHAN', 'JISU', 'JAEYUN', 'J.YOU', 'KYUNGHO', 'DAIGO', 'YEOJEONG']);
   assert.ok(to1.profile.koreanAliases.includes('티오원'));
   assert.ok(to1.profile.koreanAliases.includes('티오오'));
+
+  const trcng = getArtistV4ById('trcng');
+  assert.ok(trcng);
+  assert.equal(trcng.entityType, 'group');
+  assert.equal(trcng.agency, 'TS Entertainment');
+  assert.equal(trcng.agencyStatus, 'historical');
+  assert.equal(trcng.debutDate, '2017-10-10');
+  assert.equal(trcng.lifecycleStatus, 'inactive');
+  assert.deepEqual(trcng.members, ['JIHUN', 'HAYOUNG', 'HAKMIN', 'JISUNG', 'HYUNWOO', 'SIWOO', 'HOHYEON', 'KANGMIN']);
+  assert.ok(trcng.profile.koreanAliases.includes('티알씨엔지'));
+  assert.ok(!trcng.members.includes('TAESEON'));
+  assert.ok(!trcng.members.includes('WOOYEOP'));
   const oneTheNine = getArtistV4ById('1the9');
   assert.ok(oneTheNine);
   assert.equal(oneTheNine.entityType, 'group');

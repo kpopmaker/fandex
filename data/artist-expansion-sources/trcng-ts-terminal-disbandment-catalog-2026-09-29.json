@@ -1,0 +1,106 @@
+{
+  "version": "trcng_ts_terminal_disbandment_catalog_adapter_v1",
+  "source": {
+    "id": "trcng-ts-terminal-disbandment-catalog",
+    "type": "provider_catalog",
+    "name": "TRCNG TS Terminal Disbandment Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1519487wpp/trcng-shares-individual-statements-to-officially-announce-groups-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "TRCNG",
+      "aliases": [
+        "티알씨엔지"
+      ],
+      "evidence": [
+        {
+          "label": "TRCNG member disbandment statements",
+          "url": "https://www.soompi.com/article/1519487wpp/trcng-shares-individual-statements-to-officially-announce-groups-disbandment"
+        },
+        {
+          "label": "TS Entertainment eight-member continuation statement",
+          "url": "https://www.soompi.com/article/1366540wpp/trcng-to-promote-as-8-member-group-after-taeseon-and-wooyeop-sue-ts-entertainment"
+        },
+        {
+          "label": "TS Entertainment ten-member debut profile",
+          "url": "https://www.soompi.com/article/1045779wpp/ts-entertainments-new-boy-group"
+        },
+        {
+          "label": "Apple Music New Generation debut catalog",
+          "url": "https://music.apple.com/us/album/trcng-1st-mini-album-new-generation-ep/1294608588"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitMemberDisbandmentStatementsRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "explicitPriorExitEvidenceRequired": true,
+    "priorExitedMembersMustNotRemainInTerminalRoster": true,
+    "memberContractEndDatesMayDiffer": true,
+    "groupDisbandmentAnnouncementDateDistinctFromContractEndDates": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "explicitGroupDisbandmentMayBeAsserted": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2022-03-28",
+    "effectiveDate": "2022-03-28",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "TS Entertainment",
+    "terminalMembers": [
+      "JIHUN",
+      "HAYOUNG",
+      "HAKMIN",
+      "JISUNG",
+      "HYUNWOO",
+      "SIWOO",
+      "HOHYEON",
+      "KANGMIN"
+    ],
+    "terminalMemberCount": 8,
+    "priorExitedMembers": [
+      {
+        "member": "TAESEON",
+        "effectiveDate": "2019-11-19",
+        "resolution": "explicit_exclusion_from_future_eight_member_promotions"
+      },
+      {
+        "member": "WOOYEOP",
+        "effectiveDate": "2019-11-19",
+        "resolution": "explicit_exclusion_from_future_eight_member_promotions"
+      }
+    ],
+    "contractEndDates": {
+      "mostRemainingMembers": "2022-02-28",
+      "hayoung": "2022-03-16",
+      "note": "member statements report differing TS Entertainment contract end dates"
+    },
+    "explicitGroupDisbandmentAnnounced": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2017-10-10",
+    "debutRelease": "NEW GENERATION",
+    "fandomName": "CHAMPION"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_member_disbandment_plus_ts_roster_transition_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1519487wpp/trcng-shares-individual-statements-to-officially-announce-groups-disbandment",
+      "https://www.soompi.com/article/1366540wpp/trcng-to-promote-as-8-member-group-after-taeseon-and-wooyeop-sue-ts-entertainment",
+      "https://www.soompi.com/article/1045779wpp/ts-entertainments-new-boy-group",
+      "https://music.apple.com/us/album/trcng-1st-mini-album-new-generation-ep/1294608588"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

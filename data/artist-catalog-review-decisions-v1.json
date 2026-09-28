@@ -5507,6 +5507,38 @@
           "note": "The original TOO debut EP REASON FOR BEING : Benevolence is dated April 1, 2020."
         }
       ]
+    },
+    {
+      "displayArtist": "TRCNG",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "2019_ts_eight_member_continuation_plus_2022_member_disbandment_statements_resolve_terminal_eight_member_trcng_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_ts_roster_transition_member_disbandment_statements_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "TRCNG member disbandment statements preserved by Soompi",
+          "url": "https://www.soompi.com/article/1519487wpp/trcng-shares-individual-statements-to-officially-announce-groups-disbandment",
+          "note": "Remaining TRCNG members announced contract termination and the end of TRCNG in March 2022. The report identifies the group as having continued as eight members after the 2019 departures."
+        },
+        {
+          "source": "TS Entertainment eight-member continuation statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1366540wpp/trcng-to-promote-as-8-member-group-after-taeseon-and-wooyeop-sue-ts-entertainment",
+          "note": "TS Entertainment explicitly states that TRCNG would continue as eight members without TAESEON and WOOYEOP."
+        },
+        {
+          "source": "TS Entertainment ten-member debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1045779wpp/ts-entertainments-new-boy-group",
+          "note": "The original ten-member debut identity lists JIHUN, HAYOUNG, TAESEON, HAKMIN, WOOYEOP, JISUNG, HYUNWOO, SIWOO, HOHYEON, and KANGMIN."
+        },
+        {
+          "source": "Apple Music New Generation provider catalog",
+          "url": "https://music.apple.com/us/album/trcng-1st-mini-album-new-generation-ep/1294608588",
+          "note": "Provider catalog dates TRCNG's first mini album New Generation to October 10, 2017 and credits TS ENTER."
+        }
+      ]
     }
   ]
 }
