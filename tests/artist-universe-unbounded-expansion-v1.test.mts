@@ -1170,6 +1170,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(x1.lifecycleStatus, 'inactive');
   assert.deepEqual(x1.members, ['HAN SEUNG WOO', 'CHO SEUNG YOUN', 'KIM WOO SEOK', 'KIM YO HAN', 'LEE HAN GYUL', 'CHA JUN HO', 'SON DONG PYO', 'KANG MIN HEE', 'LEE EUN SANG', 'SONG HYEONG JUN', 'NAM DO HYON']);
   assert.ok(x1.profile.koreanAliases.includes('엑스원'));
+  const oneTheNine = getArtistV4ById('1the9');
+  assert.ok(oneTheNine);
+  assert.equal(oneTheNine.entityType, 'group');
+  assert.equal(oneTheNine.agency, 'PocketDol Studio');
+  assert.equal(oneTheNine.agencyStatus, 'historical');
+  assert.equal(oneTheNine.debutDate, '2019-04-13');
+  assert.equal(oneTheNine.lifecycleStatus, 'inactive');
+  assert.deepEqual(oneTheNine.members, ['JEON DO YUM', 'JUNG JIN SUNG', 'KIM TAE WOO', 'SHIN YE CHAN', 'JEONG TAEK HYEON', 'YOO YONG HA', 'PARK SUNG WON', 'LEE SEUNG HWAN', 'KIM JUN SEO']);
+  assert.ok(oneTheNine.profile.koreanAliases.includes('원더나인'));
+
 
 
   const expanded = buildExpandedArtistUniverseV4(

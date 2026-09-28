@@ -5438,6 +5438,33 @@
           "note": "The licensed provider catalog dates QUANTUM LEAP to August 27, 2019 and credits SWING Entertainment and Stone Music Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "1THE9",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "pocketdol_official_project_group_end_notice_resolves_exact_nine_member_terminal_lifecycle",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_pocketdol_group_activity_end_statement_final_nine_member_lineup_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "PocketDol Studio official activity-end statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1415274wpp/1the9s-agency-responds-to-report-regarding-groups-disbandment-date",
+          "note": "PocketDol Studio confirmed that 1THE9 promotions and group activities end on August 8, 2020, after which members return to their respective agencies."
+        },
+        {
+          "source": "MBC Under 19 final lineup preserved by Soompi",
+          "url": "https://www.soompi.com/article/1302495wpp/under-19-reveals-final-9-members-who-will-make-their-debut",
+          "note": "The final Under 19 result identifies the exact nine-member 1THE9 lineup."
+        },
+        {
+          "source": "Apple Music XIX provider catalog",
+          "url": "https://music.apple.com/us/album/xix/1459859616",
+          "note": "Provider catalog dates XIX to April 13, 2019 and credits PocketDol Studio."
+        }
+      ]
     }
   ]
 }

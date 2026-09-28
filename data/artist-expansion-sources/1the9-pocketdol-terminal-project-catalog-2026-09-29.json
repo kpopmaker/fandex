@@ -1,0 +1,85 @@
+{
+  "version": "one_the_nine_pocketdol_terminal_project_catalog_adapter_v1",
+  "source": {
+    "id": "1the9-pocketdol-terminal-project-catalog",
+    "type": "provider_catalog",
+    "name": "1THE9 PocketDol Terminal Project Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1415274wpp/1the9s-agency-responds-to-report-regarding-groups-disbandment-date"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "1THE9",
+      "aliases": [
+        "원더나인"
+      ],
+      "evidence": [
+        {
+          "label": "PocketDol Studio official project-group activity-end statement",
+          "url": "https://www.soompi.com/article/1415274wpp/1the9s-agency-responds-to-report-regarding-groups-disbandment-date"
+        },
+        {
+          "label": "MBC Under 19 exact final nine-member lineup",
+          "url": "https://www.soompi.com/article/1302495wpp/under-19-reveals-final-9-members-who-will-make-their-debut"
+        },
+        {
+          "label": "Apple Music XIX licensed debut catalog",
+          "url": "https://music.apple.com/us/album/xix/1459859616"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "officialProjectGroupActivityEndRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "projectGroupExpirationRequiresInactiveLifecycle": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "membersReturnToOwnAgenciesDoesNotReactivateGroup": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "groupActivityEndDoesNotInferIndividualCareerEnd": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2020-07-27",
+    "effectiveDate": "2020-08-08",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "PocketDol Studio",
+    "terminalMembers": [
+      "JEON DO YUM",
+      "JUNG JIN SUNG",
+      "KIM TAE WOO",
+      "SHIN YE CHAN",
+      "JEONG TAEK HYEON",
+      "YOO YONG HA",
+      "PARK SUNG WON",
+      "LEE SEUNG HWAN",
+      "KIM JUN SEO"
+    ],
+    "terminalMemberCount": 9,
+    "officialPromotionsEnded": true,
+    "groupActivitiesEnded": true,
+    "membersReturnedToRespectiveAgencies": true,
+    "projectGroupCompleted": true,
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2019-04-13",
+    "debutRelease": "XIX"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_project_group_terminal_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1415274wpp/1the9s-agency-responds-to-report-regarding-groups-disbandment-date",
+      "https://www.soompi.com/article/1302495wpp/under-19-reveals-final-9-members-who-will-make-their-debut",
+      "https://music.apple.com/us/album/xix/1459859616"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

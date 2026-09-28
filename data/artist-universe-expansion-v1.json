@@ -9034,6 +9034,77 @@
           "url": "https://music.apple.com/us/album/quantum-leap-ep/1579995230"
         }
       ]
+    },
+    {
+      "id": "1the9",
+      "ticker": "1THE9",
+      "name": "1THE9",
+      "agency": "PocketDol Studio",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-04-13",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "JEON DO YUM",
+        "JUNG JIN SUNG",
+        "KIM TAE WOO",
+        "SHIN YE CHAN",
+        "JEONG TAEK HYEON",
+        "YOO YONG HA",
+        "PARK SUNG WON",
+        "LEE SEUNG HWAN",
+        "KIM JUN SEO"
+      ],
+      "naverNewsQuery": "원더나인 1THE9 포켓돌스튜디오",
+      "koreanAliases": [
+        "원더나인"
+      ],
+      "englishAliases": [
+        "1THE9"
+      ],
+      "keywords": [
+        "PocketDol Studio",
+        "포켓돌스튜디오",
+        "MBK Entertainment",
+        "Under 19",
+        "JEON DO YUM",
+        "JUNG JIN SUNG",
+        "KIM TAE WOO",
+        "SHIN YE CHAN",
+        "JEONG TAEK HYEON",
+        "YOO YONG HA",
+        "PARK SUNG WON",
+        "LEE SEUNG HWAN",
+        "KIM JUN SEO",
+        "XIX",
+        "Spotlight",
+        "Good Bye 1THE9"
+      ],
+      "disambiguationKeywords": [
+        "PocketDol Studio",
+        "포켓돌스튜디오",
+        "원더나인",
+        "Under 19"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "PocketDol Studio official project-group activity-end statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1415274wpp/1the9s-agency-responds-to-report-regarding-groups-disbandment-date"
+        },
+        {
+          "source": "MBC Under 19 final nine-member lineup preserved by Soompi",
+          "url": "https://www.soompi.com/article/1302495wpp/under-19-reveals-final-9-members-who-will-make-their-debut"
+        },
+        {
+          "source": "Apple Music XIX licensed debut catalog",
+          "url": "https://music.apple.com/us/album/xix/1459859616"
+        }
+      ]
     }
   ]
 }
