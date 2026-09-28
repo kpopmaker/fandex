@@ -1,0 +1,79 @@
+{
+  "version": "bvndit_mnh_terminal_management_catalog_adapter_v1",
+  "source": {
+    "id": "bvndit-mnh-terminal-management-catalog",
+    "type": "provider_catalog",
+    "name": "BVNDIT MNH Terminal Management Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1553673wpp/bvndit-announces-disbandment-3-years-after-debut"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "BVNDIT",
+      "aliases": [
+        "밴디트"
+      ],
+      "evidence": [
+        {
+          "label": "MNH Entertainment terminal contract statement",
+          "url": "https://www.soompi.com/article/1553673wpp/bvndit-announces-disbandment-3-years-after-debut"
+        },
+        {
+          "label": "MNH Entertainment five-member debut profile",
+          "url": "https://www.soompi.com/article/1312560wpp/watch-new-girl-group-bvndit-gears-up-for-april-debut-with-colorful-prologue-clip"
+        },
+        {
+          "label": "Apple Music BVNDIT BE AMBITIOUS debut catalog",
+          "url": "https://music.apple.com/us/album/bvndit-be-ambitious-single/1660686650"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "groupExclusiveContractEndEvidenceRequired": true,
+    "impreciseContractEndDateMustRemainPeriod": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "headlineDisbandmentDoesNotCreateLegalConclusion": true,
+    "legalDisbandmentNotIndependentlyAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2022-11-11",
+    "contractEndPeriod": "2022-10",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "MNH Entertainment",
+    "terminalMembers": [
+      "YIYEON",
+      "SONGHEE",
+      "JUNGWOO",
+      "SIMYEONG",
+      "SEUNGEUN"
+    ],
+    "terminalMemberCount": 5,
+    "groupExclusiveContractEnded": true,
+    "legalDisbandmentAsserted": false,
+    "debutDate": "2019-04-10",
+    "debutRelease": "BVNDIT, BE AMBITIOUS!"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_management_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1553673wpp/bvndit-announces-disbandment-3-years-after-debut",
+      "https://www.soompi.com/article/1312560wpp/watch-new-girl-group-bvndit-gears-up-for-april-debut-with-colorful-prologue-clip",
+      "https://music.apple.com/us/album/bvndit-be-ambitious-single/1660686650"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

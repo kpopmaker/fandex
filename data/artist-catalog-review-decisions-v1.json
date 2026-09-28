@@ -5268,6 +5268,33 @@
           "note": "Provider catalog dates SOLAR : flare to September 2, 2020 and credits J Planet Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "BVNDIT",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "mnh_terminal_contract_statement_plus_five_member_debut_identity_resolve_historical_bvndit_management_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_mnh_terminal_contract_statement_five_member_group_identity_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MNH Entertainment terminal contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1553673wpp/bvndit-announces-disbandment-3-years-after-debut",
+          "note": "MNH Entertainment states that after discussion with BVNDIT members, the group exclusive contract ended at the end of October 2022. The preserved company statement does not independently establish a separate legal dissolution event."
+        },
+        {
+          "source": "MNH Entertainment BVNDIT debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1312560wpp/watch-new-girl-group-bvndit-gears-up-for-april-debut-with-colorful-prologue-clip",
+          "note": "MNH's debut rollout identifies the five members as YIYEON, SONGHEE, JUNGWOO, SIMYEONG, and SEUNGEUN and sets the debut for April 10, 2019."
+        },
+        {
+          "source": "Apple Music BVNDIT BE AMBITIOUS provider catalog",
+          "url": "https://music.apple.com/us/album/bvndit-be-ambitious-single/1660686650",
+          "note": "Provider catalog dates BVNDIT, BE AMBITIOUS! to April 10, 2019 and credits MNH Entertainment and Stone Music Entertainment."
+        }
+      ]
     }
   ]
 }

@@ -8661,6 +8661,66 @@
           "url": "https://music.apple.com/us/album/solar-flare-single/1529221633"
         }
       ]
+    },
+    {
+      "id": "bvndit",
+      "ticker": "BVNDIT",
+      "name": "BVNDIT",
+      "agency": "MNH Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2019-04-10",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "YIYEON",
+        "SONGHEE",
+        "JUNGWOO",
+        "SIMYEONG",
+        "SEUNGEUN"
+      ],
+      "naverNewsQuery": "밴디트 BVNDIT MNH엔터테인먼트",
+      "koreanAliases": [
+        "밴디트"
+      ],
+      "englishAliases": [
+        "BVNDIT"
+      ],
+      "keywords": [
+        "MNH Entertainment",
+        "MNH엔터테인먼트",
+        "YIYEON",
+        "SONGHEE",
+        "JUNGWOO",
+        "SIMYEONG",
+        "SEUNGEUN",
+        "BVNDIT BE AMBITIOUS",
+        "Hocus Pocus",
+        "Re-Original"
+      ],
+      "disambiguationKeywords": [
+        "MNH Entertainment",
+        "MNH엔터테인먼트",
+        "밴디트"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "MNH Entertainment terminal contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1553673wpp/bvndit-announces-disbandment-3-years-after-debut"
+        },
+        {
+          "source": "MNH Entertainment BVNDIT debut profile preserved by Soompi",
+          "url": "https://www.soompi.com/article/1312560wpp/watch-new-girl-group-bvndit-gears-up-for-april-debut-with-colorful-prologue-clip"
+        },
+        {
+          "source": "Apple Music BVNDIT BE AMBITIOUS licensed debut catalog",
+          "url": "https://music.apple.com/us/album/bvndit-be-ambitious-single/1660686650"
+        }
+      ]
     }
   ]
 }

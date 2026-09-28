@@ -102,6 +102,7 @@ jobs:
           python tests/artist-expansion-bdc-terminal-management-v1.py
           python tests/artist-expansion-bugaboo-terminal-management-v1.py
           python tests/artist-expansion-lunarsolar-terminal-management-v1.py
+          python tests/artist-expansion-bvndit-terminal-management-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -425,6 +426,11 @@ jobs:
           python scripts/artist-expansion/collect_lunarsolar_jplanet_terminal_management_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/lunarsolar-jplanet-terminal-management-catalog-2026-09-28.json \
             --output lunarsolar_jplanet_terminal_management_catalog_v1_latest.json
+      - name: Collect BVNDIT MNH terminal management catalog
+        run: |
+          python scripts/artist-expansion/collect_bvndit_mnh_terminal_management_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/bvndit-mnh-terminal-management-catalog-2026-09-28.json \
+            --output bvndit_mnh_terminal_management_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -510,6 +516,7 @@ jobs:
             --snapshot bdc_brandnew_terminal_management_catalog_v1_latest.json \
             --snapshot bugaboo_ateam_terminal_management_catalog_v1_latest.json \
             --snapshot lunarsolar_jplanet_terminal_management_catalog_v1_latest.json \
+            --snapshot bvndit_mnh_terminal_management_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -613,6 +620,7 @@ jobs:
             bdc_brandnew_terminal_management_catalog_v1_latest.json
             bugaboo_ateam_terminal_management_catalog_v1_latest.json
             lunarsolar_jplanet_terminal_management_catalog_v1_latest.json
+            bvndit_mnh_terminal_management_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

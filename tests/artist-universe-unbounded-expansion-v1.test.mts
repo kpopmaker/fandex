@@ -1118,6 +1118,16 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(lunarsolar.members, ['ESEO', 'TAERYEONG', 'JIAN', 'YUURI']);
   assert.ok(lunarsolar.profile.koreanAliases.includes('루나솔라'));
 
+  const bvndit = getArtistV4ById('bvndit');
+  assert.ok(bvndit);
+  assert.equal(bvndit.entityType, 'group');
+  assert.equal(bvndit.agency, 'MNH Entertainment');
+  assert.equal(bvndit.agencyStatus, 'historical');
+  assert.equal(bvndit.debutDate, '2019-04-10');
+  assert.equal(bvndit.lifecycleStatus, 'inactive');
+  assert.deepEqual(bvndit.members, ['YIYEON', 'SONGHEE', 'JUNGWOO', 'SIMYEONG', 'SEUNGEUN']);
+  assert.ok(bvndit.profile.koreanAliases.includes('밴디트'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
