@@ -8607,6 +8607,60 @@
           "url": "https://music.apple.com/us/album/bugaboo-single/1590957051"
         }
       ]
+    },
+    {
+      "id": "lunarsolar",
+      "ticker": "LUNARSOLAR",
+      "name": "LUNARSOLAR",
+      "agency": "J Planet Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2020-09-02",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "ESEO",
+        "TAERYEONG",
+        "JIAN",
+        "YUURI"
+      ],
+      "naverNewsQuery": "루나솔라 LUNARSOLAR 제이플래닛",
+      "koreanAliases": [
+        "루나솔라"
+      ],
+      "englishAliases": [
+        "LUNARSOLAR"
+      ],
+      "keywords": [
+        "J Planet Entertainment",
+        "JPLANET Entertainment",
+        "제이플래닛 엔터테인먼트",
+        "ESEO",
+        "TAERYEONG",
+        "JIAN",
+        "YUURI",
+        "SOLAR : flare",
+        "OH YA YA YA"
+      ],
+      "disambiguationKeywords": [
+        "J Planet Entertainment",
+        "제이플래닛 엔터테인먼트",
+        "루나솔라"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "J Planet Entertainment terminal contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1527427wpp/lunarsolar-disbands-after-less-than-2-years"
+        },
+        {
+          "source": "Apple Music SOLAR : flare licensed debut catalog",
+          "url": "https://music.apple.com/us/album/solar-flare-single/1529221633"
+        }
+      ]
     }
   ]
 }

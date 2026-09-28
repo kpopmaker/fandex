@@ -1,0 +1,73 @@
+{
+  "version": "lunarsolar_jplanet_terminal_management_catalog_adapter_v1",
+  "source": {
+    "id": "lunarsolar-jplanet-terminal-management-catalog",
+    "type": "provider_catalog",
+    "name": "LUNARSOLAR J Planet Terminal Management Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1527427wpp/lunarsolar-disbands-after-less-than-2-years"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "LUNARSOLAR",
+      "aliases": [
+        "루나솔라"
+      ],
+      "evidence": [
+        {
+          "label": "J Planet Entertainment terminal contract statement",
+          "url": "https://www.soompi.com/article/1527427wpp/lunarsolar-disbands-after-less-than-2-years"
+        },
+        {
+          "label": "Apple Music SOLAR : flare licensed debut catalog",
+          "url": "https://music.apple.com/us/album/solar-flare-single/1529221633"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "exclusiveContractTerminationRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "articleHeadlineDoesNotOverrideQuotedAgencyStatement": true,
+    "legalDisbandmentNotIndependentlyAsserted": true,
+    "postAgencyReactivationRequiresNewExplicitGroupEvidence": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2022-05-22",
+    "effectiveDate": "2022-05-22",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "J Planet Entertainment",
+    "terminalMembers": [
+      "ESEO",
+      "TAERYEONG",
+      "JIAN",
+      "YUURI"
+    ],
+    "terminalMemberCount": 4,
+    "exclusiveArtistContractTerminated": true,
+    "legalDisbandmentAsserted": false,
+    "debutDate": "2020-09-02",
+    "debutRelease": "SOLAR : flare"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_management_plus_licensed_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1527427wpp/lunarsolar-disbands-after-less-than-2-years",
+      "https://music.apple.com/us/album/solar-flare-single/1529221633"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

@@ -5246,6 +5246,28 @@
           "note": "Provider catalog dates the bugAboo debut single to October 25, 2021 and credits A TEAM ENTERTAINMENT under license to Kakao Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "LUNARSOLAR",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "jplanet_terminal_statement_resolves_exact_four_member_contract_end_state",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_jplanet_terminal_statement_plus_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "J Planet Entertainment terminal contract statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1527427wpp/lunarsolar-disbands-after-less-than-2-years",
+          "note": "J Planet Entertainment explicitly names ESEO, TAERYEONG, JIAN, and YUURI and states that the exclusive artist contract is terminated after discussions with the members."
+        },
+        {
+          "source": "Apple Music SOLAR : flare licensed debut catalog",
+          "url": "https://music.apple.com/us/album/solar-flare-single/1529221633",
+          "note": "Provider catalog dates SOLAR : flare to September 2, 2020 and credits J Planet Entertainment."
+        }
+      ]
     }
   ]
 }
