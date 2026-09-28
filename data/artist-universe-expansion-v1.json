@@ -8721,6 +8721,74 @@
           "url": "https://music.apple.com/us/album/bvndit-be-ambitious-single/1660686650"
         }
       ]
+    },
+    {
+      "id": "hotissue",
+      "ticker": "HOTISSUE",
+      "name": "HOT ISSUE",
+      "agency": "S2 Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2021-04-28",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "NAHYUN",
+        "MAYNA",
+        "HYEONGSHIN",
+        "DANA",
+        "YEWON",
+        "YEBIN",
+        "DAIN"
+      ],
+      "naverNewsQuery": "핫이슈 HOT ISSUE S2엔터테인먼트",
+      "koreanAliases": [
+        "핫이슈"
+      ],
+      "englishAliases": [
+        "HOT ISSUE"
+      ],
+      "keywords": [
+        "S2 Entertainment",
+        "S2엔터테인먼트",
+        "NAHYUN",
+        "MAYNA",
+        "HYEONGSHIN",
+        "DANA",
+        "YEWON",
+        "YEBIN",
+        "DAIN",
+        "ISSUE MAKER",
+        "GRATATA",
+        "ICONS"
+      ],
+      "disambiguationKeywords": [
+        "S2 Entertainment",
+        "S2엔터테인먼트",
+        "핫이슈"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "S2 Entertainment explicit group-disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1523252wpp/girl-group-hot-issue-disbands-before-1-year-anniversary"
+        },
+        {
+          "source": "S2 Entertainment explicit group-disbandment statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/345057"
+        },
+        {
+          "source": "Yonhap HOT ISSUE seven-member debut report",
+          "url": "https://www.yna.co.kr/view/AKR20210428139500005"
+        },
+        {
+          "source": "Bugs ISSUE MAKER provider catalog",
+          "url": "https://music.bugs.co.kr/album/4042514"
+        }
+      ]
     }
   ]
 }

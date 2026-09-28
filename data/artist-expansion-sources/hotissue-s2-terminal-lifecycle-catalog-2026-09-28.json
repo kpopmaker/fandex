@@ -1,0 +1,86 @@
+{
+  "version": "hotissue_s2_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "hotissue-s2-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "HOT ISSUE S2 Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-28T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1523252wpp/girl-group-hot-issue-disbands-before-1-year-anniversary"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "HOT ISSUE",
+      "aliases": [
+        "핫이슈"
+      ],
+      "evidence": [
+        {
+          "label": "S2 explicit group-disbandment statement",
+          "url": "https://www.soompi.com/article/1523252wpp/girl-group-hot-issue-disbands-before-1-year-anniversary"
+        },
+        {
+          "label": "S2 Korean disbandment statement preservation",
+          "url": "https://enews.imbc.com/News/ViewAmp/345057"
+        },
+        {
+          "label": "Yonhap seven-member debut identity",
+          "url": "https://www.yna.co.kr/view/AKR20210428139500005"
+        },
+        {
+          "label": "Bugs ISSUE MAKER provider catalog",
+          "url": "https://music.bugs.co.kr/album/4042514"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "explicitGroupDisbandmentEvidenceRequired": true,
+    "exactTerminalMemberRosterRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "explicitGroupDisbandmentCanCloseGroupLifecycle": true,
+    "groupDisbandmentDoesNotInferIndividualContractEnd": true,
+    "groupDisbandmentDoesNotInferIndividualCareerEnd": true,
+    "laterIndividualActivityDoesNotReactivateGroup": true,
+    "licensedOrDomesticProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "secondaryEditorialInferenceForbidden": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2022-04-22",
+    "effectiveDate": "2022-04-22",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "S2 Entertainment",
+    "terminalMembers": [
+      "NAHYUN",
+      "MAYNA",
+      "HYEONGSHIN",
+      "DANA",
+      "YEWON",
+      "YEBIN",
+      "DAIN"
+    ],
+    "terminalMemberCount": 7,
+    "groupDisbandmentExplicit": true,
+    "individualContractsEndedNotInferred": true,
+    "individualCareersEndedNotInferred": true,
+    "debutDate": "2021-04-28",
+    "debutRelease": "ISSUE MAKER"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_explicit_disbandment_plus_provider_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1523252wpp/girl-group-hot-issue-disbands-before-1-year-anniversary",
+      "https://enews.imbc.com/News/ViewAmp/345057",
+      "https://www.yna.co.kr/view/AKR20210428139500005",
+      "https://music.bugs.co.kr/album/4042514"
+    ],
+    "verifiedAt": "2026-09-28"
+  }
+}

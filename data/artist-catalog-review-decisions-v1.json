@@ -5295,6 +5295,38 @@
           "note": "Provider catalog dates BVNDIT, BE AMBITIOUS! to April 10, 2019 and credits MNH Entertainment and Stone Music Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "HOT ISSUE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "s2_explicit_group_disbandment_statement_plus_seven_member_debut_identity_resolves_terminal_hot_issue_group",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_s2_explicit_disbandment_statement_plus_seven_member_debut_and_provider_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "S2 Entertainment explicit disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1523252wpp/girl-group-hot-issue-disbands-before-1-year-anniversary",
+          "note": "S2 Entertainment's April 22, 2022 statement says the agency and HOT ISSUE decided to disband the team after extended discussion."
+        },
+        {
+          "source": "S2 Entertainment Korean statement preserved by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/345057",
+          "note": "The Korean preservation reproduces S2's statement that the agency and HOT ISSUE decided to disband the team."
+        },
+        {
+          "source": "Yonhap debut report",
+          "url": "https://www.yna.co.kr/view/AKR20210428139500005",
+          "note": "Contemporaneous debut reporting identifies the seven members NAHYUN, MAYNA, HYEONGSHIN, DANA, YEWON, YEBIN, and DAIN and the April 28, 2021 debut."
+        },
+        {
+          "source": "Bugs ISSUE MAKER provider catalog",
+          "url": "https://music.bugs.co.kr/album/4042514",
+          "note": "Provider catalog dates ISSUE MAKER to April 28, 2021 and lists S2 Entertainment as the planning agency."
+        }
+      ]
     }
   ]
 }
