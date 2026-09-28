@@ -1,0 +1,55 @@
+name: Validate FANDEX Blob production binding v1
+
+on:
+  push:
+    branches:
+      - validation/blob-production-binding-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Verify exact FANDEX project access
+        run: |
+          test -n "$VERCEL_TOKEN"
+          code=$(curl -sS -o /tmp/project.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_PROJECT_HTTP=$code"
+          test "$code" = "200"
+          test "$(jq -r '.id' /tmp/project.json)" = "$VERCEL_PROJECT_ID"
+
+      - name: Read Blob binding metadata only
+        run: |
+          code=$(curl -sS -o /tmp/env.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?teamId=$VERCEL_ORG_ID&decrypt=false")
+          echo "FANDEX_ENV_HTTP=$code"
+          test "$code" = "200"
+
+          jq -c '[
+            (.envs // . // [])[]
+            | select(.key == "BLOB_READ_WRITE_TOKEN" or .key == "BLOB_STORE_ID")
+            | {key, target, type}
+          ] | sort_by(.key)' /tmp/env.json > /tmp/blob-binding.json
+
+          echo "FANDEX_BLOB_ENV_BINDING=$(cat /tmp/blob-binding.json)"
+          count=$(jq 'length' /tmp/blob-binding.json)
+          test "$count" -gt 0
+
+      - name: Assert Production-only Blob binding
+        run: |
+          jq -e '
+            length > 0
+            and all(.[]; ((.target // []) | sort) == ["production"])
+          ' /tmp/blob-binding.json >/dev/null
+          echo "FANDEX_BLOB_BINDING_VERIFIED=production-only"
+          echo "externalStorageWrites=0"
+          echo "productionEnvMutations=0"
+          echo "liveMirrorWritesEnabled=false"
+          echo "historicalBackfillPerformed=false"
+          echo "productionMirrorReadCutover=false"
