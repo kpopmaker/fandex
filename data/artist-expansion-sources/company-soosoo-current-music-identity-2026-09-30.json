@@ -1,0 +1,77 @@
+{
+  "version": "company_soosoo_current_music_identity_adapter_v1",
+  "source": {
+    "id": "company-soosoo-official-current-music-identity",
+    "type": "agency_roster",
+    "name": "Company Soosoo Official Current Music Identity",
+    "observedAt": "2026-09-30T07:08:00+09:00",
+    "url": "https://companysoosoo.com/contents/curation"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "DOH KYUNG SOO",
+      "aliases": [
+        "도경수",
+        "D.O.",
+        "D.O"
+      ],
+      "evidence": [
+        {
+          "label": "Company Soosoo official current ARTIST page",
+          "url": "https://companysoosoo.com/contents/curation"
+        },
+        {
+          "label": "Company Soosoo official first full album BLISS release notice",
+          "url": "https://companysoosoo.com/notice/686b98a5c1ce9352856f7436"
+        },
+        {
+          "label": "Company Soosoo official Snowfall at Night digital single release notice",
+          "url": "https://companysoosoo.com/notice/678a2b74e4b4d4285e162885"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "DOH KYUNG SOO": {
+      "agency": "Company Soosoo",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "currentArtistPage": true,
+      "recentMusicEvidence": [
+        {
+          "type": "full_album",
+          "title": "BLISS",
+          "releaseDate": "2025-07-07"
+        },
+        {
+          "type": "digital_single",
+          "title": "Snowfall at Night",
+          "releaseDate": "2025-01-17"
+        }
+      ]
+    }
+  },
+  "contract": {
+    "officialCurrentArtistPageRequired": true,
+    "officialRecentMusicReleaseRequired": true,
+    "currentAgencyEvidenceRequired": true,
+    "actingActivityDoesNotDisqualifyMusicCanonical": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_Company_Soosoo_current_music_identity_snapshot",
+    "verifiedFrom": [
+      "https://companysoosoo.com/contents/curation",
+      "https://companysoosoo.com/notice",
+      "https://companysoosoo.com/notice/686b98a5c1ce9352856f7436",
+      "https://companysoosoo.com/notice/678a2b74e4b4d4285e162885"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}

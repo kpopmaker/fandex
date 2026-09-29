@@ -807,13 +807,31 @@
       ],
       "identityEvidence": [
         {
-          "source": "Company Soosoo",
+          "source": "Company Soosoo official current ARTIST page",
           "url": "https://companysoosoo.com/contents/curation"
         },
         {
-          "source": "Company Soosoo",
-          "url": "https://companysoosoo.com/notice"
+          "source": "Company Soosoo official first full album BLISS release notice",
+          "url": "https://companysoosoo.com/notice/686b98a5c1ce9352856f7436"
+        },
+        {
+          "source": "Company Soosoo official Snowfall at Night digital single release notice",
+          "url": "https://companysoosoo.com/notice/678a2b74e4b4d4285e162885"
         }
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "keywords": [
+        "Company Soosoo",
+        "EXO",
+        "BLISS",
+        "Snowfall at Night",
+        "Mars"
+      ],
+      "disambiguationKeywords": [
+        "Company Soosoo",
+        "EXO",
+        "도경수"
       ]
     },
     {

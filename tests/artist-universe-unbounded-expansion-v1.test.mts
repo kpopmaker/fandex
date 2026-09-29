@@ -1616,6 +1616,15 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(galaxyKimJongKook.profile.koreanAliases.includes('김종국'));
   assert.ok(galaxyKimJongKook.profile.includeKeywords.includes('Turbo'));
 
+  const companySoosooDohKyungSoo = getArtistV4ById('dohkyungsoo');
+  assert.ok(companySoosooDohKyungSoo);
+  assert.equal(companySoosooDohKyungSoo.entityType, 'solo');
+  assert.equal(companySoosooDohKyungSoo.agency, 'Company Soosoo');
+  assert.equal(companySoosooDohKyungSoo.agencyStatus, 'verified');
+  assert.equal(companySoosooDohKyungSoo.lifecycleStatus, 'active');
+  assert.ok(companySoosooDohKyungSoo.profile.koreanAliases.includes('도경수'));
+  assert.ok(companySoosooDohKyungSoo.profile.includeKeywords.includes('BLISS'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
