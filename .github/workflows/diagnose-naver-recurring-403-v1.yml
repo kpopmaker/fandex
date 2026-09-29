@@ -52,8 +52,31 @@ jobs:
           };
           const sha = (s) => crypto.createHash('sha256').update(s ?? '', 'utf8').digest('hex');
 
+          const targetKeys = [
+            'FANDEX_NAVER_NEWS_RECURRING_ENABLED',
+            'FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT',
+            'FANDEX_NAVER_NEWS_RECURRING_QUERY',
+            'FANDEX_NAVER_NEWS_RECURRING_DISPLAY',
+            'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+            'BLOB_STORE_ID',
+            'FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE',
+          ];
+          const envMetadata = targetKeys.map((key) => {
+            const row = byKey.get(key);
+            return {
+              key,
+              present: Boolean(row),
+              type: row && typeof row.type === 'string' ? row.type : null,
+              decrypted: row?.decrypted === true,
+              hasValueField: Boolean(row && Object.prototype.hasOwnProperty.call(row, 'value')),
+              valueType: row ? typeof row.value : null,
+              nonEmptyStringValue: Boolean(row && typeof row.value === 'string' && row.value.length > 0),
+            };
+          });
+
           const vercelSchedulerSecret = val('FANDEX_NAVER_NEWS_SCHEDULER_SECRET');
           const result = {
+            envMetadata,
             recurringEnabledPresent: typeof val('FANDEX_NAVER_NEWS_RECURRING_ENABLED') === 'string',
             recurringEnabledExpected:
               val('FANDEX_NAVER_NEWS_RECURRING_ENABLED') === 'approved-v128-recurring-foundation',
