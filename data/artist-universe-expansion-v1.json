@@ -10666,6 +10666,49 @@
           "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar"
         }
       ]
+    },
+    {
+      "id": "parkwoojin",
+      "ticker": "PARKWOOJIN",
+      "name": "PARK WOO JIN",
+      "agency": "PARA MUSIC",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "박우진 PARK WOO JIN AB6IX",
+      "koreanAliases": [
+        "박우진"
+      ],
+      "englishAliases": [
+        "PARK WOO JIN",
+        "Park Woo Jin"
+      ],
+      "keywords": [
+        "PARA MUSIC",
+        "AB6IX",
+        "Wanna One",
+        "Cool & Hot"
+      ],
+      "disambiguationKeywords": [
+        "PARA MUSIC",
+        "AB6IX",
+        "박우진"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "PARA MUSIC official current artist directory and Park Woo Jin profile",
+          "url": "https://www.paramusic.co.kr/subPage/artist/member/?no=15"
+        },
+        {
+          "source": "PARA MUSIC 2026 Park Woo Jin exclusive-contract notice",
+          "url": "https://www.paramusic.co.kr/board/notice/read?no=4"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,108 @@
+{
+  "version": "para_music_current_roster_adapter_v1",
+  "source": {
+    "id": "para-music-official-current-artist-roster",
+    "type": "agency_roster",
+    "name": "PARA MUSIC Official Current Artist Roster",
+    "observedAt": "2026-09-29T23:55:00+09:00",
+    "url": "https://www.paramusic.co.kr/subPage/artist/index"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "PARK WOO JIN",
+      "aliases": [
+        "박우진",
+        "Park Woo Jin"
+      ],
+      "evidence": [
+        {
+          "label": "PARA MUSIC official current artist profile",
+          "url": "https://www.paramusic.co.kr/subPage/artist/member/?no=15"
+        },
+        {
+          "label": "PARA MUSIC 2026 exclusive-contract notice",
+          "url": "https://www.paramusic.co.kr/board/notice/read?no=4"
+        }
+      ]
+    },
+    {
+      "displayArtist": "YOUNITE",
+      "aliases": [
+        "유나이트"
+      ],
+      "evidence": [
+        {
+          "label": "PARA MUSIC official current YOUNITE profile",
+          "url": "https://www.paramusic.co.kr/subPage/artist/member/?no=1"
+        },
+        {
+          "label": "PARA MUSIC official 2026 transfer comeback notice",
+          "url": "https://www.paramusic.co.kr/board/notice/read?no=3"
+        },
+        {
+          "label": "PARA MUSIC official 7-member continuation notice",
+          "url": "https://www.paramusic.co.kr/board/notice/read?no=5"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "PARK WOO JIN": {
+      "agency": "PARA MUSIC",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "YOUNITE": {
+      "agency": "PARA MUSIC",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "EUNHO",
+        "STEVE",
+        "HYUNGSEOK",
+        "WOONO",
+        "DEY",
+        "KYUNGMUN",
+        "SION"
+      ],
+      "memberCount": 7
+    }
+  },
+  "groupMembershipChanges": {
+    "YOUNITE": {
+      "departedFromCurrentGroupRoster": [
+        "EUNSANG"
+      ],
+      "evidence": "PARA MUSIC 2026-06-30 official notice",
+      "soloPreparationStatus": "preparing_solo_activity_not_current_artist_directory_identity"
+    }
+  },
+  "contract": {
+    "officialCurrentArtistDirectoryRequired": true,
+    "currentAgencyEvidenceRequired": true,
+    "exactYOUNITESevenMemberRosterRequired": true,
+    "groupDepartureMustNotBeTreatedAsGroupInactivity": true,
+    "memberNameAloneDoesNotCreateSoloCanonical": true,
+    "dedicatedSoloArtistProfileRequiredForNewSoloCanonical": true,
+    "eunsangPreparationDoesNotAutoCreateCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_PARA_MUSIC_current_artist_roster_snapshot",
+    "verifiedFrom": [
+      "https://www.paramusic.co.kr/subPage/artist/index",
+      "https://www.paramusic.co.kr/subPage/artist/member/?no=15",
+      "https://www.paramusic.co.kr/board/notice/read?no=4",
+      "https://www.paramusic.co.kr/subPage/artist/member/?no=1",
+      "https://www.paramusic.co.kr/board/notice/read?no=3",
+      "https://www.paramusic.co.kr/board/notice/read?no=5"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

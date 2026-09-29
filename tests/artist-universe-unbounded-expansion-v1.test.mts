@@ -1539,6 +1539,23 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(feelGhoodYoonmirae.lifecycleStatus, 'active');
   assert.ok(feelGhoodYoonmirae.profile.koreanAliases.includes('윤미래'));
 
+  const paraYounite = getArtistV4ById('younite');
+  assert.ok(paraYounite);
+  assert.equal(paraYounite.entityType, 'group');
+  assert.equal(paraYounite.agency, 'PARA MUSIC');
+  assert.equal(paraYounite.agencyStatus, 'verified');
+  assert.equal(paraYounite.lifecycleStatus, 'active');
+  assert.deepEqual(paraYounite.members, ['EUNHO', 'STEVE', 'HYUNGSEOK', 'WOONO', 'DEY', 'KYUNGMUN', 'SION']);
+
+  const paraParkWoojin = getArtistV4ById('parkwoojin');
+  assert.ok(paraParkWoojin);
+  assert.equal(paraParkWoojin.entityType, 'solo');
+  assert.equal(paraParkWoojin.agency, 'PARA MUSIC');
+  assert.equal(paraParkWoojin.agencyStatus, 'verified');
+  assert.equal(paraParkWoojin.lifecycleStatus, 'active');
+  assert.ok(paraParkWoojin.profile.koreanAliases.includes('박우진'));
+  assert.ok(paraParkWoojin.profile.includeKeywords.includes('AB6IX'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
