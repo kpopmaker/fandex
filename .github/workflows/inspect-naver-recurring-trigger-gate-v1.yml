@@ -1,0 +1,36 @@
+name: Inspect NAVER recurring trigger gate v1
+
+on:
+  push:
+    branches:
+      - ops/inspect-naver-recurring-trigger-gate-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      TRIGGER_GATE: ${{ vars.FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED }}
+      SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+    steps:
+      - name: Report activation booleans only
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${TRIGGER_GATE:-}" == "approved-github-hourly-v1" ]]; then
+            echo "FANDEX_NAVER_RECURRING_TRIGGER_GATE_ACTIVE=true"
+          else
+            echo "FANDEX_NAVER_RECURRING_TRIGGER_GATE_ACTIVE=false"
+          fi
+
+          if [[ -n "${SCHEDULER_SECRET:-}" ]]; then
+            echo "FANDEX_NAVER_RECURRING_SCHEDULER_SECRET_PRESENT=true"
+          else
+            echo "FANDEX_NAVER_RECURRING_SCHEDULER_SECRET_PRESENT=false"
+          fi
+
+          echo "productionRequests=0"
+          echo "repositoryMutations=0"
