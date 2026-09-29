@@ -1334,6 +1334,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   }
 
 
+  const smDirectoryIds = ['taeyeon', 'kai', 'nctu'];
+  for (const artistId of smDirectoryIds) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing SM directory canonical: ${artistId}`);
+    assert.equal(artist.agency, 'SM Entertainment');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+  assert.equal(getArtistV4ById('taeyeon')?.entityType, 'solo');
+  assert.equal(getArtistV4ById('kai')?.entityType, 'solo');
+  assert.equal(getArtistV4ById('nctu')?.entityType, 'unit');
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

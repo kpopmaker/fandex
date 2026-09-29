@@ -1,0 +1,82 @@
+{
+  "version": "sm_official_identity_directory_gap_catalog_v1",
+  "source": {
+    "id": "sm-official-identity-directory-gap-catalog",
+    "type": "provider_catalog",
+    "name": "SM Entertainment Official Identity Directory Gap Catalog",
+    "observedAt": "2026-09-29T17:37:00+09:00",
+    "url": "https://www.smentertainment.com/artist/"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "TAEYEON",
+      "aliases": [
+        "태연",
+        "김태연"
+      ],
+      "evidence": [
+        {
+          "label": "SM Entertainment official artist directory",
+          "url": "https://www.smentertainment.com/artist/"
+        },
+        {
+          "label": "SM 2026 TIMA newsroom identifies Girls' Generation TAEYEON among SM artists",
+          "url": "https://www.smentertainment.com/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KAI",
+      "aliases": [
+        "Kai",
+        "카이",
+        "김종인"
+      ],
+      "evidence": [
+        {
+          "label": "SM Entertainment official artist directory",
+          "url": "https://www.smentertainment.com/artist/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NCT U",
+      "aliases": [
+        "엔시티 유"
+      ],
+      "evidence": [
+        {
+          "label": "SM Entertainment official artist directory",
+          "url": "https://www.smentertainment.com/artist/"
+        },
+        {
+          "label": "SM artist overview documents NCT U under NCT identity",
+          "url": "https://cdn2.smentertainment.com/wp-content/uploads/2025/07/2024-SM-Entertainment-Sustainability-Report_EN.pdf"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "officialFirstPartySourceOnly": true,
+    "existingCanonicalCoverageGapOnly": true,
+    "exactGapTargetsRequired": true,
+    "directoryPresenceDoesNotInferExclusiveManagementContract": true,
+    "directoryPresenceDoesNotInferCurrentReleaseActivity": true,
+    "rotationalUnitMembershipNotMaterialized": true,
+    "noNewCanonicalFromDirectoryOnly": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": false,
+    "scopeVerificationRequired": false
+  },
+  "provenance": {
+    "snapshotType": "verified_sm_official_identity_directory_gap_snapshot",
+    "verifiedFrom": [
+      "https://www.smentertainment.com/artist/",
+      "https://www.smentertainment.com/",
+      "https://cdn2.smentertainment.com/wp-content/uploads/2025/07/2024-SM-Entertainment-Sustainability-Report_EN.pdf"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
