@@ -1,0 +1,192 @@
+{
+  "version": "bighit_bts_txt_music_identity_catalog_adapter_v1",
+  "source": {
+    "id": "bighit-bts-txt-official-music-identity-catalog",
+    "type": "provider_catalog",
+    "name": "BIGHIT MUSIC Official BTS/TXT Music Identity Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://bts.ibighit.com/eng/"
+  },
+  "candidateCount": 9,
+  "candidates": [
+    {
+      "displayArtist": "BTS",
+      "aliases": [
+        "방탄소년단"
+      ],
+      "evidence": [
+        {
+          "label": "BIGHIT MUSIC 2026 BTS album and world tour notice",
+          "url": "https://weverse.io/bts/notice/32916"
+        },
+        {
+          "label": "BIGHIT MUSIC BTS official discography",
+          "url": "https://bts.ibighit.com/eng/discography/detail/be.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TOMORROW X TOGETHER",
+      "aliases": [
+        "TXT",
+        "투모로우바이투게더"
+      ],
+      "evidence": [
+        {
+          "label": "BIGHIT MUSIC five-member TXT contract renewal notice",
+          "url": "https://weverse.io/txt/notice/29620"
+        }
+      ]
+    },
+    {
+      "displayArtist": "RM",
+      "aliases": [
+        "김남준"
+      ],
+      "evidence": [
+        {
+          "label": "RM official BIGHIT MUSIC discography",
+          "url": "https://bts.ibighit.com/eng/discography/rm/detail/rpwp/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jin",
+      "aliases": [
+        "JIN",
+        "김석진"
+      ],
+      "evidence": [
+        {
+          "label": "Jin official BIGHIT MUSIC discography",
+          "url": "https://bts.ibighit.com/eng/discography/jin/detail/echo/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SUGA",
+      "aliases": [
+        "Agust D",
+        "민윤기"
+      ],
+      "evidence": [
+        {
+          "label": "SUGA official BIGHIT MUSIC D-DAY catalog",
+          "url": "https://bts.ibighit.com/eng/discography/suga/detail/d-day/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "j-hope",
+      "aliases": [
+        "J-Hope",
+        "제이홉"
+      ],
+      "evidence": [
+        {
+          "label": "j-hope official BIGHIT MUSIC discography",
+          "url": "https://bts.ibighit.com/eng/discography/j-hope/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jimin",
+      "aliases": [
+        "JIMIN",
+        "지민"
+      ],
+      "evidence": [
+        {
+          "label": "Jimin official BIGHIT MUSIC MUSE catalog",
+          "url": "https://bts.ibighit.com/eng/discography/jimin/detail/muse/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "V",
+      "aliases": [
+        "Kim Taehyung",
+        "뷔"
+      ],
+      "evidence": [
+        {
+          "label": "V official BIGHIT MUSIC catalog",
+          "url": "https://bts.ibighit.com/eng/discography/v/detail/winter-ahead/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jung Kook",
+      "aliases": [
+        "Jungkook",
+        "정국"
+      ],
+      "evidence": [
+        {
+          "label": "Jung Kook official BIGHIT MUSIC GOLDEN catalog",
+          "url": "https://bts.ibighit.com/eng/discography/jung-kook/detail/golden/"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "BTS": {
+      "agency": "BIGHIT MUSIC",
+      "lifecycleStatus": "active",
+      "members": [
+        "RM",
+        "Jin",
+        "SUGA",
+        "j-hope",
+        "Jimin",
+        "V",
+        "Jung Kook"
+      ],
+      "memberCount": 7,
+      "currentGroupActivityEvidence": "https://weverse.io/bts/notice/32916"
+    },
+    "TOMORROW X TOGETHER": {
+      "agency": "BIGHIT MUSIC",
+      "lifecycleStatus": "active",
+      "members": [
+        "SOOBIN",
+        "YEONJUN",
+        "BEOMGYU",
+        "TAEHYUN",
+        "HUENINGKAI"
+      ],
+      "memberCount": 5,
+      "currentGroupActivityEvidence": "https://weverse.io/txt/notice/29620"
+    }
+  },
+  "contract": {
+    "officialFirstPartySourceOnly": true,
+    "currentGroupStatusEvidenceRequired": true,
+    "exactCurrentTxtRosterRequired": true,
+    "exactBtsMemberIdentityRequired": true,
+    "soloCatalogEvidenceRequired": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "soloCatalogIdentityDoesNotDetachMemberFromGroup": true,
+    "agustDAliasMustResolveToSugaCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_bighit_first_party_bts_txt_group_and_solo_identity_catalog_snapshot",
+    "verifiedFrom": [
+      "https://weverse.io/bts/notice/32916",
+      "https://weverse.io/txt/notice/29620",
+      "https://bts.ibighit.com/eng/discography/detail/be.html",
+      "https://bts.ibighit.com/eng/discography/rm/detail/rpwp/",
+      "https://bts.ibighit.com/eng/discography/jin/detail/echo/",
+      "https://bts.ibighit.com/eng/discography/suga/detail/d-day/",
+      "https://bts.ibighit.com/eng/discography/j-hope/",
+      "https://bts.ibighit.com/eng/discography/jimin/detail/muse/",
+      "https://bts.ibighit.com/eng/discography/v/detail/winter-ahead/",
+      "https://bts.ibighit.com/eng/discography/jung-kook/detail/golden/"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

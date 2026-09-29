@@ -1284,6 +1284,28 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(artms.profile.koreanAliases.includes('아르테미스'));
 
 
+  const bts = getArtistV4ById('bts');
+  assert.ok(bts);
+  assert.equal(bts.agency, 'BIGHIT MUSIC');
+  assert.equal(bts.lifecycleStatus, 'active');
+  assert.deepEqual(bts.members, ["RM","Jin","SUGA","j-hope","Jimin","V","Jung Kook"]);
+
+  const txt = getArtistV4ById('txt');
+  assert.ok(txt);
+  assert.equal(txt.agency, 'BIGHIT MUSIC');
+  assert.equal(txt.lifecycleStatus, 'active');
+  assert.deepEqual(txt.members, ["SOOBIN","YEONJUN","BEOMGYU","TAEHYUN","HUENINGKAI"]);
+
+  for (const artistId of ['rm', 'jin', 'suga', 'jhope', 'jimin', 'v', 'jungkook']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'BIGHIT MUSIC');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+  assert.ok(getArtistV4ById('suga')?.profile.englishAliases.includes('Agust D'));
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
