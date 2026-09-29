@@ -106,3 +106,30 @@ jobs:
           NODE
 
           rm -f "$response_file"
+
+      - name: Pull Production env read-only and validate recurring non-secret contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$TEAM_ID" "$PROJECT_ID" > .vercel/project.json
+          env_file="$(mktemp)"
+
+          npx --yes vercel@latest env pull "$env_file"             --environment=production             --yes             --token="$VERCEL_TOKEN"             --scope="$TEAM_ID" >/tmp/vercel-env-pull.log 2>&1
+
+          set -a
+          source "$env_file"
+          set +a
+
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_ENABLED:-}" == "approved-v128-recurring-foundation" ]]             && enabled=true || enabled=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT:-}" == "production" ]]             && deployment=true || deployment=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_QUERY:-}" == "아이유 IU" ]]             && query=true || query=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DISPLAY:-}" == "100" ]]             && display=true || display=false
+
+          echo "FANDEX_RECURRING_ENABLED_EXPECTED=$enabled"
+          echo "FANDEX_RECURRING_DEPLOYMENT_EXPECTED=$deployment"
+          echo "FANDEX_RECURRING_QUERY_EXPECTED=$query"
+          echo "FANDEX_RECURRING_DISPLAY_EXPECTED=$display"
+          echo "FANDEX_PRODUCTION_ENV_PULL_SECRET_VALUE_LOGGED=false"
+
+          rm -f "$env_file" /tmp/vercel-env-pull.log .vercel/project.json
