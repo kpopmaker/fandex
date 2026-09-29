@@ -28,13 +28,19 @@ function request(overrides: { method?: string; bearer?: string; id?: string; bod
   });
 }
 
-function fixture() {
-  const scheduler = buildNaverNewsSchedulerPlan({ query: '아이유 IU', at: '2026-09-29T03:00:00Z', display: 100 });
+function fixture(
+  at = '2026-09-29T03:00:00Z',
+  uploadedAt = '2026-09-29T03:01:01Z',
+) {
+  const atMs = Date.parse(at);
+  assert.ok(Number.isFinite(atMs));
+  const scheduler = buildNaverNewsSchedulerPlan({ query: '아이유 IU', at, display: 100 });
   const plan = buildNaverNewsIngestionWritePlan(buildNaverNewsJobIdentity(scheduler.command), {
-    fetchedAt: '2026-09-29T03:01:00Z', response: {
-      total: 1, start: 1, display: 1, lastBuildDate: '2026-09-29T03:00:00Z', items: [{
+    fetchedAt: new Date(atMs + 60_000).toISOString(), response: {
+      total: 1, start: 1, display: 1, lastBuildDate: at, items: [{
         title: 'private-title-sentinel', description: 'private-summary-sentinel',
-        originallink: 'https://private-source.example.test/article', pubDate: '2026-09-29T02:00:00Z',
+        originallink: 'https://private-source.example.test/article',
+        pubDate: new Date(atMs - 3_600_000).toISOString(),
       }],
     },
   });
@@ -42,7 +48,7 @@ function fixture() {
   assert.ok(objects.schedulerManifestPathname && objects.schedulerManifestBody);
   const bodies = new Map([[objects.jobPathname, objects.jobBody],
     [objects.schedulerManifestPathname, objects.schedulerManifestBody]]);
-  const rows = [...bodies.keys()].map((pathname) => ({ pathname, uploadedAt: Date.parse('2026-09-29T03:01:01Z') }));
+  const rows = [...bodies.keys()].map((pathname) => ({ pathname, uploadedAt: Date.parse(uploadedAt) }));
   const reader: BlobVerificationReader = {
     list: async (prefix) => rows.filter((row) => row.pathname.startsWith(prefix)),
     readText: async (path) => bodies.get(path) ?? null,
@@ -96,6 +102,47 @@ test('B: stage exists, linked manifest absent', async () => {
   f.bodies.delete(f.objects.schedulerManifestPathname!);
   f.rows.splice(1, 1);
   assert.equal((await invoke(f.reader)).body.classification, B);
+});
+
+test('newer staged scheduler job takes B precedence over an older finalized manifest', async () => {
+  const older = fixture('2026-09-29T01:00:00Z', '2026-09-29T01:01:01Z');
+  const newer = fixture();
+  older.bodies.set(newer.objects.jobPathname, newer.objects.jobBody);
+  older.rows.push({
+    pathname: newer.objects.jobPathname,
+    uploadedAt: Date.parse('2026-09-29T03:01:01Z'),
+  });
+  const { body } = await invoke(older.reader);
+  assert.equal(body.classification, B);
+  assert.equal(body.latest.jobId, JSON.parse(newer.objects.jobBody).jobId);
+});
+
+test('older unfinalized stage does not mask a newer finalized scheduler manifest', async () => {
+  const newer = fixture();
+  const older = fixture('2026-09-29T01:00:00Z', '2026-09-29T01:01:01Z');
+  newer.bodies.set(older.objects.jobPathname, older.objects.jobBody);
+  newer.rows.push({
+    pathname: older.objects.jobPathname,
+    uploadedAt: Date.parse('2026-09-29T01:01:01Z'),
+  });
+  const { body } = await invoke(newer.reader);
+  assert.equal(body.classification, A);
+  assert.equal(body.latest.jobId, JSON.parse(newer.objects.jobBody).jobId);
+});
+
+test('multiple unfinalized post-activation jobs fail closed rather than letting A mask ambiguity', async () => {
+  const finalized = fixture('2026-09-29T01:00:00Z', '2026-09-29T01:01:01Z');
+  for (const at of ['2026-09-29T02:00:00Z', '2026-09-29T03:00:00Z']) {
+    const staged = fixture(at, new Date(Date.parse(at) + 61_000).toISOString());
+    finalized.bodies.set(staged.objects.jobPathname, staged.objects.jobBody);
+    finalized.rows.push({
+      pathname: staged.objects.jobPathname,
+      uploadedAt: Date.parse(new Date(Date.parse(at) + 61_000).toISOString()),
+    });
+  }
+  const { body } = await invoke(finalized.reader);
+  assert.equal(body.classification, FAILED);
+  assert.equal(body.errorClass, 'integrity_failed');
 });
 
 test('C: successful empty list and historical-only inventory', async () => {
