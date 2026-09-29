@@ -124,7 +124,7 @@ async function appendAudit(
   if (!isSha256(eventSha256) || Buffer.byteLength(canonicalJson(boundedPayload), 'utf8') > 4096) {
     throw new Error('naver_news_audit_event_invalid');
   }
-  await observeNaverNewsDatabaseOperation(() => client.query(
+  await observeNaverNewsDatabaseOperation('audit_insert', () => client.query(
     `INSERT INTO fandex.source_ingestion_audit_events
       (job_id, sequence, event_type, event_sha256, bounded_payload)
      VALUES ($1, $2, $3, $4, $5::jsonb)`,
@@ -133,16 +133,16 @@ async function appendAudit(
 }
 
 async function withTransaction<T>(pool: NaverNewsIngestionPool, operation: (client: TransactionClient) => Promise<T>): Promise<T> {
-  const client = await observeNaverNewsDatabaseOperation(() => pool.connect()).catch(() => {
+  const client = await observeNaverNewsDatabaseOperation('connect', () => pool.connect()).catch(() => {
     throw new Error('naver_news_repository_operation_failed');
   });
   try {
-    await observeNaverNewsDatabaseOperation(() => client.query('BEGIN'));
+    await observeNaverNewsDatabaseOperation('begin', () => client.query('BEGIN'));
     const result = await operation(client);
-    await observeNaverNewsDatabaseOperation(() => client.query('COMMIT'));
+    await observeNaverNewsDatabaseOperation('commit', () => client.query('COMMIT'));
     return result;
   } catch (error) {
-    try { await observeNaverNewsDatabaseOperation(() => client.query('ROLLBACK')); } catch { /* fail closed below */ }
+    try { await observeNaverNewsDatabaseOperation('rollback', () => client.query('ROLLBACK')); } catch { /* fail closed below */ }
     if (error instanceof Error && /^naver_news_[a-z_]+$/.test(error.message)) throw error;
     throw new Error('naver_news_repository_operation_failed');
   } finally {
@@ -151,7 +151,7 @@ async function withTransaction<T>(pool: NaverNewsIngestionPool, operation: (clie
 }
 
 async function lockedJob(client: Queryable, identity: NaverNewsJobIdentity): Promise<JobRow | null> {
-  const result = await observeNaverNewsDatabaseOperation(() => client.query<JobRow>(JOB_SELECT, [
+  const result = await observeNaverNewsDatabaseOperation('job_select', () => client.query<JobRow>(JOB_SELECT, [
     identity.jobId,
     identity.idempotencyKey,
     NAVER_NEWS_PROVIDER,
@@ -168,7 +168,7 @@ export function createPostgresNaverNewsIngestionRepository(
     async ensureJob(identity, now) {
       const createdAt = normalizeIso(now, 'naver_news_worker_time_invalid');
       return withTransaction(pool, async (client) => {
-        const inserted = await observeNaverNewsDatabaseOperation(() => client.query<{ job_id: string }>(
+        const inserted = await observeNaverNewsDatabaseOperation('job_insert', () => client.query<{ job_id: string }>(
           `INSERT INTO fandex.source_ingestion_jobs
             (job_id, idempotency_key, request_sha256, contract_version, provider, collection_key,
              request_contract, status, attempt_count, max_attempts, created_at, updated_at)

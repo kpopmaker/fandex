@@ -431,6 +431,7 @@ test('synthetic database errors are redacted and clean up client and pool', asyn
 
   assert.equal(error.message, 'naver_news_production_write_failed');
   assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=job_insert'],
     ['FANDEX_NAVER_DATABASE_ERROR_CLASS=undefined_table'],
     ['FANDEX_NAVER_DISPATCH_FAILED_STAGE=database_ensure'],
   ]);
