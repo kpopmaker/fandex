@@ -5721,6 +5721,20 @@
           "note": "Provider catalog dates Girls and Flowers to August 3, 2018 and credits n.CH Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "tuki.",
+      "decision": "exclude_non_kpop_scope",
+      "relationResolution": "japanese_singer_songwriter_outside_kpop_scope",
+      "relatedCanonicalArtistIds": [],
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "tuki. Official Site",
+          "url": "https://tuki-official.net/profiles",
+          "note": "Official biography describes tuki. as a singer-songwriter whose Japan chart, Japan Record Awards, NHK Kohaku, and 2026 Nippon Budokan milestones include a Guinness record explicitly framed for a solo J-POP artist; Korea/Taiwan/Hong Kong touring does not establish a K-pop identity."
+        }
+      ]
     }
   ]
 }
