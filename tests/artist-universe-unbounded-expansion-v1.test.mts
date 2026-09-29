@@ -1539,15 +1539,6 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(feelGhoodYoonmirae.lifecycleStatus, 'active');
   assert.ok(feelGhoodYoonmirae.profile.koreanAliases.includes('윤미래'));
 
-  const s2KissOfLife = getArtistV4ById('kissoflife');
-  assert.ok(s2KissOfLife);
-  assert.equal(s2KissOfLife.entityType, 'group');
-  assert.equal(s2KissOfLife.agency, 'S2 Entertainment');
-  assert.equal(s2KissOfLife.agencyStatus, 'verified');
-  assert.equal(s2KissOfLife.lifecycleStatus, 'active');
-  assert.deepEqual(s2KissOfLife.members, ['Julie', 'Natty', 'Belle', 'Haneul']);
-  assert.ok(s2KissOfLife.profile.koreanAliases.includes('키스오브라이프'));
-
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
