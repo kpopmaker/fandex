@@ -1395,6 +1395,37 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(edamWoodz.lifecycleStatus, 'active');
 
 
+  const osHuhGak = getArtistV4ById('huhgak');
+  assert.ok(osHuhGak);
+  assert.equal(osHuhGak.entityType, 'solo');
+  assert.equal(osHuhGak.agency, 'OS Projects');
+  assert.equal(osHuhGak.agencyStatus, 'verified');
+  assert.equal(osHuhGak.lifecycleStatus, 'active');
+
+  const osLimHanByul = getArtistV4ById('limhanbyul');
+  assert.ok(osLimHanByul);
+  assert.equal(osLimHanByul.entityType, 'solo');
+  assert.equal(osLimHanByul.agency, 'OS Projects');
+  assert.equal(osLimHanByul.agencyStatus, 'verified');
+  assert.equal(osLimHanByul.lifecycleStatus, 'active');
+
+  const osKimYechan = getArtistV4ById('kimyechan');
+  assert.ok(osKimYechan);
+  assert.equal(osKimYechan.entityType, 'solo');
+  assert.equal(osKimYechan.agency, 'OS Projects');
+  assert.equal(osKimYechan.agencyStatus, 'verified');
+  assert.equal(osKimYechan.lifecycleStatus, 'active');
+  assert.ok(osKimYechan.profile.koreanAliases.includes('김예찬'));
+
+  const osHyb = getArtistV4ById('hyb');
+  assert.ok(osHyb);
+  assert.equal(osHyb.entityType, 'project');
+  assert.equal(osHyb.agency, 'OS Projects');
+  assert.equal(osHyb.agencyStatus, 'verified');
+  assert.equal(osHyb.lifecycleStatus, 'active');
+  assert.deepEqual(osHyb.members, ["Huh Gak","Shin Yong Jae","Lim Han Byul"]);
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

@@ -5977,6 +5977,48 @@
           "note": "Preserves C9 Entertainment's re-contract statement for Lee Seok Hoon."
         }
       ]
+    },
+    {
+      "displayArtist": "KIM YECHAN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_OS_Projects_current_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_OS_Projects_artist_roster_plus_2026_exclusive_contract_notice",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists",
+          "note": "Current official artist page lists 김예찬 (KIM YECHAN)."
+        },
+        {
+          "source": "OS Projects",
+          "url": "https://www.osprojects.kr/?bmode=view&idx=173992094&t=board",
+          "note": "September 2026 official news states Kim Yechan signed an exclusive contract and will continue solo music activity."
+        }
+      ]
+    },
+    {
+      "displayArtist": "HYB",
+      "decision": "new_canonical_project_candidate",
+      "relationResolution": "official_OS_Projects_HYB_music_project_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "huhgak",
+        "limhanbyul"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_OS_Projects_artist_page_and_music_video_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists",
+          "note": "Official artist page lists 허용별 (허각, 신용재, 임한별) and its music-video entries."
+        }
+      ]
     }
   ]
 }

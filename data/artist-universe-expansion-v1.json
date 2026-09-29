@@ -750,8 +750,18 @@
         {
           "source": "OS Projects",
           "url": "https://www.osprojects.kr/news/?bmode=view&idx=169951663&q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&t=board"
+        },
+        {
+          "source": "OS Projects official current artist roster",
+          "url": "https://www.osprojects.kr/artists"
+        },
+        {
+          "source": "OS Projects 2026 current music activity news",
+          "url": "https://www.osprojects.kr/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "huhgak",
@@ -771,8 +781,14 @@
         {
           "source": "OS Projects",
           "url": "https://www.osprojects.kr/"
+        },
+        {
+          "source": "OS Projects official current artist roster",
+          "url": "https://www.osprojects.kr/artists"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "dohkyungsoo",
@@ -10167,6 +10183,94 @@
         {
           "source": "C9 Entertainment re-contract statement preserved by iMBC",
           "url": "https://enews.imbc.com/Tpl/View/319226?progcode=0"
+        }
+      ]
+    },
+    {
+      "id": "kimyechan",
+      "ticker": "KIMYECHAN",
+      "name": "KIM YECHAN",
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "김예찬 KIM YECHAN OS프로젝트",
+      "koreanAliases": [
+        "김예찬"
+      ],
+      "englishAliases": [
+        "KIM YECHAN",
+        "Kim Yechan"
+      ],
+      "keywords": [
+        "OS Projects",
+        "OS프로젝트",
+        "Undercover",
+        "Singer Again 4"
+      ],
+      "disambiguationKeywords": [
+        "OS Projects",
+        "OS프로젝트",
+        "김예찬"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists"
+        },
+        {
+          "source": "OS Projects September 2026 exclusive-contract notice",
+          "url": "https://www.osprojects.kr/?bmode=view&idx=173992094&t=board"
+        }
+      ]
+    },
+    {
+      "id": "hyb",
+      "ticker": "HYB",
+      "name": "HYB",
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "entityType": "project",
+      "lifecycleStatus": "active",
+      "members": [
+        "Huh Gak",
+        "Shin Yong Jae",
+        "Lim Han Byul"
+      ],
+      "naverNewsQuery": "허용별 HYB 허각 신용재 임한별",
+      "koreanAliases": [
+        "허용별"
+      ],
+      "englishAliases": [
+        "HYB",
+        "HuhYongByul"
+      ],
+      "keywords": [
+        "OS Projects",
+        "허각",
+        "신용재",
+        "임한별",
+        "이게 뭐냔 말이야",
+        "별의 순간"
+      ],
+      "disambiguationKeywords": [
+        "OS Projects",
+        "허용별"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "OS Projects official artist roster and music-video catalog",
+          "url": "https://www.osprojects.kr/artists"
         }
       ]
     }

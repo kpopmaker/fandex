@@ -1,0 +1,132 @@
+{
+  "version": "os_projects_current_music_roster_adapter_v1",
+  "source": {
+    "id": "os-projects-official-current-music-roster",
+    "type": "agency_roster",
+    "name": "OS Projects Official Current Music Roster",
+    "observedAt": "2026-09-29T20:35:00+09:00",
+    "url": "https://www.osprojects.kr/artists"
+  },
+  "candidateCount": 4,
+  "candidates": [
+    {
+      "displayArtist": "Huh Gak",
+      "aliases": [
+        "허각",
+        "HUH GAK"
+      ],
+      "evidence": [
+        {
+          "label": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists"
+        },
+        {
+          "label": "OS Projects 2026 current news",
+          "url": "https://www.osprojects.kr/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lim Han Byul",
+      "aliases": [
+        "임한별",
+        "Onestar"
+      ],
+      "evidence": [
+        {
+          "label": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists"
+        },
+        {
+          "label": "OS Projects 2026 current news",
+          "url": "https://www.osprojects.kr/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM YECHAN",
+      "aliases": [
+        "Kim Yechan",
+        "김예찬"
+      ],
+      "evidence": [
+        {
+          "label": "OS Projects official artist roster",
+          "url": "https://www.osprojects.kr/artists"
+        },
+        {
+          "label": "OS Projects September 2026 exclusive-contract notice",
+          "url": "https://www.osprojects.kr/?bmode=view&idx=173992094&t=board"
+        }
+      ]
+    },
+    {
+      "displayArtist": "HYB",
+      "aliases": [
+        "허용별",
+        "HuhYongByul"
+      ],
+      "evidence": [
+        {
+          "label": "OS Projects official artist roster with HYB music-video entries",
+          "url": "https://www.osprojects.kr/artists"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "Huh Gak": {
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "Lim Han Byul": {
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "KIM YECHAN": {
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "HYB": {
+      "agency": "OS Projects",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "project",
+      "members": [
+        "Huh Gak",
+        "Shin Yong Jae",
+        "Lim Han Byul"
+      ],
+      "memberCount": 3
+    }
+  },
+  "contract": {
+    "officialSourceOnly": true,
+    "fullOfficialArtistPageRequired": true,
+    "current2026ActivityRequiredForExistingSoloists": true,
+    "kimYechanOfficialContractRequired": true,
+    "hybOfficialMusicVideoIdentityRequired": true,
+    "hybExactMemberCompositionRequired": true,
+    "projectMemberDoesNotCreateSoloCanonical": true,
+    "projectIdentityDoesNotCollapseMemberSoloIdentity": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_OS_Projects_current_artist_roster_plus_2026_activity_snapshot",
+    "verifiedFrom": [
+      "https://www.osprojects.kr/artists",
+      "https://www.osprojects.kr/",
+      "https://www.osprojects.kr/?bmode=view&idx=173992094&t=board"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
