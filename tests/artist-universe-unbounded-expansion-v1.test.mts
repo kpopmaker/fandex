@@ -1442,6 +1442,36 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(abyssKimMinSeok.profile.koreanAliases.includes('김민석'));
 
 
+  const yhYena = getArtistV4ById('yena');
+  assert.ok(yhYena);
+  assert.equal(yhYena.entityType, 'solo');
+  assert.equal(yhYena.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhYena.agencyStatus, 'verified');
+  assert.equal(yhYena.lifecycleStatus, 'active');
+
+  const yhTempest = getArtistV4ById('tempest');
+  assert.ok(yhTempest);
+  assert.equal(yhTempest.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhTempest.lifecycleStatus, 'active');
+  assert.deepEqual(yhTempest.members, ["LEW","HANBIN","HYEONGSEOP","HYUK","EUNCHAN","TAERAE"]);
+
+  const yhDaff = getArtistV4ById('daff');
+  assert.ok(yhDaff);
+  assert.equal(yhDaff.entityType, 'solo');
+  assert.equal(yhDaff.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhDaff.agencyStatus, 'verified');
+  assert.equal(yhDaff.lifecycleStatus, 'active');
+  assert.ok(yhDaff.profile.koreanAliases.includes('다프'));
+
+  const yhAnd2ble = getArtistV4ById('and2ble');
+  assert.ok(yhAnd2ble);
+  assert.equal(yhAnd2ble.entityType, 'group');
+  assert.equal(yhAnd2ble.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhAnd2ble.agencyStatus, 'verified');
+  assert.equal(yhAnd2ble.lifecycleStatus, 'active');
+  assert.deepEqual(yhAnd2ble.members, ["JANG HAO","YOO SEUNGEON","RICKY","KIM GYUVIN","HAN YUJIN"]);
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

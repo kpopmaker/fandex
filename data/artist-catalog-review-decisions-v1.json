@@ -6019,6 +6019,28 @@
           "note": "Official artist page lists 허용별 (허각, 신용재, 임한별) and its music-video entries."
         }
       ]
+    },
+    {
+      "displayArtist": "DáFF",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "dedicated_YH_music_profile_and_discography_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_YH_Music_roster_plus_dedicated_profile_with_debut_and_discography",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "YH ENTERTAINMENT Music roster",
+          "url": "https://yhent.co.kr/artists/music/",
+          "note": "Current official Music roster lists DáFF."
+        },
+        {
+          "source": "YH ENTERTAINMENT DáFF profile",
+          "url": "https://www.yhent.co.kr/artist/daff/",
+          "note": "Dedicated official profile gives 2024-12-11 debut and discography."
+        }
+      ]
     }
   ]
 }

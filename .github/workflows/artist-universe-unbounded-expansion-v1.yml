@@ -124,6 +124,7 @@ jobs:
           python tests/artist-expansion-edam-current-music-catalog-v1.py
           python tests/artist-expansion-os-projects-current-roster-v1.py
           python tests/artist-expansion-abyss-melomance-current-identity-v1.py
+          python tests/artist-expansion-yh-entertainment-current-roster-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -557,6 +558,11 @@ jobs:
           python scripts/artist-expansion/collect_abyss_melomance_current_identity_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/abyss-melomance-current-identity-catalog-2026-09-29.json \
             --output abyss_melomance_current_identity_catalog_v1_latest.json
+      - name: Collect YH ENTERTAINMENT current music roster
+        run: |
+          python scripts/artist-expansion/collect_yh_entertainment_current_music_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/yh-entertainment-current-music-roster-2026-09-29.json \
+            --output yh_entertainment_current_music_roster_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -664,6 +670,7 @@ jobs:
             --snapshot edam_current_music_catalog_v1_latest.json \
             --snapshot os_projects_current_music_roster_v1_latest.json \
             --snapshot abyss_melomance_current_identity_catalog_v1_latest.json \
+            --snapshot yh_entertainment_current_music_roster_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -789,6 +796,7 @@ jobs:
             edam_current_music_catalog_v1_latest.json
             os_projects_current_music_roster_v1_latest.json
             abyss_melomance_current_identity_catalog_v1_latest.json
+            yh_entertainment_current_music_roster_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

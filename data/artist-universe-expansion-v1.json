@@ -820,7 +820,7 @@
       "id": "yena",
       "ticker": "YENA",
       "name": "YENA",
-      "agency": "YUE HUA ENTERTAINMENT",
+      "agency": "YH ENTERTAINMENT",
       "entityType": "solo",
       "naverNewsQuery": "최예나 YENA",
       "koreanAliases": [
@@ -836,8 +836,18 @@
         {
           "source": "YUE HUA ENTERTAINMENT",
           "url": "https://yhfamily.co.kr/index.php?CurrentPage=1&action=SiteBoardAt&iBrdContNo=1133&iBrdNo=8&module=Board&sAt=007&sBrdContRe=0&sMode=VIEW_FORM&sSearchField=&sSearchValue="
+        },
+        {
+          "source": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "source": "YH ENTERTAINMENT official YENA profile",
+          "url": "https://www.yhent.co.kr/artist/yena/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "nflying",
@@ -1851,7 +1861,7 @@
       "id": "and2ble",
       "ticker": "AND2BLE",
       "name": "AND2BLE",
-      "agency": "YH Entertainment",
+      "agency": "YH ENTERTAINMENT",
       "entityType": "group",
       "naverNewsQuery": "앤더블 AND2BLE",
       "koreanAliases": [
@@ -1868,8 +1878,22 @@
         {
           "source": "Weverse",
           "url": "https://weverse.io/and2ble/notice/35302"
+        },
+        {
+          "source": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "members": [
+        "JANG HAO",
+        "YOO SEUNGEON",
+        "RICKY",
+        "KIM GYUVIN",
+        "HAN YUJIN"
+      ],
+      "debutDate": "2026-05-26"
     },
     {
       "id": "hahyunsang",
@@ -10287,6 +10311,49 @@
         {
           "source": "OS Projects official artist roster and music-video catalog",
           "url": "https://www.osprojects.kr/artists"
+        }
+      ]
+    },
+    {
+      "id": "daff",
+      "ticker": "DAFF",
+      "name": "DáFF",
+      "agency": "YH ENTERTAINMENT",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "debutDate": "2024-12-11",
+      "naverNewsQuery": "다프 DáFF YH ENTERTAINMENT",
+      "koreanAliases": [
+        "다프"
+      ],
+      "englishAliases": [
+        "DáFF",
+        "DAFF",
+        "Daff"
+      ],
+      "keywords": [
+        "YH ENTERTAINMENT",
+        "ZOMBIE",
+        "Glow up"
+      ],
+      "disambiguationKeywords": [
+        "YH ENTERTAINMENT",
+        "다프"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "source": "YH ENTERTAINMENT official DáFF profile and discography",
+          "url": "https://www.yhent.co.kr/artist/daff/"
         }
       ]
     }

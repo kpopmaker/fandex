@@ -1,0 +1,153 @@
+{
+  "version": "yh_entertainment_current_music_roster_adapter_v1",
+  "source": {
+    "id": "yh-entertainment-official-current-music-roster",
+    "type": "agency_roster",
+    "name": "YH ENTERTAINMENT Official Current Music Roster",
+    "observedAt": "2026-09-29T20:35:00+09:00",
+    "url": "https://yhent.co.kr/artists/music/"
+  },
+  "candidateCount": 4,
+  "candidates": [
+    {
+      "displayArtist": "YENA",
+      "aliases": [
+        "예나",
+        "최예나",
+        "Choi Yena",
+        "Choi Ye-na"
+      ],
+      "evidence": [
+        {
+          "label": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "label": "YH ENTERTAINMENT official YENA profile",
+          "url": "https://www.yhent.co.kr/artist/yena/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TEMPEST",
+      "aliases": [
+        "템페스트"
+      ],
+      "evidence": [
+        {
+          "label": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "label": "YH ENTERTAINMENT official TEMPEST profile",
+          "url": "https://yhent.co.kr/artist/tempest/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "DáFF",
+      "aliases": [
+        "다프",
+        "DAFF",
+        "Daff"
+      ],
+      "evidence": [
+        {
+          "label": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "label": "YH ENTERTAINMENT official DáFF profile and discography",
+          "url": "https://www.yhent.co.kr/artist/daff/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AND2BLE",
+      "aliases": [
+        "앤더블"
+      ],
+      "evidence": [
+        {
+          "label": "YH ENTERTAINMENT official Music roster",
+          "url": "https://yhent.co.kr/artists/music/"
+        },
+        {
+          "label": "YH ENTERTAINMENT official AND2BLE profile",
+          "url": "https://yhent.co.kr/en/artist/and2ble/"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "YENA": {
+      "agency": "YH ENTERTAINMENT",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "debutDate": "2022-01-17"
+    },
+    "TEMPEST": {
+      "agency": "YH ENTERTAINMENT",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "debutDate": "2022-03-02",
+      "members": [
+        "LEW",
+        "HANBIN",
+        "HYEONGSEOP",
+        "HYUK",
+        "EUNCHAN",
+        "TAERAE"
+      ],
+      "memberCount": 6
+    },
+    "DáFF": {
+      "agency": "YH ENTERTAINMENT",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "debutDate": "2024-12-11"
+    },
+    "AND2BLE": {
+      "agency": "YH ENTERTAINMENT",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "debutDate": "2026-05-26",
+      "members": [
+        "JANG HAO",
+        "YOO SEUNGEON",
+        "RICKY",
+        "KIM GYUVIN",
+        "HAN YUJIN"
+      ],
+      "memberCount": 5
+    }
+  },
+  "contract": {
+    "officialFirstPartySourceOnly": true,
+    "fullCurrentMusicRosterRequired": true,
+    "dedicatedProfileRequiredForNewCanonical": true,
+    "exactTempestCurrentRosterRequired": true,
+    "exactAnd2bleCurrentRosterRequired": true,
+    "groupMemberSoloActivityDoesNotCreateCanonicalWithoutDedicatedProfile": true,
+    "agencyNameNormalizedToCurrentOfficialYH": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_YH_current_music_roster_and_dedicated_profile_snapshot",
+    "verifiedFrom": [
+      "https://yhent.co.kr/artists/music/",
+      "https://www.yhent.co.kr/artist/yena/",
+      "https://yhent.co.kr/artist/tempest/",
+      "https://www.yhent.co.kr/artist/daff/",
+      "https://yhent.co.kr/en/artist/and2ble/"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
