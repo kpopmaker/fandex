@@ -163,6 +163,7 @@ test('shadow route redacts activation and dispatch failures', async () => {
   assert.deepEqual(await badConfig.json(), {
     ok: false,
     code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'protocol_rejected',
   });
 
   const sensitive = 'postgresql://secret@example.test/neondb NAVER_NEWS_CLIENT_SECRET raw_payload SQL';
@@ -178,9 +179,41 @@ test('shadow route redacts activation and dispatch failures', async () => {
   assert.deepEqual(JSON.parse(text), {
     ok: false,
     code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'dispatch_failed',
   });
   assert.equal(text.includes('secret'), false);
   assert.equal(text.includes('raw_payload'), false);
+});
+
+
+test('shadow route classifies config and authorization failures without exposing values', async () => {
+  const configRejected = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: `Bearer ${SECRET}` },
+    }),
+    environment({ [NAVER_NEWS_RECURRING_ENABLED_ENV]: 'wrong' }),
+    { dispatch: fakeDispatch([]) },
+  );
+  assert.equal(configRejected.status, 403);
+  assert.deepEqual(await configRejected.json(), {
+    ok: false,
+    code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'config_rejected',
+  });
+
+  const authRejected = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: 'Bearer wrong' },
+    }),
+    environment(),
+    { dispatch: fakeDispatch([]) },
+  );
+  assert.equal(authRejected.status, 403);
+  assert.deepEqual(await authRejected.json(), {
+    ok: false,
+    code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'authorization_rejected',
+  });
 });
 
 test('shadow activation source contains no timer, cron, GET handler, or request override path', async () => {
