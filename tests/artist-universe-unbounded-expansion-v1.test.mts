@@ -1366,18 +1366,18 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(leeSeokHoon.lifecycleStatus, 'active');
   assert.ok(leeSeokHoon.profile.koreanAliases.includes('이석훈'));
 
-  const naze = getArtistV4ById('naze');
-  assert.ok(naze);
-  assert.equal(naze.agency, 'C9 Entertainment');
-  assert.equal(naze.lifecycleStatus, 'active');
-  assert.deepEqual(naze.members, ["KAISEI","YOUNKI","ATO","TURN","YUYA","KIMKUN","DOHYEOK"]);
+  const c9Naze = getArtistV4ById('naze');
+  assert.ok(c9Naze);
+  assert.equal(c9Naze.agency, 'C9 Entertainment');
+  assert.equal(c9Naze.lifecycleStatus, 'active');
+  assert.deepEqual(c9Naze.members, ["KAISEI","YOUNKI","ATO","TURN","YUYA","KIMKUN","DOHYEOK"]);
 
-  const cix = getArtistV4ById('cix');
-  assert.ok(cix);
-  assert.equal(cix.agency, 'C9 Entertainment');
-  assert.equal(cix.agencyStatus, 'historical');
-  assert.equal(cix.lifecycleStatus, 'inactive');
-  assert.deepEqual(cix.members, ["BX","SEUNGHUN","YONGHEE","HYUNSUK"]);
+  const c9Cix = getArtistV4ById('cix');
+  assert.ok(c9Cix);
+  assert.equal(c9Cix.agency, 'C9 Entertainment');
+  assert.equal(c9Cix.agencyStatus, 'historical');
+  assert.equal(c9Cix.lifecycleStatus, 'inactive');
+  assert.deepEqual(c9Cix.members, ["BX","SEUNGHUN","YONGHEE","HYUNSUK"]);
 
 
 
