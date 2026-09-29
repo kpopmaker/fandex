@@ -50,9 +50,17 @@ def parse_live_pages(artists_html: str, faq_html: str, robot_park_html: str) -> 
         if not has(artists, token):
             return []
 
-    for token in ["G-DRAGON", "K-pop artist", "TAEMIN", "March 2026", "Kim Jong-kook", "Singer", "TV personality"]:
-        if not has(faq, token) and not has(artists, token):
+    roster_text = f"{artists} {faq}"
+    classification_patterns = [
+        r"G-DRAGON.{0,300}K-pop artist",
+        r"TAEMIN.{0,300}K-pop artist",
+        r"Kim Jong-kook.{0,300}Singer.{0,120}TV personality",
+    ]
+    for pattern in classification_patterns:
+        if not re.search(pattern, roster_text, flags=re.IGNORECASE):
             return []
+    if not has(roster_text, "March 2026"):
+        return []
 
     for token in ["G-DRAGON", "HOME SWEET HOME", "TAEMIN", "Advice", "Idea"]:
         if not has(robot_park, token):

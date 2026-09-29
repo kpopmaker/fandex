@@ -46,7 +46,11 @@ assert snapshot["contract"]["existingCanonicalMustSuppressDuplicateDiscovery"] i
 assert snapshot["contract"]["autoPromote"] is False
 
 assert module.parse_live_pages(artists.replace("TAEMIN", "OTHER"), faq, robot) == []
-assert module.parse_live_pages(artists, faq.replace("Singer", "Actor"), robot) == []
+assert module.parse_live_pages(
+    artists.replace("Singer", "Actor"),
+    faq.replace("Singer", "Actor"),
+    robot,
+) == []
 assert module.parse_live_pages(artists, faq, robot.replace("Advice", "OTHER")) == []
 assert module.parse_live_pages(artists.replace("Lee Jung-hoo", "OTHER"), faq, robot) == []
 
