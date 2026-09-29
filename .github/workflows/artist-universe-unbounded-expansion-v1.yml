@@ -118,6 +118,7 @@ jobs:
           python tests/artist-expansion-nature-terminal-lifecycle-v1.py
           python tests/artist-expansion-modhaus-current-roster-v1.py
           python tests/artist-expansion-bighit-bts-txt-identity-catalog-v1.py
+          python tests/artist-expansion-cam-with-us-current-roster-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -521,6 +522,11 @@ jobs:
           python scripts/artist-expansion/collect_bighit_bts_txt_identity_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/bighit-bts-txt-identity-catalog-2026-09-29.json \
             --output bighit_bts_txt_identity_catalog_v1_latest.json
+      - name: Collect CAM WITH US current music roster
+        run: |
+          python scripts/artist-expansion/collect_cam_with_us_current_music_roster_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/cam-with-us-current-music-roster-2026-09-29.json \
+            --output cam_with_us_current_music_roster_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -622,6 +628,7 @@ jobs:
             --snapshot nature_nch_terminal_lifecycle_catalog_v1_latest.json \
             --snapshot modhaus_current_artist_roster_v1_latest.json \
             --snapshot bighit_bts_txt_identity_catalog_v1_latest.json \
+            --snapshot cam_with_us_current_music_roster_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -741,6 +748,7 @@ jobs:
             nature_nch_terminal_lifecycle_catalog_v1_latest.json
             modhaus_current_artist_roster_v1_latest.json
             bighit_bts_txt_identity_catalog_v1_latest.json
+            cam_with_us_current_music_roster_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

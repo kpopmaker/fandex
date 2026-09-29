@@ -1,0 +1,278 @@
+{
+  "version": "cam_with_us_current_music_roster_adapter_v1",
+  "source": {
+    "id": "cam-with-us-official-current-music-roster",
+    "type": "agency_roster",
+    "name": "CAM WITH US Official Current Music Roster",
+    "observedAt": "2026-09-29T17:37:00+09:00",
+    "url": "https://camwus.com/"
+  },
+  "pageRoster": [
+    "Lee Kang Seung",
+    "Kim Suyoung",
+    "DAVICHI",
+    "Balming Tiger",
+    "Silica Gel",
+    "PARKMOONCHI",
+    "Jeong Sewoon",
+    "O3ohn",
+    "Car, the garden",
+    "sunwoojunga",
+    "10CM",
+    "IDIOTAPE",
+    "Joo Woojae",
+    "So Soo Bin",
+    "SANAGO",
+    "Lee Seungkook"
+  ],
+  "candidateCount": 13,
+  "candidates": [
+    {
+      "displayArtist": "Lee Kang Seung",
+      "aliases": [
+        "이강승"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Your love is mine)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Kim Suyoung",
+      "aliases": [
+        "김수영"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Spark!)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "DAVICHI",
+      "aliases": [
+        "Davichi",
+        "다비치"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (TIME CAPSULE)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Balming Tiger",
+      "aliases": [
+        "바밍타이거"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Gongbu)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Silica Gel",
+      "aliases": [
+        "실리카겔"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Ballad of You)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "PARKMOONCHI",
+      "aliases": [
+        "Park Moonchi",
+        "박문치"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (BABO ZIPPER)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jeong Sewoon",
+      "aliases": [
+        "정세운"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Too much)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "O3ohn",
+      "aliases": [
+        "오존"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (40 Something)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Car, the garden",
+      "aliases": [
+        "Car the garden",
+        "카더가든"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (BLUE HEART)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "sunwoojunga",
+      "aliases": [
+        "Sunwoo Jung-a",
+        "선우정아"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (Peacock)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "10CM",
+      "aliases": [
+        "10cm",
+        "십센치"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (The Darkest Night)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "IDIOTAPE",
+      "aliases": [
+        "이디오테잎"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (PUBG: BLINDSPOT)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "So Soo Bin",
+      "aliases": [
+        "소수빈"
+      ],
+      "evidence": [
+        {
+          "label": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "label": "CAM WITH US official album archive (As Always)",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    }
+  ],
+  "excludedRosterProfiles": [
+    {
+      "displayArtist": "Joo Woojae",
+      "reason": "current_CAM_roster_present_but_no_album_identity_established_by_CAM_archive"
+    },
+    {
+      "displayArtist": "SANAGO",
+      "reason": "current_CAM_roster_present_but_no_album_identity_established_by_CAM_archive"
+    },
+    {
+      "displayArtist": "Lee Seungkook",
+      "reason": "current_CAM_roster_present_but_no_album_identity_established_by_CAM_archive"
+    }
+  ],
+  "contract": {
+    "officialSourceOnly": true,
+    "fullCurrentRosterPresenceRequired": true,
+    "musicIdentityRequiresOfficialAlbumArchiveEvidence": true,
+    "rosterPresenceAloneDoesNotCreateMusicCanonical": true,
+    "nonMusicOrUnverifiedProfilesNotAutoIncluded": true,
+    "memberRosterNotInferredFromAgencyListing": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_CAM_current_roster_plus_official_album_archive_snapshot",
+    "verifiedFrom": [
+      "https://camwus.com/",
+      "https://camwus.com/archive/"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

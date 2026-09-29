@@ -5735,6 +5735,226 @@
           "note": "Official biography describes tuki. as a singer-songwriter whose Japan chart, Japan Record Awards, NHK Kohaku, and 2026 Nippon Budokan milestones include a Guinness record explicitly framed for a solo J-POP artist; Korea/Taiwan/Hong Kong touring does not establish a K-pop identity."
         }
       ]
+    },
+    {
+      "displayArtist": "Lee Kang Seung",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists Lee Kang Seung."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for Lee Kang Seung."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Kim Suyoung",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists Kim Suyoung."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for Kim Suyoung."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Balming Tiger",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_music_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists Balming Tiger."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for Balming Tiger."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Silica Gel",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_music_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists Silica Gel."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for Silica Gel."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PARKMOONCHI",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists PARKMOONCHI."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for PARKMOONCHI."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Jeong Sewoon",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists Jeong Sewoon."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for Jeong Sewoon."
+        }
+      ]
+    },
+    {
+      "displayArtist": "O3ohn",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists O3ohn."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for O3ohn."
+        }
+      ]
+    },
+    {
+      "displayArtist": "sunwoojunga",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists sunwoojunga."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for sunwoojunga."
+        }
+      ]
+    },
+    {
+      "displayArtist": "IDIOTAPE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_music_group_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists IDIOTAPE."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for IDIOTAPE."
+        }
+      ]
+    },
+    {
+      "displayArtist": "So Soo Bin",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_cam_current_roster_and_album_archive_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_CAM_WITH_US_roster_plus_official_album_archive",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "CAM WITH US",
+          "url": "https://camwus.com/",
+          "note": "Current official CAM WITH US roster lists So Soo Bin."
+        },
+        {
+          "source": "CAM WITH US Archive",
+          "url": "https://camwus.com/archive/",
+          "note": "Official CAM archive records album activity for So Soo Bin."
+        }
+      ]
     }
   ]
 }

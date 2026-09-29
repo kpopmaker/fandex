@@ -1306,6 +1306,34 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(getArtistV4ById('suga')?.profile.englishAliases.includes('Agust D'));
 
 
+  const camSoloIds = ['leekangseung', 'kimsuyoung', 'parkmoonchi', 'jeongsewoon', 'o3ohn', 'sunwoojunga', 'sosoobin'];
+  for (const artistId of camSoloIds) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing CAM solo canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  for (const artistId of ['balmingtiger', 'silicagel', 'idiotape']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing CAM group canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  for (const artistId of ['10cm', 'davichi', 'carthegarden']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing pre-existing CAM canonical: ${artistId}`);
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

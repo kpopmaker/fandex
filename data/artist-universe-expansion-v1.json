@@ -218,8 +218,18 @@
         {
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/80067149"
+        },
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "davichi",
@@ -239,8 +249,18 @@
         {
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/80041466"
+        },
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "leechangsub",
@@ -344,8 +364,18 @@
         {
           "source": "Melon Ticket",
           "url": "https://ticket.melon.com/artist/index.htm?artistId=735506"
+        },
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "hwanggaram",
@@ -9690,6 +9720,390 @@
         {
           "source": "Apple Music Girls and Flowers licensed debut catalog",
           "url": "https://music.apple.com/us/album/girls-and-flowers-ep/1624356825"
+        }
+      ]
+    },
+    {
+      "id": "leekangseung",
+      "ticker": "LEEKANGSEUNG",
+      "name": "Lee Kang Seung",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이강승 Lee Kang Seung CAM WITH US",
+      "koreanAliases": [
+        "이강승"
+      ],
+      "englishAliases": [
+        "Lee Kang Seung"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "이강승"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "kimsuyoung",
+      "ticker": "KIMSUYOUNG",
+      "name": "Kim Suyoung",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "김수영 Kim Suyoung CAM WITH US",
+      "koreanAliases": [
+        "김수영"
+      ],
+      "englishAliases": [
+        "Kim Suyoung"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "김수영"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "balmingtiger",
+      "ticker": "BALMINGTIGER",
+      "name": "Balming Tiger",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "바밍타이거 Balming Tiger CAM WITH US",
+      "koreanAliases": [
+        "바밍타이거"
+      ],
+      "englishAliases": [
+        "Balming Tiger"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "바밍타이거"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official Gongbu album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "silicagel",
+      "ticker": "SILICAGEL",
+      "name": "Silica Gel",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "실리카겔 Silica Gel CAM WITH US",
+      "koreanAliases": [
+        "실리카겔"
+      ],
+      "englishAliases": [
+        "Silica Gel"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "실리카겔"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official Ballad of You album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "parkmoonchi",
+      "ticker": "PARKMOONCHI",
+      "name": "PARKMOONCHI",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "박문치 PARKMOONCHI CAM WITH US",
+      "koreanAliases": [
+        "박문치"
+      ],
+      "englishAliases": [
+        "PARKMOONCHI",
+        "Park Moonchi"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "박문치"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official BABO ZIPPER album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "jeongsewoon",
+      "ticker": "JEONGSEWOON",
+      "name": "Jeong Sewoon",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "정세운 Jeong Sewoon CAM WITH US",
+      "koreanAliases": [
+        "정세운"
+      ],
+      "englishAliases": [
+        "Jeong Sewoon",
+        "Jeong Se-woon"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "정세운"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "o3ohn",
+      "ticker": "O3OHN",
+      "name": "O3ohn",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "오존 O3ohn CAM WITH US",
+      "koreanAliases": [
+        "오존"
+      ],
+      "englishAliases": [
+        "O3ohn"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "O3ohn"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "sunwoojunga",
+      "ticker": "SUNWOOJUNGA",
+      "name": "sunwoojunga",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "선우정아 sunwoojunga CAM WITH US",
+      "koreanAliases": [
+        "선우정아"
+      ],
+      "englishAliases": [
+        "sunwoojunga",
+        "Sunwoo Jung-a"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "선우정아"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official Peacock album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "idiotape",
+      "ticker": "IDIOTAPE",
+      "name": "IDIOTAPE",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "group",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이디오테잎 IDIOTAPE CAM WITH US",
+      "koreanAliases": [
+        "이디오테잎"
+      ],
+      "englishAliases": [
+        "IDIOTAPE"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "이디오테잎"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official PUBG BLINDSPOT album archive",
+          "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "sosoobin",
+      "ticker": "SOSOOBIN",
+      "name": "So Soo Bin",
+      "agency": "CAM WITH US",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "소수빈 So Soo Bin CAM WITH US",
+      "koreanAliases": [
+        "소수빈"
+      ],
+      "englishAliases": [
+        "So Soo Bin",
+        "So Soo-Bin"
+      ],
+      "keywords": [
+        "CAM WITH US"
+      ],
+      "disambiguationKeywords": [
+        "CAM WITH US",
+        "소수빈"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "CAM WITH US official current artist roster",
+          "url": "https://camwus.com/"
+        },
+        {
+          "source": "CAM WITH US official As Always album archive",
+          "url": "https://camwus.com/archive/"
         }
       ]
     }
