@@ -1,3 +1,4 @@
+import { observeNaverNewsDatabaseOperation } from './naverNewsDispatchDiagnostics';
 import {
   canonicalJson,
   isSha256,
@@ -123,25 +124,25 @@ async function appendAudit(
   if (!isSha256(eventSha256) || Buffer.byteLength(canonicalJson(boundedPayload), 'utf8') > 4096) {
     throw new Error('naver_news_audit_event_invalid');
   }
-  await client.query(
+  await observeNaverNewsDatabaseOperation(() => client.query(
     `INSERT INTO fandex.source_ingestion_audit_events
       (job_id, sequence, event_type, event_sha256, bounded_payload)
      VALUES ($1, $2, $3, $4, $5::jsonb)`,
     [jobId, sequence, eventType, eventSha256, JSON.stringify(boundedPayload)],
-  );
+  ));
 }
 
 async function withTransaction<T>(pool: NaverNewsIngestionPool, operation: (client: TransactionClient) => Promise<T>): Promise<T> {
-  const client = await pool.connect().catch(() => {
+  const client = await observeNaverNewsDatabaseOperation(() => pool.connect()).catch(() => {
     throw new Error('naver_news_repository_operation_failed');
   });
   try {
-    await client.query('BEGIN');
+    await observeNaverNewsDatabaseOperation(() => client.query('BEGIN'));
     const result = await operation(client);
-    await client.query('COMMIT');
+    await observeNaverNewsDatabaseOperation(() => client.query('COMMIT'));
     return result;
   } catch (error) {
-    try { await client.query('ROLLBACK'); } catch { /* fail closed below */ }
+    try { await observeNaverNewsDatabaseOperation(() => client.query('ROLLBACK')); } catch { /* fail closed below */ }
     if (error instanceof Error && /^naver_news_[a-z_]+$/.test(error.message)) throw error;
     throw new Error('naver_news_repository_operation_failed');
   } finally {
@@ -150,12 +151,12 @@ async function withTransaction<T>(pool: NaverNewsIngestionPool, operation: (clie
 }
 
 async function lockedJob(client: Queryable, identity: NaverNewsJobIdentity): Promise<JobRow | null> {
-  const result = await client.query<JobRow>(JOB_SELECT, [
+  const result = await observeNaverNewsDatabaseOperation(() => client.query<JobRow>(JOB_SELECT, [
     identity.jobId,
     identity.idempotencyKey,
     NAVER_NEWS_PROVIDER,
     identity.request.collectionKey,
-  ]);
+  ]));
   if (result.rows.length > 1) throw new Error('naver_news_job_identity_collision');
   return result.rows[0] ?? null;
 }
@@ -167,7 +168,7 @@ export function createPostgresNaverNewsIngestionRepository(
     async ensureJob(identity, now) {
       const createdAt = normalizeIso(now, 'naver_news_worker_time_invalid');
       return withTransaction(pool, async (client) => {
-        const inserted = await client.query<{ job_id: string }>(
+        const inserted = await observeNaverNewsDatabaseOperation(() => client.query<{ job_id: string }>(
           `INSERT INTO fandex.source_ingestion_jobs
             (job_id, idempotency_key, request_sha256, contract_version, provider, collection_key,
              request_contract, status, attempt_count, max_attempts, created_at, updated_at)
@@ -185,7 +186,7 @@ export function createPostgresNaverNewsIngestionRepository(
             NAVER_NEWS_JOB_MAX_ATTEMPTS,
             createdAt,
           ],
-        );
+        ));
         if (inserted.rowCount === 1) {
           const payload = Object.freeze({ requestSha256: identity.requestSha256 });
           await appendAudit(client, identity.jobId, 1, 'job_enqueued', payload);
