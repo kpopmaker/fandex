@@ -135,6 +135,13 @@ export function parseProductionWriteCommand(argv: readonly string[]): ParsedProd
   });
 }
 
+export function normalizeNaverNewsRuntimeDatabaseTransportUrl(connectionString: string): string {
+  const transportUrl = new URL(connectionString);
+  transportUrl.searchParams.delete('sslmode');
+  transportUrl.searchParams.delete('uselibpqcompat');
+  return transportUrl.toString();
+}
+
 function defaultPoolFactory(config: NaverNewsProductionWritePoolConfig): NaverNewsProductionWritePool {
   return new Pool(config) as unknown as NaverNewsProductionWritePool;
 }
@@ -166,8 +173,9 @@ export async function runNaverNewsProductionWrite(
     ...dependencies.collectorOptions,
     environment,
   }));
+  const transportConnectionString = normalizeNaverNewsRuntimeDatabaseTransportUrl(connectionString);
   const config = Object.freeze({
-    connectionString,
+    connectionString: transportConnectionString,
     max: 1 as const,
     connectionTimeoutMillis: CONNECTION_TIMEOUT_MILLISECONDS,
     statement_timeout: STATEMENT_TIMEOUT_MILLISECONDS,

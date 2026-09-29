@@ -9,6 +9,7 @@ import {
   type NaverNewsApiResponse,
   type NaverNewsRequestContract,
 } from '../lib/server/ingestion/naverNewsContracts';
+import { requireRuntimeDatabaseUrl } from '../lib/server/persistence/contracts';
 import {
   FANDEX_NAVER_NEWS_CLIENT_ID_ENV,
   FANDEX_NAVER_NEWS_CLIENT_SECRET_ENV,
@@ -18,6 +19,7 @@ import {
 import {
   NAVER_NEWS_V124_APPROVAL_ENV,
   NAVER_NEWS_V124_APPROVAL_VALUE,
+  normalizeNaverNewsRuntimeDatabaseTransportUrl,
   productionWriteExitCode,
   runNaverNewsProductionWrite,
   type NaverNewsProductionWriteDependencies,
@@ -471,4 +473,49 @@ test('v124 source exposes only bounded output and adds no scheduler, migration, 
   assert.match(packageJson, /"ingestion:naver-news:write": "tsx scripts\/ingestion\/write-naver-news-v124\.mts"/);
   assert.equal(createHash('sha256').update(migrationOne.toString('utf8').replace(/\r\n/g, '\n'), 'utf8').digest('hex'), '8c48ab0e3094461316e07e666b4b0370450548df1dca5847970b4dc9639e259a');
   assert.equal(createHash('sha256').update(migrationTwo.toString('utf8').replace(/\r\n/g, '\n'), 'utf8').digest('hex'), '8951cd9ace8f30a586a23b5b813794560ea916798ae7c64e9542440ff1881aef');
+});
+
+test('runtime database transport normalization matches verified production DB transport boundary', () => {
+  const candidate = `${runtimeUrl}?sslmode=require&uselibpqcompat=true&channel_binding=require`;
+  const required = requireRuntimeDatabaseUrl({ FANDEX_RUNTIME_DATABASE_URL: candidate });
+  assert.match(required, /sslmode=verify-full/);
+
+  const normalized = normalizeNaverNewsRuntimeDatabaseTransportUrl(required);
+  const parsed = new URL(normalized);
+
+  assert.equal(parsed.searchParams.has('sslmode'), false);
+  assert.equal(parsed.searchParams.has('uselibpqcompat'), false);
+  assert.equal(parsed.searchParams.get('channel_binding'), 'require');
+  assert.equal(decodeURIComponent(parsed.username), 'fandex_runtime');
+  assert.equal(parsed.hostname.includes('pooler'), true);
+  assert.equal(decodeURIComponent(parsed.pathname.slice(1)), 'neondb');
+});
+
+test('production writer passes normalized runtime transport URL to pg pool factory', async () => {
+  const pool = new SyntheticPostgresPool();
+  const configs: NaverNewsProductionWritePoolConfig[] = [];
+  const values = environment({
+    runtime: `${runtimeUrl}?sslmode=require&uselibpqcompat=true&channel_binding=require`,
+  });
+  await runNaverNewsProductionWrite(argv, values, {
+    collectorOptions: {
+      fetch: async () => jsonResponse(apiResponse(buildNaverNewsJobIdentity({
+        provider: 'naver-news',
+        collectionKey: 'manual-v124-synthetic-write',
+        query: 'FANDEX v124 synthetic production write',
+        display: 1,
+        start: 1,
+        sort: 'date',
+      }).request)),
+      now: () => new Date(fixedCollectedAt),
+    },
+    poolFactory: (config) => { configs.push(config); return pool; },
+    now: fixedWorkerClock(),
+  });
+
+  const parsed = new URL(configs[0].connectionString);
+  assert.equal(parsed.searchParams.has('sslmode'), false);
+  assert.equal(parsed.searchParams.has('uselibpqcompat'), false);
+  assert.equal(parsed.searchParams.get('channel_binding'), 'require');
+  assert.deepEqual(configs[0].ssl, { rejectUnauthorized: true });
 });
