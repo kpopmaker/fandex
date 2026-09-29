@@ -1426,6 +1426,22 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(osHyb.members, ["Huh Gak","Shin Yong Jae","Lim Han Byul"]);
 
 
+  const abyssMeloMance = getArtistV4ById('melomance');
+  assert.ok(abyssMeloMance);
+  assert.equal(abyssMeloMance.entityType, 'group');
+  assert.equal(abyssMeloMance.agency, 'ABYSS COMPANY');
+  assert.equal(abyssMeloMance.agencyStatus, 'verified');
+  assert.equal(abyssMeloMance.lifecycleStatus, 'active');
+
+  const abyssKimMinSeok = getArtistV4ById('kimminseok');
+  assert.ok(abyssKimMinSeok);
+  assert.equal(abyssKimMinSeok.entityType, 'solo');
+  assert.equal(abyssKimMinSeok.agency, 'ABYSS COMPANY');
+  assert.equal(abyssKimMinSeok.agencyStatus, 'verified');
+  assert.equal(abyssKimMinSeok.lifecycleStatus, 'active');
+  assert.ok(abyssKimMinSeok.profile.koreanAliases.includes('김민석'));
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

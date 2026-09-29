@@ -1,0 +1,90 @@
+{
+  "version": "abyss_melomance_current_identity_catalog_v1",
+  "source": {
+    "id": "abyss-melomance-official-current-identity-catalog",
+    "type": "provider_catalog",
+    "name": "ABYSS COMPANY Official MeloMance Current Identity Catalog",
+    "observedAt": "2026-09-29T20:35:00+09:00",
+    "url": "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "MeloMance",
+      "aliases": [
+        "멜로망스",
+        "MELOMANCE"
+      ],
+      "evidence": [
+        {
+          "label": "MeloMance official b.stage 2026 current content",
+          "url": "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26"
+        },
+        {
+          "label": "ABYSS COMPANY official Romance Express notice",
+          "url": "https://melomance.bstage.in/surveys/680f6f3b1c3e0d4337d8107e"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Kim Min-seok",
+      "aliases": [
+        "김민석",
+        "Kim Minseok",
+        "Kim Min Seok"
+      ],
+      "evidence": [
+        {
+          "label": "MeloMance official b.stage 2026 Kim Min-seok solo content",
+          "url": "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26"
+        },
+        {
+          "label": "Spotify licensed 2026 ABYSS COMPANY Summer.zip (1) catalog",
+          "url": "https://open.spotify.com/album/3poSqBHArTD9Y0gQs5QHt8"
+        },
+        {
+          "label": "Spotify licensed 2026 ABYSS COMPANY Summer.zip (2) catalog",
+          "url": "https://open.spotify.com/track/60OeXiAejO8R5QIRvaYKkh"
+        }
+      ]
+    }
+  ],
+  "currentIdentity": {
+    "MeloMance": {
+      "agency": "ABYSS COMPANY",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group"
+    },
+    "Kim Min-seok": {
+      "agency": "ABYSS COMPANY",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    }
+  },
+  "contract": {
+    "firstPartyBstageContinuityRequired": true,
+    "current2026GroupActivityRequired": true,
+    "current2026SoloActivityRequired": true,
+    "abyssOperatorEvidenceRequired": true,
+    "licensedAbyssSoloCatalogRequired": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "soloIdentityDoesNotDetachMemberFromGroup": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "noMemberRosterMutationFromContentIndex": true,
+    "autoPromote": false,
+    "identityReviewRequired": false,
+    "scopeVerificationRequired": false
+  },
+  "provenance": {
+    "snapshotType": "verified_ABYSS_first_party_bstage_current_identity_plus_licensed_catalog_snapshot",
+    "verifiedFrom": [
+      "https://melomance.bstage.in/contents/section/64cc7b04c66af87ec06c6f26",
+      "https://melomance.bstage.in/surveys/680f6f3b1c3e0d4337d8107e",
+      "https://open.spotify.com/album/3poSqBHArTD9Y0gQs5QHt8",
+      "https://open.spotify.com/track/60OeXiAejO8R5QIRvaYKkh"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

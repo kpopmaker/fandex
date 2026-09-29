@@ -990,8 +990,14 @@
         {
           "source": "ABYSS COMPANY",
           "url": "https://melomance.bstage.in/community"
+        },
+        {
+          "source": "ABYSS COMPANY official Romance Express notice",
+          "url": "https://melomance.bstage.in/surveys/680f6f3b1c3e0d4337d8107e"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "kimminseok",
@@ -1015,8 +1021,18 @@
         {
           "source": "Bugs",
           "url": "https://music.bugs.co.kr/artist/80223134"
+        },
+        {
+          "source": "Spotify licensed 2026 ABYSS COMPANY Summer.zip (1) catalog",
+          "url": "https://open.spotify.com/album/3poSqBHArTD9Y0gQs5QHt8"
+        },
+        {
+          "source": "Spotify licensed 2026 ABYSS COMPANY Summer.zip (2) catalog",
+          "url": "https://open.spotify.com/track/60OeXiAejO8R5QIRvaYKkh"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "nerdconnection",
