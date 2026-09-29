@@ -126,6 +126,7 @@ jobs:
           python tests/artist-expansion-abyss-melomance-current-identity-v1.py
           python tests/artist-expansion-yh-entertainment-current-roster-v1.py
           python tests/artist-expansion-mystic-story-verified-profiles-v1.py
+          python tests/artist-expansion-btob-company-current-identities-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -569,6 +570,11 @@ jobs:
           python scripts/artist-expansion/collect_mystic_story_verified_music_profiles_v1.py \
             --fallback-snapshot data/artist-expansion-sources/mystic-story-verified-music-profiles-2026-09-29.json \
             --output mystic_story_verified_music_profiles_v1_latest.json
+      - name: Collect BTOB Company current managed music identities
+        run: |
+          python scripts/artist-expansion/collect_btob_company_current_managed_music_identities_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/btob-company-current-managed-music-identities-2026-09-29.json \
+            --output btob_company_current_managed_music_identities_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -678,6 +684,7 @@ jobs:
             --snapshot abyss_melomance_current_identity_catalog_v1_latest.json \
             --snapshot yh_entertainment_current_music_roster_v1_latest.json \
             --snapshot mystic_story_verified_music_profiles_v1_latest.json \
+            --snapshot btob_company_current_managed_music_identities_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -805,6 +812,7 @@ jobs:
             abyss_melomance_current_identity_catalog_v1_latest.json
             yh_entertainment_current_music_roster_v1_latest.json
             mystic_story_verified_music_profiles_v1_latest.json
+            btob_company_current_managed_music_identities_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

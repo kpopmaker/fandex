@@ -6058,6 +6058,112 @@
           "note": "Official music profile identifies SON TAEJIN / 손태진 under MYSTIC STORY and documents solo releases including SHINE."
         }
       ]
+    },
+    {
+      "displayArtist": "SEO EUNKWANG",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_BTOB_Company_current_managed_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "btob"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_BTOB_Company_managed_member_statement_plus_dedicated_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company",
+          "note": "Official evidence for SEO EUNKWANG."
+        },
+        {
+          "source": "BTOB Company 2026 Seo Eunkwang official notices",
+          "url": "https://btobcompany.kr/notice",
+          "note": "Official evidence for SEO EUNKWANG."
+        },
+        {
+          "source": "BTOB Company official Seo Eunkwang music-video catalog",
+          "url": "https://btobcompany.kr/eunkwang-musicvideo",
+          "note": "Official evidence for SEO EUNKWANG."
+        }
+      ]
+    },
+    {
+      "displayArtist": "LEE MINHYUK (HUTA)",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_BTOB_Company_current_managed_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "btob"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_BTOB_Company_managed_member_statement_plus_dedicated_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company",
+          "note": "Official evidence for LEE MINHYUK (HUTA)."
+        },
+        {
+          "source": "BTOB Company 2026 HUTA TEMPERATURE notices",
+          "url": "https://btobcompany.kr/notice",
+          "note": "Official evidence for LEE MINHYUK (HUTA)."
+        }
+      ]
+    },
+    {
+      "displayArtist": "IM HYUNSIK",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_BTOB_Company_current_managed_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "btob"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_BTOB_Company_managed_member_statement_plus_dedicated_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company",
+          "note": "Official evidence for IM HYUNSIK."
+        },
+        {
+          "source": "BTOB Company 2026 Im Hyunsik activity",
+          "url": "https://btobcompany.kr/btob-behind",
+          "note": "Official evidence for IM HYUNSIK."
+        },
+        {
+          "source": "BTOB Company official Im Hyunsik discography",
+          "url": "https://btobcompany.kr/hyunsik-discography",
+          "note": "Official evidence for IM HYUNSIK."
+        }
+      ]
+    },
+    {
+      "displayArtist": "PENIEL",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_BTOB_Company_current_managed_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [
+        "btob"
+      ],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_BTOB_Company_managed_member_statement_plus_dedicated_music_activity",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company",
+          "note": "Official evidence for PENIEL."
+        },
+        {
+          "source": "BTOB Company official Peniel music-video catalog including IDKI",
+          "url": "https://btobcompany.kr/peniel-musicvideo",
+          "note": "Official evidence for PENIEL."
+        }
+      ]
     }
   ]
 }

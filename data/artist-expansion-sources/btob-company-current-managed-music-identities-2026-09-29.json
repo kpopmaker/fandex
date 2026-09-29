@@ -1,0 +1,179 @@
+{
+  "version": "btob_company_current_managed_music_identity_catalog_v1",
+  "source": {
+    "id": "btob-company-official-current-managed-music-identities",
+    "type": "agency_roster",
+    "name": "BTOB Company Official Current Managed Music Identities",
+    "observedAt": "2026-09-29T21:47:00+09:00",
+    "url": "https://btobcompany.kr/company"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "BTOB",
+      "aliases": [
+        "비투비"
+      ],
+      "evidence": [
+        {
+          "label": "BTOB Company official company page",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "label": "BTOB Company official BTOB discography with 2026 group release",
+          "url": "https://btobcompany.kr/btob-discography"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SEO EUNKWANG",
+      "aliases": [
+        "서은광",
+        "Seo Eunkwang",
+        "Eunkwang"
+      ],
+      "evidence": [
+        {
+          "label": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "label": "BTOB Company 2026 SEO EUNKWANG notices",
+          "url": "https://btobcompany.kr/notice"
+        },
+        {
+          "label": "BTOB Company official Seo Eunkwang music-video catalog",
+          "url": "https://btobcompany.kr/eunkwang-musicvideo"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LEE MINHYUK (HUTA)",
+      "aliases": [
+        "이민혁",
+        "HUTA",
+        "Lee Minhyuk",
+        "Lee Min-hyuk"
+      ],
+      "evidence": [
+        {
+          "label": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "label": "BTOB Company 2026 HUTA TEMPERATURE notices",
+          "url": "https://btobcompany.kr/notice"
+        }
+      ]
+    },
+    {
+      "displayArtist": "IM HYUNSIK",
+      "aliases": [
+        "임현식",
+        "Im Hyunsik",
+        "Lim Hyunsik"
+      ],
+      "evidence": [
+        {
+          "label": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "label": "BTOB Company 2026 Im Hyunsik individual activity",
+          "url": "https://btobcompany.kr/btob-behind"
+        },
+        {
+          "label": "BTOB Company official Im Hyunsik discography",
+          "url": "https://btobcompany.kr/hyunsik-discography"
+        }
+      ]
+    },
+    {
+      "displayArtist": "PENIEL",
+      "aliases": [
+        "프니엘"
+      ],
+      "evidence": [
+        {
+          "label": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "label": "BTOB Company official Peniel music-video catalog including IDKI",
+          "url": "https://btobcompany.kr/peniel-musicvideo"
+        },
+        {
+          "label": "BTOB Company official 2026 discography catalog including IDKI",
+          "url": "https://btobcompany.kr/btob-discography"
+        }
+      ]
+    }
+  ],
+  "managedSoloSet": [
+    "SEO EUNKWANG",
+    "LEE MINHYUK (HUTA)",
+    "IM HYUNSIK",
+    "PENIEL"
+  ],
+  "currentManagedIdentities": {
+    "BTOB": {
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group"
+    },
+    "SEO EUNKWANG": {
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "LEE MINHYUK (HUTA)": {
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "IM HYUNSIK": {
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "PENIEL": {
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    }
+  },
+  "contract": {
+    "officialFirstPartySourceOnly": true,
+    "currentCompanyManagedSoloSetRequired": true,
+    "dedicatedSoloMusicEvidenceRequired": true,
+    "current2026GroupActivityRequired": true,
+    "current2026IndividualActivityEvidenceRequired": true,
+    "managedSoloSetDoesNotDefineFullBtobGroupRoster": true,
+    "externalMemberAgencyDoesNotEndBtobMembership": true,
+    "memberIdentityDoesNotCollapseGroupIdentity": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "noBtobMemberRosterMutationFromCompanyManagedSet": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_BTOB_Company_current_managed_music_identity_snapshot",
+    "verifiedFrom": [
+      "https://btobcompany.kr/company",
+      "https://btobcompany.kr/btob-discography",
+      "https://btobcompany.kr/notice",
+      "https://btobcompany.kr/btob-behind",
+      "https://btobcompany.kr/eunkwang-musicvideo",
+      "https://btobcompany.kr/hyunsik-discography",
+      "https://btobcompany.kr/peniel-musicvideo"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

@@ -10402,6 +10402,188 @@
           "url": "https://www.mystic89.net/artist/tae-jin-Son"
         }
       ]
+    },
+    {
+      "id": "seoeunkwang",
+      "ticker": "SEOEUNKWANG",
+      "name": "SEO EUNKWANG",
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "서은광 SEO EUNKWANG 비투비 BTOB",
+      "koreanAliases": [
+        "서은광"
+      ],
+      "englishAliases": [
+        "SEO EUNKWANG",
+        "Seo Eunkwang",
+        "Eunkwang"
+      ],
+      "keywords": [
+        "BTOB Company",
+        "BTOB",
+        "비투비"
+      ],
+      "disambiguationKeywords": [
+        "BTOB",
+        "비투비",
+        "서은광"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "source": "BTOB Company 2026 Seo Eunkwang official notices",
+          "url": "https://btobcompany.kr/notice"
+        },
+        {
+          "source": "BTOB Company official Seo Eunkwang music-video catalog",
+          "url": "https://btobcompany.kr/eunkwang-musicvideo"
+        }
+      ]
+    },
+    {
+      "id": "huta",
+      "ticker": "HUTA",
+      "name": "LEE MINHYUK (HUTA)",
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이민혁 HUTA BTOB 비투비",
+      "koreanAliases": [
+        "이민혁"
+      ],
+      "englishAliases": [
+        "LEE MINHYUK (HUTA)",
+        "Lee Minhyuk",
+        "Lee Min-hyuk",
+        "HUTA"
+      ],
+      "keywords": [
+        "BTOB Company",
+        "BTOB",
+        "비투비",
+        "HUTA"
+      ],
+      "disambiguationKeywords": [
+        "BTOB",
+        "비투비",
+        "HUTA"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "source": "BTOB Company 2026 HUTA TEMPERATURE notices",
+          "url": "https://btobcompany.kr/notice"
+        }
+      ]
+    },
+    {
+      "id": "imhyunsik",
+      "ticker": "IMHYUNSIK",
+      "name": "IM HYUNSIK",
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "임현식 IM HYUNSIK BTOB 비투비",
+      "koreanAliases": [
+        "임현식"
+      ],
+      "englishAliases": [
+        "IM HYUNSIK",
+        "Im Hyunsik",
+        "Lim Hyunsik"
+      ],
+      "keywords": [
+        "BTOB Company",
+        "BTOB",
+        "비투비"
+      ],
+      "disambiguationKeywords": [
+        "BTOB",
+        "비투비",
+        "임현식"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "source": "BTOB Company 2026 Im Hyunsik activity",
+          "url": "https://btobcompany.kr/btob-behind"
+        },
+        {
+          "source": "BTOB Company official Im Hyunsik discography",
+          "url": "https://btobcompany.kr/hyunsik-discography"
+        }
+      ]
+    },
+    {
+      "id": "peniel",
+      "ticker": "PENIEL",
+      "name": "PENIEL",
+      "agency": "BTOB Company",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "프니엘 PENIEL BTOB 비투비",
+      "koreanAliases": [
+        "프니엘"
+      ],
+      "englishAliases": [
+        "PENIEL",
+        "Peniel"
+      ],
+      "keywords": [
+        "BTOB Company",
+        "BTOB",
+        "비투비",
+        "IDKI"
+      ],
+      "disambiguationKeywords": [
+        "BTOB",
+        "비투비",
+        "프니엘"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "BTOB Company current managed-member statement",
+          "url": "https://btobcompany.kr/company"
+        },
+        {
+          "source": "BTOB Company official Peniel music-video catalog including IDKI",
+          "url": "https://btobcompany.kr/peniel-musicvideo"
+        }
+      ]
     }
   ]
 }

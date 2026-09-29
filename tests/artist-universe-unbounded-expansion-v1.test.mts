@@ -1494,6 +1494,30 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(mysticSonTaejin.profile.koreanAliases.includes('손태진'));
 
 
+  const btobCurrent = getArtistV4ById('btob');
+  assert.ok(btobCurrent);
+  assert.equal(btobCurrent.agency, 'BTOB Company');
+  assert.equal(btobCurrent.lifecycleStatus, 'active');
+
+  for (const artistId of ['seoeunkwang', 'huta', 'imhyunsik', 'peniel']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing BTOB Company solo canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'BTOB Company');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  assert.ok(getArtistV4ById('seoeunkwang')?.profile.koreanAliases.includes('서은광'));
+  assert.ok(getArtistV4ById('huta')?.profile.englishAliases.includes('HUTA'));
+  assert.ok(getArtistV4ById('imhyunsik')?.profile.koreanAliases.includes('임현식'));
+  assert.ok(getArtistV4ById('peniel')?.profile.koreanAliases.includes('프니엘'));
+
+  const btobChangsub = getArtistV4ById('leechangsub');
+  assert.ok(btobChangsub);
+  assert.equal(btobChangsub.agency, 'Fantagio');
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
