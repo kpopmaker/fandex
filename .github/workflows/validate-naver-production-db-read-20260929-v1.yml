@@ -1,0 +1,89 @@
+name: Validate NAVER Production DB read 2026-09-29 v1
+
+on:
+  push:
+    branches:
+      - validation/naver-production-db-read-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Read Production runtime DB credential without logging it
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          code=$(curl -sS -o /tmp/env.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?teamId=$VERCEL_ORG_ID&decrypt=true")
+          echo "FANDEX_ENV_DECRYPT_HTTP=$code"
+          test "$code" = "200"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/env.json','utf8'));
+          const envs=Array.isArray(d.envs)?d.envs:Array.isArray(d)?d:[];
+          const rows=envs.filter(e=>e && e.key==='FANDEX_RUNTIME_DATABASE_URL');
+          if (rows.length!==1 || typeof rows[0].value!=='string' || !rows[0].value) {
+            console.error('runtime_database_url_unavailable');
+            process.exit(2);
+          }
+          const value=rows[0].value;
+          console.log('::add-mask::'+value);
+          fs.writeFileSync('/tmp/runtime-db-url',value,{mode:0o600});
+          console.log('FANDEX_RUNTIME_DATABASE_URL_DECRYPTED=present');
+          NODE
+
+      - name: Execute read-only SELECT 1
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const {Client}=require('pg');
+          const connectionString=fs.readFileSync('/tmp/runtime-db-url','utf8');
+          const client=new Client({
+            connectionString,
+            connectionTimeoutMillis:5000,
+            statement_timeout:10000,
+            ssl:{rejectUnauthorized:true},
+          });
+          (async()=>{
+            try{
+              await client.connect();
+              const result=await client.query('SELECT 1 AS ok');
+              if(result.rows?.[0]?.ok!==1) throw new Error('unexpected_select_result');
+              console.log('FANDEX_PRODUCTION_DB_READ=success');
+            }catch(error){
+              const code=error && typeof error==='object' && 'code' in error ? String(error.code) : 'unknown';
+              console.log('FANDEX_PRODUCTION_DB_READ=failed');
+              console.log('FANDEX_PRODUCTION_DB_SQLSTATE='+code);
+              process.exitCode=3;
+            }finally{
+              try{await client.end();}catch{}
+            }
+          })();
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          rm -f /tmp/runtime-db-url /tmp/env.json
+          echo "databaseWrites=0"
+          echo "blobWrites=0"
+          echo "schedulerInvocations=0"
+          echo "productionEnvMutations=0"
