@@ -1517,6 +1517,28 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(btobChangsub);
   assert.equal(btobChangsub.agency, 'Fantagio');
 
+  const feelGhoodBibi = getArtistV4ById('bibi');
+  assert.ok(feelGhoodBibi);
+  assert.equal(feelGhoodBibi.entityType, 'solo');
+  assert.equal(feelGhoodBibi.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodBibi.lifecycleStatus, 'active');
+
+  const feelGhoodTigerJk = getArtistV4ById('tigerjk');
+  assert.ok(feelGhoodTigerJk);
+  assert.equal(feelGhoodTigerJk.entityType, 'solo');
+  assert.equal(feelGhoodTigerJk.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodTigerJk.agencyStatus, 'verified');
+  assert.equal(feelGhoodTigerJk.lifecycleStatus, 'active');
+  assert.ok(feelGhoodTigerJk.profile.koreanAliases.includes('타이거JK'));
+
+  const feelGhoodYoonmirae = getArtistV4ById('yoonmirae');
+  assert.ok(feelGhoodYoonmirae);
+  assert.equal(feelGhoodYoonmirae.entityType, 'solo');
+  assert.equal(feelGhoodYoonmirae.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodYoonmirae.agencyStatus, 'verified');
+  assert.equal(feelGhoodYoonmirae.lifecycleStatus, 'active');
+  assert.ok(feelGhoodYoonmirae.profile.koreanAliases.includes('윤미래'));
+
 
 
   const expanded = buildExpandedArtistUniverseV4(

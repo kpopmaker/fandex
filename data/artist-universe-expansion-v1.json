@@ -10584,6 +10584,88 @@
           "url": "https://btobcompany.kr/peniel-musicvideo"
         }
       ]
+    },
+    {
+      "id": "tigerjk",
+      "ticker": "TIGERJK",
+      "name": "Tiger JK",
+      "agency": "Feel Ghood Music",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "타이거JK Tiger JK 필굿뮤직",
+      "koreanAliases": [
+        "타이거JK",
+        "타이거 JK"
+      ],
+      "englishAliases": [
+        "Tiger JK"
+      ],
+      "keywords": [
+        "Feel Ghood Music",
+        "Drunken Tiger",
+        "드렁큰 타이거"
+      ],
+      "disambiguationKeywords": [
+        "Feel Ghood Music",
+        "타이거JK"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Feel Ghood Music official current ARTIST menu",
+          "url": "https://feelghoods.com/product/list.html"
+        },
+        {
+          "source": "Bugs licensed 2026 FeelGhoodMusic Let Me Love You catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar"
+        }
+      ]
+    },
+    {
+      "id": "yoonmirae",
+      "ticker": "YOONMIRAE",
+      "name": "Yoonmirae",
+      "agency": "Feel Ghood Music",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "윤미래 Yoonmirae 필굿뮤직",
+      "koreanAliases": [
+        "윤미래"
+      ],
+      "englishAliases": [
+        "Yoonmirae",
+        "Yoon Mirae"
+      ],
+      "keywords": [
+        "Feel Ghood Music",
+        "R&B",
+        "hip-hop"
+      ],
+      "disambiguationKeywords": [
+        "Feel Ghood Music",
+        "윤미래"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Feel Ghood Music official current ARTIST menu",
+          "url": "https://feelghoods.com/product/list.html"
+        },
+        {
+          "source": "Bugs licensed 2026 FeelGhoodMusic Let Me Love You catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar"
+        }
+      ]
     }
   ]
 }

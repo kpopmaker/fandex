@@ -1,0 +1,107 @@
+{
+  "version": "feel_ghood_current_artist_roster_adapter_v1",
+  "source": {
+    "id": "feel-ghood-music-official-current-artist-roster",
+    "type": "agency_roster",
+    "name": "Feel Ghood Music Official Current Artist Roster",
+    "observedAt": "2026-09-29T22:51:00+09:00",
+    "url": "https://feelghoods.com/product/list.html"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "Tiger JK",
+      "aliases": [
+        "타이거JK",
+        "타이거 JK"
+      ],
+      "evidence": [
+        {
+          "label": "Feel Ghood Music official current ARTIST menu",
+          "url": "https://feelghoods.com/product/list.html"
+        },
+        {
+          "label": "Bugs licensed 2026 FeelGhoodMusic Let Me Love You catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Yoonmirae",
+      "aliases": [
+        "Yoon Mirae",
+        "윤미래"
+      ],
+      "evidence": [
+        {
+          "label": "Feel Ghood Music official current ARTIST menu",
+          "url": "https://feelghoods.com/product/list.html"
+        },
+        {
+          "label": "Bugs licensed 2026 FeelGhoodMusic Let Me Love You catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar"
+        }
+      ]
+    },
+    {
+      "displayArtist": "BIBI",
+      "aliases": [
+        "비비",
+        "김형서"
+      ],
+      "evidence": [
+        {
+          "label": "Feel Ghood Music official current ARTIST menu",
+          "url": "https://feelghoods.com/product/list.html"
+        },
+        {
+          "label": "Warner Music Group 2026 partnership preserving Feel Ghood management continuity",
+          "url": "https://www.wmg.com/news/korean-star-bibi-backed-by-strategic-global-partnership-of-wm-korea-and-feelghood-music"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "Tiger JK": {
+      "agency": "Feel Ghood Music",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "Yoonmirae": {
+      "agency": "Feel Ghood Music",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "BIBI": {
+      "agency": "Feel Ghood Music",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    }
+  },
+  "contract": {
+    "officialFirstPartyRosterRequired": true,
+    "exactCurrentArtistMenuRequired": true,
+    "current2026TigerYoonMusicActivityRequired": true,
+    "bibi2026ManagementContinuityRequired": true,
+    "licensedCurrentReleaseCrossCheckRequired": true,
+    "historicalGroupIdentityNotAutoCreated": true,
+    "duetDoesNotCreateUnitCanonical": true,
+    "currentRosterDoesNotInferUnlistedFormerArtists": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_Feel_Ghood_current_artist_menu_plus_2026_activity_snapshot",
+    "verifiedFrom": [
+      "https://feelghoods.com/product/list.html",
+      "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar",
+      "https://www.wmg.com/news/korean-star-bibi-backed-by-strategic-global-partnership-of-wm-korea-and-feelghood-music"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

@@ -6164,6 +6164,50 @@
           "note": "Official evidence for PENIEL."
         }
       ]
+    },
+    {
+      "displayArtist": "Tiger JK",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_Feel_Ghood_current_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_Feel_Ghood_artist_roster_plus_2026_Korean_music_release",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Feel Ghood Music official shop",
+          "url": "https://feelghoods.com/product/list.html",
+          "note": "Current official ARTIST menu lists Tiger JK."
+        },
+        {
+          "source": "Bugs licensed catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar",
+          "note": "2026-08-20 FeelGhoodMusic release identifies Tiger JK as main artist."
+        }
+      ]
+    },
+    {
+      "displayArtist": "Yoonmirae",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "official_Feel_Ghood_current_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "current_official_Feel_Ghood_artist_roster_plus_2026_Korean_music_release",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Feel Ghood Music official shop",
+          "url": "https://feelghoods.com/product/list.html",
+          "note": "Current official ARTIST menu lists yoonmirae."
+        },
+        {
+          "source": "Bugs licensed catalog",
+          "url": "https://music.bugs.co.kr/album/4153775?wl_ref=list_ab_03_ar",
+          "note": "2026-08-20 FeelGhoodMusic release identifies 윤미래 as main artist."
+        }
+      ]
     }
   ]
 }
