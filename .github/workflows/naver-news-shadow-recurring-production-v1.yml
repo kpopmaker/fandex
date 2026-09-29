@@ -35,7 +35,9 @@ jobs:
           if [[ "$code" != "200" ]]; then
             node <<'NODE'
           const fs=require('fs');
-          const d=JSON.parse(fs.readFileSync('/tmp/response.json','utf8'));
+          let d;
+          try { d=JSON.parse(fs.readFileSync('/tmp/response.json','utf8')); }
+          catch { process.exit(2); }
           const allowed=new Set(['config_rejected','protocol_rejected','authorization_rejected','dispatch_failed']);
           if (d?.ok !== false || d?.code !== 'naver_news_shadow_recurring_scheduler_rejected'
               || !allowed.has(d?.errorClass)) process.exit(2);
@@ -46,7 +48,9 @@ jobs:
 
           node <<'NODE'
           const fs=require('fs');
-          const d=JSON.parse(fs.readFileSync('/tmp/response.json','utf8'));
+          let d;
+          try { d=JSON.parse(fs.readFileSync('/tmp/response.json','utf8')); }
+          catch { process.exit(2); }
           if (d?.ok !== true) process.exit(2);
           if (d?.mode !== 'shadow-recurring-scheduler') process.exit(3);
           if (typeof d?.collectionKey !== 'string') process.exit(4);
