@@ -1,0 +1,85 @@
+name: Diagnose NAVER recurring 403 v1
+
+on:
+  push:
+    branches:
+      - ops/diagnose-naver-recurring-403-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      GITHUB_SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+      TEAM_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Compare Production recurring config without logging values
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VERCEL_TOKEN:-}"
+          test -n "${GITHUB_SCHEDULER_SECRET:-}"
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl -sS               -o "$response_file"               -w '%{http_code}'               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Accept: application/json"               "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID&decrypt=true"
+          )"
+
+          echo "VERCEL_ENV_DECRYPT_HTTP=$http_code"
+          test "$http_code" = "200"
+
+          node - "$response_file" <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const rows = JSON.parse(fs.readFileSync(process.argv[2], 'utf8')).envs ?? [];
+          const githubSecret = process.env.GITHUB_SCHEDULER_SECRET ?? '';
+
+          const byKey = new Map();
+          for (const row of rows) {
+            if (!row || typeof row !== 'object' || typeof row.key !== 'string') continue;
+            const targets = Array.isArray(row.target) ? row.target : [];
+            if (!targets.includes('production')) continue;
+            byKey.set(row.key, row);
+          }
+          const val = (key) => {
+            const row = byKey.get(key);
+            return row && typeof row.value === 'string' ? row.value : undefined;
+          };
+          const sha = (s) => crypto.createHash('sha256').update(s ?? '', 'utf8').digest('hex');
+
+          const vercelSchedulerSecret = val('FANDEX_NAVER_NEWS_SCHEDULER_SECRET');
+          const result = {
+            recurringEnabledPresent: typeof val('FANDEX_NAVER_NEWS_RECURRING_ENABLED') === 'string',
+            recurringEnabledExpected:
+              val('FANDEX_NAVER_NEWS_RECURRING_ENABLED') === 'approved-v128-recurring-foundation',
+            recurringDeploymentPresent:
+              typeof val('FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT') === 'string',
+            recurringDeploymentExpected:
+              val('FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT') === 'production',
+            recurringQueryPresent: typeof val('FANDEX_NAVER_NEWS_RECURRING_QUERY') === 'string',
+            recurringQueryExpected: val('FANDEX_NAVER_NEWS_RECURRING_QUERY') === '아이유 IU',
+            recurringDisplayPresent: typeof val('FANDEX_NAVER_NEWS_RECURRING_DISPLAY') === 'string',
+            recurringDisplayExpected: val('FANDEX_NAVER_NEWS_RECURRING_DISPLAY') === '100',
+            productionSchedulerSecretPresent:
+              typeof vercelSchedulerSecret === 'string' && vercelSchedulerSecret.length > 0,
+            githubSchedulerSecretPresent: githubSecret.length > 0,
+            schedulerSecretsEqual:
+              typeof vercelSchedulerSecret === 'string' &&
+              vercelSchedulerSecret.length > 0 &&
+              githubSecret.length > 0 &&
+              sha(vercelSchedulerSecret) === sha(githubSecret),
+            blobStoreIdPresent: typeof val('BLOB_STORE_ID') === 'string' && val('BLOB_STORE_ID').length > 0,
+            mirrorModeExpected: val('FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE') === 'shadow-write-v1',
+            rawValuesLogged: false,
+            productionRequests: 0,
+            repositoryMutations: 0,
+          };
+          console.log(JSON.stringify(result));
+          NODE
+
+          rm -f "$response_file"
