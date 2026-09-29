@@ -1,0 +1,21 @@
+{
+  "baseSha": "54bb0f0fcdbf6860893cc7fb9e4b021131348d71",
+  "verificationHead": "abdd4d97f3a8821ab2b8b99b3431d137c1bd9acd",
+  "activationRun": "36502683565",
+  "deploymentId": "dpl_FLYKAKV7u7reTGsUzG7XC4BvHnZg",
+  "startedAt": "2026-09-29T01:23:18.889Z",
+  "remoteWrites": 0,
+  "authenticationException": "Project OIDC token issuance only",
+  "blobWrites": 0,
+  "databaseCalls": 0,
+  "blobSdkVersion": "2.8.0",
+  "activationReadyAt": "2026-09-29T00:22:42.680Z",
+  "oidcEnvironment": "development",
+  "storeIdReadDecrypted": false,
+  "productionStoreBindingFound": true,
+  "productionOnlyStoreBinding": true,
+  "snapshotCutoffAt": "2026-09-29T01:23:19.437Z",
+  "verdict": "VERIFICATION_BLOCKED",
+  "blockedPhase": "private_blob_list",
+  "blockerCode": "BlobOidcEnvironmentNotAllowedError"
+}
