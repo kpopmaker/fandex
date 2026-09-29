@@ -136,7 +136,7 @@ export async function verifyNaverBlobSnapshot(
       check(selected.collectionKey === manifest.collectionKey && selected.jobId === manifest.jobId);
       check(selected.pathname === `${MANIFEST_PREFIX}${manifest.collectionKey}/${manifest.jobId}.json`);
       check(manifest.jobObjectPath === `${JOB_PREFIX}${manifest.jobId}.json`);
-      check(finalizedJobPaths.has(manifest.jobObjectPath));
+      check(postJobs.some((row) => row.pathname === manifest.jobObjectPath));
 
       if (unfinalizedJobs.length === 1) {
         const candidateRow = unfinalizedJobs[0];
