@@ -1,0 +1,163 @@
+{
+  "version": "c9_current_terminal_music_identity_catalog_v1",
+  "source": {
+    "id": "c9-current-terminal-music-identity-catalog",
+    "type": "provider_catalog",
+    "name": "C9 Entertainment Current + Terminal Music Identity Catalog",
+    "observedAt": "2026-09-29T17:37:00+09:00",
+    "url": "https://www.c9ent.co.kr/"
+  },
+  "candidateCount": 5,
+  "candidates": [
+    {
+      "displayArtist": "EPEX",
+      "aliases": [
+        "이펙스"
+      ],
+      "evidence": [
+        {
+          "label": "Korea JoongAng Daily current 2026 EPEX activity attributed to C9 Entertainment",
+          "url": "https://www.koreajoongangdaily.com/entertainment/boy-band-epex-to-appear-at-weibo-event-in-bangkok-next-month/12763970"
+        },
+        {
+          "label": "C9 Entertainment official Keum departure and seven-member continuation preserved by Soompi",
+          "url": "https://www.soompi.com/article/1799819wpp/epex-announces-keums-departure-from-the-group"
+        }
+      ]
+    },
+    {
+      "displayArtist": "YOUNHA",
+      "aliases": [
+        "윤하",
+        "고윤하"
+      ],
+      "evidence": [
+        {
+          "label": "Melon 2026 release catalog listing C9 Entertainment as production agency",
+          "url": "https://www.melon.com/album/detail.htm?albumId=12831104&snsGate=Y"
+        }
+      ]
+    },
+    {
+      "displayArtist": "Lee Seok Hoon",
+      "aliases": [
+        "LEE SEOK HOON",
+        "이석훈"
+      ],
+      "evidence": [
+        {
+          "label": "2026 activity coverage supplied by C9 Entertainment",
+          "url": "https://sports.khan.co.kr/en/article/202607021531007"
+        }
+      ]
+    },
+    {
+      "displayArtist": "NAZE",
+      "aliases": [
+        "네이즈"
+      ],
+      "evidence": [
+        {
+          "label": "C9 Entertainment May 4 2026 debut statement preserved by Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/multinational-boy-band-naze-to-debut-with-ep-naze-in-may/12589408"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CIX",
+      "aliases": [
+        "씨아이엑스"
+      ],
+      "evidence": [
+        {
+          "label": "C9 Entertainment terminal group-activity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1836886wpp/cix-to-conclude-group-activities-yonghee-to-enlist-in-military"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "EPEX": {
+      "agency": "C9 Entertainment",
+      "lifecycleStatus": "active",
+      "members": [
+        "WISH",
+        "MU",
+        "A-MIN",
+        "BAEKSEUNG",
+        "AYDEN",
+        "YEWANG",
+        "JEFF"
+      ],
+      "memberCount": 7
+    },
+    "YOUNHA": {
+      "agency": "C9 Entertainment",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "Lee Seok Hoon": {
+      "agency": "C9 Entertainment",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "NAZE": {
+      "agency": "C9 Entertainment",
+      "lifecycleStatus": "active",
+      "members": [
+        "KAISEI",
+        "YOUNKI",
+        "ATO",
+        "TURN",
+        "YUYA",
+        "KIMKUN",
+        "DOHYEOK"
+      ],
+      "memberCount": 7,
+      "debutDate": "2026-05-04"
+    }
+  },
+  "terminalIdentity": {
+    "CIX": {
+      "agency": "C9 Entertainment",
+      "agencyStatus": "historical",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "BX",
+        "SEUNGHUN",
+        "YONGHEE",
+        "HYUNSUK"
+      ],
+      "memberCount": 4,
+      "officialGroupActivitiesEnded": true,
+      "allMembersLeaveAgency": true
+    }
+  },
+  "contract": {
+    "preservedOfficialAgencyStatementsAllowed": true,
+    "activeIdentityRequires2026Evidence": true,
+    "currentSevenMemberEpexRosterRequired": true,
+    "explicitDepartureRequiredForMemberRemoval": true,
+    "temporaryHiatusDoesNotEqualDeparture": true,
+    "explicitTerminalGroupActivityEndRequired": true,
+    "terminalCixMustRemainInactiveHistorical": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "groupMembershipDoesNotCollapseSoloIdentity": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_current_C9_music_activity_plus_terminal_CIX_evidence_snapshot",
+    "verifiedFrom": [
+      "https://www.koreajoongangdaily.com/entertainment/boy-band-epex-to-appear-at-weibo-event-in-bangkok-next-month/12763970",
+      "https://www.soompi.com/article/1799819wpp/epex-announces-keums-departure-from-the-group",
+      "https://www.melon.com/album/detail.htm?albumId=12831104&snsGate=Y",
+      "https://sports.khan.co.kr/en/article/202607021531007",
+      "https://www.koreajoongangdaily.com/entertainment/multinational-boy-band-naze-to-debut-with-ep-naze-in-may/12589408",
+      "https://www.soompi.com/article/1836886wpp/cix-to-conclude-group-activities-yonghee-to-enlist-in-military"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

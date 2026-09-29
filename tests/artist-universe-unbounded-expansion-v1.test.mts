@@ -1346,6 +1346,40 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(getArtistV4ById('nctu')?.entityType, 'unit');
 
 
+  const epex = getArtistV4ById('epex');
+  assert.ok(epex);
+  assert.equal(epex.agency, 'C9 Entertainment');
+  assert.equal(epex.lifecycleStatus, 'active');
+  assert.deepEqual(epex.members, ["WISH","MU","A-MIN","BAEKSEUNG","AYDEN","YEWANG","JEFF"]);
+
+  const younha = getArtistV4ById('younha');
+  assert.ok(younha);
+  assert.equal(younha.agency, 'C9 Entertainment');
+  assert.equal(younha.agencyStatus, 'verified');
+  assert.equal(younha.lifecycleStatus, 'active');
+
+  const leeSeokHoon = getArtistV4ById('leeseokhoon');
+  assert.ok(leeSeokHoon);
+  assert.equal(leeSeokHoon.entityType, 'solo');
+  assert.equal(leeSeokHoon.agency, 'C9 Entertainment');
+  assert.equal(leeSeokHoon.agencyStatus, 'verified');
+  assert.equal(leeSeokHoon.lifecycleStatus, 'active');
+  assert.ok(leeSeokHoon.profile.koreanAliases.includes('이석훈'));
+
+  const naze = getArtistV4ById('naze');
+  assert.ok(naze);
+  assert.equal(naze.agency, 'C9 Entertainment');
+  assert.equal(naze.lifecycleStatus, 'active');
+  assert.deepEqual(naze.members, ["KAISEI","YOUNKI","ATO","TURN","YUYA","KIMKUN","DOHYEOK"]);
+
+  const cix = getArtistV4ById('cix');
+  assert.ok(cix);
+  assert.equal(cix.agency, 'C9 Entertainment');
+  assert.equal(cix.agencyStatus, 'historical');
+  assert.equal(cix.lifecycleStatus, 'inactive');
+  assert.deepEqual(cix.members, ["BX","SEUNGHUN","YONGHEE","HYUNSUK"]);
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,

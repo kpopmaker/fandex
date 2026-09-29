@@ -5955,6 +5955,28 @@
           "note": "Official CAM archive records album activity for So Soo Bin."
         }
       ]
+    },
+    {
+      "displayArtist": "Lee Seok Hoon",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "current_C9_solo_music_identity_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "2026_C9_supplied_music_activity_plus_preserved_C9_contract_evidence",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "Sports Kyunghyang",
+          "url": "https://sports.khan.co.kr/en/article/202607021531007",
+          "note": "2026 music/MC activity coverage is supplied by C9 Entertainment."
+        },
+        {
+          "source": "iMBC",
+          "url": "https://enews.imbc.com/Tpl/View/319226?progcode=0",
+          "note": "Preserves C9 Entertainment's re-contract statement for Lee Seok Hoon."
+        }
+      ]
     }
   ]
 }

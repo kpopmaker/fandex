@@ -125,8 +125,14 @@
         {
           "source": "Melon",
           "url": "https://www.melon.com/artist/album.htm?artistId=203912"
+        },
+        {
+          "source": "Melon 2026 release catalog / C9 Entertainment",
+          "url": "https://www.melon.com/album/detail.htm?albumId=12831104&snsGate=Y"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "buzz",
@@ -5831,8 +5837,13 @@
         {
           "source": "NAZE Japan Official",
           "url": "https://1st.naze-official.jp/"
+        },
+        {
+          "source": "C9 Entertainment 2026 NAZE debut statement preserved by Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/multinational-boy-band-naze-to-debut-with-ep-naze-in-may/12589408"
         }
-      ]
+      ],
+      "agencyStatus": "verified"
     },
     {
       "id": "h1key",
@@ -10104,6 +10115,48 @@
         {
           "source": "CAM WITH US official As Always album archive",
           "url": "https://camwus.com/archive/"
+        }
+      ]
+    },
+    {
+      "id": "leeseokhoon",
+      "ticker": "LEESEOKHOON",
+      "name": "Lee Seok Hoon",
+      "agency": "C9 Entertainment",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "이석훈 Lee Seok Hoon C9엔터테인먼트",
+      "koreanAliases": [
+        "이석훈"
+      ],
+      "englishAliases": [
+        "Lee Seok Hoon",
+        "Lee Seok-hoon"
+      ],
+      "keywords": [
+        "C9 Entertainment",
+        "SG Wannabe",
+        "SG워너비"
+      ],
+      "disambiguationKeywords": [
+        "C9 Entertainment",
+        "이석훈",
+        "SG워너비"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "2026 activity coverage supplied by C9 Entertainment",
+          "url": "https://sports.khan.co.kr/en/article/202607021531007"
+        },
+        {
+          "source": "C9 Entertainment re-contract statement preserved by iMBC",
+          "url": "https://enews.imbc.com/Tpl/View/319226?progcode=0"
         }
       ]
     }
