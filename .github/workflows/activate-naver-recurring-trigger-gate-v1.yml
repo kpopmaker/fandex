@@ -1,0 +1,57 @@
+name: Activate NAVER recurring trigger gate v1
+
+on:
+  push:
+    branches:
+      - ops/activate-naver-recurring-trigger-20260929-v1
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VARIABLE_NAME: FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED
+      VARIABLE_VALUE: approved-github-hourly-v1
+    steps:
+      - name: Set exact repository variable once
+        shell: bash
+        run: |
+          set -euo pipefail
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/variables/${VARIABLE_NAME}"
+          payload='{"value":"approved-github-hourly-v1"}'
+
+          status="$(curl -sS -o /tmp/body.json -w '%{http_code}' \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            -H "Content-Type: application/json" \
+            "$api" \
+            -d "$payload")"
+
+          if [[ "$status" == "404" ]]; then
+            create_api="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/variables"
+            create_payload='{"name":"FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED","value":"approved-github-hourly-v1"}'
+            status="$(curl -sS -o /tmp/body.json -w '%{http_code}' \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "X-GitHub-Api-Version: 2026-03-10" \
+              -H "Content-Type: application/json" \
+              "$create_api" \
+              -d "$create_payload")"
+          fi
+
+          echo "FANDEX_NAVER_RECURRING_TRIGGER_ACTIVATION_HTTP=$status"
+          if [[ "$status" != "204" && "$status" != "201" ]]; then
+            rm -f /tmp/body.json
+            exit 1
+          fi
+          rm -f /tmp/body.json
+          echo "FANDEX_NAVER_RECURRING_TRIGGER_ACTIVATION=success"
+          echo "productionRequests=0"
