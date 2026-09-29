@@ -1,0 +1,85 @@
+{
+  "version": "katseye_current_music_identity_adapter_v1",
+  "source": {
+    "id": "hybe-geffen-official-katseye-current-music-identity",
+    "type": "provider_catalog",
+    "name": "HYBE x Geffen Official KATSEYE Current Music Identity",
+    "observedAt": "2026-09-30T07:08:00+09:00",
+    "url": "https://www.katseye.world/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "KATSEYE",
+      "aliases": [
+        "캣츠아이"
+      ],
+      "evidence": [
+        {
+          "label": "HYBE official current artist directory",
+          "url": "https://hybecorp.com/en/company/artist"
+        },
+        {
+          "label": "KATSEYE official 2026 releases archive",
+          "url": "https://www.katseye.world/releases-archive/"
+        },
+        {
+          "label": "KATSEYE official current videos archive",
+          "url": "https://www.katseye.world/videos/"
+        },
+        {
+          "label": "KATSEYE official site HYBE x Geffen attribution",
+          "url": "https://www.katseye.world/sign-up/"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "KATSEYE": {
+      "agency": "HYBE x Geffen",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "debutDate": "2024-06-28",
+      "current2026MusicEvidence": [
+        {
+          "title": "Internet Girl",
+          "releaseDate": "2026-01-02"
+        },
+        {
+          "title": "PINKY UP",
+          "releaseDate": "2026-04-09"
+        },
+        {
+          "title": "WILD",
+          "releaseDate": "2026-04-15"
+        },
+        {
+          "title": "Animal",
+          "releaseDate": "2026-07-24"
+        }
+      ]
+    }
+  },
+  "contract": {
+    "hybeCurrentArtistDirectoryRequired": true,
+    "officialKatseyeSiteRequired": true,
+    "hybeGeffenAttributionRequired": true,
+    "current2026MusicReleaseRequired": true,
+    "historicalDebutEvidenceAloneInsufficient": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_HYBE_Geffen_KATSEYE_current_music_identity_snapshot",
+    "verifiedFrom": [
+      "https://hybecorp.com/en/company/artist",
+      "https://www.katseye.world/releases-archive/",
+      "https://www.katseye.world/videos/",
+      "https://www.katseye.world/sign-up/"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
