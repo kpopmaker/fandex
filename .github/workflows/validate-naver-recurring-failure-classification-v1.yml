@@ -1,9 +1,19 @@
-name: Validate NAVER recurring failure classification v1
+name: Validate NAVER recurring route
 
 on:
-  push:
+  pull_request:
     branches:
-      - integration/naver-recurring-failure-classification-v1
+      - main
+    paths:
+      - app/api/internal/naver-news/shadow-scheduler/route.ts
+      - lib/server/ingestion/**
+      - tests/naver-news-shadow-recurring-activation-v1.test.mts
+      - tests/naver-news-recurring-scheduler-v128.test.mts
+      - tests/naver-news-production-write-v124.test.mts
+      - .github/workflows/naver-news-shadow-recurring-production-v1.yml
+      - .github/workflows/validate-naver-recurring-failure-classification-v1.yml
+      - package.json
+      - package-lock.json
 
 permissions:
   contents: read
@@ -15,13 +25,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node --conditions=react-server --import tsx --test tests/naver-news-shadow-recurring-activation-v1.test.mts tests/naver-news-recurring-scheduler-v128.test.mts
+      - run: node --conditions=react-server --import tsx --test tests/naver-news-shadow-recurring-activation-v1.test.mts tests/naver-news-recurring-scheduler-v128.test.mts tests/naver-news-production-write-v124.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build

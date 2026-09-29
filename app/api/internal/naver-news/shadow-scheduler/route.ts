@@ -65,6 +65,13 @@ async function resolveRuntimeBlobEnvironment(
 }
 
 function rejected(errorClass: ShadowRecurringFailureClass): Response {
+  // Log only the fixed class, never the caught error, request, or environment.
+  // Observability must not change the rejection response or cause a retry.
+  try {
+    console.warn(`FANDEX_NAVER_RECURRING_ERROR_CLASS=${errorClass}`);
+  } catch {
+    // Preserve fail-closed behavior even when the logging sink is unavailable.
+  }
   return Response.json(
     {
       ok: false,

@@ -216,6 +216,67 @@ test('shadow route classifies config and authorization failures without exposing
   });
 });
 
+test('runtime failure logs contain only the bounded class and preserve dispatch boundaries', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const raw = 'PRIVATE_PROVIDER_PAYLOAD SQL postgresql://secret@example.test/db';
+  const cases = [
+    { errorClass: 'config_rejected', overrides: { [NAVER_NEWS_RECURRING_ENABLED_ENV]: raw }, auth: `Bearer ${SECRET}`, dispatches: 0 },
+    { errorClass: 'protocol_rejected', overrides: { [NAVER_NEWS_RECURRING_QUERY_ENV]: raw }, auth: `Bearer ${SECRET}`, dispatches: 0 },
+    { errorClass: 'authorization_rejected', overrides: {}, auth: `Bearer ${raw}`, dispatches: 0 },
+    { errorClass: 'dispatch_failed', overrides: {}, auth: `Bearer ${SECRET}`, dispatches: 1 },
+    { errorClass: 'dispatch_failed', overrides: { FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1', BLOB_STORE_ID: 'store_123' }, auth: `Bearer ${SECRET}`, dispatches: 0 },
+  ];
+  for (const candidate of cases) {
+    logs.length = 0;
+    let dispatches = 0;
+    const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+      new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+        method: 'POST', headers: { authorization: candidate.auth },
+      }),
+      environment(candidate.overrides),
+      {
+        dispatch: async () => { dispatches += 1; throw new Error(raw); },
+        resolveOidcToken: () => { throw new Error(raw); },
+      },
+    );
+    assert.equal(response.status, 403);
+    assert.deepEqual(await response.json(), {
+      ok: false, code: 'naver_news_shadow_recurring_scheduler_rejected', errorClass: candidate.errorClass,
+    });
+    assert.deepEqual(logs, [[`FANDEX_NAVER_RECURRING_ERROR_CLASS=${candidate.errorClass}`]]);
+    assert.equal(dispatches, candidate.dispatches);
+  }
+});
+
+test('logging sink failure cannot alter a rejection or cause another dispatch', async (t) => {
+  t.mock.method(console, 'warn', () => { throw new Error('logging unavailable'); });
+  let dispatches = 0;
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: `Bearer ${SECRET}` },
+    }), environment(), {
+      dispatch: async () => { dispatches += 1; throw new Error('PRIVATE_PROVIDER_PAYLOAD'); },
+    },
+  );
+  assert.equal(response.status, 403);
+  assert.equal((await response.json()).errorClass, 'dispatch_failed');
+  assert.equal(dispatches, 1);
+});
+
+test('successful dispatch does not emit failure evidence', async (t) => {
+  const warn = t.mock.method(console, 'warn', () => {});
+  const calls: any[] = [];
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: `Bearer ${SECRET}` },
+    }), environment(), { dispatch: fakeDispatch(calls) },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(warn.mock.callCount(), 0);
+  assert.equal(calls.length, 1);
+});
+
 test('shadow route resolves request-context OIDC for the live Blob mirror before dispatch', async () => {
   const calls: any[] = [];
   let resolverCalls = 0;
