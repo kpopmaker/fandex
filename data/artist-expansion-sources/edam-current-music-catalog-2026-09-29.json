@@ -1,0 +1,85 @@
+{
+  "version": "edam_current_music_identity_catalog_v1",
+  "source": {
+    "id": "edam-official-current-music-identity-catalog",
+    "type": "provider_catalog",
+    "name": "EDAM Entertainment Official Current Music Identity Catalog",
+    "observedAt": "2026-09-29T19:28:00+09:00",
+    "url": "https://www.madeedam.com/us/board/list.php?bdId=usnotice"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "IU",
+      "aliases": [
+        "아이유",
+        "이지은",
+        "Lee Jieun"
+      ],
+      "evidence": [
+        {
+          "label": "made EDAM IU 2026 Season's Greetings official notice",
+          "url": "https://www.madeedam.com/us/board/view.php?bdId=usnotice&sno=132"
+        },
+        {
+          "label": "EDAM Entertainment September 2026 IU music activity preserved by Yonhap",
+          "url": "https://en.yna.co.kr/view/AEN20260910002500315"
+        }
+      ]
+    },
+    {
+      "displayArtist": "WOODZ",
+      "aliases": [
+        "우즈",
+        "조승연",
+        "Woodz"
+      ],
+      "evidence": [
+        {
+          "label": "made EDAM 2026 WOODZ WORLD TOUR official MD notice",
+          "url": "https://madeedam.com/us/board/view.php?bdId=usnotice&sno=135"
+        },
+        {
+          "label": "EDAM Entertainment 2026 WOODZ release activity preserved by KBS World",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=465960&lang=k"
+        }
+      ]
+    }
+  ],
+  "currentIdentity": {
+    "IU": {
+      "agency": "EDAM Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    },
+    "WOODZ": {
+      "agency": "EDAM Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    }
+  },
+  "contract": {
+    "officialFirstPartyEdamEvidenceRequired": true,
+    "current2026EvidenceRequired": true,
+    "exactIdentitySetRequired": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "merchandiseEvidenceDoesNotSubstituteForMusicIdentityAlone": true,
+    "currentMusicActivityCrossCheckRequired": true,
+    "noNewCanonicalFromMerchandiseOnly": true,
+    "autoPromote": false,
+    "identityReviewRequired": false,
+    "scopeVerificationRequired": false
+  },
+  "provenance": {
+    "snapshotType": "verified_EDAM_first_party_current_identity_plus_2026_music_activity_snapshot",
+    "verifiedFrom": [
+      "https://www.madeedam.com/us/board/view.php?bdId=usnotice&sno=132",
+      "https://madeedam.com/us/board/view.php?bdId=usnotice&sno=135",
+      "https://en.yna.co.kr/view/AEN20260910002500315",
+      "https://world.kbs.co.kr/service/contents_view.htm?board_seq=465960&lang=k"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

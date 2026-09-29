@@ -121,6 +121,7 @@ jobs:
           python tests/artist-expansion-cam-with-us-current-roster-v1.py
           python tests/artist-expansion-sm-identity-directory-gap-v1.py
           python tests/artist-expansion-c9-current-terminal-catalog-v1.py
+          python tests/artist-expansion-edam-current-music-catalog-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -539,6 +540,11 @@ jobs:
           python scripts/artist-expansion/collect_c9_current_terminal_music_catalog_v1.py \
             --fallback-snapshot data/artist-expansion-sources/c9-current-terminal-music-catalog-2026-09-29.json \
             --output c9_current_terminal_music_catalog_v1_latest.json
+      - name: Collect EDAM current music identity catalog
+        run: |
+          python scripts/artist-expansion/collect_edam_current_music_catalog_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/edam-current-music-catalog-2026-09-29.json \
+            --output edam_current_music_catalog_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -643,6 +649,7 @@ jobs:
             --snapshot cam_with_us_current_music_roster_v1_latest.json \
             --snapshot sm_identity_directory_gap_catalog_v1_latest.json \
             --snapshot c9_current_terminal_music_catalog_v1_latest.json \
+            --snapshot edam_current_music_catalog_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -765,6 +772,7 @@ jobs:
             cam_with_us_current_music_roster_v1_latest.json
             sm_identity_directory_gap_catalog_v1_latest.json
             c9_current_terminal_music_catalog_v1_latest.json
+            edam_current_music_catalog_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

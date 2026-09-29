@@ -537,8 +537,18 @@
         {
           "source": "Melon",
           "url": "https://ticket.melon.com/artist/index.htm?artistId=2086047"
+        },
+        {
+          "source": "made EDAM 2026 WOODZ WORLD TOUR official notice",
+          "url": "https://madeedam.com/us/board/view.php?bdId=usnotice&sno=135"
+        },
+        {
+          "source": "KBS World preservation of EDAM 2026 WOODZ release activity",
+          "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=465960&lang=k"
         }
-      ]
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active"
     },
     {
       "id": "leechanhyuk",

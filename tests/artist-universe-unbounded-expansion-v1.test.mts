@@ -1380,6 +1380,21 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(c9Cix.members, ["BX","SEUNGHUN","YONGHEE","HYUNSUK"]);
 
 
+  const edamIu = getArtistV4ById('iu');
+  assert.ok(edamIu);
+  assert.equal(edamIu.entityType, 'solo');
+  assert.equal(edamIu.agency, 'EDAM Entertainment');
+  assert.equal(edamIu.agencyStatus, 'verified');
+  assert.equal(edamIu.lifecycleStatus, 'active');
+
+  const edamWoodz = getArtistV4ById('woodz');
+  assert.ok(edamWoodz);
+  assert.equal(edamWoodz.entityType, 'solo');
+  assert.equal(edamWoodz.agency, 'EDAM Entertainment');
+  assert.equal(edamWoodz.agencyStatus, 'verified');
+  assert.equal(edamWoodz.lifecycleStatus, 'active');
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
