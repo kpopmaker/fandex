@@ -223,7 +223,7 @@ test('Production resolves request-context OIDC only after authorization and pass
   const f = fixture();
   const env = { ...environment, VERCEL_OIDC_TOKEN: '' };
   let resolverCalls = 0;
-  let readerEnvironment: Readonly<Record<string, string | undefined>> | null = null;
+  let readerOidcToken: string | undefined;
 
   const response = await handleNaverBlobReadVerification(request(), env, {
     now,
@@ -232,7 +232,7 @@ test('Production resolves request-context OIDC only after authorization and pass
       return 'request-context-oidc-sentinel';
     },
     createReader: (resolvedEnvironment) => {
-      readerEnvironment = resolvedEnvironment;
+      readerOidcToken = resolvedEnvironment.VERCEL_OIDC_TOKEN;
       return f.reader;
     },
   });
@@ -241,7 +241,7 @@ test('Production resolves request-context OIDC only after authorization and pass
   assert.equal(response.status, 200);
   assert.equal(body.classification, A);
   assert.equal(resolverCalls, 1);
-  assert.equal(readerEnvironment?.VERCEL_OIDC_TOKEN, 'request-context-oidc-sentinel');
+  assert.equal(readerOidcToken, 'request-context-oidc-sentinel');
 
   resolverCalls = 0;
   const rejected = await handleNaverBlobReadVerification(
