@@ -163,6 +163,7 @@ test('shadow route redacts activation and dispatch failures', async () => {
   assert.deepEqual(await badConfig.json(), {
     ok: false,
     code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'protocol_rejected',
   });
 
   const sensitive = 'postgresql://secret@example.test/neondb NAVER_NEWS_CLIENT_SECRET raw_payload SQL';
@@ -178,9 +179,81 @@ test('shadow route redacts activation and dispatch failures', async () => {
   assert.deepEqual(JSON.parse(text), {
     ok: false,
     code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'dispatch_failed',
   });
   assert.equal(text.includes('secret'), false);
   assert.equal(text.includes('raw_payload'), false);
+});
+
+
+test('shadow route classifies config and authorization failures without exposing values', async () => {
+  const configRejected = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: `Bearer ${SECRET}` },
+    }),
+    environment({ [NAVER_NEWS_RECURRING_ENABLED_ENV]: 'wrong' }),
+    { dispatch: fakeDispatch([]) },
+  );
+  assert.equal(configRejected.status, 403);
+  assert.deepEqual(await configRejected.json(), {
+    ok: false,
+    code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'config_rejected',
+  });
+
+  const authRejected = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST', headers: { authorization: 'Bearer wrong' },
+    }),
+    environment(),
+    { dispatch: fakeDispatch([]) },
+  );
+  assert.equal(authRejected.status, 403);
+  assert.deepEqual(await authRejected.json(), {
+    ok: false,
+    code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'authorization_rejected',
+  });
+});
+
+test('recurring workflow suppresses malformed response bodies and only logs bounded failure classes', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { runInNewContext } = await import('node:vm');
+  const workflow = await readFile(new URL(
+    '../.github/workflows/naver-news-shadow-recurring-production-v1.yml', import.meta.url,
+  ), 'utf8');
+  const scripts = [...workflow.matchAll(/node <<'NODE'\r?\n([\s\S]*?)\r?\n\s+NODE/g)]
+    .map((match) => match[1]);
+  assert.equal(scripts.length, 2);
+  function evaluate(script: string, body: string) {
+    const output: string[] = [];
+    let exitCode = 0;
+    const stopped = Symbol('exit');
+    try {
+      runInNewContext(script, {
+        require: () => ({ readFileSync: () => body }),
+        console: { log: (value: string) => output.push(value) },
+        process: { exit: (code: number) => { exitCode = code; throw stopped; } },
+      });
+    } catch (error) {
+      if (error !== stopped) throw error;
+    }
+    return { exitCode, output };
+  }
+  for (const script of scripts) {
+    for (const body of ['', '<html>PRIVATE_PROVIDER_PAYLOAD</html>', '{"secret":"PRIVATE_TOKEN",']) {
+      assert.deepEqual(evaluate(script, body), { exitCode: 2, output: [] });
+    }
+  }
+  for (const errorClass of ['config_rejected', 'protocol_rejected', 'authorization_rejected', 'dispatch_failed']) {
+    assert.deepEqual(evaluate(scripts[0], JSON.stringify({
+      ok: false, code: 'naver_news_shadow_recurring_scheduler_rejected', errorClass,
+      raw: 'PRIVATE_PROVIDER_PAYLOAD',
+    })), { exitCode: 0, output: [`FANDEX_NAVER_RECURRING_ERROR_CLASS=${errorClass}`] });
+  }
+  assert.deepEqual(evaluate(scripts[0], JSON.stringify({
+    ok: false, code: 'naver_news_shadow_recurring_scheduler_rejected', errorClass: 'PRIVATE_TOKEN',
+  })), { exitCode: 2, output: [] });
 });
 
 test('shadow activation source contains no timer, cron, GET handler, or request override path', async () => {
