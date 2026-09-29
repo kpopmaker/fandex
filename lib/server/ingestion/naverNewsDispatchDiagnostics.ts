@@ -50,23 +50,57 @@ const DATABASE_ERROR_CLASSES = Object.freeze({
   '08007': 'connection_exception',
   '08P01': 'connection_exception',
   ENOTFOUND: 'dns_failure',
+  EAI_AGAIN: 'dns_failure',
   ECONNREFUSED: 'connection_refused',
-  ETIMEDOUT: 'connection_timeout',
   ECONNRESET: 'connection_reset',
+  EPIPE: 'connection_reset',
+  ETIMEDOUT: 'connection_timeout',
+  ERR_SOCKET_CONNECTION_TIMEOUT: 'connection_timeout',
+  ERR_TLS_HANDSHAKE_TIMEOUT: 'tls_failure',
+  ERR_TLS_CERT_ALTNAME_INVALID: 'tls_failure',
+  DEPTH_ZERO_SELF_SIGNED_CERT: 'tls_failure',
   SELF_SIGNED_CERT_IN_CHAIN: 'tls_failure',
   UNABLE_TO_VERIFY_LEAF_SIGNATURE: 'tls_failure',
   CERT_HAS_EXPIRED: 'tls_failure',
+  '57014': 'query_timeout',
+  '57P01': 'server_unavailable',
+  '57P02': 'server_unavailable',
+  '57P03': 'server_unavailable',
 } as const);
 
 type DatabaseErrorClass =
   | (typeof DATABASE_ERROR_CLASSES)[keyof typeof DATABASE_ERROR_CLASSES]
   | 'other_database_error';
 
+function databaseErrorCodes(error: unknown, depth = 0, seen = new Set<object>()): string[] {
+  if (!error || typeof error !== 'object' || depth > 3 || seen.has(error)) return [];
+  seen.add(error);
+
+  const row = error as {
+    code?: unknown;
+    cause?: unknown;
+    errors?: unknown;
+  };
+  const codes: string[] = [];
+  if (typeof row.code === 'string') codes.push(row.code);
+
+  if (Array.isArray(row.errors)) {
+    for (const nested of row.errors.slice(0, 8)) {
+      codes.push(...databaseErrorCodes(nested, depth + 1, seen));
+    }
+  }
+  if (row.cause !== undefined) {
+    codes.push(...databaseErrorCodes(row.cause, depth + 1, seen));
+  }
+  return codes;
+}
+
 function classifyDatabaseError(error: unknown): DatabaseErrorClass {
-  if (!error || typeof error !== 'object' || !('code' in error)) return 'other_database_error';
-  const code = String((error as { code?: unknown }).code ?? '');
-  return DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES]
-    ?? 'other_database_error';
+  for (const code of databaseErrorCodes(error)) {
+    const classified = DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES];
+    if (classified) return classified;
+  }
+  return 'other_database_error';
 }
 
 export async function observeNaverNewsDatabaseOperation<T>(
