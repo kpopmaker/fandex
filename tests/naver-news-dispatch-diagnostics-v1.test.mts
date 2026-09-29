@@ -113,3 +113,85 @@ test('invalid runtime database operation names cannot enter logs', async (t) => 
   );
   assert.deepEqual(logs, [['FANDEX_NAVER_DATABASE_ERROR_CLASS=undefined_table']]);
 });
+
+test('nested aggregate and cause database codes are classified without exposing nested error text', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+
+  const nestedTimeout = Object.assign(new Error('PRIVATE_NESTED_TIMEOUT_DETAIL'), {
+    code: 'ERR_SOCKET_CONNECTION_TIMEOUT',
+  });
+  const aggregate = new AggregateError(
+    [new Error('PRIVATE_OUTER_DETAIL'), nestedTimeout],
+    'PRIVATE_AGGREGATE_DETAIL',
+  );
+
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('connect', () => Promise.reject(aggregate)),
+    (error: unknown) => error === aggregate,
+  );
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=connection_timeout'],
+  ]);
+  assert.doesNotMatch(JSON.stringify(logs), /PRIVATE_/);
+
+  logs.length = 0;
+  const cause = Object.assign(new Error('PRIVATE_TLS_DETAIL'), {
+    code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+  });
+  const outer = Object.assign(new Error('PRIVATE_WRAPPER_DETAIL'), { cause });
+
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('connect', () => { throw outer; }),
+    (error: unknown) => error === outer,
+  );
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=tls_failure'],
+  ]);
+  assert.doesNotMatch(JSON.stringify(logs), /PRIVATE_/);
+});
+
+test('database error graph traversal is bounded and cycle-safe', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cyclic: { cause?: unknown; errors?: unknown[] } = {};
+  cyclic.cause = cyclic;
+  cyclic.errors = [cyclic];
+
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('connect', () => { throw cyclic; }),
+    (error: unknown) => error === cyclic,
+  );
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+  ]);
+});
+
+test('extended verifier-safe connection codes remain bounded classes', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['EAI_AGAIN', 'dns_failure'],
+    ['EPIPE', 'connection_reset'],
+    ['ERR_TLS_HANDSHAKE_TIMEOUT', 'tls_failure'],
+    ['ERR_TLS_CERT_ALTNAME_INVALID', 'tls_failure'],
+    ['DEPTH_ZERO_SELF_SIGNED_CERT', 'tls_failure'],
+    ['57P03', 'server_unavailable'],
+  ] as const;
+
+  for (const [code, expected] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
+    ]);
+  }
+});
