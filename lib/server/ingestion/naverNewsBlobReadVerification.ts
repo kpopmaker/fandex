@@ -200,6 +200,7 @@ export async function verifyNaverBlobSnapshot(
 
 export type BlobProbeDependencies = Readonly<{
   createReader(environment: Readonly<Record<string, string | undefined>>): BlobVerificationReader;
+  resolveOidcToken?: () => string | undefined | Promise<string | undefined>;
   now?: () => Date;
 }>;
 
@@ -238,10 +239,29 @@ export async function handleNaverBlobReadVerification(
     || !isNaverNewsRecurringAuthorizationValid(request.headers.get('authorization'),
       environment.FANDEX_NAVER_NEWS_SCHEDULER_SECRET ?? '')) return failed(403, 'request_rejected');
   if (new URL(request.url).search || !await hasEmptyBody(request)) return failed(400, 'request_rejected');
-  if (environment.VERCEL_ENV !== 'production' || !environment.VERCEL_OIDC_TOKEN?.trim()
-    || !environment.BLOB_STORE_ID?.trim()) return failed(503, 'runtime_unavailable');
+  const storeId = environment.BLOB_STORE_ID?.trim();
+  if (environment.VERCEL_ENV !== 'production' || !storeId) return failed(503, 'runtime_unavailable');
+
+  let oidcToken = environment.VERCEL_OIDC_TOKEN?.trim();
+  if (!oidcToken && dependencies.resolveOidcToken) {
+    try {
+      oidcToken = (await dependencies.resolveOidcToken())?.trim();
+    } catch {
+      return failed(503, 'runtime_unavailable');
+    }
+  }
+  if (!oidcToken) return failed(503, 'runtime_unavailable');
+
+  const runtimeEnvironment = Object.freeze({
+    ...environment,
+    VERCEL_OIDC_TOKEN: oidcToken,
+    BLOB_STORE_ID: storeId,
+  });
   try {
-    const result = await verifyNaverBlobSnapshot(dependencies.createReader(environment), observationCutoffAt);
+    const result = await verifyNaverBlobSnapshot(
+      dependencies.createReader(runtimeEnvironment),
+      observationCutoffAt,
+    );
     return Response.json(result, { status: result.ok ? 200 : 502, headers });
   } catch { return failed(503, 'runtime_unavailable'); }
 }

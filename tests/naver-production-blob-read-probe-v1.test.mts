@@ -219,6 +219,49 @@ test('body and query cannot configure storage; truly empty streamed body works',
   assert.equal((await invoke(f.reader, request({ body: '' }))).body.classification, A);
 });
 
+test('Production resolves request-context OIDC only after authorization and passes it to reader', async () => {
+  const f = fixture();
+  const env = { ...environment, VERCEL_OIDC_TOKEN: '' };
+  let resolverCalls = 0;
+  let readerOidcToken: string | undefined;
+
+  const response = await handleNaverBlobReadVerification(request(), env, {
+    now,
+    resolveOidcToken: async () => {
+      resolverCalls += 1;
+      return 'request-context-oidc-sentinel';
+    },
+    createReader: (resolvedEnvironment) => {
+      readerOidcToken = resolvedEnvironment.VERCEL_OIDC_TOKEN;
+      return f.reader;
+    },
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.classification, A);
+  assert.equal(resolverCalls, 1);
+  assert.equal(readerOidcToken, 'request-context-oidc-sentinel');
+
+  resolverCalls = 0;
+  const rejected = await handleNaverBlobReadVerification(
+    request({ bearer: 'Bearer wrong-secret' }),
+    env,
+    {
+      now,
+      resolveOidcToken: () => {
+        resolverCalls += 1;
+        return 'must-not-be-read';
+      },
+      createReader: () => {
+        throw new Error('must-not-create-reader');
+      },
+    },
+  );
+  assert.equal(rejected.status, 403);
+  assert.equal(resolverCalls, 0);
+});
+
 test('Preview and missing runtime OIDC fail without a reader; no token fallback', async () => {
   for (const env of [{ ...environment, VERCEL_ENV: 'preview' },
     { ...environment, VERCEL_OIDC_TOKEN: '', BLOB_READ_WRITE_TOKEN: 'not-allowed' },
