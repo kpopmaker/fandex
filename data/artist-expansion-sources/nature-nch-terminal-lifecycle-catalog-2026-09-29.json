@@ -1,0 +1,97 @@
+{
+  "version": "nature_nch_terminal_lifecycle_catalog_adapter_v1",
+  "source": {
+    "id": "nature-nch-terminal-lifecycle-catalog",
+    "type": "provider_catalog",
+    "name": "NATURE n.CH Terminal Lifecycle Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1657637wpp/nature-officially-announces-disbandment-after-6-years"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "NATURE",
+      "aliases": [
+        "네이처"
+      ],
+      "evidence": [
+        {
+          "label": "n.CH terminal group-activity statement",
+          "url": "https://www.soompi.com/article/1657637wpp/nature-officially-announces-disbandment-after-6-years"
+        },
+        {
+          "label": "n.CH terminal statement Korean preservation",
+          "url": "https://enews.imbc.com/News/ViewAmp/416092"
+        },
+        {
+          "label": "n.CH-supplied nine-member profile",
+          "url": "https://www.mk.co.kr/news/musics/10526878"
+        },
+        {
+          "label": "Apple Music Girls and Flowers debut catalog",
+          "url": "https://music.apple.com/us/album/girls-and-flowers-ep/1624356825"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "explicitGroupActivityEndRequired": true,
+    "membersSeparatePathsEvidenceRequired": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "temporaryNonparticipationDoesNotEqualDeparture": true,
+    "healthHiatusDoesNotTerminateMembership": true,
+    "overseasScheduleAbsenceDoesNotTerminateMembership": true,
+    "explicitDepartureRequiredForMemberRemoval": true,
+    "postGroupIndividualAgencyRetentionDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalLifecycle": {
+    "announcedAt": "2024-04-27",
+    "effectiveDate": "2024-04-27",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "n.CH Entertainment",
+    "terminalMembers": [
+      "SOHEE",
+      "AURORA",
+      "SAEBOM",
+      "LU",
+      "CHAEBIN",
+      "HARU",
+      "LOHA",
+      "UCHAE",
+      "SUNSHINE"
+    ],
+    "terminalMemberCount": 9,
+    "officialGroupActivitiesEnded": true,
+    "membersProceedSeparately": true,
+    "soheeIndividualAgencyRetention": true,
+    "priorExitedMembers": [
+      {
+        "member": "GAGA",
+        "resolution": "preterminal_explicit_former_member_excluded_from_terminal_roster"
+      }
+    ],
+    "debutDate": "2018-08-03",
+    "debutRelease": "Girls and Flowers",
+    "fandomName": "LEAF"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_terminal_plus_nch_supplied_roster_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1657637wpp/nature-officially-announces-disbandment-after-6-years",
+      "https://enews.imbc.com/News/ViewAmp/416092",
+      "https://www.mk.co.kr/news/musics/10526878",
+      "https://music.apple.com/us/album/girls-and-flowers-ep/1624356825"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

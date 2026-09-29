@@ -9616,6 +9616,82 @@
           "url": "https://music.apple.com/us/album/nun-nu-nan-na-single/1670526978"
         }
       ]
+    },
+    {
+      "id": "nature",
+      "ticker": "NATURE",
+      "name": "NATURE",
+      "agency": "n.CH Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2018-08-03",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "SOHEE",
+        "AURORA",
+        "SAEBOM",
+        "LU",
+        "CHAEBIN",
+        "HARU",
+        "LOHA",
+        "UCHAE",
+        "SUNSHINE"
+      ],
+      "fandomName": "LEAF",
+      "naverNewsQuery": "네이처 NATURE n.CH 엔터테인먼트",
+      "koreanAliases": [
+        "네이처"
+      ],
+      "englishAliases": [
+        "NATURE"
+      ],
+      "keywords": [
+        "n.CH Entertainment",
+        "n.CH엔터테인먼트",
+        "SOHEE",
+        "AURORA",
+        "SAEBOM",
+        "LU",
+        "CHAEBIN",
+        "HARU",
+        "LOHA",
+        "UCHAE",
+        "SUNSHINE",
+        "GAGA",
+        "가가",
+        "Girls and Flowers",
+        "Allegro Cantabile",
+        "LEAF"
+      ],
+      "disambiguationKeywords": [
+        "n.CH Entertainment",
+        "n.CH엔터테인먼트",
+        "네이처"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "n.CH terminal group-activity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1657637wpp/nature-officially-announces-disbandment-after-6-years"
+        },
+        {
+          "source": "n.CH terminal statement Korean preservation by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/416092"
+        },
+        {
+          "source": "n.CH-supplied nine-member NATURE profile preserved by Maeil Business",
+          "url": "https://www.mk.co.kr/news/musics/10526878"
+        },
+        {
+          "source": "Apple Music Girls and Flowers licensed debut catalog",
+          "url": "https://music.apple.com/us/album/girls-and-flowers-ep/1624356825"
+        }
+      ]
     }
   ]
 }

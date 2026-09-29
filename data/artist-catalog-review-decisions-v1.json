@@ -5689,6 +5689,38 @@
           "note": "Provider catalog dates Nun Nu Nan Na to February 4, 2020 and credits J9 Entertainment."
         }
       ]
+    },
+    {
+      "displayArtist": "NATURE",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "nch_terminal_group_activity_end_statement_plus_preterminal_nine_member_profile_resolves_terminal_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_nch_terminal_statement_nch_supplied_nine_member_profile_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "n.CH terminal group-activity statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1657637wpp/nature-officially-announces-disbandment-after-6-years",
+          "note": "n.CH states NATURE is ending all official activities as a group and members will go their separate ways; SOHEE remains with n.CH for individual activities."
+        },
+        {
+          "source": "n.CH terminal statement Korean preservation by iMBC",
+          "url": "https://enews.imbc.com/News/ViewAmp/416092",
+          "note": "Korean preservation reproduces n.CH's wording that official group activities end after member discussions."
+        },
+        {
+          "source": "n.CH-supplied nine-member profile preserved by Maeil Business",
+          "url": "https://www.mk.co.kr/news/musics/10526878",
+          "note": "Contemporaneous n.CH-supplied coverage identifies NATURE as SOHEE, SAEBOM, LU, CHAEBIN, HARU, UCHAE, SUNSHINE, AURORA, and LOHA. Temporary promotion absences are not treated as departures."
+        },
+        {
+          "source": "Apple Music Girls and Flowers licensed debut catalog",
+          "url": "https://music.apple.com/us/album/girls-and-flowers-ep/1624356825",
+          "note": "Provider catalog dates Girls and Flowers to August 3, 2018 and credits n.CH Entertainment."
+        }
+      ]
     }
   ]
 }
