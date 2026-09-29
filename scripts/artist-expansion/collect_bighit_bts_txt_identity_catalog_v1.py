@@ -110,7 +110,9 @@ def parse_live_pages(
         if "bighit music" not in page.casefold():
             return []
 
-    if not contains_any(solo_pages["SUGA"], ["Agust D", "D-DAY"]):
+    if "agust d" not in solo_pages["SUGA"].casefold():
+        return []
+    if "d-day" not in solo_pages["SUGA"].casefold():
         return []
     if not contains_any(solo_pages["Jimin"], ["MUSE", "FACE"]):
         return []
