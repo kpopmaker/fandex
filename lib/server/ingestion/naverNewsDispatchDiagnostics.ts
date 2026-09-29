@@ -68,8 +68,15 @@ const DATABASE_ERROR_CLASSES = Object.freeze({
   '57P03': 'server_unavailable',
 } as const);
 
+const DATABASE_ERROR_MESSAGES = Object.freeze({
+  'timeout exceeded when trying to connect': 'connection_timeout',
+  'Connection terminated due to connection timeout': 'connection_timeout',
+  'Connection terminated unexpectedly': 'connection_reset',
+} as const);
+
 type DatabaseErrorClass =
   | (typeof DATABASE_ERROR_CLASSES)[keyof typeof DATABASE_ERROR_CLASSES]
+  | (typeof DATABASE_ERROR_MESSAGES)[keyof typeof DATABASE_ERROR_MESSAGES]
   | 'other_database_error';
 
 function databaseErrorCodes(error: unknown, depth = 0, seen = new Set<object>()): string[] {
@@ -95,9 +102,36 @@ function databaseErrorCodes(error: unknown, depth = 0, seen = new Set<object>())
   return codes;
 }
 
+function databaseErrorMessages(error: unknown, depth = 0, seen = new Set<object>()): string[] {
+  if (!error || typeof error !== 'object' || depth > 3 || seen.has(error)) return [];
+  seen.add(error);
+
+  const row = error as {
+    message?: unknown;
+    cause?: unknown;
+    errors?: unknown;
+  };
+  const messages: string[] = [];
+  if (typeof row.message === 'string') messages.push(row.message);
+
+  if (Array.isArray(row.errors)) {
+    for (const nested of row.errors.slice(0, 8)) {
+      messages.push(...databaseErrorMessages(nested, depth + 1, seen));
+    }
+  }
+  if (row.cause !== undefined) {
+    messages.push(...databaseErrorMessages(row.cause, depth + 1, seen));
+  }
+  return messages;
+}
+
 function classifyDatabaseError(error: unknown): DatabaseErrorClass {
   for (const code of databaseErrorCodes(error)) {
     const classified = DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES];
+    if (classified) return classified;
+  }
+  for (const message of databaseErrorMessages(error)) {
+    const classified = DATABASE_ERROR_MESSAGES[message as keyof typeof DATABASE_ERROR_MESSAGES];
     if (classified) return classified;
   }
   return 'other_database_error';
