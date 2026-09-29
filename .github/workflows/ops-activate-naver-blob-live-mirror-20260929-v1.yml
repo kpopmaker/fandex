@@ -1,0 +1,178 @@
+name: OPS Activate NAVER Blob live mirror 2026-09-29 v1
+
+on:
+  push:
+    branches:
+      - ops/activate-naver-blob-live-mirror-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+      VERCEL_PROJECT_NAME: fandex
+      BASE_DEPLOYMENT_ID: dpl_EqCtyAXcajT5qRk6sBj9NLVW3iKV
+      EXPECTED_MAIN_SHA: 54bb0f0fcdbf6860893cc7fb9e4b021131348d71
+      MIRROR_ENV_KEY: FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE
+      MIRROR_ENV_VALUE: shadow-write-v1
+    steps:
+      - name: Approval and identity guard
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          test "$VERCEL_PROJECT_ID" = "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v"
+          test "$BASE_DEPLOYMENT_ID" = "dpl_EqCtyAXcajT5qRk6sBj9NLVW3iKV"
+          test "$EXPECTED_MAIN_SHA" = "54bb0f0fcdbf6860893cc7fb9e4b021131348d71"
+          test "$MIRROR_ENV_KEY" = "FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE"
+          test "$MIRROR_ENV_VALUE" = "shadow-write-v1"
+
+      - name: Verify exact base Production deployment is READY
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /tmp/base-deployment.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v13/deployments/$BASE_DEPLOYMENT_ID?teamId=$VERCEL_ORG_ID")
+          echo "FANDEX_BASE_DEPLOYMENT_HTTP=$code"
+          test "$code" = "200"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/base-deployment.json','utf8'));
+          if (d.id !== process.env.BASE_DEPLOYMENT_ID) process.exit(2);
+          if ((d.readyState ?? d.state) !== 'READY') process.exit(3);
+          if (d.target !== 'production') process.exit(4);
+          if (d.meta?.githubCommitSha !== process.env.EXPECTED_MAIN_SHA) process.exit(5);
+          console.log('FANDEX_BASE_DEPLOYMENT_VERIFIED=ready-production');
+          NODE
+
+      - name: Upsert live mirror activation to Production only
+        run: |
+          set -euo pipefail
+          cat >/tmp/env-body.json <<'JSON'
+          {
+            "key": "FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE",
+            "value": "shadow-write-v1",
+            "type": "plain",
+            "target": ["production"],
+            "comment": "Authorized FANDEX NAVER Evidence Blob live mirror shadow-write activation 2026-09-29"
+          }
+          JSON
+
+          code=$(curl -sS -o /tmp/env-upsert.json -w '%{http_code}'             -X POST             -H "Authorization: Bearer $VERCEL_TOKEN"             -H "Content-Type: application/json"             "https://api.vercel.com/v10/projects/$VERCEL_PROJECT_ID/env?upsert=true&teamId=$VERCEL_ORG_ID"             --data-binary @/tmp/env-body.json)
+          echo "FANDEX_MIRROR_ENV_UPSERT_HTTP=$code"
+          test "$code" = "200" -o "$code" = "201"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/env-upsert.json','utf8'));
+          if (Array.isArray(d.failed) && d.failed.length > 0) {
+            console.error('mirror_env_upsert_failed');
+            process.exit(2);
+          }
+          console.log('FANDEX_MIRROR_ENV_UPSERT=accepted');
+          NODE
+
+      - name: Verify activation metadata is Production only
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /tmp/env-list.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?teamId=$VERCEL_ORG_ID&decrypt=false")
+          echo "FANDEX_ENV_VERIFY_HTTP=$code"
+          test "$code" = "200"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/env-list.json','utf8'));
+          const envs=Array.isArray(d.envs)?d.envs:Array.isArray(d)?d:[];
+          const rows=envs.filter(e=>e && e.key===process.env.MIRROR_ENV_KEY);
+          if (rows.length !== 1) {
+            console.error('mirror_env_cardinality_invalid:' + rows.length);
+            process.exit(2);
+          }
+          const target=Array.isArray(rows[0].target)?[...rows[0].target].sort():[];
+          if (JSON.stringify(target)!==JSON.stringify(['production'])) {
+            console.error('mirror_env_target_invalid:' + JSON.stringify(target));
+            process.exit(3);
+          }
+          console.log('FANDEX_MIRROR_ENV_VERIFIED=production-only');
+          NODE
+
+      - name: Redeploy exact READY Production deployment with new env
+        id: redeploy
+        run: |
+          set -euo pipefail
+          cat >/tmp/redeploy-body.json <<JSON
+          {
+            "deploymentId": "$BASE_DEPLOYMENT_ID",
+            "name": "$VERCEL_PROJECT_NAME",
+            "project": "$VERCEL_PROJECT_NAME",
+            "target": "production"
+          }
+          JSON
+
+          code=$(curl -sS -o /tmp/redeploy.json -w '%{http_code}'             -X POST             -H "Authorization: Bearer $VERCEL_TOKEN"             -H "Content-Type: application/json"             "https://api.vercel.com/v13/deployments?forceNew=1&teamId=$VERCEL_ORG_ID"             --data-binary @/tmp/redeploy-body.json)
+          echo "FANDEX_REDEPLOY_HTTP=$code"
+          test "$code" = "200" -o "$code" = "201"
+
+          DEPLOYMENT_ID=$(node -e '
+            const fs=require("fs");
+            const d=JSON.parse(fs.readFileSync("/tmp/redeploy.json","utf8"));
+            if (typeof d.id !== "string" || !d.id.startsWith("dpl_")) process.exit(2);
+            process.stdout.write(d.id);
+          ')
+          echo "deployment_id=$DEPLOYMENT_ID" >> "$GITHUB_OUTPUT"
+          echo "FANDEX_REDEPLOY_CREATED=$DEPLOYMENT_ID"
+
+      - name: Wait for activated Production deployment READY
+        run: |
+          set -euo pipefail
+          DEPLOYMENT_ID="${{ steps.redeploy.outputs.deployment_id }}"
+          test -n "$DEPLOYMENT_ID"
+
+          for attempt in $(seq 1 60); do
+            code=$(curl -sS -o /tmp/new-deployment.json -w '%{http_code}'               -H "Authorization: Bearer $VERCEL_TOKEN"               "https://api.vercel.com/v13/deployments/$DEPLOYMENT_ID?teamId=$VERCEL_ORG_ID")
+            test "$code" = "200"
+
+            state=$(node -e '
+              const fs=require("fs");
+              const d=JSON.parse(fs.readFileSync("/tmp/new-deployment.json","utf8"));
+              process.stdout.write(String(d.readyState ?? d.state ?? "UNKNOWN"));
+            ')
+            echo "FANDEX_ACTIVATED_DEPLOYMENT_STATE=$state"
+
+            if [ "$state" = "READY" ]; then
+              break
+            fi
+            if [ "$state" = "ERROR" ] || [ "$state" = "CANCELED" ]; then
+              exit 10
+            fi
+            if [ "$attempt" = "60" ]; then
+              exit 11
+            fi
+            sleep 10
+          done
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/new-deployment.json','utf8'));
+          if ((d.readyState ?? d.state) !== 'READY') process.exit(2);
+          if (d.target !== 'production') process.exit(3);
+          if (d.meta?.githubCommitSha !== process.env.EXPECTED_MAIN_SHA) process.exit(4);
+          if (d.aliasError != null) process.exit(5);
+          console.log('FANDEX_ACTIVATED_DEPLOYMENT_VERIFIED=ready-production');
+          console.log('FANDEX_ACTIVATED_DEPLOYMENT_ID=' + d.id);
+          NODE
+
+      - name: Safety boundary
+        run: |
+          echo "liveMirrorWriteActivation=true"
+          echo "historicalBackfillPerformed=false"
+          echo "productionMirrorReadCutover=false"
+          echo "momentumReevaluationPerformed=false"
+          echo "productionVerifierExecutions=0"
+          echo "registryMutations=0"
+          echo "productPublication=false"
+          echo "publicRouteCutover=false"
