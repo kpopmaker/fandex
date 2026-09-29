@@ -195,3 +195,43 @@ test('extended verifier-safe connection codes remain bounded classes', async (t)
     ]);
   }
 });
+
+test('known pg pool code-less connect messages map to bounded classes without logging raw messages', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['timeout exceeded when trying to connect', 'connection_timeout'],
+    ['Connection terminated due to connection timeout', 'connection_timeout'],
+    ['Connection terminated unexpectedly', 'connection_reset'],
+  ] as const;
+
+  for (const [message, expected] of cases) {
+    logs.length = 0;
+    const failure = new Error(message);
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(message), false);
+  }
+});
+
+test('unknown code-less database messages remain other_database_error and are never logged', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const secretMessage = 'postgresql://fandex_runtime:PRIVATE_SECRET@private.example/neondb';
+  const failure = new Error(secretMessage);
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('connect', () => { throw failure; }),
+    (error: unknown) => error === failure,
+  );
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+  ]);
+  assert.equal(JSON.stringify(logs).includes(secretMessage), false);
+});
