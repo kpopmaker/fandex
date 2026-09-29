@@ -1,0 +1,111 @@
+{
+  "version": "mystic_story_verified_music_profiles_v1",
+  "source": {
+    "id": "mystic-story-verified-music-profile-supplement",
+    "type": "provider_catalog",
+    "name": "MYSTIC STORY Verified Music Profile Supplement",
+    "observedAt": "2026-09-29T21:47:00+09:00",
+    "url": "https://www.mystic89.net/"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "Billlie",
+      "aliases": [
+        "빌리"
+      ],
+      "evidence": [
+        {
+          "label": "MYSTIC STORY official Billlie profile",
+          "url": "https://www.mystic89.net/artist/Billlie"
+        }
+      ]
+    },
+    {
+      "displayArtist": "LUCY",
+      "aliases": [
+        "루시"
+      ],
+      "evidence": [
+        {
+          "label": "MYSTIC STORY official LUCY profile",
+          "url": "https://www.mystic89.net/artist/lucy"
+        }
+      ]
+    },
+    {
+      "displayArtist": "SON TAEJIN",
+      "aliases": [
+        "Son Taejin",
+        "손태진"
+      ],
+      "evidence": [
+        {
+          "label": "MYSTIC STORY official Son Taejin profile",
+          "url": "https://www.mystic89.net/artist/tae-jin-Son"
+        }
+      ]
+    }
+  ],
+  "verifiedProfiles": {
+    "Billlie": {
+      "agency": "MYSTIC STORY",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "SIYOON",
+        "SHEON",
+        "TSUKI",
+        "MOON SUA",
+        "HARAM",
+        "SUHYEON",
+        "HARUNA"
+      ],
+      "memberCount": 7
+    },
+    "LUCY": {
+      "agency": "MYSTIC STORY",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "SHIN YECHAN",
+        "CHOI SANGYEOP",
+        "CHO WONSANG",
+        "SHIN GWANGIL"
+      ],
+      "memberCount": 4
+    },
+    "SON TAEJIN": {
+      "agency": "MYSTIC STORY",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo"
+    }
+  },
+  "contract": {
+    "officialProfileOnly": true,
+    "thisIsNotClaimedAsCompleteMysticRoster": true,
+    "exactVerifiedProfileSetRequired": true,
+    "exactBilllieMemberSetRequired": true,
+    "exactLucyMemberSetRequired": true,
+    "sonTaejinDedicatedSoloProfileRequired": true,
+    "actorProfilesExcluded": true,
+    "creatorProfilesExcluded": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_current_MYSTIC_STORY_music_profile_snapshot",
+    "verifiedFrom": [
+      "https://www.mystic89.net/artist/Billlie",
+      "https://www.mystic89.net/artist/lucy",
+      "https://www.mystic89.net/artist/tae-jin-Son"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

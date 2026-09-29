@@ -1955,6 +1955,14 @@
           "source": "MYSTIC STORY",
           "url": "https://www.mystic89.net/artist/lucy"
         }
+      ],
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "members": [
+        "SHIN YECHAN",
+        "CHOI SANGYEOP",
+        "CHO WONSANG",
+        "SHIN GWANGIL"
       ]
     },
     {
@@ -10354,6 +10362,44 @@
         {
           "source": "YH ENTERTAINMENT official DáFF profile and discography",
           "url": "https://www.yhent.co.kr/artist/daff/"
+        }
+      ]
+    },
+    {
+      "id": "sontaejin",
+      "ticker": "SONTAEJIN",
+      "name": "SON TAEJIN",
+      "agency": "MYSTIC STORY",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "손태진 SON TAEJIN 미스틱스토리",
+      "koreanAliases": [
+        "손태진"
+      ],
+      "englishAliases": [
+        "SON TAEJIN",
+        "Son Taejin"
+      ],
+      "keywords": [
+        "MYSTIC STORY",
+        "SHINE",
+        "팬텀싱어",
+        "불타는 트롯맨"
+      ],
+      "disambiguationKeywords": [
+        "MYSTIC STORY",
+        "손태진"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "MYSTIC STORY official Son Taejin profile",
+          "url": "https://www.mystic89.net/artist/tae-jin-Son"
         }
       ]
     }

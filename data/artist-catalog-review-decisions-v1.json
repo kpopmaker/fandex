@@ -6041,6 +6041,23 @@
           "note": "Dedicated official profile gives 2024-12-11 debut and discography."
         }
       ]
+    },
+    {
+      "displayArtist": "SON TAEJIN",
+      "decision": "new_canonical_solo_candidate",
+      "relationResolution": "dedicated_MYSTIC_STORY_solo_music_profile_verified",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "official_MYSTIC_STORY_dedicated_music_profile",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "MYSTIC STORY",
+          "url": "https://www.mystic89.net/artist/tae-jin-Son",
+          "note": "Official music profile identifies SON TAEJIN / 손태진 under MYSTIC STORY and documents solo releases including SHINE."
+        }
+      ]
     }
   ]
 }

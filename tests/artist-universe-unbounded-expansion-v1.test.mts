@@ -1472,6 +1472,28 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.deepEqual(yhAnd2ble.members, ["JANG HAO","YOO SEUNGEON","RICKY","KIM GYUVIN","HAN YUJIN"]);
 
 
+  const mysticBilllie = getArtistV4ById('billlie');
+  assert.ok(mysticBilllie);
+  assert.equal(mysticBilllie.agency, 'MYSTIC STORY');
+  assert.equal(mysticBilllie.lifecycleStatus, 'active');
+  assert.deepEqual(mysticBilllie.members, ["SIYOON","SHEON","TSUKI","MOON SUA","HARAM","SUHYEON","HARUNA"]);
+
+  const mysticLucy = getArtistV4ById('lucy');
+  assert.ok(mysticLucy);
+  assert.equal(mysticLucy.agency, 'MYSTIC STORY');
+  assert.equal(mysticLucy.agencyStatus, 'verified');
+  assert.equal(mysticLucy.lifecycleStatus, 'active');
+  assert.deepEqual(mysticLucy.members, ["SHIN YECHAN","CHOI SANGYEOP","CHO WONSANG","SHIN GWANGIL"]);
+
+  const mysticSonTaejin = getArtistV4ById('sontaejin');
+  assert.ok(mysticSonTaejin);
+  assert.equal(mysticSonTaejin.entityType, 'solo');
+  assert.equal(mysticSonTaejin.agency, 'MYSTIC STORY');
+  assert.equal(mysticSonTaejin.agencyStatus, 'verified');
+  assert.equal(mysticSonTaejin.lifecycleStatus, 'active');
+  assert.ok(mysticSonTaejin.profile.koreanAliases.includes('손태진'));
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
