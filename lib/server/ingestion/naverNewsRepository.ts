@@ -137,12 +137,12 @@ async function withTransaction<T>(pool: NaverNewsIngestionPool, operation: (clie
     throw new Error('naver_news_repository_operation_failed');
   });
   try {
-    await observeNaverNewsDatabaseOperation('audit_insert', () => client.query('BEGIN'));
+    await observeNaverNewsDatabaseOperation('begin', () => client.query('BEGIN'));
     const result = await operation(client);
-    await observeNaverNewsDatabaseOperation('audit_insert', () => client.query('COMMIT'));
+    await observeNaverNewsDatabaseOperation('commit', () => client.query('COMMIT'));
     return result;
   } catch (error) {
-    try { await observeNaverNewsDatabaseOperation('audit_insert', () => client.query('ROLLBACK')); } catch { /* fail closed below */ }
+    try { await observeNaverNewsDatabaseOperation('rollback', () => client.query('ROLLBACK')); } catch { /* fail closed below */ }
     if (error instanceof Error && /^naver_news_[a-z_]+$/.test(error.message)) throw error;
     throw new Error('naver_news_repository_operation_failed');
   } finally {
