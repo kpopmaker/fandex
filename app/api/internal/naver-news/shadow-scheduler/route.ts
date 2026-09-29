@@ -1,5 +1,6 @@
 import 'server-only';
 import { getVercelOidcToken } from '@vercel/functions/oidc';
+import { observeNaverNewsDispatchStage } from '@/lib/server/ingestion/naverNewsDispatchDiagnostics';
 
 import {
   readNaverNewsShadowRecurringProtocol,
@@ -109,7 +110,8 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
 
   let runtimeEnvironment: Readonly<Record<string, string | undefined>>;
   try {
-    runtimeEnvironment = await resolveRuntimeBlobEnvironment(environment, dependencies);
+    runtimeEnvironment = await observeNaverNewsDispatchStage('runtime_oidc',
+      () => resolveRuntimeBlobEnvironment(environment, dependencies));
   } catch {
     return rejected('dispatch_failed');
   }

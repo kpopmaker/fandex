@@ -56,7 +56,9 @@ test('mirror stages before DB completion and finalizes after applied completion'
   assert.deepEqual(order,['ensure','claim','stage','complete','finalize']);
 });
 
-test('stage failure uses existing retryable DB failure path and never completes',async()=>{
+test('stage failure uses existing retryable DB failure path and never completes',async(t)=>{
+  const logs:unknown[][]=[];
+  t.mock.method(console,'warn',(...args:unknown[])=>logs.push(args));
   const order:string[]=[];
   const repository:NaverNewsIngestionRepository={
     async ensureJob(){order.push('ensure');return {status:'created'};},
@@ -74,6 +76,7 @@ test('stage failure uses existing retryable DB failure path and never completes'
   });
   assert.equal(result.status,'retryable_failed');
   assert.deepEqual(order,['ensure','claim','stage','fail:naver_news_evidence_mirror_stage_failed']);
+  assert.deepEqual(logs,[['FANDEX_NAVER_DISPATCH_FAILED_STAGE=blob_stage']]);
 });
 
 test('idempotent replay repairs missing finalization without recollection',async()=>{

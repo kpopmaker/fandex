@@ -1,3 +1,4 @@
+import { observeNaverNewsDispatchStage } from './naverNewsDispatchDiagnostics';
 import {
   buildNaverNewsSchedulerPlan,
   NAVER_NEWS_SCHEDULER_VERSION,
@@ -48,11 +49,11 @@ export async function runNaverNewsSchedulerDispatchCore(
   input: Readonly<{ query: string; display?: number; environment: Readonly<Record<string, string | undefined>> }>,
   dependencies: NaverNewsSchedulerDispatchDependencies = {},
 ): Promise<NaverNewsSchedulerDispatchCoreSummary> {
-  const plan = buildNaverNewsSchedulerPlan({
+  const plan = await observeNaverNewsDispatchStage('scheduler_plan', () => buildNaverNewsSchedulerPlan({
     query: input.query,
     at: currentIso(dependencies.now ?? (() => new Date())),
     ...(input.display === undefined ? {} : { display: input.display }),
-  });
+  }));
   const delegatedEnvironment = Object.freeze({
     ...input.environment,
     [NAVER_NEWS_V124_APPROVAL_ENV]: NAVER_NEWS_V124_APPROVAL_VALUE,

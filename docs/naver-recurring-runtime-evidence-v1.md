@@ -47,7 +47,37 @@ verifier, environment/variable changes, backfill, activation, publication, or
 cutover. Both previous Blob probe approvals remain consumed. Momentum Product
 actual remains 2/7 and `productMomentumScore = null`.
 
-## CI
+## Downstream failure stage evidence
+
+PR #280 reached Production at commit `c06fd79c7843ad1c78236a73455ce86d38c81f40`,
+deployment `dpl_3pNPKDcswSwYm54xNKtsxSeEH6CW`. Read-only logs at 14:52:00 and
+14:52:15 UTC on 2026-09-29 showed `dispatch_failed`. These establish that the
+route's config, canonical protocol, and bearer guards passed; they do not prove
+the caller was the GitHub scheduler or that runtime OIDC resolution succeeded.
+
+The dispatch path additionally emits `FANDEX_NAVER_DISPATCH_FAILED_STAGE=<stage>`
+at the operation that throws. Stages are a fixed runtime allowlist:
+
+- Runtime setup: `runtime_oidc`, `scheduler_plan`, `writer_arguments`,
+  `database_config`, `provider_config`, `pool_create`, `mirror_config`.
+- Worker operations: `database_ensure`, `database_claim`, `provider_collect`,
+  `response_validate`, `blob_stage`, `database_complete`, `blob_finalize`,
+  `database_fail`.
+- Cleanup: `pool_close`.
+
+Stage means the operation failed, not that a specific credential, schema,
+provider, or network diagnosis has been proven. Correlate the marker with its
+request and route class; a cleanup or failure-recording error can add another
+stage for the same request. A recoverable provider or mirror-stage failure can
+produce a worker failure status without a thrown route error. Inspect the
+writer status; do not equate HTTP 200 with ingestion success.
+
+Only fixed stage names are logged. The original exception is rethrown unchanged
+into the existing bounded handlers; exception text and payloads are never logged.
+Operation ordering, authorization, retries, DB transactions, and mirror semantics
+are unchanged. A logging exception cannot replace the operational error.
+
+## Reusable CI
 
 The existing recurring-classification workflow is a reusable, path-filtered PR
 check that checks out the exact PR head. It runs isolated recurring and writer

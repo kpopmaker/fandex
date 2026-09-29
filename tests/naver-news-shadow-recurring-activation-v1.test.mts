@@ -244,7 +244,11 @@ test('runtime failure logs contain only the bounded class and preserve dispatch 
     assert.deepEqual(await response.json(), {
       ok: false, code: 'naver_news_shadow_recurring_scheduler_rejected', errorClass: candidate.errorClass,
     });
-    assert.deepEqual(logs, [[`FANDEX_NAVER_RECURRING_ERROR_CLASS=${candidate.errorClass}`]]);
+    assert.deepEqual(logs, [
+      ...(candidate.overrides.FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE
+        ? [['FANDEX_NAVER_DISPATCH_FAILED_STAGE=runtime_oidc']] : []),
+      [`FANDEX_NAVER_RECURRING_ERROR_CLASS=${candidate.errorClass}`],
+    ]);
     assert.equal(dispatches, candidate.dispatches);
   }
 });
