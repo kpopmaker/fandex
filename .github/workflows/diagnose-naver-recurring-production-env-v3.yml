@@ -1,0 +1,63 @@
+name: Diagnose NAVER recurring Production env values v3
+
+on:
+  push:
+    branches:
+      - ops/diagnose-naver-recurring-403-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_SCOPE: larva3203-1222s-projects
+      VERCEL_PROJECT: fandex
+    steps:
+      - name: Link exact Vercel project locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VERCEL_TOKEN:-}"
+          npx --yes vercel@latest link             --yes             --project="$VERCEL_PROJECT"             --scope="$VERCEL_SCOPE"             --token="$VERCEL_TOKEN" >/tmp/vercel-link.log 2>&1
+          echo "VERCEL_LOCAL_LINK=success"
+
+      - name: Pull Production env and compare recurring contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          env_file="$(mktemp)"
+          set +e
+          npx --yes vercel@latest env pull "$env_file"             --environment=production             --yes             --scope="$VERCEL_SCOPE"             --token="$VERCEL_TOKEN" >/tmp/vercel-env-pull.log 2>&1
+          cli_status=$?
+          set -e
+
+          if [[ "$cli_status" != "0" ]]; then
+            echo "VERCEL_ENV_PULL_STATUS=failed"
+            tail -n 20 /tmp/vercel-env-pull.log
+            rm -f "$env_file" /tmp/vercel-env-pull.log
+            exit "$cli_status"
+          fi
+
+          set -a
+          source "$env_file"
+          set +a
+
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_ENABLED:-}" == "approved-v128-recurring-foundation" ]]             && enabled=true || enabled=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT:-}" == "production" ]]             && deployment=true || deployment=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_QUERY:-}" == "아이유 IU" ]]             && query=true || query=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DISPLAY:-}" == "100" ]]             && display=true || display=false
+
+          echo "VERCEL_ENV_PULL_STATUS=success"
+          echo "FANDEX_RECURRING_ENABLED_EXPECTED=$enabled"
+          echo "FANDEX_RECURRING_DEPLOYMENT_EXPECTED=$deployment"
+          echo "FANDEX_RECURRING_QUERY_EXPECTED=$query"
+          echo "FANDEX_RECURRING_DISPLAY_EXPECTED=$display"
+          echo "secretValuesLogged=false"
+          echo "productionRequests=0"
+          echo "repositoryMutations=0"
+
+          rm -f "$env_file" /tmp/vercel-env-pull.log /tmp/vercel-link.log
