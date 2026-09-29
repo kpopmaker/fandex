@@ -1,0 +1,42 @@
+name: Dispatch NAVER recurring post-PR278 v1
+
+on:
+  push:
+    branches:
+      - ops/dispatch-naver-recurring-post-pr278-20260929-v1
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      GH_TOKEN: ${{ github.token }}
+      EXPECTED_MAIN_SHA: e33439b39300006db8a43c30158f021893d3a822
+      TARGET_WORKFLOW: naver-news-shadow-recurring-production-v1.yml
+    steps:
+      - name: Dispatch exact-main recurring workflow once
+        shell: bash
+        run: |
+          set -euo pipefail
+          main_sha="$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/main" \
+            | python -c "import json,sys; print(json.load(sys.stdin)['sha'])")"
+          test "$main_sha" = "$EXPECTED_MAIN_SHA"
+
+          curl -fsSL -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/$TARGET_WORKFLOW/dispatches" \
+            -d '{"ref":"main"}'
+
+          echo "FANDEX_NAVER_RECURRING_POST_PR278_DISPATCH=accepted"
+          echo "retries=0"
+          echo "parallelDispatches=0"
