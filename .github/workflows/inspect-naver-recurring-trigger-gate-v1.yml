@@ -1,4 +1,5 @@
 name: Inspect NAVER recurring trigger gate v1
+# recheck after activation attempt
 
 on:
   push:
