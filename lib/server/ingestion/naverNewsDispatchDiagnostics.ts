@@ -25,11 +25,22 @@ export async function observeNaverNewsDispatchStage<T>(
   }
 }
 
+const DATABASE_OPERATIONS = new Set([
+  'connect', 'begin', 'job_insert', 'job_select', 'audit_insert', 'commit', 'rollback',
+] as const);
+
+type DatabaseOperation = typeof DATABASE_OPERATIONS extends Set<infer Operation> ? Operation : never;
+
 const DATABASE_ERROR_CLASSES = Object.freeze({
   '42P01': 'undefined_table',
   '42501': 'insufficient_privilege',
   '3F000': 'invalid_schema',
   '42703': 'undefined_column',
+  '23514': 'check_violation',
+  '23505': 'unique_violation',
+  '23503': 'foreign_key_violation',
+  '22001': 'value_too_long',
+  '22P02': 'invalid_text_representation',
   '28P01': 'authentication_failed',
   '08000': 'connection_exception',
   '08001': 'connection_exception',
@@ -38,6 +49,13 @@ const DATABASE_ERROR_CLASSES = Object.freeze({
   '08006': 'connection_exception',
   '08007': 'connection_exception',
   '08P01': 'connection_exception',
+  ENOTFOUND: 'dns_failure',
+  ECONNREFUSED: 'connection_refused',
+  ETIMEDOUT: 'connection_timeout',
+  ECONNRESET: 'connection_reset',
+  SELF_SIGNED_CERT_IN_CHAIN: 'tls_failure',
+  UNABLE_TO_VERIFY_LEAF_SIGNATURE: 'tls_failure',
+  CERT_HAS_EXPIRED: 'tls_failure',
 } as const);
 
 type DatabaseErrorClass =
@@ -52,6 +70,7 @@ function classifyDatabaseError(error: unknown): DatabaseErrorClass {
 }
 
 export async function observeNaverNewsDatabaseOperation<T>(
+  operationName: DatabaseOperation,
   operation: () => T | Promise<T>,
 ): Promise<T> {
   try {
@@ -59,6 +78,9 @@ export async function observeNaverNewsDatabaseOperation<T>(
   } catch (error) {
     const errorClass = classifyDatabaseError(error);
     try {
+      if (DATABASE_OPERATIONS.has(operationName)) {
+        console.warn(`FANDEX_NAVER_DATABASE_FAILED_OPERATION=${operationName}`);
+      }
       console.warn(`FANDEX_NAVER_DATABASE_ERROR_CLASS=${errorClass}`);
     } catch {
       // A logging failure must never replace the database failure.
