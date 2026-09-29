@@ -1,4 +1,5 @@
 import 'server-only';
+import { getVercelOidcToken } from '@vercel/functions/oidc';
 
 import {
   readNaverNewsShadowRecurringProtocol,
@@ -7,17 +8,61 @@ import {
 } from '@/lib/server/ingestion/naverNewsShadowRecurringScheduler';
 import type { NaverNewsRecurringDependencies } from '@/lib/server/ingestion/naverNewsRecurringScheduler';
 import {
+  NAVER_NEWS_BLOB_MIRROR_MODE_ENV,
+  NAVER_NEWS_BLOB_MIRROR_MODE_SHADOW_WRITE,
+} from '@/lib/server/ingestion/naverNewsBlobMirrorRuntime';
+import {
   isNaverNewsRecurringAuthorizationValid,
   readNaverNewsRecurringConfig,
 } from '@/lib/server/ingestion/naverNewsRecurringSchedulerContracts';
 
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
+type ShadowRecurringRouteDependencies = NaverNewsRecurringDependencies & Readonly<{
+  resolveOidcToken?: () => string | undefined | Promise<string | undefined>;
+}>;
 
 type ShadowRecurringFailureClass =
   | 'config_rejected'
   | 'protocol_rejected'
   | 'authorization_rejected'
   | 'dispatch_failed';
+
+async function resolveRuntimeBlobEnvironment(
+  environment: Readonly<Record<string, string | undefined>>,
+  dependencies: ShadowRecurringRouteDependencies,
+): Promise<Readonly<Record<string, string | undefined>>> {
+  const mode = environment[NAVER_NEWS_BLOB_MIRROR_MODE_ENV]?.trim();
+  if (mode !== NAVER_NEWS_BLOB_MIRROR_MODE_SHADOW_WRITE) return environment;
+
+  const storeId = environment.BLOB_STORE_ID?.trim();
+  if (!storeId) throw new Error('naver_news_blob_runtime_unavailable');
+
+  const persistedOidcToken = environment.VERCEL_OIDC_TOKEN?.trim();
+  if (persistedOidcToken) {
+    return Object.freeze({
+      ...environment,
+      VERCEL_OIDC_TOKEN: persistedOidcToken,
+      BLOB_STORE_ID: storeId,
+    });
+  }
+
+  if (!dependencies.resolveOidcToken) {
+    throw new Error('naver_news_blob_runtime_unavailable');
+  }
+
+  const resolvedOidcToken = (await dependencies.resolveOidcToken())?.trim();
+  if (!resolvedOidcToken) {
+    throw new Error('naver_news_blob_runtime_unavailable');
+  }
+
+  return Object.freeze({
+    ...environment,
+    VERCEL_OIDC_TOKEN: resolvedOidcToken,
+    BLOB_STORE_ID: storeId,
+  });
+}
 
 function rejected(errorClass: ShadowRecurringFailureClass): Response {
   return Response.json(
@@ -33,7 +78,7 @@ function rejected(errorClass: ShadowRecurringFailureClass): Response {
 export async function handleNaverNewsShadowRecurringSchedulerRequest(
   request: Request,
   environment: Readonly<Record<string, string | undefined>>,
-  dependencies: NaverNewsRecurringDependencies = {},
+  dependencies: ShadowRecurringRouteDependencies = {},
 ): Promise<Response> {
   let config: ReturnType<typeof readNaverNewsRecurringConfig>;
   try {
@@ -55,9 +100,16 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
     return rejected('authorization_rejected');
   }
 
+  let runtimeEnvironment: Readonly<Record<string, string | undefined>>;
+  try {
+    runtimeEnvironment = await resolveRuntimeBlobEnvironment(environment, dependencies);
+  } catch {
+    return rejected('dispatch_failed');
+  }
+
   try {
     const result: NaverNewsShadowRecurringResult = await runNaverNewsShadowRecurringScheduler(
-      environment,
+      runtimeEnvironment,
       request.headers.get('authorization'),
       dependencies,
     );
@@ -80,5 +132,7 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
 }
 
 export async function POST(request: Request): Promise<Response> {
-  return handleNaverNewsShadowRecurringSchedulerRequest(request, process.env);
+  return handleNaverNewsShadowRecurringSchedulerRequest(request, process.env, {
+    resolveOidcToken: () => getVercelOidcToken(),
+  });
 }

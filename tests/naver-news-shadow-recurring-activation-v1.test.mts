@@ -216,6 +216,113 @@ test('shadow route classifies config and authorization failures without exposing
   });
 });
 
+test('shadow route resolves request-context OIDC for the live Blob mirror before dispatch', async () => {
+  const calls: any[] = [];
+  let resolverCalls = 0;
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${SECRET}` },
+    }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
+      BLOB_STORE_ID: 'store_123',
+      VERCEL_OIDC_TOKEN: undefined,
+    }),
+    {
+      now: () => NOW,
+      dispatch: fakeDispatch(calls),
+      resolveOidcToken: () => {
+        resolverCalls += 1;
+        return 'runtime-oidc-token';
+      },
+    },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(resolverCalls, 1);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].environment.VERCEL_OIDC_TOKEN, 'runtime-oidc-token');
+  assert.equal(calls[0].environment.BLOB_STORE_ID, 'store_123');
+});
+
+test('shadow route never resolves OIDC before authorization passes', async () => {
+  let resolverCalls = 0;
+  const calls: any[] = [];
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: { authorization: 'Bearer wrong' },
+    }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
+      BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      dispatch: fakeDispatch(calls),
+      resolveOidcToken: () => {
+        resolverCalls += 1;
+        return 'runtime-oidc-token';
+      },
+    },
+  );
+  assert.equal(response.status, 403);
+  assert.equal(resolverCalls, 0);
+  assert.equal(calls.length, 0);
+  assert.equal((await response.json()).errorClass, 'authorization_rejected');
+});
+
+test('shadow route fails closed when live Blob mirror OIDC cannot be resolved', async () => {
+  const calls: any[] = [];
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${SECRET}` },
+    }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
+      BLOB_STORE_ID: 'store_123',
+      VERCEL_OIDC_TOKEN: undefined,
+    }),
+    {
+      dispatch: fakeDispatch(calls),
+      resolveOidcToken: async () => undefined,
+    },
+  );
+  assert.equal(response.status, 403);
+  assert.equal(calls.length, 0);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    code: 'naver_news_shadow_recurring_scheduler_rejected',
+    errorClass: 'dispatch_failed',
+  });
+});
+
+test('shadow route preserves an existing runtime OIDC token without calling resolver', async () => {
+  const calls: any[] = [];
+  let resolverCalls = 0;
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${SECRET}` },
+    }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
+      BLOB_STORE_ID: 'store_123',
+      VERCEL_OIDC_TOKEN: 'existing-oidc-token',
+    }),
+    {
+      dispatch: fakeDispatch(calls),
+      resolveOidcToken: () => {
+        resolverCalls += 1;
+        return 'unexpected';
+      },
+    },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(resolverCalls, 0);
+  assert.equal(calls[0].environment.VERCEL_OIDC_TOKEN, 'existing-oidc-token');
+});
+
 test('recurring workflow suppresses malformed response bodies and only logs bounded failure classes', async () => {
   const { readFile } = await import('node:fs/promises');
   const { runInNewContext } = await import('node:vm');
