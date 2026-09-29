@@ -1,0 +1,59 @@
+name: Diagnose NAVER recurring Production env values v2
+
+on:
+  push:
+    branches:
+      - ops/diagnose-naver-recurring-403-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      TEAM_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Pull exact Production env and compare contract values
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VERCEL_TOKEN:-}"
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$TEAM_ID" "$PROJECT_ID" > .vercel/project.json
+          env_file="$(mktemp)"
+
+          set +e
+          npx --yes vercel@latest env pull "$env_file"             --environment=production             --yes             --token="$VERCEL_TOKEN" >/tmp/vercel-env-pull.log 2>&1
+          cli_status=$?
+          set -e
+
+          if [[ "$cli_status" != "0" ]]; then
+            echo "VERCEL_ENV_PULL_STATUS=failed"
+            tail -n 20 /tmp/vercel-env-pull.log
+            rm -f "$env_file" /tmp/vercel-env-pull.log .vercel/project.json
+            exit "$cli_status"
+          fi
+
+          set -a
+          source "$env_file"
+          set +a
+
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_ENABLED:-}" == "approved-v128-recurring-foundation" ]]             && enabled=true || enabled=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT:-}" == "production" ]]             && deployment=true || deployment=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_QUERY:-}" == "아이유 IU" ]]             && query=true || query=false
+          [[ "${FANDEX_NAVER_NEWS_RECURRING_DISPLAY:-}" == "100" ]]             && display=true || display=false
+
+          echo "VERCEL_ENV_PULL_STATUS=success"
+          echo "FANDEX_RECURRING_ENABLED_EXPECTED=$enabled"
+          echo "FANDEX_RECURRING_DEPLOYMENT_EXPECTED=$deployment"
+          echo "FANDEX_RECURRING_QUERY_EXPECTED=$query"
+          echo "FANDEX_RECURRING_DISPLAY_EXPECTED=$display"
+          echo "secretValuesLogged=false"
+          echo "productionRequests=0"
+          echo "repositoryMutations=0"
+
+          rm -f "$env_file" /tmp/vercel-env-pull.log .vercel/project.json
