@@ -11,7 +11,10 @@ assert spec and spec.loader
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
-html = "<html><body>KANGTA TVXQ! 2Spade A-NA KAI NCT U TAEYEON YUTA</body></html>"
+html = "<html><body>" + "".join(
+    f"<div>{value}</div>"
+    for value in ["KANGTA", "TVXQ!", "2Spade", "A-NA", "KAI", "NCT U", "TAEYEON", "YUTA"]
+) + "</body></html>"
 rows = module.parse_directory(html)
 assert [row["displayArtist"] for row in rows] == ["TAEYEON", "KAI", "NCT U"]
 
