@@ -1,0 +1,62 @@
+name: Validate NAVER recurring Production env 2026-09-29 v1
+
+on:
+  push:
+    branches:
+      - validation/naver-recurring-production-env-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Read env metadata only
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          code=$(curl -sS -o /tmp/env.json -w '%{http_code}'             -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?teamId=$VERCEL_ORG_ID&decrypt=false")
+          echo "FANDEX_ENV_HTTP=$code"
+          test "$code" = "200"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/env.json','utf8'));
+          const envs=Array.isArray(d.envs)?d.envs:Array.isArray(d)?d:[];
+          const keys=[
+            'FANDEX_NAVER_NEWS_RECURRING_ENABLED',
+            'FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT',
+            'FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+            'FANDEX_NAVER_NEWS_RECURRING_QUERY',
+            'FANDEX_NAVER_NEWS_RECURRING_DISPLAY',
+            'FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE',
+            'BLOB_STORE_ID',
+            'FANDEX_RUNTIME_DATABASE_URL',
+            'FANDEX_NAVER_NEWS_API_ENDPOINT',
+            'FANDEX_NAVER_NEWS_CLIENT_ID',
+            'FANDEX_NAVER_NEWS_CLIENT_SECRET',
+          ];
+          for (const key of keys) {
+            const rows=envs.filter(e=>e && e.key===key);
+            const targets=rows.map(e=>Array.isArray(e.target)?[...e.target].sort():[]).flat();
+            console.log(key+'='+JSON.stringify({
+              present:rows.length>0,
+              count:rows.length,
+              targets:[...new Set(targets)].sort(),
+              types:[...new Set(rows.map(e=>e.type??null))],
+            }));
+          }
+          NODE
+
+      - name: Assert no mutation occurred
+        run: |
+          echo "productionEnvMutations=0"
+          echo "databaseWrites=0"
+          echo "blobWrites=0"
+          echo "schedulerInvocations=0"
