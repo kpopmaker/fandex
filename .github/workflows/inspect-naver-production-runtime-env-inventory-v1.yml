@@ -1,0 +1,83 @@
+name: Inspect NAVER Production runtime env inventory v1
+
+on:
+  push:
+    branches:
+      - ops/naver-production-runtime-env-inventory-20260929-v1
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      TEAM_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Read Vercel env inventory once without decrypting values
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${VERCEL_TOKEN:-}"
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl -sS               -o "$response_file"               -w '%{http_code}'               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Accept: application/json"               "https://api.vercel.com/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID&decrypt=false"
+          )"
+
+          if [ "$http_code" != "200" ]; then
+            echo "VERCEL_ENV_INVENTORY_HTTP_STATUS=$http_code"
+            exit 1
+          fi
+
+          node - "$response_file" <<'NODE'
+          const fs = require('node:fs');
+          const path = process.argv[2];
+          const body = JSON.parse(fs.readFileSync(path, 'utf8'));
+          if (!Array.isArray(body.envs)) throw new Error('envs_missing');
+
+          const targetKeys = new Set([
+            'BLOB_STORE_ID',
+            'FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID',
+            'VERCEL_OIDC_TOKEN',
+            'FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE',
+          ]);
+
+          const rows = body.envs
+            .filter((row) => row && typeof row === 'object' && targetKeys.has(row.key))
+            .map((row) => ({
+              key: row.key,
+              type: typeof row.type === 'string' ? row.type : null,
+              target: Array.isArray(row.target) ? [...row.target].sort() : row.target ?? null,
+              decrypted: row.decrypted === true,
+              hasValueField: Object.prototype.hasOwnProperty.call(row, 'value'),
+            }))
+            .sort((a, b) => a.key.localeCompare(b.key));
+
+          const pagination = body.pagination && typeof body.pagination === 'object'
+            ? {
+                count: body.pagination.count ?? null,
+                hasMore: body.pagination.hasMore ?? null,
+                nextPresent: Boolean(body.pagination.next || body.pagination.nextCursor || body.pagination.cursor),
+              }
+            : null;
+
+          console.log(JSON.stringify({
+            inventoryRead: 'success',
+            totalEnvRows: body.envs.length,
+            targetRows: rows,
+            targetPresence: {
+              BLOB_STORE_ID: rows.some((r) => r.key === 'BLOB_STORE_ID'),
+              FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: rows.some((r) => r.key === 'FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID'),
+              VERCEL_OIDC_TOKEN: rows.some((r) => r.key === 'VERCEL_OIDC_TOKEN'),
+              FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: rows.some((r) => r.key === 'FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE'),
+            },
+            pagination,
+            rawValuesLogged: false,
+          }));
+          NODE
+
+          rm -f "$response_file"
