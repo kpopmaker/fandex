@@ -1,0 +1,97 @@
+{
+  "version": "cignature_c9_terminal_disbandment_catalog_adapter_v1",
+  "source": {
+    "id": "cignature-c9-terminal-disbandment-catalog",
+    "type": "provider_catalog",
+    "name": "cignature C9 Terminal Disbandment Catalog",
+    "observedAt": "2026-09-29T00:00:00+09:00",
+    "url": "https://www.soompi.com/article/1707943wpp/cignature-announces-disbandment"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "cignature",
+      "aliases": [
+        "시그니처",
+        "CIGNATURE"
+      ],
+      "evidence": [
+        {
+          "label": "C9 explicit disbandment and all-seven contract termination statement",
+          "url": "https://www.soompi.com/article/1707943wpp/cignature-announces-disbandment"
+        },
+        {
+          "label": "C9 terminal statement Korean preservation",
+          "url": "https://enews.imbc.com/M/Detail/439618"
+        },
+        {
+          "label": "C9-supplied seven-member profile and Belle temporary project absence",
+          "url": "https://www.koreajoongangdaily.com/entertainment/girl-group-cignature-to-release-fifth-ep-sweetie-but-saltie-in-june/11759375"
+        },
+        {
+          "label": "Apple Music Nun Nu Nan Na licensed debut catalog",
+          "url": "https://music.apple.com/us/album/nun-nu-nan-na-single/1670526978"
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "preservedOfficialStatementsAllowedForHistoricalEvents": true,
+    "exactTerminalMemberRosterRequired": true,
+    "explicitAgencyDisbandmentRequired": true,
+    "allSevenExclusiveContractsTerminatedRequired": true,
+    "groupActivityEndDateRequired": true,
+    "temporaryProjectAbsenceDoesNotTerminateMembership": true,
+    "sixMemberPromotionSubsetDoesNotChangeCanonicalRoster": true,
+    "historicalAgencyRequiresInactiveLifecycle": true,
+    "groupDisbandmentConfirmed": true,
+    "legalEntityDissolutionNotAsserted": true,
+    "individualPostGroupActivityDoesNotReactivateGroup": true,
+    "terminalGroupStateDoesNotInferIndividualCareerEnd": true,
+    "licensedProviderDebutCatalogAllowed": true,
+    "debutDateCrossSourceConsistencyRequired": true,
+    "memberNamesDoNotCreateSoloCanonicals": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "terminalManagement": {
+    "announcedAt": "2024-12-03",
+    "effectiveDate": "2024-11-30",
+    "lifecycleStatus": "inactive",
+    "agencyStatus": "historical",
+    "agency": "C9 Entertainment",
+    "terminalMembers": [
+      "CHAESOL",
+      "JEEWON",
+      "SELINE",
+      "CHLOE",
+      "BELLE",
+      "SEMI",
+      "DOHEE"
+    ],
+    "terminalMemberCount": 7,
+    "allSevenExclusiveContractsTerminated": true,
+    "groupActivitiesEnded": true,
+    "groupDisbandmentConfirmed": true,
+    "belleTemporaryProjectAbsencePreserved": true,
+    "promotionSubsetBeforeTermination": {
+      "activePromotionMemberCount": 6,
+      "absentMember": "BELLE",
+      "reason": "temporary_UNIS_project_participation_not_departure"
+    },
+    "legalEntityDissolutionAsserted": false,
+    "debutDate": "2020-02-04",
+    "debutRelease": "Nun Nu Nan Na"
+  },
+  "provenance": {
+    "snapshotType": "verified_preserved_official_disbandment_plus_preterminal_seven_member_snapshot",
+    "verifiedFrom": [
+      "https://www.soompi.com/article/1707943wpp/cignature-announces-disbandment",
+      "https://enews.imbc.com/M/Detail/439618",
+      "https://www.koreajoongangdaily.com/entertainment/girl-group-cignature-to-release-fifth-ep-sweetie-but-saltie-in-june/11759375",
+      "https://music.apple.com/us/album/nun-nu-nan-na-single/1670526978"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}

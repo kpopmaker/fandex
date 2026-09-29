@@ -5657,6 +5657,38 @@
           "note": "Bugs identifies artist 비오브유(B.O.Y), release date 2020-01-07, and agency 더뮤직웍스."
         }
       ]
+    },
+    {
+      "displayArtist": "cignature",
+      "decision": "new_canonical_group_candidate",
+      "relationResolution": "c9_explicit_disbandment_all_seven_contract_termination_and_preterminal_seven_member_profile_resolve_terminal_identity",
+      "relatedCanonicalArtistIds": [],
+      "scopeDecision": "eligible",
+      "scopeBasis": "preserved_official_c9_disbandment_statement_exact_preterminal_seven_member_identity_and_licensed_debut_catalog",
+      "onboardingBlocker": null,
+      "autoPromote": false,
+      "evidence": [
+        {
+          "source": "C9 Entertainment terminal disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1707943wpp/cignature-announces-disbandment",
+          "note": "C9 Entertainment states the company and members agreed that disbandment was necessary, terminated all seven members' exclusive contracts, and concluded group activities effective November 30, 2024."
+        },
+        {
+          "source": "C9 Entertainment terminal statement preserved by iMBC",
+          "url": "https://enews.imbc.com/M/Detail/439618",
+          "note": "Korean preservation of the official C9 statement independently confirms seven-member contract termination and November 30, 2024 group-activity closure."
+        },
+        {
+          "source": "C9 Entertainment current seven-member profile preserved by Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/girl-group-cignature-to-release-fifth-ep-sweetie-but-saltie-in-june/11759375",
+          "note": "The May 2024 C9-supplied profile identifies CHAESOL, JEEWON, SELINE, CHLOE, BELLE, SEMI, and DOHEE as the seven members and separately explains BELLE's temporary UNIS project participation while cignature promoted as six."
+        },
+        {
+          "source": "Apple Music Nun Nu Nan Na licensed debut catalog",
+          "url": "https://music.apple.com/us/album/nun-nu-nan-na-single/1670526978",
+          "note": "Provider catalog dates Nun Nu Nan Na to February 4, 2020 and credits J9 Entertainment."
+        }
+      ]
     }
   ]
 }

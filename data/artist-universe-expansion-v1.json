@@ -9543,6 +9543,79 @@
           "url": "https://music.bugs.co.kr/album/20298791"
         }
       ]
+    },
+    {
+      "id": "cignature",
+      "ticker": "CIGNATURE",
+      "name": "cignature",
+      "agency": "C9 Entertainment",
+      "agencyStatus": "historical",
+      "entityType": "group",
+      "debutDate": "2020-02-04",
+      "lifecycleStatus": "inactive",
+      "members": [
+        "CHAESOL",
+        "JEEWON",
+        "SELINE",
+        "CHLOE",
+        "BELLE",
+        "SEMI",
+        "DOHEE"
+      ],
+      "naverNewsQuery": "시그니처 cignature C9엔터테인먼트",
+      "koreanAliases": [
+        "시그니처"
+      ],
+      "englishAliases": [
+        "cignature",
+        "CIGNATURE"
+      ],
+      "keywords": [
+        "C9 Entertainment",
+        "J9 Entertainment",
+        "C9엔터테인먼트",
+        "J9엔터테인먼트",
+        "CHAESOL",
+        "JEEWON",
+        "SELINE",
+        "CHLOE",
+        "BELLE",
+        "SEMI",
+        "DOHEE",
+        "YE AH",
+        "SUNN",
+        "NUN NU NAN NA",
+        "Nun Nu Nan Na",
+        "Sweetie but Saltie"
+      ],
+      "disambiguationKeywords": [
+        "C9 Entertainment",
+        "C9엔터테인먼트",
+        "시그니처"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "archive",
+      "identityEvidence": [
+        {
+          "source": "C9 Entertainment terminal disbandment statement preserved by Soompi",
+          "url": "https://www.soompi.com/article/1707943wpp/cignature-announces-disbandment"
+        },
+        {
+          "source": "C9 Entertainment terminal statement Korean preservation by iMBC",
+          "url": "https://enews.imbc.com/M/Detail/439618"
+        },
+        {
+          "source": "C9 Entertainment seven-member profile and Belle temporary project absence preserved by Korea JoongAng Daily",
+          "url": "https://www.koreajoongangdaily.com/entertainment/girl-group-cignature-to-release-fifth-ep-sweetie-but-saltie-in-june/11759375"
+        },
+        {
+          "source": "Apple Music Nun Nu Nan Na licensed debut catalog",
+          "url": "https://music.apple.com/us/album/nun-nu-nan-na-single/1670526978"
+        }
+      ]
     }
   ]
 }
