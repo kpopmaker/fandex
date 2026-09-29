@@ -1578,6 +1578,20 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(inbChen.lifecycleStatus, 'active');
   assert.ok(inbChen.profile.koreanAliases.includes('첸'));
 
+  const dreamcatcher = getArtistV4ById('dreamcatcher');
+  assert.ok(dreamcatcher);
+  assert.equal(dreamcatcher.agency, 'Dreamcatcher Company');
+  assert.equal(dreamcatcher.lifecycleStatus, 'active');
+
+  const dreamcatcherUau = getArtistV4ById('uau');
+  assert.ok(dreamcatcherUau);
+  assert.equal(dreamcatcherUau.entityType, 'unit');
+  assert.equal(dreamcatcherUau.agency, 'Dreamcatcher Company');
+  assert.equal(dreamcatcherUau.agencyStatus, 'verified');
+  assert.equal(dreamcatcherUau.lifecycleStatus, 'active');
+  assert.ok(dreamcatcherUau.profile.koreanAliases.includes('유아유'));
+  assert.ok(dreamcatcherUau.profile.includeKeywords.includes('Dreamcatcher'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

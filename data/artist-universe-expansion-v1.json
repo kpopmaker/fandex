@@ -10797,6 +10797,56 @@
           "url": "https://www.inb100.com/42"
         }
       ]
+    },
+    {
+      "id": "uau",
+      "ticker": "UAU",
+      "name": "UAU",
+      "agency": "Dreamcatcher Company",
+      "agencyStatus": "verified",
+      "entityType": "unit",
+      "lifecycleStatus": "active",
+      "debutDate": "2025-05-28",
+      "naverNewsQuery": "유아유 UAU 드림캐쳐",
+      "koreanAliases": [
+        "유아유"
+      ],
+      "englishAliases": [
+        "UAU"
+      ],
+      "keywords": [
+        "Dreamcatcher Company",
+        "Dreamcatcher",
+        "JiU",
+        "SuA",
+        "Yoohyeon",
+        "Playlist #You Are You",
+        "Playlist #Your Youth"
+      ],
+      "disambiguationKeywords": [
+        "Dreamcatcher",
+        "드림캐쳐",
+        "Dreamcatcher Company"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "DREAMCATCHER OFFICIAL STORE UAU debut album manufactured by DREAMCATCHER COMPANY",
+          "url": "https://dreamcatcher.kr/product/detail.html?cate_no=1&display_group=2&product_no=133"
+        },
+        {
+          "source": "DREAMCATCHER OFFICIAL STORE UAU 2026 Season's Greetings manufactured by DREAMCATCHER COMPANY",
+          "url": "https://en.dreamcatcher.kr/product/exclusive-special-event-uau-2026-seasons-greetings-the-night-bloom/144/?cate_no=1&display_group=2"
+        },
+        {
+          "source": "2026 current-member/unit corroboration citing photo provided by Dreamcatcher Company",
+          "url": "https://cbcglobe.com/en/articles/2026/06/19/dreamcatcher-unit-uau-makes-refreshing-summer-comeback-with-9f8bdc7b"
+        }
+      ]
     }
   ]
 }

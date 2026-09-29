@@ -1,0 +1,116 @@
+{
+  "version": "dreamcatcher_official_store_catalog_adapter_v1",
+  "source": {
+    "id": "dreamcatcher-official-store-current-music-identity-catalog",
+    "type": "provider_catalog",
+    "name": "Dreamcatcher Official Store Current Music Identity Catalog",
+    "observedAt": "2026-09-30T00:24:00+09:00",
+    "url": "https://dreamcatcher.kr/"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "Dreamcatcher",
+      "aliases": [
+        "드림캐쳐",
+        "DREAMCATCHER"
+      ],
+      "evidence": [
+        {
+          "label": "DREAMCATCHER OFFICIAL STORE current member profile",
+          "url": "https://dreamcatcher.kr/shopinfo/memberprofile.html"
+        }
+      ]
+    },
+    {
+      "displayArtist": "UAU",
+      "aliases": [
+        "유아유"
+      ],
+      "evidence": [
+        {
+          "label": "DREAMCATCHER OFFICIAL STORE UAU debut album manufactured by DREAMCATCHER COMPANY",
+          "url": "https://dreamcatcher.kr/product/detail.html?cate_no=1&display_group=2&product_no=133"
+        },
+        {
+          "label": "DREAMCATCHER OFFICIAL STORE UAU 2026 Season's Greetings manufactured by DREAMCATCHER COMPANY",
+          "url": "https://en.dreamcatcher.kr/product/exclusive-special-event-uau-2026-seasons-greetings-the-night-bloom/144/?cate_no=1&display_group=2"
+        },
+        {
+          "label": "DREAMCATCHER OFFICIAL STORE UAU 2026 second mini-album activity",
+          "url": "https://en.dreamcatcher.kr/product/uau-2nd-mini-album-playlist-your-youth-photobook-ver/167/"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "Dreamcatcher": {
+      "agency": "Dreamcatcher Company",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "JIU",
+        "SUA",
+        "SIYEON",
+        "HANDONG",
+        "YOOHYEON",
+        "DAMI",
+        "GAHYEON"
+      ],
+      "memberCount": 7
+    },
+    "UAU": {
+      "agency": "Dreamcatcher Company",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "unit",
+      "debutDate": "2025-05-28"
+    }
+  },
+  "supplementalClassificationEvidence": {
+    "UAU": {
+      "classification": "Dreamcatcher unit",
+      "members": [
+        "JiU",
+        "SuA",
+        "Yoohyeon"
+      ],
+      "sourceType": "secondary_current_report_with_company_supplied_photo",
+      "url": "https://cbcglobe.com/en/articles/2026/06/19/dreamcatcher-unit-uau-makes-refreshing-summer-comeback-with-9f8bdc7b"
+    }
+  },
+  "excludedExternalProviderIdentities": [
+    {
+      "displayArtist": "ChRocktikal",
+      "aliases": [
+        "크록티칼"
+      ],
+      "reason": "sold_on_dreamcatcher_official_store_but_album_manufacturer_is_LEEGEUM_ENT_not_Dreamcatcher_Company",
+      "url": "https://dreamcatcher.kr/product/detail.html?cate_no=24&display_group=1&product_no=148"
+    }
+  ],
+  "contract": {
+    "officialStoreIdentityEvidenceRequired": true,
+    "dreamcatcherExactCurrentMemberProfileRequired": true,
+    "uauOfficialDebutAlbumRequired": true,
+    "uauDreamcatcherCompanyManufacturerEvidenceRequired": true,
+    "uauCurrent2026ActivityRequired": true,
+    "secondaryClassificationMustRemainDistinctFromFirstPartyIdentityEvidence": true,
+    "externalProviderProductMustNotBeAutoPromotedAsDreamcatcherCompanyIdentity": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_Dreamcatcher_official_store_music_identity_snapshot",
+    "verifiedFrom": [
+      "https://dreamcatcher.kr/shopinfo/memberprofile.html",
+      "https://dreamcatcher.kr/product/detail.html?cate_no=1&display_group=2&product_no=133",
+      "https://en.dreamcatcher.kr/product/exclusive-special-event-uau-2026-seasons-greetings-the-night-bloom/144/?cate_no=1&display_group=2",
+      "https://en.dreamcatcher.kr/product/uau-2nd-mini-album-playlist-your-youth-photobook-ver/167/",
+      "https://dreamcatcher.kr/product/detail.html?cate_no=24&display_group=1&product_no=148"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
