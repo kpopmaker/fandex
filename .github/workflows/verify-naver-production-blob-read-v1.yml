@@ -1,0 +1,37 @@
+name: Invoke NAVER Production Blob read verification v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      execution_approval:
+        description: 'Separate post-merge approval: type ops-naver-blob-read-verification-20260929-v1'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naver-production-blob-read-verification-v1
+  cancel-in-progress: false
+
+jobs:
+  invoke:
+    if: >-
+      github.repository == 'kpopmaker/fandex' && github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && github.run_attempt == 1 &&
+      inputs.execution_approval == 'ops-naver-blob-read-verification-20260929-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Invoke once and log validated classification only
+        env:
+          FANDEX_NAVER_NEWS_SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+          EXECUTION_APPROVAL: ${{ inputs.execution_approval }}
+        run: node scripts/verification/invokeNaverProductionBlobRead.mjs

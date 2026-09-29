@@ -1,0 +1,29 @@
+name: Validate NAVER Production Blob read probe v1
+
+on:
+  push:
+    branches: [integration/naver-production-blob-read-probe-v1]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/naver-production-blob-read-probe-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node --conditions=react-server --import tsx --test tests/naver-production-blob-read-probe-v1.test.mts tests/naver-news-stored-evidence-mirror-v1.test.mts tests/naver-evidence-vercel-blob-adapter-v1.test.mts tests/naver-news-live-blob-mirror-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
