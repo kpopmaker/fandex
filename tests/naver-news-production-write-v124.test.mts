@@ -151,7 +151,9 @@ class SyntheticPostgresPool implements NaverNewsProductionWritePool {
       return { rowCount: 0, rows: [] };
     }
     if (sql.includes('INSERT INTO fandex.source_ingestion_jobs')) {
-      if (this.failOnJobInsert) throw new Error(fakeDatabaseLeak);
+      if (this.failOnJobInsert) {
+        throw Object.assign(new Error(fakeDatabaseLeak), { code: '42P01' });
+      }
       this.writeQueries += 1;
       if (this.job) return { rowCount: 0, rows: [] };
       this.job = {
@@ -428,7 +430,10 @@ test('synthetic database errors are redacted and clean up client and pool', asyn
   }));
 
   assert.equal(error.message, 'naver_news_production_write_failed');
-  assert.deepEqual(logs, [['FANDEX_NAVER_DISPATCH_FAILED_STAGE=database_ensure']]);
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=undefined_table'],
+    ['FANDEX_NAVER_DISPATCH_FAILED_STAGE=database_ensure'],
+  ]);
   assert.doesNotMatch(error.message, /fake-db-secret|private-pooler-host|fandex_runtime/);
   assert.equal(apiCalls, 0);
   assert.equal(pool.connectCalls, 1);
