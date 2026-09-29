@@ -174,10 +174,10 @@ async function streamToText(
   }
 }
 
-export function createVercelBlobImmutableTextObjectStore(
-  client: VercelBlobSdkPort,
+export function createVercelBlobTextReadStore(
+  client: Pick<VercelBlobSdkPort, 'get' | 'list'>,
   config: VercelBlobPrivateStoreConfig,
-): ImmutableTextObjectStore {
+): Pick<ImmutableTextObjectStore, 'readText' | 'listPathnames'> {
   const auth = authOptions(config);
 
   async function readText(pathname: string): Promise<string | null> {
@@ -257,6 +257,16 @@ export function createVercelBlobImmutableTextObjectStore(
       throw new Error('naver_evidence_blob_list_failed');
     }
   }
+
+  return Object.freeze({ readText, listPathnames });
+}
+
+export function createVercelBlobImmutableTextObjectStore(
+  client: VercelBlobSdkPort,
+  config: VercelBlobPrivateStoreConfig,
+): ImmutableTextObjectStore {
+  const auth = authOptions(config);
+  const { readText, listPathnames } = createVercelBlobTextReadStore(client, config);
 
   async function putTextIfAbsent(
     pathname: string,

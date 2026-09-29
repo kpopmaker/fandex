@@ -30,6 +30,10 @@ export const NAVER_NEWS_STORED_EVIDENCE_MIRROR_VERSION =
 const ROOT = 'fandex/naver-news/stored-evidence-mirror/v1';
 const JOB_PREFIX = `${ROOT}/jobs/`;
 const SCHEDULER_MANIFEST_PREFIX = `${ROOT}/scheduler-manifests/`;
+export {
+  JOB_PREFIX as NAVER_NEWS_MIRROR_JOB_PREFIX,
+  SCHEDULER_MANIFEST_PREFIX as NAVER_NEWS_MIRROR_MANIFEST_PREFIX,
+};
 const SCHEDULER_COLLECTION_KEY_PATTERN =
   /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
 
@@ -245,7 +249,7 @@ function parseJson(body: string, errorCode: string): unknown {
   }
 }
 
-function decodeJobEnvelope(body: string): MirrorJobEnvelope {
+export function decodeJobEnvelope(body: string): MirrorJobEnvelope {
   const parsed = parseJson(body, 'naver_news_mirror_job_payload_invalid');
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
     throw new Error('naver_news_mirror_job_payload_invalid');
@@ -287,7 +291,7 @@ function decodeJobEnvelope(body: string): MirrorJobEnvelope {
   });
 }
 
-function decodeManifestEnvelope(body: string): SchedulerManifestEnvelope {
+export function decodeManifestEnvelope(body: string): SchedulerManifestEnvelope {
   const parsed = parseJson(body, 'naver_news_latest_official_slot_stored_job_invalid');
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
     throw new Error('naver_news_latest_official_slot_stored_job_invalid');
