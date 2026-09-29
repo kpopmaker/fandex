@@ -1,0 +1,53 @@
+name: Verify NAVER post-activation Blob direct read
+
+on:
+  push:
+    branches: [validation/naver-post-activation-blob-read-20260929-v1]
+    paths:
+      - .github/workflows/verify-naver-post-activation-blob-read.yml
+      - scripts/verification/naverBlobDirectRead.mjs
+      - tests/naver-blob-direct-read.test.mts
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naver-post-activation-blob-read-20260929-v1
+  cancel-in-progress: false
+
+jobs:
+  read-only-verification:
+    if: github.repository == 'kpopmaker/fandex' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Require current main and unchanged merged decoders
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/kpopmaker/fandex/commits/main --jq .sha)" = "54bb0f0fcdbf6860893cc7fb9e4b021131348d71"
+          git diff --exit-code 54bb0f0fcdbf6860893cc7fb9e4b021131348d71 HEAD -- lib/server/ingestion lib/server/storage lib/shared package.json package-lock.json
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Test read-only verifier and existing decoders without credentials
+        run: node --import tsx --test tests/naver-blob-direct-read.test.mts tests/naver-news-stored-evidence-mirror-v1.test.mts
+      - name: Issue project OIDC and read private Blob evidence
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: node --import tsx scripts/verification/naverBlobDirectRead.mjs
+      - name: Upload sanitized verification result only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: naver-post-activation-blob-direct-read
+          path: verification/naver-blob-direct-read-result.json
+          if-no-files-found: ignore
+          retention-days: 14
