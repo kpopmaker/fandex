@@ -1265,6 +1265,25 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(oneTheNine.profile.koreanAliases.includes('원더나인'));
 
 
+  const tripleS = getArtistV4ById('triples');
+  assert.ok(tripleS);
+  assert.equal(tripleS.entityType, 'group');
+  assert.equal(tripleS.agency, 'MODHAUS');
+  assert.equal(tripleS.debutDate, '2023-02-13');
+  assert.equal(tripleS.lifecycleStatus, 'active');
+  assert.deepEqual(tripleS.members, ["SeoYeon","HyeRin","JiWoo","ChaeYeon","YooYeon","SooMin","NaKyoung","YuBin","Kaede","DaHyun","Kotone","YeonJi","Nien","SoHyun","Xinyu","Mayu","Lynn","JooBin","HaYeon","ShiOn","ChaeWon","Sullin","SeoAh","JiYeon"]);
+  assert.ok(tripleS.profile.koreanAliases.includes('트리플에스'));
+
+  const artms = getArtistV4ById('artms');
+  assert.ok(artms);
+  assert.equal(artms.entityType, 'group');
+  assert.equal(artms.agency, 'MODHAUS');
+  assert.equal(artms.debutDate, '2024-05-31');
+  assert.equal(artms.lifecycleStatus, 'active');
+  assert.deepEqual(artms.members, ["HeeJin","HaSeul","Kim Lip","JinSoul","Choerry"]);
+  assert.ok(artms.profile.koreanAliases.includes('아르테미스'));
+
+
 
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
