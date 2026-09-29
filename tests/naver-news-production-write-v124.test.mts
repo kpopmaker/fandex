@@ -386,7 +386,9 @@ test('synthetic production run uses the external collector and existing atomic r
   );
 });
 
-test('synthetic fetch errors are bounded and use the existing retryable failure path', async () => {
+test('synthetic fetch errors are bounded and use the existing retryable failure path', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const pool = new SyntheticPostgresPool();
   let apiCalls = 0;
   const secretLeak = `${endpoint} ${clientId} ${clientSecret}`;
@@ -404,6 +406,7 @@ test('synthetic fetch errors are bounded and use the existing retryable failure 
   assert.equal(result.counts, null);
   assert.equal(apiCalls, 1);
   assert.equal(pool.job?.status, 'retryable_failed');
+  assert.deepEqual(logs, [['FANDEX_NAVER_DISPATCH_FAILED_STAGE=provider_collect']]);
   assert.equal(pool.beginCalls, 3);
   assert.equal(pool.commitCalls, 3);
   assert.equal(pool.rollbackCalls, 0);
@@ -412,7 +415,9 @@ test('synthetic fetch errors are bounded and use the existing retryable failure 
   assert.doesNotMatch(JSON.stringify(result), new RegExp(`${clientId}|${clientSecret}|openapi\\.naver\\.com`));
 });
 
-test('synthetic database errors are redacted and clean up client and pool', async () => {
+test('synthetic database errors are redacted and clean up client and pool', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const pool = new SyntheticPostgresPool(true);
   let apiCalls = 0;
   const error = await errorFrom(runNaverNewsProductionWrite(argv, environment(), {
@@ -423,6 +428,7 @@ test('synthetic database errors are redacted and clean up client and pool', asyn
   }));
 
   assert.equal(error.message, 'naver_news_production_write_failed');
+  assert.deepEqual(logs, [['FANDEX_NAVER_DISPATCH_FAILED_STAGE=database_ensure']]);
   assert.doesNotMatch(error.message, /fake-db-secret|private-pooler-host|fandex_runtime/);
   assert.equal(apiCalls, 0);
   assert.equal(pool.connectCalls, 1);
@@ -452,7 +458,7 @@ test('v124 source exposes only bounded output and adds no scheduler, migration, 
   assert.match(source, /createPostgresNaverNewsIngestionRepository/);
   assert.match(source, /runNaverNewsIngestionWorker/);
   assert.match(source, /requireRuntimeDatabaseUrl\(environment\)/);
-  assert.match(source, /finally \{[\s\S]*await pool\.end\(\)/);
+  assert.match(source, /finally \{[\s\S]*pool\.end\(\)/);
   assert.doesNotMatch(source, /FANDEX_MIGRATION_DATABASE_URL|INSERT INTO|UPDATE fandex|client\.query\(|setInterval\(|node-cron|cron\.schedule|scheduleJob\(/i);
   assert.match(source, /NAVER News v124 production write failed closed\. No credential, endpoint, database detail, SQL, or raw payload was logged\./);
   assert.match(packageJson, /"test:ingestion:v124": "tsx --test tests\/naver-news-production-write-v124\.test\.mts"/);

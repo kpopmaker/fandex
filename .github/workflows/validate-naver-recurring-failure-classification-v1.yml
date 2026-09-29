@@ -10,6 +10,9 @@ on:
       - tests/naver-news-shadow-recurring-activation-v1.test.mts
       - tests/naver-news-recurring-scheduler-v128.test.mts
       - tests/naver-news-production-write-v124.test.mts
+      - tests/naver-news-dispatch-diagnostics-v1.test.mts
+      - tests/naver-news-worker-mirror-lifecycle-v1.test.mts
+      - scripts/ingestion/write-naver-news-v124.mts
       - .github/workflows/naver-news-shadow-recurring-production-v1.yml
       - .github/workflows/validate-naver-recurring-failure-classification-v1.yml
       - package.json
@@ -32,7 +35,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node --conditions=react-server --import tsx --test tests/naver-news-shadow-recurring-activation-v1.test.mts tests/naver-news-recurring-scheduler-v128.test.mts tests/naver-news-production-write-v124.test.mts
+      - run: >-
+          node --conditions=react-server --import tsx --test
+          tests/naver-news-shadow-recurring-activation-v1.test.mts
+          tests/naver-news-recurring-scheduler-v128.test.mts
+          tests/naver-news-production-write-v124.test.mts
+          tests/naver-news-dispatch-diagnostics-v1.test.mts
+          tests/naver-news-worker-mirror-lifecycle-v1.test.mts
+          tests/naver-news-ingestion-v121.test.mts
+          tests/naver-news-scheduler-dispatch-v126.test.mts
+          tests/naver-news-live-blob-mirror-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build

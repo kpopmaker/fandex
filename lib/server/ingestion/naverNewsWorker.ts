@@ -1,3 +1,4 @@
+import { observeNaverNewsDispatchStage } from './naverNewsDispatchDiagnostics';
 import {
   buildNaverNewsIngestionWritePlan,
   buildNaverNewsJobIdentity,
@@ -82,11 +83,13 @@ export async function runNaverNewsIngestionWorker(
   input: NaverNewsWorkerInput,
 ): Promise<NaverNewsWorkerResult> {
   const identity = buildNaverNewsJobIdentity(input.command);
-  const ensured = await input.repository.ensureJob(identity, input.now());
+  const ensured = await observeNaverNewsDispatchStage('database_ensure',
+    () => input.repository.ensureJob(identity, input.now()));
   if (ensured.status === 'idempotent_succeeded') {
     if (input.evidenceMirror) {
       try {
-        await input.evidenceMirror.finalize(identity, ensured.resultSha256);
+        await observeNaverNewsDispatchStage('blob_finalize',
+          () => input.evidenceMirror!.finalize(identity, ensured.resultSha256));
       } catch {
         throw new Error('naver_news_evidence_mirror_finalize_failed');
       }
@@ -97,11 +100,13 @@ export async function runNaverNewsIngestionWorker(
     return terminalResult(ensured.status, identity);
   }
 
-  const claimed = await input.repository.claimJob(identity, input.workerId, input.now());
+  const claimed = await observeNaverNewsDispatchStage('database_claim',
+    () => input.repository.claimJob(identity, input.workerId, input.now()));
   if (claimed.status === 'idempotent_succeeded') {
     if (input.evidenceMirror) {
       try {
-        await input.evidenceMirror.finalize(identity, claimed.resultSha256);
+        await observeNaverNewsDispatchStage('blob_finalize',
+          () => input.evidenceMirror!.finalize(identity, claimed.resultSha256));
       } catch {
         throw new Error('naver_news_evidence_mirror_finalize_failed');
       }
@@ -112,60 +117,63 @@ export async function runNaverNewsIngestionWorker(
 
   let collection: NaverNewsCollection;
   try {
-    collection = await input.collector.collect(identity.request);
+    collection = await observeNaverNewsDispatchStage('provider_collect',
+      () => input.collector.collect(identity.request));
   } catch (error) {
-    const failed = await input.repository.failJob(
+    const failed = await observeNaverNewsDispatchStage('database_fail', () => input.repository.failJob(
       identity,
       input.workerId,
       claimed.claimToken,
       workerFailureCode(error),
       input.now(),
-    );
+    ));
     return terminalResult(failed.status, identity, { attempt: claimed.attempt });
   }
 
   let plan: ReturnType<typeof buildNaverNewsIngestionWritePlan>;
   try {
-    plan = buildNaverNewsIngestionWritePlan(identity, collection);
+    plan = await observeNaverNewsDispatchStage('response_validate',
+      () => buildNaverNewsIngestionWritePlan(identity, collection));
   } catch (error) {
-    const failed = await input.repository.failJob(
+    const failed = await observeNaverNewsDispatchStage('database_fail', () => input.repository.failJob(
       identity,
       input.workerId,
       claimed.claimToken,
       workerFailureCode(error),
       input.now(),
-    );
+    ));
     return terminalResult(failed.status, identity, { attempt: claimed.attempt });
   }
 
   if (input.evidenceMirror) {
     try {
-      await input.evidenceMirror.stage(plan);
+      await observeNaverNewsDispatchStage('blob_stage', () => input.evidenceMirror!.stage(plan));
     } catch {
-      const failed = await input.repository.failJob(
+      const failed = await observeNaverNewsDispatchStage('database_fail', () => input.repository.failJob(
         identity,
         input.workerId,
         claimed.claimToken,
         'naver_news_evidence_mirror_stage_failed',
         input.now(),
-      );
+      ));
       return terminalResult(failed.status, identity, { attempt: claimed.attempt });
     }
   }
 
-  const completed = await input.repository.completeJob(
+  const completed = await observeNaverNewsDispatchStage('database_complete', () => input.repository.completeJob(
     identity,
     input.workerId,
     claimed.claimToken,
     plan,
     input.now(),
-  );
+  ));
   if (!('resultSha256' in completed)) {
     return terminalResult(completed.status, identity, { attempt: claimed.attempt });
   }
   if (input.evidenceMirror) {
     try {
-      await input.evidenceMirror.finalize(identity, completed.resultSha256);
+      await observeNaverNewsDispatchStage('blob_finalize',
+        () => input.evidenceMirror!.finalize(identity, completed.resultSha256));
     } catch {
       throw new Error('naver_news_evidence_mirror_finalize_failed');
     }

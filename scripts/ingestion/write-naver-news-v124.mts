@@ -1,6 +1,7 @@
 import { pathToFileURL } from 'node:url';
 
 import { Pool } from 'pg';
+import { observeNaverNewsDispatchStage } from '../../lib/server/ingestion/naverNewsDispatchDiagnostics';
 
 import {
   buildNaverNewsJobIdentity,
@@ -154,13 +155,17 @@ export async function runNaverNewsProductionWrite(
   if (environment[NAVER_NEWS_V124_APPROVAL_ENV] !== NAVER_NEWS_V124_APPROVAL_VALUE) {
     throw new Error('naver_news_production_write_approval_required');
   }
-  const parsed = parseProductionWriteCommand(argv);
-  buildNaverNewsJobIdentity(parsed.command);
-  const connectionString = requireRuntimeDatabaseUrl(environment);
-  const collector = createNaverNewsExternalCollector({
+  const parsed = await observeNaverNewsDispatchStage('writer_arguments', () => {
+    const command = parseProductionWriteCommand(argv);
+    buildNaverNewsJobIdentity(command.command);
+    return command;
+  });
+  const connectionString = await observeNaverNewsDispatchStage('database_config',
+    () => requireRuntimeDatabaseUrl(environment));
+  const collector = await observeNaverNewsDispatchStage('provider_config', () => createNaverNewsExternalCollector({
     ...dependencies.collectorOptions,
     environment,
-  });
+  }));
   const config = Object.freeze({
     connectionString,
     max: 1 as const,
@@ -170,7 +175,8 @@ export async function runNaverNewsProductionWrite(
   });
   let pool: NaverNewsProductionWritePool;
   try {
-    pool = (dependencies.poolFactory ?? defaultPoolFactory)(config);
+    pool = await observeNaverNewsDispatchStage('pool_create',
+      () => (dependencies.poolFactory ?? defaultPoolFactory)(config));
   } catch {
     throw productionWriteFailed();
   }
@@ -179,10 +185,10 @@ export async function runNaverNewsProductionWrite(
   let failed = false;
   try {
     const repository = createPostgresNaverNewsIngestionRepository(pool);
-    const evidenceMirror = (
+    const evidenceMirror = await observeNaverNewsDispatchStage('mirror_config', () => (
       dependencies.evidenceMirrorFactory
       ?? createProductionNaverNewsBlobEvidenceMirror
-    )(environment);
+    )(environment));
     result = await runNaverNewsIngestionWorker({
       command: parsed.command,
       workerId: parsed.workerId,
@@ -195,7 +201,7 @@ export async function runNaverNewsProductionWrite(
     failed = true;
   } finally {
     try {
-      await pool.end();
+      await observeNaverNewsDispatchStage('pool_close', () => pool.end());
     } catch {
       failed = true;
     }
