@@ -1625,6 +1625,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(companySoosooDohKyungSoo.profile.koreanAliases.includes('도경수'));
   assert.ok(companySoosooDohKyungSoo.profile.includeKeywords.includes('BLISS'));
 
+  const bpmViviz = getArtistV4ById('viviz');
+  assert.ok(bpmViviz);
+  assert.equal(bpmViviz.entityType, 'group');
+  assert.equal(bpmViviz.agency, 'BPM Entertainment');
+  assert.equal(bpmViviz.lifecycleStatus, 'active');
+  assert.ok(bpmViviz.profile.koreanAliases.includes('비비지'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

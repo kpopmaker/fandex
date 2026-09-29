@@ -135,6 +135,7 @@ jobs:
           python tests/artist-expansion-dreamcatcher-official-store-catalog-v1.py
           python tests/artist-expansion-galaxy-current-music-roster-v1.py
           python tests/artist-expansion-company-soosoo-current-music-identity-v1.py
+          python tests/artist-expansion-bpm-viviz-current-group-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -623,6 +624,11 @@ jobs:
           python scripts/artist-expansion/collect_company_soosoo_current_music_identity_v1.py \
             --fallback-snapshot data/artist-expansion-sources/company-soosoo-current-music-identity-2026-09-30.json \
             --output company_soosoo_current_music_identity_v1_latest.json
+      - name: Collect BPM VIVIZ current group identity
+        run: |
+          python scripts/artist-expansion/collect_bpm_viviz_current_group_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/bpm-viviz-current-group-2026-09-30.json \
+            --output bpm_viviz_current_group_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -741,6 +747,7 @@ jobs:
             --snapshot dreamcatcher_official_store_catalog_v1_latest.json \
             --snapshot galaxy_current_music_roster_v1_latest.json \
             --snapshot company_soosoo_current_music_identity_v1_latest.json \
+            --snapshot bpm_viviz_current_group_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -877,6 +884,7 @@ jobs:
             dreamcatcher_official_store_catalog_v1_latest.json
             galaxy_current_music_roster_v1_latest.json
             company_soosoo_current_music_identity_v1_latest.json
+            bpm_viviz_current_group_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

@@ -1,0 +1,85 @@
+{
+  "version": "bpm_viviz_current_group_adapter_v1",
+  "source": {
+    "id": "bpm-official-viviz-current-group-identity",
+    "type": "agency_roster",
+    "name": "Big Planet Made Official VIVIZ Current Group Identity",
+    "observedAt": "2026-09-30T07:08:00+09:00",
+    "url": "https://www.bpment.co.kr/artist/gallery.php?idx=289"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "VIVIZ",
+      "aliases": [
+        "비비지"
+      ],
+      "evidence": [
+        {
+          "label": "Big Planet Made official VIVIZ artist page",
+          "url": "https://www.bpment.co.kr/artist/gallery.php?idx=289"
+        },
+        {
+          "label": "Big Planet Made official VIVIZ first full album A Montage of ( )",
+          "url": "https://www.bpment.co.kr/page/discography_detail.php?idx=374"
+        },
+        {
+          "label": "Big Planet Made official EUNHA profile",
+          "url": "https://bpment.co.kr/artist/profile.php?idx=295"
+        },
+        {
+          "label": "Big Planet Made official SINB profile",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=296"
+        },
+        {
+          "label": "Big Planet Made official UMJI profile",
+          "url": "https://www.bpment.co.kr/artist/profile.php?idx=297"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "VIVIZ": {
+      "agency": "BPM Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "EUNHA",
+        "SINB",
+        "UMJI"
+      ],
+      "memberCount": 3,
+      "recentMusicEvidence": {
+        "title": "A Montage of ( )",
+        "releaseDate": "2025-07-08",
+        "titleTrack": "La La Love Me",
+        "trackCount": 9
+      }
+    }
+  },
+  "contract": {
+    "officialCurrentGroupPageRequired": true,
+    "officialCurrentMemberProfilesRequired": true,
+    "officialRecentGroupReleaseRequired": true,
+    "exactThreeMemberIdentityRequired": true,
+    "memberProfileAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "notExhaustiveLabelRoster": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_BPM_VIVIZ_current_group_identity_snapshot",
+    "verifiedFrom": [
+      "https://www.bpment.co.kr/artist/gallery.php?idx=289",
+      "https://www.bpment.co.kr/artist/video.php?idx=289&page=2&pageidx=289",
+      "https://www.bpment.co.kr/page/discography_detail.php?idx=374",
+      "https://bpment.co.kr/artist/profile.php?idx=295",
+      "https://www.bpment.co.kr/artist/profile.php?idx=296",
+      "https://www.bpment.co.kr/artist/profile.php?idx=297"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
