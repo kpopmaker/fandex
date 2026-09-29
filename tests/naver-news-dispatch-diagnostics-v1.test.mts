@@ -60,10 +60,10 @@ test('database SQLSTATE is reduced to a fixed safe class without logging raw err
       { code },
     );
     await assert.rejects(
-      observeNaverNewsDatabaseOperation(() => { throw failure; }),
+      observeNaverNewsDatabaseOperation('job_insert', () => { throw failure; }),
       (error: unknown) => error === failure,
     );
-    assert.deepEqual(logs, [[`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`]]);
+    assert.deepEqual(logs, [[`FANDEX_NAVER_DATABASE_FAILED_OPERATION=job_insert`], [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`]]);
     assert.equal(JSON.stringify(logs).includes('secret'), false);
     assert.equal(JSON.stringify(logs).includes('RAW_PROVIDER_PAYLOAD'), false);
     assert.equal(JSON.stringify(logs).includes(code), false);
@@ -74,7 +74,42 @@ test('database diagnostic logger failure preserves the original database error',
   t.mock.method(console, 'warn', () => { throw new Error('logger unavailable'); });
   const failure = Object.assign(new Error('database raw detail'), { code: '42P01' });
   await assert.rejects(
-    observeNaverNewsDatabaseOperation(() => Promise.reject(failure)),
+    observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
     (error: unknown) => error === failure,
   );
+});
+
+test('database node connection codes are reduced to safe classes and operation names', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['ENOTFOUND', 'dns_failure'],
+    ['ECONNREFUSED', 'connection_refused'],
+    ['ETIMEDOUT', 'connection_timeout'],
+    ['ECONNRESET', 'connection_reset'],
+    ['SELF_SIGNED_CERT_IN_CHAIN', 'tls_failure'],
+  ] as const;
+  for (const [code, expected] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
+    ]);
+  }
+});
+
+test('invalid runtime database operation names cannot enter logs', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code: '42P01' });
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('PRIVATE_OPERATION' as never, () => { throw failure; }),
+    (error: unknown) => error === failure,
+  );
+  assert.deepEqual(logs, [['FANDEX_NAVER_DATABASE_ERROR_CLASS=undefined_table']]);
 });
