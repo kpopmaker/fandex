@@ -10847,6 +10847,100 @@
           "url": "https://cbcglobe.com/en/articles/2026/06/19/dreamcatcher-unit-uau-makes-refreshing-summer-comeback-with-9f8bdc7b"
         }
       ]
+    },
+    {
+      "id": "taemin",
+      "ticker": "TAEMIN",
+      "name": "TAEMIN",
+      "agency": "Galaxy Corporation",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "태민 TAEMIN 샤이니",
+      "koreanAliases": [
+        "태민",
+        "이태민"
+      ],
+      "englishAliases": [
+        "TAEMIN",
+        "Taemin",
+        "Lee Taemin"
+      ],
+      "keywords": [
+        "Galaxy Corporation",
+        "SHINee",
+        "Advice",
+        "Idea"
+      ],
+      "disambiguationKeywords": [
+        "Galaxy Corporation",
+        "SHINee",
+        "태민"
+      ],
+      "markets": [
+        "KR",
+        "JP",
+        "GLOBAL"
+      ],
+      "tier": "high",
+      "identityEvidence": [
+        {
+          "source": "Galaxy Corporation official 2026 artist roster",
+          "url": "https://insights.galaxyuniverse.ai/en/artists/"
+        },
+        {
+          "source": "Galaxy Corporation official company FAQ identifying TAEMIN as current K-pop artist",
+          "url": "https://insights.galaxyuniverse.ai/en/faq/company/"
+        },
+        {
+          "source": "Galaxy Corporation official Robot Park story using TAEMIN Advice and Idea",
+          "url": "https://insights.galaxyuniverse.ai/en/story/robot-park/"
+        }
+      ]
+    },
+    {
+      "id": "kimjongkook",
+      "ticker": "KIMJONGKOOK",
+      "name": "KIM JONG KOOK",
+      "agency": "Galaxy Corporation",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "김종국 가수 KIM JONG KOOK",
+      "koreanAliases": [
+        "김종국"
+      ],
+      "englishAliases": [
+        "KIM JONG KOOK",
+        "Kim Jong-kook",
+        "Kim Jong Kook"
+      ],
+      "keywords": [
+        "Galaxy Corporation",
+        "Turbo",
+        "가수",
+        "Running Man"
+      ],
+      "disambiguationKeywords": [
+        "Galaxy Corporation",
+        "가수",
+        "Turbo"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "Galaxy Corporation official 2026 artist roster classifying Kim Jong-kook as singer and TV personality",
+          "url": "https://insights.galaxyuniverse.ai/en/artists/"
+        },
+        {
+          "source": "Galaxy Corporation official company FAQ current roster",
+          "url": "https://insights.galaxyuniverse.ai/en/faq/company/"
+        }
+      ]
     }
   ]
 }

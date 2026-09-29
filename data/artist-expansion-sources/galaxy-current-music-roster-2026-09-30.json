@@ -1,0 +1,129 @@
+{
+  "version": "galaxy_current_music_roster_adapter_v1",
+  "source": {
+    "id": "galaxy-corporation-official-current-music-eligible-roster",
+    "type": "agency_roster",
+    "name": "Galaxy Corporation Official Current Music-Eligible Artist Roster",
+    "observedAt": "2026-09-30T00:24:00+09:00",
+    "url": "https://insights.galaxyuniverse.ai/en/artists/"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "G-DRAGON",
+      "aliases": [
+        "지드래곤",
+        "GD"
+      ],
+      "evidence": [
+        {
+          "label": "Galaxy Corporation official 2026 artist roster",
+          "url": "https://insights.galaxyuniverse.ai/en/artists/"
+        },
+        {
+          "label": "Galaxy Corporation official company FAQ",
+          "url": "https://insights.galaxyuniverse.ai/en/faq/company/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "TAEMIN",
+      "aliases": [
+        "태민"
+      ],
+      "evidence": [
+        {
+          "label": "Galaxy Corporation official 2026 artist roster",
+          "url": "https://insights.galaxyuniverse.ai/en/artists/"
+        },
+        {
+          "label": "Galaxy Corporation official Robot Park story using TAEMIN music",
+          "url": "https://insights.galaxyuniverse.ai/en/story/robot-park/"
+        }
+      ]
+    },
+    {
+      "displayArtist": "KIM JONG KOOK",
+      "aliases": [
+        "김종국",
+        "Kim Jong-kook"
+      ],
+      "evidence": [
+        {
+          "label": "Galaxy Corporation official roster classifying Kim Jong-kook as singer and TV personality",
+          "url": "https://insights.galaxyuniverse.ai/en/artists/"
+        },
+        {
+          "label": "Galaxy Corporation official company FAQ current roster",
+          "url": "https://insights.galaxyuniverse.ai/en/faq/company/"
+        }
+      ]
+    }
+  ],
+  "currentMusicEligibleRoster": {
+    "G-DRAGON": {
+      "agency": "Galaxy Corporation",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "officialRosterField": "K-pop artist"
+    },
+    "TAEMIN": {
+      "agency": "Galaxy Corporation",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "officialRosterField": "K-pop artist",
+      "joinedGalaxy": "2026-03"
+    },
+    "KIM JONG KOOK": {
+      "agency": "Galaxy Corporation",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "officialRosterField": "Singer · TV personality"
+    }
+  },
+  "excludedNonMusicRoster": [
+    {
+      "displayArtist": "Song Kang-ho",
+      "officialRosterField": "Actor"
+    },
+    {
+      "displayArtist": "Lee Jung-hoo",
+      "officialRosterField": "MLB player"
+    },
+    {
+      "displayArtist": "Ryu Jun-yeol",
+      "officialRosterField": "Actor"
+    },
+    {
+      "displayArtist": "Na In-woo",
+      "officialRosterField": "Actor"
+    },
+    {
+      "displayArtist": "Jung Il-woo",
+      "officialRosterField": "Actor"
+    }
+  ],
+  "contract": {
+    "officialCurrentRosterRequired": true,
+    "officialRosterFieldRequired": true,
+    "musicEligibilityRequiresKpopArtistOrSingerField": true,
+    "actorAndAthleteEntriesMustBeExcluded": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_Galaxy_Corporation_current_music_eligible_roster_snapshot",
+    "verifiedFrom": [
+      "https://insights.galaxyuniverse.ai/en/artists/",
+      "https://insights.galaxyuniverse.ai/en/faq/company/",
+      "https://insights.galaxyuniverse.ai/en/story/robot-park/"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
