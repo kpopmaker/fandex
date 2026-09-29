@@ -1,0 +1,105 @@
+{
+  "version": "inb100_current_roster_adapter_v1",
+  "source": {
+    "id": "inb100-official-current-artist-roster",
+    "type": "agency_roster",
+    "name": "INB100 Official Current Artist Roster",
+    "observedAt": "2026-09-30T00:24:00+09:00",
+    "url": "https://inb100.com/36"
+  },
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "displayArtist": "BAEKHYUN",
+      "aliases": [
+        "백현"
+      ],
+      "evidence": [
+        {
+          "label": "INB100 official current ARTIST directory",
+          "url": "https://inb100.com/36"
+        },
+        {
+          "label": "INB100 official BAEKHYUN solo profile",
+          "url": "https://inb100.com/40"
+        }
+      ]
+    },
+    {
+      "displayArtist": "XIUMIN",
+      "aliases": [
+        "시우민"
+      ],
+      "evidence": [
+        {
+          "label": "INB100 official current ARTIST directory",
+          "url": "https://inb100.com/36"
+        },
+        {
+          "label": "INB100 official XIUMIN solo profile",
+          "url": "https://www.inb100.com/41"
+        }
+      ]
+    },
+    {
+      "displayArtist": "CHEN",
+      "aliases": [
+        "첸"
+      ],
+      "evidence": [
+        {
+          "label": "INB100 official current ARTIST directory",
+          "url": "https://inb100.com/36"
+        },
+        {
+          "label": "INB100 official CHEN solo profile",
+          "url": "https://www.inb100.com/42"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "BAEKHYUN": {
+      "agency": "INB100",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "soloDebutDate": "2019-07-10"
+    },
+    "XIUMIN": {
+      "agency": "INB100",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "soloDebutDate": "2022-09-26"
+    },
+    "CHEN": {
+      "agency": "INB100",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "soloDebutDate": "2019-04-01"
+    }
+  },
+  "contract": {
+    "officialCurrentArtistDirectoryRequired": true,
+    "exactCurrentArtistSetRequired": true,
+    "dedicatedSoloProfileRequired": true,
+    "officialSoloDebutEvidenceRequired": true,
+    "groupMembershipAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_INB100_current_artist_roster_snapshot",
+    "verifiedFrom": [
+      "https://inb100.com/36",
+      "https://inb100.com/40",
+      "https://www.inb100.com/41",
+      "https://www.inb100.com/42"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}

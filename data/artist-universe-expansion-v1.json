@@ -10709,6 +10709,94 @@
           "url": "https://www.paramusic.co.kr/board/notice/read?no=4"
         }
       ]
+    },
+    {
+      "id": "xiumin",
+      "ticker": "XIUMIN",
+      "name": "XIUMIN",
+      "agency": "INB100",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "시우민 XIUMIN EXO",
+      "koreanAliases": [
+        "시우민"
+      ],
+      "englishAliases": [
+        "XIUMIN",
+        "Xiumin"
+      ],
+      "keywords": [
+        "INB100",
+        "EXO",
+        "EXO-CBX",
+        "Brand New",
+        "Interview X"
+      ],
+      "disambiguationKeywords": [
+        "INB100",
+        "EXO",
+        "시우민"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "INB100 official current ARTIST directory",
+          "url": "https://inb100.com/36"
+        },
+        {
+          "source": "INB100 official XIUMIN profile with solo debut and discography",
+          "url": "https://www.inb100.com/41"
+        }
+      ]
+    },
+    {
+      "id": "chen",
+      "ticker": "CHEN",
+      "name": "CHEN",
+      "agency": "INB100",
+      "agencyStatus": "verified",
+      "entityType": "solo",
+      "lifecycleStatus": "active",
+      "naverNewsQuery": "첸 CHEN EXO",
+      "koreanAliases": [
+        "첸"
+      ],
+      "englishAliases": [
+        "CHEN",
+        "Chen"
+      ],
+      "keywords": [
+        "INB100",
+        "EXO",
+        "EXO-CBX",
+        "사월 그리고 꽃",
+        "Arcadia"
+      ],
+      "disambiguationKeywords": [
+        "INB100",
+        "EXO",
+        "첸"
+      ],
+      "markets": [
+        "KR",
+        "GLOBAL"
+      ],
+      "tier": "standard",
+      "identityEvidence": [
+        {
+          "source": "INB100 official current ARTIST directory",
+          "url": "https://inb100.com/36"
+        },
+        {
+          "source": "INB100 official CHEN profile with solo debut and discography",
+          "url": "https://www.inb100.com/42"
+        }
+      ]
     }
   ]
 }

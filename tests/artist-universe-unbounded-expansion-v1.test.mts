@@ -1556,6 +1556,28 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(paraParkWoojin.profile.koreanAliases.includes('박우진'));
   assert.ok(paraParkWoojin.profile.includeKeywords.includes('AB6IX'));
 
+  const inbBaekhyun = getArtistV4ById('baekhyun');
+  assert.ok(inbBaekhyun);
+  assert.equal(inbBaekhyun.entityType, 'solo');
+  assert.equal(inbBaekhyun.agency, 'INB100');
+  assert.equal(inbBaekhyun.lifecycleStatus, 'active');
+
+  const inbXiumin = getArtistV4ById('xiumin');
+  assert.ok(inbXiumin);
+  assert.equal(inbXiumin.entityType, 'solo');
+  assert.equal(inbXiumin.agency, 'INB100');
+  assert.equal(inbXiumin.agencyStatus, 'verified');
+  assert.equal(inbXiumin.lifecycleStatus, 'active');
+  assert.ok(inbXiumin.profile.koreanAliases.includes('시우민'));
+
+  const inbChen = getArtistV4ById('chen');
+  assert.ok(inbChen);
+  assert.equal(inbChen.entityType, 'solo');
+  assert.equal(inbChen.agency, 'INB100');
+  assert.equal(inbChen.agencyStatus, 'verified');
+  assert.equal(inbChen.lifecycleStatus, 'active');
+  assert.ok(inbChen.profile.koreanAliases.includes('첸'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
