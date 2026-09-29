@@ -1,0 +1,69 @@
+{
+  "version": "s2_entertainment_current_artist_roster_adapter_v1",
+  "source": {
+    "id": "s2-entertainment-official-current-artist-roster",
+    "type": "agency_roster",
+    "name": "S2 Entertainment Official Current Artist Roster",
+    "observedAt": "2026-09-29T23:18:00+09:00",
+    "url": "https://s2ent.co.kr/17"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "KISS OF LIFE",
+      "aliases": [
+        "키스오브라이프",
+        "KIOF"
+      ],
+      "evidence": [
+        {
+          "label": "S2 Entertainment official ARTIST directory",
+          "url": "https://s2ent.co.kr/17"
+        },
+        {
+          "label": "S2 Entertainment official KISS OF LIFE profile",
+          "url": "https://s2ent.co.kr/34"
+        },
+        {
+          "label": "S2 Entertainment official KISS OF LIFE 2026 album activity",
+          "url": "https://s2ent.co.kr/47"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "KISS OF LIFE": {
+      "agency": "S2 Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "JULIE",
+        "NATTY",
+        "BELLE",
+        "HANEUL"
+      ],
+      "memberCount": 4
+    }
+  },
+  "contract": {
+    "officialFirstPartyRosterRequired": true,
+    "exactCurrentArtistDirectoryRequired": true,
+    "exactCurrentMemberSetRequired": true,
+    "current2026MusicActivityRequired": true,
+    "memberProfilesDoNotCreateSoloCanonicals": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_S2_Entertainment_current_artist_and_member_snapshot",
+    "verifiedFrom": [
+      "https://s2ent.co.kr/17",
+      "https://s2ent.co.kr/34",
+      "https://s2ent.co.kr/47"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
