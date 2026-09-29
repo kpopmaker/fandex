@@ -129,6 +129,7 @@ jobs:
           python tests/artist-expansion-btob-company-current-identities-v1.py
           python tests/artist-expansion-feel-ghood-current-roster-v1.py
           python tests/artist-expansion-s2-entertainment-current-roster-v1.py
+          python tests/artist-expansion-fnf-current-debuted-groups-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -587,6 +588,11 @@ jobs:
           python scripts/artist-expansion/collect_s2_entertainment_current_artist_roster_v1.py \
             --fallback-snapshot data/artist-expansion-sources/s2-entertainment-current-artist-roster-2026-09-29.json \
             --output s2_entertainment_current_artist_roster_v1_latest.json
+      - name: Collect F&F Entertainment current debuted groups
+        run: |
+          python scripts/artist-expansion/collect_fnf_current_debuted_groups_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/fnf-current-debuted-groups-2026-09-29.json \
+            --output fnf_current_debuted_groups_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -699,6 +705,7 @@ jobs:
             --snapshot btob_company_current_managed_music_identities_v1_latest.json \
             --snapshot feel_ghood_current_artist_roster_v1_latest.json \
             --snapshot s2_entertainment_current_artist_roster_v1_latest.json \
+            --snapshot fnf_current_debuted_groups_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -829,6 +836,7 @@ jobs:
             btob_company_current_managed_music_identities_v1_latest.json
             feel_ghood_current_artist_roster_v1_latest.json
             s2_entertainment_current_artist_roster_v1_latest.json
+            fnf_current_debuted_groups_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

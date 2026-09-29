@@ -1,0 +1,118 @@
+{
+  "version": "fnf_current_debuted_groups_adapter_v1",
+  "source": {
+    "id": "fnf-entertainment-official-current-debuted-groups",
+    "type": "provider_catalog",
+    "name": "F&F Entertainment Official Current Debuted Group Catalog",
+    "observedAt": "2026-09-29T23:18:00+09:00",
+    "url": "https://www.fnfent.com/sub/artist/list.html"
+  },
+  "candidateCount": 2,
+  "candidates": [
+    {
+      "displayArtist": "UNIS",
+      "aliases": [
+        "유니스"
+      ],
+      "evidence": [
+        {
+          "label": "F&F Entertainment official UNIS profile",
+          "url": "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=29"
+        },
+        {
+          "label": "F&F Entertainment official 2026 UNIS activity",
+          "url": "https://www.fnfent.com/sub/news/view.html?idx=486"
+        }
+      ]
+    },
+    {
+      "displayArtist": "AHOF",
+      "aliases": [
+        "아홉"
+      ],
+      "evidence": [
+        {
+          "label": "F&F Entertainment official AHOF debut discography",
+          "url": "https://www.fnfent.com/sub/artist/discography_view.html?idx=25"
+        },
+        {
+          "label": "F&F Entertainment official 2026 AHOF activity",
+          "url": "https://www.fnfent.com/sub/news/view.html?idx=462"
+        }
+      ]
+    }
+  ],
+  "currentRoster": {
+    "UNIS": {
+      "agency": "F&F Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "HYEONJU",
+        "NANA",
+        "GEHLEE",
+        "KOTOKO",
+        "YUNHA",
+        "ELISIA",
+        "YOONA",
+        "SEOWON"
+      ],
+      "memberCount": 8
+    },
+    "AHOF": {
+      "agency": "F&F Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "스티븐",
+        "서정우",
+        "차웅기",
+        "장슈아이보",
+        "박한",
+        "제이엘",
+        "박주원",
+        "즈언",
+        "다이스케"
+      ],
+      "memberCount": 9
+    }
+  },
+  "excludedProjectIdentities": [
+    {
+      "displayArtist": "UNIVERSE TICKET",
+      "reason": "survival_program_project_identity_not_current_debuted_group",
+      "url": "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=26"
+    },
+    {
+      "displayArtist": "UNIVERSE LEAGUE",
+      "reason": "survival_program_project_identity_not_current_debuted_group",
+      "url": "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=39"
+    }
+  ],
+  "contract": {
+    "officialFirstPartyEvidenceRequired": true,
+    "currentDebutedGroupActivityRequired": true,
+    "exactUNISMemberSetRequired": true,
+    "exactAHOFMemberSetRequired": true,
+    "survivalProgramProjectIdentityExcluded": true,
+    "programParticipantDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_FnF_current_debuted_group_snapshot",
+    "verifiedFrom": [
+      "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=29",
+      "https://www.fnfent.com/sub/news/view.html?idx=486",
+      "https://www.fnfent.com/sub/artist/discography_view.html?idx=25",
+      "https://www.fnfent.com/sub/news/view.html?idx=462",
+      "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=26",
+      "https://www.fnfent.com/sub/artist/artist_view.html?artist_idx=39"
+    ],
+    "verifiedAt": "2026-09-29"
+  }
+}
