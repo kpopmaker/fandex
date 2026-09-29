@@ -137,6 +137,7 @@ jobs:
           python tests/artist-expansion-company-soosoo-current-music-identity-v1.py
           python tests/artist-expansion-bpm-viviz-current-group-v1.py
           python tests/artist-expansion-katseye-current-music-identity-v1.py
+          python tests/artist-expansion-themuze-rescene-current-group-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -635,6 +636,11 @@ jobs:
           python scripts/artist-expansion/collect_katseye_current_music_identity_v1.py \
             --fallback-snapshot data/artist-expansion-sources/katseye-current-music-identity-2026-09-30.json \
             --output katseye_current_music_identity_v1_latest.json
+      - name: Collect THE MUZE RESCENE current group identity
+        run: |
+          python scripts/artist-expansion/collect_themuze_rescene_current_group_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/themuze-rescene-current-group-2026-09-30.json \
+            --output themuze_rescene_current_group_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -755,6 +761,7 @@ jobs:
             --snapshot company_soosoo_current_music_identity_v1_latest.json \
             --snapshot bpm_viviz_current_group_v1_latest.json \
             --snapshot katseye_current_music_identity_v1_latest.json \
+            --snapshot themuze_rescene_current_group_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -893,6 +900,7 @@ jobs:
             company_soosoo_current_music_identity_v1_latest.json
             bpm_viviz_current_group_v1_latest.json
             katseye_current_music_identity_v1_latest.json
+            themuze_rescene_current_group_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

@@ -1640,6 +1640,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.ok(hybeGeffenKatseye.profile.koreanAliases.includes('캣츠아이'));
   assert.ok(hybeGeffenKatseye.profile.includeKeywords.includes('Geffen'));
 
+  const theMuzeRescene = getArtistV4ById('rescene');
+  assert.ok(theMuzeRescene);
+  assert.equal(theMuzeRescene.entityType, 'group');
+  assert.equal(theMuzeRescene.agency, 'THE MUZE Entertainment');
+  assert.equal(theMuzeRescene.lifecycleStatus, 'active');
+  assert.ok(theMuzeRescene.profile.koreanAliases.includes('리센느'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

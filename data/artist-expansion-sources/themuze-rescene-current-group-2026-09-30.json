@@ -1,0 +1,82 @@
+{
+  "version": "themuze_rescene_current_group_adapter_v1",
+  "source": {
+    "id": "the-muze-official-rescene-current-group-identity",
+    "type": "agency_roster",
+    "name": "THE MUZE Entertainment Official RESCENE Current Group Identity",
+    "observedAt": "2026-09-30T08:14:00+09:00",
+    "url": "https://themuze.kr/rescene"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "RESCENE",
+      "aliases": [
+        "리센느"
+      ],
+      "evidence": [
+        {
+          "label": "THE MUZE Entertainment official RESCENE current group page",
+          "url": "https://themuze.kr/rescene"
+        },
+        {
+          "label": "THE MUZE Entertainment official current discography",
+          "url": "https://themuze.kr/discography"
+        },
+        {
+          "label": "THE MUZE Entertainment official Runaway release page",
+          "url": "https://themuze.kr/Runaway_"
+        },
+        {
+          "label": "THE MUZE Entertainment official Pretty Girl release page",
+          "url": "https://themuze.kr/prettygirl_"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "RESCENE": {
+      "agency": "THE MUZE Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": [
+        "WONI",
+        "MINAMI",
+        "LIV",
+        "MAY",
+        "ZENA"
+      ],
+      "memberCount": 5,
+      "currentDiscographyEvidence": [
+        "Runaway",
+        "Pretty Girl",
+        "lip bomb",
+        "Dearest",
+        "Glow Up",
+        "SCENEDROME"
+      ]
+    }
+  },
+  "contract": {
+    "officialCurrentGroupPageRequired": true,
+    "officialCurrentDiscographyRequired": true,
+    "exactFiveMemberIdentityRequired": true,
+    "memberNameAloneDoesNotCreateSoloCanonical": true,
+    "currentReleaseEvidenceRequired": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_THE_MUZE_RESCENE_current_group_identity_snapshot",
+    "verifiedFrom": [
+      "https://themuze.kr/rescene",
+      "https://themuze.kr/discography",
+      "https://themuze.kr/Runaway_",
+      "https://themuze.kr/prettygirl_"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
