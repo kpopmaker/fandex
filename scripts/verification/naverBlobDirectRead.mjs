@@ -160,6 +160,11 @@ async function run() {
     requireCheck(typeof issued.token === 'string' && issued.token.length > 0, 'oidc_token_missing');
     // No token is logged, put in GITHUB_ENV, or persisted in an artifact.
     const oidcToken = issued.token;
+    const claims = JSON.parse(Buffer.from(oidcToken.split('.')[1], 'base64url').toString('utf8'));
+    const tokenEnvironment = claims.environment ?? claims.env
+      ?? claims.sub?.match(/(?:^|:)environment:([^:]+)/)?.[1];
+    report.oidcEnvironment = ['production', 'preview', 'development'].includes(tokenEnvironment)
+      ? tokenEnvironment : 'unrecognized';
     phase = 'production_env_metadata_read';
     const envResponse = await api(`/v10/projects/${PROJECT}/env?decrypt=false`);
     const envs = envResponse.envs;
@@ -173,6 +178,7 @@ async function run() {
     const storeEnv = await api(`/v1/projects/${PROJECT}/env/${encodeURIComponent(entries[0].id)}`);
     const storeId = storeEnv.value;
     requireCheck(typeof storeId === 'string' && storeId.trim().length > 0, 'blob_store_id_missing');
+    report.storeIdReadDecrypted = storeEnv.decrypted === true;
     report.productionStoreBindingFound = true;
     report.productionOnlyStoreBinding = entries[0].target.length === 1 && entries[0].target[0] === 'production';
     const auth = { oidcToken, storeId };
@@ -229,6 +235,10 @@ async function run() {
     report.verdict = 'VERIFICATION_BLOCKED';
     report.blockedPhase = phase;
     report.blockerCode = error instanceof SafeVerificationError ? error.message : 'redacted_external_or_decoder_failure';
+    const safeErrorClasses = new Set(['BlobAccessError', 'BlobOidcEnvironmentNotAllowedError',
+      'BlobStoreNotFoundError', 'BlobStoreSuspendedError', 'BlobUnknownError', 'BlobNotFoundError',
+      'BlobServiceNotAvailable', 'BlobServiceRateLimited', 'BlobRequestAbortedError', 'BlobError']);
+    if (safeErrorClasses.has(error?.constructor?.name)) report.blockerCode = error.constructor.name;
     process.exitCode = 1;
   }
   await mkdir('verification', { recursive: true });
