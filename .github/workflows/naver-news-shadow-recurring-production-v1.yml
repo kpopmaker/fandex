@@ -32,7 +32,17 @@ jobs:
           set -euo pipefail
           code=$(curl -sS             --connect-timeout 15             --max-time 300             --retry 0             -o /tmp/response.json             -w '%{http_code}'             -X POST             -H "Authorization: Bearer $FANDEX_NAVER_NEWS_SCHEDULER_SECRET"             -H "Content-Type: application/json"             "$FANDEX_PRODUCTION_BASE_URL/api/internal/naver-news/shadow-scheduler")
           echo "FANDEX_NAVER_RECURRING_HTTP=$code"
-          test "$code" = "200"
+          if [[ "$code" != "200" ]]; then
+            node <<'NODE'
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('/tmp/response.json','utf8'));
+          const allowed=new Set(['config_rejected','protocol_rejected','authorization_rejected','dispatch_failed']);
+          if (d?.ok !== false || d?.code !== 'naver_news_shadow_recurring_scheduler_rejected'
+              || !allowed.has(d?.errorClass)) process.exit(2);
+          console.log('FANDEX_NAVER_RECURRING_ERROR_CLASS=' + d.errorClass);
+          NODE
+            exit 1
+          fi
 
           node <<'NODE'
           const fs=require('fs');
