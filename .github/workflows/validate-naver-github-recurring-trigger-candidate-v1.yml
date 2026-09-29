@@ -1,0 +1,53 @@
+name: Validate NAVER GitHub recurring trigger candidate v1
+
+on:
+  push:
+    branches:
+      - integration/naver-github-recurring-trigger-candidate-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.head_ref == 'integration/naver-github-recurring-trigger-candidate-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert trigger contract and inactive gate
+        env:
+          TRIGGER_GATE: ${{ vars.FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED }}
+          SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$SCHEDULER_SECRET"
+          test "$TRIGGER_GATE" != "approved-github-hourly-v1"
+
+          node <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('.github/workflows/naver-news-shadow-recurring-production-v1.yml','utf8');
+          const required=[
+            "cron: '17 * * * *'",
+            "vars.FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED == 'approved-github-hourly-v1'",
+            "https://fandex-eta.vercel.app",
+            "/api/internal/naver-news/shadow-scheduler",
+            "-X POST",
+            'Authorization: Bearer $FANDEX_NAVER_NEWS_SCHEDULER_SECRET',
+            '--retry 0',
+            'cancel-in-progress: false',
+          ];
+          for(const token of required){
+            if(!s.includes(token)){
+              console.error('missing_contract_token');
+              process.exit(2);
+            }
+          }
+          console.log('FANDEX_RECURRING_TRIGGER_CANDIDATE=valid');
+          console.log('FANDEX_RECURRING_TRIGGER_GATE_ACTIVE=false');
+          console.log('productionRequests=0');
+          NODE

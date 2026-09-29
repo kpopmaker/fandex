@@ -1,0 +1,44 @@
+{
+  "contractVersion": "naver-news-github-recurring-trigger-candidate-v1",
+  "provider": "github-actions",
+  "target": {
+    "route": "https://fandex-eta.vercel.app/api/internal/naver-news/shadow-scheduler",
+    "method": "POST",
+    "authentication": "Bearer FANDEX_NAVER_NEWS_SCHEDULER_SECRET"
+  },
+  "schedule": {
+    "cadence": "hourly",
+    "cron": "17 * * * *",
+    "rationale": "avoid start-of-hour scheduler congestion while preserving deterministic current-hour slot identity"
+  },
+  "concurrency": {
+    "group": "fandex-naver-news-shadow-recurring-production-v1",
+    "cancelInProgress": false,
+    "retries": 0
+  },
+  "activation": {
+    "gateType": "github-repository-variable",
+    "key": "FANDEX_NAVER_NEWS_RECURRING_TRIGGER_ENABLED",
+    "requiredValue": "approved-github-hourly-v1",
+    "currentExpectedState": "inactive",
+    "mergeDoesNotAuthorizeActivation": true
+  },
+  "prerequisites": {
+    "githubSchedulerSecretPresent": true,
+    "vercelRecurringProductionEnvMetadataPresent": true,
+    "blobMirrorProductionOnly": true,
+    "blobLiveMirrorGateEnabled": true
+  },
+  "currentEvidence": {
+    "retainedRuntimeWindowSuccessful2xx": 0,
+    "currentRoute403Observed": true,
+    "officialRepoRecurringTriggerBeforeCandidate": false
+  },
+  "safety": {
+    "productionRequestDuringCandidateValidation": false,
+    "databaseWriteDuringCandidateValidation": false,
+    "blobWriteDuringCandidateValidation": false,
+    "productionEnvMutation": false
+  },
+  "nextGate": "merge-code-candidate-then-explicit-recurring-trigger-activation-authorization"
+}
