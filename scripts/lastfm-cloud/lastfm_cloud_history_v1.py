@@ -237,6 +237,15 @@ def append_daily_snapshot(seeds, api_key):
     )
 
     expected_count = len(seeds)
+    expected_artists = {
+        row["artist"]
+        for row in seeds
+    }
+    seed_by_artist = {
+        row["artist"]: row
+        for row in seeds
+    }
+    seeds_to_collect = list(seeds)
 
     today_rows = [
         row
@@ -244,9 +253,28 @@ def append_daily_snapshot(seeds, api_key):
         if (row.get("snapshotDate") or "").strip() == snapshot_date
     ]
     if today_rows:
-        today_artists = {(row.get("artist") or "").strip() for row in today_rows}
-        expected_artists = {row["artist"] for row in seeds}
-        if today_artists == expected_artists and len(today_rows) == len(seeds):
+        today_artists = {
+            (row.get("artist") or "").strip()
+            for row in today_rows
+        }
+
+        if len(today_rows) != len(today_artists):
+            raise RuntimeError(
+                f"Duplicate artist rows already exist for {snapshot_date}."
+            )
+
+        unknown_today = (
+            today_artists
+            - expected_artists
+        )
+        if unknown_today:
+            raise RuntimeError(
+                "Today snapshot contains artists outside "
+                "the current reviewed seed: "
+                + ", ".join(sorted(unknown_today))
+            )
+
+        if today_artists == expected_artists:
             print(
                 f"SKIP: {snapshot_date} snapshot already complete "
                 f"({expected_count}/{expected_count})."
@@ -257,25 +285,75 @@ def append_daily_snapshot(seeds, api_key):
                 HISTORY_FIELDS,
             )
             return history, snapshot_date, False
-        raise RuntimeError(
-            f"Partial snapshot already exists for {snapshot_date}: "
-            f"{len(today_rows)}/{expected_count}. Refusing to mix runs."
+
+        previous_dates = sorted({
+            (row.get("snapshotDate") or "").strip()
+            for row in history
+            if (
+                (row.get("snapshotDate") or "").strip()
+                and (row.get("snapshotDate") or "").strip()
+                < snapshot_date
+            )
+        })
+        if not previous_dates:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "no previous complete cohort exists to prove expansion."
+            )
+
+        previous_date = previous_dates[-1]
+        previous_artists = {
+            (row.get("artist") or "").strip()
+            for row in history
+            if (
+                (row.get("snapshotDate") or "").strip()
+                == previous_date
+            )
+        }
+
+        if today_artists != previous_artists:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "today cohort does not match the previous complete cohort."
+            )
+
+        if not today_artists < expected_artists:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "current seed is not a strict cohort expansion."
+            )
+
+        missing_artists = (
+            expected_artists
+            - today_artists
+        )
+        seeds_to_collect = [
+            seed_by_artist[artist]
+            for artist in sorted(
+                missing_artists
+            )
+        ]
+        print(
+            f"EXPAND: {snapshot_date} cohort "
+            f"{len(today_artists)} -> {expected_count}; "
+            f"collecting {len(seeds_to_collect)} newly bound artists."
         )
 
     collected = []
     errors = []
-    for index, seed in enumerate(seeds, start=1):
+    collect_count = len(seeds_to_collect)
+    for index, seed in enumerate(seeds_to_collect, start=1):
         try:
             item = fetch_artist_info(seed, api_key)
             collected.append(item)
             print(
-                f"[{index}/{expected_count}] OK {item['artist']} | "
+                f"[{index}/{collect_count}] OK {item['artist']} | "
                 f"listeners={item['listeners']} | playcount={item['playcount']}"
             )
         except Exception as exc:
             errors.append(f"{seed['artist']}: {exc}")
             print(
-                f"[{index}/{expected_count}] ERROR {seed['artist']} | {exc}"
+                f"[{index}/{collect_count}] ERROR {seed['artist']} | {exc}"
             )
 
     if errors:
@@ -304,8 +382,13 @@ def append_daily_snapshot(seeds, api_key):
         key=lambda row: ((row.get("snapshotDate") or ""), (row.get("artist") or ""))
     )
     write_csv(HISTORY_FILE, merged, HISTORY_FIELDS)
+    final_snapshot_count = (
+        len(today_rows)
+        + len(new_rows)
+    )
     print(
-        f"ADD: {snapshot_date} snapshot appended ({expected_count} rows)."
+        f"ADD: {snapshot_date} snapshot complete "
+        f"({final_snapshot_count}/{expected_count} rows)."
     )
     return merged, snapshot_date, True
 
