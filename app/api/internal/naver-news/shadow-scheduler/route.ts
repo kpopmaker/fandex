@@ -35,6 +35,11 @@ type RuntimeRegionClass = 'sin1' | 'iad1' | 'other' | 'missing';
 type RequestSourceClass =
   | 'github_actions_hourly_v1'
   | 'vercel_cron'
+  | 'vercel_signed_service'
+  | 'github_webhook'
+  | 'node_client'
+  | 'python_requests'
+  | 'browser'
   | 'curl_unmarked'
   | 'other'
   | 'missing';
@@ -46,6 +51,16 @@ export function classifyNaverNewsRequestSource(request: Request): RequestSourceC
   const userAgent = request.headers.get('user-agent')?.trim().toLowerCase();
   if (!userAgent) return 'missing';
   if (userAgent.startsWith('vercel-cron/')) return 'vercel_cron';
+  if (request.headers.has('x-vercel-signature')) return 'vercel_signed_service';
+  if (userAgent.startsWith('github-hookshot/')) return 'github_webhook';
+  if (
+    userAgent === 'node'
+    || userAgent.startsWith('node/')
+    || userAgent.startsWith('undici')
+    || userAgent.startsWith('axios/')
+  ) return 'node_client';
+  if (userAgent.startsWith('python-requests/')) return 'python_requests';
+  if (userAgent.startsWith('mozilla/')) return 'browser';
   if (userAgent.startsWith('curl/')) return 'curl_unmarked';
   return 'other';
 }
