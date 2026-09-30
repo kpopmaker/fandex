@@ -381,12 +381,12 @@ def validate_cloud_dates(
     by_date = {}
 
     for row in cloud_rows:
-        date = norm(
+        snapshot_date = norm(
             row.get("snapshotDate")
         )
 
         by_date.setdefault(
-            date,
+            snapshot_date,
             [],
         ).append(row)
 
@@ -396,40 +396,47 @@ def validate_cloud_dates(
         )
 
     sorted_dates = sorted(by_date)
-    first_date = sorted_dates[0]
-    expected_artists = {
-        norm(row.get("artist"))
-        for row in by_date[first_date]
-        if norm(row.get("artist"))
-    }
-    expected_count = len(expected_artists)
+    previous_artists = None
 
-    if expected_count == 0:
-        raise RuntimeError(
-            f"Cloud snapshot has no artists: {first_date}"
-        )
-
-    for date in sorted_dates:
-        rows = by_date[date]
+    for snapshot_date in sorted_dates:
+        rows = by_date[
+            snapshot_date
+        ]
         artists = {
             norm(row.get("artist"))
             for row in rows
             if norm(row.get("artist"))
         }
 
-        if (
-            len(rows) != expected_count
-            or artists != expected_artists
-        ):
+        if not artists:
             raise RuntimeError(
-                "Incomplete Cloud snapshot: "
-                f"{date} = "
-                f"{len(rows)}/{expected_count} rows, "
-                f"{len(artists)}/{expected_count} artists"
+                "Cloud snapshot has no artists: "
+                + snapshot_date
             )
 
-    return sorted_dates
+        if len(rows) != len(artists):
+            raise RuntimeError(
+                "Cloud snapshot contains duplicate "
+                f"artist rows: {snapshot_date}"
+            )
 
+        if (
+            previous_artists is not None
+            and not previous_artists <= artists
+        ):
+            removed = sorted(
+                previous_artists
+                - artists
+            )
+            raise RuntimeError(
+                "Cloud cohort shrank or lost "
+                f"reviewed artists on {snapshot_date}: "
+                + ", ".join(removed)
+            )
+
+        previous_artists = artists
+
+    return sorted_dates
 
 def write_local_atomic(rows):
     temp_file = LOCAL_FILE.with_suffix(
