@@ -296,6 +296,29 @@ type DatabaseInsufficientResourceCause =
   | 'other_insufficient_resources'
   | 'message_absent';
 
+type DatabaseQuotaResource =
+  | 'compute'
+  | 'network_transfer'
+  | 'storage'
+  | 'branch'
+  | 'endpoint'
+  | 'other';
+
+function classifyDatabaseQuotaResource(error: unknown): DatabaseQuotaResource {
+  for (const message of databaseErrorMessages(error)) {
+    const normalized = message.toLowerCase();
+    if (!normalized.includes('quota')) continue;
+    if (normalized.includes('compute')) return 'compute';
+    if (normalized.includes('transfer') || normalized.includes('egress') || normalized.includes('network')) {
+      return 'network_transfer';
+    }
+    if (normalized.includes('storage') || normalized.includes('disk')) return 'storage';
+    if (normalized.includes('branch')) return 'branch';
+    if (normalized.includes('endpoint')) return 'endpoint';
+  }
+  return 'other';
+}
+
 function classifyDatabaseInsufficientResourceCause(error: unknown): DatabaseInsufficientResourceCause {
   const messages = databaseErrorMessages(error);
   if (messages.length === 0) return 'message_absent';
@@ -341,7 +364,11 @@ export async function observeNaverNewsDatabaseOperation<T>(
       }
       console.warn(`FANDEX_NAVER_DATABASE_ERROR_CLASS=${errorClass}`);
       if (errorClass === 'insufficient_resources') {
-        console.warn(`FANDEX_NAVER_DATABASE_INSUFFICIENT_RESOURCE_CAUSE=${classifyDatabaseInsufficientResourceCause(error)}`);
+        const insufficientResourceCause = classifyDatabaseInsufficientResourceCause(error);
+        console.warn(`FANDEX_NAVER_DATABASE_INSUFFICIENT_RESOURCE_CAUSE=${insufficientResourceCause}`);
+        if (insufficientResourceCause === 'other_quota_exceeded') {
+          console.warn(`FANDEX_NAVER_DATABASE_QUOTA_RESOURCE=${classifyDatabaseQuotaResource(error)}`);
+        }
       }
       if (errorClass === 'other_database_error') {
         const shape = classifyDatabaseErrorShape(error);
