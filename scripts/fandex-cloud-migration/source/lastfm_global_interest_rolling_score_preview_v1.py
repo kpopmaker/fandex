@@ -21,6 +21,7 @@ OUTPUT_JSON = Path(
 )
 
 REQUIRED_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "latestDate",
     "snapshotDateCount",
@@ -36,6 +37,7 @@ REQUIRED_FIELDS = [
 
 OUTPUT_FIELDS = [
     "rank",
+    "canonicalArtistId",
     "artist",
     "latestDate",
     "snapshotDateCount",
@@ -111,6 +113,49 @@ def read_input():
 
     if not rows:
         raise RuntimeError("Rolling input is empty.")
+
+    artist_to_canonical = {}
+    canonical_to_artist = {}
+
+    for row in rows:
+        artist = norm(row.get("artist"))
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Rolling input missing canonicalArtistId: "
+                + artist
+            )
+
+        previous_id = artist_to_canonical.get(artist)
+        if (
+            previous_id
+            and previous_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Rolling input artist identity mismatch: "
+                + artist
+            )
+
+        previous_artist = canonical_to_artist.get(
+            canonical_artist_id
+        )
+        if (
+            previous_artist
+            and previous_artist != artist
+        ):
+            raise RuntimeError(
+                "Rolling input canonical identity collision: "
+                + canonical_artist_id
+            )
+
+        artist_to_canonical[artist] = (
+            canonical_artist_id
+        )
+        canonical_to_artist[
+            canonical_artist_id
+        ] = artist
 
     return rows
 
@@ -459,6 +504,13 @@ def main():
         output_rows.append({
             "rank":
                 "",
+
+            "canonicalArtistId":
+                norm(
+                    row.get(
+                        "canonicalArtistId"
+                    )
+                ),
 
             "artist":
                 artist,
