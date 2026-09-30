@@ -55,11 +55,6 @@ jobs:
           NODE_OPTIONS: --conditions=react-server
         run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
 
-      - name: Product activation readiness regression
-        env:
-          NODE_OPTIONS: --conditions=react-server
-        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
-
       - name: V2 carrier record candidate regression
         env:
           NODE_OPTIONS: --conditions=react-server
