@@ -54,6 +54,13 @@ const DATABASE_ERROR_CLASSES = Object.freeze({
   ECONNREFUSED: 'connection_refused',
   ECONNRESET: 'connection_reset',
   EPIPE: 'connection_reset',
+  ENETRESET: 'connection_reset',
+  ECONNABORTED: 'connection_aborted',
+  ENETUNREACH: 'network_unreachable',
+  EHOSTUNREACH: 'host_unreachable',
+  EHOSTDOWN: 'host_unreachable',
+  ENETDOWN: 'network_unavailable',
+  EADDRNOTAVAIL: 'address_unavailable',
   ETIMEDOUT: 'connection_timeout',
   ERR_SOCKET_CONNECTION_TIMEOUT: 'connection_timeout',
   ERR_TLS_HANDSHAKE_TIMEOUT: 'tls_failure',
@@ -89,7 +96,21 @@ type DatabaseErrorClass =
   | (typeof DATABASE_ERROR_CLASSES)[keyof typeof DATABASE_ERROR_CLASSES]
   | (typeof DATABASE_ERROR_MESSAGES)[keyof typeof DATABASE_ERROR_MESSAGES]
   | (typeof DATABASE_ERROR_MESSAGE_PREFIXES)[number][1]
+  | 'connection_aborted'
+  | 'network_unreachable'
+  | 'host_unreachable'
+  | 'network_unavailable'
+  | 'address_unavailable'
   | 'other_database_error';
+
+function classifyDatabaseCodeFamily(code: string): DatabaseErrorClass | null {
+  if (code.startsWith('ERR_SSL_')) return 'tls_failure';
+  if (/^[0-9A-Z]{5}$/.test(code)) {
+    if (code.startsWith('08')) return 'connection_exception';
+    if (code.startsWith('28')) return 'authentication_failed';
+  }
+  return null;
+}
 
 function databaseErrorCodes(error: unknown, depth = 0, seen = new Set<object>()): string[] {
   if (!error || typeof error !== 'object' || depth > 3 || seen.has(error)) return [];
@@ -141,6 +162,8 @@ function classifyDatabaseError(error: unknown): DatabaseErrorClass {
   for (const code of databaseErrorCodes(error)) {
     const classified = DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES];
     if (classified) return classified;
+    const family = classifyDatabaseCodeFamily(code);
+    if (family) return family;
   }
   for (const message of databaseErrorMessages(error)) {
     const classified = DATABASE_ERROR_MESSAGES[message as keyof typeof DATABASE_ERROR_MESSAGES];
