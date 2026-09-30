@@ -257,26 +257,40 @@ def validate_cloud_dates(
             "Cloud history is empty."
         )
 
-    for date, rows in sorted(
-        by_date.items()
-    ):
+    sorted_dates = sorted(by_date)
+    first_date = sorted_dates[0]
+    expected_artists = {
+        norm(row.get("artist"))
+        for row in by_date[first_date]
+        if norm(row.get("artist"))
+    }
+    expected_count = len(expected_artists)
+
+    if expected_count == 0:
+        raise RuntimeError(
+            f"Cloud snapshot has no artists: {first_date}"
+        )
+
+    for date in sorted_dates:
+        rows = by_date[date]
         artists = {
             norm(row.get("artist"))
             for row in rows
+            if norm(row.get("artist"))
         }
 
         if (
-            len(rows) != 10
-            or len(artists) != 10
+            len(rows) != expected_count
+            or artists != expected_artists
         ):
             raise RuntimeError(
                 "Incomplete Cloud snapshot: "
                 f"{date} = "
-                f"{len(rows)}/10 rows, "
-                f"{len(artists)}/10 artists"
+                f"{len(rows)}/{expected_count} rows, "
+                f"{len(artists)}/{expected_count} artists"
             )
 
-    return sorted(by_date)
+    return sorted_dates
 
 
 def write_local_atomic(rows):
