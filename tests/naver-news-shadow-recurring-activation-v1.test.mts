@@ -16,7 +16,11 @@ import {
   readNaverNewsShadowRecurringProtocol,
   runNaverNewsShadowRecurringScheduler,
 } from '../lib/server/ingestion/naverNewsShadowRecurringScheduler';
-import { handleNaverNewsShadowRecurringSchedulerRequest, preferredRegion } from '../app/api/internal/naver-news/shadow-scheduler/route';
+import {
+  classifyNaverNewsRuntimeRegion,
+  handleNaverNewsShadowRecurringSchedulerRequest,
+  preferredRegion,
+} from '../app/api/internal/naver-news/shadow-scheduler/route';
 
 const SECRET = 'local-only-shadow-recurring-secret';
 const NOW = new Date('2026-09-14T00:34:56.000Z');
@@ -50,6 +54,15 @@ function fakeDispatch(calls: any[]) {
 
 test('shadow scheduler route is pinned to the Singapore function region', () => {
   assert.equal(preferredRegion, 'sin1');
+});
+
+test('runtime region evidence is reduced to a fixed safe class', () => {
+  assert.equal(classifyNaverNewsRuntimeRegion('sin1'), 'sin1');
+  assert.equal(classifyNaverNewsRuntimeRegion('SIN1'), 'sin1');
+  assert.equal(classifyNaverNewsRuntimeRegion('iad1'), 'iad1');
+  assert.equal(classifyNaverNewsRuntimeRegion('PRIVATE_REGION_VALUE'), 'other');
+  assert.equal(classifyNaverNewsRuntimeRegion(undefined), 'missing');
+  assert.equal(classifyNaverNewsRuntimeRegion('   '), 'missing');
 });
 
 test('shadow protocol is pinned to canonical IU query and display 100', () => {
