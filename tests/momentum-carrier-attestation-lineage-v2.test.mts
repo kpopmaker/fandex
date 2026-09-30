@@ -56,7 +56,7 @@ function buildV2Record(
       role: 'diagnostic',
     },
     value: {
-      rawValue: 'direction-conflicted',
+      rawValue: 'flat-corroborated',
       unit: null,
       missingState: 'observed',
     },
@@ -73,7 +73,7 @@ function buildV2Record(
         + ':'
         + SOURCE_ATTESTATION_DIGEST,
       revision: null,
-      conflictState: 'cross-family-direction-conflict',
+      conflictState: null,
     },
     lifecycle: {
       state: 'research',
@@ -89,13 +89,13 @@ function buildV2Record(
     recordedAt: '2026-09-27T03:20:00.000Z',
     canonicalArtistId: 'iu',
     alignmentCutoffAt: '2026-09-27T02:10:05.000Z',
-    directionalConsensus: 'direction-conflicted',
+    directionalConsensus: 'flat-corroborated',
     persistenceConsensus: 'persistence-not-applicable',
     sourceContractVersion: SOURCE_ATTESTATION_CONTRACT,
     sourceV143Digest: null,
     sourceAttestationContractVersion: SOURCE_ATTESTATION_CONTRACT,
     sourceAttestationDigest: SOURCE_ATTESTATION_DIGEST,
-    changeKind: 'cutoff-advanced-same-state',
+    changeKind: 'direction-state-changed',
     previousSourceDigest: PREVIOUS_SOURCE_DIGEST,
     previousRecordDigest: PREVIOUS_RECORD_DIGEST,
     observation,
@@ -169,7 +169,7 @@ test('v2 carrier may chain from legacy v1 through preview-independent attestatio
   );
   assert.equal(
     product.model.evidence.directionalConsensus,
-    'direction-conflicted',
+    'flat-corroborated',
   );
   assert.equal(
     product.model.evidence.persistenceConsensus,
@@ -225,6 +225,23 @@ test('exact v2 Stored Evidence lookup exposes attestation lineage without v143 r
     result.model.previousSourceDigest,
     PREVIOUS_SOURCE_DIGEST,
   );
+});
+
+test('v2 carrier rejects cutoff-only append semantics', async () => {
+  const record = buildV2Record({
+    changeKind: 'cutoff-advanced-same-state',
+  });
+  const jsonl = await historyWith(record);
+
+  const result = readMomentumEvidenceConsensusShadowProductFromJsonl({
+    artistId: 'iu',
+    jsonl,
+  });
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status !== 'data-issue') return;
+  assert.equal(result.previewFallbackUsed, false);
+  assert.equal(result.productMetricReadPerformed, false);
 });
 
 test('v2 carrier fails closed if v142 attestation is mislabeled as sourceV143Digest', async () => {
