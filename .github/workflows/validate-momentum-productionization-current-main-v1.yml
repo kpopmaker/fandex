@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '.github/workflows/validate-momentum-*.yml'
+      - 'lib/intelligence/fandexMomentum*.ts'
+      - 'lib/product/**/momentum*.ts'
+      - 'lib/server/ingestion/momentum*.ts'
+      - 'tests/momentum-*.test.mts'
 
 permissions:
   contents: read
