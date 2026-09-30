@@ -69,6 +69,7 @@ test('database SQLSTATE is reduced to a fixed safe class without logging raw err
       ...(expected === 'other_database_error' ? [
         ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
         ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
+        ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=upper_token_like'],
         ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
         ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
         ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
@@ -179,6 +180,7 @@ test('database error graph traversal is bounded and cycle-safe', async (t) => {
     ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
     ['FANDEX_NAVER_DATABASE_ERROR_ROOT=object'],
     ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=absent'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=present'],
     ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=array'],
@@ -249,6 +251,7 @@ test('unknown code-less database messages remain other_database_error and are ne
     ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
     ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
     ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=absent'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
     ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
@@ -302,6 +305,7 @@ test('unknown pg connect messages remain other_database_error', async (t) => {
     ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
     ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
     ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=absent'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
     ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
     ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
@@ -329,6 +333,7 @@ test('bounded unknown database error shape never emits raw values', async (t) =>
     ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
     ['FANDEX_NAVER_DATABASE_ERROR_ROOT=type_error'],
     ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=other'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=other'],
     ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
     ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=present'],
     ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=other'],
@@ -371,7 +376,12 @@ test('standard SQLSTATE classes and Node network errors map to bounded connect c
 test('arbitrary lookalike codes do not enter SQLSTATE or TLS families', async (t) => {
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
-  for (const code of ['08PRIVATE', '28_SECRET', 'ERR_PRIVATE_TLS']) {
+  const cases = [
+    ['08PRIVATE', 'other_string'],
+    ['28_SECRET', 'other_string'],
+    ['ERR_PRIVATE_TLS', 'node_error_like'],
+  ] as const;
+  for (const [code, family] of cases) {
     logs.length = 0;
     const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
     await assert.rejects(
@@ -383,9 +393,46 @@ test('arbitrary lookalike codes do not enter SQLSTATE or TLS families', async (t
       ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
       ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
       ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${family}`],
       ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
       ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
       ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
     ]);
   }
 });
+
+test('unknown string database codes emit only bounded family shapes', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['53300', 'sqlstate_like'],
+    ['ERR_TLS_PRIVATE_DETAIL', 'node_tls_like'],
+    ['ERR_OSSL_PRIVATE_DETAIL', 'node_ossl_like'],
+    ['ERR_PRIVATE_DETAIL', 'node_error_like'],
+    ['EPROTO', 'node_errno_like'],
+    ['CERT_PRIVATE_DETAIL', 'upper_token_like'],
+    ['private-code', 'other_string'],
+  ] as const;
+
+  for (const [code, family] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${family}`],
+      ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(code), false);
+    assert.equal(JSON.stringify(logs).includes('PRIVATE_DATABASE_DETAIL'), false);
+  }
+});
+

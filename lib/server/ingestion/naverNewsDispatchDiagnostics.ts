@@ -166,6 +166,31 @@ type DatabaseErrorShape = Readonly<{
   errors: 'array' | 'other' | 'absent';
 }>;
 
+type DatabaseErrorCodeFamilyShape =
+  | 'sqlstate_like'
+  | 'node_tls_like'
+  | 'node_ossl_like'
+  | 'node_error_like'
+  | 'node_errno_like'
+  | 'upper_token_like'
+  | 'other_string'
+  | 'other'
+  | 'absent';
+
+function classifyDatabaseErrorCodeFamilyShape(error: unknown): DatabaseErrorCodeFamilyShape {
+  if (!error || typeof error !== 'object') return 'absent';
+  const code = (error as { code?: unknown }).code;
+  if (code === undefined) return 'absent';
+  if (typeof code !== 'string') return 'other';
+  if (/^[0-9A-Z]{5}$/.test(code)) return 'sqlstate_like';
+  if (code.startsWith('ERR_TLS_')) return 'node_tls_like';
+  if (code.startsWith('ERR_OSSL_')) return 'node_ossl_like';
+  if (code.startsWith('ERR_')) return 'node_error_like';
+  if (/^E[A-Z0-9_]+$/.test(code)) return 'node_errno_like';
+  if (/^[A-Z][A-Z0-9_]+$/.test(code)) return 'upper_token_like';
+  return 'other_string';
+}
+
 function classifyDatabaseErrorShape(error: unknown): DatabaseErrorShape {
   let root: DatabaseErrorShape['root'];
   if (error === null || error === undefined) root = 'nullish';
@@ -235,6 +260,7 @@ export async function observeNaverNewsDatabaseOperation<T>(
         const shape = classifyDatabaseErrorShape(error);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_ROOT=${shape.root}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=${shape.code}`);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${classifyDatabaseErrorCodeFamilyShape(error)}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=${shape.message}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=${shape.cause}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=${shape.errors}`);
