@@ -199,6 +199,317 @@
         "query": "ENHYPEN"
       },
       "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-jungkook-supported-v1",
+      "canonicalArtistId": "jungkook",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 정국",
+          "url": "https://music.bugs.co.kr/artist/80180889",
+          "note": "Bugs entity lists GOLDEN, Seven, Standing Next to You and BTS participation for 정국."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jungkook",
+        "artist": "정국",
+        "aliases": [
+          "정국",
+          "Jung Kook",
+          "Jungkook"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-jungkook-supported-v1",
+      "canonicalArtistId": "jungkook",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — Jung Kook",
+          "url": "https://www.last.fm/music/Jung+Kook",
+          "note": "Last.fm identifies Jeon Jung Kook, BTS member, and shows Standing Next to You as a current popular track."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jungkook",
+        "artist": "정국",
+        "query": "Jung Kook"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-jimin-supported-v1",
+      "canonicalArtistId": "jimin",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 지민",
+          "url": "https://music.bugs.co.kr/artist/80180887",
+          "note": "Bugs identifies a male solo artist debuted in 2013 with affiliated act 방탄소년단 and tracks Like Crazy / Who."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jimin",
+        "artist": "지민",
+        "aliases": [
+          "지민",
+          "Jimin"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-jimin-supported-v1",
+      "canonicalArtistId": "jimin",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — Jimin",
+          "url": "https://www.last.fm/music/Jimin",
+          "note": "Last.fm identifies Park Ji-min as the South Korean singer who debuted as a member of BTS."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jimin",
+        "artist": "지민",
+        "query": "Jimin"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-v-supported-v1",
+      "canonicalArtistId": "v",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — V",
+          "url": "https://music.bugs.co.kr/artist/80180888",
+          "note": "Bugs identifies V as a Korean male solo artist debuted in 2013 with affiliated act 방탄소년단 and Layover tracks."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "v",
+        "artist": "V",
+        "aliases": [
+          "V",
+          "뷔",
+          "Kim Taehyung"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-v-unsupported-v1",
+      "canonicalArtistId": "v",
+      "source": "lastfm",
+      "decision": "unsupported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — V",
+          "url": "https://www.last.fm/music/V",
+          "note": "Last.fm explicitly states that V is the name of more than one artist and combines multiple unrelated V identities on the same artist page; current name-query stats therefore cannot be treated as canonical-only BTS V data."
+        }
+      ],
+      "notes": "Unsupported under the current Last.fm name-query binding model because the provider page aggregates multiple artists named V."
+    },
+    {
+      "reviewId": "music-jennie-supported-v1",
+      "canonicalArtistId": "jennie",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 제니 (JENNIE)",
+          "url": "https://music.bugs.co.kr/artist/80265678",
+          "note": "Bugs identifies 제니 (JENNIE) as a Korean female solo artist with affiliated act BLACKPINK."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jennie",
+        "artist": "제니 (JENNIE)",
+        "aliases": [
+          "제니",
+          "JENNIE",
+          "Jennie"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-jennie-supported-v1",
+      "canonicalArtistId": "jennie",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — Jennie",
+          "url": "https://www.last.fm/music/Jennie",
+          "note": "Last.fm identifies Jennie Kim / JENNIE as the South Korean BLACKPINK member."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "jennie",
+        "artist": "제니 (JENNIE)",
+        "query": "Jennie"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-lisa-supported-v1",
+      "canonicalArtistId": "lisa",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 리사(LISA)",
+          "url": "https://music.bugs.co.kr/artist/80265680",
+          "note": "Bugs identifies 리사(LISA) as a Thai female solo artist debuted in 2016 with affiliated act BLACKPINK."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "lisa",
+        "artist": "리사(LISA)",
+        "aliases": [
+          "리사",
+          "LISA",
+          "Lisa"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-lisa-unsupported-v1",
+      "canonicalArtistId": "lisa",
+      "source": "lastfm",
+      "decision": "unsupported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — Lisa",
+          "url": "https://www.last.fm/music/Lisa",
+          "note": "Last.fm explicitly states there are at least eight known artists named Lisa; the page aggregates multiple identities, so current name-query stats cannot be treated as canonical-only BLACKPINK LISA data."
+        }
+      ],
+      "notes": "Unsupported under the current Last.fm name-query binding model because the provider page aggregates multiple artists named Lisa."
+    },
+    {
+      "reviewId": "music-rose-supported-v1",
+      "canonicalArtistId": "rose",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 로제(ROSÉ)",
+          "url": "https://music.bugs.co.kr/artist/80265679",
+          "note": "Bugs identifies 로제(ROSÉ) as a Korean female solo artist with affiliated act BLACKPINK and solo releases including rosie."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "rose",
+        "artist": "로제(ROSÉ)",
+        "aliases": [
+          "로제",
+          "ROSÉ",
+          "Rosé",
+          "ROSE"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-rose-supported-v1",
+      "canonicalArtistId": "rose",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — Rosé",
+          "url": "https://www.last.fm/music/Ros%C3%A9",
+          "note": "Last.fm identifies ROSÉ / Roseanne Park as the South Korean-New Zealander singer and BLACKPINK vocalist."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "rose",
+        "artist": "로제(ROSÉ)",
+        "query": "Rosé"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-riize-supported-v1",
+      "canonicalArtistId": "riize",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — RIIZE",
+          "url": "https://music.bugs.co.kr/artist/80384286",
+          "note": "Bugs identifies RIIZE as a Korean male group debuted in 2023 and lists the current members."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "riize",
+        "artist": "RIIZE",
+        "aliases": [
+          "RIIZE",
+          "라이즈"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-riize-supported-v1",
+      "canonicalArtistId": "riize",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — RIIZE",
+          "url": "https://www.last.fm/music/RIIZE",
+          "note": "Last.fm identifies RIIZE as the six-member boy group formed by SM Entertainment."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "riize",
+        "artist": "RIIZE",
+        "query": "RIIZE"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
     }
   ]
 }
