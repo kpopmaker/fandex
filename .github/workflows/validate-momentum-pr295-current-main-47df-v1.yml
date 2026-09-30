@@ -1,4 +1,5 @@
 name: Validate Momentum PR295 against current main 47df v1
+# revalidation epoch: post-pr302
 
 on:
   push:
