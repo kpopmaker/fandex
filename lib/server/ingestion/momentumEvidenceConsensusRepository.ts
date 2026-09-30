@@ -29,6 +29,12 @@ type MomentumChangeKind =
   | 'persistence-state-changed'
   | 'direction-and-persistence-changed';
 
+type MomentumChangeKindV2 =
+  | 'initial-observation'
+  | 'direction-state-changed'
+  | 'persistence-state-changed'
+  | 'direction-and-persistence-changed';
+
 type MomentumHistoryObservation = Readonly<{
   observationId: string;
   providerId: string;
@@ -104,7 +110,7 @@ type MomentumUnifiedHistoryRecordV2 = Readonly<{
   sourceV143Digest: null;
   sourceAttestationContractVersion: typeof ATTESTATION_SOURCE_CONTRACT;
   sourceAttestationDigest: string;
-  changeKind: MomentumChangeKind;
+  changeKind: MomentumChangeKindV2;
   previousSourceDigest: string | null;
   previousRecordDigest: string | null;
   observation: MomentumHistoryObservation;
@@ -197,6 +203,15 @@ function isChangeKind(value: unknown): value is MomentumChangeKind {
   );
 }
 
+function isV2ChangeKind(value: unknown): value is MomentumChangeKindV2 {
+  return (
+    value === 'initial-observation'
+    || value === 'direction-state-changed'
+    || value === 'persistence-state-changed'
+    || value === 'direction-and-persistence-changed'
+  );
+}
+
 function getSourceDigest(record: MomentumUnifiedHistoryRecord): string {
   return record.contractVersion === HISTORY_CONTRACT_V1
     ? record.sourceV143Digest
@@ -274,7 +289,6 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
     || !validIso(record.alignmentCutoffAt)
     || !isDirectional(record.directionalConsensus)
     || !isPersistence(record.persistenceConsensus)
-    || !isChangeKind(record.changeKind)
     || (
       record.previousRecordDigest !== null
       && !validSha(record.previousRecordDigest)
@@ -292,7 +306,8 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
 
   if (record.contractVersion === HISTORY_CONTRACT_V1) {
     if (
-      record.sourceContractVersion !== LEGACY_SOURCE_CONTRACT
+      !isChangeKind(record.changeKind)
+      || record.sourceContractVersion !== LEGACY_SOURCE_CONTRACT
       || !validSha(record.sourceV143Digest)
       || (
         record.previousSourceV143Digest !== null
@@ -314,7 +329,8 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
       throw new Error('momentum_consensus_history_record_invalid');
     }
   } else if (
-    record.sourceContractVersion !== ATTESTATION_SOURCE_CONTRACT
+    !isV2ChangeKind(record.changeKind)
+    || record.sourceContractVersion !== ATTESTATION_SOURCE_CONTRACT
     || record.sourceV143Digest !== null
     || record.sourceAttestationContractVersion
       !== ATTESTATION_SOURCE_CONTRACT
