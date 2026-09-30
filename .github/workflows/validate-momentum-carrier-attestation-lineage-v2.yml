@@ -35,11 +35,11 @@ jobs:
           if [ "$EVENT_NAME" = "pull_request" ]; then
             git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
             LIVE_BASE_SHA="$(git rev-parse "refs/remotes/origin/$PR_BASE_REF")"
-            git diff --name-only "$LIVE_BASE_SHA...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+            git diff --name-only "$LIVE_BASE_SHA" "$PR_HEAD_SHA" | sort > /tmp/changed.txt
           else
             git fetch origin "+refs/heads/work/momentum-preview-independent-attestation-current-main-v1:refs/remotes/origin/work/momentum-preview-independent-attestation-current-main-v1"
             STACK_BASE="$(git rev-parse refs/remotes/origin/work/momentum-preview-independent-attestation-current-main-v1)"
-            git diff --name-only "$STACK_BASE...HEAD" | sort > /tmp/changed.txt
+            git diff --name-only "$STACK_BASE" HEAD | sort > /tmp/changed.txt
           fi
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-carrier-attestation-lineage-v2.yml
