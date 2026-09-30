@@ -29,11 +29,13 @@ jobs:
       - name: Scope allowlist
         env:
           EVENT_NAME: ${{ github.event_name }}
-          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            git diff --name-only "$PR_BASE_SHA...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+            git fetch origin "$PR_BASE_REF"
+            LIVE_BASE_SHA="$(git rev-parse "origin/$PR_BASE_REF")"
+            git diff --name-only "$LIVE_BASE_SHA...$PR_HEAD_SHA" | sort > /tmp/changed.txt
           else
             git fetch origin work/momentum-preview-independent-attestation-current-main-v1
             STACK_BASE="$(git rev-parse origin/work/momentum-preview-independent-attestation-current-main-v1)"
