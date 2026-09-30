@@ -459,3 +459,19 @@ test('shadow activation source contains no timer, cron, GET handler, or request 
   assert.doesNotMatch(source, /setInterval|setTimeout|cron\.schedule|vercel\.json|searchParams|request\.json/i);
   assert.doesNotMatch(source, /export\s+async\s+function\s+GET/);
 });
+
+test('vercel config pins only the NAVER recurring scheduler function to sin1', async () => {
+  const fs = await import('node:fs/promises');
+  const raw = await fs.readFile(new URL('../vercel.json', import.meta.url), 'utf8');
+  const config = JSON.parse(raw) as {
+    regions?: unknown;
+    functions?: Record<string, { regions?: string[] }>;
+  };
+
+  assert.equal(config.regions, undefined);
+  assert.deepEqual(
+    config.functions?.['app/api/internal/naver-news/shadow-scheduler/route.ts']?.regions,
+    ['sin1'],
+  );
+  assert.equal(Object.keys(config.functions ?? {}).length, 1);
+});
