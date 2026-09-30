@@ -68,21 +68,23 @@ test('runtime region evidence is reduced to a fixed safe class', () => {
 
 test('authenticated scheduler request sources reduce to fixed safe classes only', () => {
   const base = 'https://example.test/api/internal/naver-news/shadow-scheduler';
-  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
-    headers: {
-      'x-fandex-scheduler-source': 'github-actions-hourly-v1',
-      'user-agent': 'curl/8.0 PRIVATE_DETAIL',
-    },
-  })), 'github_actions_hourly_v1');
-  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
-    headers: { 'user-agent': 'vercel-cron/1.0 PRIVATE_DETAIL' },
-  })), 'vercel_cron');
-  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
-    headers: { 'user-agent': 'curl/8.0 PRIVATE_DETAIL' },
-  })), 'curl_unmarked');
-  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
-    headers: { 'user-agent': 'PRIVATE_CLIENT/1.0' },
-  })), 'other');
+  const cases = [
+    [{ 'x-fandex-scheduler-source': 'github-actions-hourly-v1', 'user-agent': 'curl/8.0 PRIVATE_DETAIL' }, 'github_actions_hourly_v1'],
+    [{ 'user-agent': 'vercel-cron/1.0 PRIVATE_DETAIL' }, 'vercel_cron'],
+    [{ 'user-agent': 'PRIVATE_SERVICE/1.0', 'x-vercel-signature': 'PRIVATE_SIGNATURE' }, 'vercel_signed_service'],
+    [{ 'user-agent': 'GitHub-Hookshot/abcdef PRIVATE_DETAIL' }, 'github_webhook'],
+    [{ 'user-agent': 'node' }, 'node_client'],
+    [{ 'user-agent': 'undici PRIVATE_DETAIL' }, 'node_client'],
+    [{ 'user-agent': 'axios/1.7 PRIVATE_DETAIL' }, 'node_client'],
+    [{ 'user-agent': 'python-requests/2.32 PRIVATE_DETAIL' }, 'python_requests'],
+    [{ 'user-agent': 'Mozilla/5.0 PRIVATE_DETAIL' }, 'browser'],
+    [{ 'user-agent': 'curl/8.0 PRIVATE_DETAIL' }, 'curl_unmarked'],
+    [{ 'user-agent': 'PRIVATE_CLIENT/1.0' }, 'other'],
+  ] as const;
+
+  for (const [headers, expected] of cases) {
+    assert.equal(classifyNaverNewsRequestSource(new Request(base, { headers })), expected);
+  }
   assert.equal(classifyNaverNewsRequestSource(new Request(base)), 'missing');
 });
 
