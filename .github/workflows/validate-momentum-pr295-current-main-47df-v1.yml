@@ -1,0 +1,51 @@
+name: Validate Momentum PR295 against current main 47df v1
+
+on:
+  push:
+    branches:
+      - validation/momentum-pr295-current-main-47df-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validation branch scope
+        run: |
+          git diff --name-only 6bd2e28befbb6eee59752c80d5a71655cd0733bd...HEAD | sort > /tmp/changed.txt
+          printf '%s\n' '.github/workflows/validate-momentum-pr295-current-main-47df-v1.yml' > /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - name: Assert exact current main and merge-simulate
+        run: |
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "47dfacdcf28df7696a68c2cb9303f649ddb7104e"
+          git merge --no-commit --no-ff 47dfacdcf28df7696a68c2cb9303f649ddb7104e
+
+      - run: npm ci
+
+      - name: Preview-independent categorical attestation regression
+        run: npx tsx --test tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+
+      - name: Existing Momentum Product contract regression
+        run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
+
+      - name: Existing live-shadow readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
