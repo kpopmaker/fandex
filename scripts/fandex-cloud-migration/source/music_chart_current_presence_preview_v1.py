@@ -20,6 +20,11 @@ CURRENT_MUSIC_JSON = Path(
     "fandex_music_chart_ranking_v1_latest.json"
 )
 
+MUSIC_TARGET_BINDING_FILE = Path(
+    "data/fandex-cloud-v10/seed/"
+    "music_chart_artist_targets_v1.json"
+)
+
 OUTPUT_CSV = Path(
     "music_chart_current_presence_preview_v1_latest.csv"
 )
@@ -141,12 +146,98 @@ def read_json(path):
         return json.load(file)
 
 
-def select_best(rows, target_artists):
+def load_music_canonical_bindings():
+    payload = read_json(
+        MUSIC_TARGET_BINDING_FILE
+    )
+    rows = payload.get("artists", [])
+
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            "Invalid Music target binding config."
+        )
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(
+            row.get("artist")
+        )
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Music canonical binding row."
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Music canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Music artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Music canonical bindings are empty."
+        )
+
+    return bindings
+
+
+def resolve_row_canonical_id(
+    row,
+    bindings,
+):
+    artist = norm(row.get("artist"))
+    expected_id = bindings.get(artist)
+
+    if not expected_id:
+        raise RuntimeError(
+            "Unbound Music artist: " + artist
+        )
+
+    existing_id = norm(
+        row.get("canonicalArtistId")
+    )
+    if (
+        existing_id
+        and existing_id != expected_id
+    ):
+        raise RuntimeError(
+            "Music canonicalArtistId mismatch: "
+            f"{artist} = {existing_id} "
+            f"!= {expected_id}"
+        )
+
+    return expected_id
+
+
+def select_best(rows, target_artists, bindings):
     best = {}
 
     for row in rows:
         artist = norm(
             row.get("artist")
+        )
+
+        canonical_artist_id = (
+            resolve_row_canonical_id(
+                row,
+                bindings,
+            )
         )
 
         platform = norm(
@@ -159,6 +250,8 @@ def select_best(rows, target_artists):
 
         if (
             artist not in target_artists
+            or canonical_artist_id
+            != bindings[artist]
             or platform
             not in PLATFORM_WEIGHTS
             or rank == 999999
@@ -181,7 +274,11 @@ def select_best(rows, target_artists):
                 previous.get("rank")
             )
         ):
-            best[key] = row
+            selected = dict(row)
+            selected["canonicalArtistId"] = (
+                canonical_artist_id
+            )
+            best[key] = selected
 
     return best
 
@@ -270,11 +367,22 @@ def main():
     )
 
 
+    canonical_bindings = (
+        load_music_canonical_bindings()
+    )
+
     current_points = (
         current_music_points(
             current_music
         )
     )
+
+    for artist in current_points:
+        if artist not in canonical_bindings:
+            raise RuntimeError(
+                "Current Music ranking contains "
+                f"unbound artist: {artist}"
+            )
 
     target_artists = list(
         current_points.keys()
@@ -287,6 +395,7 @@ def main():
     best = select_best(
         rows,
         set(target_artists),
+        canonical_bindings,
     )
 
 
@@ -316,6 +425,9 @@ def main():
             if row is None:
 
                 preview_rows.append({
+                    "canonicalArtistId":
+                        canonical_bindings[artist],
+
                     "artist":
                         artist,
 
@@ -341,6 +453,19 @@ def main():
                 continue
 
 
+            if (
+                norm(
+                    row.get(
+                        "canonicalArtistId"
+                    )
+                )
+                != canonical_bindings[artist]
+            ):
+                raise RuntimeError(
+                    "Selected Music candidate identity mismatch: "
+                    + artist
+                )
+
             rank = safe_rank(
                 row.get("rank")
             )
@@ -364,6 +489,9 @@ def main():
 
 
             preview_rows.append({
+                "canonicalArtistId":
+                    canonical_bindings[artist],
+
                 "artist":
                     artist,
 
@@ -403,6 +531,7 @@ def main():
 
 
     fields = [
+        "canonicalArtistId",
         "artist",
         "platform",
         "status",
