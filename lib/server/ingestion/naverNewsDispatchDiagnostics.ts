@@ -177,6 +177,64 @@ type DatabaseErrorCodeFamilyShape =
   | 'other'
   | 'absent';
 
+const DATABASE_SQLSTATE_CLASSES = Object.freeze({
+  '00': 'successful_completion',
+  '01': 'warning',
+  '02': 'no_data',
+  '03': 'sql_statement_not_yet_complete',
+  '08': 'connection_exception',
+  '09': 'triggered_action_exception',
+  '0A': 'feature_not_supported',
+  '0B': 'invalid_transaction_initiation',
+  '0F': 'locator_exception',
+  '0L': 'invalid_grantor',
+  '0P': 'invalid_role_specification',
+  '0Z': 'diagnostics_exception',
+  '10': 'xquery_error',
+  '20': 'case_not_found',
+  '21': 'cardinality_violation',
+  '22': 'data_exception',
+  '23': 'integrity_constraint_violation',
+  '24': 'invalid_cursor_state',
+  '25': 'invalid_transaction_state',
+  '26': 'invalid_sql_statement_name',
+  '27': 'triggered_data_change_violation',
+  '28': 'invalid_authorization_specification',
+  '2B': 'dependent_privilege_descriptors_still_exist',
+  '2D': 'invalid_transaction_termination',
+  '2F': 'sql_routine_exception',
+  '34': 'invalid_cursor_name',
+  '38': 'external_routine_exception',
+  '39': 'external_routine_invocation_exception',
+  '3B': 'savepoint_exception',
+  '3D': 'invalid_catalog_name',
+  '3F': 'invalid_schema_name',
+  '40': 'transaction_rollback',
+  '42': 'syntax_error_or_access_rule_violation',
+  '44': 'with_check_option_violation',
+  '53': 'insufficient_resources',
+  '54': 'program_limit_exceeded',
+  '55': 'object_not_in_prerequisite_state',
+  '57': 'operator_intervention',
+  '58': 'system_error',
+  F0: 'configuration_file_error',
+  HV: 'foreign_data_wrapper_error',
+  P0: 'plpgsql_error',
+  XX: 'internal_error',
+} as const);
+
+type DatabaseSqlstateClass =
+  | (typeof DATABASE_SQLSTATE_CLASSES)[keyof typeof DATABASE_SQLSTATE_CLASSES]
+  | 'unknown_sqlstate_class';
+
+function classifyDatabaseSqlstateClass(error: unknown): DatabaseSqlstateClass | null {
+  if (!error || typeof error !== 'object') return null;
+  const code = (error as { code?: unknown }).code;
+  if (typeof code !== 'string' || !/^[0-9A-Z]{5}$/.test(code)) return null;
+  return DATABASE_SQLSTATE_CLASSES[code.slice(0, 2) as keyof typeof DATABASE_SQLSTATE_CLASSES]
+    ?? 'unknown_sqlstate_class';
+}
+
 function classifyDatabaseErrorCodeFamilyShape(error: unknown): DatabaseErrorCodeFamilyShape {
   if (!error || typeof error !== 'object') return 'absent';
   const code = (error as { code?: unknown }).code;
@@ -260,7 +318,14 @@ export async function observeNaverNewsDatabaseOperation<T>(
         const shape = classifyDatabaseErrorShape(error);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_ROOT=${shape.root}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=${shape.code}`);
-        console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${classifyDatabaseErrorCodeFamilyShape(error)}`);
+        const codeFamilyShape = classifyDatabaseErrorCodeFamilyShape(error);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${codeFamilyShape}`);
+        if (codeFamilyShape === 'sqlstate_like') {
+          const sqlstateClass = classifyDatabaseSqlstateClass(error);
+          if (sqlstateClass) {
+            console.warn(`FANDEX_NAVER_DATABASE_SQLSTATE_CLASS=${sqlstateClass}`);
+          }
+        }
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=${shape.message}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=${shape.cause}`);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=${shape.errors}`);

@@ -405,16 +405,16 @@ test('unknown string database codes emit only bounded family shapes', async (t) 
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const cases = [
-    ['53300', 'sqlstate_like'],
-    ['ERR_TLS_PRIVATE_DETAIL', 'node_tls_like'],
-    ['ERR_OSSL_PRIVATE_DETAIL', 'node_ossl_like'],
-    ['ERR_PRIVATE_DETAIL', 'node_error_like'],
-    ['EPROTO', 'node_errno_like'],
-    ['CERT_PRIVATE_DETAIL', 'upper_token_like'],
-    ['private-code', 'other_string'],
+    ['53300', 'sqlstate_like', 'insufficient_resources'],
+    ['ERR_TLS_PRIVATE_DETAIL', 'node_tls_like', null],
+    ['ERR_OSSL_PRIVATE_DETAIL', 'node_ossl_like', null],
+    ['ERR_PRIVATE_DETAIL', 'node_error_like', null],
+    ['EPROTO', 'node_errno_like', null],
+    ['CERT_PRIVATE_DETAIL', 'upper_token_like', null],
+    ['private-code', 'other_string', null],
   ] as const;
 
-  for (const [code, family] of cases) {
+  for (const [code, family, sqlstateClass] of cases) {
     logs.length = 0;
     const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
     await assert.rejects(
@@ -427,6 +427,47 @@ test('unknown string database codes emit only bounded family shapes', async (t) 
       ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
       ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
       [`FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=${family}`],
+      ...(sqlstateClass ? [[`FANDEX_NAVER_DATABASE_SQLSTATE_CLASS=${sqlstateClass}`]] : []),
+      ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(code), false);
+    assert.equal(JSON.stringify(logs).includes('PRIVATE_DATABASE_DETAIL'), false);
+  }
+});
+
+test('unknown PostgreSQL SQLSTATE conditions emit only official bounded class semantics', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['23502', 'integrity_constraint_violation'],
+    ['42883', 'syntax_error_or_access_rule_violation'],
+    ['53300', 'insufficient_resources'],
+    ['54000', 'program_limit_exceeded'],
+    ['55P03', 'object_not_in_prerequisite_state'],
+    ['58030', 'system_error'],
+    ['F0000', 'configuration_file_error'],
+    ['HV00N', 'foreign_data_wrapper_error'],
+    ['P0001', 'plpgsql_error'],
+    ['XX000', 'internal_error'],
+    ['ZZ999', 'unknown_sqlstate_class'],
+  ] as const;
+
+  for (const [code, sqlstateClass] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CODE_FAMILY_SHAPE=sqlstate_like'],
+      [`FANDEX_NAVER_DATABASE_SQLSTATE_CLASS=${sqlstateClass}`],
       ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
       ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
       ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
