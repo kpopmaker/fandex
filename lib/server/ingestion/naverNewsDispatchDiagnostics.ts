@@ -70,13 +70,25 @@ const DATABASE_ERROR_CLASSES = Object.freeze({
 
 const DATABASE_ERROR_MESSAGES = Object.freeze({
   'timeout exceeded when trying to connect': 'connection_timeout',
+  'timeout expired': 'connection_timeout',
   'Connection terminated due to connection timeout': 'connection_timeout',
   'Connection terminated unexpectedly': 'connection_reset',
+  'Connection terminated': 'connection_reset',
+  'The server does not support SSL connections': 'tls_failure',
+  'There was an error establishing an SSL connection': 'tls_failure',
+  'sslnegotiation=direct requires SSL to be enabled': 'ssl_negotiation_invalid',
+  'Password must be a string': 'credential_material_invalid',
 } as const);
+
+const DATABASE_ERROR_MESSAGE_PREFIXES = Object.freeze([
+  ['SASL:', 'sasl_failure'],
+  ['Invalid sslnegotiation value:', 'ssl_negotiation_invalid'],
+] as const);
 
 type DatabaseErrorClass =
   | (typeof DATABASE_ERROR_CLASSES)[keyof typeof DATABASE_ERROR_CLASSES]
   | (typeof DATABASE_ERROR_MESSAGES)[keyof typeof DATABASE_ERROR_MESSAGES]
+  | (typeof DATABASE_ERROR_MESSAGE_PREFIXES)[number][1]
   | 'other_database_error';
 
 function databaseErrorCodes(error: unknown, depth = 0, seen = new Set<object>()): string[] {
@@ -133,6 +145,9 @@ function classifyDatabaseError(error: unknown): DatabaseErrorClass {
   for (const message of databaseErrorMessages(error)) {
     const classified = DATABASE_ERROR_MESSAGES[message as keyof typeof DATABASE_ERROR_MESSAGES];
     if (classified) return classified;
+    for (const [prefix, prefixClass] of DATABASE_ERROR_MESSAGE_PREFIXES) {
+      if (message.startsWith(prefix)) return prefixClass;
+    }
   }
   return 'other_database_error';
 }
