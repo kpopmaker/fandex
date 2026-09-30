@@ -8,7 +8,9 @@
       "diagnostic/*": false,
       "work/*": false,
       "v131-lastfm-real-signal-read-model": false,
-      "integration/artist-expansion-*": false
+      "integration/artist-expansion-*": false,
+      "integration/naver-*": false,
+      "integration/ops-*": false
     }
   },
   "functions": {
