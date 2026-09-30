@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 VERSION = "music_chart_discover_artist_candidates_v2"
 COLLECTOR_FILE = Path("music_chart_collect_melon_genie_fallback_v1.py")
 
-TARGET_ARTISTS = {
+DEFAULT_TARGET_ARTISTS = {
     "아이유": [
         "아이유",
         "IU",
@@ -63,6 +63,52 @@ TARGET_ARTISTS = {
         "TXT",
     ],
 }
+
+TARGET_ARTISTS_FILE = Path("music_chart_artist_targets_v1.json")
+REPO_TARGET_ARTISTS_FILE = Path(
+    "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json"
+)
+
+
+def load_target_artists(path: Path | None = None):
+    candidate = path
+    if candidate is None:
+        if TARGET_ARTISTS_FILE.exists():
+            candidate = TARGET_ARTISTS_FILE
+        elif REPO_TARGET_ARTISTS_FILE.exists():
+            candidate = REPO_TARGET_ARTISTS_FILE
+
+    if candidate is None or not candidate.exists():
+        return DEFAULT_TARGET_ARTISTS.copy()
+
+    payload = json.loads(candidate.read_text(encoding="utf-8-sig"))
+    rows = payload.get("artists") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            f"Invalid music target config: {candidate}"
+        )
+
+    result = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        artist = str(row.get("artist") or "").strip()
+        aliases = [
+            str(alias).strip()
+            for alias in (row.get("aliases") or [])
+            if str(alias).strip()
+        ]
+        if artist and aliases:
+            result[artist] = aliases
+
+    if not result:
+        raise RuntimeError(
+            f"Music target config has no artists: {candidate}"
+        )
+    return result
+
+
+TARGET_ARTISTS = load_target_artists()
 
 SOURCES = [
     {
