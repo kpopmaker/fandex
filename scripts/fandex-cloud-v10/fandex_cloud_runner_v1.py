@@ -17,10 +17,61 @@ LASTFM_CLOUD_URL = (
     "data/lastfm-cloud/lastfm_artist_interest_history_v1.csv"
 )
 LASTFM_LOCAL = Path("lastfm_artist_interest_history_v1.csv")
+LASTFM_BINDING_FILE = Path(
+    "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv"
+)
 CLOUD_RUN_LATEST = Path("fandex_cloud_run_latest.json")
 
 def norm(value):
     return "" if value is None else str(value).strip()
+
+
+def load_lastfm_canonical_bindings():
+    if not LASTFM_BINDING_FILE.exists():
+        raise RuntimeError(
+            f"Last.fm binding file missing: {LASTFM_BINDING_FILE}"
+        )
+
+    with LASTFM_BINDING_FILE.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as f:
+        rows = list(csv.DictReader(f))
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(row.get("artist"))
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Last.fm canonical binding row"
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Last.fm canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Last.fm artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Last.fm canonical bindings are empty"
+        )
+
+    return bindings
 
 
 def bootstrap_lastfm_history():
@@ -60,6 +111,8 @@ def bootstrap_lastfm_history():
     if not cloud_rows:
         raise RuntimeError("Last.fm cloud history is empty")
 
+    canonical_bindings = load_lastfm_canonical_bindings()
+
     counts = Counter(row["snapshotDate"] for row in cloud_rows)
     by_date_artists = {}
     for row in cloud_rows:
@@ -93,11 +146,32 @@ def bootstrap_lastfm_history():
         except Exception:
             snapshot_at = collected_at
 
+        artist = norm(row.get("artist"))
+        canonical_artist_id = canonical_bindings.get(artist)
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Unbound Last.fm cloud artist: " + artist
+            )
+
+        cloud_canonical_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if (
+            cloud_canonical_id
+            and cloud_canonical_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Last.fm cloud canonicalArtistId mismatch: "
+                f"{artist} = {cloud_canonical_id} "
+                f"!= {canonical_artist_id}"
+            )
+
         output_rows.append(
             {
                 "snapshotDate": norm(row.get("snapshotDate")),
                 "snapshotAt": snapshot_at,
-                "artist": norm(row.get("artist")),
+                "canonicalArtistId": canonical_artist_id,
+                "artist": artist,
                 "lastfmName": norm(row.get("lastfmName")),
                 "listeners": norm(row.get("listeners")),
                 "playcount": norm(row.get("playcount")),
@@ -113,6 +187,7 @@ def bootstrap_lastfm_history():
             fieldnames=[
                 "snapshotDate",
                 "snapshotAt",
+                "canonicalArtistId",
                 "artist",
                 "lastfmName",
                 "listeners",
