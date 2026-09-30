@@ -381,6 +381,11 @@ test('arbitrary lookalike codes do not enter SQLSTATE or TLS families', async (t
     assert.deepEqual(logs, [
       ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
       ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ROOT=error'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=string'],
+      ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
+      ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
     ]);
   }
 });
