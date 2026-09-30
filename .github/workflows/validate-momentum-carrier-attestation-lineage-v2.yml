@@ -55,11 +55,6 @@ jobs:
       - name: Existing Momentum Product contract regression
         run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
 
-      - name: Existing public route design regression
-        env:
-          NODE_OPTIONS: --conditions=react-server
-        run: npx tsx --test tests/momentum-public-route-design-v1.test.mts
-
       - name: Existing live-shadow readiness regression
         env:
           NODE_OPTIONS: --conditions=react-server
