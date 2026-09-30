@@ -31,6 +31,24 @@ type ShadowRecurringFailureClass =
   | 'authorization_rejected'
   | 'dispatch_failed';
 
+type RuntimeRegionClass = 'sin1' | 'iad1' | 'other' | 'missing';
+
+export function classifyNaverNewsRuntimeRegion(value: string | undefined): RuntimeRegionClass {
+  const normalized = value?.trim().toLowerCase();
+  if (!normalized) return 'missing';
+  if (normalized === 'sin1' || normalized === 'iad1') return normalized;
+  return 'other';
+}
+
+function observeNaverNewsRuntimeRegion(value: string | undefined): void {
+  const regionClass = classifyNaverNewsRuntimeRegion(value);
+  try {
+    console.info(`FANDEX_NAVER_RUNTIME_REGION_CLASS=${regionClass}`);
+  } catch {
+    // Region evidence must never alter request execution.
+  }
+}
+
 async function resolveRuntimeBlobEnvironment(
   environment: Readonly<Record<string, string | undefined>>,
   dependencies: ShadowRecurringRouteDependencies,
@@ -142,6 +160,7 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
 }
 
 export async function POST(request: Request): Promise<Response> {
+  observeNaverNewsRuntimeRegion(process.env.VERCEL_REGION);
   return handleNaverNewsShadowRecurringSchedulerRequest(request, process.env, {
     resolveOidcToken: () => getVercelOidcToken(),
   });
