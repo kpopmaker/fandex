@@ -16,9 +16,9 @@ import {
 import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from '../lib/server/product/momentumEvidenceConsensusRealProductRead';
-import {
-  getMomentumLiveShadowProductReadinessForIU,
-} from '../lib/server/product/momentumLiveShadowProductReadiness';
+import type {
+  MomentumLiveShadowProductReadinessResult,
+} from '../lib/product/readiness/momentumLiveShadowProductReadiness';
 import {
   sha256Canonical,
 } from '../lib/shared/canonicalDigest';
@@ -265,32 +265,76 @@ test('v2 carrier fails closed when previous source lineage does not match previo
 });
 
 test('public route design accepts a valid attested trace without numeric promotion', async () => {
-  const [readiness, currentSource] = await Promise.all([
-    getMomentumLiveShadowProductReadinessForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-  ]);
+  const currentSource =
+    await getMomentumEvidenceConsensusShadowProductForIU();
 
   assert.equal(currentSource.status, 'ok');
   if (currentSource.status !== 'ok') return;
 
+  const model = currentSource.model;
   const attestedSource: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({
       status: 'ok' as const,
       model: Object.freeze({
-        ...currentSource.model,
+        ...model,
         storedEvidenceTrace: Object.freeze({
-          carrierRecordId:
-            currentSource.model.storedEvidenceTrace.carrierRecordId,
-          observationId:
-            currentSource.model.storedEvidenceTrace.observationId,
+          carrierRecordId: model.storedEvidenceTrace.carrierRecordId,
+          observationId: model.storedEvidenceTrace.observationId,
           sourceV143Digest: null,
           sourceAttestationContractVersion:
             SOURCE_ATTESTATION_CONTRACT,
           sourceAttestationDigest: SOURCE_ATTESTATION_DIGEST,
-          observationDigest:
-            currentSource.model.storedEvidenceTrace.observationDigest,
+          observationDigest: model.storedEvidenceTrace.observationDigest,
         }),
       }),
+    });
+
+  const readiness: MomentumLiveShadowProductReadinessResult =
+    Object.freeze({
+      contractVersion: 'momentum-live-shadow-product-readiness-v1',
+      state: 'public-route-candidate' as const,
+      productActivationReady: false as const,
+      productPublicationReady: false as const,
+      publicRouteDesignReady: true,
+      productMomentumScore: null,
+      numericProductEligible: false as const,
+      previewFallbackAllowed: false as const,
+      runtimeShadowReadVerified: true,
+      currentCarrier: Object.freeze({
+        carrierRecordId: model.storedEvidenceTrace.carrierRecordId,
+        alignmentCutoffAt: model.evidence.alignmentCutoffAt,
+        directionalConsensus: model.evidence.directionalConsensus,
+        persistenceConsensus: model.evidence.persistenceConsensus,
+        historicalOnly: false,
+      }),
+      sourceCurrentness: Object.freeze({
+        lastfmSourceAdvancedBeyondCarrierCutoff: true,
+        naverSchedulerObservedAfterCarrierCutoff: true,
+        naverCurrentStoredEvidenceReproducedForReadiness: true,
+        sourceAdvancementObserved: true,
+      }),
+      freshnessPolicy: Object.freeze({
+        arbitraryAgeThresholdAllowed: false as const,
+        maximumAgeDays: null,
+        currentCategoricalEvaluationRequiredAfterSourceAdvancement:
+          true as const,
+        newHistoryObservationRequiredBeforeEvaluation: false as const,
+        historyAppendDecision:
+          'defer-until-current-evaluation' as const,
+      }),
+      currentEvaluation: Object.freeze({
+        performed: true,
+        currentCarrierProduced: true,
+        currentNoOpEvaluationAttested: false,
+        satisfiesFreshness: true,
+        evaluatedAlignmentCutoffAt: model.evidence.alignmentCutoffAt,
+        directionalConsensus: model.evidence.directionalConsensus,
+        persistenceConsensus: model.evidence.persistenceConsensus,
+        attestationPath:
+          'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+        attestationDigest: SOURCE_ATTESTATION_DIGEST,
+      }),
+      blockers: Object.freeze([]),
     });
 
   const result = createMomentumPublicRouteDesignCandidate(
