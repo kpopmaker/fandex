@@ -384,11 +384,11 @@ def main():
             )
 
     target_artists = list(
-        current_points.keys()
+        canonical_bindings.keys()
     )
     if not target_artists:
         raise RuntimeError(
-            "Current music ranking has no artists."
+            "Music canonical bindings have no artists."
         )
 
     best = select_best(
@@ -591,30 +591,33 @@ def main():
 
     for artist in sorted_artists:
 
-        current = (
-            current_points.get(
-                artist,
-                0.0,
-            )
-        )
-
         proposed = (
             proposed_totals[
                 artist
             ]
         )
 
-        delta = round(
-            proposed - current,
-            2,
-        )
-
-        line = (
-            f"{artist} | "
-            f"current={current:.2f} | "
-            f"proposed={proposed:.2f} | "
-            f"delta={delta:+.2f}"
-        )
+        if artist in current_points:
+            current = current_points[
+                artist
+            ]
+            delta = round(
+                proposed - current,
+                2,
+            )
+            line = (
+                f"{artist} | "
+                f"current={current:.2f} | "
+                f"proposed={proposed:.2f} | "
+                f"delta={delta:+.2f}"
+            )
+        else:
+            line = (
+                f"{artist} | "
+                "current=UNAVAILABLE | "
+                f"proposed={proposed:.2f} | "
+                "delta=UNAVAILABLE"
+            )
 
         print(
             line
