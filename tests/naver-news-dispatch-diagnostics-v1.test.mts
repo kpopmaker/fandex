@@ -235,3 +235,51 @@ test('unknown code-less database messages remain other_database_error and are ne
   ]);
   assert.equal(JSON.stringify(logs).includes(secretMessage), false);
 });
+
+test('known pg connect error families map to bounded classes without logging raw messages', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+
+  const cases = [
+    ['SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string', 'sasl_failure'],
+    ['SASL: SCRAM-SERVER-FINAL-MESSAGE: server signature does not match', 'sasl_failure'],
+    ['The server does not support SSL connections', 'tls_failure'],
+    ['There was an error establishing an SSL connection', 'tls_failure'],
+    ['Invalid sslnegotiation value: "PRIVATE_VALUE". Valid values are "postgres" and "direct".', 'ssl_negotiation_invalid'],
+    ['sslnegotiation=direct requires SSL to be enabled', 'ssl_negotiation_invalid'],
+    ['Password must be a string', 'credential_material_invalid'],
+    ['timeout expired', 'connection_timeout'],
+    ['Connection terminated', 'connection_reset'],
+  ] as const;
+
+  for (const [message, expected] of cases) {
+    logs.length = 0;
+    const failure = new Error(message);
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(message), false);
+    assert.equal(JSON.stringify(logs).includes('PRIVATE_VALUE'), false);
+  }
+});
+
+test('unknown pg connect messages remain other_database_error', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const failure = new Error('PRIVATE_UNCLASSIFIED_CONNECT_DETAIL');
+
+  await assert.rejects(
+    observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+    (error: unknown) => error === failure,
+  );
+  assert.deepEqual(logs, [
+    ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+    ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+  ]);
+  assert.equal(JSON.stringify(logs).includes('PRIVATE_UNCLASSIFIED_CONNECT_DETAIL'), false);
+});
