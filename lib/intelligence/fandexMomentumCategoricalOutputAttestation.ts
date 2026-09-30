@@ -21,7 +21,7 @@ type PersistenceConsensus =
 
 type EvaluationClassification =
   | 'attested-no-op-same-cutoff-same-state'
-  | 'new-carrier-cutoff-advanced-same-state'
+  | 'attested-no-op-cutoff-advanced-same-state'
   | 'new-carrier-direction-state-changed'
   | 'new-carrier-persistence-state-changed'
   | 'new-carrier-direction-and-persistence-changed'
@@ -184,21 +184,34 @@ function assertEligibleEvidence(
   }
 
   const decision = evidence.decision;
+  const noOpClassification =
+    decision.classification === 'attested-no-op-same-cutoff-same-state'
+    || decision.classification
+      === 'attested-no-op-cutoff-advanced-same-state';
+  const appendClassification =
+    decision.classification === 'new-carrier-direction-state-changed'
+    || decision.classification === 'new-carrier-persistence-state-changed'
+    || decision.classification
+      === 'new-carrier-direction-and-persistence-changed';
+
   if (
     decision.currentDualSourceCategoricalEvaluationPerformed !== true
     || decision.currentNaverStoredEvidenceReproducedForReadiness !== true
+    || (!noOpClassification && !appendClassification)
     || (
-      decision.newHistoryObservationRequired
-      && decision.attestedNoOp
+      noOpClassification
+      && (
+        decision.newHistoryObservationRequired !== false
+        || decision.attestedNoOp !== true
+      )
     )
     || (
-      !decision.newHistoryObservationRequired
-      && !decision.attestedNoOp
+      appendClassification
+      && (
+        decision.newHistoryObservationRequired !== true
+        || decision.attestedNoOp !== false
+      )
     )
-    || decision.classification === 'alignment-regression-blocked'
-    || decision.classification === 'evaluation-blocked'
-    || decision.classification
-      === 'same-observation-cutoff-revision-review-required'
   ) {
     throw new Error('momentum_categorical_attestation_decision_invalid');
   }
