@@ -17,10 +17,10 @@ with tempfile.TemporaryDirectory() as tmp:
     t=Path(tmp)
     delta=t/"delta.csv"
     with delta.open("w",encoding="utf-8",newline="") as f:
-        w=csv.DictWriter(f,fieldnames=["artist","previousDate","latestDate","daysBetween","listenerDeltaPerDay","playcountDeltaPerDay","status"])
+        w=csv.DictWriter(f,fieldnames=["canonicalArtistId","artist","previousDate","latestDate","daysBetween","listenerDeltaPerDay","playcountDeltaPerDay","status"])
         w.writeheader()
         for i in range(11):
-            w.writerow({"artist":f"a{i}","previousDate":"2026-09-22","latestDate":"2026-09-23","daysBetween":1,"listenerDeltaPerDay":i+1,"playcountDeltaPerDay":(i+1)*2,"status":"delta_ready"})
+            w.writerow({"canonicalArtistId":f"canonical-{i}","artist":f"a{i}","previousDate":"2026-09-22","latestDate":"2026-09-23","daysBetween":1,"listenerDeltaPerDay":i+1,"playcountDeltaPerDay":(i+1)*2,"status":"delta_ready"})
     one.INPUT_CSV=delta; one.OUTPUT_CSV=t/"one.csv"; one.OUTPUT_JSON=t/"one.json"; one.REPORT=t/"one.txt"
     one.main()
     assert json.loads((t/"one.json").read_text())["artistCount"]==11
@@ -29,7 +29,7 @@ with tempfile.TemporaryDirectory() as tmp:
     with rolling.open("w",encoding="utf-8",newline="") as f:
         w=csv.DictWriter(f,fieldnames=roll.REQUIRED_FIELDS); w.writeheader()
         for i in range(11):
-            w.writerow({"artist":f"a{i}","latestDate":"2026-09-23","snapshotDateCount":7,
+            w.writerow({"canonicalArtistId":f"canonical-{i}","artist":f"a{i}","latestDate":"2026-09-23","snapshotDateCount":7,
             "rolling3Status":"ready","rolling3ListenerDeltaPerDay":i+1,"rolling3PlaycountDeltaPerDay":(i+1)*2,
             "rolling7Status":"ready","rolling7ListenerDeltaPerDay":i+1,"rolling7PlaycountDeltaPerDay":(i+1)*2})
     roll.INPUT_FILE=rolling; roll.OUTPUT_CSV=t/"roll.csv"; roll.OUTPUT_JSON=t/"roll.json"
