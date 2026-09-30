@@ -1,0 +1,66 @@
+{
+  "version": "eden_allhours_current_group_adapter_v1",
+  "source": {
+    "id": "eden-official-allhours-current-group-identity",
+    "type": "agency_roster",
+    "name": "EDEN Entertainment Official ALL(H)OURS Current Group Identity",
+    "observedAt": "2026-09-30T10:01:00+09:00",
+    "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ALL(H)OURS",
+      "aliases": ["올아워즈", "ALLHOURS"],
+      "evidence": [
+        {
+          "label": "ALL(H)OURS official current INTRO member roster",
+          "url": "https://all-h-ours.com/contents/section/65892d155660697e81e136ea"
+        },
+        {
+          "label": "EDEN Entertainment official sixth mini album UNBOUND pre-order notice",
+          "url": "https://all-h-ours.com/community/board/65669da51cb04d2dda946a8f/post/6a8bddf7ce53f323ff5867b0"
+        },
+        {
+          "label": "ALL(H)OURS official 2026 music-broadcast participation notice",
+          "url": "https://all-h-ours.com/surveys/6a9e9e7ff96937336a415e50"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "ALL(H)OURS": {
+      "agency": "Eden Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": ["KUNHO", "ON:N", "MINJE", "YOUMIN", "HYUNBIN", "MASAMI", "XAYDEN"],
+      "memberCount": 7,
+      "current2026MusicEvidence": {
+        "release": "UNBOUND",
+        "releaseDate": "2026-09-10",
+        "releaseType": "sixth_mini_album"
+      }
+    }
+  },
+  "contract": {
+    "officialCurrentIntroRequired": true,
+    "exactSevenMemberIdentityRequired": true,
+    "edenOfficialCurrentReleaseNoticeRequired": true,
+    "current2026MusicActivityRequired": true,
+    "memberNameAloneDoesNotCreateSoloCanonical": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_EDEN_ALLHOURS_current_group_identity_snapshot",
+    "verifiedFrom": [
+      "https://all-h-ours.com/contents/section/65892d155660697e81e136ea",
+      "https://all-h-ours.com/community/board/65669da51cb04d2dda946a8f/post/6a8bddf7ce53f323ff5867b0",
+      "https://all-h-ours.com/surveys/6a9e9e7ff96937336a415e50"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}

@@ -1647,6 +1647,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(theMuzeRescene.lifecycleStatus, 'active');
   assert.ok(theMuzeRescene.profile.koreanAliases.includes('리센느'));
 
+  const edenAllHours = getArtistV4ById('allhours');
+  assert.ok(edenAllHours);
+  assert.equal(edenAllHours.entityType, 'group');
+  assert.equal(edenAllHours.agency, 'Eden Entertainment');
+  assert.equal(edenAllHours.lifecycleStatus, 'active');
+  assert.ok(edenAllHours.profile.koreanAliases.includes('올아워즈'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
