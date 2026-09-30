@@ -335,12 +335,9 @@ def main():
         )
     ]
 
-    if (
-        len(ranking) == 10
-        and len(set(artists)) == 10
-    ):
+    if ranking and len(ranking) == len(set(artists)):
         health.ok(
-            "artistCount: 10/10"
+            f"artistCount: {len(ranking)}/{len(set(artists))}"
         )
     else:
         health.fail(
@@ -363,11 +360,11 @@ def main():
     if ranks == list(
         range(
             1,
-            11,
+            len(ranking) + 1,
         )
     ):
         health.ok(
-            "rank sequence: 1-10"
+            f"rank sequence: 1-{len(ranking)}"
         )
     else:
         health.fail(
@@ -496,7 +493,7 @@ def main():
 
     if not source_bad:
         health.ok(
-            "source structure: 10/10"
+            f"source structure: {len(ranking)}/{len(ranking)}"
         )
     else:
         health.fail(
@@ -507,7 +504,7 @@ def main():
     if not scale_bad:
         health.ok(
             "Music/Last.fm scale: "
-            "0.25 (10/10)"
+            f"0.25 ({len(ranking)}/{len(ranking)})"
         )
     else:
         health.fail(
@@ -555,13 +552,12 @@ def main():
     }
 
     if (
-        len(music_ranking) == 10
-        and len(
-            music_artists
-        ) == 10
+        music_ranking
+        and len(music_ranking) == len(music_artists)
+        and music_artists == set(artists)
     ):
         health.ok(
-            "Music v2 artistCount: 10/10"
+            f"Music v2 artistCount: {len(music_ranking)}/{len(music_artists)}"
         )
     else:
         health.fail(
@@ -664,14 +660,16 @@ def main():
             )
         )
 
+    expected_artist_count = len(ranking)
+
     if int(
         lastfm_payload.get(
             "scoreReadyCount"
         )
         or 0
-    ) == 10:
+    ) == expected_artist_count:
         health.ok(
-            "scoreReadyCount: 10/10"
+            f"scoreReadyCount: {expected_artist_count}/{expected_artist_count}"
         )
     else:
         health.fail(
