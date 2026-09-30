@@ -18,6 +18,7 @@ import {
 } from '@/lib/server/ingestion/naverNewsRecurringSchedulerContracts';
 
 export const runtime = 'nodejs';
+export const preferredRegion = 'sin1';
 export const dynamic = 'force-dynamic';
 
 type ShadowRecurringRouteDependencies = NaverNewsRecurringDependencies & Readonly<{

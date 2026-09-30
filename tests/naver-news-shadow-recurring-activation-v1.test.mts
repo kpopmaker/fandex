@@ -16,7 +16,7 @@ import {
   readNaverNewsShadowRecurringProtocol,
   runNaverNewsShadowRecurringScheduler,
 } from '../lib/server/ingestion/naverNewsShadowRecurringScheduler';
-import { handleNaverNewsShadowRecurringSchedulerRequest } from '../app/api/internal/naver-news/shadow-scheduler/route';
+import { handleNaverNewsShadowRecurringSchedulerRequest, preferredRegion } from '../app/api/internal/naver-news/shadow-scheduler/route';
 
 const SECRET = 'local-only-shadow-recurring-secret';
 const NOW = new Date('2026-09-14T00:34:56.000Z');
@@ -47,6 +47,10 @@ function fakeDispatch(calls: any[]) {
     } as any;
   };
 }
+
+test('shadow scheduler route is pinned to the Singapore function region', () => {
+  assert.equal(preferredRegion, 'sin1');
+});
 
 test('shadow protocol is pinned to canonical IU query and display 100', () => {
   const protocol = readNaverNewsShadowRecurringProtocol(environment());
