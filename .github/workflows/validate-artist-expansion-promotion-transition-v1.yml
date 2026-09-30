@@ -1,0 +1,37 @@
+name: Validate Artist Expansion promotion transition v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-current-main-v18
+
+permissions:
+  contents: read
+
+jobs:
+  validate-promotion-transition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install beautifulsoup4 requests
+      - name: Transition workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py \
+            scripts/fandex-cloud-migration/source/music_chart_check_history_v1.py \
+            scripts/fandex-cloud-migration/source/music_chart_current_presence_preview_v1.py \
+            scripts/lastfm-cloud/lastfm_cloud_history_v1.py \
+            scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py
+      - name: Materialized candidate regression
+        run: python tests/artist-expansion-materialized-candidate-pipeline-v1.py
+      - name: Short English alias boundary regression
+        run: python tests/artist-expansion-music-short-english-alias-boundary-v1.py
+      - name: Source promotion transition regression
+        run: python tests/artist-expansion-source-promotion-transition-v1.py
