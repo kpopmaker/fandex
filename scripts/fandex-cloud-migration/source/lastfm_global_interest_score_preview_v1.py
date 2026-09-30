@@ -84,6 +84,50 @@ def main():
     if not rows:
         raise SystemExit("ERROR: delta input is empty")
 
+    artist_to_canonical = {}
+    canonical_to_artist = {}
+
+    for row in rows:
+        artist = str(
+            row.get("artist") or ""
+        ).strip()
+        canonical_artist_id = str(
+            row.get("canonicalArtistId") or ""
+        ).strip()
+
+        if not canonical_artist_id:
+            raise SystemExit(
+                "ERROR: delta input missing canonicalArtistId: "
+                + artist
+            )
+
+        previous_id = artist_to_canonical.get(artist)
+        if (
+            previous_id
+            and previous_id != canonical_artist_id
+        ):
+            raise SystemExit(
+                "ERROR: delta artist identity mismatch: "
+                + artist
+            )
+
+        previous_artist = canonical_to_artist.get(
+            canonical_artist_id
+        )
+        if (
+            previous_artist
+            and previous_artist != artist
+        ):
+            raise SystemExit(
+                "ERROR: delta canonical identity collision: "
+                + canonical_artist_id
+            )
+
+        artist_to_canonical[artist] = canonical_artist_id
+        canonical_to_artist[
+            canonical_artist_id
+        ] = artist
+
     bad_status = [
         row
         for row in rows
@@ -155,6 +199,10 @@ def main():
         )
 
         results.append({
+            "canonicalArtistId": row.get(
+                "canonicalArtistId",
+                "",
+            ),
             "artist": row.get("artist", ""),
             "previousDate": row.get(
                 "previousDate",
@@ -210,6 +258,7 @@ def main():
 
     fieldnames = [
         "rank",
+        "canonicalArtistId",
         "artist",
         "previousDate",
         "latestDate",
