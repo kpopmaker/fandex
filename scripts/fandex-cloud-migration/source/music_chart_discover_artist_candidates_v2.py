@@ -64,13 +64,26 @@ DEFAULT_TARGET_ARTISTS = {
     ],
 }
 
+DEFAULT_TARGET_CANONICAL_IDS = {
+    "아이유": "iu",
+    "에스파": "aespa",
+    "에이티즈": "ateez",
+    "보이넥스트도어": "boynextdoor",
+    "아이브": "ive",
+    "르세라핌": "lesserafim",
+    "뉴진스": "newjeans",
+    "세븐틴": "seventeen",
+    "스트레이키즈": "straykids",
+    "투모로우바이투게더": "txt",
+}
+
 TARGET_ARTISTS_FILE = Path("music_chart_artist_targets_v1.json")
 REPO_TARGET_ARTISTS_FILE = Path(
     "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json"
 )
 
 
-def load_target_artists(path: Path | None = None):
+def load_target_artist_bindings(path: Path | None = None):
     candidate = path
     if candidate is None:
         if TARGET_ARTISTS_FILE.exists():
@@ -79,7 +92,10 @@ def load_target_artists(path: Path | None = None):
             candidate = REPO_TARGET_ARTISTS_FILE
 
     if candidate is None or not candidate.exists():
-        return DEFAULT_TARGET_ARTISTS.copy()
+        return (
+            DEFAULT_TARGET_ARTISTS.copy(),
+            DEFAULT_TARGET_CANONICAL_IDS.copy(),
+        )
 
     payload = json.loads(candidate.read_text(encoding="utf-8-sig"))
     rows = payload.get("artists") if isinstance(payload, dict) else None
@@ -89,26 +105,55 @@ def load_target_artists(path: Path | None = None):
         )
 
     result = {}
+    canonical_ids = {}
+    seen_canonical_ids = set()
+
     for row in rows:
         if not isinstance(row, dict):
             continue
+
+        canonical_artist_id = str(
+            row.get("canonicalArtistId") or ""
+        ).strip()
         artist = str(row.get("artist") or "").strip()
         aliases = [
             str(alias).strip()
             for alias in (row.get("aliases") or [])
             if str(alias).strip()
         ]
-        if artist and aliases:
-            result[artist] = aliases
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                f"Music target missing canonicalArtistId: {artist or '<unknown>'}"
+            )
+        if canonical_artist_id in seen_canonical_ids:
+            raise RuntimeError(
+                f"Duplicate canonicalArtistId in music target config: "
+                f"{canonical_artist_id}"
+            )
+        if not artist or not aliases:
+            raise RuntimeError(
+                f"Invalid music target binding: {canonical_artist_id}"
+            )
+
+        seen_canonical_ids.add(canonical_artist_id)
+        result[artist] = aliases
+        canonical_ids[artist] = canonical_artist_id
 
     if not result:
         raise RuntimeError(
             f"Music target config has no artists: {candidate}"
         )
-    return result
+
+    return result, canonical_ids
 
 
-TARGET_ARTISTS = load_target_artists()
+def load_target_artists(path: Path | None = None):
+    artists, _ = load_target_artist_bindings(path)
+    return artists
+
+
+TARGET_ARTISTS, TARGET_CANONICAL_IDS = load_target_artist_bindings()
 
 SOURCES = [
     {
@@ -219,6 +264,10 @@ def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
     matches = [
         {
             "artist": target_artist,
+            "canonicalArtistId": TARGET_CANONICAL_IDS.get(
+                target_artist,
+                target_artist,
+            ),
             "aliases": sorted(
                 set(aliases),
                 key=lambda alias: (
@@ -243,6 +292,7 @@ def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
         "status": "resolved",
         "chartArtist": chart_artist,
         "artist": match["artist"],
+        "canonicalArtistId": match["canonicalArtistId"],
         "matchedAlias": match["aliases"][0],
         "matches": matches,
     }
@@ -475,6 +525,10 @@ def build_candidates(
                             match["artist"]
                             for match in resolution["matches"]
                         ],
+                        "candidateCanonicalArtistIds": [
+                            match["canonicalArtistId"]
+                            for match in resolution["matches"]
+                        ],
                         "matchedAliases": {
                             match["artist"]: match["aliases"]
                             for match in resolution["matches"]
@@ -489,11 +543,13 @@ def build_candidates(
             continue
 
         target_artist = str(resolution["artist"])
+        canonical_artist_id = str(resolution["canonicalArtistId"])
         matched_alias = str(resolution["matchedAlias"])
 
         candidates.append(
             {
                 "approve": "",
+                "canonicalArtistId": canonical_artist_id,
                 "artist": target_artist,
                 "platform": item.get("platform", ""),
                 "chartName": item.get("chartName", ""),
@@ -542,6 +598,7 @@ def write_csv(
 ) -> None:
     fieldnames = [
         "approve",
+        "canonicalArtistId",
         "artist",
         "platform",
         "chartName",
