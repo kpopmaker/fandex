@@ -1,0 +1,32 @@
+name: Validate Artist Expansion reviewed provider batch v2
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-current-main-v13
+  pull_request:
+    branches:
+      - integration/artist-expansion-current-main-v5
+
+permissions:
+  contents: read
+
+jobs:
+  validate-reviewed-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install beautifulsoup4 requests
+      - name: Review workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/artist_source_compatibility_review_v1.py
+      - name: Active source binding contract
+        run: python tests/artist-expansion-source-binding-contract-v1.py
+      - name: First two reviewed provider batches
+        run: python tests/artist-expansion-source-compatibility-review-v1.py
