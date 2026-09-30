@@ -17,6 +17,7 @@ import {
   runNaverNewsShadowRecurringScheduler,
 } from '../lib/server/ingestion/naverNewsShadowRecurringScheduler';
 import {
+  classifyNaverNewsRequestSource,
   classifyNaverNewsRuntimeRegion,
   handleNaverNewsShadowRecurringSchedulerRequest,
   preferredRegion,
@@ -63,6 +64,26 @@ test('runtime region evidence is reduced to a fixed safe class', () => {
   assert.equal(classifyNaverNewsRuntimeRegion('PRIVATE_REGION_VALUE'), 'other');
   assert.equal(classifyNaverNewsRuntimeRegion(undefined), 'missing');
   assert.equal(classifyNaverNewsRuntimeRegion('   '), 'missing');
+});
+
+test('authenticated scheduler request sources reduce to fixed safe classes only', () => {
+  const base = 'https://example.test/api/internal/naver-news/shadow-scheduler';
+  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
+    headers: {
+      'x-fandex-scheduler-source': 'github-actions-hourly-v1',
+      'user-agent': 'curl/8.0 PRIVATE_DETAIL',
+    },
+  })), 'github_actions_hourly_v1');
+  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
+    headers: { 'user-agent': 'vercel-cron/1.0 PRIVATE_DETAIL' },
+  })), 'vercel_cron');
+  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
+    headers: { 'user-agent': 'curl/8.0 PRIVATE_DETAIL' },
+  })), 'curl_unmarked');
+  assert.equal(classifyNaverNewsRequestSource(new Request(base, {
+    headers: { 'user-agent': 'PRIVATE_CLIENT/1.0' },
+  })), 'other');
+  assert.equal(classifyNaverNewsRequestSource(new Request(base)), 'missing');
 });
 
 test('shadow protocol is pinned to canonical IU query and display 100', () => {
@@ -231,6 +252,26 @@ test('shadow route classifies config and authorization failures without exposing
     code: 'naver_news_shadow_recurring_scheduler_rejected',
     errorClass: 'authorization_rejected',
   });
+});
+
+test('authenticated request source logging is bounded and never emits raw headers', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'info', (...args: unknown[]) => logs.push(args));
+  const calls: any[] = [];
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${SECRET}`,
+        'user-agent': 'curl/8.0 PRIVATE_USER_AGENT_DETAIL',
+      },
+    }),
+    environment(),
+    { now: () => NOW, dispatch: fakeDispatch(calls) },
+  );
+  assert.equal(response.status, 200);
+  assert.deepEqual(logs, [['FANDEX_NAVER_REQUEST_SOURCE_CLASS=curl_unmarked']]);
+  assert.doesNotMatch(JSON.stringify(logs), /PRIVATE_USER_AGENT_DETAIL/);
 });
 
 test('runtime failure logs contain only the bounded class and preserve dispatch boundaries', async (t) => {
@@ -474,4 +515,14 @@ test('vercel config pins only the NAVER recurring scheduler function to sin1', a
     ['sin1'],
   );
   assert.equal(Object.keys(config.functions ?? {}).length, 1);
+});
+
+
+test('canonical hourly workflow emits only a fixed non-secret source marker', async () => {
+  const fs = await import('node:fs/promises');
+  const workflow = await fs.readFile(new URL(
+    '../.github/workflows/naver-news-shadow-recurring-production-v1.yml', import.meta.url,
+  ), 'utf8');
+  assert.match(workflow, /X-Fandex-Scheduler-Source: github-actions-hourly-v1/);
+  assert.doesNotMatch(workflow, /X-Fandex-Scheduler-Source:\s*\$\{\{/);
 });
