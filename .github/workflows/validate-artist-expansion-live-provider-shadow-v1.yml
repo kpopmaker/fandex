@@ -1,0 +1,39 @@
+name: Validate Artist Expansion live provider shadow v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-current-main-v16
+
+permissions:
+  contents: read
+
+jobs:
+  live-provider-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install beautifulsoup4 requests
+      - name: Shadow workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/artist_source_candidate_provider_shadow_v1.py
+      - name: Candidate config regression
+        run: python tests/artist-expansion-materialized-candidate-pipeline-v1.py
+      - name: Live Music and Last.fm provider shadow
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/artist_source_candidate_provider_shadow_v1.py
+      - name: Upload shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-source-candidate-provider-shadow-v1
+          path: artist_source_candidate_provider_shadow_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
