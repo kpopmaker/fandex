@@ -69,7 +69,7 @@ def main():
         music,
         lastfm,
     )
-    assert len(production_reviews) == 8
+    assert len(production_reviews) == 22
     assert {
         row["canonicalArtistId"]
         for row in production_reviews
@@ -78,6 +78,13 @@ def main():
         "blackpink",
         "twice",
         "enhypen",
+        "jungkook",
+        "jimin",
+        "v",
+        "jennie",
+        "lisa",
+        "rose",
+        "riize",
     }
     assert {
         row["source"]
@@ -89,7 +96,7 @@ def main():
     assert {
         row["proposedStatus"]
         for row in production_reviews
-    } == {"supported"}
+    } == {"supported", "unsupported"}
     assert {
         row["activationState"]
         for row in production_reviews
@@ -99,30 +106,42 @@ def main():
         registry,
         production_reviews,
     )
-    assert production_preview["reviewCount"] == 8
+    assert production_preview["reviewCount"] == 22
     assert (
         production_preview["sourceSummary"]["music_chart"][
             "reviewedSupportedProposalCount"
         ]
-        == 4
+        == 11
+    )
+    assert (
+        production_preview["sourceSummary"]["music_chart"][
+            "reviewedUnsupportedProposalCount"
+        ]
+        == 0
     )
     assert (
         production_preview["sourceSummary"]["lastfm"][
             "reviewedSupportedProposalCount"
         ]
-        == 4
+        == 9
+    )
+    assert (
+        production_preview["sourceSummary"]["lastfm"][
+            "reviewedUnsupportedProposalCount"
+        ]
+        == 2
     )
     assert (
         production_preview["sourceSummary"]["music_chart"][
             "pendingReviewCount"
         ]
-        == 341
+        == 334
     )
     assert (
         production_preview["sourceSummary"]["lastfm"][
             "pendingReviewCount"
         ]
-        == 341
+        == 334
     )
     assert production_preview["mutatesCompatibilityRegistry"] is False
     assert production_preview["mutatesProviderBindings"] is False
@@ -130,6 +149,64 @@ def main():
     assert production_preview["productModified"] is False
     assert production_preview["databaseModified"] is False
     assert production_preview["runtimeModified"] is False
+
+    unsupported_pairs = {
+        (
+            row["source"],
+            row["canonicalArtistId"],
+        )
+        for row in production_reviews
+        if row["proposedStatus"] == "unsupported"
+    }
+    assert unsupported_pairs == {
+        ("lastfm", "v"),
+        ("lastfm", "lisa"),
+    }
+
+    for row in production_reviews:
+        if row["proposedStatus"] == "unsupported":
+            assert row["proposedBinding"] is None
+
+    assert (
+        len(
+            registry["sources"]["music_chart"][
+                "supportedCanonicalArtistIds"
+            ]
+        )
+        == 10
+    )
+    assert (
+        len(
+            registry["sources"]["music_chart"][
+                "unresolvedCanonicalArtistIds"
+            ]
+        )
+        == 345
+    )
+    assert (
+        len(
+            registry["sources"]["lastfm"][
+                "supportedCanonicalArtistIds"
+            ]
+        )
+        == 10
+    )
+    assert (
+        len(
+            registry["sources"]["lastfm"][
+                "unresolvedCanonicalArtistIds"
+            ]
+        )
+        == 345
+    )
+    assert (
+        len(
+            registry["sources"]["lastfm"][
+                "unsupportedCanonicalArtistIds"
+            ]
+        )
+        == 0
+    )
 
     base = empty_ledger(reviews_payload)
 
@@ -333,8 +410,8 @@ def main():
         assert "must not include proposedBinding" in str(exc)
 
     print(
-        "PASS: production reviewed batch and source compatibility workflow "
-        "are auditable, fail-closed, and non-activating"
+        "PASS: first two reviewed provider batches and source compatibility "
+        "workflow are auditable, fail-closed, and non-activating"
     )
 
 
