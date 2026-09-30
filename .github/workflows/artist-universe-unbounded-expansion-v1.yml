@@ -139,6 +139,7 @@ jobs:
           python tests/artist-expansion-katseye-current-music-identity-v1.py
           python tests/artist-expansion-themuze-rescene-current-group-v1.py
           python tests/artist-expansion-eden-allhours-current-group-v1.py
+          python tests/artist-expansion-mulgogi-limyoungwoong-current-solo-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -647,6 +648,11 @@ jobs:
           python scripts/artist-expansion/collect_eden_allhours_current_group_v1.py \
             --fallback-snapshot data/artist-expansion-sources/eden-allhours-current-group-2026-09-30.json \
             --output eden_allhours_current_group_v1_latest.json
+      - name: Collect Mulgogi Lim Young-woong current solo identity
+        run: |
+          python scripts/artist-expansion/collect_mulgogi_limyoungwoong_current_solo_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/mulgogi-limyoungwoong-current-solo-2026-09-30.json \
+            --output mulgogi_limyoungwoong_current_solo_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -769,6 +775,7 @@ jobs:
             --snapshot katseye_current_music_identity_v1_latest.json \
             --snapshot themuze_rescene_current_group_v1_latest.json \
             --snapshot eden_allhours_current_group_v1_latest.json \
+            --snapshot mulgogi_limyoungwoong_current_solo_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -909,6 +916,7 @@ jobs:
             katseye_current_music_identity_v1_latest.json
             themuze_rescene_current_group_v1_latest.json
             eden_allhours_current_group_v1_latest.json
+            mulgogi_limyoungwoong_current_solo_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json

@@ -1,0 +1,53 @@
+{
+  "version": "mulgogi_limyoungwoong_current_solo_adapter_v1",
+  "source": {
+    "id": "mulgogi-official-limyoungwoong-current-solo-identity",
+    "type": "agency_roster",
+    "name": "Mulgogi Music Official Lim Young-woong Current Solo Identity",
+    "observedAt": "2026-09-30T10:45:00+09:00",
+    "url": "https://www.mulgogimusic.com/"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "Lim Young-woong",
+      "aliases": ["임영웅", "Lim Young Woong"],
+      "evidence": [
+        {
+          "label": "Mulgogi Music official Lim Young Woong artist profile and discography",
+          "url": "https://www.mulgogimusic.com/"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "Lim Young-woong": {
+      "agency": "Mulgogi Music",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "debutDate": "2016-08-08",
+      "current2026MusicEvidence": {
+        "release": "IM HERO 10",
+        "releaseDate": "2026-09-08"
+      }
+    }
+  },
+  "contract": {
+    "officialArtistProfileRequired": true,
+    "soloIdentityRequired": true,
+    "mulgogiAgencyRequired": true,
+    "current2026MusicActivityRequired": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_Mulgogi_LimYoungWoong_current_solo_identity_snapshot",
+    "verifiedFrom": [
+      "https://www.mulgogimusic.com/"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
