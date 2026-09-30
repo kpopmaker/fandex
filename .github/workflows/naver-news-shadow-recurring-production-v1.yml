@@ -30,7 +30,7 @@ jobs:
       - name: Dispatch canonical shadow scheduler once
         run: |
           set -euo pipefail
-          code=$(curl -sS             --connect-timeout 15             --max-time 300             --retry 0             -o /tmp/response.json             -w '%{http_code}'             -X POST             -H "Authorization: Bearer $FANDEX_NAVER_NEWS_SCHEDULER_SECRET"             -H "Content-Type: application/json"             "$FANDEX_PRODUCTION_BASE_URL/api/internal/naver-news/shadow-scheduler")
+          code=$(curl -sS             --connect-timeout 15             --max-time 300             --retry 0             -o /tmp/response.json             -w '%{http_code}'             -X POST             -H "Authorization: Bearer $FANDEX_NAVER_NEWS_SCHEDULER_SECRET"             -H "X-Fandex-Scheduler-Source: github-actions-hourly-v1"             -H "Content-Type: application/json"             "$FANDEX_PRODUCTION_BASE_URL/api/internal/naver-news/shadow-scheduler")
           echo "FANDEX_NAVER_RECURRING_HTTP=$code"
           if [[ "$code" != "200" ]]; then
             node <<'NODE'
