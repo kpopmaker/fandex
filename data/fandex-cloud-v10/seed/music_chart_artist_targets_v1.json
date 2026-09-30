@@ -6,21 +6,24 @@
       "aliases": [
         "아이유",
         "IU"
-      ]
+      ],
+      "canonicalArtistId": "iu"
     },
     {
       "artist": "에스파",
       "aliases": [
         "에스파",
         "aespa"
-      ]
+      ],
+      "canonicalArtistId": "aespa"
     },
     {
       "artist": "에이티즈",
       "aliases": [
         "에이티즈",
         "ATEEZ"
-      ]
+      ],
+      "canonicalArtistId": "ateez"
     },
     {
       "artist": "보이넥스트도어",
@@ -29,14 +32,16 @@
         "BOYNEXTDOOR",
         "BOY NEXT DOOR",
         "BND"
-      ]
+      ],
+      "canonicalArtistId": "boynextdoor"
     },
     {
       "artist": "아이브",
       "aliases": [
         "아이브",
         "IVE"
-      ]
+      ],
+      "canonicalArtistId": "ive"
     },
     {
       "artist": "르세라핌",
@@ -44,21 +49,24 @@
         "르세라핌",
         "LE SSERAFIM",
         "LESSERAFIM"
-      ]
+      ],
+      "canonicalArtistId": "lesserafim"
     },
     {
       "artist": "뉴진스",
       "aliases": [
         "뉴진스",
         "NewJeans"
-      ]
+      ],
+      "canonicalArtistId": "newjeans"
     },
     {
       "artist": "세븐틴",
       "aliases": [
         "세븐틴",
         "SEVENTEEN"
-      ]
+      ],
+      "canonicalArtistId": "seventeen"
     },
     {
       "artist": "스트레이키즈",
@@ -67,7 +75,8 @@
         "스트레이 키즈",
         "Stray Kids",
         "SKZ"
-      ]
+      ],
+      "canonicalArtistId": "straykids"
     },
     {
       "artist": "투모로우바이투게더",
@@ -75,7 +84,8 @@
         "투모로우바이투게더",
         "TOMORROW X TOGETHER",
         "TXT"
-      ]
+      ],
+      "canonicalArtistId": "txt"
     }
   ]
 }
