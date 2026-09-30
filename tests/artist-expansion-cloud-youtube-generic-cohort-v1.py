@@ -59,6 +59,7 @@ def main():
         music = tmp_path / "music.json"
         lastfm_csv = tmp_path / "lastfm.csv"
         lastfm_json = tmp_path / "lastfm.json"
+        lastfm_binding = tmp_path / "lastfm_seed.csv"
         master_out = tmp_path / "master.json"
         reports_out = tmp_path / "reports.json"
         audit_out = tmp_path / "audit.csv"
@@ -93,6 +94,21 @@ def main():
             json.dumps({"activeMode": "rolling3_50_rolling7_50"}),
             encoding="utf-8",
         )
+
+        with lastfm_binding.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["canonicalArtistId", "artist", "query"],
+            )
+            writer.writeheader()
+            for i, artist in enumerate(artists):
+                writer.writerow(
+                    {
+                        "canonicalArtistId": f"canonical-{i:02d}",
+                        "artist": artist,
+                        "query": artist,
+                    }
+                )
 
         original = {
             "NAVER": master.NAVER,
@@ -136,6 +152,7 @@ def main():
                 rows.append(
                     {
                         "snapshotDate": snapshot_date,
+                        "canonicalArtistId": f"canonical-{i:02d}",
                         "artist": artist,
                         "lastfmName": artist,
                         "listeners": str(1000 + multiplier * (i + 1)),
@@ -149,6 +166,7 @@ def main():
             buf,
             fieldnames=[
                 "snapshotDate",
+                "canonicalArtistId",
                 "artist",
                 "lastfmName",
                 "listeners",
@@ -161,13 +179,16 @@ def main():
 
         original_urlopen = runner.urllib.request.urlopen
         original_local = runner.LASTFM_LOCAL
+        original_binding = runner.LASTFM_BINDING_FILE
         runner.urllib.request.urlopen = lambda *args, **kwargs: FakeResponse(buf.getvalue())
         runner.LASTFM_LOCAL = tmp_path / "lastfm_bootstrap.csv"
+        runner.LASTFM_BINDING_FILE = lastfm_binding
         try:
             runner.bootstrap_lastfm_history()
         finally:
             runner.urllib.request.urlopen = original_urlopen
             runner.LASTFM_LOCAL = original_local
+            runner.LASTFM_BINDING_FILE = original_binding
 
         with (tmp_path / "lastfm_bootstrap.csv").open(
             "r", encoding="utf-8-sig", newline=""
@@ -175,6 +196,9 @@ def main():
             bootstrap_rows = list(csv.DictReader(f))
         assert len(bootstrap_rows) == 22
         assert {row["artist"] for row in bootstrap_rows} == set(artists)
+        assert {row["canonicalArtistId"] for row in bootstrap_rows} == {
+            f"canonical-{i:02d}" for i in range(11)
+        }
 
     print("PASS: Cloud master + YouTube parity + runner support 11 artists")
 
