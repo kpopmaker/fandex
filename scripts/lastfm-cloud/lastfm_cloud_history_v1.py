@@ -107,9 +107,9 @@ def read_seed():
         query = (row.get("query") or "").strip()
         if artist and query:
             seeds.append({"artist": artist, "query": query})
-    if len(seeds) != 10:
-        raise RuntimeError(f"Expected 10 Last.fm seed rows, got {len(seeds)}.")
-    if len({row["artist"] for row in seeds}) != 10:
+    if not seeds:
+        raise RuntimeError("Last.fm seed is empty.")
+    if len({row["artist"] for row in seeds}) != len(seeds):
         raise RuntimeError("Duplicate artist detected in Last.fm seed.")
     return seeds
 
@@ -162,6 +162,8 @@ def append_daily_snapshot(seeds, api_key):
     snapshot_date = now.date().isoformat()
     history = read_csv(HISTORY_FILE)
 
+    expected_count = len(seeds)
+
     today_rows = [
         row
         for row in history
@@ -171,11 +173,14 @@ def append_daily_snapshot(seeds, api_key):
         today_artists = {(row.get("artist") or "").strip() for row in today_rows}
         expected_artists = {row["artist"] for row in seeds}
         if today_artists == expected_artists and len(today_rows) == len(seeds):
-            print(f"SKIP: {snapshot_date} snapshot already complete (10/10).")
+            print(
+                f"SKIP: {snapshot_date} snapshot already complete "
+                f"({expected_count}/{expected_count})."
+            )
             return history, snapshot_date, False
         raise RuntimeError(
             f"Partial snapshot already exists for {snapshot_date}: "
-            f"{len(today_rows)}/10. Refusing to mix runs."
+            f"{len(today_rows)}/{expected_count}. Refusing to mix runs."
         )
 
     collected = []
@@ -185,12 +190,14 @@ def append_daily_snapshot(seeds, api_key):
             item = fetch_artist_info(seed, api_key)
             collected.append(item)
             print(
-                f"[{index}/10] OK {item['artist']} | "
+                f"[{index}/{expected_count}] OK {item['artist']} | "
                 f"listeners={item['listeners']} | playcount={item['playcount']}"
             )
         except Exception as exc:
             errors.append(f"{seed['artist']}: {exc}")
-            print(f"[{index}/10] ERROR {seed['artist']} | {exc}")
+            print(
+                f"[{index}/{expected_count}] ERROR {seed['artist']} | {exc}"
+            )
 
     if errors:
         raise RuntimeError(
@@ -217,7 +224,9 @@ def append_daily_snapshot(seeds, api_key):
         key=lambda row: ((row.get("snapshotDate") or ""), (row.get("artist") or ""))
     )
     write_csv(HISTORY_FILE, merged, HISTORY_FIELDS)
-    print(f"ADD: {snapshot_date} snapshot appended (10 rows).")
+    print(
+        f"ADD: {snapshot_date} snapshot appended ({expected_count} rows)."
+    )
     return merged, snapshot_date, True
 
 
@@ -302,7 +311,7 @@ def log_minmax(values):
 
 def build_score(delta_rows):
     ready = [row for row in delta_rows if row["status"] == "delta_ready"]
-    if len(ready) != 10:
+    if len(ready) != len(delta_rows):
         write_csv(SCORE_FILE, [], SCORE_FIELDS)
         return []
 
