@@ -190,20 +190,74 @@ def load_collector():
     return module
 
 
-def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
     normalized_chart_artist = compact_text(chart_artist)
 
     if not normalized_chart_artist:
-        return None
+        return {
+            "status": "no_match",
+            "chartArtist": chart_artist,
+            "matches": [],
+        }
+
+    matches_by_artist: dict[str, list[str]] = {}
 
     for target_artist, aliases in TARGET_ARTISTS.items():
         for alias in aliases:
             normalized_alias = compact_text(alias)
 
             if normalized_alias and normalized_alias in normalized_chart_artist:
-                return target_artist, alias
+                matches_by_artist.setdefault(target_artist, []).append(alias)
 
-    return None
+    if not matches_by_artist:
+        return {
+            "status": "no_match",
+            "chartArtist": chart_artist,
+            "matches": [],
+        }
+
+    matches = [
+        {
+            "artist": target_artist,
+            "aliases": sorted(
+                set(aliases),
+                key=lambda alias: (
+                    -len(compact_text(alias)),
+                    compact_text(alias),
+                    alias,
+                ),
+            ),
+        }
+        for target_artist, aliases in sorted(matches_by_artist.items())
+    ]
+
+    if len(matches) > 1:
+        return {
+            "status": "ambiguous",
+            "chartArtist": chart_artist,
+            "matches": matches,
+        }
+
+    match = matches[0]
+    return {
+        "status": "resolved",
+        "chartArtist": chart_artist,
+        "artist": match["artist"],
+        "matchedAlias": match["aliases"][0],
+        "matches": matches,
+    }
+
+
+def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+    resolution = resolve_target_artist(chart_artist)
+
+    if resolution["status"] != "resolved":
+        return None
+
+    return (
+        str(resolution["artist"]),
+        str(resolution["matchedAlias"]),
+    )
 
 
 def extract_first_rank(number_tag) -> int | None:
@@ -395,6 +449,7 @@ def dedupe_chart_items(
 def build_candidates(
     chart_items: list[dict[str, Any]],
     chart_date: str,
+    identity_ambiguities: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     candidates: list[dict[str, Any]] = []
 
@@ -403,12 +458,38 @@ def build_candidates(
             item.get("artistName") or ""
         ).strip()
 
-        matched = find_target_artist(chart_artist)
+        resolution = resolve_target_artist(chart_artist)
 
-        if matched is None:
+        if resolution["status"] == "ambiguous":
+            if identity_ambiguities is not None:
+                identity_ambiguities.append(
+                    {
+                        "platform": item.get("platform", ""),
+                        "chartName": item.get("chartName", ""),
+                        "trackTitle": item.get("trackTitle", ""),
+                        "rank": item.get("rank", ""),
+                        "chartDate": chart_date,
+                        "sourceKey": item.get("sourceKey", ""),
+                        "matchedArtist": chart_artist,
+                        "candidateArtists": [
+                            match["artist"]
+                            for match in resolution["matches"]
+                        ],
+                        "matchedAliases": {
+                            match["artist"]: match["aliases"]
+                            for match in resolution["matches"]
+                        },
+                        "rankSource": item.get("rankSource", ""),
+                        "sourceUrl": item.get("sourceUrl", ""),
+                    }
+                )
             continue
 
-        target_artist, matched_alias = matched
+        if resolution["status"] != "resolved":
+            continue
+
+        target_artist = str(resolution["artist"])
+        matched_alias = str(resolution["matchedAlias"])
 
         candidates.append(
             {
@@ -497,6 +578,7 @@ def write_report(
     candidates: list[dict[str, Any]],
     source_counts: dict[str, int],
     created_at: str,
+    identity_ambiguities: list[dict[str, Any]] | None = None,
 ) -> None:
     artist_counts = {
         artist: 0
@@ -529,7 +611,7 @@ def write_report(
     lines.extend(
         [
             "",
-            "신규 6명 후보 현황",
+            "Configured artist 후보 현황",
             "-" * 76,
         ]
     )
@@ -561,6 +643,22 @@ def write_report(
                 f"{row['rank']}위 | "
                 f"{row['trackTitle']} | "
                 f"rankSource={row['rankSource']}"
+            )
+
+    if identity_ambiguities:
+        lines.extend(
+            [
+                "",
+                "Identity ambiguity",
+                "-" * 76,
+            ]
+        )
+        for row in identity_ambiguities:
+            lines.append(
+                f"AMBIGUOUS {row.get('matchedArtist', '')} | "
+                f"candidateArtists={','.join(row.get('candidateArtists', []))} | "
+                f"platform={row.get('platform', '')} | "
+                f"rank={row.get('rank', '')}"
             )
 
     lines.extend(
@@ -627,9 +725,11 @@ def main() -> int:
         print(f"- parsed items: {len(items)}")
 
     deduped_items = dedupe_chart_items(all_items)
+    identity_ambiguities: list[dict[str, Any]] = []
     candidates = build_candidates(
         deduped_items,
         chart_date,
+        identity_ambiguities,
     )
 
     timestamp_csv = Path(
@@ -664,6 +764,8 @@ def main() -> int:
         "sourceCounts": source_counts,
         "candidateCount": len(candidates),
         "candidates": candidates,
+        "identityAmbiguityCount": len(identity_ambiguities),
+        "identityAmbiguities": identity_ambiguities,
         "fetchLogs": fetch_logs,
     }
 
@@ -682,12 +784,14 @@ def main() -> int:
         candidates,
         source_counts,
         created_at,
+        identity_ambiguities,
     )
     write_report(
         latest_report,
         candidates,
         source_counts,
         created_at,
+        identity_ambiguities,
     )
 
     print()
