@@ -32,6 +32,8 @@ jobs:
           git fetch origin main
           CURRENT_MAIN="$(git rev-parse origin/main)"
           echo "MOMENTUM_VALIDATED_MAIN_SHA=$CURRENT_MAIN"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git merge --no-commit --no-ff "$CURRENT_MAIN"
 
       - run: npm ci
