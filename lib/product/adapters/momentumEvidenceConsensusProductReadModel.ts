@@ -1,4 +1,5 @@
 import {
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_SOURCE_VARIABLE_ID,
@@ -35,6 +36,20 @@ function validTimestamp(value: string): boolean {
 
 function validDigest(value: string): boolean {
   return /^[0-9a-f]{64}$/.test(value);
+}
+
+function validSourceLineage(
+  record: ProductMomentumEvidenceConsensusStoredRecord,
+): boolean {
+  if (record.sourceV143Digest !== null) {
+    return validDigest(record.sourceV143Digest);
+  }
+
+  return (
+    record.sourceAttestationContractVersion
+      === PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION
+    && validDigest(record.sourceAttestationDigest)
+  );
 }
 
 function qualitativeEvidenceUsable(
@@ -135,7 +150,7 @@ export function buildProductMomentumEvidenceConsensusReadModel(
     if (
       record.recordId.trim().length === 0
       || record.observationId.trim().length === 0
-      || !validDigest(record.sourceV143Digest)
+      || !validSourceLineage(record)
       || !validDigest(record.observationDigest)
     ) {
       issues.push({
@@ -178,6 +193,24 @@ export function buildProductMomentumEvidenceConsensusReadModel(
 
   const latest = matchingRecords[0];
 
+  const storedEvidenceTrace =
+    latest.sourceV143Digest === null
+      ? Object.freeze({
+          carrierRecordId: latest.recordId,
+          observationId: latest.observationId,
+          sourceV143Digest: null,
+          sourceAttestationContractVersion:
+            latest.sourceAttestationContractVersion,
+          sourceAttestationDigest: latest.sourceAttestationDigest,
+          observationDigest: latest.observationDigest,
+        })
+      : Object.freeze({
+          carrierRecordId: latest.recordId,
+          observationId: latest.observationId,
+          sourceV143Digest: latest.sourceV143Digest,
+          observationDigest: latest.observationDigest,
+        });
+
   return Object.freeze({
     status: 'ok' as const,
     model: Object.freeze({
@@ -210,12 +243,7 @@ export function buildProductMomentumEvidenceConsensusReadModel(
         lifecycleState: 'research' as const,
         materialClass: 'real' as const,
       }),
-      storedEvidenceTrace: Object.freeze({
-        carrierRecordId: latest.recordId,
-        observationId: latest.observationId,
-        sourceV143Digest: latest.sourceV143Digest,
-        observationDigest: latest.observationDigest,
-      }),
+      storedEvidenceTrace,
       dataOrigin: 'observed' as const,
       publication: 'shadow' as const,
       presentation: 'standard' as const,
