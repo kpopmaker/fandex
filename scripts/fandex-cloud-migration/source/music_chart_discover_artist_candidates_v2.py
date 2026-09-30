@@ -235,6 +235,55 @@ def load_collector():
     return module
 
 
+def alias_matches_chart_artist(
+    chart_artist: str,
+    alias: str,
+) -> bool:
+    artist_text = str(chart_artist or "").strip()
+    alias_text = str(alias or "").strip()
+
+    if not artist_text or not alias_text:
+        return False
+
+    has_ascii_letter = bool(
+        re.search(
+            r"[A-Za-z]",
+            alias_text,
+        )
+    )
+
+    if not has_ascii_letter:
+        normalized_alias = compact_text(alias_text)
+        normalized_chart_artist = compact_text(
+            artist_text
+        )
+        return bool(
+            normalized_alias
+            and normalized_alias
+            in normalized_chart_artist
+        )
+
+    escaped = re.escape(alias_text)
+    escaped = escaped.replace(
+        r"\ ",
+        r"\s+",
+    )
+
+    pattern = (
+        r"(?<![A-Za-z0-9])"
+        + escaped
+        + r"(?![A-Za-z0-9])"
+    )
+
+    return bool(
+        re.search(
+            pattern,
+            artist_text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
 def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
     normalized_chart_artist = compact_text(chart_artist)
 
@@ -249,9 +298,10 @@ def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
 
     for target_artist, aliases in TARGET_ARTISTS.items():
         for alias in aliases:
-            normalized_alias = compact_text(alias)
-
-            if normalized_alias and normalized_alias in normalized_chart_artist:
+            if alias_matches_chart_artist(
+                chart_artist,
+                alias,
+            ):
                 matches_by_artist.setdefault(target_artist, []).append(alias)
 
     if not matches_by_artist:
