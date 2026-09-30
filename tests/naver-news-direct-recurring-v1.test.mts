@@ -8,6 +8,9 @@ import {
   runNaverNewsDirectRecurring,
 } from '../scripts/ingestion/run-naver-news-recurring-direct-v1.mjs';
 import {
+  NAVER_NEWS_INGESTION_CONTRACT_VERSION,
+} from '../lib/server/ingestion/naverNewsContracts';
+import {
   NAVER_NEWS_RECURRING_DEPLOYMENT_ENV,
   NAVER_NEWS_RECURRING_DEPLOYMENT_VALUE,
   NAVER_NEWS_RECURRING_DISPLAY_ENV,
@@ -76,7 +79,7 @@ test('approved direct recurring reuses the existing recurring scheduler exactly 
         workerId: 'scheduler-v125-20260930t130000z-synthetic001',
         production: {
           mode: 'production-write',
-          contractVersion: 'v124_naver_news_operational_ingestion',
+          contractVersion: NAVER_NEWS_INGESTION_CONTRACT_VERSION,
           status: 'applied',
           requestSha256: '0'.repeat(64),
           resultSha256: '1'.repeat(64),
