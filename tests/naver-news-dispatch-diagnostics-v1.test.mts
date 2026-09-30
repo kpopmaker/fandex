@@ -550,15 +550,12 @@ test('other PostgreSQL 53000 quota messages expose only a bounded quota resource
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const cases = [
-    ['PRIVATE active time quota enforcement detail', 'active_time'],
-    ['PRIVATE active_time_seconds quota enforcement detail', 'active_time'],
+    ['PRIVATE active time usage quota enforcement detail', 'active_time'],
     ['PRIVATE compute quota enforcement detail', 'compute'],
-    ['PRIVATE written data quota enforcement detail', 'written_data'],
-    ['PRIVATE written_data_bytes quota enforcement detail', 'written_data'],
+    ['PRIVATE written data usage quota enforcement detail', 'written_data'],
     ['PRIVATE egress quota enforcement detail', 'network_transfer'],
     ['PRIVATE network quota enforcement detail', 'network_transfer'],
-    ['PRIVATE logical size quota enforcement detail', 'logical_size'],
-    ['PRIVATE logical_size_bytes quota enforcement detail', 'logical_size'],
+    ['PRIVATE logical size usage quota enforcement detail', 'logical_size'],
     ['PRIVATE storage quota enforcement detail', 'storage'],
     ['PRIVATE branch quota enforcement detail', 'branch'],
     ['PRIVATE endpoint quota enforcement detail', 'endpoint'],
