@@ -866,6 +866,12 @@ def main() -> int:
     raw_payload = {
         "version": VERSION,
         "createdAt": created_at,
+        "targetArtists": list(TARGET_ARTISTS.keys()),
+        "targetCanonicalArtistIds": [
+            TARGET_CANONICAL_IDS[artist]
+            for artist in TARGET_ARTISTS
+        ],
+        "targetArtistCount": len(TARGET_ARTISTS),
         "seedModified": False,
         "websiteModified": False,
         "sourceCounts": source_counts,
