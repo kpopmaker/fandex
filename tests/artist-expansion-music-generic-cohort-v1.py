@@ -42,6 +42,7 @@ def main():
                 {
                     "artists": [
                         {
+                            "canonicalArtistId": f"canonical-{i:02d}",
                             "artist": artist,
                             "aliases": [artist, f"alias-{i:02d}"],
                         }
