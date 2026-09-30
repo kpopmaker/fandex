@@ -63,6 +63,7 @@ def main():
 
         delta_rows = [
             {
+                "canonicalArtistId": f"canonical-{i:02d}",
                 "artist": artist,
                 "status": "delta_ready",
                 "previousDate": "2026-09-22",
@@ -94,6 +95,7 @@ def main():
                 rows.append(
                     {
                         "snapshotDate": snapshot_date,
+                        "canonicalArtistId": f"canonical-{i:02d}",
                         "artist": artist,
                         "listeners": str(1000 + multiplier * (i + 1)),
                         "playcount": str(10000 + multiplier * (i + 1) * 10),
