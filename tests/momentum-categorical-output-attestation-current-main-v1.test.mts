@@ -39,11 +39,11 @@ const BASE_EVIDENCE: MomentumCurrentDualSourceEvaluationEvidence = Object.freeze
       '3ac534dd6afc2e75f534cf4bc98ce6fb33fdd22e081eaae9aedcf97a90fd6721',
   }),
   decision: Object.freeze({
-    classification: 'new-carrier-cutoff-advanced-same-state',
+    classification: 'attested-no-op-cutoff-advanced-same-state',
     currentDualSourceCategoricalEvaluationPerformed: true,
     currentNaverStoredEvidenceReproducedForReadiness: true,
-    newHistoryObservationRequired: true,
-    attestedNoOp: false,
+    newHistoryObservationRequired: false,
+    attestedNoOp: true,
   }),
   safety: Object.freeze({
     databaseMode: 'read-only',
@@ -103,11 +103,29 @@ test('attestation binds exact NAVER Stored Evidence and evaluation identity', ()
   );
   assert.equal(
     result.evaluationEvidence.evaluationClassification,
-    'new-carrier-cutoff-advanced-same-state',
+    'attested-no-op-cutoff-advanced-same-state',
   );
   assert.match(
     result.evaluationEvidence.evaluationEvidenceDigest,
     /^[0-9a-f]{64}$/,
+  );
+});
+
+
+test('obsolete cutoff-advanced same-state append classification fails closed', () => {
+  const tampered = {
+    ...BASE_EVIDENCE,
+    decision: {
+      ...BASE_EVIDENCE.decision,
+      classification: 'new-carrier-cutoff-advanced-same-state',
+      newHistoryObservationRequired: true,
+      attestedNoOp: false,
+    },
+  } as unknown as MomentumCurrentDualSourceEvaluationEvidence;
+
+  assert.throws(
+    () => buildFandexMomentumCategoricalOutputAttestation(tampered),
+    /momentum_categorical_attestation_decision_invalid/,
   );
 });
 
