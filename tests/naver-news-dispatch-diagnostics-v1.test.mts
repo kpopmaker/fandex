@@ -511,9 +511,17 @@ test('generic PostgreSQL 53000 messages map only to bounded quota families', asy
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const cases = [
+    ['Your project has exceeded the active time quota.', 'active_time_quota_exceeded'],
     ['Your account or project has exceeded the compute time quota. Upgrade your plan to increase limits.', 'compute_time_quota_exceeded'],
+    ['Your project has exceeded the written data quota.', 'written_data_quota_exceeded'],
     ['Your project has exceeded the data transfer quota. Upgrade your plan to increase limits.', 'data_transfer_quota_exceeded'],
     ['Your project has exceeded the network transfer quota.', 'data_transfer_quota_exceeded'],
+    ['Your branch has exceeded the logical size quota.', 'logical_size_quota_exceeded'],
+    ['quota field active_time_seconds reached', 'active_time_quota_exceeded'],
+    ['quota field compute_time_seconds reached', 'compute_time_quota_exceeded'],
+    ['quota field written_data_bytes reached', 'written_data_quota_exceeded'],
+    ['quota field data_transfer_bytes reached', 'data_transfer_quota_exceeded'],
+    ['quota field logical_size_bytes reached', 'logical_size_quota_exceeded'],
     ['PRIVATE unknown quota enforcement detail', 'other_quota_exceeded'],
     ['PRIVATE generic resource detail', 'other_insufficient_resources'],
   ] as const;
@@ -542,9 +550,12 @@ test('other PostgreSQL 53000 quota messages expose only a bounded quota resource
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const cases = [
+    ['PRIVATE active time usage quota enforcement detail', 'active_time'],
     ['PRIVATE compute quota enforcement detail', 'compute'],
+    ['PRIVATE written data usage quota enforcement detail', 'written_data'],
     ['PRIVATE egress quota enforcement detail', 'network_transfer'],
     ['PRIVATE network quota enforcement detail', 'network_transfer'],
+    ['PRIVATE logical size usage quota enforcement detail', 'logical_size'],
     ['PRIVATE storage quota enforcement detail', 'storage'],
     ['PRIVATE branch quota enforcement detail', 'branch'],
     ['PRIVATE endpoint quota enforcement detail', 'endpoint'],

@@ -290,15 +290,21 @@ function classifyDatabaseErrorShape(error: unknown): DatabaseErrorShape {
 }
 
 type DatabaseInsufficientResourceCause =
+  | 'active_time_quota_exceeded'
   | 'compute_time_quota_exceeded'
+  | 'written_data_quota_exceeded'
   | 'data_transfer_quota_exceeded'
+  | 'logical_size_quota_exceeded'
   | 'other_quota_exceeded'
   | 'other_insufficient_resources'
   | 'message_absent';
 
 type DatabaseQuotaResource =
+  | 'active_time'
   | 'compute'
+  | 'written_data'
   | 'network_transfer'
+  | 'logical_size'
   | 'storage'
   | 'branch'
   | 'endpoint'
@@ -308,9 +314,18 @@ function classifyDatabaseQuotaResource(error: unknown): DatabaseQuotaResource {
   for (const message of databaseErrorMessages(error)) {
     const normalized = message.toLowerCase();
     if (!normalized.includes('quota')) continue;
+    if (normalized.includes('active time') || normalized.includes('active_time_seconds')) {
+      return 'active_time';
+    }
     if (normalized.includes('compute')) return 'compute';
+    if (normalized.includes('written data') || normalized.includes('written_data_bytes')) {
+      return 'written_data';
+    }
     if (normalized.includes('transfer') || normalized.includes('egress') || normalized.includes('network')) {
       return 'network_transfer';
+    }
+    if (normalized.includes('logical size') || normalized.includes('logical_size_bytes')) {
+      return 'logical_size';
     }
     if (normalized.includes('storage') || normalized.includes('disk')) return 'storage';
     if (normalized.includes('branch')) return 'branch';
@@ -324,9 +339,24 @@ function classifyDatabaseInsufficientResourceCause(error: unknown): DatabaseInsu
   if (messages.length === 0) return 'message_absent';
   for (const message of messages) {
     const normalized = message.toLowerCase();
-    if (normalized.includes('compute time quota')) return 'compute_time_quota_exceeded';
-    if (normalized.includes('data transfer quota') || normalized.includes('network transfer quota')) {
+    if (normalized.includes('active time quota') || normalized.includes('active_time_seconds')) {
+      return 'active_time_quota_exceeded';
+    }
+    if (normalized.includes('compute time quota') || normalized.includes('compute_time_seconds')) {
+      return 'compute_time_quota_exceeded';
+    }
+    if (normalized.includes('written data quota') || normalized.includes('written_data_bytes')) {
+      return 'written_data_quota_exceeded';
+    }
+    if (
+      normalized.includes('data transfer quota')
+      || normalized.includes('network transfer quota')
+      || normalized.includes('data_transfer_bytes')
+    ) {
       return 'data_transfer_quota_exceeded';
+    }
+    if (normalized.includes('logical size quota') || normalized.includes('logical_size_bytes')) {
+      return 'logical_size_quota_exceeded';
     }
     if (normalized.includes('quota')) return 'other_quota_exceeded';
   }
