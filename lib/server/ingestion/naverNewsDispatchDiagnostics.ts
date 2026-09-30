@@ -289,6 +289,27 @@ function classifyDatabaseErrorShape(error: unknown): DatabaseErrorShape {
   });
 }
 
+type DatabaseInsufficientResourceCause =
+  | 'compute_time_quota_exceeded'
+  | 'data_transfer_quota_exceeded'
+  | 'other_quota_exceeded'
+  | 'other_insufficient_resources'
+  | 'message_absent';
+
+function classifyDatabaseInsufficientResourceCause(error: unknown): DatabaseInsufficientResourceCause {
+  const messages = databaseErrorMessages(error);
+  if (messages.length === 0) return 'message_absent';
+  for (const message of messages) {
+    const normalized = message.toLowerCase();
+    if (normalized.includes('compute time quota')) return 'compute_time_quota_exceeded';
+    if (normalized.includes('data transfer quota') || normalized.includes('network transfer quota')) {
+      return 'data_transfer_quota_exceeded';
+    }
+    if (normalized.includes('quota')) return 'other_quota_exceeded';
+  }
+  return 'other_insufficient_resources';
+}
+
 function classifyDatabaseError(error: unknown): DatabaseErrorClass {
   for (const code of databaseErrorCodes(error)) {
     const classified = DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES];
@@ -319,6 +340,9 @@ export async function observeNaverNewsDatabaseOperation<T>(
         console.warn(`FANDEX_NAVER_DATABASE_FAILED_OPERATION=${operationName}`);
       }
       console.warn(`FANDEX_NAVER_DATABASE_ERROR_CLASS=${errorClass}`);
+      if (errorClass === 'insufficient_resources') {
+        console.warn(`FANDEX_NAVER_DATABASE_INSUFFICIENT_RESOURCE_CAUSE=${classifyDatabaseInsufficientResourceCause(error)}`);
+      }
       if (errorClass === 'other_database_error') {
         const shape = classifyDatabaseErrorShape(error);
         console.warn(`FANDEX_NAVER_DATABASE_ERROR_ROOT=${shape.root}`);
