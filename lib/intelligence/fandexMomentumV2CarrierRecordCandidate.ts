@@ -3,6 +3,7 @@ import {
 } from './fandexMomentumCategoricalOutputAttestation';
 import {
   FANDEX_MOMENTUM_CARRIER_HISTORY_V2,
+  type MomentumCarrierPersistenceDecision,
 } from './fandexMomentumCarrierPersistenceDecision';
 import type {
   FandexMomentumCurrentEvaluationExecutionResult,
@@ -15,8 +16,8 @@ export const FANDEX_MOMENTUM_V2_CARRIER_RECORD_CANDIDATE_VERSION =
 const VARIABLE_ID =
   'momentum.cross-family-evidence-state.research' as const;
 
-type AppendExecutionResult = Extract<
-  FandexMomentumCurrentEvaluationExecutionResult,
+type AppendPersistenceDecision = Extract<
+  MomentumCarrierPersistenceDecision,
   { state: 'append-v2-carrier-candidate' }
 >;
 
@@ -59,9 +60,9 @@ export type FandexMomentumV2CarrierRecordCandidateResult =
         canonicalArtistId: string;
         alignmentCutoffAt: string;
         directionalConsensus:
-          AppendExecutionResult['persistenceDecision']['nextDirectionalConsensus'];
+          AppendPersistenceDecision['nextDirectionalConsensus'];
         persistenceConsensus:
-          AppendExecutionResult['persistenceDecision']['nextPersistenceConsensus'];
+          AppendPersistenceDecision['nextPersistenceConsensus'];
         sourceContractVersion:
           typeof FANDEX_MOMENTUM_CATEGORICAL_OUTPUT_ATTESTATION_VERSION;
         sourceV143Digest: null;
@@ -69,7 +70,7 @@ export type FandexMomentumV2CarrierRecordCandidateResult =
           typeof FANDEX_MOMENTUM_CATEGORICAL_OUTPUT_ATTESTATION_VERSION;
         sourceAttestationDigest: string;
         changeKind:
-          AppendExecutionResult['persistenceDecision']['changeKind'];
+          AppendPersistenceDecision['changeKind'];
         previousSourceDigest: string;
         previousRecordDigest: string;
         observation: Readonly<{
@@ -88,7 +89,7 @@ export type FandexMomentumV2CarrierRecordCandidateResult =
           }>;
           value: Readonly<{
             rawValue:
-              AppendExecutionResult['persistenceDecision']['nextDirectionalConsensus'];
+              AppendPersistenceDecision['nextDirectionalConsensus'];
             unit: null;
             missingState: 'observed';
           }>;
@@ -164,6 +165,10 @@ export function buildFandexMomentumV2CarrierRecordCandidate(
   }
 
   const decision = input.execution.persistenceDecision;
+  if (decision.state !== 'append-v2-carrier-candidate') {
+    return blocked('execution-not-append-candidate');
+  }
+
   if (
     Date.parse(input.recordedAt)
       < Date.parse(decision.nextAlignmentCutoffAt)
