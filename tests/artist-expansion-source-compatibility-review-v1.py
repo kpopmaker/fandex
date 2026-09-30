@@ -54,64 +54,138 @@ def base_inputs():
     return registry, reviews_payload, music, lastfm
 
 
+def empty_ledger(payload):
+    result = dict(payload)
+    result["reviews"] = []
+    return result
+
+
 def main():
     registry, reviews_payload, music, lastfm = base_inputs()
 
-    assert reviews_payload["reviews"] == []
+    production_reviews = review.validate_reviews(
+        registry,
+        reviews_payload,
+        music,
+        lastfm,
+    )
+    assert len(production_reviews) == 8
+    assert {
+        row["canonicalArtistId"]
+        for row in production_reviews
+    } == {
+        "bts",
+        "blackpink",
+        "twice",
+        "enhypen",
+    }
+    assert {
+        row["source"]
+        for row in production_reviews
+    } == {
+        "music_chart",
+        "lastfm",
+    }
+    assert {
+        row["proposedStatus"]
+        for row in production_reviews
+    } == {"supported"}
+    assert {
+        row["activationState"]
+        for row in production_reviews
+    } == {"reviewed_candidate_only"}
 
-    fixture = dict(reviews_payload)
+    production_preview = review.build_preview(
+        registry,
+        production_reviews,
+    )
+    assert production_preview["reviewCount"] == 8
+    assert (
+        production_preview["sourceSummary"]["music_chart"][
+            "reviewedSupportedProposalCount"
+        ]
+        == 4
+    )
+    assert (
+        production_preview["sourceSummary"]["lastfm"][
+            "reviewedSupportedProposalCount"
+        ]
+        == 4
+    )
+    assert (
+        production_preview["sourceSummary"]["music_chart"][
+            "pendingReviewCount"
+        ]
+        == 341
+    )
+    assert (
+        production_preview["sourceSummary"]["lastfm"][
+            "pendingReviewCount"
+        ]
+        == 341
+    )
+    assert production_preview["mutatesCompatibilityRegistry"] is False
+    assert production_preview["mutatesProviderBindings"] is False
+    assert production_preview["activatesCollection"] is False
+    assert production_preview["productModified"] is False
+    assert production_preview["databaseModified"] is False
+    assert production_preview["runtimeModified"] is False
+
+    base = empty_ledger(reviews_payload)
+
+    fixture = dict(base)
     fixture["reviews"] = [
         {
-            "reviewId": "music-bts-supported-v1",
-            "canonicalArtistId": "bts",
+            "reviewId": "music-jimin-supported-fixture",
+            "canonicalArtistId": "jimin",
             "source": "music_chart",
             "decision": "supported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture-provider-evidence",
-                    "url": "https://example.com/music/bts",
+                    "url": "https://example.com/music/jimin",
                     "note": "fixture only",
                 }
             ],
             "proposedBinding": {
-                "canonicalArtistId": "bts",
-                "artist": "방탄소년단",
-                "aliases": ["방탄소년단", "BTS"],
+                "canonicalArtistId": "jimin",
+                "artist": "지민",
+                "aliases": ["지민", "Jimin"],
             },
         },
         {
-            "reviewId": "lastfm-blackpink-supported-v1",
-            "canonicalArtistId": "blackpink",
+            "reviewId": "lastfm-jennie-supported-fixture",
+            "canonicalArtistId": "jennie",
             "source": "lastfm",
             "decision": "supported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture-provider-evidence",
-                    "url": "https://example.com/lastfm/blackpink",
+                    "url": "https://example.com/lastfm/jennie",
                     "note": "fixture only",
                 }
             ],
             "proposedBinding": {
-                "canonicalArtistId": "blackpink",
-                "artist": "블랙핑크",
-                "query": "BLACKPINK",
+                "canonicalArtistId": "jennie",
+                "artist": "제니",
+                "query": "JENNIE",
             },
         },
         {
-            "reviewId": "music-twice-unsupported-v1",
-            "canonicalArtistId": "twice",
+            "reviewId": "music-v-unsupported-fixture",
+            "canonicalArtistId": "v",
             "source": "music_chart",
             "decision": "unsupported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture-incompatibility-evidence",
-                    "url": "https://example.com/music/twice-unavailable",
+                    "url": "https://example.com/music/v-unavailable",
                     "note": "fixture only",
                 }
             ],
@@ -156,7 +230,7 @@ def main():
         == 1
     )
 
-    already_supported = dict(reviews_payload)
+    already_supported = dict(base)
     already_supported["reviews"] = [
         {
             "reviewId": "music-iu-repeat",
@@ -164,7 +238,7 @@ def main():
             "source": "music_chart",
             "decision": "supported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture",
@@ -190,24 +264,24 @@ def main():
     except RuntimeError as exc:
         assert "already supported" in str(exc)
 
-    collision = dict(reviews_payload)
+    collision = dict(base)
     collision["reviews"] = [
         {
-            "reviewId": "music-bts-collision",
-            "canonicalArtistId": "bts",
+            "reviewId": "music-jimin-collision",
+            "canonicalArtistId": "jimin",
             "source": "music_chart",
             "decision": "supported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture",
-                    "url": "https://example.com/bts",
+                    "url": "https://example.com/jimin",
                 }
             ],
             "proposedBinding": {
-                "artist": "방탄소년단",
-                "aliases": ["BTS", "IU"],
+                "artist": "지민",
+                "aliases": ["Jimin", "IU"],
             },
         }
     ]
@@ -224,24 +298,24 @@ def main():
     except RuntimeError as exc:
         assert "collision with active binding" in str(exc)
 
-    unsupported_with_binding = dict(reviews_payload)
+    unsupported_with_binding = dict(base)
     unsupported_with_binding["reviews"] = [
         {
-            "reviewId": "music-twice-invalid",
-            "canonicalArtistId": "twice",
+            "reviewId": "music-v-invalid",
+            "canonicalArtistId": "v",
             "source": "music_chart",
             "decision": "unsupported",
             "reviewer": "validation-fixture",
-            "reviewedAt": "2026-09-30T23:00:00+09:00",
+            "reviewedAt": "2026-10-01T07:00:00+09:00",
             "evidence": [
                 {
                     "source": "fixture",
-                    "url": "https://example.com/twice",
+                    "url": "https://example.com/v",
                 }
             ],
             "proposedBinding": {
-                "artist": "트와이스",
-                "aliases": ["TWICE"],
+                "artist": "뷔",
+                "aliases": ["V"],
             },
         }
     ]
@@ -259,8 +333,8 @@ def main():
         assert "must not include proposedBinding" in str(exc)
 
     print(
-        "PASS: reviewed source compatibility workflow "
-        "is auditable, fail-closed, and non-activating"
+        "PASS: production reviewed batch and source compatibility workflow "
+        "are auditable, fail-closed, and non-activating"
     )
 
 
