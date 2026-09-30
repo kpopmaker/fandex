@@ -1,8 +1,10 @@
 import {
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONTRACT_VERSION,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_SOURCE_VARIABLE_ID,
   type ProductMomentumEvidenceConsensusReadModelResult,
+  type ProductMomentumEvidenceConsensusStoredEvidenceTrace,
 } from '../contracts/productMomentumEvidenceConsensus';
 import type {
   MomentumLiveShadowProductReadinessResult,
@@ -104,6 +106,20 @@ function validTrace(value: string): boolean {
   return /^[0-9a-f]{64}$/.test(value);
 }
 
+function validSourceLineageTrace(
+  trace: ProductMomentumEvidenceConsensusStoredEvidenceTrace,
+): boolean {
+  if (trace.sourceV143Digest !== null) {
+    return validTrace(trace.sourceV143Digest);
+  }
+
+  return (
+    trace.sourceAttestationContractVersion
+      === PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION
+    && validTrace(trace.sourceAttestationDigest)
+  );
+}
+
 export function createMomentumPublicRouteDesignCandidate(
   readiness: MomentumLiveShadowProductReadinessResult,
   source: ProductMomentumEvidenceConsensusReadModelResult,
@@ -175,7 +191,7 @@ export function createMomentumPublicRouteDesignCandidate(
   if (
     !validTrace(model.storedEvidenceTrace.carrierRecordId)
     || !validTrace(model.storedEvidenceTrace.observationId)
-    || !validTrace(model.storedEvidenceTrace.sourceV143Digest)
+    || !validSourceLineageTrace(model.storedEvidenceTrace)
     || !validTrace(model.storedEvidenceTrace.observationDigest)
   ) {
     return blocked('stored-evidence-trace-invalid');
