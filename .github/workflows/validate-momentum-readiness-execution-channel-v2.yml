@@ -1,0 +1,76 @@
+name: Validate Momentum readiness execution channel v2
+
+on:
+  push:
+    branches:
+      - work/momentum-readiness-execution-channel-v2
+  pull_request:
+    branches:
+      - work/momentum-v2-carrier-record-candidate-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
+            LIVE_BASE_SHA="$(git rev-parse "refs/remotes/origin/$PR_BASE_REF")"
+            git diff --name-only "$LIVE_BASE_SHA" "$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git fetch origin "+refs/heads/work/momentum-v2-carrier-record-candidate-v1:refs/remotes/origin/work/momentum-v2-carrier-record-candidate-v1"
+            STACK_BASE="$(git rev-parse refs/remotes/origin/work/momentum-v2-carrier-record-candidate-v1)"
+            git diff --name-only "$STACK_BASE" HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-readiness-execution-channel-v2.yml
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Live-shadow readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Post-execution readiness regression
+        run: npx tsx --test tests/momentum-post-execution-product-readiness-v1.test.mts
+
+      - name: Product activation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
+
+      - name: V2 carrier record candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-v2-carrier-record-candidate-v1.test.mts
+
+      - name: Current evaluation execution regression
+        run: npx tsx --test tests/momentum-current-evaluation-execution-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
