@@ -158,6 +158,49 @@ function databaseErrorMessages(error: unknown, depth = 0, seen = new Set<object>
   return messages;
 }
 
+type DatabaseErrorShape = Readonly<{
+  root: 'aggregate_error' | 'type_error' | 'error' | 'object' | 'string' | 'primitive' | 'nullish';
+  code: 'string' | 'other' | 'absent';
+  message: 'string' | 'other' | 'absent';
+  cause: 'present' | 'absent';
+  errors: 'array' | 'other' | 'absent';
+}>;
+
+function classifyDatabaseErrorShape(error: unknown): DatabaseErrorShape {
+  let root: DatabaseErrorShape['root'];
+  if (error === null || error === undefined) root = 'nullish';
+  else if (error instanceof AggregateError) root = 'aggregate_error';
+  else if (error instanceof TypeError) root = 'type_error';
+  else if (error instanceof Error) root = 'error';
+  else if (typeof error === 'object') root = 'object';
+  else if (typeof error === 'string') root = 'string';
+  else root = 'primitive';
+
+  if (!error || typeof error !== 'object') {
+    return Object.freeze({
+      root,
+      code: 'absent',
+      message: typeof error === 'string' ? 'string' : 'absent',
+      cause: 'absent',
+      errors: 'absent',
+    });
+  }
+
+  const row = error as {
+    code?: unknown;
+    message?: unknown;
+    cause?: unknown;
+    errors?: unknown;
+  };
+  return Object.freeze({
+    root,
+    code: row.code === undefined ? 'absent' : typeof row.code === 'string' ? 'string' : 'other',
+    message: row.message === undefined ? 'absent' : typeof row.message === 'string' ? 'string' : 'other',
+    cause: row.cause === undefined ? 'absent' : 'present',
+    errors: row.errors === undefined ? 'absent' : Array.isArray(row.errors) ? 'array' : 'other',
+  });
+}
+
 function classifyDatabaseError(error: unknown): DatabaseErrorClass {
   for (const code of databaseErrorCodes(error)) {
     const classified = DATABASE_ERROR_CLASSES[code as keyof typeof DATABASE_ERROR_CLASSES];
@@ -188,6 +231,14 @@ export async function observeNaverNewsDatabaseOperation<T>(
         console.warn(`FANDEX_NAVER_DATABASE_FAILED_OPERATION=${operationName}`);
       }
       console.warn(`FANDEX_NAVER_DATABASE_ERROR_CLASS=${errorClass}`);
+      if (errorClass === 'other_database_error') {
+        const shape = classifyDatabaseErrorShape(error);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_ROOT=${shape.root}`);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_CODE_SHAPE=${shape.code}`);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=${shape.message}`);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=${shape.cause}`);
+        console.warn(`FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=${shape.errors}`);
+      }
     } catch {
       // A logging failure must never replace the database failure.
     }
