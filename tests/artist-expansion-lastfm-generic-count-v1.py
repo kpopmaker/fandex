@@ -35,10 +35,19 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         seed_path = Path(tmp) / "seed.csv"
         with seed_path.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["artist", "query"])
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["canonicalArtistId", "artist", "query"],
+            )
             writer.writeheader()
-            for artist in artists:
-                writer.writerow({"artist": artist, "query": artist})
+            for i, artist in enumerate(artists):
+                writer.writerow(
+                    {
+                        "canonicalArtistId": f"canonical-{i:02d}",
+                        "artist": artist,
+                        "query": artist,
+                    }
+                )
 
         original_seed = cloud.SEED_FILE
         cloud.SEED_FILE = seed_path
@@ -48,6 +57,9 @@ def main():
             cloud.SEED_FILE = original_seed
 
         assert len(seeds) == 11
+        assert {row["canonicalArtistId"] for row in seeds} == {
+            f"canonical-{i:02d}" for i in range(11)
+        }
 
         delta_rows = [
             {
