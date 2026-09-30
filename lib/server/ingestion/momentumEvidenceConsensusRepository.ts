@@ -2,6 +2,7 @@ import {
   buildProductMomentumEvidenceConsensusReadModel,
 } from '../../product/adapters/momentumEvidenceConsensusProductReadModel';
 import {
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION,
   PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_SOURCE_VARIABLE_ID,
   type ProductMomentumDirectionalConsensus,
   type ProductMomentumEvidenceConsensusReadModelResult,
@@ -12,10 +13,21 @@ import {
   sha256Canonical,
 } from '../../shared/canonicalDigest';
 
-const HISTORY_CONTRACT =
+const HISTORY_CONTRACT_V1 =
   'v147_fandex_momentum_unified_history_research_v1' as const;
-const SOURCE_CONTRACT =
+const HISTORY_CONTRACT_V2 =
+  'v147_fandex_momentum_unified_history_research_v2' as const;
+const LEGACY_SOURCE_CONTRACT =
   'v143_fandex_momentum_output_form_eligibility_research_v1' as const;
+const ATTESTATION_SOURCE_CONTRACT =
+  PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION;
+
+type MomentumChangeKind =
+  | 'initial-observation'
+  | 'cutoff-advanced-same-state'
+  | 'direction-state-changed'
+  | 'persistence-state-changed'
+  | 'direction-and-persistence-changed';
 
 type MomentumHistoryObservation = Readonly<{
   observationId: string;
@@ -55,33 +67,54 @@ type MomentumHistoryObservation = Readonly<{
   contractVersion: string;
 }>;
 
-type MomentumUnifiedHistoryRecord = Readonly<{
-  contractVersion: typeof HISTORY_CONTRACT;
+type MomentumIsolation = Readonly<{
+  productMetricReads: 0;
+  productMetricWrites: 0;
+  previewFallbackReads: 0;
+  databaseWrites: 0;
+}>;
+
+type MomentumUnifiedHistoryRecordV1 = Readonly<{
+  contractVersion: typeof HISTORY_CONTRACT_V1;
   sequence: number;
   recordedAt: string;
   canonicalArtistId: string;
   alignmentCutoffAt: string;
   directionalConsensus: ProductMomentumDirectionalConsensus;
   persistenceConsensus: ProductMomentumPersistenceConsensus;
-  sourceContractVersion: typeof SOURCE_CONTRACT;
+  sourceContractVersion: typeof LEGACY_SOURCE_CONTRACT;
   sourceV143Digest: string;
-  changeKind:
-    | 'initial-observation'
-    | 'cutoff-advanced-same-state'
-    | 'direction-state-changed'
-    | 'persistence-state-changed'
-    | 'direction-and-persistence-changed';
+  changeKind: MomentumChangeKind;
   previousSourceV143Digest: string | null;
   previousRecordDigest: string | null;
   observation: MomentumHistoryObservation;
-  isolation: Readonly<{
-    productMetricReads: 0;
-    productMetricWrites: 0;
-    previewFallbackReads: 0;
-    databaseWrites: 0;
-  }>;
+  isolation: MomentumIsolation;
   recordDigest: string;
 }>;
+
+type MomentumUnifiedHistoryRecordV2 = Readonly<{
+  contractVersion: typeof HISTORY_CONTRACT_V2;
+  sequence: number;
+  recordedAt: string;
+  canonicalArtistId: string;
+  alignmentCutoffAt: string;
+  directionalConsensus: ProductMomentumDirectionalConsensus;
+  persistenceConsensus: ProductMomentumPersistenceConsensus;
+  sourceContractVersion: typeof ATTESTATION_SOURCE_CONTRACT;
+  sourceV143Digest: null;
+  sourceAttestationContractVersion: typeof ATTESTATION_SOURCE_CONTRACT;
+  sourceAttestationDigest: string;
+  changeKind: MomentumChangeKind;
+  previousSourceDigest: string | null;
+  previousRecordDigest: string | null;
+  observation: MomentumHistoryObservation;
+  isolation: MomentumIsolation;
+  recordDigest: string;
+}>;
+
+type MomentumUnifiedHistoryRecord =
+  | MomentumUnifiedHistoryRecordV1
+  | MomentumUnifiedHistoryRecordV2;
 
 export type MomentumEvidenceConsensusStoredEvidenceReadResult =
   | Readonly<{
@@ -93,12 +126,21 @@ export type MomentumEvidenceConsensusStoredEvidenceReadResult =
         alignmentCutoffAt: string;
         directionalConsensus: ProductMomentumDirectionalConsensus;
         persistenceConsensus: ProductMomentumPersistenceConsensus;
-        sourceV143Digest: string;
+        historyContractVersion:
+          | typeof HISTORY_CONTRACT_V1
+          | typeof HISTORY_CONTRACT_V2;
+        sourceV143Digest: string | null;
+        sourceAttestationContractVersion:
+          | typeof ATTESTATION_SOURCE_CONTRACT
+          | null;
+        sourceAttestationDigest: string | null;
+        sourceDigest: string;
         observationDigest: string;
         recordedAt: string;
-        changeKind: MomentumUnifiedHistoryRecord['changeKind'];
+        changeKind: MomentumChangeKind;
         previousRecordDigest: string | null;
         previousSourceV143Digest: string | null;
+        previousSourceDigest: string | null;
       }>;
     }>
   | Readonly<{
@@ -145,9 +187,7 @@ function isPersistence(
   );
 }
 
-function isChangeKind(
-  value: unknown,
-): value is MomentumUnifiedHistoryRecord['changeKind'] {
+function isChangeKind(value: unknown): value is MomentumChangeKind {
   return (
     value === 'initial-observation'
     || value === 'cutoff-advanced-same-state'
@@ -157,7 +197,40 @@ function isChangeKind(
   );
 }
 
+function getSourceDigest(record: MomentumUnifiedHistoryRecord): string {
+  return record.contractVersion === HISTORY_CONTRACT_V1
+    ? record.sourceV143Digest
+    : record.sourceAttestationDigest;
+}
+
+function getPreviousSourceDigest(
+  record: MomentumUnifiedHistoryRecord,
+): string | null {
+  return record.contractVersion === HISTORY_CONTRACT_V1
+    ? record.previousSourceV143Digest
+    : record.previousSourceDigest;
+}
+
 function digestPayload(record: MomentumUnifiedHistoryRecord) {
+  if (record.contractVersion === HISTORY_CONTRACT_V1) {
+    return {
+      contractVersion: record.contractVersion,
+      sequence: record.sequence,
+      recordedAt: record.recordedAt,
+      canonicalArtistId: record.canonicalArtistId,
+      alignmentCutoffAt: record.alignmentCutoffAt,
+      directionalConsensus: record.directionalConsensus,
+      persistenceConsensus: record.persistenceConsensus,
+      sourceContractVersion: record.sourceContractVersion,
+      sourceV143Digest: record.sourceV143Digest,
+      changeKind: record.changeKind,
+      previousSourceV143Digest: record.previousSourceV143Digest,
+      previousRecordDigest: record.previousRecordDigest,
+      observation: record.observation,
+      isolation: record.isolation,
+    };
+  }
+
   return {
     contractVersion: record.contractVersion,
     sequence: record.sequence,
@@ -168,8 +241,11 @@ function digestPayload(record: MomentumUnifiedHistoryRecord) {
     persistenceConsensus: record.persistenceConsensus,
     sourceContractVersion: record.sourceContractVersion,
     sourceV143Digest: record.sourceV143Digest,
+    sourceAttestationContractVersion:
+      record.sourceAttestationContractVersion,
+    sourceAttestationDigest: record.sourceAttestationDigest,
     changeKind: record.changeKind,
-    previousSourceV143Digest: record.previousSourceV143Digest,
+    previousSourceDigest: record.previousSourceDigest,
     previousRecordDigest: record.previousRecordDigest,
     observation: record.observation,
     isolation: record.isolation,
@@ -180,12 +256,16 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('momentum_consensus_history_shape_invalid');
   }
+
   const record = value as Record<string, unknown>;
   const observation = record.observation;
   const isolation = record.isolation;
 
   if (
-    record.contractVersion !== HISTORY_CONTRACT
+    (
+      record.contractVersion !== HISTORY_CONTRACT_V1
+      && record.contractVersion !== HISTORY_CONTRACT_V2
+    )
     || !Number.isSafeInteger(record.sequence)
     || (record.sequence as number) <= 0
     || !validIso(record.recordedAt)
@@ -194,13 +274,7 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
     || !validIso(record.alignmentCutoffAt)
     || !isDirectional(record.directionalConsensus)
     || !isPersistence(record.persistenceConsensus)
-    || record.sourceContractVersion !== SOURCE_CONTRACT
-    || !validSha(record.sourceV143Digest)
     || !isChangeKind(record.changeKind)
-    || (
-      record.previousSourceV143Digest !== null
-      && !validSha(record.previousSourceV143Digest)
-    )
     || (
       record.previousRecordDigest !== null
       && !validSha(record.previousRecordDigest)
@@ -216,8 +290,58 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
     throw new Error('momentum_consensus_history_record_invalid');
   }
 
+  if (record.contractVersion === HISTORY_CONTRACT_V1) {
+    if (
+      record.sourceContractVersion !== LEGACY_SOURCE_CONTRACT
+      || !validSha(record.sourceV143Digest)
+      || (
+        record.previousSourceV143Digest !== null
+        && !validSha(record.previousSourceV143Digest)
+      )
+      || Object.prototype.hasOwnProperty.call(
+        record,
+        'sourceAttestationContractVersion',
+      )
+      || Object.prototype.hasOwnProperty.call(
+        record,
+        'sourceAttestationDigest',
+      )
+      || Object.prototype.hasOwnProperty.call(
+        record,
+        'previousSourceDigest',
+      )
+    ) {
+      throw new Error('momentum_consensus_history_record_invalid');
+    }
+  } else if (
+    record.sourceContractVersion !== ATTESTATION_SOURCE_CONTRACT
+    || record.sourceV143Digest !== null
+    || record.sourceAttestationContractVersion
+      !== ATTESTATION_SOURCE_CONTRACT
+    || !validSha(record.sourceAttestationDigest)
+    || (
+      record.previousSourceDigest !== null
+      && !validSha(record.previousSourceDigest)
+    )
+    || Object.prototype.hasOwnProperty.call(
+      record,
+      'previousSourceV143Digest',
+    )
+  ) {
+    throw new Error('momentum_consensus_history_record_invalid');
+  }
+
   const candidate = record as unknown as MomentumUnifiedHistoryRecord;
   const obs = candidate.observation;
+  const expectedEvidenceRef =
+    candidate.contractVersion === HISTORY_CONTRACT_V1
+      ? 'fandex:momentum:v143:' + candidate.sourceV143Digest
+      : (
+          'fandex:momentum:attestation:'
+          + candidate.sourceAttestationContractVersion
+          + ':'
+          + candidate.sourceAttestationDigest
+        );
 
   if (
     obs.contractVersion !== 'fandex-observation-v1'
@@ -236,8 +360,7 @@ function parseRecord(value: unknown): MomentumUnifiedHistoryRecord {
     || Object.prototype.hasOwnProperty.call(obs.value, 'normalizedValue')
     || obs.time.observedAt !== candidate.alignmentCutoffAt
     || !validIso(obs.time.collectedAt)
-    || obs.evidence.evidenceRef
-      !== 'fandex:momentum:v143:' + candidate.sourceV143Digest
+    || obs.evidence.evidenceRef !== expectedEvidenceRef
     || obs.lifecycle.state !== 'research'
     || obs.lifecycle.materialClass !== 'real'
     || candidate.isolation.productMetricReads !== 0
@@ -279,7 +402,7 @@ export function parseMomentumEvidenceConsensusHistory(
     if (index === 0) {
       if (
         current.previousRecordDigest !== null
-        || current.previousSourceV143Digest !== null
+        || getPreviousSourceDigest(current) !== null
         || current.changeKind !== 'initial-observation'
       ) {
         throw new Error('momentum_consensus_history_first_record_invalid');
@@ -290,7 +413,7 @@ export function parseMomentumEvidenceConsensusHistory(
     const previous = records[index - 1];
     if (
       current.previousRecordDigest !== previous.recordDigest
-      || current.previousSourceV143Digest !== previous.sourceV143Digest
+      || getPreviousSourceDigest(current) !== getSourceDigest(previous)
       || current.canonicalArtistId !== previous.canonicalArtistId
       || Date.parse(current.alignmentCutoffAt)
         <= Date.parse(previous.alignmentCutoffAt)
@@ -305,7 +428,7 @@ export function parseMomentumEvidenceConsensusHistory(
 function toStoredRecord(
   record: MomentumUnifiedHistoryRecord,
 ): ProductMomentumEvidenceConsensusStoredRecord {
-  return Object.freeze({
+  const common = {
     recordId: record.recordDigest,
     observationId: record.observation.observationId,
     canonicalArtistId: record.canonicalArtistId,
@@ -313,11 +436,25 @@ function toStoredRecord(
     alignmentCutoffAt: record.alignmentCutoffAt,
     directionalConsensus: record.directionalConsensus,
     persistenceConsensus: record.persistenceConsensus,
-    sourceV143Digest: record.sourceV143Digest,
     observationDigest: sha256Canonical(record.observation),
     rawValue: record.directionalConsensus,
     lifecycleState: 'research' as const,
     materialClass: 'real' as const,
+  };
+
+  if (record.contractVersion === HISTORY_CONTRACT_V1) {
+    return Object.freeze({
+      ...common,
+      sourceV143Digest: record.sourceV143Digest,
+    });
+  }
+
+  return Object.freeze({
+    ...common,
+    sourceV143Digest: null,
+    sourceAttestationContractVersion:
+      record.sourceAttestationContractVersion,
+    sourceAttestationDigest: record.sourceAttestationDigest,
   });
 }
 
@@ -393,6 +530,8 @@ export function readMomentumEvidenceConsensusStoredEvidenceFromJsonl(
   }
 
   const record = matches[0];
+  const v1 = record.contractVersion === HISTORY_CONTRACT_V1;
+
   return Object.freeze({
     status: 'ok' as const,
     model: Object.freeze({
@@ -402,12 +541,20 @@ export function readMomentumEvidenceConsensusStoredEvidenceFromJsonl(
       alignmentCutoffAt: record.alignmentCutoffAt,
       directionalConsensus: record.directionalConsensus,
       persistenceConsensus: record.persistenceConsensus,
-      sourceV143Digest: record.sourceV143Digest,
+      historyContractVersion: record.contractVersion,
+      sourceV143Digest: v1 ? record.sourceV143Digest : null,
+      sourceAttestationContractVersion:
+        v1 ? null : record.sourceAttestationContractVersion,
+      sourceAttestationDigest:
+        v1 ? null : record.sourceAttestationDigest,
+      sourceDigest: getSourceDigest(record),
       observationDigest: sha256Canonical(record.observation),
       recordedAt: record.recordedAt,
       changeKind: record.changeKind,
       previousRecordDigest: record.previousRecordDigest,
-      previousSourceV143Digest: record.previousSourceV143Digest,
+      previousSourceV143Digest:
+        v1 ? record.previousSourceV143Digest : null,
+      previousSourceDigest: getPreviousSourceDigest(record),
     }),
   });
 }
