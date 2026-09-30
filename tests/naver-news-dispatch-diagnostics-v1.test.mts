@@ -529,6 +529,40 @@ test('generic PostgreSQL 53000 messages map only to bounded quota families', asy
       ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
       ['FANDEX_NAVER_DATABASE_ERROR_CLASS=insufficient_resources'],
       [`FANDEX_NAVER_DATABASE_INSUFFICIENT_RESOURCE_CAUSE=${cause}`],
+      ...(cause === 'other_quota_exceeded'
+        ? [['FANDEX_NAVER_DATABASE_QUOTA_RESOURCE=other']]
+        : []),
+    ]);
+    assert.equal(JSON.stringify(logs).includes(message), false);
+    assert.equal(JSON.stringify(logs).includes('53000'), false);
+  }
+});
+
+test('other PostgreSQL 53000 quota messages expose only a bounded quota resource', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['PRIVATE compute quota enforcement detail', 'compute'],
+    ['PRIVATE egress quota enforcement detail', 'network_transfer'],
+    ['PRIVATE network quota enforcement detail', 'network_transfer'],
+    ['PRIVATE storage quota enforcement detail', 'storage'],
+    ['PRIVATE branch quota enforcement detail', 'branch'],
+    ['PRIVATE endpoint quota enforcement detail', 'endpoint'],
+    ['PRIVATE quota enforcement detail', 'other'],
+  ] as const;
+
+  for (const [message, resource] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error(message), { code: '53000' });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CLASS=insufficient_resources'],
+      ['FANDEX_NAVER_DATABASE_INSUFFICIENT_RESOURCE_CAUSE=other_quota_exceeded'],
+      [`FANDEX_NAVER_DATABASE_QUOTA_RESOURCE=${resource}`],
     ]);
     assert.equal(JSON.stringify(logs).includes(message), false);
     assert.equal(JSON.stringify(logs).includes('53000'), false);
