@@ -23,6 +23,7 @@ export const dynamic = 'force-dynamic';
 
 type ShadowRecurringRouteDependencies = NaverNewsRecurringDependencies & Readonly<{
   resolveOidcToken?: () => string | undefined | Promise<string | undefined>;
+  requireTrustedRequestSource?: boolean;
 }>;
 
 type ShadowRecurringFailureClass =
@@ -34,6 +35,7 @@ type ShadowRecurringFailureClass =
 type RuntimeRegionClass = 'sin1' | 'iad1' | 'other' | 'missing';
 type RequestSourceClass =
   | 'github_actions_hourly_v1'
+  | 'github_actions_manual_v1'
   | 'vercel_cron'
   | 'vercel_signed_service'
   | 'github_webhook'
@@ -47,6 +49,7 @@ type RequestSourceClass =
 export function classifyNaverNewsRequestSource(request: Request): RequestSourceClass {
   const marker = request.headers.get('x-fandex-scheduler-source')?.trim();
   if (marker === 'github-actions-hourly-v1') return 'github_actions_hourly_v1';
+  if (marker === 'github-actions-manual-v1') return 'github_actions_manual_v1';
 
   const userAgent = request.headers.get('user-agent')?.trim().toLowerCase();
   if (!userAgent) return 'missing';
@@ -65,13 +68,19 @@ export function classifyNaverNewsRequestSource(request: Request): RequestSourceC
   return 'other';
 }
 
-function observeNaverNewsRequestSource(request: Request): void {
+function observeNaverNewsRequestSource(request: Request): RequestSourceClass {
   const sourceClass = classifyNaverNewsRequestSource(request);
   try {
     console.info(`FANDEX_NAVER_REQUEST_SOURCE_CLASS=${sourceClass}`);
   } catch {
     // Request-source evidence must never alter request execution.
   }
+  return sourceClass;
+}
+
+function isTrustedNaverNewsRequestSource(sourceClass: RequestSourceClass): boolean {
+  return sourceClass === 'github_actions_hourly_v1'
+    || sourceClass === 'github_actions_manual_v1';
 }
 
 export function classifyNaverNewsRuntimeRegion(value: string | undefined): RuntimeRegionClass {
@@ -168,7 +177,13 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
     return rejected('authorization_rejected');
   }
 
-  observeNaverNewsRequestSource(request);
+  const requestSourceClass = observeNaverNewsRequestSource(request);
+  if (
+    dependencies.requireTrustedRequestSource
+    && !isTrustedNaverNewsRequestSource(requestSourceClass)
+  ) {
+    return rejected('authorization_rejected');
+  }
 
   let runtimeEnvironment: Readonly<Record<string, string | undefined>>;
   try {
@@ -206,5 +221,6 @@ export async function POST(request: Request): Promise<Response> {
   observeNaverNewsRuntimeRegion(process.env.VERCEL_REGION);
   return handleNaverNewsShadowRecurringSchedulerRequest(request, process.env, {
     resolveOidcToken: () => getVercelOidcToken(),
+    requireTrustedRequestSource: true,
   });
 }

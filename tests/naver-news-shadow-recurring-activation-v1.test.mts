@@ -70,6 +70,7 @@ test('authenticated scheduler request sources reduce to fixed safe classes only'
   const base = 'https://example.test/api/internal/naver-news/shadow-scheduler';
   const cases = [
     [{ 'x-fandex-scheduler-source': 'github-actions-hourly-v1', 'user-agent': 'curl/8.0 PRIVATE_DETAIL' }, 'github_actions_hourly_v1'],
+    [{ 'x-fandex-scheduler-source': 'github-actions-manual-v1', 'user-agent': 'curl/8.0 PRIVATE_DETAIL' }, 'github_actions_manual_v1'],
     [{ 'user-agent': 'vercel-cron/1.0 PRIVATE_DETAIL' }, 'vercel_cron'],
     [{ 'user-agent': 'PRIVATE_SERVICE/1.0', 'x-vercel-signature': 'PRIVATE_SIGNATURE' }, 'vercel_signed_service'],
     [{ 'user-agent': 'GitHub-Hookshot/abcdef PRIVATE_DETAIL' }, 'github_webhook'],
@@ -254,6 +255,64 @@ test('shadow route classifies config and authorization failures without exposing
     code: 'naver_news_shadow_recurring_scheduler_rejected',
     errorClass: 'authorization_rejected',
   });
+});
+
+test('Production source gate rejects unmarked authenticated callers before OIDC or DB dispatch', async (t) => {
+  const infoLogs: unknown[][] = [];
+  const warnLogs: unknown[][] = [];
+  t.mock.method(console, 'info', (...args: unknown[]) => infoLogs.push(args));
+  t.mock.method(console, 'warn', (...args: unknown[]) => warnLogs.push(args));
+
+  let dispatches = 0;
+  let oidcResolutions = 0;
+  const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+    new Request('https://example.test/api/internal/naver-news/shadow-scheduler', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${SECRET}`,
+        'user-agent': 'PRIVATE_CLIENT/1.0',
+      },
+    }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
+      BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      requireTrustedRequestSource: true,
+      dispatch: async () => { dispatches += 1; throw new Error('unexpected dispatch'); },
+      resolveOidcToken: () => { oidcResolutions += 1; return 'unexpected-token'; },
+    },
+  );
+
+  assert.equal(response.status, 403);
+  assert.equal(dispatches, 0);
+  assert.equal(oidcResolutions, 0);
+  assert.deepEqual(infoLogs, [['FANDEX_NAVER_REQUEST_SOURCE_CLASS=other']]);
+  assert.deepEqual(warnLogs, [['FANDEX_NAVER_RECURRING_ERROR_CLASS=authorization_rejected']]);
+});
+
+test('Production source gate accepts the canonical hourly and manual GitHub markers', async () => {
+  const base = 'https://example.test/api/internal/naver-news/shadow-scheduler';
+  for (const marker of ['github-actions-hourly-v1', 'github-actions-manual-v1']) {
+    const calls: any[] = [];
+    const response = await handleNaverNewsShadowRecurringSchedulerRequest(
+      new Request(base, {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${SECRET}`,
+          'x-fandex-scheduler-source': marker,
+        },
+      }),
+      environment(),
+      {
+        requireTrustedRequestSource: true,
+        now: () => NOW,
+        dispatch: fakeDispatch(calls),
+      },
+    );
+    assert.equal(response.status, 200);
+    assert.equal(calls.length, 1);
+  }
 });
 
 test('authenticated request source logging is bounded and never emits raw headers', async (t) => {
@@ -520,11 +579,26 @@ test('vercel config pins only the NAVER recurring scheduler function to sin1', a
 });
 
 
-test('canonical hourly workflow emits only a fixed non-secret source marker', async () => {
+test('canonical GitHub scheduler workflows emit only fixed non-secret source markers', async () => {
   const fs = await import('node:fs/promises');
-  const workflow = await fs.readFile(new URL(
+  const hourly = await fs.readFile(new URL(
     '../.github/workflows/naver-news-shadow-recurring-production-v1.yml', import.meta.url,
   ), 'utf8');
-  assert.match(workflow, /X-Fandex-Scheduler-Source: github-actions-hourly-v1/);
-  assert.doesNotMatch(workflow, /X-Fandex-Scheduler-Source:\s*\$\{\{/);
+  const manual = await fs.readFile(new URL(
+    '../.github/workflows/naver-shadow-production-trigger.yml', import.meta.url,
+  ), 'utf8');
+
+  assert.match(hourly, /X-Fandex-Scheduler-Source: github-actions-hourly-v1/);
+  assert.match(manual, /X-Fandex-Scheduler-Source: github-actions-manual-v1/);
+  assert.doesNotMatch(hourly, /X-Fandex-Scheduler-Source:\s*\$\{\{/);
+  assert.doesNotMatch(manual, /X-Fandex-Scheduler-Source:\s*\$\{\{/);
+});
+
+test('Production POST wrapper requires the trusted request-source gate', async () => {
+  const fs = await import('node:fs/promises');
+  const route = await fs.readFile(
+    new URL('../app/api/internal/naver-news/shadow-scheduler/route.ts', import.meta.url),
+    'utf8',
+  );
+  assert.match(route, /requireTrustedRequestSource:\s*true/);
 });

@@ -51,6 +51,7 @@ jobs:
             --retry-delay 2 \
             --retry-all-errors \
             --header "Authorization: Bearer ${SCHEDULER_SECRET}" \
+            --header 'X-Fandex-Scheduler-Source: github-actions-manual-v1' \
             --header 'Content-Type: application/json' \
             --data '{}' \
             "${SHADOW_ENDPOINT}")"
