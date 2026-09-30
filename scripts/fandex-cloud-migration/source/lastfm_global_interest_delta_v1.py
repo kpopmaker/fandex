@@ -169,10 +169,9 @@ def main():
             ),
         })
 
-    if len(by_artist) != 10:
+    if not by_artist:
         raise SystemExit(
-            "ERROR: history artist count가 "
-            f"10이 아닙니다: {len(by_artist)}"
+            "ERROR: history에 artist가 없습니다."
         )
 
     results = []
