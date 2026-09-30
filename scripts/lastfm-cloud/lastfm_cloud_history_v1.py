@@ -102,15 +102,48 @@ def get_api_key():
 def read_seed():
     rows = read_csv(SEED_FILE)
     seeds = []
+    seen_canonical_ids = set()
+    seen_artists = set()
+
     for row in rows:
+        canonical_artist_id = (
+            row.get("canonicalArtistId") or ""
+        ).strip()
         artist = (row.get("artist") or "").strip()
         query = (row.get("query") or "").strip()
-        if artist and query:
-            seeds.append({"artist": artist, "query": query})
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                f"Last.fm seed missing canonicalArtistId: "
+                f"{artist or '<unknown>'}"
+            )
+        if canonical_artist_id in seen_canonical_ids:
+            raise RuntimeError(
+                f"Duplicate canonicalArtistId detected in Last.fm seed: "
+                f"{canonical_artist_id}"
+            )
+        if artist in seen_artists:
+            raise RuntimeError(
+                f"Duplicate artist detected in Last.fm seed: {artist}"
+            )
+        if not artist or not query:
+            raise RuntimeError(
+                f"Invalid Last.fm seed binding: {canonical_artist_id}"
+            )
+
+        seen_canonical_ids.add(canonical_artist_id)
+        seen_artists.add(artist)
+        seeds.append(
+            {
+                "canonicalArtistId": canonical_artist_id,
+                "artist": artist,
+                "query": query,
+            }
+        )
+
     if not seeds:
         raise RuntimeError("Last.fm seed is empty.")
-    if len({row["artist"] for row in seeds}) != len(seeds):
-        raise RuntimeError("Duplicate artist detected in Last.fm seed.")
+
     return seeds
 
 
