@@ -39,6 +39,13 @@ jobs:
           fi
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-productionization-current-main-v1.yml
+          .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
+          lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts
+          lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          tests/momentum-current-evaluation-execution-v1.test.mts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-v2-carrier-record-candidate-v1.test.mts
           lib/intelligence/fandexMomentumCarrierPersistenceDecision.ts
           lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts
           lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts
