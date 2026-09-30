@@ -1,0 +1,23 @@
+{
+  "version": "artist_source_compatibility_reviews_v1",
+  "compatibilityVersion": "artist_source_compatibility_v1",
+  "workflow": {
+    "scopedSources": [
+      "music_chart",
+      "lastfm"
+    ],
+    "allowedDecisions": [
+      "supported",
+      "unsupported"
+    ],
+    "activationPolicy": "manual_only_no_runtime_mutation",
+    "rules": [
+      "Only currently unresolved canonical artists may receive a transition review.",
+      "supported requires explicit provider binding plus evidence.",
+      "unsupported requires explicit provider incompatibility evidence.",
+      "No fuzzy identity matching is permitted.",
+      "A review preview never mutates provider bindings, compatibility registry, Product state, Registry lifecycle, DB, or runtime."
+    ]
+  },
+  "reviews": []
+}
