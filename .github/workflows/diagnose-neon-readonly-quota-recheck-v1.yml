@@ -16,6 +16,9 @@ jobs:
     timeout-minutes: 5
     env:
       FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+      FANDEX_NEON_PROJECT_ID: ${{ secrets.FANDEX_NEON_PROJECT_ID }}
     steps:
       - name: Checkout exact diagnostic head
         uses: actions/checkout@v4
@@ -28,6 +31,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Check bounded Neon control-plane secret readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "${NEON_API_KEY}" ]]; then echo "FANDEX_NEON_API_KEY=present"; else echo "FANDEX_NEON_API_KEY=missing"; fi
+          if [[ -n "${NEON_PROJECT_ID}" ]]; then echo "FANDEX_NEON_PROJECT_ID=present"; else echo "FANDEX_NEON_PROJECT_ID=missing"; fi
+          if [[ -n "${FANDEX_NEON_PROJECT_ID}" ]]; then echo "FANDEX_NEON_FANDEX_PROJECT_ID=present"; else echo "FANDEX_NEON_FANDEX_PROJECT_ID=missing"; fi
+          echo "FANDEX_NEON_CONTROL_PLANE_SECRET_VALUES_LOGGED=false"
 
       - name: Run bounded read-only Neon probe
         shell: bash
