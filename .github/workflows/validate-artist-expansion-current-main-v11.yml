@@ -39,6 +39,10 @@ jobs:
         run: npx tsx --test tests/artist-expansion-short-korean-alias-v1.test.mts
       - name: Unbounded Artist Universe
         run: npx tsx --test tests/artist-universe-unbounded-expansion-v1.test.mts
+      - name: Source compatibility partitions
+        run: npx tsx --test tests/artist-expansion-source-compatibility-v1.test.mts
+      - name: Reviewed source compatibility workflow
+        run: python tests/artist-expansion-source-compatibility-review-v1.py
       - name: Last.fm generic count and cloud sync
         run: python tests/artist-expansion-lastfm-generic-count-v1.py
       - name: Last.fm score generic cohort
@@ -61,6 +65,7 @@ jobs:
             scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py \
             scripts/fandex-cloud-migration/source/fandex_master_score_v10.py \
             scripts/fandex-cloud-migration/source/fandex_python_health_check_v3.py \
+            scripts/fandex-cloud-migration/source/artist_source_compatibility_review_v1.py \
             scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py \
             scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_score_preview_v1.py \
             scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py \
