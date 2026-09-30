@@ -283,3 +283,52 @@ test('unknown pg connect messages remain other_database_error', async (t) => {
   ]);
   assert.equal(JSON.stringify(logs).includes('PRIVATE_UNCLASSIFIED_CONNECT_DETAIL'), false);
 });
+
+test('standard SQLSTATE classes and Node network errors map to bounded connect classes', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['28000', 'authentication_failed'],
+    ['08005', 'connection_exception'],
+    ['ENETUNREACH', 'network_unreachable'],
+    ['EHOSTUNREACH', 'host_unreachable'],
+    ['EHOSTDOWN', 'host_unreachable'],
+    ['ENETDOWN', 'network_unavailable'],
+    ['EADDRNOTAVAIL', 'address_unavailable'],
+    ['ENETRESET', 'connection_reset'],
+    ['ECONNABORTED', 'connection_aborted'],
+    ['ERR_SSL_WRONG_VERSION_NUMBER', 'tls_failure'],
+  ] as const;
+
+  for (const [code, expected] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(code), false);
+    assert.equal(JSON.stringify(logs).includes('PRIVATE_DATABASE_DETAIL'), false);
+  }
+});
+
+test('arbitrary lookalike codes do not enter SQLSTATE or TLS families', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  for (const code of ['08PRIVATE', '28_SECRET', 'ERR_PRIVATE_TLS']) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => { throw failure; }),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      ['FANDEX_NAVER_DATABASE_ERROR_CLASS=other_database_error'],
+    ]);
+  }
+});
