@@ -1661,6 +1661,13 @@ test('baseline remains 100 while active universe expands beyond it', () => {
   assert.equal(mulgogiLimYoungWoong.lifecycleStatus, 'active');
   assert.ok(mulgogiLimYoungWoong.profile.koreanAliases.includes('임영웅'));
 
+  const kiOnf = getArtistV4ById('onf');
+  assert.ok(kiOnf);
+  assert.equal(kiOnf.entityType, 'group');
+  assert.equal(kiOnf.agency, 'KI Entertainment');
+  assert.equal(kiOnf.lifecycleStatus, 'active');
+  assert.ok(kiOnf.profile.koreanAliases.includes('온앤오프'));
+
   const expanded = buildExpandedArtistUniverseV4(
     artistUniverseV4,
     [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],

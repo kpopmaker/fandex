@@ -1,0 +1,61 @@
+{
+  "version": "ki_onf_current_group_adapter_v1",
+  "source": {
+    "id": "ki-entertainment-official-onf-current-group-identity",
+    "type": "agency_roster",
+    "name": "KI Entertainment Official ONF Current Group Identity",
+    "observedAt": "2026-09-30T11:10:00+09:00",
+    "url": "https://x.com/KIENT_offcl"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "ONF",
+      "aliases": ["온앤오프"],
+      "evidence": [
+        {
+          "label": "KI Entertainment official ONF exclusive-contract announcement channel",
+          "url": "https://x.com/KIENT_offcl"
+        },
+        {
+          "label": "ONF official current activity channel",
+          "url": "https://x.com/ONF_offcl"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "ONF": {
+      "agency": "KI Entertainment",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "group",
+      "members": ["HYOJIN", "E-TION", "SEUNGJUN", "WYATT", "MINKYUN", "YUTO"],
+      "memberCount": 6,
+      "current2026MusicEvidence": {
+        "release": "ONF:MY SELF",
+        "releaseDate": "2026-06-17",
+        "titleTrack": "Open The Door"
+      }
+    }
+  },
+  "contract": {
+    "officialKIExclusiveContractRequired": true,
+    "exactSixMemberIdentityRequired": true,
+    "current2026MusicActivityRequired": true,
+    "currentAgencyMustBeKI": true,
+    "historicalWMNotCurrentAgency": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_KI_ONF_current_group_identity_snapshot",
+    "verifiedFrom": [
+      "https://x.com/KIENT_offcl",
+      "https://x.com/ONF_offcl"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}
