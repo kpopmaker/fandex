@@ -405,7 +405,7 @@ test('unknown string database codes emit only bounded family shapes', async (t) 
   const logs: unknown[][] = [];
   t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
   const cases = [
-    ['53300', 'sqlstate_like', 'insufficient_resources'],
+    ['53999', 'sqlstate_like', 'insufficient_resources'],
     ['ERR_TLS_PRIVATE_DETAIL', 'node_tls_like', null],
     ['ERR_OSSL_PRIVATE_DETAIL', 'node_ossl_like', null],
     ['ERR_PRIVATE_DETAIL', 'node_error_like', null],
@@ -443,7 +443,7 @@ test('unknown PostgreSQL SQLSTATE conditions emit only official bounded class se
   const cases = [
     ['23502', 'integrity_constraint_violation'],
     ['42883', 'syntax_error_or_access_rule_violation'],
-    ['53300', 'insufficient_resources'],
+    ['53999', 'insufficient_resources'],
     ['54000', 'program_limit_exceeded'],
     ['55P03', 'object_not_in_prerequisite_state'],
     ['58030', 'system_error'],
@@ -471,6 +471,33 @@ test('unknown PostgreSQL SQLSTATE conditions emit only official bounded class se
       ['FANDEX_NAVER_DATABASE_ERROR_MESSAGE_SHAPE=string'],
       ['FANDEX_NAVER_DATABASE_ERROR_CAUSE_SHAPE=absent'],
       ['FANDEX_NAVER_DATABASE_ERROR_ERRORS_SHAPE=absent'],
+    ]);
+    assert.equal(JSON.stringify(logs).includes(code), false);
+    assert.equal(JSON.stringify(logs).includes('PRIVATE_DATABASE_DETAIL'), false);
+  }
+});
+
+test('PostgreSQL Class 53 insufficient-resource conditions map to bounded classes', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'warn', (...args: unknown[]) => logs.push(args));
+  const cases = [
+    ['53000', 'insufficient_resources'],
+    ['53100', 'disk_full'],
+    ['53200', 'out_of_memory'],
+    ['53300', 'too_many_connections'],
+    ['53400', 'configuration_limit_exceeded'],
+  ] as const;
+
+  for (const [code, expected] of cases) {
+    logs.length = 0;
+    const failure = Object.assign(new Error('PRIVATE_DATABASE_DETAIL'), { code });
+    await assert.rejects(
+      observeNaverNewsDatabaseOperation('connect', () => Promise.reject(failure)),
+      (error: unknown) => error === failure,
+    );
+    assert.deepEqual(logs, [
+      ['FANDEX_NAVER_DATABASE_FAILED_OPERATION=connect'],
+      [`FANDEX_NAVER_DATABASE_ERROR_CLASS=${expected}`],
     ]);
     assert.equal(JSON.stringify(logs).includes(code), false);
     assert.equal(JSON.stringify(logs).includes('PRIVATE_DATABASE_DETAIL'), false);
