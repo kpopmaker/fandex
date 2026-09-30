@@ -26,11 +26,26 @@ LOCAL_FILE = Path(
     "lastfm_artist_interest_history_v1.csv"
 )
 
+LASTFM_BINDING_FILE = Path(
+    "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv"
+)
+
 STATUS_FILE = Path(
     "lastfm_sync_cloud_history_v1_1_latest.json"
 )
 
 LOCAL_FIELDS = [
+    "snapshotDate",
+    "snapshotAt",
+    "canonicalArtistId",
+    "artist",
+    "lastfmName",
+    "listeners",
+    "playcount",
+    "sourceVersion",
+]
+
+LOCAL_REQUIRED_FIELDS = [
     "snapshotDate",
     "snapshotAt",
     "artist",
@@ -50,6 +65,7 @@ CLOUD_REQUIRED_FIELDS = [
 ]
 
 COMPARE_FIELDS = [
+    "canonicalArtistId",
     "lastfmName",
     "listeners",
     "playcount",
@@ -129,6 +145,99 @@ def require_fields(
         )
 
 
+def load_lastfm_canonical_bindings():
+    if not LASTFM_BINDING_FILE.exists():
+        raise RuntimeError(
+            f"Last.fm binding file missing: {LASTFM_BINDING_FILE}"
+        )
+
+    fields, rows = read_csv_file(
+        LASTFM_BINDING_FILE
+    )
+    require_fields(
+        "Last.fm binding",
+        fields,
+        [
+            "canonicalArtistId",
+            "artist",
+            "query",
+        ],
+    )
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(row.get("artist"))
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Last.fm canonical binding row"
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Last.fm canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Last.fm artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Last.fm canonical bindings are empty"
+        )
+
+    return bindings
+
+
+def hydrate_local_canonical_ids(
+    rows,
+    canonical_bindings,
+):
+    hydrated = []
+
+    for row in rows:
+        artist = norm(row.get("artist"))
+        canonical_artist_id = (
+            canonical_bindings.get(artist)
+        )
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Unbound Last.fm local artist: "
+                + artist
+            )
+
+        existing_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if (
+            existing_id
+            and existing_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Last.fm local canonicalArtistId mismatch: "
+                f"{artist} = {existing_id} "
+                f"!= {canonical_artist_id}"
+            )
+
+        item = dict(row)
+        item["canonicalArtistId"] = (
+            canonical_artist_id
+        )
+        hydrated.append(item)
+
+    return hydrated
+
+
 def find_duplicates(rows):
     counts = Counter(
         row_key(row)
@@ -190,7 +299,35 @@ def dominant_source_version(local_rows):
 def project_cloud_row(
     cloud_row,
     source_version,
+    canonical_bindings,
 ):
+    artist = norm(
+        cloud_row.get("artist")
+    )
+    canonical_artist_id = (
+        canonical_bindings.get(artist)
+    )
+
+    if not canonical_artist_id:
+        raise RuntimeError(
+            "Unbound Last.fm cloud artist: "
+            + artist
+        )
+
+    cloud_canonical_id = norm(
+        cloud_row.get("canonicalArtistId")
+    )
+    if (
+        cloud_canonical_id
+        and cloud_canonical_id
+        != canonical_artist_id
+    ):
+        raise RuntimeError(
+            "Last.fm cloud canonicalArtistId mismatch: "
+            f"{artist} = {cloud_canonical_id} "
+            f"!= {canonical_artist_id}"
+        )
+
     return {
         "snapshotDate":
             norm(
@@ -206,10 +343,11 @@ def project_cloud_row(
                 )
             ),
 
+        "canonicalArtistId":
+            canonical_artist_id,
+
         "artist":
-            norm(
-                cloud_row.get("artist")
-            ),
+            artist,
 
         "lastfmName":
             norm(
@@ -365,13 +503,21 @@ def main():
     require_fields(
         "Local",
         local_fields,
-        LOCAL_FIELDS,
+        LOCAL_REQUIRED_FIELDS,
     )
 
     require_fields(
         "Cloud",
         cloud_fields,
         CLOUD_REQUIRED_FIELDS,
+    )
+
+    canonical_bindings = (
+        load_lastfm_canonical_bindings()
+    )
+    local_rows = hydrate_local_canonical_ids(
+        local_rows,
+        canonical_bindings,
     )
 
     local_duplicates = (
@@ -419,6 +565,7 @@ def main():
             project_cloud_row(
                 row,
                 source_version,
+                canonical_bindings,
             )
         for row in cloud_rows
     }
