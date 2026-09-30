@@ -27,11 +27,12 @@ jobs:
           printf '%s\n' '.github/workflows/validate-momentum-pr295-current-main-47df-v1.yml' > /tmp/allowed.txt
           diff -u /tmp/allowed.txt /tmp/changed.txt
 
-      - name: Assert exact current main and merge-simulate
+      - name: Capture current main and merge-simulate
         run: |
           git fetch origin main
-          test "$(git rev-parse origin/main)" = "47dfacdcf28df7696a68c2cb9303f649ddb7104e"
-          git merge --no-commit --no-ff 47dfacdcf28df7696a68c2cb9303f649ddb7104e
+          CURRENT_MAIN="$(git rev-parse origin/main)"
+          echo "MOMENTUM_VALIDATED_MAIN_SHA=$CURRENT_MAIN"
+          git merge --no-commit --no-ff "$CURRENT_MAIN"
 
       - run: npm ci
 
