@@ -109,11 +109,8 @@ def read_input():
             + ", ".join(missing)
         )
 
-    if len(rows) != 10:
-        raise RuntimeError(
-            "Expected 10 rolling rows, "
-            f"got {len(rows)}."
-        )
+    if not rows:
+        raise RuntimeError("Rolling input is empty.")
 
     return rows
 
@@ -381,12 +378,12 @@ def main():
     #
     # 두 rolling이 모두 준비되면
     # 각각 50%로 결합한다.
-    if rolling7_ready == 10:
+    if rolling7_ready == len(rows):
         active_mode = (
             "rolling3_50_rolling7_50"
         )
 
-    elif rolling3_ready == 10:
+    elif rolling3_ready == len(rows):
         active_mode = "rolling3_only"
 
     else:
@@ -695,12 +692,12 @@ def main():
 
     print(
         f"rolling3ReadyCount: "
-        f"{rolling3_ready}/10"
+        f"{rolling3_ready}/{len(rows)}"
     )
 
     print(
         f"rolling7ReadyCount: "
-        f"{rolling7_ready}/10"
+        f"{rolling7_ready}/{len(rows)}"
     )
 
     print(
@@ -710,7 +707,7 @@ def main():
 
     print(
         f"scoreReadyCount: "
-        f"{score_ready_count}/10"
+        f"{score_ready_count}/{len(rows)}"
     )
 
     print(
