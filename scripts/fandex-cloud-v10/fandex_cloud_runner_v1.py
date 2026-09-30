@@ -113,27 +113,66 @@ def bootstrap_lastfm_history():
 
     canonical_bindings = load_lastfm_canonical_bindings()
 
-    counts = Counter(row["snapshotDate"] for row in cloud_rows)
+    counts = Counter(
+        row["snapshotDate"]
+        for row in cloud_rows
+    )
     by_date_artists = {}
     for row in cloud_rows:
-        by_date_artists.setdefault(row["snapshotDate"], set()).add(
+        by_date_artists.setdefault(
+            row["snapshotDate"],
+            set(),
+        ).add(
             norm(row.get("artist"))
         )
 
     snapshot_dates = sorted(counts)
-    expected_artists = by_date_artists[snapshot_dates[0]]
-    expected_count = len(expected_artists)
-    if expected_count == 0:
-        raise RuntimeError("Last.fm cloud history has no artists")
+    previous_artists = None
 
     for snapshot_date in snapshot_dates:
-        artists = by_date_artists[snapshot_date]
-        if counts[snapshot_date] != expected_count or artists != expected_artists:
+        artists = by_date_artists[
+            snapshot_date
+        ]
+
+        if not artists:
             raise RuntimeError(
-                f"Incomplete Last.fm cloud snapshot: {snapshot_date} "
-                f"rows={counts[snapshot_date]}/{expected_count} "
-                f"artists={len(artists)}"
+                "Last.fm cloud snapshot has no artists: "
+                + snapshot_date
             )
+
+        if counts[snapshot_date] != len(artists):
+            raise RuntimeError(
+                "Last.fm cloud snapshot contains duplicate "
+                f"artist rows: {snapshot_date}"
+            )
+
+        unbound = sorted(
+            artist
+            for artist in artists
+            if artist not in canonical_bindings
+        )
+        if unbound:
+            raise RuntimeError(
+                "Last.fm cloud snapshot contains "
+                "unbound artists: "
+                + ", ".join(unbound)
+            )
+
+        if (
+            previous_artists is not None
+            and not previous_artists <= artists
+        ):
+            removed = sorted(
+                previous_artists
+                - artists
+            )
+            raise RuntimeError(
+                "Last.fm cloud cohort shrank on "
+                f"{snapshot_date}: "
+                + ", ".join(removed)
+            )
+
+        previous_artists = artists
 
     output_rows = []
     for row in cloud_rows:
