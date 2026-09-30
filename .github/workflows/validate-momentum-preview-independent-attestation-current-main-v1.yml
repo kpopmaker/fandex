@@ -26,8 +26,16 @@ jobs:
           cache: npm
 
       - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          git diff --name-only fe69d558cf720fb0aa761e207773055e9dc9e69e...HEAD | sort > /tmp/changed.txt
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$PR_BASE_SHA...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git diff --name-only fe69d558cf720fb0aa761e207773055e9dc9e69e...HEAD | sort > /tmp/changed.txt
+          fi
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-momentum-preview-independent-attestation-current-main-v1.yml
           lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts
