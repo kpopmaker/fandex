@@ -1,0 +1,74 @@
+name: Validate Momentum current evaluation execution v1
+
+on:
+  push:
+    branches:
+      - work/momentum-current-evaluation-execution-v1
+  pull_request:
+    branches:
+      - integration/momentum-productionization-current-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
+            LIVE_BASE_SHA="$(git rev-parse "refs/remotes/origin/$PR_BASE_REF")"
+            git diff --name-only "$LIVE_BASE_SHA" "$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git fetch origin "+refs/heads/integration/momentum-productionization-current-main-v1:refs/remotes/origin/integration/momentum-productionization-current-main-v1"
+            STACK_BASE="$(git rev-parse refs/remotes/origin/integration/momentum-productionization-current-main-v1)"
+            git diff --name-only "$STACK_BASE" HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-current-evaluation-execution-v1.yml
+          lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts
+          tests/momentum-current-evaluation-execution-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Current evaluation execution regression
+        run: npx tsx --test tests/momentum-current-evaluation-execution-v1.test.mts
+
+      - name: Preview-independent categorical attestation regression
+        run: npx tsx --test tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+
+      - name: Carrier persistence decision regression
+        run: npx tsx --test tests/momentum-carrier-persistence-decision-v1.test.mts
+
+      - name: Carrier lineage regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-carrier-attestation-lineage-v2.test.mts
+
+      - name: Existing live-shadow readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
