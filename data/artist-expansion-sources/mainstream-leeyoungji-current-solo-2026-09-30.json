@@ -1,0 +1,54 @@
+{
+  "version": "mainstream_leeyoungji_current_solo_adapter_v1",
+  "source": {
+    "id": "mainstream-official-leeyoungji-current-solo-identity",
+    "type": "agency_roster",
+    "name": "MAINSTREAM Official Lee Young Ji Current Solo Identity",
+    "observedAt": "2026-09-30T17:56:00+09:00",
+    "url": "https://www.main-stream.net/blank-1"
+  },
+  "candidateCount": 1,
+  "candidates": [
+    {
+      "displayArtist": "Lee Young Ji",
+      "aliases": ["이영지", "LEE YOUNG JI", "Youngji"],
+      "evidence": [
+        {
+          "label": "MAINSTREAM official Lee Young Ji artist profile",
+          "url": "https://www.main-stream.net/blank-1"
+        }
+      ]
+    }
+  ],
+  "currentIdentityState": {
+    "Lee Young Ji": {
+      "agency": "Mainstream",
+      "agencyStatus": "verified",
+      "lifecycleStatus": "active",
+      "entityType": "solo",
+      "debutDate": "2019-11-02",
+      "current2026MusicEvidence": {
+        "release": "ROBOT",
+        "releaseDate": "2026-02-28"
+      }
+    }
+  },
+  "contract": {
+    "officialArtistProfileRequired": true,
+    "mainstreamAttributionRequired": true,
+    "officialDebutEvidenceRequired": true,
+    "current2026MusicActivityRequired": true,
+    "soloIdentityRequired": true,
+    "existingCanonicalMustSuppressDuplicateDiscovery": true,
+    "autoPromote": false,
+    "identityReviewRequired": true,
+    "scopeVerificationRequired": true
+  },
+  "provenance": {
+    "snapshotType": "verified_MAINSTREAM_LeeYoungJi_current_solo_identity_snapshot",
+    "verifiedFrom": [
+      "https://www.main-stream.net/blank-1"
+    ],
+    "verifiedAt": "2026-09-30"
+  }
+}

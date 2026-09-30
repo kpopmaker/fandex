@@ -141,6 +141,7 @@ jobs:
           python tests/artist-expansion-eden-allhours-current-group-v1.py
           python tests/artist-expansion-mulgogi-limyoungwoong-current-solo-v1.py
           python tests/artist-expansion-ki-onf-current-group-v1.py
+          python tests/artist-expansion-mainstream-leeyoungji-current-solo-v1.py
           python tests/artist-expansion-nomad-roster-v1.py
           python tests/artist-expansion-bugs-yg-provider-catalog-v1.py
           python tests/artist-expansion-weverse-con-roster-v1.py
@@ -659,6 +660,11 @@ jobs:
           python scripts/artist-expansion/collect_ki_onf_current_group_v1.py \
             --fallback-snapshot data/artist-expansion-sources/ki-onf-current-group-2026-09-30.json \
             --output ki_onf_current_group_v1_latest.json
+      - name: Collect MAINSTREAM Lee Young Ji current solo identity
+        run: |
+          python scripts/artist-expansion/collect_mainstream_leeyoungji_current_solo_v1.py \
+            --fallback-snapshot data/artist-expansion-sources/mainstream-leeyoungji-current-solo-2026-09-30.json \
+            --output mainstream_leeyoungji_current_solo_v1_latest.json
       - name: Collect NOMAD Entertainment lifecycle-safe identity snapshot
         run: |
           python scripts/artist-expansion/collect_nomad_roster_v1.py \
@@ -783,6 +789,7 @@ jobs:
             --snapshot eden_allhours_current_group_v1_latest.json \
             --snapshot mulgogi_limyoungwoong_current_solo_v1_latest.json \
             --snapshot ki_onf_current_group_v1_latest.json \
+            --snapshot mainstream_leeyoungji_current_solo_v1_latest.json \
             --snapshot nomad_roster_v1_latest.json \
             --snapshot bugs_yg_provider_catalog_v1_latest.json \
             --snapshot weverse_con_2026_roster_v1_latest.json \
@@ -925,6 +932,7 @@ jobs:
             eden_allhours_current_group_v1_latest.json
             mulgogi_limyoungwoong_current_solo_v1_latest.json
             ki_onf_current_group_v1_latest.json
+            mainstream_leeyoungji_current_solo_v1_latest.json
             nomad_roster_v1_latest.json
             bugs_yg_provider_catalog_v1_latest.json
             weverse_con_2026_roster_v1_latest.json
