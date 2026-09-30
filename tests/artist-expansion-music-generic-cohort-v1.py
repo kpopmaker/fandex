@@ -130,12 +130,14 @@ def main():
             "MG_JSON": preview.MG_JSON,
             "BUGS_JSON": preview.BUGS_JSON,
             "CURRENT_MUSIC_JSON": preview.CURRENT_MUSIC_JSON,
+            "MUSIC_TARGET_BINDING_FILE": preview.MUSIC_TARGET_BINDING_FILE,
             "OUTPUT_CSV": preview.OUTPUT_CSV,
             "REPORT": preview.REPORT,
         }
         preview.MG_JSON = mg_json
         preview.BUGS_JSON = bugs_json
         preview.CURRENT_MUSIC_JSON = current_music_json
+        preview.MUSIC_TARGET_BINDING_FILE = target_config
         preview.OUTPUT_CSV = preview_csv
         preview.REPORT = preview_report
         try:
@@ -149,6 +151,9 @@ def main():
 
         assert len(preview_rows) == 33
         assert {row["artist"] for row in preview_rows} == set(artists)
+        assert {row["canonicalArtistId"] for row in preview_rows} == {
+            f"canonical-{i:02d}" for i in range(11)
+        }
 
         history_meta = tmp_path / "history_meta.json"
         latest_json = tmp_path / "latest.json"
@@ -181,6 +186,19 @@ def main():
         payload = json.loads(latest_json.read_text(encoding="utf-8"))
         assert len(payload["ranking"]) == 11
         assert {row["artist"] for row in payload["ranking"]} == set(artists)
+        assert {
+            row["canonicalArtistId"] for row in payload["ranking"]
+        } == {f"canonical-{i:02d}" for i in range(11)}
+
+        with history_csv.open(
+            "r",
+            encoding="utf-8-sig",
+            newline="",
+        ) as f:
+            history_rows = list(csv.DictReader(f))
+        assert {
+            row["canonicalArtistId"] for row in history_rows
+        } == {f"canonical-{i:02d}" for i in range(11)}
 
     print("PASS: Music discovery + preview/publish supports 11-artist cohort")
 
