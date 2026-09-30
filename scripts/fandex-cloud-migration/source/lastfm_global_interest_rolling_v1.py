@@ -307,23 +307,8 @@ def validate_history(rows):
             canonical_artist_id
         ] = artist
 
-    first_artist_set = {
-        norm(row.get("artist"))
-        for row in by_date[
-            sorted_dates[0]
-        ]
-    }
-    first_canonical_set = {
-        norm(row.get("canonicalArtistId"))
-        for row in by_date[
-            sorted_dates[0]
-        ]
-    }
-
-    if not first_artist_set:
-        raise RuntimeError(
-            f"No artists found in {sorted_dates[0]}."
-        )
+    previous_artist_set = None
+    previous_canonical_set = None
 
     for snapshot_date in sorted_dates:
         date_rows = by_date[
@@ -339,25 +324,53 @@ def validate_history(rows):
             for row in date_rows
         }
 
-        expected_count = len(first_artist_set)
-        if len(date_rows) != expected_count:
+        if not artist_set:
             raise RuntimeError(
-                "Incomplete snapshot: "
-                f"{snapshot_date} = "
-                f"{len(date_rows)}/{expected_count}"
+                f"No artists found in {snapshot_date}."
             )
 
-        if artist_set != first_artist_set:
+        if len(date_rows) != len(artist_set):
             raise RuntimeError(
-                "Artist set mismatch: "
+                "Incomplete snapshot with duplicate "
+                f"artist rows: {snapshot_date}"
+            )
+
+        if len(artist_set) != len(canonical_set):
+            raise RuntimeError(
+                "Artist/canonical cardinality mismatch: "
                 f"{snapshot_date}"
             )
 
-        if canonical_set != first_canonical_set:
-            raise RuntimeError(
-                "Canonical artist set mismatch: "
-                f"{snapshot_date}"
+        if (
+            previous_artist_set is not None
+            and not previous_artist_set <= artist_set
+        ):
+            removed = sorted(
+                previous_artist_set
+                - artist_set
             )
+            raise RuntimeError(
+                "Artist cohort shrank: "
+                f"{snapshot_date} / "
+                + ", ".join(removed)
+            )
+
+        if (
+            previous_canonical_set is not None
+            and not previous_canonical_set <= canonical_set
+        ):
+            removed = sorted(
+                previous_canonical_set
+                - canonical_set
+            )
+            raise RuntimeError(
+                "Canonical artist cohort shrank: "
+                f"{snapshot_date} / "
+                + ", ".join(removed)
+            )
+
+        previous_artist_set = artist_set
+        previous_canonical_set = canonical_set
 
     return sorted_dates
 
