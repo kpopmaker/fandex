@@ -10,6 +10,8 @@ export const FANDEX_NAVER_CANONICAL_ARTIST_READ_ENTRY_CONTRACT_VERSION =
 const NAVER_RELEVANCE_REASONS = Object.freeze([
   'canonical_korean_alias_in_title',
   'canonical_korean_alias_in_summary',
+  'canonical_short_korean_alias_with_corroboration_in_title',
+  'canonical_short_korean_alias_with_corroboration_in_summary',
 ] as const);
 
 export type CanonicalNaverNewsArtistReadEntryV1 = Readonly<{
@@ -26,7 +28,11 @@ export type CanonicalNaverNewsArtistReadEntryV1 = Readonly<{
   relevance: Readonly<{
     status: 'accepted';
     reason: string;
-    matchedEvidence: Readonly<{ field: 'title' | 'summary'; alias: string }> | null;
+    matchedEvidence: Readonly<{
+      field: 'title' | 'summary';
+      alias: string;
+      corroboration?: string;
+    }> | null;
   }>;
   semantic: Readonly<{
     entryKind: 'canonical-evidence';
@@ -59,12 +65,27 @@ function stringArray(value: unknown, code: string): readonly string[] {
   return Object.freeze([...value]);
 }
 
-function matchedEvidence(value: unknown): Readonly<{ field: 'title' | 'summary'; alias: string }> | null {
+function matchedEvidence(value: unknown): Readonly<{
+  field: 'title' | 'summary';
+  alias: string;
+  corroboration?: string;
+}> | null {
   if (value === null) return null;
-  if (typeof value !== 'object' || Array.isArray(value)) throw new Error('naver_news_read_entry_matched_evidence_invalid');
+  if (typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('naver_news_read_entry_matched_evidence_invalid');
+  }
   const input = value as Record<string, unknown>;
-  if (input.field !== 'title' && input.field !== 'summary') throw new Error('naver_news_read_entry_matched_evidence_invalid');
-  return Object.freeze({ field: input.field, alias: requiredString(input.alias, 'naver_news_read_entry_matched_evidence_invalid') });
+  if (input.field !== 'title' && input.field !== 'summary') {
+    throw new Error('naver_news_read_entry_matched_evidence_invalid');
+  }
+  const corroboration = input.corroboration === undefined
+    ? undefined
+    : requiredString(input.corroboration, 'naver_news_read_entry_matched_evidence_invalid');
+  return Object.freeze({
+    field: input.field,
+    alias: requiredString(input.alias, 'naver_news_read_entry_matched_evidence_invalid'),
+    ...(corroboration ? { corroboration } : {}),
+  });
 }
 
 function validateObservation(input: CanonicalNaverNewsObservation): void {
