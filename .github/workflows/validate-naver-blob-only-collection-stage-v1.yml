@@ -43,6 +43,8 @@ jobs:
           fi
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-naver-blob-only-collection-stage-v1.yml
+          .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
+          .github/workflows/validate-momentum-productionization-current-main-v1.yml
           lib/server/ingestion/naverNewsBlobOnlyCollectionStage.ts
           tests/naver-news-blob-only-collection-stage-v1.test.mts
           EOF
