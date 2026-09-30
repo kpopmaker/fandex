@@ -233,6 +233,9 @@ def select_best(rows, target_artists, bindings):
             row.get("artist")
         )
 
+        if artist not in target_artists:
+            continue
+
         canonical_artist_id = (
             resolve_row_canonical_id(
                 row,
@@ -249,11 +252,7 @@ def select_best(rows, target_artists, bindings):
         )
 
         if (
-            artist not in target_artists
-            or canonical_artist_id
-            != bindings[artist]
-            or platform
-            not in PLATFORM_WEIGHTS
+            platform not in PLATFORM_WEIGHTS
             or rank == 999999
         ):
             continue
