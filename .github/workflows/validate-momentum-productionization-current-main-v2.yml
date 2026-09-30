@@ -45,12 +45,14 @@ jobs:
           lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts
           lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts
           lib/product/contracts/productMomentumEvidenceConsensus.ts
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
           lib/product/readiness/momentumPublicRouteDesignCandidate.ts
           lib/server/ingestion/momentumEvidenceConsensusRepository.ts
           tests/momentum-carrier-attestation-lineage-v2.test.mts
           tests/momentum-carrier-persistence-decision-v1.test.mts
           tests/momentum-categorical-output-attestation-current-main-v1.test.mts
           tests/momentum-current-evaluation-execution-v1.test.mts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
