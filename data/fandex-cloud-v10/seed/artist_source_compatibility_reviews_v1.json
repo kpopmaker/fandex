@@ -19,5 +19,186 @@
       "A review preview never mutates provider bindings, compatibility registry, Product state, Registry lifecycle, DB, or runtime."
     ]
   },
-  "reviews": []
+  "reviews": [
+    {
+      "reviewId": "music-bts-supported-v1",
+      "canonicalArtistId": "bts",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 방탄소년단",
+          "url": "https://music.bugs.co.kr/artist/80079394",
+          "note": "Bugs identifies the entity as 방탄소년단, a Korean male group debuted in 2013, with members RM, SUGA, 진, j-hope, 지민, V, 정국."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "bts",
+        "artist": "방탄소년단",
+        "aliases": [
+          "방탄소년단",
+          "BTS"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-bts-supported-v1",
+      "canonicalArtistId": "bts",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — BTS",
+          "url": "https://www.last.fm/music/BTS",
+          "note": "Last.fm main BTS artist page identifies BTS as the South Korean group also known as 방탄소년단."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "bts",
+        "artist": "방탄소년단",
+        "query": "BTS"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-blackpink-supported-v1",
+      "canonicalArtistId": "blackpink",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — BLACKPINK",
+          "url": "https://music.bugs.co.kr/artist/20022492",
+          "note": "Bugs identifies BLACKPINK as a Korean female group debuted in 2016 with members 지수, 제니, 로제, 리사."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "blackpink",
+        "artist": "BLACKPINK",
+        "aliases": [
+          "BLACKPINK",
+          "블랙핑크"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-blackpink-supported-v1",
+      "canonicalArtistId": "blackpink",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — BLACKPINK",
+          "url": "https://www.last.fm/music/BLACKPINK",
+          "note": "Last.fm main BLACKPINK artist page identifies the four-member South Korean group and lists the Korean name 블랙핑크."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "blackpink",
+        "artist": "블랙핑크",
+        "query": "BLACKPINK"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-twice-supported-v1",
+      "canonicalArtistId": "twice",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — TWICE (트와이스)",
+          "url": "https://music.bugs.co.kr/artist/80249916",
+          "note": "Bugs identifies TWICE (트와이스) as a Korean female group debuted in 2015 and lists the group members."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "twice",
+        "artist": "트와이스",
+        "aliases": [
+          "트와이스",
+          "TWICE"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-twice-supported-v1",
+      "canonicalArtistId": "twice",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — TWICE",
+          "url": "https://www.last.fm/music/TWICE",
+          "note": "Last.fm main TWICE artist page identifies TWICE as the nine-member South Korean group and includes the Korean name 트와이스."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "twice",
+        "artist": "트와이스",
+        "query": "TWICE"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "music-enhypen-supported-v1",
+      "canonicalArtistId": "enhypen",
+      "source": "music_chart",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Bugs artist entity — 엔하이픈 (ENHYPEN)",
+          "url": "https://music.bugs.co.kr/artist/80347259",
+          "note": "Bugs identifies 엔하이픈 (ENHYPEN) as a Korean male group debuted in 2020."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "enhypen",
+        "artist": "엔하이픈",
+        "aliases": [
+          "엔하이픈",
+          "ENHYPEN"
+        ]
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    },
+    {
+      "reviewId": "lastfm-enhypen-supported-v1",
+      "canonicalArtistId": "enhypen",
+      "source": "lastfm",
+      "decision": "supported",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T07:17:00+09:00",
+      "evidence": [
+        {
+          "source": "Last.fm artist page — ENHYPEN",
+          "url": "https://www.last.fm/music/ENHYPEN",
+          "note": "Last.fm main ENHYPEN artist page identifies ENHYPEN as a South Korean boy group under BELIFT LAB."
+        }
+      ],
+      "proposedBinding": {
+        "canonicalArtistId": "enhypen",
+        "artist": "엔하이픈",
+        "query": "ENHYPEN"
+      },
+      "notes": "Reviewed candidate only; do not activate without separate binding/compatibility application."
+    }
+  ]
 }
