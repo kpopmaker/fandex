@@ -86,6 +86,100 @@
         "TXT"
       ],
       "canonicalArtistId": "txt"
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "aliases": [
+        "방탄소년단",
+        "BTS"
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "aliases": [
+        "BLACKPINK",
+        "블랙핑크"
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "aliases": [
+        "트와이스",
+        "TWICE"
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "aliases": [
+        "엔하이픈",
+        "ENHYPEN"
+      ]
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "aliases": [
+        "정국",
+        "Jung Kook",
+        "Jungkook"
+      ]
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "aliases": [
+        "지민",
+        "Jimin"
+      ]
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "aliases": [
+        "V",
+        "뷔",
+        "Kim Taehyung"
+      ]
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "aliases": [
+        "제니",
+        "JENNIE",
+        "Jennie"
+      ]
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "aliases": [
+        "리사",
+        "LISA",
+        "Lisa"
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "aliases": [
+        "로제",
+        "ROSÉ",
+        "Rosé",
+        "ROSE"
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "aliases": [
+        "RIIZE",
+        "라이즈"
+      ]
     }
   ]
 }
