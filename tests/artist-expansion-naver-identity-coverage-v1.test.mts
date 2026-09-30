@@ -7,7 +7,7 @@ import { bindCanonicalArtistToNaverNews } from '../lib/server/ingestion/naverNew
 test('audit NAVER artist identity coverage across the full artist universe', () => {
   const rows = artistUniverseV4.map((artist) => {
     const binding = bindCanonicalArtistToNaverNews(artist.id);
-    const aliases = artist.profile.koreanAliases.filter((alias) => [...alias].length >= 2);
+    const aliases = artist.profile.koreanAliases.filter((alias) => alias.trim().length > 0);
     return {
       artistId: artist.id,
       tier: artist.collection.tier,
