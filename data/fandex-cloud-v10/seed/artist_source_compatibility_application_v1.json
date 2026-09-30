@@ -1,0 +1,33 @@
+{
+  "version": "artist_source_compatibility_application_v1",
+  "reviewLedgerVersion": "artist_source_compatibility_reviews_v1",
+  "mode": "preview_only_no_active_mutation",
+  "selectedReviewIds": [
+    "music-bts-supported-v1",
+    "lastfm-bts-supported-v1",
+    "music-blackpink-supported-v1",
+    "lastfm-blackpink-supported-v1",
+    "music-twice-supported-v1",
+    "lastfm-twice-supported-v1",
+    "music-enhypen-supported-v1",
+    "lastfm-enhypen-supported-v1",
+    "music-jungkook-supported-v1",
+    "lastfm-jungkook-supported-v1",
+    "music-jimin-supported-v1",
+    "lastfm-jimin-supported-v1",
+    "music-v-supported-v1",
+    "music-jennie-supported-v1",
+    "lastfm-jennie-supported-v1",
+    "music-lisa-supported-v1",
+    "music-rose-supported-v1",
+    "lastfm-rose-supported-v1",
+    "music-riize-supported-v1",
+    "lastfm-riize-supported-v1"
+  ],
+  "rules": [
+    "Selection is explicit; reviewed-supported rows are never auto-applied.",
+    "Only supported reviewed-candidate rows may be selected.",
+    "Unsupported reviews require a separate compatibility-status application path.",
+    "Preview generation must not modify active provider bindings, compatibility registry, Product state, Registry lifecycle, DB, or runtime."
+  ]
+}
