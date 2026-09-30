@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - validation/artist-expansion-current-main-v2
+  pull_request:
+    branches:
+      - integration/artist-expansion-current-main-v2
 
 permissions:
   contents: read
