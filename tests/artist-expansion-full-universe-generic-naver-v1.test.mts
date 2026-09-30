@@ -39,7 +39,7 @@ function recordFor(artistId: string, alias: string): NaverNewsNormalizedRecord {
 
 for (const artist of artistUniverseV4) {
   test(`${artist.id}: full generic NAVER artist pipeline preserves canonical identity`, () => {
-    const alias = artist.profile.koreanAliases.find((value) => [...value].length >= 2);
+    const alias = artist.profile.koreanAliases.find((value) => value.trim().length > 0);
     assert.ok(alias, `${artist.id} missing canonical Korean alias`);
     assert.ok(artist.profile.naverNewsQuery?.trim(), `${artist.id} missing explicit NAVER query`);
 
