@@ -9,5 +9,12 @@
       "work/*": false,
       "v131-lastfm-real-signal-read-model": false
     }
+  },
+  "functions": {
+    "app/api/internal/naver-news/shadow-scheduler/route.ts": {
+      "regions": [
+        "sin1"
+      ]
+    }
   }
 }
