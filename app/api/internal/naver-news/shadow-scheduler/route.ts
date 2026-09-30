@@ -32,6 +32,32 @@ type ShadowRecurringFailureClass =
   | 'dispatch_failed';
 
 type RuntimeRegionClass = 'sin1' | 'iad1' | 'other' | 'missing';
+type RequestSourceClass =
+  | 'github_actions_hourly_v1'
+  | 'vercel_cron'
+  | 'curl_unmarked'
+  | 'other'
+  | 'missing';
+
+export function classifyNaverNewsRequestSource(request: Request): RequestSourceClass {
+  const marker = request.headers.get('x-fandex-scheduler-source')?.trim();
+  if (marker === 'github-actions-hourly-v1') return 'github_actions_hourly_v1';
+
+  const userAgent = request.headers.get('user-agent')?.trim().toLowerCase();
+  if (!userAgent) return 'missing';
+  if (userAgent.startsWith('vercel-cron/')) return 'vercel_cron';
+  if (userAgent.startsWith('curl/')) return 'curl_unmarked';
+  return 'other';
+}
+
+function observeNaverNewsRequestSource(request: Request): void {
+  const sourceClass = classifyNaverNewsRequestSource(request);
+  try {
+    console.info(`FANDEX_NAVER_REQUEST_SOURCE_CLASS=${sourceClass}`);
+  } catch {
+    // Request-source evidence must never alter request execution.
+  }
+}
 
 export function classifyNaverNewsRuntimeRegion(value: string | undefined): RuntimeRegionClass {
   const normalized = value?.trim().toLowerCase();
@@ -126,6 +152,8 @@ export async function handleNaverNewsShadowRecurringSchedulerRequest(
   )) {
     return rejected('authorization_rejected');
   }
+
+  observeNaverNewsRequestSource(request);
 
   let runtimeEnvironment: Readonly<Record<string, string | undefined>>;
   try {
