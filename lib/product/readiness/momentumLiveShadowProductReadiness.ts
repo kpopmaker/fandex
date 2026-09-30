@@ -5,7 +5,7 @@ import type {
 export const MOMENTUM_LIVE_SHADOW_PRODUCT_READINESS_VERSION =
   'momentum-live-shadow-product-readiness-v1' as const;
 
-export type MomentumLiveShadowSourceCurrentnessAudit = Readonly<{
+type MomentumLiveShadowSourceCurrentnessAuditBase = Readonly<{
   contractVersion: 'momentum-live-shadow-source-currentness-audit-v1';
   evaluatedAgainstMain: string;
   canonicalArtistId: 'iu';
@@ -23,15 +23,6 @@ export type MomentumLiveShadowSourceCurrentnessAudit = Readonly<{
     deltaReadyCount: number;
     needsReviewCount: number;
     sourceAdvancedBeyondCarrierCutoff: boolean;
-  }>;
-  naverRuntime: Readonly<{
-    schedulerRouteObservedAt: string;
-    deploymentId: string;
-    deploymentCommit: string;
-    requestPath: string;
-    httpStatus: number;
-    schedulerObservedAfterCarrierCutoff: boolean;
-    currentStoredEvidenceReproducedForReadiness: boolean;
   }>;
   freshnessPolicy: Readonly<{
     arbitraryAgeThresholdAllowed: false;
@@ -51,6 +42,44 @@ export type MomentumLiveShadowSourceCurrentnessAudit = Readonly<{
     attestationDigest: string | null;
   }>;
 }>;
+
+type NaverVercelRuntimeEvidence = Readonly<{
+  schedulerRouteObservedAt: string;
+  deploymentId: string;
+  deploymentCommit: string;
+  requestPath: string;
+  httpStatus: number;
+  schedulerObservedAfterCarrierCutoff: boolean;
+  currentStoredEvidenceReproducedForReadiness: boolean;
+}>;
+
+type NaverGithubActionsDirectEvidence = Readonly<{
+  mode: 'github-actions-direct-recurring';
+  observedAt: string;
+  workflowRunId: number;
+  workflowJobId: number;
+  workflowHeadSha: string;
+  slotStart: string;
+  collectionKey: string;
+  status: 'applied';
+  exactOfficialProtocol: true;
+  schedulerObservedAfterCarrierCutoff: boolean;
+  currentStoredEvidenceReproducedForReadiness: boolean;
+}>;
+
+export type MomentumLiveShadowSourceCurrentnessAudit =
+  | Readonly<
+      MomentumLiveShadowSourceCurrentnessAuditBase & {
+        naverRuntime: NaverVercelRuntimeEvidence;
+        naverDirectRecurring?: never;
+      }
+    >
+  | Readonly<
+      MomentumLiveShadowSourceCurrentnessAuditBase & {
+        naverRuntime?: never;
+        naverDirectRecurring: NaverGithubActionsDirectEvidence;
+      }
+    >;
 
 export type MomentumLiveShadowProductReadinessResult = Readonly<{
   contractVersion: typeof MOMENTUM_LIVE_SHADOW_PRODUCT_READINESS_VERSION;
@@ -103,9 +132,56 @@ function validIso(value: string): boolean {
   return Number.isFinite(Date.parse(value));
 }
 
+function validPositiveInteger(value: number): boolean {
+  return Number.isSafeInteger(value) && value > 0;
+}
+
+function naverEvidenceState(
+  audit: MomentumLiveShadowSourceCurrentnessAudit,
+): Readonly<{
+  valid: boolean;
+  schedulerObservedAfterCarrierCutoff: boolean;
+  currentStoredEvidenceReproducedForReadiness: boolean;
+}> {
+  if (audit.naverRuntime !== undefined) {
+    return Object.freeze({
+      valid:
+        validIso(audit.naverRuntime.schedulerRouteObservedAt)
+        && audit.naverRuntime.deploymentId.length > 0
+        && /^[0-9a-f]{40}$/.test(audit.naverRuntime.deploymentCommit)
+        && audit.naverRuntime.requestPath
+          === '/api/internal/naver-news/shadow-scheduler'
+        && audit.naverRuntime.httpStatus === 200,
+      schedulerObservedAfterCarrierCutoff:
+        audit.naverRuntime.schedulerObservedAfterCarrierCutoff,
+      currentStoredEvidenceReproducedForReadiness:
+        audit.naverRuntime.currentStoredEvidenceReproducedForReadiness,
+    });
+  }
+
+  const direct = audit.naverDirectRecurring;
+  return Object.freeze({
+    valid:
+      direct.mode === 'github-actions-direct-recurring'
+      && validIso(direct.observedAt)
+      && validPositiveInteger(direct.workflowRunId)
+      && validPositiveInteger(direct.workflowJobId)
+      && /^[0-9a-f]{40}$/.test(direct.workflowHeadSha)
+      && validIso(direct.slotStart)
+      && direct.collectionKey.length > 0
+      && direct.status === 'applied'
+      && direct.exactOfficialProtocol === true,
+    schedulerObservedAfterCarrierCutoff:
+      direct.schedulerObservedAfterCarrierCutoff,
+    currentStoredEvidenceReproducedForReadiness:
+      direct.currentStoredEvidenceReproducedForReadiness,
+  });
+}
+
 function validAudit(
   audit: MomentumLiveShadowSourceCurrentnessAudit,
 ): boolean {
+  const naver = naverEvidenceState(audit);
   const noOpAttestationValid =
     !audit.currentEvaluation.currentNoOpEvaluationAttested
     || (
@@ -129,7 +205,7 @@ function validAudit(
   return (
     audit.contractVersion
       === 'momentum-live-shadow-source-currentness-audit-v1'
-    && audit.evaluatedAgainstMain.length === 40
+    && /^[0-9a-f]{40}$/.test(audit.evaluatedAgainstMain)
     && audit.canonicalArtistId === 'iu'
     && /^[0-9a-f]{64}$/.test(audit.carrier.carrierRecordId)
     && validIso(audit.carrier.alignmentCutoffAt)
@@ -138,10 +214,7 @@ function validAudit(
     && audit.lastfm.snapshotDateCount > 0
     && audit.lastfm.deltaReadyCount === 10
     && audit.lastfm.needsReviewCount === 0
-    && validIso(audit.naverRuntime.schedulerRouteObservedAt)
-    && audit.naverRuntime.requestPath
-      === '/api/internal/naver-news/shadow-scheduler'
-    && audit.naverRuntime.httpStatus === 200
+    && naver.valid
     && audit.freshnessPolicy.arbitraryAgeThresholdAllowed === false
     && audit.freshnessPolicy.maximumAgeDays === null
     && audit.freshnessPolicy
@@ -162,6 +235,7 @@ export function evaluateMomentumLiveShadowProductReadiness(
 ): MomentumLiveShadowProductReadinessResult {
   const blockers: string[] = [];
   const audit = input.sourceAudit;
+  const naver = naverEvidenceState(audit);
 
   if (!validAudit(audit)) {
     blockers.push('source-currentness-audit-invalid');
@@ -197,7 +271,7 @@ export function evaluateMomentumLiveShadowProductReadiness(
 
   const sourceAdvancementObserved =
     audit.lastfm.sourceAdvancedBeyondCarrierCutoff
-    || audit.naverRuntime.schedulerObservedAfterCarrierCutoff;
+    || naver.schedulerObservedAfterCarrierCutoff;
 
   const evaluationPerformed =
     audit.currentEvaluation.currentDualSourceCategoricalEvaluationPerformed;
@@ -208,11 +282,11 @@ export function evaluateMomentumLiveShadowProductReadiness(
   const satisfiesFreshness =
     evaluationPerformed
     && currentEvaluationArtifactPresent
-    && audit.naverRuntime.currentStoredEvidenceReproducedForReadiness;
+    && naver.currentStoredEvidenceReproducedForReadiness;
 
   if (
     sourceAdvancementObserved
-    && !audit.naverRuntime.currentStoredEvidenceReproducedForReadiness
+    && !naver.currentStoredEvidenceReproducedForReadiness
   ) {
     blockers.push(
       'current-naver-stored-evidence-not-reproduced-for-readiness',
@@ -260,9 +334,9 @@ export function evaluateMomentumLiveShadowProductReadiness(
       lastfmSourceAdvancedBeyondCarrierCutoff:
         audit.lastfm.sourceAdvancedBeyondCarrierCutoff,
       naverSchedulerObservedAfterCarrierCutoff:
-        audit.naverRuntime.schedulerObservedAfterCarrierCutoff,
+        naver.schedulerObservedAfterCarrierCutoff,
       naverCurrentStoredEvidenceReproducedForReadiness:
-        audit.naverRuntime.currentStoredEvidenceReproducedForReadiness,
+        naver.currentStoredEvidenceReproducedForReadiness,
       sourceAdvancementObserved,
     }),
     freshnessPolicy: Object.freeze({

@@ -1,0 +1,91 @@
+name: Validate Momentum productionization current main v1
+
+on:
+  push:
+    branches:
+      - integration/momentum-productionization-current-main-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git diff --name-only 40dfbf88f631e81bb8d8cab1467af21673eebf6a...HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-productionization-current-main-v1.yml
+          .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
+          lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts
+          lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          tests/momentum-current-evaluation-execution-v1.test.mts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-v2-carrier-record-candidate-v1.test.mts
+          lib/intelligence/fandexMomentumCarrierPersistenceDecision.ts
+          lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts
+          lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts
+          lib/product/contracts/productMomentumEvidenceConsensus.ts
+          lib/product/readiness/momentumPublicRouteDesignCandidate.ts
+          lib/server/ingestion/momentumEvidenceConsensusRepository.ts
+          tests/momentum-carrier-attestation-lineage-v2.test.mts
+          tests/momentum-carrier-persistence-decision-v1.test.mts
+          tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
+          test ! -s /tmp/disallowed.txt
+
+      - run: npm ci
+
+      - name: Preview-independent categorical attestation regression
+        run: npx tsx --test tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+
+      - name: Carrier attestation lineage v2 regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-carrier-attestation-lineage-v2.test.mts
+
+      - name: Carrier persistence decision regression
+        run: npx tsx --test tests/momentum-carrier-persistence-decision-v1.test.mts
+
+      - name: Existing carrier runtime regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-evidence-consensus-runtime-read-v1.test.mts
+
+      - name: Existing Momentum Product contract regression
+        run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
+
+      - name: Existing live-shadow readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
