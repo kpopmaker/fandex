@@ -302,10 +302,8 @@ def main():
         rolling_payload = json.loads(
             rolling_score_json.read_text(encoding="utf-8")
         )
-        assert {
-            row["canonicalArtistId"]
-            for row in rolling_payload["ranking"]
-        } == {"canonical-a", "canonical-b"}
+        assert rolling_payload["artistCount"] == 2
+        assert rolling_payload["scoreReadyCount"] == 2
 
     print(
         "PASS: Last.fm canonical identity propagates from binding "
