@@ -23,6 +23,7 @@ STATUS_FILE = DATA_DIR / "lastfm_cloud_status_latest.json"
 
 HISTORY_FIELDS = [
     "snapshotDate",
+    "canonicalArtistId",
     "artist",
     "query",
     "lastfmName",
@@ -33,6 +34,7 @@ HISTORY_FIELDS = [
 ]
 
 DELTA_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "previousDate",
     "latestDate",
@@ -46,6 +48,7 @@ DELTA_FIELDS = [
 
 SCORE_FIELDS = [
     "rank",
+    "canonicalArtistId",
     "artist",
     "previousDate",
     "latestDate",
@@ -147,6 +150,40 @@ def read_seed():
     return seeds
 
 
+def hydrate_history_canonical_ids(history, seeds):
+    binding_by_artist = {
+        seed["artist"]: seed["canonicalArtistId"]
+        for seed in seeds
+    }
+
+    hydrated = []
+    for row in history:
+        artist = (row.get("artist") or "").strip()
+        if not artist:
+            continue
+
+        expected_id = binding_by_artist.get(artist)
+        if not expected_id:
+            raise RuntimeError(
+                f"Unbound Last.fm history artist: {artist}"
+            )
+
+        existing_id = (
+            row.get("canonicalArtistId") or ""
+        ).strip()
+        if existing_id and existing_id != expected_id:
+            raise RuntimeError(
+                f"Last.fm history canonicalArtistId mismatch: "
+                f"{artist} = {existing_id} != {expected_id}"
+            )
+
+        item = dict(row)
+        item["canonicalArtistId"] = expected_id
+        hydrated.append(item)
+
+    return hydrated
+
+
 def fetch_artist_info(seed, api_key):
     params = {
         "method": "artist.getInfo",
@@ -182,6 +219,7 @@ def fetch_artist_info(seed, api_key):
         )
 
     return {
+        "canonicalArtistId": seed["canonicalArtistId"],
         "artist": seed["artist"],
         "query": seed["query"],
         "lastfmName": (artist_info.get("name") or "").strip(),
@@ -193,7 +231,10 @@ def fetch_artist_info(seed, api_key):
 def append_daily_snapshot(seeds, api_key):
     now = datetime.now(KST)
     snapshot_date = now.date().isoformat()
-    history = read_csv(HISTORY_FILE)
+    history = hydrate_history_canonical_ids(
+        read_csv(HISTORY_FILE),
+        seeds,
+    )
 
     expected_count = len(seeds)
 
@@ -209,6 +250,11 @@ def append_daily_snapshot(seeds, api_key):
             print(
                 f"SKIP: {snapshot_date} snapshot already complete "
                 f"({expected_count}/{expected_count})."
+            )
+            write_csv(
+                HISTORY_FILE,
+                history,
+                HISTORY_FIELDS,
             )
             return history, snapshot_date, False
         raise RuntimeError(
@@ -241,6 +287,7 @@ def append_daily_snapshot(seeds, api_key):
     new_rows = [
         {
             "snapshotDate": snapshot_date,
+            "canonicalArtistId": item["canonicalArtistId"],
             "artist": item["artist"],
             "query": item["query"],
             "lastfmName": item["lastfmName"],
@@ -273,6 +320,7 @@ def build_delta(history, seeds):
 
     delta_rows = []
     for seed in seeds:
+        canonical_artist_id = seed["canonicalArtistId"]
         artist = seed["artist"]
         rows = sorted(by_artist.get(artist, []), key=lambda row: row["snapshotDate"])
         distinct = {}
@@ -282,6 +330,7 @@ def build_delta(history, seeds):
         if len(dates) < 2:
             delta_rows.append(
                 {
+                    "canonicalArtistId": canonical_artist_id,
                     "artist": artist,
                     "previousDate": "",
                     "latestDate": dates[-1] if dates else "",
@@ -317,6 +366,7 @@ def build_delta(history, seeds):
 
         delta_rows.append(
             {
+                "canonicalArtistId": canonical_artist_id,
                 "artist": artist,
                 "previousDate": previous_date,
                 "latestDate": latest_date,
@@ -361,6 +411,7 @@ def build_score(delta_rows):
         score_rows.append(
             {
                 "rank": 0,
+                "canonicalArtistId": row["canonicalArtistId"],
                 "artist": row["artist"],
                 "previousDate": row["previousDate"],
                 "latestDate": row["latestDate"],
