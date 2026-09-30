@@ -26,12 +26,16 @@ import lastfm_cloud_history_v1 as lastfm
 
 VERSION = "artist_source_candidate_provider_shadow_v1"
 
-MUSIC_CANDIDATE_FILE = Path(
-    "data/fandex-cloud-v10/seed/"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
+MUSIC_CANDIDATE_FILE = (
+    REPO_ROOT
+    / "data/fandex-cloud-v10/seed/"
     "music_chart_artist_targets_candidate_v1.json"
 )
-LASTFM_CANDIDATE_FILE = Path(
-    "scripts/lastfm-cloud/"
+LASTFM_CANDIDATE_FILE = (
+    REPO_ROOT
+    / "scripts/lastfm-cloud/"
     "lastfm_artist_seed_candidate_v1.csv"
 )
 OUTPUT_FILE = Path(
@@ -89,6 +93,11 @@ def collect_music_shadow() -> dict[str, Any]:
     )
 
     try:
+        discover.COLLECTOR_FILE = (
+            Path(__file__).resolve().with_name(
+                "music_chart_collect_melon_genie_fallback_v1.py"
+            )
+        )
         collector = discover.load_collector()
 
         source_results = []
