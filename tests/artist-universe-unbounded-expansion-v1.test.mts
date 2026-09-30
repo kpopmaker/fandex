@@ -1,0 +1,1799 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+
+import {
+  artistUniverseV4,
+  buildExpandedArtistUniverseV4,
+  getArtistV4ById,
+  ARTIST_UNIVERSE_V4_BASELINE_COUNT,
+} from '../app/data/v4/artistUniverse';
+import { bindCanonicalArtistToNaverNews } from '../lib/server/ingestion/naverNewsArtistBinding';
+import expansionPayload from '../data/artist-universe-expansion-v1.json';
+
+const seed = (id: string, ticker: string) => ({
+  id,
+  ticker,
+  name: `Artist ${id}`,
+  agency: 'Expansion Test Agency',
+  entityType: 'group' as const,
+  naverNewsQuery: `테스트 ${id}`,
+  koreanAliases: [`테스트${id}`],
+  englishAliases: [`Artist ${id}`],
+  keywords: ['expansion-test'],
+  tier: 'standard' as const,
+  priorityScore: 50,
+});
+
+test('baseline remains 100 while active universe expands beyond it', () => {
+  assert.equal(ARTIST_UNIVERSE_V4_BASELINE_COUNT, 100);
+  assert.equal(
+    artistUniverseV4.length,
+    ARTIST_UNIVERSE_V4_BASELINE_COUNT + expansionPayload.artists.length,
+  );
+
+  for (const artistId of [
+    'kiiikiii',
+    'alldayproject',
+    'cortis',
+    'psy',
+    'ailee',
+    'younha',
+    'buzz',
+    'seeya',
+    'limyoungwoong',
+    '10cm',
+    'davichi',
+    'leechangsub',
+    'hanroro',
+    'sungsikyung',
+    'choiyuree',
+    'carthegarden',
+    'hwanggaram',
+    'crush',
+    'parkjaejung',
+    'jannabi',
+    'paulkim',
+    'bol4',
+    'woodz',
+    'leechanhyuk',
+    'jungseunghwan',
+    'kimnayoung',
+    'chojungseok',
+    'kyoungseo',
+    'gyeongseoyeji',
+    'kimfeel',
+    'limjaehyun',
+    'limhanbyul',
+    'huhgak',
+    'dohkyungsoo',
+    'yena',
+    'nflying',
+    'bignaughty',
+    'woody',
+    'soyeon',
+    'epikhigh',
+    'melomance',
+    'kimminseok',
+    'nerdconnection',
+    'gaho',
+    'leellamarz',
+    'shaun',
+    'dkdecember',
+    'standingegg',
+    'ioi',
+    'maktub',
+    'noahjooda',
+    'thenuts',
+    'kwill',
+    'brothersu',
+    'idid',
+    'aen',
+    'eunjiwon',
+    'kangseungyoon',
+    'hoony',
+    'jinu',
+    'mino',
+    'leesuhyun',
+    'bobby',
+    '82major',
+    'highlight',
+    'kimjaejoong',
+    'hwangminhyun',
+    'yoonsanha',
+    'ahof',
+    'ampersandone',
+    'plave',
+    'rain',
+    'touched',
+    'and2ble',
+    'hahyunsang',
+    'kwonjinnah',
+    'lucy',
+    'wendy',
+    'nssign',
+    'sechskies',
+    'leesungkyung',
+    'hori7on',
+    'jypark',
+    '2pm',
+    'boystory',
+    'yaochen',
+    'girlset',
+    'kangta',
+    'naevis',
+    'xnghan',
+    'anshinae',
+    'danieljikal',
+    'babydontcry',
+    'babylon',
+    'eden',
+    'maddox',
+    'ftisland',
+    'cnblue',
+    'sf9',
+    'hifiunicorn',
+    'axmxp',
+    'goldenchild',
+    'drippin',
+    'unchild',
+    'mamamooplus',
+    'onewe',
+    'purplekiss',
+    'alphadriveone',
+    'joyuri',
+    'kimjaehwan',
+    'leedaehwi',
+    'lun8',
+    'zoonizini',
+    'chaeunwoo',
+    'astro',
+    'wekimeki',
+    'moonbinsanha',
+    'jinjinrocky',
+    'lun8wave',
+    'flareu',
+    'modyssey',
+    'lightsum',
+    'slay',
+    'pentagon',
+    'ejel',
+    'limsanghyun',
+    'vvon',
+    'jungjaehyung',
+    'lucidfall',
+    'peppertones',
+    'leesangsoon',
+    'leehyori',
+    'parksaebyul',
+    'kyuhyun',
+    'dragonpony',
+    'toy',
+    'afterschool',
+    'orangecaramel',
+    'bumzu',
+    'nuest',
+    'oddyouth',
+    'mcnd',
+    'teentop',
+    'up10tion',
+    '100percent',
+    'kara',
+    'b1a4',
+    'solar',
+    'moonbyul',
+    'kard',
+    'csr',
+    'ahnyeeun',
+    'youngposse',
+    'xlov',
+    'secret',
+  ]) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing expanded artist: ${artistId}`);
+    const binding = bindCanonicalArtistToNaverNews(artistId);
+    assert.equal(binding.canonicalArtistId, artistId);
+    assert.equal(binding.provider, 'naver-news');
+    assert.ok(binding.query.trim());
+  }
+
+  for (const artistId of ['kara', 'csr', 'ahnyeeun', 'secret']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.agency, '');
+    assert.equal(artist.agencyStatus, 'unresolved');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const b1a4 = getArtistV4ById('b1a4');
+  assert.ok(b1a4);
+  assert.equal(b1a4.entityType, 'group');
+  assert.equal(b1a4.agency, 'Hieutpieup Co., Ltd.');
+  assert.deepEqual(b1a4.members, ['CNU', 'SANDEUL', 'GONGCHAN']);
+
+  for (const artistId of ['solar', 'moonbyul']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'RBW');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const kard = getArtistV4ById('kard');
+  assert.ok(kard);
+  assert.equal(kard.entityType, 'group');
+  assert.equal(kard.agency, 'DSP Media');
+  assert.deepEqual(kard.members, ['BM', 'J.SEPH', 'SOMIN', 'JIWOO']);
+
+  const youngPosse = getArtistV4ById('youngposse');
+  assert.ok(youngPosse);
+  assert.equal(youngPosse.agency, 'DSP Media / BEATS Entertainment');
+  assert.equal(youngPosse.lifecycleStatus, 'active');
+
+  const xlov = getArtistV4ById('xlov');
+  assert.ok(xlov);
+  assert.equal(xlov.agency, 'StrangeLab');
+  assert.deepEqual(xlov.members, ['RUI', 'HARU', 'WUMUTI', 'HYUN']);
+
+  const secret = getArtistV4ById('secret');
+  assert.ok(secret);
+  assert.deepEqual(secret.members, ['JUN HYO SEONG', 'ZINGER', 'YEBIN']);
+
+  const oddYouth = getArtistV4ById('oddyouth');
+  assert.ok(oddYouth);
+  assert.equal(oddYouth.entityType, 'group');
+  assert.equal(oddYouth.agency, 'TOP Media');
+  assert.equal(oddYouth.debutDate, '2024-11-01');
+  assert.equal(oddYouth.members.length, 5);
+
+  const mcnd = getArtistV4ById('mcnd');
+  assert.ok(mcnd);
+  assert.equal(mcnd.entityType, 'group');
+  assert.equal(mcnd.agency, 'TOP Media');
+  assert.equal(mcnd.debutDate, '2020-02-27');
+  assert.equal(mcnd.members.length, 5);
+
+  const teenTop = getArtistV4ById('teentop');
+  assert.ok(teenTop);
+  assert.equal(teenTop.lifecycleStatus, 'active');
+  assert.equal(teenTop.agency, '');
+  assert.equal(teenTop.agencyStatus, 'unresolved');
+  assert.deepEqual(teenTop.members, ['CHUNJI', 'NIEL', 'RICKY', 'CHANGJO']);
+
+  const up10tion = getArtistV4ById('up10tion');
+  assert.ok(up10tion);
+  assert.equal(up10tion.lifecycleStatus, 'hiatus');
+  assert.equal(up10tion.agency, '');
+  assert.equal(up10tion.agencyStatus, 'unresolved');
+  assert.equal(up10tion.members.length, 7);
+
+  const hundredPercent = getArtistV4ById('100percent');
+  assert.ok(hundredPercent);
+  assert.equal(hundredPercent.lifecycleStatus, 'inactive');
+  assert.equal(hundredPercent.agency, 'TOP Media');
+  assert.equal(hundredPercent.agencyStatus, 'historical');
+  assert.equal(hundredPercent.collection.tier, 'archive');
+
+  for (const artistId of ['afterschool', 'orangecaramel', 'nuest']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.lifecycleStatus, 'inactive');
+    assert.equal(artist.agencyStatus, 'historical');
+    assert.equal(artist.agency, 'PLEDIS Entertainment');
+    assert.equal(artist.collection.tier, 'archive');
+  }
+
+  const orangeCaramel = getArtistV4ById('orangecaramel');
+  assert.ok(orangeCaramel);
+  assert.equal(orangeCaramel.entityType, 'unit');
+  assert.deepEqual(orangeCaramel.members, ['RAINA', 'NANA', 'LIZZY']);
+
+  const nuest = getArtistV4ById('nuest');
+  assert.ok(nuest);
+  assert.equal(nuest.entityType, 'group');
+  assert.equal(nuest.debutDate, '2012-03-15');
+  assert.equal(nuest.members.length, 5);
+
+  const bumzu = getArtistV4ById('bumzu');
+  assert.ok(bumzu);
+  assert.equal(bumzu.entityType, 'solo');
+  assert.equal(bumzu.lifecycleStatus, 'active');
+  assert.equal(bumzu.agency, 'PLEDIS Entertainment');
+
+  for (const artistId of ['jungjaehyung', 'lucidfall', 'leesangsoon', 'leehyori', 'parksaebyul', 'kyuhyun']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'Antenna');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const peppertones = getArtistV4ById('peppertones');
+  assert.ok(peppertones);
+  assert.equal(peppertones.entityType, 'group');
+  assert.equal(peppertones.agency, 'Antenna');
+  assert.deepEqual(peppertones.members, ['신재평', '이장원']);
+
+  const toy = getArtistV4ById('toy');
+  assert.ok(toy);
+  assert.equal(toy.entityType, 'project');
+  assert.equal(toy.agency, 'Antenna');
+  assert.equal(toy.lifecycleStatus, 'active');
+  assert.ok(toy.profile.englishAliases.includes('You Hee Yul'));
+  assert.ok(toy.profile.koreanAliases.includes('유희열'));
+
+  const dragonPony = getArtistV4ById('dragonpony');
+  assert.ok(dragonPony);
+  assert.equal(dragonPony.entityType, 'group');
+  assert.equal(dragonPony.agency, 'Antenna');
+  assert.equal(dragonPony.debutDate, '2024-09-26');
+  assert.deepEqual(dragonPony.members, ['안태규', '권세혁', '고강훈']);
+
+  const ejel = getArtistV4ById('ejel');
+  assert.ok(ejel);
+  assert.equal(ejel.entityType, 'solo');
+  assert.equal(ejel.agency, 'MNH Entertainment');
+  assert.equal(ejel.lifecycleStatus, 'active');
+
+  const limSangHyun = getArtistV4ById('limsanghyun');
+  assert.ok(limSangHyun);
+  assert.equal(limSangHyun.entityType, 'solo');
+  assert.equal(limSangHyun.agency, 'MNH Entertainment');
+  assert.equal(limSangHyun.debutDate, '2021-07-25');
+  assert.equal(limSangHyun.lifecycleStatus, 'military');
+
+  const vvon = getArtistV4ById('vvon');
+  assert.ok(vvon);
+  assert.equal(vvon.entityType, 'solo');
+  assert.equal(vvon.agency, 'MNH Entertainment');
+  assert.equal(vvon.lifecycleStatus, 'active');
+
+  const pentagon = getArtistV4ById('pentagon');
+  assert.ok(pentagon);
+  assert.equal(pentagon.entityType, 'group');
+  assert.equal(pentagon.lifecycleStatus, 'active');
+  assert.equal(pentagon.agency, '');
+  assert.equal(pentagon.agencyStatus, 'unresolved');
+  assert.equal(pentagon.members.length, 7);
+  assert.deepEqual(pentagon.members, ['JINHO', 'HUI', 'HONGSEOK', 'SHINWON', 'YEOWON', 'KINO', 'WOOSEOK']);
+
+  const nowz = getArtistV4ById('nowadays');
+  assert.ok(nowz);
+  assert.equal(nowz.nameEn, 'NOWZ');
+  assert.ok(nowz.profile.englishAliases.includes('NOWADAYS'));
+  assert.ok(nowz.profile.englishAliases.includes('NOWZ'));
+  assert.ok(nowz.profile.koreanAliases.includes('나우어데이즈'));
+  assert.ok(nowz.profile.koreanAliases.includes('나우즈'));
+
+  const lightsum = getArtistV4ById('lightsum');
+  assert.ok(lightsum);
+  assert.equal(lightsum.entityType, 'group');
+  assert.equal(lightsum.agency, 'Cube Entertainment');
+  assert.equal(lightsum.members.length, 6);
+
+  const slay = getArtistV4ById('slay');
+  assert.ok(slay);
+  assert.equal(slay.entityType, 'solo');
+  assert.equal(slay.agency, 'Cube Entertainment');
+
+  const flareu = getArtistV4ById('flareu');
+  assert.ok(flareu);
+  assert.equal(flareu.entityType, 'group');
+  assert.equal(flareu.agency, 'FNC Entertainment');
+  assert.equal(flareu.debutDate, '2026-05-13');
+  assert.deepEqual(flareu.members, ['CHUEI LI YU', 'KANG WOO JIN']);
+
+  const modyssey = getArtistV4ById('modyssey');
+  assert.ok(modyssey);
+  assert.equal(modyssey.entityType, 'group');
+  assert.equal(modyssey.agency, 'ONECEAD');
+  assert.equal(modyssey.debutDate, '2026-04-13');
+  assert.equal(modyssey.members.length, 7);
+  assert.ok(modyssey.members.includes('YICHEN'));
+
+  const lun8wave = getArtistV4ById('lun8wave');
+  assert.ok(lun8wave);
+  assert.equal(lun8wave.entityType, 'unit');
+  assert.equal(lun8wave.lifecycleStatus, 'active');
+  assert.deepEqual(lun8wave.members, ['TAKUMA', 'JUNWOO', 'DOHYUN']);
+  assert.equal(lun8wave.agency, 'Fantagio');
+
+  for (const artistId of ['wekimeki', 'moonbinsanha', 'jinjinrocky']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.lifecycleStatus, 'inactive');
+    assert.equal(artist.agencyStatus, 'historical');
+    assert.equal(artist.collection.tier, 'archive');
+    assert.equal(artist.agency, 'Fantagio');
+  }
+
+  const lun8 = getArtistV4ById('lun8');
+  assert.ok(lun8);
+  assert.equal(lun8.entityType, 'group');
+  assert.equal(lun8.agency, 'Fantagio');
+
+  const zoonizini = getArtistV4ById('zoonizini');
+  assert.ok(zoonizini);
+  assert.equal(zoonizini.entityType, 'unit');
+  assert.deepEqual(zoonizini.members, ['MJ', 'JINJIN']);
+
+  const chaEunWoo = getArtistV4ById('chaeunwoo');
+  assert.ok(chaEunWoo);
+  assert.equal(chaEunWoo.entityType, 'solo');
+  assert.equal(chaEunWoo.lifecycleStatus, 'military');
+
+  const astro = getArtistV4ById('astro');
+  assert.ok(astro);
+  assert.equal(astro.entityType, 'group');
+  assert.equal(astro.agency, 'Fantagio');
+  assert.equal(astro.members.length, 4);
+
+  const alphaDriveOne = getArtistV4ById('alphadriveone');
+  assert.ok(alphaDriveOne);
+  assert.equal(alphaDriveOne.entityType, 'group');
+  assert.equal(alphaDriveOne.agency, 'WAKEONE');
+  assert.equal(alphaDriveOne.members.length, 8);
+
+  for (const artistId of ['joyuri', 'kimjaehwan', 'leedaehwi']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'WAKEONE');
+    assert.ok(artist.profile.markets.includes('KR'));
+  }
+
+  const mamamooPlus = getArtistV4ById('mamamooplus');
+  assert.ok(mamamooPlus);
+  assert.equal(mamamooPlus.entityType, 'unit');
+  assert.equal(mamamooPlus.agency, 'RBW');
+  assert.equal(mamamooPlus.members.length, 2);
+  assert.ok(mamamooPlus.profile.englishAliases.includes('MAMAMOO+'));
+
+  for (const artistId of ['onewe', 'purplekiss']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'RBW');
+    assert.ok(artist.profile.markets.includes('KR'));
+  }
+
+  const unchild = getArtistV4ById('unchild');
+  assert.ok(unchild);
+  assert.equal(unchild.entityType, 'group');
+  assert.equal(unchild.agency, 'High Up Entertainment');
+  assert.equal(unchild.debutDate, '2026-04-21');
+  assert.equal(unchild.members.length, 6);
+  assert.ok(unchild.profile.markets.includes('KR'));
+
+  for (const artistId of ['goldenchild', 'drippin']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'Woollim Entertainment');
+    assert.ok(artist.profile.markets.includes('KR'));
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  for (const artistId of ['ftisland', 'cnblue', 'sf9', 'hifiunicorn', 'axmxp']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'FNC Entertainment');
+    assert.ok(artist.profile.markets.includes('KR'));
+  }
+
+  for (const artistId of ['babylon', 'eden', 'maddox']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'KQ Entertainment');
+    assert.ok(artist.profile.markets.includes('KR'));
+  }
+
+  const anShinae = getArtistV4ById('anshinae');
+  assert.ok(anShinae);
+  assert.equal(anShinae.entityType, 'solo');
+
+  const danielJikal = getArtistV4ById('danieljikal');
+  assert.ok(danielJikal);
+  assert.equal(danielJikal.entityType, 'solo');
+  assert.equal(danielJikal.debutDate, '2024-03-05');
+
+  const babyDontCry = getArtistV4ById('babydontcry');
+  assert.ok(babyDontCry);
+  assert.equal(babyDontCry.entityType, 'group');
+  assert.equal(babyDontCry.debutDate, '2025-06-23');
+  assert.equal(babyDontCry.members.length, 4);
+
+  const kangta = getArtistV4ById('kangta');
+  assert.ok(kangta);
+  assert.equal(kangta.entityType, 'solo');
+  assert.ok(kangta.profile.markets.includes('KR'));
+
+  const naevis = getArtistV4ById('naevis');
+  assert.ok(naevis);
+  assert.equal(naevis.entityType, 'solo');
+  assert.equal(naevis.debutDate, '2024-09-10');
+
+  const xnghan = getArtistV4ById('xnghan');
+  assert.ok(xnghan);
+  assert.equal(xnghan.entityType, 'solo');
+  assert.ok(xnghan.profile.englishAliases.includes('XngHan&Xoul'));
+  assert.ok(xnghan.profile.koreanAliases.includes('승한앤소울'));
+
+  for (const artistId of ['boystory', 'yaochen', 'girlset']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.ok(artist.profile.markets.includes('KR'));
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  const jyPark = getArtistV4ById('jypark');
+  assert.ok(jyPark);
+  assert.equal(jyPark.entityType, 'solo');
+  assert.equal(jyPark.lifecycleStatus, 'active');
+  assert.equal(jyPark.agency, 'JYP Entertainment');
+
+  const twoPm = getArtistV4ById('2pm');
+  assert.ok(twoPm);
+  assert.equal(twoPm.entityType, 'group');
+  assert.equal(twoPm.lifecycleStatus, 'active');
+  assert.equal(twoPm.agency, 'JYP Entertainment');
+
+  const hori7on = getArtistV4ById('hori7on');
+  assert.ok(hori7on);
+  assert.equal(hori7on.entityType, 'group');
+  assert.equal(hori7on.lifecycleStatus, 'active');
+  assert.equal(hori7on.agency, '');
+  assert.equal(hori7on.agencyStatus, 'unresolved');
+  assert.equal(hori7on.collection.tier, 'standard');
+
+  const leeSungKyung = getArtistV4ById('leesungkyung');
+  assert.ok(leeSungKyung);
+  assert.equal(leeSungKyung.entityType, 'solo');
+  assert.equal(leeSungKyung.lifecycleStatus, 'active');
+  assert.equal(leeSungKyung.collection.tier, 'standard');
+  assert.match(leeSungKyung.profile.naverNewsQuery ?? '', /가수/);
+
+  const sechskies = getArtistV4ById('sechskies');
+  assert.ok(sechskies);
+  assert.equal(sechskies.lifecycleStatus, 'inactive');
+  assert.equal(sechskies.collection.tier, 'archive');
+
+  const evan = getArtistV4ById('evan');
+  assert.ok(evan);
+  assert.equal(evan.entityType, 'solo');
+  assert.equal(evan.agency, 'BELIFT LAB');
+  assert.equal(evan.debutDate, '2026-06-22');
+  assert.equal(evan.lifecycleStatus, 'active');
+  assert.ok(evan.profile.koreanAliases.includes('에반'));
+  assert.ok(!evan.profile.englishAliases.includes('HEESEUNG'));
+
+  const taeyang = getArtistV4ById('taeyang');
+  assert.ok(taeyang);
+  assert.equal(taeyang.entityType, 'solo');
+  assert.equal(taeyang.agency, 'THEBLACKLABEL');
+  assert.equal(taeyang.lifecycleStatus, 'active');
+  assert.ok(taeyang.profile.koreanAliases.includes('태양'));
+
+  const vince = getArtistV4ById('vince');
+  assert.ok(vince);
+  assert.equal(vince.entityType, 'solo');
+  assert.equal(vince.agency, 'THEBLACKLABEL');
+  assert.equal(vince.lifecycleStatus, 'active');
+  assert.ok(vince.profile.koreanAliases.includes('빈스'));
+
+  const dkb = getArtistV4ById('dkb');
+  assert.ok(dkb);
+  assert.equal(dkb.entityType, 'group');
+  assert.equal(dkb.agency, 'Brave Entertainment');
+  assert.equal(dkb.debutDate, '2020-02-03');
+  assert.equal(dkb.lifecycleStatus, 'active');
+  assert.ok(dkb.profile.koreanAliases.includes('다크비'));
+
+  const candyShop = getArtistV4ById('candyshop');
+  assert.ok(candyShop);
+  assert.equal(candyShop.entityType, 'group');
+  assert.equal(candyShop.agency, 'Brave Entertainment');
+  assert.equal(candyShop.debutDate, '2024-03-27');
+  assert.equal(candyShop.lifecycleStatus, 'active');
+  assert.ok(candyShop.profile.koreanAliases.includes('캔디샵'));
+
+  const tunexx = getArtistV4ById('tunexx');
+  assert.ok(tunexx);
+  assert.equal(tunexx.entityType, 'group');
+  assert.equal(tunexx.agency, 'IST Entertainment');
+  assert.equal(tunexx.debutDate, '2026-03-03');
+  assert.equal(tunexx.lifecycleStatus, 'active');
+  assert.equal(tunexx.members.length, 7);
+  assert.ok(tunexx.profile.koreanAliases.includes('튜넥스'));
+
+  const haSungWoon = getArtistV4ById('hasungwoon');
+  assert.ok(haSungWoon);
+  assert.equal(haSungWoon.entityType, 'solo');
+  assert.equal(haSungWoon.agency, 'Big Planet Made');
+  assert.equal(haSungWoon.lifecycleStatus, 'active');
+  assert.ok(haSungWoon.profile.koreanAliases.includes('하성운'));
+
+  const badvillain = getArtistV4ById('badvillain');
+  assert.ok(badvillain);
+  assert.equal(badvillain.entityType, 'group');
+  assert.equal(badvillain.agency, 'Big Planet Made');
+  assert.equal(badvillain.debutDate, '2024-06-03');
+  assert.equal(badvillain.lifecycleStatus, 'active');
+  assert.ok(badvillain.profile.koreanAliases.includes('배드빌런'));
+
+  const lu = getArtistV4ById('lu');
+  assert.ok(lu);
+  assert.equal(lu.entityType, 'solo');
+  assert.equal(lu.agency, 'StrangeLab');
+  assert.equal(lu.debutDate, '2026-03-28');
+  assert.equal(lu.lifecycleStatus, 'active');
+  assert.ok(lu.profile.koreanAliases.includes('강하윤'));
+
+  const ohMyGirl = getArtistV4ById('ohmygirl');
+  assert.ok(ohMyGirl);
+  assert.equal(ohMyGirl.agency, 'DSP Media');
+
+  const onf = getArtistV4ById('onf');
+  assert.ok(onf);
+  assert.equal(onf.agency, 'KI Entertainment');
+  assert.ok(onf.profile.includeKeywords.includes('Yuto'));
+
+  const naze = getArtistV4ById('naze');
+  assert.ok(naze);
+  assert.equal(naze.entityType, 'group');
+  assert.equal(naze.agency, 'C9 Entertainment');
+  assert.equal(naze.debutDate, '2026-05-04');
+  assert.equal(naze.lifecycleStatus, 'active');
+  assert.equal(naze.members.length, 7);
+  assert.ok(naze.profile.koreanAliases.includes('네이즈'));
+
+  const cix = getArtistV4ById('cix');
+  assert.ok(cix);
+  assert.equal(cix.lifecycleStatus, 'inactive');
+  assert.equal(cix.agency, 'C9 Entertainment');
+  assert.equal(cix.agencyStatus, 'historical');
+  assert.equal(cix.collection.tier, 'archive');
+  assert.deepEqual(cix.members, ['BX', 'SEUNGHUN', 'YONGHEE', 'HYUNSUK']);
+
+  const h1key = getArtistV4ById('h1key');
+  assert.ok(h1key);
+  assert.equal(h1key.entityType, 'group');
+  assert.equal(h1key.agency, 'CHOI CREATIVE LAB');
+  assert.equal(h1key.debutDate, '2022-01-05');
+  assert.equal(h1key.lifecycleStatus, 'active');
+  assert.deepEqual(h1key.members, ['SEOI', 'RIINA', 'HWISEO', 'YEL']);
+  assert.ok(h1key.profile.koreanAliases.includes('하이키'));
+
+  const newbeat = getArtistV4ById('newbeat');
+  assert.ok(newbeat);
+  assert.equal(newbeat.entityType, 'group');
+  assert.equal(newbeat.agency, 'BEAT INTERACTIVE');
+  assert.equal(newbeat.debutDate, '2025-03-24');
+  assert.equal(newbeat.lifecycleStatus, 'active');
+  assert.equal(newbeat.members.length, 7);
+  assert.ok(newbeat.profile.koreanAliases.includes('뉴비트'));
+
+  const nicole = getArtistV4ById('nicole');
+  assert.ok(nicole);
+  assert.equal(nicole.entityType, 'solo');
+  assert.equal(nicole.agency, 'iNKODE Entertainment');
+  assert.equal(nicole.lifecycleStatus, 'active');
+  assert.equal(nicole.debutDate, undefined);
+  assert.ok(nicole.profile.koreanAliases.includes('니콜'));
+
+  const sayMyName = getArtistV4ById('saymyname');
+  assert.ok(sayMyName);
+  assert.equal(sayMyName.entityType, 'group');
+  assert.equal(sayMyName.agency, 'iNKODE Entertainment');
+  assert.equal(sayMyName.debutDate, '2024-10-16');
+  assert.equal(sayMyName.members.length, 8);
+
+  const keyvitup = getArtistV4ById('keyvitup');
+  assert.ok(keyvitup);
+  assert.equal(keyvitup.entityType, 'group');
+  assert.equal(keyvitup.agency, 'iNKODE Entertainment');
+  assert.equal(keyvitup.debutDate, '2026-04-08');
+  assert.deepEqual(keyvitup.members, ['TAEHWAN', 'HYUNMIN', 'SENA', 'JAEIN', 'RUKIA']);
+
+  const vayonn = getArtistV4ById('vayonn');
+  assert.ok(vayonn);
+  assert.equal(vayonn.entityType, 'group');
+  assert.equal(vayonn.agency, 'iNKODE Entertainment');
+  assert.equal(vayonn.debutDate, '2026-07-06');
+  assert.deepEqual(vayonn.members, ['MASATO', 'SEN', 'AYANG', 'JINYU', 'TERU', 'MANO']);
+
+  const fiftyFifty = getArtistV4ById('fiftyfifty');
+  assert.ok(fiftyFifty);
+  assert.equal(fiftyFifty.entityType, 'group');
+  assert.equal(fiftyFifty.agency, 'ATTRAKT');
+  assert.equal(fiftyFifty.debutDate, '2022-11-18');
+  assert.equal(fiftyFifty.lifecycleStatus, 'active');
+  assert.deepEqual(fiftyFifty.members, ['KEENA', 'CHANELLE MOON', 'YEWON', 'HANA', 'ATHENA']);
+  assert.equal(fiftyFifty.fandomName, 'TWENY');
+  assert.ok(fiftyFifty.profile.koreanAliases.includes('피프티피프티'));
+
+  const ichillin = getArtistV4ById('ichillin');
+  assert.ok(ichillin);
+  assert.equal(ichillin.entityType, 'group');
+  assert.equal(ichillin.agency, 'KM Entertainment');
+  assert.equal(ichillin.debutDate, '2021-09-08');
+  assert.equal(ichillin.lifecycleStatus, 'active');
+  assert.deepEqual(ichillin.members, ['JIYOON', 'E.JI', 'JACKIE', 'JOONIE', 'CHAERIN', 'YEJU', 'CHOWON']);
+  assert.equal(ichillin.fandomName, 'WILLING');
+
+  const ichillinJ = getArtistV4ById('ichillinj');
+  assert.ok(ichillinJ);
+  assert.equal(ichillinJ.entityType, 'unit');
+  assert.equal(ichillinJ.agency, 'KM Entertainment');
+  assert.equal(ichillinJ.debutDate, '2026-09-02');
+  assert.equal(ichillinJ.lifecycleStatus, 'active');
+  assert.deepEqual(ichillinJ.members, ['E.JI', 'JOONIE', 'YEJU']);
+  assert.ok(ichillinJ.profile.koreanAliases.includes('아이칠린 제이'));
+
+  const asc2nt = getArtistV4ById('asc2nt');
+  assert.ok(asc2nt);
+  assert.equal(asc2nt.entityType, 'group');
+  assert.equal(asc2nt.agency, 'NEW WAYS COMPANY');
+  assert.equal(asc2nt.debutDate, '2024-05-07');
+  assert.equal(asc2nt.lifecycleStatus, 'active');
+  assert.deepEqual(asc2nt.members, ['KARAM', 'REON', 'JAY', 'KYLE', 'HYOWON']);
+  assert.ok(asc2nt.profile.koreanAliases.includes('어센트'));
+
+  const evnne = getArtistV4ById('evnne');
+  assert.ok(evnne);
+  assert.equal(evnne.entityType, 'group');
+  assert.equal(evnne.agency, 'Jellyfish Entertainment');
+  assert.equal(evnne.debutDate, '2023-09-19');
+  assert.equal(evnne.lifecycleStatus, 'active');
+  assert.equal(evnne.members.length, 7);
+  assert.ok(evnne.profile.koreanAliases.includes('이븐'));
+
+  const vixx = getArtistV4ById('vixx');
+  assert.ok(vixx);
+  assert.equal(vixx.entityType, 'group');
+  assert.equal(vixx.agency, 'Jellyfish Entertainment');
+  assert.equal(vixx.debutDate, '2012-05-24');
+  assert.equal(vixx.lifecycleStatus, 'active');
+  assert.ok(vixx.profile.koreanAliases.includes('빅스'));
+
+  const verivery = getArtistV4ById('verivery');
+  assert.ok(verivery);
+  assert.equal(verivery.entityType, 'group');
+  assert.equal(verivery.agency, 'Jellyfish Entertainment');
+  assert.equal(verivery.debutDate, '2019-01-09');
+  assert.equal(verivery.lifecycleStatus, 'active');
+  assert.ok(verivery.profile.koreanAliases.includes('베리베리'));
+
+  const idntt = getArtistV4ById('idntt');
+  assert.ok(idntt);
+  assert.equal(idntt.entityType, 'group');
+  assert.equal(idntt.agency, 'MODHAUS');
+  assert.equal(idntt.lifecycleStatus, 'active');
+  assert.equal(idntt.debutDate, undefined);
+  assert.ok(idntt.profile.koreanAliases.includes('아이덴티티'));
+  assert.ok(idntt.profile.englishAliases.includes('idntt'));
+
+  const onePact = getArtistV4ById('onepact');
+  assert.ok(onePact);
+  assert.equal(onePact.entityType, 'group');
+  assert.equal(onePact.agency, 'ARMADA ENT');
+  assert.equal(onePact.debutDate, '2023-11-30');
+  assert.equal(onePact.lifecycleStatus, 'active');
+  assert.equal(onePact.members.length, 0);
+  assert.ok(onePact.profile.koreanAliases.includes('원팩트'));
+
+  const theKingDom = getArtistV4ById('thekingdom');
+  assert.ok(theKingDom);
+  assert.equal(theKingDom.entityType, 'group');
+  assert.equal(theKingDom.agency, 'GF Entertainment');
+  assert.equal(theKingDom.debutDate, '2021-02-18');
+  assert.equal(theKingDom.lifecycleStatus, 'inactive');
+  assert.deepEqual(theKingDom.members, ['DANN', 'ARTHUR', 'MUJIN', 'LOUIS', 'IVAN', 'JAHAN']);
+  assert.equal(theKingDom.fandomName, 'KINGMAKER');
+  assert.ok(theKingDom.profile.koreanAliases.includes('킹덤'));
+  assert.ok(theKingDom.profile.englishAliases.includes('KINGDOM'));
+
+  const madein = getArtistV4ById('madein');
+  assert.ok(madein);
+  assert.equal(madein.entityType, 'group');
+  assert.equal(madein.agency, '143 Entertainment');
+  assert.equal(madein.debutDate, '2024-09-03');
+  assert.equal(madein.lifecycleStatus, 'active');
+  assert.deepEqual(madein.members, ['MASHIRO', 'MiU', 'SUHYE', 'YESEO', 'SERINA', 'NAGOMI']);
+  assert.equal(madein.fandomName, 'MABY');
+  assert.ok(madein.profile.englishAliases.includes('LIMELIGHT'));
+  assert.ok(madein.profile.koreanAliases.includes('라임라잇'));
+
+  const waker = getArtistV4ById('waker');
+  assert.ok(waker);
+  assert.equal(waker.entityType, 'group');
+  assert.equal(waker.agency, 'Howling Entertainment');
+  assert.equal(waker.debutDate, '2024-01-08');
+  assert.equal(waker.lifecycleStatus, 'active');
+  assert.equal(waker.members.length, 0);
+  assert.equal(waker.fandomName, 'Sleeper');
+  assert.ok(waker.profile.koreanAliases.includes('웨이커'));
+
+  const dxmon = getArtistV4ById('dxmon');
+  assert.ok(dxmon);
+  assert.equal(dxmon.entityType, 'group');
+  assert.equal(dxmon.agency, 'H Music Entertainment');
+  assert.equal(dxmon.debutDate, '2024-01-17');
+  assert.equal(dxmon.lifecycleStatus, 'active');
+  assert.deepEqual(dxmon.members, ['SEITA', 'MINJAE', 'HEE', 'TK', 'REX']);
+  assert.equal(dxmon.fandomName, 'MONs');
+  assert.ok(dxmon.profile.koreanAliases.includes('다이몬'));
+
+  const classy = getArtistV4ById('classy');
+  assert.ok(classy);
+  assert.equal(classy.entityType, 'group');
+  assert.equal(classy.agency, 'K-TIGERS Entertainment');
+  assert.equal(classy.lifecycleStatus, 'active');
+  assert.equal(classy.debutDate, undefined);
+  assert.deepEqual(classy.members, ['MYUNG HYUNGSEO', 'YOON CHAEWON', 'HONG HYEJU', 'KIM RIWON', 'WON JIMIN', 'PARK BOEUN', 'KIM SEONYOU']);
+  assert.equal(classy.fandomName, 'CLIKE:y');
+  assert.ok(classy.profile.koreanAliases.includes('클라씨'));
+
+  const nomad = getArtistV4ById('nomad');
+  assert.ok(nomad);
+  assert.equal(nomad.entityType, 'group');
+  assert.equal(nomad.agency, 'NOMAD Entertainment');
+  assert.equal(nomad.debutDate, '2024-02-28');
+  assert.equal(nomad.lifecycleStatus, 'inactive');
+  assert.equal(nomad.agencyStatus, 'historical');
+  assert.equal(nomad.collection.tier, 'archive');
+  assert.deepEqual(nomad.members, ['DOY', 'SANGHA', 'ONE', 'RIVR', 'JUNHO']);
+  assert.ok(nomad.profile.koreanAliases.includes('노매드'));
+
+  const vvup = getArtistV4ById('vvup');
+  assert.ok(vvup);
+  assert.equal(vvup.entityType, 'group');
+  assert.equal(vvup.agency, 'egoENT');
+  assert.equal(vvup.debutDate, '2024-04-01');
+  assert.equal(vvup.lifecycleStatus, 'active');
+  assert.deepEqual(vvup.members, ['KIM', 'PAAN', 'SUYEON', 'JIYOON']);
+  assert.equal(vvup.fandomName, 'VVinie');
+  assert.ok(vvup.profile.koreanAliases.includes('비비업'));
+
+  const fantasyBoys = getArtistV4ById('fantasyboys');
+  assert.ok(fantasyBoys);
+  assert.equal(fantasyBoys.entityType, 'group');
+  assert.equal(fantasyBoys.agency, 'PocketDol Studio');
+  assert.equal(fantasyBoys.debutDate, '2023-09-21');
+  assert.equal(fantasyBoys.lifecycleStatus, 'active');
+  assert.deepEqual(fantasyBoys.members, [
+    'KANG MINSEO',
+    'LEE HANBIN',
+    'HIKARI',
+    'LING QI',
+    'HIKARU',
+    'KIM WOOSEOK',
+    'HONG SUNGMIN',
+    'OH HYEONTAE',
+    'KIM GYURAE',
+    'KAEDAN',
+  ]);
+  assert.equal(fantasyBoys.fandomName, 'Bandi');
+  assert.ok(fantasyBoys.profile.koreanAliases.includes('판타지 보이즈'));
+
+  const arrc = getArtistV4ById('arrc');
+  assert.ok(arrc);
+  assert.equal(arrc.entityType, 'group');
+  assert.equal(arrc.agency, 'MYSTIC STORY');
+  assert.equal(arrc.agencyStatus, 'historical');
+  assert.equal(arrc.debutDate, '2024-08-19');
+  assert.equal(arrc.lifecycleStatus, 'inactive');
+  assert.equal(arrc.collection.tier, 'archive');
+  assert.deepEqual(arrc.members, ['ANDY', 'CHOI HAN', 'DOHA', 'HYUNMIN', 'JIBEEN', 'KIEN', 'RIOTO']);
+  assert.equal(arrc.fandomName, 'ARrCer');
+  assert.ok(arrc.profile.koreanAliases.includes('아크'));
+
+  const pow = getArtistV4ById('pow');
+  assert.ok(pow);
+  assert.equal(pow.entityType, 'group');
+  assert.equal(pow.agency, 'GRID Entertainment');
+  assert.equal(pow.debutDate, '2023-10-11');
+  assert.equal(pow.lifecycleStatus, 'active');
+  assert.deepEqual(pow.members, ['YORCH', 'HYUNBIN', 'JUNGBIN', 'DONGYEON', 'HONG']);
+  assert.equal(pow.fandomName, 'POWER');
+  assert.ok(pow.profile.koreanAliases.includes('파우'));
+
+  const whib = getArtistV4ById('whib');
+  assert.ok(whib);
+  assert.equal(whib.entityType, 'group');
+  assert.equal(whib.agency, 'C-JeS Studio');
+  assert.equal(whib.debutDate, '2023-11-08');
+  assert.equal(whib.lifecycleStatus, 'active');
+  assert.deepEqual(whib.members, ['KIM JUN MIN', 'HASEUNG', 'JINBEOM', 'UGEON', 'LEEJEONG', 'JAEHA', 'WONJUN']);
+  assert.equal(whib.fandomName, 'AnD');
+  assert.ok(whib.profile.koreanAliases.includes('휘브'));
+  assert.ok(!whib.members.includes('INHONG'));
+
+  const aimers = getArtistV4ById('aimers');
+  assert.ok(aimers);
+  assert.equal(aimers.entityType, 'group');
+  assert.equal(aimers.agency, 'HYPER RHYTHM');
+  assert.equal(aimers.debutDate, '2022-11-17');
+  assert.equal(aimers.lifecycleStatus, 'active');
+  assert.deepEqual(aimers.members, ['SEUNGHYUN', 'EUNJUN', 'DORYUN', 'YOEL', 'SEUNGHWAN', 'WOOYOUNG']);
+  assert.equal(aimers.fandomName, 'AIMING');
+  assert.ok(aimers.profile.koreanAliases.includes('에이머스'));
+
+  const trendz = getArtistV4ById('trendz');
+  assert.ok(trendz);
+  assert.equal(trendz.entityType, 'group');
+  assert.equal(trendz.agency, 'Global H Media');
+  assert.equal(trendz.debutDate, '2022-01-05');
+  assert.equal(trendz.lifecycleStatus, 'active');
+  assert.deepEqual(trendz.members, ['HANKOOK', 'HAVIT', 'LEON', 'YOONWOO', 'ra.L', 'EUNIL', 'YECHAN']);
+  assert.equal(trendz.fandomName, 'FRIENDZ');
+  assert.ok(trendz.profile.koreanAliases.includes('트렌드지'));
+
+  const tiot = getArtistV4ById('tiot');
+  assert.ok(tiot);
+  assert.equal(tiot.entityType, 'group');
+  assert.equal(tiot.agency, 'Redstart ENM');
+  assert.equal(tiot.debutDate, '2024-04-22');
+  assert.equal(tiot.lifecycleStatus, 'active');
+  assert.deepEqual(tiot.members, ['KIM MIN SEOUNG', 'KUM JUN HYEON', 'HONG KEON HEE', 'CHOI WOO JIN', 'SHIN YE CHAN']);
+  assert.equal(tiot.fandomName, 'LOTI');
+  assert.ok(tiot.profile.koreanAliases.includes('티아이오티'));
+
+  const blitzers = getArtistV4ById('blitzers');
+  assert.ok(blitzers);
+  assert.equal(blitzers.entityType, 'group');
+  assert.equal(blitzers.agency, 'WUZO Entertainment');
+  assert.equal(blitzers.debutDate, '2021-05-12');
+  assert.equal(blitzers.lifecycleStatus, 'active');
+  assert.deepEqual(blitzers.members, ['JINHWA', 'JUHAN', 'SYA', 'CHRIS', 'LUTAN', 'WOOJU']);
+  assert.equal(blitzers.fandomName, 'BLEE');
+  assert.ok(blitzers.profile.koreanAliases.includes('블리처스'));
+  assert.ok(!blitzers.members.includes('GO_U'));
+
+  const justb = getArtistV4ById('justb');
+  assert.ok(justb);
+  assert.equal(justb.entityType, 'group');
+  assert.equal(justb.agency, 'BLUEDOT Entertainment');
+  assert.equal(justb.debutDate, '2021-06-30');
+  assert.equal(justb.lifecycleStatus, 'active');
+  assert.deepEqual(justb.members, ['LIM JIMIN', 'GEONU', 'BAIN', 'SIWOO', 'DY', 'SANGWOO']);
+  assert.equal(justb.fandomName, 'ONLY B');
+  assert.ok(justb.profile.koreanAliases.includes('저스트비'));
+
+  const dkz = getArtistV4ById('dkz');
+  assert.ok(dkz);
+  assert.equal(dkz.entityType, 'group');
+  assert.equal(dkz.agency, 'Dongyo Entertainment');
+  assert.equal(dkz.agencyStatus, 'historical');
+  assert.equal(dkz.debutDate, '2019-04-24');
+  assert.equal(dkz.lifecycleStatus, 'inactive');
+  assert.deepEqual(dkz.members, ['SEHYEON', 'MINGYU', 'JAECHAN', 'JUONE', 'GISEOK']);
+  assert.equal(dkz.fandomName, 'DONG-ARI');
+  assert.ok(dkz.profile.koreanAliases.includes('동키즈'));
+  assert.ok(dkz.profile.englishAliases.includes('DONGKIZ'));
+  assert.ok(!dkz.members.includes('JONGHYEONG'));
+
+  const elast = getArtistV4ById('elast');
+  assert.ok(elast);
+  assert.equal(elast.entityType, 'group');
+  assert.equal(elast.agency, 'E Entertainment');
+  assert.equal(elast.agencyStatus, 'historical');
+  assert.equal(elast.debutDate, '2020-06-09');
+  assert.equal(elast.lifecycleStatus, 'inactive');
+  assert.deepEqual(elast.members, ['RANO', 'BAEKGYEUL', 'ROMIN', 'WONHYUK', 'WONJUN', 'YEJUN']);
+  assert.equal(elast.fandomName, 'ELRING');
+  assert.ok(elast.profile.koreanAliases.includes('엘라스트'));
+  assert.ok(!elast.members.includes('SEUNGYEOP'));
+  assert.ok(!elast.members.includes('CHOI IN'));
+
+  const ghost9 = getArtistV4ById('ghost9');
+  assert.ok(ghost9);
+  assert.equal(ghost9.entityType, 'group');
+  assert.equal(ghost9.agency, 'Maroo Entertainment');
+  assert.equal(ghost9.agencyStatus, 'verified');
+  assert.equal(ghost9.debutDate, '2020-09-23');
+  assert.equal(ghost9.lifecycleStatus, 'active');
+  assert.deepEqual(ghost9.members, ['SHIN', 'SON JUNHYUNG', 'LEE KANGSUNG', 'CHOI JUNSEONG', 'PRINCE', 'LEE WOOJIN', 'LEE JINWOO']);
+  assert.ok(ghost9.profile.koreanAliases.includes('고스트나인'));
+  assert.ok(!ghost9.members.includes('HWANG DONG JUN'));
+  assert.ok(!ghost9.members.includes('LEE TAE SEUNG'));
+
+  const wei = getArtistV4ById('wei');
+  assert.ok(wei);
+  assert.equal(wei.entityType, 'group');
+  assert.equal(wei.agency, 'OUI Entertainment');
+  assert.equal(wei.agencyStatus, 'verified');
+  assert.equal(wei.debutDate, '2020-10-05');
+  assert.equal(wei.lifecycleStatus, 'active');
+  assert.deepEqual(wei.members, ['JANG DAE HYEON', 'KIM DONG HAN', 'YOO YONG HA', 'KIM YO HAN', 'KANG SEOK HWA', 'KIM JUN SEO']);
+  assert.ok(wei.profile.koreanAliases.includes('위아이'));
+  assert.ok(wei.profile.englishAliases.includes('WEi'));
+
+  const atbo = getArtistV4ById('atbo');
+  assert.ok(atbo);
+  assert.equal(atbo.entityType, 'group');
+  assert.equal(atbo.agency, 'IST Entertainment');
+  assert.equal(atbo.agencyStatus, 'historical');
+  assert.equal(atbo.debutDate, '2022-07-27');
+  assert.equal(atbo.lifecycleStatus, 'inactive');
+  assert.deepEqual(atbo.members, ['OH JUNSEOK', 'RYU JUNMIN', 'BAE HYUNJUN', 'JEONG SEUNGHWAN', 'KIM YEONKYU', 'WON BIN']);
+  assert.ok(atbo.profile.koreanAliases.includes('에이티비오'));
+  assert.ok(!atbo.members.includes('SEOK RAKWON'));
+
+  const mirae = getArtistV4ById('mirae');
+  assert.ok(mirae);
+  assert.equal(mirae.entityType, 'group');
+  assert.equal(mirae.agency, 'DSP Media');
+  assert.equal(mirae.agencyStatus, 'historical');
+  assert.equal(mirae.debutDate, '2021-03-17');
+  assert.equal(mirae.lifecycleStatus, 'inactive');
+  assert.deepEqual(mirae.members, ['LEE JUN HYUK', 'LIEN', 'YOO DOHYUN', 'KHAEL', 'SON DONG PYO', 'PARK SI YOUNG', 'JANG YU BIN']);
+  assert.ok(mirae.profile.koreanAliases.includes('미래소년'));
+
+  const luminous = getArtistV4ById('luminous');
+  assert.ok(luminous);
+  assert.equal(luminous.entityType, 'group');
+  assert.equal(luminous.agency, 'Barunson Double IP');
+  assert.equal(luminous.agencyStatus, 'historical');
+  assert.equal(luminous.debutDate, '2021-09-09');
+  assert.equal(luminous.lifecycleStatus, 'inactive');
+  assert.deepEqual(luminous.members, ['YOUNGBIN', 'SUIL', 'STEVEN', 'WOOBIN']);
+  assert.ok(luminous.profile.koreanAliases.includes('루미너스'));
+
+  const ntx = getArtistV4ById('ntx');
+  assert.ok(ntx);
+  assert.equal(ntx.entityType, 'group');
+  assert.equal(ntx.agency, 'Victory Company');
+  assert.equal(ntx.agencyStatus, 'verified');
+  assert.equal(ntx.debutDate, '2021-03-30');
+  assert.equal(ntx.lifecycleStatus, 'active');
+  assert.deepEqual(ntx.members, ['HYEONGJIN', 'YUNHYEOK', 'XIHA', 'CHANGHUN', 'HOJUN', 'RAWHYUN', 'EUNHO', 'SEUNGWON']);
+  assert.ok(ntx.profile.koreanAliases.includes('엔티엑스'));
+  assert.ok(!ntx.members.includes('GIHYUN'));
+  assert.ok(!ntx.members.includes('JISEONG'));
+
+  const ninei = getArtistV4ById('ninei');
+  assert.ok(ninei);
+  assert.equal(ninei.entityType, 'group');
+  assert.equal(ninei.agency, '');
+  assert.equal(ninei.agencyStatus, 'unresolved');
+  assert.equal(ninei.debutDate, '2022-03-30');
+  assert.equal(ninei.lifecycleStatus, 'active');
+  assert.deepEqual(ninei.members, ['JEWON', 'EDEN', 'MINJUN', 'VAHN', 'VARI', 'TAEHUN', 'JIHO']);
+  assert.ok(ninei.profile.koreanAliases.includes('나인아이'));
+  assert.ok(!ninei.members.includes('WINNIE'));
+  assert.ok(!ninei.members.includes('JOOHYOUNG'));
+  assert.ok(!ninei.members.includes('SEOWON'));
+
+  const omegax = getArtistV4ById('omegax');
+  assert.ok(omegax);
+  assert.equal(omegax.entityType, 'group');
+  assert.equal(omegax.agency, 'IPQ');
+  assert.equal(omegax.agencyStatus, 'verified');
+  assert.equal(omegax.debutDate, '2021-06-30');
+  assert.equal(omegax.lifecycleStatus, 'active');
+  assert.deepEqual(omegax.members, ['JAEHAN', 'HWICHAN', 'SEBIN', 'HANGYEOM', 'TAEDONG', 'XEN', 'JEHYUN', 'KEVIN', 'HYUK', 'YECHAN']);
+  assert.ok(omegax.profile.koreanAliases.includes('오메가엑스'));
+  assert.ok(!omegax.members.includes('JUNGHOON'));
+
+  const ab6ix = getArtistV4ById('ab6ix');
+  assert.ok(ab6ix);
+  assert.equal(ab6ix.entityType, 'group');
+  assert.equal(ab6ix.agency, '');
+  assert.equal(ab6ix.agencyStatus, 'unresolved');
+  assert.equal(ab6ix.debutDate, '2019-05-22');
+  assert.equal(ab6ix.lifecycleStatus, 'active');
+  assert.deepEqual(ab6ix.members, ['JEON WOONG', 'KIM DONG HYUN', 'PARK WOO JIN', 'LEE DAE HWI']);
+  assert.ok(ab6ix.profile.koreanAliases.includes('에이비식스'));
+  assert.ok(!ab6ix.members.includes('LIM YOUNG MIN'));
+
+  const bdc = getArtistV4ById('bdc');
+  assert.ok(bdc);
+  assert.equal(bdc.entityType, 'group');
+  assert.equal(bdc.agency, 'BRANDNEW MUSIC');
+  assert.equal(bdc.agencyStatus, 'historical');
+  assert.equal(bdc.debutDate, '2019-10-29');
+  assert.equal(bdc.lifecycleStatus, 'inactive');
+  assert.deepEqual(bdc.members, ['KIM SI HUN', 'HONG SEONG JUN', 'YUN JUNG HWAN']);
+  assert.ok(bdc.profile.koreanAliases.includes('비디씨'));
+
+  const bugaboo = getArtistV4ById('bugaboo');
+  assert.ok(bugaboo);
+  assert.equal(bugaboo.entityType, 'group');
+  assert.equal(bugaboo.agency, 'ATEAM Entertainment');
+  assert.equal(bugaboo.agencyStatus, 'historical');
+  assert.equal(bugaboo.debutDate, '2021-10-25');
+  assert.equal(bugaboo.lifecycleStatus, 'inactive');
+  assert.deepEqual(bugaboo.members, ['CHOYEON', 'YOONA', 'RAINIE', 'ZIN', 'EUNCHAE', 'CYAN']);
+  assert.ok(bugaboo.profile.koreanAliases.includes('버가부'));
+
+  const lunarsolar = getArtistV4ById('lunarsolar');
+  assert.ok(lunarsolar);
+  assert.equal(lunarsolar.entityType, 'group');
+  assert.equal(lunarsolar.agency, 'J Planet Entertainment');
+  assert.equal(lunarsolar.agencyStatus, 'historical');
+  assert.equal(lunarsolar.debutDate, '2020-09-02');
+  assert.equal(lunarsolar.lifecycleStatus, 'inactive');
+  assert.deepEqual(lunarsolar.members, ['ESEO', 'TAERYEONG', 'JIAN', 'YUURI']);
+  assert.ok(lunarsolar.profile.koreanAliases.includes('루나솔라'));
+
+  const bvndit = getArtistV4ById('bvndit');
+  assert.ok(bvndit);
+  assert.equal(bvndit.entityType, 'group');
+  assert.equal(bvndit.agency, 'MNH Entertainment');
+  assert.equal(bvndit.agencyStatus, 'historical');
+  assert.equal(bvndit.debutDate, '2019-04-10');
+  assert.equal(bvndit.lifecycleStatus, 'inactive');
+  assert.deepEqual(bvndit.members, ['YIYEON', 'SONGHEE', 'JUNGWOO', 'SIMYEONG', 'SEUNGEUN']);
+  assert.ok(bvndit.profile.koreanAliases.includes('밴디트'));
+
+  const hotissue = getArtistV4ById('hotissue');
+  assert.ok(hotissue);
+  assert.equal(hotissue.entityType, 'group');
+  assert.equal(hotissue.agency, 'S2 Entertainment');
+  assert.equal(hotissue.agencyStatus, 'historical');
+  assert.equal(hotissue.debutDate, '2021-04-28');
+  assert.equal(hotissue.lifecycleStatus, 'inactive');
+  assert.deepEqual(hotissue.members, ['NAHYUN', 'MAYNA', 'HYEONGSHIN', 'DANA', 'YEWON', 'YEBIN', 'DAIN']);
+  assert.ok(hotissue.profile.koreanAliases.includes('핫이슈'));
+
+  const tfn = getArtistV4ById('tfn');
+  assert.ok(tfn);
+  assert.equal(tfn.entityType, 'group');
+  assert.equal(tfn.agency, 'MLD Entertainment');
+  assert.equal(tfn.agencyStatus, 'historical');
+  assert.equal(tfn.debutDate, '2021-01-11');
+  assert.equal(tfn.lifecycleStatus, 'inactive');
+  assert.deepEqual(tfn.members, ['NOA', 'SIAN', 'KEVIN', 'GUNWOO', 'LEO', 'ON', 'ZERO', 'KAIRI', 'KIO']);
+  assert.ok(tfn.profile.koreanAliases.includes('티에프앤'));
+  assert.ok(tfn.profile.englishAliases.includes('T1419'));
+
+  const dcrunch = getArtistV4ById('dcrunch');
+  assert.ok(dcrunch);
+  assert.equal(dcrunch.entityType, 'group');
+  assert.equal(dcrunch.agency, 'AI Grand Korea');
+  assert.equal(dcrunch.agencyStatus, 'historical');
+  assert.equal(dcrunch.debutDate, '2018-08-06');
+  assert.equal(dcrunch.lifecycleStatus, 'inactive');
+  assert.deepEqual(dcrunch.members, ['HYUNWOOK', 'HYUNHO', 'HYUNOH', 'O.V', 'CHANYOUNG', 'JUNGSEUNG']);
+  assert.ok(dcrunch.profile.koreanAliases.includes('디크런치'));
+  assert.ok(!dcrunch.members.includes('HYUNWOO'));
+  assert.ok(!dcrunch.members.includes('MINHYUK'));
+  assert.ok(!dcrunch.members.includes('DYLAN'));
+  const x1 = getArtistV4ById('x1');
+  assert.ok(x1);
+  assert.equal(x1.entityType, 'group');
+  assert.equal(x1.agency, 'Swing Entertainment');
+  assert.equal(x1.agencyStatus, 'historical');
+  assert.equal(x1.debutDate, '2019-08-27');
+  assert.equal(x1.lifecycleStatus, 'inactive');
+  assert.deepEqual(x1.members, ['HAN SEUNG WOO', 'CHO SEUNG YOUN', 'KIM WOO SEOK', 'KIM YO HAN', 'LEE HAN GYUL', 'CHA JUN HO', 'SON DONG PYO', 'KANG MIN HEE', 'LEE EUN SANG', 'SONG HYEONG JUN', 'NAM DO HYON']);
+  assert.ok(x1.profile.koreanAliases.includes('엑스원'));
+
+  const to1 = getArtistV4ById('to1');
+  assert.ok(to1);
+  assert.equal(to1.entityType, 'group');
+  assert.equal(to1.agency, 'WAKEONE');
+  assert.equal(to1.agencyStatus, 'historical');
+  assert.equal(to1.debutDate, '2020-04-01');
+  assert.equal(to1.lifecycleStatus, 'inactive');
+  assert.deepEqual(to1.members, ['DONGGEON', 'CHAN', 'JISU', 'JAEYUN', 'J.YOU', 'KYUNGHO', 'DAIGO', 'YEOJEONG']);
+  assert.ok(to1.profile.koreanAliases.includes('티오원'));
+  assert.ok(to1.profile.koreanAliases.includes('티오오'));
+
+  const trcng = getArtistV4ById('trcng');
+  assert.ok(trcng);
+  assert.equal(trcng.entityType, 'group');
+  assert.equal(trcng.agency, 'TS Entertainment');
+  assert.equal(trcng.agencyStatus, 'historical');
+  assert.equal(trcng.debutDate, '2017-10-10');
+  assert.equal(trcng.lifecycleStatus, 'inactive');
+  assert.deepEqual(trcng.members, ['JIHUN', 'HAYOUNG', 'HAKMIN', 'JISUNG', 'HYUNWOO', 'SIWOO', 'HOHYEON', 'KANGMIN']);
+  assert.ok(trcng.profile.koreanAliases.includes('티알씨엔지'));
+  assert.ok(!trcng.members.includes('TAESEON'));
+  assert.ok(!trcng.members.includes('WOOYEOP'));
+
+  const gugudan = getArtistV4ById('gugudan');
+  assert.ok(gugudan);
+  assert.equal(gugudan.entityType, 'group');
+  assert.equal(gugudan.agency, 'Jellyfish Entertainment');
+  assert.equal(gugudan.agencyStatus, 'historical');
+  assert.equal(gugudan.debutDate, '2016-06-28');
+  assert.equal(gugudan.lifecycleStatus, 'inactive');
+  assert.deepEqual(gugudan.members, ['HANA', 'MIMI', 'NAYOUNG', 'HAEBIN', 'KIM SEJEONG', 'SOYEE', 'SALLY', 'MINA']);
+  assert.ok(gugudan.profile.koreanAliases.includes('구구단'));
+  assert.ok(!gugudan.members.includes('HYEYEON'));
+
+  const hinapia = getArtistV4ById('hinapia');
+  assert.ok(hinapia);
+  assert.equal(hinapia.entityType, 'group');
+  assert.equal(hinapia.agency, 'OSR Entertainment');
+  assert.equal(hinapia.agencyStatus, 'historical');
+  assert.equal(hinapia.debutDate, '2019-11-03');
+  assert.equal(hinapia.lifecycleStatus, 'inactive');
+  assert.deepEqual(hinapia.members, ['MINKYEUNG', 'GYEONGWON', 'EUNWOO', 'YAEBIN', 'BADA']);
+  assert.ok(hinapia.profile.koreanAliases.includes('희나피아'));
+
+  const d1ce = getArtistV4ById('d1ce');
+  assert.ok(d1ce);
+  assert.equal(d1ce.entityType, 'group');
+  assert.equal(d1ce.agency, 'D1CE Entertainment');
+  assert.equal(d1ce.agencyStatus, 'historical');
+  assert.equal(d1ce.debutDate, '2019-08-01');
+  assert.equal(d1ce.lifecycleStatus, 'inactive');
+  assert.deepEqual(d1ce.members, ['WOO JIN YOUNG', 'PARK WOO DAM', 'KIM HYUN SOO', 'JUNG YOO JUN', 'JO YONG GEUN']);
+  assert.ok(d1ce.profile.koreanAliases.includes('디원스'));
+
+  const boy = getArtistV4ById('boy');
+  assert.ok(boy);
+  assert.equal(boy.entityType, 'group');
+  assert.equal(boy.agency, 'The Music Works Entertainment');
+  assert.equal(boy.agencyStatus, 'historical');
+  assert.equal(boy.debutDate, '2020-01-07');
+  assert.equal(boy.lifecycleStatus, 'inactive');
+  assert.deepEqual(boy.members, ['KIM KOOK HEON', 'SONG YU VIN']);
+  assert.ok(boy.profile.koreanAliases.includes('비오브유'));
+
+  const cignature = getArtistV4ById('cignature');
+  assert.ok(cignature);
+  assert.equal(cignature.entityType, 'group');
+  assert.equal(cignature.agency, 'C9 Entertainment');
+  assert.equal(cignature.agencyStatus, 'historical');
+  assert.equal(cignature.debutDate, '2020-02-04');
+  assert.equal(cignature.lifecycleStatus, 'inactive');
+  assert.deepEqual(cignature.members, ['CHAESOL', 'JEEWON', 'SELINE', 'CHLOE', 'BELLE', 'SEMI', 'DOHEE']);
+  assert.ok(cignature.profile.koreanAliases.includes('시그니처'));
+
+  const nature = getArtistV4ById('nature');
+  assert.ok(nature);
+  assert.equal(nature.entityType, 'group');
+  assert.equal(nature.agency, 'n.CH Entertainment');
+  assert.equal(nature.agencyStatus, 'historical');
+  assert.equal(nature.debutDate, '2018-08-03');
+  assert.equal(nature.lifecycleStatus, 'inactive');
+  assert.deepEqual(nature.members, ['SOHEE', 'AURORA', 'SAEBOM', 'LU', 'CHAEBIN', 'HARU', 'LOHA', 'UCHAE', 'SUNSHINE']);
+  assert.ok(nature.profile.koreanAliases.includes('네이처'));
+  const oneTheNine = getArtistV4ById('1the9');
+  assert.ok(oneTheNine);
+  assert.equal(oneTheNine.entityType, 'group');
+  assert.equal(oneTheNine.agency, 'PocketDol Studio');
+  assert.equal(oneTheNine.agencyStatus, 'historical');
+  assert.equal(oneTheNine.debutDate, '2019-04-13');
+  assert.equal(oneTheNine.lifecycleStatus, 'inactive');
+  assert.deepEqual(oneTheNine.members, ['JEON DO YUM', 'JUNG JIN SUNG', 'KIM TAE WOO', 'SHIN YE CHAN', 'JEONG TAEK HYEON', 'YOO YONG HA', 'PARK SUNG WON', 'LEE SEUNG HWAN', 'KIM JUN SEO']);
+  assert.ok(oneTheNine.profile.koreanAliases.includes('원더나인'));
+
+
+  const tripleS = getArtistV4ById('triples');
+  assert.ok(tripleS);
+  assert.equal(tripleS.entityType, 'group');
+  assert.equal(tripleS.agency, 'MODHAUS');
+  assert.equal(tripleS.debutDate, '2023-02-13');
+  assert.equal(tripleS.lifecycleStatus, 'active');
+  assert.deepEqual(tripleS.members, ["SeoYeon","HyeRin","JiWoo","ChaeYeon","YooYeon","SooMin","NaKyoung","YuBin","Kaede","DaHyun","Kotone","YeonJi","Nien","SoHyun","Xinyu","Mayu","Lynn","JooBin","HaYeon","ShiOn","ChaeWon","Sullin","SeoAh","JiYeon"]);
+  assert.ok(tripleS.profile.koreanAliases.includes('트리플에스'));
+
+  const artms = getArtistV4ById('artms');
+  assert.ok(artms);
+  assert.equal(artms.entityType, 'group');
+  assert.equal(artms.agency, 'MODHAUS');
+  assert.equal(artms.debutDate, '2024-05-31');
+  assert.equal(artms.lifecycleStatus, 'active');
+  assert.deepEqual(artms.members, ["HeeJin","HaSeul","Kim Lip","JinSoul","Choerry"]);
+  assert.ok(artms.profile.koreanAliases.includes('아르테미스'));
+
+
+  const bts = getArtistV4ById('bts');
+  assert.ok(bts);
+  assert.equal(bts.agency, 'BIGHIT MUSIC');
+  assert.equal(bts.lifecycleStatus, 'active');
+  assert.deepEqual(bts.members, ["RM","Jin","SUGA","j-hope","Jimin","V","Jung Kook"]);
+
+  const txt = getArtistV4ById('txt');
+  assert.ok(txt);
+  assert.equal(txt.agency, 'BIGHIT MUSIC');
+  assert.equal(txt.lifecycleStatus, 'active');
+  assert.deepEqual(txt.members, ["SOOBIN","YEONJUN","BEOMGYU","TAEHYUN","HUENINGKAI"]);
+
+  for (const artistId of ['rm', 'jin', 'suga', 'jhope', 'jimin', 'v', 'jungkook']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'BIGHIT MUSIC');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+  assert.ok(getArtistV4ById('suga')?.profile.englishAliases.includes('Agust D'));
+
+
+  const camSoloIds = ['leekangseung', 'kimsuyoung', 'parkmoonchi', 'jeongsewoon', 'o3ohn', 'sunwoojunga', 'sosoobin'];
+  for (const artistId of camSoloIds) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing CAM solo canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  for (const artistId of ['balmingtiger', 'silicagel', 'idiotape']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing CAM group canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'group');
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  for (const artistId of ['10cm', 'davichi', 'carthegarden']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing pre-existing CAM canonical: ${artistId}`);
+    assert.equal(artist.agency, 'CAM WITH US');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+
+  const smDirectoryIds = ['taeyeon', 'kai', 'nctu'];
+  for (const artistId of smDirectoryIds) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing SM directory canonical: ${artistId}`);
+    assert.equal(artist.agency, 'SM Entertainment');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+  assert.equal(getArtistV4ById('taeyeon')?.entityType, 'solo');
+  assert.equal(getArtistV4ById('kai')?.entityType, 'solo');
+  assert.equal(getArtistV4ById('nctu')?.entityType, 'unit');
+
+
+  const epex = getArtistV4ById('epex');
+  assert.ok(epex);
+  assert.equal(epex.agency, 'C9 Entertainment');
+  assert.equal(epex.lifecycleStatus, 'active');
+  assert.deepEqual(epex.members, ["WISH","MU","A-MIN","BAEKSEUNG","AYDEN","YEWANG","JEFF"]);
+
+  const younha = getArtistV4ById('younha');
+  assert.ok(younha);
+  assert.equal(younha.agency, 'C9 Entertainment');
+  assert.equal(younha.agencyStatus, 'verified');
+  assert.equal(younha.lifecycleStatus, 'active');
+
+  const leeSeokHoon = getArtistV4ById('leeseokhoon');
+  assert.ok(leeSeokHoon);
+  assert.equal(leeSeokHoon.entityType, 'solo');
+  assert.equal(leeSeokHoon.agency, 'C9 Entertainment');
+  assert.equal(leeSeokHoon.agencyStatus, 'verified');
+  assert.equal(leeSeokHoon.lifecycleStatus, 'active');
+  assert.ok(leeSeokHoon.profile.koreanAliases.includes('이석훈'));
+
+  const c9Naze = getArtistV4ById('naze');
+  assert.ok(c9Naze);
+  assert.equal(c9Naze.agency, 'C9 Entertainment');
+  assert.equal(c9Naze.lifecycleStatus, 'active');
+  assert.deepEqual(c9Naze.members, ["KAISEI","YOUNKI","ATO","TURN","YUYA","KIMKUN","DOHYEOK"]);
+
+  const c9Cix = getArtistV4ById('cix');
+  assert.ok(c9Cix);
+  assert.equal(c9Cix.agency, 'C9 Entertainment');
+  assert.equal(c9Cix.agencyStatus, 'historical');
+  assert.equal(c9Cix.lifecycleStatus, 'inactive');
+  assert.deepEqual(c9Cix.members, ["BX","SEUNGHUN","YONGHEE","HYUNSUK"]);
+
+
+  const edamIu = getArtistV4ById('iu');
+  assert.ok(edamIu);
+  assert.equal(edamIu.entityType, 'solo');
+  assert.equal(edamIu.agency, 'EDAM Entertainment');
+  assert.equal(edamIu.agencyStatus, 'verified');
+  assert.equal(edamIu.lifecycleStatus, 'active');
+
+  const edamWoodz = getArtistV4ById('woodz');
+  assert.ok(edamWoodz);
+  assert.equal(edamWoodz.entityType, 'solo');
+  assert.equal(edamWoodz.agency, 'EDAM Entertainment');
+  assert.equal(edamWoodz.agencyStatus, 'verified');
+  assert.equal(edamWoodz.lifecycleStatus, 'active');
+
+
+  const osHuhGak = getArtistV4ById('huhgak');
+  assert.ok(osHuhGak);
+  assert.equal(osHuhGak.entityType, 'solo');
+  assert.equal(osHuhGak.agency, 'OS Projects');
+  assert.equal(osHuhGak.agencyStatus, 'verified');
+  assert.equal(osHuhGak.lifecycleStatus, 'active');
+
+  const osLimHanByul = getArtistV4ById('limhanbyul');
+  assert.ok(osLimHanByul);
+  assert.equal(osLimHanByul.entityType, 'solo');
+  assert.equal(osLimHanByul.agency, 'OS Projects');
+  assert.equal(osLimHanByul.agencyStatus, 'verified');
+  assert.equal(osLimHanByul.lifecycleStatus, 'active');
+
+  const osKimYechan = getArtistV4ById('kimyechan');
+  assert.ok(osKimYechan);
+  assert.equal(osKimYechan.entityType, 'solo');
+  assert.equal(osKimYechan.agency, 'OS Projects');
+  assert.equal(osKimYechan.agencyStatus, 'verified');
+  assert.equal(osKimYechan.lifecycleStatus, 'active');
+  assert.ok(osKimYechan.profile.koreanAliases.includes('김예찬'));
+
+  const osHyb = getArtistV4ById('hyb');
+  assert.ok(osHyb);
+  assert.equal(osHyb.entityType, 'project');
+  assert.equal(osHyb.agency, 'OS Projects');
+  assert.equal(osHyb.agencyStatus, 'verified');
+  assert.equal(osHyb.lifecycleStatus, 'active');
+  assert.deepEqual(osHyb.members, ["Huh Gak","Shin Yong Jae","Lim Han Byul"]);
+
+
+  const abyssMeloMance = getArtistV4ById('melomance');
+  assert.ok(abyssMeloMance);
+  assert.equal(abyssMeloMance.entityType, 'group');
+  assert.equal(abyssMeloMance.agency, 'ABYSS COMPANY');
+  assert.equal(abyssMeloMance.agencyStatus, 'verified');
+  assert.equal(abyssMeloMance.lifecycleStatus, 'active');
+
+  const abyssKimMinSeok = getArtistV4ById('kimminseok');
+  assert.ok(abyssKimMinSeok);
+  assert.equal(abyssKimMinSeok.entityType, 'solo');
+  assert.equal(abyssKimMinSeok.agency, 'ABYSS COMPANY');
+  assert.equal(abyssKimMinSeok.agencyStatus, 'verified');
+  assert.equal(abyssKimMinSeok.lifecycleStatus, 'active');
+  assert.ok(abyssKimMinSeok.profile.koreanAliases.includes('김민석'));
+
+
+  const yhYena = getArtistV4ById('yena');
+  assert.ok(yhYena);
+  assert.equal(yhYena.entityType, 'solo');
+  assert.equal(yhYena.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhYena.agencyStatus, 'verified');
+  assert.equal(yhYena.lifecycleStatus, 'active');
+
+  const yhTempest = getArtistV4ById('tempest');
+  assert.ok(yhTempest);
+  assert.equal(yhTempest.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhTempest.lifecycleStatus, 'active');
+  assert.deepEqual(yhTempest.members, ["LEW","HANBIN","HYEONGSEOP","HYUK","EUNCHAN","TAERAE"]);
+
+  const yhDaff = getArtistV4ById('daff');
+  assert.ok(yhDaff);
+  assert.equal(yhDaff.entityType, 'solo');
+  assert.equal(yhDaff.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhDaff.agencyStatus, 'verified');
+  assert.equal(yhDaff.lifecycleStatus, 'active');
+  assert.ok(yhDaff.profile.koreanAliases.includes('다프'));
+
+  const yhAnd2ble = getArtistV4ById('and2ble');
+  assert.ok(yhAnd2ble);
+  assert.equal(yhAnd2ble.entityType, 'group');
+  assert.equal(yhAnd2ble.agency, 'YH ENTERTAINMENT');
+  assert.equal(yhAnd2ble.agencyStatus, 'verified');
+  assert.equal(yhAnd2ble.lifecycleStatus, 'active');
+  assert.deepEqual(yhAnd2ble.members, ["JANG HAO","YOO SEUNGEON","RICKY","KIM GYUVIN","HAN YUJIN"]);
+
+
+  const mysticBilllie = getArtistV4ById('billlie');
+  assert.ok(mysticBilllie);
+  assert.equal(mysticBilllie.agency, 'MYSTIC STORY');
+  assert.equal(mysticBilllie.lifecycleStatus, 'active');
+  assert.deepEqual(mysticBilllie.members, ["SIYOON","SHEON","TSUKI","MOON SUA","HARAM","SUHYEON","HARUNA"]);
+
+  const mysticLucy = getArtistV4ById('lucy');
+  assert.ok(mysticLucy);
+  assert.equal(mysticLucy.agency, 'MYSTIC STORY');
+  assert.equal(mysticLucy.agencyStatus, 'verified');
+  assert.equal(mysticLucy.lifecycleStatus, 'active');
+  assert.deepEqual(mysticLucy.members, ["SHIN YECHAN","CHOI SANGYEOP","CHO WONSANG","SHIN GWANGIL"]);
+
+  const mysticSonTaejin = getArtistV4ById('sontaejin');
+  assert.ok(mysticSonTaejin);
+  assert.equal(mysticSonTaejin.entityType, 'solo');
+  assert.equal(mysticSonTaejin.agency, 'MYSTIC STORY');
+  assert.equal(mysticSonTaejin.agencyStatus, 'verified');
+  assert.equal(mysticSonTaejin.lifecycleStatus, 'active');
+  assert.ok(mysticSonTaejin.profile.koreanAliases.includes('손태진'));
+
+
+  const btobCurrent = getArtistV4ById('btob');
+  assert.ok(btobCurrent);
+  assert.equal(btobCurrent.agency, 'BTOB Company');
+  assert.equal(btobCurrent.lifecycleStatus, 'active');
+
+  for (const artistId of ['seoeunkwang', 'huta', 'imhyunsik', 'peniel']) {
+    const artist = getArtistV4ById(artistId);
+    assert.ok(artist, `missing BTOB Company solo canonical: ${artistId}`);
+    assert.equal(artist.entityType, 'solo');
+    assert.equal(artist.agency, 'BTOB Company');
+    assert.equal(artist.agencyStatus, 'verified');
+    assert.equal(artist.lifecycleStatus, 'active');
+  }
+
+  assert.ok(getArtistV4ById('seoeunkwang')?.profile.koreanAliases.includes('서은광'));
+  assert.ok(getArtistV4ById('huta')?.profile.englishAliases.includes('HUTA'));
+  assert.ok(getArtistV4ById('imhyunsik')?.profile.koreanAliases.includes('임현식'));
+  assert.ok(getArtistV4ById('peniel')?.profile.koreanAliases.includes('프니엘'));
+
+  const btobChangsub = getArtistV4ById('leechangsub');
+  assert.ok(btobChangsub);
+  assert.equal(btobChangsub.agency, 'Fantagio');
+
+  const feelGhoodBibi = getArtistV4ById('bibi');
+  assert.ok(feelGhoodBibi);
+  assert.equal(feelGhoodBibi.entityType, 'solo');
+  assert.equal(feelGhoodBibi.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodBibi.lifecycleStatus, 'active');
+
+  const feelGhoodTigerJk = getArtistV4ById('tigerjk');
+  assert.ok(feelGhoodTigerJk);
+  assert.equal(feelGhoodTigerJk.entityType, 'solo');
+  assert.equal(feelGhoodTigerJk.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodTigerJk.agencyStatus, 'verified');
+  assert.equal(feelGhoodTigerJk.lifecycleStatus, 'active');
+  assert.ok(feelGhoodTigerJk.profile.koreanAliases.includes('타이거JK'));
+
+  const feelGhoodYoonmirae = getArtistV4ById('yoonmirae');
+  assert.ok(feelGhoodYoonmirae);
+  assert.equal(feelGhoodYoonmirae.entityType, 'solo');
+  assert.equal(feelGhoodYoonmirae.agency, 'Feel Ghood Music');
+  assert.equal(feelGhoodYoonmirae.agencyStatus, 'verified');
+  assert.equal(feelGhoodYoonmirae.lifecycleStatus, 'active');
+  assert.ok(feelGhoodYoonmirae.profile.koreanAliases.includes('윤미래'));
+
+  const paraYounite = getArtistV4ById('younite');
+  assert.ok(paraYounite);
+  assert.equal(paraYounite.entityType, 'group');
+  assert.equal(paraYounite.agency, 'PARA MUSIC');
+  assert.equal(paraYounite.agencyStatus, 'verified');
+  assert.equal(paraYounite.lifecycleStatus, 'active');
+  assert.deepEqual(paraYounite.members, ['EUNHO', 'STEVE', 'HYUNGSEOK', 'WOONO', 'DEY', 'KYUNGMUN', 'SION']);
+
+  const paraParkWoojin = getArtistV4ById('parkwoojin');
+  assert.ok(paraParkWoojin);
+  assert.equal(paraParkWoojin.entityType, 'solo');
+  assert.equal(paraParkWoojin.agency, 'PARA MUSIC');
+  assert.equal(paraParkWoojin.agencyStatus, 'verified');
+  assert.equal(paraParkWoojin.lifecycleStatus, 'active');
+  assert.ok(paraParkWoojin.profile.koreanAliases.includes('박우진'));
+  assert.ok(paraParkWoojin.profile.includeKeywords.includes('AB6IX'));
+
+  const inbBaekhyun = getArtistV4ById('baekhyun');
+  assert.ok(inbBaekhyun);
+  assert.equal(inbBaekhyun.entityType, 'solo');
+  assert.equal(inbBaekhyun.agency, 'INB100');
+  assert.equal(inbBaekhyun.lifecycleStatus, 'active');
+
+  const inbXiumin = getArtistV4ById('xiumin');
+  assert.ok(inbXiumin);
+  assert.equal(inbXiumin.entityType, 'solo');
+  assert.equal(inbXiumin.agency, 'INB100');
+  assert.equal(inbXiumin.agencyStatus, 'verified');
+  assert.equal(inbXiumin.lifecycleStatus, 'active');
+  assert.ok(inbXiumin.profile.koreanAliases.includes('시우민'));
+
+  const inbChen = getArtistV4ById('chen');
+  assert.ok(inbChen);
+  assert.equal(inbChen.entityType, 'solo');
+  assert.equal(inbChen.agency, 'INB100');
+  assert.equal(inbChen.agencyStatus, 'verified');
+  assert.equal(inbChen.lifecycleStatus, 'active');
+  assert.ok(inbChen.profile.koreanAliases.includes('첸'));
+
+  const dreamcatcher = getArtistV4ById('dreamcatcher');
+  assert.ok(dreamcatcher);
+  assert.equal(dreamcatcher.agency, 'Dreamcatcher Company');
+  assert.equal(dreamcatcher.lifecycleStatus, 'active');
+
+  const dreamcatcherUau = getArtistV4ById('uau');
+  assert.ok(dreamcatcherUau);
+  assert.equal(dreamcatcherUau.entityType, 'unit');
+  assert.equal(dreamcatcherUau.agency, 'Dreamcatcher Company');
+  assert.equal(dreamcatcherUau.agencyStatus, 'verified');
+  assert.equal(dreamcatcherUau.lifecycleStatus, 'active');
+  assert.ok(dreamcatcherUau.profile.koreanAliases.includes('유아유'));
+  assert.ok(dreamcatcherUau.profile.includeKeywords.includes('Dreamcatcher'));
+
+  const galaxyGdragon = getArtistV4ById('gdragon');
+  assert.ok(galaxyGdragon);
+  assert.equal(galaxyGdragon.entityType, 'solo');
+  assert.equal(galaxyGdragon.agency, 'Galaxy Corporation');
+  assert.equal(galaxyGdragon.lifecycleStatus, 'active');
+
+  const galaxyTaemin = getArtistV4ById('taemin');
+  assert.ok(galaxyTaemin);
+  assert.equal(galaxyTaemin.entityType, 'solo');
+  assert.equal(galaxyTaemin.agency, 'Galaxy Corporation');
+  assert.equal(galaxyTaemin.agencyStatus, 'verified');
+  assert.equal(galaxyTaemin.lifecycleStatus, 'active');
+  assert.ok(galaxyTaemin.profile.koreanAliases.includes('태민'));
+  assert.ok(galaxyTaemin.profile.includeKeywords.includes('SHINee'));
+
+  const galaxyKimJongKook = getArtistV4ById('kimjongkook');
+  assert.ok(galaxyKimJongKook);
+  assert.equal(galaxyKimJongKook.entityType, 'solo');
+  assert.equal(galaxyKimJongKook.agency, 'Galaxy Corporation');
+  assert.equal(galaxyKimJongKook.agencyStatus, 'verified');
+  assert.equal(galaxyKimJongKook.lifecycleStatus, 'active');
+  assert.ok(galaxyKimJongKook.profile.koreanAliases.includes('김종국'));
+  assert.ok(galaxyKimJongKook.profile.includeKeywords.includes('Turbo'));
+
+  const companySoosooDohKyungSoo = getArtistV4ById('dohkyungsoo');
+  assert.ok(companySoosooDohKyungSoo);
+  assert.equal(companySoosooDohKyungSoo.entityType, 'solo');
+  assert.equal(companySoosooDohKyungSoo.agency, 'Company Soosoo');
+  assert.equal(companySoosooDohKyungSoo.agencyStatus, 'verified');
+  assert.equal(companySoosooDohKyungSoo.lifecycleStatus, 'active');
+  assert.ok(companySoosooDohKyungSoo.profile.koreanAliases.includes('도경수'));
+  assert.ok(companySoosooDohKyungSoo.profile.includeKeywords.includes('BLISS'));
+
+  const bpmViviz = getArtistV4ById('viviz');
+  assert.ok(bpmViviz);
+  assert.equal(bpmViviz.entityType, 'group');
+  assert.equal(bpmViviz.agency, 'BPM Entertainment');
+  assert.equal(bpmViviz.lifecycleStatus, 'active');
+  assert.ok(bpmViviz.profile.koreanAliases.includes('비비지'));
+
+  const hybeGeffenKatseye = getArtistV4ById('katseye');
+  assert.ok(hybeGeffenKatseye);
+  assert.equal(hybeGeffenKatseye.entityType, 'group');
+  assert.equal(hybeGeffenKatseye.agency, 'HYBE x Geffen');
+  assert.equal(hybeGeffenKatseye.lifecycleStatus, 'active');
+  assert.ok(hybeGeffenKatseye.profile.koreanAliases.includes('캣츠아이'));
+  assert.ok(hybeGeffenKatseye.profile.includeKeywords.includes('Geffen'));
+
+  const theMuzeRescene = getArtistV4ById('rescene');
+  assert.ok(theMuzeRescene);
+  assert.equal(theMuzeRescene.entityType, 'group');
+  assert.equal(theMuzeRescene.agency, 'THE MUZE Entertainment');
+  assert.equal(theMuzeRescene.lifecycleStatus, 'active');
+  assert.ok(theMuzeRescene.profile.koreanAliases.includes('리센느'));
+
+  const edenAllHours = getArtistV4ById('allhours');
+  assert.ok(edenAllHours);
+  assert.equal(edenAllHours.entityType, 'group');
+  assert.equal(edenAllHours.agency, 'Eden Entertainment');
+  assert.equal(edenAllHours.lifecycleStatus, 'active');
+  assert.ok(edenAllHours.profile.koreanAliases.includes('올아워즈'));
+
+  const mulgogiLimYoungWoong = getArtistV4ById('limyoungwoong');
+  assert.ok(mulgogiLimYoungWoong);
+  assert.equal(mulgogiLimYoungWoong.entityType, 'solo');
+  assert.equal(mulgogiLimYoungWoong.agency, 'Mulgogi Music');
+  assert.equal(mulgogiLimYoungWoong.lifecycleStatus, 'active');
+  assert.ok(mulgogiLimYoungWoong.profile.koreanAliases.includes('임영웅'));
+
+  const kiOnf = getArtistV4ById('onf');
+  assert.ok(kiOnf);
+  assert.equal(kiOnf.entityType, 'group');
+  assert.equal(kiOnf.agency, 'KI Entertainment');
+  assert.equal(kiOnf.lifecycleStatus, 'active');
+  assert.ok(kiOnf.profile.koreanAliases.includes('온앤오프'));
+
+  const mainstreamLeeYoungJi = getArtistV4ById('lee-youngji');
+  assert.ok(mainstreamLeeYoungJi);
+  assert.equal(mainstreamLeeYoungJi.entityType, 'solo');
+  assert.equal(mainstreamLeeYoungJi.agency, 'Mainstream');
+  assert.equal(mainstreamLeeYoungJi.lifecycleStatus, 'active');
+  assert.ok(mainstreamLeeYoungJi.profile.koreanAliases.includes('이영지'));
+
+  const expanded = buildExpandedArtistUniverseV4(
+    artistUniverseV4,
+    [seed('expansion-104', 'EXP104'), seed('expansion-105', 'EXP105')],
+  );
+
+  assert.equal(expanded.length, artistUniverseV4.length + 2);
+  assert.equal(expanded.at(-2)?.id, 'expansion-104');
+  assert.equal(expanded.at(-1)?.id, 'expansion-105');
+});
+
+test('duplicate canonical id is rejected', () => {
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(
+      artistUniverseV4,
+      [seed('iu', 'EXP-IU')],
+    ),
+    /artist_universe_expansion_duplicate_id:iu/,
+  );
+});
+
+test('duplicate ticker is rejected case-insensitively', () => {
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(
+      artistUniverseV4,
+      [seed('expansion-duplicate-ticker', 'iu')],
+    ),
+    /artist_universe_expansion_duplicate_ticker:iu/,
+  );
+});
+
+test('unresolved agency may be explicit without inventing a management company', () => {
+  const unresolvedAgency = {
+    ...seed('expansion-unresolved-agency', 'EXPUNRES'),
+    agency: '',
+    agencyStatus: 'unresolved' as const,
+  };
+
+  const expanded = buildExpandedArtistUniverseV4(
+    artistUniverseV4,
+    [unresolvedAgency],
+  );
+  assert.equal(expanded.at(-1)?.agency, '');
+  assert.equal(expanded.at(-1)?.agencyStatus, 'unresolved');
+});
+
+test('historical agency is allowed only for inactive archive-style identities', () => {
+  const historicalAgency = {
+    ...seed('expansion-historical-agency', 'EXPHIST'),
+    agency: 'Historical Label',
+    agencyStatus: 'historical' as const,
+    lifecycleStatus: 'inactive' as const,
+    tier: 'archive' as const,
+  };
+
+  const expanded = buildExpandedArtistUniverseV4(
+    artistUniverseV4,
+    [historicalAgency],
+  );
+  assert.equal(expanded.at(-1)?.agency, 'Historical Label');
+  assert.equal(expanded.at(-1)?.agencyStatus, 'historical');
+  assert.equal(expanded.at(-1)?.lifecycleStatus, 'inactive');
+});
+
+test('historical agency cannot be attached to an active identity', () => {
+  const bad = {
+    ...seed('expansion-active-historical-agency', 'EXPACTHIST'),
+    agencyStatus: 'historical' as const,
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_historical_agency_requires_inactive:expansion-active-historical-agency/,
+  );
+});
+
+test('blank agency still fails unless unresolved status is explicit', () => {
+  const bad = {
+    ...seed('expansion-blank-agency', 'EXPBLANK'),
+    agency: '',
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_missing_agency:expansion-blank-agency/,
+  );
+});
+
+test('unresolved agency status rejects a non-empty agency guess', () => {
+  const bad = {
+    ...seed('expansion-conflicting-agency', 'EXPCONFLICT'),
+    agencyStatus: 'unresolved' as const,
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_conflicting_agency_status:expansion-conflicting-agency/,
+  );
+});
+
+test('missing Korean identity evidence is rejected', () => {
+  const bad = {
+    ...seed('expansion-missing-ko', 'EXPKO'),
+    koreanAliases: [],
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_missing_korean_alias:expansion-missing-ko/,
+  );
+});
+
+test('missing NAVER query is rejected', () => {
+  const bad = {
+    ...seed('expansion-missing-query', 'EXPQ'),
+    naverNewsQuery: '',
+  };
+
+  assert.throws(
+    () => buildExpandedArtistUniverseV4(artistUniverseV4, [bad]),
+    /artist_universe_expansion_missing_naver_query:expansion-missing-query/,
+  );
+});
