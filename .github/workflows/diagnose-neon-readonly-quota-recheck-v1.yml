@@ -1,0 +1,96 @@
+name: Diagnose Neon read-only quota recheck v1
+
+on:
+  push:
+    branches:
+      - diagnostic/neon-readonly-quota-recheck-v1
+    paths:
+      - .github/workflows/diagnose-neon-readonly-quota-recheck-v1.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - name: Checkout exact diagnostic head
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run bounded read-only Neon probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import pg from 'pg';
+          const { Pool } = pg;
+
+          const raw = process.env.FANDEX_RUNTIME_DATABASE_URL?.trim();
+          if (!raw) {
+            console.log('FANDEX_NEON_READONLY_DATABASE_SECRET=missing');
+            process.exit(2);
+          }
+          console.log('FANDEX_NEON_READONLY_DATABASE_SECRET=present');
+          console.log('FANDEX_NEON_READONLY_WRITE_EFFECTS=0');
+
+          const url = new URL(raw);
+          url.searchParams.delete('sslmode');
+          url.searchParams.delete('uselibpqcompat');
+
+          const pool = new Pool({
+            connectionString: url.toString(),
+            max: 1,
+            connectionTimeoutMillis: 5000,
+            statement_timeout: 10000,
+            ssl: { rejectUnauthorized: true },
+          });
+
+          let client;
+          let phase = 'connect';
+          try {
+            client = await pool.connect();
+            console.log('FANDEX_NEON_READONLY_CONNECT=success');
+            phase = 'select_one';
+            const result = await client.query('SELECT 1 AS ok');
+            if (result?.rows?.[0]?.ok !== 1) {
+              console.log('FANDEX_NEON_READONLY_SELECT_ONE=unexpected');
+              process.exitCode = 1;
+            } else {
+              console.log('FANDEX_NEON_READONLY_SELECT_ONE=success');
+            }
+          } catch (error) {
+            const code = typeof error?.code === 'string' ? error.code : '';
+            let errorClass = 'other_database_error';
+            if (code === '53000') errorClass = 'insufficient_resources';
+            else if (code === '28P01') errorClass = 'authentication_failed';
+            else if (code.startsWith('08')) errorClass = 'connection_exception';
+            else if (code === 'ETIMEDOUT' || code === 'ERR_SOCKET_CONNECTION_TIMEOUT') {
+              errorClass = 'connection_timeout';
+            }
+            console.log(`FANDEX_NEON_READONLY_FAILED_PHASE=${phase}`);
+            console.log(`FANDEX_NEON_READONLY_ERROR_CLASS=${errorClass}`);
+            process.exitCode = 1;
+          } finally {
+            try { client?.release(); } catch {}
+            try { await pool.end(); } catch {}
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_NEON_READONLY_RAW_ERROR_LOGGED=false"
+          echo "FANDEX_NEON_READONLY_CONNECTION_STRING_LOGGED=false"
+          echo "FANDEX_NEON_READONLY_SQL_MUTATIONS=0"
