@@ -100,6 +100,7 @@ test('current source audit records the 2026-09-28 Last.fm advance and requires r
   assert.equal(audit.lastfm.snapshotDateCount, 50);
   assert.equal(audit.lastfm.deltaReadyCount, 10);
   assert.equal(audit.lastfm.needsReviewCount, 0);
+  assert.ok(audit.naverRuntime);
   assert.equal(
     audit.naverRuntime.currentStoredEvidenceReproducedForReadiness,
     false,
@@ -252,4 +253,145 @@ test('runtime carrier and currentness audit mismatch fails closed', async () => 
   assert.ok(
     result.blockers.includes('runtime-carrier-source-audit-mismatch'),
   );
+});
+
+
+function directAuditFrom(
+  audit: MomentumLiveShadowSourceCurrentnessAudit,
+  input: Readonly<{
+    storedEvidenceReproduced: boolean;
+    currentEvaluation?: MomentumLiveShadowSourceCurrentnessAudit['currentEvaluation'];
+    historicalOnly?: boolean;
+    status?: string;
+    exactOfficialProtocol?: boolean;
+  }>,
+): MomentumLiveShadowSourceCurrentnessAudit {
+  const status = input.status ?? 'applied';
+  const exactOfficialProtocol = input.exactOfficialProtocol ?? true;
+
+  return {
+    contractVersion: audit.contractVersion,
+    evaluatedAgainstMain:
+      '79ac55100ec4b64be8eeb234dc0fa9b617960303',
+    canonicalArtistId: audit.canonicalArtistId,
+    carrier: {
+      ...audit.carrier,
+      historicalOnly: input.historicalOnly ?? audit.carrier.historicalOnly,
+    },
+    lastfm: { ...audit.lastfm },
+    naverDirectRecurring: {
+      mode: 'github-actions-direct-recurring',
+      observedAt: '2026-09-30T14:20:00.000Z',
+      workflowRunId: 36730000001,
+      workflowJobId: 109930000001,
+      workflowHeadSha:
+        'c87ac80196bc5c8b06230ec8cb0d245ca88bfac0',
+      slotStart: '2026-09-30T14:00:00.000Z',
+      collectionKey:
+        'sched-v125-naver-news-20260930t140000z-direct001',
+      status,
+      exactOfficialProtocol,
+      schedulerObservedAfterCarrierCutoff: true,
+      currentStoredEvidenceReproducedForReadiness:
+        input.storedEvidenceReproduced,
+    },
+    freshnessPolicy: { ...audit.freshnessPolicy },
+    currentEvaluation:
+      input.currentEvaluation ?? { ...audit.currentEvaluation },
+  } as unknown as MomentumLiveShadowSourceCurrentnessAudit;
+}
+
+test('GitHub Actions direct recurring evidence is accepted as a second readiness channel', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+
+  const directAudit = directAuditFrom(audit, {
+    storedEvidenceReproduced: false,
+  });
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: directAudit,
+  });
+
+  assert.equal(result.state, 'current-categorical-evaluation-required');
+  assert.equal(result.runtimeShadowReadVerified, true);
+  assert.equal(
+    result.sourceCurrentness.naverSchedulerObservedAfterCarrierCutoff,
+    true,
+  );
+  assert.equal(
+    result.sourceCurrentness.naverCurrentStoredEvidenceReproducedForReadiness,
+    false,
+  );
+  assert.ok(
+    !result.blockers.includes('source-currentness-audit-invalid'),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'current-naver-stored-evidence-not-reproduced-for-readiness',
+    ),
+  );
+});
+
+test('direct recurring Stored Evidence can satisfy current no-op freshness without Vercel route evidence', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+
+  const directAudit = directAuditFrom(audit, {
+    storedEvidenceReproduced: true,
+    historicalOnly: false,
+    currentEvaluation: {
+      currentDualSourceCategoricalEvaluationPerformed: true,
+      currentCarrierProduced: false,
+      currentNoOpEvaluationAttested: true,
+      evaluatedAlignmentCutoffAt: '2026-09-30T02:10:05.000Z',
+      directionalConsensus: audit.carrier.directionalConsensus,
+      persistenceConsensus: audit.carrier.persistenceConsensus,
+      attestationPath:
+        'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+      attestationDigest:
+        'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+    },
+  });
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: directAudit,
+  });
+
+  assert.equal(result.state, 'public-route-candidate');
+  assert.equal(result.publicRouteDesignReady, true);
+  assert.equal(result.productActivationReady, false);
+  assert.equal(result.productPublicationReady, false);
+  assert.equal(result.productMomentumScore, null);
+  assert.equal(result.numericProductEligible, false);
+  assert.equal(result.previewFallbackAllowed, false);
+  assert.equal(result.currentEvaluation.satisfiesFreshness, true);
+  assert.deepEqual(result.blockers, []);
+});
+
+test('invalid direct recurring execution evidence fails closed', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+
+  const invalidDirectAudit = directAuditFrom(audit, {
+    storedEvidenceReproduced: true,
+    status: 'failed',
+  });
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: invalidDirectAudit,
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.publicRouteDesignReady, false);
+  assert.ok(result.blockers.includes('source-currentness-audit-invalid'));
 });

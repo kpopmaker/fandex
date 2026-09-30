@@ -13,6 +13,9 @@ export const PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_CONSTRUCT_ID =
 export const PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_SOURCE_VARIABLE_ID =
   'momentum.cross-family-evidence-state.research' as const;
 
+export const PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION =
+  'momentum-categorical-output-attestation-v1' as const;
+
 export type ProductMomentumDirectionalConsensus =
   | 'direction-corroborated-up'
   | 'direction-corroborated-down'
@@ -26,7 +29,7 @@ export type ProductMomentumPersistenceConsensus =
   | 'neither-direction-repeated'
   | 'persistence-not-applicable';
 
-export type ProductMomentumEvidenceConsensusStoredRecord = Readonly<{
+type ProductMomentumEvidenceConsensusStoredRecordBase = Readonly<{
   recordId: string;
   observationId: string;
   canonicalArtistId: string;
@@ -35,19 +38,47 @@ export type ProductMomentumEvidenceConsensusStoredRecord = Readonly<{
   alignmentCutoffAt: string;
   directionalConsensus: ProductMomentumDirectionalConsensus;
   persistenceConsensus: ProductMomentumPersistenceConsensus;
-  sourceV143Digest: string;
   observationDigest: string;
   rawValue: ProductMomentumDirectionalConsensus;
   lifecycleState: 'research';
   materialClass: 'real';
 }>;
 
-export type ProductMomentumEvidenceConsensusStoredEvidenceTrace = Readonly<{
+export type ProductMomentumEvidenceConsensusStoredRecord =
+  | Readonly<
+      ProductMomentumEvidenceConsensusStoredRecordBase & {
+        sourceV143Digest: string;
+      }
+    >
+  | Readonly<
+      ProductMomentumEvidenceConsensusStoredRecordBase & {
+        sourceV143Digest: null;
+        sourceAttestationContractVersion:
+          typeof PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION;
+        sourceAttestationDigest: string;
+      }
+    >;
+
+type ProductMomentumEvidenceConsensusStoredEvidenceTraceBase = Readonly<{
   carrierRecordId: string;
   observationId: string;
-  sourceV143Digest: string;
   observationDigest: string;
 }>;
+
+export type ProductMomentumEvidenceConsensusStoredEvidenceTrace =
+  | Readonly<
+      ProductMomentumEvidenceConsensusStoredEvidenceTraceBase & {
+        sourceV143Digest: string;
+      }
+    >
+  | Readonly<
+      ProductMomentumEvidenceConsensusStoredEvidenceTraceBase & {
+        sourceV143Digest: null;
+        sourceAttestationContractVersion:
+          typeof PRODUCT_MOMENTUM_EVIDENCE_CONSENSUS_ATTESTATION_SOURCE_VERSION;
+        sourceAttestationDigest: string;
+      }
+    >;
 
 export type ProductMomentumEvidenceConsensusReadModel = Readonly<{
   contractVersion:
