@@ -7,6 +7,7 @@ export type SnsFandomDimension =
 
 export type SnsFandomProviderId =
   | 'youtube-data-api'
+  | 'youtube-comments-derived'
   | 'youtube-analytics-api'
   | 'instagram-api'
   | 'tiktok-display-api'
@@ -45,6 +46,7 @@ export type SnsFandomProviderQualification = Readonly<{
   historicalAccess:
     | 'prospective-snapshots-required'
     | 'authorized-account-history'
+    | 'bounded-public-comment-history'
     | 'research-only'
     | 'unverified';
   blockers: readonly string[];
@@ -75,6 +77,31 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
         'https://developers.google.com/youtube/terms/derived-metrics-policy',
         'https://developers.google.com/youtube/v3/docs/channels',
         'https://developers.google.com/youtube/v3/docs/comments',
+      ]),
+    }),
+    Object.freeze({
+      providerId: 'youtube-comments-derived' as const,
+      state: 'conditional-approval-required' as const,
+      constructCoverage: Object.freeze([
+        'fandom-activity-persistence' as const,
+      ]),
+      authorizedAcquisition: 'available-after-provider-approval' as const,
+      commercialUse: 'conditional' as const,
+      recurringAutomatedCollection: 'conditional' as const,
+      storageRetention: 'conditional' as const,
+      derivedMetricPublication: 'conditional' as const,
+      identityCoverage: 'public-channel-id' as const,
+      historicalAccess: 'bounded-public-comment-history' as const,
+      blockers: Object.freeze([
+        'youtube-commenter-recurrence-derived-metric-use-case-not-approved',
+        'youtube-comment-raw-identifiers-must-not-be-retained-by-this-adapter',
+        'youtube-comment-history-completeness-not-guaranteed',
+      ]),
+      evidenceUrls: Object.freeze([
+        'https://developers.google.com/youtube/v3/docs/comments',
+        'https://developers.google.com/youtube/v3/docs/commentThreads',
+        'https://developers.google.com/youtube/terms/developer-policies',
+        'https://developers.google.com/youtube/terms/derived-metrics-policy',
       ]),
     }),
     Object.freeze({
