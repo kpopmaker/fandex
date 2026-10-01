@@ -7,8 +7,11 @@ import {
   NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE,
 } from '../lib/server/ingestion/naverNewsVercelCronFallback';
 import type {
-  NaverNewsRecurringDependencies,
-} from '../lib/server/ingestion/naverNewsRecurringScheduler';
+  NaverNewsBlobOnlyCollectionStageSummary,
+} from '../lib/server/ingestion/naverNewsBlobOnlyCollectionStage';
+import type {
+  ImmutableTextObjectStore,
+} from '../lib/server/storage/immutableTextObjectStore';
 
 const CRON_SECRET = 'cron-secret-value';
 const SCHEDULER_SECRET = 'scheduler-secret-value';
@@ -60,52 +63,58 @@ function request(
   );
 }
 
-function fakeDispatch(
-  counter: { count: number },
-): NonNullable<NaverNewsRecurringDependencies['dispatch']> {
-  return async (
-    input,
-  ) => {
-    counter.count += 1;
-    assert.equal(input.query, '아이유 IU');
-    assert.equal(input.display, 100);
-    assert.equal(
-      input.environment.FANDEX_NAVER_NEWS_SCHEDULER_SECRET,
-      SCHEDULER_SECRET,
-    );
-    return Object.freeze({
-      mode: 'scheduler-dispatch' as const,
-      dispatchVersion:
-        'v126_naver_news_scheduler_dispatch_v1' as const,
-      schedulerVersion:
-        'v125_naver_news_scheduler_v1' as const,
-      slotStart: '2026-10-01T12:00:00.000Z',
-      nextSlotStart: '2026-10-01T13:00:00.000Z',
-      collectionKey:
-        'sched-v125-naver-news-20261001t120000z-f1ed381d367d',
-      workerId:
-        'naver-scheduler-v125-20261001t120000z-f1ed381d367d',
-      production: Object.freeze({
-        mode: 'production-write' as const,
-        contractVersion:
-          'v121_naver_news_ingestion_v1' as const,
-        status: 'applied' as const,
-        requestSha256: 'a'.repeat(64),
-        resultSha256: 'b'.repeat(64),
-        attempt: 1,
-        counts: Object.freeze({
-          received: 100,
-          rawEvidence: 100,
-          normalizedRecords: 100,
-          duplicateRecords: 0,
-          rejectedItems: 0,
-        }),
-      }),
-    });
-  };
+function memoryStore(): ImmutableTextObjectStore {
+  return Object.freeze({
+    async readText() {
+      return null;
+    },
+    async listPathnames() {
+      return Object.freeze([]);
+    },
+    async putTextIfAbsent(pathname: string) {
+      return Object.freeze({
+        status: 'created' as const,
+        pathname,
+      });
+    },
+  });
 }
 
-test('rejects wrong auth, schedule, method, and query before dispatch', async () => {
+function stageSummary(): NaverNewsBlobOnlyCollectionStageSummary {
+  return Object.freeze({
+    contractVersion: 'naver-news-blob-only-collection-stage-v1',
+    mode: 'blob-only-collection-stage' as const,
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
+    slotStart: '2026-10-01T12:00:00.000Z',
+    collectionKey:
+      'sched-v125-naver-news-20261001t120000z-f1ed381d367d',
+    jobId: 'a'.repeat(64),
+    requestSha256: 'b'.repeat(64),
+    resultSha256: 'c'.repeat(64),
+    planSha256: 'd'.repeat(64),
+    stagedObjectStatus: 'created' as const,
+    counts: Object.freeze({
+      received: 100,
+      rawEvidence: 100,
+      normalizedRecords: 100,
+      duplicateRecords: 0,
+      rejectedItems: 0,
+    }),
+    safety: Object.freeze({
+      databaseConnections: 0 as const,
+      databaseQueries: 0 as const,
+      databaseWrites: 0 as const,
+      databaseCompletionPerformed: false as const,
+      schedulerManifestFinalized: false as const,
+      schedulesActivated: 0 as const,
+      environmentMutations: 0 as const,
+      productActivations: 0 as const,
+      publicRouteCutovers: 0 as const,
+    }),
+  });
+}
+
+test('rejects wrong auth, schedule, method, and query before Blob store or collection stage', async () => {
   const candidates = [
     request({ authorization: 'Bearer wrong' }),
     request({ schedule: '0 * * * *' }),
@@ -116,95 +125,154 @@ test('rejects wrong auth, schedule, method, and query before dispatch', async ()
   ];
 
   for (const candidate of candidates) {
-    const counter = { count: 0 };
+    let storeCalls = 0;
+    let stageCalls = 0;
     const response = await handleNaverNewsVercelCronFallback(
       candidate,
       environment(),
       {
-        dispatch: fakeDispatch(counter),
+        createStore() {
+          storeCalls += 1;
+          return memoryStore();
+        },
+        async runStage() {
+          stageCalls += 1;
+          return stageSummary();
+        },
       },
     );
     assert.ok([403, 405].includes(response.status));
-    assert.equal(counter.count, 0);
+    assert.equal(storeCalls, 0);
+    assert.equal(stageCalls, 0);
   }
 });
 
-test('rejects missing CRON_SECRET and non-Production runtime before dispatch', async () => {
+test('rejects missing CRON_SECRET and non-Production runtime before Blob store or collection stage', async () => {
   for (const env of [
     environment({ CRON_SECRET: undefined }),
     environment({ VERCEL_ENV: 'preview' }),
   ]) {
-    const counter = { count: 0 };
+    let storeCalls = 0;
+    let stageCalls = 0;
     const response = await handleNaverNewsVercelCronFallback(
       request(),
       env,
-      { dispatch: fakeDispatch(counter) },
+      {
+        createStore() {
+          storeCalls += 1;
+          return memoryStore();
+        },
+        async runStage() {
+          stageCalls += 1;
+          return stageSummary();
+        },
+      },
     );
     assert.ok([403, 503].includes(response.status));
-    assert.equal(counter.count, 0);
+    assert.equal(storeCalls, 0);
+    assert.equal(stageCalls, 0);
   }
 });
 
-test('authenticated exact Vercel Cron request dispatches the existing scheduler once', async () => {
-  const counter = { count: 0 };
-  const response = await handleNaverNewsVercelCronFallback(
-    request(),
-    environment(),
-    {
-      dispatch: fakeDispatch(counter),
-      now: () => new Date('2026-10-01T12:17:00.000Z'),
-    },
-  );
-
-  assert.equal(response.status, 200);
-  assert.equal(counter.count, 1);
-  assert.deepEqual(await response.json(), {
-    ok: true,
-    mode: 'naver-news-vercel-cron-fallback-v1',
-    trigger: 'vercel-cron-authenticated',
-    schedule: '17 * * * *',
-    activationVersion:
-      'v1_naver_news_shadow_recurring_activation',
-    canonicalArtistId: 'iu',
-    recurringVersion:
-      'v128_naver_news_recurring_scheduler_v1',
-    schedulerVersion:
-      'v125_naver_news_scheduler_v1',
-    slotStart: '2026-10-01T12:00:00.000Z',
-    collectionKey:
-      'sched-v125-naver-news-20261001t120000z-f1ed381d367d',
-    status: 'applied',
-  });
-});
-
-test('Blob mirror mode requires OIDC before dispatch and forwards resolved token', async () => {
-  const counter = { count: 0 };
+test('authenticated exact Vercel Cron request stages one official scheduler slot to Blob only', async () => {
   let oidcCalls = 0;
+  let storeCalls = 0;
+  let stageCalls = 0;
 
   const response = await handleNaverNewsVercelCronFallback(
     request(),
     environment({
-      FANDEX_NAVER_EVIDENCE_BLOB_MIRROR_MODE: 'shadow-write-v1',
-      BLOB_STORE_ID: 'store_123',
+      FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: 'store_123',
     }),
     {
       resolveOidcToken() {
         oidcCalls += 1;
         return 'oidc-token';
       },
-      dispatch: async (input) => {
-        counter.count += 1;
-        assert.equal(input.environment.VERCEL_OIDC_TOKEN, 'oidc-token');
-        assert.equal(input.environment.BLOB_STORE_ID, 'store_123');
-        return fakeDispatch({ count: 0 })(input);
+      createStore(runtimeEnvironment) {
+        storeCalls += 1;
+        assert.equal(
+          runtimeEnvironment.FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID,
+          'store_123',
+        );
+        assert.equal(
+          runtimeEnvironment.VERCEL_OIDC_TOKEN,
+          'oidc-token',
+        );
+        return memoryStore();
       },
-      now: () => new Date('2026-10-01T12:17:00.000Z'),
+      async runStage(input, dependencies) {
+        stageCalls += 1;
+        assert.equal(input.query, '아이유 IU');
+        assert.equal(input.display, 100);
+        assert.equal(
+          input.environment.VERCEL_OIDC_TOKEN,
+          'oidc-token',
+        );
+        assert.ok(dependencies.store);
+        return stageSummary();
+      },
     },
   );
 
   assert.equal(response.status, 200);
   assert.equal(oidcCalls, 1);
-  assert.equal(counter.count, 1);
+  assert.equal(storeCalls, 1);
+  assert.equal(stageCalls, 1);
+  assert.deepEqual(await response.json(), {
+    ok: true,
+    mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
+    trigger: 'vercel-cron-authenticated',
+    schedule: '17 * * * *',
+    contractVersion: 'naver-news-blob-only-collection-stage-v1',
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
+    slotStart: '2026-10-01T12:00:00.000Z',
+    collectionKey:
+      'sched-v125-naver-news-20261001t120000z-f1ed381d367d',
+    jobId: 'a'.repeat(64),
+    resultSha256: 'c'.repeat(64),
+    stagedObjectStatus: 'created',
+    counts: {
+      received: 100,
+      rawEvidence: 100,
+      normalizedRecords: 100,
+      duplicateRecords: 0,
+      rejectedItems: 0,
+    },
+    databaseWrites: 0,
+    schedulerManifestFinalized: false,
+  });
+});
+
+test('missing Blob binding fails closed before collection stage', async () => {
+  let storeCalls = 0;
+  let stageCalls = 0;
+  const response = await handleNaverNewsVercelCronFallback(
+    request(),
+    environment(),
+    {
+      resolveOidcToken() {
+        return 'oidc-token';
+      },
+      createStore() {
+        storeCalls += 1;
+        return memoryStore();
+      },
+      async runStage() {
+        stageCalls += 1;
+        return stageSummary();
+      },
+    },
+  );
+
+  assert.equal(response.status, 503);
+  assert.equal(storeCalls, 0);
+  assert.equal(stageCalls, 0);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
+    errorClass: 'runtime_unavailable',
+  });
 });
 
 test('candidate remains dormant because vercel.json contains no crons', async () => {
@@ -220,7 +288,7 @@ test('candidate remains dormant because vercel.json contains no crons', async ()
   });
 });
 
-test('route is GET-only in sin1 and uses request-context OIDC', async () => {
+test('route is GET-only in sin1 and binds request-context OIDC to the Production Blob store', async () => {
   const route = await readFile(
     new URL(
       '../app/api/internal/naver-news/vercel-cron-fallback/route.ts',
@@ -232,4 +300,5 @@ test('route is GET-only in sin1 and uses request-context OIDC', async () => {
   assert.doesNotMatch(route, /export async function POST/);
   assert.match(route, /preferredRegion = 'sin1'/);
   assert.match(route, /getVercelOidcToken/);
+  assert.match(route, /createProductionNaverNewsBlobEvidenceStore/);
 });
