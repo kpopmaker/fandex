@@ -1,0 +1,233 @@
+{
+  "version": "youtube_v3_legacy_approved_seed_manifest_v1",
+  "provenance": {
+    "branch": "cloud-v10-pc-independent",
+    "commit": "b5ab72fb94f180a21722c991d658ccb2eb4e2de5",
+    "sources": [
+      "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_v1.py",
+      "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_artist_list_v2.py"
+    ],
+    "note": "Recovered only explicitly human-approved video IDs committed in historical approval scripts. This is not the full original youtube_seed_videos_v1.csv."
+  },
+  "semantics": {
+    "usage": "legacy_reproducibility_audit_only",
+    "activeSeedModified": false,
+    "productModified": false
+  },
+  "artists": [
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videos": [
+        {
+          "videoId": "83C3TZ4Zm_o",
+          "reviewedVideoType": "official_mv"
+        },
+        {
+          "videoId": "eq7jZgVR6IM",
+          "reviewedVideoType": "shorts"
+        },
+        {
+          "videoId": "3K15XOwICnc",
+          "reviewedVideoType": "shorts"
+        },
+        {
+          "videoId": "r2eoeCk171I",
+          "reviewedVideoType": "broadcast_clip"
+        },
+        {
+          "videoId": "0aEgFTk7B9o",
+          "reviewedVideoType": "broadcast_clip"
+        },
+        {
+          "videoId": "XxvANTF-19g",
+          "reviewedVideoType": "broadcast_clip"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "videos": [
+        {
+          "videoId": "ax1csKKQnns",
+          "reviewedVideoType": "live_clip"
+        },
+        {
+          "videoId": "IBWfp7odPmE",
+          "reviewedVideoType": "shorts"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videos": [
+        {
+          "videoId": "ke0UrNoe7-k",
+          "reviewedVideoType": "dance_practice"
+        },
+        {
+          "videoId": "vcbIP2YvDOo",
+          "reviewedVideoType": "dance_practice"
+        },
+        {
+          "videoId": "R9hv2cLYK-w",
+          "reviewedVideoType": "broadcast_clip"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "videos": [
+        {
+          "videoId": "53KJej_aLuQ",
+          "reviewedVideoType": "shorts"
+        },
+        {
+          "videoId": "YAhZMuKJsIw",
+          "reviewedVideoType": "shorts"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videos": [
+        {
+          "videoId": "TNDF5Qr6ayo"
+        },
+        {
+          "videoId": "mx8VPWBWKmY"
+        },
+        {
+          "videoId": "uVpGElT--E8"
+        },
+        {
+          "videoId": "9qkpcLK422o"
+        },
+        {
+          "videoId": "1Lmy7qwmSMc"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videos": [
+        {
+          "videoId": "V1Lr-_AxeR8"
+        },
+        {
+          "videoId": "a2grcJdfXmY"
+        },
+        {
+          "videoId": "1v2KMsfBDjc"
+        },
+        {
+          "videoId": "Gnn4GRSzRXI"
+        },
+        {
+          "videoId": "3YC4-RYEhBs"
+        },
+        {
+          "videoId": "ox9Bw-lmn6s"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videos": [
+        {
+          "videoId": "NNbaTJX_9go"
+        },
+        {
+          "videoId": "Fq-A3aLqmms"
+        },
+        {
+          "videoId": "9MaO43ekbHs"
+        },
+        {
+          "videoId": "Jx_58YiWxP0"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videos": [
+        {
+          "videoId": "N9X1o0q4aIc"
+        },
+        {
+          "videoId": "dZNPbNkKAss"
+        },
+        {
+          "videoId": "5A7qyhj-HjE"
+        },
+        {
+          "videoId": "zsdueA_zcl8"
+        },
+        {
+          "videoId": "b7gHOIJiGgI"
+        },
+        {
+          "videoId": "G0G3pLRyraY"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videos": [
+        {
+          "videoId": "Q7IFjVUUb_E"
+        },
+        {
+          "videoId": "l8sSQAa1kNM"
+        },
+        {
+          "videoId": "F0UIsSnotlA"
+        },
+        {
+          "videoId": "kQjidaLtpvk"
+        },
+        {
+          "videoId": "hQUVIT8m-c0"
+        },
+        {
+          "videoId": "jDREKfYqgkw"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videos": [
+        {
+          "videoId": "jOnLqqDRfY4"
+        },
+        {
+          "videoId": "vlmXpQOE75c"
+        },
+        {
+          "videoId": "mNLiZ25srkI"
+        },
+        {
+          "videoId": "uKFlZmn4eQk"
+        },
+        {
+          "videoId": "b5j01yC0LeY"
+        },
+        {
+          "videoId": "TBS3VbzEQis"
+        },
+        {
+          "videoId": "EUERJYKCzWU"
+        }
+      ]
+    }
+  ]
+}
