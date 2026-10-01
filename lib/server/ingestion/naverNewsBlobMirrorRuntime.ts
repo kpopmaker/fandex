@@ -37,6 +37,14 @@ const blobSdk: VercelBlobSdkPort = Object.freeze({
   },
 });
 
+export function createProductionNaverNewsBlobEvidenceStore(
+  environment: Readonly<Record<string, string | undefined>>,
+  client: VercelBlobSdkPort = blobSdk,
+) {
+  const config = resolveVercelBlobPrivateStoreConfig(environment);
+  return createVercelBlobImmutableTextObjectStore(client, config);
+}
+
 export function createProductionNaverNewsBlobEvidenceMirror(
   environment: Readonly<Record<string, string | undefined>>,
   client: VercelBlobSdkPort = blobSdk,
@@ -47,8 +55,10 @@ export function createProductionNaverNewsBlobEvidenceMirror(
     throw new Error('naver_news_blob_mirror_mode_invalid');
   }
 
-  const config = resolveVercelBlobPrivateStoreConfig(environment);
-  const store = createVercelBlobImmutableTextObjectStore(client, config);
+  const store = createProductionNaverNewsBlobEvidenceStore(
+    environment,
+    client,
+  );
 
   return Object.freeze({
     async stage(plan) {
