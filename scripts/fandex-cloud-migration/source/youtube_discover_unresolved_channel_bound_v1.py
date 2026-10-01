@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import argparse
 import json
 import os
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -47,15 +49,29 @@ def youtube_get(url, params, api_key):
         },
     )
 
-    with urllib.request.urlopen(
-        request,
-        timeout=30,
-    ) as response:
-        return json.loads(
-            response.read().decode(
-                "utf-8"
-            )
-        )
+    last_error = None
+
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(
+                request,
+                timeout=30,
+            ) as response:
+                return json.loads(
+                    response.read().decode(
+                        "utf-8"
+                    )
+                )
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code != 429 or attempt == 2:
+                raise
+            time.sleep(2 ** attempt)
+
+    raise RuntimeError(
+        "YouTube request failed after retries: "
+        + str(last_error)
+    )
 
 
 def get_anchor(
@@ -281,7 +297,28 @@ def search_channel(
     return rows
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Discover channel-bound YouTube candidates "
+            "for unresolved canonical artists."
+        )
+    )
+    parser.add_argument(
+        "--canonical-id",
+        action="append",
+        default=[],
+        help=(
+            "Limit discovery to one canonicalArtistId. "
+            "May be repeated."
+        ),
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+
     api_key = norm(
         os.environ.get(
             API_KEY_ENV
@@ -304,10 +341,51 @@ def main():
     if not isinstance(
         targets,
         list,
-    ) or len(targets) != 4:
+    ) or not targets:
         raise RuntimeError(
-            "Expected four unresolved "
-            "YouTube review targets."
+            "YouTube unresolved review plan has no targets."
+        )
+
+    requested_ids = {
+        norm(value)
+        for value in args.canonical_id
+        if norm(value)
+    }
+
+    if requested_ids:
+        targets = [
+            target
+            for target in targets
+            if norm(
+                target.get(
+                    "canonicalArtistId"
+                )
+            )
+            in requested_ids
+        ]
+
+        found_ids = {
+            norm(
+                target.get(
+                    "canonicalArtistId"
+                )
+            )
+            for target in targets
+        }
+        missing_requested = sorted(
+            requested_ids
+            - found_ids
+        )
+        if missing_requested:
+            raise RuntimeError(
+                "Requested unresolved YouTube canonical IDs "
+                "not present in review plan: "
+                + ", ".join(missing_requested)
+            )
+
+    if not targets:
+        raise RuntimeError(
+            "No unresolved YouTube review targets selected."
         )
 
     seen_ids = set()
