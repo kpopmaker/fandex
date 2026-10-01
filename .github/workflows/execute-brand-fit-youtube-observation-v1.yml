@@ -7,6 +7,10 @@ on:
         description: Exact main SHA approved for the one-shot Brand observation
         required: true
         type: string
+      execution_authorization_id:
+        description: Exact owner execution authorization ID from issue #367
+        required: true
+        type: string
       confirm:
         description: Exact confirmation token
         required: true
@@ -15,6 +19,7 @@ on:
 permissions:
   contents: read
   actions: read
+  issues: read
 
 concurrency:
   group: brand-fit-youtube-observation-v1
@@ -27,7 +32,9 @@ jobs:
     timeout-minutes: 10
     env:
       EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+      EXECUTION_AUTHORIZATION_ID: ${{ inputs.execution_authorization_id }}
       EXECUTION_CONFIRM: ${{ inputs.confirm }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       FANDEX_BRAND_FIT_YOUTUBE_API_KEY: ${{ secrets.FANDEX_BRAND_FIT_YOUTUBE_API_KEY }}
       FANDEX_BRAND_FIT_YOUTUBE_METADATA_POLICY_APPROVED: approved-brand-fit-youtube-metadata-policy-v1
       FANDEX_BRAND_FIT_YOUTUBE_DISCLOSURE_READY: approved-brand-fit-youtube-disclosure-v1
@@ -42,9 +49,12 @@ jobs:
         run: |
           set -euo pipefail
           test "$EXPECTED_MAIN_SHA" = "$GITHUB_SHA"
+          test -n "$EXECUTION_AUTHORIZATION_ID"
           test "$EXECUTION_CONFIRM" = "execute-brand-fit-youtube-observation-v1"
           test -n "$FANDEX_BRAND_FIT_YOUTUBE_API_KEY"
       - run: npm ci
+      - name: Validate owner approval and one-shot consumption
+        run: npx tsx scripts/operations/brandFitYoutubeProductionExecutionGateV1.mts
       - name: Execute exactly one bounded Brand Fit provider observation
         shell: bash
         run: |
