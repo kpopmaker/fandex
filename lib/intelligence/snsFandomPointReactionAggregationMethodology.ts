@@ -222,6 +222,26 @@ export function evaluateSnsFandomReactionAggregationMethodology(
     });
   }
 
+  const validation =
+    validateSnsFandomReactionAggregationDecision(input.decision);
+
+  if (!validation.ok) {
+    return Object.freeze({
+      contractVersion:
+        SNS_FANDOM_REACTION_AGGREGATION_METHODOLOGY_VERSION,
+      state: 'methodology-invalid' as const,
+      construct: input.decision.construct,
+      metricId: input.decision.metricId,
+      methodId: input.decision.methodId,
+      executionImplemented: false as const,
+      aggregateValue: null,
+      normalizedValue: null,
+      crossMetricCombinationAllowed: false as const,
+      crossPlatformCombinationAllowed: false as const,
+      blockers: validation.blockers,
+    });
+  }
+
   const validationDataset = input.validationDataset;
   const datasetBlockers: string[] = [];
 
@@ -291,26 +311,6 @@ export function evaluateSnsFandomReactionAggregationMethodology(
       crossMetricCombinationAllowed: false as const,
       crossPlatformCombinationAllowed: false as const,
       blockers: Object.freeze(datasetBlockers),
-    });
-  }
-
-  const validation =
-    validateSnsFandomReactionAggregationDecision(input.decision);
-
-  if (!validation.ok) {
-    return Object.freeze({
-      contractVersion:
-        SNS_FANDOM_REACTION_AGGREGATION_METHODOLOGY_VERSION,
-      state: 'methodology-invalid' as const,
-      construct: input.decision.construct,
-      metricId: input.decision.metricId,
-      methodId: input.decision.methodId,
-      executionImplemented: false as const,
-      aggregateValue: null,
-      normalizedValue: null,
-      crossMetricCombinationAllowed: false as const,
-      crossPlatformCombinationAllowed: false as const,
-      blockers: validation.blockers,
     });
   }
 
