@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - 'lib/intelligence/riskAdjustmentPointConstruct.ts'
+      - 'lib/intelligence/riskAdjustmentNewsIssuePointProjection.ts'
       - 'tests/risk-adjustment-point-contract-v1.test.mts'
+      - 'tests/risk-adjustment-news-issue-projection-v1.test.mts'
       - '.github/workflows/validate-risk-adjustment-contract-v1.yml'
   workflow_dispatch:
 
@@ -21,5 +23,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts
+      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts
       - run: npm run typecheck
