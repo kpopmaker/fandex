@@ -62,6 +62,12 @@ test('manual executor performs exactly one bounded provider request and no write
   assert.match(result.storedEvidenceReview.evidenceDigest, /^[0-9a-f]{64}$/);
   assert.equal(result.storedEvidenceReview.storageWriteAuthorized, false);
   assert.equal(result.storedEvidenceReview.productActivationAuthorized, false);
+  assert.match(
+    result.immutableEvidenceObject.pathname,
+    /^fandex\/brand-fit\/stored-evidence\/v1\/iu\/estee-lauder\/[0-9a-f]{64}\.json$/,
+  );
+  assert.match(result.immutableEvidenceObject.payloadDigest, /^[0-9a-f]{64}$/);
+  assert.equal(result.immutableEvidenceObject.storageWriteAuthorized, false);
 
   assert.equal(requests.length, 1);
   assert.equal(requests[0].pathname, '/youtube/v3/videos');
@@ -90,6 +96,9 @@ test('sanitized output never includes provider credential or raw title/descripti
   assert.match(serialized, /storage-candidate/);
   assert.match(serialized, /evidenceDigest/);
   assert.match(serialized, /storageWriteAuthorized/);
+  assert.match(serialized, /immutableEvidenceObject/);
+  assert.match(serialized, /fandex\\\/brand-fit\\\/stored-evidence\\\/v1/);
+  assert.match(serialized, /payloadDigest/);
 });
 
 test('invalid credential fails before any provider request', async () => {
