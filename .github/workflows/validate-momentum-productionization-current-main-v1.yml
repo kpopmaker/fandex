@@ -61,6 +61,11 @@ jobs:
           tests/momentum-carrier-attestation-lineage-v2.test.mts
           tests/momentum-carrier-persistence-decision-v1.test.mts
           tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+          .github/workflows/momentum-recovery-continuity-gate-v1.yml
+          .github/workflows/validate-momentum-recovery-continuity-gate-v1.yml
+          lib/intelligence/fandexMomentumRecoveryContinuityGate.ts
+          scripts/operations/momentumRecoveryContinuityGateV1.mts
+          tests/momentum-recovery-continuity-gate-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
