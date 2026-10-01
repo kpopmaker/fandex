@@ -1,0 +1,56 @@
+name: Validate Artist Expansion YouTube V channel-bound discovery v2
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-v-channel-bound-v2
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-v-channel-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Targeted discovery syntax
+        run: python -m py_compile scripts/fandex-cloud-migration/source/youtube_discover_unresolved_channel_bound_v1.py
+      - name: Live V-only channel-bound discovery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_discover_unresolved_channel_bound_v1.py --canonical-id v
+      - name: Print V candidate evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path("youtube_v3_unresolved_channel_bound_candidates_v1.json").read_text(encoding="utf-8"))
+          assert p["targetCount"] == 1
+          row=p["targets"][0]
+          assert row["canonicalArtistId"] == "v"
+          print(
+              "V channel-bound | "
+              f"channel={row['resolvedChannel']['title']} | "
+              f"customUrl={row['resolvedChannel']['customUrl']} | "
+              f"candidates={row['candidateCount']}"
+          )
+          for item in row["candidates"]:
+              print(
+                  f"{item['videoId']} | "
+                  f"{item['title']} | "
+                  f"{item['publishedAt']} | "
+                  f"{item['channelTitle']}"
+              )
+          PY
+      - name: Upload V evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-v-channel-bound-v2
+          path: youtube_v3_unresolved_channel_bound_candidates_v1.json
+          if-no-files-found: ignore
+          retention-days: 7
