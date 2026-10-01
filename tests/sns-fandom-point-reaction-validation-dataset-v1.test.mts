@@ -140,7 +140,7 @@ function observationsFor(
         },
         lifecycle: {
           state: 'research',
-          materialClass: options.materialClass ?? 'real',
+          materialClass: (options.materialClass ?? 'real') as 'real',
           blockers: [],
         },
       });
