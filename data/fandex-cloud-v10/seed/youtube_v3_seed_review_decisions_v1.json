@@ -1,0 +1,254 @@
+{
+  "version": "youtube_v3_seed_review_decisions_v1",
+  "sourceRunId": 36800253141,
+  "sourceArtifact": "artist-expansion-youtube-discovery-v2",
+  "evidenceMode": "live_youtube_data_api_title_channel_type_review",
+  "activationState": "reviewed_candidate_only_not_active",
+  "semantics": {
+    "approved": "Explicitly reviewed as artist-relevant seed evidence. May enter candidate seed only.",
+    "rejected": "Explicitly reviewed as wrong artist, fan/FMVs, unrelated, or insufficiently artist-specific.",
+    "needs_review": "Potentially relevant but not sufficiently evidenced for seed promotion.",
+    "unlisted": "Machine candidate only. Never auto-promote."
+  },
+  "reviews": [
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "approved": [
+        "3RwRrxiG5j4",
+        "nP1xjFX86Po",
+        "RdUV9Ms5GM4"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "approved": [
+        "1Yu-Q8SGOBo",
+        "rAE2y9Y3EV8",
+        "83C3TZ4Zm_o"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "approved": [
+        "ke0UrNoe7-k",
+        "WwxpFQy3BRw",
+        "G5kSPz4OK8M"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "approved": [
+        "WI4__7z_dJw",
+        "ntLoF0LnAwY",
+        "dTWxjbJZ238"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "approved": [
+        "TNDF5Qr6ayo",
+        "vZ5GH8qyQmk",
+        "uVpGElT--E8"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "approved": [
+        "a2grcJdfXmY",
+        "Y1Lah0BM0KQ"
+      ],
+      "rejected": [],
+      "needsReview": [
+        "27C4pfRsf9g"
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "approved": [
+        "NNbaTJX_9go",
+        "tEDMEcyoS74"
+      ],
+      "rejected": [
+        "vo_qsb635u0"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "approved": [
+        "pBpr9TnhhkE",
+        "Do9BOhk0u_w",
+        "oyubak3kMFE"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "approved": [
+        "BZ4UzthYTss",
+        "Q7IFjVUUb_E",
+        "vo_qsb635u0"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "approved": [
+        "jOnLqqDRfY4",
+        "Tg076GY2a-Q",
+        "0sAsd9fdeRQ"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "approved": [
+        "_gyultVTesk",
+        "b4iVv91Z6lY",
+        "GEk4jHwfFTA"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "approved": [
+        "2GJfWMYCWY0"
+      ],
+      "rejected": [
+        "OOiWQqwBi_g",
+        "i97G1PtxTlk"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "approved": [
+        "FD_oc92GO6k"
+      ],
+      "rejected": [
+        "P5Yt4KvJnTY"
+      ],
+      "needsReview": [
+        "gOjG-70-D5o"
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "approved": [
+        "MT-4Bk1Lw8g",
+        "K5SXamqxoio",
+        "bPjrHu60278"
+      ],
+      "rejected": [],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "approved": [
+        "p0nPyE-dv9Q"
+      ],
+      "rejected": [
+        "df5oNSlJ47c",
+        "KKKU6mq0URY"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "approved": [],
+      "rejected": [
+        "vOONJEFWHIo",
+        "GEk4jHwfFTA",
+        "kK0zrehnAZs"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "approved": [],
+      "rejected": [
+        "GEk4jHwfFTA",
+        "A1nu9jg6ciY",
+        "1DzBKtD3JzI"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "approved": [],
+      "rejected": [],
+      "needsReview": [
+        "s466YCiHfKw",
+        "_IT83Y_HcAw",
+        "0UPDBODtxzw"
+      ]
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "approved": [],
+      "rejected": [
+        "aiUf4ZoyoKg"
+      ],
+      "needsReview": [
+        "FyS5dAywkEo",
+        "J77i-E_0JWg"
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "approved": [
+        "Lufa9QAFFeY"
+      ],
+      "rejected": [
+        "-OO91qecQtM",
+        "T168ovl39rE"
+      ],
+      "needsReview": []
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "approved": [
+        "4PBRfhGY1qs",
+        "p3hkvshy5ko",
+        "FM9l_F_tlUc"
+      ],
+      "rejected": [],
+      "needsReview": []
+    }
+  ]
+}
