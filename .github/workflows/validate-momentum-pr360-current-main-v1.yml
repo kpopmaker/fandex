@@ -1,0 +1,47 @@
+name: Validate Momentum PR360 against current main v1
+
+on:
+  push:
+    branches:
+      - validation/momentum-pr360-current-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Capture current main and merge-simulate
+        run: |
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          CURRENT_MAIN="$(git rev-parse refs/remotes/origin/main)"
+          echo "MOMENTUM_PR360_VALIDATED_MAIN_SHA=$CURRENT_MAIN"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git merge --no-commit --no-ff "$CURRENT_MAIN"
+
+      - run: npm ci
+
+      - name: Recovery epoch migration regression
+        run: npx tsx --test tests/momentum-naver-recovery-epoch-migration-v1.test.mts
+
+      - name: Existing NAVER shadow epoch regression
+        run: npx tsx --test tests/naver-news-shadow-epoch-v1.test.mts
+
+      - name: Existing frozen newsIssuePoint regression
+        run: npx tsx --test tests/naver-news-issue-point-frozen-methodology.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
