@@ -11,6 +11,9 @@ import {
 import {
   buildYoutubeSnsFandomCandidate,
 } from '../lib/intelligence/snsFandomPointYoutubeCandidate';
+import {
+  buildYoutubeAnalyticsFandomPersistenceCandidate,
+} from '../lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate';
 
 function observation(
   overrides: Partial<SnsFandomObservation> = {},
@@ -70,6 +73,15 @@ test('current provider matrix intentionally has no Production-ready source', () 
   );
   assert.equal(youtube?.state, 'conditional-approval-required');
 
+  const youtubeAnalytics = SNS_FANDOM_PROVIDER_QUALIFICATIONS.find(
+    (item) => item.providerId === 'youtube-analytics-api',
+  );
+  assert.equal(youtubeAnalytics?.state, 'authorized-account-only');
+  assert.deepEqual(
+    youtubeAnalytics?.constructCoverage,
+    ['fandom-activity-persistence'],
+  );
+
   const tiktokResearch = SNS_FANDOM_PROVIDER_QUALIFICATIONS.find(
     (item) => item.providerId === 'tiktok-research-api',
   );
@@ -128,6 +140,25 @@ test('observation time and collection time remain distinct semantics', () => {
   assert.deepEqual(
     validateSnsFandomObservation(invalid).blockers,
     ['collection-precedes-observation'],
+  );
+});
+
+test('provider period ordering is validated independently from collection time', () => {
+  const invalid = observation({
+    time: {
+      providerPeriodStart: '2026-10-02T00:00:00.000Z',
+      providerPeriodEnd: '2026-10-01T23:59:59.999Z',
+      observedAt: '2026-10-01T12:00:00.000Z',
+      collectedAt: '2026-10-02T00:01:00.000Z',
+    },
+  });
+
+  assert.deepEqual(
+    validateSnsFandomObservation(invalid).blockers,
+    [
+      'provider-period-order-invalid',
+      'observation-precedes-provider-period-end',
+    ],
   );
 });
 
@@ -225,6 +256,68 @@ test('YouTube adapter emits no observations before rights approval', () => {
   assert.deepEqual(result.blockers, [
     'youtube-derived-metrics-approval-missing',
     'youtube-retention-policy-approval-missing',
+  ]);
+});
+
+test('YouTube Analytics persistence adapter emits nothing without channel-owner authorization', () => {
+  const result = buildYoutubeAnalyticsFandomPersistenceCandidate({
+    snapshots: [],
+    channelOwnerAuthorizationVerified: false,
+  });
+
+  assert.equal(result.state, 'authorization-blocked');
+  assert.deepEqual(result.observations, []);
+  assert.deepEqual(result.persistenceEvidence, []);
+  assert.deepEqual(result.blockers, [
+    'youtube-analytics-channel-owner-authorization-required',
+  ]);
+});
+
+test('authorized YouTube Analytics subscriber activity remains a bounded persistence proxy', () => {
+  const result = buildYoutubeAnalyticsFandomPersistenceCandidate({
+    channelOwnerAuthorizationVerified: true,
+    snapshots: [
+      {
+        canonicalArtistId: 'iu',
+        youtubeChannelId: 'UC-iu',
+        providerPeriodStart: '2026-09-29T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-29T23:59:59.999Z',
+        observedAt: '2026-09-30T00:00:00.000Z',
+        collectedAt: '2026-09-30T00:01:00.000Z',
+        subscribedViews: 120,
+        evidenceRef: 'evidence://youtube-analytics/iu/2026-09-29',
+      },
+      {
+        canonicalArtistId: 'iu',
+        youtubeChannelId: 'UC-iu',
+        providerPeriodStart: '2026-09-30T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+        subscribedViews: 140,
+        evidenceRef: 'evidence://youtube-analytics/iu/2026-09-30',
+      },
+    ],
+  });
+
+  assert.equal(result.state, 'normalized-authorized-account-candidate');
+  assert.equal(result.observations.length, 2);
+  assert.ok(result.observations.every(
+    (item) =>
+      item.providerId === 'youtube-analytics-api'
+      && item.variable.dimension === 'fandom-activity-persistence'
+      && item.variable.metricId
+        === 'youtube.analytics.subscribed-view-count',
+  ));
+  assert.equal(result.persistenceEvidence.length, 1);
+  assert.equal(
+    result.persistenceEvidence[0]?.state,
+    'temporal-history-present',
+  );
+  assert.equal(result.persistenceEvidence[0]?.derivedNumericValue, null);
+  assert.equal(result.persistenceEvidence[0]?.inferenceOfFanIdentity, false);
+  assert.deepEqual(result.blockers, [
+    'youtube-analytics-generic-kpop-coverage-not-established',
   ]);
 });
 
