@@ -8,11 +8,13 @@ on:
       - 'lib/intelligence/riskAdjustmentActivityExposureProjection.ts'
       - 'lib/intelligence/riskAdjustmentUpstreamMetadataRequirements.ts'
       - 'lib/intelligence/riskAdjustmentUpstreamInventory.ts'
+      - 'lib/intelligence/riskAdjustmentDependencyHandoff.ts'
       - 'tests/risk-adjustment-point-contract-v1.test.mts'
       - 'tests/risk-adjustment-news-issue-projection-v1.test.mts'
       - 'tests/risk-adjustment-activity-exposure-projection-v1.test.mts'
       - 'tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts'
       - 'tests/risk-adjustment-upstream-inventory-v1.test.mts'
+      - 'tests/risk-adjustment-dependency-handoff-v1.test.mts'
       - '.github/workflows/validate-risk-adjustment-contract-v1.yml'
   workflow_dispatch:
 
@@ -29,5 +31,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-upstream-inventory-v1.test.mts
+      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-upstream-inventory-v1.test.mts tests/risk-adjustment-dependency-handoff-v1.test.mts
       - run: npm run typecheck
