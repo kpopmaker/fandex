@@ -13,6 +13,7 @@ on:
       - 'lib/intelligence/brandFitYouTubeManualExecution.ts'
       - 'lib/intelligence/brandFitStoredEvidenceReview.ts'
       - 'lib/intelligence/brandFitImmutableEvidenceRecord.ts'
+      - 'lib/intelligence/brandFitProductionObservationReceipt.ts'
       - 'scripts/operations/brandFitYoutubeObservationV1.mts'
       - 'docs/fandex-brand-fit-youtube-production-ops-handoff.md'
       - 'tests/brand-fit-point-contract-v1.test.mts'
@@ -24,6 +25,7 @@ on:
       - 'tests/brand-fit-youtube-manual-execution-v1.test.mts'
       - 'tests/brand-fit-stored-evidence-review-v1.test.mts'
       - 'tests/brand-fit-immutable-evidence-record-v1.test.mts'
+      - 'tests/brand-fit-production-observation-receipt-v1.test.mts'
       - '.github/workflows/validate-brand-fit-contract-v1.yml'
   workflow_dispatch:
 
@@ -40,5 +42,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/brand-fit-point-contract-v1.test.mts tests/brand-fit-source-qualification-v1.test.mts tests/brand-fit-youtube-source-adapter-v1.test.mts tests/brand-fit-identity-bindings-v1.test.mts tests/brand-fit-production-collection-handoff-v1.test.mts tests/brand-fit-youtube-api-request-v1.test.mts tests/brand-fit-youtube-manual-execution-v1.test.mts tests/brand-fit-stored-evidence-review-v1.test.mts tests/brand-fit-immutable-evidence-record-v1.test.mts
+      - run: npx tsx --test tests/brand-fit-point-contract-v1.test.mts tests/brand-fit-source-qualification-v1.test.mts tests/brand-fit-youtube-source-adapter-v1.test.mts tests/brand-fit-identity-bindings-v1.test.mts tests/brand-fit-production-collection-handoff-v1.test.mts tests/brand-fit-youtube-api-request-v1.test.mts tests/brand-fit-youtube-manual-execution-v1.test.mts tests/brand-fit-stored-evidence-review-v1.test.mts tests/brand-fit-immutable-evidence-record-v1.test.mts tests/brand-fit-production-observation-receipt-v1.test.mts
       - run: npm run typecheck
