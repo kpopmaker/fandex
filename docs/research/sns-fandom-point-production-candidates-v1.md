@@ -35,6 +35,26 @@ References:
 - https://developers.google.com/youtube/v3/docs/channels
 - https://developers.google.com/youtube/v3/docs/comments
 
+### YouTube Analytics / Reporting APIs — authorized persistence candidate
+
+Official channel reports require OAuth authorization from the channel owner. The reporting schema can segment user activity by `subscribed_status` and date, allowing FANDEX to observe repeated aggregate activity from the subscribed audience without tracking individual viewers.
+
+Production status: **authorized-account-only**.
+
+This is a bounded candidate for the **fandom activity / persistence** dimension, not a claim that every subscriber is a fan. The adapter uses aggregate subscribed-view activity across provider periods and never infers individual identity or loyalty.
+
+Blockers:
+
+- channel-owner authorization is required;
+- generic K-pop artist coverage is therefore not established;
+- shared OAuth/runtime handling belongs outside this variable-specific branch.
+
+References:
+
+- https://developers.google.com/youtube/analytics/channel_reports
+- https://developers.google.com/youtube/reporting
+- https://developers.google.com/youtube/reporting/v1/reports/channel_reports
+
 ### Instagram API — coverage-limited candidate
 
 Meta's current Instagram Platform documentation describes management of Instagram Business or Creator accounts linked through the platform. That does not establish arbitrary read coverage of the full K-pop artist universe.
@@ -89,7 +109,13 @@ The smallest currently actionable candidate for **SNS public reaction / diffusio
 
 That does **not** satisfy the separate **fandom activity / persistence** construct. Repeated snapshots of the same YouTube view/like/comment counter are reaction history, not evidence that FANDEX may relabel as fandom persistence.
 
-Accordingly, there is currently **no qualified minimum full source combination** for the complete `snsFandomPoint` construct. A second, separately qualified persistence source or an explicitly authorized provider signal is still required. Until that exists, the Product remains blocked rather than filling the missing dimension with reaction history.
+Accordingly, there is currently **no generic, full-universe qualified minimum source combination** for the complete `snsFandomPoint` construct.
+
+For an artist that explicitly authorizes FANDEX, the strongest current bounded candidate is:
+- public-reaction evidence from YouTube statistics under the applicable YouTube data/derived-metric/storage permissions; plus
+- aggregate subscribed-audience activity history from YouTube Analytics/Reporting.
+
+That authorized-account path still does not solve arbitrary K-pop coverage. For artists without channel-owner authorization, a separately qualified persistence source is still required. Until then, the Product remains blocked rather than filling the missing dimension with reaction history.
 
 YouTube itself is deliberately not called a Production source yet. It remains rights-blocked until the documented YouTube analytics/derived-metrics and retention requirements are satisfied.
 
@@ -105,9 +131,11 @@ The YouTube candidate adapter therefore:
 
 ## History requirement
 
-Historical access is prospective for the first candidate.
+Historical access differs by source:
+- public YouTube Data API reaction evidence requires compliant prospective snapshot handling unless an approved storage path applies;
+- authorized YouTube Analytics/Reporting can query owned-channel activity over explicit report periods.
 
-A single snapshot is `history-insufficient`. Two or more distinct observation times establish only `temporal-history-present`, which is the mathematical minimum for change-over-time evidence, not a fandom-strength threshold. The contract still does not infer persistence strength or produce a score.
+A single observation remains `history-insufficient`. Two or more distinct observation times within the **same provider artist/content/metric scope** establish only `temporal-history-present`, which is the mathematical minimum for change-over-time evidence, not a fandom-strength threshold. Reaction history still cannot satisfy the fandom-persistence dimension. The contract does not infer persistence strength or produce a score.
 
 ## Current Product readiness
 
