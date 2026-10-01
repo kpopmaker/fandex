@@ -49,7 +49,15 @@ def main():
 
     queries = discover.build_queries("방탄소년단")
     assert queries
-    assert all("BTS" in query for query in queries)
+    assert len(queries) == len(discover.ALIASES["방탄소년단"])
+    assert any(
+        "BTS" in query
+        for query in queries
+    )
+    assert any(
+        "방탄소년단" in query
+        for query in queries
+    )
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
