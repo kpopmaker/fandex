@@ -143,6 +143,10 @@ function observation(
     evidence: Object.freeze({
       evidenceRef: batch.evidenceRef,
       providerClientRef: batch.providerClientRef,
+      providerEndpoints: Object.freeze([
+        'youtube.commentThreads.list',
+        'youtube.comments.list',
+      ]),
       revision: null,
     }),
     lifecycle: Object.freeze({
