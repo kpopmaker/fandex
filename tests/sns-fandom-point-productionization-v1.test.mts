@@ -157,8 +157,39 @@ test('persistence evidence requires temporal history and does not infer fan iden
     }),
   ]);
   assert.equal(two[0]?.state, 'temporal-history-present');
+  assert.equal(two[0]?.dimension, 'public-reaction-diffusion');
+  assert.equal(two[0]?.providerContentId, 'video-1');
   assert.equal(two[0]?.distinctObservationTimeCount, 2);
   assert.equal(two[0]?.derivedNumericValue, null);
+});
+
+test('persistence history never combines different provider content implicitly', () => {
+  const split = buildSnsFandomPersistenceEvidence([
+    observation(),
+    observation({
+      observationId: 'obs-other-content',
+      entity: {
+        entityType: 'artist',
+        canonicalArtistId: 'iu',
+        providerArtistId: 'UC-example',
+        providerContentId: 'video-2',
+        identityState: 'bound',
+      },
+      time: {
+        providerPeriodStart: null,
+        providerPeriodEnd: null,
+        observedAt: '2026-10-02T00:00:00.000Z',
+        collectedAt: '2026-10-02T00:01:00.000Z',
+      },
+    }),
+  ]);
+
+  assert.equal(split.length, 2);
+  assert.ok(split.every((item) => item.state === 'history-insufficient'));
+  assert.deepEqual(
+    split.map((item) => item.providerContentId).sort(),
+    ['video-1', 'video-2'],
+  );
 });
 
 test('current Real Product readiness fails closed on provider rights', () => {
@@ -242,7 +273,7 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
   });
 });
 
-test('even dual-dimension source evidence does not invent a numeric snsFandomPoint', () => {
+test('reaction history alone cannot satisfy fandom persistence readiness', () => {
   const productionQualifications =
     SNS_FANDOM_PROVIDER_QUALIFICATIONS.map((item) =>
       item.providerId === 'youtube-data-api'
@@ -250,32 +281,106 @@ test('even dual-dimension source evidence does not invent a numeric snsFandomPoi
         : item,
     );
 
-  const observations = [
-    observation(),
-    observation({
-      observationId: 'obs-2',
-      value: {
-        rawValue: 12,
-        unit: 'count',
-        missingState: 'observed',
-      },
-      time: {
-        providerPeriodStart: null,
-        providerPeriodEnd: null,
-        observedAt: '2026-10-02T00:00:00.000Z',
-        collectedAt: '2026-10-02T00:01:00.000Z',
-      },
-    }),
-  ];
+  const result = evaluateSnsFandomPointReadiness({
+    canonicalArtistId: 'iu',
+    observations: [
+      observation(),
+      observation({
+        observationId: 'obs-2',
+        time: {
+          providerPeriodStart: null,
+          providerPeriodEnd: null,
+          observedAt: '2026-10-02T00:00:00.000Z',
+          collectedAt: '2026-10-02T00:01:00.000Z',
+        },
+      }),
+    ],
+    providerQualifications: productionQualifications,
+  });
+
+  assert.equal(result.state, 'source-evidence-incomplete');
+  assert.equal(result.observedReactionEvidenceCount, 2);
+  assert.equal(result.temporalPersistenceEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes('fandom-activity-persistence-history-missing'),
+  );
+});
+
+test('even explicitly qualified dual-dimension evidence does not invent a numeric snsFandomPoint', () => {
+  const productionQualifications =
+    SNS_FANDOM_PROVIDER_QUALIFICATIONS.map((item) =>
+      item.providerId === 'x-api'
+        ? {
+            ...item,
+            state: 'production-ready' as const,
+            blockers: [],
+          }
+        : item,
+    );
+
+  const fandomObservation = (
+    observationId: string,
+    observedAt: string,
+    collectedAt: string,
+  ): SnsFandomObservation => ({
+    ...observation(),
+    observationId,
+    providerId: 'x-api',
+    entity: {
+      entityType: 'artist',
+      canonicalArtistId: 'iu',
+      providerArtistId: 'hypothetical-qualified-provider-artist',
+      providerContentId: 'persistence-scope-1',
+      identityState: 'bound',
+    },
+    variable: {
+      variableId: 'snsFandomPoint',
+      metricFamily: 'sns-fandom',
+      dimension: 'fandom-activity-persistence',
+      metricId: 'test.qualified-persistence-signal',
+      metricRole: 'construct-evidence',
+    },
+    time: {
+      providerPeriodStart: null,
+      providerPeriodEnd: null,
+      observedAt,
+      collectedAt,
+    },
+  });
+
+  const reaction = {
+    ...observation(),
+    observationId: 'reaction-1',
+    providerId: 'x-api' as const,
+    entity: {
+      entityType: 'artist' as const,
+      canonicalArtistId: 'iu',
+      providerArtistId: 'hypothetical-qualified-provider-artist',
+      providerContentId: 'reaction-scope-1',
+      identityState: 'bound' as const,
+    },
+  };
 
   const result = evaluateSnsFandomPointReadiness({
     canonicalArtistId: 'iu',
-    observations,
+    observations: [
+      reaction,
+      fandomObservation(
+        'fandom-1',
+        '2026-10-01T00:00:00.000Z',
+        '2026-10-01T00:01:00.000Z',
+      ),
+      fandomObservation(
+        'fandom-2',
+        '2026-10-02T00:00:00.000Z',
+        '2026-10-02T00:01:00.000Z',
+      ),
+    ],
     providerQualifications: productionQualifications,
   });
 
   assert.equal(result.state, 'dual-dimension-evidence-ready');
-  assert.equal(result.observedReactionEvidenceCount, 2);
+  assert.equal(result.observedReactionEvidenceCount, 1);
   assert.equal(result.temporalPersistenceEvidenceCount, 1);
   assert.equal(result.snsFandomPoint, null);
   assert.equal(result.numericProductEligible, false);
