@@ -12,6 +12,7 @@ export type BrandFitArtistBrandBinding = Readonly<{
     sourceUrl: string;
     announcedOn: string;
     lastCorroboratedOn: string | null;
+    corroborationSourceUrl: string | null;
   }>;
 }>;
 
@@ -72,7 +73,9 @@ export const IU_ESTEE_LAUDER_AMBASSADOR_BINDING:
       sourceUrl:
         'https://www.elcompanies.com/en/news-and-media/newsroom/press-releases/2024/04-11-2024-120032323',
       announcedOn: '2024-04-11',
-      lastCorroboratedOn: '2026-04-08',
+      lastCorroboratedOn: '2026-01-08',
+      corroborationSourceUrl:
+        'https://www.elcompanies.com/en/news-and-media/newsroom/press-releases/2026/01-08-2026-130206196',
     }),
   });
 
