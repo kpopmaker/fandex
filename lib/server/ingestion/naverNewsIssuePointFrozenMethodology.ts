@@ -10,7 +10,7 @@ import {
   evaluateNaverNewsMediaActivityMethodResearch,
   type NaverNewsMediaActivityResearchWindow,
 } from './naverNewsMediaActivityMethodResearch';
-import { getOfficialNaverNewsShadowEpoch } from './naverNewsShadowEpoch';
+import { getNaverNewsShadowEpochByProtocolStart } from './naverNewsShadowEpoch';
 import type { NaverNewsShadowFirstSeenSeriesResult } from './naverNewsShadowFirstSeenSeries';
 import type { NaverNewsShadowFirstSeenActivitySlot } from './naverNewsShadowFirstSeenActivity';
 
@@ -397,7 +397,15 @@ function unavailableResult(
 export function evaluateNaverNewsIssuePointFrozenMethodology(
   series: NaverNewsShadowFirstSeenSeriesResult,
 ): NaverNewsIssuePointFrozenMethodologyResult {
-  const officialEpoch = getOfficialNaverNewsShadowEpoch(series.canonicalArtistId);
+  let officialEpoch;
+  try {
+    officialEpoch = getNaverNewsShadowEpochByProtocolStart(
+      series.canonicalArtistId,
+      series.protocolStart,
+    );
+  } catch {
+    officialEpoch = null;
+  }
   const methodResearch = evaluateNaverNewsMediaActivityMethodResearch({
     series,
     candidateWindowSlotCounts: [WINDOW_SLOT_COUNT],
@@ -406,7 +414,8 @@ export function evaluateNaverNewsIssuePointFrozenMethodology(
     evaluateNaverNewsMediaActivityDiurnalReadiness(methodResearch.analysisSlotCount);
 
   if (
-    series.protocolStart !== officialEpoch.protocolStart
+    officialEpoch === null
+    || series.protocolStart !== officialEpoch.protocolStart
     || series.canonicalArtistId !== officialEpoch.canonicalArtistId
   ) {
     return unavailableResult(series, baselineReadiness, 'official_epoch_mismatch');
