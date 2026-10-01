@@ -1,0 +1,25 @@
+name: Validate Brand Fit contract v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/brandFitPointConstruct.ts'
+      - 'tests/brand-fit-point-contract-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-contract-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/brand-fit-point-contract-v1.test.mts
+      - run: npm run typecheck
