@@ -147,7 +147,7 @@ function observation(
       state: 'research' as const,
       materialClass: 'real' as const,
       blockers: Object.freeze([
-        'youtube-commenter-recurrence-derived-metric-use-case-not-approved-for-production',
+        'sns-fandom-cross-dimension-methodology-not-approved',
       ]),
     }),
   });
@@ -384,7 +384,7 @@ export function buildYoutubePublicCommentPersistenceCandidate(
     safety: SAFETY,
     blockers: Object.freeze([
       'youtube-comment-history-completeness-not-guaranteed',
-      'youtube-commenter-recurrence-remains-research-until-provider-approval-recorded',
+      'sns-fandom-cross-dimension-methodology-not-approved',
     ]),
   });
 }
