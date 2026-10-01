@@ -211,6 +211,7 @@ function observation(
     evidence: {
       evidenceRef: 'evidence://youtube/video-1/20261001t000000z',
       providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: ['youtube.videos.list'],
       revision: null,
     },
     lifecycle: {
@@ -575,6 +576,7 @@ test('provider approval evidence is bound to an exact API client project', () =>
     evidence: {
       evidenceRef: 'evidence://youtube/video-1/other-client',
       providerClientRef: 'google-cloud-project:other-project',
+      providerEndpoints: ['youtube.videos.list'],
       revision: null,
     },
   });
@@ -604,6 +606,7 @@ test('artist entitlement is bound to the OAuth client that produced the observat
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: 'google-cloud-project:other-project',
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -670,6 +673,30 @@ test('YouTube comment persistence adapter rejects approval from another API clie
     result.blockers.includes(
       'youtube-commenter-recurrence-provider-approval-client-mismatch',
     ),
+  );
+});
+
+test('provider approval evidence is bound to the exact endpoints that produced an observation', () => {
+  const approval = youtubeStatsProviderApproval();
+  const wrongEndpointObservation = observation({
+    evidence: {
+      evidenceRef: 'evidence://youtube/video-1/wrong-endpoint',
+      providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: ['youtube.search.list'],
+      revision: null,
+    },
+  });
+
+  const result = evaluateSnsFandomPointReadiness({
+    canonicalArtistId: 'iu',
+    observations: [wrongEndpointObservation],
+    providerApprovals: [approval],
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes('public-reaction-diffusion-evidence-missing'),
   );
 });
 
@@ -893,6 +920,7 @@ test('YouTube Analytics adapter rejects mismatched artist/channel entitlement', 
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -922,6 +950,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
         observedAt: '2026-09-30T00:00:00.000Z',
@@ -934,6 +963,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -1238,6 +1268,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
         observedAt: '2026-09-30T00:00:00.000Z',
@@ -1250,6 +1281,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -1366,6 +1398,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-01T00:00:00.000Z',
         providerPeriodEnd: '2026-09-15T23:59:59.999Z',
         observedAt: '2026-09-16T00:00:00.000Z',
@@ -1397,6 +1430,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
         youtubeChannelId: 'UC-iu',
         providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
+        providerEndpoint: 'youtube.analytics.reports.query',
         providerPeriodStart: '2026-09-16T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
