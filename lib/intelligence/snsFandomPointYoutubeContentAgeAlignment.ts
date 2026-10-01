@@ -73,6 +73,10 @@ export function evaluateSnsFandomYoutubeContentAgeAlignment(
     validateSnsFandomYoutubeContentManifest(input.manifest);
   const blockers = [...manifestValidation.blockers];
 
+  if (manifestValidation.selectedVideoIds.length === 0) {
+    blockers.push('youtube-content-age-manifest-empty');
+  }
+
   const publishedAtByVideoId = new Map(
     input.manifest.items.map((item) => [item.videoId, item.publishedAt]),
   );
@@ -174,7 +178,8 @@ export function evaluateSnsFandomYoutubeContentAgeAlignment(
     ).sort((a, b) => a - b);
 
     const complete =
-      metricBlockers.length === 0
+      manifestValidation.selectedVideoIds.length > 0
+      && metricBlockers.length === 0
       && samples.length === manifestValidation.selectedVideoIds.length
       && observedVideoCount === manifestValidation.selectedVideoIds.length;
 
@@ -227,7 +232,9 @@ export function evaluateSnsFandomYoutubeContentAgeAlignment(
   blockers.push('youtube-artist-level-aggregation-methodology-not-approved');
 
   const state =
-    incomplete || !manifestValidation.ok
+    incomplete
+      || !manifestValidation.ok
+      || manifestValidation.selectedVideoIds.length === 0
       ? 'evidence-incomplete' as const
       : misaligned
         ? 'age-alignment-blocked' as const
