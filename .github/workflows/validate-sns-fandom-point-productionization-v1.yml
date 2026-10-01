@@ -49,6 +49,7 @@ jobs:
           lib/intelligence/snsFandomPointComparability.ts
           lib/intelligence/snsFandomPointContracts.ts
           lib/intelligence/snsFandomPointProviderApprovalIntake.ts
+          lib/intelligence/snsFandomPointReactionAggregationMethodology.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
@@ -58,6 +59,7 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
           tests/sns-fandom-point-comparability-v1.test.mts
           tests/sns-fandom-point-productionization-v1.test.mts
+          tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
           EOF
