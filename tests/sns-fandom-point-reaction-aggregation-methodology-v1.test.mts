@@ -6,6 +6,9 @@ import {
   type SnsFandomReactionAggregationDecision,
 } from '../lib/intelligence/snsFandomPointReactionAggregationMethodology';
 import {
+  type SnsFandomReactionMethodologyStudyResult,
+} from '../lib/intelligence/snsFandomPointReactionMethodologyStudy';
+import {
   type SnsFandomReactionValidationDatasetResult,
 } from '../lib/intelligence/snsFandomPointReactionValidationDataset';
 import {
@@ -75,6 +78,39 @@ function validationDataset(
   };
 }
 
+function methodologyStudy(
+  overrides: Partial<SnsFandomReactionMethodologyStudyResult> = {},
+): SnsFandomReactionMethodologyStudyResult {
+  return {
+    contractVersion: 'sns-fandom-reaction-methodology-study-v1',
+    studyId: 'reaction-study-v1',
+    state: 'decision-support-ready',
+    primaryDatasetId: 'dataset://real/reaction-methodology-v1',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    comparedMethodIds: [
+      'candidate-method-a',
+      'candidate-method-b',
+    ],
+    validationDatasetIds: [
+      'dataset://real/reaction-methodology-v1',
+      'dataset://real/reaction-methodology-age-alt-v1',
+    ],
+    distinctTargetContentAgeCount: 2,
+    distinctSelectedContentCount: 2,
+    contentAgeSensitivityReviewed: true,
+    releaseVolumeSensitivityReviewed: true,
+    missingnessSensitivityReviewed: true,
+    revisionStabilityReviewed: true,
+    selectedMethodId: null,
+    methodRankingProduced: false,
+    scoreProduced: false,
+    decisionSupportReady: true,
+    blockers: [],
+    ...overrides,
+  };
+}
+
 function decision(
   overrides: Partial<SnsFandomReactionAggregationDecision> = {},
 ): SnsFandomReactionAggregationDecision {
@@ -94,6 +130,7 @@ function decision(
     decidedAt: '2026-10-01T00:00:00.000Z',
     empiricalValidation: {
       datasetRef: 'dataset://real/reaction-methodology-v1',
+      studyId: 'reaction-study-v1',
       materialClass: 'real',
       distinctCanonicalArtistCount: 2,
       comparedMethodIds: [
@@ -113,6 +150,7 @@ test('age-aligned evidence without a methodology decision remains blocked', () =
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: null,
   });
 
@@ -131,6 +169,7 @@ test('research-only methodology never becomes executable Product aggregation', (
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision(),
   });
 
@@ -146,10 +185,12 @@ test('approved methodology requires real multi-artist validation and all structu
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision({
       state: 'approved',
       empiricalValidation: {
         datasetRef: 'dataset://real/reaction-methodology-v1',
+        studyId: 'reaction-study-v1',
         materialClass: 'real',
         distinctCanonicalArtistCount: 1,
         comparedMethodIds: ['candidate-method-a'],
@@ -193,6 +234,7 @@ test('even a structurally valid approved decision produces no number until execu
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision({
       state: 'approved',
     }),
@@ -213,6 +255,7 @@ test('typical-content intensity and total-window reaction volume remain distinct
   const intensity = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision({
       construct: 'typical-content-reaction-intensity',
       releaseVolumeTreatment:
@@ -223,6 +266,9 @@ test('typical-content intensity and total-window reaction volume remain distinct
   const volume = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
     validationDataset: validationDataset({
+      construct: 'window-total-reaction-volume',
+    }),
+    methodologyStudy: methodologyStudy({
       construct: 'window-total-reaction-volume',
     }),
     decision: decision({
@@ -245,6 +291,7 @@ test('an approved methodology cannot bypass missing content-age alignment', () =
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment('age-alignment-blocked'),
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -268,6 +315,7 @@ test('methodology decision cannot target a metric without aligned observed conte
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: noMetricEvidence,
     validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -287,6 +335,7 @@ test('methodology decision cannot reuse a different validation dataset id', () =
     validationDataset: validationDataset({
       datasetId: 'dataset://real/other-dataset',
     }),
+    methodologyStudy: methodologyStudy(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -306,6 +355,7 @@ test('methodology decision construct and metric must match the real validation d
       construct: 'window-total-reaction-volume',
       metricId: 'youtube.video.like-count',
     }),
+    methodologyStudy: methodologyStudy(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -318,6 +368,50 @@ test('methodology decision construct and metric must match the real validation d
   assert.ok(
     result.blockers.includes(
       'reaction-aggregation-validation-dataset-metric-mismatch',
+    ),
+  );
+});
+
+
+test('approved methodology cannot proceed without completed methodology study evidence', () => {
+  const result = evaluateSnsFandomReactionAggregationMethodology({
+    ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
+    methodologyStudy: null,
+    decision: decision({ state: 'approved' }),
+  });
+
+  assert.equal(result.state, 'study-evidence-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-methodology-study-missing',
+    ),
+  );
+});
+
+test('decision cannot substitute a different study or compared method set', () => {
+  const result = evaluateSnsFandomReactionAggregationMethodology({
+    ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
+    methodologyStudy: methodologyStudy({
+      studyId: 'other-study',
+      comparedMethodIds: [
+        'candidate-method-a',
+        'candidate-method-c',
+      ],
+    }),
+    decision: decision({ state: 'approved' }),
+  });
+
+  assert.equal(result.state, 'study-evidence-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-methodology-study-id-mismatch',
+    ),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-methodology-study-method-set-mismatch',
     ),
   );
 });
