@@ -7,8 +7,10 @@ import {
   SNS_FANDOM_PROVIDER_QUALIFICATIONS,
   type SnsFandomArtistProviderEntitlement,
   type SnsFandomObservation,
+  type SnsFandomProviderApprovalEvidence,
   validateSnsFandomArtistProviderEntitlement,
   validateSnsFandomObservation,
+  validateSnsFandomProviderApprovalEvidence,
 } from '../lib/intelligence/snsFandomPointContracts';
 import {
   buildYoutubeSnsFandomCandidate,
@@ -43,6 +45,80 @@ function youtubeAnalyticsEntitlement(
       recurringAutomatedCollection: true,
       storageRetention: true,
       derivedMetricPublication: true,
+    },
+    ...overrides,
+  };
+}
+
+function youtubeStatsProviderApproval(
+  overrides: Partial<SnsFandomProviderApprovalEvidence> = {},
+): SnsFandomProviderApprovalEvidence {
+  return {
+    contractVersion: 'sns-fandom-provider-approval-evidence-v1',
+    providerId: 'youtube-data-api',
+    state: 'approved',
+    approvalClass: 'youtube-analytics-derived-metrics-data-storage',
+    useCase: 'analytics-reporting',
+    approvedDimensions: ['public-reaction-diffusion'],
+    approvedMetricIds: [
+      'youtube.video.view-count',
+      'youtube.video.like-count',
+      'youtube.video.comment-count',
+      'youtube.channel.subscriber-count',
+    ],
+    allowedEndpoints: [
+      'youtube.videos.list',
+      'youtube.channels.list',
+    ],
+    approvedAt: '2026-10-01T00:00:00.000Z',
+    validUntil: null,
+    evidenceRef: 'evidence://youtube/audit/fandex/reaction-v1',
+    rights: {
+      commercialProductUse: true,
+      recurringAutomatedCollection: true,
+      aggregateRetention: true,
+      derivedMetricPublication: true,
+    },
+    retention: {
+      statisticalDataMonths: 36,
+      derivedMetricMonths: 36,
+      nonStatisticalDataRefreshDays: 30,
+    },
+    ...overrides,
+  };
+}
+
+function youtubeCommentProviderApproval(
+  overrides: Partial<SnsFandomProviderApprovalEvidence> = {},
+): SnsFandomProviderApprovalEvidence {
+  return {
+    contractVersion: 'sns-fandom-provider-approval-evidence-v1',
+    providerId: 'youtube-comments-derived',
+    state: 'approved',
+    approvalClass: 'youtube-analytics-derived-metrics-data-storage',
+    useCase: 'analytics-reporting',
+    approvedDimensions: ['fandom-activity-persistence'],
+    approvedMetricIds: [
+      'youtube.public-commenter.cross-content-repeat-count',
+      'youtube.public-commenter.distinct-count',
+    ],
+    allowedEndpoints: [
+      'youtube.commentThreads.list',
+      'youtube.comments.list',
+    ],
+    approvedAt: '2026-10-01T00:00:00.000Z',
+    validUntil: null,
+    evidenceRef: 'evidence://youtube/audit/fandex/comment-persistence-v1',
+    rights: {
+      commercialProductUse: true,
+      recurringAutomatedCollection: true,
+      aggregateRetention: true,
+      derivedMetricPublication: true,
+    },
+    retention: {
+      statisticalDataMonths: 36,
+      derivedMetricMonths: 36,
+      nonStatisticalDataRefreshDays: 30,
     },
     ...overrides,
   };
@@ -156,6 +232,48 @@ test('artist entitlement is fail-closed on rights, validity, and exact artist id
       '2026-10-01T00:00:00.000Z',
     ).blockers,
     ['artist-provider-entitlement-expired-by-time'],
+  );
+});
+
+test('provider approval evidence is fail-closed on rights, validity, and YouTube retention caps', () => {
+  const active = youtubeStatsProviderApproval();
+  assert.equal(
+    validateSnsFandomProviderApprovalEvidence(
+      active,
+      '2026-10-01T00:02:00.000Z',
+    ).ok,
+    true,
+  );
+
+  const incompleteRights = youtubeStatsProviderApproval({
+    rights: {
+      commercialProductUse: true,
+      recurringAutomatedCollection: true,
+      aggregateRetention: false,
+      derivedMetricPublication: true,
+    },
+  });
+  assert.deepEqual(
+    validateSnsFandomProviderApprovalEvidence(
+      incompleteRights,
+      '2026-10-01T00:02:00.000Z',
+    ).blockers,
+    ['provider-approval-rights-incomplete'],
+  );
+
+  const excessiveRetention = youtubeStatsProviderApproval({
+    retention: {
+      statisticalDataMonths: 37,
+      derivedMetricMonths: 36,
+      nonStatisticalDataRefreshDays: 30,
+    },
+  });
+  assert.deepEqual(
+    validateSnsFandomProviderApprovalEvidence(
+      excessiveRetention,
+      '2026-10-01T00:02:00.000Z',
+    ).blockers,
+    ['youtube-provider-approval-statistical-retention-invalid'],
   );
 });
 
@@ -321,21 +439,18 @@ test('current Real Product readiness fails closed on provider rights', () => {
   );
 });
 
-test('YouTube adapter emits no observations before rights approval', () => {
+test('YouTube adapter emits no observations before provider approval evidence', () => {
   const result = buildYoutubeSnsFandomCandidate({
     snapshots: [],
-    providerApproval: {
-      analyticsDerivedMetricsUseCaseApproved: false,
-      retentionExtensionOrRefreshPolicyApproved: false,
-    },
+    providerApproval: null,
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
   assert.equal(result.state, 'rights-blocked');
   assert.deepEqual(result.observations, []);
   assert.deepEqual(result.persistenceEvidence, []);
   assert.deepEqual(result.blockers, [
-    'youtube-derived-metrics-approval-missing',
-    'youtube-retention-policy-approval-missing',
+    'youtube-provider-approval-evidence-missing',
   ]);
 });
 
@@ -460,13 +575,8 @@ test('public-comment persistence candidate is completely silent before derived-m
       comments: [],
       evidenceRef: 'evidence://youtube-comments/iu/2026-09',
     },
-    rights: {
-      derivedMetricsUseCaseApproved: false,
-      commenterRecurrenceMetricApproved: false,
-      commercialProductUseApproved: false,
-      recurringCollectionApproved: false,
-      aggregateRetentionApproved: false,
-    },
+    providerApproval: null,
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
   assert.equal(result.state, 'rights-blocked');
@@ -474,7 +584,7 @@ test('public-comment persistence candidate is completely silent before derived-m
   assert.deepEqual(result.persistenceEvidence, []);
   assert.ok(
     result.blockers.includes(
-      'youtube-commenter-recurrence-metric-approval-missing',
+      'youtube-commenter-recurrence-provider-approval-evidence-missing',
     ),
   );
 });
@@ -522,13 +632,8 @@ test('public-comment recurrence is aggregated across distinct official content w
       ],
       evidenceRef: 'evidence://youtube-comments/iu/2026-09',
     },
-    rights: {
-      derivedMetricsUseCaseApproved: true,
-      commenterRecurrenceMetricApproved: true,
-      commercialProductUseApproved: true,
-      recurringCollectionApproved: true,
-      aggregateRetentionApproved: true,
-    },
+    providerApproval: youtubeCommentProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
   assert.equal(result.state, 'normalized-candidate');
@@ -575,13 +680,8 @@ test('public-comment recurrence fails closed when a comment falls outside the de
       ],
       evidenceRef: 'evidence://youtube-comments/iu/2026-09',
     },
-    rights: {
-      derivedMetricsUseCaseApproved: true,
-      commenterRecurrenceMetricApproved: true,
-      commercialProductUseApproved: true,
-      recurringCollectionApproved: true,
-      aggregateRetentionApproved: true,
-    },
+    providerApproval: youtubeCommentProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
   assert.equal(result.state, 'input-blocked');
@@ -613,10 +713,8 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
         evidenceRef: 'evidence://youtube/iu/1',
       },
     ],
-    providerApproval: {
-      analyticsDerivedMetricsUseCaseApproved: true,
-      retentionExtensionOrRefreshPolicyApproved: true,
-    },
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
   assert.equal(result.state, 'normalized-candidate');
@@ -636,6 +734,46 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
     unit: null,
     missingState: 'missing',
   });
+});
+
+test('validated provider approval evidence makes only its exact provider metrics evidence-eligible', () => {
+  const approved = youtubeStatsProviderApproval();
+  const result = evaluateSnsFandomPointReadiness({
+    canonicalArtistId: 'iu',
+    observations: [observation()],
+    providerApprovals: [approved],
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'provider-rights-blocked');
+  assert.deepEqual(result.productionReadyProviders, []);
+  assert.deepEqual(result.providerApprovedProviders, ['youtube-data-api']);
+  assert.deepEqual(result.evidenceEligibleProviders, ['youtube-data-api']);
+  assert.equal(result.observedReactionEvidenceCount, 1);
+  assert.equal(result.temporalPersistenceEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes(
+      'fandom-activity-persistence-provider-rights-blocked',
+    ),
+  );
+});
+
+test('approval for one YouTube metric never authorizes an unlisted metric', () => {
+  const approved = youtubeStatsProviderApproval({
+    approvedMetricIds: ['youtube.video.view-count'],
+  });
+  const result = evaluateSnsFandomPointReadiness({
+    canonicalArtistId: 'iu',
+    observations: [observation()],
+    providerApprovals: [approved],
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.deepEqual(result.providerApprovedProviders, ['youtube-data-api']);
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes('public-reaction-diffusion-evidence-missing'),
+  );
 });
 
 test('reaction history alone cannot satisfy fandom persistence readiness', () => {
