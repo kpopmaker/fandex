@@ -1,6 +1,7 @@
 import {
   buildSnsFandomPersistenceEvidence,
   isSnsFandomArtistEntitlementActiveFor,
+  validateSnsFandomArtistProviderEntitlement,
   type SnsFandomArtistProviderEntitlement,
   type SnsFandomObservation,
   type SnsFandomPersistenceEvidence,
@@ -121,11 +122,30 @@ export function buildYoutubeAnalyticsFandomPersistenceCandidate(
   if (entitlement === null) {
     blockers.push('youtube-analytics-channel-owner-entitlement-missing');
   } else {
+    const entitlementValidation =
+      validateSnsFandomArtistProviderEntitlement(
+        entitlement,
+        input.evaluatedAt,
+      );
+
+    if (!entitlementValidation.ok) {
+      blockers.push('youtube-analytics-entitlement-invalid');
+    }
+    if (entitlement.state !== 'active') {
+      blockers.push('youtube-analytics-entitlement-not-active');
+    }
     if (entitlement.providerId !== 'youtube-analytics-api') {
       blockers.push('youtube-analytics-entitlement-provider-mismatch');
     }
     if (entitlement.authorizationClass !== 'channel-owner-oauth') {
       blockers.push('youtube-analytics-entitlement-class-invalid');
+    }
+    if (
+      !entitlement.allowedDimensions.includes(
+        'fandom-activity-persistence',
+      )
+    ) {
+      blockers.push('youtube-analytics-persistence-dimension-not-authorized');
     }
     if (
       !entitlement.authorizedScopes.includes(
