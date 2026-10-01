@@ -29,6 +29,13 @@ AUDIT = Path("fandex_master_v10_audit.csv")
 REPORT = Path("FANDEX_MASTER_V10_REPORT.txt")
 PREVIOUS_BACKUP = Path("master_v10_previous_latest")
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+YOUTUBE_LINEAGE_STATUS = (
+    REPO_ROOT
+    / "data/fandex-cloud-v10/seed/"
+    "youtube_v3_lineage_status_v1.json"
+)
+
 
 def read_json(path):
     if not path.exists():
@@ -248,6 +255,74 @@ def main():
             f"youtube={len(youtube_cohort)}"
         )
 
+    youtube_lineage = read_json(
+        YOUTUBE_LINEAGE_STATUS
+    )
+    if (
+        norm(youtube_lineage.get("version"))
+        != "youtube_v3_lineage_status_v1"
+    ):
+        raise RuntimeError(
+            "unexpected YouTube lineage status version"
+        )
+
+    frozen_rows = (
+        youtube_lineage
+        .get("activeProductState", {})
+        .get("canonicalArtists", [])
+    )
+    frozen_youtube_cohort = {
+        norm(row.get("artist"))
+        for row in frozen_rows
+        if isinstance(row, dict)
+        and norm(row.get("artist"))
+    }
+
+    if not frozen_youtube_cohort:
+        raise RuntimeError(
+            "YouTube lineage status has no frozen Product cohort"
+        )
+
+    product_expansion = (
+        youtube_lineage.get(
+            "productExpansion",
+            {},
+        )
+    )
+    expansion_eligibility = norm(
+        product_expansion.get(
+            "eligibility"
+        )
+    )
+    expanded_or_changed_allowed = bool(
+        product_expansion.get(
+            "expandedOrChangedYoutubeCohortAllowed"
+        )
+    )
+
+    if youtube_cohort != frozen_youtube_cohort:
+        if (
+            expansion_eligibility != "eligible"
+            or not expanded_or_changed_allowed
+        ):
+            added = sorted(
+                youtube_cohort
+                - frozen_youtube_cohort
+            )
+            removed = sorted(
+                frozen_youtube_cohort
+                - youtube_cohort
+            )
+            raise RuntimeError(
+                "YouTube Product cohort expansion blocked by "
+                "lineage status: "
+                f"eligibility={expansion_eligibility or '<missing>'} | "
+                "added="
+                + (",".join(added) if added else "NONE")
+                + " | removed="
+                + (",".join(removed) if removed else "NONE")
+            )
+
     missing_music = sorted(
         product_cohort
         - music_cohort
@@ -442,6 +517,12 @@ def main():
             "musicSourceArtistCount": len(music_cohort),
             "lastfmScoreReadyArtistCount": len(lastfm_ready_cohort),
             "requiresSourceSuperset": True,
+            "youtubeLineageStatus": expansion_eligibility,
+            "youtubeFrozenCohortCount": len(
+                frozen_youtube_cohort
+            ),
+            "youtubeExpandedOrChangedCohortAllowed":
+                expanded_or_changed_allowed,
         },
         "ranking": ranking,
     }
