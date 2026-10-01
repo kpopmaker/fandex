@@ -26,6 +26,9 @@ import {
   ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
   evaluateYoutubeCollectorCompatibility,
 } from '../lib/intelligence/snsFandomPointYoutubeCollectorCompatibility';
+import {
+  buildSnsFandomYoutubeCollectorBridge,
+} from '../lib/intelligence/snsFandomPointYoutubeCollectorBridge';
 
 function youtubeAnalyticsEntitlement(
   overrides: Partial<SnsFandomArtistProviderEntitlement> = {},
@@ -213,6 +216,149 @@ test('collector compatibility becomes eligible only when missing/time/identity/e
   assert.equal(compatible.state, 'production-compatible');
   assert.equal(compatible.productionCompatible, true);
   assert.deepEqual(compatible.blockers, []);
+});
+
+test('collector bridge rejects the current legacy collector before reading candidate data', () => {
+  const result = buildSnsFandomYoutubeCollectorBridge({
+    collectorProfile: ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+    batch: {
+      contractVersion: 'sns-fandom-youtube-collector-export-v1',
+      canonicalArtistId: 'iu',
+      providerChannelId: 'UC-iu',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      evidenceRef: 'evidence://youtube/iu/collector',
+      channelSubscriberCount: null,
+      videos: [],
+    },
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'collector-incompatible');
+  assert.equal(result.candidate, null);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-collector-missing-semantics-not-preserved',
+    ),
+  );
+});
+
+test('collector bridge preserves null missing values and exact observation time after compatibility is fixed', () => {
+  const compatibleProfile = {
+    ...ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+    collectorId: 'youtube-collector-hypothetical-fixed-v2',
+    sourceRef: 'hypothetical-fixed-v2',
+    missingStatisticSemantics: 'preserve-null' as const,
+    emitsProviderChannelId: true,
+    emitsObservedAt: true,
+    emitsCollectedAt: true,
+    persistsRawApiResponse: false,
+    rawApiResponseRetentionQualified: false,
+    emitsEvidenceRef: true,
+  };
+
+  const result = buildSnsFandomYoutubeCollectorBridge({
+    collectorProfile: compatibleProfile,
+    batch: {
+      contractVersion: 'sns-fandom-youtube-collector-export-v1',
+      canonicalArtistId: 'iu',
+      providerChannelId: 'UC-iu',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      evidenceRef: 'evidence://youtube/iu/collector-fixed',
+      channelSubscriberCount: null,
+      videos: [
+        {
+          videoId: 'video-1',
+          viewCount: 100,
+          likeCount: null,
+          commentCount: 10,
+        },
+      ],
+    },
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'candidate-built');
+  assert.ok(result.candidate);
+  assert.equal(result.candidate?.state, 'normalized-candidate');
+  if (result.candidate?.state !== 'normalized-candidate') return;
+
+  const likes = result.candidate.observations.find(
+    (item) => item.variable.metricId === 'youtube.video.like-count',
+  );
+  assert.deepEqual(likes?.value, {
+    rawValue: null,
+    unit: null,
+    missingState: 'missing',
+  });
+  assert.equal(
+    likes?.entity.providerArtistId,
+    'UC-iu',
+  );
+  assert.equal(
+    likes?.time.observedAt,
+    '2026-10-01T00:00:00.000Z',
+  );
+  assert.equal(
+    likes?.time.collectedAt,
+    '2026-10-01T00:01:00.000Z',
+  );
+});
+
+test('collector bridge rejects duplicate video ids and invalid counts before normalization', () => {
+  const compatibleProfile = {
+    ...ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+    collectorId: 'youtube-collector-hypothetical-fixed-v2',
+    sourceRef: 'hypothetical-fixed-v2',
+    missingStatisticSemantics: 'preserve-null' as const,
+    emitsProviderChannelId: true,
+    emitsObservedAt: true,
+    emitsCollectedAt: true,
+    persistsRawApiResponse: false,
+    rawApiResponseRetentionQualified: false,
+    emitsEvidenceRef: true,
+  };
+
+  const result = buildSnsFandomYoutubeCollectorBridge({
+    collectorProfile: compatibleProfile,
+    batch: {
+      contractVersion: 'sns-fandom-youtube-collector-export-v1',
+      canonicalArtistId: 'iu',
+      providerChannelId: 'UC-iu',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      evidenceRef: 'evidence://youtube/iu/invalid',
+      channelSubscriberCount: null,
+      videos: [
+        {
+          videoId: 'video-1',
+          viewCount: -1,
+          likeCount: null,
+          commentCount: 1,
+        },
+        {
+          videoId: 'video-1',
+          viewCount: 1,
+          likeCount: 1,
+          commentCount: 1,
+        },
+      ],
+    },
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'input-blocked');
+  assert.equal(result.candidate, null);
+  assert.ok(
+    result.blockers.includes('youtube-collector-export-video-count-invalid'),
+  );
+  assert.ok(
+    result.blockers.includes('youtube-collector-export-video-id-duplicate'),
+  );
 });
 
 test('current provider matrix intentionally has no Production-ready source', () => {
