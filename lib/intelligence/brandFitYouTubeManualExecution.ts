@@ -16,6 +16,10 @@ import {
   reviewBrandFitStoredEvidenceCandidate,
   type BrandFitStoredEvidenceReviewResult,
 } from './brandFitStoredEvidenceReview';
+import {
+  buildBrandFitImmutableEvidenceObjectCandidate,
+  type BrandFitImmutableEvidenceObjectCandidate,
+} from './brandFitImmutableEvidenceRecord';
 
 export const BRAND_FIT_YOUTUBE_MANUAL_EXECUTION_VERSION =
   'brand-fit-youtube-manual-execution-v1' as const;
@@ -40,6 +44,7 @@ export type BrandFitYouTubeManualExecutionResult =
         BrandFitStoredEvidenceReviewResult,
         { status: 'storage-candidate' }
       >;
+      immutableEvidenceObject: BrandFitImmutableEvidenceObjectCandidate;
       providerRequestCount: 1;
       databaseWritePerformed: false;
       productActivationPerformed: false;
@@ -192,11 +197,15 @@ export async function executeBrandFitYouTubeObservation(input: Readonly<{
     return blocked('evidence-review-rejected', 1);
   }
 
+  const immutableEvidenceObject =
+    buildBrandFitImmutableEvidenceObjectCandidate(storedEvidenceReview);
+
   return Object.freeze({
     status: 'eligible-for-stored-evidence-review' as const,
     contractVersion: BRAND_FIT_YOUTUBE_MANUAL_EXECUTION_VERSION,
     handoff,
     storedEvidenceReview,
+    immutableEvidenceObject,
     providerRequestCount: 1 as const,
     databaseWritePerformed: false as const,
     productActivationPerformed: false as const,
@@ -226,6 +235,18 @@ export function sanitizeBrandFitYouTubeManualExecutionResult(
       storageWriteAuthorized: review.storageWriteAuthorized,
       productActivationAuthorized: review.productActivationAuthorized,
       publicPublicationAuthorized: review.publicPublicationAuthorized,
+    }),
+    immutableEvidenceObject: Object.freeze({
+      pathname: result.immutableEvidenceObject.pathname,
+      body: result.immutableEvidenceObject.body,
+      payloadDigest: result.immutableEvidenceObject.payloadDigest,
+      evidenceDigest: result.immutableEvidenceObject.evidenceDigest,
+      storageWriteAuthorized:
+        result.immutableEvidenceObject.storageWriteAuthorized,
+      productActivationAuthorized:
+        result.immutableEvidenceObject.productActivationAuthorized,
+      publicPublicationAuthorized:
+        result.immutableEvidenceObject.publicPublicationAuthorized,
     }),
     evidence: Object.freeze({
       variableId: evidence.variableId,
