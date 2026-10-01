@@ -1,0 +1,92 @@
+name: Validate Artist Expansion YouTube recovery v2
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v2
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recovered YouTube syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3_preview.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3.py
+      - name: Canonical recovery regression
+        run: python tests/artist-expansion-youtube-recovery-v1.py
+      - name: Live YouTube 21-artist machine discovery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_DISCOVERY_MAX_QUERIES: '2'
+          YOUTUBE_DISCOVERY_MAX_RESULTS: '3'
+          YOUTUBE_PUBLISHED_AFTER: '2026-01-01T00:00:00Z'
+        run: python scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py --all
+      - name: Print sanitized discovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("fandex_youtube_seed_candidates_latest.json")
+              .read_text(encoding="utf-8")
+          )
+          rows = payload["candidates"]
+          counts = Counter(row["artist"] for row in rows)
+          print(
+              "YouTube discovery | targets="
+              f"{len(payload['targetArtists'])} | "
+              f"candidates={len(rows)} | "
+              f"new={payload['newCandidates']}"
+          )
+          for artist in payload["targetArtists"]:
+              candidates = [
+                  row for row in rows
+                  if row["artist"] == artist
+                  and row["candidateStatus"] == "NEW"
+              ]
+              candidates.sort(
+                  key=lambda row: (
+                      -int(row.get("candidateScore") or 0),
+                      -int(row.get("viewCount") or 0),
+                  )
+              )
+              top = candidates[0] if candidates else None
+              if top:
+                  print(
+                      f"{top['canonicalArtistId']} | {artist} | "
+                      f"count={len(candidates)} | "
+                      f"topScore={top['candidateScore']} | "
+                      f"videoId={top['videoId']} | "
+                      f"channel={top['channelTitle']} | "
+                      f"title={top['title']}"
+                  )
+              else:
+                  print(
+                      f"{artist} | count=0 | top=NONE"
+                  )
+          PY
+      - name: Upload YouTube discovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-discovery-v2
+          path: |
+            youtube_seed_candidates_v1_latest.csv
+            fandex_youtube_seed_candidates_latest.json
+            FANDEX_YOUTUBE_SEED_DISCOVERY_REPORT.txt
+          if-no-files-found: ignore
+          retention-days: 7
