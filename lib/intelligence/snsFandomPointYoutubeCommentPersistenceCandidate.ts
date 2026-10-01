@@ -1,6 +1,8 @@
 import {
   buildSnsFandomPersistenceEvidence,
+  validateSnsFandomProviderApprovalEvidence,
   type SnsFandomObservation,
+  type SnsFandomProviderApprovalEvidence,
   type SnsFandomPersistenceEvidence,
 } from './snsFandomPointContracts';
 
@@ -23,14 +25,6 @@ export type YoutubePublicCommentPersistenceBatch = Readonly<{
   collectedAt: string;
   comments: readonly YoutubePublicCommentRecord[];
   evidenceRef: string;
-}>;
-
-type RightsGate = Readonly<{
-  derivedMetricsUseCaseApproved: boolean;
-  commenterRecurrenceMetricApproved: boolean;
-  commercialProductUseApproved: boolean;
-  recurringCollectionApproved: boolean;
-  aggregateRetentionApproved: boolean;
 }>;
 
 type Safety = Readonly<{
@@ -101,26 +95,6 @@ function emptySummary(receivedCommentCount: number) {
   });
 }
 
-function rightsBlockers(rights: RightsGate): string[] {
-  const blockers: string[] = [];
-  if (!rights.derivedMetricsUseCaseApproved) {
-    blockers.push('youtube-derived-metrics-use-case-approval-missing');
-  }
-  if (!rights.commenterRecurrenceMetricApproved) {
-    blockers.push('youtube-commenter-recurrence-metric-approval-missing');
-  }
-  if (!rights.commercialProductUseApproved) {
-    blockers.push('youtube-commenter-recurrence-commercial-use-not-approved');
-  }
-  if (!rights.recurringCollectionApproved) {
-    blockers.push('youtube-commenter-recurrence-recurring-collection-not-approved');
-  }
-  if (!rights.aggregateRetentionApproved) {
-    blockers.push('youtube-commenter-recurrence-aggregate-retention-not-approved');
-  }
-  return blockers;
-}
-
 function observation(
   batch: YoutubePublicCommentPersistenceBatch,
   metric: Readonly<{
@@ -182,11 +156,74 @@ function observation(
 export function buildYoutubePublicCommentPersistenceCandidate(
   input: Readonly<{
     batch: YoutubePublicCommentPersistenceBatch;
-    rights: RightsGate;
+    providerApproval: SnsFandomProviderApprovalEvidence | null;
+    evaluatedAt: string;
   }>,
 ): YoutubePublicCommentPersistenceCandidateResult {
-  const rightsFailures = rightsBlockers(input.rights);
-  if (rightsFailures.length > 0) {
+  const approval = input.providerApproval;
+  const approvalBlockers: string[] = [];
+  const requiredMetricIds = [
+    'youtube.public-commenter.cross-content-repeat-count',
+    'youtube.public-commenter.distinct-count',
+  ] as const;
+  const requiredEndpoints = [
+    'youtube.commentThreads.list',
+    'youtube.comments.list',
+  ] as const;
+
+  if (approval === null) {
+    approvalBlockers.push(
+      'youtube-commenter-recurrence-provider-approval-evidence-missing',
+    );
+  } else {
+    if (
+      !validateSnsFandomProviderApprovalEvidence(
+        approval,
+        input.evaluatedAt,
+      ).ok
+    ) {
+      approvalBlockers.push(
+        'youtube-commenter-recurrence-provider-approval-invalid',
+      );
+    }
+    if (approval.state !== 'approved') {
+      approvalBlockers.push(
+        'youtube-commenter-recurrence-provider-approval-not-approved',
+      );
+    }
+    if (approval.providerId !== 'youtube-comments-derived') {
+      approvalBlockers.push(
+        'youtube-commenter-recurrence-provider-approval-provider-mismatch',
+      );
+    }
+    if (
+      !approval.approvedDimensions.includes(
+        'fandom-activity-persistence',
+      )
+    ) {
+      approvalBlockers.push(
+        'youtube-commenter-recurrence-provider-approval-dimension-missing',
+      );
+    }
+    for (const metricId of requiredMetricIds) {
+      if (!approval.approvedMetricIds.includes(metricId)) {
+        approvalBlockers.push(
+          'youtube-commenter-recurrence-provider-approval-metric-missing',
+        );
+        break;
+      }
+    }
+    for (const endpoint of requiredEndpoints) {
+      if (!approval.allowedEndpoints.includes(endpoint)) {
+        approvalBlockers.push(
+          'youtube-commenter-recurrence-provider-approval-endpoint-missing',
+        );
+        break;
+      }
+    }
+  }
+
+  if (approvalBlockers.length > 0) {
     return Object.freeze({
       contractVersion:
         SNS_FANDOM_YOUTUBE_COMMENT_PERSISTENCE_CANDIDATE_VERSION,
@@ -195,7 +232,7 @@ export function buildYoutubePublicCommentPersistenceCandidate(
       persistenceEvidence: Object.freeze([]),
       summary: emptySummary(input.batch.comments.length),
       safety: SAFETY,
-      blockers: Object.freeze(rightsFailures),
+      blockers: Object.freeze(approvalBlockers),
     });
   }
 
