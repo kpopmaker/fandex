@@ -506,7 +506,7 @@ export async function mirrorNaverNewsStoredEvidence(
 }
 
 export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
-  store: ImmutableTextObjectStore,
+  store: Pick<ImmutableTextObjectStore, 'readText'>,
 ): NaverNewsCanonicalJobEvidenceReadRepository {
   async function readOne(
     jobId: string,

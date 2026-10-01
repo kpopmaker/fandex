@@ -1,0 +1,82 @@
+name: Validate Momentum Blob current-evidence read v1
+
+on:
+  push:
+    branches:
+      - integration/ops-momentum-blob-current-evidence-read-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: >-
+      github.event_name == 'push' ||
+      github.head_ref == 'integration/ops-momentum-blob-current-evidence-read-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git diff --name-only b76e7d22cc1c3479faca20ebf951c1be0097944b...HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/inspect-naver-production-blob-current-evidence-v1.yml
+          .github/workflows/validate-momentum-blob-current-evidence-read-v1.yml
+          app/api/internal/naver-news/blob-current-evidence/route.ts
+          lib/server/ingestion/naverNewsBlobCurrentEvidenceCoverage.ts
+          lib/server/ingestion/naverNewsBlobCurrentEvidenceRead.ts
+          lib/server/ingestion/naverNewsBlobMirrorRuntime.ts
+          lib/server/ingestion/naverNewsStoredEvidenceMirror.ts
+          tests/naver-news-blob-current-evidence-coverage-v1.test.mts
+          tests/naver-news-blob-current-evidence-read-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Blob current-evidence coverage regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-blob-current-evidence-coverage-v1.test.mts
+
+      - name: Production Blob current-evidence read regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-blob-current-evidence-read-v1.test.mts
+
+      - name: Existing Momentum current-evaluation regressions
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-categorical-output-attestation-current-main-v1.test.mts tests/momentum-current-evaluation-execution-v1.test.mts
+
+      - name: Existing NAVER Blob evidence regressions
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts tests/naver-evidence-vercel-blob-adapter-v1.test.mts tests/naver-news-canonical-job-evidence-v130.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
