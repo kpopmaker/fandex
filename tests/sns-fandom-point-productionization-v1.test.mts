@@ -699,7 +699,6 @@ test('YouTube public stats adapter rejects approval from another API client proj
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
-        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: 'google-cloud-project:other-project',
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
