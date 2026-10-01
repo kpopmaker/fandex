@@ -12,7 +12,10 @@ from pathlib import Path
 
 VERSION = "youtube_discover_seed_candidates_artist_list_v2"
 
-ARTIST_LIST = Path("artist_list.txt")
+TARGET_CONFIG = Path(
+    "data/fandex-cloud-v10/seed/"
+    "music_chart_artist_targets_candidate_v1.json"
+)
 SEED_CSV = Path("youtube_seed_videos_v1.csv")
 
 LATEST_CSV = Path("youtube_seed_candidates_v1_latest.csv")
@@ -26,18 +29,9 @@ MAX_RESULTS_PER_QUERY = int(os.environ.get("YOUTUBE_DISCOVERY_MAX_RESULTS", "5")
 MAX_QUERIES_PER_ARTIST = int(os.environ.get("YOUTUBE_DISCOVERY_MAX_QUERIES", "4"))
 
 
-ALIASES = {
-    "아이유": ["IU", "아이유"],
-    "에스파": ["aespa", "에스파"],
-    "에이티즈": ["ATEEZ", "에이티즈"],
-    "보이넥스트도어": ["BOYNEXTDOOR", "보이넥스트도어"],
-    "아이브": ["IVE", "아이브"],
-    "르세라핌": ["LE SSERAFIM", "르세라핌"],
-    "뉴진스": ["NewJeans", "뉴진스"],
-    "세븐틴": ["SEVENTEEN", "세븐틴"],
-    "스트레이키즈": ["Stray Kids", "SKZ", "스트레이키즈"],
-    "투모로우바이투게더": ["TXT", "TOMORROW X TOGETHER", "투모로우바이투게더"],
-}
+ALIASES = {}
+CANONICAL_IDS = {}
+
 
 
 OFFICIAL_CHANNEL_HINTS = [
@@ -56,11 +50,56 @@ OFFICIAL_CHANNEL_HINTS = [
 
 
 def read_artist_list():
-    return [
-        line.strip()
-        for line in ARTIST_LIST.read_text(encoding="utf-8-sig").splitlines()
-        if line.strip()
-    ]
+    payload = json.loads(
+        TARGET_CONFIG.read_text(
+            encoding="utf-8-sig"
+        )
+    )
+    rows = payload.get("artists")
+    if not isinstance(rows, list) or not rows:
+        raise RuntimeError(
+            "YouTube discovery target config has no artists."
+        )
+
+    artists = []
+    seen_ids = set()
+    seen_names = set()
+
+    for row in rows:
+        canonical_id = str(
+            row.get("canonicalArtistId") or ""
+        ).strip()
+        artist = str(
+            row.get("artist") or ""
+        ).strip()
+        aliases = [
+            str(value).strip()
+            for value in row.get("aliases", [])
+            if str(value).strip()
+        ]
+
+        if not canonical_id or not artist or not aliases:
+            raise RuntimeError(
+                "Invalid YouTube discovery target binding."
+            )
+        if canonical_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate YouTube discovery canonicalArtistId: "
+                + canonical_id
+            )
+        if artist in seen_names:
+            raise RuntimeError(
+                "Duplicate YouTube discovery artist: "
+                + artist
+            )
+
+        seen_ids.add(canonical_id)
+        seen_names.add(artist)
+        artists.append(artist)
+        CANONICAL_IDS[artist] = canonical_id
+        ALIASES[artist] = aliases
+
+    return artists
 
 
 def read_csv(path):
@@ -271,6 +310,7 @@ def main():
     print("=" * 70)
     print(f"version: {VERSION}")
     print("주의: youtube_seed_videos_v1.csv 원본은 수정하지 않습니다.")
+    print("주의: 결과는 machine candidate이며 reviewed seed가 아닙니다.")
     print("주의: website public/data는 건드리지 않습니다.")
     print()
 
@@ -364,6 +404,7 @@ def main():
                 current = found.get(key)
 
                 row = {
+                    "canonicalArtistId": CANONICAL_IDS[artist],
                     "artist": artist,
                     "videoId": video_id,
                     "url": f"https://www.youtube.com/watch?v={video_id}",
@@ -402,6 +443,7 @@ def main():
     )
 
     fieldnames = [
+        "canonicalArtistId",
         "artist",
         "videoId",
         "url",
@@ -437,6 +479,10 @@ def main():
         "targetMode": target_mode,
         "publishedAfter": PUBLISHED_AFTER,
         "artistListCount": len(artists),
+        "targetCanonicalArtistIds": [
+            CANONICAL_IDS[artist]
+            for artist in target_artists
+        ],
         "seedArtistCount": len(seed_artists),
         "targetArtists": target_artists,
         "totalCandidates": len(rows),
