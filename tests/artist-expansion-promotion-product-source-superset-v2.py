@@ -78,6 +78,11 @@ YOUTUBE_SEED = (
     / "data/fandex-cloud-v10/seed/"
     "fandex_youtube_ranking_v3_latest.json"
 )
+COMPAT_ACTIVE = (
+    ROOT
+    / "data/fandex-cloud-v10/seed/"
+    "artist_source_compatibility_v1.json"
+)
 
 
 def read_json(path):
@@ -107,6 +112,66 @@ def write_csv(path, rows, fields):
         )
         writer.writeheader()
         writer.writerows(rows)
+
+
+def assert_active_compatibility():
+    compatibility = read_json(
+        COMPAT_ACTIVE
+    )
+    music = compatibility["sources"][
+        "music_chart"
+    ]
+    lastfm = compatibility["sources"][
+        "lastfm"
+    ]
+
+    assert len(
+        music["supportedCanonicalArtistIds"]
+    ) == 21
+    assert len(
+        music["unresolvedCanonicalArtistIds"]
+    ) == 334
+    assert (
+        music["unsupportedCanonicalArtistIds"]
+        == []
+    )
+
+    assert len(
+        lastfm["supportedCanonicalArtistIds"]
+    ) == 19
+    assert len(
+        lastfm["unresolvedCanonicalArtistIds"]
+    ) == 334
+    assert set(
+        lastfm["unsupportedCanonicalArtistIds"]
+    ) == {"v", "lisa"}
+
+    for source in [
+        "music_chart",
+        "lastfm",
+    ]:
+        row = compatibility["sources"][
+            source
+        ]
+        supported = set(
+            row["supportedCanonicalArtistIds"]
+        )
+        unresolved = set(
+            row["unresolvedCanonicalArtistIds"]
+        )
+        unsupported = set(
+            row["unsupportedCanonicalArtistIds"]
+        )
+        assert not (
+            supported & unresolved
+            or supported & unsupported
+            or unresolved & unsupported
+        )
+        assert len(
+            supported
+            | unresolved
+            | unsupported
+        ) == 355
 
 
 def product_names():
@@ -766,6 +831,8 @@ def assert_health_and_daily(
 
 
 def main():
+    assert_active_compatibility()
+
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
 
