@@ -1,0 +1,40 @@
+name: Momentum post-outage recovery readiness v1
+
+on:
+  schedule:
+    - cron: '47 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: momentum-post-outage-recovery-readiness-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Evaluate post-outage recovery readiness
+        run: npx tsx scripts/operations/momentumPostOutageRecoveryReadinessV1.mts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "databaseWrites=0"
+          echo "historyWritePerformed=false"
+          echo "productMetricWrites=0"
+          echo "previewFallbackReads=0"
