@@ -714,6 +714,9 @@ export function validateSnsFandomObservation(
 
   const periodStart = observation.time.providerPeriodStart;
   const periodEnd = observation.time.providerPeriodEnd;
+  if ((periodStart === null) !== (periodEnd === null)) {
+    blockers.push('provider-period-pair-incomplete');
+  }
   if (
     periodStart !== null
     && periodEnd !== null
@@ -750,10 +753,17 @@ export type SnsFandomPersistenceEvidence = Readonly<{
   state:
     | 'temporal-history-present'
     | 'history-insufficient'
+    | 'time-semantics-conflict'
     | 'missing'
     | 'unsupported';
+  temporalBasis:
+    | 'provider-period'
+    | 'observation-time'
+    | 'mixed'
+    | 'none';
   observationCount: number;
   distinctObservationTimeCount: number;
+  distinctProviderPeriodCount: number;
   firstObservedAt: string | null;
   lastObservedAt: string | null;
   derivedNumericValue: null;
@@ -794,15 +804,44 @@ export function buildSnsFandomPersistenceEvidence(
       new Set(observed.map((item) => item.time.observedAt)),
     ).sort();
 
+    const periodBacked = observed.filter(
+      (item) =>
+        item.time.providerPeriodStart !== null
+        && item.time.providerPeriodEnd !== null,
+    );
+    const pointInTime = observed.filter(
+      (item) =>
+        item.time.providerPeriodStart === null
+        && item.time.providerPeriodEnd === null,
+    );
+    const distinctProviderPeriods = Array.from(
+      new Set(periodBacked.map((item) => [
+        item.time.providerPeriodStart,
+        item.time.providerPeriodEnd,
+      ].join('|'))),
+    ).sort();
+
+    let temporalBasis: SnsFandomPersistenceEvidence['temporalBasis'];
     let state: SnsFandomPersistenceEvidence['state'];
     if (group.every((item) => item.value.missingState === 'unsupported')) {
+      temporalBasis = 'none';
       state = 'unsupported';
     } else if (observed.length === 0) {
+      temporalBasis = 'none';
       state = 'missing';
-    } else if (distinctObservedAt.length < 2) {
-      state = 'history-insufficient';
+    } else if (periodBacked.length === observed.length) {
+      temporalBasis = 'provider-period';
+      state = distinctProviderPeriods.length < 2
+        ? 'history-insufficient'
+        : 'temporal-history-present';
+    } else if (pointInTime.length === observed.length) {
+      temporalBasis = 'observation-time';
+      state = distinctObservedAt.length < 2
+        ? 'history-insufficient'
+        : 'temporal-history-present';
     } else {
-      state = 'temporal-history-present';
+      temporalBasis = 'mixed';
+      state = 'time-semantics-conflict';
     }
 
     output.push(Object.freeze({
@@ -815,8 +854,10 @@ export function buildSnsFandomPersistenceEvidence(
       metricId: first.variable.metricId,
       metricRole: first.variable.metricRole,
       state,
+      temporalBasis,
       observationCount: observed.length,
       distinctObservationTimeCount: distinctObservedAt.length,
+      distinctProviderPeriodCount: distinctProviderPeriods.length,
       firstObservedAt: distinctObservedAt[0] ?? null,
       lastObservedAt:
         distinctObservedAt[distinctObservedAt.length - 1] ?? null,
