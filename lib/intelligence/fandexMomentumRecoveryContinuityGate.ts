@@ -2,13 +2,28 @@ import {
   evaluateNaverNewsMediaActivityDiurnalReadiness,
 } from '../server/ingestion/naverNewsMediaActivityBaselineReadinessResearch';
 import {
+  bindCanonicalArtistToNaverNews,
+} from '../server/ingestion/naverNewsArtistBinding';
+import {
+  buildNaverNewsJobIdentity,
+  canonicalJson,
+} from '../server/ingestion/naverNewsContracts';
+import type {
+  NaverNewsLatestOfficialShadowSlotReadRepository,
+  NaverNewsSucceededSchedulerJob,
+} from '../server/ingestion/naverNewsLatestOfficialShadowSlot';
+import {
+  buildNaverNewsSchedulerPlan,
   NAVER_NEWS_SCHEDULER_CADENCE_MINUTES,
+  NAVER_NEWS_SCHEDULER_DEFAULT_DISPLAY,
 } from '../server/ingestion/naverNewsScheduler';
 
 export const FANDEX_MOMENTUM_RECOVERY_CONTINUITY_GATE_VERSION =
   'momentum-recovery-continuity-gate-v1' as const;
 
 const CADENCE_MS = NAVER_NEWS_SCHEDULER_CADENCE_MINUTES * 60_000;
+const COLLECTION_KEY_PATTERN =
+  /^sched-v125-naver-news-(\d{8})t(\d{6})z-[0-9a-f]{12}$/;
 
 function requiredAnalysisSlotCount(): number {
   for (let count = 0; count <= 24 * 365; count += 1) {
@@ -72,6 +87,61 @@ function exactSlot(value: string): number {
     throw new Error('momentum_recovery_continuity_slot_invalid');
   }
   return timestamp;
+}
+
+function slotFromCollectionKey(value: string): string {
+  const match = COLLECTION_KEY_PATTERN.exec(value);
+  if (!match) {
+    throw new Error('momentum_recovery_collection_key_invalid');
+  }
+  const date = match[1];
+  const time = match[2];
+  const slotStart = (
+    date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8)
+    + 'T' + time.slice(0, 2) + ':' + time.slice(2, 4) + ':'
+    + time.slice(4, 6) + '.000Z'
+  );
+  exactSlot(slotStart);
+  return slotStart;
+}
+
+function exactOfficialSlot(
+  job: NaverNewsSucceededSchedulerJob,
+): string | null {
+  const slotStart = slotFromCollectionKey(job.collectionKey);
+  const binding = bindCanonicalArtistToNaverNews('iu');
+  const plan = buildNaverNewsSchedulerPlan({
+    query: binding.query,
+    at: slotStart,
+    display: NAVER_NEWS_SCHEDULER_DEFAULT_DISPLAY,
+  });
+  const identity = buildNaverNewsJobIdentity(plan.command);
+
+  if (
+    plan.slotStart !== slotStart
+    || plan.collectionKey !== job.collectionKey
+    || identity.jobId !== job.jobId
+    || canonicalJson(identity.request)
+      !== canonicalJson(job.requestContract)
+  ) {
+    return null;
+  }
+
+  return slotStart;
+}
+
+export async function evaluateFandexMomentumRecoveryContinuityFromRepository(
+  repository: NaverNewsLatestOfficialShadowSlotReadRepository,
+): Promise<FandexMomentumRecoveryContinuityGateResult> {
+  const jobs = await repository.readSucceededSchedulerJobs();
+  const slots: string[] = [];
+
+  for (const job of jobs) {
+    const slot = exactOfficialSlot(job);
+    if (slot !== null) slots.push(slot);
+  }
+
+  return evaluateFandexMomentumRecoveryContinuityGate(slots);
 }
 
 export function evaluateFandexMomentumRecoveryContinuityGate(
