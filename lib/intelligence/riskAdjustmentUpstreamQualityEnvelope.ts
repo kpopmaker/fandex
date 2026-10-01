@@ -78,6 +78,7 @@ export type RiskAdjustmentUpstreamQualityEnvelopeAssessment =
       contractVersion:
         typeof RISK_ADJUSTMENT_UPSTREAM_QUALITY_ENVELOPE_VERSION;
       reason:
+        | 'envelope-shape-invalid'
         | 'contract-version-mismatch'
         | 'producer-contract-version-invalid'
         | 'upstream-input-invalid'
@@ -101,19 +102,36 @@ function invalid(
   });
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value)
+    && typeof value === 'object'
+    && !Array.isArray(value);
+}
+
 function validSemantic(
-  value: RiskAdjustmentQualityDimensionSemantic | undefined,
-): boolean {
+  value: unknown,
+): value is RiskAdjustmentQualityDimensionSemantic {
+  if (!isRecord(value)) return false;
   return (
-    value !== undefined
+    typeof value.semanticId === 'string'
     && value.semanticId.trim().length > 0
+    && typeof value.semanticVersion === 'string'
     && value.semanticVersion.trim().length > 0
+    && typeof value.stateValue === 'string'
     && value.stateValue.trim().length > 0
+    && Array.isArray(value.evidenceRefs)
     && value.evidenceRefs.length > 0
     && value.evidenceRefs.every(
       (ref) => typeof ref === 'string' && ref.trim().length > 0,
     )
   );
+}
+
+function hasOnlyDimensionKeys(
+  value: Record<string, unknown>,
+  allowed: readonly string[],
+): boolean {
+  return Object.keys(value).every((key) => allowed.includes(key));
 }
 
 function requiredDimensionStateValue(
@@ -142,6 +160,10 @@ function optionalDimensionStateValue(
 export function evaluateRiskAdjustmentUpstreamQualityEnvelope(
   envelope: RiskAdjustmentUpstreamQualityEnvelope,
 ): RiskAdjustmentUpstreamQualityEnvelopeAssessment {
+  if (!isRecord(envelope)) {
+    return invalid('envelope-shape-invalid');
+  }
+
   if (
     envelope.contractVersion
     !== RISK_ADJUSTMENT_UPSTREAM_QUALITY_ENVELOPE_VERSION
@@ -149,8 +171,26 @@ export function evaluateRiskAdjustmentUpstreamQualityEnvelope(
     return invalid('contract-version-mismatch');
   }
 
-  if (envelope.producerContractVersion.trim().length === 0) {
+  if (
+    typeof envelope.producerContractVersion !== 'string'
+    || envelope.producerContractVersion.trim().length === 0
+  ) {
     return invalid('producer-contract-version-invalid');
+  }
+
+  if (
+    !isRecord(envelope.requiredDimensionSemantics)
+    || !isRecord(envelope.optionalDimensionSemantics)
+    || !hasOnlyDimensionKeys(
+      envelope.requiredDimensionSemantics,
+      RISK_ADJUSTMENT_REQUIRED_QUALITY_DIMENSIONS,
+    )
+    || !hasOnlyDimensionKeys(
+      envelope.optionalDimensionSemantics,
+      RISK_ADJUSTMENT_OPTIONAL_QUALITY_DIMENSIONS,
+    )
+  ) {
+    return invalid('envelope-shape-invalid');
   }
 
   if (!isRiskAdjustmentUpstreamInput(envelope.input)) {
