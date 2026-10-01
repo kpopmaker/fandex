@@ -7,6 +7,7 @@ export type SnsFandomDimension =
 
 export type SnsFandomProviderId =
   | 'youtube-data-api'
+  | 'youtube-analytics-api'
   | 'instagram-api'
   | 'tiktok-display-api'
   | 'tiktok-research-api'
@@ -74,6 +75,29 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
         'https://developers.google.com/youtube/terms/derived-metrics-policy',
         'https://developers.google.com/youtube/v3/docs/channels',
         'https://developers.google.com/youtube/v3/docs/comments',
+      ]),
+    }),
+    Object.freeze({
+      providerId: 'youtube-analytics-api' as const,
+      state: 'authorized-account-only' as const,
+      constructCoverage: Object.freeze([
+        'fandom-activity-persistence' as const,
+      ]),
+      authorizedAcquisition: 'requires-artist-account-authorization' as const,
+      commercialUse: 'conditional' as const,
+      recurringAutomatedCollection: 'authorized-account-only' as const,
+      storageRetention: 'conditional' as const,
+      derivedMetricPublication: 'conditional' as const,
+      identityCoverage: 'authorized-account-only' as const,
+      historicalAccess: 'authorized-account-history' as const,
+      blockers: Object.freeze([
+        'youtube-analytics-channel-owner-authorization-required',
+        'youtube-analytics-generic-kpop-coverage-not-established',
+      ]),
+      evidenceUrls: Object.freeze([
+        'https://developers.google.com/youtube/analytics/channel_reports',
+        'https://developers.google.com/youtube/reporting',
+        'https://developers.google.com/youtube/reporting/v1/reports/channel_reports',
       ]),
     }),
     Object.freeze({
