@@ -32,6 +32,7 @@ export type RiskAdjustmentAvailabilityState =
   | 'true-zero'
   | 'source-missing'
   | 'provider-unavailable'
+  | 'upstream-unavailable-ambiguous'
   | 'not-tracked'
   | 'not-ranked';
 
@@ -90,6 +91,7 @@ export type RiskAdjustmentUpstreamInput = Readonly<{
 export type RiskAdjustmentQualityIssue =
   | 'source-missing'
   | 'provider-unavailable'
+  | 'availability-unresolved'
   | 'identity-unresolved'
   | 'identity-conflict'
   | 'incomplete-coverage'
@@ -164,6 +166,9 @@ export function assessRiskAdjustmentDependency(
   }
   if (input.availabilityState === 'provider-unavailable') {
     qualityIssues.push('provider-unavailable');
+  }
+  if (input.availabilityState === 'upstream-unavailable-ambiguous') {
+    qualityIssues.push('availability-unresolved');
   }
   if (input.identityState === 'unresolved') {
     qualityIssues.push('identity-unresolved');
