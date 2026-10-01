@@ -1,0 +1,43 @@
+name: Validate Momentum PR378 against current main v1
+
+on:
+  push:
+    branches:
+      - validation/momentum-pr378-current-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Capture current main and merge-simulate
+        run: |
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          CURRENT_MAIN="$(git rev-parse refs/remotes/origin/main)"
+          echo "MOMENTUM_PR378_VALIDATED_MAIN_SHA=$CURRENT_MAIN"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git merge --no-commit --no-ff "$CURRENT_MAIN"
+
+      - run: npm ci
+      - run: npx tsx --test tests/momentum-recovery-continuity-gate-v1.test.mts
+      - run: npx tsx --test tests/momentum-carrier-persistence-decision-v1.test.mts
+      - run: npx tsx --test tests/momentum-current-evaluation-execution-v1.test.mts
+      - run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+        env:
+          NODE_OPTIONS: --conditions=react-server
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
