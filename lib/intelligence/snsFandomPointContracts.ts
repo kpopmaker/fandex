@@ -884,6 +884,7 @@ export type SnsFandomPointReadinessResult = Readonly<{
   followerCountAloneAllowedAsFandom: false;
   mentionCountAloneAllowedAsSnsFandom: false;
   observedReactionEvidenceCount: number;
+  contentLevelReactionEvidenceCount: number;
   temporalPersistenceEvidenceCount: number;
   productionReadyProviders: readonly SnsFandomProviderId[];
   providerApprovedProviders: readonly SnsFandomProviderId[];
@@ -1019,13 +1020,25 @@ export function evaluateSnsFandomPointReadiness(
     && isObservationProviderEligible(observation)
   ));
 
+  const contentLevelReactionEvidence = validObserved.filter(
+    (observation) =>
+      observation.variable.dimension === 'public-reaction-diffusion'
+      && observation.entity.providerContentId !== null,
+  );
+
   const reactionEvidence = validObserved.filter(
     (observation) =>
-      observation.variable.dimension === 'public-reaction-diffusion',
+      observation.variable.dimension === 'public-reaction-diffusion'
+      && observation.entity.providerContentId === null,
   );
 
   if (reactionEvidence.length === 0) {
     blockers.push('public-reaction-diffusion-evidence-missing');
+    if (contentLevelReactionEvidence.length > 0) {
+      blockers.push(
+        'public-reaction-artist-level-aggregation-missing',
+      );
+    }
   }
 
   const persistenceEvidence = buildSnsFandomPersistenceEvidence(
@@ -1094,6 +1107,8 @@ export function evaluateSnsFandomPointReadiness(
     followerCountAloneAllowedAsFandom: false as const,
     mentionCountAloneAllowedAsSnsFandom: false as const,
     observedReactionEvidenceCount: reactionEvidence.length,
+    contentLevelReactionEvidenceCount:
+      contentLevelReactionEvidence.length,
     temporalPersistenceEvidenceCount: persistenceEvidence.length,
     productionReadyProviders: Object.freeze(productionReadyProviders),
     providerApprovedProviders: Object.freeze(providerApprovedProviders),
