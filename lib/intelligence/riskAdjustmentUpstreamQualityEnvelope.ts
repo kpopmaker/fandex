@@ -13,9 +13,10 @@ import {
   type RiskAdjustmentRequiredQualityDimension,
   type RiskAdjustmentUpstreamMetadataCapability,
 } from './riskAdjustmentUpstreamMetadataRequirements';
-import type {
-  RiskAdjustmentUpstreamInput,
-  RiskAdjustmentUpstreamVariableId,
+import {
+  isRiskAdjustmentUpstreamInput,
+  type RiskAdjustmentUpstreamInput,
+  type RiskAdjustmentUpstreamVariableId,
 } from './riskAdjustmentPointConstruct';
 
 export const RISK_ADJUSTMENT_UPSTREAM_QUALITY_ENVELOPE_VERSION =
@@ -79,6 +80,7 @@ export type RiskAdjustmentUpstreamQualityEnvelopeAssessment =
       reason:
         | 'contract-version-mismatch'
         | 'producer-contract-version-invalid'
+        | 'upstream-input-invalid'
         | 'variable-id-mismatch'
         | 'lifecycle-mismatch'
         | 'material-class-mismatch'
@@ -149,6 +151,10 @@ export function evaluateRiskAdjustmentUpstreamQualityEnvelope(
 
   if (envelope.producerContractVersion.trim().length === 0) {
     return invalid('producer-contract-version-invalid');
+  }
+
+  if (!isRiskAdjustmentUpstreamInput(envelope.input)) {
+    return invalid('upstream-input-invalid');
   }
 
   if (envelope.input.variableId !== envelope.variableId) {
