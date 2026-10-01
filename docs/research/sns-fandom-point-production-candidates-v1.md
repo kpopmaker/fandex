@@ -637,3 +637,41 @@ required combination of:
 
 The Product remains fail-closed. Old derived YouTube points and historical seed
 IDs must not be backfilled into the new validation dataset.
+
+
+## YouTube 2026 derived-metrics policy clarification
+
+Current official YouTube policy was re-verified after the 2026-06-01 policy
+change.
+
+Baseline policy still prohibits independently creating derived metrics from
+YouTube API Data.
+
+However, audited developers whose Analytics & Reporting use case is accepted
+under the additional Developer Policies amendment may create specified
+analytics metrics. The official examples expressly include:
+
+- custom channel scores using averages, sums or ratios of API Data;
+- creator influence / content quality style scores;
+- cross-channel performance ranking / leaderboards;
+- historical channel-performance comparisons;
+- viewer-sentiment analysis from aggregate engagement/comment evidence.
+
+This means FANDEX's intended channel/artist analytics is not automatically
+disqualified by being a custom score or cross-channel comparison. The exact
+API Client must first obtain the additional-policy grant and clearly label
+FANDEX-derived metrics as independently generated rather than YouTube-sourced.
+
+The provider contract now models that distinction explicitly rather than
+treating generic API access as derived-metric permission.
+
+### Submission-readiness state
+
+Read-only Production verification:
+- public app root exists at `https://fandex-eta.vercel.app`;
+- `/privacy` is 404;
+- `/terms` is 404.
+
+Therefore the closest external blocker before a real audit submission is now
+the public legal/compliance surface plus the remaining application evidence,
+not additional variable math.
