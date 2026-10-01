@@ -1,0 +1,72 @@
+name: Validate Artist Expansion YouTube unresolved channel-bound v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-unresolved-v1
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-unresolved-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Focused discovery syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_unresolved_channel_bound_v1.py
+      - name: Live provider-bound unresolved discovery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python scripts/fandex-cloud-migration/source/youtube_discover_unresolved_channel_bound_v1.py
+      - name: Validate focused discovery contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(
+              Path(
+                  "youtube_v3_unresolved_channel_bound_candidates_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          assert payload["targetCount"] == 4
+          assert payload["activationState"] == "review_only_not_seed"
+          assert {
+              row["canonicalArtistId"]
+              for row in payload["targets"]
+          } == {"jimin", "v", "jennie", "lisa"}
+
+          for target in payload["targets"]:
+              anchor = target["anchor"]
+              channel = target["resolvedChannel"]
+              assert anchor["channelId"] == channel["channelId"]
+              assert channel["channelId"]
+              assert channel["title"]
+              for row in target["candidates"]:
+                  assert row["channelId"] == channel["channelId"]
+                  assert row["reviewState"] == "machine_candidate_unreviewed"
+
+          assert payload["activeSeedModified"] is False
+          assert payload["productModified"] is False
+          assert payload["runtimeModified"] is False
+
+          print(
+              "PASS: four unresolved YouTube targets use "
+              "channel-bound provider discovery without seed activation"
+          )
+          PY
+      - name: Upload focused review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-unresolved-v1
+          path: youtube_v3_unresolved_channel_bound_candidates_v1.json
+          retention-days: 7
