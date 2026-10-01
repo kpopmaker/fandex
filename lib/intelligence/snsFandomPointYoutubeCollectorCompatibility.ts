@@ -9,6 +9,7 @@ export type YoutubeCollectorCompatibilityProfile = Readonly<{
     | 'coerce-missing-to-zero'
     | 'unknown';
   emitsProviderChannelId: boolean;
+  emitsProviderClientRef: boolean;
   emitsObservedAt: boolean;
   emitsCollectedAt: boolean;
   persistsRawApiResponse: boolean;
@@ -31,6 +32,7 @@ export const ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE:
       'validation/artist-expansion-youtube-shadow-v1@ed8b7c293ebb9d5927cd004367546bed01b5f732',
     missingStatisticSemantics: 'coerce-missing-to-zero' as const,
     emitsProviderChannelId: false,
+    emitsProviderClientRef: false,
     emitsObservedAt: false,
     emitsCollectedAt: false,
     persistsRawApiResponse: true,
@@ -48,6 +50,9 @@ export function evaluateYoutubeCollectorCompatibility(
   }
   if (!profile.emitsProviderChannelId) {
     blockers.push('youtube-collector-provider-channel-id-missing');
+  }
+  if (!profile.emitsProviderClientRef) {
+    blockers.push('youtube-collector-provider-client-ref-missing');
   }
   if (!profile.emitsObservedAt) {
     blockers.push('youtube-collector-observed-at-missing');
