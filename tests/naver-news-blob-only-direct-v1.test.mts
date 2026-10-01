@@ -4,7 +4,7 @@ import test from 'node:test';
 
 import {
   runNaverNewsBlobOnlyDirect,
-} from '../scripts/ingestion/run-naver-news-blob-only-direct-v1.mts';
+} from '../scripts/ingestion/run-naver-news-blob-only-direct-v1';
 import type {
   NaverNewsBlobOnlyCollectionStageSummary,
 } from '../lib/server/ingestion/naverNewsBlobOnlyCollectionStage';
