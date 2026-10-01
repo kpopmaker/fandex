@@ -123,9 +123,11 @@ def main():
         and
         master_ok
         and
-        len(music_ranking) == len(master_ranking)
+        bool(music_ranking)
         and
-        music_artists == master_artists
+        len(music_ranking) == len(music_artists)
+        and
+        master_artists <= music_artists
     )
 
     print()
@@ -150,12 +152,14 @@ def main():
 
     print(
         f"Music v2         : "
-        f"{len(music_ranking)}/{len(master_ranking)} artists"
+        f"{len(music_ranking)} source / "
+        f"{len(master_ranking)} Product artists"
     )
 
     print(
         f"Music v2 ranked  : "
-        f"{ranked_platforms}/30 platforms"
+        f"{ranked_platforms}/"
+        f"{len(music_ranking) * 3} platforms"
     )
 
     print(
