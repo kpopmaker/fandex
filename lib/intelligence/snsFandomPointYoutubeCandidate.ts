@@ -12,6 +12,7 @@ export const SNS_FANDOM_YOUTUBE_CANDIDATE_VERSION =
 export type YoutubePublicStatsSnapshot = Readonly<{
   canonicalArtistId: string;
   youtubeChannelId: string;
+  providerClientRef: string;
   observedAt: string;
   collectedAt: string;
   videos: readonly Readonly<{
@@ -103,6 +104,7 @@ function observation(
     }),
     evidence: Object.freeze({
       evidenceRef: input.evidenceRef,
+      providerClientRef: input.providerClientRef,
       revision: null,
     }),
     lifecycle: Object.freeze({
@@ -151,6 +153,14 @@ export function buildYoutubeSnsFandomCandidate(
     }
     if (approval.providerId !== 'youtube-data-api') {
       blockers.push('youtube-provider-approval-provider-mismatch');
+    }
+    if (
+      input.snapshots.some(
+        (snapshot) =>
+          snapshot.providerClientRef !== approval.providerClientRef,
+      )
+    ) {
+      blockers.push('youtube-provider-approval-client-mismatch');
     }
     if (
       !approval.approvedDimensions.includes(
