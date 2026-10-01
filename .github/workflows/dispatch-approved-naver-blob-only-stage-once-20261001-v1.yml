@@ -1,0 +1,36 @@
+name: Dispatch approved NAVER Blob-only Production stage once 20261001 v1
+
+on:
+  push:
+    branches:
+      - diagnostic/naver-blob-only-live-once-20261001-v1
+    paths:
+      - .github/workflows/dispatch-approved-naver-blob-only-stage-once-20261001-v1.yml
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: dispatch-approved-naver-blob-only-stage-once-20261001-v1
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/diagnostic/naver-blob-only-live-once-20261001-v1' &&
+      github.event_name == 'push' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Dispatch existing guarded main workflow exactly once
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run             invoke-naver-production-blob-only-collection-stage-v1.yml             --repo kpopmaker/fandex             --ref main             --field execution_approval=ops-naver-blob-only-stage-20261001-v1
+          echo "FANDEX_NAVER_BLOB_ONLY_DISPATCH=accepted"
+          echo "FANDEX_NAVER_BLOB_ONLY_DISPATCH_TARGET=main"
+          echo "FANDEX_NAVER_BLOB_ONLY_DISPATCH_COUNT=1"
