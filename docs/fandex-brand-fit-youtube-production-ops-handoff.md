@@ -138,3 +138,40 @@ A success-looking JSON result is rejected unless all of the following remain bou
 If self-validation fails, the command exits non-zero and does not emit a success receipt.
 
 This validation still does not authorize storage, activation, publication, recurring collection, or cutover.
+
+
+## Owner execution authorization
+
+The Production workflow requires explicit owner authorization on GitHub issue #367. A normal status/update comment is not authorization.
+
+After the Brand workflow exists on `main`, and only after explicit execution approval has been given, Production Operations must record one issue comment using this exact schema:
+
+```text
+BRAND_FIT_YOUTUBE_PROVIDER_EXECUTION_AUTHORIZED
+authorizationId: brand-fit-youtube-execution-YYYYMMDDtHHMMSSz-v1
+authorizedMainSha: <exact current main SHA containing the execution workflow>
+maximumExecutions: 1
+targetVideoId: 39CUlBDuRSo
+canonicalArtistId: iu
+canonicalBrandId: estee-lauder
+canonicalCampaignId: estee-lauder-korea-new-night-campaign-2025-iu
+```
+
+The authorization comment must be authored by `kpopmaker`.
+
+The manual workflow inputs must then match the issue evidence exactly:
+
+- `expected_main_sha` = `authorizedMainSha`
+- `execution_authorization_id` = `authorizationId`
+- `confirm` = `execute-brand-fit-youtube-observation-v1`
+
+The workflow fails closed if the owner authorization is absent, malformed, bound to another main SHA, bound to another authorization ID, or targets another Artist / Brand / Campaign / video.
+
+The authorization is one-shot. It is considered consumed if any earlier dispatch either:
+
+- completed successfully, or
+- reached a successful `Execute exactly one bounded Brand Fit provider observation` step even if a later artifact/post-processing step caused the overall workflow to fail.
+
+Therefore an artifact-upload failure after a successful provider call does not authorize another provider call.
+
+This section documents the required evidence format only. It is not itself an execution authorization.
