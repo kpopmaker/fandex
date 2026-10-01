@@ -204,3 +204,38 @@ The current Artist Expansion collector fails at step 1 and therefore cannot
 reach normalization. Once Production Operations / Artist Expansion supplies a
 corrected collector profile and output contract, the bridge can feed the
 existing YouTube reaction adapter without any Preview/Synthetic fallback.
+
+
+## Content-age collection requirement before aggregation
+
+A corrected complete-window snapshot is still only source evidence. It is not
+automatically artist-level aggregation evidence.
+
+YouTube view / like / comment counters are cumulative. If two videos were
+published on different dates but observed in the same batch timestamp, the
+older video has had more elapsed exposure time. The variable contract therefore
+does not treat those raw cumulative values as directly comparable merely
+because they came from the same snapshot.
+
+For direct raw content-level comparison without an additional exposure model,
+the v1 methodology requires exact equality of:
+
+`observedAt - publishedAt`
+
+across the content samples being compared.
+
+Consequences for shared collection:
+
+- a single batch snapshot can remain valid raw source evidence;
+- that batch usually will **not** be aggregation-ready when selected videos
+  have different publication dates;
+- an aggregation-ready direct-comparison path would need per-content
+  observations captured at a common elapsed content age; or
+- a separately justified exposure-adjustment model would need its own
+  methodology, tests, and approval.
+
+The snsFandom variable contract currently allows neither interpolation nor
+extrapolation between snapshots to manufacture an age-aligned value.
+
+This is a downstream Product methodology requirement, not a request for this
+branch to modify the global scheduler.
