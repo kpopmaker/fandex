@@ -1,0 +1,42 @@
+{
+  "version": "youtube_v3_unresolved_review_plan_v1",
+  "activationState": "review_only_not_binding",
+  "targets": [
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "anchorVideoId": "p0nPyE-dv9Q",
+      "anchorCanonicalArtistId": "jungkook",
+      "anchorPurpose": "Resolve the reviewed BANGTANTV channel, then search only that provider channel for Jimin-specific 2026 evidence.",
+      "query": "Jimin",
+      "publishedAfter": "2026-01-01T00:00:00Z"
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "anchorVideoId": "p0nPyE-dv9Q",
+      "anchorCanonicalArtistId": "jungkook",
+      "anchorPurpose": "Resolve the reviewed BANGTANTV channel, then search only that provider channel for V-specific 2026 evidence.",
+      "query": "V Taehyung",
+      "publishedAfter": "2026-01-01T00:00:00Z"
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "anchorVideoId": "s466YCiHfKw",
+      "anchorCanonicalArtistId": "jennie",
+      "anchorPurpose": "Resolve the candidate Jennie VEVO channel before reviewing channel-bound JENNIE evidence.",
+      "query": "JENNIE",
+      "publishedAfter": "2026-01-01T00:00:00Z"
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "anchorVideoId": "FyS5dAywkEo",
+      "anchorCanonicalArtistId": "lisa",
+      "anchorPurpose": "Resolve the candidate LISA VEVO channel before reviewing channel-bound LISA evidence.",
+      "query": "LISA",
+      "publishedAfter": "2026-01-01T00:00:00Z"
+    }
+  ]
+}
