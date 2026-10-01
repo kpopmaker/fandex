@@ -16,7 +16,25 @@ function ageAlignment(
   return {
     contractVersion: 'sns-fandom-youtube-content-age-alignment-v1',
     state,
-    metrics: [],
+    metrics: [
+      {
+        metricId: 'youtube.video.view-count',
+        state: state === 'age-alignment-ready'
+          ? 'exact-age-aligned'
+          : 'age-misaligned',
+        manifestVideoCount: 1,
+        observedVideoCount: 1,
+        distinctContentAgeMilliseconds: [604800000],
+        samples: [],
+        directRawComparisonReady:
+          state === 'age-alignment-ready',
+        interpolationAllowed: false,
+        extrapolationAllowed: false,
+        aggregationMethod: null,
+        aggregateValue: null,
+        blockers: [],
+      },
+    ],
     artistLevelAggregationReady: false,
     normalizationReady: false,
     interpolationAllowed: false,
@@ -199,4 +217,25 @@ test('an approved methodology cannot bypass missing content-age alignment', () =
       'reaction-aggregation-content-age-alignment-not-ready',
     ),
   );
+});
+
+
+test('methodology decision cannot target a metric without aligned observed content evidence', () => {
+  const noMetricEvidence: SnsFandomYoutubeContentAgeAlignmentResult = {
+    ...ageAlignment(),
+    metrics: [],
+  };
+
+  const result = evaluateSnsFandomReactionAggregationMethodology({
+    ageAlignment: noMetricEvidence,
+    decision: decision({ state: 'approved' }),
+  });
+
+  assert.equal(result.state, 'age-alignment-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-selected-metric-age-alignment-not-ready',
+    ),
+  );
+  assert.equal(result.aggregateValue, null);
 });
