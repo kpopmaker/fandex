@@ -1,0 +1,35 @@
+name: Validate Artist Expansion YouTube full reviewed cohort shadow v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-full-cohort-shadow-v1
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-full-reviewed-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Full cohort shadow syntax
+        run: python -m py_compile scripts/fandex-cloud-migration/source/youtube_v3_full_reviewed_cohort_shadow_v1.py
+      - name: Validate reviewed seed materialization
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py
+      - name: Live YouTube full reviewed cohort shadow
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_v3_full_reviewed_cohort_shadow_v1.py
+      - name: Upload full cohort evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-full-reviewed-cohort-v1
+          path: youtube_v3_full_reviewed_cohort_shadow_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
