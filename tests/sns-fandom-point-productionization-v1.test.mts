@@ -136,6 +136,13 @@ function youtubeStatsProviderApproval(
       derivedMetricMonths: 36,
       nonStatisticalDataRefreshDays: 30,
     },
+    youtubePolicyGrant: {
+      complianceAuditPassed: true,
+      analyticsReportingUseCaseAccepted: true,
+      developerPoliciesAmendmentAccepted: true,
+      additionalDerivedMetricsApproved: true,
+      extendedStatisticalStorageApproved: true,
+    },
     ...overrides,
   };
 }
@@ -173,6 +180,13 @@ function youtubeCommentProviderApproval(
       derivedMetricMonths: 36,
       nonStatisticalDataRefreshDays: 30,
     },
+    youtubePolicyGrant: {
+      complianceAuditPassed: true,
+      analyticsReportingUseCaseAccepted: true,
+      developerPoliciesAmendmentAccepted: true,
+      additionalDerivedMetricsApproved: true,
+      extendedStatisticalStorageApproved: true,
+    },
     ...overrides,
   };
 }
@@ -209,6 +223,13 @@ function youtubeCommentProviderDecision(
       statisticalDataMonths: 36,
       derivedMetricMonths: 36,
       nonStatisticalDataRefreshDays: 30,
+    },
+    youtubePolicyGrant: {
+      complianceAuditPassed: true,
+      analyticsReportingUseCaseAccepted: true,
+      developerPoliciesAmendmentAccepted: true,
+      additionalDerivedMetricsApproved: true,
+      extendedStatisticalStorageApproved: true,
     },
     ...overrides,
   };
@@ -656,6 +677,77 @@ test('provider approval evidence is fail-closed on rights, validity, and YouTube
       '2026-10-01T00:02:00.000Z',
     ).blockers,
     ['youtube-provider-approval-statistical-retention-invalid'],
+  );
+});
+
+test('YouTube approval requires the explicit Analytics & Reporting amendment grant', () => {
+  const missingGrant = youtubeStatsProviderApproval({
+    youtubePolicyGrant: null,
+  });
+  assert.deepEqual(
+    validateSnsFandomProviderApprovalEvidence(
+      missingGrant,
+      '2026-10-01T00:02:00.000Z',
+    ).blockers,
+    ['youtube-provider-policy-grant-missing'],
+  );
+
+  const amendmentNotAccepted = youtubeStatsProviderApproval({
+    youtubePolicyGrant: {
+      complianceAuditPassed: true,
+      analyticsReportingUseCaseAccepted: true,
+      developerPoliciesAmendmentAccepted: false,
+      additionalDerivedMetricsApproved: true,
+      extendedStatisticalStorageApproved: true,
+    },
+  });
+  assert.ok(
+    validateSnsFandomProviderApprovalEvidence(
+      amendmentNotAccepted,
+      '2026-10-01T00:02:00.000Z',
+    ).blockers.includes(
+      'youtube-provider-derived-metrics-amendment-not-accepted',
+    ),
+  );
+
+  const derivedMetricsNotApproved = youtubeStatsProviderApproval({
+    youtubePolicyGrant: {
+      complianceAuditPassed: true,
+      analyticsReportingUseCaseAccepted: true,
+      developerPoliciesAmendmentAccepted: true,
+      additionalDerivedMetricsApproved: false,
+      extendedStatisticalStorageApproved: true,
+    },
+  });
+  assert.ok(
+    validateSnsFandomProviderApprovalEvidence(
+      derivedMetricsNotApproved,
+      '2026-10-01T00:02:00.000Z',
+    ).blockers.includes(
+      'youtube-provider-additional-derived-metrics-not-approved',
+    ),
+  );
+});
+
+test('a submission acknowledgement cannot fabricate YouTube amendment approval', () => {
+  const result = buildSnsFandomProviderApprovalEvidenceFromDecision(
+    youtubeCommentProviderDecision({
+      decisionKind: 'submission-confirmation',
+      youtubePolicyGrant: {
+        complianceAuditPassed: false,
+        analyticsReportingUseCaseAccepted: false,
+        developerPoliciesAmendmentAccepted: false,
+        additionalDerivedMetricsApproved: false,
+        extendedStatisticalStorageApproved: false,
+      },
+    }),
+    '2026-10-01T00:02:00.000Z',
+  );
+
+  assert.equal(result.state, 'rejected');
+  assert.equal(result.approvalEvidence, null);
+  assert.ok(
+    result.blockers.includes('provider-decision-is-not-an-approval-grant'),
   );
 });
 
