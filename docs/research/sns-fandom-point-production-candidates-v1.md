@@ -442,3 +442,69 @@ Current repository state:
 - per-video YouTube evidence therefore cannot satisfy Product reaction
   readiness;
 - `snsFandomPoint` remains null.
+
+
+## Real reaction methodology validation dataset contract
+
+The aggregation methodology decision is now bound to an executable validation
+dataset contract rather than a free-form claim that “real data was reviewed.”
+
+The dataset is built from each artist's:
+
+- exact canonical artist / official YouTube channel binding;
+- complete official-channel publication-window manifest;
+- real `youtube.videos.list` observations;
+- exact provider API client/project reference;
+- exact content-level evidence references; and
+- exact content age derived from `observedAt - publishedAt`.
+
+A dataset is structurally eligible only when:
+
+- it contains at least two distinct canonical artists; this is the mathematical
+  minimum for cross-artist validation and is **not** a claim of statistical
+  representativeness;
+- all source observations are `materialClass = real`;
+- the selected metric is fully observed for every manifest content item;
+- all selected content samples inside each artist are exactly age-aligned;
+- the target elapsed content age is identical across artists;
+- all artists use the same approved provider client/project;
+- the statistical endpoint provenance is exactly
+  `youtube.videos.list`; and
+- each artist's manifest video set exactly equals its selected metric
+  observation set.
+
+The contract intentionally does **not** equalize the number of content items
+per artist. Doing so would silently change the construct by dropping real
+official content. Release-volume sensitivity must instead be evaluated
+explicitly by the later methodology analysis.
+
+### Revision stability
+
+A structurally valid dataset remains non-eligible for methodology approval
+until revision stability is assessed.
+
+The revision audit requires at least two distinct dataset revision references
+because one revision cannot establish stability. The audit itself remains
+evidence-based and must carry a non-secret evidence reference.
+
+States:
+- `unassessed` -> structurally ready at most;
+- `changed` -> methodology validation remains ineligible;
+- `stable` with sufficient revision evidence -> validation-ready.
+
+No aggregate or normalized value is emitted by the validation-dataset
+contract.
+
+### Methodology binding
+
+An aggregation decision must now match the exact validation dataset:
+
+- dataset id;
+- construct;
+- metric;
+- real material class;
+- canonical-artist count; and
+- revision-stability review state.
+
+A different dataset cannot be substituted after a methodology decision is
+recorded without causing the decision gate to fail closed.
