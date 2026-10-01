@@ -57,6 +57,11 @@ test('manual executor performs exactly one bounded provider request and no write
   assert.equal(result.databaseWritePerformed, false);
   assert.equal(result.productActivationPerformed, false);
   assert.equal(result.credentialIncludedInOutput, false);
+  if (result.status !== 'eligible-for-stored-evidence-review') return;
+  assert.equal(result.storedEvidenceReview.status, 'storage-candidate');
+  assert.match(result.storedEvidenceReview.evidenceDigest, /^[0-9a-f]{64}$/);
+  assert.equal(result.storedEvidenceReview.storageWriteAuthorized, false);
+  assert.equal(result.storedEvidenceReview.productActivationAuthorized, false);
 
   assert.equal(requests.length, 1);
   assert.equal(requests[0].pathname, '/youtube/v3/videos');
@@ -82,6 +87,9 @@ test('sanitized output never includes provider credential or raw title/descripti
   assert.doesNotMatch(serialized, /에스티 로더와 아이유가 함께한/);
   assert.match(serialized, /brandFitPoint/);
   assert.match(serialized, /campaign-appearance/);
+  assert.match(serialized, /storage-candidate/);
+  assert.match(serialized, /evidenceDigest/);
+  assert.match(serialized, /storageWriteAuthorized/);
 });
 
 test('invalid credential fails before any provider request', async () => {
