@@ -2,13 +2,6 @@
   "version": "youtube_seed_video_reviews_v1",
   "targetCohortVersion": "music_chart_artist_targets_candidate_v1",
   "historicalBaselineManifestVersion": "youtube_historical_seed_manifest_v1",
-  "sourceDiscovery": {
-    "workflow": "Validate Artist Expansion YouTube recovery v3",
-    "runId": "36839355681",
-    "jobId": "110294442654",
-    "validationHead": "752ec4b7f1cf765a3562c068ba6cc2d813bbf3a8",
-    "artifactId": "11150906061"
-  },
   "activationPolicy": "reviewed_candidate_only_no_active_seed_mutation",
   "rules": [
     "Machine discovery score or strong evidence never auto-approves a seed.",
@@ -32,7 +25,9 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow."
+      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     },
     {
       "reviewId": "youtube-blackpink-2GJfWMYCWY0-v1",
@@ -48,7 +43,9 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in both the artist channel and title."
+      "reviewReason": "Target identity is explicit in both the artist channel and title.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     },
     {
       "reviewId": "youtube-twice-FD_oc92GO6k-v1",
@@ -64,7 +61,9 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in both the artist channel and title; content is a direct live performance."
+      "reviewReason": "Target identity is explicit in both the artist channel and title; content is a direct live performance.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     },
     {
       "reviewId": "youtube-enhypen-MT-4Bk1Lw8g-v1",
@@ -80,7 +79,9 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow."
+      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     },
     {
       "reviewId": "youtube-rose-Lufa9QAFFeY-v1",
@@ -96,7 +97,9 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in both the artist channel and title."
+      "reviewReason": "Target identity is explicit in both the artist channel and title.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     },
     {
       "reviewId": "youtube-riize-4PBRfhGY1qs-v1",
@@ -112,7 +115,97 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T08:55:39Z",
       "machineEvidence": "strong_artist_specific_evidence",
-      "reviewReason": "Target identity is explicit in both the artist channel and title; content is direct dance-practice evidence."
+      "reviewReason": "Target identity is explicit in both the artist channel and title; content is direct dance-practice evidence.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
+    },
+    {
+      "reviewId": "youtube-jimin-Y7do-6qV5Dw-v1",
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "videoId": "Y7do-6qV5Dw",
+      "videoUrl": "https://www.youtube.com/watch?v=Y7do-6qV5Dw",
+      "title": "'NORMAL (Korean Ver.)' Stage CAM (Jimin focus) @ BTS WORLD TOUR 'ARIRANG' IN BUSAN",
+      "channelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "reviewedVideoType": "performance_video",
+      "decision": "approved",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T09:07:23Z",
+      "machineEvidence": "strong_artist_specific_evidence",
+      "reviewReason": "Target identity is explicit in the focus-stage title and the source is BANGTANTV.",
+      "sourceDiscoveryRunId": "36840645603",
+      "sourceArtifactId": "11150803658"
+    },
+    {
+      "reviewId": "youtube-v-kwAhKmSWdx8-v1",
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "videoId": "kwAhKmSWdx8",
+      "videoUrl": "https://www.youtube.com/watch?v=kwAhKmSWdx8",
+      "title": "'Dynamite' by V | BTS WORLD TOUR ‘ARIRANG’",
+      "channelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "reviewedVideoType": "external_content",
+      "decision": "approved",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "machineEvidence": "partial_artist_specific_evidence",
+      "reviewReason": "Manual review overrides partial machine status because target identity is explicit in the title and the source is BANGTANTV. Historical classifier type is preserved conservatively as external_content.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
+    },
+    {
+      "reviewId": "youtube-jennie-s466YCiHfKw-v1",
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "videoId": "s466YCiHfKw",
+      "videoUrl": "https://www.youtube.com/watch?v=s466YCiHfKw",
+      "title": "JENNIE - FALLEN ANGEL (Official Video)",
+      "channelId": "UCN9_L9lA9kqJbGANLRus_1A",
+      "channelTitle": "JennieRubyJaneVEVO",
+      "reviewedVideoType": "external_content",
+      "decision": "approved",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "machineEvidence": "partial_artist_specific_evidence",
+      "reviewReason": "Manual review accepts the artist-named VEVO source and explicit JENNIE title. Historical classifier output is preserved conservatively as external_content.",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
+    },
+    {
+      "reviewId": "youtube-lisa-FyS5dAywkEo-v1",
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "videoId": "FyS5dAywkEo",
+      "videoUrl": "https://www.youtube.com/watch?v=FyS5dAywkEo",
+      "title": "LISA - SaWaDiKa (Official Music Video)",
+      "channelId": "UCg3ymxYCmURj5BFtbgMt-Og",
+      "channelTitle": "LISAOfficialVEVO",
+      "reviewedVideoType": "official_mv",
+      "decision": "approved",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T09:07:23Z",
+      "machineEvidence": "partial_artist_specific_evidence",
+      "reviewReason": "Manual review accepts the artist-named VEVO source and explicit LISA official music-video title.",
+      "sourceDiscoveryRunId": "36840645603",
+      "sourceArtifactId": "11150803658"
+    }
+  ],
+  "sourceDiscoveries": [
+    {
+      "workflow": "Validate Artist Expansion YouTube recovery v3",
+      "runId": "36839355681",
+      "jobId": "110294442654",
+      "validationHead": "752ec4b7f1cf765a3562c068ba6cc2d813bbf3a8",
+      "artifactId": "11150906061"
+    },
+    {
+      "workflow": "Validate Artist Expansion YouTube reviewed seed v5",
+      "runId": "36840645603",
+      "jobId": "110298684995",
+      "validationHead": "38430a13494466565c6717656c2c6fe90fe2abb5",
+      "artifactId": "11150803658"
     }
   ]
 }
