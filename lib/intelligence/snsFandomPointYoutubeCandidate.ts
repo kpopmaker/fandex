@@ -26,8 +26,8 @@ export type YoutubeSnsFandomCandidateResult =
   | Readonly<{
       contractVersion: typeof SNS_FANDOM_YOUTUBE_CANDIDATE_VERSION;
       state: 'rights-blocked';
-      observations: readonly [];
-      persistenceEvidence: readonly [];
+      observations: readonly SnsFandomObservation[];
+      persistenceEvidence: readonly SnsFandomPersistenceEvidence[];
       blockers: readonly string[];
     }>
   | Readonly<{
@@ -35,7 +35,7 @@ export type YoutubeSnsFandomCandidateResult =
       state: 'normalized-candidate';
       observations: readonly SnsFandomObservation[];
       persistenceEvidence: readonly SnsFandomPersistenceEvidence[];
-      blockers: readonly [];
+      blockers: readonly string[];
     }>;
 
 function valueState(value: number | null): Readonly<{
