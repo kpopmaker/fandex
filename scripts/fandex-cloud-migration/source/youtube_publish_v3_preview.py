@@ -220,6 +220,7 @@ def main():
     audit_rows = []
     artist_totals = defaultdict(float)
     artist_counts = defaultdict(int)
+    canonical_by_artist = {}
     category_totals = defaultdict(lambda: defaultdict(float))
     type_counts = defaultdict(lambda: defaultdict(int))
     view_totals = defaultdict(int)
@@ -227,8 +228,34 @@ def main():
     comment_totals = defaultdict(int)
 
     for row in rows:
+        canonical_artist_id = get_first(
+            row,
+            ["canonicalArtistId"],
+            "",
+        ).strip()
         artist = get_first(row, ["artist"], "").strip()
         video_id = get_first(row, ["videoId"], "").strip()
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "YouTube v3 preview row missing canonicalArtistId: "
+                + video_id
+            )
+
+        existing_canonical_id = canonical_by_artist.get(
+            artist
+        )
+        if (
+            existing_canonical_id
+            and existing_canonical_id
+            != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "YouTube v3 preview artist/canonical conflict: "
+                f"{artist} / {existing_canonical_id} / "
+                f"{canonical_artist_id}"
+            )
+        canonical_by_artist[artist] = canonical_artist_id
         video_type = get_first(row, ["videoType", "suggestedVideoType"], "").strip()
         title = get_first(row, ["title"], "")
         channel = get_first(row, ["channelTitle", "channel"], "")
@@ -250,6 +277,7 @@ def main():
         comment_totals[artist] += comments
 
         audit_rows.append({
+            "canonicalArtistId": canonical_artist_id,
             "artist": artist,
             "videoId": video_id,
             "videoType": video_type,
@@ -282,6 +310,7 @@ def main():
         }
 
         ranking.append({
+            "canonicalArtistId": canonical_by_artist[artist],
             "artist": artist,
             "youtubePointV3Preview": round(total, 4),
             "previousV2Score": v2_scores.get(artist, ""),
@@ -301,7 +330,8 @@ def main():
         "pythonOnly": True,
         "touchesWebsitePublicData": False,
         "scoreMode": "youtube_v3_preview_uncapped_additive_log_points",
-        "note": "Preview only. This file does not replace v2 latest or master score.",
+        "scoreComparability": "UNKNOWN_REQUIRES_COMPLETE_REVIEWED_SEED_POLICY",
+        "note": "Preview only. This file does not replace the frozen production YouTube v3 cutover score or master score.",
         "ranking": ranking,
     }
 
@@ -311,6 +341,7 @@ def main():
 
     timestamp_audit = Path(f"youtube_publish_v3_preview_audit_{timestamp}.csv")
     fieldnames = [
+        "canonicalArtistId",
         "artist",
         "videoId",
         "videoType",
