@@ -71,7 +71,7 @@ function memoryStore(): ImmutableTextObjectStore {
     async listPathnames() {
       return Object.freeze([]);
     },
-    async putTextIfAbsent(pathname) {
+    async putTextIfAbsent(pathname: string) {
       return Object.freeze({
         status: 'created' as const,
         pathname,
