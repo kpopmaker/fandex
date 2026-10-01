@@ -249,6 +249,41 @@ export type SnsFandomArtistProviderEntitlementValidation = Readonly<{
   blockers: readonly string[];
 }>;
 
+export const SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION =
+  'sns-fandom-provider-approval-evidence-v1' as const;
+
+export type SnsFandomProviderApprovalEvidence = Readonly<{
+  contractVersion: typeof SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION;
+  providerId: SnsFandomProviderId;
+  state: 'approved' | 'pending' | 'expired' | 'revoked';
+  approvalClass:
+    | 'youtube-analytics-derived-metrics-data-storage'
+    | 'provider-commercial-data-license';
+  useCase: 'analytics-reporting';
+  approvedDimensions: readonly SnsFandomDimension[];
+  approvedMetricIds: readonly string[];
+  allowedEndpoints: readonly string[];
+  approvedAt: string;
+  validUntil: string | null;
+  evidenceRef: string;
+  rights: Readonly<{
+    commercialProductUse: boolean;
+    recurringAutomatedCollection: boolean;
+    aggregateRetention: boolean;
+    derivedMetricPublication: boolean;
+  }>;
+  retention: Readonly<{
+    statisticalDataMonths: number | null;
+    derivedMetricMonths: number | null;
+    nonStatisticalDataRefreshDays: number | null;
+  }>;
+}>;
+
+export type SnsFandomProviderApprovalEvidenceValidation = Readonly<{
+  ok: boolean;
+  blockers: readonly string[];
+}>;
+
 export type SnsFandomMissingState =
   | 'observed'
   | 'missing'
@@ -306,6 +341,155 @@ export type SnsFandomObservationValidation = Readonly<{
 function validIso(value: string): boolean {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+}
+
+export function validateSnsFandomProviderApprovalEvidence(
+  approval: SnsFandomProviderApprovalEvidence,
+  evaluatedAt: string,
+): SnsFandomProviderApprovalEvidenceValidation {
+  const blockers: string[] = [];
+
+  if (
+    approval.contractVersion
+      !== SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION
+  ) {
+    blockers.push('provider-approval-version-invalid');
+  }
+  if (approval.approvedDimensions.length === 0) {
+    blockers.push('provider-approval-dimensions-empty');
+  }
+  if (approval.approvedMetricIds.length === 0) {
+    blockers.push('provider-approval-metrics-empty');
+  }
+  if (approval.allowedEndpoints.length === 0) {
+    blockers.push('provider-approval-endpoints-empty');
+  }
+  if (approval.evidenceRef.trim().length === 0) {
+    blockers.push('provider-approval-evidence-empty');
+  }
+
+  for (const value of [
+    approval.approvedAt,
+    evaluatedAt,
+    ...(approval.validUntil === null ? [] : [approval.validUntil]),
+  ]) {
+    if (!validIso(value)) {
+      blockers.push('provider-approval-time-invalid');
+      break;
+    }
+  }
+
+  if (
+    approval.validUntil !== null
+    && validIso(approval.approvedAt)
+    && validIso(approval.validUntil)
+    && Date.parse(approval.approvedAt) > Date.parse(approval.validUntil)
+  ) {
+    blockers.push('provider-approval-validity-order-invalid');
+  }
+
+  if (
+    approval.state === 'approved'
+    && validIso(evaluatedAt)
+    && validIso(approval.approvedAt)
+    && Date.parse(evaluatedAt) < Date.parse(approval.approvedAt)
+  ) {
+    blockers.push('provider-approval-not-yet-valid');
+  }
+
+  if (
+    approval.state === 'approved'
+    && approval.validUntil !== null
+    && validIso(evaluatedAt)
+    && validIso(approval.validUntil)
+    && Date.parse(evaluatedAt) > Date.parse(approval.validUntil)
+  ) {
+    blockers.push('provider-approval-expired-by-time');
+  }
+
+  if (
+    approval.state === 'approved'
+    && (
+      !approval.rights.commercialProductUse
+      || !approval.rights.recurringAutomatedCollection
+      || !approval.rights.aggregateRetention
+      || !approval.rights.derivedMetricPublication
+    )
+  ) {
+    blockers.push('provider-approval-rights-incomplete');
+  }
+
+  if (
+    approval.approvalClass
+      === 'youtube-analytics-derived-metrics-data-storage'
+  ) {
+    if (!(
+      approval.providerId === 'youtube-data-api'
+      || approval.providerId === 'youtube-comments-derived'
+    )) {
+      blockers.push('youtube-provider-approval-provider-invalid');
+    }
+    if (
+      approval.retention.statisticalDataMonths !== null
+      && (
+        !Number.isInteger(approval.retention.statisticalDataMonths)
+        || approval.retention.statisticalDataMonths < 0
+        || approval.retention.statisticalDataMonths > 36
+      )
+    ) {
+      blockers.push('youtube-provider-approval-statistical-retention-invalid');
+    }
+    if (
+      approval.retention.derivedMetricMonths !== null
+      && (
+        !Number.isInteger(approval.retention.derivedMetricMonths)
+        || approval.retention.derivedMetricMonths < 0
+        || approval.retention.derivedMetricMonths > 36
+      )
+    ) {
+      blockers.push('youtube-provider-approval-derived-retention-invalid');
+    }
+    if (
+      approval.retention.nonStatisticalDataRefreshDays !== null
+      && (
+        !Number.isInteger(
+          approval.retention.nonStatisticalDataRefreshDays,
+        )
+        || approval.retention.nonStatisticalDataRefreshDays < 0
+        || approval.retention.nonStatisticalDataRefreshDays > 30
+      )
+    ) {
+      blockers.push(
+        'youtube-provider-approval-non-statistical-refresh-invalid',
+      );
+    }
+  }
+
+  return Object.freeze({
+    ok: blockers.length === 0,
+    blockers: Object.freeze(blockers),
+  });
+}
+
+export function isSnsFandomProviderApprovalActiveFor(
+  approval: SnsFandomProviderApprovalEvidence,
+  input: Readonly<{
+    providerId: SnsFandomProviderId;
+    dimension: SnsFandomDimension;
+    metricId: string;
+    evaluatedAt: string;
+  }>,
+): boolean {
+  return (
+    validateSnsFandomProviderApprovalEvidence(
+      approval,
+      input.evaluatedAt,
+    ).ok
+    && approval.state === 'approved'
+    && approval.providerId === input.providerId
+    && approval.approvedDimensions.includes(input.dimension)
+    && approval.approvedMetricIds.includes(input.metricId)
+  );
 }
 
 export function validateSnsFandomArtistProviderEntitlement(
@@ -631,6 +815,7 @@ export type SnsFandomPointReadinessResult = Readonly<{
   observedReactionEvidenceCount: number;
   temporalPersistenceEvidenceCount: number;
   productionReadyProviders: readonly SnsFandomProviderId[];
+  providerApprovedProviders: readonly SnsFandomProviderId[];
   artistAuthorizedProviders: readonly SnsFandomProviderId[];
   evidenceEligibleProviders: readonly SnsFandomProviderId[];
   blockers: readonly string[];
@@ -641,6 +826,7 @@ export function evaluateSnsFandomPointReadiness(
     canonicalArtistId: string;
     observations: readonly SnsFandomObservation[];
     providerQualifications?: readonly SnsFandomProviderQualification[];
+    providerApprovals?: readonly SnsFandomProviderApprovalEvidence[];
     artistEntitlements?: readonly SnsFandomArtistProviderEntitlement[];
     evaluatedAt?: string;
   }>,
@@ -653,8 +839,27 @@ export function evaluateSnsFandomPointReadiness(
     .filter((item) => item.state === 'production-ready')
     .map((item) => item.providerId);
 
+  const providerApprovals = input.providerApprovals ?? [];
   const artistEntitlements = input.artistEntitlements ?? [];
   const evaluatedAt = input.evaluatedAt ?? null;
+
+  const providerApprovedProviders = qualifications
+    .filter((qualification) => (
+      qualification.state === 'conditional-approval-required'
+      && evaluatedAt !== null
+      && providerApprovals.some((approval) => (
+        approval.providerId === qualification.providerId
+        && approval.approvedDimensions.some((dimension) =>
+          qualification.constructCoverage.includes(dimension)
+        )
+        && validateSnsFandomProviderApprovalEvidence(
+          approval,
+          evaluatedAt,
+        ).ok
+        && approval.state === 'approved'
+      ))
+    ))
+    .map((item) => item.providerId);
 
   const artistAuthorizedProviders = qualifications
     .filter((qualification) => (
@@ -678,6 +883,7 @@ export function evaluateSnsFandomPointReadiness(
   const evidenceEligibleProviders = Array.from(
     new Set([
       ...productionReadyProviders,
+      ...providerApprovedProviders,
       ...artistAuthorizedProviders,
     ]),
   );
@@ -696,6 +902,20 @@ export function evaluateSnsFandomPointReadiness(
 
     if (qualification.state === 'production-ready') {
       return true;
+    }
+
+    if (
+      qualification.state === 'conditional-approval-required'
+      && evaluatedAt !== null
+    ) {
+      return providerApprovals.some((approval) =>
+        isSnsFandomProviderApprovalActiveFor(approval, {
+          providerId: observation.providerId,
+          dimension: observation.variable.dimension,
+          metricId: observation.variable.metricId,
+          evaluatedAt,
+        })
+      );
     }
 
     if (
@@ -754,6 +974,7 @@ export function evaluateSnsFandomPointReadiness(
       qualification.constructCoverage.includes('public-reaction-diffusion')
       && (
         qualification.state === 'production-ready'
+        || providerApprovedProviders.includes(qualification.providerId)
         || artistAuthorizedProviders.includes(qualification.providerId)
       )
     ),
@@ -763,6 +984,7 @@ export function evaluateSnsFandomPointReadiness(
       qualification.constructCoverage.includes('fandom-activity-persistence')
       && (
         qualification.state === 'production-ready'
+        || providerApprovedProviders.includes(qualification.providerId)
         || artistAuthorizedProviders.includes(qualification.providerId)
       )
     ),
@@ -800,6 +1022,7 @@ export function evaluateSnsFandomPointReadiness(
     observedReactionEvidenceCount: reactionEvidence.length,
     temporalPersistenceEvidenceCount: persistenceEvidence.length,
     productionReadyProviders: Object.freeze(productionReadyProviders),
+    providerApprovedProviders: Object.freeze(providerApprovedProviders),
     artistAuthorizedProviders: Object.freeze(artistAuthorizedProviders),
     evidenceEligibleProviders: Object.freeze(evidenceEligibleProviders),
     blockers: Object.freeze(blockers),
