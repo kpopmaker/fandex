@@ -7,6 +7,24 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
+      - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
+      - 'lib/intelligence/fandexMomentumCarrierPersistenceDecision.ts'
+      - 'lib/intelligence/fandexMomentumCategoricalOutputAttestation.ts'
+      - 'lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts'
+      - 'lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts'
+      - 'lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts'
+      - 'lib/product/contracts/productMomentumEvidenceConsensus.ts'
+      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'lib/product/readiness/momentumPublicRouteDesignCandidate.ts'
+      - 'lib/server/ingestion/momentumEvidenceConsensusRepository.ts'
+      - 'tests/momentum-carrier-attestation-lineage-v2.test.mts'
+      - 'tests/momentum-carrier-persistence-decision-v1.test.mts'
+      - 'tests/momentum-categorical-output-attestation-current-main-v1.test.mts'
+      - 'tests/momentum-current-evaluation-execution-v1.test.mts'
+      - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - 'tests/momentum-v2-carrier-record-candidate-v1.test.mts'
 
 permissions:
   contents: read
@@ -33,8 +51,8 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
-            LIVE_BASE_SHA="$(git rev-parse "refs/remotes/origin/$PR_BASE_REF")"
-            git diff --name-only "$LIVE_BASE_SHA" "$PR_HEAD_SHA" | sort > /tmp/changed.txt
+            MERGE_BASE="$(git merge-base "refs/remotes/origin/$PR_BASE_REF" "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
           else
             git fetch origin "+refs/heads/integration/momentum-productionization-current-main-v1:refs/remotes/origin/integration/momentum-productionization-current-main-v1"
             STACK_BASE="$(git rev-parse refs/remotes/origin/integration/momentum-productionization-current-main-v1)"
@@ -55,11 +73,6 @@ jobs:
           tests/momentum-carrier-attestation-lineage-v2.test.mts
           tests/momentum-carrier-persistence-decision-v1.test.mts
           tests/momentum-categorical-output-attestation-current-main-v1.test.mts
-          .github/workflows/momentum-recovery-continuity-gate-v1.yml
-          .github/workflows/validate-momentum-recovery-continuity-gate-v1.yml
-          lib/intelligence/fandexMomentumRecoveryContinuityGate.ts
-          scripts/operations/momentumRecoveryContinuityGateV1.mts
-          tests/momentum-recovery-continuity-gate-v1.test.mts
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
