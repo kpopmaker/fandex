@@ -508,3 +508,54 @@ An aggregation decision must now match the exact validation dataset:
 
 A different dataset cannot be substituted after a methodology decision is
 recorded without causing the decision gate to fail closed.
+
+
+## Methodology study evidence gate
+
+The methodology decision no longer accepts sensitivity-review booleans as
+sufficient evidence by themselves.
+
+A separate `sns-fandom-reaction-methodology-study-v1` contract now binds the
+decision-support evidence to real validation datasets.
+
+A study can become `decision-support-ready` only when:
+
+- the primary dataset is real and `validation-ready`;
+- all supporting datasets are also real and validation-ready;
+- construct, metric, provider client, and endpoint provenance remain
+  consistent across datasets;
+- at least two distinct aggregation method ids have result evidence on the
+  primary dataset;
+- content-age sensitivity uses at least two real validation datasets with
+  distinct exact target content ages;
+- the declared content-age comparison references only datasets actually
+  supplied to the study;
+- release-volume sensitivity evidence exists and the supplied real data
+  actually contains at least two distinct selected-content counts;
+- missingness sensitivity has an explicit non-secret evidence reference; and
+- every supplied validation dataset has passed revision-stability review.
+
+The study deliberately produces:
+- no selected method;
+- no method ranking;
+- no score.
+
+It only establishes that enough evidence exists for a separate methodology
+decision.
+
+### Decision binding
+
+The final aggregation decision must exactly match:
+
+- methodology study id;
+- primary validation dataset id;
+- construct;
+- metric;
+- compared method-id set; and
+- all four sensitivity / revision review states.
+
+A methodology decision cannot swap datasets, omit an evaluated method, or
+claim a review state that the study did not establish.
+
+Even after all these gates, numeric execution remains a separate unimplemented
+step and the Product value remains null.
