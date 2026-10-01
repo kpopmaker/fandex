@@ -108,3 +108,33 @@ If the command returns `eligible-for-stored-evidence-review`:
 5. keep numeric eligibility `false`
 
 This handoff does not authorize merge, deployment, recurring collection, scheduler changes, database writes, Product registration, activation, or public cutover.
+
+
+## Receipt validation
+
+A successful one-shot command now self-validates its sanitized output before printing it.
+
+The receipt contract is:
+
+- `brand-fit-production-observation-receipt-v1`
+- implementation: `lib/intelligence/brandFitProductionObservationReceipt.ts`
+
+A success-looking JSON result is rejected unless all of the following remain bound:
+
+- execution status is the expected one-shot success state
+- exactly one provider request was made
+- no database write or Product activation was performed
+- credential is absent
+- raw title/description/provider payload fields are absent
+- stored-evidence review digest is a valid SHA-256
+- immutable body decodes successfully
+- immutable payload digest matches
+- top-level sanitized evidence matches the immutable evidence projection
+- pathname is exactly the reviewed IU / Estée Lauder path
+- Artist / Brand / Campaign identity matches the reviewed bindings
+- rights remain `restricted`
+- numeric eligibility remains false
+
+If self-validation fails, the command exits non-zero and does not emit a success receipt.
+
+This validation still does not authorize storage, activation, publication, recurring collection, or cutover.
