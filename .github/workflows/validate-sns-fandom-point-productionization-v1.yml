@@ -1,0 +1,61 @@
+name: Validate snsFandomPoint Productionization v1
+
+on:
+  push:
+    branches:
+      - integration/sns-fandom-point-productionization-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: >-
+      github.event_name == 'push' ||
+      github.head_ref == 'integration/sns-fandom-point-productionization-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git diff --name-only b76e7d22cc1c3479faca20ebf951c1be0097944b...HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-sns-fandom-point-productionization-v1.yml
+          docs/research/sns-fandom-point-production-candidates-v1.md
+          lib/intelligence/snsFandomPointContracts.ts
+          lib/intelligence/snsFandomPointYoutubeCandidate.ts
+          tests/sns-fandom-point-productionization-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: snsFandomPoint contract regression
+        run: npx tsx --test tests/sns-fandom-point-productionization-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
