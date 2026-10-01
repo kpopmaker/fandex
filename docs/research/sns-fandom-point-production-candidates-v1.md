@@ -390,3 +390,55 @@ A future methodology has two possible paths, neither currently approved:
 
 No arbitrary age bucket, interpolation rule, extrapolation rule, or decay
 formula is introduced in v1.
+
+
+## Reaction aggregation methodology decision gate
+
+After content-universe selection and content-age alignment, FANDEX still does
+not choose an artist-level aggregation formula automatically.
+
+Two possible reaction constructs are kept distinct:
+
+- **typical-content-reaction-intensity** — asks about the reaction magnitude of
+  a representative content item while keeping release volume separate; and
+- **window-total-reaction-volume** — treats the amount of released content and
+  the total reaction generated within the window as part of the construct.
+
+These are not interchangeable. A formula cannot silently decide which
+construct FANDEX means.
+
+The v1 methodology decision contract therefore requires an explicit internal
+decision record with:
+
+- exact construct target;
+- exact metric id;
+- selected method id;
+- the existing complete-window content selection rule;
+- exact-age-aligned content requirement;
+- explicit release-volume treatment;
+- missing-policy = block;
+- non-secret methodology evidence reference;
+- real-data validation dataset reference;
+- at least two distinct canonical artists, which is only the mathematical
+  minimum for cross-artist validation;
+- confirmation that content-age sensitivity, release-volume sensitivity,
+  missingness sensitivity, and revision stability were reviewed.
+
+A `research-only` decision never becomes Product aggregation.
+
+Even a structurally valid `approved` decision still produces:
+- executionImplemented = false;
+- aggregateValue = null;
+- normalizedValue = null.
+
+The numeric execution must be implemented and validated separately after a
+real methodology decision exists. This prevents the contract layer from
+smuggling in an arbitrary sum, mean, median, maximum, latest-content rule,
+weight, or threshold.
+
+Current repository state:
+- no approved reaction aggregation decision exists;
+- no artist-level reaction aggregate is produced;
+- per-video YouTube evidence therefore cannot satisfy Product reaction
+  readiness;
+- `snsFandomPoint` remains null.
