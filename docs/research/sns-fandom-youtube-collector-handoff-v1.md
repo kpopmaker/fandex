@@ -276,3 +276,38 @@ The variable branch does not modify the global scheduler. If future approved
 collection requires per-content target-age scheduling, that runtime work
 belongs to FANDEX Production Operations after the methodology collection plan
 is approved.
+
+
+## Sensitivity-study collection requirements
+
+One age-aligned validation dataset is not enough to approve an aggregation
+methodology.
+
+The methodology-study contract requires additional real evidence for:
+
+### Content-age sensitivity
+- at least two validation-ready datasets;
+- same construct / metric / provider client / endpoint semantics;
+- distinct exact elapsed content ages;
+- no interpolation or extrapolation between them.
+
+### Release-volume sensitivity
+- real datasets must contain actual variation in selected official-content
+  counts;
+- collectors must not manufacture this variation by dropping content;
+- content-count equalization remains prohibited.
+
+### Missingness sensitivity
+- an explicit study artifact / evidence reference is required;
+- Missing must remain Missing;
+- the variable contract does not authorize replacing missing provider values
+  with zero for the sensitivity study.
+
+### Revision stability
+- every validation dataset entering the study must already have passed its
+  revision-stability audit.
+
+The study itself does not choose a winning aggregation method. It only produces
+decision-support evidence. Any future runtime scheduling needed to collect
+multiple exact content ages remains a Production Operations responsibility and
+must not be introduced by this variable branch.
