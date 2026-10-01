@@ -33,8 +33,43 @@ import {
 import {
   buildSnsFandomYoutubeCollectorBridge,
 } from '../lib/intelligence/snsFandomPointYoutubeCollectorBridge';
+import {
+  type SnsFandomYoutubeContentManifest,
+} from '../lib/intelligence/snsFandomPointYoutubeContentSelection';
 
 const PROVIDER_CLIENT_REF = 'gcp-project-fandex-youtube-primary';
+
+function youtubeContentManifest(
+  videoIds: readonly string[],
+  overrides: Partial<SnsFandomYoutubeContentManifest> = {},
+): SnsFandomYoutubeContentManifest {
+  return {
+    contractVersion: 'sns-fandom-youtube-content-manifest-v1',
+    canonicalArtistId: 'iu',
+    youtubeChannelId: 'UC-iu',
+    providerClientRef: PROVIDER_CLIENT_REF,
+    selectionRule: 'official-channel-all-uploads-in-published-window',
+    windowStart: '2026-09-01T00:00:00.000Z',
+    windowEnd: '2026-09-30T23:59:59.999Z',
+    uploadsPlaylistId: 'UU-iu',
+    providerEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+    ],
+    pagination: {
+      pageCount: 1,
+      terminalNextPageToken: null,
+      terminalPageEvidenceRef:
+        'evidence://youtube/iu/uploads/terminal-page',
+    },
+    items: videoIds.map((videoId) => ({
+      videoId,
+      publishedAt: '2026-09-15T00:00:00.000Z',
+    })),
+    evidenceRef: 'evidence://youtube/iu/uploads/window',
+    ...overrides,
+  };
+}
 
 function youtubeAnalyticsEntitlement(
   overrides: Partial<SnsFandomArtistProviderEntitlement> = {},
@@ -85,6 +120,7 @@ function youtubeStatsProviderApproval(
     allowedEndpoints: [
       'youtube.videos.list',
       'youtube.channels.list',
+      'youtube.playlistItems.list',
     ],
     approvedAt: '2026-10-01T00:00:00.000Z',
     validUntil: null,
@@ -242,6 +278,8 @@ test('current Artist Expansion YouTube collector is rejected for snsFandom Produ
       'youtube-collector-provider-channel-id-missing',
       'youtube-collector-provider-client-ref-missing',
       'youtube-collector-provider-endpoints-missing',
+      'youtube-collector-content-published-at-missing',
+      'youtube-collector-complete-uploads-window-missing',
       'youtube-collector-observed-at-missing',
       'youtube-collector-collected-at-missing',
       'youtube-collector-raw-response-retention-unqualified',
@@ -258,6 +296,8 @@ test('collector compatibility becomes eligible only when missing/time/identity/e
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
     emitsProviderEndpoints: true,
+    emitsContentPublishedAt: true,
+    emitsCompleteUploadsWindowManifest: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -280,8 +320,15 @@ test('collector bridge rejects the current legacy collector before reading candi
       providerClientRef: PROVIDER_CLIENT_REF,
       providerEndpoints: [
         'youtube.channels.list',
+        'youtube.playlistItems.list',
         'youtube.videos.list',
       ],
+      contentWindowStart: '2026-09-01T00:00:00.000Z',
+      contentWindowEnd: '2026-09-30T23:59:59.999Z',
+      uploadsPlaylistId: 'UU-iu',
+      paginationPageCount: 1,
+      terminalPageEvidenceRef:
+        'evidence://youtube/iu/uploads/terminal-page',
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/collector',
@@ -310,6 +357,8 @@ test('collector bridge rejects a provenance-complete profile when required read 
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
     emitsProviderEndpoints: true,
+    emitsContentPublishedAt: true,
+    emitsCompleteUploadsWindowManifest: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -325,6 +374,12 @@ test('collector bridge rejects a provenance-complete profile when required read 
       providerChannelId: 'UC-iu',
       providerClientRef: PROVIDER_CLIENT_REF,
       providerEndpoints: ['youtube.videos.list'],
+      contentWindowStart: '2026-09-01T00:00:00.000Z',
+      contentWindowEnd: '2026-09-30T23:59:59.999Z',
+      uploadsPlaylistId: 'UU-iu',
+      paginationPageCount: 1,
+      terminalPageEvidenceRef:
+        'evidence://youtube/iu/uploads/terminal-page',
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/endpoint-mismatch',
@@ -353,6 +408,8 @@ test('collector bridge preserves null missing values and exact observation time 
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
     emitsProviderEndpoints: true,
+    emitsContentPublishedAt: true,
+    emitsCompleteUploadsWindowManifest: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -369,8 +426,15 @@ test('collector bridge preserves null missing values and exact observation time 
       providerClientRef: PROVIDER_CLIENT_REF,
       providerEndpoints: [
         'youtube.channels.list',
+        'youtube.playlistItems.list',
         'youtube.videos.list',
       ],
+      contentWindowStart: '2026-09-01T00:00:00.000Z',
+      contentWindowEnd: '2026-09-30T23:59:59.999Z',
+      uploadsPlaylistId: 'UU-iu',
+      paginationPageCount: 1,
+      terminalPageEvidenceRef:
+        'evidence://youtube/iu/uploads/terminal-page',
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/collector-fixed',
@@ -378,6 +442,7 @@ test('collector bridge preserves null missing values and exact observation time 
       videos: [
         {
           videoId: 'video-1',
+          publishedAt: '2026-09-15T00:00:00.000Z',
           viewCount: 100,
           likeCount: null,
           commentCount: 10,
@@ -424,6 +489,8 @@ test('collector bridge rejects duplicate video ids and invalid counts before nor
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
     emitsProviderEndpoints: true,
+    emitsContentPublishedAt: true,
+    emitsCompleteUploadsWindowManifest: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -440,8 +507,15 @@ test('collector bridge rejects duplicate video ids and invalid counts before nor
       providerClientRef: PROVIDER_CLIENT_REF,
       providerEndpoints: [
         'youtube.channels.list',
+        'youtube.playlistItems.list',
         'youtube.videos.list',
       ],
+      contentWindowStart: '2026-09-01T00:00:00.000Z',
+      contentWindowEnd: '2026-09-30T23:59:59.999Z',
+      uploadsPlaylistId: 'UU-iu',
+      paginationPageCount: 1,
+      terminalPageEvidenceRef:
+        'evidence://youtube/iu/uploads/terminal-page',
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/invalid',
@@ -449,12 +523,14 @@ test('collector bridge rejects duplicate video ids and invalid counts before nor
       videos: [
         {
           videoId: 'video-1',
+          publishedAt: '2026-09-15T00:00:00.000Z',
           viewCount: -1,
           likeCount: null,
           commentCount: 1,
         },
         {
           videoId: 'video-1',
+          publishedAt: '2026-09-15T00:00:00.000Z',
           viewCount: 1,
           likeCount: 1,
           commentCount: 1,
@@ -703,6 +779,9 @@ test('YouTube public stats adapter rejects approval from another API client proj
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
         videos: [],
+        contentManifest: youtubeContentManifest([], {
+          providerClientRef: 'google-cloud-project:other-project',
+        }),
         channelSubscriberCount: null,
         evidenceRef: 'evidence://youtube/iu/other-client',
       },
@@ -1301,6 +1380,7 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
             commentCount: 10,
           },
         ],
+        contentManifest: youtubeContentManifest(['video-1']),
         channelSubscriberCount: 1000,
         evidenceRef: 'evidence://youtube/iu/1',
       },
@@ -1534,6 +1614,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
             commentCount: 5,
           },
         ],
+        contentManifest: youtubeContentManifest(['video-r1']),
         channelSubscriberCount: 1000,
         evidenceRef: 'evidence://youtube/iu/reaction-1',
       },
