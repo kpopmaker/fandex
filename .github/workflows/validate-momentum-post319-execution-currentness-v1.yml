@@ -55,6 +55,11 @@ jobs:
           tests/momentum-carrier-attestation-lineage-v2.test.mts
           tests/momentum-carrier-persistence-decision-v1.test.mts
           tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+          .github/workflows/momentum-recovery-continuity-gate-v1.yml
+          .github/workflows/validate-momentum-recovery-continuity-gate-v1.yml
+          lib/intelligence/fandexMomentumRecoveryContinuityGate.ts
+          scripts/operations/momentumRecoveryContinuityGateV1.mts
+          tests/momentum-recovery-continuity-gate-v1.test.mts
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
