@@ -1,0 +1,31 @@
+name: Validate Momentum NAVER recovery epoch candidate v1
+
+on:
+  push:
+    branches:
+      - work/momentum-naver-recovery-epoch-candidate-v1
+  pull_request:
+    paths:
+      - 'lib/intelligence/fandexMomentumNaverRecoveryEpochCandidate.ts'
+      - 'tests/momentum-naver-recovery-epoch-candidate-v1.test.mts'
+      - 'data/momentum-product/iu_momentum_naver_recovery_epoch_candidate_v1.json'
+      - '.github/workflows/validate-momentum-naver-recovery-epoch-candidate-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/momentum-naver-recovery-epoch-candidate-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
