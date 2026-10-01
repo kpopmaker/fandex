@@ -17,6 +17,7 @@ export type BrandFitExecutionIssueComment = Readonly<{
 export type BrandFitExecutionWorkflowRun = Readonly<{
   id: number;
   conclusion: string | null;
+  providerExecutionStepSucceeded: boolean;
 }>;
 
 export type BrandFitYouTubeProductionExecutionGateResult =
@@ -100,7 +101,10 @@ export function evaluateBrandFitYouTubeProductionExecutionGate(input: Readonly<{
   const priorSuccess = input.workflowRuns.some(
     (run) =>
       run.id !== input.currentRunId
-      && run.conclusion === 'success',
+      && (
+        run.conclusion === 'success'
+        || run.providerExecutionStepSucceeded
+      ),
   );
   if (priorSuccess) {
     return blocked('execution-already-consumed');
