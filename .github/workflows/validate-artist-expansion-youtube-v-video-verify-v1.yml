@@ -1,0 +1,69 @@
+name: Validate Artist Expansion YouTube V video verify v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-v-video-verify-v1
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-v-video-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify V candidate with YouTube videos.list
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          video_id="sY19m7EZTw4"
+          params=urllib.parse.urlencode({
+              "part":"snippet,statistics",
+              "id":video_id,
+              "maxResults":1,
+              "key":os.environ["YOUTUBE_API_KEY"],
+          })
+          url="https://www.googleapis.com/youtube/v3/videos?"+params
+          with urllib.request.urlopen(url, timeout=30) as r:
+              payload=json.loads(r.read().decode("utf-8"))
+          items=payload.get("items",[])
+          if len(items)!=1:
+              raise SystemExit("V candidate video unavailable")
+          item=items[0]
+          snippet=item.get("snippet",{})
+          stats=item.get("statistics",{})
+          result={
+              "videoId":video_id,
+              "title":snippet.get("title",""),
+              "channelId":snippet.get("channelId",""),
+              "channelTitle":snippet.get("channelTitle",""),
+              "publishedAt":snippet.get("publishedAt",""),
+              "viewCount":stats.get("viewCount",""),
+              "likeCount":stats.get("likeCount",""),
+              "commentCount":stats.get("commentCount",""),
+          }
+          print(json.dumps(result, ensure_ascii=False))
+          if result["channelTitle"]!="BANGTANTV":
+              raise SystemExit("unexpected channel: "+result["channelTitle"])
+          title=result["title"].casefold()
+          if not ("v" in title and "normal log" in title):
+              raise SystemExit("unexpected title: "+result["title"])
+          with open("youtube_v_video_verify_v1.json","w",encoding="utf-8") as f:
+              json.dump(result,f,ensure_ascii=False,indent=2)
+              f.write("\n")
+          PY
+      - name: Upload V verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-v-video-verify-v1
+          path: youtube_v_video_verify_v1.json
+          if-no-files-found: ignore
+          retention-days: 7
