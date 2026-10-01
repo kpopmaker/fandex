@@ -180,7 +180,17 @@ def read_existing_seed():
 
 def build_queries(artist):
     aliases = ALIASES.get(artist, [artist])
-    main = aliases[0]
+    main = next(
+        (
+            alias
+            for alias in aliases
+            if any(
+                "A" <= char.upper() <= "Z"
+                for char in alias
+            )
+        ),
+        aliases[0],
+    )
 
     queries = [
         f"{main} 2026 official MV",
