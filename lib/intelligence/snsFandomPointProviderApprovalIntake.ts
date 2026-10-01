@@ -130,6 +130,6 @@ export function buildSnsFandomProviderApprovalEvidenceFromDecision(
     contractVersion: SNS_FANDOM_PROVIDER_APPROVAL_INTAKE_VERSION,
     state: 'accepted-provider-grant' as const,
     approvalEvidence,
-    blockers: Object.freeze([]),
+    blockers: Object.freeze([]) as readonly [],
   });
 }
