@@ -1,3 +1,4 @@
+# exact-head validation trigger
 name: Validate Brand Fit contract v1
 
 on:
