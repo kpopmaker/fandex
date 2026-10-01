@@ -45,6 +45,7 @@ jobs:
           .github/workflows/validate-sns-fandom-point-productionization-v1.yml
           docs/research/sns-fandom-point-production-candidates-v1.md
           lib/intelligence/snsFandomPointContracts.ts
+          lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
           tests/sns-fandom-point-productionization-v1.test.mts
           EOF
