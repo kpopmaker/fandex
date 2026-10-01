@@ -46,6 +46,7 @@ jobs:
           docs/research/sns-fandom-point-production-candidates-v1.md
           docs/research/sns-fandom-youtube-api-audit-packet-v1.md
           docs/research/sns-fandom-youtube-collector-handoff-v1.md
+          lib/intelligence/snsFandomPointComparability.ts
           lib/intelligence/snsFandomPointContracts.ts
           lib/intelligence/snsFandomPointProviderApprovalIntake.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
@@ -53,6 +54,7 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
+          tests/sns-fandom-point-comparability-v1.test.mts
           tests/sns-fandom-point-productionization-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
@@ -61,7 +63,10 @@ jobs:
       - run: npm ci
 
       - name: snsFandomPoint contract regression
-        run: npx tsx --test tests/sns-fandom-point-productionization-v1.test.mts
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-point-productionization-v1.test.mts
+          tests/sns-fandom-point-comparability-v1.test.mts
 
       - run: npm run typecheck
       - run: npm run lint
