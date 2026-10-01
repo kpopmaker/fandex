@@ -174,12 +174,34 @@
     "resolutionOptions": [
       "recover_complete_original_seed_and_metric_lineage",
       "approve_a_full_cohort_youtube_v3_rebaseline_under_one_reviewed_seed_policy"
-    ]
+    ],
+    "nextDecisionBoundary": {
+      "type": "youtube_full_cohort_rebaseline_policy",
+      "technicalEvidenceReady": true,
+      "automaticDecisionAllowed": false,
+      "note": "A 21-artist / 74-video shadow exists under the recovered historical formula, but seed evidence is heterogeneous and four frozen Product artists still lack complete original baseline lineage. A full-cohort rebaseline policy must be explicitly approved before replacing the frozen Product YouTube v3 snapshot."
+    }
   },
   "safety": {
     "missingIsZero": false,
     "reviewedSeedImpliesProductEligibility": false,
     "automaticRescalingAllowed": false,
     "automaticProductExpansionAllowed": false
+  },
+  "fullReviewedCohortShadow": {
+    "runId": 36841902398,
+    "jobId": 110302730391,
+    "validationHead": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "reviewedSeedVideoCount": 74,
+    "historicalRecoveredArtistCount": 10,
+    "currentReviewedArtistCount": 11,
+    "historicalLineageComplete": false,
+    "commonSeedSelectionPolicyEstablished": false,
+    "comparabilityThresholdDefined": false,
+    "productEligibilityEvaluated": false,
+    "rebaselineAuthorized": false,
+    "activeYouTubeRankingModified": false
   }
 }
