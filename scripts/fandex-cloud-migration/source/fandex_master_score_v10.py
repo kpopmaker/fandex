@@ -194,6 +194,8 @@ def main():
         raise RuntimeError("Last.fm rolling score field not found")
 
     lastfm = {}
+    lastfm_modes = {}
+    lastfm_status = {}
 
     for row in lastfm_rows:
         name = norm(
@@ -202,37 +204,99 @@ def main():
             or row.get("name")
         )
 
-        if name:
-            lastfm[name] = num(row.get(score_field))
+        if not name:
+            continue
 
-    sets = [
-        set(naver),
-        set(youtube),
-        set(music),
-        set(lastfm),
-    ]
-
-    if (
-        not sets[0]
-        or any(artist_set != sets[0] for artist_set in sets[1:])
-    ):
-        raise RuntimeError(
-            "source artist set mismatch: "
-            + " | ".join(
-                f"{name}={len(artist_set)}"
-                for name, artist_set in zip(
-                    ["naver", "youtube", "musicV2", "lastfm"],
-                    sets,
-                )
+        if name in lastfm:
+            raise RuntimeError(
+                "duplicate Last.fm artist row: "
+                + name
             )
+
+        point_text = norm(
+            row.get(score_field)
+        )
+        mode = norm(
+            row.get("activeMode")
+        )
+        status = norm(
+            row.get("status")
         )
 
-    rolling_payload = read_json(LASTFM_JSON)
-    active_mode = norm(rolling_payload.get("activeMode"))
+        if point_text:
+            lastfm[name] = num(
+                point_text
+            )
 
-    if active_mode != "rolling3_50_rolling7_50":
+        lastfm_modes[name] = mode
+        lastfm_status[name] = status
+
+    product_cohort = set(naver)
+    youtube_cohort = set(youtube)
+    music_cohort = set(music)
+    lastfm_ready_cohort = set(lastfm)
+
+    if not product_cohort:
         raise RuntimeError(
-            f"unexpected Last.fm activeMode: {active_mode}"
+            "product cohort is empty"
+        )
+
+    if youtube_cohort != product_cohort:
+        raise RuntimeError(
+            "product cohort mismatch: "
+            f"naver={len(product_cohort)} | "
+            f"youtube={len(youtube_cohort)}"
+        )
+
+    missing_music = sorted(
+        product_cohort
+        - music_cohort
+    )
+    if missing_music:
+        raise RuntimeError(
+            "Music source missing Product artists: "
+            + ", ".join(missing_music)
+        )
+
+    missing_lastfm = sorted(
+        product_cohort
+        - lastfm_ready_cohort
+    )
+    if missing_lastfm:
+        raise RuntimeError(
+            "Last.fm source missing Product-ready artists: "
+            + ", ".join(missing_lastfm)
+        )
+
+    for name in sorted(product_cohort):
+        if (
+            lastfm_modes.get(name)
+            != "rolling3_50_rolling7_50"
+        ):
+            raise RuntimeError(
+                "Last.fm Product artist not full rolling-ready: "
+                f"{name} / "
+                f"{lastfm_modes.get(name) or '<missing>'}"
+            )
+
+        if lastfm_status.get(name) != "ok":
+            raise RuntimeError(
+                "Last.fm Product artist status not ok: "
+                f"{name} / "
+                f"{lastfm_status.get(name) or '<missing>'}"
+            )
+
+    rolling_payload = read_json(LASTFM_JSON)
+    rolling_payload_mode = norm(
+        rolling_payload.get("activeMode")
+    )
+    if rolling_payload_mode not in {
+        "rolling3_50_rolling7_50",
+        "mixed_by_artist",
+    }:
+        raise RuntimeError(
+            "unexpected Last.fm payload activeMode: "
+            + rolling_payload_mode
         )
 
     old = previous_map()
@@ -240,7 +304,7 @@ def main():
     ranking = []
     report_map = {}
 
-    for name in sorted(sets[0]):
+    for name in sorted(product_cohort):
         naver_point = round(naver[name], 2)
         youtube_point = round(youtube[name], 2)
 
@@ -306,7 +370,7 @@ def main():
                     "cumulativePoint": lastfm_point,
                     "rawPoint": lastfm_raw,
                     "scale": LASTFM_SCALE,
-                    "activeMode": active_mode,
+                    "activeMode": lastfm_modes[name],
                     "sourceVersion": (
                         "lastfm_global_interest_"
                         "rolling_score_preview_v1"
@@ -370,6 +434,14 @@ def main():
             "youtube": str(YOUTUBE),
             "musicChart": str(MUSIC),
             "lastfmRolling": str(LASTFM_CSV),
+        },
+        "productCohort": {
+            "authority": "naver_youtube_exact_parity",
+            "artistCount": len(product_cohort),
+            "artists": sorted(product_cohort),
+            "musicSourceArtistCount": len(music_cohort),
+            "lastfmScoreReadyArtistCount": len(lastfm_ready_cohort),
+            "requiresSourceSuperset": True,
         },
         "ranking": ranking,
     }
