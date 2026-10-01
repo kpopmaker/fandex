@@ -1,0 +1,72 @@
+name: Validate NAVER Vercel Cron fallback v1
+
+on:
+  push:
+    branches:
+      - integration/ops-naver-vercel-cron-fallback-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: >-
+      github.event_name == 'push' ||
+      github.head_ref == 'integration/ops-naver-vercel-cron-fallback-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git diff --name-only fb828e36fe8db96dd9a4ffa4a4ae1512ea3f7c9c...HEAD | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-naver-vercel-cron-fallback-v1.yml
+          app/api/internal/naver-news/vercel-cron-fallback/route.ts
+          lib/server/ingestion/naverNewsVercelCronFallback.ts
+          tests/naver-news-vercel-cron-fallback-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Vercel Cron fallback regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-vercel-cron-fallback-v1.test.mts
+
+      - name: Existing NAVER recurring regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-shadow-recurring-activation-v1.test.mts tests/naver-news-recurring-scheduler-v128.test.mts tests/naver-news-scheduler-dispatch-v126.test.mts
+
+      - name: Existing NAVER Blob lifecycle regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-live-blob-mirror-v1.test.mts tests/naver-news-stored-evidence-mirror-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
