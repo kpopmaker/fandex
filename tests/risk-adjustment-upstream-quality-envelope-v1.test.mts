@@ -204,6 +204,30 @@ test('optional volatility semantic must bind to the projected volatility state',
   );
 });
 
+test('runtime-invalid projected state cannot be accepted even when semantic stateValue matches it', () => {
+  const base = completeEnvelope();
+  const envelope = {
+    ...base,
+    input: {
+      ...base.input,
+      freshnessState: 'banana',
+    },
+    requiredDimensionSemantics: {
+      ...base.requiredDimensionSemantics,
+      freshness: semantic('freshness', 'banana'),
+    },
+  } as unknown as RiskAdjustmentUpstreamQualityEnvelope;
+
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(envelope),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'upstream-input-invalid',
+    },
+  );
+});
+
 test('variable identity mismatch is rejected before handoff evaluation', () => {
   const envelope = completeEnvelope({
     variableId: 'comebackActivityPoint',
