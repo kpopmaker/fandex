@@ -1,0 +1,29 @@
+name: Validate Artist Expansion YouTube lineage final v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-lineage-final-v1
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-lineage-final:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: YouTube lineage syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/fandex_master_score_v10.py \
+            scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_v3_full_reviewed_cohort_shadow_v1.py
+      - name: Reviewed seed materialization
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py
+      - name: Final YouTube lineage guard
+        run: python tests/artist-expansion-youtube-lineage-guard-v1.py
