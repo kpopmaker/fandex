@@ -1,22 +1,22 @@
 FANDEX Python Status Report v2
 ========================================================================================
-createdAt: 2026-09-30T11:42:11
+createdAt: 2026-10-01T11:46:21
 masterVersion: fandex_master_v10_music_v2_lastfm_rolling_v1
 scoreMode: uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25
 productionFormula: Naver v3 + YouTube v3 + Music v2 x0.25 + Last.fm Rolling x0.25
 
 Current FANDEX production ranking
 ----------------------------------------------------------------------------------------
-1위 에스파 | FANDEX 361.47 | Naver 214.28 | YouTube 79.04 | Music raw 180.75 x0.25=45.19 | Last.fm raw 91.8406 x0.25=22.96
-2위 에이티즈 | FANDEX 340.15 | Naver 226.34 | YouTube 52.43 | Music raw 187.5 x0.25=46.88 | Last.fm raw 57.995 x0.25=14.5
-3위 아이유 | FANDEX 334.31 | Naver 244.89 | YouTube 49.63 | Music raw 139.75 x0.25=34.94 | Last.fm raw 19.3806 x0.25=4.85
-4위 르세라핌 | FANDEX 260.3 | Naver 182.26 | YouTube 52.76 | Music raw 6.8 x0.25=1.7 | Last.fm raw 94.3151 x0.25=23.58
-5위 뉴진스 | FANDEX 254.41 | Naver 201.66 | YouTube 21.54 | Music raw 39.8 x0.25=9.95 | Last.fm raw 85.0521 x0.25=21.26
-6위 보이넥스트도어 | FANDEX 243.34 | Naver 187.53 | YouTube 35.42 | Music raw 54.8 x0.25=13.7 | Last.fm raw 26.7585 x0.25=6.69
-7위 아이브 | FANDEX 238.96 | Naver 166.58 | YouTube 37.2 | Music raw 100.0 x0.25=25.0 | Last.fm raw 40.7319 x0.25=10.18
-8위 투모로우바이투게더 | FANDEX 229.44 | Naver 163.02 | YouTube 49.71 | Music raw 0.0 x0.25=0.0 | Last.fm raw 66.8259 x0.25=16.71
-9위 세븐틴 | FANDEX 222.31 | Naver 173.12 | YouTube 42.85 | Music raw 0.0 x0.25=0.0 | Last.fm raw 25.3592 x0.25=6.34
-10위 스트레이키즈 | FANDEX 156.59 | Naver 90.6 | YouTube 47.99 | Music raw 0.0 x0.25=0.0 | Last.fm raw 71.9891 x0.25=18.0
+1위 에스파 | FANDEX 361.11 | Naver 214.28 | YouTube 79.04 | Music raw 180.75 x0.25=45.19 | Last.fm raw 90.4029 x0.25=22.6
+2위 에이티즈 | FANDEX 338.9 | Naver 226.34 | YouTube 52.43 | Music raw 187.5 x0.25=46.88 | Last.fm raw 53.0055 x0.25=13.25
+3위 아이유 | FANDEX 334.25 | Naver 244.89 | YouTube 49.63 | Music raw 139.75 x0.25=34.94 | Last.fm raw 19.1418 x0.25=4.79
+4위 르세라핌 | FANDEX 260.2 | Naver 182.26 | YouTube 52.76 | Music raw 6.8 x0.25=1.7 | Last.fm raw 93.9305 x0.25=23.48
+5위 뉴진스 | FANDEX 254.38 | Naver 201.66 | YouTube 21.54 | Music raw 39.8 x0.25=9.95 | Last.fm raw 84.9031 x0.25=21.23
+6위 보이넥스트도어 | FANDEX 245.83 | Naver 187.53 | YouTube 35.42 | Music raw 54.8 x0.25=13.7 | Last.fm raw 36.7028 x0.25=9.18
+7위 아이브 | FANDEX 238.37 | Naver 166.58 | YouTube 37.2 | Music raw 100.0 x0.25=25.0 | Last.fm raw 38.3539 x0.25=9.59
+8위 투모로우바이투게더 | FANDEX 228.73 | Naver 163.02 | YouTube 49.71 | Music raw 0.0 x0.25=0.0 | Last.fm raw 63.9825 x0.25=16.0
+9위 세븐틴 | FANDEX 221.18 | Naver 173.12 | YouTube 42.85 | Music raw 0.0 x0.25=0.0 | Last.fm raw 20.8423 x0.25=5.21
+10위 스트레이키즈 | FANDEX 155.78 | Naver 90.6 | YouTube 47.99 | Music raw 0.0 x0.25=0.0 | Last.fm raw 68.7533 x0.25=17.19
 
 Daily operation
 ----------------------------------------------------------------------------------------
