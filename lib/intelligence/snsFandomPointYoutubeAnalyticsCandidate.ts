@@ -1,5 +1,7 @@
 import {
   buildSnsFandomPersistenceEvidence,
+  isSnsFandomArtistEntitlementActiveFor,
+  type SnsFandomArtistProviderEntitlement,
   type SnsFandomObservation,
   type SnsFandomPersistenceEvidence,
 } from './snsFandomPointContracts';
@@ -22,7 +24,7 @@ export type YoutubeAnalyticsFandomPersistenceCandidateResult =
   | Readonly<{
       contractVersion:
         typeof SNS_FANDOM_YOUTUBE_ANALYTICS_CANDIDATE_VERSION;
-      state: 'authorization-blocked';
+      state: 'entitlement-blocked';
       observations: readonly SnsFandomObservation[];
       persistenceEvidence: readonly SnsFandomPersistenceEvidence[];
       blockers: readonly string[];
@@ -108,18 +110,61 @@ function observation(
 export function buildYoutubeAnalyticsFandomPersistenceCandidate(
   input: Readonly<{
     snapshots: readonly YoutubeSubscribedAudienceActivitySnapshot[];
-    channelOwnerAuthorizationVerified: boolean;
+    entitlement: SnsFandomArtistProviderEntitlement | null;
+    evaluatedAt: string;
   }>,
 ): YoutubeAnalyticsFandomPersistenceCandidateResult {
-  if (!input.channelOwnerAuthorizationVerified) {
+  const firstSnapshot = input.snapshots[0] ?? null;
+  const entitlement = input.entitlement;
+  const blockers: string[] = [];
+
+  if (entitlement === null) {
+    blockers.push('youtube-analytics-channel-owner-entitlement-missing');
+  } else {
+    if (entitlement.providerId !== 'youtube-analytics-api') {
+      blockers.push('youtube-analytics-entitlement-provider-mismatch');
+    }
+    if (entitlement.authorizationClass !== 'channel-owner-oauth') {
+      blockers.push('youtube-analytics-entitlement-class-invalid');
+    }
+    if (
+      !entitlement.authorizedScopes.includes(
+        'https://www.googleapis.com/auth/yt-analytics.readonly',
+      )
+    ) {
+      blockers.push('youtube-analytics-readonly-scope-missing');
+    }
+    if (
+      firstSnapshot !== null
+      && !isSnsFandomArtistEntitlementActiveFor(entitlement, {
+        canonicalArtistId: firstSnapshot.canonicalArtistId,
+        providerId: 'youtube-analytics-api',
+        providerArtistId: firstSnapshot.youtubeChannelId,
+        dimension: 'fandom-activity-persistence',
+        evaluatedAt: input.evaluatedAt,
+      })
+    ) {
+      blockers.push('youtube-analytics-entitlement-not-active-for-snapshot');
+    }
+  }
+
+  if (
+    firstSnapshot !== null
+    && input.snapshots.some((snapshot) => (
+      snapshot.canonicalArtistId !== firstSnapshot.canonicalArtistId
+      || snapshot.youtubeChannelId !== firstSnapshot.youtubeChannelId
+    ))
+  ) {
+    blockers.push('youtube-analytics-snapshot-identity-mixed');
+  }
+
+  if (blockers.length > 0) {
     return Object.freeze({
       contractVersion: SNS_FANDOM_YOUTUBE_ANALYTICS_CANDIDATE_VERSION,
-      state: 'authorization-blocked' as const,
+      state: 'entitlement-blocked' as const,
       observations: Object.freeze([]),
       persistenceEvidence: Object.freeze([]),
-      blockers: Object.freeze([
-        'youtube-analytics-channel-owner-authorization-required',
-      ]),
+      blockers: Object.freeze(blockers),
     });
   }
 
