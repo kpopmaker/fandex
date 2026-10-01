@@ -57,7 +57,6 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
       state: 'conditional-approval-required' as const,
       constructCoverage: Object.freeze([
         'public-reaction-diffusion' as const,
-        'fandom-activity-persistence' as const,
       ]),
       authorizedAcquisition: 'available-after-provider-approval' as const,
       commercialUse: 'conditional' as const,
@@ -309,6 +308,9 @@ export type SnsFandomPersistenceEvidence = Readonly<{
   contractVersion: 'sns-fandom-persistence-history-evidence-v1';
   canonicalArtistId: string;
   providerId: SnsFandomProviderId;
+  providerArtistId: string | null;
+  providerContentId: string | null;
+  dimension: SnsFandomDimension;
   metricId: string;
   metricRole: SnsFandomMetricRole;
   state:
@@ -336,6 +338,9 @@ export function buildSnsFandomPersistenceEvidence(
     const key = [
       observation.entity.canonicalArtistId,
       observation.providerId,
+      observation.entity.providerArtistId ?? '',
+      observation.entity.providerContentId ?? '',
+      observation.variable.dimension,
       observation.variable.metricId,
       observation.variable.metricRole,
     ].join('|');
@@ -370,6 +375,9 @@ export function buildSnsFandomPersistenceEvidence(
       contractVersion: 'sns-fandom-persistence-history-evidence-v1',
       canonicalArtistId: first.entity.canonicalArtistId,
       providerId: first.providerId,
+      providerArtistId: first.entity.providerArtistId,
+      providerContentId: first.entity.providerContentId,
+      dimension: first.variable.dimension,
       metricId: first.variable.metricId,
       metricRole: first.variable.metricRole,
       state,
@@ -447,6 +455,7 @@ export function evaluateSnsFandomPointReadiness(
   ).filter(
     (item) =>
       item.canonicalArtistId === input.canonicalArtistId
+      && item.dimension === 'fandom-activity-persistence'
       && item.metricRole === 'construct-evidence'
       && item.state === 'temporal-history-present'
       && productionReadyProviders.includes(item.providerId),
