@@ -15,6 +15,7 @@ export const BRAND_FIT_POINT_CONSTRUCT = Object.freeze({
 export const BRAND_FIT_SOURCE_FAMILIES = Object.freeze([
   'official-brand-announcement',
   'official-agency-announcement',
+  'official-brand-youtube-video',
 ] as const);
 export type BrandFitSourceFamily =
   typeof BRAND_FIT_SOURCE_FAMILIES[number];
