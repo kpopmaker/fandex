@@ -1,7 +1,12 @@
-import type { FandexConfidenceState } from './confidence';
-import type {
-  FandexDataLifecycleState,
-  FandexDataMaterialClass,
+import {
+  FANDEX_CONFIDENCE_STATES,
+  type FandexConfidenceState,
+} from './confidence';
+import {
+  isFandexDataLifecycleState,
+  isFandexDataMaterialClass,
+  type FandexDataLifecycleState,
+  type FandexDataMaterialClass,
 } from './productionState';
 
 export const RISK_ADJUSTMENT_POINT_CONTRACT_VERSION =
@@ -27,52 +32,76 @@ export const RISK_ADJUSTMENT_UPSTREAM_CANDIDATES = Object.freeze([
 export type RiskAdjustmentUpstreamVariableId =
   typeof RISK_ADJUSTMENT_UPSTREAM_CANDIDATES[number];
 
+export const RISK_ADJUSTMENT_AVAILABILITY_STATES = Object.freeze([
+  'available',
+  'available-nonzero',
+  'true-zero',
+  'source-missing',
+  'provider-unavailable',
+  'upstream-unavailable-ambiguous',
+  'not-tracked',
+  'not-ranked',
+  'unsupported',
+] as const);
 export type RiskAdjustmentAvailabilityState =
-  | 'available'
-  | 'available-nonzero'
-  | 'true-zero'
-  | 'source-missing'
-  | 'provider-unavailable'
-  | 'upstream-unavailable-ambiguous'
-  | 'not-tracked'
-  | 'not-ranked'
-  | 'unsupported';
+  typeof RISK_ADJUSTMENT_AVAILABILITY_STATES[number];
 
+export const RISK_ADJUSTMENT_IDENTITY_STATES = Object.freeze([
+  'resolved',
+  'unresolved',
+  'conflict',
+] as const);
 export type RiskAdjustmentIdentityState =
-  | 'resolved'
-  | 'unresolved'
-  | 'conflict';
+  typeof RISK_ADJUSTMENT_IDENTITY_STATES[number];
 
+export const RISK_ADJUSTMENT_COVERAGE_STATES = Object.freeze([
+  'complete',
+  'incomplete',
+  'unknown',
+] as const);
 export type RiskAdjustmentCoverageState =
-  | 'complete'
-  | 'incomplete'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_COVERAGE_STATES[number];
 
+export const RISK_ADJUSTMENT_FRESHNESS_STATES = Object.freeze([
+  'current',
+  'stale',
+  'unknown',
+] as const);
 export type RiskAdjustmentFreshnessState =
-  | 'current'
-  | 'stale'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_FRESHNESS_STATES[number];
 
+export const RISK_ADJUSTMENT_CONFLICT_STATES = Object.freeze([
+  'none',
+  'detected',
+  'unknown',
+] as const);
 export type RiskAdjustmentConflictState =
-  | 'none'
-  | 'detected'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_CONFLICT_STATES[number];
 
+export const RISK_ADJUSTMENT_REVISION_STATES = Object.freeze([
+  'stable',
+  'revised-stable',
+  'unstable',
+  'unknown',
+] as const);
 export type RiskAdjustmentRevisionState =
-  | 'stable'
-  | 'revised-stable'
-  | 'unstable'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_REVISION_STATES[number];
 
+export const RISK_ADJUSTMENT_VOLATILITY_STATES = Object.freeze([
+  'ordinary',
+  'unusual',
+  'unknown',
+] as const);
 export type RiskAdjustmentVolatilityState =
-  | 'ordinary'
-  | 'unusual'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_VOLATILITY_STATES[number];
 
+export const RISK_ADJUSTMENT_HISTORY_STATES = Object.freeze([
+  'sufficient',
+  'insufficient',
+  'unknown',
+] as const);
 export type RiskAdjustmentHistoryState =
-  | 'sufficient'
-  | 'insufficient'
-  | 'unknown';
+  typeof RISK_ADJUSTMENT_HISTORY_STATES[number];
 
 export type RiskAdjustmentUpstreamInput = Readonly<{
   variableId: RiskAdjustmentUpstreamVariableId;
@@ -89,6 +118,63 @@ export type RiskAdjustmentUpstreamInput = Readonly<{
   historyState: RiskAdjustmentHistoryState;
   evidenceRefs: readonly string[];
 }>;
+
+export function isRiskAdjustmentUpstreamInput(
+  value: unknown,
+): value is RiskAdjustmentUpstreamInput {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+  const row = value as Partial<RiskAdjustmentUpstreamInput>;
+  return (
+    typeof row.variableId === 'string'
+    && RISK_ADJUSTMENT_UPSTREAM_CANDIDATES.includes(
+      row.variableId as RiskAdjustmentUpstreamVariableId,
+    )
+    && isFandexDataLifecycleState(row.lifecycleState)
+    && isFandexDataMaterialClass(row.materialClass)
+    && typeof row.confidenceState === 'string'
+    && FANDEX_CONFIDENCE_STATES.includes(
+      row.confidenceState as FandexConfidenceState,
+    )
+    && typeof row.availabilityState === 'string'
+    && RISK_ADJUSTMENT_AVAILABILITY_STATES.includes(
+      row.availabilityState as RiskAdjustmentAvailabilityState,
+    )
+    && typeof row.identityState === 'string'
+    && RISK_ADJUSTMENT_IDENTITY_STATES.includes(
+      row.identityState as RiskAdjustmentIdentityState,
+    )
+    && typeof row.coverageState === 'string'
+    && RISK_ADJUSTMENT_COVERAGE_STATES.includes(
+      row.coverageState as RiskAdjustmentCoverageState,
+    )
+    && typeof row.freshnessState === 'string'
+    && RISK_ADJUSTMENT_FRESHNESS_STATES.includes(
+      row.freshnessState as RiskAdjustmentFreshnessState,
+    )
+    && typeof row.conflictState === 'string'
+    && RISK_ADJUSTMENT_CONFLICT_STATES.includes(
+      row.conflictState as RiskAdjustmentConflictState,
+    )
+    && typeof row.revisionState === 'string'
+    && RISK_ADJUSTMENT_REVISION_STATES.includes(
+      row.revisionState as RiskAdjustmentRevisionState,
+    )
+    && typeof row.volatilityState === 'string'
+    && RISK_ADJUSTMENT_VOLATILITY_STATES.includes(
+      row.volatilityState as RiskAdjustmentVolatilityState,
+    )
+    && typeof row.historyState === 'string'
+    && RISK_ADJUSTMENT_HISTORY_STATES.includes(
+      row.historyState as RiskAdjustmentHistoryState,
+    )
+    && Array.isArray(row.evidenceRefs)
+    && row.evidenceRefs.every(
+      (ref) => typeof ref === 'string' && ref.trim().length > 0,
+    )
+  );
+}
 
 export type RiskAdjustmentQualityIssue =
   | 'source-missing'
@@ -155,6 +241,10 @@ function validateEvidenceRefs(refs: readonly string[]): readonly string[] {
 export function assessRiskAdjustmentDependency(
   input: RiskAdjustmentUpstreamInput,
 ): RiskAdjustmentDependencyAssessment {
+  if (!isRiskAdjustmentUpstreamInput(input)) {
+    throw new Error('risk_adjustment_upstream_input_invalid');
+  }
+
   const blockers: RiskAdjustmentDependencyBlocker[] = [];
   if (input.lifecycleState !== 'production') {
     blockers.push('upstream-not-production');
