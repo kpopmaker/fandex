@@ -47,6 +47,7 @@ jobs:
           lib/intelligence/snsFandomPointContracts.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
           tests/sns-fandom-point-productionization-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
