@@ -1,0 +1,42 @@
+name: Validate Momentum current evaluation runner v1
+
+on:
+  push:
+    branches:
+      - work/momentum-current-evaluation-runner-v1
+  pull_request:
+    paths:
+      - 'lib/lastfm-signal/**'
+      - 'lib/intelligence/fandexNaverMediaAttentionMomentumResearch.ts'
+      - 'lib/intelligence/fandexMomentumTemporalNormalizationResearch.ts'
+      - 'lib/intelligence/fandexMomentumCrossFamilyCombinationResearch.ts'
+      - 'lib/intelligence/fandexMomentumCurrentEvaluationPipeline.ts'
+      - 'scripts/operations/momentumCurrentEvaluationRunnerV1.mts'
+      - 'tests/fandex-naver-media-attention-momentum-v140.test.mts'
+      - 'tests/fandex-momentum-temporal-normalization-v141.test.mts'
+      - 'tests/fandex-momentum-cross-family-combination-v142.test.mts'
+      - 'tests/momentum-current-evaluation-pipeline-v1.test.mts'
+      - '.github/workflows/momentum-current-dual-source-evaluation-runner-v1.yml'
+      - '.github/workflows/validate-momentum-current-evaluation-runner-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-naver-media-attention-momentum-v140.test.mts
+      - run: npx tsx --test tests/fandex-momentum-temporal-normalization-v141.test.mts
+      - run: npx tsx --test tests/fandex-momentum-cross-family-combination-v142.test.mts
+      - run: npx tsx --test tests/momentum-current-evaluation-pipeline-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
