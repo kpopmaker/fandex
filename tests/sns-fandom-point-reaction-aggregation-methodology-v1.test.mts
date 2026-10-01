@@ -6,6 +6,9 @@ import {
   type SnsFandomReactionAggregationDecision,
 } from '../lib/intelligence/snsFandomPointReactionAggregationMethodology';
 import {
+  type SnsFandomReactionValidationDatasetResult,
+} from '../lib/intelligence/snsFandomPointReactionValidationDataset';
+import {
   type SnsFandomYoutubeContentAgeAlignmentResult,
 } from '../lib/intelligence/snsFandomPointYoutubeContentAgeAlignment';
 
@@ -42,6 +45,33 @@ function ageAlignment(
     blockers: state === 'age-alignment-ready'
       ? ['youtube-artist-level-aggregation-methodology-not-approved']
       : ['youtube-content-age-alignment-required'],
+  };
+}
+
+function validationDataset(
+  overrides: Partial<SnsFandomReactionValidationDatasetResult> = {},
+): SnsFandomReactionValidationDatasetResult {
+  return {
+    contractVersion: 'sns-fandom-reaction-validation-dataset-v1',
+    datasetId: 'dataset://real/reaction-methodology-v1',
+    state: 'validation-ready',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    materialClass: 'real',
+    canonicalArtistIds: ['artist-a', 'artist-b'],
+    distinctCanonicalArtistCount: 2,
+    providerId: 'youtube-data-api',
+    providerClientRef: 'gcp-project-fandex-youtube-primary',
+    providerEndpoints: ['youtube.videos.list'],
+    targetContentAgeMilliseconds: 604800000,
+    members: [],
+    revisionStabilityReviewed: true,
+    methodologyValidationEligible: true,
+    aggregateValuesProduced: false,
+    normalizedValuesProduced: false,
+    arbitraryContentCountEqualizationAllowed: false,
+    blockers: [],
+    ...overrides,
   };
 }
 
@@ -82,6 +112,7 @@ function decision(
 test('age-aligned evidence without a methodology decision remains blocked', () => {
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
     decision: null,
   });
 
@@ -99,6 +130,7 @@ test('age-aligned evidence without a methodology decision remains blocked', () =
 test('research-only methodology never becomes executable Product aggregation', () => {
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
     decision: decision(),
   });
 
@@ -113,6 +145,7 @@ test('research-only methodology never becomes executable Product aggregation', (
 test('approved methodology requires real multi-artist validation and all structural sensitivity reviews', () => {
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
     decision: decision({
       state: 'approved',
       empiricalValidation: {
@@ -159,6 +192,7 @@ test('approved methodology requires real multi-artist validation and all structu
 test('even a structurally valid approved decision produces no number until execution is separately implemented', () => {
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
     decision: decision({
       state: 'approved',
     }),
@@ -178,6 +212,7 @@ test('even a structurally valid approved decision produces no number until execu
 test('typical-content intensity and total-window reaction volume remain distinct construct decisions', () => {
   const intensity = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset(),
     decision: decision({
       construct: 'typical-content-reaction-intensity',
       releaseVolumeTreatment:
@@ -187,6 +222,9 @@ test('typical-content intensity and total-window reaction volume remain distinct
 
   const volume = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment(),
+    validationDataset: validationDataset({
+      construct: 'window-total-reaction-volume',
+    }),
     decision: decision({
       construct: 'window-total-reaction-volume',
       releaseVolumeTreatment: 'part-of-construct',
@@ -206,6 +244,7 @@ test('typical-content intensity and total-window reaction volume remain distinct
 test('an approved methodology cannot bypass missing content-age alignment', () => {
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: ageAlignment('age-alignment-blocked'),
+    validationDataset: validationDataset(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -228,6 +267,7 @@ test('methodology decision cannot target a metric without aligned observed conte
 
   const result = evaluateSnsFandomReactionAggregationMethodology({
     ageAlignment: noMetricEvidence,
+    validationDataset: validationDataset(),
     decision: decision({ state: 'approved' }),
   });
 
@@ -238,4 +278,46 @@ test('methodology decision cannot target a metric without aligned observed conte
     ),
   );
   assert.equal(result.aggregateValue, null);
+});
+
+
+test('methodology decision cannot reuse a different validation dataset id', () => {
+  const result = evaluateSnsFandomReactionAggregationMethodology({
+    ageAlignment: ageAlignment(),
+    validationDataset: validationDataset({
+      datasetId: 'dataset://real/other-dataset',
+    }),
+    decision: decision({ state: 'approved' }),
+  });
+
+  assert.equal(result.state, 'validation-dataset-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-validation-dataset-ref-mismatch',
+    ),
+  );
+  assert.equal(result.aggregateValue, null);
+});
+
+test('methodology decision construct and metric must match the real validation dataset', () => {
+  const result = evaluateSnsFandomReactionAggregationMethodology({
+    ageAlignment: ageAlignment(),
+    validationDataset: validationDataset({
+      construct: 'window-total-reaction-volume',
+      metricId: 'youtube.video.like-count',
+    }),
+    decision: decision({ state: 'approved' }),
+  });
+
+  assert.equal(result.state, 'validation-dataset-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-validation-dataset-construct-mismatch',
+    ),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'reaction-aggregation-validation-dataset-metric-mismatch',
+    ),
+  );
 });
