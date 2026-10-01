@@ -97,7 +97,10 @@ test('sanitized output never includes provider credential or raw title/descripti
   assert.match(serialized, /evidenceDigest/);
   assert.match(serialized, /storageWriteAuthorized/);
   assert.match(serialized, /immutableEvidenceObject/);
-  assert.match(serialized, /fandex\\\/brand-fit\\\/stored-evidence\\\/v1/);
+  assert.equal(
+    serialized.includes('fandex/brand-fit/stored-evidence/v1'),
+    true,
+  );
   assert.match(serialized, /payloadDigest/);
 });
 
