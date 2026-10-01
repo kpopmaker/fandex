@@ -109,7 +109,7 @@ function observation(
       state: 'research' as const,
       materialClass: 'real' as const,
       blockers: Object.freeze([
-        'youtube-provider-approval-required-before-production-use',
+        'sns-fandom-cross-dimension-methodology-not-approved',
       ]),
     }),
   });
