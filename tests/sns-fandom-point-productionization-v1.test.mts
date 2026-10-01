@@ -146,6 +146,7 @@ function youtubeCommentProviderDecision(
     contractVersion: 'sns-fandom-provider-approval-intake-v1',
     decisionKind: 'provider-grant',
     providerId: 'youtube-comments-derived',
+    providerClientRef: 'gcp-project-fandex-youtube-primary',
     approvalClass: 'youtube-analytics-derived-metrics-data-storage',
     useCase: 'analytics-reporting',
     approvedDimensions: ['fandom-activity-persistence'],
@@ -601,6 +602,7 @@ test('artist entitlement is bound to the OAuth client that produced the observat
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: 'google-cloud-project:other-project',
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
@@ -627,6 +629,7 @@ test('YouTube public stats adapter rejects approval from another API client proj
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: 'google-cloud-project:other-project',
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
@@ -888,6 +891,7 @@ test('YouTube Analytics adapter rejects mismatched artist/channel entitlement', 
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
@@ -916,6 +920,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
@@ -927,6 +932,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
@@ -1098,6 +1104,7 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
@@ -1229,6 +1236,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
@@ -1240,6 +1248,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
@@ -1329,6 +1338,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
@@ -1354,6 +1364,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       batch: {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-01T00:00:00.000Z',
         providerPeriodEnd: '2026-09-15T23:59:59.999Z',
@@ -1384,6 +1395,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       batch: {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: 'gcp-project-fandex-youtube-primary',
         providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-16T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
