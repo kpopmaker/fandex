@@ -259,16 +259,22 @@ def main() -> None:
         for row in materialized
     }
 
-    if len(reviewed_ids) != 10:
+    target_ids = set(targets)
+
+    if not reviewed_ids:
         raise RuntimeError(
-            "Expected 10 artists in first YouTube reviewed batch, "
-            f"got {len(reviewed_ids)}."
+            "Reviewed YouTube seed shadow has no reviewed artists."
         )
 
-    if "v" in reviewed_ids:
+    unknown_reviewed_ids = sorted(
+        reviewed_ids
+        - target_ids
+    )
+    if unknown_reviewed_ids:
         raise RuntimeError(
-            "Canonical V must remain without approved YouTube seed "
-            "in the first reviewed batch."
+            "Reviewed YouTube seed shadow contains "
+            "artists outside the canonical target cohort: "
+            + ", ".join(unknown_reviewed_ids)
         )
 
     payload = {
