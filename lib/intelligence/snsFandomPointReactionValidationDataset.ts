@@ -254,6 +254,10 @@ export function buildSnsFandomReactionValidationDataset(
       blockers.push('reaction-validation-provider-endpoint-mismatch');
       continue;
     }
+    if (distinctArtistEndpointSets[0] !== 'youtube.videos.list') {
+      blockers.push('reaction-validation-statistical-endpoint-invalid');
+      continue;
+    }
     cohortEndpointSets.push(distinctArtistEndpointSets[0]);
 
     members.push(Object.freeze({
