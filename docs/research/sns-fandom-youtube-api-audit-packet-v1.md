@@ -250,3 +250,85 @@ External blocker:
   entitlement.
 
 Until one of those exists as evidence, Production collection remains blocked.
+
+
+## 1a. Current form semantics verified 2026-10-02
+
+The live YouTube Data API Services **Audit and Quota Extension Form** was
+re-checked against the current provider form and policy text.
+
+Verified submission path:
+
+- Section 1 request type:
+  `Complete a compliance audit to request for additional quota`;
+- Section 5 use-case category:
+  `Analytics & Reporting`;
+- the form explicitly describes this category as tracking views, subscribers,
+  trends, or comparing channel performance metrics;
+- the derived-metrics/storage subsection appears under Section 5;
+- the applicant must affirm the additional derived-metrics and data-storage
+  amendment.
+
+The amendment displayed by the provider form states that:
+
+- Developer Policies III.E.2.a and III.E.4.h are amended for qualifying
+  limited derived-metric use cases, provided custom metrics are clearly
+  identified as independently generated rather than YouTube API metrics;
+- III.E.4.b/c/d are amended so publicly available statistical counters and
+  approved derived metrics may be retained for up to 36 calendar months;
+- other API data such as titles, creator names, descriptions and comment text
+  remains subject to the ordinary 30-day refresh/deletion requirements.
+
+Important: checking the acknowledgement is **not** provider approval. The form
+explicitly says YouTube will determine whether the submitted use case
+qualifies.
+
+The approval evidence contract therefore now requires all of these provider
+grant states to be explicitly recorded:
+
+- compliance audit passed;
+- Analytics & Reporting use case accepted;
+- Developer Policies amendment accepted;
+- additional derived metrics approved;
+- extended statistical storage approved.
+
+A form submission, acknowledgement, or pending review cannot satisfy those
+fields.
+
+## 8a. Current FANDEX submission-readiness audit
+
+Read-only Vercel verification found:
+
+- Vercel project: `fandex`;
+- stable Production alias candidate:
+  `https://fandex-eta.vercel.app`;
+- root page: HTTP 200;
+- `/privacy`: HTTP 404;
+- `/terms`: HTTP 404.
+
+Therefore the Primary Access URL blocker is partially resolved, but the
+provider form still cannot be considered submission-ready.
+
+Current concrete blockers:
+
+- public Privacy Policy URL does not exist at the Production alias;
+- public Terms of Service URL does not exist at the Production alias;
+- required Privacy Policy screenshot is not available;
+- homepage screenshot showing Privacy Policy placement cannot be produced yet;
+- Terms documentation artifact is not available;
+- Analytics & Reporting dashboard/feature screenshot is not recorded;
+- exact Google Cloud project-number evidence is not recorded in this variable
+  branch;
+- measured quota estimate is not recorded;
+- applicant / organization legal identity must be supplied outside the repo;
+- demo credentials, if requested by the reviewer, must be supplied only
+  through the secure provider form and must never be committed.
+
+These web/legal/UI items are outside the snsFandomPoint Single Writer boundary.
+They must be handled by the Production/website owner before an actual provider
+submission.
+
+The variable branch now exposes
+`sns-fandom-youtube-audit-submission-readiness-v1` so these prerequisites can
+be evaluated fail-closed without treating submission readiness as provider
+approval.
