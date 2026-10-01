@@ -190,6 +190,38 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
     }),
   ]);
 
+export const SNS_FANDOM_ARTIST_PROVIDER_ENTITLEMENT_VERSION =
+  'sns-fandom-artist-provider-entitlement-v1' as const;
+
+export type SnsFandomArtistProviderEntitlement = Readonly<{
+  contractVersion: typeof SNS_FANDOM_ARTIST_PROVIDER_ENTITLEMENT_VERSION;
+  canonicalArtistId: string;
+  providerId: SnsFandomProviderId;
+  providerArtistId: string;
+  authorizationClass:
+    | 'channel-owner-oauth'
+    | 'content-owner-oauth'
+    | 'provider-account-oauth';
+  state: 'active' | 'pending' | 'expired' | 'revoked';
+  allowedDimensions: readonly SnsFandomDimension[];
+  authorizedScopes: readonly string[];
+  verifiedAt: string;
+  validFrom: string;
+  validUntil: string | null;
+  evidenceRef: string;
+  rights: Readonly<{
+    commercialProductUse: boolean;
+    recurringAutomatedCollection: boolean;
+    storageRetention: boolean;
+    derivedMetricPublication: boolean;
+  }>;
+}>;
+
+export type SnsFandomArtistProviderEntitlementValidation = Readonly<{
+  ok: boolean;
+  blockers: readonly string[];
+}>;
+
 export type SnsFandomMissingState =
   | 'observed'
   | 'missing'
@@ -247,6 +279,123 @@ export type SnsFandomObservationValidation = Readonly<{
 function validIso(value: string): boolean {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+}
+
+export function validateSnsFandomArtistProviderEntitlement(
+  entitlement: SnsFandomArtistProviderEntitlement,
+  evaluatedAt: string,
+): SnsFandomArtistProviderEntitlementValidation {
+  const blockers: string[] = [];
+
+  if (
+    entitlement.contractVersion
+      !== SNS_FANDOM_ARTIST_PROVIDER_ENTITLEMENT_VERSION
+  ) {
+    blockers.push('artist-provider-entitlement-version-invalid');
+  }
+  if (entitlement.canonicalArtistId.trim().length === 0) {
+    blockers.push('artist-provider-entitlement-canonical-id-empty');
+  }
+  if (entitlement.providerArtistId.trim().length === 0) {
+    blockers.push('artist-provider-entitlement-provider-id-empty');
+  }
+  if (entitlement.allowedDimensions.length === 0) {
+    blockers.push('artist-provider-entitlement-dimensions-empty');
+  }
+  if (entitlement.authorizedScopes.length === 0) {
+    blockers.push('artist-provider-entitlement-scopes-empty');
+  }
+  if (entitlement.evidenceRef.trim().length === 0) {
+    blockers.push('artist-provider-entitlement-evidence-empty');
+  }
+
+  for (const value of [
+    entitlement.verifiedAt,
+    entitlement.validFrom,
+    evaluatedAt,
+    ...(entitlement.validUntil === null ? [] : [entitlement.validUntil]),
+  ]) {
+    if (!validIso(value)) {
+      blockers.push('artist-provider-entitlement-time-invalid');
+      break;
+    }
+  }
+
+  if (
+    validIso(entitlement.verifiedAt)
+    && validIso(entitlement.validFrom)
+    && Date.parse(entitlement.verifiedAt) < Date.parse(entitlement.validFrom)
+  ) {
+    blockers.push('artist-provider-entitlement-verified-before-valid-from');
+  }
+
+  if (
+    entitlement.validUntil !== null
+    && validIso(entitlement.validFrom)
+    && validIso(entitlement.validUntil)
+    && Date.parse(entitlement.validFrom) > Date.parse(entitlement.validUntil)
+  ) {
+    blockers.push('artist-provider-entitlement-validity-order-invalid');
+  }
+
+  if (
+    entitlement.state === 'active'
+    && validIso(evaluatedAt)
+    && validIso(entitlement.validFrom)
+    && Date.parse(evaluatedAt) < Date.parse(entitlement.validFrom)
+  ) {
+    blockers.push('artist-provider-entitlement-not-yet-valid');
+  }
+
+  if (
+    entitlement.state === 'active'
+    && entitlement.validUntil !== null
+    && validIso(evaluatedAt)
+    && validIso(entitlement.validUntil)
+    && Date.parse(evaluatedAt) > Date.parse(entitlement.validUntil)
+  ) {
+    blockers.push('artist-provider-entitlement-expired-by-time');
+  }
+
+  if (
+    entitlement.state === 'active'
+    && (
+      !entitlement.rights.commercialProductUse
+      || !entitlement.rights.recurringAutomatedCollection
+      || !entitlement.rights.storageRetention
+      || !entitlement.rights.derivedMetricPublication
+    )
+  ) {
+    blockers.push('artist-provider-entitlement-rights-incomplete');
+  }
+
+  return Object.freeze({
+    ok: blockers.length === 0,
+    blockers: Object.freeze(blockers),
+  });
+}
+
+export function isSnsFandomArtistEntitlementActiveFor(
+  entitlement: SnsFandomArtistProviderEntitlement,
+  input: Readonly<{
+    canonicalArtistId: string;
+    providerId: SnsFandomProviderId;
+    providerArtistId: string;
+    dimension: SnsFandomDimension;
+    evaluatedAt: string;
+  }>,
+): boolean {
+  return (
+    validateSnsFandomArtistProviderEntitlement(
+      entitlement,
+      input.evaluatedAt,
+    ).ok
+    && entitlement.state === 'active'
+    && entitlement.canonicalArtistId === input.canonicalArtistId
+    && entitlement.providerId === input.providerId
+    && entitlement.providerArtistId === input.providerArtistId
+    && entitlement.allowedDimensions.includes(input.dimension)
+  );
 }
 
 export function validateSnsFandomObservation(
@@ -455,6 +604,8 @@ export type SnsFandomPointReadinessResult = Readonly<{
   observedReactionEvidenceCount: number;
   temporalPersistenceEvidenceCount: number;
   productionReadyProviders: readonly SnsFandomProviderId[];
+  artistAuthorizedProviders: readonly SnsFandomProviderId[];
+  evidenceEligibleProviders: readonly SnsFandomProviderId[];
   blockers: readonly string[];
 }>;
 
@@ -463,6 +614,8 @@ export function evaluateSnsFandomPointReadiness(
     canonicalArtistId: string;
     observations: readonly SnsFandomObservation[];
     providerQualifications?: readonly SnsFandomProviderQualification[];
+    artistEntitlements?: readonly SnsFandomArtistProviderEntitlement[];
+    evaluatedAt?: string;
   }>,
 ): SnsFandomPointReadinessResult {
   const qualifications =
@@ -473,20 +626,76 @@ export function evaluateSnsFandomPointReadiness(
     .filter((item) => item.state === 'production-ready')
     .map((item) => item.providerId);
 
-  if (productionReadyProviders.length === 0) {
-    blockers.push('no-qualified-production-provider');
-  }
+  const artistEntitlements = input.artistEntitlements ?? [];
+  const evaluatedAt = input.evaluatedAt ?? null;
+
+  const artistAuthorizedProviders = qualifications
+    .filter((qualification) => (
+      qualification.state === 'authorized-account-only'
+      && evaluatedAt !== null
+      && artistEntitlements.some((entitlement) => (
+        entitlement.providerId === qualification.providerId
+        && entitlement.canonicalArtistId === input.canonicalArtistId
+        && entitlement.allowedDimensions.some((dimension) =>
+          qualification.constructCoverage.includes(dimension)
+        )
+        && validateSnsFandomArtistProviderEntitlement(
+          entitlement,
+          evaluatedAt,
+        ).ok
+        && entitlement.state === 'active'
+      ))
+    ))
+    .map((item) => item.providerId);
+
+  const evidenceEligibleProviders = Array.from(
+    new Set([
+      ...productionReadyProviders,
+      ...artistAuthorizedProviders,
+    ]),
+  );
+
+  const isObservationProviderEligible = (
+    observation: SnsFandomObservation,
+  ): boolean => qualifications.some((qualification) => {
+    if (
+      qualification.providerId !== observation.providerId
+      || !qualification.constructCoverage.includes(
+        observation.variable.dimension,
+      )
+    ) {
+      return false;
+    }
+
+    if (qualification.state === 'production-ready') {
+      return true;
+    }
+
+    if (
+      qualification.state !== 'authorized-account-only'
+      || evaluatedAt === null
+      || observation.entity.providerArtistId === null
+    ) {
+      return false;
+    }
+
+    return artistEntitlements.some((entitlement) =>
+      isSnsFandomArtistEntitlementActiveFor(entitlement, {
+        canonicalArtistId: input.canonicalArtistId,
+        providerId: observation.providerId,
+        providerArtistId: observation.entity.providerArtistId!,
+        dimension: observation.variable.dimension,
+        evaluatedAt,
+      })
+    );
+  });
 
   const validObserved = input.observations.filter((observation) => (
     observation.entity.canonicalArtistId === input.canonicalArtistId
     && validateSnsFandomObservation(observation).ok
     && observation.value.missingState === 'observed'
     && observation.variable.metricRole === 'construct-evidence'
-    && qualifications.some((item) => (
-      item.providerId === observation.providerId
-      && item.state === 'production-ready'
-      && item.constructCoverage.includes(observation.variable.dimension)
-    ))
+    && isObservationProviderEligible(observation)
   ));
 
   const reactionEvidence = validObserved.filter(
@@ -506,15 +715,41 @@ export function evaluateSnsFandomPointReadiness(
       && item.dimension === 'fandom-activity-persistence'
       && item.metricRole === 'construct-evidence'
       && item.state === 'temporal-history-present'
-      && productionReadyProviders.includes(item.providerId),
+      && evidenceEligibleProviders.includes(item.providerId),
   );
 
   if (persistenceEvidence.length === 0) {
     blockers.push('fandom-activity-persistence-history-missing');
   }
 
+  const reactionProviderAvailable = qualifications.some(
+    (qualification) => (
+      qualification.constructCoverage.includes('public-reaction-diffusion')
+      && (
+        qualification.state === 'production-ready'
+        || artistAuthorizedProviders.includes(qualification.providerId)
+      )
+    ),
+  );
+  const persistenceProviderAvailable = qualifications.some(
+    (qualification) => (
+      qualification.constructCoverage.includes('fandom-activity-persistence')
+      && (
+        qualification.state === 'production-ready'
+        || artistAuthorizedProviders.includes(qualification.providerId)
+      )
+    ),
+  );
+
+  if (!reactionProviderAvailable) {
+    blockers.push('public-reaction-diffusion-provider-rights-blocked');
+  }
+  if (!persistenceProviderAvailable) {
+    blockers.push('fandom-activity-persistence-provider-rights-blocked');
+  }
+
   const state =
-    productionReadyProviders.length === 0
+    !reactionProviderAvailable || !persistenceProviderAvailable
       ? 'provider-rights-blocked' as const
       : reactionEvidence.length === 0 || persistenceEvidence.length === 0
         ? 'source-evidence-incomplete' as const
@@ -538,6 +773,8 @@ export function evaluateSnsFandomPointReadiness(
     observedReactionEvidenceCount: reactionEvidence.length,
     temporalPersistenceEvidenceCount: persistenceEvidence.length,
     productionReadyProviders: Object.freeze(productionReadyProviders),
+    artistAuthorizedProviders: Object.freeze(artistAuthorizedProviders),
+    evidenceEligibleProviders: Object.freeze(evidenceEligibleProviders),
     blockers: Object.freeze(blockers),
   });
 }
