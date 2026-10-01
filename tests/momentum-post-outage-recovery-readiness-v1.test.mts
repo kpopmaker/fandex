@@ -66,7 +66,7 @@ test('forbids NAVER evidence after the Last.fm component end', () => {
     missingSlotStart: null,
     missingJobId: null,
     throughSlotStart: '2026-10-01T03:00:00.000Z',
-  } as Partial<NaverNewsShadowFirstSeenSeriesResult>);
+  } as unknown as Partial<NaverNewsShadowFirstSeenSeriesResult>);
 
   const value = evaluateFandexMomentumPostOutageRecoveryReadiness({
     canonicalArtistId: 'iu',
@@ -89,7 +89,7 @@ test('uses the frozen eight-hour native cadence for freshness', () => {
     missingSlotStart: null,
     missingJobId: null,
     throughSlotStart: '2026-10-01T00:00:00.000Z',
-  } as Partial<NaverNewsShadowFirstSeenSeriesResult>);
+  } as unknown as Partial<NaverNewsShadowFirstSeenSeriesResult>);
 
   const value = evaluateFandexMomentumPostOutageRecoveryReadiness({
     canonicalArtistId: 'iu',
@@ -113,7 +113,7 @@ test('becomes ready only with available, non-lookahead, cadence-fresh evidence',
     missingSlotStart: null,
     missingJobId: null,
     throughSlotStart: '2026-10-01T02:00:00.000Z',
-  } as Partial<NaverNewsShadowFirstSeenSeriesResult>);
+  } as unknown as Partial<NaverNewsShadowFirstSeenSeriesResult>);
 
   const value = evaluateFandexMomentumPostOutageRecoveryReadiness({
     canonicalArtistId: 'iu',
