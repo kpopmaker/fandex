@@ -1,0 +1,100 @@
+name: Validate Artist Expansion YouTube reviewed seed v5
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v5
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-reviewed-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: YouTube review workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py \
+            scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py
+      - name: First reviewed seed batch regression
+        run: python tests/artist-expansion-youtube-seed-review-v1.py
+      - name: Build reviewed seed preview
+        run: python scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py
+      - name: Target unresolved 5 with live YouTube discovery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_DISCOVERY_CANONICAL_IDS: 'jungkook,jimin,v,jennie,lisa'
+          YOUTUBE_DISCOVERY_MAX_QUERIES: '4'
+          YOUTUBE_DISCOVERY_MAX_RESULTS: '5'
+          YOUTUBE_PUBLISHED_AFTER: '2026-01-01T00:00:00Z'
+        run: python scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py --all
+      - name: Print unresolved-5 discovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("fandex_youtube_seed_candidates_latest.json")
+              .read_text(encoding="utf-8")
+          )
+          priority = {
+              "strong_artist_specific_evidence": 0,
+              "partial_artist_specific_evidence": 1,
+              "weak_no_artist_specific_evidence": 2,
+          }
+          print(
+              "YouTube unresolved-5 discovery | targets="
+              f"{len(payload['targetArtists'])} | "
+              f"candidates={len(payload['candidates'])}"
+          )
+          for artist in payload["targetArtists"]:
+              rows = [
+                  row for row in payload["candidates"]
+                  if row["artist"] == artist
+                  and row["candidateStatus"] == "NEW"
+              ]
+              counts = Counter(
+                  row["reviewEligibility"]
+                  for row in rows
+              )
+              rows.sort(
+                  key=lambda row: (
+                      priority.get(row["reviewEligibility"], 9),
+                      -int(row.get("candidateScore") or 0),
+                      -int(row.get("viewCount") or 0),
+                  )
+              )
+              print(
+                  f"{rows[0]['canonicalArtistId'] if rows else 'NONE'} | "
+                  f"{artist} | "
+                  f"strong={counts['strong_artist_specific_evidence']} | "
+                  f"partial={counts['partial_artist_specific_evidence']} | "
+                  f"weak={counts['weak_no_artist_specific_evidence']} | "
+                  f"top={rows[0]['reviewEligibility'] if rows else 'NONE'} | "
+                  f"videoId={rows[0]['videoId'] if rows else 'NONE'} | "
+                  f"channelId={rows[0]['channelId'] if rows else 'NONE'} | "
+                  f"channel={rows[0]['channelTitle'] if rows else 'NONE'} | "
+                  f"title={rows[0]['title'] if rows else 'NONE'}"
+              )
+          PY
+      - name: Upload unresolved-5 discovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-unresolved5-v5
+          path: |
+            youtube_seed_candidates_v1_latest.csv
+            fandex_youtube_seed_candidates_latest.json
+            FANDEX_YOUTUBE_SEED_DISCOVERY_REPORT.txt
+            youtube_seed_videos_reviewed_expansion_candidate_v1.csv
+            youtube_seed_video_review_preview_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
