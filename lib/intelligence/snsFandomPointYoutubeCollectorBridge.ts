@@ -17,6 +17,7 @@ export type SnsFandomYoutubeCollectorExport = Readonly<{
   contractVersion: 'sns-fandom-youtube-collector-export-v1';
   canonicalArtistId: string;
   providerChannelId: string;
+  providerClientRef: string;
   observedAt: string;
   collectedAt: string;
   evidenceRef: string;
@@ -90,6 +91,9 @@ export function buildSnsFandomYoutubeCollectorBridge(
   if (batch.providerChannelId.trim().length === 0) {
     blockers.push('youtube-collector-export-provider-channel-id-empty');
   }
+  if (batch.providerClientRef.trim().length === 0) {
+    blockers.push('youtube-collector-export-provider-client-ref-empty');
+  }
   if (batch.evidenceRef.trim().length === 0) {
     blockers.push('youtube-collector-export-evidence-ref-empty');
   }
@@ -145,6 +149,7 @@ export function buildSnsFandomYoutubeCollectorBridge(
       {
         canonicalArtistId: batch.canonicalArtistId,
         youtubeChannelId: batch.providerChannelId,
+        providerClientRef: batch.providerClientRef,
         observedAt: batch.observedAt,
         collectedAt: batch.collectedAt,
         videos: batch.videos,
