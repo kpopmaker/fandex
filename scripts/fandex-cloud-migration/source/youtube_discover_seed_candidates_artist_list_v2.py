@@ -47,6 +47,7 @@ OFFICIAL_CHANNEL_HINTS = [
     "Stray Kids",
     "TOMORROW X TOGETHER",
     "TXT",
+    "BANGTANTV",
 ]
 
 
@@ -517,12 +518,55 @@ def main():
     artists = read_artist_list()
     seed_rows, existing_video_ids, seed_artists = read_existing_seed()
 
-    if "--all" in sys.argv:
+    requested_ids = [
+        value.strip()
+        for value in os.environ.get(
+            "YOUTUBE_DISCOVERY_CANONICAL_IDS",
+            "",
+        ).split(",")
+        if value.strip()
+    ]
+
+    if requested_ids:
+        requested_set = set(requested_ids)
+        known_ids = set(
+            CANONICAL_IDS.values()
+        )
+        unknown = sorted(
+            requested_set
+            - known_ids
+        )
+        if unknown:
+            raise RuntimeError(
+                "Unknown targeted YouTube canonical IDs: "
+                + ", ".join(unknown)
+            )
+
+        target_artists = [
+            artist
+            for artist in artists
+            if CANONICAL_IDS[artist]
+            in requested_set
+        ]
+        target_mode = (
+            "explicit canonical IDs: "
+            + ", ".join(requested_ids)
+        )
+
+    elif "--all" in sys.argv:
         target_artists = artists
         target_mode = "all artists"
+
     else:
-        target_artists = [artist for artist in artists if artist not in seed_artists]
-        target_mode = "artists missing from youtube_seed_videos_v1.csv"
+        target_artists = [
+            artist
+            for artist in artists
+            if artist not in seed_artists
+        ]
+        target_mode = (
+            "artists missing from "
+            "youtube_seed_videos_v1.csv"
+        )
 
     print(f"artist_list count: {len(artists)}")
     print(f"seed artist count: {len(seed_artists)}")
