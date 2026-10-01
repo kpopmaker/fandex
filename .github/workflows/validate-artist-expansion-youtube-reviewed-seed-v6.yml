@@ -1,0 +1,190 @@
+name: Validate Artist Expansion YouTube reviewed seed v6
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v6
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-reviewed-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: YouTube review workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py \
+            scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py
+
+      - name: Reviewed seed coverage regression
+        run: python tests/artist-expansion-youtube-seed-review-v6.py
+
+      - name: Build reviewed seed preview
+        run: python scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py
+
+      - name: Search reviewed official channels for Jung Kook
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+          import importlib.util
+
+          root = Path(".")
+          path = root / "scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py"
+          spec = importlib.util.spec_from_file_location("yt_discovery", path)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+
+          api_key = os.environ["YOUTUBE_API_KEY"]
+          aliases = ["Jung Kook", "Jungkook", "정국"]
+          channels = {
+              "BANGTANTV": "UCLkAepWjdylmXSltofFvsYQ",
+              "HYBE LABELS": "UC3IZKseVpdzPSBaWxBxundA",
+          }
+
+          def call(endpoint, params):
+              params = dict(params)
+              params["key"] = api_key
+              url = (
+                  "https://www.googleapis.com/youtube/v3/"
+                  + endpoint
+                  + "?"
+                  + urllib.parse.urlencode(params)
+              )
+              with urllib.request.urlopen(url, timeout=30) as response:
+                  return json.loads(response.read().decode("utf-8"))
+
+          found = {}
+          query_log = []
+
+          for channel_name, channel_id in channels.items():
+              for alias in aliases:
+                  payload = call(
+                      "search",
+                      {
+                          "part": "snippet",
+                          "q": alias,
+                          "channelId": channel_id,
+                          "type": "video",
+                          "maxResults": 10,
+                          "order": "relevance",
+                          "publishedAfter": "2026-01-01T00:00:00Z",
+                      },
+                  )
+                  ids = [
+                      item.get("id", {}).get("videoId")
+                      for item in payload.get("items", [])
+                      if item.get("id", {}).get("videoId")
+                  ]
+                  query_log.append({
+                      "channelName": channel_name,
+                      "channelId": channel_id,
+                      "alias": alias,
+                      "videoCount": len(ids),
+                  })
+                  if not ids:
+                      continue
+
+                  details = call(
+                      "videos",
+                      {
+                          "part": "snippet,statistics",
+                          "id": ",".join(ids),
+                          "maxResults": 50,
+                      },
+                  )
+                  for item in details.get("items", []):
+                      snippet = item.get("snippet", {})
+                      stats = item.get("statistics", {})
+                      video_id = item.get("id", "")
+                      title = snippet.get("title", "")
+                      matched = [
+                          value
+                          for value in aliases
+                          if module.alias_matches_text(title, value)
+                      ]
+                      found[video_id] = {
+                          "canonicalArtistId": "jungkook",
+                          "artist": "정국",
+                          "videoId": video_id,
+                          "videoUrl": "https://www.youtube.com/watch?v=" + video_id,
+                          "title": title,
+                          "channelId": snippet.get("channelId", ""),
+                          "channelTitle": snippet.get("channelTitle", ""),
+                          "publishedAt": snippet.get("publishedAt", ""),
+                          "videoType": module.classify_type(title),
+                          "matchedAliases": matched,
+                          "viewCount": int(stats.get("viewCount") or 0),
+                          "likeCount": int(stats.get("likeCount") or 0),
+                          "commentCount": int(stats.get("commentCount") or 0),
+                      }
+
+          rows = list(found.values())
+          rows.sort(
+              key=lambda row: (
+                  not bool(row["matchedAliases"]),
+                  -row["viewCount"],
+                  row["videoId"],
+              )
+          )
+
+          output = {
+              "version": "youtube_jungkook_reviewed_channel_discovery_v1",
+              "channels": channels,
+              "aliases": aliases,
+              "queryLog": query_log,
+              "candidateCount": len(rows),
+              "identityMatchedCount": sum(
+                  1 for row in rows if row["matchedAliases"]
+              ),
+              "candidates": rows,
+          }
+
+          Path(
+              "youtube_jungkook_reviewed_channel_candidates_v1.json"
+          ).write_text(
+              json.dumps(output, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          print(
+              "Jung Kook reviewed-channel discovery | "
+              f"candidates={output['candidateCount']} | "
+              f"identityMatched={output['identityMatchedCount']}"
+          )
+
+          for row in rows[:20]:
+              print(
+                  f"videoId={row['videoId']} | "
+                  f"type={row['videoType']} | "
+                  f"matched={','.join(row['matchedAliases']) or 'NONE'} | "
+                  f"channel={row['channelTitle']} | "
+                  f"views={row['viewCount']} | "
+                  f"title={row['title']}"
+              )
+          PY
+
+      - name: Upload Jung Kook reviewed-channel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-jungkook-reviewed-channel-v6
+          path: |
+            youtube_jungkook_reviewed_channel_candidates_v1.json
+            youtube_seed_videos_reviewed_expansion_candidate_v1.csv
+            youtube_seed_video_review_preview_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
