@@ -351,14 +351,41 @@ def validate_reviews() -> dict[str, Any]:
                 "title",
                 "channelId",
                 "channelTitle",
-                "sourceDiscoveryRunId",
-                "sourceArtifactId",
+                "evidenceSourceType",
+                "evidenceUrl",
             ]:
                 if not norm(raw.get(field)):
                     raise RuntimeError(
                         "Approved YouTube seed missing "
                         f"{field}: {review_id}"
                     )
+
+            evidence_source_type = norm(
+                raw.get("evidenceSourceType")
+            )
+
+            if evidence_source_type not in {
+                "github_discovery_artifact",
+                "direct_provider_review",
+            }:
+                raise RuntimeError(
+                    "Invalid YouTube evidenceSourceType: "
+                    + review_id
+                )
+
+            if (
+                evidence_source_type
+                == "github_discovery_artifact"
+            ):
+                for field in [
+                    "sourceDiscoveryRunId",
+                    "sourceArtifactId",
+                ]:
+                    if not norm(raw.get(field)):
+                        raise RuntimeError(
+                            "GitHub discovery evidence missing "
+                            f"{field}: {review_id}"
+                        )
 
             if video_id in historical_video_ids:
                 raise RuntimeError(
@@ -416,6 +443,18 @@ def validate_reviews() -> dict[str, Any]:
                 machine_evidence,
             "reviewReason":
                 review_reason,
+            "evidenceSourceType":
+                norm(
+                    raw.get(
+                        "evidenceSourceType"
+                    )
+                ),
+            "evidenceUrl":
+                norm(
+                    raw.get(
+                        "evidenceUrl"
+                    )
+                ),
             "sourceDiscoveryRunId":
                 norm(
                     raw.get(
@@ -512,6 +551,8 @@ def write_outputs(
         "reviewedAt",
         "machineEvidence",
         "reviewReason",
+        "evidenceSourceType",
+        "evidenceUrl",
         "sourceDiscoveryRunId",
         "sourceArtifactId",
         "activationState",
@@ -553,6 +594,10 @@ def write_outputs(
                     row["machineEvidence"],
                 "reviewReason":
                     row["reviewReason"],
+                "evidenceSourceType":
+                    row["evidenceSourceType"],
+                "evidenceUrl":
+                    row["evidenceUrl"],
                 "sourceDiscoveryRunId":
                     row["sourceDiscoveryRunId"],
                 "sourceArtifactId":
