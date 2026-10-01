@@ -12,6 +12,10 @@ import {
 import type {
   BrandFitYouTubeComplianceControls,
 } from './brandFitSourceQualification';
+import {
+  reviewBrandFitStoredEvidenceCandidate,
+  type BrandFitStoredEvidenceReviewResult,
+} from './brandFitStoredEvidenceReview';
 
 export const BRAND_FIT_YOUTUBE_MANUAL_EXECUTION_VERSION =
   'brand-fit-youtube-manual-execution-v1' as const;
@@ -32,6 +36,10 @@ export type BrandFitYouTubeManualExecutionResult =
         BrandFitCollectionHandoffResult,
         { status: 'eligible-for-stored-evidence-review' }
       >;
+      storedEvidenceReview: Extract<
+        BrandFitStoredEvidenceReviewResult,
+        { status: 'storage-candidate' }
+      >;
       providerRequestCount: 1;
       databaseWritePerformed: false;
       productActivationPerformed: false;
@@ -46,7 +54,8 @@ export type BrandFitYouTubeManualExecutionResult =
         | 'http-failed'
         | 'response-invalid'
         | 'observation-rejected'
-        | 'evidence-handoff-rejected';
+        | 'evidence-handoff-rejected'
+        | 'evidence-review-rejected';
       providerRequestCount: 0 | 1;
       databaseWritePerformed: false;
       productActivationPerformed: false;
@@ -178,10 +187,16 @@ export async function executeBrandFitYouTubeObservation(input: Readonly<{
     return blocked('evidence-handoff-rejected', 1);
   }
 
+  const storedEvidenceReview = reviewBrandFitStoredEvidenceCandidate(handoff);
+  if (storedEvidenceReview.status !== 'storage-candidate') {
+    return blocked('evidence-review-rejected', 1);
+  }
+
   return Object.freeze({
     status: 'eligible-for-stored-evidence-review' as const,
     contractVersion: BRAND_FIT_YOUTUBE_MANUAL_EXECUTION_VERSION,
     handoff,
+    storedEvidenceReview,
     providerRequestCount: 1 as const,
     databaseWritePerformed: false as const,
     productActivationPerformed: false as const,
@@ -195,6 +210,7 @@ export function sanitizeBrandFitYouTubeManualExecutionResult(
   if (result.status === 'blocked') return result;
 
   const evidence = result.handoff.adapterResult.evidence;
+  const review = result.storedEvidenceReview;
   return Object.freeze({
     status: result.status,
     contractVersion: result.contractVersion,
@@ -202,6 +218,15 @@ export function sanitizeBrandFitYouTubeManualExecutionResult(
     databaseWritePerformed: result.databaseWritePerformed,
     productActivationPerformed: result.productActivationPerformed,
     credentialIncludedInOutput: result.credentialIncludedInOutput,
+    storedEvidenceReview: Object.freeze({
+      status: review.status,
+      contractVersion: review.contractVersion,
+      evidenceDigest: review.evidenceDigest,
+      review: review.review,
+      storageWriteAuthorized: review.storageWriteAuthorized,
+      productActivationAuthorized: review.productActivationAuthorized,
+      publicPublicationAuthorized: review.publicPublicationAuthorized,
+    }),
     evidence: Object.freeze({
       variableId: evidence.variableId,
       eventId: evidence.eventId,
