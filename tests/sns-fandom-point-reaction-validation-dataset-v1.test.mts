@@ -392,7 +392,7 @@ test('detected dataset revision instability blocks methodology validation eligib
   );
 });
 
-test('different statistical endpoint provenance across artists is rejected', () => {
+test('a non-YouTube statistical endpoint is rejected before cross-artist methodology comparison', () => {
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
@@ -420,7 +420,7 @@ test('different statistical endpoint provenance across artists is rejected', () 
   assert.equal(result.state, 'blocked');
   assert.ok(
     result.blockers.includes(
-      'reaction-validation-cross-artist-endpoint-mismatch',
+      'reaction-validation-statistical-endpoint-invalid',
     ),
   );
 });
