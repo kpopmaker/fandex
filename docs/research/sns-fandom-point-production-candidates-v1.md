@@ -227,3 +227,32 @@ Submission preparation is recorded in:
 
 A submitted form is not approval. Only a provider decision may populate an
 `approved` evidence record.
+
+
+## Existing YouTube collector compatibility
+
+A reusable YouTube video-metrics collector exists on the Artist Expansion
+validation branch, but the exact inspected version is not Production-compatible
+with snsFandomPoint.
+
+Compatibility assessment:
+- source:
+  `validation/artist-expansion-youtube-shadow-v1@ed8b7c293ebb9d5927cd004367546bed01b5f732`
+- verdict: `not-production-compatible`
+
+The blockers are:
+- absent statistics are coerced to numeric zero;
+- provider YouTube channel id is not emitted in each metric row;
+- observation time is not row-bound;
+- collection time is not row-bound;
+- raw API responses are persisted without snsFandom-specific retention
+  qualification;
+- row-level evidence reference is absent.
+
+The variable branch now has an executable fail-closed compatibility verifier and
+will not accept this collector shape as Production evidence.
+
+Required shared-runtime changes are documented in:
+- `docs/research/sns-fandom-youtube-collector-handoff-v1.md`
+
+No shared collector code was changed by this branch.
