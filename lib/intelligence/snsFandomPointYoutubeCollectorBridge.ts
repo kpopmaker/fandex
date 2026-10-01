@@ -19,12 +19,18 @@ export type SnsFandomYoutubeCollectorExport = Readonly<{
   providerChannelId: string;
   providerClientRef: string;
   providerEndpoints: readonly string[];
+  contentWindowStart: string;
+  contentWindowEnd: string;
+  uploadsPlaylistId: string;
+  paginationPageCount: number;
+  terminalPageEvidenceRef: string;
   observedAt: string;
   collectedAt: string;
   evidenceRef: string;
   channelSubscriberCount: number | null;
   videos: readonly Readonly<{
     videoId: string;
+    publishedAt: string;
     viewCount: number | null;
     likeCount: number | null;
     commentCount: number | null;
@@ -105,6 +111,7 @@ export function buildSnsFandomYoutubeCollectorBridge(
   }
   for (const requiredEndpoint of [
     'youtube.channels.list',
+    'youtube.playlistItems.list',
     'youtube.videos.list',
   ]) {
     if (!batch.providerEndpoints.includes(requiredEndpoint)) {
@@ -170,7 +177,37 @@ export function buildSnsFandomYoutubeCollectorBridge(
         providerClientRef: batch.providerClientRef,
         observedAt: batch.observedAt,
         collectedAt: batch.collectedAt,
-        videos: batch.videos,
+        videos: batch.videos.map((video) => ({
+          videoId: video.videoId,
+          viewCount: video.viewCount,
+          likeCount: video.likeCount,
+          commentCount: video.commentCount,
+        })),
+        contentManifest: {
+          contractVersion: 'sns-fandom-youtube-content-manifest-v1',
+          canonicalArtistId: batch.canonicalArtistId,
+          youtubeChannelId: batch.providerChannelId,
+          providerClientRef: batch.providerClientRef,
+          selectionRule:
+            'official-channel-all-uploads-in-published-window',
+          windowStart: batch.contentWindowStart,
+          windowEnd: batch.contentWindowEnd,
+          uploadsPlaylistId: batch.uploadsPlaylistId,
+          providerEndpoints: [
+            'youtube.channels.list',
+            'youtube.playlistItems.list',
+          ],
+          pagination: {
+            pageCount: batch.paginationPageCount,
+            terminalNextPageToken: null,
+            terminalPageEvidenceRef: batch.terminalPageEvidenceRef,
+          },
+          items: batch.videos.map((video) => ({
+            videoId: video.videoId,
+            publishedAt: video.publishedAt,
+          })),
+          evidenceRef: batch.evidenceRef,
+        },
         channelSubscriberCount: batch.channelSubscriberCount,
         evidenceRef: batch.evidenceRef,
       },
