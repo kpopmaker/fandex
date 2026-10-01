@@ -45,7 +45,7 @@ jobs:
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/naver-news-blob-only-direct-production-v1.yml
           .github/workflows/validate-naver-blob-only-direct-v1.yml
-          scripts/ingestion/run-naver-news-blob-only-direct-v1.mts
+          scripts/ingestion/run-naver-news-blob-only-direct-v1.ts
           tests/naver-news-blob-only-direct-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
