@@ -301,3 +301,51 @@ Accordingly, `comparable-cohorts-ready` means only that a defensible
 like-for-like comparison frame exists. It does **not** mean that a normalized
 score, percentile, weight, threshold, or final `snsFandomPoint` may be
 produced.
+
+
+## YouTube artist-level content aggregation boundary
+
+The content-universe problem is separated from the aggregation-function
+problem.
+
+### Content-universe selection
+
+For YouTube public-reaction evidence, the v1 selection contract accepts only:
+
+- the bound official artist channel;
+- its official uploads playlist;
+- all uploads whose publication timestamps fall inside one explicitly declared
+  publication-time window;
+- complete pagination through a terminal `playlistItems.list` page; and
+- a later `videos.list` statistical snapshot whose video-id set exactly
+  matches the manifest.
+
+This blocks silent use of:
+
+- manually curated videos;
+- latest-N videos;
+- top-N by any engagement counter;
+- search-result subsets;
+- arbitrary unequal content samples.
+
+The contract does not prescribe the publication-window duration. Window choice
+remains a methodology question and must be justified before a cross-artist
+Product score can use it.
+
+### Aggregation function
+
+A valid content manifest does **not** authorize an artist-level numeric
+aggregation.
+
+The current state remains:
+
+- selected content universe: can be contract-validated;
+- per-video raw counters: can remain source observations;
+- artist-level sum / mean / median / max / latest-video statistic: not approved;
+- cross-metric combination: not approved;
+- cross-platform combination: not approved;
+- normalized artist value: `null`;
+- final `snsFandomPoint`: `null`.
+
+This boundary prevents a valid source universe from being mistaken for a valid
+scoring formula.
