@@ -197,3 +197,33 @@ References:
 - https://developers.google.com/youtube/v3/docs/commentThreads
 - https://developers.google.com/youtube/terms/developer-policies
 - https://developers.google.com/youtube/terms/derived-metrics-policy
+
+
+## Provider approval evidence gate
+
+Conditional providers are no longer promoted by boolean flags or by manually
+rewriting their qualification state.
+
+The runtime contract now accepts
+`sns-fandom-provider-approval-evidence-v1`. A conditional provider becomes
+evidence-eligible only when an actual approval record is valid at evaluation
+time and covers the exact:
+
+- provider;
+- snsFandom construct dimension;
+- metric id;
+- approved endpoints;
+- commercial Product use;
+- recurring automated collection;
+- aggregate retention;
+- derived-metric publication.
+
+For the current YouTube additional-policy model, approval evidence also
+fail-closes retention claims above the documented 36-month statistical /
+derived-metric ceiling and the 30-day non-statistical refresh window.
+
+Submission preparation is recorded in:
+- `docs/research/sns-fandom-youtube-api-audit-packet-v1.md`
+
+A submitted form is not approval. Only a provider decision may populate an
+`approved` evidence record.
