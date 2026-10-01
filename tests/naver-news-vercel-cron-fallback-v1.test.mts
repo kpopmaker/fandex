@@ -6,6 +6,9 @@ import {
   handleNaverNewsVercelCronFallback,
   NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE,
 } from '../lib/server/ingestion/naverNewsVercelCronFallback';
+import type {
+  NaverNewsRecurringDependencies,
+} from '../lib/server/ingestion/naverNewsRecurringScheduler';
 
 const CRON_SECRET = 'cron-secret-value';
 const SCHEDULER_SECRET = 'scheduler-secret-value';
@@ -57,13 +60,11 @@ function request(
   );
 }
 
-function fakeDispatch(counter: { count: number }) {
+function fakeDispatch(
+  counter: { count: number },
+): NonNullable<NaverNewsRecurringDependencies['dispatch']> {
   return async (
-    input: Readonly<{
-      query: string;
-      display?: number;
-      environment: Readonly<Record<string, string | undefined>>;
-    }>,
+    input,
   ) => {
     counter.count += 1;
     assert.equal(input.query, '아이유 IU');
@@ -85,15 +86,13 @@ function fakeDispatch(counter: { count: number }) {
       workerId:
         'naver-scheduler-v125-20261001t120000z-f1ed381d367d',
       production: Object.freeze({
-        mode: 'apply' as const,
+        mode: 'production-write' as const,
         contractVersion:
-          'v124_naver_news_production_write_v1' as const,
-        provider: 'naver-news' as const,
-        jobId:
-          'a'.repeat(64),
-        collectionKey:
-          'sched-v125-naver-news-20261001t120000z-f1ed381d367d',
+          'v121_naver_news_ingestion_v1' as const,
         status: 'applied' as const,
+        requestSha256: 'a'.repeat(64),
+        resultSha256: 'b'.repeat(64),
+        attempt: 1,
         counts: Object.freeze({
           received: 100,
           rawEvidence: 100,
