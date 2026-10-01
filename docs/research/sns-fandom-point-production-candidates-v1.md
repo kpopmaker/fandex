@@ -256,3 +256,48 @@ Required shared-runtime changes are documented in:
 - `docs/research/sns-fandom-youtube-collector-handoff-v1.md`
 
 No shared collector code was changed by this branch.
+
+
+## Comparability boundary before numeric normalization
+
+Numeric normalization is still **not approved**. Before any formula can be
+considered, observations must first pass an explicit comparability contract.
+
+The v1 comparability contract only groups construct evidence when all of the
+following are identical:
+
+- provider;
+- exact provider API client/project reference;
+- exact provider endpoint provenance;
+- snsFandom construct dimension;
+- metric id;
+- unit;
+- temporal basis;
+- exact provider period, when the source is period-backed; or
+- exact observation timestamp, when the source is point-in-time.
+
+A comparison cohort requires observations from at least two distinct canonical
+artists. This is only the mathematical minimum for a cross-artist comparison,
+not a score threshold or quality threshold.
+
+Content-level observations such as individual-video view/like/comment counters
+are **not** automatically treated as artist-level comparable values. They remain
+excluded until a separately justified artist-level content aggregation contract
+exists. This prevents artists with different numbers/types of official videos
+from being compared through an implicit sum, mean, latest-video pick, or other
+arbitrary aggregation.
+
+The comparability layer emits:
+
+- raw evidence members;
+- comparison cohort identity;
+- explicit temporal basis;
+- `normalizedValue = null`;
+- `normalizationMethod = null`;
+- cross-platform combination = false;
+- cross-metric combination = false.
+
+Accordingly, `comparable-cohorts-ready` means only that a defensible
+like-for-like comparison frame exists. It does **not** mean that a normalized
+score, percentile, weight, threshold, or final `snsFandomPoint` may be
+produced.
