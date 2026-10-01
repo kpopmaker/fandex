@@ -14,6 +14,7 @@ export type YoutubeSubscribedAudienceActivitySnapshot = Readonly<{
   canonicalArtistId: string;
   youtubeChannelId: string;
   providerClientRef: string;
+  providerEndpoint: string;
   providerPeriodStart: string;
   providerPeriodEnd: string;
   observedAt: string;
@@ -98,6 +99,7 @@ function observation(
     evidence: Object.freeze({
       evidenceRef: snapshot.evidenceRef,
       providerClientRef: snapshot.providerClientRef,
+      providerEndpoints: Object.freeze([snapshot.providerEndpoint]),
       revision: null,
     }),
     lifecycle: Object.freeze({
