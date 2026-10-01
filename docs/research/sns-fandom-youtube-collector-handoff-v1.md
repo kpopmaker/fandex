@@ -44,6 +44,29 @@ Required upstream behavior:
 - keep canonicalArtistId binding separate from provider identity;
 - do not infer provider identity from display title.
 
+### 2a. Provider API client/project identity is not emitted
+
+Provider approval is project/client scoped. A YouTube approval granted to one
+Google Cloud project must not authorize evidence collected by another client.
+
+Required upstream behavior:
+- emit a stable non-secret `providerClientRef` identifying the Google Cloud /
+  API client project that performed the request;
+- do not emit API keys, OAuth access tokens, refresh tokens, or client secrets;
+- the value must match the provider approval / artist entitlement evidence used
+  downstream.
+
+### 2b. Exact provider endpoint provenance is not emitted
+
+The approval evidence contract is endpoint-scoped. The collector must preserve
+which YouTube API methods produced the batch.
+
+Required upstream behavior:
+- emit the exact endpoint set used for the export;
+- the public reaction bridge currently requires at least
+  `youtube.channels.list` and `youtube.videos.list`;
+- unapproved or undeclared endpoints must not be silently treated as covered.
+
 ### 3. Observation time is not row-bound
 
 The output has content `publishedAt`, but content publication time is not the
@@ -95,6 +118,8 @@ at least:
 
 - `canonicalArtistId`
 - `providerChannelId`
+- `providerClientRef`
+- `providerEndpoints` including the exact YouTube methods used
 - `videoId`
 - `viewCount: number | null`
 - `likeCount: number | null`
@@ -139,12 +164,15 @@ only accepts an upstream export after:
 
 1. the declared collector profile passes the compatibility verifier;
 2. canonical artist and provider channel ids are explicit;
-3. missing statistics remain nullable;
-4. observation and collection times are distinct explicit timestamps;
-5. video ids are unique and counts are null or non-negative safe integers;
-6. a durable evidence reference exists; and
-7. exact provider approval evidence is valid for the downstream YouTube
-   metrics.
+3. provider API client/project identity is explicit and matches approval
+   evidence;
+4. exact provider endpoint provenance is explicit;
+5. missing statistics remain nullable;
+6. observation and collection times are distinct explicit timestamps;
+7. video ids are unique and counts are null or non-negative safe integers;
+8. a durable evidence reference exists; and
+9. exact provider approval evidence is valid for the downstream YouTube
+   metrics and endpoint set.
 
 The current Artist Expansion collector fails at step 1 and therefore cannot
 reach normalization. Once Production Operations / Artist Expansion supplies a
