@@ -142,7 +142,7 @@ test('CI/CD policy documentation matches main-only automatic deployment behavior
   );
   assert.match(
     source,
-    /automatic Vercel Preview is not required for `integration\/\*`/,
+    /do not require an automatic Vercel Preview for `integration\/\*`/,
   );
   assert.match(
     source,
