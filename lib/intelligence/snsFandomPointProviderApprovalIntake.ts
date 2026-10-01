@@ -17,6 +17,7 @@ export type SnsFandomProviderDecision = Readonly<{
     | 'provider-acknowledgement'
     | 'provider-rejection';
   providerId: SnsFandomProviderId;
+  providerClientRef: string;
   approvalClass:
     | 'youtube-analytics-derived-metrics-data-storage'
     | 'provider-commercial-data-license';
@@ -83,6 +84,10 @@ export function buildSnsFandomProviderApprovalEvidenceFromDecision(
     blockers.push('provider-decision-is-not-an-approval-grant');
   }
 
+  if (decision.providerClientRef.trim().length === 0) {
+    blockers.push('provider-decision-client-ref-empty');
+  }
+
   if (decision.evidenceRef.trim().length === 0) {
     blockers.push('provider-decision-evidence-ref-empty');
   } else if (containsSecretLikeMaterial(decision.evidenceRef)) {
@@ -92,6 +97,7 @@ export function buildSnsFandomProviderApprovalEvidenceFromDecision(
   const approvalEvidence: SnsFandomProviderApprovalEvidence = Object.freeze({
     contractVersion: SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION,
     providerId: decision.providerId,
+    providerClientRef: decision.providerClientRef,
     state: 'approved' as const,
     approvalClass: decision.approvalClass,
     useCase: decision.useCase,
