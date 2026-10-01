@@ -130,8 +130,8 @@
   },
   "newReviewedSeedEvidence": {
     "targetArtistCount": 21,
-    "approvedVideoCount": 26,
-    "approvedArtistCount": 10,
+    "approvedVideoCount": 27,
+    "approvedArtistCount": 11,
     "approvedCanonicalArtistIds": [
       "bts",
       "blackpink",
@@ -139,28 +139,38 @@
       "enhypen",
       "jungkook",
       "jimin",
+      "v",
       "jennie",
       "lisa",
       "rose",
       "riize"
     ],
-    "unresolvedCanonicalArtistIds": [
-      "v"
-    ],
+    "unresolvedCanonicalArtistIds": [],
     "liveShadowRun": {
-      "runId": 36839330798,
-      "jobId": 110294361480,
-      "validationHead": "71981783c5d8edf4124857ecfe4bc2f16fe13e01",
+      "runId": 36841474383,
+      "jobId": 110301352445,
+      "validationHead": "83bb923d5545b6cf8d28992db6c06ae97ca1fdc4",
       "conclusion": "success"
     },
     "activationState": "reviewed_seed_candidate_only",
-    "productEligibility": "not_evaluated"
+    "productEligibility": "not_evaluated",
+    "vEvidence": {
+      "videoId": "sY19m7EZTw4",
+      "title": "V's NORMAL LOG #2026BTSFESTA",
+      "channelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "publishedAt": "2026-06-07T12:00:00Z",
+      "verificationRunId": 36841151084,
+      "verificationJobId": 110300308697,
+      "videoType": "external_content",
+      "shadowPoint": 6.42
+    }
   },
   "productExpansion": {
     "eligibility": "blocked_incomplete_legacy_scale_lineage",
     "currentFrozenCohortAllowed": true,
     "expandedOrChangedYoutubeCohortAllowed": false,
-    "reason": "New reviewed YouTube v3 shadow points cannot be mixed with the frozen Product snapshot until a common comparable YouTube scoring baseline is explicitly established. No rescaling or threshold is authorized by this contract.",
+    "reason": "All 11 newly targeted artists now have reviewed YouTube seed evidence, but those shadow scores still cannot be mixed with the frozen Product snapshot until a common comparable YouTube scoring baseline is explicitly established. The original raw baseline for four frozen artists remains unrecovered. No rescaling or threshold is authorized by this contract.",
     "resolutionOptions": [
       "recover_complete_original_seed_and_metric_lineage",
       "approve_a_full_cohort_youtube_v3_rebaseline_under_one_reviewed_seed_policy"
