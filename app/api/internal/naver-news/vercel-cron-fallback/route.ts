@@ -4,6 +4,9 @@ import { getVercelOidcToken } from '@vercel/functions/oidc';
 import {
   handleNaverNewsVercelCronFallback,
 } from '@/lib/server/ingestion/naverNewsVercelCronFallback';
+import {
+  createProductionNaverNewsBlobEvidenceStore,
+} from '@/lib/server/ingestion/naverNewsBlobMirrorRuntime';
 
 export const runtime = 'nodejs';
 export const preferredRegion = 'sin1';
@@ -16,6 +19,7 @@ export async function GET(request: Request): Promise<Response> {
     process.env,
     {
       resolveOidcToken: () => getVercelOidcToken(),
+      createStore: createProductionNaverNewsBlobEvidenceStore,
     },
   );
 }
