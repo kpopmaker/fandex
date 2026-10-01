@@ -179,18 +179,42 @@ def read_existing_seed():
     return rows, video_ids, artists
 
 
-def build_queries(artist):
-    aliases = ALIASES.get(artist, [artist])
-    main = next(
-        (
-            alias
-            for alias in aliases
-            if any(
-                "A" <= char.upper() <= "Z"
-                for char in alias
-            )
+def select_primary_query_alias(artist):
+    aliases = ALIASES.get(
+        artist,
+        [artist],
+    )
+
+    english_aliases = [
+        alias
+        for alias in aliases
+        if re.search(
+            r"[A-Za-z]",
+            alias,
+        )
+    ]
+
+    if not english_aliases:
+        return aliases[0]
+
+    return sorted(
+        english_aliases,
+        key=lambda alias: (
+            -len(
+                re.sub(
+                    r"[^A-Za-z0-9]+",
+                    "",
+                    alias,
+                )
+            ),
+            alias.casefold(),
         ),
-        aliases[0],
+    )[0]
+
+
+def build_queries(artist):
+    main = select_primary_query_alias(
+        artist
     )
 
     queries = [
