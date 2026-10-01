@@ -2,6 +2,7 @@ import csv
 import json
 import math
 import os
+import re
 import shutil
 import sys
 import urllib.parse
@@ -272,29 +273,142 @@ def classify_type(title):
     return "external_content"
 
 
-def is_officialish_channel(artist, channel_title):
-    channel = channel_title.lower()
-    aliases = [a.lower() for a in ALIASES.get(artist, [artist])]
+def alias_matches_text(text, alias):
+    source = str(text or "").strip()
+    candidate = str(alias or "").strip()
 
-    if any(alias.lower() in channel for alias in aliases):
-        return True
+    if not source or not candidate:
+        return False
 
-    for hint in OFFICIAL_CHANNEL_HINTS:
-        if hint.lower() in channel:
-            return True
+    has_ascii_letter = bool(
+        re.search(
+            r"[A-Za-z]",
+            candidate,
+        )
+    )
 
-    return False
+    if not has_ascii_letter:
+        compact_source = re.sub(
+            r"\s+",
+            "",
+            source.casefold(),
+        )
+        compact_candidate = re.sub(
+            r"\s+",
+            "",
+            candidate.casefold(),
+        )
+        return bool(
+            compact_candidate
+            and compact_candidate
+            in compact_source
+        )
+
+    escaped = re.escape(candidate)
+    escaped = escaped.replace(
+        r"\ ",
+        r"\s+",
+    )
+    pattern = (
+        r"(?<![A-Za-z0-9])"
+        + escaped
+        + r"(?![A-Za-z0-9])"
+    )
+    return bool(
+        re.search(
+            pattern,
+            source,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
-def calc_score(artist, title, channel_title, video_type, views):
+def matching_aliases(artist, text):
+    return [
+        alias
+        for alias in ALIASES.get(
+            artist,
+            [artist],
+        )
+        if alias_matches_text(
+            text,
+            alias,
+        )
+    ]
+
+
+def is_trusted_label_channel(channel_title):
+    channel = str(
+        channel_title or ""
+    ).casefold()
+
+    return any(
+        hint.casefold() in channel
+        for hint in OFFICIAL_CHANNEL_HINTS
+    )
+
+
+def classify_channel_evidence(
+    artist,
+    title,
+    channel_title,
+):
+    title_aliases = matching_aliases(
+        artist,
+        title,
+    )
+    channel_aliases = matching_aliases(
+        artist,
+        channel_title,
+    )
+
+    if channel_aliases:
+        channel_class = (
+            "artist_specific_channel"
+        )
+    elif (
+        title_aliases
+        and is_trusted_label_channel(
+            channel_title
+        )
+    ):
+        channel_class = (
+            "trusted_label_with_title_identity"
+        )
+    else:
+        channel_class = "unverified_channel"
+
+    return {
+        "titleAliases":
+            title_aliases,
+        "channelAliases":
+            channel_aliases,
+        "channelClass":
+            channel_class,
+    }
+
+
+def calc_score(
+    artist,
+    title,
+    channel_title,
+    video_type,
+    views,
+):
     score = 0
-    text = f"{title} {channel_title}".lower()
-    aliases = [a.lower() for a in ALIASES.get(artist, [artist])]
+    evidence = classify_channel_evidence(
+        artist,
+        title,
+        channel_title,
+    )
 
-    if any(alias in text for alias in aliases):
+    if evidence["titleAliases"]:
         score += 25
 
-    if is_officialish_channel(artist, channel_title):
+    if evidence["channelClass"] in {
+        "artist_specific_channel",
+        "trusted_label_with_title_identity",
+    }:
         score += 25
 
     type_bonus = {
@@ -309,9 +423,50 @@ def calc_score(artist, title, channel_title, video_type, views):
     score += type_bonus
 
     if views > 0:
-        score += min(25, int(math.log10(max(views, 1)) * 5))
+        score += min(
+            25,
+            int(
+                math.log10(
+                    max(views, 1)
+                )
+                * 5
+            ),
+        )
 
-    return min(score, 100)
+    if (
+        evidence["titleAliases"]
+        and evidence["channelClass"]
+        in {
+            "artist_specific_channel",
+            "trusted_label_with_title_identity",
+        }
+    ):
+        review_eligibility = (
+            "strong_artist_specific_evidence"
+        )
+    elif (
+        evidence["titleAliases"]
+        or evidence["channelAliases"]
+    ):
+        review_eligibility = (
+            "partial_artist_specific_evidence"
+        )
+    else:
+        review_eligibility = (
+            "weak_no_artist_specific_evidence"
+        )
+
+    return {
+        "score": min(score, 100),
+        "titleAliases":
+            evidence["titleAliases"],
+        "channelAliases":
+            evidence["channelAliases"],
+        "channelClass":
+            evidence["channelClass"],
+        "reviewEligibility":
+            review_eligibility,
+    }
 
 
 def main():
@@ -400,6 +555,7 @@ def main():
 
                 title = snippet.get("title", "")
                 channel_title = snippet.get("channelTitle", "")
+                channel_id = snippet.get("channelId", "")
                 published_at = snippet.get("publishedAt", "")
 
                 views = safe_int(stats.get("viewCount"))
@@ -407,7 +563,14 @@ def main():
                 comments = safe_int(stats.get("commentCount"))
 
                 video_type = classify_type(title)
-                score = calc_score(artist, title, channel_title, video_type, views)
+                score_evidence = calc_score(
+                    artist,
+                    title,
+                    channel_title,
+                    video_type,
+                    views,
+                )
+                score = score_evidence["score"]
 
                 key = (artist, video_id)
 
@@ -421,11 +584,22 @@ def main():
                     "videoUrl": f"https://www.youtube.com/watch?v={video_id}",
                     "title": title,
                     "channelTitle": channel_title,
+                    "channelId": channel_id,
                     "publishedAt": published_at,
                     "type": video_type,
                     "videoType": video_type,
                     "score": score,
                     "candidateScore": score,
+                    "matchedTitleAliases": "|".join(
+                        score_evidence["titleAliases"]
+                    ),
+                    "matchedChannelAliases": "|".join(
+                        score_evidence["channelAliases"]
+                    ),
+                    "channelEvidenceClass":
+                        score_evidence["channelClass"],
+                    "reviewEligibility":
+                        score_evidence["reviewEligibility"],
                     "views": views,
                     "viewCount": views,
                     "likes": likes,
@@ -460,11 +634,16 @@ def main():
         "videoUrl",
         "title",
         "channelTitle",
+        "channelId",
         "publishedAt",
         "type",
         "videoType",
         "score",
         "candidateScore",
+        "matchedTitleAliases",
+        "matchedChannelAliases",
+        "channelEvidenceClass",
+        "reviewEligibility",
         "views",
         "viewCount",
         "likes",
