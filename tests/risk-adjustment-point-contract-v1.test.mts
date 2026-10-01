@@ -254,8 +254,40 @@ test('duplicate upstream variables fail closed', () => {
 test('invalid evidence refs fail closed rather than silently dropping lineage', () => {
   assert.throws(
     () => assessRiskAdjustmentDependency(input({ evidenceRefs: [''] })),
-    /evidence_ref_invalid/,
+    /upstream_input_invalid/,
   );
+});
+
+test('runtime-invalid quality enum cannot enter Risk derivation through a cast', () => {
+  const invalid = {
+    ...input(),
+    freshnessState: 'banana',
+  } as unknown as RiskAdjustmentUpstreamInput;
+
+  assert.throws(
+    () => assessRiskAdjustmentDependency(invalid),
+    /upstream_input_invalid/,
+  );
+  assert.throws(
+    () => deriveRiskAdjustmentAssessment([invalid]),
+    /upstream_input_invalid/,
+  );
+});
+
+test('runtime-invalid lifecycle, material, confidence, and variable identity fail closed', () => {
+  for (const invalid of [
+    { ...input(), lifecycleState: 'live' },
+    { ...input(), materialClass: 'unknown' },
+    { ...input(), confidenceState: 'certain' },
+    { ...input(), variableId: 'unknownPoint' },
+  ]) {
+    assert.throws(
+      () => assessRiskAdjustmentDependency(
+        invalid as unknown as RiskAdjustmentUpstreamInput,
+      ),
+      /upstream_input_invalid/,
+    );
+  }
 });
 
 test('no validated upstream input remains insufficient_data', () => {
