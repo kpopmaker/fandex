@@ -224,6 +224,7 @@ export type SnsFandomArtistProviderEntitlement = Readonly<{
   contractVersion: typeof SNS_FANDOM_ARTIST_PROVIDER_ENTITLEMENT_VERSION;
   canonicalArtistId: string;
   providerId: SnsFandomProviderId;
+  providerClientRef: string;
   providerArtistId: string;
   authorizationClass:
     | 'channel-owner-oauth'
@@ -255,6 +256,7 @@ export const SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION =
 export type SnsFandomProviderApprovalEvidence = Readonly<{
   contractVersion: typeof SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION;
   providerId: SnsFandomProviderId;
+  providerClientRef: string;
   state: 'approved' | 'pending' | 'expired' | 'revoked';
   approvalClass:
     | 'youtube-analytics-derived-metrics-data-storage'
@@ -324,6 +326,7 @@ export type SnsFandomObservation = Readonly<{
   }>;
   evidence: Readonly<{
     evidenceRef: string;
+    providerClientRef: string;
     revision: string | null;
   }>;
   lifecycle: Readonly<{
@@ -354,6 +357,9 @@ export function validateSnsFandomProviderApprovalEvidence(
       !== SNS_FANDOM_PROVIDER_APPROVAL_EVIDENCE_VERSION
   ) {
     blockers.push('provider-approval-version-invalid');
+  }
+  if (approval.providerClientRef.trim().length === 0) {
+    blockers.push('provider-approval-client-ref-empty');
   }
   if (approval.approvedDimensions.length === 0) {
     blockers.push('provider-approval-dimensions-empty');
@@ -475,6 +481,7 @@ export function isSnsFandomProviderApprovalActiveFor(
   approval: SnsFandomProviderApprovalEvidence,
   input: Readonly<{
     providerId: SnsFandomProviderId;
+    providerClientRef: string;
     dimension: SnsFandomDimension;
     metricId: string;
     evaluatedAt: string;
@@ -487,6 +494,7 @@ export function isSnsFandomProviderApprovalActiveFor(
     ).ok
     && approval.state === 'approved'
     && approval.providerId === input.providerId
+    && approval.providerClientRef === input.providerClientRef
     && approval.approvedDimensions.includes(input.dimension)
     && approval.approvedMetricIds.includes(input.metricId)
   );
@@ -503,6 +511,9 @@ export function validateSnsFandomArtistProviderEntitlement(
       !== SNS_FANDOM_ARTIST_PROVIDER_ENTITLEMENT_VERSION
   ) {
     blockers.push('artist-provider-entitlement-version-invalid');
+  }
+  if (entitlement.providerClientRef.trim().length === 0) {
+    blockers.push('artist-provider-entitlement-client-ref-empty');
   }
   if (entitlement.canonicalArtistId.trim().length === 0) {
     blockers.push('artist-provider-entitlement-canonical-id-empty');
@@ -591,6 +602,7 @@ export function isSnsFandomArtistEntitlementActiveFor(
   input: Readonly<{
     canonicalArtistId: string;
     providerId: SnsFandomProviderId;
+    providerClientRef: string;
     providerArtistId: string;
     dimension: SnsFandomDimension;
     evaluatedAt: string;
@@ -604,6 +616,7 @@ export function isSnsFandomArtistEntitlementActiveFor(
     && entitlement.state === 'active'
     && entitlement.canonicalArtistId === input.canonicalArtistId
     && entitlement.providerId === input.providerId
+    && entitlement.providerClientRef === input.providerClientRef
     && entitlement.providerArtistId === input.providerArtistId
     && entitlement.allowedDimensions.includes(input.dimension)
   );
@@ -619,6 +632,9 @@ export function validateSnsFandomObservation(
   }
   if (observation.observationId.trim().length === 0) {
     blockers.push('observation-id-empty');
+  }
+  if (observation.evidence.providerClientRef.trim().length === 0) {
+    blockers.push('provider-client-ref-empty');
   }
   if (observation.entity.canonicalArtistId.trim().length === 0) {
     blockers.push('canonical-artist-id-empty');
@@ -911,6 +927,7 @@ export function evaluateSnsFandomPointReadiness(
       return providerApprovals.some((approval) =>
         isSnsFandomProviderApprovalActiveFor(approval, {
           providerId: observation.providerId,
+          providerClientRef: observation.evidence.providerClientRef,
           dimension: observation.variable.dimension,
           metricId: observation.variable.metricId,
           evaluatedAt,
@@ -930,6 +947,7 @@ export function evaluateSnsFandomPointReadiness(
       isSnsFandomArtistEntitlementActiveFor(entitlement, {
         canonicalArtistId: input.canonicalArtistId,
         providerId: observation.providerId,
+        providerClientRef: observation.evidence.providerClientRef,
         providerArtistId: observation.entity.providerArtistId!,
         dimension: observation.variable.dimension,
         evaluatedAt,
