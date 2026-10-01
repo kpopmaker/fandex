@@ -41,8 +41,13 @@ The current variable candidate needs only read endpoints:
 - `youtube.channels.list`
   - channel binding / statistical channel fields;
   - current adapter use includes channel subscriber count as context-only evidence.
+- `youtube.playlistItems.list`
+  - enumerate the bound official channel uploads playlist for a declared
+    publication-time window;
+  - pagination must run to a terminal page so the window is not silently
+    truncated to a manually selected / latest-N subset.
 - `youtube.videos.list`
-  - public video view / like / comment counters.
+  - public video view / like / comment counters for the exact manifest set.
 - `youtube.commentThreads.list`
   - public comment-thread retrieval for the aggregate recurrence candidate.
 - `youtube.comments.list`
@@ -51,7 +56,7 @@ The current variable candidate needs only read endpoints:
 No write/upload/moderation endpoints are part of snsFandomPoint.
 
 Current YouTube quota documentation assigns 1 quota unit per call to each of
-these four list methods. Pagination consumes additional calls and therefore
+these five list methods. Pagination consumes additional calls and therefore
 additional quota.
 
 ## 4. Exact metrics requested
@@ -84,6 +89,36 @@ The application should not request approval for a final numeric
 `snsFandomPoint` formula yet. Cross-dimension normalization/combination is
 not approved internally and the Product contract still keeps
 `snsFandomPoint = null`.
+
+## 4a. Content-universe boundary
+
+Public video counters are not artist-level evidence by themselves. Before any
+artist-level aggregation is considered, FANDEX requires a content manifest
+built from the bound official channel's uploads playlist.
+
+The allowed v1 selection rule is:
+- all uploads in one explicit publication-time window;
+- enumerated through `channels.list` -> uploads playlist id ->
+  `playlistItems.list`;
+- pagination completed to a terminal page;
+- every selected video id bound to its publication timestamp;
+- the exact manifest video-id set must match the later `videos.list`
+  statistical snapshot set.
+
+The v1 contract explicitly rejects treating any of the following as equivalent
+without a separately approved methodology:
+- latest N videos;
+- top N by views / likes / comments;
+- manually curated videos;
+- search-result subsets;
+- unequal per-artist content counts chosen for convenience.
+
+The publication-window duration is intentionally not hard-coded here. A future
+cross-artist methodology must justify the window and use the same window
+semantics across the comparison cohort.
+
+No sum, mean, median, maximum, latest-video value, or other artist-level
+aggregation function is approved by this manifest contract.
 
 ## 5. Data minimization / retention statement
 
@@ -119,6 +154,8 @@ universe and collection cadence before submission.
 Let:
 
 - `A` = number of bound official artist channels;
+- `U_pages` = total `playlistItems.list` pages required to enumerate the
+  declared official-channel publication windows;
 - `V` = total official videos included in one reaction snapshot;
 - `C_pages` = total `commentThreads.list` pages collected in one comment
   recurrence window;
@@ -131,12 +168,13 @@ Because each current read call costs 1 unit:
 
 - channel-stat calls/day =
   `ceil(A / provider_max_ids_per_channels_list_call) * S`
+- upload-manifest calls/day = `U_pages * S`
 - video-stat calls/day =
   `ceil(V / provider_max_ids_per_videos_list_call) * S`
 - comment-thread calls/day = `C_pages * P`
 - comment calls/day = `R_pages * P`
 - projected snsFandomPoint YouTube quota/day =
-  sum of the four terms above.
+  sum of the five terms above.
 
 Record the actual measured pagination/call counts from a permitted dry run or
 staging collector before entering the quota request.
