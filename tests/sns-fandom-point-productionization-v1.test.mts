@@ -840,11 +840,102 @@ test('provider period ordering is validated independently from collection time',
   );
 });
 
+test('provider period requires a complete start/end pair', () => {
+  const invalid = observation({
+    time: {
+      providerPeriodStart: '2026-09-01T00:00:00.000Z',
+      providerPeriodEnd: null,
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+    },
+  });
+
+  assert.deepEqual(
+    validateSnsFandomObservation(invalid).blockers,
+    ['provider-period-pair-incomplete'],
+  );
+});
+
+test('period-backed persistence does not count a re-collection of the same provider period as new history', () => {
+  const samePeriod = buildSnsFandomPersistenceEvidence([
+    observation({
+      observationId: 'period-obs-1',
+      time: {
+        providerPeriodStart: '2026-09-01T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+      },
+    }),
+    observation({
+      observationId: 'period-obs-2',
+      time: {
+        providerPeriodStart: '2026-09-01T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-02T00:00:00.000Z',
+        collectedAt: '2026-10-02T00:01:00.000Z',
+      },
+    }),
+  ]);
+
+  assert.equal(samePeriod[0]?.state, 'history-insufficient');
+  assert.equal(samePeriod[0]?.temporalBasis, 'provider-period');
+  assert.equal(samePeriod[0]?.distinctObservationTimeCount, 2);
+  assert.equal(samePeriod[0]?.distinctProviderPeriodCount, 1);
+});
+
+test('period-backed persistence requires distinct provider periods rather than collection timestamps', () => {
+  const distinctPeriods = buildSnsFandomPersistenceEvidence([
+    observation({
+      observationId: 'period-a',
+      time: {
+        providerPeriodStart: '2026-09-01T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-15T23:59:59.999Z',
+        observedAt: '2026-09-16T00:00:00.000Z',
+        collectedAt: '2026-09-16T00:01:00.000Z',
+      },
+    }),
+    observation({
+      observationId: 'period-b',
+      time: {
+        providerPeriodStart: '2026-09-16T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+      },
+    }),
+  ]);
+
+  assert.equal(distinctPeriods[0]?.state, 'temporal-history-present');
+  assert.equal(distinctPeriods[0]?.temporalBasis, 'provider-period');
+  assert.equal(distinctPeriods[0]?.distinctProviderPeriodCount, 2);
+});
+
+test('mixed period and point-in-time semantics never become persistence history', () => {
+  const mixed = buildSnsFandomPersistenceEvidence([
+    observation(),
+    observation({
+      observationId: 'period-backed',
+      time: {
+        providerPeriodStart: '2026-09-01T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+      },
+    }),
+  ]);
+
+  assert.equal(mixed[0]?.state, 'time-semantics-conflict');
+  assert.equal(mixed[0]?.temporalBasis, 'mixed');
+});
+
 test('persistence evidence requires temporal history and does not infer fan identity', () => {
   const one = buildSnsFandomPersistenceEvidence([
     observation(),
   ]);
   assert.equal(one[0]?.state, 'history-insufficient');
+  assert.equal(one[0]?.temporalBasis, 'observation-time');
+  assert.equal(one[0]?.distinctProviderPeriodCount, 0);
   assert.equal(one[0]?.derivedNumericValue, null);
   assert.equal(one[0]?.inferenceOfFanIdentity, false);
 
@@ -869,6 +960,8 @@ test('persistence evidence requires temporal history and does not infer fan iden
   assert.equal(two[0]?.dimension, 'public-reaction-diffusion');
   assert.equal(two[0]?.providerContentId, 'video-1');
   assert.equal(two[0]?.distinctObservationTimeCount, 2);
+  assert.equal(two[0]?.temporalBasis, 'observation-time');
+  assert.equal(two[0]?.distinctProviderPeriodCount, 0);
   assert.equal(two[0]?.derivedNumericValue, null);
 });
 
