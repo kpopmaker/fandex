@@ -1,0 +1,74 @@
+name: Momentum current dual-source evaluation runner v1
+
+on:
+  workflow_run:
+    workflows:
+      - FANDEX Last.fm Cloud History
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: momentum-current-dual-source-evaluation-runner-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Bind exact main and current workflow job
+        run: |
+          set -euo pipefail
+          echo "MOMENTUM_EVALUATED_MAIN_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          job_id="$(
+            curl --fail --silent --show-error               --header "Authorization: Bearer $GH_TOKEN"               --header "Accept: application/vnd.github+json"               "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100"               | node -e '
+                let s="";
+                process.stdin.on("data",d=>s+=d);
+                process.stdin.on("end",()=>{
+                  const data=JSON.parse(s);
+                  const job=(data.jobs||[]).find(x=>x.name==="evaluate");
+                  if(!job || !Number.isSafeInteger(job.id)) process.exit(2);
+                  process.stdout.write(String(job.id));
+                });
+              '
+          )"
+          echo "MOMENTUM_WORKFLOW_JOB_ID=$job_id" >> "$GITHUB_ENV"
+
+      - run: npm ci
+
+      - name: Evaluate current aligned dual-source evidence
+        run: npx tsx scripts/operations/momentumCurrentEvaluationRunnerV1.mts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "databaseWrites=0"
+          echo "historyWritePerformed=false"
+          echo "productMetricWrites=0"
+          echo "previewFallbackReads=0"
+          echo "productionActivations=0"
