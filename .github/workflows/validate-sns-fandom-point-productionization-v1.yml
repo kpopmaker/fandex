@@ -47,6 +47,7 @@ jobs:
           docs/research/sns-fandom-youtube-api-audit-packet-v1.md
           docs/research/sns-fandom-youtube-collector-handoff-v1.md
           lib/intelligence/snsFandomPointContracts.ts
+          lib/intelligence/snsFandomPointProviderApprovalIntake.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
