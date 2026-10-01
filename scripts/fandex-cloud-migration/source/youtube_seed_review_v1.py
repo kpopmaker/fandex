@@ -351,6 +351,8 @@ def validate_reviews() -> dict[str, Any]:
                 "title",
                 "channelId",
                 "channelTitle",
+                "sourceDiscoveryRunId",
+                "sourceArtifactId",
             ]:
                 if not norm(raw.get(field)):
                     raise RuntimeError(
@@ -414,6 +416,18 @@ def validate_reviews() -> dict[str, Any]:
                 machine_evidence,
             "reviewReason":
                 review_reason,
+            "sourceDiscoveryRunId":
+                norm(
+                    raw.get(
+                        "sourceDiscoveryRunId"
+                    )
+                ),
+            "sourceArtifactId":
+                norm(
+                    raw.get(
+                        "sourceArtifactId"
+                    )
+                ),
             "activationState":
                 "reviewed_candidate_only",
         })
@@ -498,6 +512,8 @@ def write_outputs(
         "reviewedAt",
         "machineEvidence",
         "reviewReason",
+        "sourceDiscoveryRunId",
+        "sourceArtifactId",
         "activationState",
     ]
 
@@ -537,6 +553,10 @@ def write_outputs(
                     row["machineEvidence"],
                 "reviewReason":
                     row["reviewReason"],
+                "sourceDiscoveryRunId":
+                    row["sourceDiscoveryRunId"],
+                "sourceArtifactId":
+                    row["sourceArtifactId"],
                 "activationState":
                     row["activationState"],
             })
