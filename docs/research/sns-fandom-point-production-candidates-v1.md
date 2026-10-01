@@ -559,3 +559,81 @@ claim a review state that the study did not establish.
 
 Even after all these gates, numeric execution remains a separate unimplemented
 step and the Product value remains null.
+
+
+## Existing YouTube shadow evidence audit
+
+Existing Artist Expansion YouTube artifacts were inspected before declaring
+new collection to be required.
+
+### Discovery artifact
+
+Workflow run:
+- `36800253141`
+
+Artifact:
+- id: `11135500171`
+- name: `artist-expansion-youtube-discovery-v2`
+
+Preserved files:
+- `youtube_seed_candidates_v1_latest.csv`
+- `fandex_youtube_seed_candidates_latest.json`
+- `FANDEX_YOUTUBE_SEED_DISCOVERY_REPORT.txt`
+
+Verdict: **not a reaction methodology validation dataset**.
+
+These are seed-discovery / review candidates. They do not contain the required
+age-aligned raw view / like / comment observation history.
+
+### Full reviewed cohort shadow artifact
+
+Workflow run:
+- `36841902398`
+
+Artifact:
+- id: `11150549597`
+- name: `artist-expansion-youtube-full-reviewed-cohort-v1`
+
+Preserved file:
+- `youtube_v3_full_reviewed_cohort_shadow_v1_latest.json`
+
+The artifact contains derived `youtubePointV3Shadow` values for 21 artists,
+not the raw content-level metric observations needed by the new methodology
+contract.
+
+The artifact itself explicitly records:
+
+- `scoreMode = historical_youtube_v3_formula_on_heterogeneous_reviewed_seed_evidence`;
+- `historicalLineageComplete = false`;
+- `commonSeedSelectionPolicyEstablished = false`;
+- `comparabilityThresholdDefined = false`;
+- `productEligibilityEvaluated = false`;
+- `rebaselineAuthorized = false`.
+
+It is therefore not admissible as evidence that the current
+`snsFandomPoint` reaction aggregation methodology is valid.
+
+### Historical manifest
+
+The existing
+`youtube_historical_approved_seed_manifest_v1.json` explicitly states that
+the original raw metrics were never committed and that the manifest does not
+claim exact historical metric reproducibility.
+
+Verdict: **not reusable for the real methodology validation dataset**.
+
+### Consequence
+
+No currently preserved repository / GitHub Actions artifact satisfies the
+required combination of:
+
+- complete official uploads-window manifest;
+- real raw content counters;
+- exact observation time;
+- exact common elapsed content age;
+- same provider client / endpoint provenance;
+- multi-artist cohort;
+- reproducible revision evidence.
+
+The Product remains fail-closed. Old derived YouTube points and historical seed
+IDs must not be backfilled into the new validation dataset.
