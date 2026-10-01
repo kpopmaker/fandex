@@ -1,0 +1,143 @@
+name: Validate Artist Expansion YouTube recovery v3
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v3
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recovered YouTube syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3_preview.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3.py
+      - name: Hardened canonical recovery regression
+        run: python tests/artist-expansion-youtube-recovery-v3.py
+      - name: Live YouTube 21-artist machine discovery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_DISCOVERY_MAX_QUERIES: '2'
+          YOUTUBE_DISCOVERY_MAX_RESULTS: '3'
+          YOUTUBE_PUBLISHED_AFTER: '2026-01-01T00:00:00Z'
+        run: python scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py --all
+      - name: Print hardened discovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("fandex_youtube_seed_candidates_latest.json")
+              .read_text(encoding="utf-8")
+          )
+          rows = payload["candidates"]
+          priority = {
+              "strong_artist_specific_evidence": 0,
+              "partial_artist_specific_evidence": 1,
+              "weak_no_artist_specific_evidence": 2,
+          }
+
+          print(
+              "YouTube discovery v3 | targets="
+              f"{len(payload['targetArtists'])} | "
+              f"candidates={len(rows)} | "
+              f"new={payload['newCandidates']}"
+          )
+
+          strong_video_owners = defaultdict(set)
+
+          for artist in payload["targetArtists"]:
+              artist_rows = [
+                  row for row in rows
+                  if row["artist"] == artist
+                  and row["candidateStatus"] == "NEW"
+              ]
+              counts = Counter(
+                  row["reviewEligibility"]
+                  for row in artist_rows
+              )
+              artist_rows.sort(
+                  key=lambda row: (
+                      priority.get(
+                          row["reviewEligibility"],
+                          9,
+                      ),
+                      -int(row.get("candidateScore") or 0),
+                      -int(row.get("viewCount") or 0),
+                  )
+              )
+              top = artist_rows[0] if artist_rows else None
+
+              for row in artist_rows:
+                  if (
+                      row["reviewEligibility"]
+                      == "strong_artist_specific_evidence"
+                  ):
+                      strong_video_owners[
+                          row["videoId"]
+                      ].add(
+                          row["canonicalArtistId"]
+                      )
+
+              if top:
+                  print(
+                      f"{top['canonicalArtistId']} | {artist} | "
+                      f"strong={counts['strong_artist_specific_evidence']} | "
+                      f"partial={counts['partial_artist_specific_evidence']} | "
+                      f"weak={counts['weak_no_artist_specific_evidence']} | "
+                      f"topEligibility={top['reviewEligibility']} | "
+                      f"topScore={top['candidateScore']} | "
+                      f"videoId={top['videoId']} | "
+                      f"channelId={top['channelId']} | "
+                      f"channel={top['channelTitle']} | "
+                      f"title={top['title']}"
+                  )
+              else:
+                  print(
+                      f"{artist} | candidates=0 | top=NONE"
+                  )
+
+          conflicts = {
+              video_id: sorted(owners)
+              for video_id, owners
+              in strong_video_owners.items()
+              if len(owners) > 1
+          }
+          print(
+              "strongCrossArtistVideoConflictCount="
+              f"{len(conflicts)}"
+          )
+          for video_id, owners in sorted(
+              conflicts.items()
+          ):
+              print(
+                  "STRONG_CONFLICT | "
+                  f"videoId={video_id} | "
+                  f"owners={','.join(owners)}"
+              )
+          PY
+      - name: Upload YouTube discovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-discovery-v3
+          path: |
+            youtube_seed_candidates_v1_latest.csv
+            fandex_youtube_seed_candidates_latest.json
+            FANDEX_YOUTUBE_SEED_DISCOVERY_REPORT.txt
+          if-no-files-found: ignore
+          retention-days: 7
