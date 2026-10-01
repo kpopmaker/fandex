@@ -1,0 +1,153 @@
+name: Inspect NAVER Production Blob current evidence v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      read_intent:
+        description: 'Type ops-momentum-blob-current-evidence-read-20261001-v1'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inspect-naver-production-blob-current-evidence-v1
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1 &&
+      inputs.read_intent == 'ops-momentum-blob-current-evidence-read-20261001-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect once without retry
+        shell: bash
+        env:
+          SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$SCHEDULER_SECRET"
+
+          status="$(
+            curl               --silent               --show-error               --request POST               --retry 0               --output /tmp/response.json               --write-out '%{http_code}'               --header "Authorization: Bearer ${SCHEDULER_SECRET}"               --header 'X-Fandex-Momentum-Blob-Current-Evidence-Id: ops-momentum-blob-current-evidence-read-20261001-v1'               --header 'X-Fandex-Scheduler-Source: github-actions-manual-v1'               'https://fandex-eta.vercel.app/api/internal/naver-news/blob-current-evidence'
+          )"
+
+          if [[ "$status" != "200" ]]; then
+            echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_HTTP=failed"
+            exit 1
+          fi
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          let value;
+          try {
+            value = JSON.parse(
+              fs.readFileSync('/tmp/response.json', 'utf8'),
+            );
+          } catch {
+            console.log(
+              'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_RESPONSE=invalid',
+            );
+            process.exit(1);
+          }
+
+          const sha = /^[0-9a-f]{64}$/;
+          const collectionKey =
+            /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
+          const hasLatest = value?.throughSlotStart !== null;
+
+          const valid =
+            value?.ok === true
+            && value?.mode ===
+              'momentum-naver-blob-current-evidence-read'
+            && value?.contractVersion ===
+              'naver-news-blob-current-evidence-coverage-v1'
+            && value?.canonicalArtistId === 'iu'
+            && value?.exactOfficialProtocol === true
+            && value?.evidenceSource ===
+              'immutable-blob-staged-job'
+            && value?.schedulerCompletionClaimed === false
+            && ['available', 'unavailable'].includes(
+              value?.seriesStatus,
+            )
+            && Number.isSafeInteger(value?.expectedSlotCount)
+            && value.expectedSlotCount >= 0
+            && Number.isSafeInteger(
+              value?.reproducedSnapshotCount,
+            )
+            && value.reproducedSnapshotCount >= 0
+            && value.reproducedSnapshotCount
+              <= value.expectedSlotCount
+            && Number.isSafeInteger(value?.missingSlotCount)
+            && value.missingSlotCount >= 0
+            && value.databaseReads === 0
+            && value.databaseWrites === 0
+            && value.blobWrites === 0
+            && (
+              !hasLatest
+              || (
+                Number.isFinite(
+                  Date.parse(value.throughSlotStart),
+                )
+                && sha.test(value.latestStagedJobId ?? '')
+                && collectionKey.test(
+                  value.latestStagedCollectionKey ?? '',
+                )
+              )
+            );
+
+          if (!valid) {
+            console.log(
+              'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_RESPONSE=invalid',
+            );
+            process.exit(1);
+          }
+
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_RESPONSE=validated',
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_SERIES_STATUS='
+              + value.seriesStatus,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_EXPECTED_SLOT_COUNT='
+              + value.expectedSlotCount,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_REPRODUCED_SNAPSHOT_COUNT='
+              + value.reproducedSnapshotCount,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_MISSING_SLOT_COUNT='
+              + value.missingSlotCount,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_LATEST_VALIDATED='
+              + value.latestStagedJobValidated,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_READINESS='
+              + value.currentStoredEvidenceReproducedForReadiness,
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_DATABASE_WRITES=0',
+          );
+          console.log(
+            'FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_BLOB_WRITES=0',
+          );
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_RETRIES=0"
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_RAW_PAYLOAD_LOGGED=false"
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_CREDENTIALS_LOGGED=false"
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_WRITES=0"
