@@ -1,0 +1,80 @@
+name: Validate Artist Expansion YouTube historical recovery v4
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v4
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-historical-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: YouTube recovery syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_discover_seed_candidates_artist_list_v2.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_recover_historical_seed_v1.py
+      - name: Hardened discovery regression
+        run: python tests/artist-expansion-youtube-recovery-v3.py
+      - name: Historical seed manifest regression
+        run: python tests/artist-expansion-youtube-historical-seed-v1.py
+      - name: Live recover 47 historical approved video IDs
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_recover_historical_seed_v1.py
+      - name: Print recovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(
+              Path(
+                  "youtube_seed_videos_recovered_baseline_candidate_v1.json"
+              ).read_text(encoding="utf-8")
+          )
+
+          print(
+              "YouTube historical recovery | "
+              f"artists={payload['artistCount']} | "
+              f"approvedIds={payload['approvedVideoIdCount']} | "
+              f"resolved={payload['liveResolvedCount']} | "
+              f"missing={payload['liveMissingCount']} | "
+              f"explicitTypes={payload['explicitHistoricalTypeCount']} | "
+              f"reclassifiedTypes={payload['liveReclassifiedTypeCount']}"
+          )
+          print(
+              "typeCounts="
+              + json.dumps(
+                  payload["recoveredTypeCounts"],
+                  ensure_ascii=False,
+                  sort_keys=True,
+              )
+          )
+          for row in payload["missingVideos"]:
+              print(
+                  "MISSING | "
+                  f"{row['canonicalArtistId']} | "
+                  f"{row['artist']} | "
+                  f"{row['videoId']}"
+              )
+          PY
+      - name: Upload historical recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-historical-recovery-v4
+          path: |
+            youtube_seed_videos_recovered_baseline_candidate_v1.csv
+            youtube_seed_videos_recovered_baseline_candidate_v1.json
+          if-no-files-found: ignore
+          retention-days: 7
