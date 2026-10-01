@@ -21,6 +21,11 @@ import {
 import {
   buildYoutubePublicCommentPersistenceCandidate,
 } from '../lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate';
+import {
+  ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_COMPATIBILITY,
+  ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+  evaluateYoutubeCollectorCompatibility,
+} from '../lib/intelligence/snsFandomPointYoutubeCollectorCompatibility';
 
 function youtubeAnalyticsEntitlement(
   overrides: Partial<SnsFandomArtistProviderEntitlement> = {},
@@ -168,6 +173,47 @@ function observation(
     ...overrides,
   };
 }
+
+test('current Artist Expansion YouTube collector is rejected for snsFandom Production evidence', () => {
+  assert.equal(
+    ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_COMPATIBILITY.state,
+    'not-production-compatible',
+  );
+  assert.equal(
+    ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_COMPATIBILITY
+      .productionCompatible,
+    false,
+  );
+  assert.deepEqual(
+    ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_COMPATIBILITY.blockers,
+    [
+      'youtube-collector-missing-semantics-not-preserved',
+      'youtube-collector-provider-channel-id-missing',
+      'youtube-collector-observed-at-missing',
+      'youtube-collector-collected-at-missing',
+      'youtube-collector-raw-response-retention-unqualified',
+      'youtube-collector-evidence-ref-missing',
+    ],
+  );
+});
+
+test('collector compatibility becomes eligible only when missing/time/identity/evidence/retention semantics are all explicit', () => {
+  const compatible = evaluateYoutubeCollectorCompatibility({
+    ...ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+    sourceRef: 'hypothetical-fixed-collector',
+    missingStatisticSemantics: 'preserve-null',
+    emitsProviderChannelId: true,
+    emitsObservedAt: true,
+    emitsCollectedAt: true,
+    persistsRawApiResponse: false,
+    rawApiResponseRetentionQualified: false,
+    emitsEvidenceRef: true,
+  });
+
+  assert.equal(compatible.state, 'production-compatible');
+  assert.equal(compatible.productionCompatible, true);
+  assert.deepEqual(compatible.blockers, []);
+});
 
 test('current provider matrix intentionally has no Production-ready source', () => {
   assert.equal(
