@@ -153,3 +153,25 @@ until a separately justified cross-dimension combination methodology is approved
 ## Validation scope
 
 Exact variable-scope CI must cover only the five snsFandomPoint files introduced by this candidate and must not modify shared runtime, scheduler, database, registry, or deployment configuration.
+
+
+## Artist-scoped entitlement contract
+
+Authorized-account sources are not promoted to globally Production-ready merely because their API exists.
+
+The variable contract now requires an explicit, secret-free artist/provider entitlement record before authorized-account evidence can enter readiness. The entitlement binds:
+
+- canonical artist id;
+- exact provider and provider artist/channel id;
+- authorization class;
+- allowed snsFandom dimensions;
+- recorded OAuth scopes;
+- verification and validity times;
+- non-secret evidence reference;
+- explicit rights for commercial Product use, recurring automated collection, storage/retention, and derived metric publication.
+
+An entitlement is fail-closed when pending, revoked, expired, not yet valid, missing a required right, mismatched to the canonical artist/provider identity, or missing the provider-specific scope.
+
+For YouTube Analytics the candidate adapter additionally requires the official `yt-analytics.readonly` scope and an exact channel-owner OAuth entitlement. No access or refresh token is persisted in this variable contract.
+
+This enables artist-specific readiness without mutating the global Artist registry or pretending that one artist's authorization applies to another artist.
