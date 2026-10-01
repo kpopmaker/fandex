@@ -12,6 +12,7 @@ on:
       - 'lib/intelligence/brandFitYouTubeApiRequest.ts'
       - 'lib/intelligence/brandFitYouTubeManualExecution.ts'
       - 'scripts/operations/brandFitYoutubeObservationV1.mts'
+      - 'docs/fandex-brand-fit-youtube-production-ops-handoff.md'
       - 'tests/brand-fit-point-contract-v1.test.mts'
       - 'tests/brand-fit-source-qualification-v1.test.mts'
       - 'tests/brand-fit-youtube-source-adapter-v1.test.mts'
