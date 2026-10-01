@@ -438,7 +438,11 @@ export function evaluateSnsFandomPointReadiness(
     && validateSnsFandomObservation(observation).ok
     && observation.value.missingState === 'observed'
     && observation.variable.metricRole === 'construct-evidence'
-    && productionReadyProviders.includes(observation.providerId)
+    && qualifications.some((item) => (
+      item.providerId === observation.providerId
+      && item.state === 'production-ready'
+      && item.constructCoverage.includes(observation.variable.dimension)
+    ))
   ));
 
   const reactionEvidence = validObserved.filter(
