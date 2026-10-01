@@ -60,9 +60,14 @@ function parseComments(value: unknown): readonly BrandFitExecutionIssueComment[]
   }));
 }
 
+type RawWorkflowRun = Readonly<{
+  id: number;
+  conclusion: string | null;
+}>;
+
 function parseWorkflowRuns(
   value: unknown,
-): readonly BrandFitExecutionWorkflowRun[] {
+): readonly RawWorkflowRun[] {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('github_execution_gate_runs_invalid');
   }
@@ -89,6 +94,52 @@ function parseWorkflowRuns(
       conclusion: row.conclusion as string | null,
     });
   }));
+}
+
+async function hydrateWorkflowRuns(
+  runs: readonly RawWorkflowRun[],
+  token: string,
+): Promise<readonly BrandFitExecutionWorkflowRun[]> {
+  return Object.freeze(await Promise.all(runs.map(async (run) => {
+    const jobsRaw = await githubJson(
+      '/repos/' + REPOSITORY + '/actions/runs/' + run.id + '/jobs?per_page=100',
+      token,
+    );
+    if (!jobsRaw || typeof jobsRaw !== 'object' || Array.isArray(jobsRaw)) {
+      throw new Error('github_execution_gate_jobs_invalid');
+    }
+    const jobs = (jobsRaw as Record<string, unknown>).jobs;
+    if (!Array.isArray(jobs)) {
+      throw new Error('github_execution_gate_jobs_invalid');
+    }
+
+    let providerExecutionStepSucceeded = false;
+    for (const job of jobs) {
+      if (!job || typeof job !== 'object' || Array.isArray(job)) {
+        throw new Error('github_execution_gate_jobs_invalid');
+      }
+      const steps = (job as Record<string, unknown>).steps;
+      if (!Array.isArray(steps)) continue;
+      for (const step of steps) {
+        if (!step || typeof step !== 'object' || Array.isArray(step)) {
+          throw new Error('github_execution_gate_jobs_invalid');
+        }
+        const row = step as Record<string, unknown>;
+        if (
+          row.name === 'Execute exactly one bounded Brand Fit provider observation'
+          && row.conclusion === 'success'
+        ) {
+          providerExecutionStepSucceeded = true;
+        }
+      }
+    }
+
+    return Object.freeze({
+      id: run.id,
+      conclusion: run.conclusion,
+      providerExecutionStepSucceeded,
+    });
+  })));
 }
 
 async function main(): Promise<void> {
@@ -118,12 +169,17 @@ async function main(): Promise<void> {
     githubToken,
   );
 
+  const workflowRuns = await hydrateWorkflowRuns(
+    parseWorkflowRuns(runsRaw),
+    githubToken,
+  );
+
   const result = evaluateBrandFitYouTubeProductionExecutionGate({
     authorizationId,
     expectedMainSha,
     currentRunId,
     issueComments: parseComments(commentsRaw),
-    workflowRuns: parseWorkflowRuns(runsRaw),
+    workflowRuns,
   });
 
   if (result.status !== 'authorized') {
