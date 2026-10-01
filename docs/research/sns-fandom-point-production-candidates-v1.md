@@ -85,12 +85,13 @@ No X data should enter `snsFandomPoint` until the exact commercial entitlement a
 
 ## Minimal realistic source combination
 
-The smallest currently actionable candidate is **YouTube-first**, with the same authorized source family contributing:
+The smallest currently actionable candidate for **SNS public reaction / diffusion** is **YouTube-first**, using official artist-content statistics after the relevant provider rights are cleared.
 
-- public-reaction observations from official artist content statistics; and
-- prospective temporal history showing repeated construct-relevant observations.
+That does **not** satisfy the separate **fandom activity / persistence** construct. Repeated snapshots of the same YouTube view/like/comment counter are reaction history, not evidence that FANDEX may relabel as fandom persistence.
 
-This is deliberately not called a Production source yet. It remains rights-blocked until the documented YouTube analytics/derived-metrics and retention requirements are satisfied.
+Accordingly, there is currently **no qualified minimum full source combination** for the complete `snsFandomPoint` construct. A second, separately qualified persistence source or an explicitly authorized provider signal is still required. Until that exists, the Product remains blocked rather than filling the missing dimension with reaction history.
+
+YouTube itself is deliberately not called a Production source yet. It remains rights-blocked until the documented YouTube analytics/derived-metrics and retention requirements are satisfied.
 
 The YouTube candidate adapter therefore:
 
@@ -98,7 +99,8 @@ The YouTube candidate adapter therefore:
 - emits raw observations without cross-platform aggregation;
 - keeps subscriber count as **context-only**, so follower count cannot satisfy fandom readiness by itself;
 - preserves missing values as missing, never zero;
-- creates only categorical temporal-history evidence;
+- creates categorical history only within the same provider artist/content/metric scope;
+- does not let reaction history satisfy the fandom-persistence dimension;
 - emits no numeric `snsFandomPoint`.
 
 ## History requirement
