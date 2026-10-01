@@ -1,0 +1,49 @@
+name: Generate Next 16.3.6 security lockfile
+
+on:
+  push:
+    branches:
+      - integration/security-next-16-3-6-v1
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generate exact dependency lockfile
+        run: npm install next@16.3.6 --save-exact --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Enforce dependency-only generator scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --name-only | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          package-lock.json
+          package.json
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - name: Commit generated dependency update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git commit -m 'fix(security): patch Next.js critical RCE to 16.3.6'
+          git push origin HEAD:integration/security-next-16-3-6-v1
