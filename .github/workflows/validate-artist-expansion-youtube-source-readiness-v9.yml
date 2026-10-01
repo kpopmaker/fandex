@@ -1,0 +1,21 @@
+name: Validate Artist Expansion YouTube source readiness v9
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-readiness-v9
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: YouTube source readiness regression
+        run: python tests/artist-expansion-youtube-source-readiness-v1.py
