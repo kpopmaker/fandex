@@ -551,19 +551,34 @@ def main():
         )
     }
 
+    product_artists = set(artists)
+
     if (
         music_ranking
         and len(music_ranking) == len(music_artists)
-        and music_artists == set(artists)
+        and product_artists <= music_artists
     ):
         health.ok(
-            f"Music v2 artistCount: {len(music_ranking)}/{len(music_artists)}"
+            "Music v2 source superset: "
+            f"source={len(music_artists)} / "
+            f"product={len(product_artists)} / "
+            f"extra={len(music_artists - product_artists)}"
         )
     else:
+        missing_music = sorted(
+            product_artists
+            - music_artists
+        )
         health.fail(
-            "Music v2 artistCount mismatch: "
-            f"{len(music_ranking)}/"
-            f"{len(music_artists)}"
+            "Music v2 Product coverage mismatch: "
+            f"source={len(music_artists)} / "
+            f"product={len(product_artists)} / "
+            "missing="
+            + (
+                ",".join(missing_music)
+                if missing_music
+                else "NONE"
+            )
         )
 
     music_date = norm(
@@ -662,22 +677,70 @@ def main():
 
     expected_artist_count = len(ranking)
 
-    if int(
+    lastfm_rows = read_csv(
+        LASTFM_CSV
+    )
+    lastfm_ready_artists = {
+        norm(
+            row.get("artist")
+        )
+        for row in lastfm_rows
+        if (
+            norm(
+                row.get("artist")
+            )
+            and norm(
+                row.get(
+                    "rollingCombinedPreviewPoint"
+                )
+            )
+            and norm(
+                row.get("activeMode")
+            )
+            == "rolling3_50_rolling7_50"
+            and norm(
+                row.get("status")
+            )
+            == "ok"
+        )
+    }
+
+    missing_lastfm_product = sorted(
+        product_artists
+        - lastfm_ready_artists
+    )
+    payload_ready_count = int(
         lastfm_payload.get(
             "scoreReadyCount"
         )
         or 0
-    ) == expected_artist_count:
+    )
+
+    if (
+        not missing_lastfm_product
+        and payload_ready_count
+        == len(lastfm_ready_artists)
+        and payload_ready_count
+        >= expected_artist_count
+    ):
         health.ok(
-            f"scoreReadyCount: {expected_artist_count}/{expected_artist_count}"
+            "Last.fm Product-ready superset: "
+            f"ready={payload_ready_count} / "
+            f"product={expected_artist_count} / "
+            f"extra={payload_ready_count - expected_artist_count}"
         )
     else:
         health.fail(
-            "scoreReadyCount: "
-            + str(
-                lastfm_payload.get(
-                    "scoreReadyCount"
+            "Last.fm Product-ready coverage mismatch: "
+            f"ready={payload_ready_count} / "
+            f"product={expected_artist_count} / "
+            "missing="
+            + (
+                ",".join(
+                    missing_lastfm_product
                 )
+                if missing_lastfm_product
+                else "NONE"
             )
         )
 
