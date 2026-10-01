@@ -7,10 +7,12 @@ on:
       - 'lib/intelligence/riskAdjustmentNewsIssuePointProjection.ts'
       - 'lib/intelligence/riskAdjustmentActivityExposureProjection.ts'
       - 'lib/intelligence/riskAdjustmentUpstreamMetadataRequirements.ts'
+      - 'lib/intelligence/riskAdjustmentUpstreamInventory.ts'
       - 'tests/risk-adjustment-point-contract-v1.test.mts'
       - 'tests/risk-adjustment-news-issue-projection-v1.test.mts'
       - 'tests/risk-adjustment-activity-exposure-projection-v1.test.mts'
-      - 'tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts'
+      - 'tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-upstream-inventory-v1.test.mts'
+      - 'tests/risk-adjustment-upstream-inventory-v1.test.mts'
       - '.github/workflows/validate-risk-adjustment-contract-v1.yml'
   workflow_dispatch:
 
