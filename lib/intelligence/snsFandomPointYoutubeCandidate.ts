@@ -1,4 +1,8 @@
 import {
+  evaluateSnsFandomYoutubeContentSelection,
+  type SnsFandomYoutubeContentManifest,
+} from './snsFandomPointYoutubeContentSelection';
+import {
   buildSnsFandomPersistenceEvidence,
   validateSnsFandomProviderApprovalEvidence,
   type SnsFandomObservation,
@@ -21,6 +25,7 @@ export type YoutubePublicStatsSnapshot = Readonly<{
     likeCount: number | null;
     commentCount: number | null;
   }>[];
+  contentManifest: SnsFandomYoutubeContentManifest;
   channelSubscriberCount: number | null;
   evidenceRef: string;
 }>;
@@ -28,7 +33,7 @@ export type YoutubePublicStatsSnapshot = Readonly<{
 export type YoutubeSnsFandomCandidateResult =
   | Readonly<{
       contractVersion: typeof SNS_FANDOM_YOUTUBE_CANDIDATE_VERSION;
-      state: 'rights-blocked';
+      state: 'rights-blocked' | 'selection-blocked';
       observations: readonly SnsFandomObservation[];
       persistenceEvidence: readonly SnsFandomPersistenceEvidence[];
       blockers: readonly string[];
@@ -140,6 +145,7 @@ export function buildYoutubeSnsFandomCandidate(
   const requiredEndpoints = [
     'youtube.videos.list',
     'youtube.channels.list',
+    'youtube.playlistItems.list',
   ] as const;
 
   if (approval === null) {
@@ -195,6 +201,53 @@ export function buildYoutubeSnsFandomCandidate(
       observations: Object.freeze([]),
       persistenceEvidence: Object.freeze([]),
       blockers: Object.freeze(blockers),
+    });
+  }
+
+  const selectionBlockers: string[] = [];
+  for (const snapshot of input.snapshots) {
+    if (
+      snapshot.contentManifest.canonicalArtistId
+        !== snapshot.canonicalArtistId
+    ) {
+      selectionBlockers.push(
+        'youtube-content-manifest-canonical-artist-mismatch',
+      );
+    }
+    if (
+      snapshot.contentManifest.youtubeChannelId
+        !== snapshot.youtubeChannelId
+    ) {
+      selectionBlockers.push(
+        'youtube-content-manifest-channel-mismatch',
+      );
+    }
+    if (
+      snapshot.contentManifest.providerClientRef
+        !== snapshot.providerClientRef
+    ) {
+      selectionBlockers.push(
+        'youtube-content-manifest-client-mismatch',
+      );
+    }
+
+    const selection = evaluateSnsFandomYoutubeContentSelection({
+      manifest: snapshot.contentManifest,
+      snapshotVideoIds: snapshot.videos.map((video) => video.videoId),
+      snapshotObservedAt: snapshot.observedAt,
+    });
+    selectionBlockers.push(...selection.blockers);
+  }
+
+  if (selectionBlockers.length > 0) {
+    return Object.freeze({
+      contractVersion: SNS_FANDOM_YOUTUBE_CANDIDATE_VERSION,
+      state: 'selection-blocked' as const,
+      observations: Object.freeze([]),
+      persistenceEvidence: Object.freeze([]),
+      blockers: Object.freeze(
+        Array.from(new Set(selectionBlockers)),
+      ),
     });
   }
 
