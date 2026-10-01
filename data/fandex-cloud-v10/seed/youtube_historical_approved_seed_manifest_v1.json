@@ -1,0 +1,313 @@
+{
+  "version": "youtube_historical_seed_manifest_v1",
+  "status": "recovered_historical_approval_ids_candidate_only",
+  "provenance": {
+    "branch": "cloud-v10-pc-independent",
+    "explicitTypeScript": "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_v1.py",
+    "expansionScript": "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_artist_list_v2.py",
+    "note": "Exact approved video IDs are recovered from historical apply code. The original youtube_seed_videos_v1.csv and raw metrics were never committed, so this manifest does not claim exact historical metric reproducibility."
+  },
+  "rules": [
+    "This manifest is evidence/recovery input only and must not overwrite active Product state.",
+    "Historical explicit videoType is preserved when the apply script encoded it directly.",
+    "Where the historical apply script inherited videoType from discovery candidates, current live title reclassification must be marked as recovered/inferred rather than exact historical evidence.",
+    "Missing or unavailable historical video IDs must be surfaced explicitly and never silently replaced."
+  ],
+  "artists": [
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "videos": [
+        {
+          "videoId": "ax1csKKQnns",
+          "historicalVideoType": "live_clip",
+          "historicalMemo": "IU Love wins all official live clip"
+        },
+        {
+          "videoId": "IBWfp7odPmE",
+          "historicalVideoType": "shorts",
+          "historicalMemo": "IU Love wins all official shorts"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videos": [
+        {
+          "videoId": "83C3TZ4Zm_o",
+          "historicalVideoType": "official_mv",
+          "historicalMemo": "aespa LEMONADE official MV"
+        },
+        {
+          "videoId": "eq7jZgVR6IM",
+          "historicalVideoType": "shorts",
+          "historicalMemo": "aespa LEMONADE official shorts"
+        },
+        {
+          "videoId": "3K15XOwICnc",
+          "historicalVideoType": "shorts",
+          "historicalMemo": "aespa LEMONADE official shorts"
+        },
+        {
+          "videoId": "r2eoeCk171I",
+          "historicalVideoType": "broadcast_clip",
+          "historicalMemo": "aespa LEMONADE MusicCore broadcast clip"
+        },
+        {
+          "videoId": "0aEgFTk7B9o",
+          "historicalVideoType": "broadcast_clip",
+          "historicalMemo": "aespa LEMONADE MusicBank broadcast clip"
+        },
+        {
+          "videoId": "XxvANTF-19g",
+          "historicalVideoType": "broadcast_clip",
+          "historicalMemo": "aespa LEMONADE Inkigayo broadcast clip"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videos": [
+        {
+          "videoId": "ke0UrNoe7-k",
+          "historicalVideoType": "dance_practice",
+          "historicalMemo": "ATEEZ BAD dance practice FIX ver"
+        },
+        {
+          "videoId": "vcbIP2YvDOo",
+          "historicalVideoType": "dance_practice",
+          "historicalMemo": "ATEEZ BAD choreography demo SAN ver"
+        },
+        {
+          "videoId": "R9hv2cLYK-w",
+          "historicalVideoType": "broadcast_clip",
+          "historicalMemo": "ATEEZ BAD Inkigayo broadcast clip"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "videos": [
+        {
+          "videoId": "53KJej_aLuQ",
+          "historicalVideoType": "shorts",
+          "historicalMemo": "BOYNEXTDOOR VIRAL challenge shorts"
+        },
+        {
+          "videoId": "YAhZMuKJsIw",
+          "historicalVideoType": "shorts",
+          "historicalMemo": "BOYNEXTDOOR VIRAL challenge shorts"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videos": [
+        {
+          "videoId": "TNDF5Qr6ayo",
+          "historicalVideoType": null,
+          "historicalMemo": "IVE BLACKHOLE DANCE PRACTICE"
+        },
+        {
+          "videoId": "mx8VPWBWKmY",
+          "historicalVideoType": null,
+          "historicalMemo": "Golden Disc dance practice"
+        },
+        {
+          "videoId": "uVpGElT--E8",
+          "historicalVideoType": null,
+          "historicalMemo": "BANG BANG performance video"
+        },
+        {
+          "videoId": "9qkpcLK422o",
+          "historicalVideoType": null,
+          "historicalMemo": "BANG BANG MV"
+        },
+        {
+          "videoId": "1Lmy7qwmSMc",
+          "historicalVideoType": null,
+          "historicalMemo": "BLACKHOLE MV"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videos": [
+        {
+          "videoId": "V1Lr-_AxeR8",
+          "historicalVideoType": null,
+          "historicalMemo": "BOOMPALA official MV"
+        },
+        {
+          "videoId": "a2grcJdfXmY",
+          "historicalVideoType": null,
+          "historicalMemo": "CELEBRATION official MV"
+        },
+        {
+          "videoId": "1v2KMsfBDjc",
+          "historicalVideoType": null,
+          "historicalMemo": "CELEBRATION dance practice"
+        },
+        {
+          "videoId": "Gnn4GRSzRXI",
+          "historicalVideoType": null,
+          "historicalMemo": "BOOMPALA performance film"
+        },
+        {
+          "videoId": "3YC4-RYEhBs",
+          "historicalVideoType": null,
+          "historicalMemo": "CELEBRATION performance film"
+        },
+        {
+          "videoId": "ox9Bw-lmn6s",
+          "historicalVideoType": null,
+          "historicalMemo": "BOOMPALA stage cam"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videos": [
+        {
+          "videoId": "NNbaTJX_9go",
+          "historicalVideoType": null,
+          "historicalMemo": "2026 Summer of NewJeans"
+        },
+        {
+          "videoId": "Fq-A3aLqmms",
+          "historicalVideoType": null,
+          "historicalMemo": "HANNI"
+        },
+        {
+          "videoId": "9MaO43ekbHs",
+          "historicalVideoType": null,
+          "historicalMemo": "MINJI"
+        },
+        {
+          "videoId": "Jx_58YiWxP0",
+          "historicalVideoType": null,
+          "historicalMemo": "HYEIN"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videos": [
+        {
+          "videoId": "N9X1o0q4aIc",
+          "historicalVideoType": null,
+          "historicalMemo": "DK x Seungkwan Blue cinema ver."
+        },
+        {
+          "videoId": "dZNPbNkKAss",
+          "historicalVideoType": null,
+          "historicalMemo": "DK x Seungkwan Blue epilogue ver."
+        },
+        {
+          "videoId": "5A7qyhj-HjE",
+          "historicalVideoType": null,
+          "historicalMemo": "SEVENTEEN Tiny Light official MV"
+        },
+        {
+          "videoId": "zsdueA_zcl8",
+          "historicalVideoType": null,
+          "historicalMemo": "V8 singasong choreography"
+        },
+        {
+          "videoId": "b7gHOIJiGgI",
+          "historicalVideoType": null,
+          "historicalMemo": "HOSHI SNAPBACK choreography"
+        },
+        {
+          "videoId": "G0G3pLRyraY",
+          "historicalVideoType": null,
+          "historicalMemo": "Back it up live"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videos": [
+        {
+          "videoId": "Q7IFjVUUb_E",
+          "historicalVideoType": null,
+          "historicalMemo": "RUN IT M/V"
+        },
+        {
+          "videoId": "l8sSQAa1kNM",
+          "historicalVideoType": null,
+          "historicalMemo": "Hyunjin LOVER Video"
+        },
+        {
+          "videoId": "F0UIsSnotlA",
+          "historicalVideoType": null,
+          "historicalMemo": "HAN back to life"
+        },
+        {
+          "videoId": "kQjidaLtpvk",
+          "historicalVideoType": null,
+          "historicalMemo": "official shorts"
+        },
+        {
+          "videoId": "hQUVIT8m-c0",
+          "historicalVideoType": null,
+          "historicalMemo": "THIS & THAT trailer"
+        },
+        {
+          "videoId": "jDREKfYqgkw",
+          "historicalVideoType": null,
+          "historicalMemo": "FARMING unveil track"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videos": [
+        {
+          "videoId": "jOnLqqDRfY4",
+          "historicalVideoType": null,
+          "historicalMemo": "Stick With You official MV"
+        },
+        {
+          "videoId": "vlmXpQOE75c",
+          "historicalVideoType": null,
+          "historicalMemo": "SSS official MV"
+        },
+        {
+          "videoId": "mNLiZ25srkI",
+          "historicalVideoType": null,
+          "historicalMemo": "Stick With You dance practice fix ver."
+        },
+        {
+          "videoId": "uKFlZmn4eQk",
+          "historicalVideoType": null,
+          "historicalMemo": "I'll See You There Tomorrow part switch"
+        },
+        {
+          "videoId": "b5j01yC0LeY",
+          "historicalVideoType": null,
+          "historicalMemo": "Stick With You moving ver."
+        },
+        {
+          "videoId": "TBS3VbzEQis",
+          "historicalVideoType": null,
+          "historicalMemo": "comeback showcase stage"
+        },
+        {
+          "videoId": "EUERJYKCzWU",
+          "historicalVideoType": null,
+          "historicalMemo": "Dream Week medley live"
+        }
+      ]
+    }
+  ]
+}
