@@ -69,7 +69,9 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
       identityCoverage: 'public-channel-id' as const,
       historicalAccess: 'prospective-snapshots-required' as const,
       blockers: Object.freeze([
-        'youtube-analytics-derived-metrics-approval-not-recorded',
+        'youtube-compliance-audit-grant-not-recorded',
+        'youtube-analytics-reporting-use-case-acceptance-not-recorded',
+        'youtube-derived-metrics-amendment-grant-not-recorded',
         'youtube-non-authorized-data-retention-requires-refresh-or-approved-extension',
       ]),
       evidenceUrls: Object.freeze([
@@ -93,6 +95,8 @@ export const SNS_FANDOM_PROVIDER_QUALIFICATIONS: readonly SnsFandomProviderQuali
       identityCoverage: 'public-channel-id' as const,
       historicalAccess: 'bounded-public-comment-history' as const,
       blockers: Object.freeze([
+        'youtube-compliance-audit-grant-not-recorded',
+        'youtube-derived-metrics-amendment-grant-not-recorded',
         'youtube-commenter-recurrence-derived-metric-use-case-not-approved',
         'youtube-comment-raw-identifiers-must-not-be-retained-by-this-adapter',
         'youtube-comment-history-completeness-not-guaranteed',
