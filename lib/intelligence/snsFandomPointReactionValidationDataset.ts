@@ -213,8 +213,14 @@ export function buildSnsFandomReactionValidationDataset(
       continue;
     }
 
-    const rawSamples: SnsFandomReactionValidationDatasetMember['rawSamples'] =
-      [];
+    const rawSamples: Array<{
+      videoId: string;
+      publishedAt: string;
+      observedAt: string;
+      rawValue: number;
+      evidenceRef: string;
+      revision: string | null;
+    }> = [];
     const endpointSets: string[] = [];
 
     for (const item of manifest.items) {
@@ -263,7 +269,7 @@ export function buildSnsFandomReactionValidationDataset(
     }));
   }
 
-  if (uniqueSorted(cohortContentAges.map(String)).length > 1) {
+  if (uniqueSorted(cohortContentAges.map((value) => String(value))).length > 1) {
     blockers.push('reaction-validation-cross-artist-content-age-mismatch');
   }
 
@@ -337,7 +343,7 @@ export function buildSnsFandomReactionValidationDataset(
       : null,
     providerEndpoints: Object.freeze(providerEndpoints),
     targetContentAgeMilliseconds:
-      uniqueSorted(cohortContentAges.map(String)).length === 1
+      uniqueSorted(cohortContentAges.map((value) => String(value))).length === 1
         ? cohortContentAges[0]
         : null,
     members: Object.freeze(members),
