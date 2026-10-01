@@ -41,6 +41,7 @@ function youtubeAnalyticsEntitlement(
     contractVersion: 'sns-fandom-artist-provider-entitlement-v1',
     canonicalArtistId: 'iu',
     providerId: 'youtube-analytics-api',
+    providerClientRef: PROVIDER_CLIENT_REF,
     providerArtistId: 'UC-iu',
     authorizationClass: 'channel-owner-oauth',
     state: 'active',
@@ -68,6 +69,7 @@ function youtubeStatsProviderApproval(
   return {
     contractVersion: 'sns-fandom-provider-approval-evidence-v1',
     providerId: 'youtube-data-api',
+    providerClientRef: PROVIDER_CLIENT_REF,
     state: 'approved',
     approvalClass: 'youtube-analytics-derived-metrics-data-storage',
     useCase: 'analytics-reporting',
@@ -106,6 +108,7 @@ function youtubeCommentProviderApproval(
   return {
     contractVersion: 'sns-fandom-provider-approval-evidence-v1',
     providerId: 'youtube-comments-derived',
+    providerClientRef: PROVIDER_CLIENT_REF,
     state: 'approved',
     approvalClass: 'youtube-analytics-derived-metrics-data-storage',
     useCase: 'analytics-reporting',
@@ -206,6 +209,7 @@ function observation(
     },
     evidence: {
       evidenceRef: 'evidence://youtube/video-1/20261001t000000z',
+      providerClientRef: PROVIDER_CLIENT_REF,
       revision: null,
     },
     lifecycle: {
@@ -564,6 +568,108 @@ test('actual provider grant can be converted into exact approval evidence', () =
   );
 });
 
+test('provider approval evidence is bound to an exact API client project', () => {
+  const approval = youtubeStatsProviderApproval();
+  const otherClientObservation = observation({
+    evidence: {
+      evidenceRef: 'evidence://youtube/video-1/other-client',
+      providerClientRef: 'google-cloud-project:other-project',
+      revision: null,
+    },
+  });
+
+  const result = evaluateSnsFandomPointReadiness({
+    canonicalArtistId: 'iu',
+    observations: [otherClientObservation],
+    providerApprovals: [approval],
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.deepEqual(result.providerApprovedProviders, ['youtube-data-api']);
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes('public-reaction-diffusion-evidence-missing'),
+  );
+});
+
+test('artist entitlement is bound to the OAuth client that produced the observation', () => {
+  const entitlement = youtubeAnalyticsEntitlement();
+  const analytics = buildYoutubeAnalyticsFandomPersistenceCandidate({
+    entitlement,
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+    snapshots: [
+      {
+        canonicalArtistId: 'iu',
+        youtubeChannelId: 'UC-iu',
+        providerClientRef: 'google-cloud-project:other-project',
+        providerPeriodStart: '2026-09-30T00:00:00.000Z',
+        providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+        subscribedViews: 140,
+        evidenceRef: 'evidence://youtube-analytics/iu/other-client',
+      },
+    ],
+  });
+
+  assert.equal(analytics.state, 'entitlement-blocked');
+  assert.deepEqual(analytics.observations, []);
+  assert.ok(
+    analytics.blockers.includes(
+      'youtube-analytics-entitlement-not-active-for-snapshot',
+    ),
+  );
+});
+
+test('YouTube public stats adapter rejects approval from another API client project', () => {
+  const result = buildYoutubeSnsFandomCandidate({
+    snapshots: [
+      {
+        canonicalArtistId: 'iu',
+        youtubeChannelId: 'UC-iu',
+        providerClientRef: 'google-cloud-project:other-project',
+        observedAt: '2026-10-01T00:00:00.000Z',
+        collectedAt: '2026-10-01T00:01:00.000Z',
+        videos: [],
+        channelSubscriberCount: null,
+        evidenceRef: 'evidence://youtube/iu/other-client',
+      },
+    ],
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'rights-blocked');
+  assert.ok(
+    result.blockers.includes('youtube-provider-approval-client-mismatch'),
+  );
+});
+
+test('YouTube comment persistence adapter rejects approval from another API client project', () => {
+  const result = buildYoutubePublicCommentPersistenceCandidate({
+    batch: {
+      canonicalArtistId: 'iu',
+      youtubeChannelId: 'UC-iu',
+      providerClientRef: 'google-cloud-project:other-project',
+      providerPeriodStart: '2026-09-01T00:00:00.000Z',
+      providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      comments: [],
+      evidenceRef: 'evidence://youtube-comments/iu/other-client',
+    },
+    providerApproval: youtubeCommentProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'rights-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'youtube-commenter-recurrence-provider-approval-client-mismatch',
+    ),
+  );
+});
+
 test('missing is not zero and unsupported is not missing', () => {
   const missing = observation({
     value: {
@@ -782,6 +888,7 @@ test('YouTube Analytics adapter rejects mismatched artist/channel entitlement', 
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -809,6 +916,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
         observedAt: '2026-09-30T00:00:00.000Z',
@@ -819,6 +927,7 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -855,6 +964,7 @@ test('public-comment persistence candidate is completely silent before derived-m
     batch: {
       canonicalArtistId: 'iu',
       youtubeChannelId: 'UC-iu',
+      providerClientRef: PROVIDER_CLIENT_REF,
       providerPeriodStart: '2026-09-01T00:00:00.000Z',
       providerPeriodEnd: '2026-09-30T23:59:59.999Z',
       observedAt: '2026-10-01T00:00:00.000Z',
@@ -881,6 +991,7 @@ test('public-comment recurrence is aggregated across distinct official content w
     batch: {
       canonicalArtistId: 'iu',
       youtubeChannelId: 'UC-iu',
+      providerClientRef: PROVIDER_CLIENT_REF,
       providerPeriodStart: '2026-09-01T00:00:00.000Z',
       providerPeriodEnd: '2026-09-30T23:59:59.999Z',
       observedAt: '2026-10-01T00:00:00.000Z',
@@ -953,6 +1064,7 @@ test('public-comment recurrence fails closed when a comment falls outside the de
     batch: {
       canonicalArtistId: 'iu',
       youtubeChannelId: 'UC-iu',
+      providerClientRef: PROVIDER_CLIENT_REF,
       providerPeriodStart: '2026-09-01T00:00:00.000Z',
       providerPeriodEnd: '2026-09-30T23:59:59.999Z',
       observedAt: '2026-10-01T00:00:00.000Z',
@@ -986,6 +1098,7 @@ test('YouTube candidate keeps subscriber count context-only and preserves missin
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
         videos: [
@@ -1116,6 +1229,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-29T00:00:00.000Z',
         providerPeriodEnd: '2026-09-29T23:59:59.999Z',
         observedAt: '2026-09-30T00:00:00.000Z',
@@ -1126,6 +1240,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-30T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
@@ -1214,6 +1329,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         observedAt: '2026-10-01T00:00:00.000Z',
         collectedAt: '2026-10-01T00:01:00.000Z',
         videos: [
@@ -1238,6 +1354,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       batch: {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-01T00:00:00.000Z',
         providerPeriodEnd: '2026-09-15T23:59:59.999Z',
         observedAt: '2026-09-16T00:00:00.000Z',
@@ -1267,6 +1384,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
       batch: {
         canonicalArtistId: 'iu',
         youtubeChannelId: 'UC-iu',
+        providerClientRef: PROVIDER_CLIENT_REF,
         providerPeriodStart: '2026-09-16T00:00:00.000Z',
         providerPeriodEnd: '2026-09-30T23:59:59.999Z',
         observedAt: '2026-10-01T00:00:00.000Z',
