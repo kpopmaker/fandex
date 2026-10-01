@@ -59,7 +59,9 @@ export type BrandFitCollectionHandoffResult =
 
 function exactIso(value: string): boolean {
   const parsed = Date.parse(value);
-  return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+  if (!Number.isFinite(parsed)) return false;
+  const normalized = new Date(parsed).toISOString();
+  return normalized === value || normalized.replace('.000Z', 'Z') === value;
 }
 
 function blocked(
