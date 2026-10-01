@@ -734,6 +734,7 @@ test('provider approval evidence is bound to an exact API client project', () =>
 
   assert.deepEqual(result.providerApprovedProviders, ['youtube-data-api']);
   assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.equal(result.contentLevelReactionEvidenceCount, 0);
   assert.ok(
     result.blockers.includes('public-reaction-diffusion-evidence-missing'),
   );
@@ -1421,8 +1422,14 @@ test('validated provider approval evidence makes only its exact provider metrics
   assert.deepEqual(result.productionReadyProviders, []);
   assert.deepEqual(result.providerApprovedProviders, ['youtube-data-api']);
   assert.deepEqual(result.evidenceEligibleProviders, ['youtube-data-api']);
-  assert.equal(result.observedReactionEvidenceCount, 1);
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.equal(result.contentLevelReactionEvidenceCount, 1);
   assert.equal(result.temporalPersistenceEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes(
+      'public-reaction-artist-level-aggregation-missing',
+    ),
+  );
   assert.ok(
     result.blockers.includes(
       'fandom-activity-persistence-provider-rights-blocked',
@@ -1474,8 +1481,14 @@ test('reaction history alone cannot satisfy fandom persistence readiness', () =>
   });
 
   assert.equal(result.state, 'provider-rights-blocked');
-  assert.equal(result.observedReactionEvidenceCount, 2);
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.equal(result.contentLevelReactionEvidenceCount, 2);
   assert.equal(result.temporalPersistenceEvidenceCount, 0);
+  assert.ok(
+    result.blockers.includes(
+      'public-reaction-artist-level-aggregation-missing',
+    ),
+  );
   assert.ok(
     result.blockers.includes('fandom-activity-persistence-history-missing'),
   );
@@ -1537,7 +1550,7 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
     evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
-  assert.equal(result.state, 'dual-dimension-evidence-ready');
+  assert.equal(result.state, 'source-evidence-incomplete');
   assert.deepEqual(result.productionReadyProviders, ['youtube-data-api']);
   assert.deepEqual(result.artistAuthorizedProviders, [
     'youtube-analytics-api',
@@ -1546,13 +1559,14 @@ test('artist-scoped Analytics entitlement can qualify only its persistence dimen
     [...result.evidenceEligibleProviders].sort(),
     ['youtube-analytics-api', 'youtube-data-api'],
   );
-  assert.equal(result.observedReactionEvidenceCount, 1);
+  assert.equal(result.observedReactionEvidenceCount, 0);
+  assert.equal(result.contentLevelReactionEvidenceCount, 1);
   assert.equal(result.temporalPersistenceEvidenceCount, 1);
   assert.equal(result.snsFandomPoint, null);
   assert.equal(result.numericProductEligible, false);
   assert.ok(
     result.blockers.includes(
-      'cross-dimension-combination-methodology-not-approved',
+      'public-reaction-artist-level-aggregation-missing',
     ),
   );
 });
@@ -1701,12 +1715,13 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
     evaluatedAt: '2026-10-01T00:02:00.000Z',
   });
 
-  assert.equal(readiness.state, 'dual-dimension-evidence-ready');
+  assert.equal(readiness.state, 'source-evidence-incomplete');
   assert.deepEqual(
     [...readiness.providerApprovedProviders].sort(),
     ['youtube-comments-derived', 'youtube-data-api'],
   );
-  assert.equal(readiness.observedReactionEvidenceCount, 3);
+  assert.equal(readiness.observedReactionEvidenceCount, 0);
+  assert.equal(readiness.contentLevelReactionEvidenceCount, 3);
   assert.equal(readiness.temporalPersistenceEvidenceCount, 1);
   assert.equal(readiness.snsFandomPoint, null);
   assert.equal(readiness.numericProductEligible, false);
@@ -1714,7 +1729,7 @@ test('generic YouTube provider grants can unlock both evidence dimensions withou
   assert.equal(readiness.productPublicationReady, false);
   assert.ok(
     readiness.blockers.includes(
-      'cross-dimension-combination-methodology-not-approved',
+      'public-reaction-artist-level-aggregation-missing',
     ),
   );
 });
@@ -1769,7 +1784,7 @@ test('even explicitly qualified dual-dimension evidence does not invent a numeri
       entityType: 'artist' as const,
       canonicalArtistId: 'iu',
       providerArtistId: 'hypothetical-qualified-provider-artist',
-      providerContentId: 'reaction-scope-1',
+      providerContentId: null,
       identityState: 'bound' as const,
     },
   };
