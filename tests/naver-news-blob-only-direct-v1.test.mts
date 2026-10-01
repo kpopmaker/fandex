@@ -175,7 +175,7 @@ test('rejects protocol drift before stage execution', async () => {
 test('direct runner contains no Postgres, Vercel OIDC, or HTTP Production route dependency', async () => {
   const source = await readFile(
     new URL(
-      '../scripts/ingestion/run-naver-news-blob-only-direct-v1.mts',
+      '../scripts/ingestion/run-naver-news-blob-only-direct-v1.ts',
       import.meta.url,
     ),
     'utf8',
