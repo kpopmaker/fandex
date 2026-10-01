@@ -105,6 +105,11 @@ function observation(
     evidence: Object.freeze({
       evidenceRef: input.evidenceRef,
       providerClientRef: input.providerClientRef,
+      providerEndpoints: Object.freeze([
+        metric.providerContentId === null
+          ? 'youtube.channels.list'
+          : 'youtube.videos.list',
+      ]),
       revision: null,
     }),
     lifecycle: Object.freeze({
