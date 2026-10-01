@@ -1,0 +1,103 @@
+name: Invoke NAVER Production Blob-only collection stage v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      execution_approval:
+        description: 'Separate live Blob-write approval: type ops-naver-blob-only-stage-20261001-v1'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naver-production-blob-only-collection-stage-v1
+  cancel-in-progress: false
+
+jobs:
+  invoke:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1 &&
+      inputs.execution_approval == 'ops-naver-blob-only-stage-20261001-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Invoke once without retry
+        shell: bash
+        env:
+          SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$SCHEDULER_SECRET"
+          status="$(
+            curl               --silent               --show-error               --request POST               --retry 0               --output /tmp/response.json               --write-out '%{http_code}'               --header "Authorization: Bearer ${SCHEDULER_SECRET}"               --header 'X-Fandex-Blob-Only-Stage-Id: ops-naver-blob-only-stage-20261001-v1'               --header 'X-Fandex-Scheduler-Source: github-actions-manual-v1'               'https://fandex-eta.vercel.app/api/internal/naver-news/blob-only-collection-stage'
+          )"
+          if [[ "$status" != "200" ]]; then
+            echo "FANDEX_NAVER_BLOB_ONLY_STAGE_HTTP=failed"
+            exit 1
+          fi
+          node <<'NODE'
+          const fs = require('node:fs');
+          let value;
+          try {
+            value = JSON.parse(fs.readFileSync('/tmp/response.json', 'utf8'));
+          } catch {
+            console.log('FANDEX_NAVER_BLOB_ONLY_STAGE_RESPONSE=invalid');
+            process.exit(1);
+          }
+
+          const sha = /^[0-9a-f]{64}$/;
+          const collectionKey =
+            /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
+          const counts = value?.counts;
+          const validCounts = counts
+            && ['received', 'rawEvidence', 'normalizedRecords',
+                'duplicateRecords', 'rejectedItems']
+              .every((key) => Number.isSafeInteger(counts[key])
+                && counts[key] >= 0);
+
+          const valid =
+            value?.ok === true
+            && value?.mode ===
+              'naver-production-blob-only-collection-stage'
+            && value?.contractVersion ===
+              'naver-news-blob-only-collection-stage-v1'
+            && value?.schedulerVersion ===
+              'v125_naver_news_scheduler_v1'
+            && Number.isFinite(Date.parse(value?.slotStart))
+            && collectionKey.test(value?.collectionKey ?? '')
+            && sha.test(value?.jobId ?? '')
+            && sha.test(value?.resultSha256 ?? '')
+            && ['created', 'idempotent-existing']
+              .includes(value?.stagedObjectStatus)
+            && validCounts
+            && value?.databaseWrites === 0
+            && value?.schedulerManifestFinalized === false;
+
+          if (!valid) {
+            console.log('FANDEX_NAVER_BLOB_ONLY_STAGE_RESPONSE=invalid');
+            process.exit(1);
+          }
+          console.log('FANDEX_NAVER_BLOB_ONLY_STAGE_RESPONSE=validated');
+          console.log(
+            'FANDEX_NAVER_BLOB_ONLY_STAGE_OBJECT_STATUS='
+              + value.stagedObjectStatus,
+          );
+          console.log('FANDEX_NAVER_BLOB_ONLY_STAGE_DATABASE_WRITES=0');
+          console.log(
+            'FANDEX_NAVER_BLOB_ONLY_STAGE_MANIFEST_FINALIZED=false',
+          );
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_NAVER_BLOB_ONLY_STAGE_RETRIES=0"
+          echo "FANDEX_NAVER_BLOB_ONLY_STAGE_RAW_PROVIDER_PAYLOAD_LOGGED=false"
+          echo "FANDEX_NAVER_BLOB_ONLY_STAGE_CREDENTIALS_LOGGED=false"
+          echo "FANDEX_NAVER_BLOB_ONLY_STAGE_DATABASE_WRITES=0"
+          echo "FANDEX_NAVER_BLOB_ONLY_STAGE_PRODUCT_ACTIVATIONS=0"
