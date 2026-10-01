@@ -378,7 +378,7 @@
     },
     "music_chart": {
       "bindingAuthority": "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
-      "basis": "Only reviewed configured Music target bindings are supported; all other canonical artists remain unresolved.",
+      "basis": "Reviewed Music provider bindings promoted from the validated 21-artist source cohort.",
       "supportedCanonicalArtistIds": [
         "aespa",
         "ive",
@@ -389,18 +389,24 @@
         "seventeen",
         "txt",
         "ateez",
-        "iu"
-      ],
-      "unresolvedCanonicalArtistIds": [
-        "riize",
-        "illit",
-        "tws",
-        "nmixx",
-        "babymonster",
+        "iu",
         "bts",
         "blackpink",
         "twice",
         "enhypen",
+        "jungkook",
+        "jimin",
+        "v",
+        "jennie",
+        "lisa",
+        "rose",
+        "riize"
+      ],
+      "unresolvedCanonicalArtistIds": [
+        "illit",
+        "tws",
+        "nmixx",
+        "babymonster",
         "zerobaseone",
         "gidle",
         "itzy",
@@ -418,9 +424,6 @@
         "mamamoo",
         "akmu",
         "taeyeon",
-        "jungkook",
-        "jimin",
-        "v",
         "jin",
         "suga",
         "rm",
@@ -465,10 +468,7 @@
         "onf",
         "artms",
         "unis",
-        "jennie",
         "jisoo",
-        "lisa",
-        "rose",
         "hwasa",
         "jeonsomi",
         "kickflip",
@@ -742,7 +742,7 @@
     },
     "lastfm": {
       "bindingAuthority": "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv",
-      "basis": "Only reviewed configured Last.fm seed bindings are supported; all other canonical artists remain unresolved.",
+      "basis": "Reviewed Last.fm provider bindings promoted from the validated 19-artist source cohort; V and LISA remain unsupported under the current name-query model.",
       "supportedCanonicalArtistIds": [
         "aespa",
         "ive",
@@ -753,18 +753,22 @@
         "seventeen",
         "txt",
         "ateez",
-        "iu"
-      ],
-      "unresolvedCanonicalArtistIds": [
-        "riize",
-        "illit",
-        "tws",
-        "nmixx",
-        "babymonster",
+        "iu",
         "bts",
         "blackpink",
         "twice",
         "enhypen",
+        "jungkook",
+        "jimin",
+        "jennie",
+        "rose",
+        "riize"
+      ],
+      "unresolvedCanonicalArtistIds": [
+        "illit",
+        "tws",
+        "nmixx",
+        "babymonster",
         "zerobaseone",
         "gidle",
         "itzy",
@@ -782,9 +786,6 @@
         "mamamoo",
         "akmu",
         "taeyeon",
-        "jungkook",
-        "jimin",
-        "v",
         "jin",
         "suga",
         "rm",
@@ -829,10 +830,7 @@
         "onf",
         "artms",
         "unis",
-        "jennie",
         "jisoo",
-        "lisa",
-        "rose",
         "hwasa",
         "jeonsomi",
         "kickflip",
@@ -1102,7 +1100,10 @@
         "taemin",
         "kimjongkook"
       ],
-      "unsupportedCanonicalArtistIds": []
+      "unsupportedCanonicalArtistIds": [
+        "v",
+        "lisa"
+      ]
     }
   }
 }
