@@ -515,11 +515,16 @@ test('reaction history alone cannot satisfy fandom persistence readiness', () =>
     providerQualifications: productionQualifications,
   });
 
-  assert.equal(result.state, 'source-evidence-incomplete');
+  assert.equal(result.state, 'provider-rights-blocked');
   assert.equal(result.observedReactionEvidenceCount, 2);
   assert.equal(result.temporalPersistenceEvidenceCount, 0);
   assert.ok(
     result.blockers.includes('fandom-activity-persistence-history-missing'),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'fandom-activity-persistence-provider-rights-blocked',
+    ),
   );
 });
 
