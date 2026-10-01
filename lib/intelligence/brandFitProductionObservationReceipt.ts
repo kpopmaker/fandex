@@ -166,10 +166,22 @@ export function validateBrandFitProductionObservationReceipt(
     return invalid('immutable-record-invalid');
   }
 
+  const expectedSanitizedEvidence = Object.freeze({
+    variableId: decoded.evidence.variableId,
+    eventId: decoded.evidence.eventId,
+    eventType: decoded.evidence.eventType,
+    relationshipType: decoded.evidence.relationshipType,
+    identity: decoded.evidence.identity,
+    source: decoded.evidence.source,
+    time: decoded.evidence.time,
+    revision: decoded.evidence.revision,
+    interpretation: decoded.evidence.interpretation,
+  });
+
   if (
     decoded.evidenceDigest !== evidenceDigest
     || decoded.payloadDigest !== immutable.payloadDigest
-    || canonicalJson(decoded.evidence) !== canonicalJson(evidence)
+    || canonicalJson(expectedSanitizedEvidence) !== canonicalJson(evidence)
     || immutable.pathname !== expectedPath(evidenceDigest)
   ) {
     return invalid('immutable-binding-invalid');
