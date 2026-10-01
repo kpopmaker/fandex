@@ -244,6 +244,71 @@ def validate_reviews(
                 + review_id
             )
 
+        row = dict(row)
+
+        evidence_source_type = norm(
+            row.get("evidenceSourceType")
+        )
+        source_discovery_run_id = norm(
+            row.get("sourceDiscoveryRunId")
+        )
+        source_artifact_id = norm(
+            row.get("sourceArtifactId")
+        )
+        verification_run_id = norm(
+            row.get("verificationRunId")
+        )
+        verification_job_id = norm(
+            row.get("verificationJobId")
+        )
+
+        if not evidence_source_type:
+            evidence_source_type = (
+                "global_discovery_artifact"
+            )
+
+        if evidence_source_type == "github_discovery_artifact":
+            if (
+                not source_discovery_run_id
+                or not source_artifact_id
+            ):
+                raise RuntimeError(
+                    "GitHub discovery YouTube review "
+                    "requires row-level run/artifact provenance: "
+                    + review_id
+                )
+        elif evidence_source_type == "direct_provider_review":
+            if (
+                not verification_run_id
+                or not verification_job_id
+            ):
+                raise RuntimeError(
+                    "Direct provider YouTube review "
+                    "requires verification run/job provenance: "
+                    + review_id
+                )
+        elif evidence_source_type != "global_discovery_artifact":
+            raise RuntimeError(
+                "Invalid YouTube review evidenceSourceType: "
+                + evidence_source_type
+            )
+
+        row["evidenceSourceType"] = (
+            evidence_source_type
+        )
+        row["sourceDiscoveryRunId"] = (
+            source_discovery_run_id
+        )
+        row["sourceArtifactId"] = (
+            source_artifact_id
+        )
+        row["verificationRunId"] = (
+            verification_run_id
+        )
+        row["verificationJobId"] = (
+            verification_job_id
+        )
+
         approved.append(row)
 
     return approved
@@ -285,8 +350,27 @@ def build_seed_rows(
                             "reviewId"
                         )
                     )
+                    + "; evidenceSource="
+                    + norm(
+                        row.get(
+                            "evidenceSourceType"
+                        )
+                    )
                     + "; sourceRun="
-                    + source_run_id
+                    + (
+                        norm(
+                            row.get(
+                                "sourceDiscoveryRunId"
+                            )
+                        )
+                        or source_run_id
+                    )
+                    + "; verificationRun="
+                    + norm(
+                        row.get(
+                            "verificationRunId"
+                        )
+                    )
                 ),
         })
 
