@@ -1,0 +1,144 @@
+name: Build Artist Expansion YouTube review manifest v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-review-v1
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build-review-manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download prior live discovery evidence
+        run: |
+          mkdir -p evidence
+          gh run download 36800253141 \
+            -n artist-expansion-youtube-discovery-v2 \
+            -D evidence
+      - name: Build top-3 review manifest
+        run: |
+          python - <<'PY'
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+
+          source = Path(
+              "evidence/fandex_youtube_seed_candidates_latest.json"
+          )
+          payload = json.loads(
+              source.read_text(encoding="utf-8")
+          )
+
+          grouped = defaultdict(list)
+          for row in payload["candidates"]:
+              if row.get("candidateStatus") != "NEW":
+                  continue
+              grouped[row["artist"]].append(row)
+
+          review_rows = []
+          print(
+              "YouTube review manifest | "
+              f"targets={len(payload['targetArtists'])}"
+          )
+
+          for artist in payload["targetArtists"]:
+              rows = grouped[artist]
+              rows.sort(
+                  key=lambda row: (
+                      -int(row.get("candidateScore") or 0),
+                      -int(row.get("viewCount") or 0),
+                      row.get("videoId") or "",
+                  )
+              )
+              top = rows[:3]
+              canonical_id = (
+                  top[0]["canonicalArtistId"]
+                  if top
+                  else ""
+              )
+
+              print(
+                  f"[{canonical_id} | {artist}] "
+                  f"candidateCount={len(rows)}"
+              )
+
+              for index, row in enumerate(top, start=1):
+                  print(
+                      f"  {index}. score={row['candidateScore']} | "
+                      f"videoId={row['videoId']} | "
+                      f"type={row['videoType']} | "
+                      f"channel={row['channelTitle']} | "
+                      f"title={row['title']} | "
+                      f"query={row['query']}"
+                  )
+
+                  review_rows.append({
+                      "canonicalArtistId":
+                          row["canonicalArtistId"],
+                      "artist":
+                          artist,
+                      "reviewRank":
+                          index,
+                      "candidateScore":
+                          row["candidateScore"],
+                      "videoId":
+                          row["videoId"],
+                      "sourceUrl":
+                          row["sourceUrl"],
+                      "videoType":
+                          row["videoType"],
+                      "channelTitle":
+                          row["channelTitle"],
+                      "title":
+                          row["title"],
+                      "publishedAt":
+                          row["publishedAt"],
+                      "query":
+                          row["query"],
+                      "reviewState":
+                          "machine_candidate_unreviewed",
+                  })
+
+          output = {
+              "version":
+                  "youtube_seed_review_candidates_top3_v1",
+              "sourceRunId":
+                  36800253141,
+              "sourceArtifact":
+                  "artist-expansion-youtube-discovery-v2",
+              "targetArtistCount":
+                  len(payload["targetArtists"]),
+              "candidateRows":
+                  review_rows,
+              "activationState":
+                  "review_only_not_seed",
+          }
+
+          Path(
+              "youtube_seed_review_candidates_top3_v1.json"
+          ).write_text(
+              json.dumps(
+                  output,
+                  ensure_ascii=False,
+                  indent=2,
+              ) + "\n",
+              encoding="utf-8",
+          )
+          PY
+      - name: Upload review manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-seed-review-candidates-top3-v1
+          path: youtube_seed_review_candidates_top3_v1.json
+          retention-days: 7
