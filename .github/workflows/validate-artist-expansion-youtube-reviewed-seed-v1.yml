@@ -1,0 +1,67 @@
+name: Validate Artist Expansion reviewed YouTube seed v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-reviewed-seed-v1
+
+permissions:
+  contents: read
+
+jobs:
+  reviewed-youtube-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reviewed seed syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_reviewed_seed_shadow_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3.py
+      - name: Reviewed seed contract regression
+        run: python tests/artist-expansion-youtube-reviewed-seed-v1.py
+      - name: Materialized reviewed seed check
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py
+      - name: Live reviewed seed shadow
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_shadow_v1.py
+      - name: Print shadow summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("youtube_reviewed_seed_shadow_v1_latest.json")
+              .read_text(encoding="utf-8")
+          )
+          print(
+              "YouTube reviewed shadow | "
+              f"videos={payload['reviewedVideoCount']} | "
+              f"artists={payload['reviewedArtistCount']} | "
+              f"targets={payload['targetArtistCount']} | "
+              f"unreviewedOrNoApproved={payload['unreviewedOrNoApprovedArtistCount']}"
+          )
+          for row in payload["ranking"]:
+              print(
+                  f"{row['canonicalArtistId']} | "
+                  f"seeds={row['reviewedSeedCount']} | "
+                  f"shadowPoint={row['youtubePointV3Shadow']} | "
+                  f"eligibility={row['productEligibility']}"
+              )
+          PY
+      - name: Upload reviewed seed shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-reviewed-seed-shadow-v1
+          path: youtube_reviewed_seed_shadow_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
