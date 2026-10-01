@@ -190,6 +190,33 @@ export function evaluateSnsFandomReactionAggregationMethodology(
     });
   }
 
+  const selectedMetricAlignment = input.ageAlignment.metrics.find(
+    (metric) => metric.metricId === input.decision!.metricId,
+  );
+  if (
+    selectedMetricAlignment === undefined
+    || selectedMetricAlignment.state !== 'exact-age-aligned'
+    || selectedMetricAlignment.observedVideoCount < 1
+  ) {
+    blockers.push(
+      'reaction-aggregation-selected-metric-age-alignment-not-ready',
+    );
+    return Object.freeze({
+      contractVersion:
+        SNS_FANDOM_REACTION_AGGREGATION_METHODOLOGY_VERSION,
+      state: 'age-alignment-blocked' as const,
+      construct: input.decision.construct,
+      metricId: input.decision.metricId,
+      methodId: input.decision.methodId,
+      executionImplemented: false as const,
+      aggregateValue: null,
+      normalizedValue: null,
+      crossMetricCombinationAllowed: false as const,
+      crossPlatformCombinationAllowed: false as const,
+      blockers: Object.freeze(blockers),
+    });
+  }
+
   const validation =
     validateSnsFandomReactionAggregationDecision(input.decision);
 
