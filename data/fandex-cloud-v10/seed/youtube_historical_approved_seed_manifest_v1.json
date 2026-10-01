@@ -1,17 +1,18 @@
 {
   "version": "youtube_historical_seed_manifest_v1",
-  "status": "recovered_historical_approval_ids_candidate_only",
+  "status": "recovered_known_historical_approval_ids_candidate_only",
   "provenance": {
     "branch": "cloud-v10-pc-independent",
     "explicitTypeScript": "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_v1.py",
     "expansionScript": "scripts/fandex-cloud-migration/source/youtube_apply_approved_seed_candidates_artist_list_v2.py",
-    "note": "Exact approved video IDs are recovered from historical apply code. The original youtube_seed_videos_v1.csv and raw metrics were never committed, so this manifest does not claim exact historical metric reproducibility."
+    "note": "These 47 IDs are the approved additions recoverable from historical apply code. The original complete youtube_seed_videos_v1.csv and raw metric snapshot were never committed, so these IDs are NOT asserted to be the complete historical production seed and cannot reproduce the frozen YouTube v3 cutover score by themselves."
   },
   "rules": [
     "This manifest is evidence/recovery input only and must not overwrite active Product state.",
     "Historical explicit videoType is preserved when the apply script encoded it directly.",
     "Where the historical apply script inherited videoType from discovery candidates, current live title reclassification must be marked as recovered/inferred rather than exact historical evidence.",
-    "Missing or unavailable historical video IDs must be surfaced explicitly and never silently replaced."
+    "Missing or unavailable historical video IDs must be surfaced explicitly and never silently replaced.",
+    "Do not label the 47 recovered IDs as the complete historical baseline seed; full historical seed cardinality is unknown."
   ],
   "artists": [
     {
