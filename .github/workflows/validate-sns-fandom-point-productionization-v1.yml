@@ -75,6 +75,8 @@ jobs:
           npx tsx --test
           tests/sns-fandom-point-productionization-v1.test.mts
           tests/sns-fandom-point-comparability-v1.test.mts
+          tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
 
