@@ -279,6 +279,13 @@ export type SnsFandomProviderApprovalEvidence = Readonly<{
     derivedMetricMonths: number | null;
     nonStatisticalDataRefreshDays: number | null;
   }>;
+  youtubePolicyGrant: Readonly<{
+    complianceAuditPassed: boolean;
+    analyticsReportingUseCaseAccepted: boolean;
+    developerPoliciesAmendmentAccepted: boolean;
+    additionalDerivedMetricsApproved: boolean;
+    extendedStatisticalStorageApproved: boolean;
+  }> | null;
 }>;
 
 export type SnsFandomProviderApprovalEvidenceValidation = Readonly<{
@@ -430,6 +437,34 @@ export function validateSnsFandomProviderApprovalEvidence(
     approval.approvalClass
       === 'youtube-analytics-derived-metrics-data-storage'
   ) {
+    const grant = approval.youtubePolicyGrant;
+    if (grant === null) {
+      blockers.push('youtube-provider-policy-grant-missing');
+    } else {
+      if (!grant.complianceAuditPassed) {
+        blockers.push('youtube-provider-compliance-audit-not-passed');
+      }
+      if (!grant.analyticsReportingUseCaseAccepted) {
+        blockers.push(
+          'youtube-provider-analytics-reporting-use-case-not-accepted',
+        );
+      }
+      if (!grant.developerPoliciesAmendmentAccepted) {
+        blockers.push(
+          'youtube-provider-derived-metrics-amendment-not-accepted',
+        );
+      }
+      if (!grant.additionalDerivedMetricsApproved) {
+        blockers.push(
+          'youtube-provider-additional-derived-metrics-not-approved',
+        );
+      }
+      if (!grant.extendedStatisticalStorageApproved) {
+        blockers.push(
+          'youtube-provider-extended-statistical-storage-not-approved',
+        );
+      }
+    }
     if (!(
       approval.providerId === 'youtube-data-api'
       || approval.providerId === 'youtube-comments-derived'
@@ -470,6 +505,13 @@ export function validateSnsFandomProviderApprovalEvidence(
         'youtube-provider-approval-non-statistical-refresh-invalid',
       );
     }
+  }
+
+  if (
+    approval.approvalClass !== 'youtube-analytics-derived-metrics-data-storage'
+    && approval.youtubePolicyGrant !== null
+  ) {
+    blockers.push('provider-approval-youtube-policy-grant-unexpected');
   }
 
   return Object.freeze({
