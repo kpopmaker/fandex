@@ -17,6 +17,7 @@ OUTPUT_FILE = "youtube_video_metrics_v1.csv"
 YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3/videos"
 
 SEED_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "videoId",
     "sourceUrl",
@@ -25,6 +26,7 @@ SEED_FIELDS = [
 ]
 
 OUTPUT_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "videoId",
     "title",
@@ -60,6 +62,7 @@ def ensure_template():
 
     rows = [
         {
+            "canonicalArtistId": "iu",
             "artist": "아이유",
             "videoId": "",
             "sourceUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
@@ -67,6 +70,7 @@ def ensure_template():
             "memo": "",
         },
         {
+            "canonicalArtistId": "ateez",
             "artist": "에이티즈",
             "videoId": "",
             "sourceUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
@@ -74,6 +78,7 @@ def ensure_template():
             "memo": "",
         },
         {
+            "canonicalArtistId": "boynextdoor",
             "artist": "보이넥스트도어",
             "videoId": "",
             "sourceUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
@@ -81,6 +86,7 @@ def ensure_template():
             "memo": "",
         },
         {
+            "canonicalArtistId": "aespa",
             "artist": "에스파",
             "videoId": "",
             "sourceUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
@@ -145,6 +151,9 @@ def normalize_seed_rows(rows):
     seen_video_ids = set()
 
     for row_number, row in enumerate(rows, start=2):
+        canonical_artist_id = clean_text(
+            row.get("canonicalArtistId")
+        )
         artist = clean_text(row.get("artist"))
         video_id = extract_video_id(row.get("videoId"))
         source_url = clean_text(row.get("sourceUrl"))
@@ -154,6 +163,16 @@ def normalize_seed_rows(rows):
 
         if not video_id:
             video_id = url_video_id
+
+        if not canonical_artist_id:
+            skipped.append({
+                "row": row_number,
+                "artist": artist,
+                "videoId": video_id,
+                "sourceUrl": source_url,
+                "reason": "canonicalArtistId 누락",
+            })
+            continue
 
         if not artist:
             skipped.append({
@@ -188,6 +207,7 @@ def normalize_seed_rows(rows):
         seen_video_ids.add(video_id)
 
         normalized.append({
+            "canonicalArtistId": canonical_artist_id,
             "artist": artist,
             "videoId": video_id,
             "sourceUrl": source_url or f"https://www.youtube.com/watch?v={video_id}",
@@ -275,6 +295,7 @@ def collect_video_metrics(seed_rows, api_key):
             statistics = item.get("statistics", {})
 
             output_rows.append({
+                "canonicalArtistId": seed.get("canonicalArtistId", ""),
                 "artist": seed.get("artist", ""),
                 "videoId": video_id,
                 "title": snippet.get("title", ""),
