@@ -7,6 +7,7 @@ import {
 import type { NaverNewsAppliedEvidenceMirror } from './naverNewsWorker';
 import {
   createVercelBlobImmutableTextObjectStore,
+  createVercelBlobTextReadStore,
   resolveVercelBlobPrivateStoreConfig,
   type VercelBlobSdkPort,
 } from '../storage/vercelBlobImmutableTextObjectStore';
@@ -43,6 +44,14 @@ export function createProductionNaverNewsBlobEvidenceStore(
 ) {
   const config = resolveVercelBlobPrivateStoreConfig(environment);
   return createVercelBlobImmutableTextObjectStore(client, config);
+}
+
+export function createProductionNaverNewsBlobEvidenceReadStore(
+  environment: Readonly<Record<string, string | undefined>>,
+  client: Pick<VercelBlobSdkPort, 'get' | 'list'> = blobSdk,
+) {
+  const config = resolveVercelBlobPrivateStoreConfig(environment);
+  return createVercelBlobTextReadStore(client, config);
 }
 
 export function createProductionNaverNewsBlobEvidenceMirror(
