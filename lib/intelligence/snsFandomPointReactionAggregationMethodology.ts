@@ -1,4 +1,7 @@
 import {
+  type SnsFandomReactionValidationDatasetResult,
+} from './snsFandomPointReactionValidationDataset';
+import {
   type SnsFandomYoutubeContentAgeAlignmentResult,
 } from './snsFandomPointYoutubeContentAgeAlignment';
 
@@ -53,6 +56,7 @@ export type SnsFandomReactionAggregationMethodologyReadiness =
     state:
       | 'age-alignment-blocked'
       | 'methodology-missing'
+      | 'validation-dataset-blocked'
       | 'methodology-research-only'
       | 'methodology-invalid'
       | 'methodology-approved';
@@ -149,6 +153,7 @@ export function validateSnsFandomReactionAggregationDecision(
 export function evaluateSnsFandomReactionAggregationMethodology(
   input: Readonly<{
     ageAlignment: SnsFandomYoutubeContentAgeAlignmentResult;
+    validationDataset: SnsFandomReactionValidationDatasetResult | null;
     decision: SnsFandomReactionAggregationDecision | null;
   }>,
 ): SnsFandomReactionAggregationMethodologyReadiness {
@@ -214,6 +219,78 @@ export function evaluateSnsFandomReactionAggregationMethodology(
       crossMetricCombinationAllowed: false as const,
       crossPlatformCombinationAllowed: false as const,
       blockers: Object.freeze(blockers),
+    });
+  }
+
+  const validationDataset = input.validationDataset;
+  const datasetBlockers: string[] = [];
+
+  if (validationDataset === null) {
+    datasetBlockers.push('reaction-aggregation-validation-dataset-missing');
+  } else {
+    if (
+      validationDataset.state !== 'validation-ready'
+      || !validationDataset.methodologyValidationEligible
+    ) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-dataset-not-ready',
+      );
+    }
+    if (validationDataset.materialClass !== 'real') {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-dataset-not-real',
+      );
+    }
+    if (validationDataset.construct !== input.decision.construct) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-dataset-construct-mismatch',
+      );
+    }
+    if (validationDataset.metricId !== input.decision.metricId) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-dataset-metric-mismatch',
+      );
+    }
+    if (
+      validationDataset.datasetId
+        !== input.decision.empiricalValidation.datasetRef
+    ) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-dataset-ref-mismatch',
+      );
+    }
+    if (
+      validationDataset.distinctCanonicalArtistCount
+        !== input.decision.empiricalValidation.distinctCanonicalArtistCount
+    ) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-artist-count-mismatch',
+      );
+    }
+    if (
+      validationDataset.revisionStabilityReviewed
+        !== input.decision.empiricalValidation.revisionStabilityReviewed
+    ) {
+      datasetBlockers.push(
+        'reaction-aggregation-validation-revision-review-mismatch',
+      );
+    }
+  }
+
+  if (datasetBlockers.length > 0) {
+    return Object.freeze({
+      contractVersion:
+        SNS_FANDOM_REACTION_AGGREGATION_METHODOLOGY_VERSION,
+      state: 'validation-dataset-blocked' as const,
+      construct: input.decision.construct,
+      metricId: input.decision.metricId,
+      methodId: input.decision.methodId,
+      executionImplemented: false as const,
+      aggregateValue: null,
+      normalizedValue: null,
+      crossMetricCombinationAllowed: false as const,
+      crossPlatformCombinationAllowed: false as const,
+      blockers: Object.freeze(datasetBlockers),
     });
   }
 
