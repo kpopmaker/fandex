@@ -11,6 +11,7 @@ import {
   bindCanonicalArtistToNaverNews,
 } from '../lib/server/ingestion/naverNewsArtistBinding';
 import {
+  buildNaverNewsIngestionWritePlan,
   buildNaverNewsJobIdentity,
 } from '../lib/server/ingestion/naverNewsContracts';
 import type {
@@ -21,6 +22,44 @@ import {
   buildNaverNewsSchedulerPlan,
   NAVER_NEWS_SCHEDULER_DEFAULT_DISPLAY,
 } from '../lib/server/ingestion/naverNewsScheduler';
+import {
+  createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  mirrorNaverNewsStoredEvidence,
+  stageNaverNewsStoredEvidenceMirror,
+} from '../lib/server/ingestion/naverNewsStoredEvidenceMirror';
+import type {
+  ImmutableTextObjectPutResult,
+  ImmutableTextObjectStore,
+} from '../lib/server/storage/immutableTextObjectStore';
+
+class MemoryImmutableStore implements ImmutableTextObjectStore {
+  readonly values = new Map<string, string>();
+
+  async readText(pathname: string) {
+    return this.values.get(pathname) ?? null;
+  }
+
+  async listPathnames(prefix: string) {
+    return [...this.values.keys()]
+      .filter((pathname) => pathname.startsWith(prefix))
+      .sort();
+  }
+
+  async putTextIfAbsent(
+    pathname: string,
+    body: string,
+  ): Promise<ImmutableTextObjectPutResult> {
+    const existing = this.values.get(pathname);
+    if (existing === undefined) {
+      this.values.set(pathname, body);
+      return { status: 'created', pathname };
+    }
+    if (existing === body) {
+      return { status: 'idempotent-existing', pathname };
+    }
+    return { status: 'conflict', pathname };
+  }
+}
 
 function hourly(start: string, count: number): string[] {
   const base = Date.parse(start);
@@ -50,6 +89,35 @@ function repository(
   return Object.freeze({
     async readSucceededSchedulerJobs() {
       return jobs;
+    },
+  });
+}
+
+function mirrorPlanAt(slotStart: string) {
+  const binding = bindCanonicalArtistToNaverNews('iu');
+  const scheduler = buildNaverNewsSchedulerPlan({
+    query: binding.query,
+    at: slotStart,
+    display: NAVER_NEWS_SCHEDULER_DEFAULT_DISPLAY,
+  });
+  const identity = buildNaverNewsJobIdentity(scheduler.command);
+  return buildNaverNewsIngestionWritePlan(identity, {
+    fetchedAt: new Date(Date.parse(slotStart) + 5 * 60_000).toISOString(),
+    response: {
+      lastBuildDate:
+        new Date(Date.parse(slotStart) + 4 * 60_000).toISOString(),
+      total: 1,
+      start: 1,
+      display: 1,
+      items: [
+        {
+          title: '아이유 recovery continuity evidence',
+          originallink: 'https://news.example.test/iu-recovery',
+          description: 'validated recovery continuity fixture',
+          pubDate:
+            new Date(Date.parse(slotStart) - 20 * 60_000).toISOString(),
+        },
+      ],
     },
   });
 }
@@ -148,5 +216,38 @@ test('repository adapter ignores scheduler-shaped rows that are not exact offici
   assert.equal(value.state, 'continuity-building');
   assert.equal(value.candidateProtocolStart, '2026-10-01T07:00:00.000Z');
   assert.equal(value.latestSuccessfulSlotStart, '2026-10-01T07:00:00.000Z');
+  assert.equal(value.contiguousSuccessfulSlotCount, 1);
+});
+
+test('staged Blob job evidence is not counted as scheduler completion', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = mirrorPlanAt('2026-10-01T14:00:00.000Z');
+
+  await stageNaverNewsStoredEvidenceMirror(plan, store);
+
+  const value =
+    await evaluateFandexMomentumRecoveryContinuityFromRepository(
+      createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(store),
+    );
+
+  assert.equal(value.state, 'no-recovery-evidence');
+  assert.equal(value.contiguousSuccessfulSlotCount, 0);
+  assert.equal(value.candidateProtocolStart, null);
+});
+
+test('finalized Blob official scheduler manifest feeds the same recovery gate contract', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = mirrorPlanAt('2026-10-01T14:00:00.000Z');
+
+  await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const value =
+    await evaluateFandexMomentumRecoveryContinuityFromRepository(
+      createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(store),
+    );
+
+  assert.equal(value.state, 'continuity-building');
+  assert.equal(value.candidateProtocolStart, '2026-10-01T14:00:00.000Z');
+  assert.equal(value.latestSuccessfulSlotStart, '2026-10-01T14:00:00.000Z');
   assert.equal(value.contiguousSuccessfulSlotCount, 1);
 });
