@@ -49,15 +49,29 @@ def main():
 
     queries = discover.build_queries("방탄소년단")
     assert queries
-    assert len(queries) == len(discover.ALIASES["방탄소년단"])
-    assert any(
-        "BTS" in query
-        for query in queries
+    assert len(queries) == min(
+        discover.MAX_QUERIES_PER_ARTIST,
+        4,
     )
-    assert any(
-        "방탄소년단" in query
+
+    aliases = discover.ALIASES["방탄소년단"]
+    prefixes = {
+        query.split(" 2026 ", 1)[0]
         for query in queries
-    )
+    }
+    assert len(prefixes) == 1
+    assert next(iter(prefixes)) in aliases
+
+    expected_suffixes = {
+        "official MV",
+        "dance practice",
+        "performance",
+        "shorts",
+    }
+    assert {
+        query.split(" 2026 ", 1)[1]
+        for query in queries
+    } <= expected_suffixes
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
