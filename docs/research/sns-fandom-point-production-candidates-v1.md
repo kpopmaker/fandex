@@ -175,3 +175,25 @@ An entitlement is fail-closed when pending, revoked, expired, not yet valid, mis
 For YouTube Analytics the candidate adapter additionally requires the official `yt-analytics.readonly` scope and an exact channel-owner OAuth entitlement. No access or refresh token is persisted in this variable contract.
 
 This enables artist-specific readiness without mutating the global Artist registry or pretending that one artist's authorization applies to another artist.
+
+
+## Generic public-comment persistence candidate
+
+A second persistence path is now modeled for generic public-channel coverage using the YouTube Data API comment surface.
+
+The candidate uses only fields already exposed by the official comment resource, including public comment author channel id and comment publication time. It computes one aggregate construct signal:
+
+- `youtube.public-commenter.cross-content-repeat-count`: the number of public commenter channel ids that appear across more than one distinct official artist video within the declared provider period.
+
+This is intentionally named **returning public commenter activity**, not “fan count.” It does not infer that a commenter is a fan, does not classify bots/fake engagement, and does not retain comment text, comment ids, or commenter channel ids in its output.
+
+The candidate remains **conditional-approval-required**. From June 1, 2026, YouTube's additional derived-metrics/data-storage policy applies only to audited analytics use cases that explicitly receive permission through the quota-extension/analytics approval path. The repository therefore requires separate recorded approval for this exact commenter-recurrence metric, commercial Product use, recurring collection, and aggregate retention before the source can be promoted.
+
+Even with approval, historical completeness is not assumed: deleted/unavailable comments, pagination scope, disabled comments, and incomplete collection windows remain evidence limitations.
+
+References:
+
+- https://developers.google.com/youtube/v3/docs/comments
+- https://developers.google.com/youtube/v3/docs/commentThreads
+- https://developers.google.com/youtube/terms/developer-policies
+- https://developers.google.com/youtube/terms/derived-metrics-policy
