@@ -64,8 +64,26 @@ which YouTube API methods produced the batch.
 Required upstream behavior:
 - emit the exact endpoint set used for the export;
 - the public reaction bridge currently requires at least
-  `youtube.channels.list` and `youtube.videos.list`;
+  `youtube.channels.list`, `youtube.playlistItems.list`, and
+  `youtube.videos.list`;
 - unapproved or undeclared endpoints must not be silently treated as covered.
+
+### 2c. Complete official-content window is not emitted
+
+The current collector can emit video rows, but it does not prove that those
+rows represent the complete official-channel content universe for a declared
+publication window. Without that proof, a latest-N, top-N, search subset, or
+manual selection could be mistaken for comparable artist evidence.
+
+Required upstream behavior:
+- obtain the bound channel uploads-playlist id;
+- enumerate it via `youtube.playlistItems.list`;
+- preserve each selected video's `publishedAt`;
+- declare exact `contentWindowStart` / `contentWindowEnd`;
+- record pagination page count and evidence for the terminal page;
+- expose an explicit terminal pagination state;
+- pass the exact manifest video-id set to the later statistical snapshot;
+- do not silently replace the complete window with a ranked or curated subset.
 
 ### 3. Observation time is not row-bound
 
@@ -120,7 +138,12 @@ at least:
 - `providerChannelId`
 - `providerClientRef`
 - `providerEndpoints` including the exact YouTube methods used
+- `contentWindowStart`
+- `contentWindowEnd`
+- `uploadsPlaylistId`
+- terminal pagination provenance
 - `videoId`
+- `publishedAt`
 - `viewCount: number | null`
 - `likeCount: number | null`
 - `commentCount: number | null`
@@ -167,12 +190,15 @@ only accepts an upstream export after:
 3. provider API client/project identity is explicit and matches approval
    evidence;
 4. exact provider endpoint provenance is explicit;
-5. missing statistics remain nullable;
-6. observation and collection times are distinct explicit timestamps;
-7. video ids are unique and counts are null or non-negative safe integers;
-8. a durable evidence reference exists; and
-9. exact provider approval evidence is valid for the downstream YouTube
-   metrics and endpoint set.
+5. a complete official-channel uploads manifest exists for an explicit
+   publication-time window and pagination terminates;
+6. the statistical snapshot video ids exactly match that manifest;
+7. missing statistics remain nullable;
+8. observation and collection times are distinct explicit timestamps;
+9. video ids are unique and counts are null or non-negative safe integers;
+10. a durable evidence reference exists; and
+11. exact provider approval evidence is valid for the downstream YouTube
+    metrics and endpoint set.
 
 The current Artist Expansion collector fails at step 1 and therefore cannot
 reach normalization. Once Production Operations / Artist Expansion supplies a
