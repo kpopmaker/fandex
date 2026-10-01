@@ -10,6 +10,7 @@ export type YoutubeCollectorCompatibilityProfile = Readonly<{
     | 'unknown';
   emitsProviderChannelId: boolean;
   emitsProviderClientRef: boolean;
+  emitsProviderEndpoints: boolean;
   emitsObservedAt: boolean;
   emitsCollectedAt: boolean;
   persistsRawApiResponse: boolean;
@@ -33,6 +34,7 @@ export const ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE:
     missingStatisticSemantics: 'coerce-missing-to-zero' as const,
     emitsProviderChannelId: false,
     emitsProviderClientRef: false,
+    emitsProviderEndpoints: false,
     emitsObservedAt: false,
     emitsCollectedAt: false,
     persistsRawApiResponse: true,
@@ -53,6 +55,9 @@ export function evaluateYoutubeCollectorCompatibility(
   }
   if (!profile.emitsProviderClientRef) {
     blockers.push('youtube-collector-provider-client-ref-missing');
+  }
+  if (!profile.emitsProviderEndpoints) {
+    blockers.push('youtube-collector-provider-endpoints-missing');
   }
   if (!profile.emitsObservedAt) {
     blockers.push('youtube-collector-observed-at-missing');
