@@ -17,12 +17,15 @@ test('Brand Fit execution workflow is manual and main-only', async () => {
   assert.doesNotMatch(source, /push:/);
 });
 
-test('execution requires exact main SHA, explicit confirmation, and injected credential', async () => {
+test('execution requires exact main SHA, owner authorization, explicit confirmation, and injected credential', async () => {
   const source = await readFile(workflowUrl, 'utf8');
 
   assert.match(source, /expected_main_sha:/);
   assert.match(source, /EXPECTED_MAIN_SHA/);
+  assert.match(source, /execution_authorization_id:/);
+  assert.match(source, /EXECUTION_AUTHORIZATION_ID/);
   assert.match(source, /test "\$EXPECTED_MAIN_SHA" = "\$GITHUB_SHA"/);
+  assert.match(source, /test -n "\$EXECUTION_AUTHORIZATION_ID"/);
   assert.match(
     source,
     /test "\$EXECUTION_CONFIRM" = "execute-brand-fit-youtube-observation-v1"/,
@@ -31,15 +34,25 @@ test('execution requires exact main SHA, explicit confirmation, and injected cre
     source,
     /secrets\.FANDEX_BRAND_FIT_YOUTUBE_API_KEY/,
   );
+  assert.match(source, /issues: read/);
+  assert.match(source, /secrets\.GITHUB_TOKEN/);
   assert.doesNotMatch(
     source,
     /FANDEX_BRAND_FIT_YOUTUBE_API_KEY:\s*['"]?[A-Za-z0-9_-]{8,}/,
   );
 });
 
-test('workflow calls only the bounded one-shot command and no storage or activation command', async () => {
+test('workflow requires owner gate before the bounded provider command', async () => {
   const source = await readFile(workflowUrl, 'utf8');
 
+  const gateIndex = source.indexOf(
+    'brandFitYoutubeProductionExecutionGateV1.mts',
+  );
+  const executionIndex = source.indexOf(
+    'brandFitYoutubeObservationV1.mts --execute',
+  );
+  assert.ok(gateIndex >= 0);
+  assert.ok(executionIndex > gateIndex);
   assert.match(
     source,
     /brandFitYoutubeObservationV1\.mts --execute/,
