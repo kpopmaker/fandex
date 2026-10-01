@@ -376,14 +376,28 @@
       "reviewedAt": "2026-10-01T16:46:00+09:00",
       "rationale": "SMTOWN official RIIZE MV",
       "activationState": "reviewed_seed_candidate_only"
+    },
+    {
+      "reviewId": "youtube-v-sY19m7EZTw4-approved-v1",
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "videoId": "sY19m7EZTw4",
+      "decision": "approved",
+      "reviewedVideoType": "external_content",
+      "reviewedSourceType": "official",
+      "evidenceUrl": "https://www.youtube.com/watch?v=sY19m7EZTw4",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T18:12:00+09:00",
+      "rationale": "YouTube videos.list verified BANGTANTV channel and exact title \"V's NORMAL LOG #2026BTSFESTA\"; BTS_official also linked the same video as V-specific 2026 FESTA evidence.",
+      "activationState": "reviewed_seed_candidate_only"
     }
   ],
   "artistNotes": [
     {
       "canonicalArtistId": "v",
       "artist": "V",
-      "status": "no_approved_seed_yet",
-      "note": "Live discovery candidates were BTS group-scoped or unrelated identities; none was promoted as a canonical V solo seed."
+      "status": "approved_seed_now_available",
+      "note": "V-specific BANGTANTV video sY19m7EZTw4 verified by YouTube videos.list; Search API channel-bound discovery remained rate-limited but is no longer required for this exact reviewed video evidence."
     }
   ]
 }
