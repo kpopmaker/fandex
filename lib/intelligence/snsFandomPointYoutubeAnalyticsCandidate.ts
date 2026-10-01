@@ -13,6 +13,7 @@ export const SNS_FANDOM_YOUTUBE_ANALYTICS_CANDIDATE_VERSION =
 export type YoutubeSubscribedAudienceActivitySnapshot = Readonly<{
   canonicalArtistId: string;
   youtubeChannelId: string;
+  providerClientRef: string;
   providerPeriodStart: string;
   providerPeriodEnd: string;
   observedAt: string;
@@ -96,6 +97,7 @@ function observation(
     }),
     evidence: Object.freeze({
       evidenceRef: snapshot.evidenceRef,
+      providerClientRef: snapshot.providerClientRef,
       revision: null,
     }),
     lifecycle: Object.freeze({
@@ -159,6 +161,7 @@ export function buildYoutubeAnalyticsFandomPersistenceCandidate(
       && !isSnsFandomArtistEntitlementActiveFor(entitlement, {
         canonicalArtistId: firstSnapshot.canonicalArtistId,
         providerId: 'youtube-analytics-api',
+        providerClientRef: firstSnapshot.providerClientRef,
         providerArtistId: firstSnapshot.youtubeChannelId,
         dimension: 'fandom-activity-persistence',
         evaluatedAt: input.evaluatedAt,
@@ -173,6 +176,7 @@ export function buildYoutubeAnalyticsFandomPersistenceCandidate(
     && input.snapshots.some((snapshot) => (
       snapshot.canonicalArtistId !== firstSnapshot.canonicalArtistId
       || snapshot.youtubeChannelId !== firstSnapshot.youtubeChannelId
+      || snapshot.providerClientRef !== firstSnapshot.providerClientRef
     ))
   ) {
     blockers.push('youtube-analytics-snapshot-identity-mixed');
