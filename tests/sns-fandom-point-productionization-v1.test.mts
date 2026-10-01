@@ -351,6 +351,22 @@ test('YouTube Analytics persistence adapter emits nothing without artist entitle
   ]);
 });
 
+test('YouTube Analytics adapter fails closed on revoked entitlement even with no snapshots', () => {
+  const result = buildYoutubeAnalyticsFandomPersistenceCandidate({
+    snapshots: [],
+    entitlement: youtubeAnalyticsEntitlement({
+      state: 'revoked',
+    }),
+    evaluatedAt: '2026-10-01T00:00:00.000Z',
+  });
+
+  assert.equal(result.state, 'entitlement-blocked');
+  assert.deepEqual(result.observations, []);
+  assert.ok(
+    result.blockers.includes('youtube-analytics-entitlement-not-active'),
+  );
+});
+
 test('YouTube Analytics adapter rejects mismatched artist/channel entitlement', () => {
   const result = buildYoutubeAnalyticsFandomPersistenceCandidate({
     entitlement: youtubeAnalyticsEntitlement({
