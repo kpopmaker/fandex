@@ -349,3 +349,44 @@ The current state remains:
 
 This boundary prevents a valid source universe from being mistaken for a valid
 scoring formula.
+
+
+## Content-age temporal alignment before aggregation
+
+Complete content selection does not solve exposure-time bias.
+
+YouTube public view / like / comment counters are cumulative observations.
+When two selected videos have different publication timestamps, observing them
+at the same wall-clock snapshot time gives them different elapsed content ages.
+
+The v1 age-alignment contract therefore records, for each content metric:
+
+`contentAge = observedAt - publishedAt`
+
+Without an additional exposure model, direct comparison of raw cumulative
+content counters is marked ready only when the elapsed content age is exactly
+the same across the content samples.
+
+This is not a threshold. It is a like-for-like temporal requirement.
+
+The contract explicitly keeps:
+
+- interpolation = false;
+- extrapolation = false;
+- aggregation method = null;
+- aggregate value = null;
+- artist-level aggregation readiness = false;
+- normalization readiness = false.
+
+A same-time batch snapshot of videos published on different dates is therefore
+valid source evidence but **age-alignment-blocked** for direct artist-level
+aggregation.
+
+A future methodology has two possible paths, neither currently approved:
+
+1. collect each content item's cumulative metric at a common elapsed content
+   age; or
+2. justify a separate exposure-adjustment / growth-curve model.
+
+No arbitrary age bucket, interpolation rule, extrapolation rule, or decay
+formula is introduced in v1.
