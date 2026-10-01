@@ -1,0 +1,36 @@
+name: Dispatch Momentum Blob current-evidence read once 20261001 v1
+
+on:
+  push:
+    branches:
+      - diagnostic/momentum-blob-current-evidence-read-once-20261001-v1
+    paths:
+      - .github/workflows/dispatch-momentum-blob-current-evidence-read-once-20261001-v1.yml
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: dispatch-momentum-blob-current-evidence-read-once-20261001-v1
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/diagnostic/momentum-blob-current-evidence-read-once-20261001-v1' &&
+      github.event_name == 'push' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Dispatch existing guarded main read workflow exactly once
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run             inspect-naver-production-blob-current-evidence-v1.yml             --repo kpopmaker/fandex             --ref main             --field read_intent=ops-momentum-blob-current-evidence-read-20261001-v1
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_DISPATCH=accepted"
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_DISPATCH_TARGET=main"
+          echo "FANDEX_MOMENTUM_BLOB_CURRENT_EVIDENCE_DISPATCH_COUNT=1"
