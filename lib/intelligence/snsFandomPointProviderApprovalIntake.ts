@@ -39,6 +39,13 @@ export type SnsFandomProviderDecision = Readonly<{
     derivedMetricMonths: number | null;
     nonStatisticalDataRefreshDays: number | null;
   }>;
+  youtubePolicyGrant: Readonly<{
+    complianceAuditPassed: boolean;
+    analyticsReportingUseCaseAccepted: boolean;
+    developerPoliciesAmendmentAccepted: boolean;
+    additionalDerivedMetricsApproved: boolean;
+    extendedStatisticalStorageApproved: boolean;
+  }> | null;
 }>;
 
 export type SnsFandomProviderApprovalIntakeResult =
@@ -109,6 +116,10 @@ export function buildSnsFandomProviderApprovalEvidenceFromDecision(
     evidenceRef: decision.evidenceRef,
     rights: Object.freeze({ ...decision.rights }),
     retention: Object.freeze({ ...decision.retention }),
+    youtubePolicyGrant:
+      decision.youtubePolicyGrant === null
+        ? null
+        : Object.freeze({ ...decision.youtubePolicyGrant }),
   });
 
   const validation = validateSnsFandomProviderApprovalEvidence(
