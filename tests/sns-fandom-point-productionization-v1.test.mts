@@ -34,6 +34,8 @@ import {
   buildSnsFandomYoutubeCollectorBridge,
 } from '../lib/intelligence/snsFandomPointYoutubeCollectorBridge';
 
+const PROVIDER_CLIENT_REF = 'gcp-project-fandex-youtube-primary';
+
 function youtubeAnalyticsEntitlement(
   overrides: Partial<SnsFandomArtistProviderEntitlement> = {},
 ): SnsFandomArtistProviderEntitlement {
