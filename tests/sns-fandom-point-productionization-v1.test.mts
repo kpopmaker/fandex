@@ -16,6 +16,9 @@ import {
 import {
   buildYoutubeAnalyticsFandomPersistenceCandidate,
 } from '../lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate';
+import {
+  buildYoutubePublicCommentPersistenceCandidate,
+} from '../lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate';
 
 function youtubeAnalyticsEntitlement(
   overrides: Partial<SnsFandomArtistProviderEntitlement> = {},
@@ -443,6 +446,151 @@ test('authorized YouTube Analytics subscriber activity remains a bounded persist
   assert.deepEqual(result.blockers, [
     'youtube-analytics-generic-kpop-coverage-not-established',
   ]);
+});
+
+test('public-comment persistence candidate is completely silent before derived-metric rights approval', () => {
+  const result = buildYoutubePublicCommentPersistenceCandidate({
+    batch: {
+      canonicalArtistId: 'iu',
+      youtubeChannelId: 'UC-iu',
+      providerPeriodStart: '2026-09-01T00:00:00.000Z',
+      providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      comments: [],
+      evidenceRef: 'evidence://youtube-comments/iu/2026-09',
+    },
+    rights: {
+      derivedMetricsUseCaseApproved: false,
+      commenterRecurrenceMetricApproved: false,
+      commercialProductUseApproved: false,
+      recurringCollectionApproved: false,
+      aggregateRetentionApproved: false,
+    },
+  });
+
+  assert.equal(result.state, 'rights-blocked');
+  assert.deepEqual(result.observations, []);
+  assert.deepEqual(result.persistenceEvidence, []);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-commenter-recurrence-metric-approval-missing',
+    ),
+  );
+});
+
+test('public-comment recurrence is aggregated across distinct official content without persisting commenter identity', () => {
+  const result = buildYoutubePublicCommentPersistenceCandidate({
+    batch: {
+      canonicalArtistId: 'iu',
+      youtubeChannelId: 'UC-iu',
+      providerPeriodStart: '2026-09-01T00:00:00.000Z',
+      providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      comments: [
+        {
+          videoId: 'video-a',
+          commentId: 'comment-1',
+          authorChannelId: 'author-repeat',
+          publishedAt: '2026-09-10T00:00:00.000Z',
+        },
+        {
+          videoId: 'video-b',
+          commentId: 'comment-2',
+          authorChannelId: 'author-repeat',
+          publishedAt: '2026-09-11T00:00:00.000Z',
+        },
+        {
+          videoId: 'video-a',
+          commentId: 'comment-3',
+          authorChannelId: 'author-single',
+          publishedAt: '2026-09-12T00:00:00.000Z',
+        },
+        {
+          videoId: 'video-a',
+          commentId: 'comment-3',
+          authorChannelId: 'author-single',
+          publishedAt: '2026-09-12T00:00:00.000Z',
+        },
+        {
+          videoId: 'video-c',
+          commentId: 'comment-4',
+          authorChannelId: null,
+          publishedAt: '2026-09-13T00:00:00.000Z',
+        },
+      ],
+      evidenceRef: 'evidence://youtube-comments/iu/2026-09',
+    },
+    rights: {
+      derivedMetricsUseCaseApproved: true,
+      commenterRecurrenceMetricApproved: true,
+      commercialProductUseApproved: true,
+      recurringCollectionApproved: true,
+      aggregateRetentionApproved: true,
+    },
+  });
+
+  assert.equal(result.state, 'normalized-candidate');
+  assert.equal(result.summary.receivedCommentCount, 5);
+  assert.equal(result.summary.duplicateCommentCount, 1);
+  assert.equal(result.summary.missingAuthorChannelCount, 1);
+  assert.equal(result.summary.distinctPublicCommenterCount, 2);
+  assert.equal(result.summary.returningPublicCommenterCount, 1);
+  assert.equal(result.safety.rawCommentIdsPersisted, false);
+  assert.equal(result.safety.rawCommenterChannelIdsPersisted, false);
+  assert.equal(result.safety.individualFanIdentityInferred, false);
+  assert.equal(
+    result.observations.find(
+      (item) =>
+        item.variable.metricId
+          === 'youtube.public-commenter.cross-content-repeat-count',
+    )?.value.rawValue,
+    1,
+  );
+
+  const serialized = JSON.stringify(result);
+  assert.doesNotMatch(serialized, /author-repeat/);
+  assert.doesNotMatch(serialized, /author-single/);
+  assert.doesNotMatch(serialized, /comment-1/);
+  assert.doesNotMatch(serialized, /comment-2/);
+});
+
+test('public-comment recurrence fails closed when a comment falls outside the declared provider period', () => {
+  const result = buildYoutubePublicCommentPersistenceCandidate({
+    batch: {
+      canonicalArtistId: 'iu',
+      youtubeChannelId: 'UC-iu',
+      providerPeriodStart: '2026-09-01T00:00:00.000Z',
+      providerPeriodEnd: '2026-09-30T23:59:59.999Z',
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      comments: [
+        {
+          videoId: 'video-a',
+          commentId: 'comment-outside',
+          authorChannelId: 'author-x',
+          publishedAt: '2026-10-01T00:00:00.000Z',
+        },
+      ],
+      evidenceRef: 'evidence://youtube-comments/iu/2026-09',
+    },
+    rights: {
+      derivedMetricsUseCaseApproved: true,
+      commenterRecurrenceMetricApproved: true,
+      commercialProductUseApproved: true,
+      recurringCollectionApproved: true,
+      aggregateRetentionApproved: true,
+    },
+  });
+
+  assert.equal(result.state, 'input-blocked');
+  assert.deepEqual(result.observations, []);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-comment-persistence-comment-outside-period',
+    ),
+  );
 });
 
 test('YouTube candidate keeps subscriber count context-only and preserves missing values', () => {
