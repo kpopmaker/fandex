@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '.github/workflows/validate-momentum-*.yml'
+      - 'lib/intelligence/fandexMomentum*.ts'
+      - 'lib/product/**/momentum*.ts'
+      - 'lib/server/ingestion/momentum*.ts'
+      - 'tests/momentum-*.test.mts'
 
 permissions:
   contents: read
@@ -60,7 +66,48 @@ jobs:
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
-          comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
+          grep -E '^(\.github/workflows/validate-momentum-.*\.yml|lib/intelligence/fandexMomentum.*\.ts|lib/product/.*/momentum.*\.ts|lib/server/ingestion/momentum.*\.ts|tests/momentum-.*\.test\.mts)
+
+      - run: npm ci
+
+      - name: Current evaluation execution regression
+        run: npx tsx --test tests/momentum-current-evaluation-execution-v1.test.mts
+
+      - name: V2 carrier record candidate regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-v2-carrier-record-candidate-v1.test.mts
+
+      - name: Live-shadow readiness execution-channel regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Preview-independent categorical attestation regression
+        run: npx tsx --test tests/momentum-categorical-output-attestation-current-main-v1.test.mts
+
+      - name: Carrier persistence decision regression
+        run: npx tsx --test tests/momentum-carrier-persistence-decision-v1.test.mts
+
+      - name: Carrier lineage regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-carrier-attestation-lineage-v2.test.mts
+
+      - name: Existing carrier runtime regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-evidence-consensus-runtime-read-v1.test.mts
+
+      - name: Existing Momentum Product contract regression
+        run: npx tsx --test tests/momentum-evidence-consensus-product-contract-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+ /tmp/changed.txt \
+            | sort > /tmp/momentum-changed.txt || true
+          comm -23 /tmp/momentum-changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
           test ! -s /tmp/disallowed.txt
 
       - run: npm ci
