@@ -241,6 +241,7 @@ test('current Artist Expansion YouTube collector is rejected for snsFandom Produ
       'youtube-collector-missing-semantics-not-preserved',
       'youtube-collector-provider-channel-id-missing',
       'youtube-collector-provider-client-ref-missing',
+      'youtube-collector-provider-endpoints-missing',
       'youtube-collector-observed-at-missing',
       'youtube-collector-collected-at-missing',
       'youtube-collector-raw-response-retention-unqualified',
@@ -256,6 +257,7 @@ test('collector compatibility becomes eligible only when missing/time/identity/e
     missingStatisticSemantics: 'preserve-null',
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
+    emitsProviderEndpoints: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -276,6 +278,10 @@ test('collector bridge rejects the current legacy collector before reading candi
       canonicalArtistId: 'iu',
       providerChannelId: 'UC-iu',
       providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: [
+        'youtube.channels.list',
+        'youtube.videos.list',
+      ],
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/collector',
@@ -295,14 +301,15 @@ test('collector bridge rejects the current legacy collector before reading candi
   );
 });
 
-test('collector bridge preserves null missing values and exact observation time after compatibility is fixed', () => {
+test('collector bridge rejects a provenance-complete profile when required read endpoints are absent from the batch', () => {
   const compatibleProfile = {
     ...ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
-    collectorId: 'youtube-collector-hypothetical-fixed-v2',
-    sourceRef: 'hypothetical-fixed-v2',
+    collectorId: 'youtube-collector-endpoint-mismatch-v1',
+    sourceRef: 'hypothetical-endpoint-mismatch-v1',
     missingStatisticSemantics: 'preserve-null' as const,
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
+    emitsProviderEndpoints: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -317,6 +324,53 @@ test('collector bridge preserves null missing values and exact observation time 
       canonicalArtistId: 'iu',
       providerChannelId: 'UC-iu',
       providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: ['youtube.videos.list'],
+      observedAt: '2026-10-01T00:00:00.000Z',
+      collectedAt: '2026-10-01T00:01:00.000Z',
+      evidenceRef: 'evidence://youtube/iu/endpoint-mismatch',
+      channelSubscriberCount: null,
+      videos: [],
+    },
+    providerApproval: youtubeStatsProviderApproval(),
+    evaluatedAt: '2026-10-01T00:02:00.000Z',
+  });
+
+  assert.equal(result.state, 'input-blocked');
+  assert.equal(result.candidate, null);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-collector-export-required-endpoint-missing',
+    ),
+  );
+});
+
+test('collector bridge preserves null missing values and exact observation time after compatibility is fixed', () => {
+  const compatibleProfile = {
+    ...ARTIST_EXPANSION_YOUTUBE_COLLECTOR_V1_PROFILE,
+    collectorId: 'youtube-collector-hypothetical-fixed-v2',
+    sourceRef: 'hypothetical-fixed-v2',
+    missingStatisticSemantics: 'preserve-null' as const,
+    emitsProviderChannelId: true,
+    emitsProviderClientRef: true,
+    emitsProviderEndpoints: true,
+    emitsObservedAt: true,
+    emitsCollectedAt: true,
+    persistsRawApiResponse: false,
+    rawApiResponseRetentionQualified: false,
+    emitsEvidenceRef: true,
+  };
+
+  const result = buildSnsFandomYoutubeCollectorBridge({
+    collectorProfile: compatibleProfile,
+    batch: {
+      contractVersion: 'sns-fandom-youtube-collector-export-v1',
+      canonicalArtistId: 'iu',
+      providerChannelId: 'UC-iu',
+      providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: [
+        'youtube.channels.list',
+        'youtube.videos.list',
+      ],
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/collector-fixed',
@@ -369,6 +423,7 @@ test('collector bridge rejects duplicate video ids and invalid counts before nor
     missingStatisticSemantics: 'preserve-null' as const,
     emitsProviderChannelId: true,
     emitsProviderClientRef: true,
+    emitsProviderEndpoints: true,
     emitsObservedAt: true,
     emitsCollectedAt: true,
     persistsRawApiResponse: false,
@@ -383,6 +438,10 @@ test('collector bridge rejects duplicate video ids and invalid counts before nor
       canonicalArtistId: 'iu',
       providerChannelId: 'UC-iu',
       providerClientRef: PROVIDER_CLIENT_REF,
+      providerEndpoints: [
+        'youtube.channels.list',
+        'youtube.videos.list',
+      ],
       observedAt: '2026-10-01T00:00:00.000Z',
       collectedAt: '2026-10-01T00:01:00.000Z',
       evidenceRef: 'evidence://youtube/iu/invalid',
