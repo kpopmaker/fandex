@@ -34,13 +34,13 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          TARGET_SHA="HEAD"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
-            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
-            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
-          else
-            git diff --name-only b76e7d22cc1c3479faca20ebf951c1be0097944b...HEAD | sort > /tmp/changed.txt
+            TARGET_SHA="$PR_HEAD_SHA"
           fi
+          MERGE_BASE="$(git merge-base refs/remotes/origin/main "$TARGET_SHA")"
+          git diff --name-only "$MERGE_BASE...$TARGET_SHA" | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
           .github/workflows/validate-sns-fandom-point-productionization-v1.yml
           docs/research/sns-fandom-point-production-candidates-v1.md
