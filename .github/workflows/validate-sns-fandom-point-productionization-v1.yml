@@ -50,6 +50,7 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
           tests/sns-fandom-point-productionization-v1.test.mts
           EOF
