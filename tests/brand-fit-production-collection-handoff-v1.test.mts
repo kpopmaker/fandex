@@ -152,3 +152,30 @@ test('collection before provider publication is impossible', () => {
   if (result.status !== 'blocked') return;
   assert.equal(result.reason, 'provider-time-invalid');
 });
+
+
+test('provider ISO timestamp without milliseconds is accepted while day-only remains blocked', () => {
+  const accepted = prepareBrandFitYouTubeEvidenceCandidate({
+    executionOwner: 'production-operations',
+    plan: IU_ESTEE_LAUDER_NEW_NIGHT_YOUTUBE_COLLECTION_PLAN,
+    compliance,
+    providerObservation: {
+      ...observation(),
+      publishedAt: '2025-08-03T00:00:00Z',
+    },
+  });
+  assert.equal(accepted.status, 'eligible-for-stored-evidence-review');
+
+  const blocked = prepareBrandFitYouTubeEvidenceCandidate({
+    executionOwner: 'production-operations',
+    plan: IU_ESTEE_LAUDER_NEW_NIGHT_YOUTUBE_COLLECTION_PLAN,
+    compliance,
+    providerObservation: {
+      ...observation(),
+      publishedAt: '2025-08-03',
+    },
+  });
+  assert.equal(blocked.status, 'blocked');
+  if (blocked.status !== 'blocked') return;
+  assert.equal(blocked.reason, 'provider-time-invalid');
+});
