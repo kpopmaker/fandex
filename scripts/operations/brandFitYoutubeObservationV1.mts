@@ -2,6 +2,9 @@ import {
   executeBrandFitYouTubeObservation,
   sanitizeBrandFitYouTubeManualExecutionResult,
 } from '../../lib/intelligence/brandFitYouTubeManualExecution';
+import {
+  validateBrandFitProductionObservationReceipt,
+} from '../../lib/intelligence/brandFitProductionObservationReceipt';
 
 const EXECUTION_FLAG = '--execute';
 const METADATA_POLICY_APPROVAL =
@@ -63,8 +66,17 @@ const result = await executeBrandFitYouTubeObservation({
 });
 
 const sanitized = sanitizeBrandFitYouTubeManualExecutionResult(result);
-process.stdout.write(JSON.stringify(sanitized, null, 2) + '\n');
 
 if (result.status !== 'eligible-for-stored-evidence-review') {
+  process.stdout.write(JSON.stringify(sanitized, null, 2) + '\n');
   process.exit(1);
 }
+
+const receipt = validateBrandFitProductionObservationReceipt(
+  JSON.stringify(sanitized),
+);
+if (receipt.status !== 'accepted-receipt') {
+  fail('sanitized-receipt-validation-failed');
+}
+
+process.stdout.write(JSON.stringify(sanitized, null, 2) + '\n');
