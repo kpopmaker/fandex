@@ -95,7 +95,12 @@ jobs:
                       "videoId":
                           row["videoId"],
                       "sourceUrl":
-                          row["sourceUrl"],
+                          (
+                              row.get("sourceUrl")
+                              or row.get("videoUrl")
+                              or row.get("url")
+                              or ""
+                          ),
                       "videoType":
                           row["videoType"],
                       "channelTitle":
