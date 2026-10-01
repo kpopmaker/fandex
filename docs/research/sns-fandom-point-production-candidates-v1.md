@@ -118,3 +118,8 @@ Even after rights are cleared and dual-dimension evidence exists, the v1 contrac
 - Product activation/publication = false
 
 until a separately justified cross-dimension combination methodology is approved.
+
+
+## Validation scope
+
+Exact variable-scope CI must cover only the five snsFandomPoint files introduced by this candidate and must not modify shared runtime, scheduler, database, registry, or deployment configuration.
