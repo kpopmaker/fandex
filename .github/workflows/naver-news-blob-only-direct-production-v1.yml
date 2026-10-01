@@ -59,7 +59,7 @@ jobs:
       - run: npm ci
 
       - name: Execute one direct Blob-only slot
-        run: npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.mts
+        run: npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts
 
       - name: Safety boundary
         if: always()
