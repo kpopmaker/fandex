@@ -1,0 +1,135 @@
+name: Validate Artist Expansion YouTube reviewed shadow v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-shadow-v1
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  youtube-reviewed-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download prior discovery evidence
+        run: |
+          mkdir -p evidence
+          gh run download 36800253141 \
+            -n artist-expansion-youtube-discovery-v2 \
+            -D evidence
+          cp evidence/fandex_youtube_seed_candidates_latest.json \
+            fandex_youtube_seed_candidates_latest.json
+      - name: YouTube reviewed shadow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_build_reviewed_seed_candidate_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3.py \
+            scripts/fandex-cloud-migration/source/youtube_publish_v3_shadow_v1.py
+      - name: Build reviewed candidate seed
+        run: |
+          python scripts/fandex-cloud-migration/source/youtube_build_reviewed_seed_candidate_v1.py
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("youtube_seed_videos_candidate_v1.json")
+              .read_text(encoding="utf-8")
+          )
+          with Path("youtube_seed_videos_candidate_v1.csv").open(
+              "r", encoding="utf-8-sig", newline=""
+          ) as f:
+              rows = list(csv.DictReader(f))
+
+          assert payload["targetArtistCount"] == 21
+          assert payload["coveredArtistCount"] == 17
+          assert payload["unresolvedArtistCount"] == 4
+          assert payload["approvedVideoCount"] == 41
+          assert set(payload["unresolvedCanonicalArtistIds"]) == {
+              "jimin", "v", "jennie", "lisa"
+          }
+          assert len(rows) == 41
+          print(
+              "Reviewed YouTube seed | targets=21 | "
+              "covered=17 | unresolved=4 | videos=41"
+          )
+          PY
+      - name: Collect live metrics for reviewed 41 videos
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          cp youtube_seed_videos_candidate_v1.csv youtube_seed_videos_v1.csv
+          python scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py
+          mv youtube_video_metrics_v1.csv youtube_video_metrics_candidate_v1.csv
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          with Path("youtube_video_metrics_candidate_v1.csv").open(
+              "r", encoding="utf-8-sig", newline=""
+          ) as f:
+              rows = list(csv.DictReader(f))
+
+          if len(rows) != 41:
+              raise RuntimeError(
+                  f"Reviewed YouTube metrics incomplete: {len(rows)}/41"
+              )
+          if len({row["videoId"] for row in rows}) != 41:
+              raise RuntimeError("Duplicate YouTube metrics videoId")
+          print("YouTube reviewed metrics | success=41/41")
+          PY
+      - name: Build historical-v3 shadow ranking
+        run: |
+          python scripts/fandex-cloud-migration/source/youtube_publish_v3_shadow_v1.py
+      - name: Validate reviewed shadow contract
+        run: python tests/artist-expansion-youtube-shadow-v1.py
+      - name: Print legacy comparison diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(
+              Path("fandex_youtube_ranking_v3_shadow_latest.json")
+              .read_text(encoding="utf-8")
+          )
+          print(
+              "YouTube v3 shadow | "
+              f"artists={payload['artistCount']} | "
+              f"videos={payload['videoCount']} | "
+              f"legacyComparable={payload['legacyComparableArtistCount']}"
+          )
+          for row in payload["ranking"]:
+              if row["legacySnapshotPoint"] is None:
+                  continue
+              print(
+                  f"{row['canonicalArtistId']} | {row['artist']} | "
+                  f"shadow={row['youtubePointShadow']} | "
+                  f"legacy={row['legacySnapshotPoint']} | "
+                  f"delta={row['deltaFromLegacySnapshot']}"
+              )
+          PY
+      - name: Upload reviewed YouTube shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-reviewed-shadow-v1
+          path: |
+            youtube_seed_videos_candidate_v1.csv
+            youtube_seed_videos_candidate_v1.json
+            youtube_video_metrics_candidate_v1.csv
+            fandex_youtube_ranking_v3_shadow_latest.json
+            fandex_youtube_ranking_v3_shadow_audit.csv
+          if-no-files-found: ignore
+          retention-days: 7
