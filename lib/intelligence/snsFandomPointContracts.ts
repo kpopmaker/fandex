@@ -322,6 +322,26 @@ export function validateSnsFandomObservation(
     }
   }
 
+  const periodStart = observation.time.providerPeriodStart;
+  const periodEnd = observation.time.providerPeriodEnd;
+  if (
+    periodStart !== null
+    && periodEnd !== null
+    && validIso(periodStart)
+    && validIso(periodEnd)
+    && Date.parse(periodStart) > Date.parse(periodEnd)
+  ) {
+    blockers.push('provider-period-order-invalid');
+  }
+  if (
+    periodEnd !== null
+    && validIso(periodEnd)
+    && validIso(observation.time.observedAt)
+    && Date.parse(observation.time.observedAt) < Date.parse(periodEnd)
+  ) {
+    blockers.push('observation-precedes-provider-period-end');
+  }
+
   return Object.freeze({
     ok: blockers.length === 0,
     blockers: Object.freeze(blockers),
