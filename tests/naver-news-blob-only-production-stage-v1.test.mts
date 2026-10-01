@@ -323,3 +323,36 @@ test('Production wrapper contains no Postgres or database dependency', async () 
   assert.match(route, /preferredRegion = 'sin1'/);
   assert.match(route, /createProductionNaverNewsBlobEvidenceStore/);
 });
+
+
+test('live invocation candidate is workflow_dispatch-only and approval gated', async () => {
+  const workflow = await readFile(
+    new URL(
+      '../.github/workflows/invoke-naver-production-blob-only-collection-stage-v1.yml',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.match(
+    workflow,
+    /execution_approval == 'ops-naver-blob-only-stage-20261001-v1'/,
+  );
+  assert.match(workflow, /--retry 0/);
+  assert.match(
+    workflow,
+    /X-Fandex-Blob-Only-Stage-Id: ops-naver-blob-only-stage-20261001-v1/,
+  );
+  assert.match(
+    workflow,
+    /X-Fandex-Scheduler-Source: github-actions-manual-v1/,
+  );
+  assert.match(
+    workflow,
+    /https:\/\/fandex-eta\.vercel\.app\/api\/internal\/naver-news\/blob-only-collection-stage/,
+  );
+  assert.doesNotMatch(workflow, /FANDEX_RUNTIME_DATABASE_URL/);
+  assert.doesNotMatch(workflow, /NEON_/);
+});
