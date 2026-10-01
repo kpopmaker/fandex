@@ -1,0 +1,38 @@
+name: Validate Artist Expansion YouTube reviewed shadow v2
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-reviewed-shadow-v2
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-reviewed-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: YouTube reviewed-seed syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_reviewed_seed_shadow_v1.py
+      - name: Validate reviewed seed candidate
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_candidate_v1.py
+      - name: Live reviewed seed shadow
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_reviewed_seed_shadow_v1.py
+      - name: Upload shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-reviewed-shadow-v2
+          path: youtube_reviewed_seed_shadow_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
