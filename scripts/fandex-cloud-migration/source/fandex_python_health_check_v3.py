@@ -656,14 +656,19 @@ def main():
         "Last.fm rolling source"
     )
 
-    if norm(
+    lastfm_payload_mode = norm(
         lastfm_payload.get(
             "activeMode"
         )
-    ) == "rolling3_50_rolling7_50":
+    )
+
+    if lastfm_payload_mode in {
+        "rolling3_50_rolling7_50",
+        "mixed_by_artist",
+    }:
         health.ok(
             "activeMode: "
-            "rolling3_50_rolling7_50"
+            + lastfm_payload_mode
         )
     else:
         health.fail(
