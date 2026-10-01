@@ -1,0 +1,134 @@
+{
+  "version": "youtube_source_readiness_v1",
+  "source": "youtube_v3",
+  "construct": "legacy curated-video engagement score",
+  "currentState": "FROZEN_PRODUCT_10_WITH_21_ARTIST_REVIEWED_SEED_EVIDENCE",
+  "semantics": {
+    "reviewedSeedEvidence": "Canonical artist has at least one explicitly reviewed YouTube seed video or belongs to the recoverable historical Product cohort.",
+    "frozenProductScoreAvailable": "The existing cutover snapshot contains a production YouTube v3 point for this canonical artist.",
+    "scoreRecomputeEligible": "A canonical artist can be scored under a reproducible and comparable seed-selection contract.",
+    "productExpansionEligible": "A new canonical artist can safely enter the Product cohort using YouTube evidence without changing score semantics."
+  },
+  "evidence": {
+    "frozenProductRankingFile": "data/fandex-cloud-v10/seed/fandex_youtube_ranking_v3_latest.json",
+    "historicalApprovalManifest": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+    "reviewedExpansionLedger": "data/fandex-cloud-v10/seed/youtube_seed_video_reviews_v1.json",
+    "historicalKnownApprovedVideoIds": 47,
+    "reviewedExpansionVideoIds": 11,
+    "knownApprovedShadowVideoIds": 58,
+    "reviewedSeedCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt",
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ],
+    "reviewedSeedArtistCount": 21,
+    "frozenProductScoreCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt"
+    ],
+    "frozenProductScoreArtistCount": 10
+  },
+  "readiness": {
+    "reviewedSeedEvidenceCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt",
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ],
+    "frozenProductScoreAvailableCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt"
+    ],
+    "scoreRecomputeEligibleCanonicalArtistIds": [],
+    "productExpansionEligibleCanonicalArtistIds": [],
+    "sourceOnlyReviewedButScoreBlockedCanonicalArtistIds": [
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ]
+  },
+  "blockers": [
+    {
+      "code": "COMPLETE_HISTORICAL_SEED_UNKNOWN",
+      "detail": "The original complete youtube_seed_videos_v1.csv was never committed. The 47 recovered IDs are known historical approved additions, not proof of the complete production seed."
+    },
+    {
+      "code": "FROZEN_SCORE_INPUT_NOT_REPRODUCIBLE",
+      "detail": "The 2026-08-31 YouTube v3 cutover snapshot preserves points only and does not preserve videoCount/type breakdown or the full seed input."
+    },
+    {
+      "code": "UNIFORM_EXPANSION_SEED_POLICY_UNDEFINED",
+      "detail": "Reviewed source identity exists for all 21 candidate artists, but no preserved comparable seed-selection policy exists for recomputing the legacy v3 score across old and new artists."
+    },
+    {
+      "code": "KNOWN_APPROVAL_SHADOW_NON_COMPARABLE",
+      "detail": "The 58-video known-approved shadow proves technical collection/scoring execution only. It must not replace frozen Product points or qualify new artists for Product expansion."
+    }
+  ],
+  "guards": {
+    "reviewedSeedDoesNotImplyScoreSupport": true,
+    "shadowScoreDoesNotImplyProductEligibility": true,
+    "missingHistoricalSeedDoesNotEqualZero": true,
+    "noAutomaticProductExpansion": true,
+    "noAutomaticFrozenScoreReplacement": true
+  }
+}
