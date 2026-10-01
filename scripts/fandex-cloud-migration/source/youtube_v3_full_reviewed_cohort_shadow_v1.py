@@ -246,9 +246,9 @@ def main() -> None:
             f"missing={missing} extra={extra}"
         )
 
-    if len(seed_rows) != 74:
+    if len(seed_rows) != 75:
         raise RuntimeError(
-            "Expected 74 combined reviewed YouTube seed videos, "
+            "Expected 75 combined reviewed YouTube seed videos, "
             f"got {len(seed_rows)}."
         )
 
