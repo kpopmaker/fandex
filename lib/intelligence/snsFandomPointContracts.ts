@@ -327,6 +327,7 @@ export type SnsFandomObservation = Readonly<{
   evidence: Readonly<{
     evidenceRef: string;
     providerClientRef: string;
+    providerEndpoints: readonly string[];
     revision: string | null;
   }>;
   lifecycle: Readonly<{
@@ -482,6 +483,7 @@ export function isSnsFandomProviderApprovalActiveFor(
   input: Readonly<{
     providerId: SnsFandomProviderId;
     providerClientRef: string;
+    providerEndpoints: readonly string[];
     dimension: SnsFandomDimension;
     metricId: string;
     evaluatedAt: string;
@@ -495,6 +497,10 @@ export function isSnsFandomProviderApprovalActiveFor(
     && approval.state === 'approved'
     && approval.providerId === input.providerId
     && approval.providerClientRef === input.providerClientRef
+    && input.providerEndpoints.length > 0
+    && input.providerEndpoints.every((endpoint) =>
+      approval.allowedEndpoints.includes(endpoint)
+    )
     && approval.approvedDimensions.includes(input.dimension)
     && approval.approvedMetricIds.includes(input.metricId)
   );
@@ -635,6 +641,14 @@ export function validateSnsFandomObservation(
   }
   if (observation.evidence.providerClientRef.trim().length === 0) {
     blockers.push('provider-client-ref-empty');
+  }
+  if (
+    observation.evidence.providerEndpoints.length === 0
+    || observation.evidence.providerEndpoints.some(
+      (endpoint) => endpoint.trim().length === 0,
+    )
+  ) {
+    blockers.push('provider-endpoints-invalid');
   }
   if (observation.entity.canonicalArtistId.trim().length === 0) {
     blockers.push('canonical-artist-id-empty');
@@ -928,6 +942,7 @@ export function evaluateSnsFandomPointReadiness(
         isSnsFandomProviderApprovalActiveFor(approval, {
           providerId: observation.providerId,
           providerClientRef: observation.evidence.providerClientRef,
+          providerEndpoints: observation.evidence.providerEndpoints,
           dimension: observation.variable.dimension,
           metricId: observation.variable.metricId,
           evaluatedAt,
