@@ -127,3 +127,26 @@ Changes to this collector belong to:
 
 The snsFandomPoint branch should only consume the corrected output through its
 variable-specific adapters after exact provider approval evidence is present.
+
+
+## Variable-side acceptance bridge
+
+The snsFandomPoint branch now includes
+`snsFandomPointYoutubeCollectorBridge.ts`.
+
+The bridge does not call YouTube and does not replace the shared collector. It
+only accepts an upstream export after:
+
+1. the declared collector profile passes the compatibility verifier;
+2. canonical artist and provider channel ids are explicit;
+3. missing statistics remain nullable;
+4. observation and collection times are distinct explicit timestamps;
+5. video ids are unique and counts are null or non-negative safe integers;
+6. a durable evidence reference exists; and
+7. exact provider approval evidence is valid for the downstream YouTube
+   metrics.
+
+The current Artist Expansion collector fails at step 1 and therefore cannot
+reach normalization. Once Production Operations / Artist Expansion supplies a
+corrected collector profile and output contract, the bridge can feed the
+existing YouTube reaction adapter without any Preview/Synthetic fallback.
