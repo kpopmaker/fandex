@@ -19,6 +19,7 @@ export type YoutubePublicCommentRecord = Readonly<{
 export type YoutubePublicCommentPersistenceBatch = Readonly<{
   canonicalArtistId: string;
   youtubeChannelId: string;
+  providerClientRef: string;
   providerPeriodStart: string;
   providerPeriodEnd: string;
   observedAt: string;
@@ -141,6 +142,7 @@ function observation(
     }),
     evidence: Object.freeze({
       evidenceRef: batch.evidenceRef,
+      providerClientRef: batch.providerClientRef,
       revision: null,
     }),
     lifecycle: Object.freeze({
@@ -196,6 +198,11 @@ export function buildYoutubePublicCommentPersistenceCandidate(
         'youtube-commenter-recurrence-provider-approval-provider-mismatch',
       );
     }
+    if (approval.providerClientRef !== input.batch.providerClientRef) {
+      approvalBlockers.push(
+        'youtube-commenter-recurrence-provider-approval-client-mismatch',
+      );
+    }
     if (
       !approval.approvedDimensions.includes(
         'fandom-activity-persistence',
@@ -242,6 +249,7 @@ export function buildYoutubePublicCommentPersistenceCandidate(
   if (
     batch.canonicalArtistId.trim().length === 0
     || batch.youtubeChannelId.trim().length === 0
+    || batch.providerClientRef.trim().length === 0
     || batch.evidenceRef.trim().length === 0
   ) {
     blockers.push('youtube-comment-persistence-batch-identity-invalid');
