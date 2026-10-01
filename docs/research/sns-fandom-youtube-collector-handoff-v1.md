@@ -239,3 +239,40 @@ extrapolation between snapshots to manufacture an age-aligned value.
 
 This is a downstream Product methodology requirement, not a request for this
 branch to modify the global scheduler.
+
+
+## Methodology validation dataset collection handoff
+
+The next real-data requirement is not “collect more YouTube rows.” It is a
+controlled cross-artist methodology dataset.
+
+Shared collection / operations must eventually be able to provide, for each
+artist included in the methodology study:
+
+1. a complete official-channel publication-window manifest;
+2. the exact `publishedAt` of each selected upload;
+3. real view / like / comment observations from `youtube.videos.list`;
+4. observations captured at one declared elapsed content age:
+   `observedAt - publishedAt`;
+5. the same elapsed content age across every artist in one validation dataset;
+6. exact provider client/project provenance;
+7. non-secret evidence references;
+8. Missing preserved as Missing, never zero; and
+9. enough durable source evidence to regenerate the dataset for revision
+   stability review.
+
+No Product target age is chosen by this handoff. The variable contract accepts
+an exact elapsed-age value supplied by the future methodology study; choosing
+that value requires separate evidence.
+
+Do not make artists artificially comparable by:
+- dropping videos merely to equalize content counts;
+- substituting latest-N or top-N videos;
+- interpolating a missing target-age value;
+- extrapolating future cumulative counters; or
+- filling unavailable metrics with zero.
+
+The variable branch does not modify the global scheduler. If future approved
+collection requires per-content target-age scheduling, that runtime work
+belongs to FANDEX Production Operations after the methodology collection plan
+is approved.
