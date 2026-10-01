@@ -324,3 +324,20 @@ test('observation outside the manifest is never silently folded into the content
     )
   ));
 });
+
+
+test('an empty but complete publication window is not reaction aggregation evidence', () => {
+  const result = evaluateSnsFandomYoutubeContentAgeAlignment({
+    manifest: manifest([]),
+    observations: [],
+  });
+
+  assert.equal(result.state, 'evidence-incomplete');
+  assert.equal(result.artistLevelAggregationReady, false);
+  assert.ok(
+    result.blockers.includes('youtube-content-age-manifest-empty'),
+  );
+  assert.ok(result.metrics.every(
+    (metric) => metric.state === 'evidence-incomplete',
+  ));
+});
