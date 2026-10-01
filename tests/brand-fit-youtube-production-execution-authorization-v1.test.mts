@@ -65,6 +65,7 @@ test('matching owner approval authorizes exactly one unconsumed execution', () =
     workflowRuns: [{
       id: 199,
       conclusion: 'failure',
+      providerExecutionStepSucceeded: false,
     }],
   });
 
@@ -137,6 +138,7 @@ test('any prior successful dispatch consumes the one-shot authorization', () => 
     workflowRuns: [{
       id: 198,
       conclusion: 'success',
+      providerExecutionStepSucceeded: false,
     }],
   });
 
@@ -160,8 +162,34 @@ test('current successful run id is ignored while evaluating prior consumption', 
     workflowRuns: [{
       id: 200,
       conclusion: 'success',
+      providerExecutionStepSucceeded: true,
     }],
   });
 
   assert.equal(result.status, 'authorized');
+});
+
+
+test('provider-step success consumes authorization even if the overall prior workflow failed', () => {
+  const result = evaluateBrandFitYouTubeProductionExecutionGate({
+    authorizationId: AUTH,
+    expectedMainSha: MAIN,
+    currentRunId: 200,
+    issueComments: [{
+      id: 10,
+      body: approvalBody(),
+      authorLogin: 'kpopmaker',
+    }],
+    workflowRuns: [{
+      id: 197,
+      conclusion: 'failure',
+      providerExecutionStepSucceeded: true,
+    }],
+  });
+
+  assert.deepEqual(result, {
+    status: 'blocked',
+    contractVersion: 'brand-fit-youtube-production-execution-gate-v1',
+    reason: 'execution-already-consumed',
+  });
 });
