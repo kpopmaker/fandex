@@ -389,7 +389,28 @@
       "reviewer": "artist-expansion-evidence-review",
       "reviewedAt": "2026-10-01T18:12:00+09:00",
       "rationale": "YouTube videos.list verified BANGTANTV channel and exact title \"V's NORMAL LOG #2026BTSFESTA\"; BTS_official also linked the same video as V-specific 2026 FESTA evidence.",
-      "activationState": "reviewed_seed_candidate_only"
+      "activationState": "reviewed_seed_candidate_only",
+      "evidenceSourceType": "direct_provider_review",
+      "verificationRunId": "36841151084",
+      "verificationJobId": "110300308697",
+      "verificationHead": "3491cb50e77cce210849547ae334cb8c5603cd13"
+    },
+    {
+      "reviewId": "youtube-v-kwAhKmSWdx8-approved-v1",
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "videoId": "kwAhKmSWdx8",
+      "decision": "approved",
+      "reviewedVideoType": "external_content",
+      "reviewedSourceType": "official",
+      "evidenceUrl": "https://www.youtube.com/watch?v=kwAhKmSWdx8",
+      "reviewer": "artist-expansion-evidence-review",
+      "reviewedAt": "2026-10-01T17:55:39+09:00",
+      "rationale": "BANGTANTV video title explicitly scopes the content to V: 'Dynamite' by V | BTS WORLD TOUR ‘ARIRANG’. This representative reviewed seed was independently approved in youtube_seed_video_reviews_v1 and is included here so the comprehensive reviewed evidence portfolio is a true superset of the representative seed policy.",
+      "activationState": "reviewed_seed_candidate_only",
+      "evidenceSourceType": "github_discovery_artifact",
+      "sourceDiscoveryRunId": "36839355681",
+      "sourceArtifactId": "11150906061"
     }
   ],
   "artistNotes": [
