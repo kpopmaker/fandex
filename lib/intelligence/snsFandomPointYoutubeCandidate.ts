@@ -1,6 +1,8 @@
 import {
   buildSnsFandomPersistenceEvidence,
+  validateSnsFandomProviderApprovalEvidence,
   type SnsFandomObservation,
+  type SnsFandomProviderApprovalEvidence,
   type SnsFandomPersistenceEvidence,
 } from './snsFandomPointContracts';
 
@@ -116,23 +118,62 @@ function observation(
 export function buildYoutubeSnsFandomCandidate(
   input: Readonly<{
     snapshots: readonly YoutubePublicStatsSnapshot[];
-    providerApproval: Readonly<{
-      analyticsDerivedMetricsUseCaseApproved: boolean;
-      retentionExtensionOrRefreshPolicyApproved: boolean;
-    }>;
+    providerApproval: SnsFandomProviderApprovalEvidence | null;
+    evaluatedAt: string;
   }>,
 ): YoutubeSnsFandomCandidateResult {
-  if (
-    !input.providerApproval.analyticsDerivedMetricsUseCaseApproved
-    || !input.providerApproval.retentionExtensionOrRefreshPolicyApproved
-  ) {
-    const blockers: string[] = [];
-    if (!input.providerApproval.analyticsDerivedMetricsUseCaseApproved) {
-      blockers.push('youtube-derived-metrics-approval-missing');
+  const approval = input.providerApproval;
+  const blockers: string[] = [];
+  const requiredMetricIds = [
+    'youtube.video.view-count',
+    'youtube.video.like-count',
+    'youtube.video.comment-count',
+    'youtube.channel.subscriber-count',
+  ] as const;
+  const requiredEndpoints = [
+    'youtube.videos.list',
+    'youtube.channels.list',
+  ] as const;
+
+  if (approval === null) {
+    blockers.push('youtube-provider-approval-evidence-missing');
+  } else {
+    if (
+      !validateSnsFandomProviderApprovalEvidence(
+        approval,
+        input.evaluatedAt,
+      ).ok
+    ) {
+      blockers.push('youtube-provider-approval-evidence-invalid');
     }
-    if (!input.providerApproval.retentionExtensionOrRefreshPolicyApproved) {
-      blockers.push('youtube-retention-policy-approval-missing');
+    if (approval.state !== 'approved') {
+      blockers.push('youtube-provider-approval-not-approved');
     }
+    if (approval.providerId !== 'youtube-data-api') {
+      blockers.push('youtube-provider-approval-provider-mismatch');
+    }
+    if (
+      !approval.approvedDimensions.includes(
+        'public-reaction-diffusion',
+      )
+    ) {
+      blockers.push('youtube-provider-approval-dimension-missing');
+    }
+    for (const metricId of requiredMetricIds) {
+      if (!approval.approvedMetricIds.includes(metricId)) {
+        blockers.push('youtube-provider-approval-metric-missing');
+        break;
+      }
+    }
+    for (const endpoint of requiredEndpoints) {
+      if (!approval.allowedEndpoints.includes(endpoint)) {
+        blockers.push('youtube-provider-approval-endpoint-missing');
+        break;
+      }
+    }
+  }
+
+  if (blockers.length > 0) {
     return Object.freeze({
       contractVersion: SNS_FANDOM_YOUTUBE_CANDIDATE_VERSION,
       state: 'rights-blocked' as const,
