@@ -51,8 +51,8 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
-            LIVE_BASE_SHA="$(git rev-parse "refs/remotes/origin/$PR_BASE_REF")"
-            git diff --name-only "$LIVE_BASE_SHA" "$PR_HEAD_SHA" | sort > /tmp/changed.txt
+            MERGE_BASE="$(git merge-base "refs/remotes/origin/$PR_BASE_REF" "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
           else
             git fetch origin "+refs/heads/integration/momentum-productionization-current-main-v1:refs/remotes/origin/integration/momentum-productionization-current-main-v1"
             STACK_BASE="$(git rev-parse refs/remotes/origin/integration/momentum-productionization-current-main-v1)"
