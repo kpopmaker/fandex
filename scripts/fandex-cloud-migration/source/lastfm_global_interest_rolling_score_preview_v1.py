@@ -410,32 +410,10 @@ def main():
         ) == "ready"
     )
 
-    # 활성 모드
-    #
-    # 2일 이하:
-    # insufficient_history
-    #
-    # 3~6일:
-    # rolling3
-    #
-    # 7일 이상:
-    # rolling3 + rolling7
-    #
-    # 두 rolling이 모두 준비되면
-    # 각각 50%로 결합한다.
-    if rolling7_ready == len(rows):
-        active_mode = (
-            "rolling3_50_rolling7_50"
-        )
-
-    elif rolling3_ready == len(rows):
-        active_mode = "rolling3_only"
-
-    else:
-        active_mode = (
-            "insufficient_history"
-        )
-
+    # Artist-level active mode:
+    # source cohort expansion must not downgrade
+    # already-ready Product artists merely because
+    # newly bound artists have shorter history.
     output_rows = []
 
     for row in rows:
@@ -453,6 +431,31 @@ def main():
 
         point3 = score3["point"]
         point7 = score7["point"]
+
+        rolling3_status = norm(
+            row.get(
+                "rolling3Status"
+            )
+        )
+        rolling7_status = norm(
+            row.get(
+                "rolling7Status"
+            )
+        )
+
+        if (
+            rolling3_status == "ready"
+            and rolling7_status == "ready"
+        ):
+            active_mode = (
+                "rolling3_50_rolling7_50"
+            )
+        elif rolling3_status == "ready":
+            active_mode = "rolling3_only"
+        else:
+            active_mode = (
+                "insufficient_history"
+            )
 
         combined = ""
 
@@ -475,31 +478,20 @@ def main():
         ):
             combined = point3
 
-        status = "ok"
-
-        if active_mode == (
-            "insufficient_history"
-        ):
-            status = (
-                "insufficient_history"
-            )
+        status = (
+            "ok"
+            if combined != ""
+            else "insufficient_history"
+        )
 
         if (
-            norm(
-                row.get(
-                    "rolling3Status"
-                )
-            )
+            rolling3_status
             == "review_negative_delta"
-            or
-            norm(
-                row.get(
-                    "rolling7Status"
-                )
-            )
+            or rolling7_status
             == "review_negative_delta"
         ):
             status = "review"
+            combined = ""
 
         output_rows.append({
             "rank":
@@ -530,11 +522,7 @@ def main():
                 ),
 
             "rolling3Status":
-                norm(
-                    row.get(
-                        "rolling3Status"
-                    )
-                ),
+                rolling3_status,
 
             "rolling3ListenerDeltaPerDay":
                 norm(
@@ -564,11 +552,7 @@ def main():
                 point3,
 
             "rolling7Status":
-                norm(
-                    row.get(
-                        "rolling7Status"
-                    )
-                ),
+                rolling7_status,
 
             "rolling7ListenerDeltaPerDay":
                 norm(
@@ -692,7 +676,29 @@ def main():
             rolling7_ready,
 
         "activeMode":
-            active_mode,
+            (
+                output_rows[0]["activeMode"]
+                if (
+                    output_rows
+                    and len({
+                        row["activeMode"]
+                        for row in output_rows
+                    }) == 1
+                )
+                else "mixed_by_artist"
+            ),
+
+        "activeModeCounts": {
+            mode: sum(
+                1
+                for row in output_rows
+                if row["activeMode"] == mode
+            )
+            for mode in sorted({
+                row["activeMode"]
+                for row in output_rows
+            })
+        },
 
         "scoreReadyCount":
             score_ready_count,
@@ -752,9 +758,21 @@ def main():
         f"{rolling7_ready}/{len(rows)}"
     )
 
+    payload_active_mode = (
+        output_rows[0]["activeMode"]
+        if (
+            output_rows
+            and len({
+                row["activeMode"]
+                for row in output_rows
+            }) == 1
+        )
+        else "mixed_by_artist"
+    )
+
     print(
         f"activeMode: "
-        f"{active_mode}"
+        f"{payload_active_mode}"
     )
 
     print(
