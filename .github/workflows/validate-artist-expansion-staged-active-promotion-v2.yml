@@ -1,0 +1,30 @@
+name: Validate Artist Expansion staged active promotion v2
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-promotion-music21-lastfm19-v2
+
+permissions:
+  contents: read
+
+jobs:
+  validate-staged-promotion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install beautifulsoup4 requests
+      - name: Promotion v2 syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_score_preview_v1.py \
+            scripts/fandex-cloud-migration/source/fandex_master_score_v10.py \
+            scripts/fandex-cloud-migration/source/fandex_python_health_check_v3.py \
+            scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py
+      - name: Active Music 21 / Last.fm 19 Product superset
+        run: python tests/artist-expansion-promotion-product-source-superset-v2.py
