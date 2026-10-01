@@ -1,0 +1,91 @@
+name: Validate Artist Expansion YouTube reviewed seed v7
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-recovery-v7
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-reviewed-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: YouTube review workflow syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_collect_video_metrics_v1.py
+
+      - name: Reviewed seed 21-of-21 regression
+        run: python tests/artist-expansion-youtube-seed-review-v7.py
+
+      - name: Build reviewed seed preview
+        run: python scripts/fandex-cloud-migration/source/youtube_seed_review_v1.py
+
+      - name: Verify Jung Kook direct provider evidence
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          video_id = "p0nPyE-dv9Q"
+          params = urllib.parse.urlencode({
+              "part": "snippet,statistics",
+              "id": video_id,
+              "key": os.environ["YOUTUBE_API_KEY"],
+          })
+          url = (
+              "https://www.googleapis.com/youtube/v3/videos?"
+              + params
+          )
+          with urllib.request.urlopen(url, timeout=30) as response:
+              payload = json.loads(response.read().decode("utf-8"))
+
+          items = payload.get("items", [])
+          assert len(items) == 1
+          item = items[0]
+          snippet = item.get("snippet", {})
+
+          assert item.get("id") == video_id
+          assert snippet.get("channelId") == "UCLkAepWjdylmXSltofFvsYQ"
+          assert snippet.get("channelTitle") == "BANGTANTV"
+
+          title = snippet.get("title", "")
+          normalized = title.casefold()
+          assert (
+              "jung kook" in normalized
+              or "jungkook" in normalized
+              or "정국" in title
+          )
+          assert "focus" in normalized
+
+          print(
+              "PASS: Jung Kook provider evidence | "
+              f"videoId={video_id} | "
+              f"channel={snippet.get('channelTitle')} | "
+              f"title={title}"
+          )
+          PY
+
+      - name: Upload reviewed seed preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-reviewed-seed-v7
+          path: |
+            youtube_seed_videos_reviewed_expansion_candidate_v1.csv
+            youtube_seed_video_review_preview_v1_latest.json
+          if-no-files-found: ignore
+          retention-days: 7
