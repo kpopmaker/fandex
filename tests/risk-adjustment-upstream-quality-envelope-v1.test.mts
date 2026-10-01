@@ -67,6 +67,96 @@ function completeEnvelope(
   };
 }
 
+test('malformed envelope container fails closed instead of throwing', () => {
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(
+      null as unknown as RiskAdjustmentUpstreamQualityEnvelope,
+    ),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'envelope-shape-invalid',
+    },
+  );
+});
+
+test('non-string producer contract version fails closed', () => {
+  const envelope = {
+    ...completeEnvelope(),
+    producerContractVersion: 7,
+  } as unknown as RiskAdjustmentUpstreamQualityEnvelope;
+
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(envelope),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'producer-contract-version-invalid',
+    },
+  );
+});
+
+test('malformed dimension semantic fails closed instead of throwing', () => {
+  const base = completeEnvelope();
+  const envelope = {
+    ...base,
+    requiredDimensionSemantics: {
+      ...base.requiredDimensionSemantics,
+      freshness: {
+        semanticId: 123,
+        semanticVersion: 'v1',
+        stateValue: 'current',
+        evidenceRefs: ['contract:freshness'],
+      },
+    },
+  } as unknown as RiskAdjustmentUpstreamQualityEnvelope;
+
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(envelope),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'dimension-semantic-invalid',
+    },
+  );
+});
+
+test('unknown quality dimension keys are rejected at the JSON boundary', () => {
+  const base = completeEnvelope();
+  const envelope = {
+    ...base,
+    requiredDimensionSemantics: {
+      ...base.requiredDimensionSemantics,
+      madeUpDimension: semantic('freshness'),
+    },
+  } as unknown as RiskAdjustmentUpstreamQualityEnvelope;
+
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(envelope),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'envelope-shape-invalid',
+    },
+  );
+});
+
+test('null dimension maps are rejected at the JSON boundary', () => {
+  const envelope = {
+    ...completeEnvelope(),
+    requiredDimensionSemantics: null,
+  } as unknown as RiskAdjustmentUpstreamQualityEnvelope;
+
+  assert.deepEqual(
+    evaluateRiskAdjustmentUpstreamQualityEnvelope(envelope),
+    {
+      status: 'invalid',
+      contractVersion: 'risk-adjustment-upstream-quality-envelope-v1',
+      reason: 'envelope-shape-invalid',
+    },
+  );
+});
+
 test('runtime envelope contract version mismatch fails closed', () => {
   const envelope = {
     ...completeEnvelope(),
