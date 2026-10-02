@@ -53,6 +53,7 @@ jobs:
           lib/intelligence/snsFandomPointReactionMethodologyStudy.ts
           lib/intelligence/snsFandomPointReactionValidationCollectionHandoff.ts
           lib/intelligence/snsFandomPointReactionValidationCollectionPlan.ts
+          lib/intelligence/snsFandomPointReactionValidationCollectionReceipt.ts
           lib/intelligence/snsFandomPointReactionValidationDataset.ts
           lib/intelligence/snsFandomPointReactionValidationLineage.ts
           lib/intelligence/snsFandomPointObservationContract.ts
@@ -79,6 +80,7 @@ jobs:
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
           tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
           tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
@@ -105,6 +107,7 @@ jobs:
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
           tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
           tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
