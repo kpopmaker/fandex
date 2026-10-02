@@ -437,3 +437,20 @@ exists.
 
 Receipt acceptance still does not complete methodology evidence. The later raw
 record / historical snapshot / revision lineage gate remains mandatory.
+
+
+## Dataset assembly after execution receipts
+
+Exact execution receipts are not consumed directly as methodology evidence.
+
+Before a validation dataset can be assembled, receipt members must match the
+later observation + lineage records on observation id, collection run id,
+provider resource id, artist identity, timestamps, and evidence references.
+
+A timing-review-required receipt cannot assemble the original target-age
+dataset.
+
+The current retrospective planning path additionally requires a finalized
+publication window. If an intended target age would occur before the content
+window can be finalized, Production Ops should not backfill it with a later
+counter. A separate prospective enrollment design is required for that study.
