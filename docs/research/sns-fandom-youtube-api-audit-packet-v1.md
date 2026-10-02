@@ -332,3 +332,75 @@ The variable branch now exposes
 `sns-fandom-youtube-audit-submission-readiness-v1` so these prerequisites can
 be evaluated fail-closed without treating submission readiness as provider
 approval.
+
+
+## 6a. Evidence-bound quota worksheet
+
+The quota worksheet is now executable as
+`sns-fandom-youtube-quota-worksheet-v1`.
+
+It intentionally does not choose:
+
+- artist count;
+- reaction snapshot cadence;
+- comment-persistence cadence;
+- provider batch limits;
+- per-method quota costs;
+- quota headroom;
+- requested daily quota.
+
+All of those inputs must come from measured or provider-documented evidence.
+
+The worksheet accepts:
+
+- measured artist-channel count;
+- measured uploads-playlist page count per reaction run;
+- measured video count per reaction run;
+- measured comment-thread/comment page counts when that scope is actually
+  included;
+- explicitly declared runs/day;
+- provider batch limits;
+- quota units per call;
+- non-secret evidence references for each assumption.
+
+It calculates only the evidence-backed minimum projected quota/day.
+
+It always leaves:
+
+- `requestedQuotaUnitsPerDay = null`;
+- `headroomFactorApplied = false`;
+- all arbitrary-default flags = false.
+
+This means the code never invents an application quota request or safety
+margin. If the owner wants quota headroom above the measured projection, that
+must be justified separately in the provider application.
+
+The audit-submission readiness contract now requires a real
+`quota-evidence-ready` worksheet. A free-form `quotaEstimateRef` string by
+itself is no longer sufficient. The worksheet must also match the exact
+provider client/project reference and the exact endpoint scope of the
+application.
+
+Current provider documentation rechecked on 2026-10-02:
+
+- YouTube Data API quota calculator:
+  https://developers.google.com/youtube/v3/determine_quota_cost
+- channels.list:
+  https://developers.google.com/youtube/v3/docs/channels/list
+- playlistItems.list:
+  https://developers.google.com/youtube/v3/docs/playlistItems/list
+- videos.list:
+  https://developers.google.com/youtube/v3/docs/videos/list
+- commentThreads.list:
+  https://developers.google.com/youtube/v3/docs/commentThreads/list
+- comments.list:
+  https://developers.google.com/youtube/v3/docs/comments/list
+
+The current quota calculator shows each of the five list methods above at
+1 quota unit per call and notes that additional pagination requests incur
+additional quota. The worksheet still requires these costs as evidence-bound
+inputs rather than freezing them into Product code.
+
+Batch limits are also evidence inputs rather than Product constants. This
+avoids silently assuming that a provider request parameter limit, result-page
+limit, or multi-ID batching rule is stable across policy/API revisions.
