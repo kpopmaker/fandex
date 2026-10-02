@@ -354,3 +354,73 @@ test('duplicate observation identities across artists fail closed before lineage
     ),
   );
 });
+
+
+test('artist enrollment with no actual capture task cannot count as multi-artist evidence', () => {
+  const emptyEnrollment = buildSnsFandomProspectiveContentEnrollment({
+    enrollmentId: 'prospective-artist-empty-october-v1',
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    canonicalArtistId: 'artist-empty',
+    youtubeChannelId: 'UC-artist-empty',
+    providerClientRef: CLIENT,
+    selectionRule: 'official-channel-all-uploads-in-published-window',
+    windowStart: '2026-10-01T00:00:00.000Z',
+    windowEnd: '2026-10-31T23:59:59.999Z',
+    uploadsPlaylistId: 'UU-artist-empty',
+    providerEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+    ],
+    targetAges: [
+      {
+        datasetId: 'dataset-age-7d',
+        targetContentAgeMilliseconds: AGE_7D,
+        rationaleEvidenceRef: 'evidence://methodology/age-7d',
+      },
+    ],
+    discoverySnapshots: [
+      {
+        observedAt: '2026-10-02T00:00:00.000Z',
+        pageCount: 1,
+        terminalNextPageToken: null,
+        terminalPageEvidenceRef:
+          'evidence://youtube/artist-empty/uploads/2026-10-02/terminal',
+        evidenceRef:
+          'evidence://youtube/artist-empty/uploads/2026-10-02',
+        items: [],
+      },
+    ],
+  });
+  const emptyReconciliation =
+    reconcileSnsFandomProspectiveEnrollmentWithFinalManifest({
+      enrollment: emptyEnrollment,
+      finalManifest: finalManifest(
+        'artist-empty',
+        'unused-video',
+        '2026-10-01T12:00:00.000Z',
+      ) as SnsFandomYoutubeContentManifest,
+      reconciledAt: '2026-11-01T00:00:00.000Z',
+    });
+
+  const result = bundleSnsFandomProspectiveReactionReceipts({
+    studyId: 'prospective-study-empty-artist',
+    entries: [
+      entry('artist-a', '2026-10-01T12:00:00.000Z'),
+      {
+        enrollment: emptyEnrollment,
+        reconciliation: emptyReconciliation,
+        receipts: [],
+      },
+    ],
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.receipt, null);
+  assert.ok(
+    result.blockers.includes(
+      'prospective-receipt-bundle-enrollment-task-missing',
+    ),
+  );
+});
