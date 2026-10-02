@@ -167,7 +167,7 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     slotStart: '2026-10-02T00:00:00.000Z',
     collectionKey: CURRENT_SLOT_COLLECTION_KEY,
-    jobId: CURRENT_SLOT_IDENTITY.jobId,
+    jobId: 'a'.repeat(64),
     resultSha256: 'c'.repeat(64),
     stagedObjectStatus: 'created',
     counts: {
@@ -224,9 +224,8 @@ test('skips provider collection when the current scheduler slot is already final
     contractVersion: 'naver-news-blob-only-collection-stage-v1',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     slotStart: '2026-10-02T00:00:00.000Z',
-    collectionKey:
-      'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
-    jobId: 'a'.repeat(64),
+    collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+    jobId: CURRENT_SLOT_IDENTITY.jobId,
     resultSha256: null,
     stagedObjectStatus: null,
     counts: null,
