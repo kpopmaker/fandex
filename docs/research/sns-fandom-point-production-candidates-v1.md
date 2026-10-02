@@ -813,3 +813,49 @@ Handoff additionally binds collector readiness to provider identity and
 requires provider approval to be active both at the handoff evaluation time and
 at every future exact-age capture time. Future-dated approval evidence and
 approved-ready state from another provider fail closed.
+
+
+## Validation capture receipt boundary
+
+A Production Ops handoff does not prove that collection actually happened or
+that the resulting observation matched the planned target age.
+
+The variable contract now accepts execution receipts only when they bind back
+to an exact handoff task:
+
+- task id;
+- dataset id;
+- canonical artist id;
+- video id;
+- metric id;
+- provider id;
+- provider client/project reference.
+
+Successful receipts must also carry:
+
+- actual observedAt;
+- collectedAt;
+- observation id;
+- collection run id;
+- non-secret evidence reference.
+
+The contract records:
+
+`timingDeviation = actualObservedAt - plannedCaptureAt`
+
+No timing tolerance is silently applied.
+
+If the deviation is non-zero, the capture is preserved as real evidence but the
+original target-age dataset remains in
+`capture-complete-timing-review-required` state. The contract does not
+interpolate, extrapolate, round, bucket, or shift the observation time.
+
+Only exact-target-age captures can become
+`targetAgeDatasetAssemblyEligible = true`, and even then:
+
+- lineage validation is still required;
+- revision audit is still required;
+- no aggregate or normalized score is produced.
+
+This closes the lifecycle gap between deterministic planning and downstream
+validation datasets without inventing an operational timing tolerance.
