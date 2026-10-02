@@ -8,18 +8,22 @@ on:
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_recovery_v1.json'
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_current_verification_v1.json'
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_scope_candidates_v1.json'
+      - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-current-verification-v1.test.mts'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-scope-candidates-v1.test.mts'
+      - 'tests/artist-expansion-sns-fandom-youtube-audit-binding-manifest-v1.test.mts'
       - '.github/workflows/validate-artist-expansion-sns-fandom-youtube-binding-recovery-v1.yml'
   pull_request:
     paths:
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_recovery_v1.json'
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_current_verification_v1.json'
       - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_scope_candidates_v1.json'
+      - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-current-verification-v1.test.mts'
       - 'tests/artist-expansion-sns-fandom-youtube-binding-scope-candidates-v1.test.mts'
+      - 'tests/artist-expansion-sns-fandom-youtube-audit-binding-manifest-v1.test.mts'
       - '.github/workflows/validate-artist-expansion-sns-fandom-youtube-binding-recovery-v1.yml'
   workflow_dispatch:
 
@@ -42,7 +46,8 @@ jobs:
           npx tsx --test \
             tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts \
             tests/artist-expansion-sns-fandom-youtube-binding-current-verification-v1.test.mts \
-            tests/artist-expansion-sns-fandom-youtube-binding-scope-candidates-v1.test.mts
+            tests/artist-expansion-sns-fandom-youtube-binding-scope-candidates-v1.test.mts \
+            tests/artist-expansion-sns-fandom-youtube-audit-binding-manifest-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build
