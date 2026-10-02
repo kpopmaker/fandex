@@ -1,0 +1,48 @@
+name: Momentum recovery continuity gate v1
+
+on:
+  workflow_run:
+    workflows:
+      - NAVER News shadow recurring Production v1
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: momentum-recovery-continuity-gate-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Evaluate recovery continuity
+        run: npx tsx scripts/operations/momentumRecoveryContinuityGateV1.mts
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "databaseMode=read-only"
+          echo "databaseWrites=0"
+          echo "historyWrites=0"
+          echo "registryMutations=0"
+          echo "productionActivations=0"
