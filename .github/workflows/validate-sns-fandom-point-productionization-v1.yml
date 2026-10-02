@@ -139,6 +139,7 @@ jobs:
           tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
           tests/sns-fandom-point-youtube-provider-client-identity-v1.test.mts
           tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-measurement-handoff-v1.test.mts
           tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
 
       - run: npm run typecheck
