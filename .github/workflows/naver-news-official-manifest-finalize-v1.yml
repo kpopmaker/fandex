@@ -19,4 +19,4 @@ jobs:
         run: npm ci
 
       - name: Validate finalize contract
-        run: npm run test -- --runInBand lib/intelligence/naverNewsOfficialManifestFinalize.test.mts
+        run: npx tsx --test lib/intelligence/naverNewsOfficialManifestFinalize.test.mts
