@@ -234,16 +234,11 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
   }
 
   const tasks: SnsFandomYoutubeQuotaMeasurementTask[] = [];
-  if (
-    manifestReady
-    && manifest !== null
-    && clientReady
-    && client !== null
-    && windowStartValid
-    && windowEndValid
-    && Date.parse(input.measurementWindowStart)
-      < Date.parse(input.measurementWindowEnd)
-  ) {
+
+  const uniqueBlockers = Object.freeze(Array.from(new Set(blockers)).sort());
+  const ready = uniqueBlockers.length === 0;
+
+  if (ready && client !== null) {
     const selectedBindings = input.artistBindings
       .filter((member) => member.includedInAuditScope)
       .sort((left, right) =>
@@ -267,9 +262,6 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
       }));
     }
   }
-
-  const uniqueBlockers = Object.freeze(Array.from(new Set(blockers)).sort());
-  const ready = uniqueBlockers.length === 0;
 
   return Object.freeze({
     contractVersion:
