@@ -1,6 +1,6 @@
 {
   "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
-  "createdAt": "2026-10-02T11:50:00",
+  "createdAt": "2026-10-02T22:45:55",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
@@ -12,8 +12,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 361.47,
-      "previousMasterPoint": 361.11,
-      "deltaFromPreviousMaster": 0.36,
+      "previousMasterPoint": 361.47,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 214.28,
@@ -48,8 +48,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 338.91,
-      "previousMasterPoint": 338.9,
-      "deltaFromPreviousMaster": 0.01,
+      "previousMasterPoint": 338.91,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 226.34,
@@ -84,8 +84,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 333.43,
-      "previousMasterPoint": 334.25,
-      "deltaFromPreviousMaster": -0.82,
+      "previousMasterPoint": 333.43,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 244.89,
@@ -120,8 +120,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 260.23,
-      "previousMasterPoint": 260.2,
-      "deltaFromPreviousMaster": 0.03,
+      "previousMasterPoint": 260.23,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 182.26,
@@ -156,8 +156,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 254.54,
-      "previousMasterPoint": 254.38,
-      "deltaFromPreviousMaster": 0.16,
+      "previousMasterPoint": 254.54,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 201.66,
@@ -192,8 +192,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 245.51,
-      "previousMasterPoint": 245.83,
-      "deltaFromPreviousMaster": -0.32,
+      "previousMasterPoint": 245.51,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 187.53,
@@ -228,8 +228,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 237.94,
-      "previousMasterPoint": 238.37,
-      "deltaFromPreviousMaster": -0.43,
+      "previousMasterPoint": 237.94,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 166.58,
@@ -264,8 +264,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 229.05,
-      "previousMasterPoint": 228.73,
-      "deltaFromPreviousMaster": 0.32,
+      "previousMasterPoint": 229.05,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 163.02,
@@ -300,8 +300,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 221.03,
-      "previousMasterPoint": 221.18,
-      "deltaFromPreviousMaster": -0.15,
+      "previousMasterPoint": 221.03,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 173.12,
@@ -336,8 +336,8 @@
       "version": "fandex_master_v10_music_v2_lastfm_rolling_v1",
       "scoreMode": "uncapped_cumulative_source_points_with_youtube_v3_music_chart_v2_x0_25_lastfm_rolling_x0_25",
       "fandexFinalPoint": 155.36,
-      "previousMasterPoint": 155.78,
-      "deltaFromPreviousMaster": -0.42,
+      "previousMasterPoint": 155.36,
+      "deltaFromPreviousMaster": 0.0,
       "sourcePoints": {
         "naver": {
           "cumulativePoint": 90.6,
