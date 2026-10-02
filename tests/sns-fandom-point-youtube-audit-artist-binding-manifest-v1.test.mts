@@ -202,3 +202,102 @@ test('manifest cannot claim readiness with zero selected audit members', () => {
     ),
   );
 });
+
+
+test('approved cohort v1 from Artist Expansion handoff is binding-manifest-ready', () => {
+  const result = evaluateSnsFandomYoutubeAuditArtistBindingManifest({
+    manifestId: 'sns-fandom-youtube-audit-cohort-v1',
+    evidenceRef:
+      'repo://data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_scope_candidates_v1.json#owner-selection-recorded',
+    members: [
+      {
+        canonicalArtistId: 'blackpink',
+        youtubeChannelId: 'UCOmHUn--16B90oW2L6FRR3A',
+        bindingState: 'verified',
+        includedInAuditScope: true,
+        evidenceRef:
+          'https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A',
+        verifiedAt: '2026-10-02T12:46:00.000Z',
+        sharedChannelCaveat: null,
+      },
+      {
+        canonicalArtistId: 'twice',
+        youtubeChannelId: 'UCzgxx_DM2Dcb9Y1spb9mUJA',
+        bindingState: 'verified',
+        includedInAuditScope: true,
+        evidenceRef:
+          'https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA',
+        verifiedAt: '2026-10-02T12:46:00.000Z',
+        sharedChannelCaveat: null,
+      },
+      {
+        canonicalArtistId: 'rose',
+        youtubeChannelId: 'UCBo1hnzxV9rz3WVsv__Rn1g',
+        bindingState: 'verified',
+        includedInAuditScope: true,
+        evidenceRef:
+          'https://www.youtube.com/channel/UCBo1hnzxV9rz3WVsv__Rn1g',
+        verifiedAt: '2026-10-02T12:46:00.000Z',
+        sharedChannelCaveat: null,
+      },
+      {
+        canonicalArtistId: 'riize',
+        youtubeChannelId: 'UCdVD0MsYecQaIE5Ru-pOIQQ',
+        bindingState: 'verified',
+        includedInAuditScope: true,
+        evidenceRef:
+          'https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ',
+        verifiedAt: '2026-10-02T12:46:00.000Z',
+        sharedChannelCaveat: null,
+      },
+      {
+        canonicalArtistId: 'jennie',
+        youtubeChannelId: 'UCNYi_zGmR519r5gYdOKLTjQ',
+        bindingState: 'verified',
+        includedInAuditScope: true,
+        evidenceRef:
+          'https://www.youtube.com/channel/UCNYi_zGmR519r5gYdOKLTjQ',
+        verifiedAt: '2026-10-02T12:46:00.000Z',
+        sharedChannelCaveat: null,
+      },
+    ],
+  });
+
+  assert.equal(result.state, 'binding-manifest-ready');
+  assert.equal(result.verifiedMemberCount, 5);
+  assert.equal(result.auditScopeMemberCount, 5);
+  assert.deepEqual(result.auditScopeCanonicalArtistIds, [
+    'blackpink',
+    'jennie',
+    'riize',
+    'rose',
+    'twice',
+  ]);
+  assert.deepEqual(result.auditScopeYoutubeChannelIds, [
+    'UCBo1hnzxV9rz3WVsv__Rn1g',
+    'UCNYi_zGmR519r5gYdOKLTjQ',
+    'UCOmHUn--16B90oW2L6FRR3A',
+    'UCdVD0MsYecQaIE5Ru-pOIQQ',
+    'UCzgxx_DM2Dcb9Y1spb9mUJA',
+  ].sort());
+  assert.equal(result.submissionEvidenceEligible, true);
+  assert.equal(result.arbitraryUniverseTargetApplied, false);
+  assert.deepEqual(result.blockers, []);
+});
+
+test('approved cohort v1 keeps LISA and shared-channel artists out of the manifest', () => {
+  const selectedArtistIds = new Set([
+    'blackpink',
+    'twice',
+    'rose',
+    'riize',
+    'jennie',
+  ]);
+
+  assert.equal(selectedArtistIds.has('lisa'), false);
+  assert.equal(selectedArtistIds.has('bts'), false);
+  assert.equal(selectedArtistIds.has('enhypen'), false);
+  assert.equal(selectedArtistIds.has('jimin'), false);
+  assert.equal(selectedArtistIds.has('v'), false);
+  assert.equal(selectedArtistIds.has('jungkook'), false);
+});
