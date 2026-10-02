@@ -44,6 +44,11 @@ test('live audit evidence snapshot records Production legal surface as HTTP 200'
     },
   );
   assert.equal(resolved.playlistItemsMaxResultsPerPage, 50);
+  assert.equal(resolved.maxChannelIdsPerCall, 50);
+  assert.equal(
+    resolved.maxChannelIdsPerCallEvidenceRef,
+    'https://developers.google.com/youtube/v3/docs/channels/list',
+  );
 });
 
 test('audit cohort evidence is exactly the merged five-member v1 manifest', async () => {
@@ -77,7 +82,6 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
-    'maxChannelIdsPerCall',
     'maxVideoIdsPerCall',
     'providerBatchLimitEvidenceRef',
   ];
@@ -97,4 +101,17 @@ test('audit packet no longer records Production privacy/terms pages as 404', asy
   assert.ok(packet.includes('/terms` -> HTTP 200'));
   assert.ok(packet.includes('earlier 404 legal-surface blocker is resolved'));
   assert.match(packet.toLowerCase(), /fixtures are never valid\s+production evidence/);
+});
+
+
+test('evidence discovery keeps Cloud project and real cadence unresolved', async () => {
+  const raw = await readJson(
+    'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
+  );
+  const discovery = raw.evidenceDiscovery as Record<string, unknown>;
+
+  assert.equal(discovery.googleDriveSearchPerformed, true);
+  assert.equal(discovery.googleDriveCloudProjectEvidenceFound, false);
+  assert.equal(discovery.githubApprovedCadenceSearchPerformed, true);
+  assert.equal(discovery.githubApprovedCadenceEvidenceFound, false);
 });
