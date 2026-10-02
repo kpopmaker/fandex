@@ -22,6 +22,19 @@ test('live audit evidence snapshot records Production legal surface as HTTP 200'
   assert.equal(resolved.primaryAccessHttpStatus, 200);
   assert.equal(resolved.privacyPolicyHttpStatus, 200);
   assert.equal(resolved.termsOfServiceHttpStatus, 200);
+  assert.equal(
+    resolved.providerQuotaCostEvidenceRef,
+    'https://developers.google.com/youtube/v3/determine_quota_cost',
+  );
+  assert.deepEqual(
+    resolved.quotaUnitsPerCall,
+    {
+      'youtube.channels.list': 1,
+      'youtube.playlistItems.list': 1,
+      'youtube.videos.list': 1,
+    },
+  );
+  assert.equal(resolved.playlistItemsMaxResultsPerPage, 50);
 });
 
 test('audit cohort evidence is exactly the merged five-member v1 manifest', async () => {
@@ -55,6 +68,9 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
+    'maxChannelIdsPerCall',
+    'maxVideoIdsPerCall',
+    'providerBatchLimitEvidenceRef',
   ];
   for (const key of keys) assert.equal(unresolved[key], null);
   assert.equal(raw.fixtureValuesAreProductionEvidence, false);
