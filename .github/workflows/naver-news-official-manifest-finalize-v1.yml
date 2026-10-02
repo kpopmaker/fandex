@@ -9,6 +9,7 @@ on:
       - "tests/naver-news-stored-evidence-mirror-v1.test.mts"
       - "tests/naver-news-blob-only-direct-v1.test.mts"
       - ".github/workflows/naver-news-blob-only-direct-production-v1.yml"
+      - ".github/workflows/naver-news-blob-only-recurring-production-v1.yml"
       - ".github/workflows/naver-news-official-manifest-finalize-v1.yml"
 
 permissions:
