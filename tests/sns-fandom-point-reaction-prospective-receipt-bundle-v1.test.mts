@@ -396,11 +396,14 @@ test('artist enrollment with no actual capture task cannot count as multi-artist
   const emptyReconciliation =
     reconcileSnsFandomProspectiveEnrollmentWithFinalManifest({
       enrollment: emptyEnrollment,
-      finalManifest: finalManifest(
-        'artist-empty',
-        'unused-video',
-        '2026-10-01T12:00:00.000Z',
-      ) as SnsFandomYoutubeContentManifest,
+      finalManifest: {
+        ...finalManifest(
+          'artist-empty',
+          'unused-video',
+          '2026-10-01T12:00:00.000Z',
+        ),
+        items: [],
+      },
       reconciledAt: '2026-11-01T00:00:00.000Z',
     });
 
