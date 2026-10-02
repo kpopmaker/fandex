@@ -1,0 +1,38 @@
+name: Validate snsFandom YouTube audit readiness refresh v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-youtube-audit-readiness-refresh-v1'
+    paths:
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - 'tests/sns-fandom-youtube-audit-evidence-refs-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-youtube-audit-readiness-refresh-v1.yml'
+  pull_request:
+    paths:
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - 'tests/sns-fandom-youtube-audit-evidence-refs-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-youtube-audit-readiness-refresh-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Audit readiness evidence regression
+        run: npx tsx --test tests/sns-fandom-youtube-audit-evidence-refs-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

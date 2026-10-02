@@ -295,44 +295,100 @@ grant states to be explicitly recorded:
 A form submission, acknowledgement, or pending review cannot satisfy those
 fields.
 
-## 8a. Current FANDEX submission-readiness audit
+## 8a. Current FANDEX submission-readiness audit — 2026-10-02 live refresh
 
-Read-only Vercel verification found:
+Current repository / deployment state:
 
-- Vercel project: `fandex`;
-- stable Production alias candidate:
-  `https://fandex-eta.vercel.app`;
-- root page: HTTP 200;
-- `/privacy`: HTTP 404;
-- `/terms`: HTTP 404.
+- current FANDEX `main`:
+  `d205a92cc28020ebded14100c3fcf75e1347f68a`;
+- latest visible Vercel Production deployment checked:
+  `dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R`;
+- deployment target: `production`;
+- deployment state: `READY`;
+- deployment Git SHA:
+  `4a2aea90961f597d644515334360fa80df0e0517`;
+- Production does not yet match current `main`;
+- the stable legal URLs are verified at the deployed SHA, while newer
+  `main` privacy wording is not claimed as deployed yet;
+- stable Production alias:
+  `https://fandex-eta.vercel.app`.
 
-Therefore the Primary Access URL blocker is partially resolved, but the
-provider form still cannot be considered submission-ready.
+Authenticated Vercel fetch verification:
 
-Current concrete blockers:
+- `/` -> HTTP 200;
+- `/privacy` -> HTTP 200;
+- `/terms` -> HTTP 200.
 
-- public Privacy Policy URL does not exist at the Production alias;
-- public Terms of Service URL does not exist at the Production alias;
-- required Privacy Policy screenshot is not available;
-- homepage screenshot showing Privacy Policy placement cannot be produced yet;
-- Terms documentation artifact is not available;
-- Analytics & Reporting dashboard/feature screenshot is not recorded;
-- exact Google Cloud project-number evidence is not recorded in this variable
-  branch;
-- measured quota estimate is not recorded;
-- applicant / organization legal identity must be supplied outside the repo;
-- demo credentials, if requested by the reviewer, must be supplied only
-  through the secure provider form and must never be committed.
+Rendered Production evidence also confirms:
 
-These web/legal/UI items are outside the snsFandomPoint Single Writer boundary.
-They must be handled by the Production/website owner before an actual provider
-submission.
+- homepage footer exposes `Privacy Policy`;
+- homepage footer exposes `Terms of Service`;
+- homepage footer exposes direct `YouTube Terms`;
+- homepage footer exposes direct `Google Privacy`;
+- `/privacy` title is `Privacy Policy | FANDEX`;
+- `/terms` title is `Terms of Service | FANDEX`.
 
-The variable branch now exposes
-`sns-fandom-youtube-audit-submission-readiness-v1` so these prerequisites can
-be evaluated fail-closed without treating submission readiness as provider
-approval.
+Therefore the earlier 404 legal-surface blocker is resolved.
 
+Merged prerequisites now present on `main`:
+
+- snsFandom Production contract PR #349: merged;
+- YouTube legal surface PR #398: merged;
+- verified Audit cohort v1 handoff PR #404: merged;
+- Audit cohort v1 exact selected member count: 5;
+- selected artists:
+  BLACKPINK / TWICE / ROSÉ / RIIZE / JENNIE;
+- LISA remains held;
+- merged binding manifest:
+  `data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json`.
+
+The exact five-member manifest is accepted by the Product-side binding
+evaluator as `binding-manifest-ready` and is the only valid
+`artistChannelCount = 5` baseline for this v1 application scope.
+
+The repository also now contains
+`sns-fandom-youtube-quota-measurement-handoff-v1`, which converts the merged
+cohort into one deterministic measurement task per selected channel, but it
+does **not** authorize provider calls and deliberately leaves the measured
+playlist-page/video-count inputs unresolved.
+
+Important test-fixture warning:
+
+- example values such as `reactionSnapshotRunsPerDay = 4`;
+- example measurement windows such as
+  `2026-09-01T00:00:00.000Z -> 2026-10-01T00:00:00.000Z`;
+- placeholder Google Cloud project numbers / ids;
+
+appear in regression tests only. They are not application evidence and must
+not be copied into a real submission packet.
+
+Current remaining concrete blockers:
+
+- Privacy Policy screenshot artifact is not yet recorded;
+- homepage screenshot showing visible legal links is not yet recorded;
+- Analytics & Reporting feature/dashboard screenshot is not yet recorded;
+- legal applicant identity evidence is not yet recorded;
+- organization/self application identity evidence is not yet recorded;
+- exact Google Cloud project number / providerClientRef binding evidence is
+  not yet recorded;
+- real measurement window is not yet declared with evidence;
+- real reaction snapshot cadence is not yet declared with evidence;
+- measured uploads-playlist page count per reaction run is not yet returned;
+- measured included-video count per reaction run is not yet returned;
+- exact quota worksheet is therefore not yet `quota-evidence-ready`;
+- provider application has not been submitted;
+- actual provider grant is absent.
+
+The merged legal URLs and repository documentation can now serve as
+non-secret URL/document evidence, but screenshots, applicant identity,
+Cloud-project identity, cadence, and actual quota measurements remain
+external-owner evidence.
+
+Submission readiness still does not imply provider approval. Even after a
+future packet evaluates as `submission-ready`, the contract keeps:
+
+- `providerApprovalGranted = false`;
+- `productionCollectionAuthorized = false`.
 
 ## 6a. Evidence-bound quota worksheet
 
@@ -551,3 +607,98 @@ The contract always keeps:
 - arbitrary measurement window = false.
 
 Therefore creating a measurement handoff is not approval to call YouTube.
+
+
+## 6d. Real-vs-fixture quota evidence boundary
+
+The merged five-member Audit cohort resolves only the artist/channel cardinality
+input for quota planning:
+
+- `artistChannelCount = 5`.
+
+It does **not** resolve the following worksheet inputs:
+
+- `uploadManifestPageCountPerReactionRun`;
+- `videoCountPerReactionRun`;
+- `reactionSnapshotRunsPerDay`;
+- provider client / Google Cloud project identity;
+- requested measurement window.
+
+The quota-measurement handoff contract requires all of those planning inputs to
+be explicit and evidence-bound before it can become
+`measurement-handoff-ready`. Even then, the handoff sets:
+
+- `automaticProviderCallAllowed = false`;
+- `collectionExecutionAuthorized = false`;
+- `quotaWorksheetAssemblyAllowed = false`.
+
+The actual page/video counts must come back from an authorized measurement
+execution or equivalent owner-supplied evidence. Test fixtures are never valid
+production evidence.
+
+
+## 6e. Official quota-cost evidence resolved; batch-ID limits still unresolved
+
+Official YouTube documentation rechecked on 2026-10-02 records:
+
+- `youtube.channels.list` -> 1 quota unit per call;
+- `youtube.playlistItems.list` -> 1 quota unit per call;
+- `youtube.videos.list` -> 1 quota unit per call;
+- each additional paginated request incurs the method quota cost;
+- `playlistItems.list.maxResults` accepts up to 50 items per page.
+
+Evidence refs:
+
+- quota calculator:
+  https://developers.google.com/youtube/v3/determine_quota_cost
+- channels.list:
+  https://developers.google.com/youtube/v3/docs/channels/list
+- playlistItems.list:
+  https://developers.google.com/youtube/v3/docs/playlistItems/list
+- videos.list:
+  https://developers.google.com/youtube/v3/docs/videos/list
+
+These facts resolve the v1 reaction-endpoint quota-cost evidence and the
+playlist page-size evidence.
+
+The documented `maxResults` values are result-set/page-size controls, not
+direct evidence of the maximum number of comma-separated IDs accepted by an
+`id` filter. In particular, `videos.list` explicitly states that
+`maxResults` is not supported with the `id` filter.
+
+Therefore FANDEX does not promote either method's `maxResults` value into an
+ID-filter batching claim:
+
+- `maxChannelIdsPerCall` remains null;
+- `maxVideoIdsPerCall` remains null;
+- the combined provider batch-limit evidence remains incomplete;
+- no test-fixture batch size may be promoted into the real worksheet.
+
+A provider-documented ID-filter limit or actual approved-client measurement is
+still required for both channel-ID and video-ID batching inputs.
+
+
+## 7b. Evidence-source discovery result
+
+Read-only evidence discovery was performed across connected sources before
+asking the owner to supply more data.
+
+Google Drive searches included:
+
+- `FANDEX YouTube Google Cloud`;
+- `YouTube API project number`;
+- `snsFandom YouTube`;
+- `YouTube quota`;
+- `Google Cloud project`;
+- `GCP`.
+
+The recorded connected-Drive searches returned no matching files. Therefore no
+Drive document was found that provides a non-secret Google Cloud project
+number or an exact project-to-snsFandom-provider-client binding.
+
+GitHub issue/PR history was also searched for a real approved reaction cadence
+or measurement window. No owner-approved real cadence/window evidence was
+found. The existing `reactionSnapshotRunsPerDay = 4` and dated measurement
+window values remain regression fixtures only.
+
+Therefore these values stay unresolved rather than being inferred.
