@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      FANDEX_NAVER_BLOB_ONLY_DIRECT_EXECUTION_APPROVAL: approved-github-actions-blob-only-direct-v1
+      FANDEX_NAVER_BLOB_ONLY_RECURRING_EXECUTION_APPROVAL: approved-github-actions-blob-only-recurring-v1
       FANDEX_NAVER_NEWS_CLIENT_ID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
       FANDEX_NAVER_NEWS_CLIENT_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
       FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
@@ -51,7 +51,7 @@ jobs:
       - run: npm ci
 
       - name: Execute one Blob-only recurring candidate slot
-        run: npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts
+        run: npx tsx scripts/ingestion/run-naver-news-blob-only-recurring-v1.ts
 
       - name: Safety boundary
         if: always()
