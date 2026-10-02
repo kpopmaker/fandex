@@ -10,7 +10,18 @@ type AuditEvidence = Readonly<{
   resolvedEvidence: Readonly<{
     privacyPolicyScreenshotRef: string | null;
     homepageScreenshotRef: string | null;
+    dashboardFeatureScreenshotRef?: string | null;
+  }>;
+  unresolvedEvidence: Readonly<{
     dashboardFeatureScreenshotRef: string | null;
+  }>;
+  rejectedEvidence: Readonly<{
+    dashboardFeatureScreenshotCandidate: Readonly<{
+      ref: string;
+      sha256: string;
+      sourceUrl: string;
+      rejectionReason: string;
+    }>;
   }>;
   fixtureValuesAreProductionEvidence: boolean;
   providerApprovalGranted: boolean;
@@ -43,18 +54,29 @@ test('screenshot evidence never promotes snsFandom into current Real Risk inputs
   );
 });
 
-test('a present dashboard screenshot ref is treated as non-authoritative until upstream validates it', () => {
-  if (evidence.resolvedEvidence.dashboardFeatureScreenshotRef !== null) {
-    assert.ok(
-      evidence.resolvedEvidence.dashboardFeatureScreenshotRef.length > 0,
-    );
-    assert.equal(evidence.providerApprovalGranted, false);
-    assert.equal(evidence.productionCollectionAuthorized, false);
-    assert.equal(evidence.providerSubmissionAuthorized, false);
-  }
+test('synthetic dashboard screenshot is rejected and remains unresolved', () => {
+  assert.equal(
+    evidence.resolvedEvidence.dashboardFeatureScreenshotRef,
+    undefined,
+  );
+  assert.equal(
+    evidence.unresolvedEvidence.dashboardFeatureScreenshotRef,
+    null,
+  );
+
+  const rejected =
+    evidence.rejectedEvidence.dashboardFeatureScreenshotCandidate;
+
+  assert.ok(rejected.ref.length > 0);
+  assert.ok(rejected.sha256.length > 0);
+  assert.equal(rejected.sourceUrl, 'https://fandex-eta.vercel.app/');
+  assert.equal(
+    rejected.rejectionReason,
+    'source-is-explicitly-synthetic-preview-homepage-not-production-analytics-reporting-feature',
+  );
 });
 
-test('valid legal screenshots still do not satisfy provider and Product readiness gates', () => {
+test('valid legal screenshots remain separate from provider and Product readiness gates', () => {
   assert.ok(
     evidence.resolvedEvidence.privacyPolicyScreenshotRef === null
       || evidence.resolvedEvidence.privacyPolicyScreenshotRef.length > 0,
@@ -68,5 +90,7 @@ test('valid legal screenshots still do not satisfy provider and Product readines
     RISK_ADJUSTMENT_CURRENT_UPSTREAM_ELIGIBILITY.find(
       (entry) => entry.variableId === 'snsFandomPoint',
     );
-  assert.equal(eligibility?.acceptedForRiskConsumption, false);
+
+  assert.ok(eligibility);
+  assert.equal(eligibility.acceptedForRiskConsumption, false);
 });
