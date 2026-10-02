@@ -404,3 +404,49 @@ inputs rather than freezing them into Product code.
 Batch limits are also evidence inputs rather than Product constants. This
 avoids silently assuming that a provider request parameter limit, result-page
 limit, or multi-ID batching rule is stable across policy/API revisions.
+
+
+## 7a. Google Cloud project / API client identity evidence
+
+The audit packet now requires an executable
+`sns-fandom-youtube-provider-client-identity-v1` artifact.
+
+A free-form `providerClientRef` or `cloudProjectRef` string is not enough.
+
+The identity artifact must bind, without storing credential material:
+
+- provider = `youtube-data-api`;
+- exact FANDEX `providerClientRef`;
+- exact numeric Google Cloud project number;
+- Google Cloud project id when known;
+- a secret **locator** only, such as a GitHub Actions secret name;
+- non-secret evidence reference proving the Cloud project / credential binding;
+- exact verification timestamp.
+
+The artifact rejects API key values, OAuth tokens, client secrets, and
+secret-like evidence references.
+
+The current repository already demonstrates a separate Brand Fit YouTube
+workflow that expects a GitHub Actions secret named
+`FANDEX_BRAND_FIT_YOUTUBE_API_KEY`. That proves only that a secret locator is
+part of an existing workflow contract. It does **not** prove:
+
+- that the secret currently exists;
+- that snsFandomPoint may reuse that credential;
+- which Google Cloud project owns that key; or
+- that the owning project has the required snsFandom provider approval.
+
+Therefore Brand Fit's secret name cannot be promoted into snsFandom client
+identity evidence by assumption.
+
+The audit-readiness gate now requires:
+
+- a `provider-client-identity-ready` artifact;
+- exact provider-client-ref equality between identity, quota worksheet, and
+  audit packet;
+- exact Cloud-project evidence-ref equality between the identity artifact and
+  the audit packet;
+- a non-null validated Google Cloud project number.
+
+Even after this identity validation passes, provider approval remains false
+until an actual provider grant is recorded.
