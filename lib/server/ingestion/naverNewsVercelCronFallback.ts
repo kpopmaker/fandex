@@ -32,6 +32,13 @@ export const NAVER_NEWS_VERCEL_CRON_FALLBACK_VERSION =
   'naver-news-vercel-cron-blob-only-fallback-v2' as const;
 export const NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE =
   '17 * * * *' as const;
+export const NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES =
+  Object.freeze(
+    Array.from(
+      { length: 24 },
+      (_, hour) => `17 ${hour} * * *`,
+    ),
+  );
 export const NAVER_NEWS_VERCEL_CRON_SECRET_ENV =
   'CRON_SECRET' as const;
 
@@ -57,6 +64,14 @@ export type NaverNewsVercelCronFallbackDependencies = Readonly<{
   ) => Promise<readonly NaverNewsSucceededSchedulerJob[]>;
   now?: () => Date;
 }>;
+
+function isAcceptedDeliverySchedule(value: string | null): boolean {
+  if (value === NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE) {
+    return true;
+  }
+  return value !== null
+    && NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES.includes(value);
+}
 
 function failure(
   status: number,
@@ -179,8 +194,9 @@ export async function handleNaverNewsVercelCronFallback(
       request.headers.get('authorization'),
       cronSecret,
     )
-    || request.headers.get('x-vercel-cron-schedule')
-      !== NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE
+    || !isAcceptedDeliverySchedule(
+      request.headers.get('x-vercel-cron-schedule'),
+    )
   ) {
     return failure(403, 'request_rejected');
   }
