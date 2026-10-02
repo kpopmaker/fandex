@@ -60,6 +60,9 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeContentSelection.ts
           lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
+          lib/intelligence/snsFandomPointProviderGrantActivationManifest.ts
+          lib/intelligence/snsFandomPointCollectionRunManifest.ts
+          lib/intelligence/snsFandomPointYoutubeRawCollectionSchema.ts
           tests/sns-fandom-point-comparability-v1.test.mts
           tests/sns-fandom-point-productionization-v1.test.mts
           tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
@@ -68,6 +71,11 @@ jobs:
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
+          tests/sns-fandom-point-collection-run-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
+          tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           diff -u /tmp/allowed.txt /tmp/changed.txt
@@ -85,6 +93,11 @@ jobs:
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
+          tests/sns-fandom-point-collection-run-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
+          tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
 
       - run: npm run typecheck
       - run: npm run lint
