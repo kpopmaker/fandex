@@ -12,5 +12,11 @@
         "sin1"
       ]
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/internal/naver-news/vercel-cron-fallback",
+      "schedule": "17 * * * *"
+    }
+  ]
 }
