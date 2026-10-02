@@ -211,6 +211,15 @@ export function buildSnsFandomReactionValidationCollectionPlan(
     if (validation.selectedVideoIds.length === 0) {
       blockers.push('reaction-collection-plan-content-manifest-empty');
     }
+    if (
+      validIso(input.plannedAt)
+      && validIso(manifest.windowEnd)
+      && Date.parse(input.plannedAt) < Date.parse(manifest.windowEnd)
+    ) {
+      blockers.push(
+        'reaction-collection-plan-content-window-not-finalized',
+      );
+    }
     selectedContentCounts.push(validation.selectedVideoIds.length);
   }
 
