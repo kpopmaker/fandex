@@ -1,0 +1,38 @@
+name: Validate snsFandom provider-client owner handoff v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-provider-client-owner-handoff-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeProviderClientOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json'
+      - 'tests/sns-fandom-point-youtube-provider-client-owner-handoff-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-provider-client-owner-handoff-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeProviderClientOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json'
+      - 'tests/sns-fandom-point-youtube-provider-client-owner-handoff-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-provider-client-owner-handoff-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Provider-client owner handoff regression
+        run: npx tsx --test tests/sns-fandom-point-youtube-provider-client-owner-handoff-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
