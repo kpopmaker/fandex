@@ -1,0 +1,36 @@
+name: Validate Artist Expansion snsFandom YouTube binding recovery v1
+
+on:
+  push:
+    branches:
+      - 'work/artist-expansion-sns-fandom-youtube-binding-recovery-v1'
+    paths:
+      - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_recovery_v1.json'
+      - 'tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts'
+      - '.github/workflows/validate-artist-expansion-sns-fandom-youtube-binding-recovery-v1.yml'
+  pull_request:
+    paths:
+      - 'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_recovery_v1.json'
+      - 'tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts'
+      - '.github/workflows/validate-artist-expansion-sns-fandom-youtube-binding-recovery-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: YouTube binding recovery regression
+        run: npx tsx --test tests/artist-expansion-sns-fandom-youtube-binding-recovery-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
