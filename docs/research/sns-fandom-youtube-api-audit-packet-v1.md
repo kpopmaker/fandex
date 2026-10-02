@@ -491,3 +491,63 @@ Current main was checked on 2026-10-02:
 - that file has 0 explicit YouTube channel bindings.
 
 The external identity handoff is tracked in issue #402.
+
+
+## 6c. Exact quota-measurement handoff for Audit cohort v1
+
+The variable branch now includes
+`sns-fandom-youtube-quota-measurement-handoff-v1`.
+
+Its purpose is to turn the merged five-member Audit cohort v1 into an exact,
+non-authorizing measurement packet before the quota worksheet is assembled.
+
+The handoff re-runs the binding-manifest evaluator internally against the
+actual manifest input. It does not trust a precomputed ready-state flag.
+
+For the approved cohort it therefore preserves:
+
+- exact selected artist count = 5;
+- exact artist/channel mapping from the merged manifest;
+- exact reaction-only endpoint scope:
+  - `youtube.channels.list`
+  - `youtube.playlistItems.list`
+  - `youtube.videos.list`
+- LISA remains outside the v1 handoff;
+- comment endpoints cannot be added silently.
+
+The handoff also requires, before it can become
+`measurement-handoff-ready`:
+
+- a validated Google Cloud provider-client identity;
+- an explicit measurement window;
+- an explicit reaction snapshot cadence;
+- non-secret cadence evidence;
+- provider batch-limit evidence;
+- provider quota-cost evidence.
+
+When ready, it emits one deterministic measurement task per selected artist
+channel. Each task requires the downstream measurement owner to produce:
+
+- uploads playlist id;
+- actual playlistItems pages traversed for the declared measurement window;
+- actual included-video count.
+
+The handoff deliberately leaves:
+
+- `uploadManifestPageCountPerReactionRun = null`;
+- `videoCountPerReactionRun = null`;
+- quota worksheet assembly disabled.
+
+Those values may become non-null only after an actual evidence-backed
+measurement result is returned.
+
+The contract always keeps:
+
+- automatic provider call = false;
+- collection execution authorization = false;
+- scheduler mutation = false;
+- deployment authorization = false;
+- arbitrary cadence = false;
+- arbitrary measurement window = false.
+
+Therefore creating a measurement handoff is not approval to call YouTube.
