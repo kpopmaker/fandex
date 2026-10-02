@@ -1,0 +1,33 @@
+{
+  "version": "sns_fandom_youtube_quota_owner_input_v1",
+  "state": "awaiting-owner-plan-evidence",
+  "instructions": {
+    "measurementWindowStart": "Exact ISO-8601 start of the real measurement window. Do not copy regression fixture dates.",
+    "measurementWindowEnd": "Exact ISO-8601 end of the real measurement window.",
+    "reactionSnapshotRunsPerDay": "Owner-approved positive integer cadence with evidence.",
+    "cadenceEvidenceRef": "Non-secret evidence reference for the approved cadence.",
+    "measuredAt": "Exact ISO-8601 timestamp when real quota usage measurements were completed.",
+    "uploadManifestPageCountPerReactionRun": "Measured positive integer pages traversed across the selected audit cohort per reaction run.",
+    "videoCountPerReactionRun": "Measured positive integer included-video count across the selected audit cohort per reaction run.",
+    "measuredUsageEvidenceRef": "Non-secret evidence reference for measured page/video counts.",
+    "maxChannelIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
+    "maxVideoIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
+    "providerBatchLimitEvidenceRef": "Non-secret provider evidence for both exact ID batch limits."
+  },
+  "measurementWindowStart": null,
+  "measurementWindowEnd": null,
+  "reactionSnapshotRunsPerDay": null,
+  "cadenceEvidenceRef": null,
+  "measuredAt": null,
+  "uploadManifestPageCountPerReactionRun": null,
+  "videoCountPerReactionRun": null,
+  "measuredUsageEvidenceRef": null,
+  "maxChannelIdsPerCall": null,
+  "maxVideoIdsPerCall": null,
+  "providerBatchLimitEvidenceRef": null,
+  "automaticProviderCallAllowed": false,
+  "collectionExecutionAuthorized": false,
+  "schedulerMutationAllowed": false,
+  "deploymentAuthorized": false,
+  "providerSubmissionAuthorized": false
+}

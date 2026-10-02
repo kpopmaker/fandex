@@ -1,0 +1,38 @@
+name: Validate snsFandom quota owner handoff v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-quota-owner-handoff-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-quota-owner-input-v1.json'
+      - 'tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-quota-owner-handoff-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-quota-owner-input-v1.json'
+      - 'tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-quota-owner-handoff-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Quota owner handoff regression
+        run: npx tsx --test tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
