@@ -1,4 +1,7 @@
-import type { SnsFandomObservationRecord } from './snsFandomPointObservationContract';
+import type {
+  SnsFandomObservationDimension,
+  SnsFandomObservationRecord,
+} from './snsFandomPointObservationContract';
 
 export const SNS_FANDOM_PROVIDER_ADAPTER_CONTRACT_VERSION =
   'sns-fandom-provider-adapter-contract-v1' as const;
@@ -9,6 +12,14 @@ export type SnsFandomProviderAdapterState =
   | 'ready-for-collection'
   | 'collecting'
   | 'failed-closed';
+
+export type SnsFandomProviderAdapterContract = Readonly<{
+  providerId: string;
+  state: SnsFandomProviderAdapterState;
+  dimensions: readonly SnsFandomObservationDimension[];
+  rightsRequired: readonly string[];
+  transform: string;
+}>;
 
 export type SnsFandomProviderAdapterContext = Readonly<{
   providerId: string;
