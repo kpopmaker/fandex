@@ -12,9 +12,23 @@ import type {
 import type {
   ImmutableTextObjectStore,
 } from '../lib/server/storage/immutableTextObjectStore';
+import {
+  buildNaverNewsJobIdentity,
+} from '../lib/server/ingestion/naverNewsContracts';
 
 const CRON_SECRET = 'cron-secret-value';
 const SCHEDULER_SECRET = 'scheduler-secret-value';
+
+const CURRENT_SLOT_COLLECTION_KEY =
+  'sched-v125-naver-news-20261001t120000z-f1ed381d367d';
+const CURRENT_SLOT_IDENTITY = buildNaverNewsJobIdentity({
+  provider: 'naver-news',
+  collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+  query: '아이유 IU',
+  display: 100,
+  start: 1,
+  sort: 'date',
+});
 
 function environment(
   overrides: Record<string, string | undefined> = {},
@@ -239,6 +253,7 @@ test('authenticated exact Vercel Cron request stages and finalizes one official 
     mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
     trigger: 'vercel-cron-authenticated',
     schedule: '17 * * * *',
+    runStatus: 'collected-and-finalized',
     contractVersion: 'naver-news-blob-only-collection-stage-v1',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     slotStart: '2026-10-01T12:00:00.000Z',
@@ -254,8 +269,105 @@ test('authenticated exact Vercel Cron request stages and finalizes one official 
       duplicateRecords: 0,
       rejectedItems: 0,
     },
+    providerCalls: 1,
     databaseWrites: 0,
     schedulerManifestFinalized: true,
+  });
+});
+
+test('already-finalized current slot skips provider collection and finalization', async () => {
+  let stageCalls = 0;
+  let finalizeCalls = 0;
+
+  const response = await handleNaverNewsVercelCronFallback(
+    request(),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      resolveOidcToken() {
+        return 'oidc-token';
+      },
+      createStore() {
+        return memoryStore();
+      },
+      now: () => new Date('2026-10-01T12:37:00.000Z'),
+      async readSucceededSchedulerJobs() {
+        return Object.freeze([Object.freeze({
+          jobId: CURRENT_SLOT_IDENTITY.jobId,
+          collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+          requestContract: CURRENT_SLOT_IDENTITY.request,
+        })]);
+      },
+      async runStage() {
+        stageCalls += 1;
+        return stageSummary();
+      },
+      async finalizeManifest() {
+        finalizeCalls += 1;
+        throw new Error('should_not_finalize');
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(stageCalls, 0);
+  assert.equal(finalizeCalls, 0);
+  assert.deepEqual(await response.json(), {
+    ok: true,
+    mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
+    trigger: 'vercel-cron-authenticated',
+    schedule: '17 * * * *',
+    runStatus: 'already-finalized',
+    contractVersion: 'naver-news-blob-only-collection-stage-v1',
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
+    slotStart: '2026-10-01T12:00:00.000Z',
+    collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+    jobId: CURRENT_SLOT_IDENTITY.jobId,
+    resultSha256: null,
+    stagedObjectStatus: null,
+    counts: null,
+    providerCalls: 0,
+    databaseWrites: 0,
+    schedulerManifestFinalized: true,
+  });
+});
+
+test('current-slot identity conflict fails closed before provider collection', async () => {
+  let stageCalls = 0;
+  const response = await handleNaverNewsVercelCronFallback(
+    request(),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      resolveOidcToken() {
+        return 'oidc-token';
+      },
+      createStore() {
+        return memoryStore();
+      },
+      now: () => new Date('2026-10-01T12:37:00.000Z'),
+      async readSucceededSchedulerJobs() {
+        return Object.freeze([Object.freeze({
+          jobId: 'f'.repeat(64),
+          collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+          requestContract: CURRENT_SLOT_IDENTITY.request,
+        })]);
+      },
+      async runStage() {
+        stageCalls += 1;
+        return stageSummary();
+      },
+    },
+  );
+
+  assert.equal(response.status, 502);
+  assert.equal(stageCalls, 0);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
+    errorClass: 'preflight_failed',
   });
 });
 
