@@ -1,0 +1,133 @@
+{
+  "version": "sns_fandom_youtube_audit_binding_scope_candidates_v1",
+  "status": "owner-selection-required",
+  "derivedFrom": {
+    "historicalRecoveryVersion": "sns_fandom_youtube_audit_binding_recovery_v1",
+    "currentVerificationVersion": "sns_fandom_youtube_audit_binding_current_verification_v1",
+    "checkedAt": "2026-10-02T12:46:00.000Z"
+  },
+  "semantics": {
+    "candidateDoesNotEqualSelected": true,
+    "selectedDoesNotEqualProviderApproved": true,
+    "sharedChannelExcludedFromV1SelectableSet": true,
+    "labelOwnedOacRequiresExplicitDecision": true,
+    "noAutomaticAuditScopeSelection": true
+  },
+  "summary": {
+    "ownerSelectableCandidateCount": 5,
+    "conditionalCandidateCount": 1,
+    "sharedChannelBlockedArtistCount": 5,
+    "selectedAuditScopeCount": 0
+  },
+  "ownerSelectableCandidates": [
+    {
+      "canonicalArtistId": "blackpink",
+      "youtubeChannelId": "UCOmHUn--16B90oW2L6FRR3A",
+      "channelTitle": "BLACKPINK",
+      "candidateBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
+        "https://www.blackpinkofficial.com/"
+      ],
+      "selected": false
+    },
+    {
+      "canonicalArtistId": "twice",
+      "youtubeChannelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+      "channelTitle": "TWICE",
+      "candidateBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
+        "https://twice.jype.com/"
+      ],
+      "selected": false
+    },
+    {
+      "canonicalArtistId": "rose",
+      "youtubeChannelId": "UCBo1hnzxV9rz3WVsv__Rn1g",
+      "channelTitle": "ROSÉ",
+      "candidateBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCBo1hnzxV9rz3WVsv__Rn1g"
+      ],
+      "selected": false
+    },
+    {
+      "canonicalArtistId": "riize",
+      "youtubeChannelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+      "channelTitle": "RIIZE",
+      "candidateBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
+        "https://www.riizeofficial.com/"
+      ],
+      "selected": false
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "youtubeChannelId": "UCNYi_zGmR519r5gYdOKLTjQ",
+      "channelTitle": "JENNIE",
+      "candidateBasis": "current-artist-named-oac-replaces-historical-vevo",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCNYi_zGmR519r5gYdOKLTjQ",
+        "https://www.youtube.com/watch?v=Ao2GsXHMD_4",
+        "https://weverse.io/jennie/highlight",
+        "https://creatoracademy.youtube.com/page/lesson/music-discovery"
+      ],
+      "selected": false
+    }
+  ],
+  "conditionalCandidates": [
+    {
+      "canonicalArtistId": "lisa",
+      "youtubeChannelId": "UC6-BgjsBa5R3PZQ_kZ8hKPg",
+      "channelTitle": "LLOUD Official",
+      "condition": "explicit-owner-acceptance-of-label-owned-oac-for-artist-scope",
+      "candidateBasis": "current-official-artist-channel-surface-replaces-historical-vevo",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UC6-BgjsBa5R3PZQ_kZ8hKPg",
+        "https://www.youtube.com/watch?v=FyS5dAywkEo",
+        "https://www.sonymusic.co.jp/artist/LISA/info/586535",
+        "https://creatoracademy.youtube.com/page/lesson/music-discovery"
+      ],
+      "selected": false
+    }
+  ],
+  "blockedSharedChannelArtists": [
+    {
+      "canonicalArtistId": "bts",
+      "youtubeChannelId": "UC3IZKseVpdzPSBaWxBxundA",
+      "channelTitle": "HYBE LABELS",
+      "blockReason": "shared-label-channel"
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "youtubeChannelId": "UC3IZKseVpdzPSBaWxBxundA",
+      "channelTitle": "HYBE LABELS",
+      "blockReason": "shared-label-channel"
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "blockReason": "shared-group-channel"
+    },
+    {
+      "canonicalArtistId": "v",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "blockReason": "shared-group-channel"
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "blockReason": "shared-group-channel"
+    }
+  ],
+  "selectedAuditScope": [],
+  "blockers": [
+    "owner-audit-cohort-selection-required",
+    "lisa-label-owned-oac-policy-decision-required"
+  ]
+}
