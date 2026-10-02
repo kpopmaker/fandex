@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -300,4 +301,46 @@ test('approved cohort v1 keeps LISA and shared-channel artists out of the manife
   assert.equal(selectedArtistIds.has('jimin'), false);
   assert.equal(selectedArtistIds.has('v'), false);
   assert.equal(selectedArtistIds.has('jungkook'), false);
+});
+
+
+test('main-merged Audit cohort v1 artifact evaluates as binding-manifest-ready', async () => {
+  const raw = JSON.parse(
+    await readFile(
+      new URL(
+        '../data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ) as SnsFandomYoutubeAuditArtistBindingManifestInput & {
+    ownerDecision?: Readonly<{
+      heldCanonicalArtistIds?: readonly string[];
+      providerApprovalImplied?: boolean;
+      collectionAuthorizationImplied?: boolean;
+    }>;
+  };
+
+  const result = evaluateSnsFandomYoutubeAuditArtistBindingManifest({
+    manifestId: raw.manifestId,
+    evidenceRef: raw.evidenceRef,
+    members: raw.members,
+  });
+
+  assert.equal(result.state, 'binding-manifest-ready');
+  assert.equal(result.verifiedMemberCount, 5);
+  assert.equal(result.auditScopeMemberCount, 5);
+  assert.deepEqual(result.auditScopeCanonicalArtistIds, [
+    'blackpink',
+    'jennie',
+    'riize',
+    'rose',
+    'twice',
+  ]);
+  assert.equal(result.submissionEvidenceEligible, true);
+  assert.deepEqual(result.blockers, []);
+
+  assert.deepEqual(raw.ownerDecision?.heldCanonicalArtistIds, ['lisa']);
+  assert.equal(raw.ownerDecision?.providerApprovalImplied, false);
+  assert.equal(raw.ownerDecision?.collectionAuthorizationImplied, false);
 });
