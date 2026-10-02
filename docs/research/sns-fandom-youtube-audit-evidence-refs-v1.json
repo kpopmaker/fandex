@@ -28,7 +28,10 @@
       "youtube.videos.list": 1
     },
     "playlistItemsPageLimitEvidenceRef": "https://developers.google.com/youtube/v3/docs/playlistItems/list",
-    "playlistItemsMaxResultsPerPage": 50
+    "playlistItemsMaxResultsPerPage": 50,
+    "maxChannelIdsPerCall": 50,
+    "maxChannelIdsPerCallEvidenceRef": "https://developers.google.com/youtube/v3/docs/channels/list",
+    "maxChannelIdsPerCallInterpretation": "Effective complete-result cap per channels.list request, derived from documented maxResults <= 50. This is not a claim that the id query string rejects a 51st ID."
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
@@ -44,7 +47,6 @@
     "uploadManifestPageCountPerReactionRun": null,
     "videoCountPerReactionRun": null,
     "quotaEstimateRef": null,
-    "maxChannelIdsPerCall": null,
     "maxVideoIdsPerCall": null,
     "providerBatchLimitEvidenceRef": null
   },
@@ -57,5 +59,20 @@
     "productionDeploymentGitSha": "4a2aea90961f597d644515334360fa80df0e0517",
     "productionMatchesCurrentMain": false,
     "note": "Stable Production legal pages are verified at the deployed SHA; newer main privacy wording is not claimed as deployed until a matching Production deployment is observed."
+  },
+  "evidenceDiscovery": {
+    "googleDriveSearchPerformed": true,
+    "googleDriveQueries": [
+      "FANDEX YouTube Google Cloud",
+      "YouTube API project number",
+      "snsFandom YouTube",
+      "YouTube quota",
+      "Google Cloud project",
+      "GCP"
+    ],
+    "googleDriveCloudProjectEvidenceFound": false,
+    "githubApprovedCadenceSearchPerformed": true,
+    "githubApprovedCadenceEvidenceFound": false,
+    "note": "No non-secret Google Cloud project-number binding or owner-approved real reaction cadence was found. Test fixtures remain invalid as Production evidence."
   }
 }
