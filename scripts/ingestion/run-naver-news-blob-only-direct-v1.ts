@@ -8,6 +8,9 @@ import {
   createProductionNaverNewsBlobEvidenceStore,
 } from '../../lib/server/ingestion/naverNewsBlobMirrorRuntime';
 import {
+  finalizeNaverNewsStoredEvidenceMirrorByJobId,
+} from '../../lib/server/ingestion/naverNewsStoredEvidenceMirror';
+import {
   readNaverNewsRecurringConfig,
 } from '../../lib/server/ingestion/naverNewsRecurringSchedulerContracts';
 import {
@@ -22,6 +25,7 @@ export const NAVER_NEWS_BLOB_ONLY_DIRECT_APPROVAL_VALUE =
 export type NaverNewsBlobOnlyDirectDependencies = Readonly<{
   createStore?: typeof createProductionNaverNewsBlobEvidenceStore;
   runStage?: typeof runNaverNewsBlobOnlyCollectionStage;
+  finalizeManifest?: typeof finalizeNaverNewsStoredEvidenceMirrorByJobId;
   now?: () => Date;
 }>;
 
@@ -36,7 +40,7 @@ export type NaverNewsBlobOnlyDirectSummary = Readonly<{
   stagedObjectStatus: NaverNewsBlobOnlyCollectionStageSummary['stagedObjectStatus'];
   counts: NaverNewsBlobOnlyCollectionStageSummary['counts'];
   databaseWrites: 0;
-  schedulerManifestFinalized: false;
+  schedulerManifestFinalized: true;
 }>;
 
 export async function runNaverNewsBlobOnlyDirect(
@@ -77,6 +81,17 @@ export async function runNaverNewsBlobOnlyDirect(
     },
   );
 
+  const finalizeManifest = dependencies.finalizeManifest
+    ?? finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  const finalized = await finalizeManifest(
+    result.jobId,
+    result.resultSha256,
+    store,
+  );
+  if (finalized.schedulerManifest === null) {
+    throw new Error('naver_news_blob_only_direct_manifest_required');
+  }
+
   return Object.freeze({
     mode: 'github-actions-direct-blob-only' as const,
     contractVersion: result.contractVersion,
@@ -88,8 +103,7 @@ export async function runNaverNewsBlobOnlyDirect(
     stagedObjectStatus: result.stagedObjectStatus,
     counts: result.counts,
     databaseWrites: result.safety.databaseWrites,
-    schedulerManifestFinalized:
-      result.safety.schedulerManifestFinalized,
+    schedulerManifestFinalized: true as const,
   });
 }
 

@@ -58,15 +58,35 @@ jobs:
 
       - run: npm ci
 
-      - name: Execute one direct Blob-only slot
-        run: npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts
+      - name: Execute one direct Blob-only slot and finalize official manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts \
+            | tee /tmp/naver-blob-only-direct-summary.json
+          node <<'NODE'
+          const fs = require('node:fs');
+          const lines = fs.readFileSync(
+            '/tmp/naver-blob-only-direct-summary.json',
+            'utf8',
+          ).trim().split(/\r?\n/).filter(Boolean);
+          const summary = JSON.parse(lines.at(-1) ?? '{}');
+          if (
+            summary.mode !== 'github-actions-direct-blob-only'
+            || summary.databaseWrites !== 0
+            || summary.schedulerManifestFinalized !== true
+          ) {
+            process.exit(1);
+          }
+          console.log('FANDEX_NAVER_BLOB_ONLY_DIRECT_MANIFEST_FINALIZED=true');
+          NODE
 
       - name: Safety boundary
         if: always()
         run: |
           echo "databaseConnections=0"
           echo "databaseWrites=0"
-          echo "schedulerManifestFinalized=false"
+          echo "schedulerManifestFinalizationRequired=true"
           echo "retries=0"
           echo "productActivations=0"
           echo "rawProviderPayloadLogged=false"
