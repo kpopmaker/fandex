@@ -1,3 +1,7 @@
+import {
+  type SnsFandomYoutubeQuotaWorksheetResult,
+} from './snsFandomPointYoutubeQuotaWorksheet';
+
 export const SNS_FANDOM_YOUTUBE_AUDIT_SUBMISSION_READINESS_VERSION =
   'sns-fandom-youtube-audit-submission-readiness-v1' as const;
 
@@ -7,6 +11,7 @@ export type SnsFandomYoutubeAuditSubmissionInput = Readonly<{
   useCase: 'analytics-reporting';
   derivedMetricsAndStorageAmendmentAccepted: boolean;
   requestedEndpoints: readonly string[];
+  quotaWorksheet: SnsFandomYoutubeQuotaWorksheetResult | null;
   evidence: Readonly<{
     applicantIdentityRef: string | null;
     organizationOrSelfRef: string | null;
@@ -37,6 +42,8 @@ export type SnsFandomYoutubeAuditSubmissionReadiness = Readonly<{
   useCase: 'analytics-reporting';
   requestedEndpoints: readonly string[];
   amendmentAcknowledged: boolean;
+  quotaEvidenceValidated: boolean;
+  minimumProjectedQuotaUnitsPerDay: number | null;
   providerApprovalGranted: false;
   productionCollectionAuthorized: false;
   blockers: readonly string[];
@@ -101,6 +108,47 @@ export function evaluateSnsFandomYoutubeAuditSubmissionReadiness(
     }
   }
 
+
+  const quotaWorksheet = input.quotaWorksheet;
+  let quotaEvidenceValidated = false;
+
+  if (quotaWorksheet === null) {
+    blockers.push('youtube-audit-quota-worksheet-missing');
+  } else {
+    if (
+      quotaWorksheet.state !== 'quota-evidence-ready'
+      || !quotaWorksheet.submissionEvidenceEligible
+      || quotaWorksheet.minimumProjectedQuotaUnitsPerDay === null
+      || quotaWorksheet.blockers.length > 0
+    ) {
+      blockers.push('youtube-audit-quota-worksheet-not-ready');
+    }
+    if (quotaWorksheet.providerClientRef !== input.providerClientRef) {
+      blockers.push('youtube-audit-quota-provider-client-mismatch');
+    }
+
+    const auditEndpoints = Array.from(
+      new Set(input.requestedEndpoints),
+    ).sort();
+    const quotaEndpoints = Array.from(
+      new Set(quotaWorksheet.requestedEndpoints),
+    ).sort();
+    if (
+      JSON.stringify(auditEndpoints)
+        !== JSON.stringify(quotaEndpoints)
+    ) {
+      blockers.push('youtube-audit-quota-endpoint-scope-mismatch');
+    }
+
+    quotaEvidenceValidated =
+      quotaWorksheet.state === 'quota-evidence-ready'
+      && quotaWorksheet.submissionEvidenceEligible
+      && quotaWorksheet.minimumProjectedQuotaUnitsPerDay !== null
+      && quotaWorksheet.blockers.length === 0
+      && quotaWorksheet.providerClientRef === input.providerClientRef
+      && JSON.stringify(auditEndpoints) === JSON.stringify(quotaEndpoints);
+  }
+
   const e = input.evidence;
   const requiredRefs: Array<readonly [string, string | null]> = [
     ['youtube-audit-applicant-identity-evidence-missing', e.applicantIdentityRef],
@@ -155,6 +203,11 @@ export function evaluateSnsFandomYoutubeAuditSubmissionReadiness(
     requestedEndpoints: Object.freeze([...input.requestedEndpoints]),
     amendmentAcknowledged:
       input.derivedMetricsAndStorageAmendmentAccepted,
+    quotaEvidenceValidated,
+    minimumProjectedQuotaUnitsPerDay:
+      quotaEvidenceValidated && quotaWorksheet !== null
+        ? quotaWorksheet.minimumProjectedQuotaUnitsPerDay
+        : null,
     providerApprovalGranted: false as const,
     productionCollectionAuthorized: false as const,
     blockers: Object.freeze(Array.from(new Set(blockers))),
