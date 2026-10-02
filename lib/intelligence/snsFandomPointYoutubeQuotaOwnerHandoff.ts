@@ -1,0 +1,218 @@
+export const SNS_FANDOM_YOUTUBE_QUOTA_OWNER_HANDOFF_VERSION =
+  'sns-fandom-youtube-quota-owner-handoff-v1' as const;
+
+export type SnsFandomYoutubeQuotaOwnerHandoffInput = Readonly<{
+  measurementWindowStart: string | null;
+  measurementWindowEnd: string | null;
+  reactionSnapshotRunsPerDay: number | null;
+  cadenceEvidenceRef: string | null;
+  measuredAt: string | null;
+  uploadManifestPageCountPerReactionRun: number | null;
+  videoCountPerReactionRun: number | null;
+  measuredUsageEvidenceRef: string | null;
+  maxChannelIdsPerCall: number | null;
+  maxVideoIdsPerCall: number | null;
+  providerBatchLimitEvidenceRef: string | null;
+}>;
+
+export type SnsFandomYoutubeQuotaOwnerHandoffResult = Readonly<{
+  contractVersion: typeof SNS_FANDOM_YOUTUBE_QUOTA_OWNER_HANDOFF_VERSION;
+  state:
+    | 'awaiting-owner-plan-evidence'
+    | 'measurement-plan-ready'
+    | 'quota-worksheet-input-ready';
+  missingPlanFields: readonly string[];
+  missingMeasurementFields: readonly string[];
+  invalidFields: readonly string[];
+  measurementWindowStart: string | null;
+  measurementWindowEnd: string | null;
+  reactionSnapshotRunsPerDay: number | null;
+  cadenceEvidenceRef: string | null;
+  measuredAt: string | null;
+  uploadManifestPageCountPerReactionRun: number | null;
+  videoCountPerReactionRun: number | null;
+  measuredUsageEvidenceRef: string | null;
+  maxChannelIdsPerCall: number | null;
+  maxVideoIdsPerCall: number | null;
+  providerBatchLimitEvidenceRef: string | null;
+  automaticProviderCallAllowed: false;
+  collectionExecutionAuthorized: false;
+  schedulerMutationAllowed: false;
+  deploymentAuthorized: false;
+  providerSubmissionAuthorized: false;
+  arbitraryCadenceApplied: false;
+  arbitraryMeasurementWindowApplied: false;
+  arbitraryProviderLimitApplied: false;
+}>;
+
+const PLAN_FIELDS = Object.freeze([
+  'measurementWindowStart',
+  'measurementWindowEnd',
+  'reactionSnapshotRunsPerDay',
+  'cadenceEvidenceRef',
+] as const);
+
+const MEASUREMENT_FIELDS = Object.freeze([
+  'measuredAt',
+  'uploadManifestPageCountPerReactionRun',
+  'videoCountPerReactionRun',
+  'measuredUsageEvidenceRef',
+  'maxChannelIdsPerCall',
+  'maxVideoIdsPerCall',
+  'providerBatchLimitEvidenceRef',
+] as const);
+
+function present(value: string | null): value is string {
+  return value !== null && value.trim().length > 0;
+}
+
+function validIso(value: string): boolean {
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+}
+
+function positiveSafeInteger(value: number): boolean {
+  return Number.isSafeInteger(value) && value > 0;
+}
+
+function secretLike(value: string): boolean {
+  if (/AIza[0-9A-Za-z_-]{10,}/.test(value)) return true;
+  const normalized = value.toLowerCase();
+  return [
+    'password=',
+    'access_token=',
+    'refresh_token=',
+    'client_secret=',
+    'authorization: bearer ',
+    'api_key=',
+    'apikey=',
+    'key=aiza',
+  ].some((needle) => normalized.includes(needle));
+}
+
+export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
+  input: SnsFandomYoutubeQuotaOwnerHandoffInput,
+): SnsFandomYoutubeQuotaOwnerHandoffResult {
+  const missingPlanFields: string[] = [];
+  const missingMeasurementFields: string[] = [];
+  const invalidFields: string[] = [];
+
+  for (const field of PLAN_FIELDS) {
+    const value = input[field];
+    if (value === null || (typeof value === 'string' && !present(value))) {
+      missingPlanFields.push(field);
+    }
+  }
+
+  for (const field of MEASUREMENT_FIELDS) {
+    const value = input[field];
+    if (value === null || (typeof value === 'string' && !present(value))) {
+      missingMeasurementFields.push(field);
+    }
+  }
+
+  if (
+    input.measurementWindowStart !== null
+    && !validIso(input.measurementWindowStart)
+  ) {
+    invalidFields.push('measurementWindowStart');
+  }
+  if (
+    input.measurementWindowEnd !== null
+    && !validIso(input.measurementWindowEnd)
+  ) {
+    invalidFields.push('measurementWindowEnd');
+  }
+  if (
+    input.measurementWindowStart !== null
+    && input.measurementWindowEnd !== null
+    && validIso(input.measurementWindowStart)
+    && validIso(input.measurementWindowEnd)
+    && Date.parse(input.measurementWindowStart) >= Date.parse(input.measurementWindowEnd)
+  ) {
+    invalidFields.push('measurementWindowOrder');
+  }
+  if (
+    input.reactionSnapshotRunsPerDay !== null
+    && !positiveSafeInteger(input.reactionSnapshotRunsPerDay)
+  ) {
+    invalidFields.push('reactionSnapshotRunsPerDay');
+  }
+  if (input.measuredAt !== null && !validIso(input.measuredAt)) {
+    invalidFields.push('measuredAt');
+  }
+  for (const field of [
+    'uploadManifestPageCountPerReactionRun',
+    'videoCountPerReactionRun',
+    'maxChannelIdsPerCall',
+    'maxVideoIdsPerCall',
+  ] as const) {
+    const value = input[field];
+    if (value !== null && !positiveSafeInteger(value)) {
+      invalidFields.push(field);
+    }
+  }
+
+  for (const field of [
+    'cadenceEvidenceRef',
+    'measuredUsageEvidenceRef',
+    'providerBatchLimitEvidenceRef',
+  ] as const) {
+    const value = input[field];
+    if (value !== null && present(value) && secretLike(value)) {
+      invalidFields.push(`${field}:secret-like`);
+    }
+  }
+
+  const missingPlan = Object.freeze(
+    Array.from(new Set(missingPlanFields)).sort(),
+  );
+  const missingMeasurement = Object.freeze(
+    Array.from(new Set(missingMeasurementFields)).sort(),
+  );
+  const invalid = Object.freeze(Array.from(new Set(invalidFields)).sort());
+
+  const planReady = missingPlan.length === 0 && invalid.length === 0;
+  const worksheetInputsReady =
+    planReady && missingMeasurement.length === 0 && invalid.length === 0;
+
+  return Object.freeze({
+    contractVersion: SNS_FANDOM_YOUTUBE_QUOTA_OWNER_HANDOFF_VERSION,
+    state: worksheetInputsReady
+      ? 'quota-worksheet-input-ready' as const
+      : planReady
+        ? 'measurement-plan-ready' as const
+        : 'awaiting-owner-plan-evidence' as const,
+    missingPlanFields: missingPlan,
+    missingMeasurementFields: missingMeasurement,
+    invalidFields: invalid,
+    measurementWindowStart: planReady ? input.measurementWindowStart : null,
+    measurementWindowEnd: planReady ? input.measurementWindowEnd : null,
+    reactionSnapshotRunsPerDay:
+      planReady ? input.reactionSnapshotRunsPerDay : null,
+    cadenceEvidenceRef: planReady ? input.cadenceEvidenceRef : null,
+    measuredAt: worksheetInputsReady ? input.measuredAt : null,
+    uploadManifestPageCountPerReactionRun:
+      worksheetInputsReady
+        ? input.uploadManifestPageCountPerReactionRun
+        : null,
+    videoCountPerReactionRun:
+      worksheetInputsReady ? input.videoCountPerReactionRun : null,
+    measuredUsageEvidenceRef:
+      worksheetInputsReady ? input.measuredUsageEvidenceRef : null,
+    maxChannelIdsPerCall:
+      worksheetInputsReady ? input.maxChannelIdsPerCall : null,
+    maxVideoIdsPerCall:
+      worksheetInputsReady ? input.maxVideoIdsPerCall : null,
+    providerBatchLimitEvidenceRef:
+      worksheetInputsReady ? input.providerBatchLimitEvidenceRef : null,
+    automaticProviderCallAllowed: false as const,
+    collectionExecutionAuthorized: false as const,
+    schedulerMutationAllowed: false as const,
+    deploymentAuthorized: false as const,
+    providerSubmissionAuthorized: false as const,
+    arbitraryCadenceApplied: false as const,
+    arbitraryMeasurementWindowApplied: false as const,
+    arbitraryProviderLimitApplied: false as const,
+  });
+}
