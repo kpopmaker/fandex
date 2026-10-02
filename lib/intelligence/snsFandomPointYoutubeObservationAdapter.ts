@@ -1,5 +1,6 @@
-import type {
-  SnsFandomObservationRecord,
+import {
+  SNS_FANDOM_OBSERVATION_CONTRACT_VERSION,
+  type SnsFandomObservationRecord,
 } from './snsFandomPointObservationContract';
 import type {
   SnsFandomProviderAdapterContract,
@@ -8,7 +9,7 @@ import type {
 export const SNS_FANDOM_YOUTUBE_OBSERVATION_ADAPTER_VERSION =
   'sns-fandom-youtube-observation-adapter-v1' as const;
 
-type YoutubeVideoMetricInput = Readonly<{
+export type YoutubeVideoMetricInput = Readonly<{
   providerVideoId: string;
   channelId: string;
   observedAt: string;
@@ -17,6 +18,7 @@ type YoutubeVideoMetricInput = Readonly<{
   likeCount: number | null;
   commentCount: number | null;
   publishedAt: string;
+  evidenceRefs: readonly string[];
 }>;
 
 export const youtubeObservationAdapter: SnsFandomProviderAdapterContract =
@@ -37,37 +39,44 @@ export function mapYoutubeVideoMetricsToObservation(
   input: YoutubeVideoMetricInput,
   artistIdentityRef: string | null,
 ): SnsFandomObservationRecord | null {
-  if (artistIdentityRef === null) return null;
-
   if (
-    input.providerVideoId.length === 0
-    || input.channelId.length === 0
+    artistIdentityRef === null
+    || artistIdentityRef.trim().length === 0
+    || input.providerVideoId.trim().length === 0
+    || input.channelId.trim().length === 0
+    || input.evidenceRefs.length === 0
   ) {
     return null;
   }
 
   return Object.freeze({
-    contractVersion: SNS_FANDOM_YOUTUBE_OBSERVATION_ADAPTER_VERSION,
+    contractVersion: SNS_FANDOM_OBSERVATION_CONTRACT_VERSION,
     providerId: 'youtube-data-api',
     artistIdentityRef,
     dimension: 'public-reaction-diffusion',
-    sourceObservation: Object.freeze({
-      sourceId: input.providerVideoId,
-      observedAt: input.observedAt,
-      collectedAt: input.collectedAt,
-      metrics: Object.freeze({
-        viewCount: input.viewCount,
-        likeCount: input.likeCount,
-        commentCount: input.commentCount,
+    observationWindow: Object.freeze({
+      startAt: input.publishedAt,
+      endAt: input.observedAt,
+    }),
+    collectionTime: input.collectedAt,
+    sourceState: 'rights-blocked',
+    rawMetrics: Object.freeze([
+      Object.freeze({
+        metricName: 'youtube.video.view-count',
+        value: input.viewCount,
+        unit: 'count',
       }),
-    }),
-    identityBinding: Object.freeze({
-      providerChannelId: input.channelId,
-      verified: false,
-    }),
-    eligibility: Object.freeze({
-      rightsState: 'blocked-by-rights',
-      collectionState: 'not-collectable',
-    }),
+      Object.freeze({
+        metricName: 'youtube.video.like-count',
+        value: input.likeCount,
+        unit: 'count',
+      }),
+      Object.freeze({
+        metricName: 'youtube.video.comment-count',
+        value: input.commentCount,
+        unit: 'count',
+      }),
+    ]),
+    evidenceRefs: Object.freeze([...input.evidenceRefs]),
   });
 }
