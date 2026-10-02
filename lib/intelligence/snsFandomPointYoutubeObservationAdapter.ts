@@ -26,7 +26,7 @@ export const youtubeObservationAdapter: SnsFandomProviderAdapterContract =
     providerId: 'youtube-data-api',
     state: 'blocked-by-rights',
     dimensions: Object.freeze([
-      'public-reaction-diffusion',
+      'public-reaction-diffusion' as const,
     ]),
     rightsRequired: Object.freeze([
       'youtube-compliance-audit-grant',
