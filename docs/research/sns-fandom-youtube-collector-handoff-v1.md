@@ -395,3 +395,14 @@ When every task already has exact-age evidence, no new collection handoff is
 needed. The handoff returns `collection-not-required` and does not require a
 new provider/collector activation check. Existing captures remain subject to
 the downstream lineage and dataset validation gates.
+
+
+### Current-time and provider-identity revalidation
+
+The approval must already be active at handoff creation time **and** remain
+active at every future capture time. A future-dated approval cannot be used to
+produce a handoff before it becomes valid.
+
+Collector readiness is also bound to provider identity. An
+`approved-ready` decision for Instagram, TikTok, or any other provider cannot
+authorize a YouTube validation capture handoff.
