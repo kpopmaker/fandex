@@ -27,6 +27,8 @@ async function load() {
       candidateBasis: string;
       evidenceRefs: string[];
       selected: boolean;
+      disposition?: string;
+      dispositionReason?: string;
     }>;
     conditionalCandidates: Array<{
       canonicalArtistId: string;
@@ -43,7 +45,23 @@ async function load() {
       channelTitle: string;
       blockReason: string;
     }>;
-    selectedAuditScope: unknown[];
+    selectedAuditScope: Array<{
+      canonicalArtistId: string;
+      youtubeChannelId: string;
+      channelTitle: string;
+      selectionBasis: string;
+      evidenceRefs: string[];
+    }>;
+    ownerDecision: {
+      decision: string;
+      decisionText: string;
+      recordedAt: string;
+      lisaDisposition: string;
+      providerApprovalImplied: boolean;
+      collectionAuthorizationImplied: boolean;
+      mergeAuthorizationImplied: boolean;
+      deploymentAuthorizationImplied: boolean;
+    };
     blockers: string[];
   };
 }
@@ -55,7 +73,7 @@ test('scope handoff reduces current evidence to five selectable and one conditio
     data.version,
     'sns_fandom_youtube_audit_binding_scope_candidates_v1',
   );
-  assert.equal(data.status, 'owner-selection-required');
+  assert.equal(data.status, 'owner-selection-recorded');
   assert.equal(data.summary.ownerSelectableCandidateCount, 5);
   assert.equal(data.summary.conditionalCandidateCount, 1);
   assert.equal(data.ownerSelectableCandidates.length, 5);
@@ -70,22 +88,35 @@ test('scope handoff reduces current evidence to five selectable and one conditio
   assert.equal(data.conditionalCandidates[0].canonicalArtistId, 'lisa');
 });
 
-test('candidate set stays non-authorizing until owner selection', async () => {
+test('owner selection records exactly five artists while remaining non-authorizing', async () => {
   const data = await load();
 
-  assert.equal(data.summary.selectedAuditScopeCount, 0);
-  assert.deepEqual(data.selectedAuditScope, []);
+  assert.equal(data.summary.selectedAuditScopeCount, 5);
+  assert.equal(data.selectedAuditScope.length, 5);
   assert.ok(
-    data.ownerSelectableCandidates.every((entry) => entry.selected === false),
+    data.ownerSelectableCandidates.every((entry) => entry.selected === true),
   );
   assert.ok(
     data.conditionalCandidates.every((entry) => entry.selected === false),
   );
+  assert.deepEqual(
+    data.selectedAuditScope
+      .map((entry) => entry.canonicalArtistId)
+      .sort(),
+    ['blackpink', 'jennie', 'riize', 'rose', 'twice'],
+  );
+  assert.equal(data.ownerDecision.decision, 'approved');
+  assert.equal(data.ownerDecision.lisaDisposition, 'hold');
+  assert.equal(data.ownerDecision.providerApprovalImplied, false);
+  assert.equal(data.ownerDecision.collectionAuthorizationImplied, false);
+  assert.equal(data.ownerDecision.mergeAuthorizationImplied, false);
+  assert.equal(data.ownerDecision.deploymentAuthorizationImplied, false);
   assert.equal(data.semantics.candidateDoesNotEqualSelected, true);
   assert.equal(data.semantics.selectedDoesNotEqualProviderApproved, true);
   assert.equal(data.semantics.noAutomaticAuditScopeSelection, true);
-  assert.ok(
-    data.blockers.includes('owner-audit-cohort-selection-required'),
+  assert.equal(
+    Number.isFinite(Date.parse(data.ownerDecision.recordedAt)),
+    true,
   );
 });
 
@@ -129,10 +160,9 @@ test('LISA remains conditional because the current OAC candidate is label-owned'
     'explicit-owner-acceptance-of-label-owned-oac-for-artist-scope',
   );
   assert.equal(lisa.selected, false);
-  assert.ok(
-    data.blockers.includes(
-      'lisa-label-owned-oac-policy-decision-required',
-    ),
+  assert.equal(
+    (lisa as typeof lisa & { disposition?: string }).disposition,
+    'hold',
   );
 });
 
