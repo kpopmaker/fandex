@@ -206,7 +206,19 @@ jobs:
           deadline=$((SECONDS + 1800))
           vercel_ready=false
 
-          while (( SECONDS < deadline )); do
+          vercel_requirement_json="$(node scripts/github/evaluate-vercel-pr-head-requirement.mjs \
+            --head-ref "${HEAD_REF}" \
+            --config-path vercel.json)"
+          vercel_required="$(jq -r '.required' <<<"${vercel_requirement_json}")"
+          vercel_reason="$(jq -r '.reason' <<<"${vercel_requirement_json}")"
+
+          case "${vercel_required}" in
+            false)
+              vercel_ready=true
+              echo "PR-head Vercel deployment is not required by trusted base policy: ${vercel_reason}"
+              ;;
+            true)
+              while (( SECONDS < deadline )); do
             pr_snapshot="$(gh pr view "${PR_NUMBER}" --repo "${REPOSITORY}" --json state,baseRefName,headRefOid,baseRefOid,isDraft,labels)"
             current_state="$(jq -r '.state' <<<"${pr_snapshot}")"
             current_base_ref="$(jq -r '.baseRefName' <<<"${pr_snapshot}")"
@@ -254,11 +266,17 @@ jobs:
                 echo "Unexpected Vercel state: ${vercel_state}"
                 exit 1
                 ;;
-            esac
-          done
+                esac
+              done
+              ;;
+            *)
+              echo "Unexpected Vercel requirement decision: ${vercel_required}"
+              exit 1
+              ;;
+          esac
 
           if [[ "${vercel_ready}" != "true" ]]; then
-            echo "Timed out waiting for Vercel success."
+            echo "Timed out waiting for required Vercel success."
             exit 1
           fi
 
