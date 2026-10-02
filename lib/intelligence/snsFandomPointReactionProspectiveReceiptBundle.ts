@@ -143,6 +143,9 @@ export function bundleSnsFandomProspectiveReactionReceipts(
         .filter((task) => task.state === 'pending-prospective-capture')
         .map((task) => task.taskId),
     );
+    if (entryExpectedTaskIds.length === 0) {
+      blockers.push('prospective-receipt-bundle-enrollment-task-missing');
+    }
     expectedTaskIds.push(...entryExpectedTaskIds);
 
     const entryMembers: SnsFandomReactionCollectionReceiptMember[] = [];
