@@ -1,9 +1,9 @@
 {
   "version": "sns_fandom_youtube_audit_evidence_refs_v1",
-  "observedAt": "2026-10-02T14:14:54.000Z",
+  "observedAt": "2026-10-02T15:13:41.000Z",
   "productionDeployment": {
-    "deploymentId": "dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R",
-    "gitSha": "4a2aea90961f597d644515334360fa80df0e0517",
+    "deploymentId": "dpl_Ugg1UJU2aL8BRNAehUowmHeZF5QD",
+    "gitSha": "1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
     "state": "READY",
     "target": "production",
     "stableAlias": "https://fandex-eta.vercel.app"
@@ -15,12 +15,12 @@
     "privacyPolicyHttpStatus": 200,
     "termsOfServiceUrl": "https://fandex-eta.vercel.app/terms",
     "termsOfServiceHttpStatus": 200,
-    "privacyPolicySourceRef": "repo://app/privacy/page.tsx@4a2aea90961f597d644515334360fa80df0e0517",
-    "termsDocumentationRef": "repo://app/terms/page.tsx@4a2aea90961f597d644515334360fa80df0e0517",
+    "privacyPolicySourceRef": "repo://app/privacy/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
+    "termsDocumentationRef": "repo://app/terms/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
     "businessModelDescriptionRef": "repo://docs/research/sns-fandom-youtube-api-audit-packet-v1.md#2-api-client-description",
     "auditCohortManifestRef": "repo://data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json@main",
     "auditCohortMemberCount": 5,
-    "legalFooterSourceRef": "repo://app/components/LegalFooter.tsx@4a2aea90961f597d644515334360fa80df0e0517",
+    "legalFooterSourceRef": "repo://app/components/LegalFooter.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
     "providerQuotaCostEvidenceRef": "https://developers.google.com/youtube/v3/determine_quota_cost",
     "quotaUnitsPerCall": {
       "youtube.channels.list": 1,
@@ -28,14 +28,39 @@
       "youtube.videos.list": 1
     },
     "playlistItemsPageLimitEvidenceRef": "https://developers.google.com/youtube/v3/docs/playlistItems/list",
-    "playlistItemsMaxResultsPerPage": 50
+    "playlistItemsMaxResultsPerPage": 50,
+    "privacyPolicyScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#privacy-policy.png",
+    "homepageScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#homepage-legal-links.png",
+    "dashboardFeatureScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png",
+    "screenshotEvidenceBundle": {
+      "githubWorkflowRunId": "37025375542",
+      "githubArtifactId": "11235301864",
+      "githubArtifactName": "sns-fandom-youtube-audit-screenshots-v1",
+      "githubArtifactDigest": "sha256:b764b7ac2d41f13ca4011727f6797eb10aa8ba2bd46a9a9278b4533ae96ebf19",
+      "githubArtifactExpiresAt": "2026-12-31T15:12:54Z",
+      "googleDriveFileId": "1llzxJnLw0CVsOiQuYHzbX_O8OlcCto-j",
+      "googleDriveFileUrl": "https://drive.google.com/file/d/1llzxJnLw0CVsOiQuYHzbX_O8OlcCto-j/view?usp=drivesdk",
+      "googleDriveFolderId": "1wPUGp_Y8bFYz4i8HbJxzxEe0VL60s4Br",
+      "capturedAt": "2026-10-02T15:13:41Z",
+      "files": {
+        "privacyPolicy": {
+          "name": "privacy-policy.png",
+          "sha256": "209294b1320cbfea2c25c587c2e774c8f116beb1288bcd90613ccc385965b513"
+        },
+        "homepageLegalLinks": {
+          "name": "homepage-legal-links.png",
+          "sha256": "d7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1"
+        },
+        "analyticsReportingDashboard": {
+          "name": "analytics-reporting-dashboard.png",
+          "sha256": "bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5"
+        }
+      }
+    }
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
     "organizationOrSelfRef": null,
-    "privacyPolicyScreenshotRef": null,
-    "homepageScreenshotRef": null,
-    "dashboardFeatureScreenshotRef": null,
     "providerClientIdentityRef": null,
     "googleCloudProjectNumber": null,
     "cloudProjectRef": null,
@@ -53,12 +78,12 @@
   "productionCollectionAuthorized": false,
   "providerSubmissionAuthorized": false,
   "repositoryStateAtRefresh": {
-    "currentMainSha": "d205a92cc28020ebded14100c3fcf75e1347f68a",
-    "productionDeploymentGitSha": "4a2aea90961f597d644515334360fa80df0e0517",
-    "productionMatchesCurrentMain": false,
-    "note": "Stable Production legal pages are verified at the deployed SHA; newer main privacy wording is not claimed as deployed until a matching Production deployment is observed.",
-    "currentMainPrivacyPolicySourceRef": "repo://app/privacy/page.tsx@d205a92cc28020ebded14100c3fcf75e1347f68a",
-    "currentMainPrivacyPolicyDeployed": false
+    "currentMainSha": "1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
+    "productionDeploymentGitSha": "1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
+    "productionMatchesCurrentMain": true,
+    "note": "Stable Production and repository main matched at screenshot capture time. Legal pages and latest privacy wording were verified on the deployed SHA.",
+    "currentMainPrivacyPolicySourceRef": "repo://app/privacy/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1",
+    "currentMainPrivacyPolicyDeployed": true
   },
   "evidenceDiscovery": {
     "googleDriveSearchPerformed": true,
