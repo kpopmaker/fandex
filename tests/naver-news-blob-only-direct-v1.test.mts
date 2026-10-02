@@ -351,6 +351,10 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
   assert.doesNotMatch(workflow, /VERCEL_OIDC_TOKEN/);
   assert.doesNotMatch(workflow, /fandex-eta\.vercel\.app/);
   assert.doesNotMatch(workflow, /curl /);
+  assert.match(workflow, /runStatus === 'already-finalized'/);
+  assert.match(workflow, /providerCalls === 0/);
+  assert.match(workflow, /runStatus === 'collected-and-finalized'/);
+  assert.match(workflow, /providerCalls === 1/);
 });
 
 
@@ -398,5 +402,9 @@ test('recurring Production workflow activates the frozen hourly cadence and pres
   );
   assert.match(workflow, /schedulerManifestFinalized !== true/);
   assert.match(workflow, /schedulerManifestFinalizationRequired=true/);
+  assert.match(workflow, /runStatus === 'already-finalized'/);
+  assert.match(workflow, /providerCalls === 0/);
+  assert.match(workflow, /runStatus === 'collected-and-finalized'/);
+  assert.match(workflow, /providerCalls === 1/);
   assert.doesNotMatch(workflow, /FANDEX_RUNTIME_DATABASE_URL/);
 });
