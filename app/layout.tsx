@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from './components/Navbar';
+import LegalFooter from './components/LegalFooter';
 
 export const metadata: Metadata = {
   title: 'FANDEX',
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         {children}
+        <LegalFooter />
       </body>
     </html>
   );

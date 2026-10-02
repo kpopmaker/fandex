@@ -1,0 +1,41 @@
+name: Validate YouTube Audit Legal Surface v1
+
+on:
+  push:
+    branches:
+      - 'work/youtube-audit-legal-surface-v1'
+    paths:
+      - 'app/privacy/page.tsx'
+      - 'app/terms/page.tsx'
+      - 'app/components/LegalFooter.tsx'
+      - 'app/layout.tsx'
+      - 'tests/youtube-audit-legal-surface-v1.test.mts'
+      - '.github/workflows/validate-youtube-audit-legal-surface-v1.yml'
+  pull_request:
+    paths:
+      - 'app/privacy/page.tsx'
+      - 'app/terms/page.tsx'
+      - 'app/components/LegalFooter.tsx'
+      - 'app/layout.tsx'
+      - 'tests/youtube-audit-legal-surface-v1.test.mts'
+      - '.github/workflows/validate-youtube-audit-legal-surface-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Legal surface regression
+        run: npx tsx --test tests/youtube-audit-legal-surface-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
