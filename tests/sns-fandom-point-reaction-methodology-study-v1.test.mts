@@ -54,6 +54,7 @@ function dataset(
       normalizedValue: null,
     })),
     revisionStabilityReviewed: true,
+    lineageValidated: true,
     methodologyValidationEligible: true,
     aggregateValuesProduced: false,
     normalizedValuesProduced: false,
