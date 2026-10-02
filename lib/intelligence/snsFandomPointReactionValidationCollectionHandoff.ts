@@ -122,13 +122,27 @@ export function buildSnsFandomReactionCollectionHandoff(
 
   const collectionRequired = pendingPlanTasks.length > 0;
 
-  const providerGrantValidated =
+  const approvalActiveAtHandoff =
     collectionRequired
     && providerApproval !== null
-    && providerApproval.state === 'approved'
-    && providerApproval.providerId === 'youtube-data-api'
     && plan.providerClientRef !== null
-    && providerApproval.providerClientRef === plan.providerClientRef
+    && isSnsFandomProviderApprovalActiveFor(providerApproval, {
+      providerId: 'youtube-data-api',
+      providerClientRef: plan.providerClientRef,
+      providerEndpoints: [
+        'youtube.channels.list',
+        'youtube.playlistItems.list',
+        'youtube.videos.list',
+      ],
+      dimension: 'public-reaction-diffusion',
+      metricId: plan.metricId,
+      evaluatedAt: input.evaluatedAt,
+    });
+
+  const providerGrantValidated =
+    collectionRequired
+    && approvalActiveAtHandoff
+    && providerApproval !== null
     && pendingPlanTasks.every((task) =>
       taskApprovalActive(providerApproval, task)
     );
@@ -154,6 +168,11 @@ export function buildSnsFandomReactionCollectionHandoff(
         'reaction-collection-handoff-provider-approval-not-approved',
       );
     }
+    if (!approvalActiveAtHandoff) {
+      blockers.push(
+        'reaction-collection-handoff-provider-approval-not-active-at-handoff',
+      );
+    }
 
     for (const task of pendingPlanTasks) {
       if (!taskApprovalActive(providerApproval, task)) {
@@ -166,7 +185,8 @@ export function buildSnsFandomReactionCollectionHandoff(
   }
 
   const collectorApprovedReady =
-    collectorActivation.state === 'approved-ready'
+    collectorActivation.providerId === 'youtube-data-api'
+    && collectorActivation.state === 'approved-ready'
     && collectorActivation.collectionAuthorized === false
     && collectorActivation.blockers.length === 0;
 
