@@ -1,0 +1,125 @@
+name: Capture snsFandom YouTube audit screenshots v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-youtube-audit-screenshot-evidence-v1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify stable Production evidence text
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          curl -fsSL --retry 3 --retry-delay 2 https://fandex-eta.vercel.app/ > evidence/homepage.html
+          curl -fsSL --retry 3 --retry-delay 2 https://fandex-eta.vercel.app/privacy > evidence/privacy.html
+
+          grep -q 'Privacy Policy' evidence/homepage.html
+          grep -q 'Terms of Service' evidence/homepage.html
+          grep -q 'YouTube Terms' evidence/homepage.html
+          grep -q 'Google Privacy' evidence/homepage.html
+          grep -q 'K-pop 리서치 지표' evidence/homepage.html
+          grep -q '현재 Dashboard 값은 월별 합성 미리보기 데이터입니다' evidence/homepage.html
+
+          grep -q 'Privacy Policy' evidence/privacy.html
+          grep -q 'YouTube API' evidence/privacy.html
+          grep -q 'YouTube Terms' evidence/privacy.html
+          grep -q 'Google Privacy' evidence/privacy.html
+
+      - name: Install Chromium
+        shell: bash
+        run: |
+          npx --yes playwright@1.55.0 install --with-deps chromium
+
+      - name: Capture audit screenshots
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          npx --yes playwright@1.55.0 screenshot \
+            --browser chromium \
+            --viewport-size "1440,1100" \
+            --wait-for-timeout 2000 \
+            https://fandex-eta.vercel.app/ \
+            evidence/analytics-reporting-dashboard.png
+
+          npx --yes playwright@1.55.0 screenshot \
+            --browser chromium \
+            --viewport-size "1440,1100" \
+            --full-page \
+            --wait-for-timeout 2000 \
+            https://fandex-eta.vercel.app/ \
+            evidence/homepage-legal-links.png
+
+          npx --yes playwright@1.55.0 screenshot \
+            --browser chromium \
+            --viewport-size "1440,1100" \
+            --full-page \
+            --wait-for-timeout 2000 \
+            https://fandex-eta.vercel.app/privacy \
+            evidence/privacy-policy.png
+
+          test -s evidence/analytics-reporting-dashboard.png
+          test -s evidence/homepage-legal-links.png
+          test -s evidence/privacy-policy.png
+
+      - name: Write evidence manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > evidence/manifest.json <<EOF
+          {
+            "version": "sns_fandom_youtube_audit_screenshots_v1",
+            "capturedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "repository": "${GITHUB_REPOSITORY}",
+            "gitSha": "${GITHUB_SHA}",
+            "workflowRunId": "${GITHUB_RUN_ID}",
+            "productionBaseUrl": "https://fandex-eta.vercel.app",
+            "files": [
+              {
+                "purpose": "analytics-and-reporting-feature",
+                "path": "analytics-reporting-dashboard.png",
+                "url": "https://fandex-eta.vercel.app/"
+              },
+              {
+                "purpose": "homepage-visible-legal-links",
+                "path": "homepage-legal-links.png",
+                "url": "https://fandex-eta.vercel.app/"
+              },
+              {
+                "purpose": "privacy-policy",
+                "path": "privacy-policy.png",
+                "url": "https://fandex-eta.vercel.app/privacy"
+              }
+            ]
+          }
+          EOF
+          sha256sum \
+            evidence/analytics-reporting-dashboard.png \
+            evidence/homepage-legal-links.png \
+            evidence/privacy-policy.png \
+            > evidence/SHA256SUMS.txt
+
+      - name: Upload screenshot evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: sns-fandom-youtube-audit-screenshots-v1
+          path: |
+            evidence/analytics-reporting-dashboard.png
+            evidence/homepage-legal-links.png
+            evidence/privacy-policy.png
+            evidence/manifest.json
+            evidence/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
