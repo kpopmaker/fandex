@@ -632,3 +632,38 @@ be explicit and evidence-bound before it can become
 The actual page/video counts must come back from an authorized measurement
 execution or equivalent owner-supplied evidence. Test fixtures are never valid
 production evidence.
+
+
+## 6e. Official quota-cost evidence resolved; batch-ID limits still unresolved
+
+Official YouTube documentation rechecked on 2026-10-02 records:
+
+- `youtube.channels.list` -> 1 quota unit per call;
+- `youtube.playlistItems.list` -> 1 quota unit per call;
+- `youtube.videos.list` -> 1 quota unit per call;
+- each additional paginated request incurs the method quota cost;
+- `playlistItems.list.maxResults` accepts up to 50 items per page.
+
+Evidence refs:
+
+- quota calculator:
+  https://developers.google.com/youtube/v3/determine_quota_cost
+- channels.list:
+  https://developers.google.com/youtube/v3/docs/channels/list
+- playlistItems.list:
+  https://developers.google.com/youtube/v3/docs/playlistItems/list
+- videos.list:
+  https://developers.google.com/youtube/v3/docs/videos/list
+
+These facts resolve the v1 reaction-endpoint quota-cost evidence and the
+playlist page-size evidence.
+
+They do **not** justify inventing:
+
+- `maxChannelIdsPerCall`;
+- `maxVideoIdsPerCall`.
+
+The current provider docs describe comma-separated ID filters, but the exact
+batch-ID cap needed by the FANDEX worksheet is not recorded here as an
+evidence-backed numeric limit. Those two worksheet inputs remain null until a
+provider-documented limit or actual approved client behavior is recorded.
