@@ -990,3 +990,32 @@ Once that gate passes, prospective tasks use the existing receipt evaluator
 without a second receipt contract. Exact timing, collection-run identity,
 observation identity, evidence continuity, lineage validation, revision audit,
 and validation-dataset assembly therefore remain the same downstream gates.
+
+
+### Multi-artist prospective receipt bundling
+
+Prospective captures are naturally fragmented by artist and discovery time, but
+the validation dataset contract requires real evidence from at least two
+canonical artists. A single-artist receipt therefore cannot be relabeled as a
+methodology dataset.
+
+After every artist's publication window has been reconciled against its final
+complete manifest, exact-target-age receipt results can be bundled into the
+existing receipt shape only when:
+
+- there are at least two distinct canonical artists;
+- all enrollments use the same provider client/project, reaction metric,
+  construct, and dataset/target-age plan;
+- every enrollment is active with no missed-before-enrollment task;
+- every final-manifest reconciliation is ready and exact;
+- every enrolled task appears in the exact receipt set;
+- all receipt results are already
+  `capture-complete-lineage-pending` and dataset-assembly eligible;
+- task IDs and observation IDs are unique across the study;
+- no timing-deviated capture is present.
+
+A ready bundle still sets lineage validation and revision audit as required. It
+does not create observations, repair missing captures, choose an aggregation
+method, normalize values, or produce `snsFandomPoint`. Its only purpose is to
+let the existing multi-artist validation-dataset assembly consume a complete
+prospective capture study without weakening the retrospective lifecycle.
