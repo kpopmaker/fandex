@@ -153,7 +153,8 @@ test('prospective ops packet is reviewable but cannot authorize scheduler, activ
   assert.equal(result.opsPacket.activationMutationAllowed, false);
   assert.equal(result.opsPacket.collectionExecutionAuthorized, false);
   assert.equal(result.opsPacket.deploymentAuthorized, false);
-  assert.equal(result.opsPacket.pendingTasks.length, 2);
+  assert.equal(result.opsPacket.pendingTasks.length, 1);
+  assert.equal(result.opsPacket.pendingTasks[0]?.videoId, 'video-b');
 });
 
 test('target age still requires external methodology rationale and no default is invented', () => {
@@ -290,6 +291,46 @@ test('reconciliation cannot happen before the declared publication window is fin
   assert.ok(
     result.blockers.includes(
       'prospective-enrollment-final-manifest-window-not-finalized',
+    ),
+  );
+});
+
+
+test('prospective enrollment evaluation must be anchored to the latest discovery snapshot', () => {
+  const result = buildSnsFandomProspectiveContentEnrollment(
+    enrollmentInput({
+      evaluatedAt: '2026-10-11T00:00:00.000Z',
+    }),
+  );
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(
+    result.blockers.includes(
+      'prospective-enrollment-evaluation-not-latest-discovery',
+    ),
+  );
+});
+
+test('final reconciliation binds the exact uploads playlist identity', () => {
+  const enrollment = buildSnsFandomProspectiveContentEnrollment(
+    enrollmentInput(),
+  );
+  const mismatched = {
+    ...finalManifest(),
+    uploadsPlaylistId: 'UU-different',
+  };
+
+  const result =
+    reconcileSnsFandomProspectiveEnrollmentWithFinalManifest({
+      enrollment,
+      finalManifest: mismatched,
+      reconciledAt: '2026-11-01T00:00:00.000Z',
+    });
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(
+    result.blockers.includes(
+      'prospective-enrollment-final-manifest-scope-mismatch',
     ),
   );
 });
