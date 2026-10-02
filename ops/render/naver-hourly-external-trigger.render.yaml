@@ -1,0 +1,15 @@
+services:
+  - type: cron
+    name: fandex-naver-hourly-external-trigger
+    runtime: node
+    region: singapore
+    plan: starter
+    branch: main
+    schedule: '17 * * * *'
+    buildCommand: npm ci --omit=dev
+    startCommand: node scripts/ops/run-naver-external-hourly-trigger-v1.mjs
+    envVars:
+      - key: FANDEX_NAVER_EXTERNAL_SCHEDULER_ENDPOINT
+        value: https://fandex-eta.vercel.app/api/internal/naver-news/vercel-cron-fallback
+      - key: FANDEX_NAVER_EXTERNAL_SCHEDULER_SECRET
+        sync: false
