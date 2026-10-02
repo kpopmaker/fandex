@@ -1,0 +1,134 @@
+{
+  "version": "sns_fandom_youtube_audit_binding_current_verification_v1",
+  "status": "current-public-verification-complete-audit-scope-not-selected",
+  "checkedAt": "2026-10-02T12:46:00.000Z",
+  "methodology": {
+    "providerApiCallPerformed": false,
+    "secretUsed": false,
+    "currentYoutubeChannelPageTitleChecked": true,
+    "historicalReviewEvidenceReused": true,
+    "oacPolicyUsedForVevoInterpretation": true,
+    "auditScopeSelectionPerformed": false
+  },
+  "youtubePolicyEvidence": {
+    "officialArtistChannelPolicyUrl": "https://artists.youtube.com/resources/",
+    "officialArtistChannelIntroductionUrl": "https://creatoracademy.youtube.com/page/lesson/music-discovery",
+    "interpretation": "YouTube documents that an Official Artist Channel can consolidate an artist's existing channel, topic channel, and Vevo channel. Historical VEVO upload provenance therefore does not by itself define the current canonical artist channel."
+  },
+  "summary": {
+    "directHistoricalCandidatesChecked": 4,
+    "directHistoricalCandidatesCurrentIdentityConfirmed": 4,
+    "historicalVevoCandidatesChecked": 2,
+    "historicalVevoCandidatesKeptAsCanonical": 0,
+    "replacementCurrentChannelCandidates": 2,
+    "finalAuditScopeIncludedCount": 0
+  },
+  "directCandidates": [
+    {
+      "canonicalArtistId": "blackpink",
+      "historicalChannelId": "UCOmHUn--16B90oW2L6FRR3A",
+      "currentChannelId": "UCOmHUn--16B90oW2L6FRR3A",
+      "currentChannelTitle": "BLACKPINK",
+      "verificationState": "current-channel-identity-confirmed",
+      "currentEvidenceRefs": [
+        "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
+        "https://www.blackpinkofficial.com/"
+      ],
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    },
+    {
+      "canonicalArtistId": "twice",
+      "historicalChannelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+      "currentChannelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+      "currentChannelTitle": "TWICE",
+      "verificationState": "current-channel-identity-confirmed",
+      "currentEvidenceRefs": [
+        "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
+        "https://twice.jype.com/"
+      ],
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    },
+    {
+      "canonicalArtistId": "rose",
+      "historicalChannelId": "UCBo1hnzxV9rz3WVsv__Rn1g",
+      "currentChannelId": "UCBo1hnzxV9rz3WVsv__Rn1g",
+      "currentChannelTitle": "ROSÉ",
+      "verificationState": "current-channel-identity-confirmed",
+      "currentEvidenceRefs": [
+        "https://www.youtube.com/channel/UCBo1hnzxV9rz3WVsv__Rn1g"
+      ],
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    },
+    {
+      "canonicalArtistId": "riize",
+      "historicalChannelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+      "currentChannelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+      "currentChannelTitle": "RIIZE",
+      "verificationState": "current-channel-identity-confirmed",
+      "currentEvidenceRefs": [
+        "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
+        "https://www.riizeofficial.com/"
+      ],
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    }
+  ],
+  "vevoTransitions": [
+    {
+      "canonicalArtistId": "jennie",
+      "historicalVevoChannelId": "UCN9_L9lA9kqJbGANLRus_1A",
+      "historicalVevoChannelTitle": "JennieRubyJaneVEVO",
+      "historicalVevoCanonicalRetained": false,
+      "currentReplacementCandidate": {
+        "youtubeChannelId": "UCNYi_zGmR519r5gYdOKLTjQ",
+        "channelTitle": "JENNIE",
+        "handle": "@jennierubyjane",
+        "candidateState": "current-oac-candidate",
+        "evidenceRefs": [
+          "https://www.youtube.com/channel/UCNYi_zGmR519r5gYdOKLTjQ",
+          "https://www.youtube.com/watch?v=Ao2GsXHMD_4",
+          "https://weverse.io/jennie/highlight"
+        ]
+      },
+      "rationale": "Current YouTube surfaces identify JENNIE as the Official Artist Channel for recent official-video content, while YouTube's OAC policy explains that VEVO content can be consolidated into the OAC.",
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "historicalVevoChannelId": "UCg3ymxYCmURj5BFtbgMt-Og",
+      "historicalVevoChannelTitle": "LISAOfficialVEVO",
+      "historicalVevoCanonicalRetained": false,
+      "personalChannelObservation": {
+        "youtubeChannelId": "UC35HKvKYPkri4Grd5KXl3wQ",
+        "channelTitle": "Lilifilm Official",
+        "handle": "@lalalalisa_m",
+        "evidenceRefs": [
+          "https://www.youtube.com/channel/UC35HKvKYPkri4Grd5KXl3wQ"
+        ]
+      },
+      "currentReplacementCandidate": {
+        "youtubeChannelId": "UC6-BgjsBa5R3PZQ_kZ8hKPg",
+        "channelTitle": "LLOUD Official",
+        "handle": "@wearelloud",
+        "candidateState": "current-oac-label-owned-review-required",
+        "evidenceRefs": [
+          "https://www.youtube.com/channel/UC6-BgjsBa5R3PZQ_kZ8hKPg",
+          "https://www.youtube.com/watch?v=FyS5dAywkEo",
+          "https://www.sonymusic.co.jp/artist/LISA/info/586535"
+        ]
+      },
+      "rationale": "Recent LISA official music videos are surfaced by YouTube under LLOUD Official as an Official Artist Channel. Because the channel is label-owned rather than artist-named, the audit cohort must not adopt it without an explicit scope decision.",
+      "auditScopeIncluded": false,
+      "ownerScopeSelectionRequired": true
+    }
+  ],
+  "blockers": [
+    "audit-cohort-owner-selection-required",
+    "lisa-label-owned-oac-scope-decision-required",
+    "shared-channel-artists-still-require-artist-specific-resolution"
+  ]
+}
