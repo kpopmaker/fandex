@@ -204,10 +204,11 @@ export async function handleNaverNewsVercelCronFallback(
     return failure(503, 'runtime_unavailable');
   }
 
+  const runStage =
+    dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
+  let result: NaverNewsBlobOnlyCollectionStageSummary;
   try {
-    const runStage =
-      dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
-    const result = await runStage(
+    result = await runStage(
       {
         query: config.query,
         display: config.display,
@@ -218,9 +219,13 @@ export async function handleNaverNewsVercelCronFallback(
         ...(dependencies.now ? { now: dependencies.now } : {}),
       },
     );
+  } catch {
+    return failure(502, 'collection_stage_failed');
+  }
 
-    const finalizeManifest = dependencies.finalizeManifest
-      ?? finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  const finalizeManifest = dependencies.finalizeManifest
+    ?? finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  try {
     const finalized = await finalizeManifest(
       result.jobId,
       result.resultSha256,
@@ -229,9 +234,9 @@ export async function handleNaverNewsVercelCronFallback(
     if (finalized.schedulerManifest === null) {
       return failure(502, 'manifest_finalize_failed');
     }
-
-    return success(result);
   } catch {
-    return failure(502, 'collection_stage_failed');
+    return failure(502, 'manifest_finalize_failed');
   }
+
+  return success(result);
 }
