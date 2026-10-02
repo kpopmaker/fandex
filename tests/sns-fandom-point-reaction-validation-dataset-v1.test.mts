@@ -550,3 +550,74 @@ test('a non-YouTube statistical endpoint is rejected before cross-artist methodo
     ),
   );
 });
+
+
+test('validation-ready dataset is impossible without collection lineage', () => {
+  const a = manifest('artist-a', ['a-1']);
+  const b = manifest('artist-b', ['b-1']);
+  const artists = [
+    { manifest: a, observations: observationsFor(a) },
+    { manifest: b, observations: observationsFor(b) },
+  ];
+
+  const result = buildReactionValidationDataset({
+    datasetId: 'lineage-missing',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    artists,
+    lineageEntries: [],
+    revisionAudit: stableAudit(),
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.lineageValidated, false);
+  assert.equal(result.methodologyValidationEligible, false);
+  assert.ok(
+    result.blockers.includes('reaction-validation-lineage-not-ready'),
+  );
+});
+
+test('mapped observation value must equal the raw provider value in lineage', () => {
+  const a = manifest('artist-a', ['a-1']);
+  const b = manifest('artist-b', ['b-1']);
+  const artists = [
+    { manifest: a, observations: observationsFor(a) },
+    { manifest: b, observations: observationsFor(b) },
+  ];
+  const lineage = lineageEntriesFor(
+    artists,
+    'youtube.video.view-count',
+  );
+  const first = lineage[0];
+
+  const tamperedLineage = [
+    {
+      ...first,
+      rawRecord: {
+        ...first.rawRecord,
+        metrics: {
+          ...first.rawRecord.metrics,
+          viewCount: '999999',
+        },
+      },
+    },
+    ...lineage.slice(1),
+  ];
+
+  const result = buildReactionValidationDataset({
+    datasetId: 'raw-mapping-mismatch',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    artists,
+    lineageEntries: tamperedLineage,
+    revisionAudit: stableAudit(),
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-validation-raw-mapping-value-mismatch',
+    ),
+  );
+  assert.equal(result.methodologyValidationEligible, false);
+});
