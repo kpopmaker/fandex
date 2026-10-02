@@ -661,28 +661,21 @@ Evidence refs:
 These facts resolve the v1 reaction-endpoint quota-cost evidence and the
 playlist page-size evidence.
 
-For `channels.list`, the documented `maxResults <= 50` establishes an
-effective complete-result cap of 50 channel resources per request. FANDEX may
-therefore use:
+The documented `maxResults` values are result-set/page-size controls, not
+direct evidence of the maximum number of comma-separated IDs accepted by an
+`id` filter. In particular, `videos.list` explicitly states that
+`maxResults` is not supported with the `id` filter.
 
-- `maxChannelIdsPerCall = 50`
+Therefore FANDEX does not promote either method's `maxResults` value into an
+ID-filter batching claim:
 
-for quota calculation, with the explicit interpretation that this is the
-maximum complete channel-resource result set per call. It is **not** a claim
-that the provider rejects a 51st comma-separated ID in the query string.
-
-For `videos.list(id=...)`, the documentation explicitly says
-`maxResults` is not supported with the `id` filter and does not publish an
-exact maximum number of comma-separated video IDs in this method reference.
-
-Therefore:
-
+- `maxChannelIdsPerCall` remains null;
 - `maxVideoIdsPerCall` remains null;
 - the combined provider batch-limit evidence remains incomplete;
 - no test-fixture batch size may be promoted into the real worksheet.
 
-A provider-documented limit or actual approved-client measurement is still
-required for the video-ID batching input.
+A provider-documented ID-filter limit or actual approved-client measurement is
+still required for both channel-ID and video-ID batching inputs.
 
 
 ## 7b. Evidence-source discovery result
@@ -699,9 +692,9 @@ Google Drive searches included:
 - `Google Cloud project`;
 - `GCP`.
 
-The connected Drive contains general FANDEX and YouTube-related files, but no
-document was found that provides a non-secret Google Cloud project number or
-an exact project-to-snsFandom-provider-client binding.
+The recorded connected-Drive searches returned no matching files. Therefore no
+Drive document was found that provides a non-secret Google Cloud project
+number or an exact project-to-snsFandom-provider-client binding.
 
 GitHub issue/PR history was also searched for a real approved reaction cadence
 or measurement window. No owner-approved real cadence/window evidence was
