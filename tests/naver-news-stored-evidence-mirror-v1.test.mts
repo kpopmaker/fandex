@@ -17,7 +17,9 @@ import {
   buildNaverNewsStoredEvidenceMirrorObjects,
   createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
   createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  finalizeNaverNewsStoredEvidenceMirrorByJobId,
   mirrorNaverNewsStoredEvidence,
+  stageNaverNewsStoredEvidenceMirror,
 } from '../lib/server/ingestion/naverNewsStoredEvidenceMirror';
 import {
   resolveLatestOfficialNaverNewsShadowThroughSlotStart,
@@ -111,6 +113,31 @@ test('validated NAVER write plan becomes immutable mirror evidence without Postg
     stored.normalizedRecords.map((record) => record.recordId),
     plan.normalizedRecords.map((record) => record.recordId),
   );
+});
+
+test('staged scheduler evidence becomes official only after canonical job-id finalization', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-10-02T01:00:00.000Z');
+
+  await stageNaverNewsStoredEvidenceMirror(plan, store);
+  const before = await createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    store,
+  ).readSucceededSchedulerJobs();
+  assert.equal(before.length, 0);
+
+  const finalized = await finalizeNaverNewsStoredEvidenceMirrorByJobId(
+    plan.identity.jobId,
+    plan.resultSha256,
+    store,
+  );
+  assert.equal(finalized.schedulerManifest?.status, 'created');
+
+  const after = await createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    store,
+  ).readSucceededSchedulerJobs();
+  assert.equal(after.length, 1);
+  assert.equal(after[0]?.jobId, plan.identity.jobId);
+  assert.equal(after[0]?.collectionKey, plan.identity.request.collectionKey);
 });
 
 test('mirror-backed latest official slot repository resolves exact scheduler protocol', async () => {
