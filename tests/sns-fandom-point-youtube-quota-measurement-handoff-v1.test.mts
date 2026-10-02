@@ -14,7 +14,7 @@ import {
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff';
 
 async function mergedAuditManifest() {
-  const raw = JSON.parse(
+  return JSON.parse(
     await readFile(
       new URL(
         '../data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json',
@@ -23,11 +23,6 @@ async function mergedAuditManifest() {
       'utf8',
     ),
   ) as SnsFandomYoutubeAuditArtistBindingManifestInput;
-
-  return {
-    raw,
-    result: evaluateSnsFandomYoutubeAuditArtistBindingManifest(raw),
-  };
 }
 
 function providerClientIdentity() {
@@ -44,13 +39,12 @@ function providerClientIdentity() {
 }
 
 test('merged five-member Audit cohort becomes an exact non-authorizing quota measurement handoff', async () => {
-  const { raw, result: manifest } = await mergedAuditManifest();
+  const manifest = await mergedAuditManifest();
 
   const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
     handoffId: 'sns-fandom-youtube-quota-measurement-v1',
     preparedAt: '2026-10-02T14:00:00.000Z',
     artistBindingManifest: manifest,
-    artistBindings: raw.members,
     providerClientIdentity: providerClientIdentity(),
     requestedEndpoints: [
       'youtube.channels.list',
@@ -77,7 +71,7 @@ test('merged five-member Audit cohort becomes an exact non-authorizing quota mea
   );
   assert.deepEqual(
     result.tasks.map((task) => task.youtubeChannelId).sort(),
-    raw.members.map((member) => member.youtubeChannelId).sort(),
+    manifest.members.map((member) => member.youtubeChannelId).sort(),
   );
   assert.equal(result.unresolvedQuotaInputs.uploadManifestPageCountPerReactionRun, null);
   assert.equal(result.unresolvedQuotaInputs.videoCountPerReactionRun, null);
@@ -93,17 +87,21 @@ test('merged five-member Audit cohort becomes an exact non-authorizing quota mea
 });
 
 test('quota measurement handoff refuses artist/channel rows that do not exactly match the validated manifest', async () => {
-  const { raw, result: manifest } = await mergedAuditManifest();
+  const manifest = await mergedAuditManifest();
 
-  const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
-    handoffId: 'sns-fandom-youtube-quota-measurement-v1',
-    preparedAt: '2026-10-02T14:00:00.000Z',
-    artistBindingManifest: manifest,
-    artistBindings: raw.members.map((member, index) =>
+  const forgedManifest = {
+    ...manifest,
+    members: manifest.members.map((member, index) =>
       index === 0
         ? { ...member, youtubeChannelId: 'UCaaaaaaaaaaaaaaaaaaaaaa' }
         : member,
     ),
+  };
+
+  const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
+    handoffId: 'sns-fandom-youtube-quota-measurement-v1',
+    preparedAt: '2026-10-02T14:00:00.000Z',
+    artistBindingManifest: forgedManifest,
     providerClientIdentity: providerClientIdentity(),
     requestedEndpoints: [
       'youtube.channels.list',
@@ -124,19 +122,18 @@ test('quota measurement handoff refuses artist/channel rows that do not exactly 
   assert.equal(result.tasks.length, 0);
   assert.ok(
     result.blockers.includes(
-      'youtube-quota-measurement-binding-rows-mismatch',
+      'youtube-quota-measurement-binding-manifest-not-ready',
     ),
   );
 });
 
 test('provider client identity is mandatory before quota measurement can be handed off', async () => {
-  const { raw, result: manifest } = await mergedAuditManifest();
+  const manifest = await mergedAuditManifest();
 
   const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
     handoffId: 'sns-fandom-youtube-quota-measurement-v1',
     preparedAt: '2026-10-02T14:00:00.000Z',
     artistBindingManifest: manifest,
-    artistBindings: raw.members,
     providerClientIdentity: null,
     requestedEndpoints: [
       'youtube.channels.list',
@@ -163,13 +160,12 @@ test('provider client identity is mandatory before quota measurement can be hand
 });
 
 test('measurement window and cadence must be explicit evidence, never defaults', async () => {
-  const { raw, result: manifest } = await mergedAuditManifest();
+  const manifest = await mergedAuditManifest();
 
   const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
     handoffId: 'sns-fandom-youtube-quota-measurement-v1',
     preparedAt: '2026-10-02T14:00:00.000Z',
     artistBindingManifest: manifest,
-    artistBindings: raw.members,
     providerClientIdentity: providerClientIdentity(),
     requestedEndpoints: [
       'youtube.channels.list',
@@ -206,13 +202,12 @@ test('measurement window and cadence must be explicit evidence, never defaults',
 });
 
 test('reaction-only audit measurement cannot silently expand into comment endpoints', async () => {
-  const { raw, result: manifest } = await mergedAuditManifest();
+  const manifest = await mergedAuditManifest();
 
   const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
     handoffId: 'sns-fandom-youtube-quota-measurement-v1',
     preparedAt: '2026-10-02T14:00:00.000Z',
     artistBindingManifest: manifest,
-    artistBindings: raw.members,
     providerClientIdentity: providerClientIdentity(),
     requestedEndpoints: [
       'youtube.channels.list',
