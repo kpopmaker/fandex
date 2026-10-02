@@ -342,3 +342,56 @@ The shared runtime must not:
 The planner itself never schedules jobs and always reports
 `schedulerMutationAllowed = false` and
 `collectionExecutionAuthorized = false`.
+
+
+## Production Ops handoff gate for validation captures
+
+A planning-ready validation collection plan is not itself permission to run
+collection.
+
+The variable-side handoff gate now requires all pending exact-age captures to
+pass:
+
+- the plan remains `planning-ready`;
+- no planned capture is already missed at handoff evaluation time;
+- one exact YouTube provider client/project is bound to the plan;
+- actual provider approval evidence is present and approved;
+- the approval is valid for the exact provider client/project;
+- the approval covers the reaction dimension, selected metric, and the
+  `channels.list -> playlistItems.list -> videos.list` endpoint chain;
+- the provider approval remains active at every future task's exact
+  `captureAt`, not merely at the handoff creation time; and
+- collector activation is `approved-ready`, but collection is not yet
+  authorized by this variable-side contract.
+
+When all conditions are met, the result is only:
+
+`production-ops-handoff-ready`
+
+The handoff output still fixes:
+
+- `schedulerMutationAllowed = false`;
+- `activationMutationAllowed = false`;
+- `collectionExecutionAuthorized = false`;
+- `deploymentAuthorized = false`;
+- `executionTimeRevalidationRequired = true`.
+
+This means FANDEX Production Ops may later consume the packet and perform its
+own activation / scheduler / run controls. The snsFandomPoint branch does not
+perform those global mutations.
+
+### Approval validity at future capture time
+
+Because target-age captures can be scheduled days or weeks after planning,
+provider approval validity is re-evaluated against every individual
+`captureAt`.
+
+If provider approval expires before a required capture, the handoff is blocked
+even when the approval is valid today.
+
+### Already captured plans
+
+When every task already has exact-age evidence, no new collection handoff is
+needed. The handoff returns `collection-not-required` and does not require a
+new provider/collector activation check. Existing captures remain subject to
+the downstream lineage and dataset validation gates.
