@@ -19,6 +19,7 @@ export type SnsFandomCollectorActivationInput = Readonly<{
 
 export type SnsFandomCollectorActivationDecision = Readonly<{
   version: typeof SNS_FANDOM_COLLECTOR_ACTIVATION_TRANSITION_VERSION;
+  providerId: string;
   state: SnsFandomCollectorActivationState;
   collectionAuthorized: boolean;
   blockers: readonly string[];
@@ -52,6 +53,7 @@ export function evaluateSnsFandomCollectorActivationTransition(
   if (blockers.length > 0) {
     return Object.freeze({
       version: SNS_FANDOM_COLLECTOR_ACTIVATION_TRANSITION_VERSION,
+      providerId: input.providerId,
       state: input.providerApprovalGranted
         ? 'approval-pending'
         : 'blocked',
@@ -62,6 +64,7 @@ export function evaluateSnsFandomCollectorActivationTransition(
 
   return Object.freeze({
     version: SNS_FANDOM_COLLECTOR_ACTIVATION_TRANSITION_VERSION,
+    providerId: input.providerId,
     state: input.collectionRequested ? 'activated' : 'approved-ready',
     collectionAuthorized: input.collectionRequested,
     blockers: Object.freeze([]),
