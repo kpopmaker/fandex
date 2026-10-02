@@ -50,6 +50,12 @@ export default function PrivacyPage() {
               YouTube Terms of Service와 Google Privacy Policy의 적용을
               받을 수 있습니다.
             </p>
+            <p className="mt-3">
+              YouTube API Services를 사용하는 사용자 기능을 활성화하기
+              전에는 이용자가 이 Privacy Policy를 확인하고 동의할 수 있는
+              절차를 제공하며, 그 절차가 구현·검증되기 전에는 해당 기능을
+              Production에서 활성화하지 않습니다.
+            </p>
             <LinkList
               links={[
                 { href: youtubeTerms, label: 'YouTube Terms of Service' },
@@ -94,10 +100,12 @@ export default function PrivacyPage() {
 
           <Section title="5. Storage, refresh, and deletion">
             <p>
-              Provider가 별도의 보관 연장을 승인하기 전에는 공개
-              Non-Authorized YouTube API Data를 YouTube 정책이 허용하는
-              범위를 넘어 장기 보관하지 않습니다. 보관 중인 데이터는
-              필요한 경우 정기적으로 refresh하거나 삭제합니다.
+              공개 Non-Authorized YouTube API Data는 적용되는 YouTube
+              정책 또는 FANDEX에 명시적으로 적용되는 별도 provider 승인에
+              더 짧거나 다른 기간이 정해져 있지 않는 한 30 calendar days를
+              넘겨 그대로 보관하지 않습니다. 30일 이내에 삭제하거나
+              최신 API Data로 refresh하며, 승인 대기 상태를 보관 연장
+              승인으로 간주하지 않습니다.
             </p>
             <p className="mt-3">
               통계 데이터 또는 FANDEX-derived metric의 연장 보관이 필요한
