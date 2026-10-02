@@ -777,3 +777,33 @@ match the deterministic planned task.
 This makes the collection plan suitable for handoff to Production Ops or a
 shared scheduler later without letting the variable branch mutate global
 scheduling infrastructure.
+
+
+## Validation collection handoff readiness
+
+The real-data methodology path now distinguishes three states:
+
+1. `planning-ready`
+2. `production-ops-handoff-ready`
+3. actual collection execution
+
+Only the first two are modeled in this variable branch. Execution remains
+outside the single-writer boundary.
+
+A handoff can become ready only when a valid planning result is paired with:
+
+- exact provider approval evidence;
+- exact provider client/project binding;
+- exact metric + endpoint approval;
+- approval validity at each future target-age capture time; and
+- a collector activation decision in `approved-ready` state.
+
+The handoff never mutates a scheduler, activates a collector, deploys code, or
+authorizes collection itself.
+
+This closes a prior gap where a deterministic collection plan could have been
+mistaken for operational authorization.
+
+Current repository state still has no real YouTube provider grant, so the
+actual Production handoff remains externally blocked even though the internal
+handoff contract is now defined and testable.
