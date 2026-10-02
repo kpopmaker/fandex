@@ -904,3 +904,65 @@ This creates an explicit limitation: short target ages inside a long
 publication window can be missed if planning waits until the window closes.
 Such studies require a separate prospective content-enrollment workflow rather
 than pretending an open window is final.
+## Prospective open-window content enrollment
+
+Short target-age studies can no longer wait for a long publication window to
+close. The variable-side contract now supports provisional enrollment while the
+window is still open without claiming that the currently visible upload set is
+complete.
+
+For each official uploads-playlist discovery snapshot, the contract requires:
+
+- the exact canonical artist, official YouTube channel, provider client/project,
+  uploads playlist, and published-window scope;
+- the exact `youtube.channels.list -> youtube.playlistItems.list` discovery
+  chain;
+- terminal pagination for that discovery snapshot;
+- explicit observation/evidence time and per-video publication timestamps;
+- externally justified target content ages. No default age is created in code.
+
+A newly discovered video is provisionally enrolled at its first observed
+snapshot. Capture tasks are deterministic:
+
+`captureAt = publishedAt + targetContentAge`
+
+If discovery happens at or after that exact target-age time, the task becomes
+`missed-before-enrollment`. It is not repaired by a later counter,
+interpolation, extrapolation, rounding, bucketing, or automatic backfill.
+
+The discovery cadence itself is deliberately not chosen by this contract.
+`discoveryCadenceMilliseconds` remains `null`; Operations must provide any
+cadence decision outside the variable contract and the resulting observations
+are judged by actual timestamps.
+
+The generated Production Ops packet is planning-only. It can be reviewed by
+Operations, but this variable branch still sets all of the following to false:
+
+- scheduler mutation;
+- collector activation mutation;
+- collection execution authorization;
+- deployment authorization.
+
+Provider grant validation and execution-time revalidation remain required.
+
+### Final reconciliation
+
+Provisional enrollment never becomes a complete content universe by itself.
+After the publication window closes, an independently finalized complete
+content manifest must be reconciled against the enrolled video set.
+
+Reconciliation is fail-closed when:
+
+- the final manifest scope differs from the enrollment scope;
+- reconciliation occurs before the window has ended;
+- a final-manifest video was never enrolled;
+- an enrolled video is absent from the final manifest;
+- the publication timestamp for the same video changes.
+
+Only an exact set/timestamp match yields
+`prospectiveContentUniverseEligibleForDatasetAssembly = true`.
+
+Even then `validationDatasetUseAllowed` remains false at this gate because the
+existing execution-receipt, lineage, revision-audit, and validation-dataset
+assembly contracts must still pass. No aggregate, normalized value, methodology
+decision, or numeric `snsFandomPoint` is produced here.
