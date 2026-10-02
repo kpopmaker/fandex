@@ -148,6 +148,7 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
   assert.equal(finalizeCalls, 1);
   assert.deepEqual(summary, {
     mode: 'github-actions-direct-blob-only',
+    runStatus: 'collected-and-finalized',
     contractVersion: 'naver-news-blob-only-collection-stage-v1',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     slotStart: '2026-10-02T00:00:00.000Z',
@@ -163,9 +164,100 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
       duplicateRecords: 1,
       rejectedItems: 0,
     },
+    providerCalls: 1,
     databaseWrites: 0,
     schedulerManifestFinalized: true,
   });
+});
+
+test('skips provider collection when the current scheduler slot is already finalized', async () => {
+  let stageCalls = 0;
+  let finalizeCalls = 0;
+  const summary = await runNaverNewsBlobOnlyDirect(
+    environment(),
+    {
+      createStore: () => fakeStore(),
+      now: () => new Date('2026-10-02T00:17:00.000Z'),
+      async readSucceededSchedulerJobs() {
+        return Object.freeze([Object.freeze({
+          jobId: 'a'.repeat(64),
+          collectionKey:
+            'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+          requestContract: Object.freeze({
+            provider: 'naver-news' as const,
+            collectionKey:
+              'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+            query: '아이유 IU',
+            display: 100,
+            start: 1,
+            sort: 'date' as const,
+          }),
+        })]);
+      },
+      async runStage() {
+        stageCalls += 1;
+        return RESULT;
+      },
+      async finalizeManifest() {
+        finalizeCalls += 1;
+        throw new Error('should_not_finalize');
+      },
+    },
+  );
+
+  assert.equal(stageCalls, 0);
+  assert.equal(finalizeCalls, 0);
+  assert.deepEqual(summary, {
+    mode: 'github-actions-direct-blob-only',
+    runStatus: 'already-finalized',
+    contractVersion: 'naver-news-blob-only-collection-stage-v1',
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
+    slotStart: '2026-10-02T00:00:00.000Z',
+    collectionKey:
+      'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+    jobId: 'a'.repeat(64),
+    resultSha256: null,
+    stagedObjectStatus: null,
+    counts: null,
+    providerCalls: 0,
+    databaseWrites: 0,
+    schedulerManifestFinalized: true,
+  });
+});
+
+test('fails closed when finalized current-slot identity conflicts with the frozen plan', async () => {
+  let stageCalls = 0;
+  await assert.rejects(
+    () => runNaverNewsBlobOnlyDirect(
+      environment(),
+      {
+        createStore: () => fakeStore(),
+        now: () => new Date('2026-10-02T00:17:00.000Z'),
+        async readSucceededSchedulerJobs() {
+          return Object.freeze([Object.freeze({
+            jobId: 'f'.repeat(64),
+            collectionKey:
+              'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+            requestContract: Object.freeze({
+              provider: 'naver-news' as const,
+              collectionKey:
+                'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+              query: '아이유 IU',
+              display: 100,
+              start: 1,
+              sort: 'date' as const,
+            }),
+          })]);
+        },
+        async runStage() {
+          stageCalls += 1;
+          return RESULT;
+        },
+      },
+    ),
+    /naver_news_blob_only_direct_preflight_conflict/,
+  );
+  assert.equal(stageCalls, 0);
 });
 
 test('fails closed when a staged scheduler job does not produce an official manifest', async () => {
