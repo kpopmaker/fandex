@@ -197,6 +197,19 @@ export type RiskAdjustmentQualityIssue =
   | 'history-insufficient'
   | 'history-unknown';
 
+export const RISK_ADJUSTMENT_FAIL_CLOSED_QUALITY_ISSUES = Object.freeze([
+  'availability-unresolved',
+  'identity-unresolved',
+  'identity-conflict',
+  'coverage-unknown',
+  'freshness-unknown',
+  'conflict-unknown',
+  'revision-state-unknown',
+  'confidence-insufficient',
+  'history-insufficient',
+  'history-unknown',
+] as const satisfies readonly RiskAdjustmentQualityIssue[]);
+
 export type RiskAdjustmentDependencyBlocker =
   | 'upstream-not-production'
   | 'upstream-not-real';
@@ -342,21 +355,10 @@ export function deriveRiskAdjustmentAssessment(
   const qualityIssues = orderedUnique(
     dependencies.flatMap((dependency) => dependency.qualityIssues),
   );
-  const failClosedQualityIssues: readonly RiskAdjustmentQualityIssue[] = [
-    'availability-unresolved',
-    'identity-unresolved',
-    'identity-conflict',
-    'coverage-unknown',
-    'freshness-unknown',
-    'conflict-unknown',
-    'revision-state-unknown',
-    'confidence-insufficient',
-    'history-insufficient',
-    'history-unknown',
-  ];
-  const hasUnresolvedRequiredQuality = failClosedQualityIssues.some(
-    (issue) => qualityIssues.includes(issue),
-  );
+  const hasUnresolvedRequiredQuality =
+    RISK_ADJUSTMENT_FAIL_CLOSED_QUALITY_ISSUES.some(
+      (issue) => qualityIssues.includes(issue),
+    );
 
   let status: RiskAdjustmentAssessment['status'];
   if (inputs.length === 0) {
