@@ -1,6 +1,6 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-10-02T11:50:00",
+  "createdAt": "2026-10-02T22:45:54",
   "snapshotDate": "2026-10-02",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
@@ -39,7 +39,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BAD",
-          "rank": "7",
+          "rank": "4",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -74,7 +74,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "15",
+          "rank": "19",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -94,22 +94,22 @@
       "platformStatus": {
         "melon": {
           "status": "RANKED",
-          "trackTitle": "이 별로부터",
-          "rank": "13",
+          "trackTitle": "Dear my crazy soulmate",
+          "rank": "14",
           "chartType": "daily",
           "point": 72.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "32",
+          "rank": "36",
           "chartType": "daily",
           "point": 34.0
         },
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "4",
+          "rank": "5",
           "chartType": "realtime",
           "point": 33.75
         }
@@ -130,7 +130,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "45",
+          "rank": "47",
           "chartType": "daily",
           "point": 48.0
         },
@@ -144,7 +144,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "45",
+          "rank": "38",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -165,14 +165,14 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "46",
+          "rank": "36",
           "chartType": "daily",
           "point": 48.0
         },
         "genie": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "139",
+          "rank": "143",
           "chartType": "daily",
           "point": 6.8
         },
@@ -200,7 +200,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "93",
+          "rank": "89",
           "chartType": "daily",
           "point": 24.0
         },
@@ -214,7 +214,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "76",
+          "rank": "52",
           "chartType": "realtime",
           "point": 9.0
         }
@@ -242,7 +242,7 @@
         "genie": {
           "status": "RANKED",
           "trackTitle": "SPAGHETTI (Feat. j-hope of BTS)",
-          "rank": "147",
+          "rank": "144",
           "chartType": "daily",
           "point": 6.8
         },
