@@ -97,6 +97,7 @@ export type SnsFandomProspectiveEnrollmentResult = Readonly<{
   canonicalArtistId: string;
   youtubeChannelId: string;
   providerClientRef: string;
+  uploadsPlaylistId: string;
   windowStart: string;
   windowEnd: string;
   provisionalVideoIds: readonly string[];
@@ -230,6 +231,15 @@ export function buildSnsFandomProspectiveContentEnrollment(
     (a, b) => Date.parse(a.observedAt) - Date.parse(b.observedAt),
   );
   const observedAtValues = sortedSnapshots.map((snapshot) => snapshot.observedAt);
+  const latestDiscoveryObservedAt =
+    sortedSnapshots.at(-1)?.observedAt ?? null;
+  if (
+    latestDiscoveryObservedAt !== null
+    && validIso(input.evaluatedAt)
+    && latestDiscoveryObservedAt !== input.evaluatedAt
+  ) {
+    blockers.push('prospective-enrollment-evaluation-not-latest-discovery');
+  }
   if (uniqueSorted(observedAtValues).length !== observedAtValues.length) {
     blockers.push('prospective-enrollment-discovery-snapshot-time-duplicate');
   }
@@ -372,7 +382,10 @@ export function buildSnsFandomProspectiveContentEnrollment(
     (task) => task.state === 'missed-before-enrollment',
   ).length;
   const pendingTasks = tasks.filter(
-    (task) => task.state === 'pending-prospective-capture',
+    (task) =>
+      task.state === 'pending-prospective-capture'
+      && task.firstSeenAt === input.evaluatedAt
+      && Date.parse(task.captureAt) > Date.parse(input.evaluatedAt),
   );
   const dedupedBlockers = uniqueSorted(blockers);
   const state = dedupedBlockers.length === 0
@@ -407,6 +420,7 @@ export function buildSnsFandomProspectiveContentEnrollment(
     canonicalArtistId: input.canonicalArtistId,
     youtubeChannelId: input.youtubeChannelId,
     providerClientRef: input.providerClientRef,
+    uploadsPlaylistId: input.uploadsPlaylistId,
     windowStart: input.windowStart,
     windowEnd: input.windowEnd,
     provisionalVideoIds: Object.freeze(uniqueSorted([...enrolled.keys()])),
@@ -453,6 +467,7 @@ export function reconcileSnsFandomProspectiveEnrollmentWithFinalManifest(
     input.finalManifest.canonicalArtistId !== input.enrollment.canonicalArtistId
     || input.finalManifest.youtubeChannelId !== input.enrollment.youtubeChannelId
     || input.finalManifest.providerClientRef !== input.enrollment.providerClientRef
+    || input.finalManifest.uploadsPlaylistId !== input.enrollment.uploadsPlaylistId
     || input.finalManifest.windowStart !== input.enrollment.windowStart
     || input.finalManifest.windowEnd !== input.enrollment.windowEnd
   ) {
