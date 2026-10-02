@@ -7,8 +7,6 @@ on:
         description: 'Separate Production approval: type approved-github-actions-blob-only-recurring-v1'
         required: true
         default: 'NO'
-  schedule:
-    - cron: '17 * * * *'
 
 permissions:
   contents: read
@@ -23,13 +21,8 @@ jobs:
       github.repository == 'kpopmaker/fandex' &&
       github.ref == 'refs/heads/main' &&
       github.run_attempt == 1 &&
-      (
-        github.event_name == 'schedule' ||
-        (
-          github.event_name == 'workflow_dispatch' &&
-          inputs.execution_approval == 'approved-github-actions-blob-only-recurring-v1'
-        )
-      )
+      github.event_name == 'workflow_dispatch' &&
+      inputs.execution_approval == 'approved-github-actions-blob-only-recurring-v1'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
