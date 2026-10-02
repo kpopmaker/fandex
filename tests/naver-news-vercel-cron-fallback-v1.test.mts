@@ -174,10 +174,11 @@ test('rejects missing CRON_SECRET and non-Production runtime before Blob store o
   }
 });
 
-test('authenticated exact Vercel Cron request stages one official scheduler slot to Blob only', async () => {
+test('authenticated exact Vercel Cron request stages and finalizes one official scheduler slot', async () => {
   let oidcCalls = 0;
   let storeCalls = 0;
   let stageCalls = 0;
+  let finalizeCalls = 0;
 
   const response = await handleNaverNewsVercelCronFallback(
     request(),
@@ -212,6 +213,19 @@ test('authenticated exact Vercel Cron request stages one official scheduler slot
         assert.ok(dependencies.store);
         return stageSummary();
       },
+      async finalizeManifest(jobId, resultSha256, store) {
+        finalizeCalls += 1;
+        assert.equal(jobId, 'a'.repeat(64));
+        assert.equal(resultSha256, 'c'.repeat(64));
+        assert.ok(store);
+        return Object.freeze({
+          schedulerManifest: Object.freeze({
+            status: 'created' as const,
+            pathname: 'fandex/naver-news/stored-evidence-mirror/v1/scheduler-manifests/test.json',
+          }),
+          schedulerManifestPayloadDigest: 'e'.repeat(64),
+        });
+      },
     },
   );
 
@@ -219,6 +233,7 @@ test('authenticated exact Vercel Cron request stages one official scheduler slot
   assert.equal(oidcCalls, 1);
   assert.equal(storeCalls, 1);
   assert.equal(stageCalls, 1);
+  assert.equal(finalizeCalls, 1);
   assert.deepEqual(await response.json(), {
     ok: true,
     mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
@@ -240,7 +255,46 @@ test('authenticated exact Vercel Cron request stages one official scheduler slot
       rejectedItems: 0,
     },
     databaseWrites: 0,
-    schedulerManifestFinalized: false,
+    schedulerManifestFinalized: true,
+  });
+});
+
+test('manifest finalization failure fails closed after collection stage', async () => {
+  let stageCalls = 0;
+  let finalizeCalls = 0;
+  const response = await handleNaverNewsVercelCronFallback(
+    request(),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      resolveOidcToken() {
+        return 'oidc-token';
+      },
+      createStore() {
+        return memoryStore();
+      },
+      async runStage() {
+        stageCalls += 1;
+        return stageSummary();
+      },
+      async finalizeManifest() {
+        finalizeCalls += 1;
+        return Object.freeze({
+          schedulerManifest: null,
+          schedulerManifestPayloadDigest: null,
+        });
+      },
+    },
+  );
+
+  assert.equal(response.status, 502);
+  assert.equal(stageCalls, 1);
+  assert.equal(finalizeCalls, 1);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    mode: 'naver-news-vercel-cron-blob-only-fallback-v2',
+    errorClass: 'manifest_finalize_failed',
   });
 });
 
@@ -275,13 +329,18 @@ test('missing Blob binding fails closed before collection stage', async () => {
   });
 });
 
-test('candidate remains dormant because vercel.json contains no crons', async () => {
+test('vercel.json registers only the frozen hourly NAVER Cron path', async () => {
   const raw = await readFile(
     new URL('../vercel.json', import.meta.url),
     'utf8',
   );
   const config = JSON.parse(raw);
-  assert.equal(config.crons, undefined);
+  assert.deepEqual(config.crons, [
+    {
+      path: '/api/internal/naver-news/vercel-cron-fallback',
+      schedule: '17 * * * *',
+    },
+  ]);
   assert.deepEqual(config.git?.deploymentEnabled, {
     '*': false,
     main: true,
