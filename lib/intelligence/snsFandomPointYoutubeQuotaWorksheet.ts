@@ -1,3 +1,7 @@
+import {
+  type SnsFandomYoutubeAuditArtistBindingManifestResult,
+} from './snsFandomPointYoutubeAuditArtistBindingManifest';
+
 export const SNS_FANDOM_YOUTUBE_QUOTA_WORKSHEET_VERSION =
   'sns-fandom-youtube-quota-worksheet-v1' as const;
 
@@ -12,6 +16,7 @@ export type SnsFandomYoutubeQuotaWorksheetInput = Readonly<{
   providerClientRef: string;
   measuredAt: string;
   requestedEndpoints: readonly SnsFandomYoutubeQuotaEndpoint[];
+  artistBindingManifest: SnsFandomYoutubeAuditArtistBindingManifestResult | null;
   measuredUsage: Readonly<{
     artistChannelCount: number;
     uploadManifestPageCountPerReactionRun: number;
@@ -47,6 +52,9 @@ export type SnsFandomYoutubeQuotaWorksheetResult = Readonly<{
   providerClientRef: string;
   measuredAt: string;
   requestedEndpoints: readonly SnsFandomYoutubeQuotaEndpoint[];
+  artistBindingManifestValidated: boolean;
+  artistBindingManifestId: string | null;
+  artistChannelCount: number | null;
   lineItems: readonly SnsFandomYoutubeQuotaLineItem[];
   minimumProjectedQuotaUnitsPerDay: number | null;
   requestedQuotaUnitsPerDay: null;
@@ -163,7 +171,36 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     }
   }
 
+  const artistBindingManifest = input.artistBindingManifest;
+  let artistBindingManifestValidated = false;
+
+  if (artistBindingManifest === null) {
+    blockers.push('youtube-quota-artist-binding-manifest-missing');
+  } else {
+    if (
+      artistBindingManifest.state !== 'binding-manifest-ready'
+      || !artistBindingManifest.submissionEvidenceEligible
+      || artistBindingManifest.auditScopeMemberCount <= 0
+      || artistBindingManifest.blockers.length > 0
+    ) {
+      blockers.push('youtube-quota-artist-binding-manifest-not-ready');
+    }
+
+    artistBindingManifestValidated =
+      artistBindingManifest.state === 'binding-manifest-ready'
+      && artistBindingManifest.submissionEvidenceEligible
+      && artistBindingManifest.auditScopeMemberCount > 0
+      && artistBindingManifest.blockers.length === 0;
+  }
+
   const m = input.measuredUsage;
+  if (
+    artistBindingManifestValidated
+    && artistBindingManifest !== null
+    && m.artistChannelCount !== artistBindingManifest.auditScopeMemberCount
+  ) {
+    blockers.push('youtube-quota-artist-channel-count-binding-mismatch');
+  }
   if (!positiveSafeInteger(m.artistChannelCount)) {
     blockers.push('youtube-quota-artist-channel-count-invalid');
   }
@@ -399,6 +436,15 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     providerClientRef: input.providerClientRef,
     measuredAt: input.measuredAt,
     requestedEndpoints: Object.freeze([...requestedEndpoints]),
+    artistBindingManifestValidated,
+    artistBindingManifestId:
+      artistBindingManifestValidated && artistBindingManifest !== null
+        ? artistBindingManifest.manifestId
+        : null,
+    artistChannelCount:
+      artistBindingManifestValidated && artistBindingManifest !== null
+        ? artistBindingManifest.auditScopeMemberCount
+        : null,
     lineItems: Object.freeze([...lineItems]),
     minimumProjectedQuotaUnitsPerDay: ready ? total : null,
     requestedQuotaUnitsPerDay: null,
