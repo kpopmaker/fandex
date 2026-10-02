@@ -10,6 +10,7 @@ on:
     paths:
       - 'package.json'
       - 'package-lock.json'
+      - 'vercel.json'
       - '.github/workflows/validate-production-dependency-security-v2.yml'
 
 permissions:
@@ -54,6 +55,7 @@ jobs:
           .github/workflows/validate-production-dependency-security-v2.yml
           package-lock.json
           package.json
+          vercel.json
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           diff -u /tmp/allowed.txt /tmp/changed.txt
