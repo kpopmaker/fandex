@@ -8,46 +8,54 @@ async function readJson(path: string) {
   ) as Record<string, unknown>;
 }
 
-test('live audit evidence snapshot records Production legal surface as HTTP 200', async () => {
+test('live audit evidence snapshot records current Production legal surface', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
   const resolved = raw.resolvedEvidence as Record<string, unknown>;
   const deployment = raw.productionDeployment as Record<string, unknown>;
+  const repositoryState =
+    raw.repositoryStateAtRefresh as Record<string, unknown>;
 
-  const repositoryState = raw.repositoryStateAtRefresh as Record<string, unknown>;
   assert.equal(
     repositoryState.currentMainSha,
-    'd205a92cc28020ebded14100c3fcf75e1347f68a',
+    '1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
   assert.equal(
     repositoryState.productionDeploymentGitSha,
-    '4a2aea90961f597d644515334360fa80df0e0517',
+    '1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
-  assert.equal(repositoryState.productionMatchesCurrentMain, false);
+  assert.equal(repositoryState.productionMatchesCurrentMain, true);
   assert.equal(deployment.gitSha, repositoryState.productionDeploymentGitSha);
   assert.equal(deployment.state, 'READY');
   assert.equal(deployment.target, 'production');
   assert.equal(
+    deployment.deploymentId,
+    'dpl_Ugg1UJU2aL8BRNAehUowmHeZF5QD',
+  );
+
+  assert.equal(
     resolved.privacyPolicySourceRef,
-    'repo://app/privacy/page.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+    'repo://app/privacy/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
   assert.equal(
     resolved.termsDocumentationRef,
-    'repo://app/terms/page.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+    'repo://app/terms/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
   assert.equal(
     resolved.legalFooterSourceRef,
-    'repo://app/components/LegalFooter.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+    'repo://app/components/LegalFooter.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
   assert.equal(
     repositoryState.currentMainPrivacyPolicySourceRef,
-    'repo://app/privacy/page.tsx@d205a92cc28020ebded14100c3fcf75e1347f68a',
+    'repo://app/privacy/page.tsx@1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1',
   );
-  assert.equal(repositoryState.currentMainPrivacyPolicyDeployed, false);
+  assert.equal(repositoryState.currentMainPrivacyPolicyDeployed, true);
+
   assert.equal(resolved.primaryAccessHttpStatus, 200);
   assert.equal(resolved.privacyPolicyHttpStatus, 200);
   assert.equal(resolved.termsOfServiceHttpStatus, 200);
+
   assert.equal(
     resolved.providerQuotaCostEvidenceRef,
     'https://developers.google.com/youtube/v3/determine_quota_cost',
@@ -69,10 +77,58 @@ test('audit cohort evidence is exactly the merged five-member v1 manifest', asyn
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
   const resolved = raw.resolvedEvidence as Record<string, unknown>;
+
   assert.equal(resolved.auditCohortMemberCount, 5);
   assert.equal(
     resolved.auditCohortManifestRef,
     'repo://data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json@main',
+  );
+});
+
+test('three required audit screenshots are resolved to the verified bundle', async () => {
+  const raw = await readJson(
+    'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
+  );
+  const resolved = raw.resolvedEvidence as Record<string, unknown>;
+  const bundle =
+    resolved.screenshotEvidenceBundle as Record<string, unknown>;
+  const files = bundle.files as Record<string, Record<string, unknown>>;
+
+  assert.equal(
+    resolved.privacyPolicyScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#privacy-policy.png',
+  );
+  assert.equal(
+    resolved.homepageScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#homepage-legal-links.png',
+  );
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png',
+  );
+
+  assert.equal(bundle.githubWorkflowRunId, '37025375542');
+  assert.equal(bundle.githubArtifactId, '11235301864');
+  assert.equal(
+    bundle.githubArtifactDigest,
+    'sha256:b764b7ac2d41f13ca4011727f6797eb10aa8ba2bd46a9a9278b4533ae96ebf19',
+  );
+  assert.equal(
+    bundle.googleDriveFileId,
+    '1llzxJnLw0CVsOiQuYHzbX_O8OlcCto-j',
+  );
+
+  assert.equal(
+    files.privacyPolicy.sha256,
+    '209294b1320cbfea2c25c587c2e774c8f116beb1288bcd90613ccc385965b513',
+  );
+  assert.equal(
+    files.homepageLegalLinks.sha256,
+    'd7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1',
+  );
+  assert.equal(
+    files.analyticsReportingDashboard.sha256,
+    'bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5',
   );
 });
 
@@ -84,9 +140,6 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
   const keys = [
     'applicantIdentityRef',
     'organizationOrSelfRef',
-    'privacyPolicyScreenshotRef',
-    'homepageScreenshotRef',
-    'dashboardFeatureScreenshotRef',
     'providerClientIdentityRef',
     'googleCloudProjectNumber',
     'cloudProjectRef',
@@ -99,7 +152,13 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
     'maxVideoIdsPerCall',
     'providerBatchLimitEvidenceRef',
   ];
+
   for (const key of keys) assert.equal(unresolved[key], null);
+
+  assert.equal('privacyPolicyScreenshotRef' in unresolved, false);
+  assert.equal('homepageScreenshotRef' in unresolved, false);
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
+
   assert.equal(raw.fixtureValuesAreProductionEvidence, false);
   assert.equal(raw.providerApprovalGranted, false);
   assert.equal(raw.productionCollectionAuthorized, false);
@@ -108,15 +167,23 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
 
 test('audit packet no longer records Production privacy/terms pages as 404', async () => {
   const packet = await readFile(
-    new URL('../docs/research/sns-fandom-youtube-api-audit-packet-v1.md', import.meta.url),
+    new URL(
+      '../docs/research/sns-fandom-youtube-api-audit-packet-v1.md',
+      import.meta.url,
+    ),
     'utf8',
   );
+
   assert.ok(packet.includes('/privacy` -> HTTP 200'));
   assert.ok(packet.includes('/terms` -> HTTP 200'));
-  assert.ok(packet.includes('earlier 404 legal-surface blocker is resolved'));
-  assert.match(packet.toLowerCase(), /fixtures are never valid\s+production evidence/);
+  assert.ok(
+    packet.includes('earlier 404 legal-surface blocker is resolved'),
+  );
+  assert.match(
+    packet.toLowerCase(),
+    /fixtures are never valid\s+production evidence/,
+  );
 });
-
 
 test('evidence discovery keeps Cloud project and real cadence unresolved', async () => {
   const raw = await readJson(
