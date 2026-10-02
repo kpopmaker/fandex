@@ -8,6 +8,22 @@ import {
 import {
   evaluateSnsFandomYoutubeQuotaWorksheet,
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaWorksheet';
+import {
+  evaluateSnsFandomYoutubeProviderClientIdentity,
+} from '../lib/intelligence/snsFandomPointYoutubeProviderClientIdentity';
+
+function providerClientIdentity() {
+  return evaluateSnsFandomYoutubeProviderClientIdentity({
+    providerId: 'youtube-data-api',
+    providerClientRef: 'gcp-project-fandex-youtube-primary',
+    googleCloudProjectNumber: '123456789012',
+    googleCloudProjectId: 'fandex-youtube-primary',
+    credentialLocatorRef:
+      'github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY',
+    evidenceRef: 'external://youtube-audit/cloud-project',
+    verifiedAt: '2026-10-02T11:30:00.000Z',
+  });
+}
 
 function quotaWorksheet() {
   return evaluateSnsFandomYoutubeQuotaWorksheet({
@@ -66,6 +82,7 @@ function submission(
       'youtube.commentThreads.list',
       'youtube.comments.list',
     ],
+    providerClientIdentity: providerClientIdentity(),
     quotaWorksheet: quotaWorksheet(),
     evidence: {
       applicantIdentityRef: 'external://youtube-audit/applicant',
@@ -97,6 +114,8 @@ test('complete audit packet can become submission-ready but never provider-appro
 
   assert.equal(result.state, 'submission-ready');
   assert.equal(result.amendmentAcknowledged, true);
+  assert.equal(result.providerClientIdentityValidated, true);
+  assert.equal(result.googleCloudProjectNumber, '123456789012');
   assert.equal(result.quotaEvidenceValidated, true);
   assert.equal(result.minimumProjectedQuotaUnitsPerDay, 59);
   assert.equal(result.providerApprovalGranted, false);
@@ -272,6 +291,62 @@ test('quota worksheet endpoint scope must exactly match the submitted applicatio
   assert.ok(
     result.blockers.includes(
       'youtube-audit-quota-endpoint-scope-mismatch',
+    ),
+  );
+});
+
+
+test('audit submission cannot become ready from a Cloud project evidence ref alone', () => {
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness(
+    submission({
+      providerClientIdentity: null,
+    }),
+  );
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.equal(result.providerClientIdentityValidated, false);
+  assert.equal(result.googleCloudProjectNumber, null);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-audit-provider-client-identity-missing',
+    ),
+  );
+});
+
+test('provider client identity must match the exact audit provider client ref', () => {
+  const identity = {
+    ...providerClientIdentity(),
+    providerClientRef: 'gcp-project-other',
+  };
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness(
+    submission({
+      providerClientIdentity: identity,
+    }),
+  );
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.equal(result.providerClientIdentityValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-audit-provider-client-ref-mismatch',
+    ),
+  );
+});
+
+test('Cloud project evidence ref must be the evidence used by the validated client identity', () => {
+  const base = submission();
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness({
+    ...base,
+    evidence: {
+      ...base.evidence,
+      cloudProjectRef: 'external://youtube-audit/different-cloud-project',
+    },
+  });
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.ok(
+    result.blockers.includes(
+      'youtube-audit-cloud-project-evidence-mismatch',
     ),
   );
 });
