@@ -1,6 +1,6 @@
 {
   "version": "sns_fandom_youtube_audit_binding_scope_candidates_v1",
-  "status": "owner-selection-required",
+  "status": "owner-selection-recorded",
   "derivedFrom": {
     "historicalRecoveryVersion": "sns_fandom_youtube_audit_binding_recovery_v1",
     "currentVerificationVersion": "sns_fandom_youtube_audit_binding_current_verification_v1",
@@ -17,7 +17,7 @@
     "ownerSelectableCandidateCount": 5,
     "conditionalCandidateCount": 1,
     "sharedChannelBlockedArtistCount": 5,
-    "selectedAuditScopeCount": 0
+    "selectedAuditScopeCount": 5
   },
   "ownerSelectableCandidates": [
     {
@@ -29,7 +29,7 @@
         "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
         "https://www.blackpinkofficial.com/"
       ],
-      "selected": false
+      "selected": true
     },
     {
       "canonicalArtistId": "twice",
@@ -40,7 +40,7 @@
         "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
         "https://twice.jype.com/"
       ],
-      "selected": false
+      "selected": true
     },
     {
       "canonicalArtistId": "rose",
@@ -50,7 +50,7 @@
       "evidenceRefs": [
         "https://www.youtube.com/channel/UCBo1hnzxV9rz3WVsv__Rn1g"
       ],
-      "selected": false
+      "selected": true
     },
     {
       "canonicalArtistId": "riize",
@@ -61,7 +61,7 @@
         "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
         "https://www.riizeofficial.com/"
       ],
-      "selected": false
+      "selected": true
     },
     {
       "canonicalArtistId": "jennie",
@@ -74,7 +74,7 @@
         "https://weverse.io/jennie/highlight",
         "https://creatoracademy.youtube.com/page/lesson/music-discovery"
       ],
-      "selected": false
+      "selected": true
     }
   ],
   "conditionalCandidates": [
@@ -90,7 +90,9 @@
         "https://www.sonymusic.co.jp/artist/LISA/info/586535",
         "https://creatoracademy.youtube.com/page/lesson/music-discovery"
       ],
-      "selected": false
+      "selected": false,
+      "disposition": "hold",
+      "dispositionReason": "owner-approved-audit-cohort-v1-excludes-lisa"
     }
   ],
   "blockedSharedChannelArtists": [
@@ -125,9 +127,70 @@
       "blockReason": "shared-group-channel"
     }
   ],
-  "selectedAuditScope": [],
+  "selectedAuditScope": [
+    {
+      "canonicalArtistId": "blackpink",
+      "youtubeChannelId": "UCOmHUn--16B90oW2L6FRR3A",
+      "channelTitle": "BLACKPINK",
+      "selectionBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
+        "https://www.blackpinkofficial.com/"
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "youtubeChannelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+      "channelTitle": "TWICE",
+      "selectionBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
+        "https://twice.jype.com/"
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "youtubeChannelId": "UCBo1hnzxV9rz3WVsv__Rn1g",
+      "channelTitle": "ROSÉ",
+      "selectionBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCBo1hnzxV9rz3WVsv__Rn1g"
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "youtubeChannelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+      "channelTitle": "RIIZE",
+      "selectionBasis": "historical-reviewed-plus-current-channel-identity",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
+        "https://www.riizeofficial.com/"
+      ]
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "youtubeChannelId": "UCNYi_zGmR519r5gYdOKLTjQ",
+      "channelTitle": "JENNIE",
+      "selectionBasis": "current-artist-named-oac-replaces-historical-vevo",
+      "evidenceRefs": [
+        "https://www.youtube.com/channel/UCNYi_zGmR519r5gYdOKLTjQ",
+        "https://www.youtube.com/watch?v=Ao2GsXHMD_4",
+        "https://weverse.io/jennie/highlight",
+        "https://creatoracademy.youtube.com/page/lesson/music-discovery"
+      ]
+    }
+  ],
   "blockers": [
-    "owner-audit-cohort-selection-required",
-    "lisa-label-owned-oac-policy-decision-required"
-  ]
+    "shared-channel-artists-still-require-artist-specific-resolution-for-future-cohort-expansion"
+  ],
+  "ownerDecision": {
+    "decision": "approved",
+    "decisionText": "Audit cohort v1: BLACKPINK / TWICE / ROSÉ / RIIZE / JENNIE 선택 승인, LISA는 보류",
+    "recordedAt": "2026-10-02T12:57:30.000Z",
+    "lisaDisposition": "hold",
+    "providerApprovalImplied": false,
+    "collectionAuthorizationImplied": false,
+    "mergeAuthorizationImplied": false,
+    "deploymentAuthorizationImplied": false
+  }
 }
