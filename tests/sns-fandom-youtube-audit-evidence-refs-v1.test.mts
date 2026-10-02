@@ -28,6 +28,23 @@ test('live audit evidence snapshot records Production legal surface as HTTP 200'
   assert.equal(deployment.gitSha, repositoryState.productionDeploymentGitSha);
   assert.equal(deployment.state, 'READY');
   assert.equal(deployment.target, 'production');
+  assert.equal(
+    resolved.privacyPolicySourceRef,
+    'repo://app/privacy/page.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+  );
+  assert.equal(
+    resolved.termsDocumentationRef,
+    'repo://app/terms/page.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+  );
+  assert.equal(
+    resolved.legalFooterSourceRef,
+    'repo://app/components/LegalFooter.tsx@4a2aea90961f597d644515334360fa80df0e0517',
+  );
+  assert.equal(
+    repositoryState.currentMainPrivacyPolicySourceRef,
+    'repo://app/privacy/page.tsx@d205a92cc28020ebded14100c3fcf75e1347f68a',
+  );
+  assert.equal(repositoryState.currentMainPrivacyPolicyDeployed, false);
   assert.equal(resolved.primaryAccessHttpStatus, 200);
   assert.equal(resolved.privacyPolicyHttpStatus, 200);
   assert.equal(resolved.termsOfServiceHttpStatus, 200);
@@ -44,11 +61,7 @@ test('live audit evidence snapshot records Production legal surface as HTTP 200'
     },
   );
   assert.equal(resolved.playlistItemsMaxResultsPerPage, 50);
-  assert.equal(resolved.maxChannelIdsPerCall, 50);
-  assert.equal(
-    resolved.maxChannelIdsPerCallEvidenceRef,
-    'https://developers.google.com/youtube/v3/docs/channels/list',
-  );
+  assert.equal('maxChannelIdsPerCall' in resolved, false);
 });
 
 test('audit cohort evidence is exactly the merged five-member v1 manifest', async () => {
@@ -82,6 +95,7 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
+    'maxChannelIdsPerCall',
     'maxVideoIdsPerCall',
     'providerBatchLimitEvidenceRef',
   ];
@@ -112,6 +126,7 @@ test('evidence discovery keeps Cloud project and real cadence unresolved', async
 
   assert.equal(discovery.googleDriveSearchPerformed, true);
   assert.equal(discovery.googleDriveCloudProjectEvidenceFound, false);
+  assert.equal(discovery.googleDriveMatchedFileCount, 0);
   assert.equal(discovery.githubApprovedCadenceSearchPerformed, true);
   assert.equal(discovery.githubApprovedCadenceEvidenceFound, false);
 });
