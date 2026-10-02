@@ -16,6 +16,7 @@ import {
 } from '../../lib/server/ingestion/naverNewsScheduler';
 import {
   buildNaverNewsJobIdentity,
+  canonicalJson,
 } from '../../lib/server/ingestion/naverNewsContracts';
 import type {
   NaverNewsSucceededSchedulerJob,
@@ -107,8 +108,8 @@ export async function runNaverNewsBlobOnlyDirect(
   if (currentOfficialJob) {
     if (
       currentOfficialJob.jobId !== expectedIdentity.jobId
-      || currentOfficialJob.requestContract.query !== config.query
-      || currentOfficialJob.requestContract.display !== config.display
+      || canonicalJson(currentOfficialJob.requestContract)
+        !== canonicalJson(expectedIdentity.request)
     ) {
       throw new Error('naver_news_blob_only_direct_preflight_conflict');
     }
