@@ -27,6 +27,19 @@ test('privacy route exposes required YouTube and Google policy disclosures', asy
   }
 });
 
+test('privacy route makes the YouTube consent and Non-Authorized Data retention boundary explicit', async () => {
+  const privacy = await source('app/privacy/page.tsx');
+
+  assert.ok(privacy.includes('30 calendar days'));
+  assert.ok(privacy.includes('30일 이내에 삭제하거나'));
+  assert.ok(
+    privacy.includes('Privacy Policy를 확인하고 동의할 수 있는'),
+  );
+  assert.ok(
+    privacy.includes('Production에서 활성화하지 않습니다'),
+  );
+});
+
 test('privacy route does not claim provider approval or active OAuth collection', async () => {
   const privacy = await source('app/privacy/page.tsx');
 
