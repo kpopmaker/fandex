@@ -355,7 +355,16 @@ test('recurring Production workflow activates the frozen hourly cadence and pres
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /^\s*schedule:/m);
   assert.match(workflow, /cron: '17 \* \* \* \*'/);
+  assert.match(workflow, /cron: '37 \* \* \* \*'/);
+  assert.match(workflow, /cron: '57 \* \* \* \*'/);
   assert.match(workflow, /github\.event_name == 'schedule'/);
+  assert.match(workflow, /github\.event\.schedule == '17 \* \* \* \*'/);
+  assert.match(workflow, /github\.event\.schedule == '37 \* \* \* \*'/);
+  assert.match(workflow, /github\.event\.schedule == '57 \* \* \* \*'/);
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED == 'approved-github-redundant-20m-v1'/,
+  );
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'/);
   assert.match(
     workflow,
