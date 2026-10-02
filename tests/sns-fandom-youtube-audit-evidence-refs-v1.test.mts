@@ -15,8 +15,17 @@ test('live audit evidence snapshot records Production legal surface as HTTP 200'
   const resolved = raw.resolvedEvidence as Record<string, unknown>;
   const deployment = raw.productionDeployment as Record<string, unknown>;
 
-  assert.equal(raw.repositoryMainSha, '4a2aea90961f597d644515334360fa80df0e0517');
-  assert.equal(deployment.gitSha, raw.repositoryMainSha);
+  const repositoryState = raw.repositoryStateAtRefresh as Record<string, unknown>;
+  assert.equal(
+    repositoryState.currentMainSha,
+    'd205a92cc28020ebded14100c3fcf75e1347f68a',
+  );
+  assert.equal(
+    repositoryState.productionDeploymentGitSha,
+    '4a2aea90961f597d644515334360fa80df0e0517',
+  );
+  assert.equal(repositoryState.productionMatchesCurrentMain, false);
+  assert.equal(deployment.gitSha, repositoryState.productionDeploymentGitSha);
   assert.equal(deployment.state, 'READY');
   assert.equal(deployment.target, 'production');
   assert.equal(resolved.primaryAccessHttpStatus, 200);
