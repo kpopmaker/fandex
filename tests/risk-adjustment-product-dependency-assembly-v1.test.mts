@@ -60,7 +60,7 @@ function completeCapability(
   };
 }
 
-test('current Real upstream projections are not consumed while handoffs are metadata-blocked', () => {
+test('current Real upstream projections are consumed but explicit unresolved quality keeps Product insufficient', () => {
   const newsHandoff = evaluateRiskAdjustmentUpstreamHandoff({
     lifecycleState: 'production',
     materialClass: 'real',
@@ -79,6 +79,7 @@ test('current Real upstream projections are not consumed while handoffs are meta
         handoff: newsHandoff,
         projectedInput: projectedInput('newsIssuePoint', {
           confidenceState: 'insufficient',
+          availabilityState: 'available-nonzero',
           coverageState: 'unknown',
           freshnessState: 'unknown',
           conflictState: 'unknown',
@@ -98,12 +99,12 @@ test('current Real upstream projections are not consumed while handoffs are meta
     ],
   });
 
-  assert.deepEqual(result.consumedVariableIds, []);
-  assert.deepEqual(result.blockedVariableIds, [
+  assert.deepEqual(result.consumedVariableIds, [
     'comebackActivityPoint',
     'newsIssuePoint',
   ]);
-  assert.equal(result.dependencies.every((entry) => !entry.consumed), true);
+  assert.deepEqual(result.blockedVariableIds, []);
+  assert.equal(result.dependencies.every((entry) => entry.consumed), true);
   assert.equal(
     result.dependencies.every((entry) => entry.projectionPresent),
     true,
@@ -112,8 +113,12 @@ test('current Real upstream projections are not consumed while handoffs are meta
     result.productCandidate.readinessState,
     'insufficient-data',
   );
+  assert.equal(result.productCandidate.assessment.status, 'insufficient_data');
   assert.equal(result.productCandidate.numericEligible, false);
   assert.equal(result.productCandidate.score, null);
+  assert.equal(result.productCandidate.penalty, null);
+  assert.equal(result.productCandidate.weight, null);
+  assert.equal(result.productCandidate.activationAuthorized, false);
 });
 
 test('accepted handoffs are the only inputs consumed by Product assembly', () => {
