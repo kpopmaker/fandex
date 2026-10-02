@@ -1,0 +1,33 @@
+name: Validate upstream quality producers premerge v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/adapters/newsIssuePointRiskQualityMetadata.ts'
+      - 'lib/product/adapters/activityExposureRiskQualityMetadata.ts'
+      - 'tests/news-issue-point-risk-quality-metadata-v1.test.mts'
+      - 'tests/activity-exposure-risk-quality-metadata-v1.test.mts'
+      - '.github/workflows/validate-upstream-quality-producers-premerge-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Producer quality regressions
+        run: npx tsx --test tests/news-issue-point-risk-quality-metadata-v1.test.mts tests/activity-exposure-risk-quality-metadata-v1.test.mts
+      - name: newsIssuePoint Product regressions
+        run: npx tsx --test tests/product-variable-boundary-v1.test.mts tests/product-news-issue-point-real-read-boundary-v1.test.mts tests/naver-news-issue-point-construct.test.mts tests/naver-news-issue-point-frozen-methodology.test.mts
+      - name: Activity Exposure Product regressions
+        run: npx tsx --test tests/product-activity-exposure-contract-v1.test.mts tests/activity-exposure-production-boundary-v1.test.mts tests/activity-exposure-production-readiness-v1.test.mts
+      - run: npm run typecheck
