@@ -1,7 +1,6 @@
 {
   "version": "sns_fandom_youtube_audit_evidence_refs_v1",
   "observedAt": "2026-10-02T14:14:54.000Z",
-  "repositoryMainSha": "4a2aea90961f597d644515334360fa80df0e0517",
   "productionDeployment": {
     "deploymentId": "dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R",
     "gitSha": "4a2aea90961f597d644515334360fa80df0e0517",
@@ -52,5 +51,11 @@
   "fixtureValuesAreProductionEvidence": false,
   "providerApprovalGranted": false,
   "productionCollectionAuthorized": false,
-  "providerSubmissionAuthorized": false
+  "providerSubmissionAuthorized": false,
+  "repositoryStateAtRefresh": {
+    "currentMainSha": "d205a92cc28020ebded14100c3fcf75e1347f68a",
+    "productionDeploymentGitSha": "4a2aea90961f597d644515334360fa80df0e0517",
+    "productionMatchesCurrentMain": false,
+    "note": "Stable Production legal pages are verified at the deployed SHA; newer main privacy wording is not claimed as deployed until a matching Production deployment is observed."
+  }
 }
