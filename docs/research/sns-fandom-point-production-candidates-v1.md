@@ -859,3 +859,48 @@ Only exact-target-age captures can become
 
 This closes the lifecycle gap between deterministic planning and downstream
 validation datasets without inventing an operational timing tolerance.
+
+
+## Receipt-to-dataset assembly gate
+
+Operational capture completion and methodology dataset readiness are now
+explicitly separated.
+
+The assembly gate only accepts a capture receipt when it is
+`capture-complete-lineage-pending` and exact-target-age eligible. It then
+requires the receipt, mapped observations, and lineage entries to agree on the
+same observation set.
+
+For every selected observation, assembly verifies:
+
+- canonical artist id;
+- provider content/video id;
+- metric id;
+- actual observedAt;
+- collectedAt;
+- observation id;
+- collection run id; and
+- evidence continuity into the lineage chain.
+
+The receipt collection run must equal the lineage collection run, and receipt
+evidence must be present somewhere in the run/raw/snapshot/revision lineage.
+
+Only after those checks does the existing validation-dataset builder run. The
+result must itself be `validation-ready`, lineage-validated, and
+methodology-validation eligible.
+
+Even successful assembly still produces:
+- no aggregate value;
+- no normalized value;
+- no methodology winner/decision;
+- no final `snsFandomPoint`.
+
+### Finalized-window correction
+
+The retrospective planner now requires `plannedAt >= manifest.windowEnd`.
+A future/open publication window cannot be treated as a complete manifest.
+
+This creates an explicit limitation: short target ages inside a long
+publication window can be missed if planning waits until the window closes.
+Such studies require a separate prospective content-enrollment workflow rather
+than pretending an open window is final.
