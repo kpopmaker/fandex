@@ -1,0 +1,26 @@
+name: Validate newsIssuePoint Risk quality metadata v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/adapters/newsIssuePointRiskQualityMetadata.ts'
+      - 'tests/news-issue-point-risk-quality-metadata-v1.test.mts'
+      - '.github/workflows/validate-news-issue-point-risk-quality-metadata-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/news-issue-point-risk-quality-metadata-v1.test.mts
+      - run: npm run typecheck
