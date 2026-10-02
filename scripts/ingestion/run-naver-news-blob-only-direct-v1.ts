@@ -8,8 +8,18 @@ import {
   createProductionNaverNewsBlobEvidenceStore,
 } from '../../lib/server/ingestion/naverNewsBlobMirrorRuntime';
 import {
+  createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
   finalizeNaverNewsStoredEvidenceMirrorByJobId,
 } from '../../lib/server/ingestion/naverNewsStoredEvidenceMirror';
+import {
+  buildNaverNewsSchedulerPlan,
+} from '../../lib/server/ingestion/naverNewsScheduler';
+import {
+  buildNaverNewsJobIdentity,
+} from '../../lib/server/ingestion/naverNewsContracts';
+import type {
+  NaverNewsSucceededSchedulerJob,
+} from '../../lib/server/ingestion/naverNewsLatestOfficialShadowSlot';
 import {
   readNaverNewsRecurringConfig,
 } from '../../lib/server/ingestion/naverNewsRecurringSchedulerContracts';
@@ -26,19 +36,26 @@ export type NaverNewsBlobOnlyDirectDependencies = Readonly<{
   createStore?: typeof createProductionNaverNewsBlobEvidenceStore;
   runStage?: typeof runNaverNewsBlobOnlyCollectionStage;
   finalizeManifest?: typeof finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  readSucceededSchedulerJobs?: (
+    store: ReturnType<typeof createProductionNaverNewsBlobEvidenceStore>,
+  ) => Promise<readonly NaverNewsSucceededSchedulerJob[]>;
   now?: () => Date;
 }>;
 
 export type NaverNewsBlobOnlyDirectSummary = Readonly<{
   mode: 'github-actions-direct-blob-only';
+  runStatus: 'collected-and-finalized' | 'already-finalized';
   contractVersion: NaverNewsBlobOnlyCollectionStageSummary['contractVersion'];
   schedulerVersion: NaverNewsBlobOnlyCollectionStageSummary['schedulerVersion'];
   slotStart: string;
   collectionKey: string;
   jobId: string;
-  resultSha256: string;
-  stagedObjectStatus: NaverNewsBlobOnlyCollectionStageSummary['stagedObjectStatus'];
-  counts: NaverNewsBlobOnlyCollectionStageSummary['counts'];
+  resultSha256: string | null;
+  stagedObjectStatus:
+    | NaverNewsBlobOnlyCollectionStageSummary['stagedObjectStatus']
+    | null;
+  counts: NaverNewsBlobOnlyCollectionStageSummary['counts'] | null;
+  providerCalls: 0 | 1;
   databaseWrites: 0;
   schedulerManifestFinalized: true;
 }>;
@@ -67,8 +84,51 @@ export async function runNaverNewsBlobOnlyDirect(
     dependencies.createStore ?? createProductionNaverNewsBlobEvidenceStore;
   const runStage =
     dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
+  const now = dependencies.now ?? (() => new Date());
+  const instant = now();
+  const schedulerPlan = buildNaverNewsSchedulerPlan({
+    query: config.query,
+    display: config.display,
+    at: instant,
+  });
+  const expectedIdentity = buildNaverNewsJobIdentity(schedulerPlan.command);
 
   const store = createStore(environment);
+  const readSucceededSchedulerJobs =
+    dependencies.readSucceededSchedulerJobs
+    ?? ((candidateStore) =>
+      createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+        candidateStore,
+      ).readSucceededSchedulerJobs());
+  const succeededJobs = await readSucceededSchedulerJobs(store);
+  const currentOfficialJob = succeededJobs.find((job) =>
+    job.collectionKey === schedulerPlan.collectionKey
+  );
+  if (currentOfficialJob) {
+    if (
+      currentOfficialJob.jobId !== expectedIdentity.jobId
+      || currentOfficialJob.requestContract.query !== config.query
+      || currentOfficialJob.requestContract.display !== config.display
+    ) {
+      throw new Error('naver_news_blob_only_direct_preflight_conflict');
+    }
+    return Object.freeze({
+      mode: 'github-actions-direct-blob-only' as const,
+      runStatus: 'already-finalized' as const,
+      contractVersion: 'naver-news-blob-only-collection-stage-v1' as const,
+      schedulerVersion: schedulerPlan.schedulerVersion,
+      slotStart: schedulerPlan.slotStart,
+      collectionKey: schedulerPlan.collectionKey,
+      jobId: currentOfficialJob.jobId,
+      resultSha256: null,
+      stagedObjectStatus: null,
+      counts: null,
+      providerCalls: 0 as const,
+      databaseWrites: 0 as const,
+      schedulerManifestFinalized: true as const,
+    });
+  }
+
   const result = await runStage(
     {
       query: config.query,
@@ -77,7 +137,7 @@ export async function runNaverNewsBlobOnlyDirect(
     },
     {
       store,
-      ...(dependencies.now ? { now: dependencies.now } : {}),
+      now: () => instant,
     },
   );
 
@@ -94,6 +154,7 @@ export async function runNaverNewsBlobOnlyDirect(
 
   return Object.freeze({
     mode: 'github-actions-direct-blob-only' as const,
+    runStatus: 'collected-and-finalized' as const,
     contractVersion: result.contractVersion,
     schedulerVersion: result.schedulerVersion,
     slotStart: result.slotStart,
@@ -102,6 +163,7 @@ export async function runNaverNewsBlobOnlyDirect(
     resultSha256: result.resultSha256,
     stagedObjectStatus: result.stagedObjectStatus,
     counts: result.counts,
+    providerCalls: 1 as const,
     databaseWrites: result.safety.databaseWrites,
     schedulerManifestFinalized: true as const,
   });
