@@ -251,3 +251,44 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
   assert.doesNotMatch(workflow, /fandex-eta\.vercel\.app/);
   assert.doesNotMatch(workflow, /curl /);
 });
+
+
+test('recurring Production workflow supplies the frozen direct-runner contract and remains manual-only', async () => {
+  const workflow = await readFile(
+    new URL(
+      '../.github/workflows/naver-news-blob-only-recurring-production-v1.yml',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_NEWS_RECURRING_ENABLED: approved-v128-recurring-foundation/,
+  );
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT: production/,
+  );
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_NEWS_RECURRING_QUERY: 아이유 IU/,
+  );
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_NEWS_RECURRING_DISPLAY: '100'/,
+  );
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_NEWS_SCHEDULER_SECRET: \$\{\{ secrets\.FANDEX_NAVER_NEWS_SCHEDULER_SECRET \}\}/,
+  );
+  assert.match(
+    workflow,
+    /BLOB_READ_WRITE_TOKEN: \$\{\{ secrets\.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN \}\}/,
+  );
+  assert.match(workflow, /schedulerManifestFinalized !== true/);
+  assert.match(workflow, /schedulerManifestFinalizationRequired=true/);
+  assert.doesNotMatch(workflow, /FANDEX_RUNTIME_DATABASE_URL/);
+});
