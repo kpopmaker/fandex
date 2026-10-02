@@ -381,7 +381,10 @@ export function buildSnsFandomProspectiveContentEnrollment(
   const missedTaskCount = tasks.filter(
     (task) => task.state === 'missed-before-enrollment',
   ).length;
-  const pendingTasks = tasks.filter(
+  const pendingTaskCount = tasks.filter(
+    (task) => task.state === 'pending-prospective-capture',
+  ).length;
+  const currentOpsTasks = tasks.filter(
     (task) =>
       task.state === 'pending-prospective-capture'
       && task.firstSeenAt === input.evaluatedAt
@@ -400,7 +403,7 @@ export function buildSnsFandomProspectiveContentEnrollment(
     enrollmentId: input.enrollmentId,
     providerId: 'youtube-data-api' as const,
     providerClientRef: input.providerClientRef,
-    pendingTasks: Object.freeze([...pendingTasks]),
+    pendingTasks: Object.freeze([...currentOpsTasks]),
     providerGrantRequired: true as const,
     providerApprovalValidated: false as const,
     executionTimeRevalidationRequired: true as const,
@@ -425,7 +428,7 @@ export function buildSnsFandomProspectiveContentEnrollment(
     windowEnd: input.windowEnd,
     provisionalVideoIds: Object.freeze(uniqueSorted([...enrolled.keys()])),
     tasks: Object.freeze(tasks),
-    pendingTaskCount: pendingTasks.length,
+    pendingTaskCount,
     missedTaskCount,
     contentUniverseComplete: false as const,
     finalManifestReconciliationRequired: true as const,
