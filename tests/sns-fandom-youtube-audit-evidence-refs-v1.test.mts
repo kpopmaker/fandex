@@ -85,7 +85,7 @@ test('audit cohort evidence is exactly the merged five-member v1 manifest', asyn
   );
 });
 
-test('three required audit screenshots are resolved to the verified bundle', async () => {
+test('legal screenshots are resolved while synthetic dashboard evidence stays rejected', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
@@ -102,11 +102,6 @@ test('three required audit screenshots are resolved to the verified bundle', asy
     resolved.homepageScreenshotRef,
     'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#homepage-legal-links.png',
   );
-  assert.equal(
-    resolved.dashboardFeatureScreenshotRef,
-    'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png',
-  );
-
   assert.equal(bundle.githubWorkflowRunId, '37025375542');
   assert.equal(bundle.githubArtifactId, '11235301864');
   assert.equal(
@@ -126,9 +121,20 @@ test('three required audit screenshots are resolved to the verified bundle', asy
     files.homepageLegalLinks.sha256,
     'd7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1',
   );
+  assert.equal('analyticsReportingDashboard' in files, false);
+
+  const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
+  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
+
+  const rejected = raw.rejectedEvidence as Record<string, unknown>;
+  const dashboardCandidate = rejected.dashboardFeatureScreenshotCandidate as Record<string, unknown>;
   assert.equal(
-    files.analyticsReportingDashboard.sha256,
-    'bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5',
+    dashboardCandidate.ref,
+    'github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png',
+  );
+  assert.equal(
+    dashboardCandidate.rejectionReason,
+    'source-is-explicitly-synthetic-preview-homepage-not-production-analytics-reporting-feature',
   );
 });
 
@@ -151,13 +157,13 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
     'maxChannelIdsPerCall',
     'maxVideoIdsPerCall',
     'providerBatchLimitEvidenceRef',
+    'dashboardFeatureScreenshotRef',
   ];
 
   for (const key of keys) assert.equal(unresolved[key], null);
 
   assert.equal('privacyPolicyScreenshotRef' in unresolved, false);
   assert.equal('homepageScreenshotRef' in unresolved, false);
-  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
 
   assert.equal(raw.fixtureValuesAreProductionEvidence, false);
   assert.equal(raw.providerApprovalGranted, false);
