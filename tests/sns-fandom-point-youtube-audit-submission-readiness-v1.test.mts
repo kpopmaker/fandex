@@ -5,6 +5,51 @@ import {
   evaluateSnsFandomYoutubeAuditSubmissionReadiness,
   type SnsFandomYoutubeAuditSubmissionInput,
 } from '../lib/intelligence/snsFandomPointYoutubeAuditSubmissionReadiness';
+import {
+  evaluateSnsFandomYoutubeQuotaWorksheet,
+} from '../lib/intelligence/snsFandomPointYoutubeQuotaWorksheet';
+
+function quotaWorksheet() {
+  return evaluateSnsFandomYoutubeQuotaWorksheet({
+    providerClientRef: 'gcp-project-fandex-youtube-primary',
+    measuredAt: '2026-10-02T11:00:00.000Z',
+    requestedEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+      'youtube.videos.list',
+      'youtube.commentThreads.list',
+      'youtube.comments.list',
+    ],
+    measuredUsage: {
+      artistChannelCount: 12,
+      uploadManifestPageCountPerReactionRun: 7,
+      videoCountPerReactionRun: 120,
+      commentThreadPageCountPerPersistenceRun: 10,
+      commentPageCountPerPersistenceRun: 5,
+      reactionSnapshotRunsPerDay: 4,
+      commentPersistenceRunsPerDay: 1,
+    },
+    providerLimits: {
+      maxChannelIdsPerCall: 50,
+      maxVideoIdsPerCall: 50,
+    },
+    quotaUnitsPerCall: {
+      'youtube.channels.list': 1,
+      'youtube.playlistItems.list': 1,
+      'youtube.videos.list': 1,
+      'youtube.commentThreads.list': 1,
+      'youtube.comments.list': 1,
+    },
+    evidence: {
+      measuredUsageEvidenceRef: 'external://youtube-audit/measured-usage',
+      cadenceEvidenceRef: 'external://youtube-audit/cadence',
+      providerBatchLimitEvidenceRef:
+        'external://youtube-audit/provider-batch-limits',
+      providerQuotaCostEvidenceRef:
+        'external://youtube-audit/provider-quota-costs',
+    },
+  });
+}
 
 function submission(
   overrides: Partial<SnsFandomYoutubeAuditSubmissionInput> = {},
@@ -21,6 +66,7 @@ function submission(
       'youtube.commentThreads.list',
       'youtube.comments.list',
     ],
+    quotaWorksheet: quotaWorksheet(),
     evidence: {
       applicantIdentityRef: 'external://youtube-audit/applicant',
       organizationOrSelfRef: 'external://youtube-audit/organization',
@@ -51,6 +97,8 @@ test('complete audit packet can become submission-ready but never provider-appro
 
   assert.equal(result.state, 'submission-ready');
   assert.equal(result.amendmentAcknowledged, true);
+  assert.equal(result.quotaEvidenceValidated, true);
+  assert.equal(result.minimumProjectedQuotaUnitsPerDay, 59);
   assert.equal(result.providerApprovalGranted, false);
   assert.equal(result.productionCollectionAuthorized, false);
   assert.deepEqual(result.blockers, []);
@@ -168,6 +216,62 @@ test('secret-like material in evidence references is rejected', () => {
   assert.ok(
     result.blockers.includes(
       'youtube-audit-evidence-ref-secret-like',
+    ),
+  );
+});
+
+
+test('audit submission cannot become ready from a quota evidence reference alone', () => {
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness(
+    submission({
+      quotaWorksheet: null,
+    }),
+  );
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.equal(result.quotaEvidenceValidated, false);
+  assert.equal(result.minimumProjectedQuotaUnitsPerDay, null);
+  assert.ok(
+    result.blockers.includes('youtube-audit-quota-worksheet-missing'),
+  );
+});
+
+test('quota worksheet must be bound to the exact provider client', () => {
+  const worksheet = {
+    ...quotaWorksheet(),
+    providerClientRef: 'gcp-project-other',
+  };
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness(
+    submission({
+      quotaWorksheet: worksheet,
+    }),
+  );
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.equal(result.quotaEvidenceValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-audit-quota-provider-client-mismatch',
+    ),
+  );
+});
+
+test('quota worksheet endpoint scope must exactly match the submitted application scope', () => {
+  const base = submission();
+  const result = evaluateSnsFandomYoutubeAuditSubmissionReadiness({
+    ...base,
+    requestedEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+      'youtube.videos.list',
+    ],
+  });
+
+  assert.equal(result.state, 'submission-blocked');
+  assert.equal(result.quotaEvidenceValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-audit-quota-endpoint-scope-mismatch',
     ),
   );
 });
