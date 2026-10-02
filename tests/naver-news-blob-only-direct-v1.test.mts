@@ -237,12 +237,7 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
   );
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.match(workflow, /schedule:/);
-  assert.match(workflow, /cron: '17 \* \* \* \*'/);
-  assert.match(
-    workflow,
-    /FANDEX_NAVER_BLOB_ONLY_RECURRING_TRIGGER_ENABLED == 'approved-github-hourly-blob-v1'/,
-  );
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
   assert.match(
     workflow,
     /approved-github-actions-blob-only-direct-v1/,
@@ -268,7 +263,12 @@ test('recurring Production workflow supplies the frozen contract and keeps hourl
   );
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.match(workflow, /schedule:/);
+  assert.match(workflow, /cron: '17 \* \* \* \*'/);
+  assert.match(
+    workflow,
+    /FANDEX_NAVER_BLOB_ONLY_RECURRING_TRIGGER_ENABLED == 'approved-github-hourly-blob-v1'/,
+  );
   assert.match(
     workflow,
     /FANDEX_NAVER_NEWS_RECURRING_ENABLED: approved-v128-recurring-foundation/,
