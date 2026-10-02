@@ -52,6 +52,7 @@ jobs:
           lib/intelligence/snsFandomPointProviderApprovalIntake.ts
           lib/intelligence/snsFandomPointReactionAggregationMethodology.ts
           lib/intelligence/snsFandomPointReactionMethodologyStudy.ts
+          lib/intelligence/snsFandomPointReactionProspectiveContentEnrollment.ts
           lib/intelligence/snsFandomPointReactionValidationCollectionHandoff.ts
           lib/intelligence/snsFandomPointReactionValidationCollectionPlan.ts
           lib/intelligence/snsFandomPointReactionValidationCollectionReceipt.ts
@@ -80,6 +81,7 @@ jobs:
           tests/sns-fandom-point-productionization-v1.test.mts
           tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-content-enrollment-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
@@ -108,6 +110,7 @@ jobs:
           tests/sns-fandom-point-comparability-v1.test.mts
           tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-content-enrollment-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
           tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
