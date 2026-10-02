@@ -427,3 +427,38 @@ test('artist enrollment with no actual capture task cannot count as multi-artist
     ),
   );
 });
+
+
+test('bundle revalidates receipt task bindings instead of trusting a ready-state label', () => {
+  const artistA = entry('artist-a', '2026-10-01T12:00:00.000Z');
+  const artistB = entry('artist-b', '2026-10-01T18:00:00.000Z');
+  const originalReceipt = artistB.receipts[0];
+  assert.ok(originalReceipt);
+
+  const forgedReceipt = {
+    ...originalReceipt,
+    members: originalReceipt.members.map((member) => ({
+      ...member,
+      plannedCaptureAt: '2026-10-09T18:00:00.000Z',
+    })),
+  };
+
+  const result = bundleSnsFandomProspectiveReactionReceipts({
+    studyId: 'prospective-study-forged-binding',
+    entries: [
+      artistA,
+      {
+        ...artistB,
+        receipts: [forgedReceipt],
+      },
+    ],
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.receipt, null);
+  assert.ok(
+    result.blockers.includes(
+      'prospective-receipt-bundle-receipt-task-binding-mismatch',
+    ),
+  );
+});
