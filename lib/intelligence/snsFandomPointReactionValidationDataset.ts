@@ -3,6 +3,10 @@ import {
   type SnsFandomObservation,
 } from './snsFandomPointContracts';
 import {
+  buildSnsFandomReactionValidationLineage,
+  type SnsFandomReactionValidationLineageEntry,
+} from './snsFandomPointReactionValidationLineage';
+import {
   evaluateSnsFandomYoutubeContentAgeAlignment,
 } from './snsFandomPointYoutubeContentAgeAlignment';
 import {
@@ -37,6 +41,7 @@ export type SnsFandomReactionValidationDatasetInput = Readonly<{
   construct: SnsFandomReactionValidationConstruct;
   metricId: SnsFandomReactionValidationMetricId;
   artists: readonly SnsFandomReactionValidationDatasetArtistInput[];
+  lineageEntries: readonly SnsFandomReactionValidationLineageEntry[];
   revisionAudit: SnsFandomReactionValidationRevisionAudit;
 }>;
 
@@ -78,6 +83,7 @@ export type SnsFandomReactionValidationDatasetResult = Readonly<{
   targetContentAgeMilliseconds: number | null;
   members: readonly SnsFandomReactionValidationDatasetMember[];
   revisionStabilityReviewed: boolean;
+  lineageValidated: boolean;
   methodologyValidationEligible: boolean;
   aggregateValuesProduced: false;
   normalizedValuesProduced: false;
@@ -89,6 +95,19 @@ function uniqueSorted(values: readonly string[]): string[] {
   return Array.from(new Set(values)).sort();
 }
 
+function rawMetricString(
+  metricId: SnsFandomReactionValidationMetricId,
+  metrics: Readonly<{
+    viewCount: string | null;
+    likeCount: string | null;
+    commentCount: string | null;
+  }>,
+): string | null {
+  if (metricId === 'youtube.video.view-count') return metrics.viewCount;
+  if (metricId === 'youtube.video.like-count') return metrics.likeCount;
+  return metrics.commentCount;
+}
+
 export function buildSnsFandomReactionValidationDataset(
   input: SnsFandomReactionValidationDatasetInput,
 ): SnsFandomReactionValidationDatasetResult {
@@ -97,6 +116,22 @@ export function buildSnsFandomReactionValidationDataset(
   if (input.datasetId.trim().length === 0) {
     blockers.push('reaction-validation-dataset-id-empty');
   }
+
+  const lineage = buildSnsFandomReactionValidationLineage(
+    input.lineageEntries,
+  );
+  const lineageValidated =
+    lineage.state === 'lineage-ready'
+    && lineage.methodologyValidationEligible;
+
+  if (!lineageValidated) {
+    blockers.push('reaction-validation-lineage-not-ready');
+    blockers.push(...lineage.blockers);
+  }
+
+  const lineageByObservationId = new Map(
+    lineage.members.map((member) => [member.observationId, member]),
+  );
 
   const canonicalArtistIds = uniqueSorted(
     input.artists.map((artist) => artist.manifest.canonicalArtistId),
@@ -191,6 +226,36 @@ export function buildSnsFandomReactionValidationDataset(
       }
 
       const videoId = observation.entity.providerContentId;
+      const lineageMember = lineageByObservationId.get(
+        observation.observationId,
+      );
+      if (lineageMember === undefined) {
+        blockers.push('reaction-validation-observation-lineage-missing');
+        continue;
+      }
+      if (
+        lineageMember.canonicalArtistId
+          !== observation.entity.canonicalArtistId
+        || lineageMember.providerResourceId !== videoId
+        || lineageMember.observedAt !== observation.time.observedAt
+        || lineageMember.collectedAt !== observation.time.collectedAt
+      ) {
+        blockers.push('reaction-validation-observation-lineage-mismatch');
+        continue;
+      }
+
+      const sourceMetric = rawMetricString(
+        input.metricId,
+        lineageMember.rawMetrics,
+      );
+      if (
+        sourceMetric === null
+        || observation.value.rawValue === null
+        || sourceMetric !== String(observation.value.rawValue)
+      ) {
+        blockers.push('reaction-validation-raw-mapping-value-mismatch');
+        continue;
+      }
       if (observationsByVideo.has(videoId)) {
         blockers.push('reaction-validation-video-observation-duplicate');
         continue;
@@ -318,7 +383,9 @@ export function buildSnsFandomReactionValidationDataset(
   );
   const structurallyReady = structuralBlockers.length === 0;
   const methodologyValidationEligible =
-    structurallyReady && revisionStabilityReviewed;
+    structurallyReady
+    && revisionStabilityReviewed
+    && lineageValidated;
 
   const state =
     !structurallyReady
@@ -352,6 +419,7 @@ export function buildSnsFandomReactionValidationDataset(
         : null,
     members: Object.freeze(members),
     revisionStabilityReviewed,
+    lineageValidated,
     methodologyValidationEligible,
     aggregateValuesProduced: false as const,
     normalizedValuesProduced: false as const,
