@@ -702,8 +702,12 @@ Therefore these values stay unresolved rather than being inferred.
 
 ## 8b. Screenshot evidence captured and preserved
 
-The three screenshot artifacts required by the current audit packet were
-captured from stable Production on 2026-10-02.
+Screenshot evidence was captured from stable Production on 2026-10-02.
+
+Two captures are valid submission-supporting evidence: the Privacy Policy and
+homepage legal-link placement. The third historical capture used the same
+homepage root and is explicitly rejected as Analytics & Reporting feature
+evidence because that surface labels itself as synthetic / preview data.
 
 Production SHA at capture:
 - `1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1`
@@ -731,13 +735,20 @@ Captured files:
    - SHA256:
      `d7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1`
 
-3. `analytics-reporting-dashboard.png`
-   - purpose: Analytics & Reporting feature/dashboard screenshot
-   - SHA256:
-     `bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5`
+Historical rejected candidate:
+- `analytics-reporting-dashboard.png`
+- SHA256:
+  `bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5`
+- source URL: stable homepage root
+- rejection reason: the captured source explicitly identifies the dashboard
+  data as synthetic / preview, so it is not valid evidence of a real
+  Analytics & Reporting feature.
 
-The downloaded PNGs were visually checked and render the intended Production
-surfaces rather than blank/error pages.
+Therefore `dashboardFeatureScreenshotRef` remains unresolved until a real,
+non-simulated Analytics & Reporting feature surface exists and is captured.
+
+The valid Privacy Policy and homepage legal-link PNGs were visually checked
+and render the intended Production surfaces rather than blank/error pages.
 
 A long-term copy of the complete ZIP was also stored in the connected Google
 Drive:

@@ -34,6 +34,9 @@ jobs:
           grep -q 'K-pop 리서치 지표' evidence/homepage.html
           grep -q '현재 Dashboard 값은 월별 합성 미리보기 데이터입니다' evidence/homepage.html
 
+          # The stable homepage is explicitly synthetic/preview data.
+          # It must never be promoted as Analytics & Reporting feature evidence.
+
           grep -q 'Privacy Policy' evidence/privacy.html
           grep -q 'YouTube API' evidence/privacy.html
           grep -q 'YouTube Terms' evidence/privacy.html
@@ -52,13 +55,6 @@ jobs:
           npx --yes playwright@1.55.0 screenshot \
             --browser chromium \
             --viewport-size "1440,1100" \
-            --wait-for-timeout 2000 \
-            https://fandex-eta.vercel.app/ \
-            evidence/analytics-reporting-dashboard.png
-
-          npx --yes playwright@1.55.0 screenshot \
-            --browser chromium \
-            --viewport-size "1440,1100" \
             --full-page \
             --wait-for-timeout 2000 \
             https://fandex-eta.vercel.app/ \
@@ -72,7 +68,6 @@ jobs:
             https://fandex-eta.vercel.app/privacy \
             evidence/privacy-policy.png
 
-          test -s evidence/analytics-reporting-dashboard.png
           test -s evidence/homepage-legal-links.png
           test -s evidence/privacy-policy.png
 
@@ -90,11 +85,6 @@ jobs:
             "productionBaseUrl": "https://fandex-eta.vercel.app",
             "files": [
               {
-                "purpose": "analytics-and-reporting-feature",
-                "path": "analytics-reporting-dashboard.png",
-                "url": "https://fandex-eta.vercel.app/"
-              },
-              {
                 "purpose": "homepage-visible-legal-links",
                 "path": "homepage-legal-links.png",
                 "url": "https://fandex-eta.vercel.app/"
@@ -108,7 +98,6 @@ jobs:
           }
           EOF
           sha256sum \
-            evidence/analytics-reporting-dashboard.png \
             evidence/homepage-legal-links.png \
             evidence/privacy-policy.png \
             > evidence/SHA256SUMS.txt
@@ -118,7 +107,6 @@ jobs:
         with:
           name: sns-fandom-youtube-audit-screenshots-v1
           path: |
-            evidence/analytics-reporting-dashboard.png
             evidence/homepage-legal-links.png
             evidence/privacy-policy.png
             evidence/manifest.json
