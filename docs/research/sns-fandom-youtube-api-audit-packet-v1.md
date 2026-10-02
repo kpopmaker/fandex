@@ -300,16 +300,16 @@ fields.
 Current repository / deployment state:
 
 - current FANDEX `main`:
-  `d205a92cc28020ebded14100c3fcf75e1347f68a`;
+  `1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1`;
 - latest visible Vercel Production deployment checked:
-  `dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R`;
+  `dpl_Ugg1UJU2aL8BRNAehUowmHeZF5QD`;
 - deployment target: `production`;
 - deployment state: `READY`;
 - deployment Git SHA:
-  `4a2aea90961f597d644515334360fa80df0e0517`;
-- Production does not yet match current `main`;
-- the stable legal URLs are verified at the deployed SHA, while newer
-  `main` privacy wording is not claimed as deployed yet;
+  `1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1`;
+- Production matches current `main` at screenshot capture time;
+- the stable legal URLs and latest privacy wording are verified on that
+  deployed SHA;
 - stable Production alias:
   `https://fandex-eta.vercel.app`.
 
@@ -364,9 +364,6 @@ not be copied into a real submission packet.
 
 Current remaining concrete blockers:
 
-- Privacy Policy screenshot artifact is not yet recorded;
-- homepage screenshot showing visible legal links is not yet recorded;
-- Analytics & Reporting feature/dashboard screenshot is not yet recorded;
 - legal applicant identity evidence is not yet recorded;
 - organization/self application identity evidence is not yet recorded;
 - exact Google Cloud project number / providerClientRef binding evidence is
@@ -379,10 +376,9 @@ Current remaining concrete blockers:
 - provider application has not been submitted;
 - actual provider grant is absent.
 
-The merged legal URLs and repository documentation can now serve as
-non-secret URL/document evidence, but screenshots, applicant identity,
-Cloud-project identity, cadence, and actual quota measurements remain
-external-owner evidence.
+The merged legal URLs, repository documentation, and three required screenshot
+artifacts are now evidence-backed. Applicant identity, Cloud-project identity,
+cadence, and actual quota measurements remain external-owner evidence.
 
 Submission readiness still does not imply provider approval. Even after a
 future packet evaluates as `submission-ready`, the contract keeps:
@@ -702,3 +698,55 @@ found. The existing `reactionSnapshotRunsPerDay = 4` and dated measurement
 window values remain regression fixtures only.
 
 Therefore these values stay unresolved rather than being inferred.
+
+
+## 8b. Screenshot evidence captured and preserved
+
+The three screenshot artifacts required by the current audit packet were
+captured from stable Production on 2026-10-02.
+
+Production SHA at capture:
+- `1f511f45ad2a5b7936fcd043d6d318d8cbb14bb1`
+
+GitHub Actions:
+- workflow: `Capture snsFandom YouTube audit screenshots v1`
+- run: `37025375542`
+- result: **SUCCESS**
+- artifact id: `11235301864`
+- artifact name: `sns-fandom-youtube-audit-screenshots-v1`
+- artifact digest:
+  `sha256:b764b7ac2d41f13ca4011727f6797eb10aa8ba2bd46a9a9278b4533ae96ebf19`
+- GitHub artifact expiry:
+  `2026-12-31T15:12:54Z`
+
+Captured files:
+
+1. `privacy-policy.png`
+   - purpose: Privacy Policy screenshot
+   - SHA256:
+     `209294b1320cbfea2c25c587c2e774c8f116beb1288bcd90613ccc385965b513`
+
+2. `homepage-legal-links.png`
+   - purpose: homepage screenshot with visible legal footer links
+   - SHA256:
+     `d7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1`
+
+3. `analytics-reporting-dashboard.png`
+   - purpose: Analytics & Reporting feature/dashboard screenshot
+   - SHA256:
+     `bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5`
+
+The downloaded PNGs were visually checked and render the intended Production
+surfaces rather than blank/error pages.
+
+A long-term copy of the complete ZIP was also stored in the connected Google
+Drive:
+
+- folder: `02_FANDEX`
+- Drive file id:
+  `1llzxJnLw0CVsOiQuYHzbX_O8OlcCto-j`
+- file:
+  `sns-fandom-youtube-audit-screenshots-v1-run-37025375542.zip`
+
+The Drive copy prevents the submission packet from depending solely on the
+90-day GitHub artifact retention period.
