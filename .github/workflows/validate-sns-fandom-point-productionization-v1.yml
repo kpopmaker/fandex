@@ -1,0 +1,147 @@
+name: Validate snsFandomPoint Productionization v1
+# Exact-head validation workflow for snsFandomPoint.
+
+on:
+  push:
+    branches:
+      - integration/sns-fandom-point-productionization-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: >-
+      github.event_name == 'push' ||
+      github.head_ref == 'integration/sns-fandom-point-productionization-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          TARGET_SHA="HEAD"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            TARGET_SHA="$PR_HEAD_SHA"
+          fi
+          MERGE_BASE="$(git merge-base refs/remotes/origin/main "$TARGET_SHA")"
+          git diff --name-only "$MERGE_BASE...$TARGET_SHA" | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-sns-fandom-point-productionization-v1.yml
+          docs/research/sns-fandom-point-production-candidates-v1.md
+          docs/research/sns-fandom-youtube-api-audit-packet-v1.md
+          docs/research/sns-fandom-youtube-collector-handoff-v1.md
+          lib/intelligence/snsFandomPointComparability.ts
+          lib/intelligence/snsFandomPointContracts.ts
+          lib/intelligence/snsFandomPointProviderApprovalIntake.ts
+          lib/intelligence/snsFandomPointReactionAggregationMethodology.ts
+          lib/intelligence/snsFandomPointReactionMethodologyStudy.ts
+          lib/intelligence/snsFandomPointReactionProspectiveContentEnrollment.ts
+          lib/intelligence/snsFandomPointReactionProspectiveReceiptBundle.ts
+          lib/intelligence/snsFandomPointReactionValidationCollectionHandoff.ts
+          lib/intelligence/snsFandomPointReactionValidationCollectionPlan.ts
+          lib/intelligence/snsFandomPointReactionValidationCollectionReceipt.ts
+          lib/intelligence/snsFandomPointReactionValidationDataset.ts
+          lib/intelligence/snsFandomPointReactionValidationDatasetAssembly.ts
+          lib/intelligence/snsFandomPointReactionValidationLineage.ts
+          lib/intelligence/snsFandomPointObservationContract.ts
+          lib/intelligence/snsFandomPointObservationRevisionContract.ts
+          lib/intelligence/snsFandomPointProviderAdapterContract.ts
+          lib/intelligence/snsFandomPointCollectorActivationTransition.ts
+          lib/intelligence/snsFandomPointHistoricalSnapshotManifest.ts
+          lib/intelligence/snsFandomPointValidationDatasetEligibility.ts
+          lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest.ts
+          lib/intelligence/snsFandomPointYoutubeAuditSubmissionReadiness.ts
+          lib/intelligence/snsFandomPointYoutubeCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeContentAgeAlignment.ts
+          lib/intelligence/snsFandomPointYoutubeContentSelection.ts
+          lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
+          lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
+          lib/intelligence/snsFandomPointYoutubeObservationAdapter.ts
+          lib/intelligence/snsFandomPointYoutubeProviderClientIdentity.ts
+          lib/intelligence/snsFandomPointYoutubeQuotaWorksheet.ts
+          lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts
+          lib/intelligence/snsFandomPointProviderGrantActivationManifest.ts
+          lib/intelligence/snsFandomPointCollectionRunManifest.ts
+          lib/intelligence/snsFandomPointYoutubeRawCollectionSchema.ts
+          tests/sns-fandom-point-comparability-v1.test.mts
+          tests/sns-fandom-point-productionization-v1.test.mts
+          tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
+          tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-content-enrollment-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-receipt-bundle-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-dataset-assembly-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-artist-binding-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
+          tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
+          tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-collector-activation-transition-v1.test.mts
+          tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
+          tests/sns-fandom-point-collection-run-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
+          tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-youtube-provider-client-identity-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-measurement-handoff-v1.test.mts
+          tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: snsFandomPoint contract regression
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-point-productionization-v1.test.mts
+          tests/sns-fandom-point-comparability-v1.test.mts
+          tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
+          tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-content-enrollment-v1.test.mts
+          tests/sns-fandom-point-reaction-prospective-receipt-bundle-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-handoff-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-plan-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-collection-receipt-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-dataset-assembly-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-artist-binding-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
+          tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
+          tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-collector-activation-transition-v1.test.mts
+          tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
+          tests/sns-fandom-point-collection-run-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
+          tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-youtube-provider-client-identity-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-measurement-handoff-v1.test.mts
+          tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
