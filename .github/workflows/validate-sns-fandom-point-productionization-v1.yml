@@ -1,4 +1,5 @@
 name: Validate snsFandomPoint Productionization v1
+# Exact-head validation workflow for snsFandomPoint.
 
 on:
   push:
