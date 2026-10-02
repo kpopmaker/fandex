@@ -311,3 +311,34 @@ The study itself does not choose a winning aggregation method. It only produces
 decision-support evidence. Any future runtime scheduling needed to collect
 multiple exact content ages remains a Production Operations responsibility and
 must not be introduced by this variable branch.
+
+
+## Validation-study capture planning handoff
+
+Once provider approval and a corrected shared collector are available, the
+variable-side planner can emit deterministic prospective capture tasks for
+methodology validation.
+
+The shared runtime should consume, not redefine:
+
+- exact canonical artist id;
+- exact YouTube channel id;
+- exact manifest video id;
+- selected metric id;
+- explicit target content age;
+- computed captureAt;
+- target validation dataset id;
+- manifest evidence reference.
+
+The shared runtime must not:
+
+- invent a default target age;
+- shift a missed capture to collection time;
+- replace a missed exact-age capture with a later current counter;
+- trim content counts to make artists equal;
+- mutate dataset ids or content selection;
+- treat planning-ready as provider authorization.
+
+The planner itself never schedules jobs and always reports
+`schedulerMutationAllowed = false` and
+`collectionExecutionAuthorized = false`.
