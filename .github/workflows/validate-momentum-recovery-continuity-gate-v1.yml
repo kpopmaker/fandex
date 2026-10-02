@@ -1,0 +1,35 @@
+name: Validate Momentum recovery continuity gate v1
+
+on:
+  push:
+    branches:
+      - work/momentum-recovery-continuity-gate-v1
+  pull_request:
+    paths:
+      - 'lib/intelligence/fandexMomentumRecoveryContinuityGate.ts'
+      - 'scripts/operations/momentumRecoveryContinuityGateV1.mts'
+      - 'scripts/operations/momentumBlobRecoveryContinuityGateV1.mts'
+      - 'tests/momentum-recovery-continuity-gate-v1.test.mts'
+      - '.github/workflows/momentum-recovery-continuity-gate-v1.yml'
+      - '.github/workflows/momentum-blob-recovery-continuity-gate-v1.yml'
+      - 'lib/server/ingestion/naverNewsStoredEvidenceMirror.ts'
+      - '.github/workflows/validate-momentum-recovery-continuity-gate-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/momentum-recovery-continuity-gate-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

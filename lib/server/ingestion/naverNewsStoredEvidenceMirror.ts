@@ -486,6 +486,33 @@ export async function finalizeNaverNewsStoredEvidenceMirror(
   });
 }
 
+export async function finalizeNaverNewsStoredEvidenceMirrorByJobId(
+  jobId: string,
+  resultSha256: string,
+  store: ImmutableTextObjectStore,
+): Promise<Readonly<{
+  schedulerManifest: ImmutableTextObjectPutResult | null;
+  schedulerManifestPayloadDigest: string | null;
+}>> {
+  if (!isSha256(jobId) || !isSha256(resultSha256)) {
+    throw new Error('naver_news_stored_evidence_mirror_finalize_invalid');
+  }
+  const body = await store.readText(objectPathForJob(jobId));
+  if (body === null) {
+    throw new Error('naver_news_stored_evidence_mirror_stage_missing');
+  }
+  const job = decodeJobEnvelope(body);
+  const identity = buildNaverNewsJobIdentity(job.requestContract);
+  if (identity.jobId !== jobId || job.resultSha256 !== resultSha256) {
+    throw new Error('naver_news_stored_evidence_mirror_finalize_invalid');
+  }
+  return finalizeNaverNewsStoredEvidenceMirror(
+    identity,
+    resultSha256,
+    store,
+  );
+}
+
 export async function mirrorNaverNewsStoredEvidence(
   plan: NaverNewsIngestionWritePlan,
   store: ImmutableTextObjectStore,
@@ -537,7 +564,7 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
 }
 
 export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
-  store: ImmutableTextObjectStore,
+  store: Pick<ImmutableTextObjectStore, 'readText' | 'listPathnames'>,
 ): NaverNewsLatestOfficialShadowSlotReadRepository {
   return Object.freeze({
     async readSucceededSchedulerJobs(): Promise<

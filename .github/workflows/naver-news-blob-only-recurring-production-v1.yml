@@ -1,0 +1,100 @@
+name: NAVER News Blob-only recurring Production v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      execution_approval:
+        description: 'Separate Production approval: type approved-github-actions-blob-only-recurring-v1'
+        required: true
+        default: 'NO'
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fandex-naver-news-blob-only-recurring-production-v1
+  cancel-in-progress: false
+
+jobs:
+  direct:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.run_attempt == 1 &&
+      (
+        github.event_name == 'schedule' ||
+        (
+          github.event_name == 'workflow_dispatch' &&
+          inputs.execution_approval == 'approved-github-actions-blob-only-recurring-v1'
+        )
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_NAVER_BLOB_ONLY_DIRECT_EXECUTION_APPROVAL: approved-github-actions-blob-only-direct-v1
+      FANDEX_NAVER_NEWS_RECURRING_ENABLED: approved-v128-recurring-foundation
+      FANDEX_NAVER_NEWS_RECURRING_DEPLOYMENT: production
+      FANDEX_NAVER_NEWS_RECURRING_QUERY: 아이유 IU
+      FANDEX_NAVER_NEWS_RECURRING_DISPLAY: '100'
+      FANDEX_NAVER_NEWS_SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+      FANDEX_NAVER_NEWS_API_ENDPOINT: https://openapi.naver.com/v1/search/news.json
+      FANDEX_NAVER_NEWS_CLIENT_ID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
+      FANDEX_NAVER_NEWS_CLIENT_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Guard required secret bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FANDEX_NAVER_NEWS_SCHEDULER_SECRET"
+          test -n "$FANDEX_NAVER_NEWS_CLIENT_ID"
+          test -n "$FANDEX_NAVER_NEWS_CLIENT_SECRET"
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - run: npm ci
+
+      - name: Execute one Blob-only recurring candidate slot and finalize official manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts \
+            | tee /tmp/naver-blob-only-recurring-summary.json
+          node <<'NODE'
+          const fs = require('node:fs');
+          const lines = fs.readFileSync(
+            '/tmp/naver-blob-only-recurring-summary.json',
+            'utf8',
+          ).trim().split(/\r?\n/).filter(Boolean);
+          const summary = JSON.parse(lines.at(-1) ?? '{}');
+          if (
+            summary.mode !== 'github-actions-direct-blob-only'
+            || summary.databaseWrites !== 0
+            || summary.schedulerManifestFinalized !== true
+          ) {
+            process.exit(1);
+          }
+          console.log('FANDEX_NAVER_BLOB_ONLY_RECURRING_MANIFEST_FINALIZED=true');
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "databaseConnections=0"
+          echo "databaseWrites=0"
+          echo "schedulerManifestFinalizationRequired=true"
+          echo "retries=0"
+          echo "productActivations=0"
+          echo "rawProviderPayloadLogged=false"
+          echo "credentialsLogged=false"
