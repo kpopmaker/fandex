@@ -19,7 +19,7 @@ function manifest(
     providerClientRef: 'gcp-project-fandex-youtube-primary',
     selectionRule: 'official-channel-all-uploads-in-published-window',
     windowStart: '2026-10-01T00:00:00.000Z',
-    windowEnd: '2026-10-31T23:59:59.999Z',
+    windowEnd: '2026-10-01T23:59:59.999Z',
     uploadsPlaylistId: 'UU-' + artistId,
     providerEndpoints: [
       'youtube.channels.list',
