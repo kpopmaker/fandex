@@ -72,7 +72,7 @@ const RESULT: NaverNewsBlobOnlyCollectionStageSummary = Object.freeze({
     databaseQueries: 0,
     databaseWrites: 0,
     databaseCompletionPerformed: false,
-    schedulerManifestFinalized: false,
+    schedulerManifestFinalized: true,
     schedulesActivated: 0,
     environmentMutations: 0,
     productActivations: 0,
@@ -102,6 +102,7 @@ test('requires explicit direct Blob-only execution approval before store creatio
 test('runs one canonical Blob-only stage directly without Vercel or database effects', async () => {
   let storeCalls = 0;
   let stageCalls = 0;
+  let finalizeCalls = 0;
 
   const summary = await runNaverNewsBlobOnlyDirect(
     environment(),
@@ -126,11 +127,25 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
         assert.ok(dependencies.store);
         return RESULT;
       },
+      async finalizeManifest(jobId, resultSha256, store) {
+        finalizeCalls += 1;
+        assert.equal(jobId, RESULT.jobId);
+        assert.equal(resultSha256, RESULT.resultSha256);
+        assert.ok(store);
+        return Object.freeze({
+          schedulerManifest: Object.freeze({
+            status: 'created' as const,
+            pathname: 'fandex/naver-news/stored-evidence-mirror/v1/scheduler-manifests/test.json',
+          }),
+          schedulerManifestPayloadDigest: 'e'.repeat(64),
+        });
+      },
     },
   );
 
   assert.equal(storeCalls, 1);
   assert.equal(stageCalls, 1);
+  assert.equal(finalizeCalls, 1);
   assert.deepEqual(summary, {
     mode: 'github-actions-direct-blob-only',
     contractVersion: 'naver-news-blob-only-collection-stage-v1',
@@ -151,6 +166,27 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
     databaseWrites: 0,
     schedulerManifestFinalized: false,
   });
+});
+
+test('fails closed when a staged scheduler job does not produce an official manifest', async () => {
+  await assert.rejects(
+    () => runNaverNewsBlobOnlyDirect(
+      environment(),
+      {
+        createStore: () => fakeStore(),
+        async runStage() {
+          return RESULT;
+        },
+        async finalizeManifest() {
+          return Object.freeze({
+            schedulerManifest: null,
+            schedulerManifestPayloadDigest: null,
+          });
+        },
+      },
+    ),
+    /naver_news_blob_only_direct_manifest_required/,
+  );
 });
 
 test('rejects protocol drift before stage execution', async () => {
@@ -188,6 +224,7 @@ test('direct runner contains no Postgres, Vercel OIDC, or HTTP Production route 
   assert.doesNotMatch(source, /fetch\(/);
   assert.match(source, /runNaverNewsBlobOnlyCollectionStage/);
   assert.match(source, /createProductionNaverNewsBlobEvidenceStore/);
+  assert.match(source, /finalizeNaverNewsStoredEvidenceMirrorByJobId/);
 });
 
 test('Production workflow is manual-only, Vercel-independent, and secret-gated', async () => {
