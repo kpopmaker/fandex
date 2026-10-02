@@ -8,8 +8,15 @@ import {
   type SnsFandomProviderApprovalEvidence,
 } from '../lib/intelligence/snsFandomPointContracts';
 import {
+  buildSnsFandomProspectiveReactionCollectionHandoff,
   buildSnsFandomReactionCollectionHandoff,
 } from '../lib/intelligence/snsFandomPointReactionValidationCollectionHandoff';
+import {
+  buildSnsFandomProspectiveContentEnrollment,
+} from '../lib/intelligence/snsFandomPointReactionProspectiveContentEnrollment';
+import {
+  evaluateSnsFandomReactionCollectionReceipts,
+} from '../lib/intelligence/snsFandomPointReactionValidationCollectionReceipt';
 import {
   buildSnsFandomReactionValidationCollectionPlan,
 } from '../lib/intelligence/snsFandomPointReactionValidationCollectionPlan';
@@ -139,6 +146,51 @@ function collectorApprovedReady() {
     adapterRegistered: true,
     observationContractCompatible: true,
     collectionRequested: false,
+  });
+}
+
+
+function prospectiveEnrollment() {
+  return buildSnsFandomProspectiveContentEnrollment({
+    enrollmentId: 'prospective-handoff-iu-october-v1',
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    canonicalArtistId: 'iu',
+    youtubeChannelId: 'UC-iu',
+    providerClientRef: CLIENT,
+    selectionRule: 'official-channel-all-uploads-in-published-window',
+    windowStart: '2026-10-01T00:00:00.000Z',
+    windowEnd: '2026-10-31T23:59:59.999Z',
+    uploadsPlaylistId: 'UU-iu',
+    providerEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+    ],
+    targetAges: [
+      {
+        datasetId: 'dataset-age-7d',
+        targetContentAgeMilliseconds: AGE_7D,
+        rationaleEvidenceRef: 'evidence://methodology/age-7d',
+      },
+    ],
+    discoverySnapshots: [
+      {
+        observedAt: '2026-10-02T00:00:00.000Z',
+        pageCount: 1,
+        terminalNextPageToken: null,
+        terminalPageEvidenceRef:
+          'evidence://youtube/iu/uploads/2026-10-02/terminal',
+        evidenceRef: 'evidence://youtube/iu/uploads/2026-10-02',
+        items: [
+          {
+            videoId: 'iu-video-1',
+            publishedAt: '2026-10-01T12:00:00.000Z',
+            evidenceRef: 'evidence://youtube/iu-video-1/discovery',
+          },
+        ],
+      },
+    ],
   });
 }
 
@@ -370,4 +422,109 @@ test('approved-ready collector decision for another provider cannot authorize Yo
       'reaction-collection-handoff-collector-not-approved-ready',
     ),
   );
+});
+
+
+test('prospective enrollment crosses the same exact grant and collector gate before becoming a receipt-compatible handoff', () => {
+  const enrollment = prospectiveEnrollment();
+  const result = buildSnsFandomProspectiveReactionCollectionHandoff({
+    enrollment,
+    providerApproval: approval(),
+    collectorActivation: collectorApprovedReady(),
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+
+  assert.equal(enrollment.state, 'enrollment-active');
+  assert.equal(result.state, 'production-ops-handoff-ready');
+  assert.equal(result.planId, enrollment.enrollmentId);
+  assert.equal(result.productionOpsHandoffReady, true);
+  assert.equal(result.providerGrantValidated, true);
+  assert.equal(result.collectorApprovedReady, true);
+  assert.equal(result.pendingTasks.length, 1);
+  assert.equal(result.pendingTasks[0]?.videoId, 'iu-video-1');
+  assert.equal(
+    result.pendingTasks[0]?.contentSelectionEvidenceRef,
+    'evidence://youtube/iu-video-1/discovery',
+  );
+  assert.equal(result.schedulerMutationAllowed, false);
+  assert.equal(result.activationMutationAllowed, false);
+  assert.equal(result.collectionExecutionAuthorized, false);
+  assert.equal(result.deploymentAuthorized, false);
+  assert.deepEqual(result.blockers, []);
+});
+
+test('prospective handoff remains blocked without the real provider grant', () => {
+  const result = buildSnsFandomProspectiveReactionCollectionHandoff({
+    enrollment: prospectiveEnrollment(),
+    providerApproval: null,
+    collectorActivation: collectorApprovedReady(),
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.productionOpsHandoffReady, false);
+  assert.equal(result.providerGrantValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'reaction-collection-handoff-provider-approval-missing',
+    ),
+  );
+});
+
+test('prospective grant must remain active through the exact future capture time', () => {
+  const result = buildSnsFandomProspectiveReactionCollectionHandoff({
+    enrollment: prospectiveEnrollment(),
+    providerApproval: approval({
+      validUntil: '2026-10-05T00:00:00.000Z',
+    }),
+    collectorActivation: collectorApprovedReady(),
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.providerGrantValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'reaction-collection-handoff-provider-approval-not-active-for-capture',
+    ),
+  );
+});
+
+test('prospective handoff output is accepted unchanged by the existing exact-timing receipt evaluator', () => {
+  const handoff = buildSnsFandomProspectiveReactionCollectionHandoff({
+    enrollment: prospectiveEnrollment(),
+    providerApproval: approval(),
+    collectorActivation: collectorApprovedReady(),
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+  const task = handoff.pendingTasks[0];
+  assert.ok(task);
+
+  const result = evaluateSnsFandomReactionCollectionReceipts({
+    handoff,
+    receipts: [
+      {
+        taskId: task.taskId,
+        datasetId: task.datasetId,
+        canonicalArtistId: task.canonicalArtistId,
+        videoId: task.videoId,
+        metricId: task.metricId,
+        providerId: 'youtube-data-api',
+        providerClientRef: task.providerClientRef,
+        state: 'succeeded',
+        observedAt: task.captureAt,
+        collectedAt: task.captureAt,
+        observationId: 'obs-prospective-iu-video-1-age-7d',
+        collectionRunId: 'run-prospective-iu-video-1-age-7d',
+        evidenceRef: 'evidence://youtube/iu-video-1/capture-age-7d',
+        failureReason: null,
+      },
+    ],
+  });
+
+  assert.equal(result.state, 'capture-complete-lineage-pending');
+  assert.equal(result.targetAgeDatasetAssemblyEligible, true);
+  assert.equal(result.exactTargetAgeCaptureCount, 1);
+  assert.equal(result.deviatedCaptureCount, 0);
+  assert.deepEqual(result.blockers, []);
 });
