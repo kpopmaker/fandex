@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'work/sns-fandom-youtube-audit-screenshot-evidence-v1'
+    paths:
+      - '.github/workflows/capture-sns-fandom-youtube-audit-screenshots-v1.yml'
   workflow_dispatch:
 
 permissions:
