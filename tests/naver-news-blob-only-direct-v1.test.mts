@@ -11,8 +11,22 @@ import type {
 import type {
   ImmutableTextObjectStore,
 } from '../lib/server/storage/immutableTextObjectStore';
+import {
+  buildNaverNewsJobIdentity,
+} from '../lib/server/ingestion/naverNewsContracts';
 
 const APPROVAL = 'approved-github-actions-blob-only-direct-v1';
+
+const CURRENT_SLOT_COLLECTION_KEY =
+  'sched-v125-naver-news-20261002t000000z-f1ed381d367d';
+const CURRENT_SLOT_IDENTITY = buildNaverNewsJobIdentity({
+  provider: 'naver-news',
+  collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+  query: '아이유 IU',
+  display: 100,
+  start: 1,
+  sort: 'date',
+});
 
 function environment(
   overrides: Record<string, string | undefined> = {},
@@ -148,11 +162,11 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
   assert.equal(finalizeCalls, 1);
   assert.deepEqual(summary, {
     mode: 'github-actions-direct-blob-only',
+    runStatus: 'collected-and-finalized',
     contractVersion: 'naver-news-blob-only-collection-stage-v1',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     slotStart: '2026-10-02T00:00:00.000Z',
-    collectionKey:
-      'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
+    collectionKey: CURRENT_SLOT_COLLECTION_KEY,
     jobId: 'a'.repeat(64),
     resultSha256: 'c'.repeat(64),
     stagedObjectStatus: 'created',
@@ -163,9 +177,81 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
       duplicateRecords: 1,
       rejectedItems: 0,
     },
+    providerCalls: 1,
     databaseWrites: 0,
     schedulerManifestFinalized: true,
   });
+});
+
+test('skips provider collection when the current scheduler slot is already finalized', async () => {
+  let stageCalls = 0;
+  let finalizeCalls = 0;
+  const summary = await runNaverNewsBlobOnlyDirect(
+    environment(),
+    {
+      createStore: () => fakeStore(),
+      now: () => new Date('2026-10-02T00:17:00.000Z'),
+      async readSucceededSchedulerJobs() {
+        return Object.freeze([Object.freeze({
+          jobId: CURRENT_SLOT_IDENTITY.jobId,
+          collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+          requestContract: CURRENT_SLOT_IDENTITY.request,
+        })]);
+      },
+      async runStage() {
+        stageCalls += 1;
+        return RESULT;
+      },
+      async finalizeManifest() {
+        finalizeCalls += 1;
+        throw new Error('should_not_finalize');
+      },
+    },
+  );
+
+  assert.equal(stageCalls, 0);
+  assert.equal(finalizeCalls, 0);
+  assert.deepEqual(summary, {
+    mode: 'github-actions-direct-blob-only',
+    runStatus: 'already-finalized',
+    contractVersion: 'naver-news-blob-only-collection-stage-v1',
+    schedulerVersion: 'v125_naver_news_scheduler_v1',
+    slotStart: '2026-10-02T00:00:00.000Z',
+    collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+    jobId: CURRENT_SLOT_IDENTITY.jobId,
+    resultSha256: null,
+    stagedObjectStatus: null,
+    counts: null,
+    providerCalls: 0,
+    databaseWrites: 0,
+    schedulerManifestFinalized: true,
+  });
+});
+
+test('fails closed when finalized current-slot identity conflicts with the frozen plan', async () => {
+  let stageCalls = 0;
+  await assert.rejects(
+    () => runNaverNewsBlobOnlyDirect(
+      environment(),
+      {
+        createStore: () => fakeStore(),
+        now: () => new Date('2026-10-02T00:17:00.000Z'),
+        async readSucceededSchedulerJobs() {
+          return Object.freeze([Object.freeze({
+            jobId: 'f'.repeat(64),
+            collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+            requestContract: CURRENT_SLOT_IDENTITY.request,
+          })]);
+        },
+        async runStage() {
+          stageCalls += 1;
+          return RESULT;
+        },
+      },
+    ),
+    /naver_news_blob_only_direct_preflight_conflict/,
+  );
+  assert.equal(stageCalls, 0);
 });
 
 test('fails closed when a staged scheduler job does not produce an official manifest', async () => {
@@ -250,6 +336,10 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
   assert.doesNotMatch(workflow, /VERCEL_OIDC_TOKEN/);
   assert.doesNotMatch(workflow, /fandex-eta\.vercel\.app/);
   assert.doesNotMatch(workflow, /curl /);
+  assert.match(workflow, /runStatus === 'already-finalized'/);
+  assert.match(workflow, /providerCalls === 0/);
+  assert.match(workflow, /runStatus === 'collected-and-finalized'/);
+  assert.match(workflow, /providerCalls === 1/);
 });
 
 
@@ -297,5 +387,9 @@ test('recurring Production workflow activates the frozen hourly cadence and pres
   );
   assert.match(workflow, /schedulerManifestFinalized !== true/);
   assert.match(workflow, /schedulerManifestFinalizationRequired=true/);
+  assert.match(workflow, /runStatus === 'already-finalized'/);
+  assert.match(workflow, /providerCalls === 0/);
+  assert.match(workflow, /runStatus === 'collected-and-finalized'/);
+  assert.match(workflow, /providerCalls === 1/);
   assert.doesNotMatch(workflow, /FANDEX_RUNTIME_DATABASE_URL/);
 });

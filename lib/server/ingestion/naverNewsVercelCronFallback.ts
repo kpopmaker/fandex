@@ -7,6 +7,9 @@ import {
   isNaverNewsRecurringAuthorizationValid,
 } from './naverNewsRecurringSchedulerContracts';
 import {
+  finalizeNaverNewsStoredEvidenceMirrorByJobId,
+} from './naverNewsStoredEvidenceMirror';
+import {
   readNaverNewsShadowRecurringProtocol,
 } from './naverNewsShadowRecurringScheduler';
 import type {
@@ -25,7 +28,8 @@ type FailureClass =
   | 'config_rejected'
   | 'protocol_rejected'
   | 'runtime_unavailable'
-  | 'collection_stage_failed';
+  | 'collection_stage_failed'
+  | 'manifest_finalize_failed';
 
 export type NaverNewsVercelCronFallbackDependencies = Readonly<{
   resolveOidcToken?:
@@ -34,6 +38,7 @@ export type NaverNewsVercelCronFallbackDependencies = Readonly<{
     environment: Readonly<Record<string, string | undefined>>,
   ): ImmutableTextObjectStore;
   runStage?: typeof runNaverNewsBlobOnlyCollectionStage;
+  finalizeManifest?: typeof finalizeNaverNewsStoredEvidenceMirrorByJobId;
   now?: () => Date;
 }>;
 
@@ -118,8 +123,7 @@ function success(
       stagedObjectStatus: result.stagedObjectStatus,
       counts: result.counts,
       databaseWrites: result.safety.databaseWrites,
-      schedulerManifestFinalized:
-        result.safety.schedulerManifestFinalized,
+      schedulerManifestFinalized: true as const,
     },
     {
       status: 200,
@@ -200,10 +204,11 @@ export async function handleNaverNewsVercelCronFallback(
     return failure(503, 'runtime_unavailable');
   }
 
+  const runStage =
+    dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
+  let result: NaverNewsBlobOnlyCollectionStageSummary;
   try {
-    const runStage =
-      dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
-    const result = await runStage(
+    result = await runStage(
       {
         query: config.query,
         display: config.display,
@@ -214,9 +219,24 @@ export async function handleNaverNewsVercelCronFallback(
         ...(dependencies.now ? { now: dependencies.now } : {}),
       },
     );
-
-    return success(result);
   } catch {
     return failure(502, 'collection_stage_failed');
   }
+
+  const finalizeManifest = dependencies.finalizeManifest
+    ?? finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  try {
+    const finalized = await finalizeManifest(
+      result.jobId,
+      result.resultSha256,
+      store,
+    );
+    if (finalized.schedulerManifest === null) {
+      return failure(502, 'manifest_finalize_failed');
+    }
+  } catch {
+    return failure(502, 'manifest_finalize_failed');
+  }
+
+  return success(result);
 }
