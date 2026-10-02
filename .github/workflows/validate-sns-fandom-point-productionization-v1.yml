@@ -52,6 +52,12 @@ jobs:
           lib/intelligence/snsFandomPointReactionAggregationMethodology.ts
           lib/intelligence/snsFandomPointReactionMethodologyStudy.ts
           lib/intelligence/snsFandomPointReactionValidationDataset.ts
+          lib/intelligence/snsFandomPointObservationContract.ts
+          lib/intelligence/snsFandomPointObservationRevisionContract.ts
+          lib/intelligence/snsFandomPointProviderAdapterContract.ts
+          lib/intelligence/snsFandomPointCollectorActivationTransition.ts
+          lib/intelligence/snsFandomPointHistoricalSnapshotManifest.ts
+          lib/intelligence/snsFandomPointValidationDatasetEligibility.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
           lib/intelligence/snsFandomPointYoutubeAuditSubmissionReadiness.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
@@ -60,6 +66,7 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeContentSelection.ts
           lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
+          lib/intelligence/snsFandomPointYoutubeObservationAdapter.ts
           lib/intelligence/snsFandomPointProviderGrantActivationManifest.ts
           lib/intelligence/snsFandomPointCollectionRunManifest.ts
           lib/intelligence/snsFandomPointYoutubeRawCollectionSchema.ts
@@ -71,6 +78,7 @@ jobs:
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-collector-activation-transition-v1.test.mts
           tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
           tests/sns-fandom-point-collection-run-manifest-v1.test.mts
           tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
@@ -93,6 +101,7 @@ jobs:
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
+          tests/sns-fandom-point-collector-activation-transition-v1.test.mts
           tests/sns-fandom-point-provider-grant-activation-manifest-v1.test.mts
           tests/sns-fandom-point-collection-run-manifest-v1.test.mts
           tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
