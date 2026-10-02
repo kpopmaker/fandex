@@ -75,6 +75,7 @@ jobs:
           lib/intelligence/snsFandomPointYoutubeCollectorBridge.ts
           lib/intelligence/snsFandomPointYoutubeCollectorCompatibility.ts
           lib/intelligence/snsFandomPointYoutubeObservationAdapter.ts
+          lib/intelligence/snsFandomPointYoutubeQuotaWorksheet.ts
           lib/intelligence/snsFandomPointProviderGrantActivationManifest.ts
           lib/intelligence/snsFandomPointCollectionRunManifest.ts
           lib/intelligence/snsFandomPointYoutubeRawCollectionSchema.ts
@@ -98,6 +99,7 @@ jobs:
           tests/sns-fandom-point-collection-run-manifest-v1.test.mts
           tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
           tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
           tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
@@ -128,6 +130,7 @@ jobs:
           tests/sns-fandom-point-collection-run-manifest-v1.test.mts
           tests/sns-fandom-point-youtube-raw-collection-schema-v1.test.mts
           tests/sns-fandom-point-youtube-observation-adapter-mapping-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
           tests/sns-fandom-point-pipeline-lifecycle-v1.test.mts
 
       - run: npm run typecheck
