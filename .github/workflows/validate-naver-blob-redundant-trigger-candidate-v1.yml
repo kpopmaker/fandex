@@ -1,0 +1,69 @@
+name: Validate NAVER Blob redundant trigger candidate v1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/naver-news-blob-only-recurring-production-v1.yml'
+      - '.github/workflows/validate-naver-blob-redundant-trigger-candidate-v1.yml'
+      - 'tests/naver-news-blob-only-direct-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert redundant trigger remains dormant
+        env:
+          REDUNDANT_TRIGGER_GATE: ${{ vars.FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$REDUNDANT_TRIGGER_GATE" != "approved-github-redundant-20m-v1"
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const source = fs.readFileSync(
+            '.github/workflows/naver-news-blob-only-recurring-production-v1.yml',
+            'utf8',
+          );
+          const required = [
+            "cron: '17 * * * *'",
+            "cron: '37 * * * *'",
+            "cron: '57 * * * *'",
+            "github.event.schedule == '17 * * * *'",
+            "github.event.schedule == '37 * * * *'",
+            "github.event.schedule == '57 * * * *'",
+            "vars.FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED == 'approved-github-redundant-20m-v1'",
+            "runStatus === 'already-finalized'",
+            "providerCalls === 0",
+            "runStatus === 'collected-and-finalized'",
+            "providerCalls === 1",
+            "databaseWrites=0",
+            "productActivations=0",
+          ];
+          for (const token of required) {
+            if (!source.includes(token)) {
+              console.error('missing_contract_token:' + token);
+              process.exit(2);
+            }
+          }
+          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_CANDIDATE=valid');
+          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_GATE_ACTIVE=false');
+          console.log('primaryCronStillActive=true');
+          console.log('redundantProductionRequests=0');
+          NODE
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Direct Blob runner regression
+        run: npx tsx --test tests/naver-news-blob-only-direct-v1.test.mts
