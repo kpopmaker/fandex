@@ -406,3 +406,34 @@ produce a handoff before it becomes valid.
 Collector readiness is also bound to provider identity. An
 `approved-ready` decision for Instagram, TikTok, or any other provider cannot
 authorize a YouTube validation capture handoff.
+
+
+## Execution receipt returned from Production Ops
+
+After Ops executes a capture task, snsFandomPoint expects an execution receipt
+that preserves the original task identity and reports the actual observation
+time.
+
+Required successful receipt fields:
+
+- task id;
+- dataset id;
+- canonical artist id;
+- video id;
+- metric id;
+- provider/client binding;
+- actual observedAt;
+- collectedAt;
+- observation id;
+- collection run id;
+- evidence reference.
+
+A failed task must return an explicit failure reason.
+
+The variable-side receipt evaluator never treats scheduler delay as zero.
+`actualObservedAt - captureAt` is recorded exactly. Any non-zero deviation
+remains timing-review-required until a separately justified timing methodology
+exists.
+
+Receipt acceptance still does not complete methodology evidence. The later raw
+record / historical snapshot / revision lineage gate remains mandatory.
