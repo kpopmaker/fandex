@@ -807,3 +807,9 @@ mistaken for operational authorization.
 Current repository state still has no real YouTube provider grant, so the
 actual Production handoff remains externally blocked even though the internal
 handoff contract is now defined and testable.
+
+
+Handoff additionally binds collector readiness to provider identity and
+requires provider approval to be active both at the handoff evaluation time and
+at every future exact-age capture time. Future-dated approval evidence and
+approved-ready state from another provider fail closed.
