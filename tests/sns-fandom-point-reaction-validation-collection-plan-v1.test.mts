@@ -374,3 +374,39 @@ test('existing capture at the wrong content age cannot satisfy a target-age task
   );
   assert.equal(result.missedTaskCount, 1);
 });
+
+
+test('finalized-manifest planner rejects a publication window that is still open at planning time', () => {
+  const openWindowManifest = {
+    ...manifest('artist-a', ['2026-10-01T12:00:00.000Z']),
+    windowEnd: '2026-10-31T23:59:59.999Z',
+  };
+  const openWindowManifestB = {
+    ...manifest('artist-b', ['2026-10-01T18:00:00.000Z']),
+    windowEnd: '2026-10-31T23:59:59.999Z',
+  };
+
+  const result = buildSnsFandomReactionValidationCollectionPlan({
+    planId: 'reaction-plan-open-window',
+    plannedAt: '2026-10-02T00:00:00.000Z',
+    construct: 'typical-content-reaction-intensity',
+    metricId: 'youtube.video.view-count',
+    objectives: ['primary-validation'],
+    targetAges: [
+      {
+        datasetId: 'dataset-age-7d',
+        targetContentAgeMilliseconds: AGE_7D,
+        rationaleEvidenceRef: 'evidence://methodology/age-7d',
+      },
+    ],
+    artistManifests: [openWindowManifest, openWindowManifestB],
+    existingCaptures: [],
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(
+    result.blockers.includes(
+      'reaction-collection-plan-content-window-not-finalized',
+    ),
+  );
+});
