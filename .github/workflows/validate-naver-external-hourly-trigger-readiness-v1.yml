@@ -1,0 +1,91 @@
+name: Validate NAVER external hourly trigger readiness v1
+
+on:
+  push:
+    branches:
+      - integration/ops-naver-external-hourly-trigger-readiness-v1
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: >-
+      github.event_name == 'push' ||
+      github.head_ref == 'integration/ops-naver-external-hourly-trigger-readiness-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main "$PR_HEAD_SHA")"
+            git diff --name-only "$MERGE_BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            MERGE_BASE="$(git merge-base refs/remotes/origin/main HEAD)"
+            git diff --name-only "$MERGE_BASE...HEAD" | sort > /tmp/changed.txt
+          fi
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-naver-external-hourly-trigger-readiness-v1.yml
+          ops/render/naver-hourly-external-trigger.render.yaml
+          scripts/ops/run-naver-external-hourly-trigger-v1.mjs
+          tests/naver-news-external-hourly-trigger-v1.test.mjs
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: External trigger unit regression
+        run: node --test tests/naver-news-external-hourly-trigger-v1.test.mjs
+
+      - name: Assert dormant Render blueprint contract
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const source = fs.readFileSync(
+            'ops/render/naver-hourly-external-trigger.render.yaml',
+            'utf8',
+          );
+          const required = [
+            "type: cron",
+            "region: singapore",
+            "schedule: '17 * * * *'",
+            "node scripts/ops/run-naver-external-hourly-trigger-v1.mjs",
+            "FANDEX_NAVER_EXTERNAL_SCHEDULER_ENDPOINT",
+            "FANDEX_NAVER_EXTERNAL_SCHEDULER_SECRET",
+            "sync: false",
+          ];
+          for (const token of required) {
+            if (!source.includes(token)) {
+              console.error('missing_contract_token:' + token);
+              process.exit(2);
+            }
+          }
+          console.log('FANDEX_NAVER_EXTERNAL_TRIGGER_BLUEPRINT=dormant-valid');
+          console.log('productionSchedulerActivations=0');
+          console.log('databaseWrites=0');
+          console.log('productActivations=0');
+          NODE
+
+      - run: npm run lint
+      - run: npm run build
