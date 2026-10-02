@@ -11,6 +11,9 @@ import {
 import {
   evaluateSnsFandomYoutubeProviderClientIdentity,
 } from '../lib/intelligence/snsFandomPointYoutubeProviderClientIdentity';
+import {
+  evaluateSnsFandomYoutubeAuditArtistBindingManifest,
+} from '../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
 
 function providerClientIdentity() {
   return evaluateSnsFandomYoutubeProviderClientIdentity({
@@ -25,6 +28,23 @@ function providerClientIdentity() {
   });
 }
 
+function artistBindingManifest() {
+  return evaluateSnsFandomYoutubeAuditArtistBindingManifest({
+    manifestId: 'youtube-audit-binding-manifest-study-v1',
+    evidenceRef: 'external://youtube-audit/verified-channel-bindings',
+    members: Array.from({ length: 12 }, (_, index) => ({
+      canonicalArtistId: `artist-${index + 1}`,
+      youtubeChannelId:
+        `UC${String(index + 1).padStart(22, '0')}`,
+      bindingState: 'verified' as const,
+      includedInAuditScope: true,
+      evidenceRef: `external://youtube-binding/artist-${index + 1}`,
+      verifiedAt: '2026-10-02T11:30:00.000Z',
+      sharedChannelCaveat: null,
+    })),
+  });
+}
+
 function quotaWorksheet() {
   return evaluateSnsFandomYoutubeQuotaWorksheet({
     providerClientRef: 'gcp-project-fandex-youtube-primary',
@@ -36,6 +56,7 @@ function quotaWorksheet() {
       'youtube.commentThreads.list',
       'youtube.comments.list',
     ],
+    artistBindingManifest: artistBindingManifest(),
     measuredUsage: {
       artistChannelCount: 12,
       uploadManifestPageCountPerReactionRun: 7,
