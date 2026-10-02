@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 
 import {
   evaluateFandexMomentumRecoveryContinuityFromRepository,
@@ -250,4 +251,57 @@ test('finalized Blob official scheduler manifest feeds the same recovery gate co
   assert.equal(value.candidateProtocolStart, '2026-10-01T14:00:00.000Z');
   assert.equal(value.latestSuccessfulSlotStart, '2026-10-01T14:00:00.000Z');
   assert.equal(value.contiguousSuccessfulSlotCount, 1);
+});
+
+
+test('Blob recovery runner reuses finalized official manifests without database or Blob writes', async () => {
+  const [script, workflow] = await Promise.all([
+    readFile(
+      new URL(
+        '../scripts/operations/momentumBlobRecoveryContinuityGateV1.mts',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        '../.github/workflows/momentum-blob-recovery-continuity-gate-v1.yml',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  ]);
+
+  assert.match(
+    script,
+    /createProductionNaverNewsBlobEvidenceReadStore/,
+  );
+  assert.match(
+    script,
+    /createObjectStoreNaverNewsLatestOfficialShadowSlotRepository/,
+  );
+  assert.match(
+    script,
+    /evaluateFandexMomentumRecoveryContinuityFromRepository/,
+  );
+  assert.doesNotMatch(script, /from ['"]pg['"]/);
+  assert.doesNotMatch(script, /FANDEX_RUNTIME_DATABASE_URL/);
+  assert.doesNotMatch(script, /putTextIfAbsent/);
+  assert.doesNotMatch(script, /stageNaverNewsStoredEvidenceMirror/);
+  assert.doesNotMatch(script, /finalizeNaverNewsStoredEvidenceMirror/);
+
+  assert.match(workflow, /workflow_run:/);
+  assert.match(
+    workflow,
+    /NAVER News Blob-only recurring Production v1/,
+  );
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.match(
+    workflow,
+    /BLOB_READ_WRITE_TOKEN: \$\{\{ secrets\.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN \}\}/,
+  );
+  assert.match(workflow, /blobWrites=0/);
+  assert.match(workflow, /databaseWrites=0/);
+  assert.match(workflow, /productionActivations=0/);
 });

@@ -1,0 +1,61 @@
+name: Momentum Blob recovery continuity gate v1
+
+on:
+  workflow_run:
+    workflows:
+      - NAVER News Blob-only recurring Production v1
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: momentum-blob-recovery-continuity-gate-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Guard Blob read credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - run: npm ci
+
+      - name: Evaluate Blob recovery continuity
+        run: npx tsx scripts/operations/momentumBlobRecoveryContinuityGateV1.mts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "evidenceSource=immutable-blob-official-scheduler-manifest"
+          echo "blobWrites=0"
+          echo "databaseReads=0"
+          echo "databaseWrites=0"
+          echo "historyWrites=0"
+          echo "registryMutations=0"
+          echo "productionActivations=0"
