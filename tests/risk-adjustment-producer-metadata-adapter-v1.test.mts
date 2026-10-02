@@ -6,6 +6,9 @@ import {
   RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS,
 } from '../lib/intelligence/riskAdjustmentProducerMetadataAdapter';
 import {
+  NEWS_ISSUE_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
+} from '../lib/product/adapters/newsIssuePointRiskQualityMetadata';
+import {
   assembleRiskAdjustmentFromQualityEnvelopes,
 } from '../lib/intelligence/riskAdjustmentQualityEnvelopeAssembly';
 
@@ -88,6 +91,10 @@ test('known producer contract identities are explicit and Variable-bound', () =>
     newsIssuePoint: 'news-issue-point-risk-quality-metadata-v1',
     comebackActivityPoint: 'activity-exposure-risk-quality-metadata-v1',
   });
+  assert.equal(
+    RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.newsIssuePoint,
+    NEWS_ISSUE_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
+  );
 });
 
 test('newsIssuePoint producer metadata adapts directly to an accepted Risk envelope', () => {
