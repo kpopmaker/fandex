@@ -79,24 +79,20 @@ test('all upstream candidates have a deterministic owner handoff scope', () => {
   });
 });
 
-test('current newsIssuePoint is Real Production but metadata-blocked', () => {
+test('current newsIssuePoint is Real Production and accepted at the metadata handoff boundary', () => {
   const result = evaluateRiskAdjustmentUpstreamHandoff({
     lifecycleState: 'production',
     materialClass: 'real',
     capability: NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_CAPABILITY,
   });
 
-  assert.equal(result.status, 'required-metadata-blocked');
-  assert.equal(result.acceptedForRiskConsumption, false);
+  assert.equal(result.status, 'accepted');
+  assert.equal(result.acceptedForRiskConsumption, true);
   assert.equal(result.ownerScope, 'news-issue-product-owner');
-  assert.deepEqual(result.missingRequiredDimensions, [
-    'confidence',
-    'conflict',
-    'coverage',
-    'freshness',
-    'revision',
-  ]);
-  assert.deepEqual(result.blockers, ['required-quality-metadata-absent']);
+  assert.deepEqual(result.missingRequiredDimensions, []);
+  assert.deepEqual(result.unknownRequiredDimensions, []);
+  assert.deepEqual(result.blockers, []);
+  assert.deepEqual(result.optionalDimensionsNotExplicit, ['volatility']);
 });
 
 test('current Activity Exposure is Real Production but metadata-blocked', () => {
@@ -206,18 +202,18 @@ test('current Real upstream inventory separates Product reality from Risk accept
   );
   assert.deepEqual(RISK_ADJUSTMENT_CURRENT_REAL_UPSTREAM_READINESS, {
     candidateCount: 2,
-    acceptedCount: 0,
-    metadataBlockedCount: 2,
+    acceptedCount: 1,
+    metadataBlockedCount: 1,
     notProductionEligibleCount: 0,
   });
-  assert.equal(
-    RISK_ADJUSTMENT_CURRENT_REAL_UPSTREAM_HANDOFFS.every(
-      (handoff) =>
-        handoff.lifecycleState === 'production'
-        && handoff.materialClass === 'real'
-        && handoff.status === 'required-metadata-blocked'
-        && handoff.acceptedForRiskConsumption === false,
-    ),
-    true,
+  const news = RISK_ADJUSTMENT_CURRENT_REAL_UPSTREAM_HANDOFFS.find(
+    (handoff) => handoff.variableId === 'newsIssuePoint',
   );
+  const activity = RISK_ADJUSTMENT_CURRENT_REAL_UPSTREAM_HANDOFFS.find(
+    (handoff) => handoff.variableId === 'comebackActivityPoint',
+  );
+  assert.equal(news?.status, 'accepted');
+  assert.equal(news?.acceptedForRiskConsumption, true);
+  assert.equal(activity?.status, 'required-metadata-blocked');
+  assert.equal(activity?.acceptedForRiskConsumption, false);
 });
