@@ -60,7 +60,7 @@ function completeCapability(
   };
 }
 
-test('current Real upstream projections are not consumed while handoffs are metadata-blocked', () => {
+test('current Real upstream assembly consumes merged news metadata but keeps Activity Exposure blocked', () => {
   const newsHandoff = evaluateRiskAdjustmentUpstreamHandoff({
     lifecycleState: 'production',
     materialClass: 'real',
@@ -98,12 +98,18 @@ test('current Real upstream projections are not consumed while handoffs are meta
     ],
   });
 
-  assert.deepEqual(result.consumedVariableIds, []);
+  assert.deepEqual(result.consumedVariableIds, ['newsIssuePoint']);
   assert.deepEqual(result.blockedVariableIds, [
     'comebackActivityPoint',
-    'newsIssuePoint',
   ]);
-  assert.equal(result.dependencies.every((entry) => !entry.consumed), true);
+  const news = result.dependencies.find(
+    (entry) => entry.variableId === 'newsIssuePoint',
+  );
+  const activity = result.dependencies.find(
+    (entry) => entry.variableId === 'comebackActivityPoint',
+  );
+  assert.equal(news?.consumed, true);
+  assert.equal(activity?.consumed, false);
   assert.equal(
     result.dependencies.every((entry) => entry.projectionPresent),
     true,
