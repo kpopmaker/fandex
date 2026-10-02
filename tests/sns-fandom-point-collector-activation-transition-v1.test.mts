@@ -18,6 +18,7 @@ const readyInput = {
 test('collector activation requires all provider gates', () => {
   const result = evaluateSnsFandomCollectorActivationTransition(readyInput);
 
+  assert.equal(result.providerId, 'youtube-data-api');
   assert.equal(result.state, 'approved-ready');
   assert.equal(result.collectionAuthorized, false);
 });
