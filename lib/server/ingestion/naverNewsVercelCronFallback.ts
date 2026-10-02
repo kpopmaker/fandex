@@ -1,4 +1,5 @@
 import {
+  NAVER_NEWS_BLOB_ONLY_COLLECTION_STAGE_VERSION,
   runNaverNewsBlobOnlyCollectionStage,
   type NaverNewsBlobOnlyCollectionStageSummary,
 } from './naverNewsBlobOnlyCollectionStage';
@@ -7,8 +8,19 @@ import {
   isNaverNewsRecurringAuthorizationValid,
 } from './naverNewsRecurringSchedulerContracts';
 import {
+  createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
   finalizeNaverNewsStoredEvidenceMirrorByJobId,
 } from './naverNewsStoredEvidenceMirror';
+import {
+  buildNaverNewsSchedulerPlan,
+} from './naverNewsScheduler';
+import {
+  buildNaverNewsJobIdentity,
+  canonicalJson,
+} from './naverNewsContracts';
+import type {
+  NaverNewsSucceededSchedulerJob,
+} from './naverNewsLatestOfficialShadowSlot';
 import {
   readNaverNewsShadowRecurringProtocol,
 } from './naverNewsShadowRecurringScheduler';
@@ -28,6 +40,7 @@ type FailureClass =
   | 'config_rejected'
   | 'protocol_rejected'
   | 'runtime_unavailable'
+  | 'preflight_failed'
   | 'collection_stage_failed'
   | 'manifest_finalize_failed';
 
@@ -39,6 +52,9 @@ export type NaverNewsVercelCronFallbackDependencies = Readonly<{
   ): ImmutableTextObjectStore;
   runStage?: typeof runNaverNewsBlobOnlyCollectionStage;
   finalizeManifest?: typeof finalizeNaverNewsStoredEvidenceMirrorByJobId;
+  readSucceededSchedulerJobs?: (
+    store: ImmutableTextObjectStore,
+  ) => Promise<readonly NaverNewsSucceededSchedulerJob[]>;
   now?: () => Date;
 }>;
 
@@ -105,8 +121,24 @@ async function resolveRuntimeEnvironment(
   });
 }
 
+type NaverNewsVercelCronFallbackSuccess = Readonly<{
+  runStatus: 'collected-and-finalized' | 'already-finalized';
+  contractVersion: typeof NAVER_NEWS_BLOB_ONLY_COLLECTION_STAGE_VERSION;
+  schedulerVersion: NaverNewsBlobOnlyCollectionStageSummary['schedulerVersion'];
+  slotStart: string;
+  collectionKey: string;
+  jobId: string;
+  resultSha256: string | null;
+  stagedObjectStatus:
+    | NaverNewsBlobOnlyCollectionStageSummary['stagedObjectStatus']
+    | null;
+  counts: NaverNewsBlobOnlyCollectionStageSummary['counts'] | null;
+  providerCalls: 0 | 1;
+  databaseWrites: 0;
+}>;
+
 function success(
-  result: NaverNewsBlobOnlyCollectionStageSummary,
+  summary: NaverNewsVercelCronFallbackSuccess,
 ): Response {
   return Response.json(
     {
@@ -114,15 +146,7 @@ function success(
       mode: NAVER_NEWS_VERCEL_CRON_FALLBACK_VERSION,
       trigger: 'vercel-cron-authenticated' as const,
       schedule: NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE,
-      contractVersion: result.contractVersion,
-      schedulerVersion: result.schedulerVersion,
-      slotStart: result.slotStart,
-      collectionKey: result.collectionKey,
-      jobId: result.jobId,
-      resultSha256: result.resultSha256,
-      stagedObjectStatus: result.stagedObjectStatus,
-      counts: result.counts,
-      databaseWrites: result.safety.databaseWrites,
+      ...summary,
       schedulerManifestFinalized: true as const,
     },
     {
@@ -204,6 +228,64 @@ export async function handleNaverNewsVercelCronFallback(
     return failure(503, 'runtime_unavailable');
   }
 
+  const now = dependencies.now ?? (() => new Date());
+  let instant: Date;
+  try {
+    instant = now();
+  } catch {
+    return failure(502, 'preflight_failed');
+  }
+
+  let schedulerPlan: ReturnType<typeof buildNaverNewsSchedulerPlan>;
+  let expectedIdentity: ReturnType<typeof buildNaverNewsJobIdentity>;
+  try {
+    schedulerPlan = buildNaverNewsSchedulerPlan({
+      query: config.query,
+      display: config.display,
+      at: instant,
+    });
+    expectedIdentity = buildNaverNewsJobIdentity(schedulerPlan.command);
+  } catch {
+    return failure(502, 'preflight_failed');
+  }
+
+  try {
+    const readSucceededSchedulerJobs =
+      dependencies.readSucceededSchedulerJobs
+      ?? ((candidateStore: ImmutableTextObjectStore) =>
+        createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+          candidateStore,
+        ).readSucceededSchedulerJobs());
+    const jobs = await readSucceededSchedulerJobs(store);
+    const currentOfficialJob = jobs.find((job) =>
+      job.collectionKey === schedulerPlan.collectionKey
+    );
+    if (currentOfficialJob) {
+      if (
+        currentOfficialJob.jobId !== expectedIdentity.jobId
+        || canonicalJson(currentOfficialJob.requestContract)
+          !== canonicalJson(expectedIdentity.request)
+      ) {
+        return failure(502, 'preflight_failed');
+      }
+      return success(Object.freeze({
+        runStatus: 'already-finalized' as const,
+        contractVersion: NAVER_NEWS_BLOB_ONLY_COLLECTION_STAGE_VERSION,
+        schedulerVersion: schedulerPlan.schedulerVersion,
+        slotStart: schedulerPlan.slotStart,
+        collectionKey: schedulerPlan.collectionKey,
+        jobId: currentOfficialJob.jobId,
+        resultSha256: null,
+        stagedObjectStatus: null,
+        counts: null,
+        providerCalls: 0 as const,
+        databaseWrites: 0 as const,
+      }));
+    }
+  } catch {
+    return failure(502, 'preflight_failed');
+  }
+
   const runStage =
     dependencies.runStage ?? runNaverNewsBlobOnlyCollectionStage;
   let result: NaverNewsBlobOnlyCollectionStageSummary;
@@ -216,7 +298,7 @@ export async function handleNaverNewsVercelCronFallback(
       },
       {
         store,
-        ...(dependencies.now ? { now: dependencies.now } : {}),
+        now: () => instant,
       },
     );
   } catch {
@@ -238,5 +320,17 @@ export async function handleNaverNewsVercelCronFallback(
     return failure(502, 'manifest_finalize_failed');
   }
 
-  return success(result);
+  return success(Object.freeze({
+    runStatus: 'collected-and-finalized' as const,
+    contractVersion: result.contractVersion,
+    schedulerVersion: result.schedulerVersion,
+    slotStart: result.slotStart,
+    collectionKey: result.collectionKey,
+    jobId: result.jobId,
+    resultSha256: result.resultSha256,
+    stagedObjectStatus: result.stagedObjectStatus,
+    counts: result.counts,
+    providerCalls: 1 as const,
+    databaseWrites: result.safety.databaseWrites,
+  }));
 }
