@@ -322,3 +322,52 @@ test('blocked planning contract can never become handoff-ready', () => {
     ),
   );
 });
+
+
+test('provider approval must already be active at handoff time, not only by the future capture time', () => {
+  const result = buildSnsFandomReactionCollectionHandoff({
+    plan: plan(),
+    providerApproval: approval({
+      approvedAt: '2026-10-03T00:00:00.000Z',
+    }),
+    collectorActivation: collectorApprovedReady(),
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.providerGrantValidated, false);
+  assert.ok(
+    result.blockers.includes(
+      'reaction-collection-handoff-provider-approval-not-active-at-handoff',
+    ),
+  );
+});
+
+test('approved-ready collector decision for another provider cannot authorize YouTube handoff', () => {
+  const otherCollector = evaluateSnsFandomCollectorActivationTransition({
+    providerId: 'instagram-api',
+    providerApprovalGranted: true,
+    approvalEvidenceComplete: true,
+    rightsState: 'authorized',
+    adapterRegistered: true,
+    observationContractCompatible: true,
+    collectionRequested: false,
+  });
+
+  const result = buildSnsFandomReactionCollectionHandoff({
+    plan: plan(),
+    providerApproval: approval(),
+    collectorActivation: otherCollector,
+    evaluatedAt: '2026-10-02T00:00:00.000Z',
+  });
+
+  assert.equal(otherCollector.state, 'approved-ready');
+  assert.equal(otherCollector.providerId, 'instagram-api');
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.collectorApprovedReady, false);
+  assert.ok(
+    result.blockers.includes(
+      'reaction-collection-handoff-collector-not-approved-ready',
+    ),
+  );
+});
