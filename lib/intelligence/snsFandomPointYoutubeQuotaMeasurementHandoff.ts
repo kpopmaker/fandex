@@ -1,4 +1,5 @@
 import {
+  type SnsFandomYoutubeAuditArtistBinding,
   type SnsFandomYoutubeAuditArtistBindingManifestResult,
 } from './snsFandomPointYoutubeAuditArtistBindingManifest';
 import {
@@ -21,6 +22,7 @@ export type SnsFandomYoutubeQuotaMeasurementHandoffInput = Readonly<{
   handoffId: string;
   preparedAt: string;
   artistBindingManifest: SnsFandomYoutubeAuditArtistBindingManifestResult | null;
+  artistBindings: readonly SnsFandomYoutubeAuditArtistBinding[];
   providerClientIdentity: SnsFandomYoutubeProviderClientIdentityResult | null;
   requestedEndpoints: readonly SnsFandomYoutubeQuotaEndpoint[];
   measurementWindowStart: string;
@@ -151,6 +153,35 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     }
   }
 
+  if (manifestReady && manifest !== null) {
+    const selectedBindings = input.artistBindings
+      .filter((member) => member.includedInAuditScope)
+      .map((member) => ({
+        canonicalArtistId: member.canonicalArtistId,
+        youtubeChannelId: member.youtubeChannelId,
+      }))
+      .sort((left, right) =>
+        left.canonicalArtistId.localeCompare(right.canonicalArtistId)
+        || left.youtubeChannelId.localeCompare(right.youtubeChannelId));
+
+    const selectedArtistIds = selectedBindings
+      .map((member) => member.canonicalArtistId)
+      .sort();
+    const selectedChannelIds = selectedBindings
+      .map((member) => member.youtubeChannelId)
+      .sort();
+
+    if (
+      selectedBindings.length !== manifest.auditScopeMemberCount
+      || JSON.stringify(selectedArtistIds)
+        !== JSON.stringify([...manifest.auditScopeCanonicalArtistIds].sort())
+      || JSON.stringify(selectedChannelIds)
+        !== JSON.stringify([...manifest.auditScopeYoutubeChannelIds].sort())
+    ) {
+      blockers.push('youtube-quota-measurement-binding-rows-mismatch');
+    }
+  }
+
   const client = input.providerClientIdentity;
   let clientReady = false;
   if (client === null) {
@@ -213,29 +244,27 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     && Date.parse(input.measurementWindowStart)
       < Date.parse(input.measurementWindowEnd)
   ) {
-    const artistIds = [...manifest.auditScopeCanonicalArtistIds].sort();
-    const channelIds = [...manifest.auditScopeYoutubeChannelIds].sort();
+    const selectedBindings = input.artistBindings
+      .filter((member) => member.includedInAuditScope)
+      .sort((left, right) =>
+        left.canonicalArtistId.localeCompare(right.canonicalArtistId));
 
-    if (artistIds.length !== channelIds.length) {
-      blockers.push('youtube-quota-measurement-binding-count-mismatch');
-    } else {
-      for (let index = 0; index < artistIds.length; index += 1) {
-        tasks.push(Object.freeze({
-          taskId:
-            `${input.handoffId}:${artistIds[index]}:${channelIds[index]}`,
-          canonicalArtistId: artistIds[index],
-          youtubeChannelId: channelIds[index],
-          providerClientRef: client.providerClientRef,
-          measurementWindowStart: input.measurementWindowStart,
-          measurementWindowEnd: input.measurementWindowEnd,
-          endpointChain: REACTION_ENDPOINTS,
-          requiredOutputs: Object.freeze([
-            'uploadsPlaylistId',
-            'playlistItemsPagesTraversed',
-            'includedVideoCount',
-          ] as const),
-        }));
-      }
+    for (const binding of selectedBindings) {
+      tasks.push(Object.freeze({
+        taskId:
+          `${input.handoffId}:${binding.canonicalArtistId}:${binding.youtubeChannelId}`,
+        canonicalArtistId: binding.canonicalArtistId,
+        youtubeChannelId: binding.youtubeChannelId,
+        providerClientRef: client.providerClientRef,
+        measurementWindowStart: input.measurementWindowStart,
+        measurementWindowEnd: input.measurementWindowEnd,
+        endpointChain: REACTION_ENDPOINTS,
+        requiredOutputs: Object.freeze([
+          'uploadsPlaylistId',
+          'playlistItemsPagesTraversed',
+          'includedVideoCount',
+        ] as const),
+      }));
     }
   }
 
