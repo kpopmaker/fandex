@@ -69,6 +69,7 @@ function validationDataset(
     targetContentAgeMilliseconds: 604800000,
     members: [],
     revisionStabilityReviewed: true,
+    lineageValidated: true,
     methodologyValidationEligible: true,
     aggregateValuesProduced: false,
     normalizedValuesProduced: false,
