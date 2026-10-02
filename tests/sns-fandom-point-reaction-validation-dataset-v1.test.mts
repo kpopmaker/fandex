@@ -5,8 +5,12 @@ import {
   type SnsFandomObservation,
 } from '../lib/intelligence/snsFandomPointContracts';
 import {
-  buildSnsFandomReactionValidationDataset,
+  buildSnsFandomReactionValidationDataset as buildReactionValidationDataset,
+  type SnsFandomReactionValidationDatasetInput,
 } from '../lib/intelligence/snsFandomPointReactionValidationDataset';
+import {
+  type SnsFandomReactionValidationLineageEntry,
+} from '../lib/intelligence/snsFandomPointReactionValidationLineage';
 import {
   type SnsFandomYoutubeContentManifest,
 } from '../lib/intelligence/snsFandomPointYoutubeContentSelection';
@@ -161,11 +165,132 @@ function stableAudit() {
   };
 }
 
+function lineageEntriesFor(
+  artists: SnsFandomReactionValidationDatasetInput['artists'],
+  metricId: SnsFandomReactionValidationDatasetInput['metricId'],
+): readonly SnsFandomReactionValidationLineageEntry[] {
+  const entries: SnsFandomReactionValidationLineageEntry[] = [];
+
+  for (const artist of artists) {
+    for (const observation of artist.observations) {
+      if (
+        observation.variable.metricId !== metricId
+        || observation.entity.providerContentId === null
+      ) {
+        continue;
+      }
+
+      const evidenceRef = observation.evidence.evidenceRef;
+      const identityRef =
+        'identity://' + observation.entity.canonicalArtistId;
+      const rawValue = observation.value.rawValue;
+      const rawString = rawValue === null ? null : String(rawValue);
+
+      entries.push({
+        canonicalArtistId: observation.entity.canonicalArtistId,
+        observationId: observation.observationId,
+        collectionRun: {
+          manifestVersion: 'sns-fandom-collection-run-manifest-v1',
+          runId: 'run:' + observation.observationId,
+          providerId: 'youtube-data-api',
+          adapterVersion: 'youtube-adapter-v1',
+          approvalEvidenceRef: 'evidence://youtube/approval/v1',
+          rightsState: 'authorized',
+          collectionState: 'completed',
+          startedAt: observation.time.observedAt,
+          completedAt: observation.time.collectedAt,
+          observationCount: 1,
+          evidenceRefs: [evidenceRef],
+          failureReasons: [],
+        },
+        rawRecord: {
+          schemaVersion: 'sns-fandom-youtube-raw-collection-schema-v1',
+          provider: 'youtube-data-api',
+          providerResourceId: observation.entity.providerContentId,
+          channelId: observation.entity.providerArtistId ?? '',
+          artistIdentityRef: identityRef,
+          observationWindow: {
+            startAt: observation.time.observedAt,
+            endAt: observation.time.observedAt,
+          },
+          observedAt: observation.time.observedAt,
+          collectedAt: observation.time.collectedAt,
+          metrics: {
+            viewCount:
+              metricId === 'youtube.video.view-count'
+                ? rawString
+                : null,
+            likeCount:
+              metricId === 'youtube.video.like-count'
+                ? rawString
+                : null,
+            commentCount:
+              metricId === 'youtube.video.comment-count'
+                ? rawString
+                : null,
+          },
+          rightsState: 'authorized-and-collectable',
+          evidenceRefs: [evidenceRef],
+        },
+        historicalSnapshot: {
+          contractVersion: 'sns-fandom-historical-snapshot-manifest-v1',
+          snapshotId: 'snapshot:' + observation.observationId,
+          providerId: 'youtube-data-api',
+          artistIdentityRef: identityRef,
+          observationWindow: {
+            start: observation.time.observedAt,
+            end: observation.time.observedAt,
+          },
+          collectionTimestamp: observation.time.collectedAt,
+          observationTimestampSource: 'provider-observation-time',
+          state: 'validated',
+          lineage: {
+            providerResponseRef: evidenceRef,
+            adapterVersion: 'youtube-adapter-v1',
+            evidenceRefs: [evidenceRef],
+          },
+          revision: {
+            previousSnapshotId: null,
+            supersedesSnapshotId: null,
+            revisionReason: null,
+          },
+          eligibility: {
+            usableForMethodologyValidation: true,
+            usableForScoring: false,
+          },
+        },
+        revisionEvent: {
+          revisionId: 'revision:' + observation.observationId,
+          observationId: observation.observationId,
+          providerId: 'youtube-data-api',
+          previousRevisionId: null,
+          revisionType: 'initial-capture',
+          observedAt: observation.time.observedAt,
+          collectedAt: observation.time.collectedAt,
+          reason: 'initial provider capture',
+          evidenceRefs: [evidenceRef],
+        },
+      });
+    }
+  }
+
+  return entries;
+}
+
+function buildDataset(
+  input: Omit<SnsFandomReactionValidationDatasetInput, 'lineageEntries'>,
+) {
+  return buildReactionValidationDataset({
+    ...input,
+    lineageEntries: lineageEntriesFor(input.artists, input.metricId),
+  });
+}
+
 test('real exact-age multi-artist evidence forms a validation-ready dataset without producing aggregates', () => {
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1', 'b-2']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'reaction-validation-v1',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -182,6 +307,7 @@ test('real exact-age multi-artist evidence forms a validation-ready dataset with
   assert.equal(result.targetContentAgeMilliseconds, AGE_MS);
   assert.equal(result.methodologyValidationEligible, true);
   assert.equal(result.revisionStabilityReviewed, true);
+  assert.equal(result.lineageValidated, true);
   assert.equal(result.aggregateValuesProduced, false);
   assert.equal(result.normalizedValuesProduced, false);
   assert.equal(result.arbitraryContentCountEqualizationAllowed, false);
@@ -199,7 +325,7 @@ test('real exact-age multi-artist evidence forms a validation-ready dataset with
 test('one artist cannot qualify a cross-artist methodology validation dataset', () => {
   const a = manifest('artist-a', ['a-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'single-artist',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -222,7 +348,7 @@ test('preview or synthetic material is rejected even when values are numerically
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'synthetic-block',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -249,7 +375,7 @@ test('different exact content ages across artists do not form one methodology co
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'age-mismatch',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -282,7 +408,7 @@ test('provider client mismatch blocks methodology dataset reuse across API proje
     'gcp-project-other-youtube',
   );
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'client-mismatch',
     construct: 'window-total-reaction-volume',
     metricId: 'youtube.video.view-count',
@@ -306,7 +432,7 @@ test('missing selected-metric evidence remains missing and never becomes zero', 
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'missing-value',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -336,7 +462,7 @@ test('structurally valid real data stays non-eligible until revision stability i
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'revision-pending',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -365,7 +491,7 @@ test('detected dataset revision instability blocks methodology validation eligib
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'revision-changed',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
@@ -396,7 +522,7 @@ test('a non-YouTube statistical endpoint is rejected before cross-artist methodo
   const a = manifest('artist-a', ['a-1']);
   const b = manifest('artist-b', ['b-1']);
 
-  const result = buildSnsFandomReactionValidationDataset({
+  const result = buildDataset({
     datasetId: 'endpoint-mismatch',
     construct: 'typical-content-reaction-intensity',
     metricId: 'youtube.video.view-count',
