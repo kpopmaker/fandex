@@ -52,6 +52,7 @@ jobs:
           lib/intelligence/snsFandomPointReactionAggregationMethodology.ts
           lib/intelligence/snsFandomPointReactionMethodologyStudy.ts
           lib/intelligence/snsFandomPointReactionValidationDataset.ts
+          lib/intelligence/snsFandomPointReactionValidationLineage.ts
           lib/intelligence/snsFandomPointObservationContract.ts
           lib/intelligence/snsFandomPointObservationRevisionContract.ts
           lib/intelligence/snsFandomPointProviderAdapterContract.ts
@@ -75,6 +76,7 @@ jobs:
           tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
           tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
@@ -98,6 +100,7 @@ jobs:
           tests/sns-fandom-point-reaction-aggregation-methodology-v1.test.mts
           tests/sns-fandom-point-reaction-methodology-study-v1.test.mts
           tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
+          tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
