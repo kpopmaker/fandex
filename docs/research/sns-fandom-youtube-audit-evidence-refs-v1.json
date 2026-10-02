@@ -15,12 +15,12 @@
     "privacyPolicyHttpStatus": 200,
     "termsOfServiceUrl": "https://fandex-eta.vercel.app/terms",
     "termsOfServiceHttpStatus": 200,
-    "privacyPolicySourceRef": "repo://app/privacy/page.tsx@main",
-    "termsDocumentationRef": "repo://app/terms/page.tsx@main",
+    "privacyPolicySourceRef": "repo://app/privacy/page.tsx@4a2aea90961f597d644515334360fa80df0e0517",
+    "termsDocumentationRef": "repo://app/terms/page.tsx@4a2aea90961f597d644515334360fa80df0e0517",
     "businessModelDescriptionRef": "repo://docs/research/sns-fandom-youtube-api-audit-packet-v1.md#2-api-client-description",
     "auditCohortManifestRef": "repo://data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json@main",
     "auditCohortMemberCount": 5,
-    "legalFooterSourceRef": "repo://app/components/LegalFooter.tsx@main",
+    "legalFooterSourceRef": "repo://app/components/LegalFooter.tsx@4a2aea90961f597d644515334360fa80df0e0517",
     "providerQuotaCostEvidenceRef": "https://developers.google.com/youtube/v3/determine_quota_cost",
     "quotaUnitsPerCall": {
       "youtube.channels.list": 1,
@@ -28,10 +28,7 @@
       "youtube.videos.list": 1
     },
     "playlistItemsPageLimitEvidenceRef": "https://developers.google.com/youtube/v3/docs/playlistItems/list",
-    "playlistItemsMaxResultsPerPage": 50,
-    "maxChannelIdsPerCall": 50,
-    "maxChannelIdsPerCallEvidenceRef": "https://developers.google.com/youtube/v3/docs/channels/list",
-    "maxChannelIdsPerCallInterpretation": "Effective complete-result cap per channels.list request, derived from documented maxResults <= 50. This is not a claim that the id query string rejects a 51st ID."
+    "playlistItemsMaxResultsPerPage": 50
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
@@ -48,7 +45,8 @@
     "videoCountPerReactionRun": null,
     "quotaEstimateRef": null,
     "maxVideoIdsPerCall": null,
-    "providerBatchLimitEvidenceRef": null
+    "providerBatchLimitEvidenceRef": null,
+    "maxChannelIdsPerCall": null
   },
   "fixtureValuesAreProductionEvidence": false,
   "providerApprovalGranted": false,
@@ -58,7 +56,9 @@
     "currentMainSha": "d205a92cc28020ebded14100c3fcf75e1347f68a",
     "productionDeploymentGitSha": "4a2aea90961f597d644515334360fa80df0e0517",
     "productionMatchesCurrentMain": false,
-    "note": "Stable Production legal pages are verified at the deployed SHA; newer main privacy wording is not claimed as deployed until a matching Production deployment is observed."
+    "note": "Stable Production legal pages are verified at the deployed SHA; newer main privacy wording is not claimed as deployed until a matching Production deployment is observed.",
+    "currentMainPrivacyPolicySourceRef": "repo://app/privacy/page.tsx@d205a92cc28020ebded14100c3fcf75e1347f68a",
+    "currentMainPrivacyPolicyDeployed": false
   },
   "evidenceDiscovery": {
     "googleDriveSearchPerformed": true,
@@ -73,6 +73,7 @@
     "googleDriveCloudProjectEvidenceFound": false,
     "githubApprovedCadenceSearchPerformed": true,
     "githubApprovedCadenceEvidenceFound": false,
-    "note": "No non-secret Google Cloud project-number binding or owner-approved real reaction cadence was found. Test fixtures remain invalid as Production evidence."
+    "note": "The recorded Google Drive searches returned no matching files, so no non-secret Google Cloud project-number binding was found. GitHub issue/PR history likewise did not establish an owner-approved real reaction cadence. Test fixtures remain invalid as Production evidence.",
+    "googleDriveMatchedFileCount": 0
   }
 }
