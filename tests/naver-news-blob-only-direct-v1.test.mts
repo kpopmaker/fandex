@@ -253,7 +253,7 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
 });
 
 
-test('recurring Production workflow supplies the frozen direct-runner contract and remains manual-only', async () => {
+test('recurring Production workflow activates the frozen hourly cadence and preserves the manual approval path', async () => {
   const workflow = await readFile(
     new URL(
       '../.github/workflows/naver-news-blob-only-recurring-production-v1.yml',
@@ -263,7 +263,14 @@ test('recurring Production workflow supplies the frozen direct-runner contract a
   );
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.match(workflow, /^\s*schedule:/m);
+  assert.match(workflow, /cron: '17 \* \* \* \*'/);
+  assert.match(workflow, /github\.event_name == 'schedule'/);
+  assert.match(workflow, /github\.event_name == 'workflow_dispatch'/);
+  assert.match(
+    workflow,
+    /inputs\.execution_approval == 'approved-github-actions-blob-only-recurring-v1'/,
+  );
   assert.match(
     workflow,
     /FANDEX_NAVER_NEWS_RECURRING_ENABLED: approved-v128-recurring-foundation/,
