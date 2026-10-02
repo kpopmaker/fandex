@@ -5,6 +5,7 @@ import test from 'node:test';
 import {
   handleNaverNewsVercelCronFallback,
   NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE,
+  NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES,
 } from '../lib/server/ingestion/naverNewsVercelCronFallback';
 import type {
   NaverNewsBlobOnlyCollectionStageSummary,
@@ -159,6 +160,55 @@ test('rejects wrong auth, schedule, method, and query before Blob store or colle
     assert.equal(storeCalls, 0);
     assert.equal(stageCalls, 0);
   }
+});
+
+test('Hobby daily schedule decomposition preserves the frozen hourly minute across all 24 UTC hours', () => {
+  assert.equal(NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE, '17 * * * *');
+  assert.deepEqual(
+    NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES,
+    Array.from({ length: 24 }, (_, hour) => `17 ${hour} * * *`),
+  );
+  assert.equal(
+    new Set(NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES).size,
+    24,
+  );
+});
+
+test('accepts an exact Hobby daily shard header after authentication', async () => {
+  let stageCalls = 0;
+  const response = await handleNaverNewsVercelCronFallback(
+    request({ schedule: NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES[12] }),
+    environment({
+      FANDEX_NAVER_EVIDENCE_BLOB_STORE_ID: 'store_123',
+    }),
+    {
+      resolveOidcToken() {
+        return 'oidc-token';
+      },
+      createStore() {
+        return memoryStore();
+      },
+      now: () => new Date('2026-10-01T12:37:00.000Z'),
+      async readSucceededSchedulerJobs() {
+        return Object.freeze([Object.freeze({
+          jobId: CURRENT_SLOT_IDENTITY.jobId,
+          collectionKey: CURRENT_SLOT_COLLECTION_KEY,
+          requestContract: CURRENT_SLOT_IDENTITY.request,
+        })]);
+      },
+      async runStage() {
+        stageCalls += 1;
+        return stageSummary();
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(stageCalls, 0);
+  const body = await response.json();
+  assert.equal(body.schedule, NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE);
+  assert.equal(body.runStatus, 'already-finalized');
+  assert.equal(body.providerCalls, 0);
 });
 
 test('rejects missing CRON_SECRET and non-Production runtime before Blob store or collection stage', async () => {
@@ -441,13 +491,26 @@ test('missing Blob binding fails closed before collection stage', async () => {
   });
 });
 
-test('authority readiness remains dormant because vercel.json contains no crons', async () => {
+test('vercel.json decomposes the frozen hourly cadence into 24 once-daily Hobby Cron jobs', async () => {
   const raw = await readFile(
     new URL('../vercel.json', import.meta.url),
     'utf8',
   );
   const config = JSON.parse(raw);
-  assert.equal(config.crons, undefined);
+  assert.deepEqual(
+    config.crons,
+    NAVER_NEWS_VERCEL_CRON_HOBBY_DAILY_SCHEDULES.map((schedule) => ({
+      path: '/api/internal/naver-news/vercel-cron-fallback',
+      schedule,
+    })),
+  );
+  assert.equal(config.crons.length, 24);
+  assert.ok(
+    config.crons.every(
+      (cron: { schedule: string }) =>
+        cron.schedule !== NAVER_NEWS_VERCEL_CRON_FALLBACK_SCHEDULE,
+    ),
+  );
   assert.deepEqual(config.git?.deploymentEnabled, {
     '*': false,
     main: true,
