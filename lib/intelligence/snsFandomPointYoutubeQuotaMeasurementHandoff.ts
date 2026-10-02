@@ -192,11 +192,11 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     blockers.push('youtube-quota-measurement-reaction-cadence-invalid');
   }
 
-  for (const [name, ref] of Object.entries({
-    cadenceEvidenceRef: input.cadenceEvidenceRef,
-    providerBatchLimitEvidenceRef: input.providerBatchLimitEvidenceRef,
-    providerQuotaCostEvidenceRef: input.providerQuotaCostEvidenceRef,
-  })) {
+  for (const [name, ref] of [
+    ['cadence-evidence-ref', input.cadenceEvidenceRef],
+    ['provider-batch-limit-evidence-ref', input.providerBatchLimitEvidenceRef],
+    ['provider-quota-cost-evidence-ref', input.providerQuotaCostEvidenceRef],
+  ] as const) {
     if (!present(ref)) {
       blockers.push(`youtube-quota-measurement-${name}-missing`);
     } else if (secretLike(ref)) {
