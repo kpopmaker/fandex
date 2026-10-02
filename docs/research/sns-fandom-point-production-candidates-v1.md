@@ -721,3 +721,59 @@ Current consequences:
 - raw-to-observation value mutation is fail-closed;
 - lineage validation still produces no aggregate, normalized value, method
   ranking, or final `snsFandomPoint`.
+
+
+## Methodology collection planning contract
+
+The repository now has a planning-only contract for future real-data
+methodology collection.
+
+The planner does not choose a default content age. Every target content age
+must be supplied explicitly with a methodology rationale evidence reference.
+This preserves the rule that no arbitrary 7-day, 14-day, or other age
+threshold is introduced by implementation code.
+
+For every declared target age and every video in every validated official
+content manifest, the planner deterministically derives:
+
+`captureAt = publishedAt + targetContentAge`
+
+The result is a set of dataset blueprints and per-content capture tasks.
+
+Important boundaries:
+
+- at least two canonical artists are required for cross-artist validation;
+- content-age sensitivity planning requires at least two distinct explicitly
+  justified target ages;
+- release-volume sensitivity requires naturally different selected-content
+  counts in the real manifests;
+- the planner never equalizes artist content counts;
+- the planner produces no aggregate or normalized values;
+- provider grant remains required;
+- shared scheduler mutation is not allowed from this variable branch;
+- collection execution is not authorized by the plan itself.
+
+### Missed exact-age captures
+
+YouTube public counters are cumulative and the current public source does not
+provide an arbitrary historical counter value for a past content age.
+
+Therefore, if the exact planned `captureAt` is already before or equal to the
+planning reference time, the task is marked missed unless an existing exact-age
+capture with evidence is supplied.
+
+A later current counter cannot substitute for a missed past target age.
+
+Existing evidence is accepted only when its:
+
+- dataset id;
+- canonical artist id;
+- video id;
+- metric id; and
+- exact observedAt
+
+match the deterministic planned task.
+
+This makes the collection plan suitable for handoff to Production Ops or a
+shared scheduler later without letting the variable branch mutate global
+scheduling infrastructure.
