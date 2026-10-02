@@ -300,13 +300,16 @@ fields.
 Current repository / deployment state:
 
 - current FANDEX `main`:
-  `4a2aea90961f597d644515334360fa80df0e0517`;
+  `d205a92cc28020ebded14100c3fcf75e1347f68a`;
 - latest visible Vercel Production deployment checked:
   `dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R`;
 - deployment target: `production`;
 - deployment state: `READY`;
 - deployment Git SHA:
   `4a2aea90961f597d644515334360fa80df0e0517`;
+- Production does not yet match current `main`;
+- the stable legal URLs are verified at the deployed SHA, while newer
+  `main` privacy wording is not claimed as deployed yet;
 - stable Production alias:
   `https://fandex-eta.vercel.app`.
 
