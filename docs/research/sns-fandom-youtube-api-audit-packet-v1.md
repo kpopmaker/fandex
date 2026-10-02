@@ -661,12 +661,51 @@ Evidence refs:
 These facts resolve the v1 reaction-endpoint quota-cost evidence and the
 playlist page-size evidence.
 
-They do **not** justify inventing:
+For `channels.list`, the documented `maxResults <= 50` establishes an
+effective complete-result cap of 50 channel resources per request. FANDEX may
+therefore use:
 
-- `maxChannelIdsPerCall`;
-- `maxVideoIdsPerCall`.
+- `maxChannelIdsPerCall = 50`
 
-The current provider docs describe comma-separated ID filters, but the exact
-batch-ID cap needed by the FANDEX worksheet is not recorded here as an
-evidence-backed numeric limit. Those two worksheet inputs remain null until a
-provider-documented limit or actual approved client behavior is recorded.
+for quota calculation, with the explicit interpretation that this is the
+maximum complete channel-resource result set per call. It is **not** a claim
+that the provider rejects a 51st comma-separated ID in the query string.
+
+For `videos.list(id=...)`, the documentation explicitly says
+`maxResults` is not supported with the `id` filter and does not publish an
+exact maximum number of comma-separated video IDs in this method reference.
+
+Therefore:
+
+- `maxVideoIdsPerCall` remains null;
+- the combined provider batch-limit evidence remains incomplete;
+- no test-fixture batch size may be promoted into the real worksheet.
+
+A provider-documented limit or actual approved-client measurement is still
+required for the video-ID batching input.
+
+
+## 7b. Evidence-source discovery result
+
+Read-only evidence discovery was performed across connected sources before
+asking the owner to supply more data.
+
+Google Drive searches included:
+
+- `FANDEX YouTube Google Cloud`;
+- `YouTube API project number`;
+- `snsFandom YouTube`;
+- `YouTube quota`;
+- `Google Cloud project`;
+- `GCP`.
+
+The connected Drive contains general FANDEX and YouTube-related files, but no
+document was found that provides a non-secret Google Cloud project number or
+an exact project-to-snsFandom-provider-client binding.
+
+GitHub issue/PR history was also searched for a real approved reaction cadence
+or measurement window. No owner-approved real cadence/window evidence was
+found. The existing `reactionSnapshotRunsPerDay = 4` and dated measurement
+window values remain regression fixtures only.
+
+Therefore these values stay unresolved rather than being inferred.
