@@ -226,7 +226,7 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     blockers.push('youtube-quota-video-batch-limit-invalid');
   }
 
-  for (const endpoint of SUPPORTED_ENDPOINTS) {
+  for (const endpoint of requestedEndpoints) {
     const cost = input.quotaUnitsPerCall[endpoint];
     if (!positiveSafeInteger(cost)) {
       blockers.push('youtube-quota-cost-invalid');
