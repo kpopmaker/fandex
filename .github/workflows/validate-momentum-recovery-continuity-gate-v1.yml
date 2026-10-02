@@ -8,8 +8,11 @@ on:
     paths:
       - 'lib/intelligence/fandexMomentumRecoveryContinuityGate.ts'
       - 'scripts/operations/momentumRecoveryContinuityGateV1.mts'
+      - 'scripts/operations/momentumBlobRecoveryContinuityGateV1.mts'
       - 'tests/momentum-recovery-continuity-gate-v1.test.mts'
       - '.github/workflows/momentum-recovery-continuity-gate-v1.yml'
+      - '.github/workflows/momentum-blob-recovery-continuity-gate-v1.yml'
+      - 'lib/server/ingestion/naverNewsStoredEvidenceMirror.ts'
       - '.github/workflows/validate-momentum-recovery-continuity-gate-v1.yml'
 
 permissions:
