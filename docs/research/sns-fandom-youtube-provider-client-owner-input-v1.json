@@ -1,0 +1,22 @@
+{
+  "version": "sns_fandom_youtube_provider_client_owner_input_v1",
+  "state": "awaiting-owner-evidence",
+  "instructions": {
+    "providerClientRef": "Non-secret stable FANDEX reference for the exact Google Cloud project/client. Do not paste API keys.",
+    "googleCloudProjectNumber": "Exact numeric Google Cloud project number.",
+    "googleCloudProjectId": "Optional Google Cloud project id; null if not known.",
+    "credentialLocatorRef": "Secret locator only, for example github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY. Never paste the credential value.",
+    "cloudProjectEvidenceRef": "Non-secret evidence reference that proves the project/client binding.",
+    "verifiedAt": "Exact ISO-8601 verification timestamp."
+  },
+  "providerClientRef": null,
+  "googleCloudProjectNumber": null,
+  "googleCloudProjectId": null,
+  "credentialLocatorRef": null,
+  "cloudProjectEvidenceRef": null,
+  "verifiedAt": null,
+  "secretMaterialStored": false,
+  "providerApprovalGranted": false,
+  "productionCollectionAuthorized": false,
+  "providerSubmissionAuthorized": false
+}
