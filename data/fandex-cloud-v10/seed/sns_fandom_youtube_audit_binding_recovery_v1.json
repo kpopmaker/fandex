@@ -1,0 +1,187 @@
+{
+  "version": "sns_fandom_youtube_audit_binding_recovery_v1",
+  "status": "historical-reviewed-channel-evidence-recovered-not-audit-approved",
+  "generatedFrom": {
+    "sourceBranch": "validation/artist-expansion-youtube-lineage-final-v1",
+    "sourceFile": "data/fandex-cloud-v10/seed/youtube_seed_video_reviews_v1.json",
+    "sourceBlobSha": "62713bf1d2644923d5f3f5c510b206151554517e",
+    "sourceDiscoveries": [
+      {
+        "workflow": "Validate Artist Expansion YouTube recovery v3",
+        "runId": "36839355681",
+        "jobId": "110294442654",
+        "validationHead": "752ec4b7f1cf765a3562c068ba6cc2d813bbf3a8",
+        "artifactId": "11150906061"
+      },
+      {
+        "workflow": "Validate Artist Expansion YouTube reviewed seed v5",
+        "runId": "36840645603",
+        "jobId": "110298684995",
+        "validationHead": "38430a13494466565c6717656c2c6fe90fe2abb5",
+        "artifactId": "11150803658"
+      }
+    ]
+  },
+  "semantics": {
+    "recoveredReviewDoesNotEqualCurrentOfficialChannelVerification": true,
+    "recoveredReviewDoesNotEqualAuditScopeApproval": true,
+    "videoApprovalDoesNotEqualChannelApproval": true,
+    "sharedChannelDoesNotEqualArtistChannel": true,
+    "vevoChannelRequiresScopeDecision": true,
+    "noProviderCollectionPerformed": true,
+    "noProductMutationPerformed": true
+  },
+  "summary": {
+    "recoveredArtistCount": 11,
+    "uniqueRecoveredChannelCount": 8,
+    "directArtistChannelCandidateCount": 4,
+    "vevoScopeReviewRequiredCount": 2,
+    "sharedChannelBlockedArtistCount": 5,
+    "auditScopeIncludedCount": 0
+  },
+  "entries": [
+    {
+      "canonicalArtistId": "bts",
+      "videoId": "_gyultVTesk",
+      "youtubeChannelId": "UC3IZKseVpdzPSBaWxBxundA",
+      "channelTitle": "HYBE LABELS",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=_gyultVTesk",
+      "recoveryState": "shared-channel-blocked",
+      "sharedChannelGroup": "hybe-labels",
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "videoId": "2GJfWMYCWY0",
+      "youtubeChannelId": "UCOmHUn--16B90oW2L6FRR3A",
+      "channelTitle": "BLACKPINK",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in both the artist channel and title.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=2GJfWMYCWY0",
+      "recoveryState": "direct-artist-channel-candidate",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "twice",
+      "videoId": "FD_oc92GO6k",
+      "youtubeChannelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+      "channelTitle": "TWICE",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in both the artist channel and title; content is a direct live performance.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=FD_oc92GO6k",
+      "recoveryState": "direct-artist-channel-candidate",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "videoId": "MT-4Bk1Lw8g",
+      "youtubeChannelId": "UC3IZKseVpdzPSBaWxBxundA",
+      "channelTitle": "HYBE LABELS",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in the title and the source is the label channel used by the historical YouTube seed workflow.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=MT-4Bk1Lw8g",
+      "recoveryState": "shared-channel-blocked",
+      "sharedChannelGroup": "hybe-labels",
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "rose",
+      "videoId": "Lufa9QAFFeY",
+      "youtubeChannelId": "UCBo1hnzxV9rz3WVsv__Rn1g",
+      "channelTitle": "ROSÉ",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in both the artist channel and title.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=Lufa9QAFFeY",
+      "recoveryState": "direct-artist-channel-candidate",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "riize",
+      "videoId": "4PBRfhGY1qs",
+      "youtubeChannelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+      "channelTitle": "RIIZE",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Target identity is explicit in both the artist channel and title; content is direct dance-practice evidence.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=4PBRfhGY1qs",
+      "recoveryState": "direct-artist-channel-candidate",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "videoId": "Y7do-6qV5Dw",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "reviewedAt": "2026-10-01T09:07:23Z",
+      "reviewReason": "Target identity is explicit in the focus-stage title and the source is BANGTANTV.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=Y7do-6qV5Dw",
+      "recoveryState": "shared-channel-blocked",
+      "sharedChannelGroup": "bangtantv",
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "v",
+      "videoId": "kwAhKmSWdx8",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Manual review overrides partial machine status because target identity is explicit in the title and the source is BANGTANTV.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=kwAhKmSWdx8",
+      "recoveryState": "shared-channel-blocked",
+      "sharedChannelGroup": "bangtantv",
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "videoId": "s466YCiHfKw",
+      "youtubeChannelId": "UCN9_L9lA9kqJbGANLRus_1A",
+      "channelTitle": "JennieRubyJaneVEVO",
+      "reviewedAt": "2026-10-01T08:55:39Z",
+      "reviewReason": "Manual review accepts the artist-named VEVO source and explicit JENNIE title.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=s466YCiHfKw",
+      "recoveryState": "vevo-scope-review-required",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "videoId": "FyS5dAywkEo",
+      "youtubeChannelId": "UCg3ymxYCmURj5BFtbgMt-Og",
+      "channelTitle": "LISAOfficialVEVO",
+      "reviewedAt": "2026-10-01T09:07:23Z",
+      "reviewReason": "Manual review accepts the artist-named VEVO source and explicit LISA official music-video title.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=FyS5dAywkEo",
+      "recoveryState": "vevo-scope-review-required",
+      "sharedChannelGroup": null,
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "videoId": "p0nPyE-dv9Q",
+      "youtubeChannelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "reviewedAt": "2026-10-01T09:13:00Z",
+      "reviewReason": "Direct provider review confirms a BANGTANTV stage-cam explicitly focused on Jung Kook.",
+      "evidenceUrl": "https://www.youtube.com/watch?v=p0nPyE-dv9Q",
+      "recoveryState": "shared-channel-blocked",
+      "sharedChannelGroup": "bangtantv",
+      "auditScopeIncluded": false,
+      "currentVerificationRequired": true
+    }
+  ]
+}
