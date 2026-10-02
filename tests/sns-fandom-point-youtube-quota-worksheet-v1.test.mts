@@ -5,6 +5,26 @@ import {
   evaluateSnsFandomYoutubeQuotaWorksheet,
   type SnsFandomYoutubeQuotaWorksheetInput,
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaWorksheet';
+import {
+  evaluateSnsFandomYoutubeAuditArtistBindingManifest,
+} from '../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
+
+function artistBindingManifest() {
+  return evaluateSnsFandomYoutubeAuditArtistBindingManifest({
+    manifestId: 'youtube-audit-binding-manifest-study-v1',
+    evidenceRef: 'external://youtube-audit/verified-channel-bindings',
+    members: Array.from({ length: 12 }, (_, index) => ({
+      canonicalArtistId: `artist-${index + 1}`,
+      youtubeChannelId:
+        `UC${String(index + 1).padStart(22, '0')}`,
+      bindingState: 'verified' as const,
+      includedInAuditScope: true,
+      evidenceRef: `external://youtube-binding/artist-${index + 1}`,
+      verifiedAt: '2026-10-02T11:30:00.000Z',
+      sharedChannelCaveat: null,
+    })),
+  });
+}
 
 function input(
   overrides: Partial<SnsFandomYoutubeQuotaWorksheetInput> = {},
@@ -17,6 +37,7 @@ function input(
       'youtube.playlistItems.list',
       'youtube.videos.list',
     ],
+    artistBindingManifest: artistBindingManifest(),
     measuredUsage: {
       artistChannelCount: 12,
       uploadManifestPageCountPerReactionRun: 7,
@@ -53,6 +74,8 @@ test('reaction-only worksheet calculates measured minimum quota without inventin
   const result = evaluateSnsFandomYoutubeQuotaWorksheet(input());
 
   assert.equal(result.state, 'quota-evidence-ready');
+  assert.equal(result.artistBindingManifestValidated, true);
+  assert.equal(result.artistChannelCount, 12);
   assert.equal(result.minimumProjectedQuotaUnitsPerDay, 44);
   assert.equal(result.requestedQuotaUnitsPerDay, null);
   assert.equal(result.headroomFactorApplied, false);
@@ -227,5 +250,43 @@ test('duplicate endpoint scope is rejected instead of silently altering the appl
   assert.equal(result.state, 'blocked');
   assert.ok(
     result.blockers.includes('youtube-quota-endpoint-duplicate'),
+  );
+});
+
+
+test('artist channel count must exactly match the verified audit binding manifest', () => {
+  const base = input();
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet({
+    ...base,
+    measuredUsage: {
+      ...base.measuredUsage,
+      artistChannelCount: 100,
+    },
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.minimumProjectedQuotaUnitsPerDay, null);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-quota-artist-channel-count-binding-mismatch',
+    ),
+  );
+});
+
+test('quota worksheet cannot become ready without the verified binding manifest', () => {
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet(
+    input({
+      artistBindingManifest: null,
+    }),
+  );
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.artistBindingManifestValidated, false);
+  assert.equal(result.artistBindingManifestId, null);
+  assert.equal(result.artistChannelCount, null);
+  assert.ok(
+    result.blockers.includes(
+      'youtube-quota-artist-binding-manifest-missing',
+    ),
   );
 });
