@@ -138,10 +138,14 @@ export function bundleSnsFandomProspectiveReactionReceipts(
       blockers.push('prospective-receipt-bundle-reconciliation-not-ready');
     }
 
+    const eligibleTasks = enrollment.tasks.filter(
+      (task) => task.state === 'pending-prospective-capture',
+    );
+    const expectedTaskById = new Map(
+      eligibleTasks.map((task) => [task.taskId, task]),
+    );
     const entryExpectedTaskIds = uniqueSorted(
-      enrollment.tasks
-        .filter((task) => task.state === 'pending-prospective-capture')
-        .map((task) => task.taskId),
+      eligibleTasks.map((task) => task.taskId),
     );
     if (entryExpectedTaskIds.length === 0) {
       blockers.push('prospective-receipt-bundle-enrollment-task-missing');
@@ -159,11 +163,33 @@ export function bundleSnsFandomProspectiveReactionReceipts(
         blockers.push('prospective-receipt-bundle-receipt-not-exact-ready');
       }
 
+      if (
+        receipt.expectedTaskCount !== receipt.members.length
+        || receipt.receivedReceiptCount !== receipt.members.length
+        || receipt.completedMemberCount !== receipt.members.length
+        || receipt.exactTargetAgeCaptureCount !== receipt.members.length
+      ) {
+        blockers.push('prospective-receipt-bundle-receipt-count-inconsistent');
+      }
+
       receivedReceiptCount += receipt.receivedReceiptCount;
       exactTargetAgeCaptureCount += receipt.exactTargetAgeCaptureCount;
       deviatedCaptureCount += receipt.deviatedCaptureCount;
 
       for (const member of receipt.members) {
+        const expectedTask = expectedTaskById.get(member.taskId);
+        if (
+          expectedTask === undefined
+          || member.datasetId !== expectedTask.datasetId
+          || member.canonicalArtistId !== expectedTask.canonicalArtistId
+          || member.videoId !== expectedTask.videoId
+          || member.metricId !== expectedTask.metricId
+          || member.plannedCaptureAt !== expectedTask.captureAt
+        ) {
+          blockers.push(
+            'prospective-receipt-bundle-receipt-task-binding-mismatch',
+          );
+        }
         if (member.canonicalArtistId !== enrollment.canonicalArtistId) {
           blockers.push(
             'prospective-receipt-bundle-receipt-artist-mismatch',
@@ -204,6 +230,13 @@ export function bundleSnsFandomProspectiveReactionReceipts(
 
   if (deviatedCaptureCount > 0) {
     blockers.push('prospective-receipt-bundle-timing-deviation-present');
+  }
+  if (
+    receivedReceiptCount !== expectedTaskIds.length
+    || exactTargetAgeCaptureCount !== expectedTaskIds.length
+    || members.length !== expectedTaskIds.length
+  ) {
+    blockers.push('prospective-receipt-bundle-study-count-inconsistent');
   }
 
   const dedupedBlockers = uniqueSorted(blockers);
