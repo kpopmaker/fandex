@@ -1,0 +1,38 @@
+name: Validate NAVER Vercel Cron current-slot preflight v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/server/ingestion/naverNewsVercelCronFallback.ts'
+      - 'tests/naver-news-vercel-cron-fallback-v1.test.mts'
+      - '.github/workflows/validate-naver-vercel-cron-current-slot-preflight-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Vercel Cron current-slot preflight regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/naver-news-vercel-cron-fallback-v1.test.mts
+
+      - name: Stored Evidence authority regression
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
