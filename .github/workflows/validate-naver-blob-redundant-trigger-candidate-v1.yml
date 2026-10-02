@@ -1,4 +1,4 @@
-name: Validate NAVER Blob redundant trigger candidate v1
+name: Validate NAVER Blob redundant trigger activation v1
 
 on:
   pull_request:
@@ -17,13 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assert redundant trigger remains dormant
-        env:
-          REDUNDANT_TRIGGER_GATE: ${{ vars.FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED }}
+      - name: Assert redundant trigger activation contract
         shell: bash
         run: |
           set -euo pipefail
-          test "$REDUNDANT_TRIGGER_GATE" != "approved-github-redundant-20m-v1"
 
           node <<'NODE'
           const fs = require('node:fs');
@@ -38,7 +35,6 @@ jobs:
             "github.event.schedule == '17 * * * *'",
             "github.event.schedule == '37 * * * *'",
             "github.event.schedule == '57 * * * *'",
-            "vars.FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED == 'approved-github-redundant-20m-v1'",
             "runStatus === 'already-finalized'",
             "providerCalls === 0",
             "runStatus === 'collected-and-finalized'",
@@ -52,10 +48,15 @@ jobs:
               process.exit(2);
             }
           }
-          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_CANDIDATE=valid');
-          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_GATE_ACTIVE=false');
+          if (source.includes('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED')) {
+            console.error('redundant_trigger_gate_must_be_removed_for_activation');
+            process.exit(3);
+          }
+          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ACTIVATION=valid');
           console.log('primaryCronStillActive=true');
-          console.log('redundantProductionRequests=0');
+          console.log('redundantCron37Active=true');
+          console.log('redundantCron57Active=true');
+          console.log('sameSlotProviderSkipProtected=true');
           NODE
 
       - uses: actions/setup-node@v4
