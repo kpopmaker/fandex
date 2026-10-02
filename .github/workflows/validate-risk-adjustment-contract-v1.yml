@@ -16,6 +16,7 @@ on:
       - 'lib/intelligence/riskAdjustmentQualityEnvelopeAssembly.ts'
       - 'lib/intelligence/riskAdjustmentQualityEnvelopeRecord.ts'
       - 'lib/intelligence/riskAdjustmentQualitySufficiencyWitness.ts'
+      - 'lib/intelligence/riskAdjustmentQualitySufficiencyAcceptance.ts'
       - 'tests/risk-adjustment-point-contract-v1.test.mts'
       - 'tests/risk-adjustment-categorical-states-v1.test.mts'
       - 'tests/risk-adjustment-news-issue-projection-v1.test.mts'
@@ -30,7 +31,8 @@ on:
       - 'tests/risk-adjustment-current-main-activity-producer-v1.test.mts'
       - 'tests/risk-adjustment-quality-envelope-assembly-v1.test.mts'
       - 'tests/risk-adjustment-quality-envelope-record-v1.test.mts'
-      - 'tests/risk-adjustment-quality-sufficiency-witness-v1.test.mts'
+      - 'tests/risk-adjustment-quality-sufficiency-witness-v1.test.mts tests/risk-adjustment-quality-sufficiency-acceptance-v1.test.mts'
+      - 'tests/risk-adjustment-quality-sufficiency-acceptance-v1.test.mts'
       - '.github/workflows/validate-risk-adjustment-contract-v1.yml'
   workflow_dispatch:
 
