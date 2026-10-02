@@ -329,18 +329,13 @@ test('missing Blob binding fails closed before collection stage', async () => {
   });
 });
 
-test('vercel.json registers only the frozen hourly NAVER Cron path', async () => {
+test('authority readiness remains dormant because vercel.json contains no crons', async () => {
   const raw = await readFile(
     new URL('../vercel.json', import.meta.url),
     'utf8',
   );
   const config = JSON.parse(raw);
-  assert.deepEqual(config.crons, [
-    {
-      path: '/api/internal/naver-news/vercel-cron-fallback',
-      schedule: '17 * * * *',
-    },
-  ]);
+  assert.equal(config.crons, undefined);
   assert.deepEqual(config.git?.deploymentEnabled, {
     '*': false,
     main: true,
