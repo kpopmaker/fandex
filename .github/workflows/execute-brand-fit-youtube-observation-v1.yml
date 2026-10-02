@@ -1,0 +1,70 @@
+name: Execute Brand Fit YouTube observation v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_main_sha:
+        description: Exact main SHA approved for the one-shot Brand observation
+        required: true
+        type: string
+      execution_authorization_id:
+        description: Exact owner execution authorization ID from issue #367
+        required: true
+        type: string
+      confirm:
+        description: Exact confirmation token
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  issues: read
+
+concurrency:
+  group: brand-fit-youtube-observation-v1
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+      EXECUTION_AUTHORIZATION_ID: ${{ inputs.execution_authorization_id }}
+      EXECUTION_CONFIRM: ${{ inputs.confirm }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FANDEX_BRAND_FIT_YOUTUBE_API_KEY: ${{ secrets.FANDEX_BRAND_FIT_YOUTUBE_API_KEY }}
+      FANDEX_BRAND_FIT_YOUTUBE_METADATA_POLICY_APPROVED: approved-brand-fit-youtube-metadata-policy-v1
+      FANDEX_BRAND_FIT_YOUTUBE_DISCLOSURE_READY: approved-brand-fit-youtube-disclosure-v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Validate one-shot execution authorization
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$EXPECTED_MAIN_SHA" = "$GITHUB_SHA"
+          test -n "$EXECUTION_AUTHORIZATION_ID"
+          test "$EXECUTION_CONFIRM" = "execute-brand-fit-youtube-observation-v1"
+          test -n "$FANDEX_BRAND_FIT_YOUTUBE_API_KEY"
+      - run: npm ci
+      - name: Validate owner approval and one-shot consumption
+        run: npx tsx scripts/operations/brandFitYoutubeProductionExecutionGateV1.mts
+      - name: Execute exactly one bounded Brand Fit provider observation
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/operations/brandFitYoutubeObservationV1.mts --execute > brand-fit-observation-receipt.json
+          test -s brand-fit-observation-receipt.json
+      - name: Upload sanitized receipt only
+        uses: actions/upload-artifact@v4
+        with:
+          name: brand-fit-youtube-observation-receipt-v1
+          path: brand-fit-observation-receipt.json
+          if-no-files-found: error
+          retention-days: 1
