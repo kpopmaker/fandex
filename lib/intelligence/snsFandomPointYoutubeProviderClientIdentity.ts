@@ -45,6 +45,7 @@ function projectId(value: string): boolean {
 }
 
 function secretLike(value: string): boolean {
+  if (/AIza[0-9A-Za-z_-]{10,}/.test(value)) return true;
   const normalized = value.toLowerCase();
   return [
     'password=',
@@ -54,7 +55,7 @@ function secretLike(value: string): boolean {
     'authorization: bearer ',
     'api_key=',
     'apikey=',
-    'key=AIza',
+    'key=aiza',
   ].some((needle) => normalized.includes(needle));
 }
 
