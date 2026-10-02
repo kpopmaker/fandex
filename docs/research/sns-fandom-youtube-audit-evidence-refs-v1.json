@@ -31,7 +31,6 @@
     "playlistItemsMaxResultsPerPage": 50,
     "privacyPolicyScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#privacy-policy.png",
     "homepageScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#homepage-legal-links.png",
-    "dashboardFeatureScreenshotRef": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png",
     "screenshotEvidenceBundle": {
       "githubWorkflowRunId": "37025375542",
       "githubArtifactId": "11235301864",
@@ -50,10 +49,6 @@
         "homepageLegalLinks": {
           "name": "homepage-legal-links.png",
           "sha256": "d7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1"
-        },
-        "analyticsReportingDashboard": {
-          "name": "analytics-reporting-dashboard.png",
-          "sha256": "bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5"
         }
       }
     }
@@ -71,7 +66,8 @@
     "quotaEstimateRef": null,
     "maxVideoIdsPerCall": null,
     "providerBatchLimitEvidenceRef": null,
-    "maxChannelIdsPerCall": null
+    "maxChannelIdsPerCall": null,
+    "dashboardFeatureScreenshotRef": null
   },
   "fixtureValuesAreProductionEvidence": false,
   "providerApprovalGranted": false,
@@ -100,5 +96,13 @@
     "githubApprovedCadenceEvidenceFound": false,
     "note": "The recorded Google Drive searches returned no matching files, so no non-secret Google Cloud project-number binding was found. GitHub issue/PR history likewise did not establish an owner-approved real reaction cadence. Test fixtures remain invalid as Production evidence.",
     "googleDriveMatchedFileCount": 0
+  },
+  "rejectedEvidence": {
+    "dashboardFeatureScreenshotCandidate": {
+      "ref": "github-actions://kpopmaker/fandex/runs/37025375542/artifacts/11235301864#analytics-reporting-dashboard.png",
+      "sha256": "bf02a0d27493cfa05596276a767d3fd4e10e94d1ca4a056a3531aa97c9f6ddc5",
+      "sourceUrl": "https://fandex-eta.vercel.app/",
+      "rejectionReason": "source-is-explicitly-synthetic-preview-homepage-not-production-analytics-reporting-feature"
+    }
   }
 }
