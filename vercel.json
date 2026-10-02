@@ -3,7 +3,8 @@
   "git": {
     "deploymentEnabled": {
       "*": false,
-      "main": true
+      "main": true,
+      "integration/security-next-16-3-6-v1": true
     }
   },
   "functions": {
