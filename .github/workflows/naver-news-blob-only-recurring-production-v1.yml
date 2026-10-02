@@ -1,0 +1,63 @@
+name: NAVER News Blob-only recurring Production v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      execution_approval:
+        description: 'Separate Production approval: type approved-github-actions-blob-only-recurring-v1'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fandex-naver-news-blob-only-recurring-production-v1
+  cancel-in-progress: false
+
+jobs:
+  direct:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1 &&
+      inputs.execution_approval == 'approved-github-actions-blob-only-recurring-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FANDEX_NAVER_BLOB_ONLY_DIRECT_EXECUTION_APPROVAL: approved-github-actions-blob-only-direct-v1
+      FANDEX_NAVER_NEWS_SCHEDULER_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+      FANDEX_NAVER_NEWS_CLIENT_ID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
+      FANDEX_NAVER_NEWS_CLIENT_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
+      FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Guard required secret bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FANDEX_NAVER_NEWS_CLIENT_ID"
+          test -n "$FANDEX_NAVER_NEWS_CLIENT_SECRET"
+          test -n "$FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN"
+
+      - run: npm ci
+
+      - name: Execute one Blob-only recurring candidate slot
+        run: npx tsx scripts/ingestion/run-naver-news-blob-only-direct-v1.ts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "databaseWrites=0"
+          echo "schedulerManifestFinalized=false"
+          echo "productActivations=0"
