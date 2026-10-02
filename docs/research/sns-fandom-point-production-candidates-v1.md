@@ -966,3 +966,27 @@ Even then `validationDatasetUseAllowed` remains false at this gate because the
 existing execution-receipt, lineage, revision-audit, and validation-dataset
 assembly contracts must still pass. No aggregate, normalized value, methodology
 decision, or numeric `snsFandomPoint` is produced here.
+
+
+### Prospective enrollment to receipt bridge
+
+The provisional enrollment packet does not bypass the existing Production Ops
+handoff gate. Before a newly enrolled capture task can enter the execution
+receipt lifecycle, it is converted into the existing
+`sns-fandom-reaction-validation-collection-handoff-v1` shape only when:
+
+- the enrollment itself is active and its current Ops packet is review-ready;
+- task artist/channel/client/metric scope still matches the enrollment scope;
+- the exact YouTube provider approval is active at handoff time;
+- the same approval remains active at each exact future `captureAt`;
+- the collector is still `approved-ready` for `youtube-data-api` and has not
+  already been collection-authorized by this variable branch.
+
+The bridge preserves the same non-authorizing safety boundary:
+scheduler mutation, activation mutation, collection authorization, and
+deployment authorization all remain false.
+
+Once that gate passes, prospective tasks use the existing receipt evaluator
+without a second receipt contract. Exact timing, collection-run identity,
+observation identity, evidence continuity, lineage validation, revision audit,
+and validation-dataset assembly therefore remain the same downstream gates.
