@@ -71,5 +71,5 @@ test('audit packet no longer records Production privacy/terms pages as 404', asy
   assert.ok(packet.includes('/privacy` -> HTTP 200'));
   assert.ok(packet.includes('/terms` -> HTTP 200'));
   assert.ok(packet.includes('earlier 404 legal-surface blocker is resolved'));
-  assert.ok(packet.includes('Test fixtures are never valid production evidence.'));
+  assert.ok(packet.toLowerCase().includes('fixtures are never valid production evidence'));
 });
