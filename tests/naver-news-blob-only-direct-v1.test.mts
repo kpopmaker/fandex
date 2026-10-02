@@ -195,14 +195,7 @@ test('skips provider collection when the current scheduler slot is already final
         return Object.freeze([Object.freeze({
           jobId: CURRENT_SLOT_IDENTITY.jobId,
           collectionKey: CURRENT_SLOT_COLLECTION_KEY,
-          requestContract: Object.freeze({
-            provider: 'naver-news' as const,
-            collectionKey: CURRENT_SLOT_COLLECTION_KEY,
-            query: '아이유 IU',
-            display: 100,
-            start: 1,
-            sort: 'date' as const,
-          }),
+          requestContract: CURRENT_SLOT_IDENTITY.request,
         })]);
       },
       async runStage() {
@@ -247,15 +240,7 @@ test('fails closed when finalized current-slot identity conflicts with the froze
           return Object.freeze([Object.freeze({
             jobId: 'f'.repeat(64),
             collectionKey: CURRENT_SLOT_COLLECTION_KEY,
-            requestContract: Object.freeze({
-              provider: 'naver-news' as const,
-              collectionKey:
-                'sched-v125-naver-news-20261002t000000z-f1ed381d367d',
-              query: '아이유 IU',
-              display: 100,
-              start: 1,
-              sort: 'date' as const,
-            }),
+            requestContract: CURRENT_SLOT_IDENTITY.request,
           })]);
         },
         async runStage() {
