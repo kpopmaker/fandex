@@ -1,0 +1,1021 @@
+# snsFandomPoint Production candidate inventory v1
+
+Evaluated against main: `b76e7d22cc1c3479faca20ebf951c1be0097944b`
+
+## Product construct
+
+`snsFandomPoint` is not a follower-count alias and is not a mention-count alias.
+
+The v1 contract keeps two constructs separate:
+
+1. **SNS public reaction / diffusion** — directly observed public content reaction signals such as content views, likes, and comments where an authorized provider contract allows them.
+2. **Fandom activity / persistence** — evidence that construct-relevant observations recur across distinct observation times. The v1 persistence layer records only whether temporal history exists. It does not infer individual fan identity, bot status, loyalty, or a numeric persistence score.
+
+No raw values from different platforms are averaged. No cross-dimension weight, threshold, or score formula exists in v1.
+
+## Provider qualification
+
+### YouTube Data API — conditional candidate
+
+Official documentation allows retrieval of channel/video/comment data, but non-authorized API data has storage/refresh limits. YouTube also documents an additional approval path for analytics use cases that need derived metrics and extended statistical-data storage.
+
+Production status: **conditional-approval-required**.
+
+Required before FANDEX Production use:
+
+- approved analytics / derived-metrics use case recorded for FANDEX;
+- retention behavior approved or implemented so stored data complies with the applicable refresh/deletion rules;
+- exact YouTube channel identity binding supplied by Artist Expansion;
+- prospective snapshot collection established because current public counters do not provide FANDEX's prior snapshots.
+
+References:
+
+- https://developers.google.com/youtube/terms/developer-policies
+- https://developers.google.com/youtube/terms/derived-metrics-policy
+- https://developers.google.com/youtube/v3/docs/channels
+- https://developers.google.com/youtube/v3/docs/comments
+
+### YouTube Analytics / Reporting APIs — authorized persistence candidate
+
+Official channel reports require OAuth authorization from the channel owner. The reporting schema can segment user activity by `subscribed_status` and date, allowing FANDEX to observe repeated aggregate activity from the subscribed audience without tracking individual viewers.
+
+Production status: **authorized-account-only**.
+
+This is a bounded candidate for the **fandom activity / persistence** dimension, not a claim that every subscriber is a fan. The adapter uses aggregate subscribed-view activity across provider periods and never infers individual identity or loyalty.
+
+Blockers:
+
+- channel-owner authorization is required;
+- generic K-pop artist coverage is therefore not established;
+- shared OAuth/runtime handling belongs outside this variable-specific branch.
+
+References:
+
+- https://developers.google.com/youtube/analytics/channel_reports
+- https://developers.google.com/youtube/reporting
+- https://developers.google.com/youtube/reporting/v1/reports/channel_reports
+
+### Instagram API — coverage-limited candidate
+
+Meta's current Instagram Platform documentation describes management of Instagram Business or Creator accounts linked through the platform. That does not establish arbitrary read coverage of the full K-pop artist universe.
+
+Production status: **authorized-account-only**.
+
+Blockers:
+
+- arbitrary K-pop artist coverage not established;
+- storage/retention and derived-publication rights not yet qualified for this FANDEX use case.
+
+Reference:
+
+- https://developers.facebook.com/documentation/instagram-platform
+
+### TikTok Display API — coverage-limited candidate
+
+TikTok Display API requires a TikTok user to authorize the app and grants scopes for that user's profile/public videos.
+
+Production status: **authorized-account-only**.
+
+This is not sufficient for generic K-pop coverage unless each target artist account authorizes FANDEX.
+
+References:
+
+- https://developers.tiktok.com/docs/en/display-api-overview
+- https://developers.tiktok.com/docs/en/display-api-get-started
+- https://developers.tiktok.com/docs/en/scopes-overview
+
+### TikTok Research API — not a commercial Production source
+
+TikTok states that Research Tools are for qualifying non-commercial research and explicitly says commercial users are not eligible.
+
+Production status: **not-production-eligible**.
+
+References:
+
+- https://developers.tiktok.com/products/research-api/
+- https://developers.tiktok.com/docs/en/research-api-faq
+
+### X API — unresolved
+
+X can support commercial analytics under some arrangements, but this repository does not yet contain an exact current license/plan record establishing FANDEX rights for recurring collection, retention, and derived metric publication.
+
+Production status: **rights-unresolved**.
+
+No X data should enter `snsFandomPoint` until the exact commercial entitlement and terms are recorded.
+
+## Minimal realistic source combination
+
+The smallest currently actionable candidate for **SNS public reaction / diffusion** is **YouTube-first**, using official artist-content statistics after the relevant provider rights are cleared.
+
+That does **not** satisfy the separate **fandom activity / persistence** construct. Repeated snapshots of the same YouTube view/like/comment counter are reaction history, not evidence that FANDEX may relabel as fandom persistence.
+
+Accordingly, there is currently **no generic, full-universe qualified minimum source combination** for the complete `snsFandomPoint` construct.
+
+For an artist that explicitly authorizes FANDEX, the strongest current bounded candidate is:
+- public-reaction evidence from YouTube statistics under the applicable YouTube data/derived-metric/storage permissions; plus
+- aggregate subscribed-audience activity history from YouTube Analytics/Reporting.
+
+That authorized-account path still does not solve arbitrary K-pop coverage. For artists without channel-owner authorization, a separately qualified persistence source is still required. Until then, the Product remains blocked rather than filling the missing dimension with reaction history.
+
+YouTube itself is deliberately not called a Production source yet. It remains rights-blocked until the documented YouTube analytics/derived-metrics and retention requirements are satisfied.
+
+The YouTube candidate adapter therefore:
+
+- accepts only exact canonical-artist-to-channel binding supplied externally;
+- emits raw observations without cross-platform aggregation;
+- keeps subscriber count as **context-only**, so follower count cannot satisfy fandom readiness by itself;
+- preserves missing values as missing, never zero;
+- creates categorical history only within the same provider artist/content/metric scope;
+- does not let reaction history satisfy the fandom-persistence dimension;
+- emits no numeric `snsFandomPoint`.
+
+## History requirement
+
+Historical access differs by source:
+- public YouTube Data API reaction evidence requires compliant prospective snapshot handling unless an approved storage path applies;
+- authorized YouTube Analytics/Reporting can query owned-channel activity over explicit report periods.
+
+A single observation remains `history-insufficient`. Two or more distinct observation times within the **same provider artist/content/metric scope** establish only `temporal-history-present`, which is the mathematical minimum for change-over-time evidence, not a fandom-strength threshold. Reaction history still cannot satisfy the fandom-persistence dimension. The contract does not infer persistence strength or produce a score.
+
+## Current Product readiness
+
+Current state: **provider-rights-blocked**.
+
+Even after rights are cleared and dual-dimension evidence exists, the v1 contract keeps:
+
+- `snsFandomPoint = null`
+- `numericProductEligible = false`
+- Product activation/publication = false
+
+until a separately justified cross-dimension combination methodology is approved.
+
+
+## Validation scope
+
+Exact variable-scope CI must cover only the five snsFandomPoint files introduced by this candidate and must not modify shared runtime, scheduler, database, registry, or deployment configuration.
+
+
+## Artist-scoped entitlement contract
+
+Authorized-account sources are not promoted to globally Production-ready merely because their API exists.
+
+The variable contract now requires an explicit, secret-free artist/provider entitlement record before authorized-account evidence can enter readiness. The entitlement binds:
+
+- canonical artist id;
+- exact provider and provider artist/channel id;
+- authorization class;
+- allowed snsFandom dimensions;
+- recorded OAuth scopes;
+- verification and validity times;
+- non-secret evidence reference;
+- explicit rights for commercial Product use, recurring automated collection, storage/retention, and derived metric publication.
+
+An entitlement is fail-closed when pending, revoked, expired, not yet valid, missing a required right, mismatched to the canonical artist/provider identity, or missing the provider-specific scope.
+
+For YouTube Analytics the candidate adapter additionally requires the official `yt-analytics.readonly` scope and an exact channel-owner OAuth entitlement. No access or refresh token is persisted in this variable contract.
+
+This enables artist-specific readiness without mutating the global Artist registry or pretending that one artist's authorization applies to another artist.
+
+
+## Generic public-comment persistence candidate
+
+A second persistence path is now modeled for generic public-channel coverage using the YouTube Data API comment surface.
+
+The candidate uses only fields already exposed by the official comment resource, including public comment author channel id and comment publication time. It computes one aggregate construct signal:
+
+- `youtube.public-commenter.cross-content-repeat-count`: the number of public commenter channel ids that appear across more than one distinct official artist video within the declared provider period.
+
+This is intentionally named **returning public commenter activity**, not “fan count.” It does not infer that a commenter is a fan, does not classify bots/fake engagement, and does not retain comment text, comment ids, or commenter channel ids in its output.
+
+The candidate remains **conditional-approval-required**. From June 1, 2026, YouTube's additional derived-metrics/data-storage policy applies only to audited analytics use cases that explicitly receive permission through the quota-extension/analytics approval path. The repository therefore requires separate recorded approval for this exact commenter-recurrence metric, commercial Product use, recurring collection, and aggregate retention before the source can be promoted.
+
+Even with approval, historical completeness is not assumed: deleted/unavailable comments, pagination scope, disabled comments, and incomplete collection windows remain evidence limitations.
+
+References:
+
+- https://developers.google.com/youtube/v3/docs/comments
+- https://developers.google.com/youtube/v3/docs/commentThreads
+- https://developers.google.com/youtube/terms/developer-policies
+- https://developers.google.com/youtube/terms/derived-metrics-policy
+
+
+## Provider approval evidence gate
+
+Conditional providers are no longer promoted by boolean flags or by manually
+rewriting their qualification state.
+
+The runtime contract now accepts
+`sns-fandom-provider-approval-evidence-v1`. A conditional provider becomes
+evidence-eligible only when an actual approval record is valid at evaluation
+time and covers the exact:
+
+- provider;
+- snsFandom construct dimension;
+- metric id;
+- approved endpoints;
+- commercial Product use;
+- recurring automated collection;
+- aggregate retention;
+- derived-metric publication.
+
+For the current YouTube additional-policy model, approval evidence also
+fail-closes retention claims above the documented 36-month statistical /
+derived-metric ceiling and the 30-day non-statistical refresh window.
+
+Submission preparation is recorded in:
+- `docs/research/sns-fandom-youtube-api-audit-packet-v1.md`
+
+A submitted form is not approval. Only a provider decision may populate an
+`approved` evidence record.
+
+
+## Existing YouTube collector compatibility
+
+A reusable YouTube video-metrics collector exists on the Artist Expansion
+validation branch, but the exact inspected version is not Production-compatible
+with snsFandomPoint.
+
+Compatibility assessment:
+- source:
+  `validation/artist-expansion-youtube-shadow-v1@ed8b7c293ebb9d5927cd004367546bed01b5f732`
+- verdict: `not-production-compatible`
+
+The blockers are:
+- absent statistics are coerced to numeric zero;
+- provider YouTube channel id is not emitted in each metric row;
+- observation time is not row-bound;
+- collection time is not row-bound;
+- raw API responses are persisted without snsFandom-specific retention
+  qualification;
+- row-level evidence reference is absent.
+
+The variable branch now has an executable fail-closed compatibility verifier and
+will not accept this collector shape as Production evidence.
+
+Required shared-runtime changes are documented in:
+- `docs/research/sns-fandom-youtube-collector-handoff-v1.md`
+
+No shared collector code was changed by this branch.
+
+
+## Comparability boundary before numeric normalization
+
+Numeric normalization is still **not approved**. Before any formula can be
+considered, observations must first pass an explicit comparability contract.
+
+The v1 comparability contract only groups construct evidence when all of the
+following are identical:
+
+- provider;
+- exact provider API client/project reference;
+- exact provider endpoint provenance;
+- snsFandom construct dimension;
+- metric id;
+- unit;
+- temporal basis;
+- exact provider period, when the source is period-backed; or
+- exact observation timestamp, when the source is point-in-time.
+
+A comparison cohort requires observations from at least two distinct canonical
+artists. This is only the mathematical minimum for a cross-artist comparison,
+not a score threshold or quality threshold.
+
+Content-level observations such as individual-video view/like/comment counters
+are **not** automatically treated as artist-level comparable values. They remain
+excluded until a separately justified artist-level content aggregation contract
+exists. This prevents artists with different numbers/types of official videos
+from being compared through an implicit sum, mean, latest-video pick, or other
+arbitrary aggregation.
+
+The comparability layer emits:
+
+- raw evidence members;
+- comparison cohort identity;
+- explicit temporal basis;
+- `normalizedValue = null`;
+- `normalizationMethod = null`;
+- cross-platform combination = false;
+- cross-metric combination = false.
+
+Accordingly, `comparable-cohorts-ready` means only that a defensible
+like-for-like comparison frame exists. It does **not** mean that a normalized
+score, percentile, weight, threshold, or final `snsFandomPoint` may be
+produced.
+
+
+## YouTube artist-level content aggregation boundary
+
+The content-universe problem is separated from the aggregation-function
+problem.
+
+### Content-universe selection
+
+For YouTube public-reaction evidence, the v1 selection contract accepts only:
+
+- the bound official artist channel;
+- its official uploads playlist;
+- all uploads whose publication timestamps fall inside one explicitly declared
+  publication-time window;
+- complete pagination through a terminal `playlistItems.list` page; and
+- a later `videos.list` statistical snapshot whose video-id set exactly
+  matches the manifest.
+
+This blocks silent use of:
+
+- manually curated videos;
+- latest-N videos;
+- top-N by any engagement counter;
+- search-result subsets;
+- arbitrary unequal content samples.
+
+The contract does not prescribe the publication-window duration. Window choice
+remains a methodology question and must be justified before a cross-artist
+Product score can use it.
+
+### Aggregation function
+
+A valid content manifest does **not** authorize an artist-level numeric
+aggregation.
+
+The current state remains:
+
+- selected content universe: can be contract-validated;
+- per-video raw counters: can remain source observations;
+- artist-level sum / mean / median / max / latest-video statistic: not approved;
+- cross-metric combination: not approved;
+- cross-platform combination: not approved;
+- normalized artist value: `null`;
+- final `snsFandomPoint`: `null`.
+
+This boundary prevents a valid source universe from being mistaken for a valid
+scoring formula.
+
+
+## Content-age temporal alignment before aggregation
+
+Complete content selection does not solve exposure-time bias.
+
+YouTube public view / like / comment counters are cumulative observations.
+When two selected videos have different publication timestamps, observing them
+at the same wall-clock snapshot time gives them different elapsed content ages.
+
+The v1 age-alignment contract therefore records, for each content metric:
+
+`contentAge = observedAt - publishedAt`
+
+Without an additional exposure model, direct comparison of raw cumulative
+content counters is marked ready only when the elapsed content age is exactly
+the same across the content samples.
+
+This is not a threshold. It is a like-for-like temporal requirement.
+
+The contract explicitly keeps:
+
+- interpolation = false;
+- extrapolation = false;
+- aggregation method = null;
+- aggregate value = null;
+- artist-level aggregation readiness = false;
+- normalization readiness = false.
+
+A same-time batch snapshot of videos published on different dates is therefore
+valid source evidence but **age-alignment-blocked** for direct artist-level
+aggregation.
+
+A future methodology has two possible paths, neither currently approved:
+
+1. collect each content item's cumulative metric at a common elapsed content
+   age; or
+2. justify a separate exposure-adjustment / growth-curve model.
+
+No arbitrary age bucket, interpolation rule, extrapolation rule, or decay
+formula is introduced in v1.
+
+
+## Reaction aggregation methodology decision gate
+
+After content-universe selection and content-age alignment, FANDEX still does
+not choose an artist-level aggregation formula automatically.
+
+Two possible reaction constructs are kept distinct:
+
+- **typical-content-reaction-intensity** — asks about the reaction magnitude of
+  a representative content item while keeping release volume separate; and
+- **window-total-reaction-volume** — treats the amount of released content and
+  the total reaction generated within the window as part of the construct.
+
+These are not interchangeable. A formula cannot silently decide which
+construct FANDEX means.
+
+The v1 methodology decision contract therefore requires an explicit internal
+decision record with:
+
+- exact construct target;
+- exact metric id;
+- selected method id;
+- the existing complete-window content selection rule;
+- exact-age-aligned content requirement;
+- explicit release-volume treatment;
+- missing-policy = block;
+- non-secret methodology evidence reference;
+- real-data validation dataset reference;
+- at least two distinct canonical artists, which is only the mathematical
+  minimum for cross-artist validation;
+- confirmation that content-age sensitivity, release-volume sensitivity,
+  missingness sensitivity, and revision stability were reviewed.
+
+A `research-only` decision never becomes Product aggregation.
+
+Even a structurally valid `approved` decision still produces:
+- executionImplemented = false;
+- aggregateValue = null;
+- normalizedValue = null.
+
+The numeric execution must be implemented and validated separately after a
+real methodology decision exists. This prevents the contract layer from
+smuggling in an arbitrary sum, mean, median, maximum, latest-content rule,
+weight, or threshold.
+
+Current repository state:
+- no approved reaction aggregation decision exists;
+- no artist-level reaction aggregate is produced;
+- per-video YouTube evidence therefore cannot satisfy Product reaction
+  readiness;
+- `snsFandomPoint` remains null.
+
+
+## Real reaction methodology validation dataset contract
+
+The aggregation methodology decision is now bound to an executable validation
+dataset contract rather than a free-form claim that “real data was reviewed.”
+
+The dataset is built from each artist's:
+
+- exact canonical artist / official YouTube channel binding;
+- complete official-channel publication-window manifest;
+- real `youtube.videos.list` observations;
+- exact provider API client/project reference;
+- exact content-level evidence references; and
+- exact content age derived from `observedAt - publishedAt`.
+
+A dataset is structurally eligible only when:
+
+- it contains at least two distinct canonical artists; this is the mathematical
+  minimum for cross-artist validation and is **not** a claim of statistical
+  representativeness;
+- all source observations are `materialClass = real`;
+- the selected metric is fully observed for every manifest content item;
+- all selected content samples inside each artist are exactly age-aligned;
+- the target elapsed content age is identical across artists;
+- all artists use the same approved provider client/project;
+- the statistical endpoint provenance is exactly
+  `youtube.videos.list`; and
+- each artist's manifest video set exactly equals its selected metric
+  observation set.
+
+The contract intentionally does **not** equalize the number of content items
+per artist. Doing so would silently change the construct by dropping real
+official content. Release-volume sensitivity must instead be evaluated
+explicitly by the later methodology analysis.
+
+### Revision stability
+
+A structurally valid dataset remains non-eligible for methodology approval
+until revision stability is assessed.
+
+The revision audit requires at least two distinct dataset revision references
+because one revision cannot establish stability. The audit itself remains
+evidence-based and must carry a non-secret evidence reference.
+
+States:
+- `unassessed` -> structurally ready at most;
+- `changed` -> methodology validation remains ineligible;
+- `stable` with sufficient revision evidence -> validation-ready.
+
+No aggregate or normalized value is emitted by the validation-dataset
+contract.
+
+### Methodology binding
+
+An aggregation decision must now match the exact validation dataset:
+
+- dataset id;
+- construct;
+- metric;
+- real material class;
+- canonical-artist count; and
+- revision-stability review state.
+
+A different dataset cannot be substituted after a methodology decision is
+recorded without causing the decision gate to fail closed.
+
+
+## Methodology study evidence gate
+
+The methodology decision no longer accepts sensitivity-review booleans as
+sufficient evidence by themselves.
+
+A separate `sns-fandom-reaction-methodology-study-v1` contract now binds the
+decision-support evidence to real validation datasets.
+
+A study can become `decision-support-ready` only when:
+
+- the primary dataset is real and `validation-ready`;
+- all supporting datasets are also real and validation-ready;
+- construct, metric, provider client, and endpoint provenance remain
+  consistent across datasets;
+- at least two distinct aggregation method ids have result evidence on the
+  primary dataset;
+- content-age sensitivity uses at least two real validation datasets with
+  distinct exact target content ages;
+- the declared content-age comparison references only datasets actually
+  supplied to the study;
+- release-volume sensitivity evidence exists and the supplied real data
+  actually contains at least two distinct selected-content counts;
+- missingness sensitivity has an explicit non-secret evidence reference; and
+- every supplied validation dataset has passed revision-stability review.
+
+The study deliberately produces:
+- no selected method;
+- no method ranking;
+- no score.
+
+It only establishes that enough evidence exists for a separate methodology
+decision.
+
+### Decision binding
+
+The final aggregation decision must exactly match:
+
+- methodology study id;
+- primary validation dataset id;
+- construct;
+- metric;
+- compared method-id set; and
+- all four sensitivity / revision review states.
+
+A methodology decision cannot swap datasets, omit an evaluated method, or
+claim a review state that the study did not establish.
+
+Even after all these gates, numeric execution remains a separate unimplemented
+step and the Product value remains null.
+
+
+## Existing YouTube shadow evidence audit
+
+Existing Artist Expansion YouTube artifacts were inspected before declaring
+new collection to be required.
+
+### Discovery artifact
+
+Workflow run:
+- `36800253141`
+
+Artifact:
+- id: `11135500171`
+- name: `artist-expansion-youtube-discovery-v2`
+
+Preserved files:
+- `youtube_seed_candidates_v1_latest.csv`
+- `fandex_youtube_seed_candidates_latest.json`
+- `FANDEX_YOUTUBE_SEED_DISCOVERY_REPORT.txt`
+
+Verdict: **not a reaction methodology validation dataset**.
+
+These are seed-discovery / review candidates. They do not contain the required
+age-aligned raw view / like / comment observation history.
+
+### Full reviewed cohort shadow artifact
+
+Workflow run:
+- `36841902398`
+
+Artifact:
+- id: `11150549597`
+- name: `artist-expansion-youtube-full-reviewed-cohort-v1`
+
+Preserved file:
+- `youtube_v3_full_reviewed_cohort_shadow_v1_latest.json`
+
+The artifact contains derived `youtubePointV3Shadow` values for 21 artists,
+not the raw content-level metric observations needed by the new methodology
+contract.
+
+The artifact itself explicitly records:
+
+- `scoreMode = historical_youtube_v3_formula_on_heterogeneous_reviewed_seed_evidence`;
+- `historicalLineageComplete = false`;
+- `commonSeedSelectionPolicyEstablished = false`;
+- `comparabilityThresholdDefined = false`;
+- `productEligibilityEvaluated = false`;
+- `rebaselineAuthorized = false`.
+
+It is therefore not admissible as evidence that the current
+`snsFandomPoint` reaction aggregation methodology is valid.
+
+### Historical manifest
+
+The existing
+`youtube_historical_approved_seed_manifest_v1.json` explicitly states that
+the original raw metrics were never committed and that the manifest does not
+claim exact historical metric reproducibility.
+
+Verdict: **not reusable for the real methodology validation dataset**.
+
+### Consequence
+
+No currently preserved repository / GitHub Actions artifact satisfies the
+required combination of:
+
+- complete official uploads-window manifest;
+- real raw content counters;
+- exact observation time;
+- exact common elapsed content age;
+- same provider client / endpoint provenance;
+- multi-artist cohort;
+- reproducible revision evidence.
+
+The Product remains fail-closed. Old derived YouTube points and historical seed
+IDs must not be backfilled into the new validation dataset.
+
+
+## YouTube 2026 derived-metrics policy clarification
+
+Current official YouTube policy was re-verified after the 2026-06-01 policy
+change.
+
+Baseline policy still prohibits independently creating derived metrics from
+YouTube API Data.
+
+However, audited developers whose Analytics & Reporting use case is accepted
+under the additional Developer Policies amendment may create specified
+analytics metrics. The official examples expressly include:
+
+- custom channel scores using averages, sums or ratios of API Data;
+- creator influence / content quality style scores;
+- cross-channel performance ranking / leaderboards;
+- historical channel-performance comparisons;
+- viewer-sentiment analysis from aggregate engagement/comment evidence.
+
+This means FANDEX's intended channel/artist analytics is not automatically
+disqualified by being a custom score or cross-channel comparison. The exact
+API Client must first obtain the additional-policy grant and clearly label
+FANDEX-derived metrics as independently generated rather than YouTube-sourced.
+
+The provider contract now models that distinction explicitly rather than
+treating generic API access as derived-metric permission.
+
+### Submission-readiness state
+
+Read-only Production verification:
+- public app root exists at `https://fandex-eta.vercel.app`;
+- `/privacy` is 404;
+- `/terms` is 404.
+
+Therefore the closest external blocker before a real audit submission is now
+the public legal/compliance surface plus the remaining application evidence,
+not additional variable math.
+
+
+## Validation dataset end-to-end lineage gate
+
+A methodology validation dataset is no longer eligible merely because its
+observations are structurally valid and marked as real.
+
+Every selected reaction observation must now be traceable through one complete
+lineage chain:
+
+1. authorized completed collection run;
+2. eligible YouTube raw collection record;
+3. validated historical snapshot;
+4. accepted observation revision event; and
+5. the metric-specific mapped observation used by the validation dataset.
+
+The lineage gate verifies that the chain preserves:
+
+- provider id;
+- provider resource / video id;
+- artist identity reference;
+- observation id;
+- observedAt;
+- collectedAt;
+- observation window;
+- evidence continuity between each lifecycle stage; and
+- raw provider metric value.
+
+The selected mapped observation value must equal the raw provider value carried
+by the lineage. A dataset is blocked if the mapped value changes, if any
+evidence edge is disconnected, if the collection run was not authorized and
+completed, if the raw record is rights-blocked, if the historical snapshot is
+not methodology-eligible, or if the revision event is not accepted.
+
+This prevents a dataset from becoming `validation-ready` through an isolated
+JSON/CSV export that cannot be traced back to the approved collection lifecycle.
+
+Current consequences:
+
+- `lineageValidated` is required for methodology validation eligibility;
+- missing lineage = blocked;
+- synthetic/Preview fallback remains ineligible;
+- unresolved revisions remain ineligible;
+- raw-to-observation value mutation is fail-closed;
+- lineage validation still produces no aggregate, normalized value, method
+  ranking, or final `snsFandomPoint`.
+
+
+## Methodology collection planning contract
+
+The repository now has a planning-only contract for future real-data
+methodology collection.
+
+The planner does not choose a default content age. Every target content age
+must be supplied explicitly with a methodology rationale evidence reference.
+This preserves the rule that no arbitrary 7-day, 14-day, or other age
+threshold is introduced by implementation code.
+
+For every declared target age and every video in every validated official
+content manifest, the planner deterministically derives:
+
+`captureAt = publishedAt + targetContentAge`
+
+The result is a set of dataset blueprints and per-content capture tasks.
+
+Important boundaries:
+
+- at least two canonical artists are required for cross-artist validation;
+- content-age sensitivity planning requires at least two distinct explicitly
+  justified target ages;
+- release-volume sensitivity requires naturally different selected-content
+  counts in the real manifests;
+- the planner never equalizes artist content counts;
+- the planner produces no aggregate or normalized values;
+- provider grant remains required;
+- shared scheduler mutation is not allowed from this variable branch;
+- collection execution is not authorized by the plan itself.
+
+### Missed exact-age captures
+
+YouTube public counters are cumulative and the current public source does not
+provide an arbitrary historical counter value for a past content age.
+
+Therefore, if the exact planned `captureAt` is already before or equal to the
+planning reference time, the task is marked missed unless an existing exact-age
+capture with evidence is supplied.
+
+A later current counter cannot substitute for a missed past target age.
+
+Existing evidence is accepted only when its:
+
+- dataset id;
+- canonical artist id;
+- video id;
+- metric id; and
+- exact observedAt
+
+match the deterministic planned task.
+
+This makes the collection plan suitable for handoff to Production Ops or a
+shared scheduler later without letting the variable branch mutate global
+scheduling infrastructure.
+
+
+## Validation collection handoff readiness
+
+The real-data methodology path now distinguishes three states:
+
+1. `planning-ready`
+2. `production-ops-handoff-ready`
+3. actual collection execution
+
+Only the first two are modeled in this variable branch. Execution remains
+outside the single-writer boundary.
+
+A handoff can become ready only when a valid planning result is paired with:
+
+- exact provider approval evidence;
+- exact provider client/project binding;
+- exact metric + endpoint approval;
+- approval validity at each future target-age capture time; and
+- a collector activation decision in `approved-ready` state.
+
+The handoff never mutates a scheduler, activates a collector, deploys code, or
+authorizes collection itself.
+
+This closes a prior gap where a deterministic collection plan could have been
+mistaken for operational authorization.
+
+Current repository state still has no real YouTube provider grant, so the
+actual Production handoff remains externally blocked even though the internal
+handoff contract is now defined and testable.
+
+
+Handoff additionally binds collector readiness to provider identity and
+requires provider approval to be active both at the handoff evaluation time and
+at every future exact-age capture time. Future-dated approval evidence and
+approved-ready state from another provider fail closed.
+
+
+## Validation capture receipt boundary
+
+A Production Ops handoff does not prove that collection actually happened or
+that the resulting observation matched the planned target age.
+
+The variable contract now accepts execution receipts only when they bind back
+to an exact handoff task:
+
+- task id;
+- dataset id;
+- canonical artist id;
+- video id;
+- metric id;
+- provider id;
+- provider client/project reference.
+
+Successful receipts must also carry:
+
+- actual observedAt;
+- collectedAt;
+- observation id;
+- collection run id;
+- non-secret evidence reference.
+
+The contract records:
+
+`timingDeviation = actualObservedAt - plannedCaptureAt`
+
+No timing tolerance is silently applied.
+
+If the deviation is non-zero, the capture is preserved as real evidence but the
+original target-age dataset remains in
+`capture-complete-timing-review-required` state. The contract does not
+interpolate, extrapolate, round, bucket, or shift the observation time.
+
+Only exact-target-age captures can become
+`targetAgeDatasetAssemblyEligible = true`, and even then:
+
+- lineage validation is still required;
+- revision audit is still required;
+- no aggregate or normalized score is produced.
+
+This closes the lifecycle gap between deterministic planning and downstream
+validation datasets without inventing an operational timing tolerance.
+
+
+## Receipt-to-dataset assembly gate
+
+Operational capture completion and methodology dataset readiness are now
+explicitly separated.
+
+The assembly gate only accepts a capture receipt when it is
+`capture-complete-lineage-pending` and exact-target-age eligible. It then
+requires the receipt, mapped observations, and lineage entries to agree on the
+same observation set.
+
+For every selected observation, assembly verifies:
+
+- canonical artist id;
+- provider content/video id;
+- metric id;
+- actual observedAt;
+- collectedAt;
+- observation id;
+- collection run id; and
+- evidence continuity into the lineage chain.
+
+The receipt collection run must equal the lineage collection run, and receipt
+evidence must be present somewhere in the run/raw/snapshot/revision lineage.
+
+Only after those checks does the existing validation-dataset builder run. The
+result must itself be `validation-ready`, lineage-validated, and
+methodology-validation eligible.
+
+Even successful assembly still produces:
+- no aggregate value;
+- no normalized value;
+- no methodology winner/decision;
+- no final `snsFandomPoint`.
+
+### Finalized-window correction
+
+The retrospective planner now requires `plannedAt >= manifest.windowEnd`.
+A future/open publication window cannot be treated as a complete manifest.
+
+This creates an explicit limitation: short target ages inside a long
+publication window can be missed if planning waits until the window closes.
+Such studies require a separate prospective content-enrollment workflow rather
+than pretending an open window is final.
+## Prospective open-window content enrollment
+
+Short target-age studies can no longer wait for a long publication window to
+close. The variable-side contract now supports provisional enrollment while the
+window is still open without claiming that the currently visible upload set is
+complete.
+
+For each official uploads-playlist discovery snapshot, the contract requires:
+
+- the exact canonical artist, official YouTube channel, provider client/project,
+  uploads playlist, and published-window scope;
+- the exact `youtube.channels.list -> youtube.playlistItems.list` discovery
+  chain;
+- terminal pagination for that discovery snapshot;
+- explicit observation/evidence time and per-video publication timestamps;
+- externally justified target content ages. No default age is created in code.
+
+A newly discovered video is provisionally enrolled at its first observed
+snapshot. Capture tasks are deterministic:
+
+`captureAt = publishedAt + targetContentAge`
+
+If discovery happens at or after that exact target-age time, the task becomes
+`missed-before-enrollment`. It is not repaired by a later counter,
+interpolation, extrapolation, rounding, bucketing, or automatic backfill.
+
+The discovery cadence itself is deliberately not chosen by this contract.
+`discoveryCadenceMilliseconds` remains `null`; Operations must provide any
+cadence decision outside the variable contract and the resulting observations
+are judged by actual timestamps.
+
+The generated Production Ops packet is planning-only. It can be reviewed by
+Operations, but this variable branch still sets all of the following to false:
+
+- scheduler mutation;
+- collector activation mutation;
+- collection execution authorization;
+- deployment authorization.
+
+Provider grant validation and execution-time revalidation remain required.
+
+### Final reconciliation
+
+Provisional enrollment never becomes a complete content universe by itself.
+After the publication window closes, an independently finalized complete
+content manifest must be reconciled against the enrolled video set.
+
+Reconciliation is fail-closed when:
+
+- the final manifest scope differs from the enrollment scope;
+- reconciliation occurs before the window has ended;
+- a final-manifest video was never enrolled;
+- an enrolled video is absent from the final manifest;
+- the publication timestamp for the same video changes.
+
+Only an exact set/timestamp match yields
+`prospectiveContentUniverseEligibleForDatasetAssembly = true`.
+
+Even then `validationDatasetUseAllowed` remains false at this gate because the
+existing execution-receipt, lineage, revision-audit, and validation-dataset
+assembly contracts must still pass. No aggregate, normalized value, methodology
+decision, or numeric `snsFandomPoint` is produced here.
+
+
+### Prospective enrollment to receipt bridge
+
+The provisional enrollment packet does not bypass the existing Production Ops
+handoff gate. Before a newly enrolled capture task can enter the execution
+receipt lifecycle, it is converted into the existing
+`sns-fandom-reaction-validation-collection-handoff-v1` shape only when:
+
+- the enrollment itself is active and its current Ops packet is review-ready;
+- task artist/channel/client/metric scope still matches the enrollment scope;
+- the exact YouTube provider approval is active at handoff time;
+- the same approval remains active at each exact future `captureAt`;
+- the collector is still `approved-ready` for `youtube-data-api` and has not
+  already been collection-authorized by this variable branch.
+
+The bridge preserves the same non-authorizing safety boundary:
+scheduler mutation, activation mutation, collection authorization, and
+deployment authorization all remain false.
+
+Once that gate passes, prospective tasks use the existing receipt evaluator
+without a second receipt contract. Exact timing, collection-run identity,
+observation identity, evidence continuity, lineage validation, revision audit,
+and validation-dataset assembly therefore remain the same downstream gates.
+
+
+### Multi-artist prospective receipt bundling
+
+Prospective captures are naturally fragmented by artist and discovery time, but
+the validation dataset contract requires real evidence from at least two
+canonical artists. A single-artist receipt therefore cannot be relabeled as a
+methodology dataset.
+
+After every artist's publication window has been reconciled against its final
+complete manifest, exact-target-age receipt results can be bundled into the
+existing receipt shape only when:
+
+- there are at least two distinct canonical artists;
+- all enrollments use the same provider client/project, reaction metric,
+  construct, and dataset/target-age plan;
+- every enrollment is active with no missed-before-enrollment task;
+- every final-manifest reconciliation is ready and exact;
+- every enrolled task appears in the exact receipt set;
+- all receipt results are already
+  `capture-complete-lineage-pending` and dataset-assembly eligible;
+- task IDs and observation IDs are unique across the study;
+- no timing-deviated capture is present.
+
+A ready bundle still sets lineage validation and revision audit as required. It
+does not create observations, repair missing captures, choose an aggregation
+method, normalize values, or produce `snsFandomPoint`. Its only purpose is to
+let the existing multi-artist validation-dataset assembly consume a complete
+prospective capture study without weakening the retrospective lifecycle.
