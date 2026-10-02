@@ -4,9 +4,15 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "lib/intelligence/naverNewsOfficialManifestFinalize.ts"
-      - "lib/intelligence/naverNewsOfficialManifestFinalize.test.mts"
+      - "lib/server/ingestion/naverNewsStoredEvidenceMirror.ts"
+      - "scripts/ingestion/run-naver-news-blob-only-direct-v1.ts"
+      - "tests/naver-news-stored-evidence-mirror-v1.test.mts"
+      - "tests/naver-news-blob-only-direct-v1.test.mts"
+      - ".github/workflows/naver-news-blob-only-direct-production-v1.yml"
       - ".github/workflows/naver-news-official-manifest-finalize-v1.yml"
+
+permissions:
+  contents: read
 
 jobs:
   finalize:
@@ -18,10 +24,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate finalize contract
-        run: npx tsx --test lib/intelligence/naverNewsOfficialManifestFinalize.test.mts
+      - name: Validate Stored Evidence finalization
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+
+      - name: Validate direct Blob authority handoff
+        run: npx tsx --test tests/naver-news-blob-only-direct-v1.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
