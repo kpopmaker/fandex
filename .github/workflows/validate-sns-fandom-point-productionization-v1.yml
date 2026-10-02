@@ -67,6 +67,7 @@ jobs:
           lib/intelligence/snsFandomPointHistoricalSnapshotManifest.ts
           lib/intelligence/snsFandomPointValidationDatasetEligibility.ts
           lib/intelligence/snsFandomPointYoutubeAnalyticsCandidate.ts
+          lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest.ts
           lib/intelligence/snsFandomPointYoutubeAuditSubmissionReadiness.ts
           lib/intelligence/snsFandomPointYoutubeCandidate.ts
           lib/intelligence/snsFandomPointYoutubeCommentPersistenceCandidate.ts
@@ -92,6 +93,8 @@ jobs:
           tests/sns-fandom-point-reaction-validation-dataset-assembly-v1.test.mts
           tests/sns-fandom-point-reaction-validation-dataset-v1.test.mts
           tests/sns-fandom-point-reaction-validation-lineage-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-artist-binding-manifest-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-artist-binding-manifest-v1.test.mts
           tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
           tests/sns-fandom-point-youtube-content-age-alignment-v1.test.mts
           tests/sns-fandom-point-youtube-content-selection-v1.test.mts
