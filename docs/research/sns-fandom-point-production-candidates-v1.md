@@ -675,3 +675,49 @@ Read-only Production verification:
 Therefore the closest external blocker before a real audit submission is now
 the public legal/compliance surface plus the remaining application evidence,
 not additional variable math.
+
+
+## Validation dataset end-to-end lineage gate
+
+A methodology validation dataset is no longer eligible merely because its
+observations are structurally valid and marked as real.
+
+Every selected reaction observation must now be traceable through one complete
+lineage chain:
+
+1. authorized completed collection run;
+2. eligible YouTube raw collection record;
+3. validated historical snapshot;
+4. accepted observation revision event; and
+5. the metric-specific mapped observation used by the validation dataset.
+
+The lineage gate verifies that the chain preserves:
+
+- provider id;
+- provider resource / video id;
+- artist identity reference;
+- observation id;
+- observedAt;
+- collectedAt;
+- observation window;
+- evidence continuity between each lifecycle stage; and
+- raw provider metric value.
+
+The selected mapped observation value must equal the raw provider value carried
+by the lineage. A dataset is blocked if the mapped value changes, if any
+evidence edge is disconnected, if the collection run was not authorized and
+completed, if the raw record is rights-blocked, if the historical snapshot is
+not methodology-eligible, or if the revision event is not accepted.
+
+This prevents a dataset from becoming `validation-ready` through an isolated
+JSON/CSV export that cannot be traced back to the approved collection lifecycle.
+
+Current consequences:
+
+- `lineageValidated` is required for methodology validation eligibility;
+- missing lineage = blocked;
+- synthetic/Preview fallback remains ineligible;
+- unresolved revisions remain ineligible;
+- raw-to-observation value mutation is fail-closed;
+- lineage validation still produces no aggregate, normalized value, method
+  ranking, or final `snsFandomPoint`.
