@@ -1,6 +1,9 @@
 import {
   type SnsFandomYoutubeQuotaWorksheetResult,
 } from './snsFandomPointYoutubeQuotaWorksheet';
+import {
+  type SnsFandomYoutubeProviderClientIdentityResult,
+} from './snsFandomPointYoutubeProviderClientIdentity';
 
 export const SNS_FANDOM_YOUTUBE_AUDIT_SUBMISSION_READINESS_VERSION =
   'sns-fandom-youtube-audit-submission-readiness-v1' as const;
@@ -11,6 +14,7 @@ export type SnsFandomYoutubeAuditSubmissionInput = Readonly<{
   useCase: 'analytics-reporting';
   derivedMetricsAndStorageAmendmentAccepted: boolean;
   requestedEndpoints: readonly string[];
+  providerClientIdentity: SnsFandomYoutubeProviderClientIdentityResult | null;
   quotaWorksheet: SnsFandomYoutubeQuotaWorksheetResult | null;
   evidence: Readonly<{
     applicantIdentityRef: string | null;
@@ -42,6 +46,8 @@ export type SnsFandomYoutubeAuditSubmissionReadiness = Readonly<{
   useCase: 'analytics-reporting';
   requestedEndpoints: readonly string[];
   amendmentAcknowledged: boolean;
+  providerClientIdentityValidated: boolean;
+  googleCloudProjectNumber: string | null;
   quotaEvidenceValidated: boolean;
   minimumProjectedQuotaUnitsPerDay: number | null;
   providerApprovalGranted: false;
@@ -109,6 +115,42 @@ export function evaluateSnsFandomYoutubeAuditSubmissionReadiness(
   }
 
 
+  const providerClientIdentity = input.providerClientIdentity;
+  let providerClientIdentityValidated = false;
+
+  if (providerClientIdentity === null) {
+    blockers.push('youtube-audit-provider-client-identity-missing');
+  } else {
+    if (
+      providerClientIdentity.state !== 'provider-client-identity-ready'
+      || !providerClientIdentity.submissionEvidenceEligible
+      || providerClientIdentity.googleCloudProjectNumber === null
+      || providerClientIdentity.evidenceRef === null
+      || providerClientIdentity.blockers.length > 0
+    ) {
+      blockers.push('youtube-audit-provider-client-identity-not-ready');
+    }
+    if (
+      providerClientIdentity.providerId !== 'youtube-data-api'
+    ) {
+      blockers.push('youtube-audit-provider-client-provider-mismatch');
+    }
+    if (
+      providerClientIdentity.providerClientRef !== input.providerClientRef
+    ) {
+      blockers.push('youtube-audit-provider-client-ref-mismatch');
+    }
+
+    providerClientIdentityValidated =
+      providerClientIdentity.state === 'provider-client-identity-ready'
+      && providerClientIdentity.submissionEvidenceEligible
+      && providerClientIdentity.googleCloudProjectNumber !== null
+      && providerClientIdentity.evidenceRef !== null
+      && providerClientIdentity.blockers.length === 0
+      && providerClientIdentity.providerId === 'youtube-data-api'
+      && providerClientIdentity.providerClientRef === input.providerClientRef;
+  }
+
   const quotaWorksheet = input.quotaWorksheet;
   let quotaEvidenceValidated = false;
 
@@ -167,6 +209,14 @@ export function evaluateSnsFandomYoutubeAuditSubmissionReadiness(
     if (secretLike(value)) blockers.push('youtube-audit-evidence-ref-secret-like');
   }
 
+  if (
+    providerClientIdentityValidated
+    && providerClientIdentity !== null
+    && e.cloudProjectRef !== providerClientIdentity.evidenceRef
+  ) {
+    blockers.push('youtube-audit-cloud-project-evidence-mismatch');
+  }
+
   if (!httpsUrl(e.primaryAccessUrl)) {
     blockers.push('youtube-audit-primary-access-url-missing-or-invalid');
   }
@@ -203,6 +253,11 @@ export function evaluateSnsFandomYoutubeAuditSubmissionReadiness(
     requestedEndpoints: Object.freeze([...input.requestedEndpoints]),
     amendmentAcknowledged:
       input.derivedMetricsAndStorageAmendmentAccepted,
+    providerClientIdentityValidated,
+    googleCloudProjectNumber:
+      providerClientIdentityValidated && providerClientIdentity !== null
+        ? providerClientIdentity.googleCloudProjectNumber
+        : null,
     quotaEvidenceValidated,
     minimumProjectedQuotaUnitsPerDay:
       quotaEvidenceValidated && quotaWorksheet !== null
