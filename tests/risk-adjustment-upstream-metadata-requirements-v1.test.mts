@@ -21,11 +21,11 @@ test('risk adjustment required metadata dimensions are explicit and deterministi
   ]);
 });
 
-test('current newsIssuePoint contract is blocked by missing explicit risk metadata', () => {
-  assert.equal(NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP.status, 'blocked');
+test('current newsIssuePoint producer exposes all required Risk metadata dimensions', () => {
+  assert.equal(NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP.status, 'ready');
   assert.deepEqual(
     NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP.missingRequiredDimensions,
-    ['confidence', 'conflict', 'coverage', 'freshness', 'revision'],
+    [],
   );
   assert.deepEqual(
     NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP.unknownRequiredDimensions,
@@ -37,7 +37,7 @@ test('current newsIssuePoint contract is blocked by missing explicit risk metada
   );
   assert.deepEqual(
     NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP.blockers,
-    ['required-quality-metadata-absent'],
+    [],
   );
 });
 
