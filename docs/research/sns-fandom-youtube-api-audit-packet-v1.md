@@ -450,3 +450,44 @@ The audit-readiness gate now requires:
 
 Even after this identity validation passes, provider approval remains false
 until an actual provider grant is recorded.
+
+
+## 6b. Verified artist-channel manifest before quota counting
+
+The measured quota worksheet now consumes
+`sns-fandom-youtube-audit-artist-binding-manifest-v1`.
+
+This prevents the Product artist-universe target from being reused as provider
+quota evidence.
+
+The binding manifest requires:
+
+- exact canonical artist id;
+- exact YouTube channel id;
+- verified binding state;
+- non-secret evidence reference;
+- exact verification time;
+- explicit inclusion/exclusion from the submitted audit scope;
+- explicit shared-channel caveat when one provider channel is bound to more
+  than one canonical artist.
+
+A shared/label channel cannot enter the v1 audit cohort merely to increase
+coverage. Shared-channel members are rejected from the audit scope even when
+the ambiguity is documented.
+
+The quota worksheet now requires:
+
+- a `binding-manifest-ready` artifact;
+- `measuredUsage.artistChannelCount` to exactly equal the manifest's
+  `auditScopeMemberCount`.
+
+Therefore the current Product universe value of 100 cannot satisfy quota
+readiness unless a real verified audit manifest actually contains 100 eligible
+unique artist-channel members.
+
+Current main was checked on 2026-10-02:
+
+- `app/data/v4/artistUniverse.ts` has 100 artist seeds;
+- that file has 0 explicit YouTube channel bindings.
+
+The external identity handoff is tracked in issue #402.
