@@ -72,7 +72,7 @@ const RESULT: NaverNewsBlobOnlyCollectionStageSummary = Object.freeze({
     databaseQueries: 0,
     databaseWrites: 0,
     databaseCompletionPerformed: false,
-    schedulerManifestFinalized: true,
+    schedulerManifestFinalized: false,
     schedulesActivated: 0,
     environmentMutations: 0,
     productActivations: 0,
@@ -164,7 +164,7 @@ test('runs one canonical Blob-only stage directly without Vercel or database eff
       rejectedItems: 0,
     },
     databaseWrites: 0,
-    schedulerManifestFinalized: false,
+    schedulerManifestFinalized: true,
   });
 });
 
