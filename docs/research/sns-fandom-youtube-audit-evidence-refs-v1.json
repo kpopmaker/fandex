@@ -1,0 +1,45 @@
+{
+  "version": "sns_fandom_youtube_audit_evidence_refs_v1",
+  "observedAt": "2026-10-02T14:14:54.000Z",
+  "repositoryMainSha": "4a2aea90961f597d644515334360fa80df0e0517",
+  "productionDeployment": {
+    "deploymentId": "dpl_13Lvwaz2eKC8Rv5neZp61VoZpC4R",
+    "gitSha": "4a2aea90961f597d644515334360fa80df0e0517",
+    "state": "READY",
+    "target": "production",
+    "stableAlias": "https://fandex-eta.vercel.app"
+  },
+  "resolvedEvidence": {
+    "primaryAccessUrl": "https://fandex-eta.vercel.app/",
+    "primaryAccessHttpStatus": 200,
+    "privacyPolicyUrl": "https://fandex-eta.vercel.app/privacy",
+    "privacyPolicyHttpStatus": 200,
+    "termsOfServiceUrl": "https://fandex-eta.vercel.app/terms",
+    "termsOfServiceHttpStatus": 200,
+    "privacyPolicySourceRef": "repo://app/privacy/page.tsx@main",
+    "termsDocumentationRef": "repo://app/terms/page.tsx@main",
+    "businessModelDescriptionRef": "repo://docs/research/sns-fandom-youtube-api-audit-packet-v1.md#2-api-client-description",
+    "auditCohortManifestRef": "repo://data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json@main",
+    "auditCohortMemberCount": 5,
+    "legalFooterSourceRef": "repo://app/components/LegalFooter.tsx@main"
+  },
+  "unresolvedEvidence": {
+    "applicantIdentityRef": null,
+    "organizationOrSelfRef": null,
+    "privacyPolicyScreenshotRef": null,
+    "homepageScreenshotRef": null,
+    "dashboardFeatureScreenshotRef": null,
+    "providerClientIdentityRef": null,
+    "googleCloudProjectNumber": null,
+    "cloudProjectRef": null,
+    "realMeasurementWindowRef": null,
+    "cadenceEvidenceRef": null,
+    "uploadManifestPageCountPerReactionRun": null,
+    "videoCountPerReactionRun": null,
+    "quotaEstimateRef": null
+  },
+  "fixtureValuesAreProductionEvidence": false,
+  "providerApprovalGranted": false,
+  "productionCollectionAuthorized": false,
+  "providerSubmissionAuthorized": false
+}
