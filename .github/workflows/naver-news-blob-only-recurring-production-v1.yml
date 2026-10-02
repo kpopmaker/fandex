@@ -78,8 +78,18 @@ jobs:
             'utf8',
           ).trim().split(/\r?\n/).filter(Boolean);
           const summary = JSON.parse(lines.at(-1) ?? '{}');
+          const runStatusValid =
+            (
+              summary.runStatus === 'collected-and-finalized'
+              && summary.providerCalls === 1
+            )
+            || (
+              summary.runStatus === 'already-finalized'
+              && summary.providerCalls === 0
+            );
           if (
             summary.mode !== 'github-actions-direct-blob-only'
+            || !runStatusValid
             || summary.databaseWrites !== 0
             || summary.schedulerManifestFinalized !== true
           ) {
