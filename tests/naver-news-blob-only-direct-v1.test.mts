@@ -253,7 +253,7 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
 });
 
 
-test('recurring Production workflow activates the frozen hourly cadence and preserves the manual approval path', async () => {
+test('recurring GitHub Production workflow remains manual-only after scheduler provider cutover', async () => {
   const workflow = await readFile(
     new URL(
       '../.github/workflows/naver-news-blob-only-recurring-production-v1.yml',
@@ -263,9 +263,8 @@ test('recurring Production workflow activates the frozen hourly cadence and pres
   );
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.match(workflow, /^\s*schedule:/m);
-  assert.match(workflow, /cron: '17 \* \* \* \*'/);
-  assert.match(workflow, /github\.event_name == 'schedule'/);
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.doesNotMatch(workflow, /github\.event_name == 'schedule'/);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'/);
   assert.match(
     workflow,
