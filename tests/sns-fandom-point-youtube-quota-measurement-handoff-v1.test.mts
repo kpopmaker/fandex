@@ -3,7 +3,6 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
-  evaluateSnsFandomYoutubeAuditArtistBindingManifest,
   type SnsFandomYoutubeAuditArtistBindingManifestInput,
 } from '../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
 import {
@@ -86,14 +85,17 @@ test('merged five-member Audit cohort becomes an exact non-authorizing quota mea
   assert.deepEqual(result.blockers, []);
 });
 
-test('quota measurement handoff refuses artist/channel rows that do not exactly match the validated manifest', async () => {
+test('quota measurement handoff refuses a structurally invalid binding manifest', async () => {
   const manifest = await mergedAuditManifest();
 
   const forgedManifest = {
     ...manifest,
     members: manifest.members.map((member, index) =>
-      index === 0
-        ? { ...member, youtubeChannelId: 'UCaaaaaaaaaaaaaaaaaaaaaa' }
+      index === 1
+        ? {
+            ...member,
+            canonicalArtistId: manifest.members[0].canonicalArtistId,
+          }
         : member,
     ),
   };
@@ -196,7 +198,7 @@ test('measurement window and cadence must be explicit evidence, never defaults',
   );
   assert.ok(
     result.blockers.includes(
-      'youtube-quota-measurement-cadenceEvidenceRef-missing',
+      'youtube-quota-measurement-cadence-evidence-ref-missing',
     ),
   );
 });
