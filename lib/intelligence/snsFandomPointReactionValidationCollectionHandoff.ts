@@ -6,6 +6,9 @@ import {
   type SnsFandomCollectorActivationDecision,
 } from './snsFandomPointCollectorActivationTransition';
 import {
+  type SnsFandomProspectiveEnrollmentResult,
+} from './snsFandomPointReactionProspectiveContentEnrollment';
+import {
   type SnsFandomReactionCollectionPlanResult,
   type SnsFandomReactionCollectionTask,
 } from './snsFandomPointReactionValidationCollectionPlan';
@@ -63,9 +66,18 @@ function unique(values: readonly string[]): string[] {
   return Array.from(new Set(values));
 }
 
+type SnsFandomReactionApprovalTask = Readonly<{
+  providerClientRef: string;
+  metricId:
+    | 'youtube.video.view-count'
+    | 'youtube.video.like-count'
+    | 'youtube.video.comment-count';
+  captureAt: string;
+}>;
+
 function taskApprovalActive(
   approval: SnsFandomProviderApprovalEvidence,
-  task: SnsFandomReactionCollectionTask,
+  task: SnsFandomReactionApprovalTask,
 ): boolean {
   return isSnsFandomProviderApprovalActiveFor(approval, {
     providerId: 'youtube-data-api',
@@ -258,6 +270,208 @@ export function buildSnsFandomReactionCollectionHandoff(
     approvalEvidenceRef: providerApproval?.evidenceRef ?? null,
     pendingTasks: Object.freeze(pendingTasks),
     alreadyCapturedTaskCount,
+    productionOpsHandoffReady,
+    providerGrantValidated,
+    collectorApprovedReady,
+    executionTimeRevalidationRequired: true as const,
+    schedulerMutationAllowed: false as const,
+    activationMutationAllowed: false as const,
+    collectionExecutionAuthorized: false as const,
+    deploymentAuthorized: false as const,
+    blockers: Object.freeze(dedupedBlockers),
+  });
+}
+
+
+export function buildSnsFandomProspectiveReactionCollectionHandoff(
+  input: Readonly<{
+    enrollment: SnsFandomProspectiveEnrollmentResult;
+    providerApproval: SnsFandomProviderApprovalEvidence | null;
+    collectorActivation: SnsFandomCollectorActivationDecision;
+    evaluatedAt: string;
+  }>,
+): SnsFandomReactionCollectionHandoffResult {
+  const blockers: string[] = [];
+  const { enrollment, providerApproval, collectorActivation } = input;
+
+  if (!validIso(input.evaluatedAt)) {
+    blockers.push('reaction-collection-handoff-evaluated-at-invalid');
+  }
+
+  if (
+    enrollment.state !== 'enrollment-active'
+    || enrollment.opsPacket.state !== 'ops-review-ready'
+  ) {
+    blockers.push('reaction-prospective-handoff-enrollment-not-ready');
+  }
+  if (enrollment.missedTaskCount > 0) {
+    blockers.push('reaction-prospective-handoff-has-missed-captures');
+  }
+  if (
+    enrollment.opsPacket.providerClientRef !== enrollment.providerClientRef
+  ) {
+    blockers.push('reaction-prospective-handoff-provider-client-mismatch');
+  }
+  if (enrollment.opsPacket.collectionExecutionAuthorized) {
+    blockers.push(
+      'reaction-prospective-handoff-illegally-authorizes-execution',
+    );
+  }
+  if (enrollment.opsPacket.schedulerMutationAllowed) {
+    blockers.push(
+      'reaction-prospective-handoff-illegally-allows-scheduler-mutation',
+    );
+  }
+  if (enrollment.opsPacket.activationMutationAllowed) {
+    blockers.push(
+      'reaction-prospective-handoff-illegally-allows-activation-mutation',
+    );
+  }
+  if (enrollment.opsPacket.deploymentAuthorized) {
+    blockers.push(
+      'reaction-prospective-handoff-illegally-authorizes-deployment',
+    );
+  }
+
+  const prospectiveTasks = enrollment.opsPacket.pendingTasks;
+  const collectionRequired = prospectiveTasks.length > 0;
+
+  for (const task of prospectiveTasks) {
+    if (
+      task.providerClientRef !== enrollment.providerClientRef
+      || task.canonicalArtistId !== enrollment.canonicalArtistId
+      || task.youtubeChannelId !== enrollment.youtubeChannelId
+      || task.metricId !== enrollment.metricId
+    ) {
+      blockers.push('reaction-prospective-handoff-task-scope-mismatch');
+      break;
+    }
+  }
+
+  const approvalActiveAtHandoff =
+    collectionRequired
+    && providerApproval !== null
+    && isSnsFandomProviderApprovalActiveFor(providerApproval, {
+      providerId: 'youtube-data-api',
+      providerClientRef: enrollment.providerClientRef,
+      providerEndpoints: [
+        'youtube.channels.list',
+        'youtube.playlistItems.list',
+        'youtube.videos.list',
+      ],
+      dimension: 'public-reaction-diffusion',
+      metricId: enrollment.metricId,
+      evaluatedAt: input.evaluatedAt,
+    });
+
+  const providerGrantValidated =
+    collectionRequired
+    && approvalActiveAtHandoff
+    && providerApproval !== null
+    && prospectiveTasks.every((task) =>
+      taskApprovalActive(providerApproval, task)
+    );
+
+  if (collectionRequired && providerApproval === null) {
+    blockers.push('reaction-collection-handoff-provider-approval-missing');
+  } else if (collectionRequired && providerApproval !== null) {
+    if (providerApproval.providerId !== 'youtube-data-api') {
+      blockers.push(
+        'reaction-collection-handoff-provider-approval-provider-mismatch',
+      );
+    }
+    if (
+      providerApproval.providerClientRef !== enrollment.providerClientRef
+    ) {
+      blockers.push('reaction-collection-handoff-provider-client-mismatch');
+    }
+    if (providerApproval.state !== 'approved') {
+      blockers.push(
+        'reaction-collection-handoff-provider-approval-not-approved',
+      );
+    }
+    if (!approvalActiveAtHandoff) {
+      blockers.push(
+        'reaction-collection-handoff-provider-approval-not-active-at-handoff',
+      );
+    }
+
+    for (const task of prospectiveTasks) {
+      if (!taskApprovalActive(providerApproval, task)) {
+        blockers.push(
+          'reaction-collection-handoff-provider-approval-not-active-for-capture',
+        );
+        break;
+      }
+    }
+  }
+
+  const collectorApprovedReady =
+    collectorActivation.providerId === 'youtube-data-api'
+    && collectorActivation.state === 'approved-ready'
+    && collectorActivation.collectionAuthorized === false
+    && collectorActivation.blockers.length === 0;
+
+  if (collectionRequired && !collectorApprovedReady) {
+    blockers.push(
+      'reaction-collection-handoff-collector-not-approved-ready',
+    );
+  }
+
+  const pendingTasks: SnsFandomReactionCollectionHandoffTask[] = [];
+  for (const task of prospectiveTasks) {
+    if (
+      validIso(input.evaluatedAt)
+      && Date.parse(task.captureAt) <= Date.parse(input.evaluatedAt)
+    ) {
+      blockers.push('reaction-collection-handoff-capture-window-missed');
+      continue;
+    }
+
+    pendingTasks.push(Object.freeze({
+      taskId: task.taskId,
+      datasetId: task.datasetId,
+      canonicalArtistId: task.canonicalArtistId,
+      youtubeChannelId: task.youtubeChannelId,
+      providerClientRef: task.providerClientRef,
+      videoId: task.videoId,
+      metricId: task.metricId,
+      captureAt: task.captureAt,
+      contentSelectionEvidenceRef: task.discoveryEvidenceRef,
+      state: 'awaiting-production-ops' as const,
+    }));
+  }
+
+  if (pendingTasks.length !== prospectiveTasks.length) {
+    blockers.push(
+      'reaction-collection-handoff-pending-task-construction-incomplete',
+    );
+  }
+
+  const dedupedBlockers = unique(blockers);
+  let state: SnsFandomReactionCollectionHandoffResult['state'];
+  let productionOpsHandoffReady = false;
+
+  if (dedupedBlockers.length > 0) {
+    state = 'blocked';
+  } else if (pendingTasks.length === 0) {
+    state = 'collection-not-required';
+  } else {
+    state = 'production-ops-handoff-ready';
+    productionOpsHandoffReady = true;
+  }
+
+  return Object.freeze({
+    contractVersion:
+      SNS_FANDOM_REACTION_COLLECTION_HANDOFF_VERSION,
+    state,
+    planId: enrollment.enrollmentId,
+    evaluatedAt: input.evaluatedAt,
+    providerId: 'youtube-data-api' as const,
+    providerClientRef: enrollment.providerClientRef,
+    approvalEvidenceRef: providerApproval?.evidenceRef ?? null,
+    pendingTasks: Object.freeze(pendingTasks),
+    alreadyCapturedTaskCount: 0,
     productionOpsHandoffReady,
     providerGrantValidated,
     collectorApprovedReady,
