@@ -1,6 +1,6 @@
 import {
-  type SnsFandomYoutubeAuditArtistBinding,
-  type SnsFandomYoutubeAuditArtistBindingManifestResult,
+  evaluateSnsFandomYoutubeAuditArtistBindingManifest,
+  type SnsFandomYoutubeAuditArtistBindingManifestInput,
 } from './snsFandomPointYoutubeAuditArtistBindingManifest';
 import {
   type SnsFandomYoutubeProviderClientIdentityResult,
@@ -21,8 +21,8 @@ const REACTION_ENDPOINTS = Object.freeze([
 export type SnsFandomYoutubeQuotaMeasurementHandoffInput = Readonly<{
   handoffId: string;
   preparedAt: string;
-  artistBindingManifest: SnsFandomYoutubeAuditArtistBindingManifestResult | null;
-  artistBindings: readonly SnsFandomYoutubeAuditArtistBinding[];
+  artistBindingManifest:
+    SnsFandomYoutubeAuditArtistBindingManifestInput | null;
   providerClientIdentity: SnsFandomYoutubeProviderClientIdentityResult | null;
   requestedEndpoints: readonly SnsFandomYoutubeQuotaEndpoint[];
   measurementWindowStart: string;
@@ -133,7 +133,11 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     blockers.push('youtube-quota-measurement-prepared-at-invalid');
   }
 
-  const manifest = input.artistBindingManifest;
+  const manifestInput = input.artistBindingManifest;
+  const manifest = manifestInput === null
+    ? null
+    : evaluateSnsFandomYoutubeAuditArtistBindingManifest(manifestInput);
+
   let manifestReady = false;
   if (manifest === null) {
     blockers.push('youtube-quota-measurement-binding-manifest-missing');
@@ -142,43 +146,10 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
       manifest.state === 'binding-manifest-ready'
       && manifest.submissionEvidenceEligible
       && manifest.auditScopeMemberCount > 0
-      && manifest.auditScopeMemberCount
-        === manifest.auditScopeCanonicalArtistIds.length
-      && manifest.auditScopeMemberCount
-        === manifest.auditScopeYoutubeChannelIds.length
       && manifest.blockers.length === 0;
 
     if (!manifestReady) {
       blockers.push('youtube-quota-measurement-binding-manifest-not-ready');
-    }
-  }
-
-  if (manifestReady && manifest !== null) {
-    const selectedBindings = input.artistBindings
-      .filter((member) => member.includedInAuditScope)
-      .map((member) => ({
-        canonicalArtistId: member.canonicalArtistId,
-        youtubeChannelId: member.youtubeChannelId,
-      }))
-      .sort((left, right) =>
-        left.canonicalArtistId.localeCompare(right.canonicalArtistId)
-        || left.youtubeChannelId.localeCompare(right.youtubeChannelId));
-
-    const selectedArtistIds = selectedBindings
-      .map((member) => member.canonicalArtistId)
-      .sort();
-    const selectedChannelIds = selectedBindings
-      .map((member) => member.youtubeChannelId)
-      .sort();
-
-    if (
-      selectedBindings.length !== manifest.auditScopeMemberCount
-      || JSON.stringify(selectedArtistIds)
-        !== JSON.stringify([...manifest.auditScopeCanonicalArtistIds].sort())
-      || JSON.stringify(selectedChannelIds)
-        !== JSON.stringify([...manifest.auditScopeYoutubeChannelIds].sort())
-    ) {
-      blockers.push('youtube-quota-measurement-binding-rows-mismatch');
     }
   }
 
@@ -239,7 +210,7 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
   const ready = uniqueBlockers.length === 0;
 
   if (ready && client !== null) {
-    const selectedBindings = input.artistBindings
+    const selectedBindings = manifestInput!.members
       .filter((member) => member.includedInAuditScope)
       .sort((left, right) =>
         left.canonicalArtistId.localeCompare(right.canonicalArtistId));
