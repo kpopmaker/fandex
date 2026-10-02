@@ -120,8 +120,11 @@ export function buildSnsFandomReactionCollectionHandoff(
     (task) => task.state === 'pending-prospective-capture',
   );
 
+  const collectionRequired = pendingPlanTasks.length > 0;
+
   const providerGrantValidated =
-    providerApproval !== null
+    collectionRequired
+    && providerApproval !== null
     && providerApproval.state === 'approved'
     && providerApproval.providerId === 'youtube-data-api'
     && plan.providerClientRef !== null
@@ -130,9 +133,9 @@ export function buildSnsFandomReactionCollectionHandoff(
       taskApprovalActive(providerApproval, task)
     );
 
-  if (providerApproval === null) {
+  if (collectionRequired && providerApproval === null) {
     blockers.push('reaction-collection-handoff-provider-approval-missing');
-  } else {
+  } else if (collectionRequired && providerApproval !== null) {
     if (providerApproval.providerId !== 'youtube-data-api') {
       blockers.push(
         'reaction-collection-handoff-provider-approval-provider-mismatch',
@@ -167,7 +170,7 @@ export function buildSnsFandomReactionCollectionHandoff(
     && collectorActivation.collectionAuthorized === false
     && collectorActivation.blockers.length === 0;
 
-  if (!collectorApprovedReady) {
+  if (collectionRequired && !collectorApprovedReady) {
     blockers.push(
       'reaction-collection-handoff-collector-not-approved-ready',
     );
