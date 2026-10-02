@@ -564,7 +564,7 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
 }
 
 export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
-  store: ImmutableTextObjectStore,
+  store: Pick<ImmutableTextObjectStore, 'readText' | 'listPathnames'>,
 ): NaverNewsLatestOfficialShadowSlotReadRepository {
   return Object.freeze({
     async readSucceededSchedulerJobs(): Promise<
