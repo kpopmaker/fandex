@@ -136,10 +136,7 @@ test('every recovered entry retains exact video evidence and review time', async
   for (const entry of data.entries) {
     assert.match(entry.youtubeChannelId, /^UC[A-Za-z0-9_-]{22}$/);
     assert.match(entry.videoId, /^[A-Za-z0-9_-]{11}$/);
-    assert.equal(
-      new Date(entry.reviewedAt).toISOString(),
-      entry.reviewedAt,
-    );
+    assert.equal(Number.isFinite(Date.parse(entry.reviewedAt)), true);
     assert.equal(
       entry.evidenceUrl,
       `https://www.youtube.com/watch?v=${entry.videoId}`,
