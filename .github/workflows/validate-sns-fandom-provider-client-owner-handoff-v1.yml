@@ -3,7 +3,7 @@ name: Validate snsFandom provider-client owner handoff v1
 on:
   push:
     branches:
-      - 'work/sns-fandom-provider-client-owner-handoff-v1'
+      - 'work/sns-fandom-youtube-provider-client-owner-evidence-v1'
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeProviderClientOwnerHandoff.ts'
       - 'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json'
