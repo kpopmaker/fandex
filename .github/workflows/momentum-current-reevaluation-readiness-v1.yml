@@ -1,0 +1,64 @@
+name: Momentum current reevaluation readiness v1
+
+on:
+  workflow_run:
+    workflows:
+      - Momentum Blob recovery continuity gate v1
+      - FANDEX Last.fm Cloud History
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: momentum-current-reevaluation-readiness-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Guard Blob read credential
+        run: |
+          set -euo pipefail
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - run: npm ci
+
+      - name: Evaluate current reevaluation readiness
+        run: npx tsx scripts/operations/momentumCurrentReevaluationReadinessV1.mts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "blobWrites=0"
+          echo "databaseReads=0"
+          echo "databaseWrites=0"
+          echo "historyWrites=0"
+          echo "productMetricReads=0"
+          echo "productMetricWrites=0"
+          echo "registryMutations=0"
+          echo "productionActivations=0"
+          echo "productPublications=0"

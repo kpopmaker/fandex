@@ -618,11 +618,15 @@ input for quota planning:
 
 Phase B owner approval now resolves these planning inputs:
 
-- `measurementWindowStart = 2026-10-03T04:06:51.000Z`;
-- `measurementWindowEnd = 2027-10-03T04:06:51.000Z`;
+- `measurementWindowStart = 2026-10-03T15:00:00.000Z`;
+- `measurementWindowEnd = 2027-10-04T15:00:00.000Z`;
+- duration = 366 calendar days;
 - `reactionSnapshotRunsPerDay = 24`;
 - non-secret cadence/window evidence =
-  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631`.
+
+This plan supersedes the earlier 365-day Phase B plan. The earlier values
+remain historical provenance only.
 
 It still does **not** resolve:
 
@@ -707,10 +711,15 @@ GitHub issue/PR history was also searched before owner action for a real
 approved reaction cadence or measurement window. No pre-existing owner-approved
 evidence was found, so regression fixtures were not promoted.
 
-On 2026-10-03 the owner then explicitly approved the real Phase B plan in
-issue #424: a 365-day window beginning at
-`2026-10-03T04:06:51.000Z` and 24 reaction snapshot runs/day. That owner decision is
-recorded at `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
+On 2026-10-03 the owner first approved a 365-day Phase B plan, then later
+superseded it with the current canonical plan:
+- start: `2026-10-03T15:00:00.000Z`;
+- end: `2027-10-04T15:00:00.000Z`;
+- duration: 366 calendar days;
+- cadence: 24 reaction snapshot runs/day.
+
+The superseding owner decision is recorded at
+`github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631`. The earlier plan remains historical provenance only.
 
 
 ## 8b. Screenshot evidence captured and preserved
@@ -807,9 +816,9 @@ Provider approval, provider submission authorization, and Production collection
 authorization remain false.
 
 
-## 9a. Quota measurement plan owner evidence resolved — 2026-10-03
+## 9a. Initial quota measurement plan — superseded 2026-10-03
 
-Owner-approved Phase B plan:
+Initial owner-approved Phase B plan (historical only after supersession):
 
 - measurement window start: `2026-10-03T04:06:51.000Z`;
 - measurement window end: `2027-10-03T04:06:51.000Z`;
@@ -974,3 +983,45 @@ The previous maximum-executions=1 authorization is consumed. This correction
 does not authorize or trigger a second provider execution. Any later retry
 requires a new explicit bounded-execution authorization after the fix is
 merged and revalidated.
+
+
+## 9b. Superseding Phase B measurement plan — 2026-10-03
+
+The owner explicitly replaced the initial Phase B plan with a new canonical
+measurement window.
+
+Owner-entered KST values:
+- start: 2026-10-04 00:00 KST;
+- end: 2027-10-05 00:00 KST;
+- reaction cadence: 24 runs/day.
+
+Canonical UTC values:
+- measurement window start: `2026-10-03T15:00:00.000Z`;
+- measurement window end: `2027-10-04T15:00:00.000Z`;
+- duration: 366 calendar days;
+- reaction snapshot cadence: 24 runs/day;
+- cadence/window evidence:
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631`.
+
+This decision supersedes the earlier plan recorded at `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
+The old plan remains historical provenance only.
+
+A bounded Phase C execution completed immediately before this superseding
+owner decision:
+- workflow run: `37114464736`;
+- completedAt: `2026-10-03T09:52:21Z`;
+- artifact id: `11271008104`;
+- artifact digest:
+  `sha256:348d383c6a0f148fc4dd3592d7604844032007586927ab6beb620fe48ac58721`.
+
+The new canonical measurement window starts at `2026-10-03T15:00:00.000Z`, after that
+one-shot completed. Therefore the run is historical evidence for the
+superseded plan only and must not populate Phase C measured-usage fields for
+the new canonical plan.
+
+The checked-in quota owner input keeps all Phase C measured fields null until
+new-plan-eligible evidence is produced and separately reviewed.
+
+This superseding Phase B decision does not authorize another provider call,
+recurring scheduler activation, Production collection, provider submission,
+deployment, or Product activation/publication.
