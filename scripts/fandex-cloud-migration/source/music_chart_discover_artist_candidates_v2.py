@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 VERSION = "music_chart_discover_artist_candidates_v2"
 COLLECTOR_FILE = Path("music_chart_collect_melon_genie_fallback_v1.py")
 
-TARGET_ARTISTS = {
+DEFAULT_TARGET_ARTISTS = {
     "아이유": [
         "아이유",
         "IU",
@@ -63,6 +63,97 @@ TARGET_ARTISTS = {
         "TXT",
     ],
 }
+
+DEFAULT_TARGET_CANONICAL_IDS = {
+    "아이유": "iu",
+    "에스파": "aespa",
+    "에이티즈": "ateez",
+    "보이넥스트도어": "boynextdoor",
+    "아이브": "ive",
+    "르세라핌": "lesserafim",
+    "뉴진스": "newjeans",
+    "세븐틴": "seventeen",
+    "스트레이키즈": "straykids",
+    "투모로우바이투게더": "txt",
+}
+
+TARGET_ARTISTS_FILE = Path("music_chart_artist_targets_v1.json")
+REPO_TARGET_ARTISTS_FILE = Path(
+    "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json"
+)
+
+
+def load_target_artist_bindings(path: Path | None = None):
+    candidate = path
+    if candidate is None:
+        if TARGET_ARTISTS_FILE.exists():
+            candidate = TARGET_ARTISTS_FILE
+        elif REPO_TARGET_ARTISTS_FILE.exists():
+            candidate = REPO_TARGET_ARTISTS_FILE
+
+    if candidate is None or not candidate.exists():
+        return (
+            DEFAULT_TARGET_ARTISTS.copy(),
+            DEFAULT_TARGET_CANONICAL_IDS.copy(),
+        )
+
+    payload = json.loads(candidate.read_text(encoding="utf-8-sig"))
+    rows = payload.get("artists") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            f"Invalid music target config: {candidate}"
+        )
+
+    result = {}
+    canonical_ids = {}
+    seen_canonical_ids = set()
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        canonical_artist_id = str(
+            row.get("canonicalArtistId") or ""
+        ).strip()
+        artist = str(row.get("artist") or "").strip()
+        aliases = [
+            str(alias).strip()
+            for alias in (row.get("aliases") or [])
+            if str(alias).strip()
+        ]
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                f"Music target missing canonicalArtistId: {artist or '<unknown>'}"
+            )
+        if canonical_artist_id in seen_canonical_ids:
+            raise RuntimeError(
+                f"Duplicate canonicalArtistId in music target config: "
+                f"{canonical_artist_id}"
+            )
+        if not artist or not aliases:
+            raise RuntimeError(
+                f"Invalid music target binding: {canonical_artist_id}"
+            )
+
+        seen_canonical_ids.add(canonical_artist_id)
+        result[artist] = aliases
+        canonical_ids[artist] = canonical_artist_id
+
+    if not result:
+        raise RuntimeError(
+            f"Music target config has no artists: {candidate}"
+        )
+
+    return result, canonical_ids
+
+
+def load_target_artists(path: Path | None = None):
+    artists, _ = load_target_artist_bindings(path)
+    return artists
+
+
+TARGET_ARTISTS, TARGET_CANONICAL_IDS = load_target_artist_bindings()
 
 SOURCES = [
     {
@@ -144,20 +235,129 @@ def load_collector():
     return module
 
 
-def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+def alias_matches_chart_artist(
+    chart_artist: str,
+    alias: str,
+) -> bool:
+    artist_text = str(chart_artist or "").strip()
+    alias_text = str(alias or "").strip()
+
+    if not artist_text or not alias_text:
+        return False
+
+    has_ascii_letter = bool(
+        re.search(
+            r"[A-Za-z]",
+            alias_text,
+        )
+    )
+
+    if not has_ascii_letter:
+        normalized_alias = compact_text(alias_text)
+        normalized_chart_artist = compact_text(
+            artist_text
+        )
+        return bool(
+            normalized_alias
+            and normalized_alias
+            in normalized_chart_artist
+        )
+
+    escaped = re.escape(alias_text)
+    escaped = escaped.replace(
+        r"\ ",
+        r"\s+",
+    )
+
+    pattern = (
+        r"(?<![A-Za-z0-9])"
+        + escaped
+        + r"(?![A-Za-z0-9])"
+    )
+
+    return bool(
+        re.search(
+            pattern,
+            artist_text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def resolve_target_artist(chart_artist: str) -> dict[str, Any]:
     normalized_chart_artist = compact_text(chart_artist)
 
     if not normalized_chart_artist:
-        return None
+        return {
+            "status": "no_match",
+            "chartArtist": chart_artist,
+            "matches": [],
+        }
+
+    matches_by_artist: dict[str, list[str]] = {}
 
     for target_artist, aliases in TARGET_ARTISTS.items():
         for alias in aliases:
-            normalized_alias = compact_text(alias)
+            if alias_matches_chart_artist(
+                chart_artist,
+                alias,
+            ):
+                matches_by_artist.setdefault(target_artist, []).append(alias)
 
-            if normalized_alias and normalized_alias in normalized_chart_artist:
-                return target_artist, alias
+    if not matches_by_artist:
+        return {
+            "status": "no_match",
+            "chartArtist": chart_artist,
+            "matches": [],
+        }
 
-    return None
+    matches = [
+        {
+            "artist": target_artist,
+            "canonicalArtistId": TARGET_CANONICAL_IDS.get(
+                target_artist,
+                target_artist,
+            ),
+            "aliases": sorted(
+                set(aliases),
+                key=lambda alias: (
+                    -len(compact_text(alias)),
+                    compact_text(alias),
+                    alias,
+                ),
+            ),
+        }
+        for target_artist, aliases in sorted(matches_by_artist.items())
+    ]
+
+    if len(matches) > 1:
+        return {
+            "status": "ambiguous",
+            "chartArtist": chart_artist,
+            "matches": matches,
+        }
+
+    match = matches[0]
+    return {
+        "status": "resolved",
+        "chartArtist": chart_artist,
+        "artist": match["artist"],
+        "canonicalArtistId": match["canonicalArtistId"],
+        "matchedAlias": match["aliases"][0],
+        "matches": matches,
+    }
+
+
+def find_target_artist(chart_artist: str) -> tuple[str, str] | None:
+    resolution = resolve_target_artist(chart_artist)
+
+    if resolution["status"] != "resolved":
+        return None
+
+    return (
+        str(resolution["artist"]),
+        str(resolution["matchedAlias"]),
+    )
 
 
 def extract_first_rank(number_tag) -> int | None:
@@ -349,6 +549,7 @@ def dedupe_chart_items(
 def build_candidates(
     chart_items: list[dict[str, Any]],
     chart_date: str,
+    identity_ambiguities: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     candidates: list[dict[str, Any]] = []
 
@@ -357,16 +558,48 @@ def build_candidates(
             item.get("artistName") or ""
         ).strip()
 
-        matched = find_target_artist(chart_artist)
+        resolution = resolve_target_artist(chart_artist)
 
-        if matched is None:
+        if resolution["status"] == "ambiguous":
+            if identity_ambiguities is not None:
+                identity_ambiguities.append(
+                    {
+                        "platform": item.get("platform", ""),
+                        "chartName": item.get("chartName", ""),
+                        "trackTitle": item.get("trackTitle", ""),
+                        "rank": item.get("rank", ""),
+                        "chartDate": chart_date,
+                        "sourceKey": item.get("sourceKey", ""),
+                        "matchedArtist": chart_artist,
+                        "candidateArtists": [
+                            match["artist"]
+                            for match in resolution["matches"]
+                        ],
+                        "candidateCanonicalArtistIds": [
+                            match["canonicalArtistId"]
+                            for match in resolution["matches"]
+                        ],
+                        "matchedAliases": {
+                            match["artist"]: match["aliases"]
+                            for match in resolution["matches"]
+                        },
+                        "rankSource": item.get("rankSource", ""),
+                        "sourceUrl": item.get("sourceUrl", ""),
+                    }
+                )
             continue
 
-        target_artist, matched_alias = matched
+        if resolution["status"] != "resolved":
+            continue
+
+        target_artist = str(resolution["artist"])
+        canonical_artist_id = str(resolution["canonicalArtistId"])
+        matched_alias = str(resolution["matchedAlias"])
 
         candidates.append(
             {
                 "approve": "",
+                "canonicalArtistId": canonical_artist_id,
                 "artist": target_artist,
                 "platform": item.get("platform", ""),
                 "chartName": item.get("chartName", ""),
@@ -415,6 +648,7 @@ def write_csv(
 ) -> None:
     fieldnames = [
         "approve",
+        "canonicalArtistId",
         "artist",
         "platform",
         "chartName",
@@ -451,6 +685,7 @@ def write_report(
     candidates: list[dict[str, Any]],
     source_counts: dict[str, int],
     created_at: str,
+    identity_ambiguities: list[dict[str, Any]] | None = None,
 ) -> None:
     artist_counts = {
         artist: 0
@@ -483,7 +718,7 @@ def write_report(
     lines.extend(
         [
             "",
-            "신규 6명 후보 현황",
+            "Configured artist 후보 현황",
             "-" * 76,
         ]
     )
@@ -515,6 +750,22 @@ def write_report(
                 f"{row['rank']}위 | "
                 f"{row['trackTitle']} | "
                 f"rankSource={row['rankSource']}"
+            )
+
+    if identity_ambiguities:
+        lines.extend(
+            [
+                "",
+                "Identity ambiguity",
+                "-" * 76,
+            ]
+        )
+        for row in identity_ambiguities:
+            lines.append(
+                f"AMBIGUOUS {row.get('matchedArtist', '')} | "
+                f"candidateArtists={','.join(row.get('candidateArtists', []))} | "
+                f"platform={row.get('platform', '')} | "
+                f"rank={row.get('rank', '')}"
             )
 
     lines.extend(
@@ -581,9 +832,11 @@ def main() -> int:
         print(f"- parsed items: {len(items)}")
 
     deduped_items = dedupe_chart_items(all_items)
+    identity_ambiguities: list[dict[str, Any]] = []
     candidates = build_candidates(
         deduped_items,
         chart_date,
+        identity_ambiguities,
     )
 
     timestamp_csv = Path(
@@ -613,11 +866,19 @@ def main() -> int:
     raw_payload = {
         "version": VERSION,
         "createdAt": created_at,
+        "targetArtists": list(TARGET_ARTISTS.keys()),
+        "targetCanonicalArtistIds": [
+            TARGET_CANONICAL_IDS[artist]
+            for artist in TARGET_ARTISTS
+        ],
+        "targetArtistCount": len(TARGET_ARTISTS),
         "seedModified": False,
         "websiteModified": False,
         "sourceCounts": source_counts,
         "candidateCount": len(candidates),
         "candidates": candidates,
+        "identityAmbiguityCount": len(identity_ambiguities),
+        "identityAmbiguities": identity_ambiguities,
         "fetchLogs": fetch_logs,
     }
 
@@ -636,12 +897,14 @@ def main() -> int:
         candidates,
         source_counts,
         created_at,
+        identity_ambiguities,
     )
     write_report(
         latest_report,
         candidates,
         source_counts,
         created_at,
+        identity_ambiguities,
     )
 
     print()

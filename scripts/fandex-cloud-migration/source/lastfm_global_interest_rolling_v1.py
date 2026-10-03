@@ -13,6 +13,10 @@ HISTORY_FILE = Path(
     "lastfm_artist_interest_history_v1.csv"
 )
 
+LASTFM_BINDING_FILE = Path(
+    "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv"
+)
+
 OUTPUT_CSV = Path(
     "lastfm_global_interest_rolling_v1_latest.csv"
 )
@@ -29,6 +33,7 @@ REQUIRED_FIELDS = [
 ]
 
 OUTPUT_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "latestDate",
     "snapshotDateCount",
@@ -61,6 +66,89 @@ def norm(value):
 
 def to_int(value):
     return int(norm(value))
+
+
+def load_lastfm_canonical_bindings():
+    if not LASTFM_BINDING_FILE.exists():
+        raise RuntimeError(
+            f"Last.fm binding file missing: {LASTFM_BINDING_FILE}"
+        )
+
+    with LASTFM_BINDING_FILE.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as f:
+        rows = list(csv.DictReader(f))
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(row.get("artist"))
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Last.fm canonical binding row"
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Last.fm canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Last.fm artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Last.fm canonical bindings are empty"
+        )
+
+    return bindings
+
+
+def hydrate_history_canonical_ids(rows):
+    bindings = load_lastfm_canonical_bindings()
+    hydrated = []
+
+    for row in rows:
+        artist = norm(row.get("artist"))
+        canonical_artist_id = bindings.get(artist)
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Unbound Last.fm history artist: "
+                + artist
+            )
+
+        existing_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if (
+            existing_id
+            and existing_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Last.fm history canonicalArtistId mismatch: "
+                f"{artist} = {existing_id} "
+                f"!= {canonical_artist_id}"
+            )
+
+        item = dict(row)
+        item["canonicalArtistId"] = (
+            canonical_artist_id
+        )
+        hydrated.append(item)
+
+    return hydrated
 
 
 def read_history():
@@ -97,13 +185,13 @@ def read_history():
             + ", ".join(missing)
         )
 
-    return rows
+    return hydrate_history_canonical_ids(rows)
 
 
 def row_key(row):
     return (
         norm(row.get("snapshotDate")),
-        norm(row.get("artist")),
+        norm(row.get("canonicalArtistId")),
     )
 
 
@@ -173,19 +261,54 @@ def validate_history(rows):
         by_date
     )
 
-    first_artist_set = {
-        norm(row.get("artist"))
-        for row in by_date[
-            sorted_dates[0]
-        ]
-    }
+    artist_to_canonical = {}
+    canonical_to_artist = {}
 
-    if len(first_artist_set) != 10:
-        raise RuntimeError(
-            "Expected 10 artists in "
-            f"{sorted_dates[0]}, "
-            f"got {len(first_artist_set)}."
+    for row in rows:
+        artist = norm(row.get("artist"))
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
         )
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Missing canonicalArtistId for "
+                + artist
+            )
+
+        previous_id = artist_to_canonical.get(
+            artist
+        )
+        if (
+            previous_id
+            and previous_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Artist canonical identity mismatch: "
+                f"{artist}"
+            )
+
+        previous_artist = canonical_to_artist.get(
+            canonical_artist_id
+        )
+        if (
+            previous_artist
+            and previous_artist != artist
+        ):
+            raise RuntimeError(
+                "Canonical artist maps to multiple "
+                f"display artists: {canonical_artist_id}"
+            )
+
+        artist_to_canonical[artist] = (
+            canonical_artist_id
+        )
+        canonical_to_artist[
+            canonical_artist_id
+        ] = artist
+
+    previous_artist_set = None
+    previous_canonical_set = None
 
     for snapshot_date in sorted_dates:
         date_rows = by_date[
@@ -196,19 +319,58 @@ def validate_history(rows):
             norm(row.get("artist"))
             for row in date_rows
         }
+        canonical_set = {
+            norm(row.get("canonicalArtistId"))
+            for row in date_rows
+        }
 
-        if len(date_rows) != 10:
+        if not artist_set:
             raise RuntimeError(
-                "Incomplete snapshot: "
-                f"{snapshot_date} = "
-                f"{len(date_rows)}/10"
+                f"No artists found in {snapshot_date}."
             )
 
-        if artist_set != first_artist_set:
+        if len(date_rows) != len(artist_set):
             raise RuntimeError(
-                "Artist set mismatch: "
+                "Incomplete snapshot with duplicate "
+                f"artist rows: {snapshot_date}"
+            )
+
+        if len(artist_set) != len(canonical_set):
+            raise RuntimeError(
+                "Artist/canonical cardinality mismatch: "
                 f"{snapshot_date}"
             )
+
+        if (
+            previous_artist_set is not None
+            and not previous_artist_set <= artist_set
+        ):
+            removed = sorted(
+                previous_artist_set
+                - artist_set
+            )
+            raise RuntimeError(
+                "Artist cohort shrank: "
+                f"{snapshot_date} / "
+                + ", ".join(removed)
+            )
+
+        if (
+            previous_canonical_set is not None
+            and not previous_canonical_set <= canonical_set
+        ):
+            removed = sorted(
+                previous_canonical_set
+                - canonical_set
+            )
+            raise RuntimeError(
+                "Canonical artist cohort shrank: "
+                f"{snapshot_date} / "
+                + ", ".join(removed)
+            )
+
+        previous_artist_set = artist_set
+        previous_canonical_set = canonical_set
 
     return sorted_dates
 
@@ -418,6 +580,13 @@ def main():
         )
 
         output_rows.append({
+            "canonicalArtistId":
+                norm(
+                    artist_rows[-1][
+                        "canonicalArtistId"
+                    ]
+                ),
+
             "artist":
                 artist,
 
@@ -576,12 +745,12 @@ def main():
 
     print(
         f"rolling3ReadyCount: "
-        f"{rolling3_ready}/10"
+        f"{rolling3_ready}/{len(by_artist)}"
     )
 
     print(
         f"rolling7ReadyCount: "
-        f"{rolling7_ready}/10"
+        f"{rolling7_ready}/{len(by_artist)}"
     )
 
     print(

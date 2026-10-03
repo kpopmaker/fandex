@@ -11,6 +11,10 @@ HISTORY_FILE = Path(
     "lastfm_artist_interest_history_v1.csv"
 )
 
+LASTFM_BINDING_FILE = Path(
+    "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv"
+)
+
 OUTPUT_CSV = Path(
     "lastfm_global_interest_delta_v1_latest.csv"
 )
@@ -25,6 +29,7 @@ OUTPUT_REPORT = Path(
 
 
 FIELDS = [
+    "canonicalArtistId",
     "artist",
     "lastfmName",
     "status",
@@ -71,6 +76,38 @@ def read_csv(path):
         newline="",
     ) as f:
         return list(csv.DictReader(f))
+
+
+def load_lastfm_canonical_bindings():
+    rows = read_csv(LASTFM_BINDING_FILE)
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        canonical_artist_id = clean(
+            row.get("canonicalArtistId")
+        )
+        artist = clean(row.get("artist"))
+
+        if not canonical_artist_id or not artist:
+            raise SystemExit(
+                "ERROR: invalid Last.fm canonical binding"
+            )
+        if canonical_artist_id in seen_ids:
+            raise SystemExit(
+                "ERROR: duplicate Last.fm canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise SystemExit(
+                "ERROR: duplicate Last.fm artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    return bindings
 
 
 def write_csv(path, rows):
@@ -134,6 +171,10 @@ def main():
             "ERROR: Last.fm history가 비어 있습니다."
         )
 
+    canonical_bindings = (
+        load_lastfm_canonical_bindings()
+    )
+
     by_artist = defaultdict(list)
 
     for row in history_rows:
@@ -153,7 +194,28 @@ def main():
                 f"ERROR: {artist} snapshotDate 형식 오류"
             )
 
+        canonical_artist_id = (
+            canonical_bindings.get(artist)
+        )
+        if not canonical_artist_id:
+            raise SystemExit(
+                f"ERROR: unbound Last.fm artist: {artist}"
+            )
+
+        existing_id = clean(
+            row.get("canonicalArtistId")
+        )
+        if (
+            existing_id
+            and existing_id != canonical_artist_id
+        ):
+            raise SystemExit(
+                "ERROR: Last.fm canonicalArtistId mismatch: "
+                f"{artist}"
+            )
+
         by_artist[artist].append({
+            "canonicalArtistId": canonical_artist_id,
             "snapshotDate": snapshot_date,
             "snapshotAt": clean(
                 row.get("snapshotAt")
@@ -169,10 +231,9 @@ def main():
             ),
         })
 
-    if len(by_artist) != 10:
+    if not by_artist:
         raise SystemExit(
-            "ERROR: history artist count가 "
-            f"10이 아닙니다: {len(by_artist)}"
+            "ERROR: history에 artist가 없습니다."
         )
 
     results = []
@@ -223,6 +284,8 @@ def main():
             insufficient_count += 1
 
             result = {
+                "canonicalArtistId":
+                    latest["canonicalArtistId"],
                 "artist": artist,
                 "lastfmName":
                     latest["lastfmName"],
@@ -313,6 +376,8 @@ def main():
             ready_count += 1
 
         result = {
+            "canonicalArtistId":
+                latest["canonicalArtistId"],
             "artist": artist,
             "lastfmName":
                 latest["lastfmName"],

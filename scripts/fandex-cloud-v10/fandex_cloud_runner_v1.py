@@ -17,24 +17,61 @@ LASTFM_CLOUD_URL = (
     "data/lastfm-cloud/lastfm_artist_interest_history_v1.csv"
 )
 LASTFM_LOCAL = Path("lastfm_artist_interest_history_v1.csv")
+LASTFM_BINDING_FILE = Path(
+    "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv"
+)
 CLOUD_RUN_LATEST = Path("fandex_cloud_run_latest.json")
-
-EXPECTED_ARTISTS = {
-    "아이유",
-    "에스파",
-    "에이티즈",
-    "보이넥스트도어",
-    "아이브",
-    "르세라핌",
-    "뉴진스",
-    "세븐틴",
-    "스트레이키즈",
-    "투모로우바이투게더",
-}
-
 
 def norm(value):
     return "" if value is None else str(value).strip()
+
+
+def load_lastfm_canonical_bindings():
+    if not LASTFM_BINDING_FILE.exists():
+        raise RuntimeError(
+            f"Last.fm binding file missing: {LASTFM_BINDING_FILE}"
+        )
+
+    with LASTFM_BINDING_FILE.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as f:
+        rows = list(csv.DictReader(f))
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(row.get("artist"))
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Last.fm canonical binding row"
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Last.fm canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Last.fm artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Last.fm canonical bindings are empty"
+        )
+
+    return bindings
 
 
 def bootstrap_lastfm_history():
@@ -74,20 +111,68 @@ def bootstrap_lastfm_history():
     if not cloud_rows:
         raise RuntimeError("Last.fm cloud history is empty")
 
-    counts = Counter(row["snapshotDate"] for row in cloud_rows)
+    canonical_bindings = load_lastfm_canonical_bindings()
+
+    counts = Counter(
+        row["snapshotDate"]
+        for row in cloud_rows
+    )
     by_date_artists = {}
     for row in cloud_rows:
-        by_date_artists.setdefault(row["snapshotDate"], set()).add(
+        by_date_artists.setdefault(
+            row["snapshotDate"],
+            set(),
+        ).add(
             norm(row.get("artist"))
         )
 
-    for snapshot_date in sorted(counts):
-        artists = by_date_artists[snapshot_date]
-        if counts[snapshot_date] != 10 or artists != EXPECTED_ARTISTS:
+    snapshot_dates = sorted(counts)
+    previous_artists = None
+
+    for snapshot_date in snapshot_dates:
+        artists = by_date_artists[
+            snapshot_date
+        ]
+
+        if not artists:
             raise RuntimeError(
-                f"Incomplete Last.fm cloud snapshot: {snapshot_date} "
-                f"rows={counts[snapshot_date]} artists={len(artists)}"
+                "Last.fm cloud snapshot has no artists: "
+                + snapshot_date
             )
+
+        if counts[snapshot_date] != len(artists):
+            raise RuntimeError(
+                "Last.fm cloud snapshot contains duplicate "
+                f"artist rows: {snapshot_date}"
+            )
+
+        unbound = sorted(
+            artist
+            for artist in artists
+            if artist not in canonical_bindings
+        )
+        if unbound:
+            raise RuntimeError(
+                "Last.fm cloud snapshot contains "
+                "unbound artists: "
+                + ", ".join(unbound)
+            )
+
+        if (
+            previous_artists is not None
+            and not previous_artists <= artists
+        ):
+            removed = sorted(
+                previous_artists
+                - artists
+            )
+            raise RuntimeError(
+                "Last.fm cloud cohort shrank on "
+                f"{snapshot_date}: "
+                + ", ".join(removed)
+            )
+
+        previous_artists = artists
 
     output_rows = []
     for row in cloud_rows:
@@ -100,11 +185,32 @@ def bootstrap_lastfm_history():
         except Exception:
             snapshot_at = collected_at
 
+        artist = norm(row.get("artist"))
+        canonical_artist_id = canonical_bindings.get(artist)
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Unbound Last.fm cloud artist: " + artist
+            )
+
+        cloud_canonical_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if (
+            cloud_canonical_id
+            and cloud_canonical_id != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Last.fm cloud canonicalArtistId mismatch: "
+                f"{artist} = {cloud_canonical_id} "
+                f"!= {canonical_artist_id}"
+            )
+
         output_rows.append(
             {
                 "snapshotDate": norm(row.get("snapshotDate")),
                 "snapshotAt": snapshot_at,
-                "artist": norm(row.get("artist")),
+                "canonicalArtistId": canonical_artist_id,
+                "artist": artist,
                 "lastfmName": norm(row.get("lastfmName")),
                 "listeners": norm(row.get("listeners")),
                 "playcount": norm(row.get("playcount")),
@@ -120,6 +226,7 @@ def bootstrap_lastfm_history():
             fieldnames=[
                 "snapshotDate",
                 "snapshotAt",
+                "canonicalArtistId",
                 "artist",
                 "lastfmName",
                 "listeners",
@@ -185,8 +292,8 @@ def main():
     bootstrap_lastfm_history()
 
     steps = [
-        (1, "Discover Melon + Genie current presence for all 10 artists", "music_chart_discover_artist_candidates_v2.py", []),
-        (2, "Discover Bugs current presence for all 10 artists", "music_chart_discover_bugs_all_targets_v1.py", []),
+        (1, "Discover Melon + Genie current presence for configured artists", "music_chart_discover_artist_candidates_v2.py", []),
+        (2, "Discover Bugs current presence for configured artists", "music_chart_discover_bugs_all_targets_v1.py", []),
         (3, "Update Music chart check history", "music_chart_check_history_v1.py", []),
         (4, "Build Music v2 current-presence preview", "music_chart_current_presence_preview_v1.py", []),
         (5, "Publish Music v2 current-presence snapshot", "music_chart_current_presence_publish_v2.py", []),

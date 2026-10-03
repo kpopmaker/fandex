@@ -220,18 +220,51 @@ def best_candidate(
 def get_discovery_artists(
     payload: dict[str, Any],
 ) -> list[str]:
-    return [
-        "아이유",
-        "에스파",
-        "에이티즈",
-        "보이넥스트도어",
-        "아이브",
-        "르세라핌",
-        "뉴진스",
-        "세븐틴",
-        "스트레이키즈",
-        "투모로우바이투게더",
+    artists = payload.get(
+        "targetArtists"
+    )
+
+    if not isinstance(
+        artists,
+        list,
+    ):
+        raise RuntimeError(
+            "Discovery JSON targetArtists missing."
+        )
+
+    normalized = [
+        norm(artist)
+        for artist in artists
+        if norm(artist)
     ]
+
+    if not normalized:
+        raise RuntimeError(
+            "Discovery JSON targetArtists empty."
+        )
+
+    if len(normalized) != len(set(normalized)):
+        raise RuntimeError(
+            "Discovery JSON targetArtists contains duplicates."
+        )
+
+    declared_count = safe_int(
+        payload.get(
+            "targetArtistCount"
+        ),
+        default=0,
+    )
+
+    if (
+        declared_count
+        and declared_count != len(normalized)
+    ):
+        raise RuntimeError(
+            "Discovery targetArtistCount mismatch: "
+            f"{declared_count} != {len(normalized)}"
+        )
+
+    return normalized
 
 def melon_genie_rows(
     payload: dict[str, Any],
