@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 96);
+  assert.equal(input.drafts.length, 97);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 94);
+  assert.equal(deduped.length, 95);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 92);
+  assert.equal(hanteo.length, 93);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 92);
+  assert.equal(hanteoFirstWeek.length, 93);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    92,
+    93,
   );
 
   for (const [artistId, title, value] of [
@@ -496,7 +496,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 39,
     'tier-c-discovery-only': 10,
-    'tier-b-provider-attributed-reputable': 62,
+    'tier-b-provider-attributed-reputable': 63,
   });
 
   const iuLilac = deduped.find(

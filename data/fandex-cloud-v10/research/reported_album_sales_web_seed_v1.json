@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T18:55:40+09:00",
+  "collectedAt": "2026-10-03T19:51:18+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4403,6 +4403,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T18:55:40+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IN LIFE",
+        "releaseDate": "2020-09-14",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 233381,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-09-14",
+      "providerPeriodEnd": "2020-09-20",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T19:51:18+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1426729:stray-kids-in-life",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1426729wpp/stray-kids-sets-new-personal-record-for-1st-week-sales-with-latest-album",
+          "sourcePublicationDate": "2020-09-21",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T19:51:18+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
