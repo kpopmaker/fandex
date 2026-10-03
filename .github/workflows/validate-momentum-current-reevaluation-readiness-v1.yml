@@ -26,6 +26,29 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Assert Production Blob secret binding contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const source = fs.readFileSync(
+            '.github/workflows/momentum-current-reevaluation-readiness-v1.yml',
+            'utf8',
+          );
+          const required = 'FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN';
+          const forbidden = 'secrets.BLOB_READ_WRITE_TOKEN';
+          if (!source.includes(required)) {
+            console.error('missing_naver_evidence_blob_secret_binding');
+            process.exit(2);
+          }
+          if (source.includes(forbidden)) {
+            console.error('obsolete_blob_secret_binding_present');
+            process.exit(3);
+          }
+          console.log('momentumReadinessBlobSecretBinding=valid');
+          NODE
+
       - run: npm ci
 
       - name: Current reevaluation readiness regression
