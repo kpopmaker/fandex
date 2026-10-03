@@ -131,7 +131,7 @@ test('invalid window order, cadence, counts, and secret-like refs fail closed', 
   );
 });
 
-test('checked-in owner template remains null and does not promote fixtures', async () => {
+test('checked-in owner template records the owner-approved plan while Phase C stays unresolved', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -142,12 +142,16 @@ test('checked-in owner template remains null and does not promote fixtures', asy
     ),
   ) as Record<string, unknown>;
 
-  assert.equal(raw.state, 'awaiting-owner-plan-evidence');
+  assert.equal(raw.state, 'measurement-plan-ready');
+  assert.equal(raw.measurementWindowStart, '2026-10-03T04:06:51.000Z');
+  assert.equal(raw.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(raw.reactionSnapshotRunsPerDay, 24);
+  assert.equal(
+    raw.cadenceEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+  );
+
   for (const field of [
-    'measurementWindowStart',
-    'measurementWindowEnd',
-    'reactionSnapshotRunsPerDay',
-    'cadenceEvidenceRef',
     'measuredAt',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
@@ -158,7 +162,20 @@ test('checked-in owner template remains null and does not promote fixtures', asy
   ]) {
     assert.equal(raw[field], null);
   }
-  assert.equal(raw.automaticProviderCallAllowed, false);
-  assert.equal(raw.collectionExecutionAuthorized, false);
-  assert.equal(raw.providerSubmissionAuthorized, false);
+
+  const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
+    raw as unknown as SnsFandomYoutubeQuotaOwnerHandoffInput,
+  );
+
+  assert.equal(result.state, 'measurement-plan-ready');
+  assert.deepEqual(result.missingPlanFields, []);
+  assert.equal(result.measurementWindowStart, '2026-10-03T04:06:51.000Z');
+  assert.equal(result.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(result.reactionSnapshotRunsPerDay, 24);
+  assert.equal(result.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
+  assert.equal(result.automaticProviderCallAllowed, false);
+  assert.equal(result.collectionExecutionAuthorized, false);
+  assert.equal(result.schedulerMutationAllowed, false);
+  assert.equal(result.deploymentAuthorized, false);
+  assert.equal(result.providerSubmissionAuthorized, false);
 });

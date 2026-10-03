@@ -1,6 +1,6 @@
 {
   "version": "sns_fandom_youtube_quota_owner_input_v1",
-  "state": "awaiting-owner-plan-evidence",
+  "state": "measurement-plan-ready",
   "instructions": {
     "measurementWindowStart": "Exact ISO-8601 start of the real measurement window. Do not copy regression fixture dates.",
     "measurementWindowEnd": "Exact ISO-8601 end of the real measurement window.",
@@ -14,10 +14,10 @@
     "maxVideoIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
     "providerBatchLimitEvidenceRef": "Non-secret provider evidence for both exact ID batch limits."
   },
-  "measurementWindowStart": null,
-  "measurementWindowEnd": null,
-  "reactionSnapshotRunsPerDay": null,
-  "cadenceEvidenceRef": null,
+  "measurementWindowStart": "2026-10-03T04:06:51.000Z",
+  "measurementWindowEnd": "2027-10-03T04:06:51.000Z",
+  "reactionSnapshotRunsPerDay": 24,
+  "cadenceEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359",
   "measuredAt": null,
   "uploadManifestPageCountPerReactionRun": null,
   "videoCountPerReactionRun": null,

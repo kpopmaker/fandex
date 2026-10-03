@@ -56,13 +56,17 @@
     "googleCloudProjectNumber": "385464276768",
     "googleCloudProjectId": "fandex-509708",
     "cloudProjectRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03",
-    "providerClientVerifiedAt": "2026-10-03T03:10:00.000Z"
+    "providerClientVerifiedAt": "2026-10-03T03:10:00.000Z",
+    "realMeasurementWindowRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359",
+    "measurementWindowStart": "2026-10-03T04:06:51.000Z",
+    "measurementWindowEnd": "2027-10-03T04:06:51.000Z",
+    "reactionSnapshotRunsPerDay": 24,
+    "cadenceEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359",
+    "measurementPlanApprovedAt": "2026-10-03T04:06:51.000Z"
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
     "organizationOrSelfRef": null,
-    "realMeasurementWindowRef": null,
-    "cadenceEvidenceRef": null,
     "uploadManifestPageCountPerReactionRun": null,
     "videoCountPerReactionRun": null,
     "quotaEstimateRef": null,
@@ -95,11 +99,12 @@
     ],
     "googleDriveCloudProjectEvidenceFound": false,
     "githubApprovedCadenceSearchPerformed": true,
-    "githubApprovedCadenceEvidenceFound": false,
-    "note": "Earlier connected-Drive searches returned no matching Cloud-project evidence and remain accurate historical discovery results. On 2026-10-03, the owner separately supplied and verified the exact snsFandom Google Cloud project/client binding in issue #424. Real cadence/window evidence remains unresolved; test fixtures remain invalid as Production evidence.",
+    "githubApprovedCadenceEvidenceFound": true,
+    "note": "Earlier connected-Drive and GitHub searches found no pre-existing owner-approved cadence/window evidence. On 2026-10-03, the owner explicitly approved a real 365-day measurement window and 24 reaction snapshot runs/day in issue #424 evidence. Provider-client identity remains owner-verified separately; Phase C measured usage and provider batch-limit evidence remain unresolved. Regression fixtures remain invalid as Production evidence.",
     "googleDriveMatchedFileCount": 0,
     "ownerProvidedCloudProjectEvidenceFound": true,
-    "ownerProvidedCloudProjectEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03"
+    "ownerProvidedCloudProjectEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03",
+    "ownerApprovedCadenceEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359"
   },
   "rejectedEvidence": {
     "dashboardFeatureScreenshotCandidate": {

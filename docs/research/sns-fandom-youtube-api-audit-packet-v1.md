@@ -366,8 +366,6 @@ Current remaining concrete blockers:
 
 - legal applicant identity evidence is not yet recorded;
 - organization/self application identity evidence is not yet recorded;
-- real measurement window is not yet declared with evidence;
-- real reaction snapshot cadence is not yet declared with evidence;
 - measured uploads-playlist page count per reaction run is not yet returned;
 - measured included-video count per reaction run is not yet returned;
 - exact quota worksheet is therefore not yet `quota-evidence-ready`;
@@ -377,8 +375,8 @@ Current remaining concrete blockers:
 The merged legal URLs, repository documentation, Privacy screenshot, and
 homepage legal-link screenshot are evidence-backed. The provider-client /
 Google Cloud project identity is also now owner-verified and evidence-bound.
-Applicant identity, real Analytics & Reporting feature screenshot, cadence,
-and actual quota measurements remain external-owner evidence.
+Applicant identity, real Analytics & Reporting feature screenshot, and
+actual quota measurements remain external-owner evidence.
 
 Submission readiness still does not imply provider approval. Even after a
 future packet evaluates as `submission-ready`, the contract keeps:
@@ -612,17 +610,24 @@ input for quota planning:
 
 - `artistChannelCount = 5`.
 
-It does **not** resolve the following worksheet inputs:
+Phase B owner approval now resolves these planning inputs:
+
+- `measurementWindowStart = 2026-10-03T04:06:51.000Z`;
+- `measurementWindowEnd = 2027-10-03T04:06:51.000Z`;
+- `reactionSnapshotRunsPerDay = 24`;
+- non-secret cadence/window evidence =
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
+
+It still does **not** resolve:
 
 - `uploadManifestPageCountPerReactionRun`;
 - `videoCountPerReactionRun`;
-- `reactionSnapshotRunsPerDay`;
-- provider client / Google Cloud project identity;
-- requested measurement window.
+- exact provider channel/video ID batch limits;
+- the final quota-evidence-ready worksheet.
 
-The quota-measurement handoff contract requires all of those planning inputs to
-be explicit and evidence-bound before it can become
-`measurement-handoff-ready`. Even then, the handoff sets:
+The quota-measurement handoff therefore remains non-executable until the
+remaining provider/measurement evidence is satisfied. Even when it becomes
+`measurement-handoff-ready`, the handoff sets:
 
 - `automaticProviderCallAllowed = false`;
 - `collectionExecutionAuthorized = false`;
@@ -692,12 +697,14 @@ The recorded connected-Drive searches returned no matching files. Therefore no
 Drive document was found that provides a non-secret Google Cloud project
 number or an exact project-to-snsFandom-provider-client binding.
 
-GitHub issue/PR history was also searched for a real approved reaction cadence
-or measurement window. No owner-approved real cadence/window evidence was
-found. The existing `reactionSnapshotRunsPerDay = 4` and dated measurement
-window values remain regression fixtures only.
+GitHub issue/PR history was also searched before owner action for a real
+approved reaction cadence or measurement window. No pre-existing owner-approved
+evidence was found, so regression fixtures were not promoted.
 
-Therefore these values stay unresolved rather than being inferred.
+On 2026-10-03 the owner then explicitly approved the real Phase B plan in
+issue #424: a 365-day window beginning at
+`2026-10-03T04:06:51.000Z` and 24 reaction snapshot runs/day. That owner decision is
+recorded at `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
 
 
 ## 8b. Screenshot evidence captured and preserved
@@ -788,7 +795,36 @@ requirements are still unresolved, including:
 - applicant / organization-or-self identity;
 - derived-metrics/storage amendment owner acknowledgement;
 - real non-simulated Analytics & Reporting feature screenshot;
-- quota measurement plan/results and quota-evidence-ready worksheet.
+- quota measurement results and quota-evidence-ready worksheet.
 
 Provider approval, provider submission authorization, and Production collection
 authorization remain false.
+
+
+## 9a. Quota measurement plan owner evidence resolved — 2026-10-03
+
+Owner-approved Phase B plan:
+
+- measurement window start: `2026-10-03T04:06:51.000Z`;
+- measurement window end: `2027-10-03T04:06:51.000Z`;
+- duration: 365 days;
+- reaction snapshot cadence: 24 runs/day;
+- cadence/window evidence:
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359`.
+
+The checked-in quota owner handoff may therefore evaluate
+`measurement-plan-ready` with no missing plan fields.
+
+Phase C remains unresolved. In particular, no real provider measurement has yet
+supplied:
+
+- uploads-playlist pages per reaction run;
+- included-video count per reaction run;
+- measured usage evidence;
+- exact channel-ID batch limit;
+- exact video-ID batch limit;
+- provider batch-limit evidence.
+
+This Phase B approval does not authorize a YouTube API call, scheduler mutation,
+Production collection, provider submission, deployment, or Product
+activation/publication.

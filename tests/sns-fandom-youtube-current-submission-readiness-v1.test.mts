@@ -20,7 +20,7 @@ async function readJson(path: string) {
   ) as Record<string, unknown>;
 }
 
-test('current owner files resolve Phase A while remaining submission blockers fail closed', async () => {
+test('current owner files resolve Phase A and Phase B plan while remaining submission blockers fail closed', async () => {
   const providerRaw = await readJson(
     'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json',
   );
@@ -73,13 +73,19 @@ test('current owner files resolve Phase A while remaining submission blockers fa
   assert.deepEqual(providerOwner.missingOwnerFields, []);
   assert.deepEqual(providerOwner.blockers, []);
 
-  assert.equal(quotaOwner.state, 'awaiting-owner-plan-evidence');
-  assert.deepEqual(quotaOwner.missingPlanFields, [
-    'cadenceEvidenceRef',
-    'measurementWindowEnd',
-    'measurementWindowStart',
-    'reactionSnapshotRunsPerDay',
-  ]);
+  assert.equal(quotaOwner.state, 'measurement-plan-ready');
+  assert.deepEqual(quotaOwner.missingPlanFields, []);
+  assert.equal(quotaOwner.measurementWindowStart, '2026-10-03T04:06:51.000Z');
+  assert.equal(quotaOwner.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(quotaOwner.reactionSnapshotRunsPerDay, 24);
+  assert.equal(
+    quotaOwner.cadenceEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+  );
+  assert.equal(quotaOwner.automaticProviderCallAllowed, false);
+  assert.equal(quotaOwner.collectionExecutionAuthorized, false);
+  assert.equal(quotaOwner.schedulerMutationAllowed, false);
+  assert.equal(quotaOwner.providerSubmissionAuthorized, false);
 
   const resolved =
     evidenceRaw.resolvedEvidence as Record<string, unknown>;
