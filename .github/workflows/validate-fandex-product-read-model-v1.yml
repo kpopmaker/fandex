@@ -1,0 +1,33 @@
+name: Validate FANDEX Product internal read model v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/contracts/fandexVariableProduct.ts'
+      - 'lib/product/contracts/fandexVariableProductSnapshot.ts'
+      - 'lib/product/contracts/fandexArtistAvailabilityMatrix.ts'
+      - 'lib/product/contracts/fandexProductCandidate.ts'
+      - 'lib/product/contracts/fandexProductExplainability.ts'
+      - 'lib/product/contracts/fandexProductReadModel.ts'
+      - 'tests/fandex-product-read-model-v1.test.mts'
+      - '.github/workflows/validate-fandex-product-read-model-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-product-read-model-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
