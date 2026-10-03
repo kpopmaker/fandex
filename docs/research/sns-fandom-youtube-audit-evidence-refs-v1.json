@@ -143,5 +143,72 @@
     "providerBatchLimitEvidenceRef": null,
     "requiredForCurrentSingletonQuotaWorksheet": false,
     "note": "Exact provider ID-filter maxima remain unknown. They are optional optimization evidence while FANDEX declares singleton-only client batching and must not be inferred from maxResults."
+  },
+  "currentBoundedMeasurementEvidence": {
+    "state": "current-plan-bounded-snapshot-recorded",
+    "authorizationCommentId": "5970501121",
+    "authorizationEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5970501121",
+    "sourceMainSha": "f7a0965e5708ddf00ebacfe58ab8740e1d89084f",
+    "executionRequestCommitSha": "b7bb87f20626eea0605bb1757c5a723e74fe1043",
+    "workflowRunId": "37132802429",
+    "workflowConclusion": "success",
+    "artifactId": "11277073687",
+    "artifactDigest": "sha256:3d7fdbed7f314c75bc49f992493a2adffc5f2442915a37a39992367a56e1c37c",
+    "durableResultEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5970531495",
+    "measurementWindowStart": "2026-10-03T15:00:00.000Z",
+    "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
+    "measurementStartedAt": "2026-10-03T15:19:15.933Z",
+    "measuredAt": "2026-10-03T15:19:42.325Z",
+    "observedThrough": "2026-10-03T15:19:15.933Z",
+    "measurementWindowComplete": false,
+    "reactionSnapshotRunsPerDay": 24,
+    "requestBatchingStrategy": "singleton-only-until-provider-batch-limit-evidence",
+    "artistChannelCount": 5,
+    "uploadManifestPageCountPerReactionRun": 115,
+    "videoCountPerReactionRun": 0,
+    "trueZeroVideoCountObserved": true,
+    "providerCallsObserved": {
+      "channelsList": 5,
+      "playlistItemsList": 115,
+      "videosList": 0,
+      "total": 120
+    },
+    "quotaUnitsObserved": 120,
+    "perArtist": [
+      {
+        "canonicalArtistId": "blackpink",
+        "playlistItemsPagesTraversed": 14,
+        "includedVideoCount": 0
+      },
+      {
+        "canonicalArtistId": "jennie",
+        "playlistItemsPagesTraversed": 4,
+        "includedVideoCount": 0
+      },
+      {
+        "canonicalArtistId": "riize",
+        "playlistItemsPagesTraversed": 44,
+        "includedVideoCount": 0
+      },
+      {
+        "canonicalArtistId": "rose",
+        "playlistItemsPagesTraversed": 2,
+        "includedVideoCount": 0
+      },
+      {
+        "canonicalArtistId": "twice",
+        "playlistItemsPagesTraversed": 51,
+        "includedVideoCount": 0
+      }
+    ],
+    "rawVideoIdentifiersStored": false,
+    "rawStatisticsStored": false,
+    "secretMaterialStored": false,
+    "quotaWorksheetEligible": false,
+    "quotaWorksheetEligibilityReason": "measurement-window-incomplete",
+    "finalOwnerEvidencePromotionAllowed": false,
+    "productionCollectionAuthorized": false,
+    "providerSubmissionAuthorized": false,
+    "schedulerMutationAuthorized": false
   }
 }
