@@ -36,8 +36,8 @@ jobs:
             '.github/workflows/momentum-current-reevaluation-readiness-v1.yml',
             'utf8',
           );
-          const required = 'BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}';
-          const forbidden = 'BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}';
+          const required = 'FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN';
+          const forbidden = 'secrets.BLOB_READ_WRITE_TOKEN';
           if (!source.includes(required)) {
             console.error('missing_naver_evidence_blob_secret_binding');
             process.exit(2);
