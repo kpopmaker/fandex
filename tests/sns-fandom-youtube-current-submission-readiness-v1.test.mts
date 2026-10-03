@@ -75,12 +75,12 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
 
   assert.equal(quotaOwner.state, 'measurement-plan-ready');
   assert.deepEqual(quotaOwner.missingPlanFields, []);
-  assert.equal(quotaOwner.measurementWindowStart, '2026-10-03T04:06:51.000Z');
-  assert.equal(quotaOwner.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(quotaOwner.measurementWindowStart, '2026-10-03T15:00:00.000Z');
+  assert.equal(quotaOwner.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(quotaOwner.reactionSnapshotRunsPerDay, 24);
   assert.equal(
     quotaOwner.cadenceEvidenceRef,
-    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
   assert.equal(quotaOwner.automaticProviderCallAllowed, false);
   assert.equal(quotaOwner.collectionExecutionAuthorized, false);
