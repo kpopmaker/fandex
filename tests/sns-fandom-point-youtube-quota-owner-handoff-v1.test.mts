@@ -262,3 +262,17 @@ test('provider-limit batching still requires provider maxima and evidence', () =
     result.missingMeasurementFields.includes('providerBatchLimitEvidenceRef'),
   );
 });
+
+
+test('observed zero included-video count is true zero rather than missing', () => {
+  const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
+    input({
+      videoCountPerReactionRun: 0,
+    }),
+  );
+
+  assert.equal(result.state, 'quota-worksheet-input-ready');
+  assert.deepEqual(result.missingMeasurementFields, []);
+  assert.deepEqual(result.invalidFields, []);
+  assert.equal(result.videoCountPerReactionRun, 0);
+});

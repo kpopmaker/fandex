@@ -1076,3 +1076,53 @@ This separation avoids both failure modes:
 - inventing `50` from a `maxResults=50` page-size parameter;
 - blocking quota planning on a provider maximum that the current singleton
   implementation does not rely on.
+
+
+## 6j. Current-plan bounded measurement returned a true zero — 2026-10-04 KST
+
+A newly authorized one-shot Phase C measurement ran inside the current
+canonical 366-day window.
+
+Execution evidence:
+- owner authorization comment: `5970501121`;
+- exact source main: `f7a0965e5708ddf00ebacfe58ab8740e1d89084f`;
+- execution request commit:
+  `b7bb87f20626eea0605bb1757c5a723e74fe1043`;
+- workflow run: `37132802429` -> SUCCESS;
+- artifact id: `11277073687`;
+- artifact digest:
+  `sha256:3d7fdbed7f314c75bc49f992493a2adffc5f2442915a37a39992367a56e1c37c`;
+- durable result evidence:
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5970531495`.
+
+Receipt timing:
+- measurementWindowStart: `2026-10-03T15:00:00.000Z`;
+- measurementStartedAt: `2026-10-03T15:19:15.933Z`;
+- measuredAt: `2026-10-03T15:19:42.325Z`;
+- observedThrough: `2026-10-03T15:19:15.933Z`;
+- measurementWindowComplete: `false`.
+
+Observed bounded values:
+- uploadManifestPageCountPerReactionRun = `115`;
+- videoCountPerReactionRun = `0`;
+- channels.list calls = `5`;
+- playlistItems.list calls = `115`;
+- videos.list calls = `0`;
+- total provider calls / quota units = `120`.
+
+The zero included-video count is a real observed zero for the bounded interval.
+It is not Missing and must not be rewritten to null or one.
+
+The bounded executor already preserves that distinction. The quota owner handoff
+and worksheet must preserve it as well:
+- `videoCountPerReactionRun = 0` is valid measured evidence;
+- the worksheet keeps `youtube.videos.list` in scope with a zero-call line item;
+- negative or non-integer counts still fail closed.
+
+This semantic correction does not itself promote the receipt into the checked-in
+owner evidence. The current window is incomplete, so evidence materialization
+and interpretation remain a separate review step.
+
+Authorization comment `5970501121` is consumed. No provider rerun,
+Production collection, provider submission, scheduler mutation, deployment,
+or Product activation/publication is authorized by this correction.
