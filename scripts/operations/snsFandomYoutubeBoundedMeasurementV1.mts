@@ -267,7 +267,7 @@ async function main(): Promise<void> {
 
   process.stdout.write(JSON.stringify({
     version: 'sns_fandom_youtube_bounded_measurement_receipt_v1',
-    state: 'completed',
+    receiptState: 'completed',
     executionAuthorizationEvidenceRef:
       request.executionAuthorizationEvidenceRef,
     executionAuthorizationCommentId:
