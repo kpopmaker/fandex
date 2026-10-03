@@ -19,6 +19,13 @@ const EXECUTION_CONFIRM =
 const QUOTA_COST_EVIDENCE_REF =
   'https://developers.google.com/youtube/v3/determine_quota_cost';
 
+const providerCallsAttempted = {
+  channelsList: 0,
+  playlistItemsList: 0,
+  videosList: 0,
+  total: 0,
+};
+
 type ExecutionRequest = Readonly<{
   version: 'sns_fandom_youtube_bounded_measurement_execution_request_v1';
   authorizationState: 'approved';
@@ -115,6 +122,15 @@ async function youtubeJson(
   apiKey: string,
   request: SnsFandomYoutubeApiRequest,
 ): Promise<unknown> {
+  if (request.method === 'channels.list') {
+    providerCallsAttempted.channelsList += 1;
+  } else if (request.method === 'playlistItems.list') {
+    providerCallsAttempted.playlistItemsList += 1;
+  } else {
+    providerCallsAttempted.videosList += 1;
+  }
+  providerCallsAttempted.total += 1;
+
   const methodPath = request.method === 'channels.list'
     ? 'channels'
     : request.method === 'playlistItems.list'
@@ -152,9 +168,8 @@ function failureReceipt(
     state: 'blocked',
     reason,
     requestPath,
-    providerCallMayHaveOccurred: reason.startsWith(
-      'youtube_data_api_request_failed:',
-    ),
+    providerCallMayHaveOccurred: providerCallsAttempted.total > 0,
+    providerCallsAttempted: { ...providerCallsAttempted },
     secretMaterialStored: false,
     productionCollectionAuthorized: false,
     providerSubmissionAuthorized: false,
