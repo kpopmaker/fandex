@@ -1,7 +1,7 @@
 {
   "version": "fandex_music_chart_v2_current_presence_parallel_v1",
-  "createdAt": "2026-10-02T22:45:54",
-  "snapshotDate": "2026-10-02",
+  "createdAt": "2026-10-03T11:36:36",
+  "snapshotDate": "2026-10-03",
   "pythonOnly": true,
   "touchesWebsitePublicData": false,
   "scoreMode": "best_current_entry_per_artist_x_platform_full_scale",
@@ -74,7 +74,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "LEMONADE",
-          "rank": "19",
+          "rank": "16",
           "chartType": "realtime",
           "point": 27.0
         }
@@ -95,7 +95,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Dear my crazy soulmate",
-          "rank": "14",
+          "rank": "15",
           "chartType": "daily",
           "point": 72.0
         },
@@ -130,7 +130,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "47",
+          "rank": "42",
           "chartType": "daily",
           "point": 48.0
         },
@@ -144,7 +144,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "BANG BANG",
-          "rank": "38",
+          "rank": "46",
           "chartType": "realtime",
           "point": 18.0
         }
@@ -153,21 +153,21 @@
     },
     {
       "artist": "보이넥스트도어",
-      "fandexMusicChartFinalPoint": 54.8,
-      "score": 54.8,
-      "rankedPlatformCount": 2,
+      "fandexMusicChartFinalPoint": 39.8,
+      "score": 39.8,
+      "rankedPlatformCount": 3,
       "platformPoints": {
-        "melon": 48.0,
+        "melon": 24.0,
         "genie": 6.8,
-        "bugs": 0.0
+        "bugs": 9.0
       },
       "platformStatus": {
         "melon": {
           "status": "RANKED",
           "trackTitle": "오늘만 I LOVE YOU",
-          "rank": "36",
+          "rank": "51",
           "chartType": "daily",
-          "point": 48.0
+          "point": 24.0
         },
         "genie": {
           "status": "RANKED",
@@ -177,11 +177,11 @@
           "point": 6.8
         },
         "bugs": {
-          "status": "NOT_RANKED",
-          "trackTitle": "",
-          "rank": "",
-          "chartType": "",
-          "point": 0.0
+          "status": "RANKED",
+          "trackTitle": "ANIMAL",
+          "rank": "94",
+          "chartType": "realtime",
+          "point": 9.0
         }
       },
       "rank": 5
@@ -200,7 +200,7 @@
         "melon": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "89",
+          "rank": "93",
           "chartType": "daily",
           "point": 24.0
         },
@@ -214,7 +214,7 @@
         "bugs": {
           "status": "RANKED",
           "trackTitle": "Hype Boy",
-          "rank": "52",
+          "rank": "68",
           "chartType": "realtime",
           "point": 9.0
         }
