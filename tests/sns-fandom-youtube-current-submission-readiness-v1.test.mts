@@ -20,7 +20,7 @@ async function readJson(path: string) {
   ) as Record<string, unknown>;
 }
 
-test('current merged owner files evaluate to the exact fail-closed submission blockers', async () => {
+test('current owner files resolve Phase A while remaining submission blockers fail closed', async () => {
   const providerRaw = await readJson(
     'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json',
   );
@@ -161,6 +161,22 @@ test('current merged owner files evaluate to the exact fail-closed submission bl
     ].sort(),
   );
 
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-provider-client-ref-empty'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-provider-client-identity-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-cloud-project-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-cloud-project-evidence-mismatch'),
+    false,
+  );
   assert.equal(
     readiness.blockers.includes('youtube-audit-privacy-screenshot-missing'),
     false,
