@@ -13,6 +13,9 @@ import {
 import {
   assembleRiskAdjustmentFromQualityEnvelopes,
 } from '../lib/intelligence/riskAdjustmentQualityEnvelopeAssembly';
+import {
+  deriveRiskAdjustmentQualitySufficiencyWitness,
+} from '../lib/intelligence/riskAdjustmentQualitySufficiencyWitness';
 
 function productionResult(): ProductActivityExposurePublicRouteResult {
   return {
@@ -168,4 +171,24 @@ test('current-main Activity Exposure is consumable but remains insufficient-data
       'volatility-unknown',
     ],
   );
+
+  const witness = deriveRiskAdjustmentQualitySufficiencyWitness([
+    adapted.envelope.input,
+  ]);
+  assert.equal(witness.status, 'quality-sufficiency-blocked');
+  assert.equal(witness.unresolvedOwnerCount, 1);
+  assert.deepEqual(witness.unresolvedRequiredDimensions, [
+    'confidence',
+    'conflict',
+    'freshness',
+    'history',
+    'revision',
+  ]);
+  assert.deepEqual(
+    witness.entries[0]?.ownerScope,
+    'activity-exposure-product-owner',
+  );
+  assert.deepEqual(witness.entries[0]?.nonBlockingQualityIssues, [
+    'volatility-unknown',
+  ]);
 });
