@@ -62,7 +62,12 @@
     "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
     "reactionSnapshotRunsPerDay": 24,
     "cadenceEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631",
-    "measurementPlanApprovedAt": "2026-10-03T09:53:43.000Z"
+    "measurementPlanApprovedAt": "2026-10-03T09:53:43.000Z",
+    "requestBatchingStrategy": "singleton-only-until-provider-batch-limit-evidence",
+    "channelIdsPerCall": 1,
+    "videoIdsPerCall": 1,
+    "requestBatchingEvidenceRef": "repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence",
+    "providerBatchLimitClaimed": false
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
@@ -70,9 +75,6 @@
     "uploadManifestPageCountPerReactionRun": null,
     "videoCountPerReactionRun": null,
     "quotaEstimateRef": null,
-    "maxVideoIdsPerCall": null,
-    "providerBatchLimitEvidenceRef": null,
-    "maxChannelIdsPerCall": null,
     "dashboardFeatureScreenshotRef": null
   },
   "fixtureValuesAreProductionEvidence": false,
@@ -100,7 +102,7 @@
     "googleDriveCloudProjectEvidenceFound": false,
     "githubApprovedCadenceSearchPerformed": true,
     "githubApprovedCadenceEvidenceFound": true,
-    "note": "Earlier connected-Drive and GitHub searches found no pre-existing owner-approved cadence/window evidence. The owner first approved a 365-day 24/day plan, then explicitly superseded it on 2026-10-03 with a 366-day plan from 2026-10-03T15:00:00.000Z through 2027-10-04T15:00:00.000Z at 24 reaction snapshot runs/day. Phase C measured usage and provider batch-limit evidence remain unresolved for the new canonical plan. Regression fixtures remain invalid as Production evidence.",
+    "note": "Earlier connected-Drive and GitHub searches found no pre-existing owner-approved cadence/window evidence. The owner first approved a 365-day 24/day plan, then explicitly superseded it on 2026-10-03 with a 366-day plan from 2026-10-03T15:00:00.000Z through 2027-10-04T15:00:00.000Z at 24 reaction snapshot runs/day. Phase C measured usage remains unresolved for the new canonical plan. Exact provider ID-filter maxima remain unknown, but they are no longer required for quota calculation while FANDEX uses evidence-bound singleton-only client batching. Regression fixtures remain invalid as Production evidence.",
     "googleDriveMatchedFileCount": 0,
     "ownerProvidedCloudProjectEvidenceFound": true,
     "ownerProvidedCloudProjectEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03",
@@ -134,5 +136,12 @@
       "eligibility": "not-eligible-for-new-canonical-plan",
       "reason": "completed-before-superseding-measurement-window-start"
     }
+  },
+  "optionalOptimizationEvidence": {
+    "maxChannelIdsPerCall": null,
+    "maxVideoIdsPerCall": null,
+    "providerBatchLimitEvidenceRef": null,
+    "requiredForCurrentSingletonQuotaWorksheet": false,
+    "note": "Exact provider ID-filter maxima remain unknown. They are optional optimization evidence while FANDEX declares singleton-only client batching and must not be inferred from maxResults."
   }
 }
