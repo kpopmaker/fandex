@@ -29,7 +29,7 @@ export type SnsFandomYoutubeQuotaMeasurementHandoffInput = Readonly<{
   measurementWindowEnd: string;
   reactionSnapshotRunsPerDay: number;
   cadenceEvidenceRef: string;
-  providerBatchLimitEvidenceRef: string;
+  providerBatchLimitEvidenceRef: string | null;
   providerQuotaCostEvidenceRef: string;
 }>;
 
@@ -50,6 +50,7 @@ export type SnsFandomYoutubeQuotaMeasurementTask = Readonly<{
     'playlistItemsPagesTraversed',
     'includedVideoCount',
   ];
+  requestBatchingStrategy: 'singleton-only-until-provider-batch-limit-evidence';
 }>;
 
 export type SnsFandomYoutubeQuotaMeasurementHandoffResult = Readonly<{
@@ -81,6 +82,9 @@ export type SnsFandomYoutubeQuotaMeasurementHandoffResult = Readonly<{
   schedulerMutationAllowed: false;
   deploymentAuthorized: false;
   quotaWorksheetAssemblyAllowed: false;
+  providerBatchLimitEvidenceRef: string | null;
+  providerBatchLimitEvidenceRequiredForQuotaWorksheet: true;
+  arbitraryProviderLimitApplied: false;
   blockers: readonly string[];
 }>;
 
@@ -194,7 +198,6 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
 
   for (const [name, ref] of [
     ['cadence-evidence-ref', input.cadenceEvidenceRef],
-    ['provider-batch-limit-evidence-ref', input.providerBatchLimitEvidenceRef],
     ['provider-quota-cost-evidence-ref', input.providerQuotaCostEvidenceRef],
   ] as const) {
     if (!present(ref)) {
@@ -202,6 +205,18 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     } else if (secretLike(ref)) {
       blockers.push(`youtube-quota-measurement-${name}-secret-like`);
     }
+  }
+
+  if (
+    input.providerBatchLimitEvidenceRef !== null
+    && (
+      !present(input.providerBatchLimitEvidenceRef)
+      || secretLike(input.providerBatchLimitEvidenceRef)
+    )
+  ) {
+    blockers.push(
+      'youtube-quota-measurement-provider-batch-limit-evidence-ref-invalid',
+    );
   }
 
   const tasks: SnsFandomYoutubeQuotaMeasurementTask[] = [];
@@ -230,6 +245,8 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
           'playlistItemsPagesTraversed',
           'includedVideoCount',
         ] as const),
+        requestBatchingStrategy:
+          'singleton-only-until-provider-batch-limit-evidence' as const,
       }));
     }
   }
@@ -270,6 +287,9 @@ export function buildSnsFandomYoutubeQuotaMeasurementHandoff(
     schedulerMutationAllowed: false as const,
     deploymentAuthorized: false as const,
     quotaWorksheetAssemblyAllowed: false as const,
+    providerBatchLimitEvidenceRef: input.providerBatchLimitEvidenceRef,
+    providerBatchLimitEvidenceRequiredForQuotaWorksheet: true as const,
+    arbitraryProviderLimitApplied: false as const,
     blockers: uniqueBlockers,
   });
 }

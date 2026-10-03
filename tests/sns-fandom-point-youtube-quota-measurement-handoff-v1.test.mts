@@ -54,8 +54,7 @@ test('merged five-member Audit cohort becomes an exact non-authorizing quota mea
     measurementWindowEnd: '2026-10-01T00:00:00.000Z',
     reactionSnapshotRunsPerDay: 4,
     cadenceEvidenceRef: 'external://youtube-audit/reaction-cadence',
-    providerBatchLimitEvidenceRef:
-      'external://youtube-audit/provider-batch-limits',
+    providerBatchLimitEvidenceRef: null,
     providerQuotaCostEvidenceRef:
       'external://youtube-audit/provider-quota-costs',
   });
@@ -80,9 +79,52 @@ test('merged five-member Audit cohort becomes an exact non-authorizing quota mea
   assert.equal(result.schedulerMutationAllowed, false);
   assert.equal(result.deploymentAuthorized, false);
   assert.equal(result.quotaWorksheetAssemblyAllowed, false);
+  assert.equal(result.providerBatchLimitEvidenceRef, null);
+  assert.equal(result.providerBatchLimitEvidenceRequiredForQuotaWorksheet, true);
+  assert.equal(result.arbitraryProviderLimitApplied, false);
+  assert.ok(
+    result.tasks.every(
+      (task) =>
+        task.requestBatchingStrategy
+        === 'singleton-only-until-provider-batch-limit-evidence',
+    ),
+  );
   assert.equal(result.arbitraryCadenceApplied, false);
   assert.equal(result.arbitraryMeasurementWindowApplied, false);
   assert.deepEqual(result.blockers, []);
+});
+
+test('missing provider batch-limit evidence does not block singleton measurement preparation', async () => {
+  const manifest = await mergedAuditManifest();
+
+  const result = buildSnsFandomYoutubeQuotaMeasurementHandoff({
+    handoffId: 'sns-fandom-youtube-quota-measurement-v1',
+    preparedAt: '2026-10-03T04:30:00.000Z',
+    artistBindingManifest: manifest,
+    providerClientIdentity: providerClientIdentity(),
+    requestedEndpoints: [
+      'youtube.channels.list',
+      'youtube.playlistItems.list',
+      'youtube.videos.list',
+    ],
+    measurementWindowStart: '2026-10-03T04:06:51.000Z',
+    measurementWindowEnd: '2027-10-03T04:06:51.000Z',
+    reactionSnapshotRunsPerDay: 24,
+    cadenceEvidenceRef:
+      'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+    providerBatchLimitEvidenceRef: null,
+    providerQuotaCostEvidenceRef:
+      'https://developers.google.com/youtube/v3/determine_quota_cost',
+  });
+
+  assert.equal(result.state, 'measurement-handoff-ready');
+  assert.deepEqual(result.blockers, []);
+  assert.equal(result.providerBatchLimitEvidenceRef, null);
+  assert.equal(result.providerBatchLimitEvidenceRequiredForQuotaWorksheet, true);
+  assert.equal(result.quotaWorksheetAssemblyAllowed, false);
+  assert.equal(result.automaticProviderCallAllowed, false);
+  assert.equal(result.collectionExecutionAuthorized, false);
+  assert.equal(result.arbitraryProviderLimitApplied, false);
 });
 
 test('quota measurement handoff refuses a structurally invalid binding manifest', async () => {

@@ -572,8 +572,14 @@ The handoff also requires, before it can become
 - an explicit measurement window;
 - an explicit reaction snapshot cadence;
 - non-secret cadence evidence;
-- provider batch-limit evidence;
 - provider quota-cost evidence.
+
+Exact provider batch-limit evidence is deliberately **not** a prerequisite for
+preparing the measurement handoff. Until that evidence exists, the handoff
+uses a singleton-only request batching strategy and does not claim any provider
+maximum. The later quota worksheet still requires evidence-backed
+`maxChannelIdsPerCall`, `maxVideoIdsPerCall`, and
+`providerBatchLimitEvidenceRef`.
 
 When ready, it emits one deterministic measurement task per selected artist
 channel. Each task requires the downstream measurement owner to produce:
@@ -827,4 +833,35 @@ supplied:
 
 This Phase B approval does not authorize a YouTube API call, scheduler mutation,
 Production collection, provider submission, deployment, or Product
+activation/publication.
+
+
+## 6f. Phase C measurement handoff / provider batch-limit dependency split
+
+Phase C is intentionally split into two independent evidence tracks:
+
+1. real page/video measurement:
+   - enumerate the five verified audit channels;
+   - traverse each uploads playlist across the owner-approved measurement
+     window;
+   - return actual playlist page count and included-video count;
+2. provider ID-batch-limit evidence:
+   - establish exact supported channel/video ID batching from provider evidence
+     or a separately authorized bounded provider test.
+
+The first track must not be blocked merely because the second track is still
+unknown. Until exact batch-limit evidence exists, any future authorized
+measurement execution must use the handoff's
+`singleton-only-until-provider-batch-limit-evidence` strategy.
+
+This is not a claim that the provider maximum is one. It is a conservative
+client execution strategy that avoids asserting an unknown provider maximum.
+
+The quota worksheet remains fail-closed and still requires:
+- `maxChannelIdsPerCall`;
+- `maxVideoIdsPerCall`;
+- `providerBatchLimitEvidenceRef`.
+
+Measurement-handoff readiness still does not authorize an API call, scheduler
+mutation, Production collection, provider submission, deployment, or Product
 activation/publication.
