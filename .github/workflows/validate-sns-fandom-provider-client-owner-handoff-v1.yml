@@ -7,7 +7,11 @@ on:
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeProviderClientOwnerHandoff.ts'
       - 'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json'
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
       - 'tests/sns-fandom-point-youtube-provider-client-owner-handoff-v1.test.mts'
+      - 'tests/sns-fandom-youtube-audit-evidence-refs-v1.test.mts'
+      - 'tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts'
       - '.github/workflows/validate-sns-fandom-provider-client-owner-handoff-v1.yml'
   pull_request:
     paths:
@@ -33,6 +37,10 @@ jobs:
       - run: npm ci
       - name: Provider-client owner handoff regression
         run: npx tsx --test tests/sns-fandom-point-youtube-provider-client-owner-handoff-v1.test.mts
+      - name: Audit evidence regression
+        run: npx tsx --test tests/sns-fandom-youtube-audit-evidence-refs-v1.test.mts
+      - name: Current submission-readiness regression
+        run: npx tsx --test tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build
