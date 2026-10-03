@@ -1,0 +1,38 @@
+name: Validate Momentum current reevaluation readiness v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/fandexMomentumCurrentReevaluationReadiness.ts'
+      - 'scripts/operations/momentumCurrentReevaluationReadinessV1.mts'
+      - '.github/workflows/momentum-current-reevaluation-readiness-v1.yml'
+      - '.github/workflows/validate-momentum-current-reevaluation-readiness-v1.yml'
+      - 'tests/momentum-current-reevaluation-readiness-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Current reevaluation readiness regression
+        run: npx tsx --test tests/momentum-current-reevaluation-readiness-v1.test.mts
+
+      - name: Blob recovery continuity regression
+        run: npx tsx --test tests/momentum-recovery-continuity-gate-v1.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
