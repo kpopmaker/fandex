@@ -1,0 +1,4224 @@
+{
+  "contractVersion": "reported-album-sales-web-seed-v1",
+  "lifecycle": "research",
+  "collectedAt": "2026-10-03T14:51:58+09:00",
+  "cohortBasis": "existing musicAlbumPoint canonical cohort",
+  "drafts": [
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Armageddon",
+        "releaseDate": "2024-05-27",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1154742,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-05-27",
+      "providerPeriodEnd": "2024-06-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92725",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92725",
+          "sourcePublicationDate": "2026-06-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Armageddon",
+        "releaseDate": "2024-05-27",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1154742,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-05-27",
+      "providerPeriodEnd": "2024-06-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreansales:2024-hanteo-firstweek:aespa-armageddon",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KOREAN SALES",
+          "sourceUrl": "https://koreansalestwt.blogspot.com/2024/04/top-100-first-dayweek-sales-on-hanteo.html",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IVE SECRET",
+        "releaseDate": "2025-08-25",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 921506,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-08-25",
+      "providerPeriodEnd": "2025-08-31",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:82781",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/82781",
+          "sourcePublicationDate": "2025-09-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "EASY",
+        "releaseDate": "2024-02-19",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 989268,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-02-19",
+      "providerPeriodEnd": "2024-02-25",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:61267",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/61267",
+          "sourcePublicationDate": "2024-02-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Action",
+        "releaseDate": "2025-10-20",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1041802,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-10-20",
+      "providerPeriodEnd": "2025-10-26",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:84646",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/84646",
+          "sourcePublicationDate": "2025-10-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "UNFORGIVEN",
+        "releaseDate": null,
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1258001,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-05-02",
+      "providerPeriodEnd": "2023-05-08",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1586049",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1586049wpp/le-sserafims-unforgiven-achieves-3rd-highest-1st-week-sales-of-any-girl-group-album-in-hanteo-history",
+          "sourcePublicationDate": "2023-05-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IVE SWITCH",
+        "releaseDate": "2024-04-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1318467,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-29",
+      "providerPeriodEnd": "2024-05-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreansales:2024-hanteo-firstweek:ive-switch",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KOREAN SALES",
+          "sourceUrl": "https://koreansalestwt.blogspot.com/2024/04/top-100-first-dayweek-sales-on-hanteo.html",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "financialnews:20240507:ive-switch",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Financial News via Nate",
+          "sourceUrl": "https://m.news.nate.com/view/20240507n24769",
+          "sourcePublicationDate": "2024-05-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:31:03+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IVE SWITCH",
+        "releaseDate": "2024-04-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "circle-album-distribution-volume",
+      "value": 1594023,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-01",
+      "providerPeriodEnd": "2024-04-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Circle Chart",
+      "territory": null,
+      "format": null,
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "circle-chart:album:2024-04:ive-switch",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Circle Chart",
+          "sourceUrl": "https://circlechart.kr/page_chart/album.circle?hitYear=2024&nationGbn=T&targetTime=04&termGbn=month&yearTime=3",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Circle Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IVE SWITCH",
+        "releaseDate": "2024-04-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "circle-retail-period-sales",
+      "value": 627846,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-01",
+      "providerPeriodEnd": "2024-04-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Circle Chart",
+      "territory": null,
+      "format": null,
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "circle-chart:article:23798:ive-switch-retail-april",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Circle Chart",
+          "sourceUrl": "https://circlechart.kr/page_article/view.circle?idx=23798&sgenre=kpop",
+          "sourcePublicationDate": "2024-05-10",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Circle Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "GOLDEN HOUR : Part.5",
+        "releaseDate": "2026-06-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1885712,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-06-26",
+      "providerPeriodEnd": "2026-07-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92835",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92835",
+          "sourcePublicationDate": "2026-07-03",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MAXIDENT",
+        "releaseDate": null,
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2163349,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-10-07",
+      "providerPeriodEnd": "2022-10-13",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:42866",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/ko/article/42866",
+          "sourcePublicationDate": "2022-10-14",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "7TH YEAR: 가시덤불에 잠시 바람이 멈췄을 때",
+        "releaseDate": "2026-04-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1806740,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-04-13",
+      "providerPeriodEnd": "2026-04-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:90909",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/90909",
+          "sourcePublicationDate": "2026-05-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "SEVENTEENTH HEAVEN",
+        "releaseDate": "2023-10-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 5091887,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-10-23",
+      "providerPeriodEnd": "2023-10-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:57690",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/57690",
+          "sourcePublicationDate": "2023-10-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Get Up",
+        "releaseDate": "2023-07-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1650181,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-07-21",
+      "providerPeriodEnd": "2023-07-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "tenasia:2023072898984",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "TenAsia",
+          "sourceUrl": "https://www.tenasia.com/music/2023072898984",
+          "sourcePublicationDate": "2023-07-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "iu",
+      "artistName": "IU",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LILAC",
+        "releaseDate": "2021-03-25",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 278414,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-03-26",
+      "providerPeriodEnd": "2021-04-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "kpopstarz:298271",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KpopStarz",
+          "sourceUrl": "https://www.kpopstarz.com/articles/298271/20210405/iu-sets-highest-personal-record-first-week-album-sales-lilac.htm",
+          "sourcePublicationDate": "2021-04-05",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "iu",
+      "artistName": "IU",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LILAC",
+        "releaseDate": "2021-03-25",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 278414,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-03-26",
+      "providerPeriodEnd": "2021-04-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T00:00:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "edaily:01088966629013824:iu-lilac",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Edaily Starin",
+          "sourceUrl": "https://www.edaily.co.kr/News/Read?mediaCodeNo=258&newsId=01088966629013824",
+          "sourcePublicationDate": "2021-04-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T00:00:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ARIRANG",
+        "releaseDate": "2026-03-20",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 4169464,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-03-20",
+      "providerPeriodEnd": "2026-03-26",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:89869",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/89869",
+          "sourcePublicationDate": "2026-03-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "READY TO BE",
+        "releaseDate": "2023-03-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 651205,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-03-10",
+      "providerPeriodEnd": "2023-03-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:50446",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/50446",
+          "sourcePublicationDate": "2023-03-22",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ROMANCE : UNTOLD",
+        "releaseDate": "2024-07-12",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2344749,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-07-12",
+      "providerPeriodEnd": "2024-07-18",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:90765",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/90765",
+          "sourcePublicationDate": "2026-04-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artistName": "RIIZE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Fame",
+        "releaseDate": "2025-11-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 667616,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-11-24",
+      "providerPeriodEnd": "2025-11-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:85798",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/85798",
+          "sourcePublicationDate": "2025-12-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artistName": "BLACKPINK",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "DEADLINE",
+        "releaseDate": "2026-02-27",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1774577,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-02-27",
+      "providerPeriodEnd": "2026-03-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:89258",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/89258",
+          "sourcePublicationDate": "2026-03-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artistName": "Jung Kook",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "GOLDEN",
+        "releaseDate": "2023-11-03",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2438483,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-11-03",
+      "providerPeriodEnd": "2023-11-09",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1625423",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1625423wpp/btss-jungkook-sets-new-record-for-highest-1st-week-sales-of-any-solo-album-in-hanteo-history",
+          "sourcePublicationDate": "2023-11-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "v",
+      "artistName": "V",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Layover",
+        "releaseDate": "2023-09-08",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2101974,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-09-08",
+      "providerPeriodEnd": "2023-09-14",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1613900",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1613900wpp/btss-v-becomes-1st-solo-double-million-seller-in-hanteo-history-with-layover",
+          "sourcePublicationDate": "2023-09-14",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artistName": "JENNIE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Ruby",
+        "releaseDate": "2025-03-07",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 661130,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-03-07",
+      "providerPeriodEnd": "2025-03-13",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "asiae:2025031411202531406",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "The Asia Business Daily",
+          "sourceUrl": "https://www.asiae.co.kr/en/print.htm?idxno=2025031411202531406",
+          "sourcePublicationDate": "2025-03-14",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artistName": "Jimin",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MUSE",
+        "releaseDate": "2024-07-19",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 814485,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-07-19",
+      "providerPeriodEnd": "2024-07-25",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreansales:jimin-muse-summary",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KOREAN SALES",
+          "sourceUrl": "https://koreansalestwt.blogspot.com/2024/07/jimin-sales-summary.html",
+          "sourcePublicationDate": "2024-07-26",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "randomviews:31293:jimin-muse",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Randomviews",
+          "sourceUrl": "https://randomviews.net/archives/31293/?PageSpeed=noscript",
+          "sourcePublicationDate": "2024-07-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "namu:muse-jimin:first-week-dates",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "Namu Wiki",
+          "sourceUrl": "https://www.namu.moe/w/MUSE%28%EC%A7%80%EB%AF%BC%29",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artistName": "LISA",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Alter Ego",
+        "releaseDate": "2025-02-28",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 167542,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-02-28",
+      "providerPeriodEnd": "2025-03-06",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreansales:lisa-alter-ego-summary",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KOREAN SALES",
+          "sourceUrl": "https://koreansalestwt.blogspot.com/2025/03/lisa-sales-summary.html",
+          "sourcePublicationDate": "2025-03-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "daebak:20250308:lisa-alter-ego",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Daebak",
+          "sourceUrl": "https://daebak.tokyo/2025/03/08/lisa-alter-ego-first-week-sales/",
+          "sourcePublicationDate": "2025-03-08",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "namu:alter-ego-lisa:first-week-dates",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "Namu Wiki",
+          "sourceUrl": "https://www.namu.moe/w/Alter%20Ego%28%EB%A6%AC%EC%82%AC%29",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artistName": "ROSÉ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "rosie",
+        "releaseDate": "2024-12-06",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 444648,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-12-06",
+      "providerPeriodEnd": "2024-12-12",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T22:47:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreansales:rose-rosie-summary",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KOREAN SALES",
+          "sourceUrl": "https://koreansalestwt.blogspot.com/2024/12/rose-sales-summary.html",
+          "sourcePublicationDate": "2024-12-15",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T22:47:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "majayo:20241207:blackpink-rose-rosie",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Majayo",
+          "sourceUrl": "https://majayo.com/20241207-blackpink/",
+          "sourcePublicationDate": "2024-12-13",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "namu:rose-rosie:first-week-dates",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "Namu Wiki",
+          "sourceUrl": "https://www.namu.moe/w/rosie",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MY WORLD",
+        "releaseDate": "2023-05-08",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1698784,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-05-08",
+      "providerPeriodEnd": "2023-05-14",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:52224:aespa-my-world",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/52224",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Proof",
+        "releaseDate": "2022-06-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2752496,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-06-10",
+      "providerPeriodEnd": "2022-06-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1531359:bts-proof",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1531359wpp/bts-achieves-highest-1st-week-sales-of-2022-with-proof",
+          "sourcePublicationDate": "2022-06-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "With YOU-th",
+        "releaseDate": "2024-02-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1063615,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-02-23",
+      "providerPeriodEnd": "2024-02-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1645802:twice-with-you-th",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1645802wpp/twices-with-you-th-becomes-their-1st-album-to-surpass-1-million-sales-in-1st-week",
+          "sourcePublicationDate": "2024-03-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ORANGE BLOOD",
+        "releaseDate": "2023-11-17",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1871269,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-11-17",
+      "providerPeriodEnd": "2023-11-23",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1628141:enhypen-orange-blood",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1628141wpp/enhypen-becomes-boy-group-with-7th-highest-1st-week-sales-in-hanteo-history",
+          "sourcePublicationDate": "2023-11-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artistName": "BLACKPINK",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "BORN PINK",
+        "releaseDate": "2022-09-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1542950,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-09-16",
+      "providerPeriodEnd": "2022-09-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1546332:blackpink-born-pink",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1546332wpp/blackpinks-born-pink-becomes-1st-double-million-seller-album-by-a-girl-group",
+          "sourcePublicationDate": "2022-09-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "GOLDEN HOUR : Part.2",
+        "releaseDate": "2024-11-15",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1416444,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-11-15",
+      "providerPeriodEnd": "2024-11-21",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:72635:ateez-golden-hour-part-2",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/72635",
+          "sourcePublicationDate": "2024-11-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "I've IVE",
+        "releaseDate": "2023-04-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1102107,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-04-10",
+      "providerPeriodEnd": "2023-04-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:51228:ive-ive",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/51228",
+          "sourcePublicationDate": "2023-04-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "FML",
+        "releaseDate": "2023-04-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 4550214,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-04-24",
+      "providerPeriodEnd": "2023-04-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1583831:seventeen-fml",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1583831wpp/seventeen-breaks-record-for-best-selling-album-in-k-pop-history-after-fml-sells-over-4-5-million-copies-in-1-week",
+          "sourcePublicationDate": "2023-04-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "★★★★★ (5-STAR)",
+        "releaseDate": "2023-06-02",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 4617499,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-06-02",
+      "providerPeriodEnd": "2023-06-08",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1592733:stray-kids-5-star",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1592733wpp/stray-kids-breaks-record-for-highest-1st-week-sales-of-any-album-in-hanteo-history",
+          "sourcePublicationDate": "2023-06-08",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Name Chapter: TEMPTATION",
+        "releaseDate": "2023-01-27",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2180889,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-01-27",
+      "providerPeriodEnd": "2023-02-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1565205:txt-temptation",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1565205wpp/txt-is-now-artist-with-2nd-highest-1st-week-sales-in-hanteo-history",
+          "sourcePublicationDate": "2023-02-02",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "HOW?",
+        "releaseDate": "2024-04-15",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 531911,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-15",
+      "providerPeriodEnd": "2024-04-21",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:63162:boynextdoor-how",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/63162",
+          "sourcePublicationDate": "2024-04-22",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "OMG",
+        "releaseDate": "2023-01-02",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 701241,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-01-02",
+      "providerPeriodEnd": "2023-01-08",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "yonhap:AEN20230109002500315:newjeans-omg",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Yonhap News Agency",
+          "sourceUrl": "https://en.yna.co.kr/view/AEN20230109002500315",
+          "sourcePublicationDate": "2023-01-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artistName": "RIIZE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "RIIZING",
+        "releaseDate": "2024-06-17",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1255015,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-06-17",
+      "providerPeriodEnd": "2024-06-23",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1669891:riize-riizing",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1669891wpp/riize-breaks-their-1st-week-sales-record-with-riizing",
+          "sourcePublicationDate": "2024-06-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artistName": "Jimin",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "FACE",
+        "releaseDate": "2023-03-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1454223,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-03-24",
+      "providerPeriodEnd": "2023-03-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1576491:jimin-face",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1576491wpp/btss-jimin-breaks-record-for-highest-1st-week-sales-of-any-solo-artist-in-history",
+          "sourcePublicationDate": "2023-03-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artistName": "LISA",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LALISA",
+        "releaseDate": "2021-09-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 736221,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-09-10",
+      "providerPeriodEnd": "2021-09-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1489064:lisa-lalisa",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1489064wpp/blackpinks-lisa-breaks-1st-week-album-salesrecord-among-female-artists-becomes-1st-solo-female-half-million-seller",
+          "sourcePublicationDate": "2021-09-16",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artistName": "ROSÉ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "R",
+        "releaseDate": "2021-03-12",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 448089,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-03-16",
+      "providerPeriodEnd": "2021-03-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-02T23:11:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1459639:rose-r",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1459639wpp/blackpinks-rose-breaks-record-of-highest-1st-week-album-sales-for-female-soloist-in-a-day-with-r",
+          "sourcePublicationDate": "2021-03-24",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "kpopstarz:308381:rose-r-period",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "KpopStarz",
+          "sourceUrl": "https://www.kpopstarz.com/articles/308381/20220816/highest-first-week-debut-album-sales-female-kpop-artists-history-2022.htm",
+          "sourcePublicationDate": "2022-08-16",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-02T23:11:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "REVIVE+",
+        "releaseDate": "2026-02-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 667234,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-02-23",
+      "providerPeriodEnd": "2026-03-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T00:20:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:89015:ive-revive-plus",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/89015",
+          "sourcePublicationDate": "2026-03-02",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T00:20:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "CRAZY",
+        "releaseDate": "2024-08-30",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 677687,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-08-30",
+      "providerPeriodEnd": "2024-09-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T00:20:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:69250:lesserafim-crazy",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/es/article/69250",
+          "sourcePublicationDate": "2024-09-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T00:20:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "HOME",
+        "releaseDate": "2026-06-08",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1085715,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-06-08",
+      "providerPeriodEnd": "2026-06-14",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T00:20:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92979:boynextdoor-home",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92979",
+          "sourcePublicationDate": "2026-07-08",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T00:20:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artistName": "RIIZE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "II",
+        "releaseDate": "2026-06-15",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1289450,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-06-15",
+      "providerPeriodEnd": "2026-06-21",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T00:20:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92516:riize-ii",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92516",
+          "sourcePublicationDate": "2026-06-22",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T00:20:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "DARK BLOOD",
+        "releaseDate": "2023-05-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1322516,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-05-22",
+      "providerPeriodEnd": "2023-05-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:02:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:52800:enhypen-dark-blood",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/52800",
+          "sourcePublicationDate": "2023-06-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:02:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "SPILL THE FEELS",
+        "releaseDate": "2024-10-14",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 3160611,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-10-14",
+      "providerPeriodEnd": "2024-10-20",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:02:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:71238:seventeen-spill-the-feels",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/71238",
+          "sourcePublicationDate": "2024-10-24",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:02:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Star Chapter: SANCTUARY",
+        "releaseDate": "2024-11-04",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1579339,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-11-04",
+      "providerPeriodEnd": "2024-11-10",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:02:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:72126:txt-star-chapter-sanctuary",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/72126",
+          "sourcePublicationDate": "2024-11-11",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:02:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "SKZ IT TAPE ‘DO IT’",
+        "releaseDate": "2025-11-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2207660,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-11-21",
+      "providerPeriodEnd": "2025-11-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:02:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:86603:stray-kids-do-it",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/86603",
+          "sourcePublicationDate": "2025-12-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:02:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "TEN: The Story Goes On",
+        "releaseDate": "2025-10-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 251604,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-10-10",
+      "providerPeriodEnd": "2025-10-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:02:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:84321:twice-ten-the-story-goes-on",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/84321",
+          "sourcePublicationDate": "2025-10-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:02:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MANIFESTO : DAY 1",
+        "releaseDate": "2022-07-04",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1241112,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-07-04",
+      "providerPeriodEnd": "2022-07-10",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:27:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:36859:enhypen-manifesto-day-1",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/ko/article/36859",
+          "sourcePublicationDate": "2022-07-11",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:27:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "After LIKE",
+        "releaseDate": "2022-08-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 924363,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-08-22",
+      "providerPeriodEnd": "2022-08-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:27:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:40021:ive-after-like",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/ko/article/40021",
+          "sourcePublicationDate": "2022-08-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:27:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "GOLDEN HOUR : Part.4",
+        "releaseDate": "2026-02-06",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1544168,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-02-06",
+      "providerPeriodEnd": "2026-02-12",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:27:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:88331:ateez-golden-hour-part-4",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/ko/article/88331",
+          "sourcePublicationDate": "2026-02-16",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:27:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Girls",
+        "releaseDate": "2022-07-08",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1126068,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-07-08",
+      "providerPeriodEnd": "2022-07-14",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:27:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1535995:aespa-girls",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1535995wpp/aespa-becomes-artist-with-6th-highest-1st-week-sales-in-hanteo-history-quadrupling-their-previous-record",
+          "sourcePublicationDate": "2022-07-15",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:27:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "New Jeans",
+        "releaseDate": "2022-08-08",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 311271,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-08-08",
+      "providerPeriodEnd": "2022-08-14",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:27:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1540571:newjeans-new-jeans",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1540571wpp/newjeans-breaks-record-for-highest-1st-week-sales-of-any-girl-group-debut-album-in-hanteo-history",
+          "sourcePublicationDate": "2022-08-14",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:27:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artistName": "BLACKPINK",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE ALBUM",
+        "releaseDate": "2020-10-06",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 689066,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-10-06",
+      "providerPeriodEnd": "2020-10-12",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:36:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:17047:blackpink-the-album",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "manila-bulletin:20201013:blackpink-the-album",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2020/10/13/blackpinks-the-album-debuts-at-no-2-on-billboard-200-highest-rank-ever-for-a-k-pop-girl-group/",
+          "sourcePublicationDate": "2020-10-13",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "BE",
+        "releaseDate": "2020-11-20",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2274882,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-11-20",
+      "providerPeriodEnd": "2020-11-26",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:36:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:17047:bts-be",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "soompi:1440669:bts-be",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1440669wpp/bts-achieves-impressive-1st-week-sales-with-be",
+          "sourcePublicationDate": "2020-11-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Attacca",
+        "releaseDate": "2021-10-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1335862,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-10-22",
+      "providerPeriodEnd": "2021-10-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:36:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1495848:seventeen-attacca",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1495848wpp/seventeen-achieves-3rd-highest-1st-week-sales-of-any-2021-album-with-attacca",
+          "sourcePublicationDate": "2021-10-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ODDINARY",
+        "releaseDate": "2022-03-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 853021,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-03-18",
+      "providerPeriodEnd": "2022-03-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:36:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1519425:stray-kids-oddinary",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1519425wpp/stray-kids-achieves-7th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history",
+          "sourcePublicationDate": "2022-03-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "minisode 2: Thursday's Child",
+        "releaseDate": "2022-05-09",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1248370,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-05-09",
+      "providerPeriodEnd": "2022-05-15",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:36:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1526474:txt-minisode-2-thursdays-child",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1526474wpp/txt-becomes-artist-with-4th-highest-1st-week-sales-in-hanteo-history-with-minisode-2-thursdays-child",
+          "sourcePublicationDate": "2022-05-15",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:36:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "PUREFLOW pt.1",
+        "releaseDate": "2026-05-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 559207,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-05-22",
+      "providerPeriodEnd": "2026-05-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:50:19+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92914:lesserafim-pureflow-pt-1",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92914",
+          "sourcePublicationDate": "2026-07-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artistName": "RIIZE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ODYSSEY",
+        "releaseDate": "2025-05-19",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1797267,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-05-19",
+      "providerPeriodEnd": "2025-05-25",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:50:19+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:79641:riize-odyssey",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/79641",
+          "sourcePublicationDate": "2025-05-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "soompi:1747215:riize-odyssey",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1747215wpp/riize-achieves-highest-1st-week-sales-of-2025-with-odyssey",
+          "sourcePublicationDate": "2025-05-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Drama",
+        "releaseDate": "2023-11-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1130379,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-11-10",
+      "providerPeriodEnd": "2023-11-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:50:19+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1626926:aespa-drama",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1626926wpp/aespa-becomes-1st-k-pop-girl-group-to-surpass-1-million-1st-week-sales-with-3-albums",
+          "sourcePublicationDate": "2023-11-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "19.99",
+        "releaseDate": "2024-09-09",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 759156,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-09-09",
+      "providerPeriodEnd": "2024-09-15",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:50:19+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1688857:boynextdoor-19-99",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1688857wpp/boynextdoor-smashes-their-1st-week-sales-record-with-19-99",
+          "sourcePublicationDate": "2024-09-16",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "No Genre",
+        "releaseDate": "2025-05-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1166419,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-05-13",
+      "providerPeriodEnd": "2025-05-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:50:19+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sbs:20250520:boynextdoor-no-genre",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "SBS Entertainment News",
+          "sourceUrl": "https://news.sbs.co.kr/news/endPage.do?news_id=N1008107285",
+          "sourcePublicationDate": "2025-05-20",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:50:19+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE WORLD EP.2 : OUTLAW",
+        "releaseDate": "2023-06-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1521275,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-06-16",
+      "providerPeriodEnd": "2023-06-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:59:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1595852:ateez-the-world-ep2-outlaw",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1595852wpp/ateez-smashes-their-1st-week-sales-record-with-the-world-ep-2-outlaw",
+          "sourcePublicationDate": "2023-06-22",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE WORLD EP.FIN : WILL",
+        "releaseDate": "2023-12-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1707870,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-12-01",
+      "providerPeriodEnd": "2023-12-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:59:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1630566:ateez-the-world-ep-fin-will",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1630566wpp/ateez-achieves-their-highest-1st-week-sales-yet-with-the-world-ep-fin-will",
+          "sourcePublicationDate": "2023-12-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE WORLD EP.1 : MOVEMENT",
+        "releaseDate": "2022-07-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 936055,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-07-29",
+      "providerPeriodEnd": "2022-08-04",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:59:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1539389:ateez-the-world-ep1-movement",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1539389wpp/ateez-achieves-6th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history",
+          "sourcePublicationDate": "2022-08-05",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MAP OF THE SOUL : 7",
+        "releaseDate": "2020-02-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 3378633,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-02-21",
+      "providerPeriodEnd": "2020-02-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:59:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:17047:bts-map-of-the-soul-7",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "soompi:1385543:bts-map-of-the-soul-7",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1385543wpp/bts-smashes-their-own-record-for-highest-1st-week-sales-in-hanteo-history-with-map-of-the-soul-7",
+          "sourcePublicationDate": "2020-02-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Formula of Love: O+T=<3",
+        "releaseDate": "2021-11-12",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 318840,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-11-12",
+      "providerPeriodEnd": "2021-11-18",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T12:59:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1499646:twice-formula-of-love",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1499646wpp/twice-breaks-own-record-for-highest-1st-week-sales-of-any-girl-group-album-in-2021-with-formula-of-love-ot",
+          "sourcePublicationDate": "2021-11-20",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T12:59:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "17 IS RIGHT HERE",
+        "releaseDate": "2024-04-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2967937,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-29",
+      "providerPeriodEnd": "2024-05-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:07:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1659265:seventeen-17-is-right-here",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1659265wpp/seventeen-achieves-highest-1st-week-sales-of-2024-with-17-is-right-here",
+          "sourcePublicationDate": "2024-05-05",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:07:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Name Chapter: FREEFALL",
+        "releaseDate": "2023-10-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2251959,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-10-13",
+      "providerPeriodEnd": "2023-10-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:07:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1620891:txt-freefall",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1620891wpp/txt-breaks-their-1st-week-sales-record-with-the-name-chapter-freefall",
+          "sourcePublicationDate": "2023-10-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:07:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Savage",
+        "releaseDate": "2021-10-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 276877,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-10-05",
+      "providerPeriodEnd": "2021-10-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:07:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1493151:aespa-savage",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1493151wpp/aespa-achieves-4th-highest-1st-week-sales-of-any-girl-group-in-hanteo-history-less-than-a-year-after-debut",
+          "sourcePublicationDate": "2021-10-12",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:07:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ANTIFRAGILE",
+        "releaseDate": "2022-10-17",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 567673,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-10-17",
+      "providerPeriodEnd": "2022-10-23",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:07:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1551001:lesserafim-antifragile",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1551001wpp/le-sserafim-achieves-5th-highest-1st-week-sales-of-any-girl-group-in-hanteo-history-with-antifragile",
+          "sourcePublicationDate": "2022-10-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:07:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artistName": "RIIZE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Get A Guitar",
+        "releaseDate": "2023-09-04",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1016849,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-09-04",
+      "providerPeriodEnd": "2023-09-10",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:07:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1612766:riize-get-a-guitar",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1612766wpp/riize-makes-history-as-1st-group-not-from-survival-show-to-sell-over-1-million-copies-of-debut-album-in-1st-week",
+          "sourcePublicationDate": "2023-09-10",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:07:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Face the Sun",
+        "releaseDate": "2022-05-27",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2067769,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-05-27",
+      "providerPeriodEnd": "2022-06-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:17:45+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1529406:seventeen-face-the-sun",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1529406wpp/seventeen-achieves-highest-1st-week-sales-of-2022-with-face-the-sun",
+          "sourcePublicationDate": "2022-06-04",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:17:45+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "NOEASY",
+        "releaseDate": "2021-08-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 641589,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-08-23",
+      "providerPeriodEnd": "2021-08-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:17:45+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1486324:stray-kids-noeasy",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1486324wpp/stray-kids-nearly-triples-their-personal-record-for-1st-week-album-sales-with-noeasy",
+          "sourcePublicationDate": "2021-08-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:17:45+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "BETWEEN 1&2",
+        "releaseDate": "2022-08-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 532622,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-08-26",
+      "providerPeriodEnd": "2022-09-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:17:45+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1543351:twice-between-1-and-2",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1543351wpp/twice-achieves-4th-highest-1st-week-sales-of-any-girl-group-in-hanteo-history-with-between-12",
+          "sourcePublicationDate": "2022-09-01",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:17:45+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "FEARLESS",
+        "releaseDate": "2022-05-02",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 307450,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-05-02",
+      "providerPeriodEnd": "2022-05-08",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:17:45+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1525451:lesserafim-fearless",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1525451wpp/le-sserafim-breaks-record-for-highest-1st-week-sales-of-any-girl-group-debut-album-in-hanteo-history",
+          "sourcePublicationDate": "2022-05-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:17:45+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "DIMENSION : DILEMMA",
+        "releaseDate": "2021-10-12",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 818716,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-10-12",
+      "providerPeriodEnd": "2021-10-18",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T13:17:45+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1494272:enhypen-dimension-dilemma",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1494272wpp/enhypen-doubles-their-1st-week-sales-record-tops-oricons-weekly-album-chart-with-dimension-dilemma",
+          "sourcePublicationDate": "2021-10-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T13:17:45+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "How Sweet",
+        "releaseDate": "2024-05-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 884717,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-05-24",
+      "providerPeriodEnd": "2024-05-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:16:24+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "edaily:01216886638918440:newjeans-how-sweet",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Edaily",
+          "sourceUrl": "https://www.edaily.co.kr/News/Read?mediaCodeNo=258&newsId=01216886638918440",
+          "sourcePublicationDate": "2024-06-04",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "timesofindia:110587934:newjeans-how-sweet",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Times of India",
+          "sourceUrl": "https://timesofindia.indiatimes.com/entertainment/k-pop/music/news/newjeans-finish-the-first-week-of-sales-for-how-sweet-on-a-high-note/articleshow/110587934.cms",
+          "sourcePublicationDate": "2024-05-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Butter",
+        "releaseDate": "2021-07-09",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1975364,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-07-09",
+      "providerPeriodEnd": "2021-07-15",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:16:24+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1479374:bts-butter",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1479374wpp/btss-butter-cd-achieves-highest-sales-of-any-2021-album-on-hanteo-in-1st-week-sales-alone",
+          "sourcePublicationDate": "2021-07-16",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MAP OF THE SOUL : PERSONA",
+        "releaseDate": "2019-04-12",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2130480,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-04-12",
+      "providerPeriodEnd": "2019-04-18",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:16:24+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:17047:bts-map-of-the-soul-persona",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "soompi:1318609:bts-map-of-the-soul-persona",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1318609wpp/bts-sets-records-for-one-week-and-all-time-album-sales-with-map-of-the-soul-persona-on-hanteo-chart",
+          "sourcePublicationDate": "2019-04-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "I'VE MINE",
+        "releaseDate": "2023-10-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1605948,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-10-13",
+      "providerPeriodEnd": "2023-10-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:16:24+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1620886:ive-ive-mine",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1620886wpp/ive-becomes-2nd-best-selling-girl-group-in-circle-chart-history",
+          "sourcePublicationDate": "2023-10-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:16:24+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "DESIRE : UNLEASH",
+        "releaseDate": "2025-06-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2145499,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-06-05",
+      "providerPeriodEnd": "2025-06-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:31:03+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreajoongangdaily:12406515:enhypen-desire-unleash",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Korea JoongAng Daily",
+          "sourceUrl": "https://www.koreajoongangdaily.com/entertainment/boy-band-enhypen-sells-over-214-million-copies-of-latest-ep-desire-unleash-in-first-week/12406515",
+          "sourcePublicationDate": "2025-06-12",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:31:03+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "HAPPY BURSTDAY",
+        "releaseDate": "2025-05-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2521208,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-05-26",
+      "providerPeriodEnd": "2025-06-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:31:03+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "koreajoongangdaily:12309924:seventeen-happy-burstday",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Korea JoongAng Daily",
+          "sourceUrl": "https://www.koreajoongangdaily.com/entertainment/seventeens-happy-burstday-sells-more-than-25-million-copies-in-first-week/12309924",
+          "sourcePublicationDate": "2025-06-02",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:31:03+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Whiplash",
+        "releaseDate": "2024-10-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 913234,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-10-21",
+      "providerPeriodEnd": "2024-10-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:31:03+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20241028:aespa-whiplash",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2024/10/28/aespa-illit-triple-s-top-hanteo-s-weekly-album-chart",
+          "sourcePublicationDate": "2024-10-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:31:03+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "WHO!",
+        "releaseDate": "2023-05-30",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 110442,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-05-30",
+      "providerPeriodEnd": "2023-06-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:51:58+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1592067:boynextdoor-who",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1592067wpp/boynextdoor-achieves-highest-1st-week-sales-of-any-2023-rookie-group-5th-highest-among-boy-group-debut-albums",
+          "sourcePublicationDate": "2023-06-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:51:58+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "WHY..",
+        "releaseDate": "2023-09-04",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 449218,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2023-09-04",
+      "providerPeriodEnd": "2023-09-10",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:51:58+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1612837:boynextdoor-why",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1612837wpp/boynextdoor-quadruples-1st-week-sales-record-with-why",
+          "sourcePublicationDate": "2023-09-10",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:51:58+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "minisode 3: TOMORROW",
+        "releaseDate": "2024-04-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1546433,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-04-01",
+      "providerPeriodEnd": "2024-04-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T14:51:58+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20240409:txt-minisode-3-tomorrow",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2024/4/9/tomorrow-x-together-no-1-on-weekly-album-chart-baby-monster-illit-unis-in-top-25",
+          "sourcePublicationDate": "2024-04-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T14:51:58+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    }
+  ]
+}
