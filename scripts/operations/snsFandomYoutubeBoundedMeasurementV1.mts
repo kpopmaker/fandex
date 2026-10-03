@@ -122,15 +122,6 @@ async function youtubeJson(
   apiKey: string,
   request: SnsFandomYoutubeApiRequest,
 ): Promise<unknown> {
-  if (request.method === 'channels.list') {
-    providerCallsAttempted.channelsList += 1;
-  } else if (request.method === 'playlistItems.list') {
-    providerCallsAttempted.playlistItemsList += 1;
-  } else {
-    providerCallsAttempted.videosList += 1;
-  }
-  providerCallsAttempted.total += 1;
-
   const methodPath = request.method === 'channels.list'
     ? 'channels'
     : request.method === 'playlistItems.list'
@@ -277,6 +268,16 @@ async function main(): Promise<void> {
     handoff,
     measurementStartedAt,
     requestJson: (apiRequest) => youtubeJson(apiKey, apiRequest),
+    onRequestAttempt: (apiRequest) => {
+      if (apiRequest.method === 'channels.list') {
+        providerCallsAttempted.channelsList += 1;
+      } else if (apiRequest.method === 'playlistItems.list') {
+        providerCallsAttempted.playlistItemsList += 1;
+      } else {
+        providerCallsAttempted.videosList += 1;
+      }
+      providerCallsAttempted.total += 1;
+    },
   });
   const measuredAt = new Date().toISOString();
 
