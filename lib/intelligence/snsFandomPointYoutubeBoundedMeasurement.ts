@@ -79,6 +79,10 @@ function validIso(value: string): boolean {
   return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
 }
 
+function validProviderDateTime(value: string): boolean {
+  return Number.isFinite(Date.parse(value));
+}
+
 function object(value: unknown, reason: string): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error(reason);
@@ -256,7 +260,7 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
           itemContent.videoPublishedAt,
           'sns_fandom_bounded_measurement_video_published_at_missing',
         );
-        if (!validIso(publishedAt)) {
+        if (!validProviderDateTime(publishedAt)) {
           throw new Error(
             'sns_fandom_bounded_measurement_video_published_at_invalid',
           );
