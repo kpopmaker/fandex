@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T01:00:42+09:00",
+  "collectedAt": "2026-10-04T01:44:00+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4999,6 +4999,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T01:00:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MORE & MORE",
+        "releaseDate": "2020-06-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 332416,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-06-01",
+      "providerPeriodEnd": "2020-06-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T01:44:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "newsis:20200609:twice-more-and-more",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Newsis",
+          "sourceUrl": "https://www.newsis.com/view/NISX20200609_0001053315",
+          "sourcePublicationDate": "2020-06-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:44:00+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
