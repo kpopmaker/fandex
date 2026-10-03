@@ -55,6 +55,12 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
       quotaRaw.videoCountPerReactionRun as number | null,
     measuredUsageEvidenceRef:
       quotaRaw.measuredUsageEvidenceRef as string | null,
+    requestBatchingStrategy:
+      quotaRaw.requestBatchingStrategy as SnsFandomYoutubeQuotaOwnerHandoffInput['requestBatchingStrategy'],
+    channelIdsPerCall: quotaRaw.channelIdsPerCall as number | null,
+    videoIdsPerCall: quotaRaw.videoIdsPerCall as number | null,
+    requestBatchingEvidenceRef:
+      quotaRaw.requestBatchingEvidenceRef as string | null,
     maxChannelIdsPerCall: quotaRaw.maxChannelIdsPerCall as number | null,
     maxVideoIdsPerCall: quotaRaw.maxVideoIdsPerCall as number | null,
     providerBatchLimitEvidenceRef:
@@ -82,6 +88,14 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     quotaOwner.cadenceEvidenceRef,
     'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
+  assert.equal(
+    quotaOwner.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(quotaOwner.channelIdsPerCall, 1);
+  assert.equal(quotaOwner.videoIdsPerCall, 1);
+  assert.equal(quotaOwner.maxChannelIdsPerCall, null);
+  assert.equal(quotaOwner.maxVideoIdsPerCall, null);
   assert.equal(quotaOwner.automaticProviderCallAllowed, false);
   assert.equal(quotaOwner.collectionExecutionAuthorized, false);
   assert.equal(quotaOwner.schedulerMutationAllowed, false);

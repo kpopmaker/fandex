@@ -19,6 +19,11 @@ function input(
     uploadManifestPageCountPerReactionRun: 5,
     videoCountPerReactionRun: 120,
     measuredUsageEvidenceRef: 'external://youtube-audit/measured-usage',
+    requestBatchingStrategy: 'provider-limit-evidenced',
+    channelIdsPerCall: 50,
+    videoIdsPerCall: 50,
+    requestBatchingEvidenceRef:
+      'external://youtube-audit/client-request-batching',
     maxChannelIdsPerCall: 50,
     maxVideoIdsPerCall: 50,
     providerBatchLimitEvidenceRef:
@@ -37,6 +42,10 @@ test('empty owner input keeps all real plan and measurement evidence unresolved'
     uploadManifestPageCountPerReactionRun: null,
     videoCountPerReactionRun: null,
     measuredUsageEvidenceRef: null,
+    requestBatchingStrategy: null,
+    channelIdsPerCall: null,
+    videoIdsPerCall: null,
+    requestBatchingEvidenceRef: null,
     maxChannelIdsPerCall: null,
     maxVideoIdsPerCall: null,
     providerBatchLimitEvidenceRef: null,
@@ -50,13 +59,14 @@ test('empty owner input keeps all real plan and measurement evidence unresolved'
     'reactionSnapshotRunsPerDay',
   ]);
   assert.deepEqual(result.missingMeasurementFields, [
-    'maxChannelIdsPerCall',
-    'maxVideoIdsPerCall',
+    'channelIdsPerCall',
     'measuredAt',
     'measuredUsageEvidenceRef',
-    'providerBatchLimitEvidenceRef',
+    'requestBatchingEvidenceRef',
+    'requestBatchingStrategy',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
+    'videoIdsPerCall',
   ]);
   assert.equal(result.automaticProviderCallAllowed, false);
   assert.equal(result.collectionExecutionAuthorized, false);
@@ -70,6 +80,12 @@ test('complete plan evidence can become measurement-plan-ready while measured ou
       uploadManifestPageCountPerReactionRun: null,
       videoCountPerReactionRun: null,
       measuredUsageEvidenceRef: null,
+      requestBatchingStrategy:
+        'singleton-only-until-provider-batch-limit-evidence',
+      channelIdsPerCall: 1,
+      videoIdsPerCall: 1,
+      requestBatchingEvidenceRef:
+        'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
       maxChannelIdsPerCall: null,
       maxVideoIdsPerCall: null,
       providerBatchLimitEvidenceRef: null,
@@ -80,6 +96,12 @@ test('complete plan evidence can become measurement-plan-ready while measured ou
   assert.deepEqual(result.missingPlanFields, []);
   assert.equal(result.reactionSnapshotRunsPerDay, 2);
   assert.equal(result.measuredAt, null);
+  assert.equal(
+    result.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(result.channelIdsPerCall, 1);
+  assert.equal(result.videoIdsPerCall, 1);
   assert.equal(result.maxChannelIdsPerCall, null);
   assert.equal(result.maxVideoIdsPerCall, null);
   assert.equal(result.automaticProviderCallAllowed, false);
@@ -95,6 +117,9 @@ test('complete measured inputs can become quota-worksheet-input-ready without au
   assert.deepEqual(result.invalidFields, []);
   assert.equal(result.uploadManifestPageCountPerReactionRun, 5);
   assert.equal(result.videoCountPerReactionRun, 120);
+  assert.equal(result.requestBatchingStrategy, 'provider-limit-evidenced');
+  assert.equal(result.channelIdsPerCall, 50);
+  assert.equal(result.videoIdsPerCall, 50);
   assert.equal(result.maxChannelIdsPerCall, 50);
   assert.equal(result.maxVideoIdsPerCall, 50);
   assert.equal(result.automaticProviderCallAllowed, false);
@@ -111,7 +136,7 @@ test('invalid window order, cadence, counts, and secret-like refs fail closed', 
       measurementWindowEnd: '2026-10-01T00:00:00.000Z',
       reactionSnapshotRunsPerDay: 0,
       uploadManifestPageCountPerReactionRun: 0,
-      maxVideoIdsPerCall: -1,
+      videoIdsPerCall: -1,
       cadenceEvidenceRef:
         'external://cadence?access_token=do-not-store-this',
     }),
@@ -125,7 +150,7 @@ test('invalid window order, cadence, counts, and secret-like refs fail closed', 
       'uploadManifestPageCountPerReactionRun',
     ),
   );
-  assert.ok(result.invalidFields.includes('maxVideoIdsPerCall'));
+  assert.ok(result.invalidFields.includes('videoIdsPerCall'));
   assert.ok(
     result.invalidFields.includes('cadenceEvidenceRef:secret-like'),
   );
@@ -162,6 +187,16 @@ test('checked-in owner template records the owner-approved plan while Phase C st
   ]) {
     assert.equal(raw[field], null);
   }
+  assert.equal(
+    raw.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(raw.channelIdsPerCall, 1);
+  assert.equal(raw.videoIdsPerCall, 1);
+  assert.equal(
+    raw.requestBatchingEvidenceRef,
+    'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
+  );
 
   const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
     raw as unknown as SnsFandomYoutubeQuotaOwnerHandoffInput,
@@ -173,9 +208,57 @@ test('checked-in owner template records the owner-approved plan while Phase C st
   assert.equal(result.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(result.reactionSnapshotRunsPerDay, 24);
   assert.equal(result.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
+  assert.equal(
+    result.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(result.channelIdsPerCall, 1);
+  assert.equal(result.videoIdsPerCall, 1);
   assert.equal(result.automaticProviderCallAllowed, false);
   assert.equal(result.collectionExecutionAuthorized, false);
   assert.equal(result.schedulerMutationAllowed, false);
   assert.equal(result.deploymentAuthorized, false);
   assert.equal(result.providerSubmissionAuthorized, false);
+});
+
+
+test('singleton client batching resolves without provider maximum evidence', () => {
+  const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
+    input({
+      requestBatchingStrategy:
+        'singleton-only-until-provider-batch-limit-evidence',
+      channelIdsPerCall: 1,
+      videoIdsPerCall: 1,
+      requestBatchingEvidenceRef:
+        'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
+      maxChannelIdsPerCall: null,
+      maxVideoIdsPerCall: null,
+      providerBatchLimitEvidenceRef: null,
+    }),
+  );
+
+  assert.equal(result.state, 'quota-worksheet-input-ready');
+  assert.deepEqual(result.missingMeasurementFields, []);
+  assert.deepEqual(result.invalidFields, []);
+  assert.equal(result.maxChannelIdsPerCall, null);
+  assert.equal(result.maxVideoIdsPerCall, null);
+  assert.equal(result.providerBatchLimitEvidenceRef, null);
+});
+
+test('provider-limit batching still requires provider maxima and evidence', () => {
+  const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
+    input({
+      requestBatchingStrategy: 'provider-limit-evidenced',
+      maxChannelIdsPerCall: null,
+      maxVideoIdsPerCall: null,
+      providerBatchLimitEvidenceRef: null,
+    }),
+  );
+
+  assert.equal(result.state, 'measurement-plan-ready');
+  assert.ok(result.missingMeasurementFields.includes('maxChannelIdsPerCall'));
+  assert.ok(result.missingMeasurementFields.includes('maxVideoIdsPerCall'));
+  assert.ok(
+    result.missingMeasurementFields.includes('providerBatchLimitEvidenceRef'),
+  );
 });

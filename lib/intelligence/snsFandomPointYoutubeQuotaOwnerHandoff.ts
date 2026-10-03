@@ -1,3 +1,7 @@
+import {
+  type SnsFandomYoutubeQuotaBatchingStrategy,
+} from './snsFandomPointYoutubeQuotaWorksheet';
+
 export const SNS_FANDOM_YOUTUBE_QUOTA_OWNER_HANDOFF_VERSION =
   'sns-fandom-youtube-quota-owner-handoff-v1' as const;
 
@@ -10,6 +14,10 @@ export type SnsFandomYoutubeQuotaOwnerHandoffInput = Readonly<{
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
   measuredUsageEvidenceRef: string | null;
+  requestBatchingStrategy: SnsFandomYoutubeQuotaBatchingStrategy | null;
+  channelIdsPerCall: number | null;
+  videoIdsPerCall: number | null;
+  requestBatchingEvidenceRef: string | null;
   maxChannelIdsPerCall: number | null;
   maxVideoIdsPerCall: number | null;
   providerBatchLimitEvidenceRef: string | null;
@@ -32,6 +40,10 @@ export type SnsFandomYoutubeQuotaOwnerHandoffResult = Readonly<{
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
   measuredUsageEvidenceRef: string | null;
+  requestBatchingStrategy: SnsFandomYoutubeQuotaBatchingStrategy | null;
+  channelIdsPerCall: number | null;
+  videoIdsPerCall: number | null;
+  requestBatchingEvidenceRef: string | null;
   maxChannelIdsPerCall: number | null;
   maxVideoIdsPerCall: number | null;
   providerBatchLimitEvidenceRef: string | null;
@@ -57,9 +69,10 @@ const MEASUREMENT_FIELDS = Object.freeze([
   'uploadManifestPageCountPerReactionRun',
   'videoCountPerReactionRun',
   'measuredUsageEvidenceRef',
-  'maxChannelIdsPerCall',
-  'maxVideoIdsPerCall',
-  'providerBatchLimitEvidenceRef',
+  'requestBatchingStrategy',
+  'channelIdsPerCall',
+  'videoIdsPerCall',
+  'requestBatchingEvidenceRef',
 ] as const);
 
 function present(value: string | null): value is string {
@@ -144,6 +157,8 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
   for (const field of [
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
+    'channelIdsPerCall',
+    'videoIdsPerCall',
     'maxChannelIdsPerCall',
     'maxVideoIdsPerCall',
   ] as const) {
@@ -156,12 +171,57 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
   for (const field of [
     'cadenceEvidenceRef',
     'measuredUsageEvidenceRef',
+    'requestBatchingEvidenceRef',
     'providerBatchLimitEvidenceRef',
   ] as const) {
     const value = input[field];
     if (value !== null && present(value) && secretLike(value)) {
       invalidFields.push(`${field}:secret-like`);
     }
+  }
+
+  if (
+    input.requestBatchingStrategy === 'singleton-only-until-provider-batch-limit-evidence'
+  ) {
+    if (input.channelIdsPerCall !== 1 || input.videoIdsPerCall !== 1) {
+      invalidFields.push('singletonRequestBatchSize');
+    }
+  } else if (input.requestBatchingStrategy === 'provider-limit-evidenced') {
+    if (
+      input.maxChannelIdsPerCall === null
+      || !positiveSafeInteger(input.maxChannelIdsPerCall)
+    ) {
+      missingMeasurementFields.push('maxChannelIdsPerCall');
+    }
+    if (
+      input.maxVideoIdsPerCall === null
+      || !positiveSafeInteger(input.maxVideoIdsPerCall)
+    ) {
+      missingMeasurementFields.push('maxVideoIdsPerCall');
+    }
+    if (!present(input.providerBatchLimitEvidenceRef)) {
+      missingMeasurementFields.push('providerBatchLimitEvidenceRef');
+    }
+    if (
+      input.channelIdsPerCall !== null
+      && input.maxChannelIdsPerCall !== null
+      && positiveSafeInteger(input.channelIdsPerCall)
+      && positiveSafeInteger(input.maxChannelIdsPerCall)
+      && input.channelIdsPerCall > input.maxChannelIdsPerCall
+    ) {
+      invalidFields.push('channelIdsPerCallExceedsProviderLimit');
+    }
+    if (
+      input.videoIdsPerCall !== null
+      && input.maxVideoIdsPerCall !== null
+      && positiveSafeInteger(input.videoIdsPerCall)
+      && positiveSafeInteger(input.maxVideoIdsPerCall)
+      && input.videoIdsPerCall > input.maxVideoIdsPerCall
+    ) {
+      invalidFields.push('videoIdsPerCallExceedsProviderLimit');
+    }
+  } else if (input.requestBatchingStrategy !== null) {
+    invalidFields.push('requestBatchingStrategy');
   }
 
   const missingPlan = Object.freeze(
@@ -200,12 +260,20 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
       worksheetInputsReady ? input.videoCountPerReactionRun : null,
     measuredUsageEvidenceRef:
       worksheetInputsReady ? input.measuredUsageEvidenceRef : null,
+    requestBatchingStrategy:
+      planReady ? input.requestBatchingStrategy : null,
+    channelIdsPerCall:
+      planReady ? input.channelIdsPerCall : null,
+    videoIdsPerCall:
+      planReady ? input.videoIdsPerCall : null,
+    requestBatchingEvidenceRef:
+      planReady ? input.requestBatchingEvidenceRef : null,
     maxChannelIdsPerCall:
-      worksheetInputsReady ? input.maxChannelIdsPerCall : null,
+      planReady ? input.maxChannelIdsPerCall : null,
     maxVideoIdsPerCall:
-      worksheetInputsReady ? input.maxVideoIdsPerCall : null,
+      planReady ? input.maxVideoIdsPerCall : null,
     providerBatchLimitEvidenceRef:
-      worksheetInputsReady ? input.providerBatchLimitEvidenceRef : null,
+      planReady ? input.providerBatchLimitEvidenceRef : null,
     automaticProviderCallAllowed: false as const,
     collectionExecutionAuthorized: false as const,
     schedulerMutationAllowed: false as const,

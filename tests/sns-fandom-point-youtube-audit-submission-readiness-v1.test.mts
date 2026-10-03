@@ -66,6 +66,11 @@ function quotaWorksheet() {
       reactionSnapshotRunsPerDay: 4,
       commentPersistenceRunsPerDay: 1,
     },
+    requestBatching: {
+      strategy: 'provider-limit-evidenced',
+      channelIdsPerCall: 50,
+      videoIdsPerCall: 50,
+    },
     providerLimits: {
       maxChannelIdsPerCall: 50,
       maxVideoIdsPerCall: 50,
@@ -80,6 +85,8 @@ function quotaWorksheet() {
     evidence: {
       measuredUsageEvidenceRef: 'external://youtube-audit/measured-usage',
       cadenceEvidenceRef: 'external://youtube-audit/cadence',
+      requestBatchingEvidenceRef:
+        'external://youtube-audit/client-request-batching',
       providerBatchLimitEvidenceRef:
         'external://youtube-audit/provider-batch-limits',
       providerQuotaCostEvidenceRef:
