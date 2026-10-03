@@ -1,0 +1,33 @@
+name: Validate FANDEX historical validation v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/contracts/fandexVariableProduct.ts'
+      - 'lib/product/contracts/fandexProductCandidate.ts'
+      - 'lib/product/contracts/fandexProductExplainability.ts'
+      - 'lib/product/contracts/fandexProductReadModel.ts'
+      - 'lib/product/contracts/fandexProductOperations.ts'
+      - 'lib/product/contracts/fandexHistoricalValidation.ts'
+      - 'tests/fandex-historical-validation-v1.test.mts'
+      - '.github/workflows/validate-fandex-historical-validation-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-historical-validation-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
