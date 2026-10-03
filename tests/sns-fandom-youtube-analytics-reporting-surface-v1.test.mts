@@ -95,3 +95,41 @@ test('unsafe or promoted evidence fails closed before rendering', async () => {
   assert.ok(surface.blockers.includes('final-owner-promotion-must-remain-false'));
   assert.ok(surface.blockers.includes('production-collection-must-remain-false'));
 });
+
+
+test('completed-window or mismatched provider accounting cannot masquerade as the bounded screenshot candidate', async () => {
+  const snapshot = await currentSnapshot();
+
+  const completed = evaluateSnsFandomYoutubeAnalyticsReportingSurface({
+    ...(snapshot as Record<string, unknown>),
+    measurementWindowComplete: true,
+  });
+  assert.equal(completed.state, 'blocked');
+  assert.ok(
+    completed.blockers.includes(
+      'measurement-window-completeness-must-remain-false',
+    ),
+  );
+
+  const mismatchedCalls = evaluateSnsFandomYoutubeAnalyticsReportingSurface({
+    ...(snapshot as Record<string, unknown>),
+    providerCallsObserved: {
+      channelsList: 5,
+      playlistItemsList: 114,
+      videosList: 0,
+      total: 119,
+    },
+    quotaUnitsObserved: 120,
+  });
+  assert.equal(mismatchedCalls.state, 'blocked');
+  assert.ok(
+    mismatchedCalls.blockers.includes(
+      'provider-playlist-call-count-mismatch',
+    ),
+  );
+  assert.ok(
+    mismatchedCalls.blockers.includes(
+      'quota-units-provider-call-mismatch',
+    ),
+  );
+});
