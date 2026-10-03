@@ -366,8 +366,6 @@ Current remaining concrete blockers:
 
 - legal applicant identity evidence is not yet recorded;
 - organization/self application identity evidence is not yet recorded;
-- exact Google Cloud project number / providerClientRef binding evidence is
-  not yet recorded;
 - real measurement window is not yet declared with evidence;
 - real reaction snapshot cadence is not yet declared with evidence;
 - measured uploads-playlist page count per reaction run is not yet returned;
@@ -376,9 +374,11 @@ Current remaining concrete blockers:
 - provider application has not been submitted;
 - actual provider grant is absent.
 
-The merged legal URLs, repository documentation, and three required screenshot
-artifacts are now evidence-backed. Applicant identity, Cloud-project identity,
-cadence, and actual quota measurements remain external-owner evidence.
+The merged legal URLs, repository documentation, Privacy screenshot, and
+homepage legal-link screenshot are evidence-backed. The provider-client /
+Google Cloud project identity is also now owner-verified and evidence-bound.
+Applicant identity, real Analytics & Reporting feature screenshot, cadence,
+and actual quota measurements remain external-owner evidence.
 
 Submission readiness still does not imply provider approval. Even after a
 future packet evaluates as `submission-ready`, the contract keeps:
@@ -761,3 +761,34 @@ Drive:
 
 The Drive copy prevents the submission packet from depending solely on the
 90-day GitHub artifact retention period.
+
+
+## 9. Provider-client owner evidence resolved — 2026-10-03
+
+Owner-confirmed Phase A identity is now recorded:
+
+- providerClientRef: `gcp-project-fandex-509708`;
+- Google Cloud project number: `385464276768`;
+- Google Cloud project id: `fandex-509708`;
+- credential locator only:
+  `github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY`;
+- evidence ref:
+  `github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03`;
+- verifiedAt: `2026-10-03T03:10:00.000Z`.
+
+No API key value is stored in the repository or packet.
+
+The provider-client owner handoff now evaluates:
+- state = `provider-client-identity-ready`;
+- missing owner fields = none;
+- blockers = none.
+
+The final audit readiness remains `submission-blocked` because separate
+requirements are still unresolved, including:
+- applicant / organization-or-self identity;
+- derived-metrics/storage amendment owner acknowledgement;
+- real non-simulated Analytics & Reporting feature screenshot;
+- quota measurement plan/results and quota-evidence-ready worksheet.
+
+Provider approval, provider submission authorization, and Production collection
+authorization remain false.
