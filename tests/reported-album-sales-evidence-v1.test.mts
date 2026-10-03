@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 92);
+  assert.equal(input.drafts.length, 93);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 90);
+  assert.equal(deduped.length, 91);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 88);
+  assert.equal(hanteo.length, 89);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 88);
+  assert.equal(hanteoFirstWeek.length, 89);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    88,
+    89,
   );
 
   for (const [artistId, title, value] of [
@@ -434,6 +434,20 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     assert.equal(item.researchUsable, true);
   }
 
+  {
+    const item = hanteoFirstWeek.find(
+      observation =>
+        observation.canonicalArtistId === 'lesserafim'
+        && observation.release.releaseTitle === 'SPAGHETTI',
+    );
+    assert.ok(item);
+    assert.equal(item.value, 464_698);
+    assert.equal(item.providerPeriodStart, '2025-10-24');
+    assert.equal(item.providerPeriodEnd, '2025-10-30');
+    assert.equal(item.evidenceQuality, 'primary-official');
+    assert.equal(item.researchUsable, true);
+  }
+
   const circleSemantics = new Set(
     circle.map(item => item.metricSemantic),
   );
@@ -462,7 +476,7 @@ test('source tiers remain separate from evidence quality', () => {
   );
 
   assert.deepEqual(tierCounts, {
-    'tier-a-primary-official': 37,
+    'tier-a-primary-official': 38,
     'tier-c-discovery-only': 10,
     'tier-b-provider-attributed-reputable': 59,
   });

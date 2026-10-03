@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T14:51:58+09:00",
+  "collectedAt": "2026-10-03T18:29:10+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4215,6 +4215,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T14:51:58+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artistName": "LE SSERAFIM",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "SPAGHETTI",
+        "releaseDate": "2025-10-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 464698,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-10-24",
+      "providerPeriodEnd": "2025-10-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T18:29:10+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:86339:lesserafim-spaghetti",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/86339",
+          "sourcePublicationDate": "2025-12-18",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T18:29:10+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
