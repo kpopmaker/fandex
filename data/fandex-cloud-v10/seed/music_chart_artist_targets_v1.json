@@ -1,0 +1,185 @@
+{
+  "version": "music_chart_artist_targets_v1",
+  "artists": [
+    {
+      "artist": "아이유",
+      "aliases": [
+        "아이유",
+        "IU"
+      ],
+      "canonicalArtistId": "iu"
+    },
+    {
+      "artist": "에스파",
+      "aliases": [
+        "에스파",
+        "aespa"
+      ],
+      "canonicalArtistId": "aespa"
+    },
+    {
+      "artist": "에이티즈",
+      "aliases": [
+        "에이티즈",
+        "ATEEZ"
+      ],
+      "canonicalArtistId": "ateez"
+    },
+    {
+      "artist": "보이넥스트도어",
+      "aliases": [
+        "보이넥스트도어",
+        "BOYNEXTDOOR",
+        "BOY NEXT DOOR",
+        "BND"
+      ],
+      "canonicalArtistId": "boynextdoor"
+    },
+    {
+      "artist": "아이브",
+      "aliases": [
+        "아이브",
+        "IVE"
+      ],
+      "canonicalArtistId": "ive"
+    },
+    {
+      "artist": "르세라핌",
+      "aliases": [
+        "르세라핌",
+        "LE SSERAFIM",
+        "LESSERAFIM"
+      ],
+      "canonicalArtistId": "lesserafim"
+    },
+    {
+      "artist": "뉴진스",
+      "aliases": [
+        "뉴진스",
+        "NewJeans"
+      ],
+      "canonicalArtistId": "newjeans"
+    },
+    {
+      "artist": "세븐틴",
+      "aliases": [
+        "세븐틴",
+        "SEVENTEEN"
+      ],
+      "canonicalArtistId": "seventeen"
+    },
+    {
+      "artist": "스트레이키즈",
+      "aliases": [
+        "스트레이키즈",
+        "스트레이 키즈",
+        "Stray Kids",
+        "SKZ"
+      ],
+      "canonicalArtistId": "straykids"
+    },
+    {
+      "artist": "투모로우바이투게더",
+      "aliases": [
+        "투모로우바이투게더",
+        "TOMORROW X TOGETHER",
+        "TXT"
+      ],
+      "canonicalArtistId": "txt"
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "aliases": [
+        "방탄소년단",
+        "BTS"
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "aliases": [
+        "BLACKPINK",
+        "블랙핑크"
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "aliases": [
+        "트와이스",
+        "TWICE"
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "aliases": [
+        "엔하이픈",
+        "ENHYPEN"
+      ]
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "aliases": [
+        "정국",
+        "Jung Kook",
+        "Jungkook"
+      ]
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "aliases": [
+        "지민",
+        "Jimin"
+      ]
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "aliases": [
+        "V",
+        "뷔",
+        "Kim Taehyung"
+      ]
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "aliases": [
+        "제니",
+        "JENNIE",
+        "Jennie"
+      ]
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "aliases": [
+        "리사",
+        "LISA",
+        "Lisa"
+      ]
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "aliases": [
+        "로제",
+        "ROSÉ",
+        "Rosé",
+        "ROSE"
+      ]
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "aliases": [
+        "RIIZE",
+        "라이즈"
+      ]
+    }
+  ]
+}

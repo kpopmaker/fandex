@@ -54,6 +54,7 @@ TARGET_ARTISTS = [
 HISTORY_FIELDS = [
     "snapshotDate",
     "checkedAt",
+    "canonicalArtistId",
     "artist",
     "musicV2Point",
     "rankedPlatformCount",
@@ -143,6 +144,7 @@ def write_json(
 
 def write_history(
     rows,
+    canonical_by_artist,
 ):
     existing = []
 
@@ -162,6 +164,37 @@ def write_history(
     merged = {}
 
     for row in existing:
+        artist = norm(
+            row.get("artist")
+        )
+        canonical_artist_id = (
+            canonical_by_artist.get(artist)
+        )
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                "Unbound Music history artist: "
+                + artist
+            )
+
+        existing_id = norm(
+            row.get("canonicalArtistId")
+        )
+        if (
+            existing_id
+            and existing_id
+            != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Music history canonicalArtistId mismatch: "
+                f"{artist} = {existing_id} "
+                f"!= {canonical_artist_id}"
+            )
+
+        hydrated = dict(row)
+        hydrated["canonicalArtistId"] = (
+            canonical_artist_id
+        )
 
         key = (
             norm(
@@ -169,15 +202,11 @@ def write_history(
                     "snapshotDate"
                 )
             ),
-            norm(
-                row.get(
-                    "artist"
-                )
-            ),
+            canonical_artist_id,
         )
 
         if all(key):
-            merged[key] = row
+            merged[key] = hydrated
 
 
     for row in rows:
@@ -187,7 +216,7 @@ def write_history(
                 "snapshotDate"
             ],
             row[
-                "artist"
+                "canonicalArtistId"
             ],
         )
 
@@ -204,7 +233,7 @@ def write_history(
                 "snapshotDate"
             ],
             row[
-                "artist"
+                "canonicalArtistId"
             ],
         )
     )
@@ -313,21 +342,90 @@ def main():
         )
 
 
-    if len(preview) != 30:
+    platforms = {
+        "melon",
+        "genie",
+        "bugs",
+    }
+
+    canonical_by_artist = {}
+    artist_by_canonical = {}
+
+    for row in preview:
+        artist = norm(
+            row.get("artist")
+        )
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+
+        if not artist or not canonical_artist_id:
+            raise RuntimeError(
+                "Preview missing canonical Music identity."
+            )
+
+        previous_id = canonical_by_artist.get(
+            artist
+        )
+        if (
+            previous_id
+            and previous_id
+            != canonical_artist_id
+        ):
+            raise RuntimeError(
+                "Music preview artist identity mismatch: "
+                + artist
+            )
+
+        previous_artist = artist_by_canonical.get(
+            canonical_artist_id
+        )
+        if (
+            previous_artist
+            and previous_artist != artist
+        ):
+            raise RuntimeError(
+                "Music preview canonical identity collision: "
+                + canonical_artist_id
+            )
+
+        canonical_by_artist[artist] = (
+            canonical_artist_id
+        )
+        artist_by_canonical[
+            canonical_artist_id
+        ] = artist
+
+    target_artists = sorted(
+        canonical_by_artist
+    )
+    if not target_artists:
         raise RuntimeError(
-            "Expected 30 "
-            "artist-platform rows, "
+            "Preview contains no artists."
+        )
+
+    expected_preview_rows = (
+        len(target_artists)
+        * len(platforms)
+    )
+    if len(preview) != expected_preview_rows:
+        raise RuntimeError(
+            "Unexpected artist-platform row count: "
+            f"expected {expected_preview_rows}, "
             f"got {len(preview)}."
         )
 
 
     artist_data = {}
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         artist_data[
             artist
         ] = {
+            "canonicalArtistId":
+                canonical_by_artist[artist],
+
             "point":
                 0.0,
 
@@ -348,6 +446,21 @@ def main():
             )
         )
 
+        canonical_artist_id = norm(
+            row.get(
+                "canonicalArtistId"
+            )
+        )
+
+        if (
+            canonical_artist_id
+            != canonical_by_artist.get(artist)
+        ):
+            raise RuntimeError(
+                "Music preview canonicalArtistId mismatch: "
+                + artist
+            )
+
         platform = norm(
             row.get(
                 "platform"
@@ -365,11 +478,7 @@ def main():
                 f"Unexpected artist: {artist}"
             )
 
-        if platform not in {
-            "melon",
-            "genie",
-            "bugs",
-        }:
+        if platform not in platforms:
             raise RuntimeError(
                 f"Unexpected platform: {platform}"
             )
@@ -448,7 +557,7 @@ def main():
 
     ranking = []
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         data = artist_data[
             artist
@@ -462,6 +571,11 @@ def main():
         )
 
         ranking.append({
+            "canonicalArtistId":
+                data[
+                    "canonicalArtistId"
+                ],
+
             "artist":
                 artist,
 
@@ -587,6 +701,11 @@ def main():
             "checkedAt":
                 created_at,
 
+            "canonicalArtistId":
+                row[
+                    "canonicalArtistId"
+                ],
+
             "artist":
                 row[
                     "artist"
@@ -608,7 +727,8 @@ def main():
 
 
     history_count = write_history(
-        history_rows
+        history_rows,
+        canonical_by_artist,
     )
 
 

@@ -20,6 +20,11 @@ CURRENT_MUSIC_JSON = Path(
     "fandex_music_chart_ranking_v1_latest.json"
 )
 
+MUSIC_TARGET_BINDING_FILE = Path(
+    "data/fandex-cloud-v10/seed/"
+    "music_chart_artist_targets_v1.json"
+)
+
 OUTPUT_CSV = Path(
     "music_chart_current_presence_preview_v1_latest.csv"
 )
@@ -141,12 +146,101 @@ def read_json(path):
         return json.load(file)
 
 
-def select_best(rows):
+def load_music_canonical_bindings():
+    payload = read_json(
+        MUSIC_TARGET_BINDING_FILE
+    )
+    rows = payload.get("artists", [])
+
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            "Invalid Music target binding config."
+        )
+
+    bindings = {}
+    seen_ids = set()
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        canonical_artist_id = norm(
+            row.get("canonicalArtistId")
+        )
+        artist = norm(
+            row.get("artist")
+        )
+
+        if not canonical_artist_id or not artist:
+            raise RuntimeError(
+                "Invalid Music canonical binding row."
+            )
+        if canonical_artist_id in seen_ids:
+            raise RuntimeError(
+                "Duplicate Music canonicalArtistId: "
+                + canonical_artist_id
+            )
+        if artist in bindings:
+            raise RuntimeError(
+                "Duplicate Music artist binding: "
+                + artist
+            )
+
+        seen_ids.add(canonical_artist_id)
+        bindings[artist] = canonical_artist_id
+
+    if not bindings:
+        raise RuntimeError(
+            "Music canonical bindings are empty."
+        )
+
+    return bindings
+
+
+def resolve_row_canonical_id(
+    row,
+    bindings,
+):
+    artist = norm(row.get("artist"))
+    expected_id = bindings.get(artist)
+
+    if not expected_id:
+        raise RuntimeError(
+            "Unbound Music artist: " + artist
+        )
+
+    existing_id = norm(
+        row.get("canonicalArtistId")
+    )
+    if (
+        existing_id
+        and existing_id != expected_id
+    ):
+        raise RuntimeError(
+            "Music canonicalArtistId mismatch: "
+            f"{artist} = {existing_id} "
+            f"!= {expected_id}"
+        )
+
+    return expected_id
+
+
+def select_best(rows, target_artists, bindings):
     best = {}
 
     for row in rows:
         artist = norm(
             row.get("artist")
+        )
+
+        if artist not in target_artists:
+            continue
+
+        canonical_artist_id = (
+            resolve_row_canonical_id(
+                row,
+                bindings,
+            )
         )
 
         platform = norm(
@@ -158,9 +252,7 @@ def select_best(rows):
         )
 
         if (
-            artist not in TARGET_ARTISTS
-            or platform
-            not in PLATFORM_WEIGHTS
+            platform not in PLATFORM_WEIGHTS
             or rank == 999999
         ):
             continue
@@ -181,7 +273,11 @@ def select_best(rows):
                 previous.get("rank")
             )
         ):
-            best[key] = row
+            selected = dict(row)
+            selected["canonicalArtistId"] = (
+                canonical_artist_id
+            )
+            best[key] = selected
 
     return best
 
@@ -270,8 +366,8 @@ def main():
     )
 
 
-    best = select_best(
-        rows
+    canonical_bindings = (
+        load_music_canonical_bindings()
     )
 
     current_points = (
@@ -280,16 +376,37 @@ def main():
         )
     )
 
+    for artist in current_points:
+        if artist not in canonical_bindings:
+            raise RuntimeError(
+                "Current Music ranking contains "
+                f"unbound artist: {artist}"
+            )
+
+    target_artists = list(
+        canonical_bindings.keys()
+    )
+    if not target_artists:
+        raise RuntimeError(
+            "Music canonical bindings have no artists."
+        )
+
+    best = select_best(
+        rows,
+        set(target_artists),
+        canonical_bindings,
+    )
+
 
     preview_rows = []
 
     proposed_totals = {
         artist: 0.0
-        for artist in TARGET_ARTISTS
+        for artist in target_artists
     }
 
 
-    for artist in TARGET_ARTISTS:
+    for artist in target_artists:
 
         for platform in [
             "melon",
@@ -307,6 +424,9 @@ def main():
             if row is None:
 
                 preview_rows.append({
+                    "canonicalArtistId":
+                        canonical_bindings[artist],
+
                     "artist":
                         artist,
 
@@ -332,6 +452,19 @@ def main():
                 continue
 
 
+            if (
+                norm(
+                    row.get(
+                        "canonicalArtistId"
+                    )
+                )
+                != canonical_bindings[artist]
+            ):
+                raise RuntimeError(
+                    "Selected Music candidate identity mismatch: "
+                    + artist
+                )
+
             rank = safe_rank(
                 row.get("rank")
             )
@@ -355,6 +488,9 @@ def main():
 
 
             preview_rows.append({
+                "canonicalArtistId":
+                    canonical_bindings[artist],
+
                 "artist":
                     artist,
 
@@ -394,6 +530,7 @@ def main():
 
 
     fields = [
+        "canonicalArtistId",
         "artist",
         "platform",
         "status",
@@ -443,7 +580,7 @@ def main():
 
 
     sorted_artists = sorted(
-        TARGET_ARTISTS,
+        target_artists,
         key=lambda artist:
             proposed_totals[
                 artist
@@ -454,30 +591,33 @@ def main():
 
     for artist in sorted_artists:
 
-        current = (
-            current_points.get(
-                artist,
-                0.0,
-            )
-        )
-
         proposed = (
             proposed_totals[
                 artist
             ]
         )
 
-        delta = round(
-            proposed - current,
-            2,
-        )
-
-        line = (
-            f"{artist} | "
-            f"current={current:.2f} | "
-            f"proposed={proposed:.2f} | "
-            f"delta={delta:+.2f}"
-        )
+        if artist in current_points:
+            current = current_points[
+                artist
+            ]
+            delta = round(
+                proposed - current,
+                2,
+            )
+            line = (
+                f"{artist} | "
+                f"current={current:.2f} | "
+                f"proposed={proposed:.2f} | "
+                f"delta={delta:+.2f}"
+            )
+        else:
+            line = (
+                f"{artist} | "
+                "current=UNAVAILABLE | "
+                f"proposed={proposed:.2f} | "
+                "delta=UNAVAILABLE"
+            )
 
         print(
             line
@@ -497,7 +637,7 @@ def main():
 
     zero_artist_count = sum(
         1
-        for artist in TARGET_ARTISTS
+        for artist in target_artists
         if proposed_totals[
             artist
         ] == 0
@@ -508,11 +648,11 @@ def main():
     print("=" * 84)
     print(
         f"rankedPlatformCount: "
-        f"{ranked_platform_count}/30"
+        f"{ranked_platform_count}/{len(target_artists) * len(PLATFORM_WEIGHTS)}"
     )
     print(
         f"zeroArtistCount: "
-        f"{zero_artist_count}/10"
+        f"{zero_artist_count}/{len(target_artists)}"
     )
     print(
         f"previewCSV: "
@@ -537,11 +677,11 @@ def main():
         "",
         (
             f"rankedPlatformCount: "
-            f"{ranked_platform_count}/30"
+            f"{ranked_platform_count}/{len(target_artists) * len(PLATFORM_WEIGHTS)}"
         ),
         (
             f"zeroArtistCount: "
-            f"{zero_artist_count}/10"
+            f"{zero_artist_count}/{len(target_artists)}"
         ),
         "seedModified: FALSE",
         "masterModified: FALSE",
