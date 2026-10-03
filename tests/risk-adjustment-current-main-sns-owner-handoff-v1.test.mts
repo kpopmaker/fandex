@@ -40,6 +40,10 @@ type QuotaOwnerInput = Readonly<{
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
   measuredUsageEvidenceRef: string | null;
+  requestBatchingStrategy: string | null;
+  channelIdsPerCall: number | null;
+  videoIdsPerCall: number | null;
+  requestBatchingEvidenceRef: string | null;
   maxChannelIdsPerCall: number | null;
   maxVideoIdsPerCall: number | null;
   providerBatchLimitEvidenceRef: string | null;
@@ -117,6 +121,14 @@ test('merged snsFandom quota owner handoff resolves Phase B measurement plan whi
       quotaOwnerInput.uploadManifestPageCountPerReactionRun,
     videoCountPerReactionRun: quotaOwnerInput.videoCountPerReactionRun,
     measuredUsageEvidenceRef: quotaOwnerInput.measuredUsageEvidenceRef,
+    requestBatchingStrategy:
+      quotaOwnerInput.requestBatchingStrategy as
+        | 'singleton-only-until-provider-batch-limit-evidence'
+        | 'provider-limit-evidenced'
+        | null,
+    channelIdsPerCall: quotaOwnerInput.channelIdsPerCall,
+    videoIdsPerCall: quotaOwnerInput.videoIdsPerCall,
+    requestBatchingEvidenceRef: quotaOwnerInput.requestBatchingEvidenceRef,
     maxChannelIdsPerCall: quotaOwnerInput.maxChannelIdsPerCall,
     maxVideoIdsPerCall: quotaOwnerInput.maxVideoIdsPerCall,
     providerBatchLimitEvidenceRef:
@@ -139,14 +151,24 @@ test('merged snsFandom quota owner handoff resolves Phase B measurement plan whi
     'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
   assert.deepEqual(result.missingMeasurementFields, [
-    'maxChannelIdsPerCall',
-    'maxVideoIdsPerCall',
     'measuredAt',
     'measuredUsageEvidenceRef',
-    'providerBatchLimitEvidenceRef',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
   ]);
+  assert.equal(
+    result.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(result.channelIdsPerCall, 1);
+  assert.equal(result.videoIdsPerCall, 1);
+  assert.equal(
+    result.requestBatchingEvidenceRef,
+    'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(result.maxChannelIdsPerCall, null);
+  assert.equal(result.maxVideoIdsPerCall, null);
+  assert.equal(result.providerBatchLimitEvidenceRef, null);
   assert.deepEqual(result.invalidFields, []);
   assert.equal(result.automaticProviderCallAllowed, false);
   assert.equal(result.collectionExecutionAuthorized, false);
