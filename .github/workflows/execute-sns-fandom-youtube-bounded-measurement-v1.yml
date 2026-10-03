@@ -1,0 +1,100 @@
+name: Execute snsFandom YouTube bounded measurement v1
+
+on:
+  push:
+    branches:
+      - 'execute/sns-fandom-phase-c-bounded-measurement-v1-*'
+    paths:
+      - 'ops/authorizations/sns-fandom-phase-c-bounded-measurement-v1/*.json'
+
+permissions:
+  contents: read
+  issues: read
+  actions: read
+
+concurrency:
+  group: sns-fandom-youtube-bounded-measurement-v1
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FANDEX_SNS_FANDOM_YOUTUBE_API_KEY:
+        ${{ secrets.FANDEX_SNS_FANDOM_YOUTUBE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Bind one-shot request to current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          mapfile -t changed < <(git diff --name-only HEAD^ HEAD)
+          test "${#changed[@]}" = "1"
+          REQUEST_FILE="${changed[0]}"
+          case "$REQUEST_FILE" in
+            ops/authorizations/sns-fandom-phase-c-bounded-measurement-v1/*.json) ;;
+            *) exit 1 ;;
+          esac
+          EXPECTED_MAIN_SHA="$(jq -r '.expectedMainSha' "$REQUEST_FILE")"
+          AUTH_COMMENT_ID="$(jq -r '.executionAuthorizationCommentId' "$REQUEST_FILE")"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_MAIN_SHA"
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          test "$(git rev-parse refs/remotes/origin/main)" = "$EXPECTED_MAIN_SHA"
+          test "$GITHUB_REF_NAME" =             "execute/sns-fandom-phase-c-bounded-measurement-v1-$AUTH_COMMENT_ID"
+          test -n "$FANDEX_SNS_FANDOM_YOUTUBE_API_KEY"
+          echo "REQUEST_FILE=$REQUEST_FILE" >> "$GITHUB_ENV"
+          echo "EXPECTED_MAIN_SHA=$EXPECTED_MAIN_SHA" >> "$GITHUB_ENV"
+
+      - run: npm ci
+
+      - name: Validate explicit owner one-shot execution authorization
+        run: >-
+          npx tsx
+          scripts/operations/snsFandomYoutubeBoundedMeasurementExecutionGateV1.mts
+          --request "$REQUEST_FILE"
+
+      - name: Execute exactly one bounded snsFandom YouTube measurement
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/operations/snsFandomYoutubeBoundedMeasurementV1.mts             --request "$REQUEST_FILE"             > sns-fandom-youtube-bounded-measurement-receipt-v1.json
+          test -s sns-fandom-youtube-bounded-measurement-receipt-v1.json
+
+      - name: Reject secret material in sanitized receipt
+        if: always()
+        shell: bash
+        run: |
+          if [ -s sns-fandom-youtube-bounded-measurement-receipt-v1.json ]; then
+            node - <<'NODE'
+          const fs = require('node:fs');
+          const text = fs.readFileSync(
+            'sns-fandom-youtube-bounded-measurement-receipt-v1.json',
+            'utf8',
+          );
+          const secret = process.env.FANDEX_SNS_FANDOM_YOUTUBE_API_KEY || '';
+          if (secret && text.includes(secret)) {
+            throw new Error('secret_material_detected_in_receipt');
+          }
+          NODE
+          fi
+
+      - name: Upload sanitized measurement receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sns-fandom-youtube-bounded-measurement-receipt-v1
+          path: sns-fandom-youtube-bounded-measurement-receipt-v1.json
+          if-no-files-found: warn
+          retention-days: 90

@@ -865,3 +865,72 @@ The quota worksheet remains fail-closed and still requires:
 Measurement-handoff readiness still does not authorize an API call, scheduler
 mutation, Production collection, provider submission, deployment, or Product
 activation/publication.
+
+
+## 6g. Phase C bounded YouTube measurement execution path
+
+The repository now prepares a one-shot execution path for Phase C page/video
+measurement. This path is intentionally narrower than Production collection.
+
+Execution scope:
+
+- exact Audit cohort v1 only:
+  BLACKPINK / TWICE / ROSÉ / RIIZE / JENNIE;
+- exact provider endpoints only:
+  - `youtube.channels.list`;
+  - `youtube.playlistItems.list`;
+  - `youtube.videos.list`;
+- comment endpoints are not allowed;
+- channel/video ID requests use
+  `singleton-only-until-provider-batch-limit-evidence`;
+- uploads-playlist pagination runs to a terminal page rather than silently
+  truncating to a latest-N subset;
+- the owner-approved measurement window/cadence from Phase B is consumed as
+  input rather than re-derived;
+- raw video IDs and raw statistics are not written to the sanitized receipt;
+- the receipt stores only public channel/playlist identifiers and aggregate
+  call/page/video counts needed for quota evidence review.
+
+The execution workflow is not scheduled. It can run only from a dedicated
+one-shot execution branch whose single new commit contains exactly one
+authorization request JSON under:
+
+`ops/authorizations/sns-fandom-phase-c-bounded-measurement-v1/`
+
+The execution request must satisfy all of the following:
+
+- its parent commit equals the explicitly authorized `main` SHA;
+- repository `main` must still equal that same SHA when the run begins;
+- the branch name is bound to the exact GitHub issue authorization comment id;
+- the issue comment is authored by the repository owner and records:
+  - maximum executions = 1;
+  - exact five-member audit cohort;
+  - exact three-endpoint scope;
+  - singleton-only batching;
+  - comment endpoints disabled;
+  - Production collection unauthorized;
+  - provider submission unauthorized;
+  - scheduler mutation unauthorized;
+- `GITHUB_RUN_ATTEMPT` must equal 1, so rerunning the same provider execution
+  is not authorized.
+
+The workflow uploads only a sanitized measurement receipt.
+
+A real observed zero included-video count is preserved as zero rather than
+being converted to missing. However, an observed value is not automatically
+promoted into the checked-in quota owner input or final quota worksheet. That
+promotion requires a separate evidence review, especially while the approved
+365-day measurement window is still incomplete.
+
+The bounded measurement path does not:
+
+- create a recurring scheduler;
+- authorize Production collection;
+- authorize provider submission;
+- infer provider ID-batch limits;
+- infer requested quota headroom;
+- activate or publish `snsFandomPoint`.
+
+The provider API key remains referenced only through the existing GitHub
+Actions secret locator
+`github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY`.
