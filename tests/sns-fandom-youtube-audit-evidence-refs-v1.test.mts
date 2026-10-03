@@ -69,6 +69,17 @@ test('live audit evidence snapshot records current Production legal surface', as
     },
   );
   assert.equal(resolved.playlistItemsMaxResultsPerPage, 50);
+  assert.equal(
+    resolved.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(resolved.channelIdsPerCall, 1);
+  assert.equal(resolved.videoIdsPerCall, 1);
+  assert.equal(
+    resolved.requestBatchingEvidenceRef,
+    'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(resolved.providerBatchLimitClaimed, false);
   assert.equal('maxChannelIdsPerCall' in resolved, false);
 });
 
@@ -150,13 +161,20 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
-    'maxChannelIdsPerCall',
-    'maxVideoIdsPerCall',
-    'providerBatchLimitEvidenceRef',
     'dashboardFeatureScreenshotRef',
   ];
 
   for (const key of keys) assert.equal(unresolved[key], null);
+
+  const optionalOptimization =
+    raw.optionalOptimizationEvidence as Record<string, unknown>;
+  assert.equal(optionalOptimization.maxChannelIdsPerCall, null);
+  assert.equal(optionalOptimization.maxVideoIdsPerCall, null);
+  assert.equal(optionalOptimization.providerBatchLimitEvidenceRef, null);
+  assert.equal(
+    optionalOptimization.requiredForCurrentSingletonQuotaWorksheet,
+    false,
+  );
 
   assert.equal(resolved.providerClientIdentityRef, 'gcp-project-fandex-509708');
   assert.equal(resolved.googleCloudProjectNumber, '385464276768');
@@ -176,6 +194,9 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
   assert.equal('cadenceEvidenceRef' in unresolved, false);
   assert.equal('providerClientIdentityRef' in unresolved, false);
   assert.equal('googleCloudProjectNumber' in unresolved, false);
+  assert.equal('maxChannelIdsPerCall' in unresolved, false);
+  assert.equal('maxVideoIdsPerCall' in unresolved, false);
+  assert.equal('providerBatchLimitEvidenceRef' in unresolved, false);
   assert.equal('cloudProjectRef' in unresolved, false);
   assert.equal('privacyPolicyScreenshotRef' in unresolved, false);
   assert.equal('homepageScreenshotRef' in unresolved, false);

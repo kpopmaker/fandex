@@ -167,10 +167,10 @@ Let:
 Because each current read call costs 1 unit:
 
 - channel-stat calls/day =
-  `ceil(A / provider_max_ids_per_channels_list_call) * S`
+  `ceil(A / declared_client_channel_ids_per_call) * S`
 - upload-manifest calls/day = `U_pages * S`
 - video-stat calls/day =
-  `ceil(V / provider_max_ids_per_videos_list_call) * S`
+  `ceil(V / declared_client_video_ids_per_call) * S`
 - comment-thread calls/day = `C_pages * P`
 - comment calls/day = `R_pages * P`
 - projected snsFandomPoint YouTube quota/day =
@@ -394,7 +394,8 @@ It intentionally does not choose:
 - artist count;
 - reaction snapshot cadence;
 - comment-persistence cadence;
-- provider batch limits;
+- client request batching;
+- provider batch limits when FANDEX explicitly claims/uses them;
 - per-method quota costs;
 - quota headroom;
 - requested daily quota.
@@ -409,7 +410,8 @@ The worksheet accepts:
 - measured comment-thread/comment page counts when that scope is actually
   included;
 - explicitly declared runs/day;
-- provider batch limits;
+- exact client request batch sizes used by FANDEX;
+- provider batch limits only when the client strategy claims/uses those limits;
 - quota units per call;
 - non-secret evidence references for each assumption.
 
@@ -683,10 +685,24 @@ ID-filter batching claim:
 - `maxChannelIdsPerCall` remains null;
 - `maxVideoIdsPerCall` remains null;
 - the combined provider batch-limit evidence remains incomplete;
-- no test-fixture batch size may be promoted into the real worksheet.
+- no test-fixture batch size may be promoted into a provider-limit claim.
 
-A provider-documented ID-filter limit or actual approved-client measurement is
-still required for both channel-ID and video-ID batching inputs.
+Those unknown provider maxima do not need to block quota calculation while the
+actual FANDEX request strategy is explicitly
+`singleton-only-until-provider-batch-limit-evidence`.
+
+For that strategy:
+
+- `channelIdsPerCall = 1`;
+- `videoIdsPerCall = 1`;
+- both values are client behavior, not provider-limit claims;
+- the quota worksheet calculates calls from those declared client batch sizes;
+- `providerBatchLimitEvidenceRef` may remain null;
+- `providerLimitClaimed = false`.
+
+Exact provider ID-filter maxima remain useful optional optimization evidence.
+They become mandatory only if FANDEX switches to a
+`provider-limit-evidenced` batching strategy.
 
 
 ## 7b. Evidence-source discovery result
@@ -1025,3 +1041,38 @@ new-plan-eligible evidence is produced and separately reviewed.
 This superseding Phase B decision does not authorize another provider call,
 recurring scheduler activation, Production collection, provider submission,
 deployment, or Product activation/publication.
+
+
+## 6i. Client batching is distinct from provider maximums
+
+Quota projection needs to know how many resource IDs FANDEX will actually send
+per request. It does not inherently need to know the provider's undocumented
+maximum accepted ID cardinality.
+
+The current measured execution contract already declares:
+
+`singleton-only-until-provider-batch-limit-evidence`
+
+That means the current quota-planning inputs are evidence-backed as:
+
+- channels.list client batch size = 1 ID/request;
+- videos.list client batch size = 1 ID/request;
+- provider maximum channel IDs/request = unknown;
+- provider maximum video IDs/request = unknown;
+- provider batch-limit evidence = absent;
+- provider maximum claimed by FANDEX = false.
+
+The quota worksheet may therefore become evidence-ready with singleton client
+batching once the current canonical measurement values exist. It must not
+reinterpret the client batch size of 1 as a YouTube provider maximum of 1.
+
+If FANDEX later wants fewer API calls by batching multiple IDs, it must first
+switch to a separately evidenced batching strategy. At that point the exact
+provider maxima and provider batch-limit evidence become required and the
+declared client batch sizes must not exceed the evidenced maxima.
+
+This separation avoids both failure modes:
+
+- inventing `50` from a `maxResults=50` page-size parameter;
+- blocking quota planning on a provider maximum that the current singleton
+  implementation does not rely on.

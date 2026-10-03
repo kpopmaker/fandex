@@ -47,6 +47,11 @@ function input(
       reactionSnapshotRunsPerDay: 4,
       commentPersistenceRunsPerDay: 0,
     },
+    requestBatching: {
+      strategy: 'provider-limit-evidenced',
+      channelIdsPerCall: 50,
+      videoIdsPerCall: 50,
+    },
     providerLimits: {
       maxChannelIdsPerCall: 50,
       maxVideoIdsPerCall: 50,
@@ -61,6 +66,8 @@ function input(
     evidence: {
       measuredUsageEvidenceRef: 'evidence://youtube/quota/measured-usage-v1',
       cadenceEvidenceRef: 'evidence://youtube/quota/cadence-v1',
+      requestBatchingEvidenceRef:
+        'evidence://youtube/client/request-batching-v1',
       providerBatchLimitEvidenceRef:
         'evidence://youtube/provider/batch-limits-v1',
       providerQuotaCostEvidenceRef:
@@ -174,7 +181,7 @@ test('comments endpoint cannot be requested without comment-thread scope', () =>
   );
 });
 
-test('measured counts, cadence, provider batch limits and quota costs cannot be defaulted', () => {
+test('measured counts, cadence, request batch sizes and quota costs cannot be defaulted', () => {
   const base = input();
   const result = evaluateSnsFandomYoutubeQuotaWorksheet({
     ...base,
@@ -183,9 +190,10 @@ test('measured counts, cadence, provider batch limits and quota costs cannot be 
       artistChannelCount: 0,
       reactionSnapshotRunsPerDay: 0,
     },
-    providerLimits: {
-      maxChannelIdsPerCall: 0,
-      maxVideoIdsPerCall: 0,
+    requestBatching: {
+      ...base.requestBatching,
+      channelIdsPerCall: 0,
+      videoIdsPerCall: 0,
     },
     quotaUnitsPerCall: {
       ...base.quotaUnitsPerCall,
@@ -210,7 +218,7 @@ test('measured counts, cadence, provider batch limits and quota costs cannot be 
   );
   assert.ok(
     result.blockers.includes(
-      'youtube-quota-channel-batch-limit-invalid',
+      'youtube-quota-channel-request-batch-size-invalid',
     ),
   );
   assert.ok(
@@ -287,6 +295,109 @@ test('quota worksheet cannot become ready without the verified binding manifest'
   assert.ok(
     result.blockers.includes(
       'youtube-quota-artist-binding-manifest-missing',
+    ),
+  );
+});
+
+
+test('singleton client batching can become quota-ready without claiming provider maxima', () => {
+  const base = input();
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet({
+    ...base,
+    requestBatching: {
+      strategy: 'singleton-only-until-provider-batch-limit-evidence',
+      channelIdsPerCall: 1,
+      videoIdsPerCall: 1,
+    },
+    providerLimits: {
+      maxChannelIdsPerCall: null,
+      maxVideoIdsPerCall: null,
+    },
+    evidence: {
+      ...base.evidence,
+      requestBatchingEvidenceRef:
+        'repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence',
+      providerBatchLimitEvidenceRef: null,
+    },
+  });
+
+  assert.equal(result.state, 'quota-evidence-ready');
+  assert.equal(
+    result.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(result.channelIdsPerCall, 1);
+  assert.equal(result.videoIdsPerCall, 1);
+  assert.equal(result.providerBatchLimitEvidenceRequired, false);
+  assert.equal(result.providerBatchLimitEvidenceValidated, false);
+  assert.equal(result.providerLimitClaimed, false);
+  assert.equal(result.minimumProjectedQuotaUnitsPerDay, 556);
+  assert.deepEqual(
+    result.lineItems.map((item) => [
+      item.endpoint,
+      item.callsPerDay,
+      item.quotaUnitsPerDay,
+    ]),
+    [
+      ['youtube.channels.list', 48, 48],
+      ['youtube.playlistItems.list', 28, 28],
+      ['youtube.videos.list', 480, 480],
+    ],
+  );
+  assert.deepEqual(result.blockers, []);
+});
+
+test('singleton strategy rejects any request batch size other than one', () => {
+  const base = input();
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet({
+    ...base,
+    requestBatching: {
+      strategy: 'singleton-only-until-provider-batch-limit-evidence',
+      channelIdsPerCall: 2,
+      videoIdsPerCall: 1,
+    },
+    providerLimits: {
+      maxChannelIdsPerCall: null,
+      maxVideoIdsPerCall: null,
+    },
+    evidence: {
+      ...base.evidence,
+      providerBatchLimitEvidenceRef: null,
+    },
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(
+    result.blockers.includes('youtube-quota-singleton-batching-size-mismatch'),
+  );
+});
+
+test('provider-limit batching still requires exact provider limit evidence', () => {
+  const base = input();
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet({
+    ...base,
+    providerLimits: {
+      maxChannelIdsPerCall: null,
+      maxVideoIdsPerCall: null,
+    },
+    evidence: {
+      ...base.evidence,
+      providerBatchLimitEvidenceRef: null,
+    },
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.providerBatchLimitEvidenceRequired, true);
+  assert.equal(result.providerBatchLimitEvidenceValidated, false);
+  assert.ok(
+    result.blockers.includes('youtube-quota-channel-provider-limit-required'),
+  );
+  assert.ok(
+    result.blockers.includes('youtube-quota-video-provider-limit-required'),
+  );
+  assert.ok(
+    result.blockers.includes(
+      'youtube-quota-provider-batch-limit-evidence-required',
     ),
   );
 });
