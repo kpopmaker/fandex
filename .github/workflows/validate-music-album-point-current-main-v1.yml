@@ -1,0 +1,277 @@
+name: Validate musicAlbumPoint current main v1
+
+on:
+  push:
+    branches:
+      - integration/music-album-point-current-main-v1
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/validate-music-album-point-current-main-v1.yml'
+      - 'lib/alternative-evidence/directAlbumProvider.ts'
+      - 'lib/alternative-evidence/directProviderEvidence.ts'
+      - 'lib/alternative-evidence/circleRetail*.ts'
+      - 'lib/alternative-evidence/hanteoAlbum*.ts'
+      - 'lib/alternative-evidence/index.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesEvidence.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortEvidenceDerivation.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchReviewerPacket.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchReviewIntakeBundle.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesResearchReviewRequestManifest.ts'
+      - 'lib/alternative-evidence/musicChartObservation.ts'
+      - 'lib/alternative-evidence/musicChartEvidenceAdapter.ts'
+      - 'lib/alternative-evidence/musicChartCanonicalIdentityBinding.ts'
+      - 'lib/alternative-evidence/musicChartObservationHistory.ts'
+      - 'lib/alternative-evidence/musicChartCurrentness.ts'
+      - 'lib/product/contracts/productMusicAlbumPointCandidate.ts'
+      - 'lib/product/contracts/musicAlbumTemporalAlignment.ts'
+      - 'lib/product/contracts/albumNormalizationInput.ts'
+      - 'lib/product/contracts/albumObservationHistory.ts'
+      - 'lib/product/readiness/musicAlbumPointProductReadiness.ts'
+      - 'lib/product/readiness/musicAlbumPointProductionHandoff.ts'
+      - 'lib/product/readiness/albumNormalizationCalibrationGate.ts'
+      - 'lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts'
+      - 'lib/product/readiness/albumNormalizationCalibrationEvidenceDerivation.ts'
+      - 'lib/product/readiness/albumReleaseScopeReviewPacket.ts'
+      - 'lib/product/readiness/albumProviderAuthorizationReview.ts'
+      - 'lib/product/readiness/albumProviderAuthorizationRequestManifest.ts'
+      - 'tests/album-direct-observation-id-determinism-v1.test.mts'
+      - 'tests/album-provider-specific-integration-depth-v1.test.mts'
+      - 'tests/circle-retail-*.test.mts'
+      - 'tests/hanteo-album-*.test.mts'
+      - 'tests/music-chart-observation-contract-v1.test.mts'
+      - 'tests/music-chart-evidence-adapter-v1.test.mts'
+      - 'tests/music-chart-canonical-identity-binding-v1.test.mts'
+      - 'tests/music-chart-observation-history-v1.test.mts'
+      - 'tests/music-chart-currentness-v1.test.mts'
+      - 'tests/music-album-point-product-candidate-v1.test.mts'
+      - 'tests/music-album-temporal-alignment-v1.test.mts'
+      - 'tests/album-normalization-input-v1.test.mts'
+      - 'tests/album-observation-history-v1.test.mts'
+      - 'tests/album-normalization-calibration-gate-v1.test.mts'
+      - 'tests/album-normalization-calibration-evidence-review-v1.test.mts'
+      - 'tests/album-normalization-calibration-evidence-derivation-v1.test.mts'
+      - 'tests/album-release-scope-review-packet-v1.test.mts'
+      - 'tests/album-provider-authorization-review-v1.test.mts'
+      - 'tests/album-provider-authorization-request-v1.test.mts'
+      - 'tests/reported-album-sales-evidence-v1.test.mts'
+      - 'tests/reported-album-sales-research-history-v1.test.mts'
+      - 'tests/reported-album-sales-research-input-v1.test.mts'
+      - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
+      - 'tests/reported-album-sales-research-cohort-evidence-derivation-v1.test.mts'
+      - 'tests/reported-album-sales-research-reviewer-packet-v1.test.mts'
+      - 'tests/reported-album-sales-research-review-intake-bundle-v1.test.mts'
+      - 'tests/reported-album-sales-research-review-request-v1.test.mts'
+      - 'data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json'
+      - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
+      - 'tests/music-album-point-production-handoff-v1.test.mts'
+      - 'tests/direct-album-provider-foundation-v1.test.mts'
+      - 'tests/album-integrated-synthetic-validation-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            HEAD_SHA="$PR_HEAD_SHA"
+          else
+            HEAD_SHA="$GITHUB_SHA"
+          fi
+          MERGE_BASE="$(git merge-base refs/remotes/origin/main "$HEAD_SHA")"
+          git diff --name-only "$MERGE_BASE...$HEAD_SHA" | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-music-album-point-current-main-v1.yml
+          lib/alternative-evidence/directAlbumProvider.ts
+          lib/alternative-evidence/directProviderEvidence.ts
+          lib/alternative-evidence/circleRetailAdapter.ts
+          lib/alternative-evidence/circleRetailDiscovery.ts
+          lib/alternative-evidence/circleRetailOperationalSemantics.ts
+          lib/alternative-evidence/circleRetailRevision.ts
+          lib/alternative-evidence/circleRetailThrottling.ts
+          lib/alternative-evidence/hanteoAlbumAdapter.ts
+          lib/alternative-evidence/hanteoAlbumDiscovery.ts
+          lib/alternative-evidence/index.ts
+          lib/alternative-evidence/reportedAlbumSalesEvidence.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchCohortEvidenceDerivation.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchReviewerPacket.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchReviewIntakeBundle.ts
+          lib/alternative-evidence/reportedAlbumSalesResearchReviewRequestManifest.ts
+          lib/alternative-evidence/musicChartObservation.ts
+          lib/alternative-evidence/musicChartEvidenceAdapter.ts
+          lib/alternative-evidence/musicChartCanonicalIdentityBinding.ts
+          lib/alternative-evidence/musicChartObservationHistory.ts
+          lib/alternative-evidence/musicChartCurrentness.ts
+          lib/product/contracts/productMusicAlbumPointCandidate.ts
+          lib/product/contracts/musicAlbumTemporalAlignment.ts
+          lib/product/contracts/albumNormalizationInput.ts
+          lib/product/contracts/albumObservationHistory.ts
+          lib/product/readiness/musicAlbumPointProductReadiness.ts
+          lib/product/readiness/musicAlbumPointProductionHandoff.ts
+          lib/product/readiness/albumNormalizationCalibrationGate.ts
+          lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts
+          lib/product/readiness/albumNormalizationCalibrationEvidenceDerivation.ts
+          lib/product/readiness/albumReleaseScopeReviewPacket.ts
+          lib/product/readiness/albumProviderAuthorizationReview.ts
+          lib/product/readiness/albumProviderAuthorizationRequestManifest.ts
+          tests/album-direct-observation-id-determinism-v1.test.mts
+          tests/album-provider-specific-integration-depth-v1.test.mts
+          tests/circle-retail-adapter-v1.test.mts
+          tests/circle-retail-discovery-v1.test.mts
+          tests/circle-retail-operational-semantics-v1.test.mts
+          tests/circle-retail-revision-v1.test.mts
+          tests/circle-retail-throttling-v1.test.mts
+          tests/hanteo-album-adapter-v1.test.mts
+          tests/hanteo-album-discovery-v1.test.mts
+          tests/music-chart-observation-contract-v1.test.mts
+          tests/music-chart-evidence-adapter-v1.test.mts
+          tests/music-chart-canonical-identity-binding-v1.test.mts
+          tests/music-chart-observation-history-v1.test.mts
+          tests/music-chart-currentness-v1.test.mts
+          tests/music-album-point-product-candidate-v1.test.mts
+          tests/music-album-temporal-alignment-v1.test.mts
+          tests/album-normalization-input-v1.test.mts
+          tests/album-observation-history-v1.test.mts
+          tests/album-normalization-calibration-gate-v1.test.mts
+          tests/album-normalization-calibration-evidence-review-v1.test.mts
+          tests/album-normalization-calibration-evidence-derivation-v1.test.mts
+          tests/album-release-scope-review-packet-v1.test.mts
+          tests/album-provider-authorization-review-v1.test.mts
+          tests/album-provider-authorization-request-v1.test.mts
+          tests/reported-album-sales-evidence-v1.test.mts
+          tests/reported-album-sales-research-history-v1.test.mts
+          tests/reported-album-sales-research-input-v1.test.mts
+          tests/reported-album-sales-research-cohort-review-v1.test.mts
+          tests/reported-album-sales-research-cohort-evidence-derivation-v1.test.mts
+          tests/reported-album-sales-research-reviewer-packet-v1.test.mts
+          tests/reported-album-sales-research-review-intake-bundle-v1.test.mts
+          tests/reported-album-sales-research-review-request-v1.test.mts
+          data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json
+          tests/music-album-point-product-contract-readiness-v1.test.mts
+          tests/music-album-point-production-handoff-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
+          cat /tmp/disallowed.txt
+          test ! -s /tmp/disallowed.txt
+
+      - run: npm ci
+
+      - name: Direct Album observation identity determinism
+        run: npx tsx --test tests/album-direct-observation-id-determinism-v1.test.mts
+
+      - name: Circle technical qualification regression
+        run: npx tsx --test tests/circle-retail-discovery-v1.test.mts tests/circle-retail-adapter-v1.test.mts tests/circle-retail-operational-semantics-v1.test.mts tests/circle-retail-revision-v1.test.mts tests/circle-retail-throttling-v1.test.mts
+
+      - name: Hanteo current qualification regression
+        run: npx tsx --test tests/hanteo-album-discovery-v1.test.mts tests/hanteo-album-adapter-v1.test.mts
+
+      - name: Provider capability and authorization regression
+        run: npx tsx --test tests/album-provider-specific-integration-depth-v1.test.mts tests/direct-album-provider-foundation-v1.test.mts
+
+      - name: Music chart observation contract regression
+        run: npx tsx --test tests/music-chart-observation-contract-v1.test.mts
+
+      - name: Music collector evidence adapter regression
+        run: npx tsx --test tests/music-chart-evidence-adapter-v1.test.mts
+
+      - name: Music shared canonical identity binding regression
+        run: npx tsx --test tests/music-chart-canonical-identity-binding-v1.test.mts
+
+      - name: Music observation history regression
+        run: npx tsx --test tests/music-chart-observation-history-v1.test.mts
+
+      - name: Music chart currentness regression
+        run: npx tsx --test tests/music-chart-currentness-v1.test.mts
+
+      - name: Music/Album temporal alignment regression
+        run: npx tsx --test tests/music-album-temporal-alignment-v1.test.mts
+
+      - name: Album observation history regression
+        run: npx tsx --test tests/album-observation-history-v1.test.mts
+
+      - name: Album normalization input regression
+        run: npx tsx --test tests/album-normalization-input-v1.test.mts
+
+      - name: Reported Album Sales web evidence regression
+        run: npx tsx --test tests/reported-album-sales-evidence-v1.test.mts
+
+      - name: Reported Album Sales research history regression
+        run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
+
+      - name: Reported Album Sales research input regression
+        run: npx tsx --test tests/reported-album-sales-research-input-v1.test.mts
+
+      - name: Reported Album Sales research cohort review regression
+        run: npx tsx --test tests/reported-album-sales-research-cohort-review-v1.test.mts
+
+      - name: Reported Album Sales research cohort evidence derivation regression
+        run: npx tsx --test tests/reported-album-sales-research-cohort-evidence-derivation-v1.test.mts
+
+      - name: Reported Album Sales research reviewer packet regression
+        run: npx tsx --test tests/reported-album-sales-research-reviewer-packet-v1.test.mts
+
+      - name: Reported Album Sales research review intake bundle regression
+        run: npx tsx --test tests/reported-album-sales-research-review-intake-bundle-v1.test.mts
+
+      - name: Reported Album Sales research review request regression
+        run: npx tsx --test tests/reported-album-sales-research-review-request-v1.test.mts
+
+      - name: Album provider authorization review regression
+        run: npx tsx --test tests/album-provider-authorization-review-v1.test.mts
+
+      - name: Album provider authorization request regression
+        run: npx tsx --test tests/album-provider-authorization-request-v1.test.mts
+
+      - name: Album release scope review packet regression
+        run: npx tsx --test tests/album-release-scope-review-packet-v1.test.mts
+
+      - name: Album calibration evidence derivation regression
+        run: npx tsx --test tests/album-normalization-calibration-evidence-derivation-v1.test.mts
+
+      - name: Album calibration evidence review regression
+        run: npx tsx --test tests/album-normalization-calibration-evidence-review-v1.test.mts
+
+      - name: Album normalization calibration gate regression
+        run: npx tsx --test tests/album-normalization-calibration-gate-v1.test.mts
+
+      - name: Music/Album Product candidate regression
+        run: npx tsx --test tests/music-album-point-product-candidate-v1.test.mts
+
+      - name: Music/Album Product contract readiness regression
+        run: npx tsx --test tests/music-album-point-product-contract-readiness-v1.test.mts
+
+      - name: Music/Album Production blocker handoff regression
+        run: npx tsx --test tests/music-album-point-production-handoff-v1.test.mts
+
+      - name: Existing Album synthetic gate
+        run: npm run test:album:synthetic-gate
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
