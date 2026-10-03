@@ -280,3 +280,77 @@ test('evidence discovery preserves history while recording owner Cloud and appro
     'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
 });
+
+
+test('current canonical bounded measurement is recorded without promoting incomplete-window quota evidence', async () => {
+  const raw = await readJson(
+    'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
+  );
+  const measurement =
+    raw.currentBoundedMeasurementEvidence as Record<string, unknown>;
+
+  assert.equal(
+    measurement.state,
+    'current-plan-bounded-snapshot-recorded',
+  );
+  assert.equal(measurement.authorizationCommentId, '5970501121');
+  assert.equal(
+    measurement.sourceMainSha,
+    'f7a0965e5708ddf00ebacfe58ab8740e1d89084f',
+  );
+  assert.equal(measurement.workflowRunId, '37132802429');
+  assert.equal(measurement.workflowConclusion, 'success');
+  assert.equal(measurement.artifactId, '11277073687');
+  assert.equal(
+    measurement.artifactDigest,
+    'sha256:3d7fdbed7f314c75bc49f992493a2adffc5f2442915a37a39992367a56e1c37c',
+  );
+  assert.equal(
+    measurement.measurementWindowStart,
+    '2026-10-03T15:00:00.000Z',
+  );
+  assert.equal(
+    measurement.measurementWindowEnd,
+    '2027-10-04T15:00:00.000Z',
+  );
+  assert.equal(
+    measurement.measuredAt,
+    '2026-10-03T15:19:42.325Z',
+  );
+  assert.equal(measurement.measurementWindowComplete, false);
+  assert.equal(measurement.uploadManifestPageCountPerReactionRun, 115);
+  assert.equal(measurement.videoCountPerReactionRun, 0);
+  assert.equal(measurement.trueZeroVideoCountObserved, true);
+  assert.equal(measurement.quotaUnitsObserved, 120);
+  assert.equal(measurement.quotaWorksheetEligible, false);
+  assert.equal(
+    measurement.quotaWorksheetEligibilityReason,
+    'measurement-window-incomplete',
+  );
+  assert.equal(measurement.finalOwnerEvidencePromotionAllowed, false);
+  assert.equal(measurement.productionCollectionAuthorized, false);
+  assert.equal(measurement.providerSubmissionAuthorized, false);
+  assert.equal(measurement.schedulerMutationAuthorized, false);
+
+  const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
+  assert.equal(unresolved.uploadManifestPageCountPerReactionRun, null);
+  assert.equal(unresolved.videoCountPerReactionRun, null);
+  assert.equal(unresolved.quotaEstimateRef, null);
+});
+
+test('quota owner instructions explicitly preserve observed zero video counts', async () => {
+  const raw = await readJson(
+    'docs/research/sns-fandom-youtube-quota-owner-input-v1.json',
+  );
+  const instructions = raw.instructions as Record<string, unknown>;
+  const text = String(instructions.videoCountPerReactionRun);
+
+  assert.match(text, /non-negative integer/i);
+  assert.match(text, /Observed zero is valid evidence/i);
+  assert.match(text, /must not be rewritten to Missing or one/i);
+
+  assert.equal(raw.measuredAt, null);
+  assert.equal(raw.uploadManifestPageCountPerReactionRun, null);
+  assert.equal(raw.videoCountPerReactionRun, null);
+  assert.equal(raw.measuredUsageEvidenceRef, null);
+});
