@@ -1,0 +1,21 @@
+{
+  "version": "sns_fandom_youtube_bounded_measurement_execution_request_v1",
+  "authorizationState": "approved",
+  "expectedMainSha": "1528b8f87c23279dc253c42f1cf4c5c414aaa1c6",
+  "executionAuthorizationCommentId": 5966107066,
+  "executionAuthorizationEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5966107066",
+  "maximumExecutions": 1,
+  "auditManifestId": "sns-fandom-youtube-audit-cohort-v1",
+  "artistChannelCount": 5,
+  "requestedEndpoints": [
+    "youtube.channels.list",
+    "youtube.playlistItems.list",
+    "youtube.videos.list"
+  ],
+  "requestBatchingStrategy": "singleton-only-until-provider-batch-limit-evidence",
+  "commentEndpointsAllowed": false,
+  "productionCollectionAuthorized": false,
+  "providerSubmissionAuthorized": false,
+  "schedulerMutationAuthorized": false,
+  "confirm": "execute-sns-fandom-youtube-bounded-measurement-v1"
+}
