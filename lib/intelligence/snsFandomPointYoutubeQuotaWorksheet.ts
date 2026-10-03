@@ -223,7 +223,7 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
   if (!positiveSafeInteger(m.uploadManifestPageCountPerReactionRun)) {
     blockers.push('youtube-quota-upload-page-count-invalid');
   }
-  if (!positiveSafeInteger(m.videoCountPerReactionRun)) {
+  if (!nonNegativeSafeInteger(m.videoCountPerReactionRun)) {
     blockers.push('youtube-quota-video-count-invalid');
   }
   if (!positiveSafeInteger(m.reactionSnapshotRunsPerDay)) {
@@ -438,7 +438,7 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
   }
 
   if (
-    positiveSafeInteger(m.videoCountPerReactionRun)
+    nonNegativeSafeInteger(m.videoCountPerReactionRun)
     && positiveSafeInteger(m.reactionSnapshotRunsPerDay)
     && positiveSafeInteger(batching.videoIdsPerCall)
   ) {
