@@ -138,7 +138,7 @@ test('legal screenshots are resolved while synthetic dashboard evidence stays re
   );
 });
 
-test('resolved provider-client evidence is recorded while remaining external-owner evidence stays fail-closed', async () => {
+test('resolved Phase A and Phase B evidence is recorded while remaining external-owner evidence stays fail-closed', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
@@ -147,8 +147,6 @@ test('resolved provider-client evidence is recorded while remaining external-own
   const keys = [
     'applicantIdentityRef',
     'organizationOrSelfRef',
-    'realMeasurementWindowRef',
-    'cadenceEvidenceRef',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
@@ -168,6 +166,14 @@ test('resolved provider-client evidence is recorded while remaining external-own
     'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
   );
   assert.equal(resolved.providerClientVerifiedAt, '2026-10-03T03:10:00.000Z');
+  assert.equal(resolved.realMeasurementWindowRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
+  assert.equal(resolved.measurementWindowStart, '2026-10-03T04:06:51.000Z');
+  assert.equal(resolved.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(resolved.reactionSnapshotRunsPerDay, 24);
+  assert.equal(resolved.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
+  assert.equal(resolved.measurementPlanApprovedAt, '2026-10-03T04:06:51.000Z');
+  assert.equal('realMeasurementWindowRef' in unresolved, false);
+  assert.equal('cadenceEvidenceRef' in unresolved, false);
   assert.equal('providerClientIdentityRef' in unresolved, false);
   assert.equal('googleCloudProjectNumber' in unresolved, false);
   assert.equal('cloudProjectRef' in unresolved, false);
@@ -200,7 +206,7 @@ test('audit packet no longer records Production privacy/terms pages as 404', asy
   );
 });
 
-test('evidence discovery preserves historical Drive result while recording owner Cloud evidence and unresolved cadence', async () => {
+test('evidence discovery preserves history while recording owner Cloud and approved cadence evidence', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
@@ -215,5 +221,9 @@ test('evidence discovery preserves historical Drive result while recording owner
     'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
   );
   assert.equal(discovery.githubApprovedCadenceSearchPerformed, true);
-  assert.equal(discovery.githubApprovedCadenceEvidenceFound, false);
+  assert.equal(discovery.githubApprovedCadenceEvidenceFound, true);
+  assert.equal(
+    discovery.ownerApprovedCadenceEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+  );
 });
