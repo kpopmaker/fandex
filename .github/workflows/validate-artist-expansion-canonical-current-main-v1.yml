@@ -1,0 +1,68 @@
+name: Validate Artist Expansion canonical current main v1
+
+on:
+  push:
+    branches:
+      - integration/artist-expansion-canonical-current-main-v1
+  pull_request:
+    paths:
+      - 'app/data/v4/artistUniverse.ts'
+      - 'app/data/v4/types.ts'
+      - 'data/artist-universe-expansion-v1.json'
+      - 'data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json'
+      - 'lib/server/ingestion/naverNewsArtistRelevance.ts'
+      - 'lib/server/intelligence/naverCanonicalArtistReadAdapter.ts'
+      - 'scripts/fandex-cloud-migration/source/**'
+      - 'scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py'
+      - 'scripts/lastfm-cloud/lastfm_artist_seed_v1.csv'
+      - 'scripts/lastfm-cloud/lastfm_cloud_history_v1.py'
+      - 'tests/artist-expansion-canonical-current-main-v1.test.mts'
+      - '.github/workflows/validate-artist-expansion-canonical-current-main-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: npm ci
+
+      - name: Generic pipeline Python syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/fandex_daily_summary_v3.py \
+            scripts/fandex-cloud-migration/source/fandex_master_score_v10.py \
+            scripts/fandex-cloud-migration/source/fandex_python_health_check_v3.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_delta_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_score_preview_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_rolling_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_global_interest_score_preview_v1.py \
+            scripts/fandex-cloud-migration/source/lastfm_sync_cloud_history_v1_1.py \
+            scripts/fandex-cloud-migration/source/music_chart_check_history_v1.py \
+            scripts/fandex-cloud-migration/source/music_chart_current_presence_preview_v1.py \
+            scripts/fandex-cloud-migration/source/music_chart_current_presence_publish_v2.py \
+            scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py \
+            scripts/fandex-cloud-v10/fandex_cloud_runner_v1.py \
+            scripts/lastfm-cloud/lastfm_cloud_history_v1.py
+
+      - name: Canonical Artist Expansion regression
+        run: npx tsx --test tests/artist-expansion-canonical-current-main-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

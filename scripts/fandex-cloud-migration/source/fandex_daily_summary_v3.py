@@ -71,17 +71,25 @@ def main():
         LASTFM
     )
 
+    master_ranking = master.get(
+        "ranking",
+        [],
+    )
+    master_artists = {
+        row.get("artist")
+        for row in master_ranking
+        if isinstance(row, dict)
+        and row.get("artist")
+    }
+
     master_ok = (
         master.get(
             "version"
         ) == EXPECTED
         and
-        len(
-            master.get(
-                "ranking",
-                [],
-            )
-        ) == 10
+        bool(master_ranking)
+        and
+        len(master_ranking) == len(master_artists)
     )
 
     music_ranking = music.get(
@@ -103,14 +111,23 @@ def main():
         )
     )
 
+    music_artists = {
+        row.get("artist")
+        for row in music_ranking
+        if isinstance(row, dict)
+        and row.get("artist")
+    }
+
     overall_ok = (
         health_ok
         and
         master_ok
         and
-        len(
-            music_ranking
-        ) == 10
+        bool(music_ranking)
+        and
+        len(music_ranking) == len(music_artists)
+        and
+        master_artists <= music_artists
     )
 
     print()
@@ -135,12 +152,14 @@ def main():
 
     print(
         f"Music v2         : "
-        f"{len(music_ranking)}/10 artists"
+        f"{len(music_ranking)} source / "
+        f"{len(master_ranking)} Product artists"
     )
 
     print(
         f"Music v2 ranked  : "
-        f"{ranked_platforms}/30 platforms"
+        f"{ranked_platforms}/"
+        f"{len(music_ranking) * 3} platforms"
     )
 
     print(

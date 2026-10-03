@@ -10,6 +10,8 @@ export const FANDEX_NAVER_CANONICAL_ARTIST_READ_ENTRY_CONTRACT_VERSION =
 const NAVER_RELEVANCE_REASONS = Object.freeze([
   'canonical_korean_alias_in_title',
   'canonical_korean_alias_in_summary',
+  'canonical_short_korean_alias_with_english_alias_in_title',
+  'canonical_short_korean_alias_with_english_alias_in_summary',
 ] as const);
 
 export type CanonicalNaverNewsArtistReadEntryV1 = Readonly<{
