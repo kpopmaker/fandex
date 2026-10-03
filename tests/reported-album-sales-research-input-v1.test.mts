@@ -33,7 +33,7 @@ function seedHistory() {
 test('actual public seed yields a score-free same-semantic Hanteo first-week research input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T20:11:42+09:00',
+    '2026-10-03T20:41:42+09:00',
   );
 
   assert.equal(input.state, 'reviewable');
@@ -44,7 +44,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
   );
   assert.equal(input.target.unit, 'physical-copies');
 
-  assert.equal(input.releaseCount, 94);
+  assert.equal(input.releaseCount, 95);
   assert.equal(input.artistCount, 21);
   assert.deepEqual(
     new Set(input.includedArtistIds),
@@ -127,6 +127,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'Get A Guitar',
       'Face the Sun',
       'An Ode',
+      'Heng:garæ',
       'NOEASY',
       'IN LIFE',
       'BETWEEN 1&2',
@@ -427,7 +428,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 test('upgraded IVE SWITCH evidence enters the research input while provider-mismatched Circle rows remain excluded', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T20:11:42+09:00',
+    '2026-10-03T20:41:42+09:00',
   );
 
   assert.ok(
@@ -507,7 +508,7 @@ test('upgraded IVE SWITCH evidence enters the research input while provider-mism
 test('Circle distribution and retail observations never enter the Hanteo first-week input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T20:11:42+09:00',
+    '2026-10-03T20:41:42+09:00',
   );
 
   assert.ok(
