@@ -12,7 +12,11 @@
     "measuredUsageEvidenceRef": "Non-secret evidence reference for measured page/video counts.",
     "maxChannelIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
     "maxVideoIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
-    "providerBatchLimitEvidenceRef": "Non-secret provider evidence for both exact ID batch limits."
+    "providerBatchLimitEvidenceRef": "Non-secret provider evidence for both exact ID batch limits.",
+    "requestBatchingStrategy": "Exact FANDEX client request batching strategy. singleton-only is a client behavior, not a provider maximum claim.",
+    "channelIdsPerCall": "Positive integer channel IDs FANDEX will actually send per channels.list request.",
+    "videoIdsPerCall": "Positive integer video IDs FANDEX will actually send per videos.list request.",
+    "requestBatchingEvidenceRef": "Non-secret evidence reference for the declared FANDEX client batching behavior."
   },
   "measurementWindowStart": "2026-10-03T15:00:00.000Z",
   "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
@@ -29,5 +33,9 @@
   "collectionExecutionAuthorized": false,
   "schedulerMutationAllowed": false,
   "deploymentAuthorized": false,
-  "providerSubmissionAuthorized": false
+  "providerSubmissionAuthorized": false,
+  "requestBatchingStrategy": "singleton-only-until-provider-batch-limit-evidence",
+  "channelIdsPerCall": 1,
+  "videoIdsPerCall": 1,
+  "requestBatchingEvidenceRef": "repo://lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff.ts#singleton-only-until-provider-batch-limit-evidence"
 }
