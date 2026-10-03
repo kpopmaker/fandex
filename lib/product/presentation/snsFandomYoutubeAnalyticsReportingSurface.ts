@@ -29,7 +29,7 @@ export type SnsFandomYoutubeAnalyticsReportingSurface =
       measurementStartedAt: string;
       measuredAt: string;
       observedThrough: string;
-      measurementWindowComplete: boolean;
+      measurementWindowComplete: false;
       quotaWorksheetEligible: false;
       finalOwnerEvidencePromotionAllowed: false;
       reactionSnapshotRunsPerDay: number;
@@ -131,6 +131,12 @@ export function evaluateSnsFandomYoutubeAnalyticsReportingSurface(
   if (input.workflowConclusion !== 'success') {
     blockers.push('workflow-not-successful');
   }
+  if (input.measurementWindowComplete !== false) {
+    blockers.push('measurement-window-completeness-must-remain-false');
+  }
+  if (input.quotaWorksheetEligibilityReason !== 'measurement-window-incomplete') {
+    blockers.push('quota-worksheet-eligibility-reason-invalid');
+  }
 
   const measurementWindowStart = exactIso(input.measurementWindowStart);
   const measurementWindowEnd = exactIso(input.measurementWindowEnd);
@@ -199,12 +205,39 @@ export function evaluateSnsFandomYoutubeAnalyticsReportingSurface(
     || total === null
   ) {
     blockers.push('provider-call-count-invalid');
-  } else if (channelsList + playlistItemsList + videosList !== total) {
-    blockers.push('provider-call-total-mismatch');
+  } else {
+    if (channelsList + playlistItemsList + videosList !== total) {
+      blockers.push('provider-call-total-mismatch');
+    }
+    if (
+      artistChannelCount !== null
+      && channelsList !== artistChannelCount
+    ) {
+      blockers.push('provider-channel-call-count-mismatch');
+    }
+    if (
+      uploadManifestPageCountPerReactionRun !== null
+      && playlistItemsList !== uploadManifestPageCountPerReactionRun
+    ) {
+      blockers.push('provider-playlist-call-count-mismatch');
+    }
+    if (
+      videoCountPerReactionRun !== null
+      && videosList !== videoCountPerReactionRun
+    ) {
+      blockers.push('provider-video-call-count-mismatch');
+    }
+    if (
+      quotaUnitsObserved !== null
+      && quotaUnitsObserved !== total
+    ) {
+      blockers.push('quota-units-provider-call-mismatch');
+    }
   }
 
   const perArtistRaw = Array.isArray(input.perArtist) ? input.perArtist : [];
   const perArtist: SnsFandomYoutubeAnalyticsReportingArtistRow[] = [];
+  const artistIds = new Set<string>();
   for (const rowValue of perArtistRaw) {
     const row = record(rowValue);
     const canonicalArtistId = text(row?.canonicalArtistId);
@@ -219,6 +252,11 @@ export function evaluateSnsFandomYoutubeAnalyticsReportingSurface(
       blockers.push('per-artist-row-invalid');
       continue;
     }
+    if (artistIds.has(canonicalArtistId)) {
+      blockers.push('per-artist-id-duplicate');
+      continue;
+    }
+    artistIds.add(canonicalArtistId);
     perArtist.push(Object.freeze({
       canonicalArtistId,
       playlistItemsPagesTraversed,
@@ -281,7 +319,7 @@ export function evaluateSnsFandomYoutubeAnalyticsReportingSurface(
     measurementStartedAt: measurementStartedAt as string,
     measuredAt: measuredAt as string,
     observedThrough: observedThrough as string,
-    measurementWindowComplete: input.measurementWindowComplete === true,
+    measurementWindowComplete: false as const,
     quotaWorksheetEligible: false as const,
     finalOwnerEvidencePromotionAllowed: false as const,
     reactionSnapshotRunsPerDay: reactionSnapshotRunsPerDay as number,
