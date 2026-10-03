@@ -143,12 +143,12 @@ test('checked-in owner template records the owner-approved plan while Phase C st
   ) as Record<string, unknown>;
 
   assert.equal(raw.state, 'measurement-plan-ready');
-  assert.equal(raw.measurementWindowStart, '2026-10-03T04:06:51.000Z');
-  assert.equal(raw.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(raw.measurementWindowStart, '2026-10-03T15:00:00.000Z');
+  assert.equal(raw.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(raw.reactionSnapshotRunsPerDay, 24);
   assert.equal(
     raw.cadenceEvidenceRef,
-    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
 
   for (const field of [
@@ -169,10 +169,10 @@ test('checked-in owner template records the owner-approved plan while Phase C st
 
   assert.equal(result.state, 'measurement-plan-ready');
   assert.deepEqual(result.missingPlanFields, []);
-  assert.equal(result.measurementWindowStart, '2026-10-03T04:06:51.000Z');
-  assert.equal(result.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(result.measurementWindowStart, '2026-10-03T15:00:00.000Z');
+  assert.equal(result.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(result.reactionSnapshotRunsPerDay, 24);
-  assert.equal(result.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
+  assert.equal(result.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
   assert.equal(result.automaticProviderCallAllowed, false);
   assert.equal(result.collectionExecutionAuthorized, false);
   assert.equal(result.schedulerMutationAllowed, false);
