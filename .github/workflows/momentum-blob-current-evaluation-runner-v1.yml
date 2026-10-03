@@ -1,0 +1,87 @@
+name: Momentum Blob current evaluation runner v1
+
+on:
+  workflow_run:
+    workflows:
+      - Momentum current reevaluation readiness v1
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: momentum-blob-current-evaluation-runner-v1
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Guard existing Blob read credential
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - name: Bind exact main and current workflow job
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "MOMENTUM_EVALUATED_MAIN_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          job_id="$(
+            curl --fail --silent --show-error               --header "Authorization: Bearer $GH_TOKEN"               --header "Accept: application/vnd.github+json"               "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100"               | node -e '
+                let s="";
+                process.stdin.on("data",d=>s+=d);
+                process.stdin.on("end",()=>{
+                  const data=JSON.parse(s);
+                  const job=(data.jobs||[]).find(x=>x.name==="evaluate");
+                  if(!job || !Number.isSafeInteger(job.id)) process.exit(2);
+                  process.stdout.write(String(job.id));
+                });
+              '
+          )"
+          echo "MOMENTUM_WORKFLOW_JOB_ID=$job_id" >> "$GITHUB_ENV"
+
+      - run: npm ci
+
+      - name: Evaluate current Blob-backed categorical evidence
+        run: npx tsx scripts/operations/momentumBlobCurrentEvaluationRunnerV1.mts
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "evidenceSource=immutable-blob-official-scheduler-manifest"
+          echo "providerCalls=0"
+          echo "databaseReads=0"
+          echo "databaseWrites=0"
+          echo "blobWrites=0"
+          echo "historyWritePerformed=false"
+          echo "productMetricWrites=0"
+          echo "registryMutations=0"
+          echo "productionActivations=0"
+          echo "productPublications=0"

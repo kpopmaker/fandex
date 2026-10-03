@@ -1,0 +1,74 @@
+name: Validate Momentum Blob current evaluation runner v1
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/operations/momentumBlobCurrentEvaluationRunnerV1.mts'
+      - '.github/workflows/momentum-blob-current-evaluation-runner-v1.yml'
+      - '.github/workflows/validate-momentum-blob-current-evaluation-runner-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Assert read-only Blob runner contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          workflow='.github/workflows/momentum-blob-current-evaluation-runner-v1.yml'
+          runner='scripts/operations/momentumBlobCurrentEvaluationRunnerV1.mts'
+
+          grep -F 'FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN' "$workflow"
+          grep -F 'Momentum current reevaluation readiness v1' "$workflow"
+          grep -F 'createProductionNaverNewsBlobEvidenceReadStore' "$runner"
+          grep -F 'evaluateFandexMomentumCurrentReevaluationReadiness' "$runner"
+          grep -F 'evaluateFandexMomentumCurrentEvaluationPipeline' "$runner"
+
+          if grep -Fq 'FANDEX_RUNTIME_DATABASE_URL' "$workflow" "$runner"; then
+            echo 'database_secret_binding_forbidden'
+            exit 2
+          fi
+          if grep -Eq '^[[:space:]]+schedule:' "$workflow"; then
+            echo 'schedule_trigger_forbidden'
+            exit 3
+          fi
+          if grep -Eq 'new Pool|requireRuntimeDatabaseUrl|createPostgres' "$runner"; then
+            echo 'database_access_forbidden'
+            exit 4
+          fi
+          if grep -Eq 'writeFile|appendFile|unlink|rmSync' "$runner"; then
+            echo 'mutation_api_forbidden'
+            exit 5
+          fi
+
+          echo 'momentumBlobCurrentEvaluationRunnerContract=valid'
+
+      - run: npm ci
+
+      - name: Current reevaluation readiness regression
+        run: npx tsx --test tests/momentum-current-reevaluation-readiness-v1.test.mts
+
+      - name: Current evaluation pipeline regression
+        run: npx tsx --test tests/momentum-current-evaluation-pipeline-v1.test.mts
+
+      - name: NAVER media-attention regression
+        run: npx tsx --test tests/fandex-naver-media-attention-momentum-v140.test.mts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
