@@ -343,7 +343,7 @@ test('Production workflow is manual-only, Vercel-independent, and secret-gated',
 });
 
 
-test('recurring Production workflow activates the frozen hourly cadence and preserves the manual approval path', async () => {
+test('recurring Production workflow is manual-only after Render becomes the canonical hourly trigger', async () => {
   const workflow = await readFile(
     new URL(
       '../.github/workflows/naver-news-blob-only-recurring-production-v1.yml',
@@ -353,14 +353,12 @@ test('recurring Production workflow activates the frozen hourly cadence and pres
   );
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.match(workflow, /^\s*schedule:/m);
-  assert.match(workflow, /cron: '17 \* \* \* \*'/);
-  assert.match(workflow, /cron: '37 \* \* \* \*'/);
-  assert.match(workflow, /cron: '57 \* \* \* \*'/);
-  assert.match(workflow, /github\.event_name == 'schedule'/);
-  assert.match(workflow, /github\.event\.schedule == '17 \* \* \* \*'/);
-  assert.match(workflow, /github\.event\.schedule == '37 \* \* \* \*'/);
-  assert.match(workflow, /github\.event\.schedule == '57 \* \* \* \*'/);
+  assert.doesNotMatch(workflow, /^\s*schedule:/m);
+  assert.doesNotMatch(workflow, /cron: '17 \* \* \* \*'/);
+  assert.doesNotMatch(workflow, /cron: '37 \* \* \* \*'/);
+  assert.doesNotMatch(workflow, /cron: '57 \* \* \* \*'/);
+  assert.doesNotMatch(workflow, /github\.event_name == 'schedule'/);
+  assert.doesNotMatch(workflow, /github\.event\.schedule/);
   assert.doesNotMatch(
     workflow,
     /FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED/,

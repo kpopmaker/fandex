@@ -1,6 +1,9 @@
-name: Validate NAVER Blob redundant trigger activation v1
+name: Validate NAVER GitHub automatic schedule disable v1
 
 on:
+  push:
+    branches:
+      - integration/ops-naver-github-schedule-disable-current-main-v2
   pull_request:
     paths:
       - '.github/workflows/naver-news-blob-only-recurring-production-v1.yml'
@@ -17,11 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assert redundant trigger activation contract
+      - name: Assert Render-canonical manual-dispatch contract
         shell: bash
         run: |
           set -euo pipefail
-
           node <<'NODE'
           const fs = require('node:fs');
           const source = fs.readFileSync(
@@ -29,12 +31,9 @@ jobs:
             'utf8',
           );
           const required = [
-            "cron: '17 * * * *'",
-            "cron: '37 * * * *'",
-            "cron: '57 * * * *'",
-            "github.event.schedule == '17 * * * *'",
-            "github.event.schedule == '37 * * * *'",
-            "github.event.schedule == '57 * * * *'",
+            'workflow_dispatch:',
+            "github.event_name == 'workflow_dispatch'",
+            "inputs.execution_approval == 'approved-github-actions-blob-only-recurring-v1'",
             "runStatus === 'already-finalized'",
             "providerCalls === 0",
             "runStatus === 'collected-and-finalized'",
@@ -48,15 +47,26 @@ jobs:
               process.exit(2);
             }
           }
-          if (source.includes('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED')) {
-            console.error('redundant_trigger_gate_must_be_removed_for_activation');
-            process.exit(3);
+          const forbidden = [
+            'schedule:',
+            "cron: '17 * * * *'",
+            "cron: '37 * * * *'",
+            "cron: '57 * * * *'",
+            "github.event_name == 'schedule'",
+            'github.event.schedule',
+            'FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ENABLED',
+          ];
+          for (const token of forbidden) {
+            if (source.includes(token)) {
+              console.error('forbidden_automatic_schedule_token:' + token);
+              process.exit(3);
+            }
           }
-          console.log('FANDEX_NAVER_BLOB_REDUNDANT_TRIGGER_ACTIVATION=valid');
-          console.log('primaryCronStillActive=true');
-          console.log('redundantCron37Active=true');
-          console.log('redundantCron57Active=true');
+          console.log('FANDEX_NAVER_GITHUB_AUTOMATIC_SCHEDULE=disabled');
+          console.log('manualWorkflowDispatchPreserved=true');
           console.log('sameSlotProviderSkipProtected=true');
+          console.log('databaseWrites=0');
+          console.log('productActivations=0');
           NODE
 
       - uses: actions/setup-node@v4
