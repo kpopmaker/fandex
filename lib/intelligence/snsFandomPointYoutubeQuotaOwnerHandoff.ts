@@ -88,6 +88,10 @@ function positiveSafeInteger(value: number): boolean {
   return Number.isSafeInteger(value) && value > 0;
 }
 
+function nonNegativeSafeInteger(value: number): boolean {
+  return Number.isSafeInteger(value) && value >= 0;
+}
+
 function secretLike(value: string): boolean {
   if (/AIza[0-9A-Za-z_-]{10,}/.test(value)) return true;
   const normalized = value.toLowerCase();
@@ -156,7 +160,6 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
   }
   for (const field of [
     'uploadManifestPageCountPerReactionRun',
-    'videoCountPerReactionRun',
     'channelIdsPerCall',
     'videoIdsPerCall',
     'maxChannelIdsPerCall',
@@ -166,6 +169,12 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
     if (value !== null && !positiveSafeInteger(value)) {
       invalidFields.push(field);
     }
+  }
+  if (
+    input.videoCountPerReactionRun !== null
+    && !nonNegativeSafeInteger(input.videoCountPerReactionRun)
+  ) {
+    invalidFields.push('videoCountPerReactionRun');
   }
 
   for (const field of [
