@@ -1126,3 +1126,51 @@ and interpretation remain a separate review step.
 Authorization comment `5970501121` is consumed. No provider rerun,
 Production collection, provider submission, scheduler mutation, deployment,
 or Product activation/publication is authorized by this correction.
+
+
+## 6k. Current bounded snapshot evidence is materialized separately from final quota evidence
+
+The successful current-plan bounded run is now represented in
+`sns-fandom-youtube-audit-evidence-refs-v1.json` as
+`currentBoundedMeasurementEvidence`.
+
+Recorded execution:
+- authorization comment: `5970501121`;
+- source main:
+  `f7a0965e5708ddf00ebacfe58ab8740e1d89084f`;
+- workflow run: `37132802429`;
+- artifact: `11277073687`;
+- artifact digest:
+  `sha256:3d7fdbed7f314c75bc49f992493a2adffc5f2442915a37a39992367a56e1c37c`;
+- durable result evidence:
+  `github-issue://kpopmaker/fandex/issues/424#issuecomment-5970531495`.
+
+The structured snapshot preserves:
+- `uploadManifestPageCountPerReactionRun = 115`;
+- `videoCountPerReactionRun = 0`;
+- `trueZeroVideoCountObserved = true`;
+- total provider calls / observed quota units = `120`;
+- exact per-artist page/video counts;
+- `measurementWindowComplete = false`.
+
+This materialization deliberately does not fill the final quota-owner fields.
+The checked-in owner input therefore remains:
+- `measuredAt = null`;
+- `uploadManifestPageCountPerReactionRun = null`;
+- `videoCountPerReactionRun = null`;
+- `measuredUsageEvidenceRef = null`.
+
+The snapshot explicitly records:
+- `quotaWorksheetEligible = false`;
+- `quotaWorksheetEligibilityReason = measurement-window-incomplete`;
+- `finalOwnerEvidencePromotionAllowed = false`.
+
+This keeps three meanings separate:
+1. the provider call really occurred and the snapshot is durable evidence;
+2. the observed zero is real data rather than Missing;
+3. an incomplete 366-day window is not silently promoted into completed
+   full-window quota evidence.
+
+No new provider call, recurring schedule, Production collection, provider
+submission, deployment, or Product activation/publication is authorized by
+materializing this evidence.
