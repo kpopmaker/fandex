@@ -23,6 +23,7 @@ STATUS_FILE = DATA_DIR / "lastfm_cloud_status_latest.json"
 
 HISTORY_FIELDS = [
     "snapshotDate",
+    "canonicalArtistId",
     "artist",
     "query",
     "lastfmName",
@@ -33,6 +34,7 @@ HISTORY_FIELDS = [
 ]
 
 DELTA_FIELDS = [
+    "canonicalArtistId",
     "artist",
     "previousDate",
     "latestDate",
@@ -46,6 +48,7 @@ DELTA_FIELDS = [
 
 SCORE_FIELDS = [
     "rank",
+    "canonicalArtistId",
     "artist",
     "previousDate",
     "latestDate",
@@ -102,16 +105,83 @@ def get_api_key():
 def read_seed():
     rows = read_csv(SEED_FILE)
     seeds = []
+    seen_canonical_ids = set()
+    seen_artists = set()
+
     for row in rows:
+        canonical_artist_id = (
+            row.get("canonicalArtistId") or ""
+        ).strip()
         artist = (row.get("artist") or "").strip()
         query = (row.get("query") or "").strip()
-        if artist and query:
-            seeds.append({"artist": artist, "query": query})
-    if len(seeds) != 10:
-        raise RuntimeError(f"Expected 10 Last.fm seed rows, got {len(seeds)}.")
-    if len({row["artist"] for row in seeds}) != 10:
-        raise RuntimeError("Duplicate artist detected in Last.fm seed.")
+
+        if not canonical_artist_id:
+            raise RuntimeError(
+                f"Last.fm seed missing canonicalArtistId: "
+                f"{artist or '<unknown>'}"
+            )
+        if canonical_artist_id in seen_canonical_ids:
+            raise RuntimeError(
+                f"Duplicate canonicalArtistId detected in Last.fm seed: "
+                f"{canonical_artist_id}"
+            )
+        if artist in seen_artists:
+            raise RuntimeError(
+                f"Duplicate artist detected in Last.fm seed: {artist}"
+            )
+        if not artist or not query:
+            raise RuntimeError(
+                f"Invalid Last.fm seed binding: {canonical_artist_id}"
+            )
+
+        seen_canonical_ids.add(canonical_artist_id)
+        seen_artists.add(artist)
+        seeds.append(
+            {
+                "canonicalArtistId": canonical_artist_id,
+                "artist": artist,
+                "query": query,
+            }
+        )
+
+    if not seeds:
+        raise RuntimeError("Last.fm seed is empty.")
+
     return seeds
+
+
+def hydrate_history_canonical_ids(history, seeds):
+    binding_by_artist = {
+        seed["artist"]: seed["canonicalArtistId"]
+        for seed in seeds
+    }
+
+    hydrated = []
+    for row in history:
+        artist = (row.get("artist") or "").strip()
+        if not artist:
+            continue
+
+        expected_id = binding_by_artist.get(artist)
+        if not expected_id:
+            raise RuntimeError(
+                f"Unbound Last.fm history artist: {artist}"
+            )
+
+        existing_id = (
+            row.get("canonicalArtistId") or ""
+        ).strip()
+        if existing_id and existing_id != expected_id:
+            raise RuntimeError(
+                f"Last.fm history canonicalArtistId mismatch: "
+                f"{artist} = {existing_id} != {expected_id}"
+            )
+
+        item = dict(row)
+        item["canonicalArtistId"] = expected_id
+        hydrated.append(item)
+
+    return hydrated
 
 
 def fetch_artist_info(seed, api_key):
@@ -149,6 +219,7 @@ def fetch_artist_info(seed, api_key):
         )
 
     return {
+        "canonicalArtistId": seed["canonicalArtistId"],
         "artist": seed["artist"],
         "query": seed["query"],
         "lastfmName": (artist_info.get("name") or "").strip(),
@@ -160,7 +231,21 @@ def fetch_artist_info(seed, api_key):
 def append_daily_snapshot(seeds, api_key):
     now = datetime.now(KST)
     snapshot_date = now.date().isoformat()
-    history = read_csv(HISTORY_FILE)
+    history = hydrate_history_canonical_ids(
+        read_csv(HISTORY_FILE),
+        seeds,
+    )
+
+    expected_count = len(seeds)
+    expected_artists = {
+        row["artist"]
+        for row in seeds
+    }
+    seed_by_artist = {
+        row["artist"]: row
+        for row in seeds
+    }
+    seeds_to_collect = list(seeds)
 
     today_rows = [
         row
@@ -168,29 +253,108 @@ def append_daily_snapshot(seeds, api_key):
         if (row.get("snapshotDate") or "").strip() == snapshot_date
     ]
     if today_rows:
-        today_artists = {(row.get("artist") or "").strip() for row in today_rows}
-        expected_artists = {row["artist"] for row in seeds}
-        if today_artists == expected_artists and len(today_rows) == len(seeds):
-            print(f"SKIP: {snapshot_date} snapshot already complete (10/10).")
+        today_artists = {
+            (row.get("artist") or "").strip()
+            for row in today_rows
+        }
+
+        if len(today_rows) != len(today_artists):
+            raise RuntimeError(
+                f"Duplicate artist rows already exist for {snapshot_date}."
+            )
+
+        unknown_today = (
+            today_artists
+            - expected_artists
+        )
+        if unknown_today:
+            raise RuntimeError(
+                "Today snapshot contains artists outside "
+                "the current reviewed seed: "
+                + ", ".join(sorted(unknown_today))
+            )
+
+        if today_artists == expected_artists:
+            print(
+                f"SKIP: {snapshot_date} snapshot already complete "
+                f"({expected_count}/{expected_count})."
+            )
+            write_csv(
+                HISTORY_FILE,
+                history,
+                HISTORY_FIELDS,
+            )
             return history, snapshot_date, False
-        raise RuntimeError(
-            f"Partial snapshot already exists for {snapshot_date}: "
-            f"{len(today_rows)}/10. Refusing to mix runs."
+
+        previous_dates = sorted({
+            (row.get("snapshotDate") or "").strip()
+            for row in history
+            if (
+                (row.get("snapshotDate") or "").strip()
+                and (row.get("snapshotDate") or "").strip()
+                < snapshot_date
+            )
+        })
+        if not previous_dates:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "no previous complete cohort exists to prove expansion."
+            )
+
+        previous_date = previous_dates[-1]
+        previous_artists = {
+            (row.get("artist") or "").strip()
+            for row in history
+            if (
+                (row.get("snapshotDate") or "").strip()
+                == previous_date
+            )
+        }
+
+        if today_artists != previous_artists:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "today cohort does not match the previous complete cohort."
+            )
+
+        if not today_artists < expected_artists:
+            raise RuntimeError(
+                f"Partial snapshot already exists for {snapshot_date}: "
+                "current seed is not a strict cohort expansion."
+            )
+
+        missing_artists = (
+            expected_artists
+            - today_artists
+        )
+        seeds_to_collect = [
+            seed_by_artist[artist]
+            for artist in sorted(
+                missing_artists
+            )
+        ]
+        print(
+            f"EXPAND: {snapshot_date} cohort "
+            f"{len(today_artists)} -> {expected_count}; "
+            f"collecting {len(seeds_to_collect)} newly bound artists."
         )
 
     collected = []
     errors = []
-    for index, seed in enumerate(seeds, start=1):
+    collect_count = len(seeds_to_collect)
+    for index, seed in enumerate(seeds_to_collect, start=1):
         try:
             item = fetch_artist_info(seed, api_key)
             collected.append(item)
             print(
-                f"[{index}/10] OK {item['artist']} | "
+                f"[{index}/{collect_count}] OK {item['artist']} | "
                 f"listeners={item['listeners']} | playcount={item['playcount']}"
             )
         except Exception as exc:
             errors.append(f"{seed['artist']}: {exc}")
-            print(f"[{index}/10] ERROR {seed['artist']} | {exc}")
+            print(
+                f"[{index}/{collect_count}] ERROR {seed['artist']} | {exc}"
+            )
 
     if errors:
         raise RuntimeError(
@@ -201,6 +365,7 @@ def append_daily_snapshot(seeds, api_key):
     new_rows = [
         {
             "snapshotDate": snapshot_date,
+            "canonicalArtistId": item["canonicalArtistId"],
             "artist": item["artist"],
             "query": item["query"],
             "lastfmName": item["lastfmName"],
@@ -217,7 +382,14 @@ def append_daily_snapshot(seeds, api_key):
         key=lambda row: ((row.get("snapshotDate") or ""), (row.get("artist") or ""))
     )
     write_csv(HISTORY_FILE, merged, HISTORY_FIELDS)
-    print(f"ADD: {snapshot_date} snapshot appended (10 rows).")
+    final_snapshot_count = (
+        len(today_rows)
+        + len(new_rows)
+    )
+    print(
+        f"ADD: {snapshot_date} snapshot complete "
+        f"({final_snapshot_count}/{expected_count} rows)."
+    )
     return merged, snapshot_date, True
 
 
@@ -231,6 +403,7 @@ def build_delta(history, seeds):
 
     delta_rows = []
     for seed in seeds:
+        canonical_artist_id = seed["canonicalArtistId"]
         artist = seed["artist"]
         rows = sorted(by_artist.get(artist, []), key=lambda row: row["snapshotDate"])
         distinct = {}
@@ -240,6 +413,7 @@ def build_delta(history, seeds):
         if len(dates) < 2:
             delta_rows.append(
                 {
+                    "canonicalArtistId": canonical_artist_id,
                     "artist": artist,
                     "previousDate": "",
                     "latestDate": dates[-1] if dates else "",
@@ -275,6 +449,7 @@ def build_delta(history, seeds):
 
         delta_rows.append(
             {
+                "canonicalArtistId": canonical_artist_id,
                 "artist": artist,
                 "previousDate": previous_date,
                 "latestDate": latest_date,
@@ -302,7 +477,7 @@ def log_minmax(values):
 
 def build_score(delta_rows):
     ready = [row for row in delta_rows if row["status"] == "delta_ready"]
-    if len(ready) != 10:
+    if len(ready) != len(delta_rows):
         write_csv(SCORE_FILE, [], SCORE_FIELDS)
         return []
 
@@ -319,6 +494,7 @@ def build_score(delta_rows):
         score_rows.append(
             {
                 "rank": 0,
+                "canonicalArtistId": row["canonicalArtistId"],
                 "artist": row["artist"],
                 "previousDate": row["previousDate"],
                 "latestDate": row["latestDate"],

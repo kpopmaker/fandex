@@ -34,7 +34,7 @@ def safe_float(value):
 def log_minmax(values):
     """
     양수 변화량을 log1p로 압축한 뒤
-    현재 10명 범위 안에서 0~100으로 정규화한다.
+    현재 cohort 범위 안에서 0~100으로 정규화한다.
     """
     logged = [
         math.log1p(max(0.0, value))
@@ -81,10 +81,52 @@ def main():
     ) as f:
         rows = list(csv.DictReader(f))
 
-    if len(rows) != 10:
-        raise SystemExit(
-            f"ERROR: delta rowCount={len(rows)} / expected=10"
+    if not rows:
+        raise SystemExit("ERROR: delta input is empty")
+
+    artist_to_canonical = {}
+    canonical_to_artist = {}
+
+    for row in rows:
+        artist = str(
+            row.get("artist") or ""
+        ).strip()
+        canonical_artist_id = str(
+            row.get("canonicalArtistId") or ""
+        ).strip()
+
+        if not canonical_artist_id:
+            raise SystemExit(
+                "ERROR: delta input missing canonicalArtistId: "
+                + artist
+            )
+
+        previous_id = artist_to_canonical.get(artist)
+        if (
+            previous_id
+            and previous_id != canonical_artist_id
+        ):
+            raise SystemExit(
+                "ERROR: delta artist identity mismatch: "
+                + artist
+            )
+
+        previous_artist = canonical_to_artist.get(
+            canonical_artist_id
         )
+        if (
+            previous_artist
+            and previous_artist != artist
+        ):
+            raise SystemExit(
+                "ERROR: delta canonical identity collision: "
+                + canonical_artist_id
+            )
+
+        artist_to_canonical[artist] = canonical_artist_id
+        canonical_to_artist[
+            canonical_artist_id
+        ] = artist
 
     bad_status = [
         row
@@ -157,6 +199,10 @@ def main():
         )
 
         results.append({
+            "canonicalArtistId": row.get(
+                "canonicalArtistId",
+                "",
+            ),
             "artist": row.get("artist", ""),
             "previousDate": row.get(
                 "previousDate",
@@ -212,6 +258,7 @@ def main():
 
     fieldnames = [
         "rank",
+        "canonicalArtistId",
         "artist",
         "previousDate",
         "latestDate",
@@ -280,9 +327,9 @@ def main():
         "공식",
         "-" * 84,
         "listenerDeltaPerDay -> log1p -> "
-        "10명 내 0~100 정규화 -> 50%",
+        "cohort 내 0~100 정규화 -> 50%",
         "playcountDeltaPerDay -> log1p -> "
-        "10명 내 0~100 정규화 -> 50%",
+        "cohort 내 0~100 정규화 -> 50%",
         "",
         "주의",
         "-" * 84,
