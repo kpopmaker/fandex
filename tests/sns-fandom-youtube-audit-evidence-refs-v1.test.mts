@@ -166,12 +166,12 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
     'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
   );
   assert.equal(resolved.providerClientVerifiedAt, '2026-10-03T03:10:00.000Z');
-  assert.equal(resolved.realMeasurementWindowRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
-  assert.equal(resolved.measurementWindowStart, '2026-10-03T04:06:51.000Z');
-  assert.equal(resolved.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(resolved.realMeasurementWindowRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
+  assert.equal(resolved.measurementWindowStart, '2026-10-03T15:00:00.000Z');
+  assert.equal(resolved.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(resolved.reactionSnapshotRunsPerDay, 24);
-  assert.equal(resolved.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
-  assert.equal(resolved.measurementPlanApprovedAt, '2026-10-03T04:06:51.000Z');
+  assert.equal(resolved.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
+  assert.equal(resolved.measurementPlanApprovedAt, '2026-10-03T15:00:00.000Z');
   assert.equal('realMeasurementWindowRef' in unresolved, false);
   assert.equal('cadenceEvidenceRef' in unresolved, false);
   assert.equal('providerClientIdentityRef' in unresolved, false);
@@ -184,6 +184,38 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
   assert.equal(raw.providerApprovalGranted, false);
   assert.equal(raw.productionCollectionAuthorized, false);
   assert.equal(raw.providerSubmissionAuthorized, false);
+});
+
+test('superseded Phase B plan and pre-window one-shot remain historical only', async () => {
+  const raw = await readJson(
+    'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
+  );
+  const superseded =
+    raw.supersededEvidence as Record<string, Record<string, unknown>>;
+  const priorPlan = superseded.priorMeasurementPlanV1;
+  const priorRun = superseded.priorPlanBoundedMeasurementRun;
+
+  assert.equal(priorPlan.state, 'superseded');
+  assert.equal(priorPlan.measurementWindowStart, '2026-10-03T04:06:51.000Z');
+  assert.equal(priorPlan.measurementWindowEnd, '2027-10-03T04:06:51.000Z');
+  assert.equal(priorPlan.reactionSnapshotRunsPerDay, 24);
+  assert.equal(priorPlan.evidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359');
+  assert.equal(priorPlan.supersededBy, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
+
+  assert.equal(priorRun.state, 'historical-only');
+  assert.equal(priorRun.workflowRunId, '37114464736');
+  assert.equal(priorRun.completedAt, '2026-10-03T09:52:21Z');
+  assert.equal(priorRun.artifactId, '11271008104');
+  assert.equal(
+    priorRun.artifactDigest,
+    'sha256:348d383c6a0f148fc4dd3592d7604844032007586927ab6beb620fe48ac58721',
+  );
+  assert.equal(priorRun.supersedingWindowStart, '2026-10-03T15:00:00.000Z');
+  assert.equal(priorRun.eligibility, 'not-eligible-for-new-canonical-plan');
+  assert.equal(
+    priorRun.reason,
+    'completed-before-superseding-measurement-window-start',
+  );
 });
 
 test('audit packet no longer records Production privacy/terms pages as 404', async () => {
@@ -224,6 +256,6 @@ test('evidence discovery preserves history while recording owner Cloud and appro
   assert.equal(discovery.githubApprovedCadenceEvidenceFound, true);
   assert.equal(
     discovery.ownerApprovedCadenceEvidenceRef,
-    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5965374359',
+    'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
 });
