@@ -100,10 +100,18 @@ function dispositionFor(
   sample: FandexHistoricalValidationSample,
   variableId: FandexVariableProductId,
 ): FandexNormalizationResearchDisposition {
-  if (sample.temporalIntegrity.status === 'issues-present') {
+  const variableTemporalIssues = sample.temporalIntegrity.issues.filter(
+    (issue) => issue.variableId === variableId,
+  );
+
+  if (
+    variableTemporalIssues.some(
+      (issue) => issue.severity === 'violation',
+    )
+  ) {
     return 'temporal-issue';
   }
-  if (sample.temporalIntegrity.status === 'indeterminate') {
+  if (variableTemporalIssues.length > 0) {
     return 'temporal-indeterminate';
   }
 
