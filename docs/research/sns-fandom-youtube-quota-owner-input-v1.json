@@ -8,7 +8,7 @@
     "cadenceEvidenceRef": "Non-secret evidence reference for the approved cadence.",
     "measuredAt": "Exact ISO-8601 timestamp when real quota usage measurements were completed.",
     "uploadManifestPageCountPerReactionRun": "Measured positive integer pages traversed across the selected audit cohort per reaction run.",
-    "videoCountPerReactionRun": "Measured positive integer included-video count across the selected audit cohort per reaction run.",
+    "videoCountPerReactionRun": "Measured non-negative integer included-video count across the selected audit cohort per reaction run. Observed zero is valid evidence and must not be rewritten to Missing or one.",
     "measuredUsageEvidenceRef": "Non-secret evidence reference for measured page/video counts.",
     "maxChannelIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
     "maxVideoIdsPerCall": "Evidence-backed positive integer ID-filter batch limit. Do not infer from maxResults.",
