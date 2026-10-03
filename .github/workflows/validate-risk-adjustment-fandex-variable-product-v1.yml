@@ -1,0 +1,33 @@
+name: Validate riskAdjustmentPoint common Product adapter v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/adapters/riskAdjustmentFandexVariableProduct.ts'
+      - 'lib/product/contracts/fandexVariableProduct.ts'
+      - 'lib/intelligence/riskAdjustmentCategoricalStates.ts'
+      - 'lib/intelligence/riskAdjustmentCurrentReadinessReport.ts'
+      - 'lib/intelligence/riskAdjustmentPointConstruct.ts'
+      - 'lib/intelligence/riskAdjustmentProductContractCandidate.ts'
+      - 'tests/risk-adjustment-fandex-variable-product-v1.test.mts'
+      - '.github/workflows/validate-risk-adjustment-fandex-variable-product-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/risk-adjustment-fandex-variable-product-v1.test.mts tests/risk-adjustment-product-contract-candidate-v1.test.mts tests/risk-adjustment-current-readiness-report-v1.test.mts tests/fandex-variable-product-contract-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
