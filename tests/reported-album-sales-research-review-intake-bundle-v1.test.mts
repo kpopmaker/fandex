@@ -42,7 +42,7 @@ function context() {
   );
   const researchInput = buildReportedAlbumSalesResearchInput(
     history,
-    '2026-10-03T23:39:21+09:00',
+    '2026-10-04T00:12:34+09:00',
   );
   const reviewerPacket =
     buildReportedAlbumSalesResearchReviewerPacket({
