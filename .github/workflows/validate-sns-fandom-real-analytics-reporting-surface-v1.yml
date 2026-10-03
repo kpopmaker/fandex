@@ -6,7 +6,15 @@ on:
       - 'work/sns-fandom-real-analytics-reporting-surface-v1'
     paths:
       - 'lib/product/presentation/snsFandomYoutubeAnalyticsReportingSurface.ts'
-      - 'lib/intelligence/snsFandomPointYoutubeAnalyticsReportingEvidence.ts'
+      - 'app/components/SnsFandomYoutubeAnalyticsReportingSurface.tsx'
+      - 'app/youtube-analytics-evidence/page.tsx'
+      - 'tests/sns-fandom-youtube-analytics-reporting-surface-v1.test.mts'
+      - 'tests/sns-fandom-youtube-real-analytics-reporting-surface-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - '.github/workflows/validate-sns-fandom-real-analytics-reporting-surface-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/product/presentation/snsFandomYoutubeAnalyticsReportingSurface.ts'
       - 'app/components/SnsFandomYoutubeAnalyticsReportingSurface.tsx'
       - 'app/youtube-analytics-evidence/page.tsx'
       - 'tests/sns-fandom-youtube-analytics-reporting-surface-v1.test.mts'
