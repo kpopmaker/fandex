@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T00:41:39+09:00",
+  "collectedAt": "2026-10-04T01:00:42+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4943,6 +4943,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T00:41:39+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Feel Special",
+        "releaseDate": "2019-09-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 154028,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-09-23",
+      "providerPeriodEnd": "2019-09-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T01:00:42+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1355815:twice-feel-special-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1355815wpp/twice-sets-k-pop-girl-group-record-for-first-week-album-sales-with-feel-special",
+          "sourcePublicationDate": "2019-09-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:00:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "sportsdonga:98119781:twice-feel-special-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Donga",
+          "sourceUrl": "https://sports.donga.com/ent/article/all/20191029/98119781/1",
+          "sourcePublicationDate": "2019-10-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:00:42+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
