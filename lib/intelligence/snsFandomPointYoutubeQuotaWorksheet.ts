@@ -12,6 +12,10 @@ export type SnsFandomYoutubeQuotaEndpoint =
   | 'youtube.commentThreads.list'
   | 'youtube.comments.list';
 
+export type SnsFandomYoutubeQuotaBatchingStrategy =
+  | 'singleton-only-until-provider-batch-limit-evidence'
+  | 'provider-limit-evidenced';
+
 export type SnsFandomYoutubeQuotaWorksheetInput = Readonly<{
   providerClientRef: string;
   measuredAt: string;
@@ -26,15 +30,21 @@ export type SnsFandomYoutubeQuotaWorksheetInput = Readonly<{
     reactionSnapshotRunsPerDay: number;
     commentPersistenceRunsPerDay: number;
   }>;
+  requestBatching: Readonly<{
+    strategy: SnsFandomYoutubeQuotaBatchingStrategy;
+    channelIdsPerCall: number;
+    videoIdsPerCall: number;
+  }>;
   providerLimits: Readonly<{
-    maxChannelIdsPerCall: number;
-    maxVideoIdsPerCall: number;
+    maxChannelIdsPerCall: number | null;
+    maxVideoIdsPerCall: number | null;
   }>;
   quotaUnitsPerCall: Readonly<Record<SnsFandomYoutubeQuotaEndpoint, number>>;
   evidence: Readonly<{
     measuredUsageEvidenceRef: string;
     cadenceEvidenceRef: string;
-    providerBatchLimitEvidenceRef: string;
+    requestBatchingEvidenceRef: string;
+    providerBatchLimitEvidenceRef: string | null;
     providerQuotaCostEvidenceRef: string;
   }>;
 }>;
@@ -56,6 +66,12 @@ export type SnsFandomYoutubeQuotaWorksheetResult = Readonly<{
   artistBindingManifestId: string | null;
   artistChannelCount: number | null;
   lineItems: readonly SnsFandomYoutubeQuotaLineItem[];
+  requestBatchingStrategy: SnsFandomYoutubeQuotaBatchingStrategy;
+  channelIdsPerCall: number;
+  videoIdsPerCall: number;
+  providerBatchLimitEvidenceRequired: boolean;
+  providerBatchLimitEvidenceValidated: boolean;
+  providerLimitClaimed: boolean;
   minimumProjectedQuotaUnitsPerDay: number | null;
   requestedQuotaUnitsPerDay: null;
   headroomFactorApplied: false;
@@ -256,11 +272,69 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     blockers.push('youtube-quota-comment-usage-outside-scope');
   }
 
-  if (!positiveSafeInteger(input.providerLimits.maxChannelIdsPerCall)) {
-    blockers.push('youtube-quota-channel-batch-limit-invalid');
+  const batching = input.requestBatching;
+  if (!positiveSafeInteger(batching.channelIdsPerCall)) {
+    blockers.push('youtube-quota-channel-request-batch-size-invalid');
   }
-  if (!positiveSafeInteger(input.providerLimits.maxVideoIdsPerCall)) {
-    blockers.push('youtube-quota-video-batch-limit-invalid');
+  if (!positiveSafeInteger(batching.videoIdsPerCall)) {
+    blockers.push('youtube-quota-video-request-batch-size-invalid');
+  }
+
+  const providerBatchLimitEvidenceRequired =
+    batching.strategy === 'provider-limit-evidenced';
+
+  if (
+    batching.strategy === 'singleton-only-until-provider-batch-limit-evidence'
+    && (
+      batching.channelIdsPerCall !== 1
+      || batching.videoIdsPerCall !== 1
+    )
+  ) {
+    blockers.push('youtube-quota-singleton-batching-size-mismatch');
+  }
+
+  const maxChannelIdsPerCall = input.providerLimits.maxChannelIdsPerCall;
+  const maxVideoIdsPerCall = input.providerLimits.maxVideoIdsPerCall;
+  if (
+    maxChannelIdsPerCall !== null
+    && !positiveSafeInteger(maxChannelIdsPerCall)
+  ) {
+    blockers.push('youtube-quota-channel-provider-limit-invalid');
+  }
+  if (
+    maxVideoIdsPerCall !== null
+    && !positiveSafeInteger(maxVideoIdsPerCall)
+  ) {
+    blockers.push('youtube-quota-video-provider-limit-invalid');
+  }
+
+  if (providerBatchLimitEvidenceRequired) {
+    if (
+      maxChannelIdsPerCall === null
+      || !positiveSafeInteger(maxChannelIdsPerCall)
+    ) {
+      blockers.push('youtube-quota-channel-provider-limit-required');
+    }
+    if (
+      maxVideoIdsPerCall === null
+      || !positiveSafeInteger(maxVideoIdsPerCall)
+    ) {
+      blockers.push('youtube-quota-video-provider-limit-required');
+    }
+    if (
+      maxChannelIdsPerCall !== null
+      && positiveSafeInteger(maxChannelIdsPerCall)
+      && batching.channelIdsPerCall > maxChannelIdsPerCall
+    ) {
+      blockers.push('youtube-quota-channel-request-batch-exceeds-provider-limit');
+    }
+    if (
+      maxVideoIdsPerCall !== null
+      && positiveSafeInteger(maxVideoIdsPerCall)
+      && batching.videoIdsPerCall > maxVideoIdsPerCall
+    ) {
+      blockers.push('youtube-quota-video-request-batch-exceeds-provider-limit');
+    }
   }
 
   for (const endpoint of requestedEndpoints) {
@@ -271,7 +345,12 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     }
   }
 
-  for (const ref of Object.values(input.evidence)) {
+  for (const ref of [
+    input.evidence.measuredUsageEvidenceRef,
+    input.evidence.cadenceEvidenceRef,
+    input.evidence.requestBatchingEvidenceRef,
+    input.evidence.providerQuotaCostEvidenceRef,
+  ]) {
     if (!present(ref)) {
       blockers.push('youtube-quota-evidence-ref-missing');
       break;
@@ -282,15 +361,40 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
     }
   }
 
+  const providerBatchLimitEvidenceRef =
+    input.evidence.providerBatchLimitEvidenceRef;
+  if (providerBatchLimitEvidenceRef !== null) {
+    if (!present(providerBatchLimitEvidenceRef)) {
+      blockers.push('youtube-quota-provider-batch-limit-evidence-ref-invalid');
+    } else if (secretLike(providerBatchLimitEvidenceRef)) {
+      blockers.push('youtube-quota-evidence-ref-secret-like');
+    }
+  }
+  if (
+    providerBatchLimitEvidenceRequired
+    && providerBatchLimitEvidenceRef === null
+  ) {
+    blockers.push('youtube-quota-provider-batch-limit-evidence-required');
+  }
+
+  const providerBatchLimitEvidenceValidated =
+    maxChannelIdsPerCall !== null
+    && positiveSafeInteger(maxChannelIdsPerCall)
+    && maxVideoIdsPerCall !== null
+    && positiveSafeInteger(maxVideoIdsPerCall)
+    && providerBatchLimitEvidenceRef !== null
+    && present(providerBatchLimitEvidenceRef)
+    && !secretLike(providerBatchLimitEvidenceRef);
+
   const lineItems: SnsFandomYoutubeQuotaLineItem[] = [];
 
   if (
     positiveSafeInteger(m.artistChannelCount)
     && positiveSafeInteger(m.reactionSnapshotRunsPerDay)
-    && positiveSafeInteger(input.providerLimits.maxChannelIdsPerCall)
+    && positiveSafeInteger(batching.channelIdsPerCall)
   ) {
     const callsPerRun = Math.ceil(
-      m.artistChannelCount / input.providerLimits.maxChannelIdsPerCall,
+      m.artistChannelCount / batching.channelIdsPerCall,
     );
     const callsPerDay = safeProduct(callsPerRun, m.reactionSnapshotRunsPerDay);
     if (callsPerDay === null) {
@@ -336,10 +440,10 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
   if (
     positiveSafeInteger(m.videoCountPerReactionRun)
     && positiveSafeInteger(m.reactionSnapshotRunsPerDay)
-    && positiveSafeInteger(input.providerLimits.maxVideoIdsPerCall)
+    && positiveSafeInteger(batching.videoIdsPerCall)
   ) {
     const callsPerRun = Math.ceil(
-      m.videoCountPerReactionRun / input.providerLimits.maxVideoIdsPerCall,
+      m.videoCountPerReactionRun / batching.videoIdsPerCall,
     );
     const callsPerDay = safeProduct(callsPerRun, m.reactionSnapshotRunsPerDay);
     if (callsPerDay === null) {
@@ -446,6 +550,13 @@ export function evaluateSnsFandomYoutubeQuotaWorksheet(
         ? artistBindingManifest.auditScopeMemberCount
         : null,
     lineItems: Object.freeze([...lineItems]),
+    requestBatchingStrategy: batching.strategy,
+    channelIdsPerCall: batching.channelIdsPerCall,
+    videoIdsPerCall: batching.videoIdsPerCall,
+    providerBatchLimitEvidenceRequired,
+    providerBatchLimitEvidenceValidated,
+    providerLimitClaimed:
+      batching.strategy === 'provider-limit-evidenced',
     minimumProjectedQuotaUnitsPerDay: ready ? total : null,
     requestedQuotaUnitsPerDay: null,
     headroomFactorApplied: false as const,
