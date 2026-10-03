@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T21:16:43+09:00",
+  "collectedAt": "2026-10-03T22:43:54+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4667,6 +4667,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T21:16:43+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Al1",
+        "releaseDate": "2017-05-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 192399,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-05-22",
+      "providerPeriodEnd": "2017-05-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T22:43:54+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:991059:seventeen-al1",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/991059wpp/seventeens-latest-album-al1-sells-190000-copies-week",
+          "sourcePublicationDate": "2017-05-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T22:43:54+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
