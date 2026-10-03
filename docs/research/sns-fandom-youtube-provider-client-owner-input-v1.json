@@ -1,6 +1,6 @@
 {
   "version": "sns_fandom_youtube_provider_client_owner_input_v1",
-  "state": "awaiting-owner-evidence",
+  "state": "provider-client-identity-ready",
   "instructions": {
     "providerClientRef": "Non-secret stable FANDEX reference for the exact Google Cloud project/client. Do not paste API keys.",
     "googleCloudProjectNumber": "Exact numeric Google Cloud project number.",
@@ -9,12 +9,12 @@
     "cloudProjectEvidenceRef": "Non-secret evidence reference that proves the project/client binding.",
     "verifiedAt": "Exact ISO-8601 verification timestamp."
   },
-  "providerClientRef": null,
-  "googleCloudProjectNumber": null,
-  "googleCloudProjectId": null,
-  "credentialLocatorRef": null,
-  "cloudProjectEvidenceRef": null,
-  "verifiedAt": null,
+  "providerClientRef": "gcp-project-fandex-509708",
+  "googleCloudProjectNumber": "385464276768",
+  "googleCloudProjectId": "fandex-509708",
+  "credentialLocatorRef": "github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY",
+  "cloudProjectEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03",
+  "verifiedAt": "2026-10-03T03:10:00.000Z",
   "secretMaterialStored": false,
   "providerApprovalGranted": false,
   "productionCollectionAuthorized": false,

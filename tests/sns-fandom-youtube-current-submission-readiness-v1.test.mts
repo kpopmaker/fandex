@@ -20,7 +20,7 @@ async function readJson(path: string) {
   ) as Record<string, unknown>;
 }
 
-test('current merged owner files evaluate to the exact fail-closed submission blockers', async () => {
+test('current owner files resolve Phase A while remaining submission blockers fail closed', async () => {
   const providerRaw = await readJson(
     'docs/research/sns-fandom-youtube-provider-client-owner-input-v1.json',
   );
@@ -65,15 +65,13 @@ test('current merged owner files evaluate to the exact fail-closed submission bl
     evaluateSnsFandomYoutubeProviderClientOwnerHandoff(providerInput);
   const quotaOwner = evaluateSnsFandomYoutubeQuotaOwnerHandoff(quotaInput);
 
-  assert.equal(providerOwner.state, 'awaiting-owner-evidence');
-  assert.equal(providerOwner.providerClientIdentity, null);
-  assert.deepEqual(providerOwner.missingOwnerFields, [
-    'cloudProjectEvidenceRef',
-    'credentialLocatorRef',
-    'googleCloudProjectNumber',
-    'providerClientRef',
-    'verifiedAt',
-  ]);
+  assert.equal(providerOwner.state, 'provider-client-identity-ready');
+  assert.equal(
+    providerOwner.providerClientIdentity?.state,
+    'provider-client-identity-ready',
+  );
+  assert.deepEqual(providerOwner.missingOwnerFields, []);
+  assert.deepEqual(providerOwner.blockers, []);
 
   assert.equal(quotaOwner.state, 'awaiting-owner-plan-evidence');
   assert.deepEqual(quotaOwner.missingPlanFields, [
@@ -130,7 +128,7 @@ test('current merged owner files evaluate to the exact fail-closed submission bl
       dashboardFeatureScreenshotRef:
         unresolved.dashboardFeatureScreenshotRef as string | null,
       cloudProjectRef:
-        unresolved.cloudProjectRef as string | null,
+        resolved.cloudProjectRef as string | null,
       quotaEstimateRef:
         unresolved.quotaEstimateRef as string | null,
       businessModelDescriptionRef:
@@ -144,9 +142,9 @@ test('current merged owner files evaluate to the exact fail-closed submission bl
   });
 
   assert.equal(readiness.state, 'submission-blocked');
-  assert.equal(readiness.providerClientIdentityValidated, false);
+  assert.equal(readiness.providerClientIdentityValidated, true);
   assert.equal(readiness.quotaEvidenceValidated, false);
-  assert.equal(readiness.googleCloudProjectNumber, null);
+  assert.equal(readiness.googleCloudProjectNumber, '385464276768');
   assert.equal(readiness.minimumProjectedQuotaUnitsPerDay, null);
   assert.equal(readiness.providerApprovalGranted, false);
   assert.equal(readiness.productionCollectionAuthorized, false);
@@ -155,17 +153,30 @@ test('current merged owner files evaluate to the exact fail-closed submission bl
     [...readiness.blockers].sort(),
     [
       'youtube-audit-applicant-identity-evidence-missing',
-      'youtube-audit-cloud-project-evidence-missing',
       'youtube-audit-dashboard-screenshot-missing',
       'youtube-audit-derived-metrics-amendment-not-accepted',
       'youtube-audit-organization-or-self-evidence-missing',
-      'youtube-audit-provider-client-identity-missing',
-      'youtube-audit-provider-client-ref-empty',
       'youtube-audit-quota-estimate-missing',
       'youtube-audit-quota-worksheet-missing',
     ].sort(),
   );
 
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-provider-client-ref-empty'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-provider-client-identity-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-cloud-project-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-cloud-project-evidence-mismatch'),
+    false,
+  );
   assert.equal(
     readiness.blockers.includes('youtube-audit-privacy-screenshot-missing'),
     false,

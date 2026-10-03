@@ -138,17 +138,15 @@ test('legal screenshots are resolved while synthetic dashboard evidence stays re
   );
 });
 
-test('external-owner evidence remains unresolved instead of fabricated', async () => {
+test('resolved provider-client evidence is recorded while remaining external-owner evidence stays fail-closed', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
+  const resolved = raw.resolvedEvidence as Record<string, unknown>;
   const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
   const keys = [
     'applicantIdentityRef',
     'organizationOrSelfRef',
-    'providerClientIdentityRef',
-    'googleCloudProjectNumber',
-    'cloudProjectRef',
     'realMeasurementWindowRef',
     'cadenceEvidenceRef',
     'uploadManifestPageCountPerReactionRun',
@@ -162,6 +160,17 @@ test('external-owner evidence remains unresolved instead of fabricated', async (
 
   for (const key of keys) assert.equal(unresolved[key], null);
 
+  assert.equal(resolved.providerClientIdentityRef, 'gcp-project-fandex-509708');
+  assert.equal(resolved.googleCloudProjectNumber, '385464276768');
+  assert.equal(resolved.googleCloudProjectId, 'fandex-509708');
+  assert.equal(
+    resolved.cloudProjectRef,
+    'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
+  );
+  assert.equal(resolved.providerClientVerifiedAt, '2026-10-03T03:10:00.000Z');
+  assert.equal('providerClientIdentityRef' in unresolved, false);
+  assert.equal('googleCloudProjectNumber' in unresolved, false);
+  assert.equal('cloudProjectRef' in unresolved, false);
   assert.equal('privacyPolicyScreenshotRef' in unresolved, false);
   assert.equal('homepageScreenshotRef' in unresolved, false);
 
@@ -191,7 +200,7 @@ test('audit packet no longer records Production privacy/terms pages as 404', asy
   );
 });
 
-test('evidence discovery keeps Cloud project and real cadence unresolved', async () => {
+test('evidence discovery preserves historical Drive result while recording owner Cloud evidence and unresolved cadence', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
@@ -200,6 +209,11 @@ test('evidence discovery keeps Cloud project and real cadence unresolved', async
   assert.equal(discovery.googleDriveSearchPerformed, true);
   assert.equal(discovery.googleDriveCloudProjectEvidenceFound, false);
   assert.equal(discovery.googleDriveMatchedFileCount, 0);
+  assert.equal(discovery.ownerProvidedCloudProjectEvidenceFound, true);
+  assert.equal(
+    discovery.ownerProvidedCloudProjectEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
+  );
   assert.equal(discovery.githubApprovedCadenceSearchPerformed, true);
   assert.equal(discovery.githubApprovedCadenceEvidenceFound, false);
 });

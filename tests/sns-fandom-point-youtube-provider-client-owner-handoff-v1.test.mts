@@ -105,7 +105,7 @@ test('invalid project metadata stays blocked by the canonical identity contract'
   );
 });
 
-test('owner-input template remains intentionally unresolved and secret-free', async () => {
+test('owner-input template records verified owner evidence and remains secret-free', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -114,18 +114,39 @@ test('owner-input template remains intentionally unresolved and secret-free', as
       ),
       'utf8',
     ),
-  ) as Record<string, unknown>;
+  ) as SnsFandomYoutubeProviderClientOwnerHandoffInput & Record<string, unknown>;
 
-  assert.equal(raw.state, 'awaiting-owner-evidence');
-  assert.equal(raw.providerClientRef, null);
-  assert.equal(raw.googleCloudProjectNumber, null);
-  assert.equal(raw.googleCloudProjectId, null);
-  assert.equal(raw.credentialLocatorRef, null);
-  assert.equal(raw.cloudProjectEvidenceRef, null);
-  assert.equal(raw.verifiedAt, null);
-  assert.equal(raw.providerApprovalGranted, false);
-  assert.equal(raw.productionCollectionAuthorized, false);
-  assert.equal(raw.providerSubmissionAuthorized, false);
+  assert.equal(raw.state, 'provider-client-identity-ready');
+  assert.equal(raw.providerClientRef, 'gcp-project-fandex-509708');
+  assert.equal(raw.googleCloudProjectNumber, '385464276768');
+  assert.equal(raw.googleCloudProjectId, 'fandex-509708');
+  assert.equal(
+    raw.credentialLocatorRef,
+    'github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY',
+  );
+  assert.equal(
+    raw.cloudProjectEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03',
+  );
+  assert.equal(raw.verifiedAt, '2026-10-03T03:10:00.000Z');
+
+  const result = evaluateSnsFandomYoutubeProviderClientOwnerHandoff(raw);
+
+  assert.equal(result.state, 'provider-client-identity-ready');
+  assert.deepEqual(result.missingOwnerFields, []);
+  assert.deepEqual(result.blockers, []);
+  assert.equal(
+    result.providerClientIdentity?.googleCloudProjectNumber,
+    '385464276768',
+  );
+  assert.equal(
+    result.providerClientIdentity?.googleCloudProjectId,
+    'fandex-509708',
+  );
+  assert.equal(result.secretMaterialStored, false);
+  assert.equal(result.providerApprovalGranted, false);
+  assert.equal(result.productionCollectionAuthorized, false);
+  assert.equal(result.providerSubmissionAuthorized, false);
   assert.equal(
     /AIza|access_token|refresh_token|client_secret|api_key=/i.test(
       JSON.stringify(raw),
