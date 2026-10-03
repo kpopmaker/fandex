@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 105);
+  assert.equal(input.drafts.length, 106);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 103);
+  assert.equal(deduped.length, 104);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 101);
+  assert.equal(hanteo.length, 102);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 101);
+  assert.equal(hanteoFirstWeek.length, 102);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    101,
+    102,
   );
 
   for (const [artistId, title, value] of [
@@ -460,6 +460,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['seventeen', 'Al1', 192_399, '2017-05-22', '2017-05-28', 'provider-attributed-secondary'],
     ['seventeen', 'YOU MAKE MY DAY', 274_218, '2018-07-16', '2018-07-22', 'provider-attributed-secondary'],
     ['seventeen', 'Love & Letter', 80_285, '2016-04-25', '2016-05-01', 'provider-attributed-secondary'],
+    ['seventeen', 'Going Seventeen', 131_998, '2016-12-05', '2016-12-11', 'corroborated-secondary'],
   ] as const) {
     const item = hanteoFirstWeek.find(
       observation =>
@@ -504,7 +505,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 39,
     'tier-c-discovery-only': 10,
-    'tier-b-provider-attributed-reputable': 71,
+    'tier-b-provider-attributed-reputable': 73,
   });
 
   const iuLilac = deduped.find(

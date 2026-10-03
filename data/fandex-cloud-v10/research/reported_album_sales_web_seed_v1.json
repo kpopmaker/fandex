@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T23:23:28+09:00",
+  "collectedAt": "2026-10-03T23:39:21+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4799,6 +4799,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T23:23:28+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Going Seventeen",
+        "releaseDate": "2016-12-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 131998,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2016-12-05",
+      "providerPeriodEnd": "2016-12-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T23:39:21+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:925417:seventeen-going-seventeen-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/925417wpp/seventeens-new-album-boombooming-popularity",
+          "sourcePublicationDate": "2016-12-15",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:39:21+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "imbc:206482:seventeen-going-seventeen-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "iMBC Entertainment",
+          "sourceUrl": "https://enews.imbc.com/News/RetrieveNewsInfo/206482",
+          "sourcePublicationDate": "2017-05-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:39:21+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
