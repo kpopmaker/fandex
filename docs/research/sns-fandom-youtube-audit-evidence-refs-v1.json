@@ -51,14 +51,16 @@
           "sha256": "d7b7059e805a9f1b34ac68be43a2eafecdcfef1a83a5b3565c6ffef95f1523b1"
         }
       }
-    }
+    },
+    "providerClientIdentityRef": "gcp-project-fandex-509708",
+    "googleCloudProjectNumber": "385464276768",
+    "googleCloudProjectId": "fandex-509708",
+    "cloudProjectRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03",
+    "providerClientVerifiedAt": "2026-10-03T03:10:00.000Z"
   },
   "unresolvedEvidence": {
     "applicantIdentityRef": null,
     "organizationOrSelfRef": null,
-    "providerClientIdentityRef": null,
-    "googleCloudProjectNumber": null,
-    "cloudProjectRef": null,
     "realMeasurementWindowRef": null,
     "cadenceEvidenceRef": null,
     "uploadManifestPageCountPerReactionRun": null,
@@ -94,8 +96,10 @@
     "googleDriveCloudProjectEvidenceFound": false,
     "githubApprovedCadenceSearchPerformed": true,
     "githubApprovedCadenceEvidenceFound": false,
-    "note": "The recorded Google Drive searches returned no matching files, so no non-secret Google Cloud project-number binding was found. GitHub issue/PR history likewise did not establish an owner-approved real reaction cadence. Test fixtures remain invalid as Production evidence.",
-    "googleDriveMatchedFileCount": 0
+    "note": "Earlier connected-Drive searches returned no matching Cloud-project evidence and remain accurate historical discovery results. On 2026-10-03, the owner separately supplied and verified the exact snsFandom Google Cloud project/client binding in issue #424. Real cadence/window evidence remains unresolved; test fixtures remain invalid as Production evidence.",
+    "googleDriveMatchedFileCount": 0,
+    "ownerProvidedCloudProjectEvidenceFound": true,
+    "ownerProvidedCloudProjectEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#provider-client-owner-evidence-2026-10-03"
   },
   "rejectedEvidence": {
     "dashboardFeatureScreenshotCandidate": {
