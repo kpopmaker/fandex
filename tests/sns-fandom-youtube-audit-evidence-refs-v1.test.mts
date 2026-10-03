@@ -171,7 +171,7 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
   assert.equal(resolved.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(resolved.reactionSnapshotRunsPerDay, 24);
   assert.equal(resolved.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
-  assert.equal(resolved.measurementPlanApprovedAt, '2026-10-03T15:00:00.000Z');
+  assert.equal(resolved.measurementPlanApprovedAt, '2026-10-03T09:53:43.000Z');
   assert.equal('realMeasurementWindowRef' in unresolved, false);
   assert.equal('cadenceEvidenceRef' in unresolved, false);
   assert.equal('providerClientIdentityRef' in unresolved, false);
