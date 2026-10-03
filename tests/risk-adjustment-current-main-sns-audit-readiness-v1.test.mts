@@ -10,6 +10,7 @@ type SnsFandomAuditEvidence = Readonly<{
   version: string;
   resolvedEvidence: Readonly<Record<string, unknown>>;
   unresolvedEvidence: Readonly<Record<string, unknown>>;
+  optionalOptimizationEvidence: Readonly<Record<string, unknown>>;
   fixtureValuesAreProductionEvidence: boolean;
   providerApprovalGranted: boolean;
   productionCollectionAuthorized: boolean;
@@ -34,7 +35,7 @@ test('current-main snsFandom audit evidence remains fail-closed on provider gate
   assert.equal(evidence.productionCollectionAuthorized, false);
 });
 
-test('current-main snsFandom provider identity and Phase B plan are resolved while Phase C quota evidence remains unresolved', () => {
+test('current-main snsFandom identity, superseding Phase B plan, and singleton batching are resolved while measured Phase C usage remains unresolved', () => {
   assert.equal(
     evidence.resolvedEvidence.providerClientIdentityRef,
     'gcp-project-fandex-509708',
@@ -68,14 +69,18 @@ test('current-main snsFandom provider identity and Phase B plan are resolved whi
     evidence.resolvedEvidence.cadenceEvidenceRef,
     'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
   );
+  assert.equal(
+    evidence.resolvedEvidence.requestBatchingStrategy,
+    'singleton-only-until-provider-batch-limit-evidence',
+  );
+  assert.equal(evidence.resolvedEvidence.channelIdsPerCall, 1);
+  assert.equal(evidence.resolvedEvidence.videoIdsPerCall, 1);
+  assert.equal(evidence.resolvedEvidence.providerBatchLimitClaimed, false);
 
   for (const key of [
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
-    'maxVideoIdsPerCall',
-    'providerBatchLimitEvidenceRef',
-    'maxChannelIdsPerCall',
   ]) {
     assert.equal(
       evidence.unresolvedEvidence[key],
@@ -83,6 +88,22 @@ test('current-main snsFandom provider identity and Phase B plan are resolved whi
       key + ' unexpectedly resolved; Risk eligibility must be reviewed',
     );
   }
+
+  for (const key of [
+    'maxChannelIdsPerCall',
+    'maxVideoIdsPerCall',
+    'providerBatchLimitEvidenceRef',
+  ]) {
+    assert.equal(
+      evidence.optionalOptimizationEvidence[key],
+      null,
+      key + ' unexpectedly resolved; provider optimization evidence must remain explicit',
+    );
+  }
+  assert.equal(
+    evidence.optionalOptimizationEvidence.requiredForCurrentSingletonQuotaWorksheet,
+    false,
+  );
 });
 
 test('snsFandom stays excluded while provider approval or Production collection is false', () => {
