@@ -934,3 +934,43 @@ The bounded measurement path does not:
 The provider API key remains referenced only through the existing GitHub
 Actions secret locator
 `github-actions-secret://FANDEX_SNS_FANDOM_YOUTUBE_API_KEY`.
+
+
+## 6h. First bounded execution failure and provider datetime correction
+
+The first authorized Phase C bounded measurement execution was consumed by:
+
+- workflow run `37101204245`;
+- exact-main authorization comment `5966107066`;
+- one-shot execution request commit
+  `0867357a6348214c0cc5efbe09367a49be0c72c4`.
+
+The authorization gate succeeded and provider execution began. The run reached:
+
+- one `youtube.channels.list` request/response;
+- one `youtube.playlistItems.list` request/response;
+- zero `youtube.videos.list` requests.
+
+It then failed with:
+
+`sns_fandom_bounded_measurement_video_published_at_invalid`
+
+The failure was caused by treating provider `videoPublishedAt` as if its
+string representation had to equal JavaScript's exact millisecond
+`toISOString()` form. That is stricter than the provider datetime contract.
+
+The corrective boundary is:
+
+- keep FANDEX owner-plan timestamps under the existing exact canonical
+  timestamp validation;
+- validate provider-returned video datetimes by parseability instead of exact
+  string canonicalization;
+- expose a request-attempt callback from the bounded executor;
+- make failure receipts record the actual attempted provider-call counts;
+- preserve the original run receipt as historical evidence but reject its
+  `providerCallMayHaveOccurred = false` field as non-canonical for that run.
+
+The previous maximum-executions=1 authorization is consumed. This correction
+does not authorize or trigger a second provider execution. Any later retry
+requires a new explicit bounded-execution authorization after the fix is
+merged and revalidated.

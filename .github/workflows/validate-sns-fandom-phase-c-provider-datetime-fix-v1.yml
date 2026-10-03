@@ -1,0 +1,44 @@
+name: Validate snsFandom Phase C provider datetime fix v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-phase-c-provider-datetime-fix-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeBoundedMeasurement.ts'
+      - 'scripts/operations/snsFandomYoutubeBoundedMeasurementV1.mts'
+      - 'tests/sns-fandom-point-youtube-bounded-measurement-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-phase-c-provider-datetime-fix-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeBoundedMeasurement.ts'
+      - 'scripts/operations/snsFandomYoutubeBoundedMeasurementV1.mts'
+      - 'tests/sns-fandom-point-youtube-bounded-measurement-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-phase-c-provider-datetime-fix-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Phase C provider datetime regression
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-point-youtube-bounded-measurement-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-measurement-handoff-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

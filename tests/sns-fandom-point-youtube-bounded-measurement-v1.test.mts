@@ -89,7 +89,7 @@ test('bounded measurement uses the exact five-member cohort and singleton video 
           items: [{
             contentDetails: {
               videoId: 'video-' + request.params.playlistId,
-              videoPublishedAt: '2026-10-03T04:30:00.000Z',
+              videoPublishedAt: '2026-10-03T04:30:00Z',
             },
           }],
         };
@@ -195,4 +195,110 @@ test('an observed zero included-video count stays zero rather than becoming miss
     requests.filter((request) => request.method === 'videos.list').length,
     0,
   );
+});
+
+
+test('provider RFC3339 offset datetime is accepted without canonical string equality', async () => {
+  const result = await executeSnsFandomYoutubeBoundedMeasurement({
+    handoff: await handoff(),
+    measurementStartedAt: '2026-10-03T05:00:00.000Z',
+    requestJson: async (request) => {
+      if (request.method === 'channels.list') {
+        return {
+          items: [{
+            id: request.params.id,
+            contentDetails: {
+              relatedPlaylists: {
+                uploads: 'uploads-' + request.params.id,
+              },
+            },
+          }],
+        };
+      }
+      if (request.method === 'playlistItems.list') {
+        return {
+          items: [{
+            contentDetails: {
+              videoId: 'video-' + request.params.playlistId,
+              videoPublishedAt: '2026-10-03T13:30:00+09:00',
+            },
+          }],
+        };
+      }
+      return {
+        items: [{
+          id: request.params.id,
+          statistics: {
+            viewCount: '1',
+          },
+        }],
+      };
+    },
+  });
+
+  assert.equal(result.videoCountPerReactionRun, 5);
+  assert.equal(result.providerCallsObserved.videosList, 5);
+});
+
+test('request-attempt callback records provider calls before a parser failure', async () => {
+  const attempts: SnsFandomYoutubeApiRequest[] = [];
+
+  await assert.rejects(
+    executeSnsFandomYoutubeBoundedMeasurement({
+      handoff: await handoff(),
+      measurementStartedAt: '2026-10-03T05:00:00.000Z',
+      onRequestAttempt: (request) => attempts.push(request),
+      requestJson: async (request) => {
+        if (request.method === 'channels.list') {
+          return {
+            items: [{
+              id: request.params.id,
+              contentDetails: {
+                relatedPlaylists: {
+                  uploads: 'uploads-' + request.params.id,
+                },
+              },
+            }],
+          };
+        }
+        if (request.method === 'playlistItems.list') {
+          return {
+            items: [{
+              contentDetails: {
+                videoId: 'video-' + request.params.playlistId,
+                videoPublishedAt: 'not-a-provider-datetime',
+              },
+            }],
+          };
+        }
+        throw new Error('videos.list must not be reached after parser failure');
+      },
+    }),
+    /sns_fandom_bounded_measurement_video_published_at_invalid/,
+  );
+
+  assert.deepEqual(
+    attempts.map((request) => request.method),
+    ['channels.list', 'playlistItems.list'],
+  );
+});
+
+test('operation failure receipt is wired to attempted-provider-call counters', async () => {
+  const source = await readFile(
+    new URL(
+      '../scripts/operations/snsFandomYoutubeBoundedMeasurementV1.mts',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(
+    source,
+    /providerCallMayHaveOccurred: providerCallsAttempted\.total > 0/,
+  );
+  assert.match(
+    source,
+    /providerCallsAttempted: \{ \.\.\.providerCallsAttempted \}/,
+  );
+  assert.match(source, /onRequestAttempt:/);
 });

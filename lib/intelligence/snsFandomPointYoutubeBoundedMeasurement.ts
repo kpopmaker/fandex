@@ -23,6 +23,7 @@ export type SnsFandomYoutubeBoundedMeasurementInput = Readonly<{
   handoff: SnsFandomYoutubeQuotaMeasurementHandoffResult;
   measurementStartedAt: string;
   requestJson: SnsFandomYoutubeApiRequester;
+  onRequestAttempt?: (request: SnsFandomYoutubeApiRequest) => void;
 }>;
 
 export type SnsFandomYoutubeBoundedMeasurementArtistReceipt = Readonly<{
@@ -77,6 +78,10 @@ export type SnsFandomYoutubeBoundedMeasurementResult = Readonly<{
 function validIso(value: string): boolean {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+}
+
+function validProviderDateTime(value: string): boolean {
+  return Number.isFinite(Date.parse(value));
 }
 
 function object(value: unknown, reason: string): Record<string, unknown> {
@@ -155,6 +160,10 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
     handoff.measurementWindowEnd,
   );
   const artists: SnsFandomYoutubeBoundedMeasurementArtistReceipt[] = [];
+  const requestJson: SnsFandomYoutubeApiRequester = async (request) => {
+    input.onRequestAttempt?.(request);
+    return input.requestJson(request);
+  };
 
   for (const task of handoff.tasks) {
     if (
@@ -165,7 +174,7 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
     }
 
     const channelsRaw = object(
-      await input.requestJson({
+      await requestJson({
         method: 'channels.list',
         params: Object.freeze({
           part: 'contentDetails',
@@ -227,7 +236,7 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
       if (pageToken !== null) params.pageToken = pageToken;
 
       const playlistRaw = object(
-        await input.requestJson({
+        await requestJson({
           method: 'playlistItems.list',
           params: Object.freeze(params),
         }),
@@ -256,7 +265,7 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
           itemContent.videoPublishedAt,
           'sns_fandom_bounded_measurement_video_published_at_missing',
         );
-        if (!validIso(publishedAt)) {
+        if (!validProviderDateTime(publishedAt)) {
           throw new Error(
             'sns_fandom_bounded_measurement_video_published_at_invalid',
           );
@@ -279,7 +288,7 @@ export async function executeSnsFandomYoutubeBoundedMeasurement(
     let videosListCalls = 0;
     for (const videoId of includedVideoIds) {
       const videosRaw = object(
-        await input.requestJson({
+        await requestJson({
           method: 'videos.list',
           params: Object.freeze({
             part: 'statistics',
