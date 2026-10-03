@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T18:29:10+09:00",
+  "collectedAt": "2026-10-03T18:55:40+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4259,6 +4259,150 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T18:29:10+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ELEVEN",
+        "releaseDate": "2021-12-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 152229,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-12-01",
+      "providerPeriodEnd": "2021-12-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T18:55:40+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1502829:ive-eleven",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1502829wpp/ive-achieves-2nd-highest-1st-week-sales-of-any-girl-group-debut-album-in-hanteo-history",
+          "sourcePublicationDate": "2021-12-08",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T18:55:40+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LOVE DIVE",
+        "releaseDate": "2022-04-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 338141,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-04-05",
+      "providerPeriodEnd": "2022-04-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T18:55:40+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1521697:ive-love-dive",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1521697wpp/ive-achieves-4th-highest-1st-week-sales-of-any-girl-group-in-hanteo-history",
+          "sourcePublicationDate": "2022-04-12",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T18:55:40+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artistName": "IVE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IVE EMPATHY",
+        "releaseDate": "2025-02-03",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1048048,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-02-03",
+      "providerPeriodEnd": "2025-02-09",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T18:55:40+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:75643:ive-empathy",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/75643",
+          "sourcePublicationDate": "2025-02-10",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T18:55:40+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "sbs:20250211:ive-empathy",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "SBS World News",
+          "sourceUrl": "https://news.sbs.co.kr/english/article.do?news_id=N1007979434",
+          "sourcePublicationDate": "2025-02-11",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T18:55:40+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }

@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 93);
+  assert.equal(input.drafts.length, 96);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 91);
+  assert.equal(deduped.length, 94);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 89);
+  assert.equal(hanteo.length, 92);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 89);
+  assert.equal(hanteoFirstWeek.length, 92);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    89,
+    92,
   );
 
   for (const [artistId, title, value] of [
@@ -448,6 +448,24 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     assert.equal(item.researchUsable, true);
   }
 
+  for (const [artistId, releaseTitle, value, periodStart, periodEnd, quality] of [
+    ['ive', 'ELEVEN', 152_229, '2021-12-01', '2021-12-07', 'provider-attributed-secondary'],
+    ['ive', 'LOVE DIVE', 338_141, '2022-04-05', '2022-04-11', 'provider-attributed-secondary'],
+    ['ive', 'IVE EMPATHY', 1_048_048, '2025-02-03', '2025-02-09', 'primary-official'],
+  ] as const) {
+    const item = hanteoFirstWeek.find(
+      observation =>
+        observation.canonicalArtistId === artistId
+        && observation.release.releaseTitle === releaseTitle,
+    );
+    assert.ok(item);
+    assert.equal(item.value, value);
+    assert.equal(item.providerPeriodStart, periodStart);
+    assert.equal(item.providerPeriodEnd, periodEnd);
+    assert.equal(item.evidenceQuality, quality);
+    assert.equal(item.researchUsable, true);
+  }
+
   const circleSemantics = new Set(
     circle.map(item => item.metricSemantic),
   );
@@ -476,9 +494,9 @@ test('source tiers remain separate from evidence quality', () => {
   );
 
   assert.deepEqual(tierCounts, {
-    'tier-a-primary-official': 38,
+    'tier-a-primary-official': 39,
     'tier-c-discovery-only': 10,
-    'tier-b-provider-attributed-reputable': 59,
+    'tier-b-provider-attributed-reputable': 62,
   });
 
   const iuLilac = deduped.find(

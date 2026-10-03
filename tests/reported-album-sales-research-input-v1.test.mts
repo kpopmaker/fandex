@@ -33,7 +33,7 @@ function seedHistory() {
 test('actual public seed yields a score-free same-semantic Hanteo first-week research input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:29:10+09:00',
+    '2026-10-03T18:55:40+09:00',
   );
 
   assert.equal(input.state, 'reviewable');
@@ -44,7 +44,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
   );
   assert.equal(input.target.unit, 'physical-copies');
 
-  assert.equal(input.releaseCount, 89);
+  assert.equal(input.releaseCount, 92);
   assert.equal(input.artistCount, 21);
   assert.deepEqual(
     new Set(input.includedArtistIds),
@@ -142,6 +142,9 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'WHY..',
       'minisode 3: TOMORROW',
       'SPAGHETTI',
+      'ELEVEN',
+      'LOVE DIVE',
+      'IVE EMPATHY',
     ]),
   );
 
@@ -376,6 +379,20 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
     ),
   );
 
+  for (const [artistId, releaseTitle] of [
+    ['ive', 'ELEVEN'],
+    ['ive', 'LOVE DIVE'],
+    ['ive', 'IVE EMPATHY'],
+  ] as const) {
+    assert.ok(
+      input.entries.some(
+        entry =>
+          entry.canonicalArtistId === artistId
+          && entry.releaseTitle === releaseTitle,
+      ),
+    );
+  }
+
   assert.ok(
     input.entries.every(
       entry =>
@@ -408,7 +425,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 test('upgraded IVE SWITCH evidence enters the research input while provider-mismatched Circle rows remain excluded', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:29:10+09:00',
+    '2026-10-03T18:55:40+09:00',
   );
 
   assert.ok(
@@ -488,7 +505,7 @@ test('upgraded IVE SWITCH evidence enters the research input while provider-mism
 test('Circle distribution and retail observations never enter the Hanteo first-week input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:29:10+09:00',
+    '2026-10-03T18:55:40+09:00',
   );
 
   assert.ok(
