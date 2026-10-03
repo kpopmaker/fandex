@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T22:43:54+09:00",
+  "collectedAt": "2026-10-03T23:14:11+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4711,6 +4711,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T22:43:54+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "YOU MAKE MY DAY",
+        "releaseDate": "2018-07-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 274218,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2018-07-16",
+      "providerPeriodEnd": "2018-07-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T23:14:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sportschosun:20180723:seventeen-you-make-my-day",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Chosun",
+          "sourceUrl": "https://www.sportschosun.com/entertainment/2018-07-23/201807230100210690016089",
+          "sourcePublicationDate": "2018-07-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:14:11+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
