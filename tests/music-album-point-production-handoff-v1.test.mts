@@ -47,7 +47,7 @@ function requests() {
   );
   const researchInput = buildReportedAlbumSalesResearchInput(
     history,
-    '2026-10-03T20:50:56+09:00',
+    '2026-10-03T21:07:31+09:00',
   );
   const reviewerPacket =
     buildReportedAlbumSalesResearchReviewerPacket({
@@ -86,7 +86,7 @@ test('current exact research and rights requests become one eight-lane Productio
     hanteo,
   } = requests();
 
-  assert.equal(researchInput.releaseCount, 96);
+  assert.equal(researchInput.releaseCount, 97);
   assert.equal(researchInput.artistCount, 21);
 
   const handoff =

@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T20:50:56+09:00",
+  "collectedAt": "2026-10-03T21:07:31+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4579,6 +4579,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T20:50:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Your Choice",
+        "releaseDate": "2021-06-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1364127,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-06-18",
+      "providerPeriodEnd": "2021-06-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T21:07:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20210629:seventeen-your-choice",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/6/29/seventeen-lands-on-billboard-200-for-first-time-since-debut-resumes-activities",
+          "sourcePublicationDate": "2021-06-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T21:07:31+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
