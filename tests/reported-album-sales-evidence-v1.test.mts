@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 96);
+  assert.equal(input.drafts.length, 110);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 94);
+  assert.equal(deduped.length, 108);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 92);
+  assert.equal(hanteo.length, 106);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 92);
+  assert.equal(hanteoFirstWeek.length, 106);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    92,
+    106,
   );
 
   for (const [artistId, title, value] of [
@@ -452,6 +452,19 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['ive', 'ELEVEN', 152_229, '2021-12-01', '2021-12-07', 'provider-attributed-secondary'],
     ['ive', 'LOVE DIVE', 338_141, '2022-04-05', '2022-04-11', 'provider-attributed-secondary'],
     ['ive', 'IVE EMPATHY', 1_048_048, '2025-02-03', '2025-02-09', 'primary-official'],
+    ['seventeen', 'An Ode', 700_863, '2019-09-16', '2019-09-22', 'provider-attributed-secondary'],
+    ['seventeen', 'Heng:garæ', 1_097_891, '2020-06-22', '2020-06-28', 'provider-attributed-secondary'],
+    ['seventeen', '; [Semicolon]', 932_054, '2020-10-19', '2020-10-25', 'provider-attributed-secondary'],
+    ['seventeen', 'Your Choice', 1_364_127, '2021-06-18', '2021-06-24', 'provider-attributed-secondary'],
+    ['seventeen', 'TEEN, AGE', 215_669, '2017-11-06', '2017-11-12', 'provider-attributed-secondary'],
+    ['seventeen', 'Al1', 192_399, '2017-05-22', '2017-05-28', 'provider-attributed-secondary'],
+    ['seventeen', 'YOU MAKE MY DAY', 274_218, '2018-07-16', '2018-07-22', 'provider-attributed-secondary'],
+    ['seventeen', 'Love & Letter', 80_285, '2016-04-25', '2016-05-01', 'provider-attributed-secondary'],
+    ['seventeen', 'Going Seventeen', 131_998, '2016-12-05', '2016-12-11', 'corroborated-secondary'],
+    ['seventeen', 'YOU MADE MY DAWN', 338_153, '2019-01-21', '2019-01-27', 'provider-attributed-secondary'],
+    ['seventeen', 'SECTOR 17', 1_126_104, '2022-07-18', '2022-07-24', 'provider-attributed-secondary'],
+    ['twice', 'Feel Special', 154_028, '2019-09-23', '2019-09-29', 'corroborated-secondary'],
+    ['twice', 'MORE & MORE', 332_416, '2020-06-01', '2020-06-07', 'provider-attributed-secondary'],
   ] as const) {
     const item = hanteoFirstWeek.find(
       observation =>
@@ -496,7 +509,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 39,
     'tier-c-discovery-only': 10,
-    'tier-b-provider-attributed-reputable': 62,
+    'tier-b-provider-attributed-reputable': 78,
   });
 
   const iuLilac = deduped.find(
