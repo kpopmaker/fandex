@@ -401,3 +401,31 @@ test('provider-limit batching still requires exact provider limit evidence', () 
     ),
   );
 });
+
+
+test('observed zero videos stay in scope with zero calls instead of becoming missing', () => {
+  const base = input();
+  const result = evaluateSnsFandomYoutubeQuotaWorksheet({
+    ...base,
+    measuredUsage: {
+      ...base.measuredUsage,
+      videoCountPerReactionRun: 0,
+    },
+  });
+
+  assert.equal(result.state, 'quota-evidence-ready');
+  assert.equal(result.minimumProjectedQuotaUnitsPerDay, 32);
+  assert.deepEqual(
+    result.lineItems.map((item) => [
+      item.endpoint,
+      item.callsPerDay,
+      item.quotaUnitsPerDay,
+    ]),
+    [
+      ['youtube.channels.list', 4, 4],
+      ['youtube.playlistItems.list', 28, 28],
+      ['youtube.videos.list', 0, 0],
+    ],
+  );
+  assert.deepEqual(result.blockers, []);
+});

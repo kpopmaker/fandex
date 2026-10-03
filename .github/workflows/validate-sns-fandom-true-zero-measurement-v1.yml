@@ -1,0 +1,43 @@
+name: Validate snsFandom true-zero measurement v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-phase-c-true-zero-video-count-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff.ts'
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaWorksheet.ts'
+      - 'tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts'
+      - 'tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-true-zero-measurement-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff.ts'
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaWorksheet.ts'
+      - 'tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts'
+      - 'tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-true-zero-measurement-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: True-zero quota regressions
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-point-youtube-quota-owner-handoff-v1.test.mts
+          tests/sns-fandom-point-youtube-quota-worksheet-v1.test.mts
+          tests/sns-fandom-point-youtube-bounded-measurement-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
