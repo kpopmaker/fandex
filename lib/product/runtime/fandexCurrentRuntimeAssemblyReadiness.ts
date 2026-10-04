@@ -103,7 +103,10 @@ export type FandexCurrentRuntimeBrandFitSource =
     }>
   | Readonly<{
       status: 'unavailable';
-      reason: 'durable-stored-evidence-reader-not-implemented';
+      reason:
+        | 'durable-stored-evidence-reader-not-implemented'
+        | 'durable-stored-evidence-runtime-unavailable'
+        | 'durable-stored-evidence-not-found';
     }>
   | Readonly<{
       status: 'data-issue';

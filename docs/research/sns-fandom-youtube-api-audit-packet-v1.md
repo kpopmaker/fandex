@@ -1186,3 +1186,49 @@ This keeps three meanings separate:
 No new provider call, recurring schedule, Production collection, provider
 submission, deployment, or Product activation/publication is authorized by
 materializing this evidence.
+
+
+## 10. Phase D submission owner handoff
+
+The three deliberate owner-only submission inputs now have a dedicated,
+fail-closed handoff:
+
+- `docs/research/sns-fandom-youtube-submission-owner-input-v1.json`
+- `sns-fandom-youtube-submission-owner-handoff-v1`
+
+The handoff covers only:
+
+- `applicantIdentityRef`;
+- `organizationOrSelfRef`;
+- `derivedMetricsAndStorageAmendmentAccepted`.
+
+The owner has now supplied all three deliberate values through a private,
+non-shared Google Drive evidence document. The public repository stores only
+the document reference, not the applicant's raw identity contents.
+
+Current checked-in owner state:
+
+- applicant identity ref = private durable Google Docs reference;
+- organization/self ref = the same private durable reference documenting the
+  individual/self application path;
+- amendment accepted = `true`;
+- owner handoff state = `submission-owner-evidence-ready`.
+
+Identity values must be durable non-secret **references**, not raw legal identity
+text or identity-document contents. The handoff rejects strings that are not
+reference-shaped and rejects common secret-bearing URL/query material.
+
+A ready owner handoff still keeps all action authorities false:
+
+- provider submission = false;
+- provider approval = false;
+- Production collection = false;
+- scheduler mutation = false;
+- Product activation = false.
+
+The current submission-readiness regression consumes this owner handoff rather
+than hard-coding those three values. Therefore an eventual owner update has one
+canonical input location. The three owner-input blockers are therefore
+resolved, while the quota worksheet/estimate blockers remain independent and
+cannot be bypassed by owner identity input. No provider submission is
+authorized by owner-input readiness alone.

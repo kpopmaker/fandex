@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'lib/product/runtime/brandFitStoredEvidenceRuntime.ts'
       - 'lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts'
       - 'lib/server/product/musicAlbumPointCurrentRuntimeRead.ts'
       - 'lib/server/product/snsFandomPointCurrentRuntimeRead.ts'
@@ -15,6 +16,7 @@ on:
       - 'data/fandex-cloud-v10/state/music_chart_*'
       - 'data/momentum-product/**'
       - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
+      - 'tests/brand-fit-stored-evidence-runtime-v1.test.mts'
       - 'tests/music-album-point-product-candidate-v1.test.mts'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
       - 'tests/risk-adjustment-news-issue-projection-v1.test.mts'
@@ -36,7 +38,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/music-album-point-product-candidate-v1.test.mts tests/music-album-point-product-contract-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/fandex-product-assembly-v1.test.mts tests/fandex-variable-product-contract-v1.test.mts
+      - run: npx tsx --test tests/brand-fit-stored-evidence-runtime-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/music-album-point-product-candidate-v1.test.mts tests/music-album-point-product-contract-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/fandex-product-assembly-v1.test.mts tests/fandex-variable-product-contract-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build

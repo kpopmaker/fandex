@@ -13,6 +13,10 @@ import {
   evaluateSnsFandomYoutubeQuotaOwnerHandoff,
   type SnsFandomYoutubeQuotaOwnerHandoffInput,
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff';
+import {
+  evaluateSnsFandomYoutubeSubmissionOwnerHandoff,
+  type SnsFandomYoutubeSubmissionOwnerHandoffInput,
+} from '../lib/intelligence/snsFandomPointYoutubeSubmissionOwnerHandoff';
 
 async function readJson(path: string) {
   return JSON.parse(
@@ -29,6 +33,9 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   const evidenceRaw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
+  );
+  const submissionOwnerRaw = await readJson(
+    'docs/research/sns-fandom-youtube-submission-owner-input-v1.json',
   );
 
   const providerInput: SnsFandomYoutubeProviderClientOwnerHandoffInput = {
@@ -67,9 +74,20 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
       quotaRaw.providerBatchLimitEvidenceRef as string | null,
   };
 
+  const submissionOwnerInput: SnsFandomYoutubeSubmissionOwnerHandoffInput = {
+    applicantIdentityRef:
+      submissionOwnerRaw.applicantIdentityRef as string | null,
+    organizationOrSelfRef:
+      submissionOwnerRaw.organizationOrSelfRef as string | null,
+    derivedMetricsAndStorageAmendmentAccepted:
+      submissionOwnerRaw.derivedMetricsAndStorageAmendmentAccepted as boolean,
+  };
+
   const providerOwner =
     evaluateSnsFandomYoutubeProviderClientOwnerHandoff(providerInput);
   const quotaOwner = evaluateSnsFandomYoutubeQuotaOwnerHandoff(quotaInput);
+  const submissionOwner =
+    evaluateSnsFandomYoutubeSubmissionOwnerHandoff(submissionOwnerInput);
 
   assert.equal(providerOwner.state, 'provider-client-identity-ready');
   assert.equal(
@@ -101,6 +119,15 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.equal(quotaOwner.schedulerMutationAllowed, false);
   assert.equal(quotaOwner.providerSubmissionAuthorized, false);
 
+  assert.equal(submissionOwner.state, 'submission-owner-evidence-ready');
+  assert.deepEqual(submissionOwner.pendingOwnerFields, []);
+  assert.deepEqual(submissionOwner.blockers, []);
+  assert.equal(submissionOwner.applicantIdentityRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(submissionOwner.organizationOrSelfRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(submissionOwner.amendmentAccepted, true);
+  assert.equal(submissionOwner.providerSubmissionAuthorized, false);
+  assert.equal(submissionOwner.productionCollectionAuthorized, false);
+
   const resolved =
     evidenceRaw.resolvedEvidence as Record<string, unknown>;
   const unresolved =
@@ -121,7 +148,8 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     providerClientRef: providerInput.providerClientRef ?? '',
     requestType: 'compliance-audit-additional-quota',
     useCase: 'analytics-reporting',
-    derivedMetricsAndStorageAmendmentAccepted: false,
+    derivedMetricsAndStorageAmendmentAccepted:
+      submissionOwner.amendmentAccepted,
     requestedEndpoints: [
       'youtube.channels.list',
       'youtube.playlistItems.list',
@@ -131,9 +159,9 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     quotaWorksheet: null,
     evidence: {
       applicantIdentityRef:
-        unresolved.applicantIdentityRef as string | null,
+        submissionOwner.applicantIdentityRef,
       organizationOrSelfRef:
-        unresolved.organizationOrSelfRef as string | null,
+        submissionOwner.organizationOrSelfRef,
       primaryAccessUrl:
         resolved.primaryAccessUrl as string | null,
       privacyPolicyUrl:
@@ -173,9 +201,6 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.deepEqual(
     [...readiness.blockers].sort(),
     [
-      'youtube-audit-applicant-identity-evidence-missing',
-      'youtube-audit-derived-metrics-amendment-not-accepted',
-      'youtube-audit-organization-or-self-evidence-missing',
       'youtube-audit-quota-estimate-missing',
       'youtube-audit-quota-worksheet-missing',
     ].sort(),
@@ -207,6 +232,18 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   assert.equal(
     readiness.blockers.includes('youtube-audit-dashboard-screenshot-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-applicant-identity-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-organization-or-self-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-derived-metrics-amendment-not-accepted'),
     false,
   );
   assert.equal(
