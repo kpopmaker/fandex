@@ -101,11 +101,22 @@ async function stageOfficial(
 
 test('Blob-backed current newsIssuePoint reader resolves latest official manifest without Postgres', async () => {
   const store = memoryStore();
-  await stageOfficial(store, '2026-09-15T16:00:00.000Z');
-  const latest = await stageOfficial(
-    store,
-    '2026-09-15T17:00:00.000Z',
+  const protocolStart = Date.parse(
+    '2026-09-15T16:00:00.000Z',
   );
+  let latest = null as Awaited<
+    ReturnType<typeof stageOfficial>
+  > | null;
+
+  for (let index = 0; index < 50; index += 1) {
+    latest = await stageOfficial(
+      store,
+      new Date(
+        protocolStart + index * 60 * 60 * 1_000,
+      ).toISOString(),
+    );
+  }
+  assert.ok(latest);
 
   let oidcCalls = 0;
   let createStoreCalls = 0;
@@ -152,11 +163,11 @@ test('Blob-backed current newsIssuePoint reader resolves latest official manifes
   );
   assert.equal(
     result.model.sourceMetadata.throughSlotStart,
-    '2026-09-15T17:00:00.000Z',
+    '2026-09-17T17:00:00.000Z',
   );
   assert.match(
     latest.identity.request.collectionKey,
-    /20260915t170000z/,
+    /20260917t170000z/,
   );
   assert.equal(
     result.model.evidenceTrace.kind,
@@ -185,9 +196,15 @@ test('Blob-backed current newsIssuePoint reader fails closed outside Production'
   assert.equal(result.status, 'data-issue');
   if (result.status !== 'data-issue') return;
   assert.equal(
-    result.issues[0]?.reason,
-    'runtime-read-failed',
+    result.issues[0]?.code,
+    'real-source-data-issue',
   );
+  if (result.issues[0]?.code === 'real-source-data-issue') {
+    assert.equal(
+      result.issues[0].reason,
+      'runtime-read-failed',
+    );
+  }
 });
 
 test('Blob-backed current newsIssuePoint reader contains no Postgres dependency', async () => {
