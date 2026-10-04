@@ -55,6 +55,11 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     reactionSnapshotRunsPerDay:
       quotaRaw.reactionSnapshotRunsPerDay as number | null,
     cadenceEvidenceRef: quotaRaw.cadenceEvidenceRef as string | null,
+    measurementWindowComplete:
+      quotaRaw.measurementWindowComplete as boolean,
+    observedThrough: quotaRaw.observedThrough as string | null,
+    measurementWindowCompletionEvidenceRef:
+      quotaRaw.measurementWindowCompletionEvidenceRef as string | null,
     measuredAt: quotaRaw.measuredAt as string | null,
     uploadManifestPageCountPerReactionRun:
       quotaRaw.uploadManifestPageCountPerReactionRun as number | null,
@@ -114,6 +119,13 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.equal(quotaOwner.videoIdsPerCall, 1);
   assert.equal(quotaOwner.maxChannelIdsPerCall, null);
   assert.equal(quotaOwner.maxVideoIdsPerCall, null);
+  assert.equal(quotaOwner.measurementWindowComplete, false);
+  assert.equal(quotaOwner.observedThrough, null);
+  assert.equal(quotaOwner.measurementWindowCompletionEvidenceRef, null);
+  assert.deepEqual(
+    quotaOwner.completionBlockers,
+    ['measurement-window-incomplete'],
+  );
   assert.equal(quotaOwner.automaticProviderCallAllowed, false);
   assert.equal(quotaOwner.collectionExecutionAuthorized, false);
   assert.equal(quotaOwner.schedulerMutationAllowed, false);
