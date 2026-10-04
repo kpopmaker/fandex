@@ -93,12 +93,29 @@ test('a screenshot can only become an evidence candidate when it is bound to the
   assert.equal(result.productActivationAuthorized, false);
 });
 
-test('the current repository remains unresolved until a real deployed screenshot exists', async () => {
+test('authorized Production screenshot is durably registered while promotion boundaries remain separate', async () => {
   const raw = await evidenceJson();
-  const unresolved =
-    raw.unresolvedEvidence as Record<string, unknown>;
+  const resolved = raw.resolvedEvidence as Record<string, unknown>;
+  const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
+  const bundle =
+    resolved.dashboardFeatureScreenshotEvidenceBundle as Record<string, unknown>;
 
-  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
+  );
+  assert.equal(
+    resolved.dashboardFeatureScreenshotSha256,
+    '5cdb6fd5fac3924c3fea26e9180d2d681560b3b344186fc742f7b605f431d06e',
+  );
+  assert.equal(bundle.sourceHttpStatus, 200);
+  assert.equal(bundle.productionDeploymentId, 'dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv');
+  assert.equal(bundle.productionGitSha, '11514e123bdfd95f810691aaeaaed7c49755cb18');
+  assert.equal(bundle.mockOrPreviewSeedMetricUsed, false);
+  assert.equal(bundle.rawVideoIdentifiersVisible, false);
+  assert.equal(bundle.rawStatisticsVisible, false);
+  assert.equal(bundle.secretMaterialVisible, false);
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
 });
 
 test('404, wrong route, preview seed, or synthetic metrics fail closed', async () => {
@@ -209,34 +226,36 @@ test('temporary refs, malformed hashes, secrets, and authorization boundary viol
 });
 
 
-test('current user-provided Production capture is an accepted candidate but remains unpromoted', async () => {
+test('user-provided PDF is preserved as supplemental corroborating evidence without replacing the canonical screenshot', async () => {
   const raw = await evidenceJson();
   const bounded =
     raw.currentBoundedMeasurementEvidence as Record<string, unknown>;
-  const candidateEvidence =
-    (raw.candidateEvidence as Record<string, unknown>)
-      .dashboardFeatureScreenshot as Record<string, unknown>;
+  const resolved =
+    raw.resolvedEvidence as Record<string, unknown>;
+  const supplemental =
+    (raw.supplementalEvidence as Record<string, unknown>)
+      .userProvidedDashboardCapture as Record<string, unknown>;
 
   const result = evaluateSnsFandomYoutubeDashboardScreenshotEvidence(
     {
-      screenshotRef: candidateEvidence.screenshotRef as string,
-      screenshotSha256: candidateEvidence.screenshotSha256 as string,
-      sourceUrl: candidateEvidence.sourceUrl as string,
-      sourceRoute: candidateEvidence.sourceRoute as string,
-      sourceHttpStatus: candidateEvidence.sourceHttpStatus as number,
-      deploymentId: candidateEvidence.deploymentId as string,
-      deploymentGitSha: candidateEvidence.deploymentGitSha as string,
-      capturedAt: candidateEvidence.capturedAt as string,
+      screenshotRef: supplemental.screenshotRef as string,
+      screenshotSha256: supplemental.screenshotSha256 as string,
+      sourceUrl: supplemental.sourceUrl as string,
+      sourceRoute: supplemental.sourceRoute as string,
+      sourceHttpStatus: supplemental.sourceHttpStatus as number,
+      deploymentId: supplemental.deploymentId as string,
+      deploymentGitSha: supplemental.deploymentGitSha as string,
+      capturedAt: supplemental.capturedAt as string,
       renderedEvidence:
-        candidateEvidence.renderedEvidence as SnsFandomYoutubeDashboardScreenshotCandidate['renderedEvidence'],
+        supplemental.renderedEvidence as SnsFandomYoutubeDashboardScreenshotCandidate['renderedEvidence'],
       mockOrPreviewSeedMetricUsed:
-        candidateEvidence.mockOrPreviewSeedMetricUsed as boolean,
+        supplemental.mockOrPreviewSeedMetricUsed as boolean,
       rawVideoIdentifiersVisible:
-        candidateEvidence.rawVideoIdentifiersVisible as boolean,
+        supplemental.rawVideoIdentifiersVisible as boolean,
       rawStatisticsVisible:
-        candidateEvidence.rawStatisticsVisible as boolean,
+        supplemental.rawStatisticsVisible as boolean,
       secretMaterialVisible:
-        candidateEvidence.secretMaterialVisible as boolean,
+        supplemental.secretMaterialVisible as boolean,
     },
     {
       workflowRunId: bounded.workflowRunId as string,
@@ -270,20 +289,16 @@ test('current user-provided Production capture is an accepted candidate but rema
     'ea7fea1838d0c0762ef76484457cbf6418e7fcf7b4cdd8684d8495e58d02c417',
   );
   assert.equal(
-    result.deploymentId,
-    'dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv',
+    supplemental.role,
+    'supplemental-corroborating-evidence',
   );
   assert.equal(
-    result.deploymentGitSha,
-    '11514e123bdfd95f810691aaeaaed7c49755cb18',
+    supplemental.canonicalDashboardScreenshotRef,
+    resolved.dashboardFeatureScreenshotRef,
   );
-  assert.equal(result.capturedAt, '2026-10-04T04:49:23.000Z');
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
+  );
   assert.equal(result.evidencePromotionAuthorized, false);
-
-  const unresolved =
-    raw.unresolvedEvidence as Record<string, unknown>;
-  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
-  assert.equal(candidateEvidence.promotionState, 'candidate-only');
-  assert.equal(candidateEvidence.captureMimeType, 'application/pdf');
-  assert.equal(candidateEvidence.capturePageCount, 2);
 });
