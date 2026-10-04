@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T01:44:00+09:00",
+  "collectedAt": "2026-10-04T13:51:02+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5043,6 +5043,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T01:44:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Rich Man",
+        "releaseDate": "2025-09-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1088340,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-09-05",
+      "providerPeriodEnd": "2025-09-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T13:51:02+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:82993",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/82993",
+          "sourcePublicationDate": "2025-09-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T13:51:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "forbes:20250912:aespa-rich-man",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Forbes",
+          "sourceUrl": "https://www.forbes.com/sites/jeffbenjamin/2025/09/12/sm-entertainment-stock-gets-tiny-bump-after-aespas-hit-one-million-plus-sales-with-rich-man/",
+          "sourcePublicationDate": "2025-09-12",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T13:51:02+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
