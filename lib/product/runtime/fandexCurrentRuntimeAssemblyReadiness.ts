@@ -235,11 +235,12 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
   const states: FandexCurrentRuntimeVariableState[] = [];
   const adapters = new Map<FandexVariableProductId, SharedAdapterResult>();
 
-  if (input.sources.musicAlbumPoint.status === 'ok') {
+  const musicAlbumSource = input.sources.musicAlbumPoint;
+  if (musicAlbumSource.status === 'ok') {
     const adapted = adaptSafely(() =>
       adaptMusicAlbumPointToFandexVariableProduct({
-        candidate: input.sources.musicAlbumPoint.candidate,
-        readiness: input.sources.musicAlbumPoint.readiness,
+        candidate: musicAlbumSource.candidate,
+        readiness: musicAlbumSource.readiness,
       }),
     );
     const result = adapterState('musicAlbumPoint', 'resolved', adapted);
@@ -250,7 +251,7 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
       sourceBlocked(
         'musicAlbumPoint',
         'data-issue',
-        input.sources.musicAlbumPoint.reason,
+        musicAlbumSource.reason,
       ).state,
     );
   }
@@ -266,11 +267,12 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
     adapters.set('newsIssuePoint', result.adapter);
   }
 
-  if (input.sources.snsFandomPoint.status === 'ok') {
+  const snsFandomSource = input.sources.snsFandomPoint;
+  if (snsFandomSource.status === 'ok') {
     const adapted = adaptSafely(() =>
       adaptSnsFandomPointToFandexVariableProduct({
         canonicalArtistId: 'iu',
-        readiness: input.sources.snsFandomPoint.readiness,
+        readiness: snsFandomSource.readiness,
       }),
     );
     const result = adapterState('snsFandomPoint', 'resolved', adapted);
@@ -281,16 +283,17 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
       sourceBlocked(
         'snsFandomPoint',
         'data-issue',
-        input.sources.snsFandomPoint.reason,
+        snsFandomSource.reason,
       ).state,
     );
   }
 
-  if (input.sources.brandFitPoint.status === 'ok') {
+  const brandFitSource = input.sources.brandFitPoint;
+  if (brandFitSource.status === 'ok') {
     const adapted = adaptSafely(() =>
       adaptBrandFitPointToFandexVariableProduct({
         canonicalArtistId: 'iu',
-        evidence: input.sources.brandFitPoint.evidence,
+        evidence: brandFitSource.evidence,
       }),
     );
     const result = adapterState('brandFitPoint', 'resolved', adapted);
@@ -300,10 +303,10 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
     states.push(
       sourceBlocked(
         'brandFitPoint',
-        input.sources.brandFitPoint.status === 'unavailable'
+        brandFitSource.status === 'unavailable'
           ? 'runtime-source-unavailable'
           : 'data-issue',
-        input.sources.brandFitPoint.reason,
+        brandFitSource.reason,
       ).state,
     );
   }
