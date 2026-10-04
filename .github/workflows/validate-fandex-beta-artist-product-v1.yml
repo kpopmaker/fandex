@@ -1,0 +1,40 @@
+name: Validate FANDEX Beta artist Product v1
+
+on:
+  push:
+    branches:
+      - work/product-fandex-beta-artist-runtime-v1
+    paths:
+      - 'app/artists/[artistId]/fandex-beta/**'
+      - 'lib/product/presentation/fandexBetaArtistPresentation.ts'
+      - 'tests/fandex-beta-artist-presentation-v1.test.mts'
+      - '.github/workflows/validate-fandex-beta-artist-product-v1.yml'
+  pull_request:
+    paths:
+      - 'app/artists/[artistId]/fandex-beta/**'
+      - 'lib/product/presentation/fandexBetaArtistPresentation.ts'
+      - 'tests/fandex-beta-artist-presentation-v1.test.mts'
+      - '.github/workflows/validate-fandex-beta-artist-product-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate Beta presentation
+        run: npx tsx --test tests/fandex-beta-artist-presentation-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
