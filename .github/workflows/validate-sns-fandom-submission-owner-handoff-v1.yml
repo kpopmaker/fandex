@@ -1,0 +1,46 @@
+name: Validate snsFandom submission owner handoff v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-submission-owner-handoff-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeSubmissionOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-submission-owner-input-v1.json'
+      - 'tests/sns-fandom-youtube-submission-owner-handoff-v1.test.mts'
+      - 'tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-submission-owner-handoff-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeSubmissionOwnerHandoff.ts'
+      - 'docs/research/sns-fandom-youtube-submission-owner-input-v1.json'
+      - 'tests/sns-fandom-youtube-submission-owner-handoff-v1.test.mts'
+      - 'tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-submission-owner-handoff-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Phase D submission owner handoff regression
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-youtube-submission-owner-handoff-v1.test.mts
+          tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts
+          tests/sns-fandom-point-youtube-audit-submission-readiness-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
