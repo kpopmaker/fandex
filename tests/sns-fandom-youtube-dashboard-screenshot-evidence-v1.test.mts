@@ -207,3 +207,83 @@ test('temporary refs, malformed hashes, secrets, and authorization boundary viol
     ),
   );
 });
+
+
+test('current user-provided Production capture is an accepted candidate but remains unpromoted', async () => {
+  const raw = await evidenceJson();
+  const bounded =
+    raw.currentBoundedMeasurementEvidence as Record<string, unknown>;
+  const candidateEvidence =
+    (raw.candidateEvidence as Record<string, unknown>)
+      .dashboardFeatureScreenshot as Record<string, unknown>;
+
+  const result = evaluateSnsFandomYoutubeDashboardScreenshotEvidence(
+    {
+      screenshotRef: candidateEvidence.screenshotRef as string,
+      screenshotSha256: candidateEvidence.screenshotSha256 as string,
+      sourceUrl: candidateEvidence.sourceUrl as string,
+      sourceRoute: candidateEvidence.sourceRoute as string,
+      sourceHttpStatus: candidateEvidence.sourceHttpStatus as number,
+      deploymentId: candidateEvidence.deploymentId as string,
+      deploymentGitSha: candidateEvidence.deploymentGitSha as string,
+      capturedAt: candidateEvidence.capturedAt as string,
+      renderedEvidence:
+        candidateEvidence.renderedEvidence as SnsFandomYoutubeDashboardScreenshotCandidate['renderedEvidence'],
+      mockOrPreviewSeedMetricUsed:
+        candidateEvidence.mockOrPreviewSeedMetricUsed as boolean,
+      rawVideoIdentifiersVisible:
+        candidateEvidence.rawVideoIdentifiersVisible as boolean,
+      rawStatisticsVisible:
+        candidateEvidence.rawStatisticsVisible as boolean,
+      secretMaterialVisible:
+        candidateEvidence.secretMaterialVisible as boolean,
+    },
+    {
+      workflowRunId: bounded.workflowRunId as string,
+      artifactId: bounded.artifactId as string,
+      measuredAt: bounded.measuredAt as string,
+      uploadManifestPageCountPerReactionRun:
+        bounded.uploadManifestPageCountPerReactionRun as number,
+      videoCountPerReactionRun:
+        bounded.videoCountPerReactionRun as number,
+      quotaUnitsObserved: bounded.quotaUnitsObserved as number,
+      measurementWindowComplete:
+        bounded.measurementWindowComplete as false,
+      trueZeroVideoCountObserved:
+        bounded.trueZeroVideoCountObserved as true,
+      quotaWorksheetEligible:
+        bounded.quotaWorksheetEligible as false,
+      finalOwnerEvidencePromotionAllowed:
+        bounded.finalOwnerEvidencePromotionAllowed as false,
+    },
+  );
+
+  assert.equal(result.status, 'accepted-evidence-candidate');
+  if (result.status !== 'accepted-evidence-candidate') return;
+
+  assert.equal(
+    result.screenshotRef,
+    'https://drive.google.com/file/d/1EZXN2C0Y5Xfe8aQpctEi37lvIpPYIbGF/view?usp=drivesdk',
+  );
+  assert.equal(
+    result.screenshotSha256,
+    'ea7fea1838d0c0762ef76484457cbf6418e7fcf7b4cdd8684d8495e58d02c417',
+  );
+  assert.equal(
+    result.deploymentId,
+    'dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv',
+  );
+  assert.equal(
+    result.deploymentGitSha,
+    '11514e123bdfd95f810691aaeaaed7c49755cb18',
+  );
+  assert.equal(result.capturedAt, '2026-10-04T04:49:23.000Z');
+  assert.equal(result.evidencePromotionAuthorized, false);
+
+  const unresolved =
+    raw.unresolvedEvidence as Record<string, unknown>;
+  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
+  assert.equal(candidateEvidence.promotionState, 'candidate-only');
+  assert.equal(candidateEvidence.captureMimeType, 'application/pdf');
+  assert.equal(candidateEvidence.capturePageCount, 2);
+});
