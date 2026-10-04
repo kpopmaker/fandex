@@ -1,0 +1,36 @@
+name: Validate FANDEX production runtime readiness probe v1
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/internal/fandex/product-runtime-readiness/route.ts'
+      - 'lib/server/product/fandexCurrentRuntimeReadinessProbe.ts'
+      - 'lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'lib/server/product/fandexArtistEndToEndRuntime.ts'
+      - 'lib/server/product/brandFitStoredEvidenceRuntime.ts'
+      - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'tests/fandex-product-runtime-readiness-probe-v1.test.mts'
+      - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
+      - 'tests/fandex-artist-runtime-binding-v1.test.mts'
+      - '.github/workflows/inspect-fandex-production-runtime-readiness-v1.yml'
+      - '.github/workflows/validate-fandex-production-runtime-readiness-probe-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-product-runtime-readiness-probe-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/fandex-artist-runtime-binding-v1.test.mts tests/brand-fit-stored-evidence-runtime-v1.test.mts tests/fandex-artist-end-to-end-product-assembly-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
