@@ -23,13 +23,38 @@ import {
 import {
   getMomentumLiveShadowProductReadinessForIU,
 } from './momentumLiveShadowProductReadiness';
+import {
+  getMusicAlbumPointCurrentRuntimeForIU,
+} from './musicAlbumPointCurrentRuntimeRead';
+import {
+  getSnsFandomPointCurrentRuntimeForIU,
+} from './snsFandomPointCurrentRuntimeRead';
+import {
+  deriveRiskAdjustmentCurrentRuntimeForIU,
+} from './riskAdjustmentCurrentRuntimeRead';
 
 export const IU_FANDEX_ARTIST_RUNTIME_LOADERS:
   FandexArtistRuntimeLoaderMap = Object.freeze({
-    musicAlbumPoint: null,
+    musicAlbumPoint: async () => {
+      const result = await getMusicAlbumPointCurrentRuntimeForIU();
+      if (result.status !== 'ok') {
+        throw new Error(
+          `music-album-runtime-read-failed:${result.reason}`,
+        );
+      }
+      return Object.freeze({
+        candidate: result.candidate,
+        readiness: result.readiness,
+      });
+    },
     newsIssuePoint:
       getNaverNewsIssuePointRealProductVariableAtLatestOfficialSlot,
-    snsFandomPoint: null,
+    snsFandomPoint: async () => {
+      const result = await getSnsFandomPointCurrentRuntimeForIU();
+      return Object.freeze({
+        readiness: result.readiness,
+      });
+    },
     brandFitPoint: null,
     comebackActivityPoint: getActivityExposurePublicRouteForIU,
     growthMomentumPoint: async () => {
@@ -43,7 +68,30 @@ export const IU_FANDEX_ARTIST_RUNTIME_LOADERS:
         readiness,
       });
     },
-    riskAdjustmentPoint: null,
+    riskAdjustmentPoint: async (resolved) => {
+      const newsIssuePoint = resolved.newsIssuePoint;
+      const comebackActivityPoint = resolved.comebackActivityPoint;
+      if (!newsIssuePoint || !comebackActivityPoint) {
+        throw new Error(
+          'risk-adjustment-runtime-dependencies-missing',
+        );
+      }
+
+      const result = deriveRiskAdjustmentCurrentRuntimeForIU({
+        newsIssuePoint,
+        comebackActivityPoint,
+      });
+      if (result.status !== 'ok') {
+        throw new Error(
+          `risk-adjustment-runtime-read-failed:${result.reason}:${result.detail}`,
+        );
+      }
+
+      return Object.freeze({
+        candidate: result.candidate,
+        readiness: result.readiness,
+      });
+    },
   });
 
 export type FandexArtistEndToEndRuntimeContext = Pick<
