@@ -224,3 +224,81 @@ test('temporary refs, malformed hashes, secrets, and authorization boundary viol
     ),
   );
 });
+
+
+test('user-provided PDF is preserved as supplemental corroborating evidence without replacing the canonical screenshot', async () => {
+  const raw = await evidenceJson();
+  const bounded =
+    raw.currentBoundedMeasurementEvidence as Record<string, unknown>;
+  const resolved =
+    raw.resolvedEvidence as Record<string, unknown>;
+  const supplemental =
+    (raw.supplementalEvidence as Record<string, unknown>)
+      .userProvidedDashboardCapture as Record<string, unknown>;
+
+  const result = evaluateSnsFandomYoutubeDashboardScreenshotEvidence(
+    {
+      screenshotRef: supplemental.screenshotRef as string,
+      screenshotSha256: supplemental.screenshotSha256 as string,
+      sourceUrl: supplemental.sourceUrl as string,
+      sourceRoute: supplemental.sourceRoute as string,
+      sourceHttpStatus: supplemental.sourceHttpStatus as number,
+      deploymentId: supplemental.deploymentId as string,
+      deploymentGitSha: supplemental.deploymentGitSha as string,
+      capturedAt: supplemental.capturedAt as string,
+      renderedEvidence:
+        supplemental.renderedEvidence as SnsFandomYoutubeDashboardScreenshotCandidate['renderedEvidence'],
+      mockOrPreviewSeedMetricUsed:
+        supplemental.mockOrPreviewSeedMetricUsed as boolean,
+      rawVideoIdentifiersVisible:
+        supplemental.rawVideoIdentifiersVisible as boolean,
+      rawStatisticsVisible:
+        supplemental.rawStatisticsVisible as boolean,
+      secretMaterialVisible:
+        supplemental.secretMaterialVisible as boolean,
+    },
+    {
+      workflowRunId: bounded.workflowRunId as string,
+      artifactId: bounded.artifactId as string,
+      measuredAt: bounded.measuredAt as string,
+      uploadManifestPageCountPerReactionRun:
+        bounded.uploadManifestPageCountPerReactionRun as number,
+      videoCountPerReactionRun:
+        bounded.videoCountPerReactionRun as number,
+      quotaUnitsObserved: bounded.quotaUnitsObserved as number,
+      measurementWindowComplete:
+        bounded.measurementWindowComplete as false,
+      trueZeroVideoCountObserved:
+        bounded.trueZeroVideoCountObserved as true,
+      quotaWorksheetEligible:
+        bounded.quotaWorksheetEligible as false,
+      finalOwnerEvidencePromotionAllowed:
+        bounded.finalOwnerEvidencePromotionAllowed as false,
+    },
+  );
+
+  assert.equal(result.status, 'accepted-evidence-candidate');
+  if (result.status !== 'accepted-evidence-candidate') return;
+
+  assert.equal(
+    result.screenshotRef,
+    'https://drive.google.com/file/d/1EZXN2C0Y5Xfe8aQpctEi37lvIpPYIbGF/view?usp=drivesdk',
+  );
+  assert.equal(
+    result.screenshotSha256,
+    'ea7fea1838d0c0762ef76484457cbf6418e7fcf7b4cdd8684d8495e58d02c417',
+  );
+  assert.equal(
+    supplemental.role,
+    'supplemental-corroborating-evidence',
+  );
+  assert.equal(
+    supplemental.canonicalDashboardScreenshotRef,
+    resolved.dashboardFeatureScreenshotRef,
+  );
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
+  );
+  assert.equal(result.evidencePromotionAuthorized, false);
+});
