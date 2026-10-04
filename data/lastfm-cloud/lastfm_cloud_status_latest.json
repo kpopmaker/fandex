@@ -1,13 +1,13 @@
 {
   "version": "lastfm_cloud_history_v1",
-  "createdAt": "2026-10-03T11:36:05+09:00",
-  "snapshotDate": "2026-10-03",
+  "createdAt": "2026-10-04T12:07:16+09:00",
+  "snapshotDate": "2026-10-04",
   "snapshotAppended": true,
-  "historyRowCount": 550,
-  "snapshotDateCount": 55,
+  "historyRowCount": 569,
+  "snapshotDateCount": 56,
   "deltaReadyCount": 10,
   "needsReviewCount": 0,
-  "scorePreviewCount": 10,
+  "scorePreviewCount": 0,
   "scoreUsage": "preview_only_not_master_score",
   "masterModified": false,
   "websiteModified": false
