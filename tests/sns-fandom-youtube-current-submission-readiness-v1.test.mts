@@ -14,6 +14,13 @@ import {
   type SnsFandomYoutubeQuotaOwnerHandoffInput,
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaOwnerHandoff';
 import {
+  evaluateSnsFandomYoutubeQuotaCloseout,
+} from '../lib/intelligence/snsFandomPointYoutubeQuotaCloseout';
+import {
+  evaluateSnsFandomYoutubeAuditArtistBindingManifest,
+  type SnsFandomYoutubeAuditArtistBindingManifestInput,
+} from '../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
+import {
   evaluateSnsFandomYoutubeSubmissionOwnerHandoff,
   type SnsFandomYoutubeSubmissionOwnerHandoffInput,
 } from '../lib/intelligence/snsFandomPointYoutubeSubmissionOwnerHandoff';
@@ -36,6 +43,9 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   const submissionOwnerRaw = await readJson(
     'docs/research/sns-fandom-youtube-submission-owner-input-v1.json',
+  );
+  const artistBindingRaw = await readJson(
+    'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json',
   );
 
   const providerInput: SnsFandomYoutubeProviderClientOwnerHandoffInput = {
@@ -93,6 +103,10 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   const quotaOwner = evaluateSnsFandomYoutubeQuotaOwnerHandoff(quotaInput);
   const submissionOwner =
     evaluateSnsFandomYoutubeSubmissionOwnerHandoff(submissionOwnerInput);
+  const artistBindingManifest =
+    evaluateSnsFandomYoutubeAuditArtistBindingManifest(
+      artistBindingRaw as unknown as SnsFandomYoutubeAuditArtistBindingManifestInput,
+    );
 
   assert.equal(providerOwner.state, 'provider-client-identity-ready');
   assert.equal(
@@ -146,6 +160,29 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     evidenceRaw.unresolvedEvidence as Record<string, unknown>;
   const rejected =
     evidenceRaw.rejectedEvidence as Record<string, unknown>;
+  const quotaUnitsPerCall =
+    resolved.quotaUnitsPerCall as Record<string, number>;
+  const quotaCloseout = evaluateSnsFandomYoutubeQuotaCloseout({
+    providerClientRef: providerInput.providerClientRef ?? '',
+    quotaOwnerHandoff: quotaOwner,
+    artistBindingManifest,
+    reactionQuotaUnitsPerCall: {
+      'youtube.channels.list':
+        quotaUnitsPerCall['youtube.channels.list'],
+      'youtube.playlistItems.list':
+        quotaUnitsPerCall['youtube.playlistItems.list'],
+      'youtube.videos.list':
+        quotaUnitsPerCall['youtube.videos.list'],
+    },
+    providerQuotaCostEvidenceRef:
+      resolved.providerQuotaCostEvidenceRef as string,
+  });
+
+  assert.equal(quotaCloseout.state, 'awaiting-completed-window');
+  assert.equal(quotaCloseout.quotaWorksheet, null);
+  assert.equal(quotaCloseout.estimateCandidate, null);
+  assert.equal(quotaCloseout.quotaEstimateRef, null);
+  assert.equal(quotaCloseout.providerSubmissionAuthorized, false);
 
   assert.equal(
     resolved.dashboardFeatureScreenshotRef,
@@ -168,7 +205,7 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
       'youtube.videos.list',
     ],
     providerClientIdentity: providerOwner.providerClientIdentity,
-    quotaWorksheet: null,
+    quotaWorksheet: quotaCloseout.quotaWorksheet,
     evidence: {
       applicantIdentityRef:
         submissionOwner.applicantIdentityRef,
