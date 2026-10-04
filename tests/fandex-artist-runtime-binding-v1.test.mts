@@ -160,9 +160,18 @@ test('dependent runtime loader receives previously resolved canonical payloads',
     ...runtime,
     riskAdjustmentPoint: async (resolved) => {
       seen.push({
-        hasNews: resolved.newsIssuePoint !== undefined,
-        hasActivity: resolved.comebackActivityPoint !== undefined,
-        hasRisk: resolved.riskAdjustmentPoint !== undefined,
+        hasNews: Object.prototype.hasOwnProperty.call(
+          resolved,
+          'newsIssuePoint',
+        ),
+        hasActivity: Object.prototype.hasOwnProperty.call(
+          resolved,
+          'comebackActivityPoint',
+        ),
+        hasRisk: Object.prototype.hasOwnProperty.call(
+          resolved,
+          'riskAdjustmentPoint',
+        ),
       });
       return undefined as never;
     },
