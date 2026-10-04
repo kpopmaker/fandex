@@ -189,14 +189,31 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
   const resolved = raw.resolvedEvidence as Record<string, unknown>;
   const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
   const keys = [
-    'applicantIdentityRef',
-    'organizationOrSelfRef',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
   ];
 
   for (const key of keys) assert.equal(unresolved[key], null);
+
+  assert.equal(
+    resolved.applicantIdentityRef,
+    'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk',
+  );
+  assert.equal(
+    resolved.organizationOrSelfRef,
+    'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk',
+  );
+  assert.equal(
+    resolved.submissionOwnerEvidenceState,
+    'submission-owner-evidence-ready',
+  );
+  assert.equal(
+    resolved.derivedMetricsAndStorageAmendmentAccepted,
+    true,
+  );
+  assert.equal('applicantIdentityRef' in unresolved, false);
+  assert.equal('organizationOrSelfRef' in unresolved, false);
 
   const optionalOptimization =
     raw.optionalOptimizationEvidence as Record<string, unknown>;
