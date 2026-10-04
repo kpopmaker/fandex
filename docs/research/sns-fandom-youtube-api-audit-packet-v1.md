@@ -375,7 +375,7 @@ Current remaining concrete blockers:
 The merged legal URLs, repository documentation, Privacy screenshot, and
 homepage legal-link screenshot are evidence-backed. The provider-client /
 Google Cloud project identity is also now owner-verified and evidence-bound.
-Applicant identity, real Analytics & Reporting feature screenshot, and
+Applicant identity and
 actual quota measurements remain external-owner evidence.
 
 Submission readiness still does not imply provider approval. Even after a
@@ -782,8 +782,21 @@ Historical rejected candidate:
   data as synthetic / preview, so it is not valid evidence of a real
   Analytics & Reporting feature.
 
-Therefore `dashboardFeatureScreenshotRef` remains unresolved until a real,
-non-simulated Analytics & Reporting feature surface exists and is captured.
+That historical synthetic candidate remains rejected. A later authorized capture of the real Production Analytics & Reporting route now resolves `dashboardFeatureScreenshotRef`.
+
+Real Analytics & Reporting screenshot evidence:
+- source: `https://fandex-eta.vercel.app/youtube-analytics-evidence`
+- Production deployment: `dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv`
+- Production git SHA: `11514e123bdfd95f810691aaeaaed7c49755cb18`
+- capture workflow run: `37178153638`
+- artifact id: `11294013664`
+- artifact digest: `sha256:05b3e88324037fe99728de4b3242a36015b7de76daaa8cf235a932f326477270`
+- screenshot SHA256: `5cdb6fd5fac3924c3fea26e9180d2d681560b3b344186fc742f7b605f431d06e`
+- captured at: `2026-10-04T04:50:55.000Z`
+- durable Drive PNG: `https://drive.google.com/file/d/1g3Di6MJ4x6djND5cZnNey0uMOfWMOHvz/view?usp=drivesdk`
+- durable Drive archive: `https://drive.google.com/file/d/17LPe_NPl0DYX92Sn4UfMDl_UqsVYExkr/view?usp=drivesdk`
+
+The captured page visibly preserves pages/run `115`, videos/run `0` as observed true zero, provider calls/quota `120`, `measurementWindowComplete=false`, final quota evidence promotion `false`, and bounded run/artifact lineage. It does not promote provider approval, Production collection, provider submission, scheduler mutation, or Product activation.
 
 The valid Privacy Policy and homepage legal-link PNGs were visually checked
 and render the intended Production surfaces rather than blank/error pages.
@@ -825,7 +838,6 @@ The final audit readiness remains `submission-blocked` because separate
 requirements are still unresolved, including:
 - applicant / organization-or-self identity;
 - derived-metrics/storage amendment owner acknowledgement;
-- real non-simulated Analytics & Reporting feature screenshot;
 - quota measurement results and quota-evidence-ready worksheet.
 
 Provider approval, provider submission authorization, and Production collection

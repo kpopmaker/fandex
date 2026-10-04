@@ -96,7 +96,7 @@ test('audit cohort evidence is exactly the merged five-member v1 manifest', asyn
   );
 });
 
-test('legal screenshots are resolved while synthetic dashboard evidence stays rejected', async () => {
+test('legal and real dashboard screenshots are resolved while synthetic dashboard history stays rejected', async () => {
   const raw = await readJson(
     'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json',
   );
@@ -134,8 +134,41 @@ test('legal screenshots are resolved while synthetic dashboard evidence stays re
   );
   assert.equal('analyticsReportingDashboard' in files, false);
 
+  const dashboardBundle =
+    resolved.dashboardFeatureScreenshotEvidenceBundle as Record<string, unknown>;
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
+  );
+  assert.equal(
+    resolved.dashboardFeatureScreenshotSha256,
+    '5cdb6fd5fac3924c3fea26e9180d2d681560b3b344186fc742f7b605f431d06e',
+  );
+  assert.equal(dashboardBundle.githubWorkflowRunId, '37178153638');
+  assert.equal(dashboardBundle.githubArtifactId, '11294013664');
+  assert.equal(
+    dashboardBundle.githubArtifactDigest,
+    'sha256:05b3e88324037fe99728de4b3242a36015b7de76daaa8cf235a932f326477270',
+  );
+  assert.equal(
+    dashboardBundle.productionDeploymentId,
+    'dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv',
+  );
+  assert.equal(
+    dashboardBundle.productionGitSha,
+    '11514e123bdfd95f810691aaeaaed7c49755cb18',
+  );
+  assert.equal(
+    dashboardBundle.googleDriveFileId,
+    '1g3Di6MJ4x6djND5cZnNey0uMOfWMOHvz',
+  );
+  assert.equal(
+    dashboardBundle.googleDriveArchiveFileId,
+    '17LPe_NPl0DYX92Sn4UfMDl_UqsVYExkr',
+  );
+
   const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
-  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
 
   const rejected = raw.rejectedEvidence as Record<string, unknown>;
   const dashboardCandidate = rejected.dashboardFeatureScreenshotCandidate as Record<string, unknown>;
@@ -161,7 +194,6 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'quotaEstimateRef',
-    'dashboardFeatureScreenshotRef',
   ];
 
   for (const key of keys) assert.equal(unresolved[key], null);
@@ -200,6 +232,7 @@ test('resolved Phase A and Phase B evidence is recorded while remaining external
   assert.equal('cloudProjectRef' in unresolved, false);
   assert.equal('privacyPolicyScreenshotRef' in unresolved, false);
   assert.equal('homepageScreenshotRef' in unresolved, false);
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
 
   assert.equal(raw.fixtureValuesAreProductionEvidence, false);
   assert.equal(raw.providerApprovalGranted, false);
