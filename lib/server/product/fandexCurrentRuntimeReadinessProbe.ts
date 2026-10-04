@@ -1,11 +1,6 @@
-import 'server-only';
-
 import {
   isNaverNewsRecurringAuthorizationValid,
 } from '../ingestion/naverNewsRecurringSchedulerContracts';
-import {
-  getFandexCurrentRuntimeAssemblyReadinessForIU,
-} from './fandexCurrentRuntimeAssemblyReadiness';
 import type {
   FandexCurrentRuntimeAssemblyReadiness,
 } from '../../product/runtime/fandexCurrentRuntimeAssemblyReadiness';
@@ -105,7 +100,15 @@ export async function handleFandexProductRuntimeReadinessProbe(
   }
 
   const read =
-    dependencies.read ?? getFandexCurrentRuntimeAssemblyReadinessForIU;
+    dependencies.read
+    ?? (async (input?: Readonly<{ generatedAt?: string }>) => {
+      const runtime = await import(
+        './fandexCurrentRuntimeAssemblyReadiness'
+      );
+      return runtime.getFandexCurrentRuntimeAssemblyReadinessForIU(
+        input,
+      );
+    });
   const generatedAt =
     (dependencies.now?.() ?? new Date()).toISOString();
 
