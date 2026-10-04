@@ -19,9 +19,14 @@ type RuntimeInputPayloads = Pick<
   RuntimeInputKey
 >;
 
+export type FandexArtistRuntimeResolvedPayloads =
+  Readonly<Partial<RuntimeInputPayloads>>;
+
 export type FandexArtistRuntimeLoaderMap = Readonly<{
   [K in RuntimeInputKey]:
-    | (() => Promise<FandexArtistVariableProductOrchestrationInput[K]>)
+    | ((
+        resolved: FandexArtistRuntimeResolvedPayloads,
+      ) => Promise<FandexArtistVariableProductOrchestrationInput[K]>)
     | null;
 }>;
 
@@ -139,7 +144,9 @@ export async function resolveFandexArtistRuntimeInputs(input: Readonly<{
     }
 
     try {
-      const value = await loader();
+      const value = await loader(
+        Object.freeze({ ...payloads }),
+      );
       (
         payloads as Record<FandexVariableProductId, unknown>
       )[variableId] = value;
