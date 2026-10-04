@@ -1,0 +1,113 @@
+name: Validate FANDEX self-host runtime v1
+
+on:
+  push:
+    branches:
+      - work/product-self-host-runtime-v1
+    paths:
+      - ".dockerignore"
+      - "Dockerfile"
+      - "next.config.ts"
+      - "app/api/health/route.ts"
+      - ".github/workflows/validate-fandex-self-host-runtime-v1.yml"
+      - "app/artists/[artistId]/fandex-beta/**"
+      - "lib/server/product/**"
+      - "data/fandex-cloud-v10/**"
+      - "data/momentum-product/**"
+  pull_request:
+    paths:
+      - ".dockerignore"
+      - "Dockerfile"
+      - "next.config.ts"
+      - "app/api/health/route.ts"
+      - ".github/workflows/validate-fandex-self-host-runtime-v1.yml"
+      - "app/artists/[artistId]/fandex-beta/**"
+      - "lib/server/product/**"
+      - "data/fandex-cloud-v10/**"
+      - "data/momentum-product/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build portable FANDEX image
+        run: docker build --progress=plain -t fandex-self-host-v1 .
+
+      - name: Start portable FANDEX runtime
+        run: |
+          docker run --rm -d \
+            --name fandex-self-host-v1 \
+            -p 3000:3000 \
+            fandex-self-host-v1
+          echo "fandex-self-host-v1" > /tmp/fandex-container-name
+
+      - name: Verify host-neutral health endpoint
+        run: |
+          for attempt in $(seq 1 45); do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/api/health > /tmp/fandex-health.json; then
+              break
+            fi
+            if [ "$attempt" -eq 45 ]; then
+              docker logs fandex-self-host-v1
+              exit 1
+            fi
+            sleep 1
+          done
+
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const payload = JSON.parse(fs.readFileSync('/tmp/fandex-health.json', 'utf8'));
+          if (payload.ok !== true || payload.service !== 'fandex' || payload.runtime !== 'nodejs') {
+            throw new Error('host-neutral-health-contract-failed');
+          }
+          NODE
+
+      - name: Verify Beta route without Vercel runtime
+        run: |
+          if ! curl --fail --silent --show-error \
+            http://127.0.0.1:3000/artists/iu/fandex-beta \
+            > /tmp/fandex-beta.html; then
+            docker logs fandex-self-host-v1
+            exit 1
+          fi
+
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('/tmp/fandex-beta.html', 'utf8');
+
+          function card(variableId, nextVariableId) {
+            const start = html.indexOf(variableId);
+            if (start < 0) throw new Error(`missing-card:${variableId}`);
+            const end = nextVariableId ? html.indexOf(nextVariableId, start + variableId.length) : html.length;
+            if (end < 0) throw new Error(`missing-next-card:${nextVariableId}`);
+            return html.slice(start, end);
+          }
+
+          const music = card('musicAlbumPoint', 'newsIssuePoint');
+          if (music.includes('repository-state-read-failed')) {
+            throw new Error('music-repository-evidence-not-traced');
+          }
+
+          const momentum = card('growthMomentumPoint', 'riskAdjustmentPoint');
+          if (
+            momentum.includes('upstream-read-not-ok')
+            || momentum.includes('runtime-read-failed')
+          ) {
+            throw new Error('momentum-repository-evidence-not-traced');
+          }
+
+          if (!html.includes('산정 보류')) {
+            throw new Error('fandex-score-withhold-boundary-missing');
+          }
+          NODE
+
+      - name: Stop portable FANDEX runtime
+        if: always()
+        run: docker rm -f fandex-self-host-v1 >/dev/null 2>&1 || true
