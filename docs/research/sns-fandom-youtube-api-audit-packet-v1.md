@@ -1186,3 +1186,41 @@ This keeps three meanings separate:
 No new provider call, recurring schedule, Production collection, provider
 submission, deployment, or Product activation/publication is authorized by
 materializing this evidence.
+
+
+## 10. Phase D submission owner handoff
+
+The three deliberate owner-only submission inputs now have a dedicated,
+fail-closed handoff:
+
+- `docs/research/sns-fandom-youtube-submission-owner-input-v1.json`
+- `sns-fandom-youtube-submission-owner-handoff-v1`
+
+The handoff covers only:
+
+- `applicantIdentityRef`;
+- `organizationOrSelfRef`;
+- `derivedMetricsAndStorageAmendmentAccepted`.
+
+Current checked-in values remain deliberately unresolved:
+
+- applicant identity ref = `null`;
+- organization/self ref = `null`;
+- amendment accepted = `false`.
+
+Identity values must be durable non-secret **references**, not raw legal identity
+text or identity-document contents. The handoff rejects strings that are not
+reference-shaped and rejects common secret-bearing URL/query material.
+
+A ready owner handoff still keeps all action authorities false:
+
+- provider submission = false;
+- provider approval = false;
+- Production collection = false;
+- scheduler mutation = false;
+- Product activation = false.
+
+The current submission-readiness regression consumes this owner handoff rather
+than hard-coding those three values. Therefore an eventual owner update has one
+canonical input location, while the quota worksheet/estimate blockers remain
+independent and cannot be bypassed by owner identity input.
