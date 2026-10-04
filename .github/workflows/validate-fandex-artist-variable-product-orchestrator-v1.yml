@@ -1,0 +1,37 @@
+name: Validate FANDEX artist variable Product orchestration v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/adapters/fandexArtistVariableProductOrchestrator.ts'
+      - 'lib/product/adapters/newsIssuePointFandexVariableProduct.ts'
+      - 'lib/product/adapters/activityExposureFandexVariableProduct.ts'
+      - 'lib/product/adapters/momentumFandexVariableProduct.ts'
+      - 'lib/product/adapters/musicAlbumPointFandexVariableProduct.ts'
+      - 'lib/product/adapters/snsFandomPointFandexVariableProduct.ts'
+      - 'lib/product/adapters/brandFitPointFandexVariableProduct.ts'
+      - 'lib/product/adapters/riskAdjustmentFandexVariableProduct.ts'
+      - 'lib/product/contracts/fandexVariableProduct.ts'
+      - 'lib/product/contracts/fandexVariableProductSnapshot.ts'
+      - 'tests/fandex-artist-variable-product-orchestrator-v1.test.mts'
+      - '.github/workflows/validate-fandex-artist-variable-product-orchestrator-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-artist-variable-product-orchestrator-v1.test.mts tests/fandex-variable-product-snapshot-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
