@@ -119,13 +119,12 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.equal(quotaOwner.schedulerMutationAllowed, false);
   assert.equal(quotaOwner.providerSubmissionAuthorized, false);
 
-  assert.equal(submissionOwner.state, 'awaiting-owner-evidence');
-  assert.deepEqual(submissionOwner.pendingOwnerFields, [
-    'applicantIdentityRef',
-    'derivedMetricsAndStorageAmendmentAccepted',
-    'organizationOrSelfRef',
-  ]);
+  assert.equal(submissionOwner.state, 'submission-owner-evidence-ready');
+  assert.deepEqual(submissionOwner.pendingOwnerFields, []);
   assert.deepEqual(submissionOwner.blockers, []);
+  assert.equal(submissionOwner.applicantIdentityRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(submissionOwner.organizationOrSelfRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(submissionOwner.amendmentAccepted, true);
   assert.equal(submissionOwner.providerSubmissionAuthorized, false);
   assert.equal(submissionOwner.productionCollectionAuthorized, false);
 
@@ -202,9 +201,6 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.deepEqual(
     [...readiness.blockers].sort(),
     [
-      'youtube-audit-applicant-identity-evidence-missing',
-      'youtube-audit-derived-metrics-amendment-not-accepted',
-      'youtube-audit-organization-or-self-evidence-missing',
       'youtube-audit-quota-estimate-missing',
       'youtube-audit-quota-worksheet-missing',
     ].sort(),
@@ -236,6 +232,18 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   assert.equal(
     readiness.blockers.includes('youtube-audit-dashboard-screenshot-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-applicant-identity-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-organization-or-self-evidence-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-derived-metrics-amendment-not-accepted'),
     false,
   );
   assert.equal(
