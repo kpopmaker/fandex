@@ -1,0 +1,14 @@
+{
+  "version": "sns_fandom_youtube_provider_submission_owner_input_v1",
+  "state": "awaiting-provider-submission-approval",
+  "approved": false,
+  "approvalEvidenceRef": null,
+  "approvedAt": null,
+  "approvedRevisionSha": null,
+  "providerClientRef": null,
+  "providerSubmissionExecuted": false,
+  "providerApprovalGranted": false,
+  "productionCollectionAuthorized": false,
+  "schedulerMutationAllowed": false,
+  "productActivationAuthorized": false
+}
