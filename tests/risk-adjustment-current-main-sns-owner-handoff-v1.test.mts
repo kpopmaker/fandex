@@ -36,6 +36,9 @@ type QuotaOwnerInput = Readonly<{
   measurementWindowEnd: string | null;
   reactionSnapshotRunsPerDay: number | null;
   cadenceEvidenceRef: string | null;
+  measurementWindowComplete: boolean;
+  observedThrough: string | null;
+  measurementWindowCompletionEvidenceRef: string | null;
   measuredAt: string | null;
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
@@ -116,6 +119,11 @@ test('merged snsFandom quota owner handoff resolves Phase B measurement plan whi
     measurementWindowEnd: quotaOwnerInput.measurementWindowEnd,
     reactionSnapshotRunsPerDay: quotaOwnerInput.reactionSnapshotRunsPerDay,
     cadenceEvidenceRef: quotaOwnerInput.cadenceEvidenceRef,
+    measurementWindowComplete:
+      quotaOwnerInput.measurementWindowComplete,
+    observedThrough: quotaOwnerInput.observedThrough,
+    measurementWindowCompletionEvidenceRef:
+      quotaOwnerInput.measurementWindowCompletionEvidenceRef,
     measuredAt: quotaOwnerInput.measuredAt,
     uploadManifestPageCountPerReactionRun:
       quotaOwnerInput.uploadManifestPageCountPerReactionRun,
@@ -153,9 +161,18 @@ test('merged snsFandom quota owner handoff resolves Phase B measurement plan whi
   assert.deepEqual(result.missingMeasurementFields, [
     'measuredAt',
     'measuredUsageEvidenceRef',
+    'measurementWindowCompletionEvidenceRef',
+    'observedThrough',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
   ]);
+  assert.deepEqual(
+    result.completionBlockers,
+    ['measurement-window-incomplete'],
+  );
+  assert.equal(result.measurementWindowComplete, false);
+  assert.equal(result.observedThrough, null);
+  assert.equal(result.measurementWindowCompletionEvidenceRef, null);
   assert.equal(
     result.requestBatchingStrategy,
     'singleton-only-until-provider-batch-limit-evidence',
