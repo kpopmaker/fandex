@@ -60,9 +60,10 @@ import type {
 import type {
   ProductVariableReadModelResult,
 } from '../contracts/productVariable';
-import type {
-  FandexVariableProductId,
-  FandexVariableProductRecord,
+import {
+  FANDEX_VARIABLE_PRODUCT_IDS,
+  type FandexVariableProductId,
+  type FandexVariableProductRecord,
 } from '../contracts/fandexVariableProduct';
 import type {
   MomentumLiveShadowProductReadinessResult,
@@ -391,10 +392,19 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
     );
   }
 
+  const stateByVariable = new Map(
+    states.map((entry) => [entry.variableId, entry] as const),
+  );
   const orderedStates = Object.freeze(
-    states.sort((left, right) =>
-      left.variableId.localeCompare(right.variableId)
-    ),
+    FANDEX_VARIABLE_PRODUCT_IDS.map((variableId) => {
+      const entry = stateByVariable.get(variableId);
+      if (!entry) {
+        throw new Error(
+          `fandex_current_runtime_variable_state_missing:${variableId}`,
+        );
+      }
+      return entry;
+    }),
   );
   const blockedVariableIds = Object.freeze(
     orderedStates
@@ -434,14 +444,26 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
     });
   }
 
+  const requireOk = (
+    variableId: FandexVariableProductId,
+  ): Extract<SharedAdapterResult, { status: 'ok' }> => {
+    const adapter = adapters.get(variableId);
+    if (!adapter || adapter.status !== 'ok') {
+      throw new Error(
+        `fandex_current_runtime_adapter_not_ok:${variableId}`,
+      );
+    }
+    return adapter;
+  };
+
   const completeAdapters = {
-    musicAlbumPoint: adapters.get('musicAlbumPoint')!,
-    newsIssuePoint: adapters.get('newsIssuePoint')!,
-    snsFandomPoint: adapters.get('snsFandomPoint')!,
-    brandFitPoint: adapters.get('brandFitPoint')!,
-    comebackActivityPoint: adapters.get('comebackActivityPoint')!,
-    growthMomentumPoint: adapters.get('growthMomentumPoint')!,
-    riskAdjustmentPoint: adapters.get('riskAdjustmentPoint')!,
+    musicAlbumPoint: requireOk('musicAlbumPoint'),
+    newsIssuePoint: requireOk('newsIssuePoint'),
+    snsFandomPoint: requireOk('snsFandomPoint'),
+    brandFitPoint: requireOk('brandFitPoint'),
+    comebackActivityPoint: requireOk('comebackActivityPoint'),
+    growthMomentumPoint: requireOk('growthMomentumPoint'),
+    riskAdjustmentPoint: requireOk('riskAdjustmentPoint'),
   };
 
   const assembly = assembleFandexProduct({
@@ -462,12 +484,9 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
         : 'blocked' as const,
     variableStates: orderedStates,
     resolvedVariableIds,
-    blockedVariableIds:
-      assembly.status === 'ok'
-        ? Object.freeze([] as FandexVariableProductId[])
-        : Object.freeze(
-            ['riskAdjustmentPoint'] as FandexVariableProductId[],
-          ),
+    blockedVariableIds: Object.freeze(
+      [] as FandexVariableProductId[],
+    ),
     records,
     assembly,
     scoreCalculated: false as const,
