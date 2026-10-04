@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T16:06:44+09:00",
+  "collectedAt": "2026-10-04T16:30:22+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5155,6 +5155,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T16:06:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.1",
+        "releaseDate": "2020-07-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 233399,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-07-29",
+      "providerPeriodEnd": "2020-08-04",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T16:30:22+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1417372:ateez-zero-fever-part1-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1417372wpp/ateez-nearly-quadruples-their-own-1st-week-sales-record-with-zero-fever-part-1",
+          "sourcePublicationDate": "2020-08-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:30:22+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "sportsworld:20200806510506:ateez-zero-fever-part1-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports World",
+          "sourceUrl": "https://www.sportsworldi.com/newsView/20200806510506",
+          "sourcePublicationDate": "2020-08-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:30:22+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
