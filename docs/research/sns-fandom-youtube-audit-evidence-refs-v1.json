@@ -110,11 +110,13 @@
       "rawStatisticsVisible": false,
       "secretMaterialVisible": false,
       "visualReviewState": "verified-production-analytics-surface"
-    }
+    },
+    "applicantIdentityRef": "https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk",
+    "organizationOrSelfRef": "https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk",
+    "submissionOwnerEvidenceState": "submission-owner-evidence-ready",
+    "derivedMetricsAndStorageAmendmentAccepted": true
   },
   "unresolvedEvidence": {
-    "applicantIdentityRef": null,
-    "organizationOrSelfRef": null,
     "uploadManifestPageCountPerReactionRun": null,
     "videoCountPerReactionRun": null,
     "quotaEstimateRef": null
