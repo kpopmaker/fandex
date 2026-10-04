@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T23:02:39+09:00",
+  "collectedAt": "2026-10-05T00:10:49+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5399,6 +5399,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T23:02:39+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE SIN : BLISS",
+        "releaseDate": "2026-08-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2099048,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-08-21",
+      "providerPeriodEnd": "2026-08-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T00:10:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sports-khan:20260828:enhypen-the-sin-bliss",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Kyunghyang",
+          "sourceUrl": "https://sports.khan.co.kr/en/article/202608282107007",
+          "sourcePublicationDate": "2026-08-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:10:49+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
