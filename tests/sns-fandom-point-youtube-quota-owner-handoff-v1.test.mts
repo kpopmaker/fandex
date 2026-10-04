@@ -15,6 +15,10 @@ function input(
     measurementWindowEnd: '2026-10-02T00:00:00.000Z',
     reactionSnapshotRunsPerDay: 2,
     cadenceEvidenceRef: 'external://youtube-audit/reaction-cadence',
+    measurementWindowComplete: true,
+    observedThrough: '2026-10-02T00:00:00.000Z',
+    measurementWindowCompletionEvidenceRef:
+      'external://youtube-audit/completed-window',
     measuredAt: '2026-10-02T12:00:00.000Z',
     uploadManifestPageCountPerReactionRun: 5,
     videoCountPerReactionRun: 120,
@@ -38,6 +42,9 @@ test('empty owner input keeps all real plan and measurement evidence unresolved'
     measurementWindowEnd: null,
     reactionSnapshotRunsPerDay: null,
     cadenceEvidenceRef: null,
+    measurementWindowComplete: false,
+    observedThrough: null,
+    measurementWindowCompletionEvidenceRef: null,
     measuredAt: null,
     uploadManifestPageCountPerReactionRun: null,
     videoCountPerReactionRun: null,
@@ -62,12 +69,18 @@ test('empty owner input keeps all real plan and measurement evidence unresolved'
     'channelIdsPerCall',
     'measuredAt',
     'measuredUsageEvidenceRef',
+    'measurementWindowCompletionEvidenceRef',
+    'observedThrough',
     'requestBatchingEvidenceRef',
     'requestBatchingStrategy',
     'uploadManifestPageCountPerReactionRun',
     'videoCountPerReactionRun',
     'videoIdsPerCall',
   ]);
+  assert.deepEqual(
+    result.completionBlockers,
+    ['measurement-window-incomplete'],
+  );
   assert.equal(result.automaticProviderCallAllowed, false);
   assert.equal(result.collectionExecutionAuthorized, false);
   assert.equal(result.providerSubmissionAuthorized, false);
@@ -76,6 +89,9 @@ test('empty owner input keeps all real plan and measurement evidence unresolved'
 test('complete plan evidence can become measurement-plan-ready while measured outputs remain null', () => {
   const result = evaluateSnsFandomYoutubeQuotaOwnerHandoff(
     input({
+      measurementWindowComplete: false,
+      observedThrough: null,
+      measurementWindowCompletionEvidenceRef: null,
       measuredAt: null,
       uploadManifestPageCountPerReactionRun: null,
       videoCountPerReactionRun: null,
@@ -95,6 +111,11 @@ test('complete plan evidence can become measurement-plan-ready while measured ou
   assert.equal(result.state, 'measurement-plan-ready');
   assert.deepEqual(result.missingPlanFields, []);
   assert.equal(result.reactionSnapshotRunsPerDay, 2);
+  assert.equal(result.measurementWindowComplete, false);
+  assert.deepEqual(
+    result.completionBlockers,
+    ['measurement-window-incomplete'],
+  );
   assert.equal(result.measuredAt, null);
   assert.equal(
     result.requestBatchingStrategy,
@@ -171,6 +192,9 @@ test('checked-in owner template records the owner-approved plan while Phase C st
   assert.equal(raw.measurementWindowStart, '2026-10-03T15:00:00.000Z');
   assert.equal(raw.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(raw.reactionSnapshotRunsPerDay, 24);
+  assert.equal(raw.measurementWindowComplete, false);
+  assert.equal(raw.observedThrough, null);
+  assert.equal(raw.measurementWindowCompletionEvidenceRef, null);
   assert.equal(
     raw.cadenceEvidenceRef,
     'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631',
@@ -207,6 +231,11 @@ test('checked-in owner template records the owner-approved plan while Phase C st
   assert.equal(result.measurementWindowStart, '2026-10-03T15:00:00.000Z');
   assert.equal(result.measurementWindowEnd, '2027-10-04T15:00:00.000Z');
   assert.equal(result.reactionSnapshotRunsPerDay, 24);
+  assert.equal(result.measurementWindowComplete, false);
+  assert.deepEqual(
+    result.completionBlockers,
+    ['measurement-window-incomplete'],
+  );
   assert.equal(result.cadenceEvidenceRef, 'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631');
   assert.equal(
     result.requestBatchingStrategy,

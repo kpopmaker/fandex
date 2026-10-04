@@ -1232,3 +1232,42 @@ canonical input location. The three owner-input blockers are therefore
 resolved, while the quota worksheet/estimate blockers remain independent and
 cannot be bypassed by owner identity input. No provider submission is
 authorized by owner-input readiness alone.
+
+
+## 6l. Final quota promotion requires completed-window evidence
+
+The quota-owner handoff now fails closed on canonical measurement-window
+completion rather than relying only on operators to leave measured fields null.
+
+Final quota worksheet input readiness additionally requires:
+
+- `measurementWindowComplete = true`;
+- `observedThrough` as an exact ISO-8601 observation boundary;
+- `observedThrough >= measurementWindowEnd`;
+- a durable non-secret `measurementWindowCompletionEvidenceRef`.
+
+Important semantics:
+
+- `measurementWindowComplete = false` is an explicit real state, not Missing;
+- `observedThrough` is an observation boundary and is not interchangeable with
+  collection/execution time;
+- a bounded snapshot from inside the canonical window cannot become
+  `quota-worksheet-input-ready` merely because page/video counts are present;
+- the observed video count of zero remains valid data and is preserved once the
+  completed-window gate is legitimately satisfied;
+- singleton client batching remains distinct from provider maximum claims.
+
+The current checked-in quota owner input therefore remains fail-closed:
+
+- `measurementWindowComplete = false`;
+- `observedThrough = null`;
+- `measurementWindowCompletionEvidenceRef = null`;
+- final measured fields remain null.
+
+The current bounded `115 / 0 / 120` snapshot remains durable evidence only.
+It does not satisfy the completed 366-day measurement-window gate and cannot be
+promoted into final quota-owner evidence or a quota worksheet.
+
+This contract change does not authorize a provider call, recurring scheduler,
+Production collection, provider submission, deployment, or Product
+activation/publication.
