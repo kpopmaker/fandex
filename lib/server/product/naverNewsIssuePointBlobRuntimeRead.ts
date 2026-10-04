@@ -1,5 +1,3 @@
-import 'server-only';
-
 import { getVercelOidcToken } from '@vercel/functions/oidc';
 
 import {
