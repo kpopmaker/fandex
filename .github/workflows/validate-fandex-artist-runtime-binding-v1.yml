@@ -12,6 +12,8 @@ on:
       - 'lib/server/product/musicAlbumPointCurrentRuntimeRead.ts'
       - 'lib/server/product/snsFandomPointCurrentRuntimeRead.ts'
       - 'lib/server/product/riskAdjustmentCurrentRuntimeRead.ts'
+      - 'lib/server/product/brandFitStoredEvidenceRuntime.ts'
+      - 'lib/product/runtime/brandFitStoredEvidenceRuntime.ts'
       - 'lib/product/assembly/fandexArtistEndToEndProductAssembly.ts'
       - 'lib/product/adapters/fandexArtistVariableProductOrchestrator.ts'
       - 'tests/fandex-artist-runtime-binding-v1.test.mts'
@@ -33,7 +35,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/fandex-artist-runtime-binding-v1.test.mts tests/fandex-artist-end-to-end-product-assembly-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts
+      - run: npx tsx --test tests/fandex-artist-runtime-binding-v1.test.mts tests/fandex-artist-end-to-end-product-assembly-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/brand-fit-stored-evidence-runtime-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build
