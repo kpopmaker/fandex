@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 115);
+  assert.equal(input.drafts.length, 116);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 113);
+  assert.equal(deduped.length, 114);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 111);
+  assert.equal(hanteo.length, 112);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 111);
+  assert.equal(hanteoFirstWeek.length, 112);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    111,
+    112,
   );
 
   for (const [artistId, title, value] of [
@@ -470,6 +470,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['ateez', 'ZERO : FEVER Part.1', 233_399, '2020-07-29', '2020-08-04', 'corroborated-secondary'],
     ['txt', 'The Chaos Chapter: FREEZE', 630_563, '2021-05-31', '2021-06-06', 'corroborated-secondary'],
     ['txt', 'The Dream Chapter: ETERNITY', 181_009, '2020-05-18', '2020-05-24', 'primary-official'],
+    ['enhypen', 'THE SIN : VANISH', 2_075_056, '2026-01-16', '2026-01-22', 'primary-official'],
   ] as const) {
     const item = hanteoFirstWeek.find(
       observation =>
@@ -512,7 +513,7 @@ test('source tiers remain separate from evidence quality', () => {
   );
 
   assert.deepEqual(tierCounts, {
-    'tier-a-primary-official': 41,
+    'tier-a-primary-official': 42,
     'tier-c-discovery-only': 10,
     'tier-b-provider-attributed-reputable': 85,
   });
