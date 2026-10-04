@@ -34,7 +34,7 @@ function context() {
   );
   const researchInput = buildReportedAlbumSalesResearchInput(
     history,
-    '2026-10-04T16:30:22+09:00',
+    '2026-10-04T17:09:27+09:00',
   );
   const reviewerPacket =
     buildReportedAlbumSalesResearchReviewerPacket({
@@ -55,10 +55,10 @@ test('current 21-artist cohort produces four empty reviewer-owned submission slo
     manifest.contractVersion,
     REPORTED_ALBUM_SALES_RESEARCH_REVIEW_REQUEST_VERSION,
   );
-  assert.equal(manifest.releaseCount, 109);
+  assert.equal(manifest.releaseCount, 110);
   assert.equal(manifest.artistCount, 21);
-  assert.equal(manifest.observationIds.length, 109);
-  assert.ok(manifest.evidenceUrls.length >= 114);
+  assert.equal(manifest.observationIds.length, 110);
+  assert.ok(manifest.evidenceUrls.length >= 116);
   assert.deepEqual(
     manifest.requestedDimensions,
     [
@@ -76,7 +76,7 @@ test('current 21-artist cohort produces four empty reviewer-owned submission slo
     assert.equal(slot.reviewerRef, null);
     assert.equal(slot.reviewedAt, null);
     assert.equal(slot.submissionReady, false);
-    assert.equal(slot.coveredObservationIds.length, 109);
+    assert.equal(slot.coveredObservationIds.length, 110);
   }
 
   const cohortCoverage = manifest.slots.find(

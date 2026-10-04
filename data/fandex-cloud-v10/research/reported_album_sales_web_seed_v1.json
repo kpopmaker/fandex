@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T16:30:22+09:00",
+  "collectedAt": "2026-10-04T17:09:27+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5211,6 +5211,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T16:30:22+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Chaos Chapter: FREEZE",
+        "releaseDate": "2021-05-31",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 630563,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-05-31",
+      "providerPeriodEnd": "2021-06-06",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T17:09:27+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1473351:txt-chaos-chapter-freeze",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1473351wpp/txt-achieves-6th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history-with-the-chaos-chapter-freeze",
+          "sourcePublicationDate": "2021-06-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T17:09:27+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "manila-bulletin:20210607:txt-freeze",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/6/7/txts-freeze-sells-631000-copies-of-freeze-in-first-week-tops-hanteo-chart",
+          "sourcePublicationDate": "2021-06-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T17:09:27+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
