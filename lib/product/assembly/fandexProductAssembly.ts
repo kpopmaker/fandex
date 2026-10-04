@@ -160,6 +160,79 @@ function errorDetail(error: unknown): string {
   return 'fandex_product_assembly_unknown_error';
 }
 
+export function assembleFandexProductFromSnapshot(input: Readonly<{
+  snapshot: FandexVariableProductSnapshot;
+  universeVersion: string;
+  artists: readonly FandexArtistAvailabilityMatrixArtist[];
+  supportClaims?: readonly FandexArtistVariableSupportClaim[];
+  generatedAt: string;
+}>): FandexProductAssemblyResult {
+  try {
+    const canonicalArtistId = input.snapshot.canonicalArtistId.trim();
+
+    const artistKnown = input.artists.some(
+      (artist) => artist.id.trim() === canonicalArtistId,
+    );
+    if (!artistKnown) {
+      return dataIssue(
+        'artist-not-known',
+        [`canonical-artist-id:${canonicalArtistId}`],
+      );
+    }
+
+    const availabilityMatrix = buildFandexArtistAvailabilityMatrix({
+      universeVersion: input.universeVersion,
+      artists: input.artists,
+      products: input.snapshot.records,
+      supportClaims: input.supportClaims,
+    });
+    const availabilityRow = availabilityMatrix.rows.find(
+      (row) => row.canonicalArtistId === canonicalArtistId,
+    );
+
+    if (!availabilityRow) {
+      return dataIssue(
+        'artist-not-known',
+        [`canonical-artist-id:${canonicalArtistId}`],
+      );
+    }
+
+    const candidate = createFandexProductCandidate({
+      snapshot: input.snapshot,
+      availabilityRow,
+    });
+    const explainability = createFandexProductExplainability(candidate);
+    const readModel = createFandexProductReadModel({
+      candidate,
+      explainability,
+      generatedAt: input.generatedAt,
+    });
+    const api = createFandexProductInternalApiOk(readModel);
+
+    if (api.status !== 'ok') {
+      throw new Error('fandex_product_assembly_ok_envelope_invalid');
+    }
+
+    return Object.freeze({
+      contractVersion: FANDEX_PRODUCT_ASSEMBLY_CONTRACT_VERSION,
+      status: 'ok' as const,
+      records: Object.freeze([...input.snapshot.records]),
+      snapshot: input.snapshot,
+      availabilityMatrix,
+      availabilityRow,
+      candidate,
+      explainability,
+      readModel,
+      api,
+    });
+  } catch (error) {
+    return dataIssue(
+      'source-inconsistent',
+      [errorDetail(error)],
+    );
+  }
+}
+
 export function assembleFandexProduct(input: Readonly<{
   adapters: FandexProductAssemblyAdapters;
   universeVersion: string;
@@ -219,69 +292,21 @@ export function assembleFandexProduct(input: Readonly<{
     );
   }
 
+  let snapshot: FandexVariableProductSnapshot;
   try {
-    const snapshot = createFandexVariableProductSnapshot(records);
-    const canonicalArtistId = snapshot.canonicalArtistId;
-
-    const artistKnown = input.artists.some(
-      (artist) => artist.id.trim() === canonicalArtistId,
-    );
-    if (!artistKnown) {
-      return dataIssue(
-        'artist-not-known',
-        [`canonical-artist-id:${canonicalArtistId}`],
-      );
-    }
-
-    const availabilityMatrix = buildFandexArtistAvailabilityMatrix({
-      universeVersion: input.universeVersion,
-      artists: input.artists,
-      products: records,
-      supportClaims: input.supportClaims,
-    });
-    const availabilityRow = availabilityMatrix.rows.find(
-      (row) => row.canonicalArtistId === canonicalArtistId,
-    );
-
-    if (!availabilityRow) {
-      return dataIssue(
-        'artist-not-known',
-        [`canonical-artist-id:${canonicalArtistId}`],
-      );
-    }
-
-    const candidate = createFandexProductCandidate({
-      snapshot,
-      availabilityRow,
-    });
-    const explainability = createFandexProductExplainability(candidate);
-    const readModel = createFandexProductReadModel({
-      candidate,
-      explainability,
-      generatedAt: input.generatedAt,
-    });
-    const api = createFandexProductInternalApiOk(readModel);
-
-    if (api.status !== 'ok') {
-      throw new Error('fandex_product_assembly_ok_envelope_invalid');
-    }
-
-    return Object.freeze({
-      contractVersion: FANDEX_PRODUCT_ASSEMBLY_CONTRACT_VERSION,
-      status: 'ok' as const,
-      records: Object.freeze([...records]),
-      snapshot,
-      availabilityMatrix,
-      availabilityRow,
-      candidate,
-      explainability,
-      readModel,
-      api,
-    });
+    snapshot = createFandexVariableProductSnapshot(records);
   } catch (error) {
     return dataIssue(
       'source-inconsistent',
       [errorDetail(error)],
     );
   }
+
+  return assembleFandexProductFromSnapshot({
+    snapshot,
+    universeVersion: input.universeVersion,
+    artists: input.artists,
+    supportClaims: input.supportClaims,
+    generatedAt: input.generatedAt,
+  });
 }
