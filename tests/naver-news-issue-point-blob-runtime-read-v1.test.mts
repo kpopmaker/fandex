@@ -152,9 +152,11 @@ test('Blob-backed current newsIssuePoint reader resolves latest official manifes
   );
   assert.equal(
     result.model.sourceMetadata.throughSlotStart,
-    latest.identity.request.collectionKey.includes('20260915t170000z')
-      ? '2026-09-15T17:00:00.000Z'
-      : null,
+    '2026-09-15T17:00:00.000Z',
+  );
+  assert.match(
+    latest.identity.request.collectionKey,
+    /20260915t170000z/,
   );
   assert.equal(
     result.model.evidenceTrace.kind,
