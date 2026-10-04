@@ -153,7 +153,35 @@ test('runtime loader failure identifies the exact variable and stops later reads
   ]);
 });
 
-test('IU server binding uses only current real runtime producers and leaves unresolved inputs explicit', () => {
+test('dependent runtime loader receives previously resolved canonical payloads', async () => {
+  const seen: unknown[] = [];
+  const runtime = completeRuntime();
+  const dependent: FandexArtistRuntimeLoaderMap = Object.freeze({
+    ...runtime,
+    riskAdjustmentPoint: async (resolved) => {
+      seen.push({
+        hasNews: resolved.newsIssuePoint !== undefined,
+        hasActivity: resolved.comebackActivityPoint !== undefined,
+        hasRisk: resolved.riskAdjustmentPoint !== undefined,
+      });
+      return undefined as never;
+    },
+  });
+
+  const result = await resolveFandexArtistRuntimeInputs({
+    canonicalArtistId: 'iu',
+    runtime: dependent,
+  });
+
+  assert.equal(result.status, 'ok');
+  assert.deepEqual(seen, [{
+    hasNews: true,
+    hasActivity: true,
+    hasRisk: false,
+  }]);
+});
+
+test('IU server binding uses six current real runtime producers and leaves only brandFit unresolved', () => {
   const source = readFileSync(
     new URL(
       '../lib/server/product/fandexArtistEndToEndRuntime.ts',
@@ -179,15 +207,28 @@ test('IU server binding uses only current real runtime producers and leaves unre
     /getMomentumLiveShadowProductReadinessForIU/,
   );
 
-  for (const unresolved of [
+  assert.match(
+    source,
+    /getMusicAlbumPointCurrentRuntimeForIU/,
+  );
+  assert.match(
+    source,
+    /getSnsFandomPointCurrentRuntimeForIU/,
+  );
+  assert.match(
+    source,
+    /deriveRiskAdjustmentCurrentRuntimeForIU/,
+  );
+  assert.match(source, /brandFitPoint: null/);
+
+  for (const resolved of [
     'musicAlbumPoint',
     'snsFandomPoint',
-    'brandFitPoint',
     'riskAdjustmentPoint',
   ]) {
-    assert.match(
+    assert.doesNotMatch(
       source,
-      new RegExp(`${unresolved}: null`),
+      new RegExp(`${resolved}: null`),
     );
   }
 
