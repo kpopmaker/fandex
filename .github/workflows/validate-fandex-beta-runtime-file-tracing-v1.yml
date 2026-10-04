@@ -1,0 +1,28 @@
+name: Validate FANDEX Beta runtime file tracing v1
+
+on:
+  pull_request:
+    paths:
+      - 'next.config.ts'
+      - 'tests/fandex-beta-output-file-tracing-v1.test.mts'
+      - '.github/workflows/validate-fandex-beta-runtime-file-tracing-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-beta-output-file-tracing-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

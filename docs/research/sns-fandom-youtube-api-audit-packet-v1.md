@@ -1338,3 +1338,41 @@ readiness still reports both quota worksheet and quota estimate as missing.
 A future matching quota estimate evidence record does not itself authorize
 provider submission, Production collection, scheduler activation, or Product
 activation/publication.
+
+
+## 13. Provider submission authorization handoff
+
+Provider submission is intentionally separated from audit packet readiness by
+`sns-fandom-youtube-provider-submission-handoff-v1`.
+
+The handoff consumes:
+
+- current audit submission readiness;
+- an explicit owner provider-submission approval boolean;
+- a durable non-secret approval evidence reference;
+- an exact ISO approval timestamp;
+- the exact repository/submission revision SHA being approved;
+- the provider client ref being approved.
+
+The handoff preserves these distinct states:
+
+- `submission-not-ready`;
+- `awaiting-provider-submission-approval`;
+- `provider-submission-authorization-invalid`;
+- `provider-submission-authorized`.
+
+A `submission-ready` audit packet does not authorize provider submission by
+itself. A stale revision binding, provider-client mismatch, invalid timestamp,
+missing approval evidence, secret-like approval reference, or absent explicit
+owner approval fails closed.
+
+Even a valid `provider-submission-authorized` result does not dispatch a
+submission and never implies:
+
+- provider approval;
+- Production YouTube collection authorization;
+- recurring scheduler activation;
+- Product activation/publication.
+
+The checked-in owner input remains deliberately unapproved and null-bound, so
+the current incomplete-window state remains unauthorized.
