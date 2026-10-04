@@ -104,7 +104,7 @@ test('secret-like evidence references fail closed', () => {
   );
 });
 
-test('checked-in Phase D owner input remains pending, reference-only, and secret-free', async () => {
+test('checked-in Phase D owner input is ready, reference-only, and secret-free', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -117,18 +117,15 @@ test('checked-in Phase D owner input remains pending, reference-only, and secret
 
   const result = evaluateSnsFandomYoutubeSubmissionOwnerHandoff(raw);
 
-  assert.equal(raw.state, 'awaiting-owner-evidence');
-  assert.equal(raw.applicantIdentityRef, null);
-  assert.equal(raw.organizationOrSelfRef, null);
-  assert.equal(raw.derivedMetricsAndStorageAmendmentAccepted, false);
+  assert.equal(raw.state, 'submission-owner-evidence-ready');
+  assert.equal(raw.applicantIdentityRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(raw.organizationOrSelfRef, 'https://docs.google.com/document/d/1Hbv5JP7n0ixYDNwcaJPg2Nx8JN_pK1ultruvf1BBaX4/edit?usp=drivesdk');
+  assert.equal(raw.derivedMetricsAndStorageAmendmentAccepted, true);
 
-  assert.equal(result.state, 'awaiting-owner-evidence');
-  assert.deepEqual(result.pendingOwnerFields, [
-    'applicantIdentityRef',
-    'derivedMetricsAndStorageAmendmentAccepted',
-    'organizationOrSelfRef',
-  ]);
+  assert.equal(result.state, 'submission-owner-evidence-ready');
+  assert.deepEqual(result.pendingOwnerFields, []);
   assert.deepEqual(result.blockers, []);
+  assert.equal(result.amendmentAccepted, true);
   assert.equal(result.providerSubmissionAuthorized, false);
   assert.equal(result.productionCollectionAuthorized, false);
 
