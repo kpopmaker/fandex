@@ -1,4 +1,4 @@
-name: Capture snsFandom YouTube audit screenshots v1
+name: Capture snsFandom YouTube analytics screenshot evidence v1
 
 on:
   push:
@@ -19,96 +19,119 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify stable Production evidence text
+      - name: Verify stable Production analytics evidence
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p evidence
-          curl -fsSL --retry 3 --retry-delay 2 https://fandex-eta.vercel.app/ > evidence/homepage.html
-          curl -fsSL --retry 3 --retry-delay 2 https://fandex-eta.vercel.app/privacy > evidence/privacy.html
+          status=$(curl -sS -L --retry 3 --retry-delay 2 -o evidence/youtube-analytics-evidence.html -w '%{http_code}' https://fandex-eta.vercel.app/youtube-analytics-evidence)
+          test "$status" = "200"
 
-          grep -q 'Privacy Policy' evidence/homepage.html
-          grep -q 'Terms of Service' evidence/homepage.html
-          grep -q 'YouTube Terms' evidence/homepage.html
-          grep -q 'Google Privacy' evidence/homepage.html
-          grep -q 'K-pop 리서치 지표' evidence/homepage.html
-          grep -q '현재 Dashboard 값은 월별 합성 미리보기 데이터입니다' evidence/homepage.html
+          python - <<'PY'
+          import html, re
+          from pathlib import Path
 
-          # The stable homepage is explicitly synthetic/preview data.
-          # It must never be promoted as Analytics & Reporting feature evidence.
+          raw = Path('evidence/youtube-analytics-evidence.html').read_text(encoding='utf-8')
+          text = html.unescape(re.sub(r'<[^>]+>', ' ', raw))
+          text = re.sub(r'\s+', ' ', text).strip()
 
-          grep -q 'Privacy Policy' evidence/privacy.html
-          grep -q 'YouTube API' evidence/privacy.html
-          grep -q 'YouTube Terms' evidence/privacy.html
-          grep -q 'Google Privacy' evidence/privacy.html
+          required = [
+              'Real provider evidence',
+              'Playlist pages traversed 115',
+              'Included videos 0 Observed true zero',
+              'Observed provider calls 120',
+              'Observed quota units 120',
+              'Reaction snapshots/day 24',
+              'Measurement window complete: false',
+              'Final quota evidence promotion: false',
+              'Workflow run: 37132802429',
+              'Artifact: 11277073687',
+              'Raw video identifiers stored: false',
+              'Raw statistics stored: false',
+              'Secret material stored: false',
+          ]
+
+          missing = [needle for needle in required if needle not in text]
+          if missing:
+              raise SystemExit('missing expected Production evidence: ' + repr(missing))
+
+          forbidden = [
+              'current Dashboard values are monthly synthetic preview data',
+              '현재 Dashboard 값은 월별 합성 미리보기 데이터입니다',
+          ]
+          present = [needle for needle in forbidden if needle in text]
+          if present:
+              raise SystemExit('synthetic preview evidence detected: ' + repr(present))
+          PY
 
       - name: Install Chromium
         shell: bash
-        run: |
-          npx --yes playwright@1.55.0 install --with-deps chromium
+        run: npx --yes playwright@1.55.0 install --with-deps chromium
 
-      - name: Capture audit screenshots
+      - name: Capture Production analytics screenshot
         shell: bash
         run: |
           set -euo pipefail
-
           npx --yes playwright@1.55.0 screenshot \
             --browser chromium \
             --viewport-size "1440,1100" \
             --full-page \
             --wait-for-timeout 2000 \
-            https://fandex-eta.vercel.app/ \
-            evidence/homepage-legal-links.png
+            https://fandex-eta.vercel.app/youtube-analytics-evidence \
+            evidence/youtube-analytics-evidence.png
 
-          npx --yes playwright@1.55.0 screenshot \
-            --browser chromium \
-            --viewport-size "1440,1100" \
-            --full-page \
-            --wait-for-timeout 2000 \
-            https://fandex-eta.vercel.app/privacy \
-            evidence/privacy-policy.png
-
-          test -s evidence/homepage-legal-links.png
-          test -s evidence/privacy-policy.png
+          test -s evidence/youtube-analytics-evidence.png
+          sha256sum evidence/youtube-analytics-evidence.png > evidence/SHA256SUMS.txt
 
       - name: Write evidence manifest
         shell: bash
         run: |
           set -euo pipefail
+          screenshot_sha=$(cut -d' ' -f1 evidence/SHA256SUMS.txt)
+          captured_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           cat > evidence/manifest.json <<EOF
           {
-            "version": "sns_fandom_youtube_audit_screenshots_v1",
-            "capturedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "version": "sns_fandom_youtube_analytics_screenshot_evidence_v1",
+            "capturedAt": "${captured_at}",
             "repository": "${GITHUB_REPOSITORY}",
-            "gitSha": "${GITHUB_SHA}",
+            "captureWorkflowGitSha": "${GITHUB_SHA}",
             "workflowRunId": "${GITHUB_RUN_ID}",
-            "productionBaseUrl": "https://fandex-eta.vercel.app",
-            "files": [
-              {
-                "purpose": "homepage-visible-legal-links",
-                "path": "homepage-legal-links.png",
-                "url": "https://fandex-eta.vercel.app/"
-              },
-              {
-                "purpose": "privacy-policy",
-                "path": "privacy-policy.png",
-                "url": "https://fandex-eta.vercel.app/privacy"
-              }
-            ]
+            "sourceUrl": "https://fandex-eta.vercel.app/youtube-analytics-evidence",
+            "sourceRoute": "/youtube-analytics-evidence",
+            "sourceHttpStatus": 200,
+            "productionDeploymentId": "dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv",
+            "productionGitSha": "11514e123bdfd95f810691aaeaaed7c49755cb18",
+            "productionDeploymentUrl": "https://fandex-q5ruetv95-larva3203-1222s-projects.vercel.app",
+            "boundedMeasurementWorkflowRunId": "37132802429",
+            "boundedMeasurementArtifactId": "11277073687",
+            "renderedEvidence": {
+              "uploadManifestPageCountPerReactionRun": 115,
+              "videoCountPerReactionRun": 0,
+              "trueZeroVideoCountObserved": true,
+              "providerCallsObserved": 120,
+              "quotaUnitsObserved": 120,
+              "reactionSnapshotRunsPerDay": 24,
+              "measurementWindowComplete": false,
+              "quotaWorksheetEligible": false,
+              "finalOwnerEvidencePromotionAllowed": false
+            },
+            "screenshot": {
+              "name": "youtube-analytics-evidence.png",
+              "sha256": "${screenshot_sha}"
+            },
+            "mockOrPreviewSeedMetricUsed": false,
+            "rawVideoIdentifiersVisible": false,
+            "rawStatisticsVisible": false,
+            "secretMaterialVisible": false
           }
           EOF
-          sha256sum \
-            evidence/homepage-legal-links.png \
-            evidence/privacy-policy.png \
-            > evidence/SHA256SUMS.txt
 
-      - name: Upload screenshot evidence
+      - name: Upload Analytics screenshot evidence
         uses: actions/upload-artifact@v4
         with:
-          name: sns-fandom-youtube-audit-screenshots-v1
+          name: sns-fandom-youtube-analytics-screenshot-evidence-v1
           path: |
-            evidence/homepage-legal-links.png
-            evidence/privacy-policy.png
+            evidence/youtube-analytics-evidence.png
             evidence/manifest.json
             evidence/SHA256SUMS.txt
           if-no-files-found: error
