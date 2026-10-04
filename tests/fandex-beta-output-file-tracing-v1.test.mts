@@ -9,10 +9,7 @@ test('FANDEX Beta route explicitly traces repository-backed runtime evidence', a
   );
 
   assert.match(source, /outputFileTracingIncludes/);
-  assert.match(
-    source,
-    /\/artists\/\\\\\[artistId\\\\\]\/fandex-beta/,
-  );
+  assert.match(source, /\/artists\/\*\/fandex-beta/);
 
   for (const pathname of [
     './data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json',
