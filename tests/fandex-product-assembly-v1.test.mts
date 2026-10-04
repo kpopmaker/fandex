@@ -24,6 +24,7 @@ import {
 } from '../lib/product/adapters/snsFandomPointFandexVariableProduct';
 import {
   assembleFandexProduct,
+  assembleFandexProductFromOrchestrationResult,
   FANDEX_PRODUCT_ASSEMBLY_ADAPTER_PRODUCT_VERSIONS,
   FANDEX_PRODUCT_ASSEMBLY_CONTRACT_VERSION,
   type FandexProductAssemblyAdapters,
@@ -33,6 +34,13 @@ import {
   FANDEX_VARIABLE_PRODUCT_IDS,
   type FandexVariableProductId,
 } from '../lib/product/contracts/fandexVariableProduct';
+import {
+  createFandexVariableProductSnapshot,
+} from '../lib/product/contracts/fandexVariableProductSnapshot';
+import {
+  FANDEX_ARTIST_VARIABLE_PRODUCT_ORCHESTRATOR_VERSION,
+  type FandexArtistVariableProductOrchestrationResult,
+} from '../lib/product/adapters/fandexArtistVariableProductOrchestrator';
 
 const expectedAdapterVersions = {
   musicAlbumPoint:
@@ -305,4 +313,70 @@ test('assembly adapter provenance map covers exactly the canonical seven variabl
     FANDEX_PRODUCT_ASSEMBLY_ADAPTER_PRODUCT_VERSIONS,
     expectedAdapterVersions,
   );
+});
+
+
+test('orchestration bridge carries one validated snapshot through candidate, explainability, read model, and API', () => {
+  const orchestration: FandexArtistVariableProductOrchestrationResult = {
+    status: 'ok',
+    orchestratorVersion:
+      FANDEX_ARTIST_VARIABLE_PRODUCT_ORCHESTRATOR_VERSION,
+    snapshot: createFandexVariableProductSnapshot(
+      FANDEX_VARIABLE_PRODUCT_IDS.map((variableId) =>
+        record(variableId),
+      ),
+    ),
+  };
+
+  const result = assembleFandexProductFromOrchestrationResult({
+    orchestration,
+    universeVersion: 'test-artist-universe-v1',
+    artists: [{ id: 'iu' }, { id: 'blackpink' }],
+    generatedAt: '2026-10-04T02:00:00.000Z',
+  });
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+
+  assert.equal(result.snapshot, orchestration.snapshot);
+  assert.equal(result.candidate.components.length, 7);
+  assert.equal(result.explainability.components.length, 7);
+  assert.equal(result.readModel.components.length, 7);
+  assert.equal(result.api.status, 'ok');
+  assert.equal(result.readModel.fandexValue, null);
+  assert.equal(result.readModel.methodologyVersion, null);
+});
+
+test('orchestration bridge converts fail-closed adapter output into a Product data issue', () => {
+  const orchestration: FandexArtistVariableProductOrchestrationResult = {
+    status: 'blocked',
+    orchestratorVersion:
+      FANDEX_ARTIST_VARIABLE_PRODUCT_ORCHESTRATOR_VERSION,
+    blocker: 'adapter-output-blocked',
+    failures: [
+      {
+        variableId: 'snsFandomPoint',
+        reason: 'adapter-blocked:upstream-product-boundary-violated',
+      },
+    ],
+  };
+
+  const result = assembleFandexProductFromOrchestrationResult({
+    orchestration,
+    universeVersion: 'test-artist-universe-v1',
+    artists: [{ id: 'iu' }],
+    generatedAt: '2026-10-04T02:00:00.000Z',
+  });
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status !== 'data-issue') return;
+
+  assert.deepEqual(result.blockedAdapterIds, ['snsFandomPoint']);
+  assert.equal(result.api.reason, 'product-candidate-unavailable');
+  assert.ok(
+    result.api.details.includes(
+      'orchestration:snsFandomPoint:adapter-blocked:upstream-product-boundary-violated',
+    ),
+  );
+  assert.equal('readModel' in result, false);
 });
