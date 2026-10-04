@@ -27,6 +27,12 @@ import {
   type SnsFandomPointFandexVariableProductAdapterResult,
 } from '../adapters/snsFandomPointFandexVariableProduct';
 import {
+  FANDEX_ARTIST_VARIABLE_PRODUCT_ORCHESTRATOR_VERSION,
+  orchestrateFandexArtistVariableProducts,
+  type FandexArtistVariableProductOrchestrationInput,
+  type FandexArtistVariableProductOrchestrationResult,
+} from '../adapters/fandexArtistVariableProductOrchestrator';
+import {
   buildFandexArtistAvailabilityMatrix,
   type FandexArtistAvailabilityMatrix,
   type FandexArtistAvailabilityMatrixArtist,
@@ -160,6 +166,164 @@ function errorDetail(error: unknown): string {
   return 'fandex_product_assembly_unknown_error';
 }
 
+export type FandexProductAssemblyContext = Readonly<{
+  universeVersion: string;
+  artists: readonly FandexArtistAvailabilityMatrixArtist[];
+  supportClaims?: readonly FandexArtistVariableSupportClaim[];
+  generatedAt: string;
+}>;
+
+export function assembleFandexProductFromSnapshot(
+  input: FandexProductAssemblyContext & Readonly<{
+    snapshot: FandexVariableProductSnapshot;
+  }>,
+): FandexProductAssemblyResult {
+  const records = input.snapshot.records;
+
+  for (const variableId of FANDEX_VARIABLE_PRODUCT_IDS) {
+    const record = records.find(
+      (candidate) => candidate.variableId === variableId,
+    );
+
+    if (
+      !record
+      || record.contractVersion !== FANDEX_VARIABLE_PRODUCT_CONTRACT_VERSION
+      || record.productVersion
+        !== FANDEX_PRODUCT_ASSEMBLY_ADAPTER_PRODUCT_VERSIONS[variableId]
+    ) {
+      return dataIssue(
+        'source-contract-invalid',
+        [
+          `${variableId}:adapter-record-contract-or-provenance-invalid`,
+        ],
+      );
+    }
+  }
+
+  try {
+    const canonicalArtistId = input.snapshot.canonicalArtistId;
+
+    const artistKnown = input.artists.some(
+      (artist) => artist.id.trim() === canonicalArtistId,
+    );
+    if (!artistKnown) {
+      return dataIssue(
+        'artist-not-known',
+        [`canonical-artist-id:${canonicalArtistId}`],
+      );
+    }
+
+    const availabilityMatrix = buildFandexArtistAvailabilityMatrix({
+      universeVersion: input.universeVersion,
+      artists: input.artists,
+      products: records,
+      supportClaims: input.supportClaims,
+    });
+    const availabilityRow = availabilityMatrix.rows.find(
+      (row) => row.canonicalArtistId === canonicalArtistId,
+    );
+
+    if (!availabilityRow) {
+      return dataIssue(
+        'artist-not-known',
+        [`canonical-artist-id:${canonicalArtistId}`],
+      );
+    }
+
+    const candidate = createFandexProductCandidate({
+      snapshot: input.snapshot,
+      availabilityRow,
+    });
+    const explainability = createFandexProductExplainability(candidate);
+    const readModel = createFandexProductReadModel({
+      candidate,
+      explainability,
+      generatedAt: input.generatedAt,
+    });
+    const api = createFandexProductInternalApiOk(readModel);
+
+    if (api.status !== 'ok') {
+      throw new Error('fandex_product_assembly_ok_envelope_invalid');
+    }
+
+    return Object.freeze({
+      contractVersion: FANDEX_PRODUCT_ASSEMBLY_CONTRACT_VERSION,
+      status: 'ok' as const,
+      records: Object.freeze([...records]),
+      snapshot: input.snapshot,
+      availabilityMatrix,
+      availabilityRow,
+      candidate,
+      explainability,
+      readModel,
+      api,
+    });
+  } catch (error) {
+    return dataIssue(
+      'source-inconsistent',
+      [errorDetail(error)],
+    );
+  }
+}
+
+export function assembleFandexProductFromOrchestrationResult(
+  input: FandexProductAssemblyContext & Readonly<{
+    orchestration: FandexArtistVariableProductOrchestrationResult;
+  }>,
+): FandexProductAssemblyResult {
+  if (
+    input.orchestration.orchestratorVersion
+      !== FANDEX_ARTIST_VARIABLE_PRODUCT_ORCHESTRATOR_VERSION
+  ) {
+    return dataIssue(
+      'source-contract-invalid',
+      ['orchestration:contract-version-invalid'],
+    );
+  }
+
+  if (input.orchestration.status === 'blocked') {
+    const blockedAdapterIds = input.orchestration.failures.flatMap(
+      (failure) =>
+        failure.variableId === null
+          ? []
+          : [failure.variableId],
+    );
+
+    return dataIssue(
+      'product-candidate-unavailable',
+      input.orchestration.failures.map(
+        (failure) =>
+          `orchestration:${failure.variableId ?? 'global'}:${failure.reason}`,
+      ),
+      blockedAdapterIds,
+    );
+  }
+
+  return assembleFandexProductFromSnapshot({
+    snapshot: input.orchestration.snapshot,
+    universeVersion: input.universeVersion,
+    artists: input.artists,
+    supportClaims: input.supportClaims,
+    generatedAt: input.generatedAt,
+  });
+}
+
+export function assembleFandexProductFromUpstreamInputs(
+  input: FandexProductAssemblyContext & Readonly<{
+    orchestrationInput: FandexArtistVariableProductOrchestrationInput;
+  }>,
+): FandexProductAssemblyResult {
+  return assembleFandexProductFromOrchestrationResult({
+    orchestration: orchestrateFandexArtistVariableProducts(
+      input.orchestrationInput,
+    ),
+    universeVersion: input.universeVersion,
+    artists: input.artists,
+    supportClaims: input.supportClaims,
+    generatedAt: input.generatedAt,
+  });
+}
+
 export function assembleFandexProduct(input: Readonly<{
   adapters: FandexProductAssemblyAdapters;
   universeVersion: string;
@@ -221,62 +385,13 @@ export function assembleFandexProduct(input: Readonly<{
 
   try {
     const snapshot = createFandexVariableProductSnapshot(records);
-    const canonicalArtistId = snapshot.canonicalArtistId;
 
-    const artistKnown = input.artists.some(
-      (artist) => artist.id.trim() === canonicalArtistId,
-    );
-    if (!artistKnown) {
-      return dataIssue(
-        'artist-not-known',
-        [`canonical-artist-id:${canonicalArtistId}`],
-      );
-    }
-
-    const availabilityMatrix = buildFandexArtistAvailabilityMatrix({
+    return assembleFandexProductFromSnapshot({
+      snapshot,
       universeVersion: input.universeVersion,
       artists: input.artists,
-      products: records,
       supportClaims: input.supportClaims,
-    });
-    const availabilityRow = availabilityMatrix.rows.find(
-      (row) => row.canonicalArtistId === canonicalArtistId,
-    );
-
-    if (!availabilityRow) {
-      return dataIssue(
-        'artist-not-known',
-        [`canonical-artist-id:${canonicalArtistId}`],
-      );
-    }
-
-    const candidate = createFandexProductCandidate({
-      snapshot,
-      availabilityRow,
-    });
-    const explainability = createFandexProductExplainability(candidate);
-    const readModel = createFandexProductReadModel({
-      candidate,
-      explainability,
       generatedAt: input.generatedAt,
-    });
-    const api = createFandexProductInternalApiOk(readModel);
-
-    if (api.status !== 'ok') {
-      throw new Error('fandex_product_assembly_ok_envelope_invalid');
-    }
-
-    return Object.freeze({
-      contractVersion: FANDEX_PRODUCT_ASSEMBLY_CONTRACT_VERSION,
-      status: 'ok' as const,
-      records: Object.freeze([...records]),
-      snapshot,
-      availabilityMatrix,
-      availabilityRow,
-      candidate,
-      explainability,
-      readModel,
-      api,
     });
   } catch (error) {
     return dataIssue(
