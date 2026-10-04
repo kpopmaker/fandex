@@ -1,0 +1,36 @@
+name: Validate FANDEX artist runtime binding v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/runtime/fandexArtistRuntimeBinding.ts'
+      - 'lib/server/product/fandexArtistEndToEndRuntime.ts'
+      - 'lib/server/product/naverNewsIssuePointRealProductRead.ts'
+      - 'lib/server/product/activityExposureRealProductRead.ts'
+      - 'lib/server/product/momentumEvidenceConsensusRealProductRead.ts'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
+      - 'lib/product/assembly/fandexArtistEndToEndProductAssembly.ts'
+      - 'lib/product/adapters/fandexArtistVariableProductOrchestrator.ts'
+      - 'tests/fandex-artist-runtime-binding-v1.test.mts'
+      - 'tests/fandex-artist-end-to-end-product-assembly-v1.test.mts'
+      - '.github/workflows/validate-fandex-artist-runtime-binding-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-artist-runtime-binding-v1.test.mts tests/fandex-artist-end-to-end-product-assembly-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
