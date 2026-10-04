@@ -1,0 +1,43 @@
+name: Validate snsFandom quota estimate materialization v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-quota-estimate-materialization-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaEstimateMaterialization.ts'
+      - 'tests/sns-fandom-youtube-quota-estimate-materialization-v1.test.mts'
+      - 'tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-youtube-quota-estimate-materialization-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeQuotaEstimateMaterialization.ts'
+      - 'tests/sns-fandom-youtube-quota-estimate-materialization-v1.test.mts'
+      - 'tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts'
+      - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
+      - '.github/workflows/validate-sns-fandom-youtube-quota-estimate-materialization-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Quota estimate materialization regressions
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-youtube-quota-estimate-materialization-v1.test.mts
+          tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

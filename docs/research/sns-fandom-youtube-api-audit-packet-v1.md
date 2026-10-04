@@ -1309,3 +1309,32 @@ candidate and keeps:
 A future completed-window evidence materialization step is still required
 before the quota estimate reference can be recorded and before submission
 readiness can become `submission-ready`.
+
+
+## 12. Quota estimate evidence materialization
+
+The final submission-only quota estimate reference is guarded by
+`sns-fandom-youtube-quota-estimate-materialization-v1`.
+
+The materializer is downstream of the completed-window closeout adapter. It
+cannot produce a quota estimate reference while the closeout state is not
+`quota-worksheet-ready-awaiting-estimate-materialization`.
+
+When the completed worksheet exists, future durable estimate evidence must:
+
+- use a durable non-secret evidence reference;
+- have an exact ISO-8601 materialization timestamp;
+- record the exact worksheet-derived minimum projected quota units/day;
+- preserve requested quota as unset;
+- preserve headroom factor as not applied.
+
+Any mismatched minimum, invented requested quota, arbitrary headroom, secret-like
+reference, or pre-measurement timestamp fails closed.
+
+Current repository evidence has no quota estimate materialization fields, so
+the current state remains `awaiting-completed-window` and submission
+readiness still reports both quota worksheet and quota estimate as missing.
+
+A future matching quota estimate evidence record does not itself authorize
+provider submission, Production collection, scheduler activation, or Product
+activation/publication.
