@@ -36,7 +36,7 @@ function seedInput() {
 
   return buildReportedAlbumSalesResearchInput(
     history,
-    '2026-10-05T00:31:10+09:00',
+    '2026-10-05T00:42:23+09:00',
   );
 }
 
@@ -106,11 +106,11 @@ test('actual research cohort packet exposes facts without making an automatic su
     buildReportedAlbumSalesResearchCohortReviewPacket(input);
 
   assert.equal(packet.inputState, 'reviewable');
-  assert.equal(packet.facts.releaseCount, 115);
+  assert.equal(packet.facts.releaseCount, 116);
   assert.equal(packet.facts.artistCount, 21);
   assert.equal(
     packet.facts.releaseIdentityStateCounts.candidate,
-    115,
+    116,
   );
   assert.equal(
     packet.facts.releaseIdentityStateCounts.resolved,
@@ -118,7 +118,7 @@ test('actual research cohort packet exposes facts without making an automatic su
   );
   assert.equal(
     packet.facts.evidenceQualityCounts['primary-official'],
-    40,
+    41,
   );
   assert.equal(
     packet.facts.evidenceQualityCounts[
@@ -130,7 +130,7 @@ test('actual research cohort packet exposes facts without making an automatic su
     packet.facts.evidenceQualityCounts['corroborated-secondary'],
     7,
   );
-  assert.equal(packet.facts.explicitSevenDayPeriodCount, 115);
+  assert.equal(packet.facts.explicitSevenDayPeriodCount, 116);
   assert.equal(packet.facts.periodInferenceUsed, false);
 
   assert.equal(

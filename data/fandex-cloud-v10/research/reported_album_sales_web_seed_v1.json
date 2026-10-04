@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T00:31:10+09:00",
+  "collectedAt": "2026-10-05T00:42:23+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5499,6 +5499,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T00:31:10+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Eyes wide open",
+        "releaseDate": "2020-10-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 245631,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-10-27",
+      "providerPeriodEnd": "2020-11-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T00:42:23+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteo-news:20210131:twice-eyes-wide-open",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:42:23+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "daebak:20201103:twice-eyes-wide-open",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Daebak",
+          "sourceUrl": "https://daebak.tokyo/?p=160114",
+          "sourcePublicationDate": "2020-11-03",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:42:23+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
