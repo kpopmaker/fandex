@@ -10,6 +10,9 @@ export type SnsFandomYoutubeQuotaOwnerHandoffInput = Readonly<{
   measurementWindowEnd: string | null;
   reactionSnapshotRunsPerDay: number | null;
   cadenceEvidenceRef: string | null;
+  measurementWindowComplete: boolean;
+  observedThrough: string | null;
+  measurementWindowCompletionEvidenceRef: string | null;
   measuredAt: string | null;
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
@@ -31,11 +34,15 @@ export type SnsFandomYoutubeQuotaOwnerHandoffResult = Readonly<{
     | 'quota-worksheet-input-ready';
   missingPlanFields: readonly string[];
   missingMeasurementFields: readonly string[];
+  completionBlockers: readonly string[];
   invalidFields: readonly string[];
   measurementWindowStart: string | null;
   measurementWindowEnd: string | null;
   reactionSnapshotRunsPerDay: number | null;
   cadenceEvidenceRef: string | null;
+  measurementWindowComplete: boolean;
+  observedThrough: string | null;
+  measurementWindowCompletionEvidenceRef: string | null;
   measuredAt: string | null;
   uploadManifestPageCountPerReactionRun: number | null;
   videoCountPerReactionRun: number | null;
@@ -65,6 +72,8 @@ const PLAN_FIELDS = Object.freeze([
 ] as const);
 
 const MEASUREMENT_FIELDS = Object.freeze([
+  'observedThrough',
+  'measurementWindowCompletionEvidenceRef',
   'measuredAt',
   'uploadManifestPageCountPerReactionRun',
   'videoCountPerReactionRun',
@@ -112,6 +121,7 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
 ): SnsFandomYoutubeQuotaOwnerHandoffResult {
   const missingPlanFields: string[] = [];
   const missingMeasurementFields: string[] = [];
+  const completionBlockers: string[] = [];
   const invalidFields: string[] = [];
 
   for (const field of PLAN_FIELDS) {
@@ -155,6 +165,9 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
   ) {
     invalidFields.push('reactionSnapshotRunsPerDay');
   }
+  if (input.observedThrough !== null && !validIso(input.observedThrough)) {
+    invalidFields.push('observedThrough');
+  }
   if (input.measuredAt !== null && !validIso(input.measuredAt)) {
     invalidFields.push('measuredAt');
   }
@@ -177,8 +190,26 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
     invalidFields.push('videoCountPerReactionRun');
   }
 
+  if (!input.measurementWindowComplete) {
+    completionBlockers.push('measurement-window-incomplete');
+  } else {
+    if (
+      input.observedThrough !== null
+      && input.measurementWindowEnd !== null
+      && validIso(input.observedThrough)
+      && validIso(input.measurementWindowEnd)
+      && Date.parse(input.observedThrough) < Date.parse(input.measurementWindowEnd)
+    ) {
+      completionBlockers.push('measurement-window-observed-through-before-end');
+    }
+    if (!present(input.measurementWindowCompletionEvidenceRef)) {
+      completionBlockers.push('measurement-window-completion-evidence-missing');
+    }
+  }
+
   for (const field of [
     'cadenceEvidenceRef',
+    'measurementWindowCompletionEvidenceRef',
     'measuredUsageEvidenceRef',
     'requestBatchingEvidenceRef',
     'providerBatchLimitEvidenceRef',
@@ -239,11 +270,17 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
   const missingMeasurement = Object.freeze(
     Array.from(new Set(missingMeasurementFields)).sort(),
   );
+  const completion = Object.freeze(
+    Array.from(new Set(completionBlockers)).sort(),
+  );
   const invalid = Object.freeze(Array.from(new Set(invalidFields)).sort());
 
   const planReady = missingPlan.length === 0 && invalid.length === 0;
   const worksheetInputsReady =
-    planReady && missingMeasurement.length === 0 && invalid.length === 0;
+    planReady
+    && missingMeasurement.length === 0
+    && completion.length === 0
+    && invalid.length === 0;
 
   return Object.freeze({
     contractVersion: SNS_FANDOM_YOUTUBE_QUOTA_OWNER_HANDOFF_VERSION,
@@ -254,12 +291,19 @@ export function evaluateSnsFandomYoutubeQuotaOwnerHandoff(
         : 'awaiting-owner-plan-evidence' as const,
     missingPlanFields: missingPlan,
     missingMeasurementFields: missingMeasurement,
+    completionBlockers: completion,
     invalidFields: invalid,
     measurementWindowStart: planReady ? input.measurementWindowStart : null,
     measurementWindowEnd: planReady ? input.measurementWindowEnd : null,
     reactionSnapshotRunsPerDay:
       planReady ? input.reactionSnapshotRunsPerDay : null,
     cadenceEvidenceRef: planReady ? input.cadenceEvidenceRef : null,
+    measurementWindowComplete: input.measurementWindowComplete,
+    observedThrough: worksheetInputsReady ? input.observedThrough : null,
+    measurementWindowCompletionEvidenceRef:
+      worksheetInputsReady
+        ? input.measurementWindowCompletionEvidenceRef
+        : null,
     measuredAt: worksheetInputsReady ? input.measuredAt : null,
     uploadManifestPageCountPerReactionRun:
       worksheetInputsReady
