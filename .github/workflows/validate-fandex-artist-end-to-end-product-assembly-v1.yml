@@ -1,0 +1,36 @@
+name: Validate FANDEX artist end-to-end Product assembly v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/product/assembly/fandexArtistEndToEndProductAssembly.ts'
+      - 'lib/product/assembly/fandexProductAssembly.ts'
+      - 'lib/product/adapters/fandexArtistVariableProductOrchestrator.ts'
+      - 'lib/product/adapters/**'
+      - 'lib/product/contracts/**'
+      - 'lib/product/readiness/**'
+      - 'lib/intelligence/**'
+      - 'tests/fandex-artist-end-to-end-product-assembly-v1.test.mts'
+      - 'tests/fandex-product-assembly-v1.test.mts'
+      - 'tests/fandex-artist-variable-product-orchestrator-v1.test.mts'
+      - '.github/workflows/validate-fandex-artist-end-to-end-product-assembly-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsx --test tests/fandex-artist-end-to-end-product-assembly-v1.test.mts tests/fandex-product-assembly-v1.test.mts tests/fandex-artist-variable-product-orchestrator-v1.test.mts tests/fandex-product-candidate-v1.test.mts tests/fandex-product-read-model-v1.test.mts tests/fandex-variable-product-contract-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
