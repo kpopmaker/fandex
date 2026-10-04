@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T17:09:27+09:00",
+  "collectedAt": "2026-10-04T22:05:04+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5267,6 +5267,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T17:09:27+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Dream Chapter: ETERNITY",
+        "releaseDate": "2020-05-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 181009,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-05-18",
+      "providerPeriodEnd": "2020-05-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T22:05:04+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "universal-music-japan:20200526:txt-eternity",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Universal Music Japan / TOMORROW X TOGETHER",
+          "sourceUrl": "https://www.universal-music.co.jp/txt/news/2020-05-26/",
+          "sourcePublicationDate": "2020-05-26",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T22:05:04+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
