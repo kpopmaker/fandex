@@ -1,0 +1,18 @@
+{
+  "version": "sns_fandom_youtube_submission_owner_input_v1",
+  "state": "awaiting-owner-evidence",
+  "instructions": {
+    "applicantIdentityRef": "Durable non-secret reference to the actual applicant identity evidence. Use a reference URI such as google-drive://file/<id> or a private HTTPS document URL. Do not place raw legal identity details, ID numbers, credentials, or document contents in this public file.",
+    "organizationOrSelfRef": "Durable non-secret reference documenting the actual organization or the individual/self application path. Do not invent an organization. Use a reference URI rather than raw identity text.",
+    "derivedMetricsAndStorageAmendmentAccepted": "Explicit owner decision. Set to true only after deliberately accepting the declared YouTube additional derived-metrics and extended statistical-data-storage scope."
+  },
+  "applicantIdentityRef": null,
+  "organizationOrSelfRef": null,
+  "derivedMetricsAndStorageAmendmentAccepted": false,
+  "secretMaterialStored": false,
+  "providerSubmissionAuthorized": false,
+  "providerApprovalGranted": false,
+  "productionCollectionAuthorized": false,
+  "schedulerMutationAllowed": false,
+  "productActivationAuthorized": false
+}
