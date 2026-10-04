@@ -32,6 +32,9 @@ import {
 import {
   deriveRiskAdjustmentCurrentRuntimeForIU,
 } from './riskAdjustmentCurrentRuntimeRead';
+import {
+  getBrandFitStoredEvidenceCurrentRuntimeForIU,
+} from './brandFitStoredEvidenceRuntime';
 
 export const IU_FANDEX_ARTIST_RUNTIME_LOADERS:
   FandexArtistRuntimeLoaderMap = Object.freeze({
@@ -55,7 +58,17 @@ export const IU_FANDEX_ARTIST_RUNTIME_LOADERS:
         readiness: result.readiness,
       });
     },
-    brandFitPoint: null,
+    brandFitPoint: async () => {
+      const result = await getBrandFitStoredEvidenceCurrentRuntimeForIU();
+      if (result.status !== 'ok') {
+        throw new Error(
+          `brand-fit-runtime-read-failed:${result.reason}`,
+        );
+      }
+      return Object.freeze({
+        evidence: result.evidence,
+      });
+    },
     comebackActivityPoint: getActivityExposurePublicRouteForIU,
     growthMomentumPoint: async () => {
       const [runtimeShadow, readiness] = await Promise.all([
