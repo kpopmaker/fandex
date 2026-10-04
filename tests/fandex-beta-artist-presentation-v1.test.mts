@@ -56,7 +56,7 @@ function record(
     methodologyVersion: 'methodology-v1',
     sourceVersion: 'source-v1',
     productVersion: 'product-v1',
-  } as FandexVariableProductRecord;
+  } as unknown as FandexVariableProductRecord;
 }
 
 test('FANDEX Beta presentation exposes runtime state without inventing a final score', () => {
@@ -66,9 +66,7 @@ test('FANDEX Beta presentation exposes runtime state without inventing a final s
       variableId === 'newsIssuePoint' || variableId === 'comebackActivityPoint'
         ? 'production'
         : 'research',
-      variableId === 'newsIssuePoint' || variableId === 'comebackActivityPoint'
-        ? 'real'
-        : 'research',
+      'real',
       variableId === 'newsIssuePoint' || variableId === 'comebackActivityPoint'
         ? 'production'
         : 'research-only',
@@ -139,7 +137,7 @@ test('FANDEX Beta presentation keeps runtime blockers explicit', () => {
     blockedVariableIds: ['brandFitPoint'],
     records: ids
       .filter((id) => id !== 'brandFitPoint')
-      .map((id) => record(id, 'research', 'research', 'research-only')),
+      .map((id) => record(id, 'research', 'real', 'research-only')),
     assembly: null,
     scoreCalculated: false,
     methodologyFinalized: false,
