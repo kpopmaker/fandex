@@ -17,6 +17,9 @@ import {
   evaluateSnsFandomYoutubeQuotaCloseout,
 } from '../lib/intelligence/snsFandomPointYoutubeQuotaCloseout';
 import {
+  evaluateSnsFandomYoutubeQuotaEstimateMaterialization,
+} from '../lib/intelligence/snsFandomPointYoutubeQuotaEstimateMaterialization';
+import {
   evaluateSnsFandomYoutubeAuditArtistBindingManifest,
   type SnsFandomYoutubeAuditArtistBindingManifestInput,
 } from '../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
@@ -184,6 +187,38 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   assert.equal(quotaCloseout.quotaEstimateRef, null);
   assert.equal(quotaCloseout.providerSubmissionAuthorized, false);
 
+  const currentQuotaEstimateRef =
+    typeof resolved.quotaEstimateRef === 'string'
+      ? resolved.quotaEstimateRef
+      : null;
+  const currentQuotaEstimateEstimatedAt =
+    typeof resolved.quotaEstimateEstimatedAt === 'string'
+      ? resolved.quotaEstimateEstimatedAt
+      : null;
+  const currentQuotaEstimateMinimum =
+    typeof resolved.quotaEstimateMinimumProjectedQuotaUnitsPerDay === 'number'
+      ? resolved.quotaEstimateMinimumProjectedQuotaUnitsPerDay
+      : null;
+  const currentQuotaEstimateRequested =
+    typeof resolved.quotaEstimateRequestedQuotaUnitsPerDay === 'number'
+      ? resolved.quotaEstimateRequestedQuotaUnitsPerDay
+      : null;
+
+  const quotaEstimate = evaluateSnsFandomYoutubeQuotaEstimateMaterialization({
+    quotaCloseout,
+    quotaEstimateRef: currentQuotaEstimateRef,
+    estimatedAt: currentQuotaEstimateEstimatedAt,
+    minimumProjectedQuotaUnitsPerDay: currentQuotaEstimateMinimum,
+    requestedQuotaUnitsPerDay: currentQuotaEstimateRequested,
+    headroomFactorApplied:
+      resolved.quotaEstimateHeadroomFactorApplied === true,
+  });
+
+  assert.equal(quotaEstimate.state, 'awaiting-completed-window');
+  assert.equal(quotaEstimate.quotaEstimateRef, null);
+  assert.equal(quotaEstimate.submissionEvidenceEligible, false);
+  assert.equal(quotaEstimate.providerSubmissionAuthorized, false);
+
   assert.equal(
     resolved.dashboardFeatureScreenshotRef,
     'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
@@ -228,7 +263,7 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
       cloudProjectRef:
         resolved.cloudProjectRef as string | null,
       quotaEstimateRef:
-        unresolved.quotaEstimateRef as string | null,
+        quotaEstimate.quotaEstimateRef,
       businessModelDescriptionRef:
         resolved.businessModelDescriptionRef as string | null,
     },
