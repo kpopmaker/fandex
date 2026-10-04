@@ -1202,11 +1202,17 @@ The handoff covers only:
 - `organizationOrSelfRef`;
 - `derivedMetricsAndStorageAmendmentAccepted`.
 
-Current checked-in values remain deliberately unresolved:
+The owner has now supplied all three deliberate values through a private,
+non-shared Google Drive evidence document. The public repository stores only
+the document reference, not the applicant's raw identity contents.
 
-- applicant identity ref = `null`;
-- organization/self ref = `null`;
-- amendment accepted = `false`.
+Current checked-in owner state:
+
+- applicant identity ref = private durable Google Docs reference;
+- organization/self ref = the same private durable reference documenting the
+  individual/self application path;
+- amendment accepted = `true`;
+- owner handoff state = `submission-owner-evidence-ready`.
 
 Identity values must be durable non-secret **references**, not raw legal identity
 text or identity-document contents. The handoff rejects strings that are not
@@ -1222,5 +1228,7 @@ A ready owner handoff still keeps all action authorities false:
 
 The current submission-readiness regression consumes this owner handoff rather
 than hard-coding those three values. Therefore an eventual owner update has one
-canonical input location, while the quota worksheet/estimate blockers remain
-independent and cannot be bypassed by owner identity input.
+canonical input location. The three owner-input blockers are therefore
+resolved, while the quota worksheet/estimate blockers remain independent and
+cannot be bypassed by owner identity input. No provider submission is
+authorized by owner-input readiness alone.
