@@ -17,6 +17,9 @@ import {
   getActivityExposurePublicRouteForIU,
 } from './activityExposureRealProductRead';
 import {
+  getBrandFitStoredEvidenceCurrentRuntimeForIU,
+} from './brandFitStoredEvidenceRuntime';
+import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from './momentumEvidenceConsensusRealProductRead';
 import {
@@ -67,6 +70,7 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     musicAlbumSettled,
     newsSettled,
     snsSettled,
+    brandFitSettled,
     activitySettled,
     momentumSettled,
     momentumReadinessSettled,
@@ -74,6 +78,7 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     getMusicAlbumPointCurrentRuntimeForIU(),
     getNaverNewsIssuePointRealProductVariableAtLatestOfficialSlot(),
     getSnsFandomPointCurrentRuntimeForIU(),
+    getBrandFitStoredEvidenceCurrentRuntimeForIU(),
     getActivityExposurePublicRouteForIU(),
     getMomentumEvidenceConsensusShadowProductForIU(),
     getMomentumLiveShadowProductReadinessForIU(),
@@ -98,6 +103,14 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
       : Object.freeze({
           status: 'data-issue' as const,
           reason: 'canonical-runtime-read-failed',
+        });
+
+  const brandFitPoint =
+    brandFitSettled.status === 'fulfilled'
+      ? brandFitSettled.value
+      : Object.freeze({
+          status: 'data-issue' as const,
+          reason: 'durable-stored-evidence-read-failed',
         });
 
   const comebackActivityPoint =
@@ -179,11 +192,7 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
       musicAlbumPoint,
       newsIssuePoint,
       snsFandomPoint,
-      brandFitPoint: Object.freeze({
-        status: 'unavailable' as const,
-        reason:
-          'durable-stored-evidence-reader-not-implemented' as const,
-      }),
+      brandFitPoint,
       comebackActivityPoint,
       growthMomentumPoint,
     },
