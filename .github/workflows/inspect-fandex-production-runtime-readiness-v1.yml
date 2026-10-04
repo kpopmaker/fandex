@@ -1,6 +1,11 @@
 name: Inspect FANDEX Production runtime readiness v1
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/inspect-fandex-production-runtime-readiness-v1.yml'
   workflow_dispatch:
     inputs:
       read_intent:
@@ -20,9 +25,20 @@ jobs:
     if: >-
       github.repository == 'kpopmaker/fandex' &&
       github.ref == 'refs/heads/main' &&
-      github.event_name == 'workflow_dispatch' &&
       github.run_attempt == 1 &&
-      inputs.read_intent == 'ops-fandex-product-runtime-readiness-20261004-v1'
+      (
+        (
+          github.event_name == 'workflow_dispatch' &&
+          inputs.read_intent == 'ops-fandex-product-runtime-readiness-20261004-v1'
+        ) ||
+        (
+          github.event_name == 'push' &&
+          contains(
+            github.event.head_commit.message,
+            'Merge pull request #__ONE_SHOT_PR__'
+          )
+        )
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
