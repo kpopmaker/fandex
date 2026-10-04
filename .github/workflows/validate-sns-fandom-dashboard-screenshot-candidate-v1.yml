@@ -1,0 +1,41 @@
+name: Validate snsFandom dashboard screenshot candidate v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-dashboard-screenshot-candidate-v1'
+    paths:
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - 'tests/sns-fandom-youtube-dashboard-screenshot-evidence-v1.test.mts'
+      - 'lib/intelligence/snsFandomPointYoutubeDashboardScreenshotEvidence.ts'
+      - '.github/workflows/validate-sns-fandom-dashboard-screenshot-candidate-v1.yml'
+  pull_request:
+    paths:
+      - 'docs/research/sns-fandom-youtube-audit-evidence-refs-v1.json'
+      - 'tests/sns-fandom-youtube-dashboard-screenshot-evidence-v1.test.mts'
+      - 'lib/intelligence/snsFandomPointYoutubeDashboardScreenshotEvidence.ts'
+      - '.github/workflows/validate-sns-fandom-dashboard-screenshot-candidate-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Dashboard screenshot candidate regressions
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-youtube-dashboard-screenshot-evidence-v1.test.mts
+          tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

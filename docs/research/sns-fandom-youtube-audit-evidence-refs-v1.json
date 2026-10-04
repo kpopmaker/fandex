@@ -252,5 +252,48 @@
     "productionCollectionAuthorized": false,
     "providerSubmissionAuthorized": false,
     "schedulerMutationAuthorized": false
+  },
+  "supplementalEvidence": {
+    "userProvidedDashboardCapture": {
+      "state": "accepted-supplemental-evidence",
+      "validatorContractVersion": "sns-fandom-youtube-dashboard-screenshot-evidence-v1",
+      "screenshotRef": "https://drive.google.com/file/d/1EZXN2C0Y5Xfe8aQpctEi37lvIpPYIbGF/view?usp=drivesdk",
+      "screenshotSha256": "ea7fea1838d0c0762ef76484457cbf6418e7fcf7b4cdd8684d8495e58d02c417",
+      "captureFileName": "YouTube Analytics Evidence - FANDEX - 2026-10-04.pdf",
+      "captureMimeType": "application/pdf",
+      "capturePageCount": 2,
+      "capturedAt": "2026-10-04T04:49:23.000Z",
+      "sourceUrl": "https://fandex-eta.vercel.app/youtube-analytics-evidence",
+      "sourceRoute": "/youtube-analytics-evidence",
+      "sourceHttpStatus": 200,
+      "deploymentId": "dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv",
+      "deploymentGitSha": "11514e123bdfd95f810691aaeaaed7c49755cb18",
+      "deploymentReadyAt": "2026-10-04T04:45:19.761Z",
+      "renderedEvidence": {
+        "workflowRunId": "37132802429",
+        "artifactId": "11277073687",
+        "measuredAt": "2026-10-03T15:19:42.325Z",
+        "uploadManifestPageCountPerReactionRun": 115,
+        "videoCountPerReactionRun": 0,
+        "quotaUnitsObserved": 120,
+        "measurementWindowComplete": false,
+        "trueZeroVideoCountObserved": true,
+        "quotaWorksheetEligible": false,
+        "finalOwnerEvidencePromotionAllowed": false
+      },
+      "mockOrPreviewSeedMetricUsed": false,
+      "rawVideoIdentifiersVisible": false,
+      "rawStatisticsVisible": false,
+      "secretMaterialVisible": false,
+      "canonicalDashboardScreenshotRef": "github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png",
+      "canonicalDashboardScreenshotSha256": "5cdb6fd5fac3924c3fea26e9180d2d681560b3b344186fc742f7b605f431d06e",
+      "evidencePromotionAuthorized": false,
+      "providerSubmissionAuthorized": false,
+      "productionCollectionAuthorized": false,
+      "schedulerMutationAuthorized": false,
+      "productActivationAuthorized": false,
+      "role": "supplemental-corroborating-evidence",
+      "note": "User-provided two-page Production capture PDF visually reviewed against the same deployed route and bounded provider lineage. The canonical dashboard screenshot remains the already-resolved GitHub Actions PNG from PR #465; this PDF is supplemental only and does not replace or re-promote it."
+    }
   }
 }
