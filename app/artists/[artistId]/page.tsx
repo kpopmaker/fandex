@@ -304,6 +304,14 @@ export default async function ArtistDetailPage({
               synthetic chart history를 만들지 않고 Stored Evidence 기반 변수 상태만
               공개합니다.
             </p>
+            <div className="mt-5">
+              <Link
+                href="/artists/iu/fandex-beta"
+                className="inline-flex rounded-full bg-slate-950 px-4 py-2 text-xs font-black text-white hover:bg-slate-800 dark:bg-cyan-300 dark:text-slate-950 dark:hover:bg-cyan-200"
+              >
+                FANDEX Beta 7-variable Product 보기
+              </Link>
+            </div>
           </header>
           <ArtistActivityExposureDetail result={activityExposureResult} />
           <ArtistProductVariableDetail
