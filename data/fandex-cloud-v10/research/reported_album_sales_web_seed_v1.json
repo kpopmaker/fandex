@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-04T13:51:02+09:00",
+  "collectedAt": "2026-10-04T16:06:44+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5099,6 +5099,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-04T13:51:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.3",
+        "releaseDate": "2021-09-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 665350,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-09-13",
+      "providerPeriodEnd": "2021-09-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T16:06:44+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1489456:ateez-zero-fever-part3",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1489456wpp/ateez-achieves-5th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history",
+          "sourcePublicationDate": "2021-09-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:06:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "newsis:20210920:ateez-zero-fever-part3",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Newsis",
+          "sourceUrl": "https://www.newsis.com/view/NISX20210920_0001589351",
+          "sourcePublicationDate": "2021-09-20",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:06:44+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
