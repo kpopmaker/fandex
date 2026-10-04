@@ -1271,3 +1271,41 @@ promoted into final quota-owner evidence or a quota worksheet.
 This contract change does not authorize a provider call, recurring scheduler,
 Production collection, provider submission, deployment, or Product
 activation/publication.
+
+
+## 11. Quota closeout adapter
+
+The completed-window quota boundary is now followed by a dedicated,
+non-executing closeout adapter:
+
+- `sns-fandom-youtube-quota-closeout-v1`.
+
+The adapter consumes only already-materialized repository evidence:
+
+- the quota owner handoff;
+- the verified five-member audit binding manifest;
+- official per-call quota costs already recorded in audit evidence;
+- the declared FANDEX request batching behavior.
+
+It performs no provider call and creates no requested-quota headroom.
+
+Before the canonical measurement window completes, it returns
+`awaiting-completed-window` and supplies no quota worksheet to current
+submission readiness.
+
+Only after the quota owner handoff becomes
+`quota-worksheet-input-ready` may the adapter assemble the reaction-only
+quota worksheet. Even then it exposes only a minimum projected quota/day
+candidate and keeps:
+
+- `quotaEstimateRef = null`;
+- requested quota = `null`;
+- headroom factor = not applied;
+- provider submission authorization = false;
+- Production collection authorization = false;
+- scheduler mutation = false;
+- Product activation = false.
+
+A future completed-window evidence materialization step is still required
+before the quota estimate reference can be recorded and before submission
+readiness can become `submission-ready`.
