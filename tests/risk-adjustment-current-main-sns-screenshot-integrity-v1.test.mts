@@ -13,7 +13,7 @@ type AuditEvidence = Readonly<{
     dashboardFeatureScreenshotRef?: string | null;
   }>;
   unresolvedEvidence: Readonly<{
-    dashboardFeatureScreenshotRef: string | null;
+    dashboardFeatureScreenshotRef?: string | null;
   }>;
   rejectedEvidence: Readonly<{
     dashboardFeatureScreenshotCandidate: Readonly<{
@@ -54,14 +54,14 @@ test('screenshot evidence never promotes snsFandom into current Real Risk inputs
   );
 });
 
-test('synthetic dashboard screenshot is rejected and remains unresolved', () => {
+test('real dashboard screenshot can resolve while the historical synthetic candidate stays rejected', () => {
   assert.equal(
     evidence.resolvedEvidence.dashboardFeatureScreenshotRef,
-    undefined,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
   );
   assert.equal(
-    evidence.unresolvedEvidence.dashboardFeatureScreenshotRef,
-    null,
+    'dashboardFeatureScreenshotRef' in evidence.unresolvedEvidence,
+    false,
   );
 
   const rejected =

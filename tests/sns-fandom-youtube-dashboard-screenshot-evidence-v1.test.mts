@@ -93,12 +93,29 @@ test('a screenshot can only become an evidence candidate when it is bound to the
   assert.equal(result.productActivationAuthorized, false);
 });
 
-test('the current repository remains unresolved until a real deployed screenshot exists', async () => {
+test('authorized Production screenshot is durably registered while promotion boundaries remain separate', async () => {
   const raw = await evidenceJson();
-  const unresolved =
-    raw.unresolvedEvidence as Record<string, unknown>;
+  const resolved = raw.resolvedEvidence as Record<string, unknown>;
+  const unresolved = raw.unresolvedEvidence as Record<string, unknown>;
+  const bundle =
+    resolved.dashboardFeatureScreenshotEvidenceBundle as Record<string, unknown>;
 
-  assert.equal(unresolved.dashboardFeatureScreenshotRef, null);
+  assert.equal(
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
+  );
+  assert.equal(
+    resolved.dashboardFeatureScreenshotSha256,
+    '5cdb6fd5fac3924c3fea26e9180d2d681560b3b344186fc742f7b605f431d06e',
+  );
+  assert.equal(bundle.sourceHttpStatus, 200);
+  assert.equal(bundle.productionDeploymentId, 'dpl_AFagtuZ63wZUKCSShLB2qGQMNHZv');
+  assert.equal(bundle.productionGitSha, '11514e123bdfd95f810691aaeaaed7c49755cb18');
+  assert.equal(bundle.mockOrPreviewSeedMetricUsed, false);
+  assert.equal(bundle.rawVideoIdentifiersVisible, false);
+  assert.equal(bundle.rawStatisticsVisible, false);
+  assert.equal(bundle.secretMaterialVisible, false);
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
 });
 
 test('404, wrong route, preview seed, or synthetic metrics fail closed', async () => {

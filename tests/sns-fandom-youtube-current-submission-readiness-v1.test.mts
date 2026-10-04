@@ -109,9 +109,10 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     evidenceRaw.rejectedEvidence as Record<string, unknown>;
 
   assert.equal(
-    unresolved.dashboardFeatureScreenshotRef,
-    null,
+    resolved.dashboardFeatureScreenshotRef,
+    'github-actions://kpopmaker/fandex/runs/37178153638/artifacts/11294013664#youtube-analytics-evidence.png',
   );
+  assert.equal('dashboardFeatureScreenshotRef' in unresolved, false);
   assert.ok(
     rejected.dashboardFeatureScreenshotCandidate,
   );
@@ -146,7 +147,7 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
       termsDocumentationRef:
         resolved.termsDocumentationRef as string | null,
       dashboardFeatureScreenshotRef:
-        unresolved.dashboardFeatureScreenshotRef as string | null,
+        resolved.dashboardFeatureScreenshotRef as string | null,
       cloudProjectRef:
         resolved.cloudProjectRef as string | null,
       quotaEstimateRef:
@@ -173,7 +174,6 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
     [...readiness.blockers].sort(),
     [
       'youtube-audit-applicant-identity-evidence-missing',
-      'youtube-audit-dashboard-screenshot-missing',
       'youtube-audit-derived-metrics-amendment-not-accepted',
       'youtube-audit-organization-or-self-evidence-missing',
       'youtube-audit-quota-estimate-missing',
@@ -203,6 +203,10 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   assert.equal(
     readiness.blockers.includes('youtube-audit-homepage-screenshot-missing'),
+    false,
+  );
+  assert.equal(
+    readiness.blockers.includes('youtube-audit-dashboard-screenshot-missing'),
     false,
   );
   assert.equal(
