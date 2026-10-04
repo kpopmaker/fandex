@@ -27,6 +27,10 @@ import {
   evaluateSnsFandomYoutubeSubmissionOwnerHandoff,
   type SnsFandomYoutubeSubmissionOwnerHandoffInput,
 } from '../lib/intelligence/snsFandomPointYoutubeSubmissionOwnerHandoff';
+import {
+  evaluateSnsFandomYoutubeProviderSubmissionHandoff,
+  type SnsFandomYoutubeProviderSubmissionApprovalInput,
+} from '../lib/intelligence/snsFandomPointYoutubeProviderSubmissionHandoff';
 
 async function readJson(path: string) {
   return JSON.parse(
@@ -49,6 +53,9 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   const artistBindingRaw = await readJson(
     'data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_artist_binding_manifest_v1.json',
+  );
+  const providerSubmissionRaw = await readJson(
+    'docs/research/sns-fandom-youtube-provider-submission-owner-input-v1.json',
   );
 
   const providerInput: SnsFandomYoutubeProviderClientOwnerHandoffInput = {
@@ -348,6 +355,55 @@ test('current owner files resolve Phase A and Phase B plan while remaining submi
   );
   assert.equal(
     readiness.blockers.includes('youtube-audit-terms-url-missing-or-invalid'),
+    false,
+  );
+
+  const providerSubmissionApproval:
+    SnsFandomYoutubeProviderSubmissionApprovalInput = {
+      approved: providerSubmissionRaw.approved === true,
+      approvalEvidenceRef:
+        providerSubmissionRaw.approvalEvidenceRef as string | null,
+      approvedAt: providerSubmissionRaw.approvedAt as string | null,
+      approvedRevisionSha:
+        providerSubmissionRaw.approvedRevisionSha as string | null,
+      providerClientRef:
+        providerSubmissionRaw.providerClientRef as string | null,
+    };
+
+  const providerSubmissionHandoff =
+    evaluateSnsFandomYoutubeProviderSubmissionHandoff({
+      auditReadiness: readiness,
+      currentRevisionSha:
+        '1111111111111111111111111111111111111111',
+      approval: providerSubmissionApproval,
+    });
+
+  assert.equal(
+    providerSubmissionHandoff.state,
+    'submission-not-ready',
+  );
+  assert.equal(
+    providerSubmissionHandoff.providerSubmissionAuthorized,
+    false,
+  );
+  assert.equal(
+    providerSubmissionHandoff.providerSubmissionExecutionPerformed,
+    false,
+  );
+  assert.equal(
+    providerSubmissionHandoff.providerApprovalGranted,
+    false,
+  );
+  assert.equal(
+    providerSubmissionHandoff.productionCollectionAuthorized,
+    false,
+  );
+  assert.equal(
+    providerSubmissionHandoff.schedulerMutationAllowed,
+    false,
+  );
+  assert.equal(
+    providerSubmissionHandoff.productActivationAuthorized,
     false,
   );
 });
