@@ -190,7 +190,7 @@ test('dependent runtime loader receives previously resolved canonical payloads',
   }]);
 });
 
-test('IU server binding uses six current real runtime producers and leaves only brandFit unresolved', () => {
+test('IU server binding exposes all seven current runtime loaders', () => {
   const source = readFileSync(
     new URL(
       '../lib/server/product/fandexArtistEndToEndRuntime.ts',
@@ -228,16 +228,15 @@ test('IU server binding uses six current real runtime producers and leaves only 
     source,
     /deriveRiskAdjustmentCurrentRuntimeForIU/,
   );
-  assert.match(source, /brandFitPoint: null/);
+  assert.match(
+    source,
+    /getBrandFitStoredEvidenceCurrentRuntimeForIU/,
+  );
 
-  for (const resolved of [
-    'musicAlbumPoint',
-    'snsFandomPoint',
-    'riskAdjustmentPoint',
-  ]) {
+  for (const variableId of FANDEX_VARIABLE_PRODUCT_IDS) {
     assert.doesNotMatch(
       source,
-      new RegExp(`${resolved}: null`),
+      new RegExp(`${variableId}: null`),
     );
   }
 
