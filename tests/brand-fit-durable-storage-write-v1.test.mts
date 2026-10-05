@@ -319,4 +319,34 @@ test('production workflow is pinned to the successful provider receipt and separ
   assert.match(workflow, /providerCalls=0/);
   assert.match(workflow, /productActivations=0/);
   assert.match(workflow, /publications=0/);
+  assert.match(
+    workflow,
+    /issue_comment:\\n    types: \\[created\\]/,
+  );
+  assert.match(
+    workflow,
+    /github\\.event\\.issue\\.number == 367/,
+  );
+  assert.match(
+    workflow,
+    /github\\.event\\.comment\\.user\\.login == 'kpopmaker'/,
+  );
+  assert.match(
+    workflow,
+    /BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE/,
+  );
+  assert.match(workflow, /GITHUB_EVENT_PATH/);
+
+  const gateScript = readFileSync(
+    new URL(
+      '../scripts/operations/brandFitDurableStorageWriteGateV1.mts',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+  assert.match(
+    gateScript,
+    /\\/runs\\?status=completed&per_page=100/,
+  );
+  assert.doesNotMatch(gateScript, /event=workflow_dispatch/);
 });
