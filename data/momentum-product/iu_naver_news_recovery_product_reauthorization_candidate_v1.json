@@ -1,0 +1,38 @@
+{
+  "contractVersion": "naver-news-recovery-product-reauthorization-candidate-v1",
+  "canonicalArtistId": "iu",
+  "variableId": "newsIssuePoint",
+  "trigger": "official-recovery-epoch-rollover",
+  "currentOfficialProtocolStart": "2026-10-03T01:00:00.000Z",
+  "productionObservation": {
+    "observedAt": "2026-10-05T13:21:00.000Z",
+    "deploymentSha": "70e66c0c7e968b222b49f391a40a419e694480b6",
+    "previousBlocker": "upstream-read-not-ok",
+    "currentBlocker": "upstream-not-real-production",
+    "interpretation": "blob-read-recovered-product-publication-remains-shadow"
+  },
+  "staleAuthorizationBindings": {
+    "activationApprovalProtocolStart": "2026-09-15T16:00:00.000Z",
+    "publicRouteCutoverApprovalProtocolStart": "2026-09-15T16:00:00.000Z",
+    "publicRouteCutoverExecutionProtocolStart": "2026-09-15T16:00:00.000Z",
+    "safeToReuseForRecoveryEpoch": false
+  },
+  "decision": {
+    "reauthorizationRequired": true,
+    "activationReauthorized": false,
+    "publicRouteCutoverReauthorized": false,
+    "publicRouteActivated": false,
+    "productScorePublished": false,
+    "directProductionContributionEligible": false,
+    "requiredNextGate": "explicit-recovery-epoch-product-reauthorization"
+  },
+  "safetyBoundary": {
+    "providerExecutionsAuthorized": 0,
+    "blobWritesAuthorized": 0,
+    "databaseWritesAuthorized": 0,
+    "backfillAuthorized": false,
+    "missingSlotSynthesisAuthorized": false,
+    "scorePublicationAuthorized": false,
+    "publicRouteCutoverAuthorized": false
+  }
+}
