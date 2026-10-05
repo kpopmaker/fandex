@@ -73,10 +73,13 @@ export const NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION =
   });
 
 if (
-  NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
-    .binding.historicalProtocolStart
-    === NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
-      .binding.recoveryProtocolStart
+  String(
+    NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+      .binding.historicalProtocolStart,
+  ) === String(
+    NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+      .binding.recoveryProtocolStart,
+  )
   || NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
     .binding.recoveryProtocolStart
     !== NAVER_NEWS_IU_RECOVERY_PROTOCOL_START
