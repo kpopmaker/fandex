@@ -1,6 +1,9 @@
 import { getVercelOidcToken } from '@vercel/functions/oidc';
 
 import {
+  applyNewsIssuePointRecoveryEpochProductReauthorization,
+} from '../../product/activation/newsIssuePointRecoveryEpochProductReauthorization';
+import {
   getArtistProductVariableRealReadModel,
   type ProductVariableRealReadRuntime,
 } from '../../product/queries/getArtistProductVariableRealReadModel';
@@ -200,5 +203,21 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       throughSlotStart,
     },
     runtime(store),
+  );
+}
+
+export async function getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot(
+  environment: Readonly<Record<string, string | undefined>> =
+    process.env,
+  dependencies: NaverNewsIssuePointBlobRuntimeDependencies = {},
+) {
+  const result =
+    await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      environment,
+      dependencies,
+    );
+
+  return applyNewsIssuePointRecoveryEpochProductReauthorization(
+    result,
   );
 }
