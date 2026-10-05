@@ -29,13 +29,18 @@ function continuity(
     | 'continuity-building'
     | 'continuity-qualified-candidate' = 'continuity-building',
 ): FandexMomentumRecoveryContinuityGateResult {
+  const protocolStart = '2026-10-03T01:00:00.000Z';
+  const qualifiedThrough = new Date(
+    Date.parse(protocolStart) + (count - 1) * 60 * 60 * 1000,
+  ).toISOString();
+
   return Object.freeze({
     contractVersion: 'momentum-recovery-continuity-gate-v1',
     state,
-    candidateProtocolStart: '2026-10-03T01:00:00.000Z',
+    candidateProtocolStart: protocolStart,
     latestSuccessfulSlotStart:
       state === 'continuity-qualified-candidate'
-        ? '2026-10-05T01:00:00.000Z'
+        ? qualifiedThrough
         : '2026-10-03T03:00:00.000Z',
     contiguousSuccessfulSlotCount: count,
     requiredAnalysisSlotCount:
@@ -65,9 +70,11 @@ const lastfmStatus: FandexMomentumCurrentLastfmStatus = Object.freeze({
   websiteModified: false,
 });
 
-function completeSeries(): NaverNewsShadowFirstSeenSeriesResult {
+function completeSeries(
+  count = FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT,
+): NaverNewsShadowFirstSeenSeriesResult {
   const expectedSlots = Array.from(
-    { length: FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT },
+    { length: count },
     (_, index) => Object.freeze({
       slotStart: new Date(
         Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60 * 1000,
@@ -92,7 +99,7 @@ function completeSeries(): NaverNewsShadowFirstSeenSeriesResult {
     canonicalArtistId: 'iu',
     schedulerVersion: 'v125_naver_news_scheduler_v1',
     protocolStart: '2026-10-03T01:00:00.000Z',
-    throughSlotStart: '2026-10-05T01:00:00.000Z',
+    throughSlotStart: expectedSlots.at(-1)?.slotStart ?? '2026-10-03T01:00:00.000Z',
     expectedSlots: Object.freeze(expectedSlots),
     snapshots: Object.freeze(snapshots),
     status: 'available',
@@ -142,6 +149,92 @@ test('qualifies only after exact Blob series reproduction and valid Last.fm hist
   assert.equal(result.nextAction, 'run-frozen-current-categorical-reevaluation');
   assert.equal(result.safety.blobWrites, 0);
   assert.equal(result.safety.databaseReads, 0);
+});
+
+test('accepts fully reproduced current Blob series beyond the minimum 49-slot qualification', () => {
+  const currentCount = 59;
+  const result = evaluateFandexMomentumCurrentReevaluationReadiness({
+    continuity: continuity(currentCount, 'continuity-qualified-candidate'),
+    naverSeries: completeSeries(currentCount),
+    lastfmStatus: Object.freeze({
+      ...lastfmStatus,
+      createdAt: '2026-10-05T11:40:44+09:00',
+      snapshotDate: '2026-10-05',
+      historyRowCount: 588,
+      snapshotDateCount: 57,
+      deltaReadyCount: 19,
+      needsReviewCount: 0,
+      scorePreviewCount: 19,
+    }),
+  });
+
+  assert.equal(result.state, 'ready-for-current-categorical-reevaluation');
+  assert.equal(result.reason, 'qualified-blob-series-reproduction-complete');
+  assert.equal(result.naver.expectedSlotCount, 59);
+  assert.equal(result.naver.reproducedSnapshotCount, 59);
+  assert.equal(result.naver.currentStoredEvidenceReproducedForReadiness, true);
+  assert.equal(result.lastfm.currentHistoryValid, true);
+  assert.equal(result.lastfm.deltaReadyCount, 19);
+});
+
+test('accepts current Last.fm mixed source cohort when Product delta history is ready', () => {
+  const result = evaluateFandexMomentumCurrentReevaluationReadiness({
+    continuity: continuity(
+      FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT,
+      'continuity-qualified-candidate',
+    ),
+    naverSeries: completeSeries(),
+    lastfmStatus: Object.freeze({
+      ...lastfmStatus,
+      createdAt: '2026-10-04T12:07:16+09:00',
+      snapshotDate: '2026-10-04',
+      historyRowCount: 569,
+      snapshotDateCount: 56,
+      deltaReadyCount: 10,
+      needsReviewCount: 0,
+      scorePreviewCount: 0,
+    }),
+  });
+
+  assert.equal(result.state, 'ready-for-current-categorical-reevaluation');
+  assert.equal(result.lastfm.currentHistoryValid, true);
+  assert.equal(result.lastfm.deltaReadyCount, 10);
+  assert.equal(result.nextAction, 'run-frozen-current-categorical-reevaluation');
+});
+
+test('rejects Last.fm history when the frozen Product delta-ready floor is not met', () => {
+  const result = evaluateFandexMomentumCurrentReevaluationReadiness({
+    continuity: continuity(
+      FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT,
+      'continuity-qualified-candidate',
+    ),
+    naverSeries: completeSeries(),
+    lastfmStatus: Object.freeze({
+      ...lastfmStatus,
+      deltaReadyCount: 9,
+      scorePreviewCount: 9,
+    }),
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.reason, 'lastfm-current-history-invalid');
+});
+
+test('rejects malformed Last.fm preview-count metadata without making preview output a readiness gate', () => {
+  const result = evaluateFandexMomentumCurrentReevaluationReadiness({
+    continuity: continuity(
+      FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT,
+      'continuity-qualified-candidate',
+    ),
+    naverSeries: completeSeries(),
+    lastfmStatus: Object.freeze({
+      ...lastfmStatus,
+      scorePreviewCount: -1,
+    }),
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.reason, 'lastfm-current-history-invalid');
 });
 
 test('fails closed when qualified continuity cannot reproduce the exact Blob series', () => {
