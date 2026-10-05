@@ -1,5 +1,5 @@
 name: Inspect NAVER Postgres official coverage read-only v1
-# inspector-revision: async-main-v2
+# inspector-revision: classify-states-v3
 
 on:
   push:
