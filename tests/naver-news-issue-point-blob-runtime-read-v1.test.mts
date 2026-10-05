@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+  getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot,
 } from '../lib/server/product/naverNewsIssuePointBlobRuntimeRead';
 import {
   buildNaverNewsIngestionWritePlan,
@@ -375,4 +376,57 @@ test('Blob-backed current newsIssuePoint reader emits sanitized production gate 
   } finally {
     console.warn = originalWarn;
   }
+});
+
+
+test('recovery-reauthorized Blob reader promotes the exactly bound current epoch to Product production', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse(
+    '2026-10-03T01:00:00.000Z',
+  );
+
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(
+        protocolStart + index * 60 * 60 * 1_000,
+      ).toISOString(),
+    );
+  }
+
+  const result =
+    await getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot(
+      {
+        VERCEL_ENV: 'production',
+        BLOB_STORE_ID: 'store_test',
+      },
+      {
+        resolveOidcToken: () => 'oidc-test-token',
+        createReadStore() {
+          return {
+            readText: store.readText,
+            listPathnames: store.listPathnames,
+          };
+        },
+      },
+    );
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+
+  assert.equal(result.model.dataOrigin, 'observed');
+  assert.equal(result.model.presentation, 'standard');
+  assert.equal(result.model.publication, 'production');
+  assert.equal(
+    result.model.sourceMetadata.sourceKind,
+    'naver-news-issue-point-frozen-methodology',
+  );
+  assert.equal(
+    result.model.sourceMetadata.officialShadowEpoch,
+    '2026-10-03T01:00:00.000Z',
+  );
+  assert.equal(
+    result.model.evidenceTrace.kind,
+    'naver-news-issue-point-stored-evidence',
+  );
 });
