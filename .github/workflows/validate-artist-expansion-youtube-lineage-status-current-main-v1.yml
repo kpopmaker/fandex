@@ -1,0 +1,25 @@
+name: Validate Artist Expansion YouTube lineage status current-main v1
+
+on:
+  push:
+    branches:
+      - validation/artist-expansion-youtube-lineage-status-current-main-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-youtube-lineage-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Master syntax
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/fandex_master_score_v10.py
+      - name: Restored YouTube lineage status
+        run: python tests/artist-expansion-youtube-lineage-status-current-main-v1.py
