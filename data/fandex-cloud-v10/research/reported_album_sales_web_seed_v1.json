@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T00:42:23+09:00",
+  "collectedAt": "2026-10-05T10:10:31+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5555,6 +5555,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T00:42:23+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Love Yourself: Answer",
+        "releaseDate": "2018-08-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 868052,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2018-08-24",
+      "providerPeriodEnd": "2018-08-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T10:10:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:20180830:bts-love-yourself-answer",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1222963wpp/btss-love-answer-records-impressive-number-sales-first-week",
+          "sourcePublicationDate": "2018-08-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T10:10:31+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
