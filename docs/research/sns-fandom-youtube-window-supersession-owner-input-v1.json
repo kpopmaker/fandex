@@ -1,0 +1,45 @@
+{
+  "version": "sns_fandom_youtube_window_supersession_owner_input_v1",
+  "state": "policy-approved-awaiting-recurring-activation",
+  "historicalWindow": {
+    "measurementWindowStart": "2026-10-03T15:00:00.000Z",
+    "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
+    "reactionSnapshotRunsPerDay": 24,
+    "cadenceEvidenceRef": "github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631",
+    "state": "historical-owner-intent-only"
+  },
+  "supersessionPolicy": {
+    "approved": true,
+    "approvalEvidenceRef": "github-issue://kpopmaker/fandex/issues/495#issuecomment-5995024898",
+    "reason": "initial-recurring-coverage-gap-no-retrospective-receipt-contract",
+    "durationDays": 366,
+    "reactionSnapshotRunsPerDay": 24,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false,
+    "retrospectiveProviderObservationAllowed": false
+  },
+  "futureActivationBinding": {
+    "enabled": false,
+    "recurringExecutionAuthorized": false,
+    "schedulerMutationAuthorized": false,
+    "activationEvidenceRef": null,
+    "authorizedRevisionSha": null,
+    "activationBoundary": null,
+    "runtimeBound": false,
+    "evidenceStoreBound": false
+  },
+  "supersedingWindowCandidate": null,
+  "authorityBoundary": {
+    "schedulerMutationAuthorizedBySupersession": false,
+    "recurringProviderExecutionAuthorizedBySupersession": false,
+    "productionCollectionAuthorizedBySupersession": false,
+    "providerSubmissionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "notes": [
+    "The historical owner-approved window is preserved and is not rewritten as completed coverage.",
+    "No new canonical window is materialized until a separately authorized real recurring activation boundary exists.",
+    "The future superseding window must start at the exact authorized UTC hourly activation boundary and retain a full 366-day duration at 24 snapshots/day.",
+    "This policy approval does not authorize scheduler activation, recurring provider execution, Production collection, provider submission, or Product/Risk activation."
+  ]
+}
