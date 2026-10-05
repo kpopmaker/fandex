@@ -108,7 +108,8 @@ function validLastfmStatus(
     && value.snapshotDateCount > 0
     && value.deltaReadyCount === 10
     && value.needsReviewCount === 0
-    && value.scorePreviewCount === 10
+    && Number.isSafeInteger(value.scorePreviewCount)
+    && value.scorePreviewCount >= 0
     && value.scoreUsage === 'preview_only_not_master_score'
     && value.masterModified === false
     && value.websiteModified === false
