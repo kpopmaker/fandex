@@ -205,7 +205,7 @@ test('IU server binding exposes all seven current runtime loaders', () => {
   );
   assert.match(
     source,
-    /getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot/,
+    /getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot/,
   );
   assert.match(
     source,
