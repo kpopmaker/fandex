@@ -196,13 +196,16 @@ export async function runSnsFandomYoutubeRecurringMeasurementSlot(
   dependencies: SnsFandomYoutubeRecurringRunnerDependencies,
 ): Promise<SnsFandomYoutubeRecurringRunnerResult> {
   const plan = evaluateSnsFandomYoutubeRecurringMeasurementPlan(input);
-  if (plan.state !== 'slot-ready' || plan.slotStart === null) {
+  if (plan.state !== 'slot-ready') {
     return nonExecutingResult(
       plan.state,
       plan.slotStart,
       null,
       plan.blockers,
     );
+  }
+  if (plan.slotStart === null) {
+    throw new Error('sns_fandom_recurring_slot_start_missing');
   }
 
   const path = receiptPath(plan.slotStart);
