@@ -4,6 +4,9 @@ import {
 import {
   NEWS_ISSUE_POINT_PUBLIC_ROUTE_CUTOVER_EXECUTION,
 } from '../activation/newsIssuePointPublicRouteCutoverExecution';
+import {
+  NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION,
+} from '../activation/newsIssuePointRecoveryProductReauthorization';
 import type {
   ProductVariableReadModelResult,
 } from '../contracts/productVariable';
@@ -49,6 +52,8 @@ function dataIssue(
 function executionBindingValid(): boolean {
   const execution = NEWS_ISSUE_POINT_PUBLIC_ROUTE_CUTOVER_EXECUTION;
   const approval = NEWS_ISSUE_POINT_PUBLIC_ROUTE_CUTOVER_APPROVAL;
+  const reauthorization =
+    NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION;
 
   return (
     execution.action === 'execute-public-route-cutover'
@@ -77,6 +82,33 @@ function executionBindingValid(): boolean {
     && execution.decision.directProductionContributionEligible === true
     && execution.decision.strictPublicationIntervalClaimAllowed === false
     && execution.decision.lifecycleState === 'production'
+    && reauthorization.action
+      === 'reauthorize-recovery-epoch-product-cutover'
+    && reauthorization.authority === 'product-operations-owner'
+    && reauthorization.target.artistId === 'iu'
+    && reauthorization.target.variableId === 'newsIssuePoint'
+    && reauthorization.binding.historicalCutoverExecutionAuthorizationId
+      === execution.cutoverExecutionAuthorizationId
+    && reauthorization.binding.historicalProtocolStart
+      === execution.binding.protocolStart
+    && reauthorization.binding.recoveryProtocolStart
+      !== execution.binding.protocolStart
+    && reauthorization.binding.methodologyVersion
+      === execution.binding.methodologyVersion
+    && reauthorization.binding.selectedWindowSlotCount
+      === execution.binding.selectedWindowSlotCount
+    && reauthorization.binding.normalizationType
+      === execution.binding.normalizationType
+    && reauthorization.binding.claimScope
+      === execution.binding.claimScope
+    && reauthorization.decision.activationReauthorized === true
+    && reauthorization.decision.publicRouteCutoverReauthorized === true
+    && reauthorization.decision.newsIssuePointPublicationAuthorized === true
+    && reauthorization.decision.newsIssuePointScorePublicationAuthorized === true
+    && reauthorization.decision.directProductionContributionEligible === true
+    && reauthorization.decision.lifecycleState === 'production'
+    && reauthorization.decision.strictPublicationIntervalClaimAllowed === false
+    && reauthorization.decision.fandexAggregateScorePublicationAuthorized === false
   );
 }
 
@@ -134,8 +166,26 @@ export async function getArtistProductVariablePublicRoute(
       !== 'naver-news-issue-point-frozen-methodology'
     || model.sourceMetadata.sourceArtistId !== 'iu'
     || model.sourceMetadata.sourceVariableKey !== 'newsIssuePoint'
+    || model.sourceMetadata.officialShadowEpoch
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.recoveryProtocolStart
+    || model.sourceMetadata.methodologyVersion
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.methodologyVersion
+    || model.sourceMetadata.selectedWindowSlotCount
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.selectedWindowSlotCount
+    || model.sourceMetadata.normalizationType
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.normalizationType
     || model.evidenceTrace.kind
       !== 'naver-news-issue-point-stored-evidence'
+    || model.evidenceTrace.officialShadowEpoch
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.recoveryProtocolStart
+    || model.evidenceTrace.methodologyVersion
+      !== NEWS_ISSUE_POINT_RECOVERY_PRODUCT_REAUTHORIZATION
+        .binding.methodologyVersion
   ) {
     return dataIssue(
       artistId,
