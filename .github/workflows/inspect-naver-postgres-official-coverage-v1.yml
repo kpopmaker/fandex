@@ -1,0 +1,36 @@
+name: Inspect NAVER Postgres official coverage read-only v1
+
+on:
+  push:
+    branches:
+      - 'work/product-production-readiness-reprobe-v1'
+    paths:
+      - '.github/workflows/inspect-naver-postgres-official-coverage-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    if: github.repository == 'kpopmaker/fandex' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Inspect official Postgres coverage read-only
+        run: npx tsx scripts/ops/inspect-naver-postgres-official-coverage-v1.ts
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_POSTGRES_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_POSTGRES_DATABASE_WRITES=0"
+          echo "FANDEX_POSTGRES_BLOB_WRITES=0"
+          echo "FANDEX_POSTGRES_SCORE_WRITES=0"
+          echo "FANDEX_POSTGRES_PUBLICATION_CHANGES=0"
