@@ -90,6 +90,12 @@ async function runtimeEnvironment(
   });
 }
 
+function diagnostic(reason: string): void {
+  console.warn(
+    `FANDEX_NAVER_NEWS_BLOB_RUNTIME_DIAGNOSTIC=${reason}`,
+  );
+}
+
 function runtime(store: ReadOnlyStore): ProductVariableRealReadRuntime {
   return Object.freeze({
     async readNewsIssuePointFrozenMethodology(input) {
@@ -97,15 +103,25 @@ function runtime(store: ReadOnlyStore): ProductVariableRealReadRuntime {
         createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
           store,
         );
-      const series =
-        await assembleOfficialNaverNewsShadowFirstSeenSeries(
+      let series;
+      try {
+        series = await assembleOfficialNaverNewsShadowFirstSeenSeries(
           {
             canonicalArtistId: input.canonicalArtistId,
             throughSlotStart: input.throughSlotStart,
           },
           repository,
         );
-      return evaluateNaverNewsIssuePointFrozenMethodology(series);
+      } catch {
+        diagnostic('canonical-evidence-read-failed');
+        throw new Error('naver_news_blob_canonical_evidence_read_failed');
+      }
+      try {
+        return evaluateNaverNewsIssuePointFrozenMethodology(series);
+      } catch {
+        diagnostic('methodology-evaluation-failed');
+        throw new Error('naver_news_blob_methodology_evaluation_failed');
+      }
     },
   });
 }
@@ -144,6 +160,7 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       ?? createProductionNaverNewsBlobEvidenceReadStore
     )(resolvedEnvironment);
   } catch {
+    diagnostic('blob-store-init-failed');
     return getArtistProductVariableRealReadModel(
       {
         artistId: 'iu',
@@ -168,6 +185,9 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     await resolveLatestOfficialNaverNewsShadowThroughSlotStart(
       latestRepository,
     );
+  if (latest.status !== 'ok') {
+    diagnostic(latest.reason);
+  }
   const throughSlotStart =
     latest.status === 'ok' ? latest.throughSlotStart : null;
 

@@ -278,3 +278,42 @@ test('Blob-backed current newsIssuePoint reader contains no Postgres dependency'
     /createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository/,
   );
 });
+
+
+test('Blob-backed current newsIssuePoint reader emits only sanitized latest-slot diagnostic', async () => {
+  const warnings: string[] = [];
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(' '));
+  };
+
+  try {
+    const result =
+      await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+        {
+          VERCEL_ENV: 'production',
+          BLOB_STORE_ID: 'store_test',
+        },
+        {
+          resolveOidcToken: () => 'oidc-test-token',
+          createReadStore() {
+            return {
+              async readText() {
+                return null;
+              },
+              async listPathnames() {
+                return [];
+              },
+            };
+          },
+        },
+      );
+
+    assert.equal(result.status, 'data-issue');
+    assert.deepEqual(warnings, [
+      'FANDEX_NAVER_NEWS_BLOB_RUNTIME_DIAGNOSTIC=latest-slot-not-found',
+    ]);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
