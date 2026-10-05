@@ -7,7 +7,7 @@
   "measurementWindowEnd": null,
   "windowDurationDays": 366,
   "reactionSnapshotRunsPerDay": 24,
-  "intendedCron": "0 * * * *",
+  "intendedCron": "17 * * * *",
   "enabled": true,
   "recurringExecutionAuthorized": true,
   "schedulerMutationAuthorized": true,
@@ -28,6 +28,7 @@
     "The historical window remains historical owner intent only and is not backfilled.",
     "The replacement canonical window is not preselected; it is immutably materialized from the first successful exact UTC-hour recurring slot.",
     "The hourly workflow checks out the exact authorized runtime revision so unrelated later main changes cannot silently alter provider execution code.",
+    "The scheduler minute is intentionally offset from minute 0 because GitHub documents elevated schedule delay/drop risk at the start of each hour; the runtime still assigns a real observation to its current UTC hourly slot.",
     "The existing private Vercel Blob credential is reused as infrastructure; snsFandom objects are isolated under sns-fandom/youtube-audit/recurring/v1.",
     "Provider submission, Production collection, Product/Risk activation, raw video identifiers, and raw statistics remain outside this authorization."
   ]
