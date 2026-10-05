@@ -1,0 +1,50 @@
+name: Validate NAVER News recovery epoch candidate v1
+
+on:
+  push:
+    branches:
+      - work/naver-news-recovery-epoch-candidate-v1
+    paths:
+      - "data/momentum-product/iu_naver_news_shadow_recovery_epoch_candidate_v1.json"
+      - "tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-epoch-candidate-v1.yml"
+      - "lib/intelligence/fandexMomentumRecoveryContinuityGate.ts"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+  pull_request:
+    paths:
+      - "data/momentum-product/iu_naver_news_shadow_recovery_epoch_candidate_v1.json"
+      - "tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-epoch-candidate-v1.yml"
+      - "lib/intelligence/fandexMomentumRecoveryContinuityGate.ts"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate qualified candidate without activation
+        run: npx tsx --test tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts
+
+      - name: Safety boundary
+        run: |
+          echo "officialEpochModified=false"
+          echo "activationAllowed=false"
+          echo "productionOperationsApprovalRequired=true"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "productActivations=0"

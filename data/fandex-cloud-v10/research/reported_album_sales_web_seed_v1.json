@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T21:15:02+09:00",
+  "collectedAt": "2026-10-05T21:55:12+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5655,6 +5655,62 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T21:15:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artistName": "BLACKPINK",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "KILL THIS LOVE",
+        "releaseDate": "2019-04-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 146094,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-04-23",
+      "providerPeriodEnd": "2019-04-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T21:55:12+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:20190430:blackpink-kill-this-love",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1321012wpp/twice-sets-new-girl-group-record-for-first-week-album-sales-with-fancy-you",
+          "sourcePublicationDate": "2019-04-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:55:12+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "namu:kill-this-love:first-week-table",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "NamuWiki",
+          "sourceUrl": "https://namu.moe/w/KILL%20THIS%20LOVE",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:55:12+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }

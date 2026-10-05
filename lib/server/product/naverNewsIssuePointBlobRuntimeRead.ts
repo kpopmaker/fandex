@@ -36,6 +36,7 @@ function isProductionRuntime(
   return (
     environment[FANDEX_PRODUCT_RUNTIME_ENV]?.trim() === 'production'
     || environment.VERCEL_ENV?.trim() === 'production'
+    || environment.VERCEL_TARGET_ENV?.trim() === 'production'
   );
 }
 
@@ -132,6 +133,7 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
   dependencies: NaverNewsIssuePointBlobRuntimeDependencies = {},
 ) {
   if (!isProductionRuntime(environment)) {
+    diagnostic('production-runtime-gate-failed');
     return getArtistProductVariableRealReadModel(
       {
         artistId: 'iu',
