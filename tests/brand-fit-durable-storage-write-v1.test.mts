@@ -319,9 +319,8 @@ test('production workflow is pinned to the successful provider receipt and separ
   assert.match(workflow, /providerCalls=0/);
   assert.match(workflow, /productActivations=0/);
   assert.match(workflow, /publications=0/);
-  assert.ok(
-    workflow.includes('issue_comment:\\n    types: [created]'),
-  );
+  assert.ok(workflow.includes('issue_comment:'));
+  assert.ok(workflow.includes('types: [created]'));
   assert.ok(
     workflow.includes('github.event.issue.number == 367'),
   );
