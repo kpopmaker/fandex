@@ -8,7 +8,7 @@ import {
 
 const SHA = '1111111111111111111111111111111111111111';
 
-test('checked-in owner authorization is recorded but remains non-executable', async () => {
+test('checked-in activation binding is exact and ready for first real hourly slot', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -19,8 +19,11 @@ test('checked-in owner authorization is recorded but remains non-executable', as
     ),
   ) as Record<string, unknown>;
 
+  const authorizedRevisionSha = raw.authorizedRevisionSha as string;
+  assert.match(authorizedRevisionSha, /^[0-9a-f]{40}$/);
+
   const result = evaluateSnsFandomYoutubeRecurringActivationBinding({
-    currentRevisionSha: SHA,
+    currentRevisionSha: authorizedRevisionSha,
     now: '2026-10-05T14:17:00.000Z',
     enabled: raw.enabled === true,
     recurringExecutionAuthorized:
@@ -29,23 +32,22 @@ test('checked-in owner authorization is recorded but remains non-executable', as
       raw.schedulerMutationAuthorized === true,
     activationAuthorizationEvidenceRef:
       raw.activationEvidenceRef as string | null,
-    authorizedRevisionSha:
-      raw.authorizedRevisionSha as string | null,
+    authorizedRevisionSha,
     runtimeBound: raw.runtimeBound === true,
     evidenceStoreBound: raw.evidenceStoreBound === true,
     evidenceStoreCredentialLocatorRef:
       raw.evidenceStoreCredentialLocatorRef as string | null,
   });
 
-  assert.equal(
-    result.state,
-    'owner-authorized-awaiting-bindings',
-  );
-  assert.equal(result.activationBoundary, null);
-  assert.equal(result.measurementWindowStart, null);
-  assert.equal(result.measurementWindowEnd, null);
-  assert.equal(result.schedulerActivationCandidate, false);
-  assert.equal(result.recurringProviderExecutionCandidate, false);
+  assert.equal(raw.state, 'activation-bound-awaiting-first-successful-slot');
+  assert.equal(raw.measurementWindowStart, null);
+  assert.equal(raw.measurementWindowEnd, null);
+  assert.equal(result.state, 'activation-candidate-ready');
+  assert.equal(result.activationBoundary, '2026-10-05T14:00:00.000Z');
+  assert.equal(result.measurementWindowStart, '2026-10-05T14:00:00.000Z');
+  assert.equal(result.measurementWindowEnd, '2027-10-06T14:00:00.000Z');
+  assert.equal(result.schedulerActivationCandidate, true);
+  assert.equal(result.recurringProviderExecutionCandidate, true);
   assert.equal(result.retrospectiveBackfillAllowed, false);
   assert.equal(result.providerSubmissionAuthorized, false);
   assert.equal(result.productionCollectionAuthorized, false);
