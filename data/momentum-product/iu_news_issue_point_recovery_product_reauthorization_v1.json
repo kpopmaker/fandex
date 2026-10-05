@@ -1,0 +1,41 @@
+{
+  "contractVersion": "v1_news_issue_point_recovery_product_reauthorization",
+  "canonicalArtistId": "iu",
+  "variableId": "newsIssuePoint",
+  "action": "reauthorize-recovery-epoch-product-cutover",
+  "authority": "product-operations-owner",
+  "authorizationId": "ops-reauthorize-newsissuepoint-recovery-epoch-20261005-v1",
+  "authorizedDate": "2026-10-05",
+  "authorizedBaseMain": "d1c11d058c903dd738a0e42e19129826aeb2e5e3",
+  "binding": {
+    "candidatePath": "data/momentum-product/iu_naver_news_recovery_product_reauthorization_candidate_v1.json",
+    "candidateBlobSha": "abb7334d4dfeed9f34e116dffbfee2f46a59ac13",
+    "recoveryEpochActivationMergeSha": "70e66c0c7e968b222b49f391a40a419e694480b6",
+    "historicalCutoverExecutionAuthorizationId": "ops-cutover-execution-newsissuepoint-20260923t095908z-v1",
+    "historicalProtocolStart": "2026-09-15T16:00:00.000Z",
+    "recoveryProtocolStart": "2026-10-03T01:00:00.000Z",
+    "methodologyVersion": "v1_naver_news_issue_point_real_methodology",
+    "selectedWindowSlotCount": 8,
+    "normalizationType": "HISTORICAL_STRICT_EXCEEDANCE_SHARE",
+    "claimScope": "protocol-conditioned-first-seen-only"
+  },
+  "decision": {
+    "activationReauthorized": true,
+    "publicRouteCutoverReauthorized": true,
+    "newsIssuePointPublicationAuthorized": true,
+    "newsIssuePointScorePublicationAuthorized": true,
+    "directProductionContributionEligible": true,
+    "lifecycleState": "production",
+    "strictPublicationIntervalClaimAllowed": false,
+    "fandexAggregateScorePublicationAuthorized": false
+  },
+  "safetyBoundary": {
+    "providerExecutionsAuthorized": 0,
+    "blobWritesAuthorized": 0,
+    "databaseWritesAuthorized": 0,
+    "backfillAuthorized": false,
+    "missingSlotSynthesisAuthorized": false,
+    "methodologyChangeAuthorized": false,
+    "fandexAggregateScorePublicationAuthorized": false
+  }
+}

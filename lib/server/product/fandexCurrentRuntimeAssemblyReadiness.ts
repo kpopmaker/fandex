@@ -6,6 +6,9 @@ import {
 import type {
   ProductVariableReadModelResult,
 } from '../../product/contracts/productVariable';
+import {
+  getArtistProductVariablePublicRoute,
+} from '../../product/queries/getArtistProductVariablePublicRoute';
 import type {
   ProductActivityExposurePublicRouteResult,
 } from '../../product/contracts/productActivityExposurePublicRoute';
@@ -76,7 +79,16 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     momentumReadinessSettled,
   ] = await Promise.allSettled([
     getMusicAlbumPointCurrentRuntimeForIU(),
-    getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(),
+    getArtistProductVariablePublicRoute(
+      {
+        artistId: 'iu',
+        variableId: 'newsIssuePoint',
+      },
+      {
+        readNewsIssuePointReal:
+          getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+      },
+    ),
     getSnsFandomPointCurrentRuntimeForIU(),
     getBrandFitStoredEvidenceCurrentRuntimeForIU(),
     getActivityExposurePublicRouteForIU(),
