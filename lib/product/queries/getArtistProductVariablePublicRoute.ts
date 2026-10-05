@@ -91,8 +91,8 @@ function executionBindingValid(): boolean {
       === execution.cutoverExecutionAuthorizationId
     && reauthorization.binding.historicalProtocolStart
       === execution.binding.protocolStart
-    && reauthorization.binding.recoveryProtocolStart
-      !== execution.binding.protocolStart
+    && String(reauthorization.binding.recoveryProtocolStart)
+      !== String(execution.binding.protocolStart)
     && reauthorization.binding.methodologyVersion
       === execution.binding.methodologyVersion
     && reauthorization.binding.selectedWindowSlotCount
