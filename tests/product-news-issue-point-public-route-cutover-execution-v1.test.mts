@@ -226,23 +226,37 @@ test('historical pre-recovery epoch evidence is rejected after recovery reauthor
   assert.equal(source.status, 'ok');
   if (source.status !== 'ok') return;
 
-  const historical = {
-    status: 'ok' as const,
+  assert.equal(
+    source.model.sourceMetadata.sourceKind,
+    'naver-news-issue-point-frozen-methodology',
+  );
+  assert.equal(
+    source.model.evidenceTrace.kind,
+    'naver-news-issue-point-stored-evidence',
+  );
+  if (
+    source.model.sourceMetadata.sourceKind
+      !== 'naver-news-issue-point-frozen-methodology'
+    || source.model.evidenceTrace.kind
+      !== 'naver-news-issue-point-stored-evidence'
+  ) {
+    return;
+  }
+
+  const historical: ProductVariableReadModelResult = {
+    status: 'ok',
     model: {
       ...source.model,
       sourceMetadata: {
         ...source.model.sourceMetadata,
         officialShadowEpoch: '2026-09-15T16:00:00.000Z',
       },
-      evidenceTrace: source.model.evidenceTrace.kind
-        === 'naver-news-issue-point-stored-evidence'
-        ? {
-            ...source.model.evidenceTrace,
-            officialShadowEpoch: '2026-09-15T16:00:00.000Z',
-          }
-        : source.model.evidenceTrace,
+      evidenceTrace: {
+        ...source.model.evidenceTrace,
+        officialShadowEpoch: '2026-09-15T16:00:00.000Z',
+      },
     },
-  } satisfies ProductVariableReadModelResult;
+  };
 
   const result = await getArtistProductVariablePublicRoute(
     { artistId: 'iu', variableId: 'newsIssuePoint' },
