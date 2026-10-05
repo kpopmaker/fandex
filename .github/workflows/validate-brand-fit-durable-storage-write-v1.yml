@@ -1,0 +1,33 @@
+name: Validate Brand Fit durable storage write v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/brandFitDurableStorageWriteAuthorization.ts'
+      - 'lib/intelligence/brandFitDurableStorageWriteGate.ts'
+      - 'lib/intelligence/brandFitStoredEvidenceWrite.ts'
+      - 'lib/server/storage/brandFitStoredEvidenceBlobRuntime.ts'
+      - 'scripts/operations/brandFitDurableStorageWriteGateV1.mts'
+      - 'scripts/operations/brandFitStoredEvidenceWriteV1.mts'
+      - '.github/workflows/write-brand-fit-durable-evidence-v1.yml'
+      - '.github/workflows/validate-brand-fit-durable-storage-write-v1.yml'
+      - 'tests/brand-fit-durable-storage-write-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run Brand Fit durable storage tests
+        run: npx tsx --test tests/brand-fit-durable-storage-write-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
