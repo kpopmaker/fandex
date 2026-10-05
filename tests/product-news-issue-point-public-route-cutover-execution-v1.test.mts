@@ -42,15 +42,15 @@ function realShadowResult(
       fact,
       series: fact.availability === 'available'
         ? [{
-            sourceTimeLabel: '2026-09-23T09:00:00.000Z',
+            sourceTimeLabel: '2026-10-05T12:00:00.000Z',
             fact,
           }]
         : [],
       observationTime: fact.availability === 'available'
         ? {
             kind: 'period',
-            start: '2026-09-23T02:00:00.000Z',
-            end: '2026-09-23T09:00:00.000Z',
+            start: '2026-10-05T05:00:00.000Z',
+            end: '2026-10-05T12:00:00.000Z',
           }
         : { kind: 'unknown' },
       dataOrigin: 'observed',
@@ -60,10 +60,10 @@ function realShadowResult(
         sourceKind: 'naver-news-issue-point-frozen-methodology',
         sourceArtistId: 'iu',
         sourceVariableKey: 'newsIssuePoint',
-        sourceTimeLabel: '2026-09-23T09:00:00.000Z',
+        sourceTimeLabel: '2026-10-05T12:00:00.000Z',
         methodologyVersion: 'v1_naver_news_issue_point_real_methodology',
-        officialShadowEpoch: '2026-09-15T16:00:00.000Z',
-        throughSlotStart: '2026-09-23T09:00:00.000Z',
+        officialShadowEpoch: '2026-10-03T01:00:00.000Z',
+        throughSlotStart: '2026-10-05T12:00:00.000Z',
         selectedWindowSlotCount: 8,
         normalizationType: 'HISTORICAL_STRICT_EXCEEDANCE_SHARE',
         baselineReadinessStatus: 'replicated_cycle_history',
@@ -76,8 +76,8 @@ function realShadowResult(
       evidenceTrace: {
         kind: 'naver-news-issue-point-stored-evidence',
         methodologyVersion: 'v1_naver_news_issue_point_real_methodology',
-        officialShadowEpoch: '2026-09-15T16:00:00.000Z',
-        throughSlotStart: '2026-09-23T09:00:00.000Z',
+        officialShadowEpoch: '2026-10-03T01:00:00.000Z',
+        throughSlotStart: '2026-10-05T12:00:00.000Z',
         currentWindow: null,
         eligiblePriorWindows: [],
         storedEvidenceJobIds: [],
@@ -218,4 +218,55 @@ test('canonical registry transitions newsIssuePoint to real Production direct co
   assert.equal(definition.lifecycle, 'production');
   assert.equal(definition.directProductionContributionEligible, true);
   assert.deepEqual(definition.blockers, []);
+});
+
+
+test('historical pre-recovery epoch evidence is rejected after recovery reauthorization', async () => {
+  const source = realShadowResult();
+  assert.equal(source.status, 'ok');
+  if (source.status !== 'ok') return;
+
+  assert.equal(
+    source.model.sourceMetadata.sourceKind,
+    'naver-news-issue-point-frozen-methodology',
+  );
+  assert.equal(
+    source.model.evidenceTrace.kind,
+    'naver-news-issue-point-stored-evidence',
+  );
+  if (
+    source.model.sourceMetadata.sourceKind
+      !== 'naver-news-issue-point-frozen-methodology'
+    || source.model.evidenceTrace.kind
+      !== 'naver-news-issue-point-stored-evidence'
+  ) {
+    return;
+  }
+
+  const historical: ProductVariableReadModelResult = {
+    status: 'ok',
+    model: {
+      ...source.model,
+      sourceMetadata: {
+        ...source.model.sourceMetadata,
+        officialShadowEpoch: '2026-09-15T16:00:00.000Z',
+      },
+      evidenceTrace: {
+        ...source.model.evidenceTrace,
+        officialShadowEpoch: '2026-09-15T16:00:00.000Z',
+      },
+    },
+  };
+
+  const result = await getArtistProductVariablePublicRoute(
+    { artistId: 'iu', variableId: 'newsIssuePoint' },
+    { readNewsIssuePointReal: async () => historical },
+  );
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status !== 'data-issue') return;
+  assert.deepEqual(result.issues, [{
+    code: 'real-source-data-issue',
+    reason: 'selector-data-issue',
+  }]);
 });
