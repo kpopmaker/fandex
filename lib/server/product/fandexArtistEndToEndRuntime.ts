@@ -12,7 +12,7 @@ import {
   type FandexArtistRuntimeLoaderMap,
 } from '../../product/runtime/fandexArtistRuntimeBinding';
 import {
-  getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+  getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot,
 } from './naverNewsIssuePointBlobRuntimeRead';
 import {
   getActivityExposurePublicRouteForIU,
@@ -51,7 +51,7 @@ export const IU_FANDEX_ARTIST_RUNTIME_LOADERS:
       });
     },
     newsIssuePoint: async () =>
-      getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(),
+      getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot(),
     snsFandomPoint: async () => {
       const result = await getSnsFandomPointCurrentRuntimeForIU();
       return Object.freeze({
