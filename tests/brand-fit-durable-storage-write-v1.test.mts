@@ -336,6 +336,7 @@ test('production workflow is pinned to the successful provider receipt and separ
     /BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE/,
   );
   assert.match(workflow, /GITHUB_EVENT_PATH/);
+  assert.match(workflow, /lines\\.length !== 4/);
 
   const gateScript = readFileSync(
     new URL(
