@@ -27,6 +27,18 @@ import type {
 export const NAVER_NEWS_ISSUE_POINT_BLOB_RUNTIME_READ_VERSION =
   'naver-news-issue-point-blob-runtime-read-v1' as const;
 
+export const FANDEX_PRODUCT_RUNTIME_ENV =
+  'FANDEX_PRODUCT_RUNTIME_ENV' as const;
+
+function isProductionRuntime(
+  environment: Readonly<Record<string, string | undefined>>,
+): boolean {
+  return (
+    environment[FANDEX_PRODUCT_RUNTIME_ENV]?.trim() === 'production'
+    || environment.VERCEL_ENV?.trim() === 'production'
+  );
+}
+
 type ReadOnlyStore = Pick<
   ImmutableTextObjectStore,
   'readText' | 'listPathnames'
@@ -103,7 +115,7 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     process.env,
   dependencies: NaverNewsIssuePointBlobRuntimeDependencies = {},
 ) {
-  if (environment.VERCEL_ENV !== 'production') {
+  if (!isProductionRuntime(environment)) {
     return getArtistProductVariableRealReadModel(
       {
         artistId: 'iu',
