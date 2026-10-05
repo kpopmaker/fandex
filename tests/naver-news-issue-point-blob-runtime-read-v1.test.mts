@@ -175,6 +175,54 @@ test('Blob-backed current newsIssuePoint reader resolves latest official manifes
   );
 });
 
+test('Blob-backed current newsIssuePoint reader accepts host-neutral Production runtime', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse(
+    '2026-09-15T16:00:00.000Z',
+  );
+
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(
+        protocolStart + index * 60 * 60 * 1_000,
+      ).toISOString(),
+    );
+  }
+
+  let oidcCalls = 0;
+  let createStoreCalls = 0;
+
+  const result =
+    await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        BLOB_READ_WRITE_TOKEN: 'static-test-token',
+      },
+      {
+        resolveOidcToken() {
+          oidcCalls += 1;
+          return 'unexpected';
+        },
+        createReadStore(environment) {
+          createStoreCalls += 1;
+          assert.equal(
+            environment.BLOB_READ_WRITE_TOKEN,
+            'static-test-token',
+          );
+          return {
+            readText: store.readText,
+            listPathnames: store.listPathnames,
+          };
+        },
+      },
+    );
+
+  assert.equal(oidcCalls, 0);
+  assert.equal(createStoreCalls, 1);
+  assert.equal(result.status, 'ok');
+});
+
 test('Blob-backed current newsIssuePoint reader fails closed outside Production', async () => {
   let storeCalls = 0;
   const result =
