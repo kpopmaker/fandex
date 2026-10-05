@@ -1,0 +1,60 @@
+name: Validate NAVER News recovery Product reauthorization candidate v1
+
+on:
+  push:
+    branches:
+      - work/naver-news-recovery-product-reauthorization-candidate-v1
+    paths:
+      - "data/momentum-product/iu_naver_news_recovery_product_reauthorization_candidate_v1.json"
+      - "tests/naver-news-recovery-product-reauthorization-candidate-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-product-reauthorization-candidate-v1.yml"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+      - "lib/product/activation/newsIssuePointRealProductActivationApproval.ts"
+      - "lib/product/activation/newsIssuePointPublicRouteCutoverApproval.ts"
+      - "lib/product/activation/newsIssuePointPublicRouteCutoverExecution.ts"
+  pull_request:
+    paths:
+      - "data/momentum-product/iu_naver_news_recovery_product_reauthorization_candidate_v1.json"
+      - "tests/naver-news-recovery-product-reauthorization-candidate-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-product-reauthorization-candidate-v1.yml"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+      - "lib/product/activation/newsIssuePointRealProductActivationApproval.ts"
+      - "lib/product/activation/newsIssuePointPublicRouteCutoverApproval.ts"
+      - "lib/product/activation/newsIssuePointPublicRouteCutoverExecution.ts"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate recovery Product reauthorization boundary
+        run: >-
+          npx tsx --test
+          tests/naver-news-recovery-product-reauthorization-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "candidateOnly=true"
+          echo "productReauthorizationApplied=false"
+          echo "publicRouteCutoverApplied=false"
+          echo "providerExecutions=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "scorePublished=false"
