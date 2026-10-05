@@ -29,7 +29,7 @@ import {
   getMusicAlbumPointCurrentRuntimeForIU,
 } from './musicAlbumPointCurrentRuntimeRead';
 import {
-  getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+  getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot,
 } from './naverNewsIssuePointBlobRuntimeRead';
 import {
   getSnsFandomPointCurrentRuntimeForIU,
@@ -76,7 +76,7 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     momentumReadinessSettled,
   ] = await Promise.allSettled([
     getMusicAlbumPointCurrentRuntimeForIU(),
-    getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(),
+    getNaverNewsIssuePointBlobReauthorizedProductionVariableAtLatestOfficialSlot(),
     getSnsFandomPointCurrentRuntimeForIU(),
     getBrandFitStoredEvidenceCurrentRuntimeForIU(),
     getActivityExposurePublicRouteForIU(),
