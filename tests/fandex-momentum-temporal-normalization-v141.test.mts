@@ -45,6 +45,28 @@ function lastfmHistory(days = 10): string {
   return rows.join('\n') + '\n';
 }
 
+function lastfmHistoryWithSourceExpansion(days = 10): string {
+  const base = lastfmHistory(days).trimEnd().split('\n');
+  const headers = base[0];
+  const rows = base.slice(1);
+  for (let day = 1; day <= days; day += 1) {
+    const date = `2026-08-${String(day).padStart(2, '0')}`;
+    for (let index = 1; index <= 9; index += 1) {
+      rows.push([
+        date,
+        `source-only-${index}`,
+        `source-only-query-${index}`,
+        `Source Only ${index}`,
+        200_000 + index * day,
+        2_000_000 + index * 10 * day,
+        `${date}T10:05:00+09:00`,
+        'ok',
+      ].join(','));
+    }
+  }
+  return [headers, ...rows].join('\n') + '\n';
+}
+
 function frozenPoint(input: Readonly<{
   throughSlotStart: string;
   activityRate: number;
@@ -253,6 +275,23 @@ test('v141 keeps tie handling strict: ties stay in denominator but not numerator
   assert.equal(naver?.priorLessThanCurrentCount, 1);
   assert.equal(naver?.priorEqualToCurrentCount, 2);
   assert.equal(naver?.historicalStrictExceedanceShare, 33.333333333333);
+});
+
+test('v141 keeps the frozen Last.fm cohort stable when source-only artists are added', () => {
+  const baseline = evaluateFandexMomentumTemporalNormalizationResearch({
+    canonicalArtistId: 'iu',
+    lastfmHistoryCsv: lastfmHistory(),
+    naverComponent: naverComponent(),
+  });
+  const expanded = evaluateFandexMomentumTemporalNormalizationResearch({
+    canonicalArtistId: 'iu',
+    lastfmHistoryCsv: lastfmHistoryWithSourceExpansion(),
+    naverComponent: naverComponent(),
+  });
+
+  assert.equal(expanded.state, 'aligned-normalized-research');
+  assert.equal(expanded.alignmentCutoffAt, baseline.alignmentCutoffAt);
+  assert.deepEqual(expanded.components, baseline.components);
 });
 
 test('v141 rejects NAVER artist mismatch rather than cross-artist normalization', () => {

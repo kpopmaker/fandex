@@ -170,9 +170,12 @@ function parseHistory(historyCsv: string): readonly RawHistoryRow[] {
     });
   });
 
-  const expectedLabels = new Set(LASTFM_CANONICAL_IDENTITIES.map((identity) => identity.artistLabel));
+  const expectedLabels = new Set(
+    LASTFM_CANONICAL_IDENTITIES.map((identity) => identity.artistLabel),
+  );
+  const canonicalRows = parsed.filter((row) => expectedLabels.has(row.artist));
   const byDate = new Map<string, RawHistoryRow[]>();
-  for (const row of parsed) {
+  for (const row of canonicalRows) {
     const bucket = byDate.get(row.snapshotDate) ?? [];
     bucket.push(row);
     byDate.set(row.snapshotDate, bucket);
@@ -182,14 +185,18 @@ function parseHistory(historyCsv: string): readonly RawHistoryRow[] {
       return rejected(`incomplete_snapshot_${date}`);
     }
     const labels = new Set(bucket.map((row) => row.artist));
-    if (labels.size !== expectedLabels.size || [...expectedLabels].some((label) => !labels.has(label))) {
+    if (
+      labels.size !== expectedLabels.size
+      || [...expectedLabels].some((label) => !labels.has(label))
+    ) {
       return rejected(`snapshot_artist_set_mismatch_${date}`);
     }
   }
 
   return Object.freeze(
-    parsed.slice().sort((left, right) =>
-      left.snapshotDate.localeCompare(right.snapshotDate) || left.artist.localeCompare(right.artist)),
+    canonicalRows.slice().sort((left, right) =>
+      left.snapshotDate.localeCompare(right.snapshotDate)
+      || left.artist.localeCompare(right.artist)),
   );
 }
 
