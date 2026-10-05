@@ -33,7 +33,7 @@ function seedHistory() {
 test('actual public seed yields a score-free same-semantic Hanteo first-week research input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-05T23:02:48+09:00',
+    '2026-10-05T23:30:46+09:00',
   );
 
   assert.equal(input.state, 'reviewable');
@@ -44,7 +44,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
   );
   assert.equal(input.target.unit, 'physical-copies');
 
-  assert.equal(input.releaseCount, 121);
+  assert.equal(input.releaseCount, 122);
   assert.equal(input.artistCount, 21);
   assert.deepEqual(
     new Set(input.includedArtistIds),
@@ -65,6 +65,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'MAXIDENT',
       '7TH YEAR: 가시덤불에 잠시 바람이 멈췄을 때',
       'The Chaos Chapter: FREEZE',
+      'The Chaos Chapter: FIGHT OR ESCAPE',
       'The Dream Chapter: ETERNITY',
       'The Action',
       'SEVENTEENTH HEAVEN',
@@ -358,6 +359,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 
   for (const [artistId, releaseTitle] of [
     ['newjeans', 'How Sweet'],
+    ['txt', 'The Chaos Chapter: FIGHT OR ESCAPE'],
     ['bts', 'Butter'],
     ['bts', 'MAP OF THE SOUL : PERSONA'],
     ['ive', "I'VE MINE"],
@@ -454,7 +456,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 test('upgraded IVE SWITCH evidence enters the research input while provider-mismatched Circle rows remain excluded', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-05T23:02:48+09:00',
+    '2026-10-05T23:30:46+09:00',
   );
 
   assert.ok(
@@ -534,7 +536,7 @@ test('upgraded IVE SWITCH evidence enters the research input while provider-mism
 test('Circle distribution and retail observations never enter the Hanteo first-week input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-05T23:02:48+09:00',
+    '2026-10-05T23:30:46+09:00',
   );
 
   assert.ok(
