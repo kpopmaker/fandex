@@ -7,10 +7,6 @@ import {
   FANDEX_MOMENTUM_RECOVERY_REQUIRED_ANALYSIS_SLOT_COUNT,
   FANDEX_MOMENTUM_RECOVERY_REQUIRED_SERIES_SLOT_COUNT,
 } from '../lib/intelligence/fandexMomentumRecoveryContinuityGate';
-import {
-  getOfficialNaverNewsShadowEpoch,
-  NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START,
-} from '../lib/server/ingestion/naverNewsShadowEpoch';
 
 type Candidate = Readonly<{
   contractVersion: string;
@@ -111,24 +107,14 @@ test('recorded recovery epoch candidate reproduces the qualified continuity gate
   assert.equal(candidate.currentOfficialEpochUnchanged, true);
 });
 
-test('candidate artifact does not modify the active official NAVER News epoch', async () => {
+test('candidate artifact remains immutable pre-activation evidence', async () => {
   const candidate = await readCandidate();
-  const official = getOfficialNaverNewsShadowEpoch('iu');
 
-  assert.equal(
-    NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START,
-    '2026-09-15T16:00:00.000Z',
-  );
-  assert.equal(
-    official.protocolStart,
-    NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START,
-  );
-  assert.notEqual(
-    candidate.candidateProtocolStart,
-    official.protocolStart,
-  );
-  assert.equal(official.directProductContributionEligible, false);
-  assert.equal(official.backfillAllowed, false);
+  assert.equal(candidate.activationAllowed, false);
+  assert.equal(candidate.activationApproved, false);
+  assert.equal(candidate.active, false);
+  assert.equal(candidate.productionOperationsApprovalRequired, true);
+  assert.equal(candidate.currentOfficialEpochUnchanged, true);
 });
 
 test('candidate evidence provenance is fixed to the observed qualified runs', async () => {

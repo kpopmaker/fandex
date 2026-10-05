@@ -7,10 +7,13 @@ import {
 } from './naverNewsScheduler';
 
 export const NAVER_NEWS_SHADOW_EPOCH_CONTRACT_VERSION =
-  'v1_naver_news_shadow_epoch' as const;
+  'v2_naver_news_shadow_epoch' as const;
+
+export const NAVER_NEWS_IU_RECOVERY_PROTOCOL_START =
+  '2026-10-03T01:00:00.000Z' as const;
 
 export const NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START =
-  '2026-09-15T16:00:00.000Z' as const;
+  NAVER_NEWS_IU_RECOVERY_PROTOCOL_START;
 
 export type NaverNewsShadowEpochContract = Readonly<{
   contractVersion: typeof NAVER_NEWS_SHADOW_EPOCH_CONTRACT_VERSION;
