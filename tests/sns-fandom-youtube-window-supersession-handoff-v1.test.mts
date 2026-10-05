@@ -16,7 +16,7 @@ const POLICY_APPROVAL =
 const CADENCE_EVIDENCE =
   'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631';
 const ACTIVATION_EVIDENCE =
-  'github-issue://kpopmaker/fandex/issues/489#issuecomment-7000000000';
+  'github-issue://kpopmaker/fandex/issues/498#issuecomment-5995396425';
 
 function baseInput(
   overrides: Partial<SnsFandomYoutubeWindowSupersessionHandoffInput> = {},
