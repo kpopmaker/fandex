@@ -1,0 +1,39 @@
+name: Inspect NAVER Postgres Blob union coverage read-only v1
+
+on:
+  push:
+    branches:
+      - 'work/product-production-readiness-reprobe-v1'
+    paths:
+      - '.github/workflows/inspect-naver-postgres-blob-union-coverage-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    if: github.repository == 'kpopmaker/fandex' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      FANDEX_RUNTIME_DATABASE_URL: ${{ secrets.FANDEX_RUNTIME_DATABASE_URL }}
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Inspect union coverage read-only
+        run: npx tsx scripts/ops/inspect-naver-postgres-blob-union-coverage-v1.ts
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_UNION_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_UNION_DATABASE_WRITES=0"
+          echo "FANDEX_UNION_BLOB_WRITES=0"
+          echo "FANDEX_UNION_SCORE_WRITES=0"
+          echo "FANDEX_UNION_PUBLICATION_CHANGES=0"
