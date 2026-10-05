@@ -42,7 +42,7 @@ function context() {
   );
   const researchInput = buildReportedAlbumSalesResearchInput(
     history,
-    '2026-10-05T21:55:12+09:00',
+    '2026-10-05T22:43:48+09:00',
   );
   const reviewerPacket =
     buildReportedAlbumSalesResearchReviewerPacket({
@@ -103,6 +103,7 @@ function fullReviewRecords() {
 
 test('empty external review intake stays integrity-valid but methodology-blocked', () => {
   const { researchInput, reviewerPacket } = context();
+  assert.equal(researchInput.releaseCount, 120);
   const bundle = intakeReportedAlbumSalesResearchReviewBundle({
     researchInput,
     reviewerPacket,

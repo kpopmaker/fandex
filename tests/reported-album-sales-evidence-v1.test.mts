@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 123);
+  assert.equal(input.drafts.length, 124);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 121);
+  assert.equal(deduped.length, 122);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 119);
+  assert.equal(hanteo.length, 120);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 119);
+  assert.equal(hanteoFirstWeek.length, 120);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    119,
+    120,
   );
 
   for (const [artistId, title, value] of [
@@ -466,6 +466,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['twice', 'Feel Special', 154_028, '2019-09-23', '2019-09-29', 'corroborated-secondary'],
     ['twice', 'MORE & MORE', 332_416, '2020-06-01', '2020-06-07', 'provider-attributed-secondary'],
     ['aespa', 'Rich Man', 1_088_340, '2025-09-05', '2025-09-11', 'primary-official'],
+    ['aespa', 'LEMONADE', 909_167, '2026-05-29', '2026-06-04', 'primary-official'],
     ['ateez', 'ZERO : FEVER Part.3', 665_350, '2021-09-13', '2021-09-19', 'corroborated-secondary'],
     ['ateez', 'ZERO : FEVER Part.1', 233_399, '2020-07-29', '2020-08-04', 'corroborated-secondary'],
     ['txt', 'The Chaos Chapter: FREEZE', 630_563, '2021-05-31', '2021-06-06', 'corroborated-secondary'],
@@ -520,7 +521,7 @@ test('source tiers remain separate from evidence quality', () => {
   );
 
   assert.deepEqual(tierCounts, {
-    'tier-a-primary-official': 43,
+    'tier-a-primary-official': 44,
     'tier-c-discovery-only': 11,
     'tier-b-provider-attributed-reputable': 94,
   });

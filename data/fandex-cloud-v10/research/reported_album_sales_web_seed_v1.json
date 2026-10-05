@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T21:55:12+09:00",
+  "collectedAt": "2026-10-05T22:43:48+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5711,6 +5711,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T21:55:12+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LEMONADE",
+        "releaseDate": "2026-05-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 909167,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-05-29",
+      "providerPeriodEnd": "2026-06-04",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T22:43:48+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92676:aespa-lemonade",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92676",
+          "sourcePublicationDate": "2026-06-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T22:43:48+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }

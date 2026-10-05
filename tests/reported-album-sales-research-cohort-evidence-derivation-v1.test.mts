@@ -23,7 +23,7 @@ type SeedFile = Readonly<{
   drafts: readonly ReportedAlbumSalesObservationDraft[];
 }>;
 
-function researchInput(asOf = '2026-10-05T21:55:12+09:00') {
+function researchInput(asOf = '2026-10-05T22:43:48+09:00') {
   const seed = JSON.parse(
     readFileSync(
       'data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json',
@@ -82,7 +82,7 @@ test('derived release-identity facts expose candidate identities without auto-re
 
   assert.equal(
     candidate.facts.releaseIdentityStateCounts.candidate,
-    119,
+    120,
   );
   assert.equal(
     candidate.facts.releaseIdentityStateCounts.resolved,
@@ -104,7 +104,7 @@ test('derived source-quality facts preserve mixed official and secondary evidenc
 
   assert.equal(
     candidate.facts.evidenceQualityCounts['primary-official'],
-    41,
+    42,
   );
   assert.equal(
     candidate.facts.evidenceQualityCounts[
@@ -131,7 +131,7 @@ test('derived period facts confirm explicit seven-day shape but still require re
       researchInput(),
     ).candidates.periodConsistency;
 
-  assert.equal(candidate.facts.explicitSevenDayPeriodCount, 119);
+  assert.equal(candidate.facts.explicitSevenDayPeriodCount, 120);
   assert.equal(candidate.facts.sameUnderlyingProvider, true);
   assert.equal(candidate.facts.sameMetricSemantic, true);
   assert.ok(
