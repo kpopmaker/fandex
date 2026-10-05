@@ -17,6 +17,7 @@ import {
 } from '../../lib/server/ingestion/naverNewsScheduler';
 import { getOfficialNaverNewsShadowEpoch } from '../../lib/server/ingestion/naverNewsShadowEpoch';
 
+async function main() {
 const url = process.env.FANDEX_RUNTIME_DATABASE_URL?.trim();
 if (!url) throw new Error('runtime_database_url_missing');
 
@@ -110,3 +111,9 @@ try {
 } finally {
   await pool.end();
 }
+}
+
+void main().catch((error) => {
+  console.error('FANDEX_POSTGRES_INSPECTOR_FAILED=' + (error instanceof Error ? error.message : 'unknown'));
+  process.exitCode = 1;
+});
