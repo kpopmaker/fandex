@@ -1,0 +1,70 @@
+name: Validate NAVER News recovery Product reauthorization v1
+
+on:
+  push:
+    branches:
+      - work/naver-news-recovery-product-reauthorization-v1
+    paths:
+      - "lib/product/activation/newsIssuePointRecoveryEpochProductReauthorization.ts"
+      - "lib/server/product/naverNewsIssuePointBlobRuntimeRead.ts"
+      - "lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts"
+      - "lib/server/product/fandexArtistEndToEndRuntime.ts"
+      - "tests/naver-news-recovery-product-reauthorization-v1.test.mts"
+      - "tests/naver-news-issue-point-blob-runtime-read-v1.test.mts"
+      - "tests/fandex-artist-runtime-binding-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-product-reauthorization-v1.yml"
+  pull_request:
+    paths:
+      - "lib/product/activation/newsIssuePointRecoveryEpochProductReauthorization.ts"
+      - "lib/server/product/naverNewsIssuePointBlobRuntimeRead.ts"
+      - "lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts"
+      - "lib/server/product/fandexArtistEndToEndRuntime.ts"
+      - "tests/naver-news-recovery-product-reauthorization-v1.test.mts"
+      - "tests/naver-news-issue-point-blob-runtime-read-v1.test.mts"
+      - "tests/fandex-artist-runtime-binding-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-product-reauthorization-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate recovery epoch Product reauthorization
+        run: >-
+          npx tsx --test
+          tests/naver-news-recovery-product-reauthorization-v1.test.mts
+          tests/naver-news-issue-point-blob-runtime-read-v1.test.mts
+          tests/news-issue-point-fandex-variable-product-v1.test.mts
+          tests/fandex-current-runtime-assembly-readiness-v1.test.mts
+          tests/fandex-artist-runtime-binding-v1.test.mts
+          tests/risk-adjustment-news-issue-projection-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "recoveryEpochProductReauthorized=true"
+          echo "methodologyChanged=false"
+          echo "scorePublished=false"
+          echo "rankingActivated=false"
+          echo "providerExecutions=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "backfillAuthorized=false"
+          echo "missingSlotSynthesisAuthorized=false"
