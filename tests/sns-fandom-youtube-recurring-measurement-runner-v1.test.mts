@@ -25,7 +25,7 @@ function activation(enabled = false) {
     recurringExecutionAuthorized: enabled,
     schedulerMutationAuthorized: enabled,
     activationEvidenceRef: enabled
-      ? 'github-issue://kpopmaker/fandex/issues/489#issuecomment-123'
+      ? 'github-issue://kpopmaker/fandex/issues/498#issuecomment-5995396425'
       : null,
     authorizedRevisionSha: enabled ? SHA : null,
   };
