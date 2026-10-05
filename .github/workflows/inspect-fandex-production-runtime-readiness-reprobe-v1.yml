@@ -1,0 +1,130 @@
+name: Inspect FANDEX Production runtime readiness reprobe v1
+
+on:
+  push:
+    branches:
+      - 'work/product-production-readiness-reprobe-v1'
+    paths:
+      - '.github/workflows/inspect-fandex-production-runtime-readiness-reprobe-v1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inspect-fandex-production-runtime-readiness-reprobe-v1
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/work/product-production-readiness-reprobe-v1' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect once without retry
+        shell: bash
+        env:
+          PROBE_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$PROBE_SECRET"
+
+          status="$(
+            curl \
+              --silent \
+              --show-error \
+              --request POST \
+              --retry 0 \
+              --output /tmp/response.json \
+              --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${PROBE_SECRET}" \
+              --header 'X-Fandex-Product-Runtime-Probe-Id: ops-fandex-product-runtime-readiness-20261004-v1' \
+              --header 'X-Fandex-Probe-Source: github-actions-manual-v1' \
+              'https://fandex-eta.vercel.app/api/internal/fandex/product-runtime-readiness'
+          )"
+
+          if [[ "$status" != "200" ]]; then
+            echo "FANDEX_PRODUCT_RUNTIME_READINESS_HTTP=failed"
+            exit 1
+          fi
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const canonicalVariables = [
+            'musicAlbumPoint',
+            'newsIssuePoint',
+            'snsFandomPoint',
+            'brandFitPoint',
+            'comebackActivityPoint',
+            'growthMomentumPoint',
+            'riskAdjustmentPoint',
+          ];
+
+          let value;
+          try {
+            value = JSON.parse(fs.readFileSync('/tmp/response.json', 'utf8'));
+          } catch {
+            console.log('FANDEX_PRODUCT_RUNTIME_READINESS_RESPONSE=invalid');
+            process.exit(1);
+          }
+
+          const states = Array.isArray(value?.variableStates) ? value.variableStates : [];
+          const stateIds = states.map((entry) => entry?.variableId);
+          const resolved = Array.isArray(value?.resolvedVariableIds) ? value.resolvedVariableIds : [];
+          const blocked = Array.isArray(value?.blockedVariableIds) ? value.blockedVariableIds : [];
+
+          const valid =
+            value?.ok === true
+            && value?.mode === 'fandex-product-runtime-readiness-probe'
+            && value?.contractVersion === 'fandex-current-runtime-assembly-readiness-v1'
+            && value?.canonicalArtistId === 'iu'
+            && Number.isFinite(Date.parse(value?.generatedAt))
+            && ['assembly-ready', 'blocked'].includes(value?.status)
+            && JSON.stringify(stateIds) === JSON.stringify(canonicalVariables)
+            && states.every((entry) =>
+              canonicalVariables.includes(entry?.variableId)
+              && ['resolved', 'data-issue', 'runtime-source-unavailable', 'derived'].includes(entry?.sourceState)
+              && ['ok', 'blocked', 'not-run'].includes(entry?.adapterState)
+              && (entry?.reason === null || typeof entry?.reason === 'string')
+            )
+            && [...resolved, ...blocked].every((variableId) => canonicalVariables.includes(variableId))
+            && value?.scoreCalculated === false
+            && value?.methodologyFinalized === false
+            && value?.publicRouteActivated === false
+            && value?.providerExecutionPerformed === false
+            && value?.writeOperationsAuthorized === false;
+
+          if (!valid) {
+            console.log('FANDEX_PRODUCT_RUNTIME_READINESS_RESPONSE=invalid');
+            process.exit(1);
+          }
+
+          console.log('FANDEX_PRODUCT_RUNTIME_READINESS_RESPONSE=validated');
+          console.log('FANDEX_PRODUCT_RUNTIME_READINESS_STATUS=' + value.status);
+          console.log('FANDEX_PRODUCT_RUNTIME_READINESS_RESOLVED=' + resolved.join(','));
+          console.log('FANDEX_PRODUCT_RUNTIME_READINESS_BLOCKED=' + (blocked.join(',') || 'none'));
+          console.log('FANDEX_PRODUCT_RUNTIME_READINESS_ASSEMBLY_STATUS=' + (value.assemblyStatus ?? 'none'));
+          for (const entry of states) {
+            console.log(
+              'FANDEX_PRODUCT_RUNTIME_READINESS_VARIABLE='
+              + entry.variableId
+              + '|sourceState=' + entry.sourceState
+              + '|adapterState=' + entry.adapterState
+              + '|reason=' + (entry.reason ?? 'none')
+            );
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_RETRIES=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_DATABASE_WRITES=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_BLOB_WRITES=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_SCORE_WRITES=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_PUBLICATION_CHANGES=0"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_RAW_EVIDENCE_LOGGED=false"
+          echo "FANDEX_PRODUCT_RUNTIME_READINESS_CREDENTIALS_LOGGED=false"
