@@ -1376,3 +1376,51 @@ submission and never implies:
 
 The checked-in owner input remains deliberately unapproved and null-bound, so
 the current incomplete-window state remains unauthorized.
+
+
+## 14. Recurring canonical-window measurement runner preparation
+
+The approved 24 reaction snapshots/day cadence now has a disabled-by-default
+runner contract:
+
+- `sns-fandom-youtube-recurring-measurement-v1`.
+
+Preparation semantics:
+
+- 24/day maps to one UTC hourly slot;
+- canonical audit cohort remains exactly five members;
+- endpoint scope remains channels.list / playlistItems.list / videos.list;
+- client batching remains singleton-only;
+- comment endpoints remain disallowed;
+- provider quota cost remains observed from exact calls at 1 unit/call;
+- observation time and collection time are stored separately;
+- zero included videos remains an explicit true-zero observation;
+- raw video identifiers/statistics/secrets are not stored;
+- each hourly slot has a deterministic immutable claim and receipt path;
+- an existing receipt is idempotent and performs no provider call;
+- an existing claim without a receipt fails closed instead of retrying the
+  provider automatically;
+- receipt aggregation is derived from immutable sanitized slot receipts.
+
+The checked-in activation contract remains disabled:
+
+- enabled=false;
+- recurringExecutionAuthorized=false;
+- schedulerMutationAuthorized=false;
+- activation evidence=null;
+- authorized revision=null;
+- runtime/store bindings=false.
+
+No `schedule:` / cron trigger is added by this preparation. The runner's CLI
+entry point also fails closed because no runtime/provider/store binding is
+activated.
+
+A separate explicit owner authorization is still required before any PR may:
+
+- bind the runner to a real provider execution/runtime;
+- bind a durable evidence-store credential;
+- add or enable a recurring scheduler trigger;
+- execute recurring YouTube provider calls.
+
+This preparation does not authorize Production collection, provider
+submission, provider approval, Risk inclusion, or Product activation.
