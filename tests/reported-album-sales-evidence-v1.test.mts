@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 127);
+  assert.equal(input.drafts.length, 128);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 125);
+  assert.equal(deduped.length, 126);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 123);
+  assert.equal(hanteo.length, 124);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 123);
+  assert.equal(hanteoFirstWeek.length, 124);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    123,
+    124,
   );
 
   for (const [artistId, title, value] of [
@@ -475,6 +475,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['txt', 'The Dream Chapter: ETERNITY', 181_009, '2020-05-18', '2020-05-24', 'primary-official'],
     ['enhypen', 'THE SIN : VANISH', 2_075_056, '2026-01-16', '2026-01-22', 'primary-official'],
     ['enhypen', 'BORDER : DAY ONE', 280_873, '2020-11-30', '2020-12-06', 'provider-attributed-secondary'],
+    ['enhypen', 'BORDER : CARNIVAL', 384_699, '2021-04-26', '2021-05-02', 'provider-attributed-secondary'],
     ['enhypen', 'THE SIN : BLISS', 2_099_048, '2026-08-21', '2026-08-27', 'provider-attributed-secondary'],
     ['enhypen', 'DIMENSION : ANSWER', 514_291, '2022-01-10', '2022-01-16', 'corroborated-secondary'],
     ['twice', 'Eyes wide open', 245_631, '2020-10-27', '2020-11-02', 'primary-official'],
@@ -526,7 +527,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 44,
     'tier-c-discovery-only': 11,
-    'tier-b-provider-attributed-reputable': 97,
+    'tier-b-provider-attributed-reputable': 98,
   });
 
   const iuLilac = deduped.find(
