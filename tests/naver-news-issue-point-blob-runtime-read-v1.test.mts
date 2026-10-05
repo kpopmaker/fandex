@@ -317,3 +317,62 @@ test('Blob-backed current newsIssuePoint reader emits only sanitized latest-slot
     console.warn = originalWarn;
   }
 });
+
+
+test('Blob-backed current newsIssuePoint reader accepts VERCEL_TARGET_ENV Production runtime', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse(
+    '2026-09-15T16:00:00.000Z',
+  );
+
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(
+        protocolStart + index * 60 * 60 * 1_000,
+      ).toISOString(),
+    );
+  }
+
+  const result =
+    await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        VERCEL_TARGET_ENV: 'production',
+        BLOB_READ_WRITE_TOKEN: 'static-test-token',
+      },
+      {
+        createReadStore() {
+          return {
+            readText: store.readText,
+            listPathnames: store.listPathnames,
+          };
+        },
+      },
+    );
+
+  assert.equal(result.status, 'ok');
+});
+
+test('Blob-backed current newsIssuePoint reader emits sanitized production gate diagnostic', async () => {
+  const warnings: string[] = [];
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(' '));
+  };
+
+  try {
+    const result =
+      await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+        {
+          VERCEL_ENV: 'preview',
+        },
+      );
+
+    assert.equal(result.status, 'data-issue');
+    assert.deepEqual(warnings, [
+      'FANDEX_NAVER_NEWS_BLOB_RUNTIME_DIAGNOSTIC=production-runtime-gate-failed',
+    ]);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
