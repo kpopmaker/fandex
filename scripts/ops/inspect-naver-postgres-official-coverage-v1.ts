@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import { bindCanonicalArtistToNaverNews } from '../../lib/server/ingestion/naverNewsArtistBinding';
 import {
   buildNaverNewsJobIdentity,
+  canonicalJson,
 } from '../../lib/server/ingestion/naverNewsContracts';
 import {
   createPostgresNaverNewsCanonicalJobEvidenceReadRepository,
@@ -133,7 +134,7 @@ try {
         if (row.status === 'succeeded') succeededIds.add(jobId);
         const exactIdentity =
           row.collection_key === exp.identity.request.collectionKey
-          && JSON.stringify(row.request_contract) === JSON.stringify(exp.identity.request);
+          && canonicalJson(row.request_contract) === canonicalJson(exp.identity.request);
         const normalizedCount = Number(row.normalized_record_count);
         const canonicalEligible =
           row.status === 'succeeded'
