@@ -1,0 +1,65 @@
+name: Validate NAVER News recovery epoch activation v1
+
+on:
+  push:
+    branches:
+      - work/naver-news-recovery-epoch-activation-v1
+    paths:
+      - "data/momentum-product/iu_naver_news_shadow_recovery_epoch_activation_v1.json"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+      - "tests/naver-news-shadow-epoch-v1.test.mts"
+      - "tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts"
+      - "tests/naver-news-shadow-recovery-epoch-activation-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-epoch-activation-v1.yml"
+  pull_request:
+    paths:
+      - "data/momentum-product/iu_naver_news_shadow_recovery_epoch_activation_v1.json"
+      - "lib/server/ingestion/naverNewsShadowEpoch.ts"
+      - "tests/naver-news-shadow-epoch-v1.test.mts"
+      - "tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts"
+      - "tests/naver-news-shadow-recovery-epoch-activation-v1.test.mts"
+      - ".github/workflows/validate-naver-news-recovery-epoch-activation-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate authorized epoch rollover and Product read boundaries
+        run: >-
+          npx tsx --test
+          tests/naver-news-shadow-epoch-v1.test.mts
+          tests/naver-news-shadow-recovery-epoch-candidate-v1.test.mts
+          tests/naver-news-shadow-recovery-epoch-activation-v1.test.mts
+          tests/naver-news-blob-current-evidence-coverage-v1.test.mts
+          tests/naver-news-issue-point-blob-runtime-read-v1.test.mts
+          tests/risk-adjustment-news-issue-projection-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "activationScope=official-epoch-rollover-only"
+          echo "providerExecutions=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "missingSlotsSynthesized=false"
+          echo "backfillAuthorized=false"
+          echo "scorePublished=false"
+          echo "publicRouteActivated=false"
