@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import {
   CIRCLE_EVIDENCE_DESCRIPTOR,
@@ -29,25 +30,25 @@ import {
   type MusicAlbumPointProductReadiness,
 } from '../../product/readiness/musicAlbumPointProductReadiness';
 
-const TARGETS_URL = new URL(
-  '../../../data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json',
-  import.meta.url,
+const TARGETS_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json',
 );
-const CHECK_HISTORY_LATEST_URL = new URL(
-  '../../../data/fandex-cloud-v10/state/music_chart_check_history_v1_latest.json',
-  import.meta.url,
+const CHECK_HISTORY_LATEST_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/state/music_chart_check_history_v1_latest.json',
 );
-const CANDIDATES_URL = new URL(
-  '../../../data/fandex-cloud-v10/state/music_chart_artist_candidates_v2_raw_latest.json',
-  import.meta.url,
+const CANDIDATES_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/state/music_chart_artist_candidates_v2_raw_latest.json',
 );
-const BUGS_URL = new URL(
-  '../../../data/fandex-cloud-v10/state/music_chart_bugs_all_targets_v1_latest.json',
-  import.meta.url,
+const BUGS_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/state/music_chart_bugs_all_targets_v1_latest.json',
 );
-const CHECK_HISTORY_CSV_URL = new URL(
-  '../../../data/fandex-cloud-v10/state/music_chart_check_history_v1.csv',
-  import.meta.url,
+const CHECK_HISTORY_CSV_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/state/music_chart_check_history_v1.csv',
 );
 
 export const MUSIC_ALBUM_POINT_CURRENT_RUNTIME_READ_VERSION =
@@ -87,8 +88,8 @@ function record(value: unknown): UnknownRecord | null {
     : null;
 }
 
-async function readJson(url: URL): Promise<unknown> {
-  return JSON.parse(await readFile(url, 'utf8')) as unknown;
+async function readJson(pathname: string): Promise<unknown> {
+  return JSON.parse(await readFile(pathname, 'utf8')) as unknown;
 }
 
 function targetBindings(value: unknown): readonly MusicChartCanonicalBinding[] {
@@ -154,11 +155,11 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
   try {
     [targets, checkHistory, candidates, bugs, historyCsv] =
       await Promise.all([
-        readJson(TARGETS_URL),
-        readJson(CHECK_HISTORY_LATEST_URL),
-        readJson(CANDIDATES_URL),
-        readJson(BUGS_URL),
-        readFile(CHECK_HISTORY_CSV_URL, 'utf8'),
+        readJson(TARGETS_PATH),
+        readJson(CHECK_HISTORY_LATEST_PATH),
+        readJson(CANDIDATES_PATH),
+        readJson(BUGS_PATH),
+        readFile(CHECK_HISTORY_CSV_PATH, 'utf8'),
       ]);
   } catch {
     return Object.freeze({

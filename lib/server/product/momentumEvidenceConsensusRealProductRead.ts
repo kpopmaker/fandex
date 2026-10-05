@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import type {
   ProductMomentumEvidenceConsensusReadModelResult,
@@ -11,15 +12,15 @@ import {
   type MomentumEvidenceConsensusStoredEvidenceReadResult,
 } from '../ingestion/momentumEvidenceConsensusRepository';
 
-const IU_MOMENTUM_EVIDENCE_CONSENSUS_ARTIFACT_URL = new URL(
-  '../../../data/momentum-product/iu_momentum_evidence_consensus_v147.jsonl',
-  import.meta.url,
+const IU_MOMENTUM_EVIDENCE_CONSENSUS_ARTIFACT_PATH = resolve(
+  process.cwd(),
+  'data/momentum-product/iu_momentum_evidence_consensus_v147.jsonl',
 );
 
 async function readIUArtifact(): Promise<string | null> {
   try {
     return await readFile(
-      IU_MOMENTUM_EVIDENCE_CONSENSUS_ARTIFACT_URL,
+      IU_MOMENTUM_EVIDENCE_CONSENSUS_ARTIFACT_PATH,
       'utf8',
     );
   } catch {
