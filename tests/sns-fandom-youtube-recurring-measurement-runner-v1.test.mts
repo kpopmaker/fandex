@@ -123,7 +123,7 @@ test('current preparation stays disabled and cannot call provider', async () => 
     input(),
     {
       store,
-      executeMeasurement: async (observationTime) => {
+      executeMeasurement: async (observationTime: string) => {
         calls += 1;
         return measurement(observationTime);
       },
@@ -194,7 +194,7 @@ test('one activated slot writes sanitized immutable receipt and preserves true z
     input('2026-10-05T12:34:56.000Z', true),
     {
       store,
-      executeMeasurement: async (observationTime) => {
+      executeMeasurement: async (observationTime: string) => {
         calls += 1;
         return measurement(observationTime, 0);
       },
@@ -268,7 +268,7 @@ test('pre-existing claim without receipt fails closed and does not retry provide
     input('2026-10-05T12:34:56.000Z', true),
     {
       store,
-      executeMeasurement: async (observationTime) => {
+      executeMeasurement: async (observationTime: string) => {
         calls += 1;
         return measurement(observationTime);
       },

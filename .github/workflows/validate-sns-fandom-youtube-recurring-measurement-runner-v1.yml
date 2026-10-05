@@ -6,7 +6,7 @@ on:
       - 'work/sns-fandom-recurring-measurement-runner-v1'
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeRecurringMeasurement.ts'
-      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1.mts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1.ts'
       - 'tests/sns-fandom-youtube-recurring-measurement-runner-v1.test.mts'
       - 'docs/research/sns-fandom-youtube-recurring-measurement-activation-v1.json'
       - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
@@ -14,7 +14,7 @@ on:
   pull_request:
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeRecurringMeasurement.ts'
-      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1.mts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1.ts'
       - 'tests/sns-fandom-youtube-recurring-measurement-runner-v1.test.mts'
       - 'docs/research/sns-fandom-youtube-recurring-measurement-activation-v1.json'
       - 'docs/research/sns-fandom-youtube-api-audit-packet-v1.md'
