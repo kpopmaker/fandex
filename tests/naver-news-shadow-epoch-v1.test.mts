@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   getOfficialNaverNewsShadowEpoch,
   NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START,
+  NAVER_NEWS_IU_RECOVERY_PROTOCOL_START,
   NAVER_NEWS_SHADOW_EPOCH_CONTRACT_VERSION,
 } from '../lib/server/ingestion/naverNewsShadowEpoch';
 import {
@@ -16,12 +17,13 @@ import {
   NAVER_NEWS_SCHEDULER_VERSION,
 } from '../lib/server/ingestion/naverNewsScheduler';
 
-const officialStart = '2026-09-15T16:00:00.000Z';
+const officialStart = '2026-10-03T01:00:00.000Z';
 
 test('IU QStash-primary shadow epoch is an explicit non-Product operational contract', () => {
   const epoch = getOfficialNaverNewsShadowEpoch('iu');
 
-  assert.equal(NAVER_NEWS_SHADOW_EPOCH_CONTRACT_VERSION, 'v1_naver_news_shadow_epoch');
+  assert.equal(NAVER_NEWS_SHADOW_EPOCH_CONTRACT_VERSION, 'v2_naver_news_shadow_epoch');
+  assert.equal(NAVER_NEWS_IU_RECOVERY_PROTOCOL_START, officialStart);
   assert.equal(NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START, officialStart);
   assert.deepEqual(epoch, {
     contractVersion: 'v1_naver_news_shadow_epoch',
@@ -69,7 +71,7 @@ test('official series cannot be evaluated through a slot before the official epo
   await assert.rejects(
     () => assembleOfficialNaverNewsShadowFirstSeenSeries({
       canonicalArtistId: 'iu',
-      throughSlotStart: '2026-09-15T15:00:00.000Z',
+      throughSlotStart: '2026-10-03T00:00:00.000Z',
     }, {
       async readJobEvidence() {
         throw new Error('must not read');
