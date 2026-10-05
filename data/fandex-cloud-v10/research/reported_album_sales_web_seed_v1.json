@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T22:43:48+09:00",
+  "collectedAt": "2026-10-05T23:02:48+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5755,6 +5755,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T22:43:48+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Supernatural",
+        "releaseDate": "2024-06-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 721639,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-06-21",
+      "providerPeriodEnd": "2024-06-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T23:02:48+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "daebak:20240628:newjeans-supernatural",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Daebak",
+          "sourceUrl": "https://daebak.tokyo/2024/06/28/newjeans-supernatural-japan-first-week-sales/",
+          "sourcePublicationDate": "2024-06-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T23:02:48+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
