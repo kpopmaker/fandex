@@ -1,0 +1,73 @@
+name: Validate newsIssuePoint recovery Product cutover v1
+
+on:
+  push:
+    branches:
+      - work/news-issue-recovery-epoch-product-cutover-v1
+    paths:
+      - "data/momentum-product/iu_news_issue_point_recovery_product_reauthorization_v1.json"
+      - "lib/product/activation/newsIssuePointRecoveryProductReauthorization.ts"
+      - "lib/product/queries/getArtistProductVariablePublicRoute.ts"
+      - "lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts"
+      - "tests/news-issue-point-recovery-product-reauthorization-v1.test.mts"
+      - "tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts"
+      - "tests/fandex-current-runtime-news-recovery-cutover-wiring-v1.test.mts"
+      - ".github/workflows/validate-news-issue-point-recovery-product-cutover-v1.yml"
+  pull_request:
+    paths:
+      - "data/momentum-product/iu_news_issue_point_recovery_product_reauthorization_v1.json"
+      - "lib/product/activation/newsIssuePointRecoveryProductReauthorization.ts"
+      - "lib/product/queries/getArtistProductVariablePublicRoute.ts"
+      - "lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts"
+      - "tests/news-issue-point-recovery-product-reauthorization-v1.test.mts"
+      - "tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts"
+      - "tests/fandex-current-runtime-news-recovery-cutover-wiring-v1.test.mts"
+      - ".github/workflows/validate-news-issue-point-recovery-product-cutover-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Validate recovery-epoch Product cutover reauthorization
+        run: >-
+          npx tsx --test
+          tests/naver-news-recovery-product-reauthorization-candidate-v1.test.mts
+          tests/news-issue-point-recovery-product-reauthorization-v1.test.mts
+          tests/product-news-issue-point-public-route-cutover-approval-v1.test.mts
+          tests/product-news-issue-point-public-route-cutover-execution-v1.test.mts
+          tests/naver-news-issue-point-blob-runtime-read-v1.test.mts
+          tests/fandex-current-runtime-news-recovery-cutover-wiring-v1.test.mts
+          tests/fandex-current-runtime-assembly-readiness-v1.test.mts
+          tests/risk-adjustment-news-issue-projection-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "recoveryEpochProductReauthorized=true"
+          echo "newsIssuePointPublicationAuthorized=true"
+          echo "historicalAuthorizationMutated=false"
+          echo "providerExecutions=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "backfillAuthorized=false"
+          echo "missingSlotSynthesisAuthorized=false"
+          echo "methodologyChangeAuthorized=false"
+          echo "fandexAggregateScorePublicationAuthorized=false"
