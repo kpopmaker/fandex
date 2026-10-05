@@ -163,7 +163,7 @@ async function main(): Promise<void> {
   const runsRaw = await githubJson(
     '/repos/' + REPOSITORY + '/actions/workflows/'
       + WORKFLOW_FILE
-      + '/runs?event=workflow_dispatch&status=completed&per_page=100',
+      + '/runs?status=completed&per_page=100',
     githubToken,
   );
 
