@@ -12,9 +12,7 @@ export const BRAND_FIT_DURABLE_STORAGE_EVIDENCE_DIGEST =
 export const BRAND_FIT_DURABLE_STORAGE_PAYLOAD_DIGEST =
   'b67c9146257a8022cd3be1b70156c9a21e33ef156e459f77789959704ef46d0b' as const;
 export const BRAND_FIT_DURABLE_STORAGE_PATHNAME =
-  'fandex/brand-fit/stored-evidence/v1/iu/estee-lauder/'
-  + BRAND_FIT_DURABLE_STORAGE_EVIDENCE_DIGEST
-  + '.json' as const;
+  'fandex/brand-fit/stored-evidence/v1/iu/estee-lauder/d597ee9e419cb8c5cd71a2206cc2b33b11652caa20bea3ff1f0fed3b68f91f96.json' as const;
 
 export type BrandFitDurableStorageWriteAuthorizationRecord = Readonly<{
   marker: typeof BRAND_FIT_DURABLE_STORAGE_WRITE_APPROVAL_MARKER;
