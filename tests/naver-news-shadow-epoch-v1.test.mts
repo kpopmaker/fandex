@@ -26,7 +26,7 @@ test('IU QStash-primary shadow epoch is an explicit non-Product operational cont
   assert.equal(NAVER_NEWS_IU_RECOVERY_PROTOCOL_START, officialStart);
   assert.equal(NAVER_NEWS_IU_QSTASH_PRIMARY_PROTOCOL_START, officialStart);
   assert.deepEqual(epoch, {
-    contractVersion: 'v1_naver_news_shadow_epoch',
+    contractVersion: 'v2_naver_news_shadow_epoch',
     lifecycle: 'shadow',
     directProductContributionEligible: false,
     canonicalArtistId: 'iu',
