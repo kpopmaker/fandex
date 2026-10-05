@@ -106,9 +106,11 @@ function validLastfmStatus(
     && value.historyRowCount > 0
     && Number.isSafeInteger(value.snapshotDateCount)
     && value.snapshotDateCount > 0
-    && value.deltaReadyCount === 10
+    && Number.isSafeInteger(value.deltaReadyCount)
+    && value.deltaReadyCount >= 10
     && value.needsReviewCount === 0
-    && value.scorePreviewCount === 10
+    && Number.isSafeInteger(value.scorePreviewCount)
+    && value.scorePreviewCount >= 0
     && value.scoreUsage === 'preview_only_not_master_score'
     && value.masterModified === false
     && value.websiteModified === false
@@ -226,7 +228,8 @@ export function evaluateFandexMomentumCurrentReevaluationReadiness(
     && series.status === 'available'
     && series.protocolStart === continuity.candidateProtocolStart
     && series.throughSlotStart === continuity.latestSuccessfulSlotStart
-    && expectedSlotCount === continuity.requiredSeriesSlotCount
+    && expectedSlotCount === continuity.contiguousSuccessfulSlotCount
+    && expectedSlotCount >= continuity.requiredSeriesSlotCount
     && reproducedSnapshotCount === expectedSlotCount;
 
   if (!seriesComplete) {
