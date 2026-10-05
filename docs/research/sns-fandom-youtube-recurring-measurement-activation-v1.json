@@ -1,0 +1,25 @@
+{
+  "version": "sns_fandom_youtube_recurring_measurement_activation_v1",
+  "state": "disabled-awaiting-explicit-activation",
+  "measurementWindowStart": "2026-10-03T15:00:00.000Z",
+  "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
+  "reactionSnapshotRunsPerDay": 24,
+  "intendedCron": "0 * * * *",
+  "enabled": false,
+  "recurringExecutionAuthorized": false,
+  "schedulerMutationAuthorized": false,
+  "activationEvidenceRef": null,
+  "authorizedRevisionSha": null,
+  "runtimeBound": false,
+  "evidenceStoreBound": false,
+  "evidenceStoreCredentialLocatorRef": null,
+  "automaticProviderCallAllowed": false,
+  "productionCollectionAuthorized": false,
+  "providerSubmissionAuthorized": false,
+  "productActivationAuthorized": false,
+  "notes": [
+    "This file is a disabled preparation contract only.",
+    "No GitHub Actions schedule trigger is added by this preparation.",
+    "A separate explicit owner authorization is required before scheduler activation, provider execution, or runtime/store credential binding."
+  ]
+}
