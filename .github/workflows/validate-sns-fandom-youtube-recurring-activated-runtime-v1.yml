@@ -1,0 +1,49 @@
+# exact-head resync validation
+name: Validate snsFandom recurring activated runtime v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-recurring-runtime-activation-v1'
+    paths:
+      - 'lib/server/storage/vercelBlobRuntime.ts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV1.ts'
+      - 'tests/sns-fandom-youtube-recurring-activated-runtime-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-youtube-recurring-activated-runtime-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/server/storage/vercelBlobRuntime.ts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV1.ts'
+      - 'tests/sns-fandom-youtube-recurring-activated-runtime-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-youtube-recurring-activated-runtime-v1.yml'
+      - '.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml'
+      - 'docs/research/sns-fandom-youtube-recurring-measurement-activation-v1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Recurring activation regressions
+        run: >-
+          npx tsx --test
+          tests/sns-fandom-youtube-recurring-activated-runtime-v1.test.mts
+          tests/sns-fandom-youtube-recurring-activation-binding-v1.test.mts
+          tests/sns-fandom-youtube-recurring-measurement-runner-v1.test.mts
+          tests/sns-fandom-youtube-window-supersession-handoff-v1.test.mts
+          tests/sns-fandom-youtube-completed-window-receipt-intake-v1.test.mts
+          tests/sns-fandom-youtube-quota-window-completion-gate-v1.test.mts
+          tests/sns-fandom-youtube-current-submission-readiness-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
