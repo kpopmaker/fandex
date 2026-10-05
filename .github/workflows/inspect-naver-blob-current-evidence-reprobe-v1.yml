@@ -1,0 +1,83 @@
+name: Inspect NAVER Blob current evidence reprobe v1
+
+on:
+  push:
+    branches:
+      - 'work/product-production-readiness-reprobe-v1'
+    paths:
+      - '.github/workflows/inspect-naver-blob-current-evidence-reprobe-v1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inspect-naver-blob-current-evidence-reprobe-v1
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/work/product-production-readiness-reprobe-v1' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect Blob coverage once without retry
+        shell: bash
+        env:
+          PROBE_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$PROBE_SECRET"
+
+          status="$(
+            curl \
+              --silent \
+              --show-error \
+              --request POST \
+              --retry 0 \
+              --output /tmp/response.json \
+              --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${PROBE_SECRET}" \
+              --header 'X-Fandex-Momentum-Blob-Current-Evidence-Id: ops-momentum-blob-current-evidence-read-20261001-v1' \
+              --header 'X-Fandex-Scheduler-Source: github-actions-manual-v1' \
+              'https://fandex-eta.vercel.app/api/internal/naver-news/blob-current-evidence'
+          )"
+
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_HTTP=$status"
+          if [[ "$status" != "200" ]]; then
+            cat /tmp/response.json
+            exit 1
+          fi
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = JSON.parse(fs.readFileSync('/tmp/response.json', 'utf8'));
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_OK=' + value.ok);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_PROTOCOL=' + value.exactOfficialProtocol);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_SERIES_STATUS=' + value.seriesStatus);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_PROTOCOL_START=' + value.protocolStart);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_THROUGH=' + value.throughSlotStart);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_EXPECTED=' + value.expectedSlotCount);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_REPRODUCED=' + value.reproducedSnapshotCount);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_MISSING=' + value.missingSlotCount);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_FIRST_MISSING_SLOT=' + (value.firstMissingSlotStart ?? 'none'));
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_FIRST_MISSING_JOB=' + (value.firstMissingJobId ?? 'none'));
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_LATEST_STAGED_VALIDATED=' + value.latestStagedJobValidated);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_READY=' + value.currentStoredEvidenceReproducedForReadiness);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_DATABASE_READS=' + value.databaseReads);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_DATABASE_WRITES=' + value.databaseWrites);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_BLOB_WRITES=' + value.blobWrites);
+          console.log('FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_MOMENTUM=' + JSON.stringify(value.momentumProjection));
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_RETRIES=0"
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_DATABASE_WRITES=0"
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_BLOB_WRITES=0"
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_SCORE_WRITES=0"
+          echo "FANDEX_NAVER_BLOB_CURRENT_EVIDENCE_PUBLICATION_CHANGES=0"
