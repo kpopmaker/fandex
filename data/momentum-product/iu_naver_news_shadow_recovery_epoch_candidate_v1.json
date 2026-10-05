@@ -1,0 +1,22 @@
+{
+  "contractVersion": "naver-news-shadow-recovery-epoch-candidate-v1",
+  "canonicalArtistId": "iu",
+  "state": "continuity-qualified-candidate",
+  "candidateProtocolStart": "2026-10-03T01:00:00.000Z",
+  "qualifiedThroughSlotStart": "2026-10-05T12:00:00.000Z",
+  "contiguousSuccessfulSlotCount": 60,
+  "requiredAnalysisSlotCount": 48,
+  "requiredSeriesSlotCount": 49,
+  "evidenceSource": "immutable-blob-official-scheduler-manifest",
+  "sourceWorkflowRunId": 37308530454,
+  "sourceCollectionWorkflowRunId": 37308464300,
+  "latestCollectionJobId": "7a707ec587770486949d9b3137df53324c4877b5b500b2fe9ac80cd3d8ffd92c",
+  "missingSlotsSynthesized": false,
+  "backfillAuthorized": false,
+  "activationAllowed": false,
+  "activationApproved": false,
+  "active": false,
+  "productionOperationsApprovalRequired": true,
+  "currentOfficialEpochUnchanged": true,
+  "notes": "Evidence-only rollover candidate. This artifact does not change the official NAVER News shadow epoch, Product lifecycle, methodology, score, or ranking."
+}
