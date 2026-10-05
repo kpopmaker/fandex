@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-05T23:30:46+09:00",
+  "collectedAt": "2026-10-06T00:17:09+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -5843,6 +5843,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-05T23:30:46+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Love Yourself: Her",
+        "releaseDate": "2017-09-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 759263,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-09-18",
+      "providerPeriodEnd": "2017-09-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T00:17:09+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "yonhap:20170925:bts-love-yourself-her",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Yonhap News Agency",
+          "sourceUrl": "https://en.yna.co.kr/view/AEN20170925001400315",
+          "sourcePublicationDate": "2017-09-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T00:17:09+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
