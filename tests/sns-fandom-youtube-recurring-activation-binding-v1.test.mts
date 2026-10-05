@@ -19,6 +19,19 @@ test('checked-in activation binding is exact and ready for first real hourly slo
     ),
   ) as Record<string, unknown>;
 
+  const workflow = await readFile(
+    new URL(
+      '../.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  const intendedCron = raw.intendedCron as string;
+  assert.equal(intendedCron, '17 * * * *');
+  assert.match(workflow, /cron:\s*['"]17 \* \* \* \*['"]/);
+  assert.doesNotMatch(workflow, /cron:\s*['"]0 \* \* \* \*['"]/);
+
   const authorizedRevisionSha = raw.authorizedRevisionSha as string;
   assert.match(authorizedRevisionSha, /^[0-9a-f]{40}$/);
 
