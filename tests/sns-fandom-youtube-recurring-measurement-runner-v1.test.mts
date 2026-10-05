@@ -13,7 +13,7 @@ import {
 } from '../lib/intelligence/snsFandomPointYoutubeRecurringMeasurement';
 import {
   runSnsFandomYoutubeRecurringMeasurementSlot,
-} from '../scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1.mts';
+} from '../scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV1';
 
 const SHA = '1111111111111111111111111111111111111111';
 const START = '2026-10-03T15:00:00.000Z';
@@ -64,7 +64,7 @@ function measurement(
       'youtube.channels.list',
       'youtube.playlistItems.list',
       'youtube.videos.list',
-    ]),
+    ] as const),
     artists: Object.freeze([]),
     uploadManifestPageCountPerReactionRun: 115,
     videoCountPerReactionRun,
