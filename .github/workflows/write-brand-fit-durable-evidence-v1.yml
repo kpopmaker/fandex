@@ -1,0 +1,120 @@
+name: Write Brand Fit durable evidence v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_main_sha:
+        description: Exact main SHA approved for the durable storage write
+        required: true
+        type: string
+      storage_write_authorization_id:
+        description: Exact owner storage-write authorization ID from issue #367
+        required: true
+        type: string
+      confirm:
+        description: Exact confirmation token
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  issues: read
+
+concurrency:
+  group: brand-fit-durable-evidence-write-v1
+  cancel-in-progress: false
+
+jobs:
+  write:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
+      STORAGE_WRITE_AUTHORIZATION_ID: ${{ inputs.storage_write_authorization_id }}
+      STORAGE_WRITE_CONFIRM: ${{ inputs.confirm }}
+      BRAND_FIT_SOURCE_RUN_ID: '37318243229'
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_BRAND_FIT_EVIDENCE_BLOB_READ_WRITE_TOKEN || secrets.BLOB_READ_WRITE_TOKEN }}
+      FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID: ${{ secrets.FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID || secrets.BLOB_STORE_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate exact storage-write dispatch boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$EXPECTED_MAIN_SHA" = "$GITHUB_SHA"
+          test -n "$STORAGE_WRITE_AUTHORIZATION_ID"
+          test "$STORAGE_WRITE_CONFIRM" = "write-brand-fit-durable-evidence-v1"
+          test "$BRAND_FIT_SOURCE_RUN_ID" = "37318243229"
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - run: npm ci
+
+      - name: Validate owner durable storage authorization and one-shot consumption
+        run: npx tsx scripts/operations/brandFitDurableStorageWriteGateV1.mts
+
+      - name: Download canonical sanitized provider receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: brand-fit-youtube-observation-receipt-v1
+          path: brand-fit-receipt
+          repository: kpopmaker/fandex
+          run-id: '37318243229'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write exactly one immutable Brand Fit durable evidence object
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/operations/brandFitStoredEvidenceWriteV1.mts             | tee /tmp/brand-fit-storage-write-summary.json
+          node <<'NODE'
+          const fs = require('node:fs');
+          const lines = fs.readFileSync(
+            '/tmp/brand-fit-storage-write-summary.json',
+            'utf8',
+          ).trim().split(/\r?\n/).filter(Boolean);
+          const summary = JSON.parse(lines.at(-1) ?? '{}');
+          if (
+            summary.status !== 'stored'
+            || !['created', 'idempotent-existing'].includes(summary.objectStatus)
+            || summary.sourceRunId !== 37318243229
+            || summary.evidenceDigest
+              !== 'd597ee9e419cb8c5cd71a2206cc2b33b11652caa20bea3ff1f0fed3b68f91f96'
+            || summary.payloadDigest
+              !== 'b67c9146257a8022cd3be1b70156c9a21e33ef156e459f77789959704ef46d0b'
+            || summary.pathname
+              !== 'fandex/brand-fit/stored-evidence/v1/iu/estee-lauder/d597ee9e419cb8c5cd71a2206cc2b33b11652caa20bea3ff1f0fed3b68f91f96.json'
+            || summary.databaseWritePerformed !== false
+            || summary.durableObjectWritePerformed !== true
+            || summary.productActivationPerformed !== false
+            || summary.publicPublicationPerformed !== false
+          ) {
+            process.exit(1);
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "sourceRunId=37318243229"
+          echo "providerCalls=0"
+          echo "databaseWrites=0"
+          echo "productActivations=0"
+          echo "publications=0"
+          echo "rawProviderPayloadStored=false"
+          echo "credentialsLogged=false"
