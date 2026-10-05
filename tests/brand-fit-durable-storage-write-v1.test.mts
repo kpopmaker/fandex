@@ -319,24 +319,22 @@ test('production workflow is pinned to the successful provider receipt and separ
   assert.match(workflow, /providerCalls=0/);
   assert.match(workflow, /productActivations=0/);
   assert.match(workflow, /publications=0/);
-  assert.match(
-    workflow,
-    /issue_comment:\\n    types: \\[created\\]/,
+  assert.ok(
+    workflow.includes('issue_comment:\\n    types: [created]'),
   );
-  assert.match(
-    workflow,
-    /github\\.event\\.issue\\.number == 367/,
+  assert.ok(
+    workflow.includes('github.event.issue.number == 367'),
   );
-  assert.match(
-    workflow,
-    /github\\.event\\.comment\\.user\\.login == 'kpopmaker'/,
+  assert.ok(
+    workflow.includes(
+      "github.event.comment.user.login == 'kpopmaker'",
+    ),
   );
-  assert.match(
-    workflow,
-    /BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE/,
+  assert.ok(
+    workflow.includes('BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE'),
   );
-  assert.match(workflow, /GITHUB_EVENT_PATH/);
-  assert.match(workflow, /lines\\.length !== 4/);
+  assert.ok(workflow.includes('GITHUB_EVENT_PATH'));
+  assert.ok(workflow.includes('lines.length !== 4'));
 
   const gateScript = readFileSync(
     new URL(
@@ -345,9 +343,11 @@ test('production workflow is pinned to the successful provider receipt and separ
     ),
     'utf8',
   );
-  assert.match(
-    gateScript,
-    /\\/runs\\?status=completed&per_page=100/,
+  assert.ok(
+    gateScript.includes('/runs?status=completed&per_page=100'),
   );
-  assert.doesNotMatch(gateScript, /event=workflow_dispatch/);
+  assert.equal(
+    gateScript.includes('event=workflow_dispatch'),
+    false,
+  );
 });
