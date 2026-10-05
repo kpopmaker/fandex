@@ -1,14 +1,14 @@
 {
   "version": "sns_fandom_youtube_recurring_measurement_activation_v1",
-  "state": "disabled-awaiting-explicit-activation",
+  "state": "owner-authorized-awaiting-runtime-store-binding",
   "measurementWindowStart": "2026-10-03T15:00:00.000Z",
   "measurementWindowEnd": "2027-10-04T15:00:00.000Z",
   "reactionSnapshotRunsPerDay": 24,
   "intendedCron": "0 * * * *",
   "enabled": false,
-  "recurringExecutionAuthorized": false,
-  "schedulerMutationAuthorized": false,
-  "activationEvidenceRef": null,
+  "recurringExecutionAuthorized": true,
+  "schedulerMutationAuthorized": true,
+  "activationEvidenceRef": "github-issue://kpopmaker/fandex/issues/498#issuecomment-5995396425",
   "authorizedRevisionSha": null,
   "runtimeBound": false,
   "evidenceStoreBound": false,
@@ -18,8 +18,9 @@
   "providerSubmissionAuthorized": false,
   "productActivationAuthorized": false,
   "notes": [
-    "This file is a disabled preparation contract only.",
-    "No GitHub Actions schedule trigger is added by this preparation.",
-    "A separate explicit owner authorization is required before scheduler activation, provider execution, or runtime/store credential binding."
+    "Owner recurring provider execution and hourly scheduler authorization is durably recorded, but no executable activation binding exists yet.",
+    "enabled remains false until exact revision, runtime, durable evidence store credential locator, and actual hourly activation boundary are bound.",
+    "No schedule/cron trigger is added by this preparation.",
+    "Provider submission, Production collection, Product/Risk activation, and historical backfill remain unauthorized."
   ]
 }

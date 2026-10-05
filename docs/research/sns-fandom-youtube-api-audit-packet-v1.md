@@ -1424,3 +1424,37 @@ A separate explicit owner authorization is still required before any PR may:
 
 This preparation does not authorize Production collection, provider
 submission, provider approval, Risk inclusion, or Product activation.
+
+
+## 16. Recurring activation authorization binding
+
+The owner has separately authorized recurring YouTube provider execution and
+hourly scheduler activation. The durable authorization record is:
+
+- `github-issue://kpopmaker/fandex/issues/498#issuecomment-5995396425`.
+
+This authorization is now represented in the recurring activation input as:
+
+- `recurringExecutionAuthorized=true`;
+- `schedulerMutationAuthorized=true`.
+
+The activation remains non-executable because:
+
+- `enabled=false`;
+- exact authorized revision = null;
+- runtime binding = false;
+- evidence-store binding = false;
+- evidence-store credential locator = null;
+- actual activation boundary has not been materialized.
+
+The activation binding evaluator requires all of those fields before it can
+produce an activation candidate. When complete, the candidate is anchored to
+the current UTC hourly slot and derives a full 366-day window at 24/day.
+
+The real activation tracker is #498. Historical preparation issue #489 is no
+longer accepted as recurring activation evidence by the recurring runner or
+window-supersession handoff.
+
+This preparation adds no schedule/cron trigger, performs no provider call, and
+does not authorize provider submission, Production collection, Product/Risk
+activation, or retrospective backfill.

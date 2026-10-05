@@ -93,7 +93,7 @@ function secretLike(value: string): boolean {
 }
 
 function durableActivationRef(value: string): boolean {
-  return /^github-issue:\/\/kpopmaker\/fandex\/issues\/489#issuecomment-[1-9][0-9]*$/.test(
+  return /^github-issue:\/\/kpopmaker\/fandex\/issues\/498#issuecomment-[1-9][0-9]*$/.test(
     value,
   );
 }
