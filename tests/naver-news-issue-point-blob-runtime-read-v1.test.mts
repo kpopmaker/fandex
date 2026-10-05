@@ -102,7 +102,7 @@ async function stageOfficial(
 test('Blob-backed current newsIssuePoint reader resolves latest official manifest without Postgres', async () => {
   const store = memoryStore();
   const protocolStart = Date.parse(
-    '2026-09-15T16:00:00.000Z',
+    '2026-10-03T01:00:00.000Z',
   );
   let latest = null as Awaited<
     ReturnType<typeof stageOfficial>
@@ -163,11 +163,11 @@ test('Blob-backed current newsIssuePoint reader resolves latest official manifes
   );
   assert.equal(
     result.model.sourceMetadata.throughSlotStart,
-    '2026-09-17T17:00:00.000Z',
+    '2026-10-05T02:00:00.000Z',
   );
   assert.match(
     latest.identity.request.collectionKey,
-    /20260917t170000z/,
+    /20261005t020000z/,
   );
   assert.equal(
     result.model.evidenceTrace.kind,
@@ -178,7 +178,7 @@ test('Blob-backed current newsIssuePoint reader resolves latest official manifes
 test('Blob-backed current newsIssuePoint reader accepts host-neutral Production runtime', async () => {
   const store = memoryStore();
   const protocolStart = Date.parse(
-    '2026-09-15T16:00:00.000Z',
+    '2026-10-03T01:00:00.000Z',
   );
 
   for (let index = 0; index < 50; index += 1) {
@@ -322,7 +322,7 @@ test('Blob-backed current newsIssuePoint reader emits only sanitized latest-slot
 test('Blob-backed current newsIssuePoint reader accepts VERCEL_TARGET_ENV Production runtime', async () => {
   const store = memoryStore();
   const protocolStart = Date.parse(
-    '2026-09-15T16:00:00.000Z',
+    '2026-10-03T01:00:00.000Z',
   );
 
   for (let index = 0; index < 50; index += 1) {

@@ -96,14 +96,14 @@ function planFor(slotStart: string): NaverNewsIngestionWritePlan {
 
 test('one staged later slot is validated but cannot satisfy official series coverage', async () => {
   const store = memoryStore();
-  const later = planFor('2026-09-15T17:00:00.000Z');
+  const later = planFor('2026-10-03T02:00:00.000Z');
   await stageNaverNewsStoredEvidenceMirror(later, store);
 
   const coverage =
     await evaluateNaverNewsBlobCurrentEvidenceCoverage(
       {
         canonicalArtistId: 'iu',
-        now: new Date('2026-09-15T17:20:00.000Z'),
+        now: new Date('2026-10-03T02:20:00.000Z'),
       },
       store,
     );
@@ -112,7 +112,7 @@ test('one staged later slot is validated but cannot satisfy official series cove
   assert.equal(coverage.evidenceSource, 'immutable-blob-staged-job');
   assert.equal(coverage.schedulerCompletionClaimed, false);
   assert.equal(coverage.schedulerManifestRequiredForCoverage, false);
-  assert.equal(coverage.throughSlotStart, '2026-09-15T17:00:00.000Z');
+  assert.equal(coverage.throughSlotStart, '2026-10-03T02:00:00.000Z');
   assert.equal(coverage.latestStagedJobId, later.identity.jobId);
   assert.equal(
     coverage.latestStagedCollectionKey,
@@ -124,7 +124,7 @@ test('one staged later slot is validated but cannot satisfy official series cove
   assert.equal(coverage.missingSlotCount, 1);
   assert.equal(
     coverage.firstMissingSlotStart,
-    '2026-09-15T16:00:00.000Z',
+    '2026-10-03T01:00:00.000Z',
   );
   assert.equal(coverage.seriesStatus, 'unavailable');
   assert.equal(
@@ -145,7 +145,7 @@ test('one staged later slot is validated but cannot satisfy official series cove
     projectNaverBlobCoverageToMomentumCurrentEvidence(coverage);
   assert.ok(projected);
   assert.deepEqual(projected, {
-    throughSlotStart: '2026-09-15T17:00:00.000Z',
+    throughSlotStart: '2026-10-03T02:00:00.000Z',
     jobId: later.identity.jobId,
     collectionKey: later.identity.request.collectionKey,
     exactOfficialProtocol: true,
@@ -157,8 +157,8 @@ test('one staged later slot is validated but cannot satisfy official series cove
 
 test('complete staged official series becomes available without claiming scheduler completion', async () => {
   const store = memoryStore();
-  const first = planFor('2026-09-15T16:00:00.000Z');
-  const second = planFor('2026-09-15T17:00:00.000Z');
+  const first = planFor('2026-10-03T01:00:00.000Z');
+  const second = planFor('2026-10-03T02:00:00.000Z');
   await stageNaverNewsStoredEvidenceMirror(first, store);
   await stageNaverNewsStoredEvidenceMirror(second, store);
 
@@ -166,7 +166,7 @@ test('complete staged official series becomes available without claiming schedul
     await evaluateNaverNewsBlobCurrentEvidenceCoverage(
       {
         canonicalArtistId: 'iu',
-        now: new Date('2026-09-15T17:20:00.000Z'),
+        now: new Date('2026-10-03T02:20:00.000Z'),
       },
       store,
     );
@@ -206,7 +206,7 @@ test('no staged official job fails closed without inventing readiness evidence',
     await evaluateNaverNewsBlobCurrentEvidenceCoverage(
       {
         canonicalArtistId: 'iu',
-        now: new Date('2026-09-15T17:20:00.000Z'),
+        now: new Date('2026-10-03T02:20:00.000Z'),
       },
       store,
     );
@@ -233,9 +233,9 @@ test('unrelated staged job paths do not count toward official coverage', async (
       sort: 'date',
     }),
     {
-      fetchedAt: '2026-09-15T17:00:05.000Z',
+      fetchedAt: '2026-10-03T02:00:05.000Z',
       response: {
-        lastBuildDate: '2026-09-15T17:00:04.000Z',
+        lastBuildDate: '2026-10-03T02:00:04.000Z',
         total: 0,
         start: 1,
         display: 0,
@@ -249,7 +249,7 @@ test('unrelated staged job paths do not count toward official coverage', async (
     await evaluateNaverNewsBlobCurrentEvidenceCoverage(
       {
         canonicalArtistId: 'iu',
-        now: new Date('2026-09-15T17:20:00.000Z'),
+        now: new Date('2026-10-03T02:20:00.000Z'),
       },
       store,
     );

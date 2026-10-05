@@ -1,0 +1,38 @@
+{
+  "contractVersion": "naver-news-shadow-recovery-epoch-activation-v1",
+  "canonicalArtistId": "iu",
+  "action": "activate-qualified-recovery-epoch",
+  "authority": "product-operations-owner",
+  "authorizationId": "ops-activate-naver-news-recovery-epoch-20261005-v1",
+  "authorizedBaseMain": "1e962d1ba2dfa663f0706941644ae208ad93b6a8",
+  "candidate": {
+    "path": "data/momentum-product/iu_naver_news_shadow_recovery_epoch_candidate_v1.json",
+    "blobSha": "33cd7bb0352efe877be17732c14c311e86046422",
+    "contractVersion": "naver-news-shadow-recovery-epoch-candidate-v1",
+    "candidateProtocolStart": "2026-10-03T01:00:00.000Z",
+    "qualifiedThroughSlotStart": "2026-10-05T12:00:00.000Z",
+    "contiguousSuccessfulSlotCount": 60,
+    "requiredAnalysisSlotCount": 48,
+    "requiredSeriesSlotCount": 49,
+    "evidenceSource": "immutable-blob-official-scheduler-manifest"
+  },
+  "decision": {
+    "activationAuthorized": true,
+    "officialEpochRolloverAuthorized": true,
+    "activatedProtocolStart": "2026-10-03T01:00:00.000Z",
+    "missingSlotsSynthesized": false,
+    "backfillAuthorized": false,
+    "publicRouteActivated": false,
+    "productScorePublished": false,
+    "directProductionContributionEligible": false
+  },
+  "safetyBoundary": {
+    "providerExecutionsAuthorized": 0,
+    "blobWritesAuthorized": 0,
+    "databaseWritesAuthorized": 0,
+    "missingSlotSynthesisAuthorized": false,
+    "backfillAuthorized": false,
+    "scorePublicationAuthorized": false,
+    "publicRouteCutoverAuthorized": false
+  }
+}
