@@ -1,6 +1,6 @@
 {
   "version": "youtube_v3_rebaseline_policy_handoff_v1",
-  "status": "owner-decision-required",
+  "status": "rebaseline-preparation-authorized",
   "productSource": "youtube_v3",
   "currentProductState": {
     "mode": "frozen_cutover_snapshot",
@@ -64,9 +64,9 @@
     }
   ],
   "currentDecision": {
-    "selectedOption": null,
-    "decisionRecordedAt": null,
-    "ownerApprovalText": null
+    "selectedOption": "approve_full_21_rebaseline",
+    "decisionRecordedAt": "2026-10-05T15:43:00Z",
+    "ownerApprovalText": "YouTube v3 21명 full-cohort rebaseline 준비 승인"
   },
   "approvalExamples": {
     "keepFrozen": "YouTube v3 frozen 10 유지 승인",
@@ -79,5 +79,14 @@
     "deploymentAuthorized": false,
     "databaseModified": false,
     "runtimeModified": false
+  },
+  "authorizationBoundary": {
+    "rebaselinePreparationAuthorized": true,
+    "productExpansionAuthorized": false,
+    "productionActivationAuthorized": false,
+    "deploymentAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "note": "Authorization is limited to preparing and evaluating one common reviewed 21-artist YouTube v3 baseline. Production activation remains a separate Production Operations decision."
   }
 }
