@@ -1,0 +1,83 @@
+{
+  "version": "youtube_v3_rebaseline_policy_handoff_v1",
+  "status": "owner-decision-required",
+  "productSource": "youtube_v3",
+  "currentProductState": {
+    "mode": "frozen_cutover_snapshot",
+    "artistCount": 10,
+    "expansionAllowedWithoutDecision": false,
+    "rankingFile": "data/fandex-cloud-v10/seed/fandex_youtube_ranking_v3_latest.json"
+  },
+  "technicalEvidence": {
+    "lineageStatusFile": "data/fandex-cloud-v10/seed/youtube_v3_lineage_status_v1.json",
+    "snsFandomRecoveredBindingEvidence": "data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_recovery_v1.json",
+    "currentVerificationEvidence": "data/fandex-cloud-v10/seed/sns_fandom_youtube_audit_binding_current_verification_v1.json",
+    "targetArtistCount": 21,
+    "fullReviewedShadowVideoCount": 74,
+    "historicalRecoveredArtistCount": 10,
+    "currentReviewedArtistCount": 11,
+    "historicalLineageComplete": false,
+    "exactLegacyReproductionPossible": false,
+    "knownIncompleteBaselineCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor"
+    ],
+    "fullReviewedCohortShadowRun": {
+      "runId": 36841902398,
+      "jobId": 110302730391,
+      "validationHead": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+      "conclusion": "success"
+    }
+  },
+  "semantics": {
+    "missingIsZero": false,
+    "reviewedSeedImpliesProductEligibility": false,
+    "automaticRescalingAllowed": false,
+    "automaticProductExpansionAllowed": false,
+    "machineCandidateImpliesApproval": false,
+    "rebaselineDecisionImpliesImmediateDeployment": false
+  },
+  "decisionOptions": [
+    {
+      "id": "keep_frozen_10",
+      "effect": "Keep the existing frozen 10-artist YouTube v3 Product cohort and continue blocking any changed or expanded YouTube Product cohort.",
+      "rebaselineAuthorized": false,
+      "productExpansionAuthorized": false,
+      "deploymentAuthorized": false
+    },
+    {
+      "id": "approve_full_21_rebaseline",
+      "effect": "Authorize preparation of a new 21-artist YouTube v3 Product baseline under one common reviewed seed-selection policy and the recovered historical v3 formula. This authorizes rebaseline preparation/evaluation only, not direct Product activation.",
+      "rebaselineAuthorized": true,
+      "productExpansionAuthorized": false,
+      "deploymentAuthorized": false,
+      "requiredFollowup": [
+        "materialize one reviewed 21-artist seed policy",
+        "collect one comparable metrics snapshot for all reviewed seeds",
+        "calculate all 21 scores with the same recovered v3 formula",
+        "compare rank/scale distribution against the frozen 10 snapshot without inventing thresholds",
+        "run exact-head Product eligibility validation",
+        "hand off activation separately to Production Operations"
+      ]
+    }
+  ],
+  "currentDecision": {
+    "selectedOption": null,
+    "decisionRecordedAt": null,
+    "ownerApprovalText": null
+  },
+  "approvalExamples": {
+    "keepFrozen": "YouTube v3 frozen 10 유지 승인",
+    "prepareFullRebaseline": "YouTube v3 21명 full-cohort rebaseline 준비 승인"
+  },
+  "safety": {
+    "activeYoutubeRankingModified": false,
+    "masterProductModified": false,
+    "collectionActivated": false,
+    "deploymentAuthorized": false,
+    "databaseModified": false,
+    "runtimeModified": false
+  }
+}
