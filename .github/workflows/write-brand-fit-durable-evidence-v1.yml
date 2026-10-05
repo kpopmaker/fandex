@@ -15,6 +15,8 @@ on:
         description: Exact confirmation token
         required: true
         type: string
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -29,15 +31,29 @@ jobs:
   write:
     if: >-
       github.repository == 'kpopmaker/fandex' &&
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.run_attempt == 1
+      github.run_attempt == 1 &&
+      (
+        (
+          github.event_name == 'workflow_dispatch' &&
+          github.ref == 'refs/heads/main'
+        ) ||
+        (
+          github.event_name == 'issue_comment' &&
+          github.event.repository.default_branch == 'main' &&
+          github.event.issue.number == 367 &&
+          github.event.comment.user.login == 'kpopmaker' &&
+          startsWith(
+            github.event.comment.body,
+            'BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE'
+          )
+        )
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha }}
-      STORAGE_WRITE_AUTHORIZATION_ID: ${{ inputs.storage_write_authorization_id }}
-      STORAGE_WRITE_CONFIRM: ${{ inputs.confirm }}
+      DISPATCH_EXPECTED_MAIN_SHA: ${{ inputs.expected_main_sha || '' }}
+      DISPATCH_STORAGE_WRITE_AUTHORIZATION_ID: ${{ inputs.storage_write_authorization_id || '' }}
+      DISPATCH_STORAGE_WRITE_CONFIRM: ${{ inputs.confirm || '' }}
       BRAND_FIT_SOURCE_RUN_ID: '37318243229'
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_BRAND_FIT_EVIDENCE_BLOB_READ_WRITE_TOKEN || secrets.BLOB_READ_WRITE_TOKEN }}
@@ -52,6 +68,113 @@ jobs:
         with:
           node-version: 22
           cache: npm
+
+      - name: Resolve durable storage execution binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const SHA_RE = /^[0-9a-f]{40}$/;
+          const AUTH_RE =
+            /^brand-fit-storage-write-\d{8}t\d{6}z-v1$/;
+          const CONFIRM = 'write-brand-fit-durable-evidence-v1';
+
+          let expectedMainSha;
+          let authorizationId;
+          let confirm;
+
+          if (process.env.GITHUB_EVENT_NAME === 'workflow_dispatch') {
+            expectedMainSha =
+              process.env.DISPATCH_EXPECTED_MAIN_SHA ?? '';
+            authorizationId =
+              process.env.DISPATCH_STORAGE_WRITE_AUTHORIZATION_ID ?? '';
+            confirm =
+              process.env.DISPATCH_STORAGE_WRITE_CONFIRM ?? '';
+          } else if (process.env.GITHUB_EVENT_NAME === 'issue_comment') {
+            const event = JSON.parse(
+              fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'),
+            );
+            const body = String(event.comment?.body ?? '')
+              .replace(/\r/g, '')
+              .trimEnd();
+            const lines = body.split('\n');
+            if (
+              lines.length !== 4
+              || lines[0] !==
+                'BRAND_FIT_DURABLE_STORAGE_WRITE_EXECUTE'
+            ) {
+              throw new Error(
+                'brand_fit_storage_execution_comment_invalid',
+              );
+            }
+
+            const fields = new Map();
+            for (const line of lines.slice(1)) {
+              const separator = line.indexOf(':');
+              if (separator <= 0) {
+                throw new Error(
+                  'brand_fit_storage_execution_comment_invalid',
+                );
+              }
+              const key = line.slice(0, separator).trim();
+              const value = line.slice(separator + 1).trim();
+              if (fields.has(key)) {
+                throw new Error(
+                  'brand_fit_storage_execution_comment_invalid',
+                );
+              }
+              fields.set(key, value);
+            }
+
+            if (
+              fields.size !== 3
+              || !fields.has('expectedMainSha')
+              || !fields.has('storageWriteAuthorizationId')
+              || !fields.has('confirm')
+            ) {
+              throw new Error(
+                'brand_fit_storage_execution_comment_invalid',
+              );
+            }
+
+            expectedMainSha = fields.get('expectedMainSha');
+            authorizationId =
+              fields.get('storageWriteAuthorizationId');
+            confirm = fields.get('confirm');
+          } else {
+            throw new Error(
+              'brand_fit_storage_execution_event_invalid',
+            );
+          }
+
+          if (!SHA_RE.test(expectedMainSha ?? '')) {
+            throw new Error(
+              'brand_fit_storage_expected_main_sha_invalid',
+            );
+          }
+          if (!AUTH_RE.test(authorizationId ?? '')) {
+            throw new Error(
+              'brand_fit_storage_authorization_id_invalid',
+            );
+          }
+          if (confirm !== CONFIRM) {
+            throw new Error(
+              'brand_fit_storage_confirmation_invalid',
+            );
+          }
+
+          fs.appendFileSync(
+            process.env.GITHUB_ENV,
+            [
+              'EXPECTED_MAIN_SHA=' + expectedMainSha,
+              'STORAGE_WRITE_AUTHORIZATION_ID=' + authorizationId,
+              'STORAGE_WRITE_CONFIRM=' + confirm,
+              '',
+            ].join('\n'),
+          );
+          NODE
 
       - name: Validate exact storage-write dispatch boundary
         shell: bash
@@ -81,7 +204,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npx tsx scripts/operations/brandFitStoredEvidenceWriteV1.mts             | tee /tmp/brand-fit-storage-write-summary.json
+          npx tsx scripts/operations/brandFitStoredEvidenceWriteV1.mts \
+            | tee /tmp/brand-fit-storage-write-summary.json
           node <<'NODE'
           const fs = require('node:fs');
           const lines = fs.readFileSync(
