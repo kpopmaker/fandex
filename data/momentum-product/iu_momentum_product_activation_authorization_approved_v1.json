@@ -9,11 +9,11 @@
     "contractVersion": "momentum-product-activation-approval-v1",
     "action": "authorize-momentum-product-activation",
     "authority": "product-operations-owner",
-    "activationAuthorizationId": "ops-activation-momentum-evidence-consensus-20260928t012306z-v1",
-    "authorizedAt": "2026-09-28T01:23:06.000Z",
-    "authorizationEvidenceCommentId": 5861676033,
-    "authorizationEvidenceCommentUrl": "https://github.com/kpopmaker/fandex/pull/267#issuecomment-5861676033",
-    "authorizedMain": "7b9899e3a85f82c4e82cde1d8383f97d62765d49"
+    "activationAuthorizationId": "ops-activation-momentum-evidence-consensus-20261006t142454z-v2",
+    "authorizedAt": "2026-10-06T14:24:54.000Z",
+    "authorizationEvidenceCommentId": 6018395684,
+    "authorizationEvidenceCommentUrl": "https://github.com/kpopmaker/fandex/pull/532#issuecomment-6018395684",
+    "authorizedMain": "027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34"
   },
   "binding": {
     "readinessContractVersion": "momentum-product-activation-readiness-v1",
@@ -26,11 +26,21 @@
     "directionalConsensus": "direction-conflicted",
     "persistenceConsensus": "persistence-not-applicable",
     "currentNoOpEvaluationAttested": true,
-    "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
-    "currentEvaluationAttestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
-    "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93",
+    "evaluatedAlignmentCutoffAt": "2026-10-06T03:33:21.000Z",
+    "currentEvaluationAttestationPath": null,
+    "currentEvaluationAttestationDigest": "f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce",
     "operationsHandoffDigest": "dca053af60e05e22ea30d45e030c31f85cea2931d448ef7dc108942bcc309d76",
-    "operationsHandoffProductionAttestationDigest": "eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9"
+    "operationsHandoffProductionAttestationDigest": "eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9",
+    "currentEvaluationAttestationWorkflow": {
+      "kind": "github-actions-read-only-current-evaluation",
+      "workflowRunId": 37477927827,
+      "workflowJobId": 112319410564,
+      "workflowHeadSha": "027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34"
+    },
+    "operationsHandoffStatus": "historical-only",
+    "productionBindingCurrent": false,
+    "productionRevalidationRequired": true,
+    "productionBlockReason": "vercel-team-fair-use-block"
   },
   "authorizationDecision": {
     "activationAuthorized": true,
