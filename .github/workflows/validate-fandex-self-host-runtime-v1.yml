@@ -146,21 +146,38 @@ jobs:
             sleep 1
           done
 
-          status="$(
-            curl \
-              --silent \
-              --show-error \
-              --request POST \
-              --retry 0 \
-              --output /tmp/fandex-brand-fit-readiness.json \
-              --write-out '%{http_code}' \
-              --header "Authorization: Bearer ${PROBE_SECRET}" \
-              --header 'X-Fandex-Product-Runtime-Probe-Id: ops-fandex-product-runtime-readiness-20261004-v1' \
-              --header 'X-Fandex-Probe-Source: github-actions-manual-v1' \
-              http://127.0.0.1:3000/api/internal/fandex/product-runtime-readiness
-          )"
+          status=""
+          for attempt in $(seq 1 10); do
+            set +e
+            status="$(
+              curl \
+                --silent \
+                --show-error \
+                --request POST \
+                --retry 0 \
+                --output /tmp/fandex-brand-fit-readiness.json \
+                --write-out '%{http_code}' \
+                --header "Authorization: Bearer ${PROBE_SECRET}" \
+                --header 'X-Fandex-Product-Runtime-Probe-Id: ops-fandex-product-runtime-readiness-20261004-v1' \
+                --header 'X-Fandex-Probe-Source: github-actions-manual-v1' \
+                http://127.0.0.1:3000/api/internal/fandex/product-runtime-readiness
+            )"
+            curl_exit="$?"
+            set -e
 
-          test "$status" = "200"
+            if [ "$curl_exit" -eq 0 ] && [ "$status" = "200" ]; then
+              break
+            fi
+
+            if [ "$attempt" -eq 10 ]; then
+              echo "brand-fit-readiness-http-status=$status"
+              echo "brand-fit-readiness-curl-exit=$curl_exit"
+              docker logs fandex-self-host-brand-fit-v1
+              exit 1
+            fi
+
+            sleep 2
+          done
 
           node <<'NODE'
           const fs = require('node:fs');
