@@ -15,6 +15,7 @@ on:
       - 'lib/alternative-evidence/hanteoAlbum*.ts'
       - 'lib/alternative-evidence/index.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesEvidence.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesProductionSource.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -59,6 +60,7 @@ on:
       - 'tests/album-provider-authorization-review-v1.test.mts'
       - 'tests/album-provider-authorization-request-v1.test.mts'
       - 'tests/reported-album-sales-evidence-v1.test.mts'
+      - 'tests/reported-album-sales-production-source-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -67,6 +69,7 @@ on:
       - 'tests/reported-album-sales-research-review-intake-bundle-v1.test.mts'
       - 'tests/reported-album-sales-research-review-request-v1.test.mts'
       - 'data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json'
+      - 'data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
       - 'tests/music-album-point-production-handoff-v1.test.mts'
       - 'tests/direct-album-provider-foundation-v1.test.mts'
@@ -115,6 +118,7 @@ jobs:
           lib/alternative-evidence/hanteoAlbumDiscovery.ts
           lib/alternative-evidence/index.ts
           lib/alternative-evidence/reportedAlbumSalesEvidence.ts
+          lib/alternative-evidence/reportedAlbumSalesProductionSource.ts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
@@ -164,6 +168,7 @@ jobs:
           tests/album-provider-authorization-review-v1.test.mts
           tests/album-provider-authorization-request-v1.test.mts
           tests/reported-album-sales-evidence-v1.test.mts
+          tests/reported-album-sales-production-source-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -172,6 +177,7 @@ jobs:
           tests/reported-album-sales-research-review-intake-bundle-v1.test.mts
           tests/reported-album-sales-research-review-request-v1.test.mts
           data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json
+          data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
           tests/music-album-point-production-handoff-v1.test.mts
           EOF
@@ -220,6 +226,9 @@ jobs:
 
       - name: Reported Album Sales web evidence regression
         run: npx tsx --test tests/reported-album-sales-evidence-v1.test.mts
+
+      - name: Reported Album Sales Production source contract
+        run: npx tsx --test tests/reported-album-sales-production-source-v1.test.mts
 
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
