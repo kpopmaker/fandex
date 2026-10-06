@@ -25,6 +25,10 @@ import {
   selectReportedAlbumSalesCurrentRelease,
 } from '../lib/alternative-evidence/reportedAlbumSalesCurrentRelease';
 import {
+  buildReportedAlbumSalesCurrentReleaseReviewRequest,
+  createReportedAlbumSalesCurrentReleaseBinding,
+} from '../lib/alternative-evidence/reportedAlbumSalesCurrentReleaseReview';
+import {
   readReportedAlbumSalesStoredEvidenceRuntime,
 } from '../lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime';
 import type {
@@ -139,6 +143,34 @@ function envelope(source: ReportedAlbumSalesObservation) {
   };
 }
 
+function currentReleaseBinding() {
+  const request =
+    buildReportedAlbumSalesCurrentReleaseReviewRequest({
+      canonicalArtistId: 'iu',
+      releaseTitle: 'Current Physical Album',
+      releaseDate: '2026-10-01',
+      candidateCanonicalReleaseId:
+        'release:iu:current-physical-album:2026-10-01',
+      evidenceRefs: [
+        'release-discovery:iu:current-physical-album',
+      ],
+    });
+  return createReportedAlbumSalesCurrentReleaseBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      conclusion: 'verified-latest-physical-release',
+      canonicalReleaseId:
+        'release:iu:current-physical-album:2026-10-01',
+      supportingEvidenceRefs: [
+        'release-discovery:iu:current-physical-album',
+      ],
+      reviewerRef: 'reviewer:music-album:current-release',
+      reviewedAt: '2026-10-08T10:30:00+09:00',
+    },
+  });
+}
+
 function readStore(input: Readonly<{
   pathnames: readonly string[];
   bodies: Readonly<Record<string, string>>;
@@ -251,6 +283,7 @@ test('verified latest physical release selects exactly one active durable observ
       observedAt: '2026-10-08T08:00:00+09:00',
       collectedAt: '2026-10-08T09:00:00+09:00',
     },
+    currentReleaseBinding: currentReleaseBinding(),
     storedEvidence: [current],
   });
 
@@ -289,6 +322,7 @@ test('incomplete first week remains pending and never becomes zero or stable', (
       observedAt: '2026-10-05T08:00:00+09:00',
       collectedAt: '2026-10-05T09:00:00+09:00',
     },
+    currentReleaseBinding: currentReleaseBinding(),
     storedEvidence: [],
   });
 
@@ -323,10 +357,45 @@ test('parallel unsuperseded observations fail closed instead of selecting the la
       observedAt: '2026-10-08T08:00:00+09:00',
       collectedAt: '2026-10-08T09:00:00+09:00',
     },
+    currentReleaseBinding: currentReleaseBinding(),
     storedEvidence: [first, second],
   });
 
   assert.equal(result.status, 'data-issue');
   if (result.status !== 'data-issue') return;
   assert.equal(result.reason, 'multiple-active-observations');
+});
+
+
+test('verified-latest discovery without a reviewed current-release binding fails closed', () => {
+  const current = envelope(observation()).envelope;
+  const result = selectReportedAlbumSalesCurrentRelease({
+    discovery: {
+      contractVersion:
+        REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION,
+      canonicalArtistId: 'iu',
+      releaseScope: 'physical-album-eligible',
+      canonicalReleaseId:
+        'release:iu:current-physical-album:2026-10-01',
+      releaseTitle: 'Current Physical Album',
+      releaseDate: '2026-10-01',
+      identityState: 'resolved',
+      latestReleaseState: 'verified-latest',
+      firstWeekCompletionState: 'completed',
+      providerPeriodStart: '2026-10-01',
+      providerPeriodEnd: '2026-10-07',
+      evidenceRefs: ['release-discovery:iu:current'],
+      observedAt: '2026-10-08T08:00:00+09:00',
+      collectedAt: '2026-10-08T09:00:00+09:00',
+    },
+    currentReleaseBinding: null,
+    storedEvidence: [current],
+  });
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status !== 'data-issue') return;
+  assert.equal(
+    result.reason,
+    'current-release-review-binding-invalid',
+  );
 });
