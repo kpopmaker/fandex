@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -57,8 +58,36 @@ def search(query: str):
             "User-Agent": "FANDEX-ArtistExpansion/1.0 (https://github.com/kpopmaker/fandex)",
         },
     )
-    with urllib.request.urlopen(req, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    last_error = None
+    for attempt in range(1, 6):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            last_error = f"HTTP {exc.code}: {exc.reason}"
+            if exc.code not in {429, 500, 502, 503, 504}:
+                raise
+        except Exception as exc:
+            last_error = str(exc)
+        time.sleep(2.0 * attempt)
+    raise RuntimeError(f"MusicBrainz search failed after retries: {query}: {last_error}")
+
+
+def write_output(results, complete: bool):
+    output = {
+        "version": "musicbrainz_21_artist_candidates_v1",
+        "createdAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "targetCount": len(TARGETS),
+        "completedTargetCount": len(results),
+        "complete": complete,
+        "autoSelectionPerformed": False,
+        "fuzzyAutoBindingAllowed": False,
+        "targets": results,
+    }
+    OUTPUT.write_text(
+        json.dumps(output, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def slim(row):
@@ -114,6 +143,7 @@ def main():
             ),
             "candidates": candidates,
         })
+        write_output(results, complete=False)
         print("\nTARGET", canonical_id, "|", query)
         for i, c in enumerate(candidates[:5], 1):
             print(
@@ -127,15 +157,7 @@ def main():
                 "area=" + repr(c["area"]),
             )
 
-    output = {
-        "version": "musicbrainz_21_artist_candidates_v1",
-        "createdAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "targetCount": len(results),
-        "autoSelectionPerformed": False,
-        "fuzzyAutoBindingAllowed": False,
-        "targets": results,
-    }
-    OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_output(results, complete=True)
     print("\nautoSelectionPerformed=FALSE")
     print("next=review-candidates")
 
