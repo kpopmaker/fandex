@@ -6,6 +6,9 @@ import {
   type ReportedAlbumSalesObservationDraft,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  resolveReportedAlbumSalesReleaseIdentity,
+} from '../lib/alternative-evidence/reportedAlbumSalesReleaseIdentityReview';
+import {
   buildReportedAlbumSalesProductionSourceCandidate,
   type ReportedWebUsageReview,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
@@ -24,8 +27,8 @@ function draft(
     canonicalArtistId: 'iu',
     artistName: 'IU',
     release: {
-      canonicalReleaseId: 'release-iu-lilac-2021-03-25',
-      identityState: 'resolved',
+      canonicalReleaseId: null,
+      identityState: 'candidate',
       releaseTitle: 'LILAC',
       releaseDate: '2021-03-25',
       edition: null,
@@ -88,9 +91,19 @@ function rights(
 }
 
 function eligibleCandidate() {
-  return buildReportedAlbumSalesProductionSourceCandidate({
+  const identity = resolveReportedAlbumSalesReleaseIdentity({
     observation: createReportedAlbumSalesObservation(draft()),
+    canonicalReleaseId: 'release-iu-lilac-2021-03-25',
+    supportingIdentityEvidenceRefs: [
+      'identity:official-release-page:iu-lilac',
+    ],
+    reviewerRef: 'review:music-album-release-identity',
+    reviewedAt: '2026-10-06T23:45:00+09:00',
+  });
+  return buildReportedAlbumSalesProductionSourceCandidate({
+    observation: identity.observation,
     conflictState: 'clear',
+    releaseIdentityReview: identity.review,
     rightsUsageReview: rights(),
   });
 }
@@ -185,6 +198,7 @@ test('blocked source candidate cannot be materialized as durable Production evid
         }),
       ),
       conflictState: 'clear',
+      releaseIdentityReview: null,
       rightsUsageReview: rights(),
     });
 
