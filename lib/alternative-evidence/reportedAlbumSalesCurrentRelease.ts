@@ -1,6 +1,10 @@
 import type {
   ReportedAlbumSalesImmutableEvidenceEnvelope,
 } from './reportedAlbumSalesImmutableEvidenceRecord';
+import {
+  validateReportedAlbumSalesCurrentReleaseBinding,
+  type ReportedAlbumSalesCurrentReleaseBinding,
+} from './reportedAlbumSalesCurrentReleaseReview';
 
 export const REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION =
   'reported-album-sales-current-release-v1' as const;
@@ -91,6 +95,7 @@ export type ReportedAlbumSalesCurrentReleaseRead =
       reason:
         | 'discovery-contract-invalid'
         | 'latest-release-conflicting'
+        | 'current-release-review-binding-invalid'
         | 'stored-evidence-artist-mismatch'
         | 'stored-evidence-release-conflict'
         | 'stored-evidence-duplicate-observation'
@@ -153,6 +158,8 @@ function unavailable(
 export function selectReportedAlbumSalesCurrentRelease(
   input: Readonly<{
     discovery: ReportedAlbumSalesCurrentReleaseDiscovery;
+    currentReleaseBinding:
+      ReportedAlbumSalesCurrentReleaseBinding | null;
     storedEvidence:
       readonly ReportedAlbumSalesImmutableEvidenceEnvelope[];
   }>,
@@ -193,6 +200,29 @@ export function selectReportedAlbumSalesCurrentRelease(
     return unavailable(
       canonicalArtistId,
       'latest-release-not-verified',
+    );
+  }
+
+  const currentReleaseBinding = input.currentReleaseBinding;
+  if (
+    currentReleaseBinding === null
+    || !validateReportedAlbumSalesCurrentReleaseBinding(
+      currentReleaseBinding,
+    )
+    || currentReleaseBinding.canonicalArtistId
+      !== canonicalArtistId
+    || currentReleaseBinding.releaseScope
+      !== discovery.releaseScope
+    || currentReleaseBinding.canonicalReleaseId
+      !== discovery.canonicalReleaseId
+    || currentReleaseBinding.releaseTitle
+      !== discovery.releaseTitle
+    || currentReleaseBinding.releaseDate
+      !== discovery.releaseDate
+  ) {
+    return dataIssue(
+      canonicalArtistId,
+      'current-release-review-binding-invalid',
     );
   }
 
