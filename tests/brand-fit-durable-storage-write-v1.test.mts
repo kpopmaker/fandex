@@ -379,6 +379,12 @@ test('production workflow is pinned to the successful provider receipt and separ
       "'VERCEL_OIDC_TOKEN=' + oidcToken",
     ),
   );
+  assert.ok(
+    workflow.includes('(async () => {'),
+  );
+  assert.ok(
+    workflow.includes('})().catch((error) => {'),
+  );
   assert.equal(
     workflow.includes(
       'FANDEX_BRAND_FIT_EVIDENCE_BLOB_READ_WRITE_TOKEN',
