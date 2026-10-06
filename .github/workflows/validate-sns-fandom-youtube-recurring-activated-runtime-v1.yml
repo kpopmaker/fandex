@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - 'work/sns-fandom-recurring-runtime-activation-v1'
+      - 'work/sns-fandom-render-scheduler-binding-candidate-v1'
     paths:
       - 'lib/server/storage/vercelBlobRuntime.ts'
       - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV1.ts'
@@ -13,9 +14,6 @@ on:
       - '.github/workflows/validate-sns-fandom-youtube-recurring-activated-runtime-v1.yml'
       - '.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml'
       - 'docs/research/sns-fandom-youtube-recurring-measurement-activation-v1.json'
-      - '.github/workflows/execute-sns-fandom-youtube-render-trigger-v1.yml'
-      - 'docs/research/sns-fandom-youtube-render-scheduler-binding-candidate-v1.json'
-      - 'tests/sns-fandom-youtube-render-trigger-binding-candidate-v1.test.mts'
       - 'tests/sns-fandom-youtube-recurring-activation-binding-v1.test.mts'
       - '.github/workflows/execute-sns-fandom-youtube-render-trigger-v1.yml'
       - 'docs/research/sns-fandom-youtube-render-scheduler-binding-candidate-v1.json'
@@ -28,6 +26,10 @@ on:
       - '.github/workflows/validate-sns-fandom-youtube-recurring-activated-runtime-v1.yml'
       - '.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml'
       - 'docs/research/sns-fandom-youtube-recurring-measurement-activation-v1.json'
+      - 'tests/sns-fandom-youtube-recurring-activation-binding-v1.test.mts'
+      - '.github/workflows/execute-sns-fandom-youtube-render-trigger-v1.yml'
+      - 'docs/research/sns-fandom-youtube-render-scheduler-binding-candidate-v1.json'
+      - 'tests/sns-fandom-youtube-render-trigger-binding-candidate-v1.test.mts'
   workflow_dispatch:
 
 permissions:
