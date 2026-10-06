@@ -108,6 +108,20 @@ test('resolved Tier A/B public reporting evidence can become a Production observ
   assert.equal(candidate.lifecycle, 'production-candidate');
   assert.equal(candidate.productionObservationEligible, true);
   assert.deepEqual(candidate.blockers, []);
+  assert.equal(candidate.collectedAt, '2026-10-06T23:30:11+09:00');
+  assert.equal(candidate.sourceEvidence.length, 1);
+  assert.equal(
+    candidate.sourceEvidence[0]?.sourceUrl,
+    'https://example.com/iu-lilac',
+  );
+  assert.equal(
+    candidate.sourceEvidence[0]?.sourcePublicationDate,
+    '2021-04-01',
+  );
+  assert.equal(
+    candidate.sourceEvidence[0]?.collectedAt,
+    '2026-10-06T23:30:11+09:00',
+  );
   assert.equal(candidate.licensedFeedClaimAllowed, false);
   assert.equal(candidate.directProviderApiClaimAllowed, false);
   assert.equal(candidate.directProviderReplacementAllowed, false);
