@@ -230,4 +230,36 @@ test('Brand Fit server runtime accepts the same host-neutral Production marker a
     readerSource,
     /if \(environment\.VERCEL_ENV !== 'production'\)/,
   );
+
+  assert.match(readerSource, /environment\.VERCEL_TOKEN/);
+  assert.match(
+    readerSource,
+    /https:\/\/api\.vercel\.com\/v1\/projects\//,
+  );
+  assert.match(
+    readerSource,
+    /fandex:brand-fit-product-runtime-read-v1/,
+  );
+  assert.match(
+    readerSource,
+    /FANDEX_BRAND_FIT_VERCEL_PROJECT_ID/,
+  );
+  assert.match(
+    readerSource,
+    /FANDEX_BRAND_FIT_VERCEL_TEAM_ID/,
+  );
+  assert.match(
+    readerSource,
+    /resolveBrandFitStoredEvidenceRuntimeEnvironment/,
+  );
+  assert.match(readerSource, /cachedProjectOidc/);
+  assert.doesNotMatch(
+    readerSource,
+    /console\.(?:log|warn|error)\([^)]*VERCEL_TOKEN/,
+  );
+  assert.doesNotMatch(readerSource, /putTextIfAbsent/);
+  assert.doesNotMatch(
+    readerSource,
+    /from '@vercel\/blob';[\s\S]*\bput\b/,
+  );
 });
