@@ -1,0 +1,78 @@
+{
+  "version": "listenbrainz_full21_probe_recovery_receipt_v1",
+  "status": "full21_observation_recovered_non_activating",
+  "lineage": {
+    "consolidationPr": 530,
+    "freshReprobePr": 531,
+    "partialAvailabilityPr": 533,
+    "partialAttemptRunId": 37473219665,
+    "partialAttemptNumber": 3
+  },
+  "hardening": {
+    "transportMode": "serial",
+    "maxAttemptsPerArtist": 6,
+    "requestTimeoutSeconds": 20,
+    "interArtistDelaySeconds": 1,
+    "semanticRulesChanged": false,
+    "identityRuleChanged": false,
+    "epochBoundaryChanged": false,
+    "scoreFormulaChanged": false
+  },
+  "recoveryRun": {
+    "workflow": "Recover Artist Expansion ListenBrainz full21 observation v1",
+    "runId": 37479984874,
+    "jobId": 112325264871,
+    "head": "ace4fc2d3a541879a6e8b6ac9a1779d48dc0d49a",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "unavailableArtistCount": 0,
+    "identityMismatchArtistCount": 0,
+    "newProviderEpochArtistCount": 0,
+    "staleProviderEpochArtistCount": 21,
+    "positiveAllTimeDeltaArtistCount": 0,
+    "negativeAllTimeDeltaArtistCount": 0,
+    "unchangedAllTimeArtistCount": 21,
+    "rateOrScoreComputed": false,
+    "productActivationAuthorized": false
+  },
+  "providerEpoch": {
+    "previousMaximumEpoch": 1791063713,
+    "previousMaximumIsoUtc": "2026-10-03T21:41:53Z",
+    "newestObservedEpoch": 1791063713,
+    "newestObservedIsoUtc": "2026-10-03T21:41:53Z",
+    "distinctProviderUpdateEpochEstablished": false
+  },
+  "artifact": {
+    "artifactId": 11420108521,
+    "name": "artist-expansion-listenbrainz-full21-recovery-v1",
+    "sizeBytes": 2570,
+    "digest": "sha256:60455d0bc46bf80d0108401b102975230fcb55d1e011061a39c874eb34b64400",
+    "expiresAt": "2026-10-20T14:34:16Z"
+  },
+  "interpretation": {
+    "full21CohortObservationRecovered": true,
+    "partialAttempt3ClassifiedAsTransientObservabilityFailure": true,
+    "priorCanonicalBindingsStillValid": true,
+    "newProviderEpochEstablished": false,
+    "zeroGrowthEstablished": false,
+    "distinctEpochDeltaCharacterizationEligible": false
+  },
+  "nextGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
+  "safety": {
+    "partialObservationInterpretedAsMissing": false,
+    "partialObservationInterpretedAsUnsupported": false,
+    "staleEpochInterpretedAsZeroGrowth": false,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
