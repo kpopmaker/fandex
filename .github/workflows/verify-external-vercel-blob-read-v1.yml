@@ -1,0 +1,76 @@
+name: Verify external Vercel Blob read v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/verify-external-vercel-blob-read-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+      BLOB_STORE_ID: store_oe4nEFW5ox93XB8v
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Mint project OIDC without logging credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          status="$(
+            curl               --silent               --show-error               --retry 0               --output /tmp/project-token.json               --write-out '%{http_code}'               --request POST               --header "Authorization: Bearer $VERCEL_TOKEN"               --header 'Content-Type: application/json'               --data '{"source":"fandex-external-blob-read-probe-v1"}'               "https://api.vercel.com/v1/projects/$VERCEL_PROJECT_ID/token?teamId=$VERCEL_TEAM_ID"
+          )"
+          test "$status" = "200"
+          oidc="$(node -e "const x=require('/tmp/project-token.json'); if(!x.token) process.exit(1); process.stdout.write(x.token)")"
+          echo "::add-mask::$oidc"
+          printf '%s' "$oidc" > /tmp/vercel-oidc-token
+          echo "FANDEX_EXTERNAL_PROJECT_OIDC_MINT=success"
+
+      - name: Read Brand Fit Blob prefix once
+        shell: bash
+        run: |
+          set -euo pipefail
+          export VERCEL_OIDC_TOKEN="$(cat /tmp/vercel-oidc-token)"
+          node --input-type=module <<'NODE'
+          import { list } from '@vercel/blob';
+
+          const result = await list({
+            prefix: 'fandex-cloud-v10/brand-fit/immutable/iu/',
+            limit: 10,
+            access: 'private',
+            oidcToken: process.env.VERCEL_OIDC_TOKEN,
+            storeId: process.env.BLOB_STORE_ID,
+          });
+
+          console.log(
+            'FANDEX_EXTERNAL_BRAND_FIT_BLOB_COUNT='
+              + result.blobs.length,
+          );
+          if (result.blobs.length < 1) {
+            throw new Error('brand-fit-evidence-not-visible');
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          rm -f /tmp/project-token.json /tmp/vercel-oidc-token
+          echo "FANDEX_EXTERNAL_BLOB_PROBE_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_EXTERNAL_BLOB_PROBE_DATABASE_WRITES=0"
+          echo "FANDEX_EXTERNAL_BLOB_PROBE_BLOB_WRITES=0"
+          echo "FANDEX_EXTERNAL_BLOB_PROBE_SECRET_LOGGING=false"
