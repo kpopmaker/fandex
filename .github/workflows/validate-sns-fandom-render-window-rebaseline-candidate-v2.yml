@@ -1,0 +1,65 @@
+name: Validate snsFandom render window rebaseline candidate v2
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-render-window-rebaseline-candidate-v2'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeWindowRebaselineCandidateV2.ts'
+      - 'tests/sns-fandom-youtube-window-rebaseline-candidate-v2.test.mts'
+      - 'docs/research/sns-fandom-youtube-window-rebaseline-candidate-v2.json'
+      - '.github/workflows/validate-sns-fandom-render-window-rebaseline-candidate-v2.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeWindowRebaselineCandidateV2.ts'
+      - 'tests/sns-fandom-youtube-window-rebaseline-candidate-v2.test.mts'
+      - 'docs/research/sns-fandom-youtube-window-rebaseline-candidate-v2.json'
+      - '.github/workflows/validate-sns-fandom-render-window-rebaseline-candidate-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Render-backed window rebaseline candidate regressions
+        run: npx tsx --test tests/sns-fandom-youtube-window-rebaseline-candidate-v2.test.mts
+
+      - name: Existing window supersession regression
+        run: npx tsx --test tests/sns-fandom-youtube-window-supersession-handoff-v1.test.mts
+
+      - name: Existing recurring activated runtime regression
+        run: npx tsx --test tests/sns-fandom-youtube-recurring-activated-runtime-v1.test.mts
+
+      - name: Existing Render trigger binding regression
+        run: npx tsx --test tests/sns-fandom-youtube-render-trigger-binding-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "currentCanonicalWindowMutated=false"
+          echo "canonicalWindowRebaselineAuthorized=false"
+          echo "historicalMissingSlotsBackfilled=false"
+          echo "retrospectiveProviderObservationAllowed=false"
+          echo "schedulerMutationPerformed=false"
+          echo "providerCalls=0"
+          echo "providerSubmissionAuthorized=false"
+          echo "productionCollectionAuthorized=false"
+          echo "productActivationAuthorized=false"
