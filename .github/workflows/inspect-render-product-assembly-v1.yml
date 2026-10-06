@@ -1,0 +1,82 @@
+name: Inspect Render Product assembly v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/inspect-render-product-assembly-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Read live Render Beta once
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(
+            curl               --silent               --show-error               --retry 0               --max-time 30               --output /tmp/fandex-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
+          )"
+          test "$status" = "200"
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('/tmp/fandex-beta.html', 'utf8');
+          const plain = html
+            .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/&#x27;/g, "'")
+            .replace(/&amp;/g, '&')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          const summary = plain.match(
+            /Runtime\s*(\d+)\s*\/\s*7.*?Real Production\s*(\d+)\s*\/\s*7.*?Blocked\s*(\d+)/i,
+          );
+          if (!summary) throw new Error('runtime-summary-not-found');
+
+          console.log('FANDEX_RENDER_RUNTIME=' + summary[1] + '/7');
+          console.log('FANDEX_RENDER_REAL_PRODUCTION=' + summary[2] + '/7');
+          console.log('FANDEX_RENDER_BLOCKED=' + summary[3]);
+
+          const vars = [
+            'musicAlbumPoint',
+            'newsIssuePoint',
+            'snsFandomPoint',
+            'brandFitPoint',
+            'comebackActivityPoint',
+            'growthMomentumPoint',
+            'riskAdjustmentPoint',
+          ];
+
+          for (let i = 0; i < vars.length; i += 1) {
+            const start = plain.indexOf(vars[i]);
+            const end = i + 1 < vars.length
+              ? plain.indexOf(vars[i + 1], start + 1)
+              : plain.indexOf('이 Beta가 의미하는 것', start + 1);
+            const card = start >= 0
+              ? plain.slice(
+                  start,
+                  end > start ? end : Math.min(plain.length, start + 1200),
+                )
+              : 'MISSING_CARD';
+            console.log(
+              'FANDEX_RENDER_VAR_' + vars[i] + '='
+                + card.slice(0, 1000),
+            );
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          rm -f /tmp/fandex-beta.html
+          echo "FANDEX_RENDER_ASSEMBLY_PROBE_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_RENDER_ASSEMBLY_PROBE_DATABASE_WRITES=0"
+          echo "FANDEX_RENDER_ASSEMBLY_PROBE_BLOB_WRITES=0"
