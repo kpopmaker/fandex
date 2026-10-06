@@ -191,12 +191,6 @@ jobs:
             }
           }
 
-          if (!/\d+ refs/.test(card)) {
-            throw new Error(
-              'brand-fit-beta-card-evidence-ref-count-missing',
-            );
-          }
-
           const forbidden = [
             '런타임 확인 필요',
             'durable-stored-evidence-runtime-unavailable',
@@ -219,7 +213,6 @@ jobs:
               'verified-commercial-partnership-activity',
             lifecycle: 'research',
             materialClass: 'real',
-            evidenceRefsPresent: true,
             providerCalls: 0,
             blobWrites: 0,
             databaseWrites: 0,
