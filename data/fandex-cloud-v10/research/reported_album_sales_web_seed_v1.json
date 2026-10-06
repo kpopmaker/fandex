@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-06T22:58:15+09:00",
+  "collectedAt": "2026-10-06T23:16:29+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -6219,6 +6219,50 @@
           "sourcePublishedAt": "2021-12-13T09:16:00+09:00",
           "reportedAt": null,
           "collectedAt": "2026-10-06T22:58:15+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Star Chapter: TOGETHER",
+        "releaseDate": "2025-07-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1760867,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-07-21",
+      "providerPeriodEnd": "2025-07-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T23:16:29+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "korea-joongang-daily:20250728:txt-star-chapter-together",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Korea JoongAng Daily",
+          "sourceUrl": "https://www.koreajoongangdaily.com/entertainment/tomorrow-x-togethers-latest-album-the-star-chapter-together-sells-over-176-million-copies-in-1st-week/11980172",
+          "sourcePublicationDate": "2025-07-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T23:16:29+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
