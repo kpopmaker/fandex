@@ -98,6 +98,101 @@ jobs:
           npx tsx --conditions=react-server
           scripts/operations/brandFitProductRuntimeReadProbeV1.mts
 
+      - name: Verify actual Production readiness endpoint sees Brand Fit
+        shell: bash
+        env:
+          PROBE_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$PROBE_SECRET"
+
+          status="$(
+            curl \
+              --silent \
+              --show-error \
+              --request POST \
+              --retry 0 \
+              --output /tmp/fandex-production-readiness.json \
+              --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${PROBE_SECRET}" \
+              --header 'X-Fandex-Product-Runtime-Probe-Id: ops-fandex-product-runtime-readiness-20261004-v1' \
+              --header 'X-Fandex-Probe-Source: github-actions-manual-v1' \
+              'https://fandex-eta.vercel.app/api/internal/fandex/product-runtime-readiness'
+          )"
+
+          if [[ "$status" != "200" ]]; then
+            echo "BRAND_FIT_PRODUCTION_RUNTIME_HTTP_STATUS=$status"
+            exit 1
+          fi
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = JSON.parse(
+            fs.readFileSync(
+              '/tmp/fandex-production-readiness.json',
+              'utf8',
+            ),
+          );
+
+          const states = Array.isArray(value?.variableStates)
+            ? value.variableStates
+            : [];
+          const brandFit = states.find(
+            (entry) => entry?.variableId === 'brandFitPoint',
+          );
+
+          const valid =
+            value?.ok === true
+            && value?.mode === 'fandex-product-runtime-readiness-probe'
+            && value?.canonicalArtistId === 'iu'
+            && brandFit?.sourceState === 'resolved'
+            && brandFit?.adapterState === 'ok'
+            && brandFit?.reason === null
+            && Array.isArray(value?.resolvedVariableIds)
+            && value.resolvedVariableIds.includes('brandFitPoint')
+            && value?.scoreCalculated === false
+            && value?.methodologyFinalized === false
+            && value?.publicRouteActivated === false
+            && value?.providerExecutionPerformed === false
+            && value?.writeOperationsAuthorized === false;
+
+          if (!valid) {
+            console.log(JSON.stringify({
+              productionRuntimeStatus: value?.status ?? null,
+              brandFitSourceState: brandFit?.sourceState ?? null,
+              brandFitAdapterState: brandFit?.adapterState ?? null,
+              brandFitReason: brandFit?.reason ?? null,
+              brandFitResolved:
+                Array.isArray(value?.resolvedVariableIds)
+                && value.resolvedVariableIds.includes('brandFitPoint'),
+              scoreCalculated: value?.scoreCalculated ?? null,
+              methodologyFinalized: value?.methodologyFinalized ?? null,
+              publicRouteActivated: value?.publicRouteActivated ?? null,
+              providerExecutionPerformed:
+                value?.providerExecutionPerformed ?? null,
+              writeOperationsAuthorized:
+                value?.writeOperationsAuthorized ?? null,
+            }));
+            process.exit(1);
+          }
+
+          console.log(JSON.stringify({
+            productionRuntimeProbe: 'ok',
+            productionRuntimeStatus: value.status,
+            brandFitSourceState: brandFit.sourceState,
+            brandFitAdapterState: brandFit.adapterState,
+            brandFitReason: brandFit.reason,
+            brandFitResolved: true,
+            scoreCalculated: value.scoreCalculated,
+            methodologyFinalized: value.methodologyFinalized,
+            publicRouteActivated: value.publicRouteActivated,
+            providerExecutionPerformed:
+              value.providerExecutionPerformed,
+            writeOperationsAuthorized:
+              value.writeOperationsAuthorized,
+          }));
+          NODE
+
       - name: Safety boundary
         if: always()
         run: |
