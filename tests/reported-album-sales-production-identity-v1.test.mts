@@ -12,9 +12,10 @@ import {
 import {
   buildReportedAlbumSalesProductionSourceCandidate,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
-import type {
-  SourceAuthorizationDimensions,
-} from '../lib/alternative-evidence/onboarding';
+import {
+  buildReportedWebUsageReviewRequest,
+  materializeReportedWebUsageReview,
+} from '../lib/alternative-evidence/reportedWebUsageReviewRequest';
 
 function candidateObservation() {
   return createReportedAlbumSalesObservation({
@@ -63,16 +64,40 @@ function candidateObservation() {
   });
 }
 
-const authorizedRights: SourceAuthorizationDimensions = Object.freeze({
-  acquisitionState: 'allowed',
-  automationState: 'review-required',
-  rawStorageState: 'review-required',
-  normalizedStorageState: 'allowed',
-  retentionState: 'allowed',
-  commercialUseState: 'allowed-with-conditions',
-  derivedPublicationState: 'allowed-with-conditions',
-  rawRedistributionState: 'blocked',
-});
+function reviewedRights(
+  observation: ReturnType<typeof candidateObservation>,
+) {
+  const request = buildReportedWebUsageReviewRequest({
+    observation,
+    rightsReviewReferences: [
+      {
+        referenceId: 'fixture:rights:identity',
+        sourceUrl: 'https://example.com/rights',
+        kind: 'legal-review-memo',
+        observedAt: '2026-10-09T10:05:00+09:00',
+        reviewSignal: 'fixture rights review',
+        authorizationStateNotInferred: true,
+      },
+    ],
+  });
+  return materializeReportedWebUsageReview({
+    request,
+    decision: {
+      requestId: request.requestId,
+      states: {
+        acquisitionState: 'allowed',
+        normalizedStorageState: 'allowed',
+        retentionState: 'allowed',
+        commercialUseState: 'allowed-with-conditions',
+        derivedPublicationState: 'allowed-with-conditions',
+      },
+      evidenceRefs: ['legal-review:reported-web:identity'],
+      conditionRefs: ['condition:factual-values-only'],
+      reviewerRef: 'reviewer:rights:identity',
+      reviewedAt: '2026-10-09T10:10:00+09:00',
+    },
+  });
+}
 
 test('candidate release identity produces a deterministic human review request without auto-resolution', () => {
   const observation = candidateObservation();
@@ -147,7 +172,7 @@ test('reviewed binding can resolve the Production source candidate without mutat
     buildReportedAlbumSalesProductionSourceCandidate({
       observation,
       asOfDate: '2026-10-09',
-      rights: authorizedRights,
+      rightsReview: reviewedRights(observation),
       releaseIdentityBinding: binding,
     });
 
@@ -188,7 +213,7 @@ test('stale or mismatched binding fails closed', () => {
     buildReportedAlbumSalesProductionSourceCandidate({
       observation,
       asOfDate: '2026-10-09',
-      rights: authorizedRights,
+      rightsReview: reviewedRights(observation),
       releaseIdentityBinding: forged,
     });
 
