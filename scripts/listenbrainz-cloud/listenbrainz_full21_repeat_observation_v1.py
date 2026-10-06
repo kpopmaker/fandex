@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 PREVIOUS = ROOT / "data/fandex-cloud-v10/seed/listenbrainz_full21_canonical_shadow_receipt_v1.json"
 OUTPUT = Path("listenbrainz_full21_repeat_observation_v1.json")
 BASE = "https://api.listenbrainz.org/1/stats/artist"
-RANGES = ["all_time", "month", "week"]
+RANGES = ["all_time"]
 
 
 def norm(value: Any) -> str:
@@ -203,7 +203,7 @@ def main() -> None:
             "metric": "total_listen_count",
             "ranges": RANGES,
             "allTimeInterpretationUnderTest": "candidate cumulative observation surface",
-            "monthWeekInterpretation": "provider-defined rolling/ranged aggregates; monotonicity not required",
+            "monthWeekInterpretation": "not recollected in this repeat; prior shadow established coverage only",
             "zeroImputationAllowed": False,
         },
         "summary": {
