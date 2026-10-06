@@ -83,7 +83,14 @@
       "v",
       "lisa"
     ],
-    "note": "This is a cross-source Product cohort blocker, not a YouTube source-readiness failure."
+    "note": "This is a cross-source Product cohort blocker, not a YouTube source-readiness failure.",
+    "lastfmMbidResolution": {
+      "evidencePath": "data/fandex-cloud-v10/seed/lastfm_v_lisa_mbid_resolution_v1.json",
+      "probeRunId": 37464237518,
+      "mbidFallbackResolvesV": false,
+      "mbidFallbackResolvesLisa": false,
+      "blockerResolved": false
+    }
   },
   "allowedNow": {
     "treatFull21CommonBaselineAsYoutubeSourceCandidate": true,
@@ -122,9 +129,9 @@
     }
   ],
   "nextGate": {
-    "code": "CROSS_SOURCE_21_ARTIST_PRODUCT_COHORT_PARITY_REQUIRED",
+    "code": "ALTERNATIVE_CANONICAL_LASTFM_PROVIDER_OR_RUNTIME_CONTRACT_DECISION_REQUIRED",
     "primaryBlocker": "lastfm:v,lisa",
-    "note": "YouTube Artist Expansion source work is technically ready at 21. Product adoption cannot proceed under the current master contract until cross-source parity is resolved or Product Runtime explicitly changes its source-availability contract."
+    "note": "Direct MBID fallback was live-probed and did not establish canonical-specific Last.fm stats for V or LISA. Product 21 remains blocked."
   },
   "safety": {
     "missingIsZero": false,
