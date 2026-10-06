@@ -6,6 +6,9 @@ import {
   type ReportedAlbumSalesObservationDraft,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  resolveReportedAlbumSalesReleaseIdentity,
+} from '../lib/alternative-evidence/reportedAlbumSalesReleaseIdentityReview';
+import {
   buildReportedAlbumSalesProductionSourceCandidate,
   type ReportedWebUsageReview,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
@@ -43,8 +46,8 @@ function draft(
     canonicalArtistId: 'iu',
     artistName: 'IU',
     release: {
-      canonicalReleaseId: 'release-iu-current',
-      identityState: 'resolved',
+      canonicalReleaseId: null,
+      identityState: 'candidate',
       releaseTitle: 'Current Release',
       releaseDate: '2026-09-20',
       edition: null,
@@ -88,13 +91,25 @@ function draft(
 
 function envelope(
   overrides: Partial<ReportedAlbumSalesObservationDraft> = {},
+  resolvedSupersedesObservationId: string | null = null,
 ) {
+  const identity = resolveReportedAlbumSalesReleaseIdentity({
+    observation: createReportedAlbumSalesObservation(
+      draft(overrides),
+    ),
+    canonicalReleaseId: 'release-iu-current',
+    supportingIdentityEvidenceRefs: [
+      'identity:official-release-page:iu-current',
+    ],
+    reviewerRef: 'review:music-album-release-identity',
+    reviewedAt: '2026-10-06T23:45:00+09:00',
+    resolvedSupersedesObservationId,
+  });
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation: createReportedAlbumSalesObservation(
-        draft(overrides),
-      ),
+      observation: identity.observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights(),
     });
   assert.equal(candidate.productionObservationEligible, true);
@@ -204,14 +219,17 @@ test('latest release candidate is not treated as current truth', () => {
 
 test('explicit correction supersedes the original durable observation', () => {
   const original = envelope();
-  const corrected = envelope({
-    value: 310_000,
-    revision: {
-      state: 'explicit-correction',
-      supersedesObservationId: original.observationId,
-      revisionObservedAt: '2026-10-01T00:00:00+09:00',
+  const corrected = envelope(
+    {
+      value: 310_000,
+      revision: {
+        state: 'explicit-correction',
+        supersedesObservationId: original.observationId,
+        revisionObservedAt: '2026-10-01T00:00:00+09:00',
+      },
     },
-  });
+    original.observationId,
+  );
 
   const result = selectReportedAlbumSalesCurrentRelease({
     discovery: discovery(),
