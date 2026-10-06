@@ -29,6 +29,13 @@ type OwnerAttestationEvidence = Readonly<{
     }>;
     currentNoOpEvaluation: Readonly<{
       evaluatedAlignmentCutoffAt: string;
+      attestationPath: string | null;
+      attestationWorkflow?: Readonly<{
+        kind: string;
+        workflowRunId: number;
+        workflowJobId: number;
+        workflowHeadSha: string;
+      }>;
       attestationDigest: string;
     }>;
   }>;
@@ -68,7 +75,7 @@ test('owner-attestation evidence package exactly matches the current candidate',
   );
   assert.equal(
     evidence.evaluatedAgainstMain,
-    '5432eb814d8c2e97e25339406b116c98c0851039',
+    'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
   );
   assert.equal(evidence.canonicalArtistId, 'iu');
   assert.equal(evidence.candidate.status, 'ready-for-owner-attestation');
@@ -84,12 +91,27 @@ test('owner-attestation evidence package exactly matches the current candidate',
   );
   assert.equal(
     evidence.freshnessEvidence.currentNoOpEvaluation.evaluatedAlignmentCutoffAt,
-    '2026-09-27T02:10:05.000Z',
+    '2026-10-06T03:33:21.000Z',
   );
   assert.equal(
     evidence.freshnessEvidence.currentNoOpEvaluation.attestationDigest,
-    'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+    'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
   );
+  assert.equal(
+    evidence.freshnessEvidence.currentNoOpEvaluation.attestationPath,
+    null,
+  );
+  assert.deepEqual(
+    evidence.freshnessEvidence.currentNoOpEvaluation.attestationWorkflow,
+    {
+      kind: 'github-actions-read-only-current-evaluation',
+      workflowRunId: 37469812804,
+      workflowJobId: 112290054657,
+      workflowHeadSha:
+        'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+    },
+  );
+
 
   assert.equal(evidence.boundary.ownerApprovalRecorded, false);
   assert.equal(evidence.boundary.activationAuthorizationId, null);
@@ -108,11 +130,11 @@ test('owner-attestation evidence package exactly matches the current candidate',
   const { evidenceDigest, ...digestInput } = evidence;
   assert.equal(
     sha256Canonical(digestInput),
-    'cd3cabbd37c603d6094c0add2fc000011897123ec82501d23b32bbe872258ce1',
+    'f4801d3ecc736b0b00d7cde50c247b908cf7e8ebdcbffc3a76bbf4b493f73384',
   );
   assert.equal(
     evidenceDigest,
-    'cd3cabbd37c603d6094c0add2fc000011897123ec82501d23b32bbe872258ce1',
+    'f4801d3ecc736b0b00d7cde50c247b908cf7e8ebdcbffc3a76bbf4b493f73384',
   );
 });
 

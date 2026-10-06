@@ -46,7 +46,7 @@ test('authorization execution-candidate evidence matches current runtime candida
   );
   assert.equal(
     evidence.preparedFromMain,
-    '62607244ffff012543d95460bc8e3612453dca66',
+    'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
   );
   assert.equal(evidence.canonicalArtistId, 'iu');
   assert.deepEqual(evidence.executionCandidate, runtimeCandidate);
@@ -68,6 +68,6 @@ test('authorization execution-candidate evidence matches current runtime candida
   assert.equal(sha256Canonical(digestInput), evidenceDigest);
   assert.equal(
     evidenceDigest,
-    'dcee9cfa8525dfa4bc3be0961e38e0678baba599c207fa04f2b8e0911087d473',
+    '0070d6c0a64da624dae55dc5c470596a574e0c5bbc38f6c3bbfdb1cd391312a2',
   );
 });

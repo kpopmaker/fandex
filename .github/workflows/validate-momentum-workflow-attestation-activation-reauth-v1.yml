@@ -1,31 +1,31 @@
-name: Validate Momentum current runtime attestation readiness v1
+name: Validate Momentum workflow-attestation activation reauth v1
 
 on:
   push:
     branches:
-      - work/momentum-current-runtime-attestation-readiness-v1
+      - work/momentum-workflow-attestation-activation-reauth-v1
   pull_request:
     branches:
       - main
     paths:
       - 'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json'
-      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
-      - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
-      - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
-      - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
-      - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
-      - 'lib/product/activation/momentumProductActivationReadiness.ts'
-      - 'tests/momentum-product-activation-readiness-v1.test.mts'
-      - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
       - 'data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json'
       - 'data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json'
       - 'lib/product/activation/momentumProductActivationApprovalCandidate.ts'
       - 'lib/product/activation/momentumProductActivationAuthorization.ts'
       - 'lib/product/activation/momentumProductActivationAuthorizationExecutionCandidate.ts'
+      - 'lib/product/activation/momentumProductActivationReadiness.ts'
+      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
       - 'tests/momentum-product-activation-approval-candidate-v1.test.mts'
       - 'tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts'
       - 'tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts'
       - 'tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts'
+      - 'tests/momentum-product-activation-readiness-v1.test.mts'
+      - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
+      - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
+      - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
+      - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
 
 permissions:
   contents: read
@@ -46,64 +46,75 @@ jobs:
 
       - name: Scope allowlist
         shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "pull_request" ]; then
-            git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
-            BASE="$(git merge-base "refs/remotes/origin/$PR_BASE_REF" "$PR_HEAD_SHA")"
-            git diff --name-only "$BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
-          else
-            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
-            BASE="$(git merge-base refs/remotes/origin/main HEAD)"
-            git diff --name-only "$BASE...HEAD" | sort > /tmp/changed.txt
-          fi
-
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          BASE="$(git merge-base refs/remotes/origin/main HEAD)"
+          git diff --name-only "$BASE...HEAD" | sort > /tmp/changed.txt
           cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
           .github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml
           .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
           .github/workflows/validate-momentum-productionization-current-main-v1.yml
-          lib/product/activation/momentumProductActivationReadiness.ts
-          tests/momentum-product-activation-readiness-v1.test.mts
-          .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
+          data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
           data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
           data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json
           lib/product/activation/momentumProductActivationApprovalCandidate.ts
           lib/product/activation/momentumProductActivationAuthorization.ts
           lib/product/activation/momentumProductActivationAuthorizationExecutionCandidate.ts
+          lib/product/activation/momentumProductActivationReadiness.ts
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-product-activation-approval-candidate-v1.test.mts
           tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
           tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
           tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
-          data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
-          lib/product/readiness/momentumLiveShadowProductReadiness.ts
-          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-product-activation-readiness-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           diff -u /tmp/allowed.txt /tmp/changed.txt
 
       - run: npm ci
 
-      - name: Live-shadow currentness
+      - name: Live currentness
         env:
           NODE_OPTIONS: --conditions=react-server
         run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
 
-      - name: Public route design regression
-        env:
-          NODE_OPTIONS: --conditions=react-server
-        run: npx tsx --test tests/momentum-public-route-design-v1.test.mts
-
-      - name: Activation readiness regression
+      - name: Activation readiness
         env:
           NODE_OPTIONS: --conditions=react-server
         run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
 
-      - name: Common Product adapter regression
-        run: npx tsx --test tests/momentum-fandex-variable-product-v1.test.mts
+      - name: Activation approval candidate
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-approval-candidate-v1.test.mts
+
+      - name: Activation execution candidate
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+
+      - name: Owner attestation evidence
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+
+      - name: Execution candidate evidence
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+
+      - name: Prior approved authorization remains backward compatible
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-v1.test.mts
+
+      - name: Publication freshness still fails closed
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-current-freshness-v1.test.mts
 
       - run: npm run typecheck
       - run: npm run lint
