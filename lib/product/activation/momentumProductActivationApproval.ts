@@ -15,8 +15,8 @@ export const MOMENTUM_PRODUCT_ACTIVATION_APPROVAL =
     action: 'authorize-momentum-product-activation' as const,
     authority: 'product-operations-owner' as const,
     activationAuthorizationId:
-      'ops-activation-momentum-evidence-consensus-20260928t012306z-v1',
-    authorizedAt: '2026-09-28T01:23:06.000Z',
+      'ops-activation-momentum-evidence-consensus-20261006t142454z-v2',
+    authorizedAt: '2026-10-06T14:24:54.000Z',
     target: Object.freeze({
       artistId: 'iu' as const,
       legacyVariableId: 'growthMomentumPoint' as const,
@@ -38,11 +38,17 @@ export const MOMENTUM_PRODUCT_ACTIVATION_APPROVAL =
       directionalConsensus: 'direction-conflicted',
       persistenceConsensus: 'persistence-not-applicable',
       currentNoOpEvaluationAttested: true as const,
-      evaluatedAlignmentCutoffAt: '2026-09-27T02:10:05.000Z',
-      currentEvaluationAttestationPath:
-        'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json' as const,
+      evaluatedAlignmentCutoffAt: '2026-10-06T03:33:21.000Z',
+      currentEvaluationAttestationPath: null,
+      currentEvaluationAttestationWorkflow: Object.freeze({
+        kind: 'github-actions-read-only-current-evaluation' as const,
+        workflowRunId: 37477927827,
+        workflowJobId: 112319410564,
+        workflowHeadSha:
+          '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
+      }),
       currentEvaluationAttestationDigest:
-        'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+        'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
     }),
   }) satisfies MomentumProductActivationApproval;
 
@@ -52,15 +58,19 @@ export const MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE =
       MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE_VERSION,
     approvedAt: MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.authorizedAt,
     authority: 'product-operations-owner' as const,
-    authorizationEvidenceCommentId: 5861676033 as const,
+    authorizationEvidenceCommentId: 6018395684 as const,
     authorizationEvidenceCommentUrl:
-      'https://github.com/kpopmaker/fandex/pull/267#issuecomment-5861676033' as const,
+      'https://github.com/kpopmaker/fandex/pull/532#issuecomment-6018395684' as const,
     authorizedMain:
-      '7b9899e3a85f82c4e82cde1d8383f97d62765d49' as const,
+      '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34' as const,
     operationsHandoffDigest:
       'dca053af60e05e22ea30d45e030c31f85cea2931d448ef7dc108942bcc309d76' as const,
     operationsHandoffProductionAttestationDigest:
       'eba9f0f299ad0f591e2d0a7cb931db1d203d29fd4bf6bf402263a81a74a1ecd9' as const,
+    operationsHandoffStatus: 'historical-only' as const,
+    productionBindingCurrent: false as const,
+    productionRevalidationRequired: true as const,
+    productionBlockReason: 'vercel-team-fair-use-block' as const,
     activationAuthorizationId:
       MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.activationAuthorizationId,
     target: MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.target,

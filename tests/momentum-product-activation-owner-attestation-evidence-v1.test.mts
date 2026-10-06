@@ -75,7 +75,7 @@ test('owner-attestation evidence package exactly matches the current candidate',
   );
   assert.equal(
     evidence.evaluatedAgainstMain,
-    '68f31f9ca993b2f90e124e569dc5f1bbed299d0c',
+    '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
   );
   assert.equal(evidence.canonicalArtistId, 'iu');
   assert.equal(evidence.candidate.status, 'ready-for-owner-attestation');
@@ -95,7 +95,7 @@ test('owner-attestation evidence package exactly matches the current candidate',
   );
   assert.equal(
     evidence.freshnessEvidence.currentNoOpEvaluation.attestationDigest,
-    '59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d',
+    'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
   );
   assert.equal(
     evidence.freshnessEvidence.currentNoOpEvaluation.attestationPath,
@@ -105,10 +105,10 @@ test('owner-attestation evidence package exactly matches the current candidate',
     evidence.freshnessEvidence.currentNoOpEvaluation.attestationWorkflow,
     {
       kind: 'github-actions-read-only-current-evaluation',
-      workflowRunId: 37469812804,
-      workflowJobId: 112311628571,
+      workflowRunId: 37477927827,
+      workflowJobId: 112319410564,
       workflowHeadSha:
-        '68f31f9ca993b2f90e124e569dc5f1bbed299d0c',
+        '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
     },
   );
 
@@ -130,11 +130,11 @@ test('owner-attestation evidence package exactly matches the current candidate',
   const { evidenceDigest, ...digestInput } = evidence;
   assert.equal(
     sha256Canonical(digestInput),
-    '3c04309f1f3c8dcc77a06d83192a8a2ae24575edf951cd1a9611a4eb38113103',
+    'df06b19a0a3ca9f6f1a322b264df1749ad0c3e766419473c39cf6a8c7dfc88cf',
   );
   assert.equal(
     evidenceDigest,
-    '3c04309f1f3c8dcc77a06d83192a8a2ae24575edf951cd1a9611a4eb38113103',
+    'df06b19a0a3ca9f6f1a322b264df1749ad0c3e766419473c39cf6a8c7dfc88cf',
   );
 });
 
