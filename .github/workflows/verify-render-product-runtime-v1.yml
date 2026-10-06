@@ -94,6 +94,44 @@ jobs:
             'FANDEX_RENDER_BRAND_FIT_CARD_RESOLVED='
               + String(!unavailable && !notFound),
           );
+
+          const text = html
+            .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/&amp;/g, '&')
+            .replace(/&#x27;/g, "'")
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          const summary = text.match(
+            /Runtime\s*(\d+)\s*\/\s*7[\s\S]*?Real Production\s*(\d+)\s*\/\s*7[\s\S]*?Blocked\s*(\d+)/i,
+          );
+          if (summary) {
+            console.log(
+              'FANDEX_RENDER_RUNTIME_SUMMARY='
+                + summary.slice(1).join('/'),
+            );
+          }
+
+          for (const key of [
+            'musicAlbumPoint',
+            'newsIssuePoint',
+            'snsFandomPoint',
+            'brandFitPoint',
+            'comebackActivityPoint',
+            'growthMomentumPoint',
+            'riskAdjustmentPoint',
+          ]) {
+            const i = text.indexOf(key);
+            if (i >= 0) {
+              console.log(
+                'FANDEX_RENDER_CARD_' + key + '='
+                  + text.slice(i, i + 700),
+              );
+            }
+          }
+
           if (unavailable || notFound) process.exit(1);
           NODE
 
