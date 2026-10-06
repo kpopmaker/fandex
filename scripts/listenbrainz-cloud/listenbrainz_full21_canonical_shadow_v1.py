@@ -5,6 +5,7 @@ import os
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -34,9 +35,9 @@ def fetch(mbid: str, stat_range: str) -> dict[str, Any]:
         },
     )
     last_error = None
-    for attempt in range(1, 6):
+    for attempt in range(1, 4):
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
+            with urllib.request.urlopen(request, timeout=12) as response:
                 status = response.status
                 body = response.read().decode("utf-8")
             if status == 204:
@@ -78,7 +79,7 @@ def fetch(mbid: str, stat_range: str) -> dict[str, Any]:
                 }
         except Exception as exc:
             last_error = str(exc)
-        time.sleep(min(2.0 * attempt, 10.0))
+        time.sleep(min(1.5 * attempt, 4.5))
     return {
         "status": "unavailable",
         "httpStatus": None,
@@ -97,20 +98,56 @@ def main() -> None:
     if len({row["musicBrainzArtistMbid"] for row in bindings}) != 21:
         raise RuntimeError("MusicBrainz MBIDs are not unique.")
 
-    rows = []
-    for index, binding in enumerate(bindings):
-        if index:
-            time.sleep(0.15)
-        mbid = binding["musicBrainzArtistMbid"]
-        range_results = {}
-        for stat_range in RANGES:
-            result = fetch(mbid, stat_range)
+    indexed_bindings = {
+        binding["canonicalArtistId"]: binding
+        for binding in bindings
+    }
+    raw_results = {
+        binding["canonicalArtistId"]: {}
+        for binding in bindings
+    }
+
+    tasks = {}
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        for binding in bindings:
+            mbid = binding["musicBrainzArtistMbid"]
+            for stat_range in RANGES:
+                future = executor.submit(fetch, mbid, stat_range)
+                tasks[future] = (binding["canonicalArtistId"], stat_range, mbid)
+
+        for future in as_completed(tasks):
+            canonical_id, stat_range, mbid = tasks[future]
+            try:
+                result = future.result()
+            except Exception as exc:
+                result = {
+                    "status": "unavailable",
+                    "httpStatus": None,
+                    "totalListenCount": None,
+                    "reason": f"worker_error:{exc}",
+                }
+
             if result["status"] == "ok":
                 if norm(result.get("returnedArtistMbid")).casefold() != mbid.casefold():
                     result["status"] = "identity_mismatch"
                     result["reason"] = "returned_mbid_differs_from_reviewed_binding"
-            range_results[stat_range] = result
-            time.sleep(0.15)
+
+            raw_results[canonical_id][stat_range] = result
+
+    rows = []
+    for binding in bindings:
+        canonical_id = binding["canonicalArtistId"]
+        mbid = binding["musicBrainzArtistMbid"]
+        range_results = raw_results[canonical_id]
+
+        for stat_range in RANGES:
+            if stat_range not in range_results:
+                range_results[stat_range] = {
+                    "status": "unavailable",
+                    "httpStatus": None,
+                    "totalListenCount": None,
+                    "reason": "missing_worker_result",
+                }
 
         statuses = [range_results[r]["status"] for r in RANGES]
         all_ok = all(status == "ok" for status in statuses)
@@ -123,7 +160,7 @@ def main() -> None:
         any_mismatch = any(status == "identity_mismatch" for status in statuses)
 
         row = {
-            "canonicalArtistId": binding["canonicalArtistId"],
+            "canonicalArtistId": canonical_id,
             "artist": binding["artist"],
             "providerArtistName": binding["providerArtistName"],
             "musicBrainzArtistMbid": mbid,
