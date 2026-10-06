@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID,
+  FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
   getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+  mintNaverNewsVercelProjectOidcToken,
 } from '../lib/server/product/naverNewsIssuePointBlobRuntimeRead';
 import {
   buildNaverNewsIngestionWritePlan,
@@ -375,4 +378,84 @@ test('Blob-backed current newsIssuePoint reader emits sanitized production gate 
   } finally {
     console.warn = originalWarn;
   }
+});
+
+
+test('News Render runtime can mint project OIDC from VERCEL_TOKEN without logging the secret', async () => {
+  const originalFetch = globalThis.fetch;
+  const expiresAt = Math.floor(Date.now() / 1000) + 600;
+  const payload = Buffer.from(
+    JSON.stringify({ exp: expiresAt }),
+  ).toString('base64url');
+  const oidcToken =
+    'header.' + payload + '.signature-signature-signature-signature';
+
+  let requestUrl = '';
+  let authorization = '';
+  let body = '';
+
+  globalThis.fetch = (async (input, init) => {
+    requestUrl = String(input);
+    authorization = String(
+      (init?.headers as Record<string, string> | undefined)
+        ?.Authorization ?? '',
+    );
+    body = String(init?.body ?? '');
+    return new Response(
+      JSON.stringify({ token: oidcToken }),
+      {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      },
+    );
+  }) as typeof fetch;
+
+  try {
+    const result = await mintNaverNewsVercelProjectOidcToken({
+      VERCEL_TOKEN: 'render-project-access-token',
+      FANDEX_VERCEL_PROJECT_ID:
+        FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID,
+      FANDEX_VERCEL_TEAM_ID:
+        FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
+    });
+
+    assert.equal(result, oidcToken);
+    assert.match(
+      requestUrl,
+      new RegExp(
+        '/v1/projects/'
+          + FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID
+          + '/token',
+      ),
+    );
+    assert.match(
+      requestUrl,
+      new RegExp(
+        'teamId=' + FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
+      ),
+    );
+    assert.equal(
+      authorization,
+      'Bearer render-project-access-token',
+    );
+    assert.match(
+      body,
+      /fandex:naver-news-product-runtime-read-v1/,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('News Render OIDC mint fails closed on unexpected Vercel project binding', async () => {
+  await assert.rejects(
+    () =>
+      mintNaverNewsVercelProjectOidcToken({
+        VERCEL_TOKEN: 'render-project-access-token',
+        FANDEX_VERCEL_PROJECT_ID: 'prj_unexpected',
+        FANDEX_VERCEL_TEAM_ID:
+          FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
+      }),
+    /naver_news_blob_runtime_vercel_project_binding_invalid/,
+  );
 });
