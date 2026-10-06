@@ -86,6 +86,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'WINGS',
       'The Most Beautiful Moment in Life: Young Forever',
       'YOU NEVER WALK ALONE',
+      'LOVE YOURSELF 轉 \'Tear\'',
       'Clé : LEVANTER',
       'KILL THIS LOVE',
       'Fame',
