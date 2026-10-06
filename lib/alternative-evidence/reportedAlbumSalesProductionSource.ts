@@ -45,6 +45,8 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   underlyingProvider: 'Hanteo Chart';
   metricSemantic: 'reported-hanteo-first-week-sales';
   underlyingMetricSemantic: 'hanteo-first-week-sales';
+  observationId: string;
+  observationScopeId: string;
   canonicalArtistId: string;
   canonicalReleaseId: string | null;
   releaseTitle: string;
@@ -316,6 +318,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     metricSemantic: 'reported-hanteo-first-week-sales' as const,
     underlyingMetricSemantic: 'hanteo-first-week-sales' as const,
     observationId: observation.observationId,
+    observationScopeId: observation.observationScopeId,
     canonicalArtistId: observation.canonicalArtistId,
     canonicalReleaseId: observation.release.canonicalReleaseId,
     releaseTitle: observation.release.releaseTitle,
