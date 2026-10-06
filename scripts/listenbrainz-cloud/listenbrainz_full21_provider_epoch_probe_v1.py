@@ -5,7 +5,6 @@ import os
 import time
 import urllib.error
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -36,9 +35,9 @@ def fetch(mbid: str) -> dict[str, Any]:
         },
     )
     last_error = None
-    for attempt in range(1, 4):
+    for attempt in range(1, 7):
         try:
-            with urllib.request.urlopen(request, timeout=12) as response:
+            with urllib.request.urlopen(request, timeout=20) as response:
                 if response.status == 204:
                     return {"status": "unavailable", "httpStatus": 204, "reason": "no_content"}
                 payload = json.loads(response.read().decode("utf-8"))
@@ -59,7 +58,7 @@ def fetch(mbid: str) -> dict[str, Any]:
                 return {"status": "unavailable", "httpStatus": exc.code, "reason": last_error}
         except Exception as exc:
             last_error = str(exc)
-        time.sleep(min(1.5 * attempt, 4.5))
+        time.sleep(min(3 * attempt, 15))
     return {"status": "unavailable", "httpStatus": None, "reason": last_error or "unknown_error"}
 
 
@@ -71,24 +70,25 @@ def main() -> None:
     prior_rows = baseline["artists"]
     prior_by_id = {row["canonicalArtistId"]: row for row in prior_rows}
 
-    futures = {}
     current = {}
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        for row in prior_rows:
-            future = executor.submit(fetch, row["musicBrainzArtistMbid"])
-            futures[future] = (row["canonicalArtistId"], row["musicBrainzArtistMbid"])
-
-        for future in as_completed(futures):
-            cid, mbid = futures[future]
-            try:
-                result = future.result()
-            except Exception as exc:
-                result = {"status": "unavailable", "reason": f"worker_error:{exc}"}
-            if result.get("status") == "ok":
-                if norm(result.get("returnedArtistMbid")).casefold() != mbid.casefold():
-                    result["status"] = "identity_mismatch"
-                    result["reason"] = "returned_mbid_differs_from_reviewed_binding"
-            current[cid] = result
+    for index, row in enumerate(prior_rows, start=1):
+        cid = row["canonicalArtistId"]
+        mbid = row["musicBrainzArtistMbid"]
+        try:
+            result = fetch(mbid)
+        except Exception as exc:
+            result = {"status": "unavailable", "reason": f"request_error:{exc}"}
+        if result.get("status") == "ok":
+            if norm(result.get("returnedArtistMbid")).casefold() != mbid.casefold():
+                result["status"] = "identity_mismatch"
+                result["reason"] = "returned_mbid_differs_from_reviewed_binding"
+        current[cid] = result
+        print(
+            f"PROBE {index:02d}/21 | {cid} | status={result.get('status')} | "
+            f"http={result.get('httpStatus')} | lastUpdated={result.get('lastUpdated')}"
+        )
+        if index < len(prior_rows):
+            time.sleep(1.0)
 
     rows = []
     new_epoch_ids = []
@@ -151,6 +151,7 @@ def main() -> None:
 
     output = {
         "version": "listenbrainz_full21_provider_epoch_probe_v1",
+        "probeTransport": {"mode": "serial", "maxAttemptsPerArtist": 6, "requestTimeoutSeconds": 20, "interArtistDelaySeconds": 1.0},
         "createdAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "github": {
             "runId": norm(os.environ.get("GITHUB_RUN_ID")),
