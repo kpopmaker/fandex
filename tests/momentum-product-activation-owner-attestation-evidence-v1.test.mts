@@ -130,11 +130,11 @@ test('owner-attestation evidence package exactly matches the current candidate',
   const { evidenceDigest, ...digestInput } = evidence;
   assert.equal(
     sha256Canonical(digestInput),
-    'ff4739e28a35b814d3a778e823b7581a41095668daafeeaa7708ab4c2ebac7e4',
+    '3c04309f1f3c8dcc77a06d83192a8a2ae24575edf951cd1a9611a4eb38113103',
   );
   assert.equal(
     evidenceDigest,
-    'ff4739e28a35b814d3a778e823b7581a41095668daafeeaa7708ab4c2ebac7e4',
+    '3c04309f1f3c8dcc77a06d83192a8a2ae24575edf951cd1a9611a4eb38113103',
   );
 });
 
