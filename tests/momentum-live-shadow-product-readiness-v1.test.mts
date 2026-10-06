@@ -68,7 +68,14 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
     persistenceConsensus: 'persistence-not-applicable',
     attestationPath: null,
     attestationDigest:
-      'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
+      'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
+    attestationWorkflow: {
+      kind: 'github-actions-read-only-current-evaluation',
+      workflowRunId: 37469812804,
+      workflowJobId: 112290054657,
+      workflowHeadSha:
+        'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+    },
   });
   assert.deepEqual(result.blockers, []);
 });
@@ -90,7 +97,7 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
 
   assert.equal(
     audit.evaluatedAgainstMain,
-    '01d7d03047946691560163cc968621a55ae4d755',
+    'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
   );
   assert.equal(audit.lastfm.snapshotDate, '2026-10-06');
   assert.equal(audit.lastfm.historyRowCount, 607);
@@ -104,8 +111,8 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
     audit.naverBlobOnlyRecurring.mode,
     'github-actions-direct-blob-only',
   );
-  assert.equal(audit.naverBlobOnlyRecurring.workflowRunId, 37455371774);
-  assert.equal(audit.naverBlobOnlyRecurring.workflowJobId, 112241560366);
+  assert.equal(audit.naverBlobOnlyRecurring.workflowRunId, 37469590114);
+  assert.equal(audit.naverBlobOnlyRecurring.workflowJobId, 112289294588);
   assert.equal(
     audit.naverBlobOnlyRecurring.currentStoredEvidenceReproducedForReadiness,
     true,
@@ -121,15 +128,15 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
   );
   assert.equal(
     audit.currentEvaluation.attestationDigest,
-    'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
+    'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowRunId,
-    37455528430,
+    37469812804,
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowJobId,
-    112242072242,
+    112290054657,
   );
 });
 

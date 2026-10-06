@@ -1,9 +1,8 @@
 {
   "contractVersion": "momentum-product-activation-owner-attestation-evidence-v1",
-  "evaluatedAgainstMain": "5432eb814d8c2e97e25339406b116c98c0851039",
+  "evaluatedAgainstMain": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
   "canonicalArtistId": "iu",
   "candidate": {
-    "contractVersion": "momentum-product-activation-approval-candidate-v1",
     "status": "ready-for-owner-attestation",
     "approvalDraft": {
       "contractVersion": "momentum-product-activation-approval-v1",
@@ -27,9 +26,15 @@
         "directionalConsensus": "direction-conflicted",
         "persistenceConsensus": "persistence-not-applicable",
         "currentNoOpEvaluationAttested": true,
-        "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
-        "currentEvaluationAttestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
-        "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+        "evaluatedAlignmentCutoffAt": "2026-10-06T03:33:21.000Z",
+        "currentEvaluationAttestationPath": null,
+        "currentEvaluationAttestationWorkflow": {
+          "kind": "github-actions-read-only-current-evaluation",
+          "workflowRunId": 37469812804,
+          "workflowJobId": 112290054657,
+          "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+        },
+        "currentEvaluationAttestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e"
       }
     },
     "authorizationWithoutApproval": {
@@ -55,11 +60,17 @@
       "persistenceConsensus": "persistence-not-applicable"
     },
     "currentNoOpEvaluation": {
-      "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
+      "evaluatedAlignmentCutoffAt": "2026-10-06T03:33:21.000Z",
       "directionalConsensus": "direction-conflicted",
       "persistenceConsensus": "persistence-not-applicable",
-      "attestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
-      "attestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+      "attestationPath": null,
+      "attestationWorkflow": {
+        "kind": "github-actions-read-only-current-evaluation",
+        "workflowRunId": 37469812804,
+        "workflowJobId": 112290054657,
+        "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+      },
+      "attestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e"
     }
   },
   "boundary": {
@@ -74,5 +85,5 @@
     "productionVerifierExecutions": 0
   },
   "requiredNextGate": "explicit-momentum-product-activation-authorization",
-  "evidenceDigest": "cd3cabbd37c603d6094c0add2fc000011897123ec82501d23b32bbe872258ce1"
+  "evidenceDigest": "f4801d3ecc736b0b00d7cde50c247b908cf7e8ebdcbffc3a76bbf4b493f73384"
 }

@@ -29,6 +29,16 @@ on:
       - 'tests/momentum-current-evaluation-execution-v1.test.mts'
       - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
       - 'tests/momentum-v2-carrier-record-candidate-v1.test.mts'
+      - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
+      - 'data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json'
+      - 'data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json'
+      - 'lib/product/activation/momentumProductActivationApprovalCandidate.ts'
+      - 'lib/product/activation/momentumProductActivationAuthorization.ts'
+      - 'lib/product/activation/momentumProductActivationAuthorizationExecutionCandidate.ts'
+      - 'tests/momentum-product-activation-approval-candidate-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts'
+      - 'tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts'
 
 permissions:
   contents: read
@@ -84,6 +94,16 @@ jobs:
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
+          .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
+          data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
+          data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json
+          lib/product/activation/momentumProductActivationApprovalCandidate.ts
+          lib/product/activation/momentumProductActivationAuthorization.ts
+          lib/product/activation/momentumProductActivationAuthorizationExecutionCandidate.ts
+          tests/momentum-product-activation-approval-candidate-v1.test.mts
+          tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+          tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+          tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt

@@ -29,8 +29,15 @@ test('current IU Momentum is eligible for activation review without activation',
   assert.equal(result.freshnessAttestation.attestationPath, null);
   assert.equal(
     result.freshnessAttestation.attestationDigest,
-    'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
+    'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
   );
+  assert.deepEqual(result.freshnessAttestation.attestationWorkflow, {
+    kind: 'github-actions-read-only-current-evaluation',
+    workflowRunId: 37469812804,
+    workflowJobId: 112290054657,
+    workflowHeadSha:
+      'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+  });
   assert.equal(result.target.artistId, 'iu');
   assert.equal(result.target.legacyVariableId, 'growthMomentumPoint');
   assert.equal(result.target.constructId, 'momentumEvidenceConsensus');

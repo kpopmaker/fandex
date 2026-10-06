@@ -1,6 +1,6 @@
 {
   "contractVersion": "momentum-product-activation-authorization-execution-candidate-evidence-v1",
-  "preparedFromMain": "62607244ffff012543d95460bc8e3612453dca66",
+  "preparedFromMain": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
   "canonicalArtistId": "iu",
   "executionCandidate": {
     "contractVersion": "momentum-product-activation-authorization-execution-candidate-v1",
@@ -34,9 +34,15 @@
         "directionalConsensus": "direction-conflicted",
         "persistenceConsensus": "persistence-not-applicable",
         "currentNoOpEvaluationAttested": true,
-        "evaluatedAlignmentCutoffAt": "2026-09-27T02:10:05.000Z",
-        "currentEvaluationAttestationPath": "data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json",
-        "currentEvaluationAttestationDigest": "b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93"
+        "evaluatedAlignmentCutoffAt": "2026-10-06T03:33:21.000Z",
+        "currentEvaluationAttestationPath": null,
+        "currentEvaluationAttestationWorkflow": {
+          "kind": "github-actions-read-only-current-evaluation",
+          "workflowRunId": 37469812804,
+          "workflowJobId": 112290054657,
+          "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+        },
+        "currentEvaluationAttestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e"
       }
     },
     "authorizationWithoutApproval": {
@@ -81,5 +87,5 @@
     "productionVerifierExecutions": 0
   },
   "requiredNextGate": "explicit-momentum-product-activation-authorization",
-  "evidenceDigest": "dcee9cfa8525dfa4bc3be0961e38e0678baba599c207fa04f2b8e0911087d473"
+  "evidenceDigest": "0070d6c0a64da624dae55dc5c470596a574e0c5bbc38f6c3bbfdb1cd391312a2"
 }

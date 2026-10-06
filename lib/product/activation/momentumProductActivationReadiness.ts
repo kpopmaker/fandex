@@ -49,6 +49,12 @@ export type MomentumProductActivationReadiness =
       persistenceConsensus: string | null;
       attestationPath: string | null;
       attestationDigest: string | null;
+      attestationWorkflow?: Readonly<{
+        kind: 'github-actions-read-only-current-evaluation';
+        workflowRunId: number;
+        workflowJobId: number;
+        workflowHeadSha: string;
+      }>;
     }>;
     productActivationAuthorized: false;
     productPublicationAuthorized: false;
@@ -254,6 +260,8 @@ export function evaluateMomentumProductActivationReadiness(
         input.liveReadiness.currentEvaluation.attestationPath,
       attestationDigest:
         input.liveReadiness.currentEvaluation.attestationDigest,
+      attestationWorkflow:
+        input.liveReadiness.currentEvaluation.attestationWorkflow,
     }),
     productActivationAuthorized: false as const,
     productPublicationAuthorized: false as const,
