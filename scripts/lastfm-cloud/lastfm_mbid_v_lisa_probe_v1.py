@@ -51,16 +51,39 @@ def api_call(api_key, method, **params):
         url,
         headers={
             "Accept": "application/json",
-            "User-Agent": "FANDEX-ArtistExpansion-LastFM-MBID-Probe/1.0",
+            "User-Agent": "FANDEX-ArtistExpansion-LastFM-MBID-Probe/1.1",
         },
     )
     with urllib.request.urlopen(request, timeout=30) as response:
-        payload = json.loads(response.read().decode("utf-8"))
+        return json.loads(response.read().decode("utf-8"))
+
+
+def safe_call(api_key, method, **params):
+    try:
+        payload = api_call(api_key, method, **params)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "transportError": str(exc),
+            "apiError": None,
+            "payload": None,
+        }
     if "error" in payload:
-        raise RuntimeError(
-            f"{method} error {payload.get('error')}: {payload.get('message')}"
-        )
-    return payload
+        return {
+            "ok": False,
+            "transportError": None,
+            "apiError": {
+                "code": payload.get("error"),
+                "message": payload.get("message"),
+            },
+            "payload": payload,
+        }
+    return {
+        "ok": True,
+        "transportError": None,
+        "apiError": None,
+        "payload": payload,
+    }
 
 
 def int_or_none(value):
@@ -73,10 +96,17 @@ def int_or_none(value):
         return None
 
 
-def info_summary(payload):
-    artist = payload.get("artist") or {}
+def info_summary(call):
+    if not call["ok"]:
+        return {
+            "ok": False,
+            "apiError": call["apiError"],
+            "transportError": call["transportError"],
+        }
+    artist = (call["payload"].get("artist") or {})
     stats = artist.get("stats") or {}
     return {
+        "ok": True,
         "name": norm(artist.get("name")),
         "mbid": norm(artist.get("mbid")),
         "url": norm(artist.get("url")),
@@ -85,21 +115,28 @@ def info_summary(payload):
     }
 
 
-def top_tracks_summary(payload, requested_mbid):
-    root = payload.get("toptracks") or {}
+def top_tracks_summary(call, requested_mbid):
+    if not call["ok"]:
+        return {
+            "ok": False,
+            "apiError": call["apiError"],
+            "transportError": call["transportError"],
+            "tracks": [],
+        }
+    root = call["payload"].get("toptracks") or {}
     tracks = root.get("track") or []
     if isinstance(tracks, dict):
         tracks = [tracks]
     out = []
-    matching_track_artist_mbid_count = 0
-    nonempty_track_artist_mbid_count = 0
+    nonempty_mbid_count = 0
+    exact_mbid_count = 0
     for item in tracks[:20]:
         artist = item.get("artist") or {}
         artist_mbid = norm(artist.get("mbid"))
         if artist_mbid:
-            nonempty_track_artist_mbid_count += 1
+            nonempty_mbid_count += 1
             if artist_mbid.casefold() == requested_mbid.casefold():
-                matching_track_artist_mbid_count += 1
+                exact_mbid_count += 1
         out.append({
             "name": norm(item.get("name")),
             "playcount": int_or_none(item.get("playcount")),
@@ -109,12 +146,39 @@ def top_tracks_summary(payload, requested_mbid):
             "url": norm(item.get("url")),
         })
     return {
+        "ok": True,
         "attrArtist": norm((root.get("@attr") or {}).get("artist")),
         "returnedTrackCount": len(tracks),
         "examinedTrackCount": len(out),
-        "nonemptyTrackArtistMbidCount": nonempty_track_artist_mbid_count,
-        "matchingRequestedArtistMbidCount": matching_track_artist_mbid_count,
+        "nonemptyTrackArtistMbidCount": nonempty_mbid_count,
+        "matchingRequestedArtistMbidCount": exact_mbid_count,
         "tracks": out,
+    }
+
+
+def search_summary(call):
+    if not call["ok"]:
+        return {
+            "ok": False,
+            "apiError": call["apiError"],
+            "transportError": call["transportError"],
+            "matches": [],
+        }
+    results = call["payload"].get("results") or {}
+    matches = ((results.get("artistmatches") or {}).get("artist") or [])
+    if isinstance(matches, dict):
+        matches = [matches]
+    return {
+        "ok": True,
+        "matches": [
+            {
+                "name": norm(row.get("name")),
+                "mbid": norm(row.get("mbid")),
+                "url": norm(row.get("url")),
+                "listeners": int_or_none(row.get("listeners")),
+            }
+            for row in matches[:30]
+        ],
     }
 
 
@@ -126,54 +190,42 @@ def main():
         mbid = target["musicBrainzArtistMbid"]
         name = target["nameQuery"]
 
-        name_info_payload = api_call(
-            api_key,
-            "artist.getInfo",
-            artist=name,
-            autocorrect=1,
-        )
-        mbid_info_payload = api_call(
-            api_key,
-            "artist.getInfo",
-            mbid=mbid,
-            autocorrect=0,
-        )
-        name_tracks_payload = api_call(
-            api_key,
-            "artist.getTopTracks",
-            artist=name,
-            autocorrect=1,
-            limit=20,
-        )
-        mbid_tracks_payload = api_call(
-            api_key,
-            "artist.getTopTracks",
-            mbid=mbid,
-            autocorrect=0,
-            limit=20,
-        )
-
-        name_info = info_summary(name_info_payload)
-        mbid_info = info_summary(mbid_info_payload)
-        name_tracks = top_tracks_summary(name_tracks_payload, mbid)
-        mbid_tracks = top_tracks_summary(mbid_tracks_payload, mbid)
+        name_info = info_summary(safe_call(
+            api_key, "artist.getInfo", artist=name, autocorrect=1
+        ))
+        mbid_info = info_summary(safe_call(
+            api_key, "artist.getInfo", mbid=mbid, autocorrect=0
+        ))
+        name_tracks = top_tracks_summary(safe_call(
+            api_key, "artist.getTopTracks", artist=name, autocorrect=1, limit=20
+        ), mbid)
+        mbid_tracks = top_tracks_summary(safe_call(
+            api_key, "artist.getTopTracks", mbid=mbid, autocorrect=0, limit=20
+        ), mbid)
+        search = search_summary(safe_call(
+            api_key, "artist.search", artist=name, limit=30
+        ))
 
         returned_mbid_exact = (
-            mbid_info["mbid"].casefold() == mbid.casefold()
+            mbid_info.get("ok") is True
+            and norm(mbid_info.get("mbid")).casefold() == mbid.casefold()
         )
         positive_stats = (
-            (mbid_info["listeners"] or 0) > 0
-            and (mbid_info["playcount"] or 0) > 0
+            mbid_info.get("ok") is True
+            and (mbid_info.get("listeners") or 0) > 0
+            and (mbid_info.get("playcount") or 0) > 0
         )
         track_mbid_identity_supported = (
-            mbid_tracks["nonemptyTrackArtistMbidCount"] > 0
-            and mbid_tracks["matchingRequestedArtistMbidCount"]
-            == mbid_tracks["nonemptyTrackArtistMbidCount"]
+            mbid_tracks.get("ok") is True
+            and mbid_tracks.get("nonemptyTrackArtistMbidCount", 0) > 0
+            and mbid_tracks.get("matchingRequestedArtistMbidCount", 0)
+            == mbid_tracks.get("nonemptyTrackArtistMbidCount", 0)
         )
+        search_exact_matches = [
+            row for row in search.get("matches", [])
+            if norm(row.get("mbid")).casefold() == mbid.casefold()
+        ]
 
-        # Do not infer canonical-only stats merely because getInfo echoes MBID.
-        # Stronger binding requires exact returned artist MBID plus top-track
-        # artist MBID evidence where Last.fm exposes it.
         canonical_specific_binding_supported = (
             returned_mbid_exact
             and positive_stats
@@ -190,16 +242,24 @@ def main():
                 "artistInfo": mbid_info,
                 "topTracks": mbid_tracks,
             },
+            "artistSearchProbe": search,
             "evidence": {
                 "returnedMbidExact": returned_mbid_exact,
                 "positiveStats": positive_stats,
                 "trackMbidIdentitySupported": track_mbid_identity_supported,
+                "artistSearchExactMbidMatchCount": len(search_exact_matches),
                 "canonicalSpecificBindingSupported": canonical_specific_binding_supported,
                 "nameAndMbidStatsEqual": (
-                    name_info["listeners"] == mbid_info["listeners"]
-                    and name_info["playcount"] == mbid_info["playcount"]
+                    name_info.get("ok") is True
+                    and mbid_info.get("ok") is True
+                    and name_info.get("listeners") == mbid_info.get("listeners")
+                    and name_info.get("playcount") == mbid_info.get("playcount")
                 ),
-                "nameAndMbidUrlEqual": name_info["url"] == mbid_info["url"],
+                "nameAndMbidUrlEqual": (
+                    name_info.get("ok") is True
+                    and mbid_info.get("ok") is True
+                    and name_info.get("url") == mbid_info.get("url")
+                ),
             },
         })
 
@@ -237,41 +297,34 @@ def main():
             "missingMbidEvidenceFailsClosed": True,
         },
     }
-
     OUTPUT.write_text(
         json.dumps(output, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
 
     for row in results:
-        e = row["evidence"]
+        print("\nTARGET", row["canonicalArtistId"])
+        print("nameInfo", row["nameQueryProbe"]["artistInfo"])
+        print("mbidInfo", row["mbidQueryProbe"]["artistInfo"])
         print(
-            f"{row['canonicalArtistId']} | "
-            f"returnedMbidExact={e['returnedMbidExact']} | "
-            f"positiveStats={e['positiveStats']} | "
-            f"trackMbidIdentitySupported={e['trackMbidIdentitySupported']} | "
-            f"nameAndMbidStatsEqual={e['nameAndMbidStatsEqual']} | "
-            f"nameAndMbidUrlEqual={e['nameAndMbidUrlEqual']} | "
-            f"canonicalSpecificBindingSupported={e['canonicalSpecificBindingSupported']}"
+            "searchMatches",
+            row["artistSearchProbe"].get("matches", [])[:10],
         )
         print(
-            "  MBID info:",
-            row["mbidQueryProbe"]["artistInfo"],
-        )
-        print(
-            "  MBID top tracks:",
+            "mbidTopTracks",
             [
                 {
                     "name": t["name"],
                     "artistName": t["artistName"],
                     "artistMbid": t["artistMbid"],
                 }
-                for t in row["mbidQueryProbe"]["topTracks"]["tracks"][:10]
+                for t in row["mbidQueryProbe"]["topTracks"].get("tracks", [])[:10]
             ],
         )
+        print("evidence", row["evidence"])
 
     print(
-        "allTargetsCanonicalSpecificBindingSupported="
+        "\nallTargetsCanonicalSpecificBindingSupported="
         + str(all_supported).upper()
     )
     print("activationAuthorized=FALSE")
