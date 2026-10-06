@@ -17,33 +17,10 @@ import {
   REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_CONTRACT_VERSION,
   REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_ID,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
-import type {
-  SourceAuthorizationDimensions,
-} from '../lib/alternative-evidence/onboarding';
-
-function rights(
-  overrides: Partial<SourceAuthorizationDimensions> = {},
-): SourceAuthorizationDimensions {
-  return Object.freeze({
-    acquisitionState: 'review-required',
-    automationState: 'review-required',
-    rawStorageState: 'review-required',
-    normalizedStorageState: 'review-required',
-    retentionState: 'review-required',
-    commercialUseState: 'review-required',
-    derivedPublicationState: 'review-required',
-    rawRedistributionState: 'blocked',
-    ...overrides,
-  });
-}
-
-const authorizedReviewedWebRights = rights({
-  acquisitionState: 'allowed',
-  normalizedStorageState: 'allowed',
-  retentionState: 'allowed',
-  commercialUseState: 'allowed-with-conditions',
-  derivedPublicationState: 'allowed-with-conditions',
-});
+import {
+  buildReportedWebUsageReviewRequest,
+  materializeReportedWebUsageReview,
+} from '../lib/alternative-evidence/reportedWebUsageReviewRequest';
 
 function observation(input: Readonly<{
   value?: number;
@@ -129,6 +106,55 @@ function reviewedReleaseBinding(
   });
 }
 
+function reviewedRights(
+  source: ReportedAlbumSalesObservation,
+) {
+  const request = buildReportedWebUsageReviewRequest({
+    observation: source,
+    rightsReviewReferences: [
+      {
+        referenceId: 'fixture:rights:reported-web',
+        sourceUrl: 'https://example.com/rights',
+        kind: 'legal-review-memo',
+        observedAt: '2026-10-08T10:05:00+09:00',
+        reviewSignal: 'fixture rights review input',
+        authorizationStateNotInferred: true,
+      },
+    ],
+  });
+  return materializeReportedWebUsageReview({
+    request,
+    decision: {
+      requestId: request.requestId,
+      states: {
+        acquisitionState: 'allowed',
+        normalizedStorageState: 'allowed',
+        retentionState: 'allowed',
+        commercialUseState: 'allowed-with-conditions',
+        derivedPublicationState: 'allowed-with-conditions',
+      },
+      evidenceRefs: ['legal-review:reported-web:fixture'],
+      conditionRefs: [
+        'condition:store-factual-values-and-provenance-only',
+      ],
+      reviewerRef: 'reviewer:rights:fixture',
+      reviewedAt: '2026-10-08T10:10:00+09:00',
+    },
+  });
+}
+
+function productionCandidate(
+  source: ReportedAlbumSalesObservation,
+  asOfDate = '2026-10-08',
+) {
+  return buildReportedAlbumSalesProductionSourceCandidate({
+    observation: source,
+    asOfDate,
+    rightsReview: reviewedRights(source),
+    releaseIdentityBinding: reviewedReleaseBinding(source),
+  });
+}
+
 test('reported web evidence becomes a truthful production-source candidate without direct or licensed provider claims', () => {
   const candidate = buildReportedAlbumSalesProductionSourceCandidate({
     observation: observation({
@@ -136,7 +162,7 @@ test('reported web evidence becomes a truthful production-source candidate witho
       canonicalReleaseId: null,
     }),
     asOfDate: '2026-10-08',
-    rights: rights(),
+    rightsReview: null,
   });
 
   assert.equal(
@@ -163,6 +189,7 @@ test('reported web evidence becomes a truthful production-source candidate witho
   assert.equal(candidate.numericScoreProduced, false);
   assert.equal(candidate.productSourceEligible, false);
   assert.equal(candidate.rightsState, 'review-required');
+  assert.ok(candidate.blockers.includes('rights-review-binding-required'));
   assert.ok(candidate.blockers.includes('release-identity-not-resolved'));
   assert.ok(candidate.blockers.includes('release-identity-binding-required'));
   assert.ok(
@@ -179,10 +206,11 @@ test('reported web evidence becomes a truthful production-source candidate witho
 
 test('Tier B reviewed web evidence becomes source-eligible only after explicit rights and human-reviewed release binding', () => {
   const source = observation();
+  const rightsReview = reviewedRights(source);
   const candidate = buildReportedAlbumSalesProductionSourceCandidate({
     observation: source,
     asOfDate: '2026-10-08',
-    rights: authorizedReviewedWebRights,
+    rightsReview,
     releaseIdentityBinding: reviewedReleaseBinding(source),
   });
 
@@ -194,19 +222,18 @@ test('Tier B reviewed web evidence becomes source-eligible only after explicit r
   assert.equal(candidate.productSourceEligible, true);
   assert.equal(
     candidate.rights.automationState,
-    'review-required',
+    'blocked',
     'human-reviewed v1 does not silently claim automated-access rights',
   );
-  assert.equal(candidate.rights.rawStorageState, 'review-required');
+  assert.equal(candidate.rights.rawStorageState, 'blocked');
   assert.equal(candidate.rights.rawRedistributionState, 'blocked');
 });
 
 test('incomplete first-week periods remain pending instead of being estimated', () => {
-  const candidate = buildReportedAlbumSalesProductionSourceCandidate({
-    observation: observation(),
-    asOfDate: '2026-10-05',
-    rights: authorizedReviewedWebRights,
-  });
+  const candidate = productionCandidate(
+    observation(),
+    '2026-10-05',
+  );
 
   assert.equal(candidate.availability, 'pending');
   assert.equal(candidate.periodInferenceUsed, false);
@@ -215,13 +242,11 @@ test('incomplete first-week periods remain pending instead of being estimated', 
 });
 
 test('discovery-only evidence cannot be promoted to a Production source', () => {
-  const candidate = buildReportedAlbumSalesProductionSourceCandidate({
-    observation: observation({
+  const candidate = productionCandidate(
+    observation({
       sourceTier: 'tier-c-discovery-only',
     }),
-    asOfDate: '2026-10-08',
-    rights: authorizedReviewedWebRights,
-  });
+  );
 
   assert.equal(candidate.productSourceEligible, false);
   assert.ok(
@@ -233,13 +258,11 @@ test('discovery-only evidence cannot be promoted to a Production source', () => 
 });
 
 test('missing publication date fails closed for Production source eligibility', () => {
-  const candidate = buildReportedAlbumSalesProductionSourceCandidate({
-    observation: observation({
+  const candidate = productionCandidate(
+    observation({
       sourcePublicationDate: null,
     }),
-    asOfDate: '2026-10-08',
-    rights: authorizedReviewedWebRights,
-  });
+  );
 
   assert.equal(candidate.productSourceEligible, false);
   assert.ok(
@@ -253,7 +276,6 @@ test('conflicting active values remain preserved and blocked', () => {
   const snapshot = buildReportedAlbumSalesProductionSourceSnapshot({
     history: buildReportedAlbumSalesHistory([first, second]),
     asOf: '2026-10-08T23:59:59+09:00',
-    rights: authorizedReviewedWebRights,
   });
 
   assert.equal(snapshot.candidates.length, 2);
@@ -272,7 +294,6 @@ test('Production-source contract defines no arbitrary corpus threshold, score, a
   const snapshot = buildReportedAlbumSalesProductionSourceSnapshot({
     history: buildReportedAlbumSalesHistory([observation()]),
     asOf: '2026-10-08T23:59:59+09:00',
-    rights: authorizedReviewedWebRights,
   });
 
   assert.equal(snapshot.minimumCorpusSizeDefined, false);
@@ -284,13 +305,14 @@ test('Production-source contract defines no arbitrary corpus threshold, score, a
 });
 
 test('raw resolved identity flag without a Production identity binding remains blocked', () => {
+  const source = observation({
+    identityState: 'resolved',
+    canonicalReleaseId: 'release:iu:test-album',
+  });
   const candidate = buildReportedAlbumSalesProductionSourceCandidate({
-    observation: observation({
-      identityState: 'resolved',
-      canonicalReleaseId: 'release:iu:test-album',
-    }),
+    observation: source,
     asOfDate: '2026-10-08',
-    rights: authorizedReviewedWebRights,
+    rightsReview: reviewedRights(source),
   });
 
   assert.equal(candidate.releaseIdentityState, 'resolved');
