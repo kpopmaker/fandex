@@ -113,6 +113,17 @@ function approvalBindingMatchesReadiness(
   candidate: ReadyApprovalCandidate,
 ): boolean {
   const approval = candidate.approval;
+  const expectedWorkflow =
+    readiness.freshnessAttestation.attestationWorkflow;
+  const actualWorkflow =
+    approval.binding.currentEvaluationAttestationWorkflow;
+  const workflowMatches =
+    expectedWorkflow === undefined || actualWorkflow === undefined
+      ? expectedWorkflow === actualWorkflow
+      : expectedWorkflow.kind === actualWorkflow.kind
+        && expectedWorkflow.workflowRunId === actualWorkflow.workflowRunId
+        && expectedWorkflow.workflowJobId === actualWorkflow.workflowJobId
+        && expectedWorkflow.workflowHeadSha === actualWorkflow.workflowHeadSha;
 
   return (
     readiness.contractVersion
@@ -141,9 +152,9 @@ function approvalBindingMatchesReadiness(
     && readiness.freshnessAttestation.evaluatedAlignmentCutoffAt !== null
     && approval.binding.evaluatedAlignmentCutoffAt
       === readiness.freshnessAttestation.evaluatedAlignmentCutoffAt
-    && readiness.freshnessAttestation.attestationPath !== null
     && approval.binding.currentEvaluationAttestationPath
       === readiness.freshnessAttestation.attestationPath
+    && workflowMatches
     && readiness.freshnessAttestation.attestationDigest !== null
     && approval.binding.currentEvaluationAttestationDigest
       === readiness.freshnessAttestation.attestationDigest

@@ -156,6 +156,12 @@ export type MomentumLiveShadowProductReadinessResult = Readonly<{
     persistenceConsensus: string | null;
     attestationPath: string | null;
     attestationDigest: string | null;
+    attestationWorkflow?: Readonly<{
+      kind: 'github-actions-read-only-current-evaluation';
+      workflowRunId: number;
+      workflowJobId: number;
+      workflowHeadSha: string;
+    }>;
   }>;
   blockers: readonly string[];
 }>;
@@ -437,6 +443,8 @@ export function evaluateMomentumLiveShadowProductReadiness(
         audit.currentEvaluation.attestationPath,
       attestationDigest:
         audit.currentEvaluation.attestationDigest,
+      attestationWorkflow:
+        audit.currentEvaluation.attestationWorkflow,
     }),
     blockers: Object.freeze(blockers),
   });

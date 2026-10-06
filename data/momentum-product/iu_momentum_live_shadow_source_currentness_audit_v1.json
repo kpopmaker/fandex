@@ -1,6 +1,6 @@
 {
   "contractVersion": "momentum-live-shadow-source-currentness-audit-v1",
-  "evaluatedAgainstMain": "01d7d03047946691560163cc968621a55ae4d755",
+  "evaluatedAgainstMain": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
   "canonicalArtistId": "iu",
   "carrier": {
     "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
@@ -20,13 +20,13 @@
   },
   "naverBlobOnlyRecurring": {
     "mode": "github-actions-direct-blob-only",
-    "observedAt": "2026-10-06T11:17:06.000Z",
-    "workflowRunId": 37455371774,
-    "workflowJobId": 112241560366,
-    "workflowHeadSha": "01d7d03047946691560163cc968621a55ae4d755",
-    "slotStart": "2026-10-06T11:00:00.000Z",
-    "collectionKey": "sched-v125-naver-news-20261006t110000z-f1ed381d367d",
-    "jobId": "a6ef7fccaf26433dcfec48fd4e288ce6606255863bf2a9f25c52ff7ed9749965",
+    "observedAt": "2026-10-06T13:17:07.000Z",
+    "workflowRunId": 37469590114,
+    "workflowJobId": 112289294588,
+    "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
+    "slotStart": "2026-10-06T13:00:00.000Z",
+    "collectionKey": "sched-v125-naver-news-20261006t130000z-f1ed381d367d",
+    "jobId": "e08848dcffdcf41d8e0575a34b63129bdc4d353cd8ace7f7ff34ba8620442bac",
     "runStatus": "collected-and-finalized",
     "schedulerManifestFinalized": true,
     "exactOfficialProtocol": true,
@@ -48,12 +48,12 @@
     "directionalConsensus": "direction-conflicted",
     "persistenceConsensus": "persistence-not-applicable",
     "attestationPath": null,
-    "attestationDigest": "c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2",
+    "attestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e",
     "attestationWorkflow": {
       "kind": "github-actions-read-only-current-evaluation",
-      "workflowRunId": 37455528430,
-      "workflowJobId": 112242072242,
-      "workflowHeadSha": "01d7d03047946691560163cc968621a55ae4d755"
+      "workflowRunId": 37469812804,
+      "workflowJobId": 112290054657,
+      "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
     }
   },
   "decision": {

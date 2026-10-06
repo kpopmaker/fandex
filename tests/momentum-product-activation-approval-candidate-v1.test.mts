@@ -33,6 +33,21 @@ test('current IU Momentum yields an owner-attestation candidate without authoriz
     'structured-categorical-evidence-only-no-numeric-score',
   );
   assert.equal(result.approval.binding.sourcePublication, 'shadow');
+  assert.equal(result.approval.binding.currentEvaluationAttestationPath, null);
+  assert.deepEqual(
+    result.approval.binding.currentEvaluationAttestationWorkflow,
+    {
+      kind: 'github-actions-read-only-current-evaluation',
+      workflowRunId: 37469812804,
+      workflowJobId: 112290054657,
+      workflowHeadSha:
+        'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+    },
+  );
+  assert.equal(
+    result.approval.binding.currentEvaluationAttestationDigest,
+    'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
+  );
   assert.equal(result.approval.binding.carrierRecordId.length, 64);
   assert.equal(
     result.approval.binding.directionalConsensus,

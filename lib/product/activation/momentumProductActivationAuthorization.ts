@@ -45,7 +45,14 @@ export type MomentumProductActivationApproval = Readonly<{
     currentNoOpEvaluationAttested: true;
     evaluatedAlignmentCutoffAt: string;
     currentEvaluationAttestationPath:
-      'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json';
+      | 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+      | null;
+    currentEvaluationAttestationWorkflow?: Readonly<{
+      kind: 'github-actions-read-only-current-evaluation';
+      workflowRunId: number;
+      workflowJobId: number;
+      workflowHeadSha: string;
+    }>;
     currentEvaluationAttestationDigest: string;
   }>;
 }>;
@@ -109,6 +116,54 @@ function exactIso(value: string): boolean {
 
 function sha256(value: string): boolean {
   return /^[0-9a-f]{64}$/.test(value);
+}
+
+function validPositiveInteger(value: number): boolean {
+  return Number.isSafeInteger(value) && value > 0;
+}
+
+function workflowAttestationValid(
+  value: MomentumProductActivationApproval['binding']['currentEvaluationAttestationWorkflow'],
+): boolean {
+  return value !== undefined
+    && value.kind === 'github-actions-read-only-current-evaluation'
+    && validPositiveInteger(value.workflowRunId)
+    && validPositiveInteger(value.workflowJobId)
+    && /^[0-9a-f]{40}$/.test(value.workflowHeadSha);
+}
+
+function attestationBindingValid(
+  binding: MomentumProductActivationApproval['binding'],
+): boolean {
+  const persisted =
+    binding.currentEvaluationAttestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && binding.currentEvaluationAttestationWorkflow === undefined;
+  const workflow =
+    binding.currentEvaluationAttestationPath === null
+    && workflowAttestationValid(
+      binding.currentEvaluationAttestationWorkflow,
+    );
+
+  return persisted || workflow;
+}
+
+function workflowAttestationMatches(
+  readiness: MomentumProductActivationReadiness,
+  approval: MomentumProductActivationApproval,
+): boolean {
+  const expected = readiness.freshnessAttestation.attestationWorkflow;
+  const actual =
+    approval.binding.currentEvaluationAttestationWorkflow;
+
+  if (expected === undefined || actual === undefined) {
+    return expected === actual;
+  }
+
+  return expected.kind === actual.kind
+    && expected.workflowRunId === actual.workflowRunId
+    && expected.workflowJobId === actual.workflowJobId
+    && expected.workflowHeadSha === actual.workflowHeadSha;
 }
 
 function notAuthorized(
@@ -185,8 +240,7 @@ function approvalContractValid(
     && approval.binding.persistenceConsensus.trim().length > 0
     && approval.binding.currentNoOpEvaluationAttested === true
     && exactIso(approval.binding.evaluatedAlignmentCutoffAt)
-    && approval.binding.currentEvaluationAttestationPath
-      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && attestationBindingValid(approval.binding)
     && sha256(approval.binding.currentEvaluationAttestationDigest)
   );
 }
@@ -221,6 +275,7 @@ function approvalMatches(
       === approval.binding.evaluatedAlignmentCutoffAt
     && readiness.freshnessAttestation.attestationPath
       === approval.binding.currentEvaluationAttestationPath
+    && workflowAttestationMatches(readiness, approval)
     && readiness.freshnessAttestation.attestationDigest !== null
     && readiness.freshnessAttestation.attestationDigest
       === approval.binding.currentEvaluationAttestationDigest

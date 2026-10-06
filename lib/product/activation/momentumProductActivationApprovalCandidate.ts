@@ -84,6 +84,23 @@ function blocked(): MomentumProductActivationApprovalCandidate {
 export function createMomentumProductActivationApprovalCandidate(
   readiness: MomentumProductActivationReadiness,
 ): MomentumProductActivationApprovalCandidate {
+  const attestationWorkflow =
+    readiness.freshnessAttestation.attestationWorkflow;
+  const persistedAttestationBound =
+    readiness.freshnessAttestation.attestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && attestationWorkflow === undefined;
+  const workflowAttestationBound =
+    readiness.freshnessAttestation.attestationPath === null
+    && attestationWorkflow !== undefined
+    && attestationWorkflow.kind
+      === 'github-actions-read-only-current-evaluation'
+    && Number.isSafeInteger(attestationWorkflow.workflowRunId)
+    && attestationWorkflow.workflowRunId > 0
+    && Number.isSafeInteger(attestationWorkflow.workflowJobId)
+    && attestationWorkflow.workflowJobId > 0
+    && /^[0-9a-f]{40}$/.test(attestationWorkflow.workflowHeadSha);
+
   if (
     readiness.status !== 'eligible-for-activation-review'
     || readiness.contractVersion
@@ -97,7 +114,7 @@ export function createMomentumProductActivationApprovalCandidate(
     || readiness.persistenceConsensus === null
     || readiness.freshnessAttestation.currentNoOpEvaluationAttested !== true
     || readiness.freshnessAttestation.evaluatedAlignmentCutoffAt === null
-    || readiness.freshnessAttestation.attestationPath === null
+    || (!persistedAttestationBound && !workflowAttestationBound)
     || readiness.freshnessAttestation.attestationDigest === null
     || readiness.freshnessAttestation.directionalConsensus
       !== readiness.directionalConsensus
@@ -148,8 +165,9 @@ export function createMomentumProductActivationApprovalCandidate(
       evaluatedAlignmentCutoffAt:
         readiness.freshnessAttestation.evaluatedAlignmentCutoffAt,
       currentEvaluationAttestationPath:
-        readiness.freshnessAttestation.attestationPath as
-          'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+        readiness.freshnessAttestation.attestationPath,
+      currentEvaluationAttestationWorkflow:
+        readiness.freshnessAttestation.attestationWorkflow,
       currentEvaluationAttestationDigest:
         readiness.freshnessAttestation.attestationDigest,
     }),

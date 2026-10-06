@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-06T22:46:44+09:00",
+  "collectedAt": "2026-10-06T22:58:15+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -6163,6 +6163,62 @@
           "sourcePublishedAt": "2021-03-08T14:10:00+09:00",
           "reportedAt": null,
           "collectedAt": "2026-10-06T22:46:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Christmas EveL",
+        "releaseDate": "2021-11-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 471312,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-11-29",
+      "providerPeriodEnd": "2021-12-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T22:58:15+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20211225:stray-kids-christmas-evel-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/12/25/here-are-the-k-pop-artists-with-the-highest-first-week-album-sales-in-2021",
+          "sourcePublicationDate": "2021-12-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:58:15+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "asiatoday-nate:20211213:stray-kids-christmas-evel-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "AsiaToday (via Nate)",
+          "sourceUrl": "https://m.news.nate.com/view/20211213n06205",
+          "sourcePublicationDate": "2021-12-13",
+          "sourcePublishedAt": "2021-12-13T09:16:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:58:15+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
