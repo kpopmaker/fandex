@@ -16,6 +16,7 @@ on:
       - 'lib/alternative-evidence/index.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesEvidence.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesProductionSource.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -61,6 +62,7 @@ on:
       - 'tests/album-provider-authorization-request-v1.test.mts'
       - 'tests/reported-album-sales-evidence-v1.test.mts'
       - 'tests/reported-album-sales-production-source-v1.test.mts'
+      - 'tests/reported-album-sales-production-identity-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -118,6 +120,7 @@ jobs:
           lib/alternative-evidence/index.ts
           lib/alternative-evidence/reportedAlbumSalesEvidence.ts
           lib/alternative-evidence/reportedAlbumSalesProductionSource.ts
+          lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
@@ -168,6 +171,7 @@ jobs:
           tests/album-provider-authorization-request-v1.test.mts
           tests/reported-album-sales-evidence-v1.test.mts
           tests/reported-album-sales-production-source-v1.test.mts
+          tests/reported-album-sales-production-identity-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -227,6 +231,9 @@ jobs:
 
       - name: Reported Album Sales production source contract regression
         run: npx tsx --test tests/reported-album-sales-production-source-v1.test.mts
+
+      - name: Reported Album Sales production identity review regression
+        run: npx tsx --test tests/reported-album-sales-production-identity-v1.test.mts
 
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
