@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-06T21:57:29+09:00",
+  "collectedAt": "2026-10-06T22:46:44+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -6107,6 +6107,62 @@
           "sourcePublishedAt": "2018-05-25T07:04:00+09:00",
           "reportedAt": null,
           "collectedAt": "2026-10-06T21:57:29+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.2",
+        "releaseDate": "2021-03-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 304585,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-03-01",
+      "providerPeriodEnd": "2021-03-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T22:46:44+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "tenasia:2021030965104:ateez-zero-fever-part2-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "TenAsia",
+          "sourceUrl": "https://www.tenasia.co.kr/article/2021030965104",
+          "sourcePublicationDate": "2021-03-09",
+          "sourcePublishedAt": "2021-03-09T11:38:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:46:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "xportsnews:1397919:ateez-zero-fever-part2-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "XportsNews",
+          "sourceUrl": "https://www.xportsnews.com/article/1397919",
+          "sourcePublicationDate": "2021-03-08",
+          "sourcePublishedAt": "2021-03-08T14:10:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:46:44+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
