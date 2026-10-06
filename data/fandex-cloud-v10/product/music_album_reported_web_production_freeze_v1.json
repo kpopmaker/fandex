@@ -1,0 +1,41 @@
+{
+  "contractVersion": "music-album-reported-web-production-freeze-v1",
+  "lifecycle": "productionization-input-freeze",
+  "source": {
+    "repository": "kpopmaker/fandex",
+    "researchPullRequest": 438,
+    "researchBranch": "integration/music-album-point-current-main-v1",
+    "researchHeadSha": "6c44d774a478b878ad0bbf3ab6d8e87eb1601a40",
+    "seedPath": "data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json",
+    "seedBlobSha": "efc9340e337b9ba0372772398c40882a51164b95"
+  },
+  "observedInventory": {
+    "rawDrafts": 136,
+    "rawHanteoFirstWeekDrafts": 134,
+    "dedupedResearchInputReleases": 132,
+    "canonicalArtists": 21,
+    "circleDrafts": 2,
+    "allRawLifecycleResearch": true,
+    "allRawReleaseIdentityCandidate": true
+  },
+  "semanticBoundary": {
+    "productionMetricSemantic": "reported-hanteo-first-week-sales",
+    "underlyingProvider": "Hanteo Chart",
+    "underlyingMetricSemantic": "hanteo-first-week-sales",
+    "unit": "physical-copies",
+    "discoveryOnlyProductionEligible": false,
+    "missingEqualsZero": false,
+    "missingEqualsStable": false,
+    "releaseDateDerivedProviderPeriodAllowed": false,
+    "crossProviderAveragingAllowed": false
+  },
+  "interpretation": {
+    "additionalBulkCollectionRequiredForContractDevelopment": false,
+    "productionEvidenceAlreadyEstablished": false,
+    "releaseIdentityResolutionStillRequired": true,
+    "rightsUsageReviewStillRequired": true,
+    "durableProductionEvidenceStillRequired": true,
+    "methodologyLockStillRequired": true,
+    "productActivationAuthorized": false
+  }
+}
