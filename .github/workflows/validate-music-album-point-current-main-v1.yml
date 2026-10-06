@@ -17,6 +17,7 @@ on:
       - 'lib/alternative-evidence/reportedAlbumSalesEvidence.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesProductionSource.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -63,6 +64,7 @@ on:
       - 'tests/reported-album-sales-evidence-v1.test.mts'
       - 'tests/reported-album-sales-production-source-v1.test.mts'
       - 'tests/reported-album-sales-immutable-evidence-v1.test.mts'
+      - 'tests/reported-album-sales-current-release-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -122,6 +124,7 @@ jobs:
           lib/alternative-evidence/reportedAlbumSalesEvidence.ts
           lib/alternative-evidence/reportedAlbumSalesProductionSource.ts
           lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts
+          lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
@@ -173,6 +176,7 @@ jobs:
           tests/reported-album-sales-evidence-v1.test.mts
           tests/reported-album-sales-production-source-v1.test.mts
           tests/reported-album-sales-immutable-evidence-v1.test.mts
+          tests/reported-album-sales-current-release-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -236,6 +240,9 @@ jobs:
 
       - name: Reported Album Sales immutable evidence contract
         run: npx tsx --test tests/reported-album-sales-immutable-evidence-v1.test.mts
+
+      - name: Reported Album Sales current release semantics
+        run: npx tsx --test tests/reported-album-sales-current-release-v1.test.mts
 
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
