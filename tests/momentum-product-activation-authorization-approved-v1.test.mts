@@ -42,13 +42,19 @@ function readiness(): MomentumProductActivationReadiness {
     persistenceConsensus: 'persistence-not-applicable',
     freshnessAttestation: Object.freeze({
       currentNoOpEvaluationAttested: true,
-      evaluatedAlignmentCutoffAt: '2026-09-27T02:10:05.000Z',
+      evaluatedAlignmentCutoffAt: '2026-10-06T03:33:21.000Z',
       directionalConsensus: 'direction-conflicted',
       persistenceConsensus: 'persistence-not-applicable',
-      attestationPath:
-        'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json',
+      attestationPath: null,
       attestationDigest:
-        'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+        'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
+      attestationWorkflow: Object.freeze({
+        kind: 'github-actions-read-only-current-evaluation' as const,
+        workflowRunId: 37477927827,
+        workflowJobId: 112319410564,
+        workflowHeadSha:
+          '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
+      }),
     }),
     productActivationAuthorized: false,
     productPublicationAuthorized: false,
@@ -67,25 +73,49 @@ function readiness(): MomentumProductActivationReadiness {
 test('explicit owner approval is exact-bound to Momentum current evidence', () => {
   assert.equal(
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.activationAuthorizationId,
-    'ops-activation-momentum-evidence-consensus-20260928t012306z-v1',
+    'ops-activation-momentum-evidence-consensus-20261006t142454z-v2',
   );
   assert.equal(
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.authorizedAt,
-    '2026-09-28T01:23:06.000Z',
+    '2026-10-06T14:24:54.000Z',
   );
   assert.equal(
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE
       .authorizationEvidenceCommentId,
-    5861676033,
+    6018395684,
   );
   assert.equal(
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.authorizedMain,
-    '7b9899e3a85f82c4e82cde1d8383f97d62765d49',
+    '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
   );
   assert.equal(
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.binding
       .currentEvaluationAttestationDigest,
-    'b1f4262f07bc3727b089b2de248128637b36c78afae6d3a9b8207a05f9e19b93',
+    'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
+  );
+  assert.equal(
+    MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.binding
+      .currentEvaluationAttestationPath,
+    null,
+  );
+  assert.deepEqual(
+    MOMENTUM_PRODUCT_ACTIVATION_APPROVAL.binding
+      .currentEvaluationAttestationWorkflow,
+    {
+      kind: 'github-actions-read-only-current-evaluation',
+      workflowRunId: 37477927827,
+      workflowJobId: 112319410564,
+      workflowHeadSha:
+        '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
+    },
+  );
+  assert.equal(
+    MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.productionBindingCurrent,
+    false,
+  );
+  assert.equal(
+    MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.productionRevalidationRequired,
+    true,
   );
 });
 

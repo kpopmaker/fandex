@@ -1,0 +1,122 @@
+name: Validate Momentum activation reauthorization approved v2
+
+on:
+  push:
+    branches:
+      - integration/momentum-product-activation-reauthorization-authorized-v2
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml'
+      - 'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json'
+      - 'data/momentum-product/iu_momentum_product_activation_authorization_approved_v1.json'
+      - 'data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json'
+      - 'data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json'
+      - 'lib/product/activation/momentumProductActivationApproval.ts'
+      - 'lib/server/product/momentumProductPublicationApprovalCandidate.ts'
+      - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - 'tests/momentum-product-activation-approval-candidate-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-approved-evidence-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-approved-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts'
+      - 'tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts'
+      - 'tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts'
+      - 'tests/momentum-product-activation-readiness-v1.test.mts'
+      - 'tests/momentum-product-publication-current-freshness-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+          BASE="$(git merge-base refs/remotes/origin/main HEAD)"
+          git diff --name-only "$BASE...HEAD" | sort > /tmp/changed.txt
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml
+          data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
+          data/momentum-product/iu_momentum_product_activation_authorization_approved_v1.json
+          data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
+          data/momentum-product/iu_momentum_product_activation_owner_attestation_evidence_v1.json
+          lib/product/activation/momentumProductActivationApproval.ts
+          lib/server/product/momentumProductPublicationApprovalCandidate.ts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-product-activation-approval-candidate-v1.test.mts
+          tests/momentum-product-activation-authorization-approved-evidence-v1.test.mts
+          tests/momentum-product-activation-authorization-approved-v1.test.mts
+          tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+          tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+          tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+          tests/momentum-product-activation-readiness-v1.test.mts
+          tests/momentum-product-publication-current-freshness-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
+          test ! -s /tmp/disallowed.txt
+
+      - run: npm ci
+
+      - name: Live currentness
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Activation readiness
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
+
+      - name: Approval candidate
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-approval-candidate-v1.test.mts
+
+      - name: Approved activation authorization
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-v1.test.mts
+
+      - name: Approved activation evidence
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-approved-evidence-v1.test.mts
+
+      - name: Owner candidate evidence
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
+
+      - name: Execution candidate
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
+
+      - name: Execution candidate evidence
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts
+
+      - name: Publication stays fail closed
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-publication-current-freshness-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

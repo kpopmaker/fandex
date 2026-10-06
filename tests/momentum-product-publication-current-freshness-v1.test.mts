@@ -5,15 +5,15 @@ import {
   getMomentumProductPublicationApprovalCandidateForIU,
 } from '../lib/server/product/momentumProductPublicationApprovalCandidate';
 
-test('current Momentum publication approval candidate fails closed after 2026-09-28 source advancement', async () => {
+test('current Momentum publication approval candidate fails closed until activation Production is revalidated', async () => {
   const candidate =
     await getMomentumProductPublicationApprovalCandidateForIU();
 
   assert.equal(candidate.status, 'blocked');
   if (candidate.status !== 'blocked') return;
 
-  assert.equal(candidate.reason, 'activation-authorization-not-ready');
-  assert.equal(candidate.activationAuthorized, false);
+  assert.equal(candidate.reason, 'activation-production-binding-stale');
+  assert.equal(candidate.activationAuthorized, true);
   assert.equal(candidate.productPublicationAuthorized, false);
   assert.equal(candidate.publicRouteActivated, false);
   assert.equal(candidate.publication, 'shadow');
