@@ -113,6 +113,7 @@ function discovery(
     contractVersion:
       REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION,
     canonicalArtistId: 'iu',
+    releaseScope: 'physical-album-eligible',
     canonicalReleaseId: 'release-iu-current',
     releaseTitle: 'Current Release',
     releaseDate: '2026-09-20',
