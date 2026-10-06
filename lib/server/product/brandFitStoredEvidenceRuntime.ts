@@ -34,6 +34,18 @@ const blobSdk: Pick<VercelBlobSdkPort, 'get' | 'list'> =
     },
   });
 
+export const FANDEX_PRODUCT_RUNTIME_ENV =
+  'FANDEX_PRODUCT_RUNTIME_ENV' as const;
+
+function isProductionRuntime(
+  environment: Readonly<Record<string, string | undefined>>,
+): boolean {
+  return (
+    environment[FANDEX_PRODUCT_RUNTIME_ENV]?.trim() === 'production'
+    || environment.VERCEL_ENV?.trim() === 'production'
+  );
+}
+
 function clean(
   value: string | undefined,
 ): string | null {
@@ -75,7 +87,7 @@ export function createProductionBrandFitStoredEvidenceReadStore(
   environment: Readonly<Record<string, string | undefined>>,
   client: Pick<VercelBlobSdkPort, 'get' | 'list'> = blobSdk,
 ) {
-  if (environment.VERCEL_ENV !== 'production') {
+  if (!isProductionRuntime(environment)) {
     throw new Error(
       'brand_fit_stored_evidence_runtime_not_production',
     );
