@@ -1,0 +1,87 @@
+name: Create encrypted Render Vercel token v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/create-encrypted-render-vercel-token-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - name: Create project-scoped Vercel token
+        shell: bash
+        env:
+          NO_COLOR: '1'
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+
+          cat > /tmp/fandex-transfer-public.pem <<'PEM'
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs7lF8cKoxKT1ZCcyto/b
+IkXJWMvFknCghdbBDRIWoKkRru/+gh6V+mG1FAWUXpUxAnBpezo9nazkklsoEAiL
+lTZLDRcH+owzYD8MM1YWjin87vwsQ2Wl85lntWhuIxsqSK5xJSPVYWuZZGnbZL0+
+Bf6s05CWtVsEI/+DP1fqvo0BUb5ISOrGldvJOOHyt8aNR9KWKnm/E46ndqHnZTqF
+1jWm6CjmcOlDMR3Trr4mJvDlQ0aaI4Hz09s+VuC+D0j/+R6LfAwjbDkmLqnlt7ie
+bL3pmbScQbALk0d9rzGzqlCPmY6bh0dmYZCP9NudqpTY5MxSIehrZDZk7iX8kQIO
+xwIDAQAB
+-----END PUBLIC KEY-----
+PEM
+
+          npx --yes vercel@latest tokens add             fandex-render-product-20261006             --project "$VERCEL_PROJECT_ID"             --format json             --token "$VERCEL_TOKEN"             > /tmp/vercel-token-create.json
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const raw = JSON.parse(
+            fs.readFileSync('/tmp/vercel-token-create.json', 'utf8'),
+          );
+
+          const candidates = [];
+          const walk = (value, key = '') => {
+            if (typeof value === 'string') {
+              if (/token/i.test(key) || /^vcp_[A-Za-z0-9_-]+$/.test(value)) {
+                candidates.push(value.trim());
+              }
+              return;
+            }
+            if (Array.isArray(value)) {
+              for (const item of value) walk(item, key);
+              return;
+            }
+            if (value && typeof value === 'object') {
+              for (const [k, v] of Object.entries(value)) walk(v, k);
+            }
+          };
+          walk(raw);
+
+          const token = candidates.find(
+            (value) => value.length >= 32 && !/\s/.test(value),
+          );
+          if (!token) {
+            throw new Error('vercel-auth-token-not-found-in-json-output');
+          }
+
+          fs.writeFileSync('/tmp/new-vercel-token', token, { mode: 0o600 });
+          NODE
+
+          openssl pkeyutl             -encrypt             -pubin             -inkey /tmp/fandex-transfer-public.pem             -pkeyopt rsa_padding_mode:oaep             -pkeyopt rsa_oaep_md:sha256             -in /tmp/new-vercel-token             -out /tmp/new-vercel-token.enc
+
+          encrypted="$(base64 -w0 /tmp/new-vercel-token.enc)"
+          echo "FANDEX_ENCRYPTED_VERCEL_TOKEN=$encrypted"
+
+      - name: Safety cleanup
+        if: always()
+        shell: bash
+        run: |
+          rm -f             /tmp/vercel-token-create.json             /tmp/new-vercel-token             /tmp/new-vercel-token.enc             /tmp/fandex-transfer-public.pem
+          echo "FANDEX_VERCEL_TOKEN_PLAINTEXT_LOGGED=false"
