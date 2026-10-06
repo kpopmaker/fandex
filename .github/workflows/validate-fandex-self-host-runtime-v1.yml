@@ -303,15 +303,6 @@ jobs:
             'Research',
             'real',
           ];
-
-          for (const value of required) {
-            if (!card.includes(value)) {
-              throw new Error(
-                'render-brand-fit-required-value-missing:' + value,
-              );
-            }
-          }
-
           const forbidden = [
             '런타임 확인 필요',
             'durable-stored-evidence-runtime-unavailable',
@@ -319,10 +310,30 @@ jobs:
             'runtime-read-failed',
           ];
 
+          const requiredPresence = Object.fromEntries(
+            required.map((value) => [value, card.includes(value)]),
+          );
+          const blockerPresence = Object.fromEntries(
+            forbidden.map((value) => [value, card.includes(value)]),
+          );
+
+          console.log(JSON.stringify({
+            renderBrandFitRequiredPresence: requiredPresence,
+            renderBrandFitBlockerPresence: blockerPresence,
+          }));
+
           for (const value of forbidden) {
             if (card.includes(value)) {
               throw new Error(
                 'render-brand-fit-runtime-blocker-present:' + value,
+              );
+            }
+          }
+
+          for (const value of required) {
+            if (!card.includes(value)) {
+              throw new Error(
+                'render-brand-fit-required-value-missing:' + value,
               );
             }
           }
