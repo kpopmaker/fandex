@@ -68,13 +68,13 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
     persistenceConsensus: 'persistence-not-applicable',
     attestationPath: null,
     attestationDigest:
-      'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
+      '59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d',
     attestationWorkflow: {
       kind: 'github-actions-read-only-current-evaluation',
       workflowRunId: 37469812804,
-      workflowJobId: 112290054657,
+      workflowJobId: 112311628571,
       workflowHeadSha:
-        'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+        '68f31f9ca993b2f90e124e569dc5f1bbed299d0c',
     },
   });
   assert.deepEqual(result.blockers, []);
@@ -97,7 +97,7 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
 
   assert.equal(
     audit.evaluatedAgainstMain,
-    'efcf3b2a3f1f0180ef2e68a9b619b81d48be3890',
+    '68f31f9ca993b2f90e124e569dc5f1bbed299d0c',
   );
   assert.equal(audit.lastfm.snapshotDate, '2026-10-06');
   assert.equal(audit.lastfm.historyRowCount, 607);
@@ -128,7 +128,7 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
   );
   assert.equal(
     audit.currentEvaluation.attestationDigest,
-    'faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e',
+    '59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d',
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowRunId,
@@ -136,7 +136,7 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowJobId,
-    112290054657,
+    112311628571,
   );
 });
 
