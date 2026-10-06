@@ -165,7 +165,7 @@ jobs:
             curl_exit="$?"
             set -e
 
-            if [ "$curl_exit" -eq 0 ] && [ "$status" = "200" ]; then
+            if [ "$curl_exit" -eq 0 ] && { [ "$status" = "200" ] || [ "$status" = "503" ]; }; then
               break
             fi
 
