@@ -1,0 +1,21 @@
+name: Validate Artist Expansion YouTube full21 adoption readiness v1
+
+on:
+  push:
+    branches:
+      - handoff/artist-expansion-youtube-full21-adoption-readiness-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-full21-adoption-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate YouTube full21 adoption readiness
+        run: python tests/artist-expansion-youtube-full21-adoption-readiness-v1.py
