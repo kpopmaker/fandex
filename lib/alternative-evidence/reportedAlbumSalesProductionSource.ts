@@ -54,6 +54,10 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   unit: 'physical-copies' | null;
   providerPeriodStart: string | null;
   providerPeriodEnd: string | null;
+  observedAt: string | null;
+  reportedAt: string | null;
+  collectedAt: string;
+  sourceEvidence: readonly ReportedAlbumSalesSupportingEvidence[];
   qualifyingEvidenceRefs: readonly string[];
   discoveryEvidenceRefs: readonly string[];
   reportingSources: readonly string[];
@@ -277,6 +281,12 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
 
   blockers.push(...usageBlocks(input.rightsUsageReview));
 
+  const sourceEvidence = Object.freeze(
+    [...observation.supportingEvidence]
+      .sort((left, right) =>
+        left.evidenceId.localeCompare(right.evidenceId))
+      .map(evidence => Object.freeze({ ...evidence })),
+  );
   const qualifyingEvidenceRefs = uniqueSorted(
     qualifyingEvidence.map(evidence => evidence.evidenceId),
   );
@@ -315,6 +325,10 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     unit: observation.unit,
     providerPeriodStart: observation.providerPeriodStart,
     providerPeriodEnd: observation.providerPeriodEnd,
+    observedAt: observation.observedAt,
+    reportedAt: observation.reportedAt,
+    collectedAt: observation.collectedAt,
+    sourceEvidence,
     qualifyingEvidenceRefs,
     discoveryEvidenceRefs,
     reportingSources,
