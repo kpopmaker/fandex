@@ -41,6 +41,8 @@ on:
       - 'lib/product/contracts/albumNormalizationInput.ts'
       - 'lib/product/contracts/albumObservationHistory.ts'
       - 'lib/product/readiness/musicAlbumPointProductReadiness.ts'
+      - 'lib/product/adapters/musicAlbumPointFandexVariableProduct.ts'
+      - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
       - 'lib/product/readiness/musicAlbumPointProductionHandoff.ts'
       - 'lib/product/readiness/albumNormalizationCalibrationGate.ts'
       - 'lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts'
@@ -86,6 +88,8 @@ on:
       - 'data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
+      - 'tests/music-album-point-fandex-variable-product-v1.test.mts'
+      - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
       - 'tests/music-album-point-production-handoff-v1.test.mts'
       - 'tests/direct-album-provider-foundation-v1.test.mts'
       - 'tests/album-integrated-synthetic-validation-v1.test.mts'
@@ -159,6 +163,8 @@ jobs:
           lib/product/contracts/albumNormalizationInput.ts
           lib/product/contracts/albumObservationHistory.ts
           lib/product/readiness/musicAlbumPointProductReadiness.ts
+          lib/product/adapters/musicAlbumPointFandexVariableProduct.ts
+          lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts
           lib/product/readiness/musicAlbumPointProductionHandoff.ts
           lib/product/readiness/albumNormalizationCalibrationGate.ts
           lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts
@@ -209,6 +215,8 @@ jobs:
           data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json
           data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
+          tests/music-album-point-fandex-variable-product-v1.test.mts
+          tests/fandex-current-runtime-assembly-readiness-v1.test.mts
           tests/music-album-point-production-handoff-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
@@ -322,6 +330,12 @@ jobs:
 
       - name: Music/Album Product contract readiness regression
         run: npx tsx --test tests/music-album-point-product-contract-readiness-v1.test.mts
+
+      - name: Music/Album common Product adapter regression
+        run: npx tsx --test tests/music-album-point-fandex-variable-product-v1.test.mts
+
+      - name: FANDEX current runtime assembly regression
+        run: npx tsx --test tests/fandex-current-runtime-assembly-readiness-v1.test.mts
 
       - name: Music/Album Production blocker handoff regression
         run: npx tsx --test tests/music-album-point-production-handoff-v1.test.mts
