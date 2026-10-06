@@ -49,6 +49,9 @@ def main():
     assert decision["fuzzyOrDisplayNameFallbackAllowed"] is False
     assert decision["missingAsZeroAllowed"] is False
 
+    # Historical stage-local gate remains recorded in the durable MBID evidence.
+    assert evidence["nextGate"]["code"] == "ALTERNATIVE_CANONICAL_LASTFM_PROVIDER_OR_RUNTIME_CONTRACT_DECISION_REQUIRED"
+
     lastfm = compat["sources"]["lastfm"]
     assert set(lastfm["unsupportedCanonicalArtistIds"]) >= {"v", "lisa"}
     assert "v," not in seed_text
@@ -60,7 +63,16 @@ def main():
     assert mbid["mbidFallbackResolvesV"] is False
     assert mbid["mbidFallbackResolvesLisa"] is False
     assert mbid["blockerResolved"] is False
-    assert readiness["nextGate"]["code"] == "ALTERNATIVE_CANONICAL_LASTFM_PROVIDER_OR_RUNTIME_CONTRACT_DECISION_REQUIRED"
+
+    # Cumulative readiness advanced after ListenBrainz canonical identity was
+    # validated. Do not require the older stage-local gate here.
+    alt = readiness["crossSourceProductReadiness"]["alternativeCanonicalProviderCandidate"]
+    assert alt["provider"] == "ListenBrainz"
+    assert alt["vCanonicalIdentitySupported"] is True
+    assert alt["lisaCanonicalIdentitySupported"] is True
+    assert alt["lastfmDropInReplacementReady"] is False
+    assert alt["productParityResolved"] is False
+    assert readiness["nextGate"]["code"] == "FULL_21_LISTENBRAINZ_CANONICAL_COHORT_SHADOW_REQUIRED"
 
     safety = evidence["safety"]
     assert all(value is False for value in safety.values())
@@ -68,7 +80,7 @@ def main():
     print(
         "PASS: Last.fm V/LISA MBID fallback rejected | "
         "V=identity-conflated | LISA=mbid-not-found | "
-        "unsupported-kept | product21=BLOCKED"
+        "ListenBrainz-path=advanced | product21=BLOCKED"
     )
 
 
