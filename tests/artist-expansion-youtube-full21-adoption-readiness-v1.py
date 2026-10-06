@@ -42,7 +42,6 @@ def main():
     assert comparison["decisionBoundary"]["mixedFrozenAndRebaselineProductScaleAllowed"] is False
 
     target_ids = set(yt["sourceCandidateCanonicalArtistIds"])
-
     naver = compat["sources"]["naver_news"]
     music = compat["sources"]["music_chart"]
     lastfm = compat["sources"]["lastfm"]
@@ -61,8 +60,6 @@ def main():
     assert cross["productCohort21Ready"] is False
     assert cross["blockerCode"] == "LASTFM_V_LISA_PRODUCT_PARITY_BLOCK"
 
-    # Verify the active master actually enforces the parity/readiness conditions
-    # cited by the handoff contract.
     assert 'if youtube_cohort != product_cohort:' in master_text
     assert 'missing_music = sorted(' in master_text
     assert 'missing_lastfm = sorted(' in master_text
@@ -77,8 +74,16 @@ def main():
     forbidden = readiness["forbiddenNow"]
     assert all(value is True for value in forbidden.values())
 
-    assert readiness["nextGate"]["code"] == "CROSS_SOURCE_21_ARTIST_PRODUCT_COHORT_PARITY_REQUIRED"
-    assert readiness["nextGate"]["primaryBlocker"] == "lastfm:v,lisa"
+    # The cross-source Last.fm blocker remains true, but cumulative research
+    # advanced to a uniform ListenBrainz full21 shadow gate.
+    alt = cross["alternativeCanonicalProviderCandidate"]
+    assert alt["provider"] == "ListenBrainz"
+    assert alt["vCanonicalIdentitySupported"] is True
+    assert alt["lisaCanonicalIdentitySupported"] is True
+    assert alt["lastfmDropInReplacementReady"] is False
+    assert alt["productParityResolved"] is False
+    assert readiness["nextGate"]["code"] == "FULL_21_LISTENBRAINZ_CANONICAL_COHORT_SHADOW_REQUIRED"
+    assert readiness["nextGate"]["primaryBlocker"] == "cross-provider metric comparability"
 
     safety = readiness["safety"]
     assert all(value is False for value in safety.values())
@@ -86,7 +91,7 @@ def main():
     print(
         "PASS: YouTube full21 adoption readiness | "
         "youtubeCandidate=READY | product21=BLOCKED | "
-        "lastfmSupported=19 | blockers=v,lisa | activeProduct=frozen10"
+        "lastfmSupported=19 | ListenBrainz-path=advanced | activeProduct=frozen10"
     )
 
 
