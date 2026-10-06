@@ -202,3 +202,32 @@ test('current IU runtime readiness uses the durable Brand Fit reader and no long
   assert.doesNotMatch(readerSource, /putTextIfAbsent/);
   assert.doesNotMatch(readerSource, /from '@vercel\/blob';[\s\S]*\bput\b/);
 });
+
+
+test('Brand Fit server runtime accepts the same host-neutral Production marker as News while preserving Vercel Production', () => {
+  const readerSource = readFileSync(
+    new URL(
+      '../lib/server/product/brandFitStoredEvidenceRuntime.ts',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(readerSource, /FANDEX_PRODUCT_RUNTIME_ENV/);
+  assert.match(
+    readerSource,
+    /environment\[FANDEX_PRODUCT_RUNTIME_ENV\]\?\.trim\(\) === 'production'/,
+  );
+  assert.match(
+    readerSource,
+    /environment\.VERCEL_ENV\?\.trim\(\) === 'production'/,
+  );
+  assert.match(
+    readerSource,
+    /if \(!isProductionRuntime\(environment\)\)/,
+  );
+  assert.doesNotMatch(
+    readerSource,
+    /if \(environment\.VERCEL_ENV !== 'production'\)/,
+  );
+});
