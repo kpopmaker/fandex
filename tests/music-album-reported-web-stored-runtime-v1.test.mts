@@ -65,7 +65,7 @@ test('Production runtime with no durable objects remains unavailable rather than
 
   assert.equal(result.status, 'unavailable');
   if (result.status !== 'unavailable') return;
-  assert.equal(result.reason, 'stored-evidence-not-found');
+  assert.equal(result.reason, 'durable-stored-evidence-not-found');
 });
 
 test('missing Production credentials fail closed as unavailable without falling back to repository research data', async () => {
