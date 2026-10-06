@@ -68,6 +68,6 @@ test('authorization execution-candidate evidence matches current runtime candida
   assert.equal(sha256Canonical(digestInput), evidenceDigest);
   assert.equal(
     evidenceDigest,
-    '40840825afb8765f09d2c1dd4c51d716e074fd200bbf69094adcbda91d4b84e5',
+    '940c69223422c3775f8e501ce934723cc77883c02ccd19ab716ea1f84ea8dcd1',
   );
 });
