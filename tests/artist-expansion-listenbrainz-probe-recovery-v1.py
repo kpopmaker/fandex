@@ -67,6 +67,26 @@ def main():
     assert interpretation["zeroGrowthEstablished"] is False
     assert interpretation["distinctEpochDeltaCharacterizationEligible"] is False
 
+    fresh = recovery["latestFreshReprobe"]
+    assert fresh["runId"] == 37479984874
+    assert fresh["runAttempt"] == 2
+    assert fresh["jobId"] == 112331126278
+    assert fresh["conclusion"] == "success"
+    assert fresh["targetArtistCount"] == 21
+    assert fresh["exactIdentityArtistCount"] == 21
+    assert fresh["unavailableArtistCount"] == 0
+    assert fresh["identityMismatchArtistCount"] == 0
+    assert fresh["newProviderEpochArtistCount"] == 0
+    assert fresh["staleProviderEpochArtistCount"] == 21
+    assert fresh["positiveAllTimeDeltaArtistCount"] == 0
+    assert fresh["negativeAllTimeDeltaArtistCount"] == 0
+    assert fresh["unchangedAllTimeArtistCount"] == 21
+    assert fresh["artifactId"] == 11421780640
+    assert fresh["artifactDigest"] == "sha256:b8d51fce05cbaf024f0be3c72dd7b806fedebba71633813471b6f759eed992c8"
+
+    assert interpretation["full21CohortObservationStableAcrossHardenedRuns"] is True
+    assert interpretation["latestFreshReprobeNewProviderEpochEstablished"] is False
+
     assert recovery["nextGate"] == "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED"
     assert all(value is False for value in recovery["safety"].values())
 
