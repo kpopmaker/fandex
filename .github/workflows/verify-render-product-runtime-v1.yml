@@ -1,0 +1,61 @@
+name: Verify Render Product runtime v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/verify-render-product-runtime-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Read Render Beta once
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(
+            curl               --silent               --show-error               --retry 0               --max-time 30               --output /tmp/fandex-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
+          )"
+          test "$status" = "200"
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('/tmp/fandex-beta.html', 'utf8');
+          const start = html.indexOf('brandFitPoint');
+          const end = html.indexOf('comebackActivityPoint', start + 1);
+          if (start < 0 || end < 0) {
+            throw new Error('brand-fit-card-not-found');
+          }
+          const card = html.slice(start, end);
+          const unavailable =
+            card.includes('durable-stored-evidence-runtime-unavailable');
+          const notFound =
+            card.includes('durable-stored-evidence-not-found');
+          console.log(
+            'FANDEX_RENDER_BRAND_FIT_RUNTIME_UNAVAILABLE='
+              + String(unavailable),
+          );
+          console.log(
+            'FANDEX_RENDER_BRAND_FIT_STORED_EVIDENCE_NOT_FOUND='
+              + String(notFound),
+          );
+          console.log(
+            'FANDEX_RENDER_BRAND_FIT_CARD_RESOLVED='
+              + String(!unavailable && !notFound),
+          );
+          if (unavailable || notFound) process.exit(1);
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_RENDER_RUNTIME_PROBE_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_RENDER_RUNTIME_PROBE_DATABASE_WRITES=0"
+          echo "FANDEX_RENDER_RUNTIME_PROBE_BLOB_WRITES=0"
+          echo "FANDEX_RENDER_RUNTIME_PROBE_RETRIES=0"
