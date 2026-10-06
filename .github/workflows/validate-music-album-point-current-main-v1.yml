@@ -19,6 +19,7 @@ on:
       - 'lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesCurrentReleaseReview.ts'
       - 'lib/alternative-evidence/reportedWebUsageReviewRequest.ts'
       - 'lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
@@ -132,6 +133,7 @@ jobs:
           lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts
           lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts
           lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts
+          lib/alternative-evidence/reportedAlbumSalesCurrentReleaseReview.ts
           lib/alternative-evidence/reportedWebUsageReviewRequest.ts
           lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
