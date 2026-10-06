@@ -1,0 +1,84 @@
+{
+  "version": "sns_fandom_youtube_window_rebaseline_candidate_v2",
+  "state": "candidate-ready-owner-approval-required",
+  "preparedAtRepositoryHeadSha": "fd5d0330f8eddd04406b308e65b076ca74ccdc99",
+  "currentMaterializedWindow": {
+    "measurementWindowStart": "2026-10-05T22:00:00.000Z",
+    "measurementWindowEnd": "2027-10-06T22:00:00.000Z",
+    "durationDays": 366,
+    "reactionSnapshotRunsPerDay": 24,
+    "state": "materialized-with-observed-continuity-gaps",
+    "continuityGapIssueRef": "github-issue://kpopmaker/fandex/issues/509",
+    "historicalMissingSlotsPreservedAsMissing": true
+  },
+  "renderBackedContinuity": {
+    "authority": "render-cron-to-github-workflow-dispatch",
+    "renderServiceName": "fandex-sns-fandom-hourly-external-trigger",
+    "renderServiceId": "crn-db2ekl6i0phs73ederu0",
+    "renderSchedule": "7 * * * *",
+    "renderRedeployId": "dep-db2g8rgm7kps73eoh9tg",
+    "renderRedeployedCommitSha": "027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34",
+    "authorizedProviderRuntimeSha": "f030eaf54be5a08d517a7712dafb1596cb541ba6",
+    "continuityEvidenceRef": "github-issue://kpopmaker/fandex/issues/509#issuecomment-6027539700",
+    "observedFirstSlotStart": "2026-10-06T15:00:00.000Z",
+    "observedLastSlotStart": "2026-10-06T23:00:00.000Z",
+    "observedConsecutiveSlotCount": 9,
+    "renderTriggeredWorkflowRuns": [
+      "github-actions://kpopmaker/fandex/runs/37484670341",
+      "github-actions://kpopmaker/fandex/runs/37493144170",
+      "github-actions://kpopmaker/fandex/runs/37501047298",
+      "github-actions://kpopmaker/fandex/runs/37508819694",
+      "github-actions://kpopmaker/fandex/runs/37516537495",
+      "github-actions://kpopmaker/fandex/runs/37524008549",
+      "github-actions://kpopmaker/fandex/runs/37531554512",
+      "github-actions://kpopmaker/fandex/runs/37538513096",
+      "github-actions://kpopmaker/fandex/runs/37544731629"
+    ],
+    "fallbackIdempotencyEvidence": {
+      "verified": true,
+      "observedFallbackRuns": [
+        "github-actions://kpopmaker/fandex/runs/37487838957",
+        "github-actions://kpopmaker/fandex/runs/37501675150",
+        "github-actions://kpopmaker/fandex/runs/37527498363",
+        "github-actions://kpopmaker/fandex/runs/37535276525"
+      ],
+      "fallbackState": "already-recorded",
+      "fallbackProviderCallsPerformed": false,
+      "providerExecutionsPerUtcHourlySlotMax": 1
+    }
+  },
+  "supersedingWindowCandidate": {
+    "measurementWindowStart": "2026-10-06T15:00:00.000Z",
+    "measurementWindowEnd": "2027-10-07T15:00:00.000Z",
+    "durationDays": 366,
+    "reactionSnapshotRunsPerDay": 24,
+    "boundaryBasis": "first-verified-render-backed-hourly-slot-after-token-propagating-redeploy",
+    "canonicalWindowRebaselineAuthorized": false,
+    "canonicalMutationPerformed": false,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false,
+    "retrospectiveProviderObservationAllowed": false
+  },
+  "latestVerifiedCoverage": {
+    "lastSlotStart": "2026-10-06T23:00:00.000Z",
+    "latestReceiptPath": "sns-fandom/youtube-audit/recurring/v1/receipts/20261006T230000Z.json",
+    "receiptCount": 13,
+    "totalProviderCallsObserved": 1609,
+    "totalQuotaUnitsObserved": 1609,
+    "trueZeroReceiptCount": 1
+  },
+  "authorityBoundary": {
+    "schedulerMutationAuthorizedByCandidate": false,
+    "recurringProviderExecutionAuthorizedByCandidate": false,
+    "providerSubmissionAuthorized": false,
+    "productionCollectionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "notes": [
+    "This is a rebaseline candidate only. It does not mutate the current canonical window.",
+    "The candidate boundary is the first verified Render-backed hourly slot after the approved redeploy that propagated the GitHub dispatch token.",
+    "The nine observed consecutive slots are recorded as evidence, not as an invented minimum threshold for future approval.",
+    "Historical missing slots remain Missing and are not converted to zero or backfilled.",
+    "A separate explicit owner approval bound to the final rebaseline contract is required before any canonical supersession mutation."
+  ]
+}
