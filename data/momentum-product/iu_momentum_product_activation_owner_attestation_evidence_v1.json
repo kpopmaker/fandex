@@ -1,6 +1,6 @@
 {
   "contractVersion": "momentum-product-activation-owner-attestation-evidence-v1",
-  "evaluatedAgainstMain": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
+  "evaluatedAgainstMain": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c",
   "canonicalArtistId": "iu",
   "candidate": {
     "status": "ready-for-owner-attestation",
@@ -31,10 +31,10 @@
         "currentEvaluationAttestationWorkflow": {
           "kind": "github-actions-read-only-current-evaluation",
           "workflowRunId": 37469812804,
-          "workflowJobId": 112290054657,
-          "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+          "workflowJobId": 112311628571,
+          "workflowHeadSha": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c"
         },
-        "currentEvaluationAttestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e"
+        "currentEvaluationAttestationDigest": "59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d"
       }
     },
     "authorizationWithoutApproval": {
@@ -67,10 +67,10 @@
       "attestationWorkflow": {
         "kind": "github-actions-read-only-current-evaluation",
         "workflowRunId": 37469812804,
-        "workflowJobId": 112290054657,
-        "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+        "workflowJobId": 112311628571,
+        "workflowHeadSha": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c"
       },
-      "attestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e"
+      "attestationDigest": "59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d"
     }
   },
   "boundary": {
@@ -85,5 +85,5 @@
     "productionVerifierExecutions": 0
   },
   "requiredNextGate": "explicit-momentum-product-activation-authorization",
-  "evidenceDigest": "f4801d3ecc736b0b00d7cde50c247b908cf7e8ebdcbffc3a76bbf4b493f73384"
+  "evidenceDigest": "ff4739e28a35b814d3a778e823b7581a41095668daafeeaa7708ab4c2ebac7e4"
 }
