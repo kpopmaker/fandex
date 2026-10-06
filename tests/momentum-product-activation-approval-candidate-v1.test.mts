@@ -38,7 +38,7 @@ test('current IU Momentum yields an owner-attestation candidate without authoriz
     result.approval.binding.currentEvaluationAttestationWorkflow,
     {
       kind: 'github-actions-read-only-current-evaluation',
-      workflowRunId: 37469812804,
+      workflowRunId: 37477927827,
       workflowJobId: 112319410564,
       workflowHeadSha:
         '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
