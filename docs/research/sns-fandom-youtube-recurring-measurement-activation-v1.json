@@ -1,13 +1,16 @@
 {
   "version": "sns_fandom_youtube_recurring_measurement_activation_v1",
-  "state": "activation-bound-awaiting-first-successful-slot",
+  "state": "active-canonical-window-materialized-continuity-gap-observed",
   "historicalMeasurementWindowStart": "2026-10-03T15:00:00.000Z",
   "historicalMeasurementWindowEnd": "2027-10-04T15:00:00.000Z",
-  "measurementWindowStart": null,
-  "measurementWindowEnd": null,
+  "measurementWindowStart": "2026-10-05T22:00:00.000Z",
+  "measurementWindowEnd": "2027-10-06T22:00:00.000Z",
   "windowDurationDays": 366,
   "reactionSnapshotRunsPerDay": 24,
   "intendedCron": "17 * * * *",
+  "redundantFallbackCronCandidate": "47 * * * *",
+  "schedulerTriggerOpportunitiesPerHourCandidate": 2,
+  "providerExecutionsPerUtcHourlySlotMax": 1,
   "enabled": true,
   "recurringExecutionAuthorized": true,
   "schedulerMutationAuthorized": true,
@@ -22,14 +25,21 @@
   "providerSubmissionAuthorized": false,
   "productActivationAuthorized": false,
   "canonicalWindowMaterialization": "first-successful-exact-utc-hour-slot",
+  "firstSuccessfulScheduledRunRef": "github-actions://kpopmaker/fandex/runs/37383756870",
+  "firstReceiptPath": "sns-fandom/youtube-audit/recurring/v1/receipts/20261005T220000Z.json",
+  "continuityRepairIssueRef": "github-issue://kpopmaker/fandex/issues/509",
+  "continuityGapObserved": true,
+  "observedMissingSlotStarts": [
+    "2026-10-05T23:00:00.000Z",
+    "2026-10-06T00:00:00.000Z"
+  ],
   "syntheticBackfillAllowed": false,
   "retrospectiveReceiptSynthesisAllowed": false,
   "notes": [
-    "The historical window remains historical owner intent only and is not backfilled.",
-    "The replacement canonical window is not preselected; it is immutably materialized from the first successful exact UTC-hour recurring slot.",
-    "The hourly workflow checks out the exact authorized runtime revision so unrelated later main changes cannot silently alter provider execution code.",
-    "The scheduler minute is intentionally offset from minute 0 because GitHub documents elevated schedule delay/drop risk at the start of each hour; the runtime still assigns a real observation to its current UTC hourly slot.",
-    "The existing private Vercel Blob credential is reused as infrastructure; snsFandom objects are isolated under sns-fandom/youtube-audit/recurring/v1.",
+    "The first real scheduled recurring slot completed successfully and materialized the canonical 366-day window.",
+    "No recurring workflow execution evidence exists for the listed missing hourly slots; they are not zeroes and are not backfilled.",
+    "The candidate second in-hour scheduler opportunity is redundancy only; immutable claim/receipt idempotency still permits at most one provider execution per UTC hourly slot.",
+    "The exact authorized provider runtime revision remains pinned so scheduler redundancy does not alter provider execution code.",
     "Provider submission, Production collection, Product/Risk activation, raw video identifiers, and raw statistics remain outside this authorization."
   ]
 }
