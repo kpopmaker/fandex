@@ -1,0 +1,142 @@
+{
+  "version": "youtube_v3_full21_adoption_readiness_v1",
+  "status": "youtube_source_candidate_ready_product_cohort_blocked",
+  "decision": {
+    "gate": "FULL_21_REBASELINE_COHORT_ADOPTION_DECISION_REQUIRED",
+    "selectedOption": "adopt_full_21_as_youtube_source_candidate_only",
+    "rationale": [
+      "A complete 21-artist / 74-video common reviewed seed policy exists.",
+      "A single common live metric snapshot returned 74/74 videos with zero imputation.",
+      "All 21 artists were scored with the same recovered YouTube v3 formula.",
+      "Frozen and common-rebaseline points are not scalar-equivalent, so partial mixing is forbidden.",
+      "The full 21 common baseline is therefore the only technically coherent YouTube expansion candidate.",
+      "Current FANDEX Master v10 requires Product cohort parity across Naver, YouTube, Music, and Last.fm readiness; Last.fm explicitly marks V and LISA unsupported under its current name-query model."
+    ]
+  },
+  "youtubeReadiness": {
+    "sourceCandidateArtistCount": 21,
+    "sourceCandidateCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt",
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ],
+    "commonSeedVideoCount": 74,
+    "measurementRunId": 37398978361,
+    "measurementReturnedVideoCount": 74,
+    "measurementZeroImputationUsed": false,
+    "formulaVersion": "youtube_publish_v3_uncapped_additive_scaled",
+    "distributionComparisonVersion": "youtube_v3_common_distribution_comparison_v1",
+    "commonBaselineTechnicallyEstablished": true,
+    "mixedFrozenAndRebaselineScaleAllowed": false,
+    "youtubeSourceCandidateAdoptionReady": true
+  },
+  "crossSourceProductReadiness": {
+    "masterContract": {
+      "path": "scripts/fandex-cloud-migration/source/fandex_master_score_v10.py",
+      "productCohortAuthority": "naver_youtube_exact_parity",
+      "requiresMusicSuperset": true,
+      "requiresLastfmScoreReadySuperset": true,
+      "requiresLastfmMode": "rolling3_50_rolling7_50",
+      "requiresLastfmStatus": "ok",
+      "expandedYoutubeCohortRequiresLineageEligibility": true
+    },
+    "target21": {
+      "naverNews": {
+        "supportedCount": 21,
+        "blockingCanonicalArtistIds": []
+      },
+      "musicChart": {
+        "supportedCount": 21,
+        "blockingCanonicalArtistIds": []
+      },
+      "lastfm": {
+        "supportedCount": 19,
+        "unsupportedCount": 2,
+        "unsupportedCanonicalArtistIds": [
+          "v",
+          "lisa"
+        ],
+        "unsupportedReason": "Current Last.fm name-query model cannot guarantee canonical-only stats for V and LISA; explicit reviewed incompatibility remains in the active compatibility registry."
+      }
+    },
+    "productCohort21Ready": false,
+    "blockerCode": "LASTFM_V_LISA_PRODUCT_PARITY_BLOCK",
+    "blockerCanonicalArtistIds": [
+      "v",
+      "lisa"
+    ],
+    "note": "This is a cross-source Product cohort blocker, not a YouTube source-readiness failure."
+  },
+  "allowedNow": {
+    "treatFull21CommonBaselineAsYoutubeSourceCandidate": true,
+    "retainFrozen10AsActiveProductYoutubeCohort": true,
+    "handoffCandidateToProductRuntime": true,
+    "continueOfflineProductEligibilitySimulation": true
+  },
+  "forbiddenNow": {
+    "mixFrozenAndRebaselineYoutubePoints": true,
+    "expandActiveProductYoutubeCohortTo21": true,
+    "markVOrLisaLastfmMissingAsZero": true,
+    "markVOrLisaLastfmUnsupportedAsMissing": true,
+    "alterLastfmUnsupportedEvidenceWithoutNewProviderEvidence": true,
+    "modifyActiveYoutubeRanking": true,
+    "modifyProductRuntime": true,
+    "deploy": true,
+    "mutateDatabase": true,
+    "activateScheduler": true,
+    "mergeMain": true
+  },
+  "resolutionPaths": [
+    {
+      "id": "resolve_lastfm_v_lisa_with_canonical_specific_provider_evidence",
+      "ownerScope": "Artist Expansion / Generic Provider Binding",
+      "condition": "A provider/query model must produce reviewed canonical-specific Last.fm-compatible evidence for both V and LISA without fuzzy or same-name aggregation."
+    },
+    {
+      "id": "change_product_runtime_missing_source_contract",
+      "ownerScope": "Product Runtime / Production Operations",
+      "condition": "Product runtime explicitly adopts a source-specific missing/unsupported policy that does not coerce Missing/Unsupported to zero and passes full Product validation."
+    },
+    {
+      "id": "keep_product_frozen10",
+      "ownerScope": "Production Operations",
+      "condition": "No cross-source change; keep current Product cohort while retaining the 21-artist YouTube baseline as validated candidate evidence."
+    }
+  ],
+  "nextGate": {
+    "code": "CROSS_SOURCE_21_ARTIST_PRODUCT_COHORT_PARITY_REQUIRED",
+    "primaryBlocker": "lastfm:v,lisa",
+    "note": "YouTube Artist Expansion source work is technically ready at 21. Product adoption cannot proceed under the current master contract until cross-source parity is resolved or Product Runtime explicitly changes its source-availability contract."
+  },
+  "safety": {
+    "missingIsZero": false,
+    "missingIsUnsupported": false,
+    "unsupportedIsMissing": false,
+    "automaticProductExpansionAllowed": false,
+    "automaticRescalingAllowed": false,
+    "activeYoutubeRankingModified": false,
+    "productRuntimeModified": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
