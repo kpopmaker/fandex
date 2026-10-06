@@ -9,6 +9,7 @@ export type ReportedAlbumSalesCurrentReleaseDiscovery = Readonly<{
   contractVersion:
     typeof REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION;
   canonicalArtistId: string;
+  releaseScope: 'physical-album-eligible';
   canonicalReleaseId: string | null;
   releaseTitle: string | null;
   releaseDate: string | null;
@@ -163,6 +164,7 @@ export function selectReportedAlbumSalesCurrentRelease(
       !== REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION
     || canonicalArtistId === ''
     || discovery.canonicalArtistId !== canonicalArtistId
+    || discovery.releaseScope !== 'physical-album-eligible'
     || !validInstant(discovery.collectedAt)
     || (
       discovery.observedAt !== null
