@@ -8,6 +8,10 @@ import {
   type ReportedAlbumSalesSourceTier,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  buildReportedAlbumSalesProductionIdentityReviewRequest,
+  createReportedAlbumSalesProductionIdentityBinding,
+} from '../lib/alternative-evidence/reportedAlbumSalesProductionIdentity';
+import {
   buildReportedAlbumSalesProductionSourceCandidate,
   buildReportedAlbumSalesProductionSourceSnapshot,
   REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_CONTRACT_VERSION,
@@ -106,6 +110,25 @@ function observation(input: Readonly<{
   });
 }
 
+function reviewedReleaseBinding(
+  source: ReportedAlbumSalesObservation,
+) {
+  const request =
+    buildReportedAlbumSalesProductionIdentityReviewRequest(source);
+  return createReportedAlbumSalesProductionIdentityBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      canonicalReleaseId: 'release:iu:test-album',
+      supportingEvidenceRefs: [
+        'canonical-release-registry:iu:test-album',
+      ],
+      reviewerRef: 'reviewer:music-album:fixture',
+      reviewedAt: '2026-10-08T10:00:00+09:00',
+    },
+  });
+}
+
 test('reported web evidence becomes a truthful production-source candidate without direct or licensed provider claims', () => {
   const candidate = buildReportedAlbumSalesProductionSourceCandidate({
     observation: observation({
@@ -141,6 +164,7 @@ test('reported web evidence becomes a truthful production-source candidate witho
   assert.equal(candidate.productSourceEligible, false);
   assert.equal(candidate.rightsState, 'review-required');
   assert.ok(candidate.blockers.includes('release-identity-not-resolved'));
+  assert.ok(candidate.blockers.includes('release-identity-binding-required'));
   assert.ok(
     candidate.blockers.includes(
       'rights-commercial-use-not-authorized',
@@ -153,11 +177,13 @@ test('reported web evidence becomes a truthful production-source candidate witho
   );
 });
 
-test('resolved Tier B reviewed web evidence can become source-eligible only after explicit required rights are granted', () => {
+test('Tier B reviewed web evidence becomes source-eligible only after explicit rights and human-reviewed release binding', () => {
+  const source = observation();
   const candidate = buildReportedAlbumSalesProductionSourceCandidate({
-    observation: observation(),
+    observation: source,
     asOfDate: '2026-10-08',
     rights: authorizedReviewedWebRights,
+    releaseIdentityBinding: reviewedReleaseBinding(source),
   });
 
   assert.equal(candidate.evidenceQuality, 'provider-attributed-secondary');
@@ -255,4 +281,25 @@ test('Production-source contract defines no arbitrary corpus threshold, score, a
   assert.equal(snapshot.productActivationAuthorized, false);
   assert.equal(snapshot.publicPublicationAuthorized, false);
   assert.equal(snapshot.methodologyLocked, false);
+});
+
+test('raw resolved identity flag without a Production identity binding remains blocked', () => {
+  const candidate = buildReportedAlbumSalesProductionSourceCandidate({
+    observation: observation({
+      identityState: 'resolved',
+      canonicalReleaseId: 'release:iu:test-album',
+    }),
+    asOfDate: '2026-10-08',
+    rights: authorizedReviewedWebRights,
+  });
+
+  assert.equal(candidate.releaseIdentityState, 'resolved');
+  assert.equal(candidate.releaseIdentityReviewState, 'unbound');
+  assert.equal(candidate.productSourceEligible, false);
+  assert.ok(
+    candidate.blockers.includes('release-identity-binding-required'),
+  );
+  assert.ok(
+    candidate.blockers.includes('release-identity-not-resolved'),
+  );
 });
