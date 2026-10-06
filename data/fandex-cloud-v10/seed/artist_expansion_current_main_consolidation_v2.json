@@ -72,7 +72,14 @@
     528
   ],
   "preservation": {
-    "sourceBlobIdentityRequired": true,
+    "sourceEvidencePreserved": true,
+    "sourceBlobIdentityPreservedCount": 49,
+    "consolidationAdjustedFileCount": 2,
+    "consolidationAdjustedFiles": [
+      "tests/artist-expansion-lastfm-v-lisa-mbid-resolution-v1.py",
+      "tests/artist-expansion-youtube-full21-adoption-readiness-v1.py"
+    ],
+    "adjustmentReason": "Stage-local nextGate assertions were updated for cumulative consolidation context; durable evidence and product-safety semantics are unchanged.",
     "activeProductCohortChanged": false,
     "lastfmSeedChanged": false,
     "productRuntimeChanged": false,
