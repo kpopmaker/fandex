@@ -59,8 +59,18 @@ jobs:
           assert d["currentReadiness"]["youtubeFull21SourceCandidateReady"] is True
           assert d["currentReadiness"]["listenbrainzCanonicalCoverage"] == "21/21"
           assert d["currentReadiness"]["listenbrainzProviderNewEpochObserved"] == "0/21"
-          assert all(value is False for key,value in d["preservation"].items() if key != "sourceBlobIdentityRequired")
-          assert d["preservation"]["sourceBlobIdentityRequired"] is True
+          pz=d["preservation"]
+          assert pz["sourceEvidencePreserved"] is True
+          assert pz["sourceBlobIdentityPreservedCount"] == 49
+          assert pz["consolidationAdjustedFileCount"] == 2
+          assert len(pz["consolidationAdjustedFiles"]) == 2
+          assert pz["activeProductCohortChanged"] is False
+          assert pz["lastfmSeedChanged"] is False
+          assert pz["productRuntimeChanged"] is False
+          assert pz["schedulerChanged"] is False
+          assert pz["databaseChanged"] is False
+          assert pz["deploymentAuthorized"] is False
+          assert pz["mainMergeAuthorized"] is False
           for path in d["consolidatedSourceFiles"]:
               assert Path(path).is_file(), path
           print("PASS: consolidation manifest | files=51 | next=provider-update-epoch")
