@@ -23,6 +23,7 @@ on:
       - 'lib/alternative-evidence/reportedWebUsageReviewRequest.ts'
       - 'lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts'
       - 'lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts'
+      - 'lib/server/product/musicAlbumPointCurrentRuntimeRead.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -71,6 +72,7 @@ on:
       - 'tests/reported-album-sales-production-identity-v1.test.mts'
       - 'tests/reported-album-sales-production-durable-v1.test.mts'
       - 'tests/music-album-reported-web-stored-runtime-v1.test.mts'
+      - 'tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts'
       - 'tests/reported-web-usage-review-request-v1.test.mts'
       - 'tests/reported-album-sales-current-evidence-gap-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
@@ -139,6 +141,7 @@ jobs:
           lib/alternative-evidence/reportedWebUsageReviewRequest.ts
           lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts
           lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts
+          lib/server/product/musicAlbumPointCurrentRuntimeRead.ts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
@@ -192,6 +195,7 @@ jobs:
           tests/reported-album-sales-production-identity-v1.test.mts
           tests/reported-album-sales-production-durable-v1.test.mts
           tests/music-album-reported-web-stored-runtime-v1.test.mts
+          tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts
           tests/reported-web-usage-review-request-v1.test.mts
           tests/reported-album-sales-current-evidence-gap-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
@@ -264,6 +268,9 @@ jobs:
 
       - name: Music Album reported web stored runtime regression
         run: npx tsx --test tests/music-album-reported-web-stored-runtime-v1.test.mts
+
+      - name: Music Album reported web current runtime wiring
+        run: npx tsx --test tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts
 
       - name: Reported Web rights review request regression
         run: npx tsx --test tests/reported-web-usage-review-request-v1.test.mts
