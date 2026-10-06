@@ -59,3 +59,5 @@ jobs:
           echo "FANDEX_RENDER_RUNTIME_PROBE_DATABASE_WRITES=0"
           echo "FANDEX_RENDER_RUNTIME_PROBE_BLOB_WRITES=0"
           echo "FANDEX_RENDER_RUNTIME_PROBE_RETRIES=0"
+
+# rerun after Render main 027d77a4 + env binding approval
