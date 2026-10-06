@@ -10,6 +10,10 @@ import {
   type ReportedAlbumSalesObservation,
   type ReportedAlbumSalesSourceTier,
 } from './reportedAlbumSalesEvidence';
+import {
+  validateReportedAlbumSalesProductionIdentityBinding,
+  type ReportedAlbumSalesProductionIdentityBinding,
+} from './reportedAlbumSalesProductionIdentity';
 
 export const REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_CONTRACT_VERSION =
   'reported-album-sales-production-source-v1' as const;
@@ -42,6 +46,7 @@ export type ReportedAlbumSalesProductionBlocker =
   | 'provider-period-not-seven-calendar-days'
   | 'first-week-period-incomplete'
   | 'release-identity-not-resolved'
+  | 'release-identity-binding-invalid'
   | 'source-tier-not-production-eligible'
   | 'source-publication-date-missing'
   | 'conflicting-evidence'
@@ -77,6 +82,8 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   canonicalReleaseId: string | null;
   releaseIdentityState:
     ReportedAlbumSalesObservation['release']['identityState'];
+  releaseIdentityBindingId: string | null;
+  releaseIdentityReviewState: 'unbound' | 'human-reviewed';
   releaseTitle: string;
   releaseDate: string | null;
   edition: string | null;
@@ -189,6 +196,9 @@ function productionBlockers(input: Readonly<{
   asOfDate: string;
   conflict: boolean;
   rights: SourceAuthorizationDimensions;
+  identityBindingProvided: boolean;
+  identityBindingValid: boolean;
+  identityResolved: boolean;
 }>): readonly ReportedAlbumSalesProductionBlocker[] {
   const { observation } = input;
   const blockers: ReportedAlbumSalesProductionBlocker[] = [];
@@ -234,9 +244,12 @@ function productionBlockers(input: Readonly<{
   }
 
   if (
-    observation.release.identityState !== 'resolved'
-    || observation.release.canonicalReleaseId === null
+    input.identityBindingProvided
+    && !input.identityBindingValid
   ) {
+    blockers.push('release-identity-binding-invalid');
+  }
+  if (!input.identityResolved) {
     blockers.push('release-identity-not-resolved');
   }
 
@@ -276,6 +289,8 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     asOfDate: string;
     rights: SourceAuthorizationDimensions;
     conflict?: boolean;
+    releaseIdentityBinding?:
+      ReportedAlbumSalesProductionIdentityBinding | null;
   }>,
 ): ReportedAlbumSalesProductionSourceCandidate {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.asOfDate)) {
@@ -285,11 +300,31 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
   }
 
   const conflict = input.conflict ?? false;
+  const releaseIdentityBinding =
+    input.releaseIdentityBinding ?? null;
+  const identityBindingValid =
+    releaseIdentityBinding !== null
+    && validateReportedAlbumSalesProductionIdentityBinding(
+      releaseIdentityBinding,
+      input.observation,
+    );
+  const canonicalReleaseId = identityBindingValid
+    ? releaseIdentityBinding.canonicalReleaseId
+    : input.observation.release.canonicalReleaseId;
+  const releaseIdentityState = identityBindingValid
+    ? 'resolved' as const
+    : input.observation.release.identityState;
+  const identityResolved =
+    releaseIdentityState === 'resolved'
+    && canonicalReleaseId !== null;
   const blockers = productionBlockers({
     observation: input.observation,
     asOfDate: input.asOfDate,
     conflict,
     rights: input.rights,
+    identityBindingProvided: releaseIdentityBinding !== null,
+    identityBindingValid,
+    identityResolved,
   });
   const currentAvailability = availability(
     input.observation,
@@ -316,30 +351,18 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     observationScopeId: input.observation.observationScopeId,
     supportingEvidence: evidenceRefs,
     revision: input.observation.revision,
+    releaseIdentityBindingId:
+      identityBindingValid
+        ? releaseIdentityBinding.bindingId
+        : null,
   });
   const durableNormalizedStorageEligible =
     currentRightsState === 'authorized'
     && currentAvailability === 'available'
-    && blockers.every(blocker =>
-      !blocker.startsWith('rights-')
-      && blocker !== 'first-week-period-incomplete'
-      && blocker !== 'conflicting-evidence'
-      && blocker !== 'release-identity-not-resolved'
-      && blocker !== 'source-tier-not-production-eligible'
-      && blocker !== 'source-publication-date-missing'
-      && blocker !== 'research-observation-not-usable'
-      && blocker !== 'metric-semantic-not-hanteo-first-week'
-      && blocker !== 'underlying-provider-mismatch'
-      && blocker !== 'unit-mismatch'
-      && blocker !== 'exact-value-unavailable'
-      && blocker !== 'provider-period-incomplete'
-      && blocker !== 'provider-period-invalid'
-      && blocker !== 'provider-period-not-seven-calendar-days',
-    );
+    && blockers.length === 0;
 
   const productSourceEligible =
-    durableNormalizedStorageEligible
-    && blockers.length === 0;
+    durableNormalizedStorageEligible;
 
   return Object.freeze({
     contractVersion:
@@ -350,10 +373,16 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     observationId: input.observation.observationId,
     observationScopeId: input.observation.observationScopeId,
     canonicalArtistId: input.observation.canonicalArtistId,
-    canonicalReleaseId:
-      input.observation.release.canonicalReleaseId,
-    releaseIdentityState:
-      input.observation.release.identityState,
+    canonicalReleaseId,
+    releaseIdentityState,
+    releaseIdentityBindingId:
+      identityBindingValid
+        ? releaseIdentityBinding.bindingId
+        : null,
+    releaseIdentityReviewState:
+      identityBindingValid
+        ? 'human-reviewed' as const
+        : 'unbound' as const,
     releaseTitle: input.observation.release.releaseTitle,
     releaseDate: input.observation.release.releaseDate,
     edition: input.observation.release.edition,
@@ -397,6 +426,8 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
     history: ReportedAlbumSalesHistory;
     asOf: string;
     rights: SourceAuthorizationDimensions;
+    identityBindings?:
+      readonly ReportedAlbumSalesProductionIdentityBinding[];
   }>,
 ): ReportedAlbumSalesProductionSourceSnapshot {
   if (
@@ -423,6 +454,18 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
   );
   const asOfDate = input.asOf.slice(0, 10);
   const conflicts = new Set(read.conflictingScopeIds);
+  const identityBindings = new Map<
+    string,
+    ReportedAlbumSalesProductionIdentityBinding
+  >();
+  for (const binding of input.identityBindings ?? []) {
+    if (identityBindings.has(binding.observationId)) {
+      throw new Error(
+        'reported_album_sales_production_identity_binding_duplicate',
+      );
+    }
+    identityBindings.set(binding.observationId, binding);
+  }
   const candidates = Object.freeze(
     read.activeObservations
       .filter(observation =>
@@ -434,6 +477,8 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
           asOfDate,
           rights: input.rights,
           conflict: conflicts.has(observation.observationScopeId),
+          releaseIdentityBinding:
+            identityBindings.get(observation.observationId) ?? null,
         }))
       .sort((left, right) =>
         left.observationId.localeCompare(right.observationId)),
