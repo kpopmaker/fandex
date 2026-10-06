@@ -1,0 +1,61 @@
+name: Bind Render Product Vercel token v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/bind-render-product-vercel-token-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  bind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      FANDEX_RENDER_API_KEY: ${{ secrets.FANDEX_RENDER_API_KEY }}
+      RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
+      RENDER_SERVICE_ID: srv-db1fgpegekts73djbji0
+    steps:
+      - name: Select credential without logging values
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          render_token="$RENDER_API_KEY"
+          if [ -z "$render_token" ]; then render_token="$FANDEX_RENDER_API_KEY"; fi
+          if [ -z "$render_token" ]; then render_token="$RENDER_TOKEN"; fi
+          test -n "$render_token"
+          echo "::add-mask::$render_token"
+          printf '%s' "$render_token" > /tmp/render-api-token
+          echo "FANDEX_RENDER_API_CREDENTIAL_AVAILABLE=true"
+
+      - name: Bind VERCEL_TOKEN to Render Product service
+        shell: bash
+        run: |
+          set -euo pipefail
+          render_token="$(cat /tmp/render-api-token)"
+          node <<'NODE' >/tmp/render-env-body.json
+          process.stdout.write(JSON.stringify({
+            value: process.env.VERCEL_TOKEN,
+          }));
+          NODE
+          status="$(
+            curl               --silent               --show-error               --retry 0               --output /tmp/render-env-response.json               --write-out '%{http_code}'               --request PUT               --url "https://api.render.com/v1/services/$RENDER_SERVICE_ID/env-vars/VERCEL_TOKEN"               --header "Authorization: Bearer $render_token"               --header 'accept: application/json'               --header 'content-type: application/json'               --data-binary @/tmp/render-env-body.json
+          )"
+          test "$status" = "200"
+          echo "FANDEX_RENDER_VERCEL_TOKEN_BOUND=true"
+
+      - name: Safety boundary
+        if: always()
+        shell: bash
+        run: |
+          rm -f /tmp/render-api-token /tmp/render-env-body.json /tmp/render-env-response.json
+          echo "FANDEX_RENDER_SECRET_VALUES_LOGGED=false"
+          echo "FANDEX_RENDER_BLOB_WRITES=0"
+          echo "FANDEX_RENDER_DATABASE_WRITES=0"
+          echo "FANDEX_RENDER_PROVIDER_CALLS=0"
