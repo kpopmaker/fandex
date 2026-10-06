@@ -6,6 +6,9 @@ import {
   type ReportedAlbumSalesObservationDraft,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  resolveReportedAlbumSalesReleaseIdentity,
+} from '../lib/alternative-evidence/reportedAlbumSalesReleaseIdentityReview';
+import {
   buildReportedAlbumSalesProductionSourceCandidate,
   REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_VERSION,
   type ReportedWebUsageReview,
@@ -18,8 +21,8 @@ function draft(
     canonicalArtistId: 'iu',
     artistName: 'IU',
     release: {
-      canonicalReleaseId: 'release:iu:lilac:2021-03-25',
-      identityState: 'resolved',
+      canonicalReleaseId: null,
+      identityState: 'candidate',
       releaseTitle: 'LILAC',
       releaseDate: '2021-03-25',
       edition: null,
@@ -61,6 +64,22 @@ function draft(
   };
 }
 
+function resolved(
+  overrides: Partial<ReportedAlbumSalesObservationDraft> = {},
+) {
+  return resolveReportedAlbumSalesReleaseIdentity({
+    observation: createReportedAlbumSalesObservation(
+      draft(overrides),
+    ),
+    canonicalReleaseId: 'release-iu-lilac-2021-03-25',
+    supportingIdentityEvidenceRefs: [
+      'identity:official-release-page:iu-lilac',
+    ],
+    reviewerRef: 'review:music-album-release-identity',
+    reviewedAt: '2026-10-06T23:45:00+09:00',
+  });
+}
+
 function rights(
   overrides: Partial<ReportedWebUsageReview> = {},
 ): ReportedWebUsageReview {
@@ -81,11 +100,13 @@ function rights(
   };
 }
 
-test('resolved Tier A/B public reporting evidence can become a Production observation candidate without pretending to be a licensed feed', () => {
+test('reviewed Tier A/B public reporting evidence can become a Production observation candidate without pretending to be a licensed feed', () => {
+  const identity = resolved();
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation: createReportedAlbumSalesObservation(draft()),
+      observation: identity.observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights(),
     });
 
@@ -108,6 +129,11 @@ test('resolved Tier A/B public reporting evidence can become a Production observ
   assert.equal(candidate.lifecycle, 'production-candidate');
   assert.equal(candidate.productionObservationEligible, true);
   assert.deepEqual(candidate.blockers, []);
+  assert.equal(candidate.releaseIdentityReviewId, identity.review.reviewId);
+  assert.deepEqual(
+    candidate.releaseIdentityEvidenceRefs,
+    ['identity:official-release-page:iu-lilac'],
+  );
   assert.equal(candidate.collectedAt, '2026-10-06T23:30:11+09:00');
   assert.equal(candidate.sourceEvidence.length, 1);
   assert.equal(
@@ -136,20 +162,13 @@ test('resolved Tier A/B public reporting evidence can become a Production observ
 });
 
 test('research candidate identity is not silently promoted into a Production observation', () => {
-  const observation = createReportedAlbumSalesObservation(
-    draft({
-      release: {
-        ...draft().release,
-        canonicalReleaseId: null,
-        identityState: 'candidate',
-      },
-    }),
-  );
+  const observation = createReportedAlbumSalesObservation(draft());
 
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
       observation,
       conflictState: 'clear',
+      releaseIdentityReview: null,
       rightsUsageReview: rights(),
     });
 
@@ -159,24 +178,52 @@ test('research candidate identity is not silently promoted into a Production obs
       'canonical-release-identity-not-resolved',
     ),
   );
+  assert.ok(candidate.blockers.includes('identity-review-missing'));
+});
+
+test('resolved flag without a bound identity review remains ineligible', () => {
+  const identity = resolved();
+
+  const candidate =
+    buildReportedAlbumSalesProductionSourceCandidate({
+      observation: identity.observation,
+      conflictState: 'clear',
+      releaseIdentityReview: null,
+      rightsUsageReview: rights(),
+    });
+
+  assert.equal(candidate.productionObservationEligible, false);
+  assert.ok(candidate.blockers.includes('identity-review-missing'));
 });
 
 test('Tier C discovery-only evidence remains ineligible for Production', () => {
+  const identity = resolved();
   const observation = createReportedAlbumSalesObservation(
     draft({
+      release: {
+        ...draft().release,
+        canonicalReleaseId: 'release-iu-lilac-2021-03-25',
+        identityState: 'resolved',
+      },
       supportingEvidence: [
         {
-          ...draft().supportingEvidence[0],
+          ...draft().supportingEvidence[0]!,
           sourceTier: 'tier-c-discovery-only',
         },
       ],
+      lifecycle: 'shadow',
     }),
+  );
+  assert.equal(
+    observation.observationId,
+    identity.observation.observationId,
   );
 
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
       observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights(),
     });
 
@@ -194,10 +241,12 @@ test('Tier C discovery-only evidence remains ineligible for Production', () => {
 });
 
 test('unknown commercial/public usage does not become an implicit web Production authorization', () => {
+  const identity = resolved();
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation: createReportedAlbumSalesObservation(draft()),
+      observation: identity.observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights({
         commercialProductUseState: 'unknown',
         publicDerivedPublicationState: 'unknown',
@@ -218,20 +267,19 @@ test('unknown commercial/public usage does not become an implicit web Production
 });
 
 test('conflicting observations and unresolved possible corrections fail closed', () => {
-  const observation = createReportedAlbumSalesObservation(
-    draft({
-      revision: {
-        state: 'possible-correction',
-        supersedesObservationId: null,
-        revisionObservedAt: '2026-10-06T23:30:11+09:00',
-      },
-    }),
-  );
+  const identity = resolved({
+    revision: {
+      state: 'possible-correction',
+      supersedesObservationId: null,
+      revisionObservedAt: '2026-10-06T23:30:11+09:00',
+    },
+  });
 
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation,
+      observation: identity.observation,
       conflictState: 'conflicting',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights(),
     });
 
@@ -247,16 +295,15 @@ test('conflicting observations and unresolved possible corrections fail closed',
 });
 
 test('explicit provider-period boundaries must themselves form a seven-day first-week period', () => {
-  const observation = createReportedAlbumSalesObservation(
-    draft({
-      providerPeriodEnd: '2021-04-01',
-    }),
-  );
+  const identity = resolved({
+    providerPeriodEnd: '2021-04-01',
+  });
 
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation,
+      observation: identity.observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights(),
     });
 
@@ -269,10 +316,12 @@ test('explicit provider-period boundaries must themselves form a seven-day first
 });
 
 test('manual-reviewed ingestion does not claim automated access rights', () => {
+  const identity = resolved();
   const candidate =
     buildReportedAlbumSalesProductionSourceCandidate({
-      observation: createReportedAlbumSalesObservation(draft()),
+      observation: identity.observation,
       conflictState: 'clear',
+      releaseIdentityReview: identity.review,
       rightsUsageReview: rights({
         automatedAccessState: 'allowed',
       }),
