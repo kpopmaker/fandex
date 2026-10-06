@@ -1,0 +1,231 @@
+import { sha256Canonical } from '../shared/canonicalDigest';
+import type {
+  ReportedAlbumSalesObservation,
+} from './reportedAlbumSalesEvidence';
+import type {
+  ReportedWebUsageDecision,
+  ReportedWebUsageReview,
+} from './reportedAlbumSalesProductionSource';
+
+export const REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION =
+  'reported-web-usage-review-request-v1' as const;
+
+export type ReportedWebRightsReviewReference = Readonly<{
+  referenceId: string;
+  sourceUrl: string;
+  kind:
+    | 'underlying-provider-restriction'
+    | 'reporting-source-terms'
+    | 'reporting-source-usage-policy'
+    | 'legal-review-memo';
+  observedAt: string;
+  reviewSignal: string;
+  authorizationStateNotInferred: true;
+}>;
+
+export type ReportedWebUsageReviewRequest = Readonly<{
+  contractVersion:
+    typeof REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION;
+  requestId: string;
+  sourceType: 'reported-web-evidence';
+  accessMode: 'manual-reviewed';
+  underlyingProvider: string;
+  observationId: string;
+  reportingSources: readonly Readonly<{
+    evidenceId: string;
+    reportingSource: string;
+    sourceUrl: string;
+    sourceTier: string;
+    sourcePublicationDate: string | null;
+  }>[];
+  rightsReviewReferences: readonly ReportedWebRightsReviewReference[];
+  requestedDimensions: readonly [
+    'sourceTermsState',
+    'factualValueStorageState',
+    'attributionState',
+    'commercialProductUseState',
+    'publicDerivedPublicationState'
+  ];
+  automatedAccessState: 'not-used';
+  materialBoundary: 'factual-values-and-provenance-only';
+  copyrightedArticleExpressionRequestedForStorage: false;
+  reviewerConclusionRequired: true;
+  autoAuthorized: false;
+  productionAuthorizationContained: false;
+  publicPublicationAuthorizationContained: false;
+}>;
+
+export type ReportedWebUsageReviewDecision = Readonly<{
+  requestId: string;
+  states: Readonly<{
+    sourceTermsState: ReportedWebUsageDecision;
+    factualValueStorageState: ReportedWebUsageDecision;
+    attributionState: ReportedWebUsageDecision;
+    commercialProductUseState: ReportedWebUsageDecision;
+    publicDerivedPublicationState: ReportedWebUsageDecision;
+  }>;
+  evidenceRefs: readonly string[];
+  conditionRefs: readonly string[];
+  reviewerRef: string;
+  reviewedAt: string;
+}>;
+
+function validInstant(value: string): boolean {
+  return /(?:Z|[+-]\d{2}:\d{2})$/i.test(value)
+    && !Number.isNaN(Date.parse(value));
+}
+
+function orderedUnique(values: readonly string[]): readonly string[] {
+  return Object.freeze(
+    [...new Set(values.map(value => value.trim()).filter(Boolean))]
+      .sort(),
+  );
+}
+
+export function buildReportedWebUsageReviewRequest(
+  input: Readonly<{
+    observation: ReportedAlbumSalesObservation;
+    rightsReviewReferences:
+      readonly ReportedWebRightsReviewReference[];
+  }>,
+): ReportedWebUsageReviewRequest {
+  const observation = input.observation;
+  if (
+    observation.underlyingProvider === null
+    || observation.underlyingProvider.trim() === ''
+    || observation.supportingEvidence.length === 0
+  ) {
+    throw new Error(
+      'reported_web_usage_review_request_source_invalid',
+    );
+  }
+
+  for (const reference of input.rightsReviewReferences) {
+    if (
+      reference.referenceId.trim() === ''
+      || !/^https?:\/\//i.test(reference.sourceUrl)
+      || !validInstant(reference.observedAt)
+      || reference.reviewSignal.trim() === ''
+      || reference.authorizationStateNotInferred !== true
+    ) {
+      throw new Error(
+        'reported_web_usage_review_request_reference_invalid',
+      );
+    }
+  }
+
+  const reportingSources = Object.freeze(
+    [...observation.supportingEvidence]
+      .sort((left, right) =>
+        left.evidenceId.localeCompare(right.evidenceId))
+      .map(evidence => Object.freeze({
+        evidenceId: evidence.evidenceId,
+        reportingSource: evidence.reportingSource,
+        sourceUrl: evidence.sourceUrl,
+        sourceTier: evidence.sourceTier,
+        sourcePublicationDate: evidence.sourcePublicationDate,
+      })),
+  );
+  const rightsReviewReferences = Object.freeze(
+    [...input.rightsReviewReferences]
+      .sort((left, right) =>
+        left.referenceId.localeCompare(right.referenceId))
+      .map(reference => Object.freeze({ ...reference })),
+  );
+
+  const requestShape = {
+    sourceType: 'reported-web-evidence' as const,
+    accessMode: 'manual-reviewed' as const,
+    underlyingProvider: observation.underlyingProvider,
+    observationId: observation.observationId,
+    reportingSources,
+    rightsReviewReferences,
+    requestedDimensions: Object.freeze([
+      'sourceTermsState',
+      'factualValueStorageState',
+      'attributionState',
+      'commercialProductUseState',
+      'publicDerivedPublicationState',
+    ] as const),
+    automatedAccessState: 'not-used' as const,
+    materialBoundary:
+      'factual-values-and-provenance-only' as const,
+    copyrightedArticleExpressionRequestedForStorage:
+      false as const,
+    reviewerConclusionRequired: true as const,
+    autoAuthorized: false as const,
+    productionAuthorizationContained: false as const,
+    publicPublicationAuthorizationContained: false as const,
+  };
+
+  return Object.freeze({
+    contractVersion:
+      REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION,
+    requestId: sha256Canonical({
+      contractVersion:
+        REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION,
+      ...requestShape,
+    }),
+    ...requestShape,
+  });
+}
+
+export function materializeReportedWebUsageReview(
+  input: Readonly<{
+    request: ReportedWebUsageReviewRequest;
+    decision: ReportedWebUsageReviewDecision;
+  }>,
+): ReportedWebUsageReview {
+  const { request, decision } = input;
+  if (decision.requestId !== request.requestId) {
+    throw new Error(
+      'reported_web_usage_review_request_mismatch',
+    );
+  }
+  if (
+    decision.reviewerRef.trim() === ''
+    || !validInstant(decision.reviewedAt)
+  ) {
+    throw new Error(
+      'reported_web_usage_review_reviewer_invalid',
+    );
+  }
+
+  const evidenceRefs = orderedUnique(decision.evidenceRefs);
+  const conditionRefs = orderedUnique(decision.conditionRefs);
+  const states = Object.values(decision.states);
+  const anyPositive = states.some(
+    state => state === 'allowed' || state === 'conditional',
+  );
+  if (anyPositive && evidenceRefs.length === 0) {
+    throw new Error(
+      'reported_web_usage_review_positive_state_requires_evidence',
+    );
+  }
+  if (
+    states.includes('conditional')
+    && conditionRefs.length === 0
+  ) {
+    throw new Error(
+      'reported_web_usage_review_conditional_requires_conditions',
+    );
+  }
+
+  return Object.freeze({
+    reviewStatus: 'reviewed' as const,
+    accessMode: request.accessMode,
+    sourceTermsState: decision.states.sourceTermsState,
+    automatedAccessState: request.automatedAccessState,
+    factualValueStorageState:
+      decision.states.factualValueStorageState,
+    attributionState: decision.states.attributionState,
+    commercialProductUseState:
+      decision.states.commercialProductUseState,
+    publicDerivedPublicationState:
+      decision.states.publicDerivedPublicationState,
+    evidenceRefs,
+    conditionRefs,
+    reviewerRef: decision.reviewerRef.trim(),
+    reviewedAt: decision.reviewedAt,
+  });
+}
