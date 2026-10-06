@@ -56,8 +56,9 @@ jobs:
       DISPATCH_STORAGE_WRITE_CONFIRM: ${{ inputs.confirm || '' }}
       BRAND_FIT_SOURCE_RUN_ID: '37318243229'
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_BRAND_FIT_EVIDENCE_BLOB_READ_WRITE_TOKEN || secrets.BLOB_READ_WRITE_TOKEN }}
-      FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID: ${{ secrets.FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID || secrets.BLOB_STORE_ID }}
+      VERCEL_PROJECT_ID: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v'
+      VERCEL_TEAM_ID: 'team_OrRPxuBxMwCYU3kk0r76AfOs'
+      FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID: 'store_oe4nEFW5ox93XB8v'
 
     steps:
       - uses: actions/checkout@v4
@@ -178,18 +179,98 @@ jobs:
 
       - name: Validate exact storage-write dispatch boundary
         shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -euo pipefail
           test "$EXPECTED_MAIN_SHA" = "$GITHUB_SHA"
           test -n "$STORAGE_WRITE_AUTHORIZATION_ID"
           test "$STORAGE_WRITE_CONFIRM" = "write-brand-fit-durable-evidence-v1"
           test "$BRAND_FIT_SOURCE_RUN_ID" = "37318243229"
-          test -n "$BLOB_READ_WRITE_TOKEN"
+          test -n "$VERCEL_TOKEN"
+          test "$VERCEL_PROJECT_ID" = "prj_aT3p8zmjyochu8iGmFOuNR1lSU7v"
+          test "$VERCEL_TEAM_ID" = "team_OrRPxuBxMwCYU3kk0r76AfOs"
+          test "$FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID" = "store_oe4nEFW5ox93XB8v"
 
       - run: npm ci
 
       - name: Validate owner durable storage authorization and one-shot consumption
         run: npx tsx scripts/operations/brandFitDurableStorageWriteGateV1.mts
+
+      - name: Mint short-lived Vercel project OIDC token
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const accessToken = String(process.env.VERCEL_TOKEN ?? '').trim();
+          const projectId = String(process.env.VERCEL_PROJECT_ID ?? '').trim();
+          const teamId = String(process.env.VERCEL_TEAM_ID ?? '').trim();
+          const storeId = String(
+            process.env.FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID ?? '',
+          ).trim();
+
+          if (!accessToken) {
+            throw new Error('brand_fit_vercel_access_token_missing');
+          }
+          if (
+            projectId !== 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v'
+            || teamId !== 'team_OrRPxuBxMwCYU3kk0r76AfOs'
+            || storeId !== 'store_oe4nEFW5ox93XB8v'
+          ) {
+            throw new Error('brand_fit_vercel_oidc_binding_invalid');
+          }
+
+          const url = new URL(
+            'https://api.vercel.com/v1/projects/'
+              + encodeURIComponent(projectId)
+              + '/token',
+          );
+          url.searchParams.set('teamId', teamId);
+
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              source: 'github-actions:brand-fit-durable-write-v1',
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              'brand_fit_vercel_project_oidc_request_failed:'
+                + response.status,
+            );
+          }
+
+          const payload = await response.json();
+          const oidcToken = (
+            payload
+            && typeof payload === 'object'
+            && !Array.isArray(payload)
+            && typeof payload.token === 'string'
+          )
+            ? payload.token.trim()
+            : '';
+
+          if (oidcToken.length < 32 || /\s/.test(oidcToken)) {
+            throw new Error(
+              'brand_fit_vercel_project_oidc_response_invalid',
+            );
+          }
+
+          process.stdout.write('::add-mask::' + oidcToken + '\n');
+          fs.appendFileSync(
+            process.env.GITHUB_ENV,
+            'VERCEL_OIDC_TOKEN=' + oidcToken + '\n',
+          );
+          NODE
 
       - name: Download canonical sanitized provider receipt
         uses: actions/download-artifact@v4
@@ -241,4 +322,7 @@ jobs:
           echo "productActivations=0"
           echo "publications=0"
           echo "rawProviderPayloadStored=false"
+          echo "blobAuth=vercel-project-oidc"
+          echo "vercelAccessTokenLogged=false"
+          echo "oidcTokenLogged=false"
           echo "credentialsLogged=false"
