@@ -111,3 +111,115 @@ jobs:
       - name: Stop portable FANDEX runtime
         if: always()
         run: docker rm -f fandex-self-host-v1 >/dev/null 2>&1 || true
+
+      - name: Verify host-neutral Brand Fit durable Product runtime
+        if: >-
+          github.event_name == 'push' ||
+          github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PROBE_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_SCHEDULER_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          test -n "$PROBE_SECRET"
+
+          docker run --rm -d \
+            --name fandex-self-host-brand-fit-v1 \
+            -p 3000:3000 \
+            -e FANDEX_PRODUCT_RUNTIME_ENV=production \
+            -e FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID=store_oe4nEFW5ox93XB8v \
+            -e VERCEL_TOKEN="$VERCEL_TOKEN" \
+            -e FANDEX_NAVER_NEWS_SCHEDULER_SECRET="$PROBE_SECRET" \
+            fandex-self-host-v1
+
+          for attempt in $(seq 1 45); do
+            if curl --fail --silent --show-error \
+              http://127.0.0.1:3000/api/health \
+              > /tmp/fandex-brand-fit-health.json; then
+              break
+            fi
+            if [ "$attempt" -eq 45 ]; then
+              docker logs fandex-self-host-brand-fit-v1
+              exit 1
+            fi
+            sleep 1
+          done
+
+          status="$(
+            curl \
+              --silent \
+              --show-error \
+              --request POST \
+              --retry 0 \
+              --output /tmp/fandex-brand-fit-readiness.json \
+              --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${PROBE_SECRET}" \
+              --header 'X-Fandex-Product-Runtime-Probe-Id: ops-fandex-product-runtime-readiness-20261004-v1' \
+              --header 'X-Fandex-Probe-Source: github-actions-manual-v1' \
+              http://127.0.0.1:3000/api/internal/fandex/product-runtime-readiness
+          )"
+
+          test "$status" = "200"
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = JSON.parse(
+            fs.readFileSync(
+              '/tmp/fandex-brand-fit-readiness.json',
+              'utf8',
+            ),
+          );
+          const states = Array.isArray(value?.variableStates)
+            ? value.variableStates
+            : [];
+          const brandFit = states.find(
+            (entry) => entry?.variableId === 'brandFitPoint',
+          );
+
+          if (
+            brandFit?.sourceState !== 'resolved'
+            || brandFit?.adapterState !== 'ok'
+            || brandFit?.reason !== null
+            || !Array.isArray(value?.resolvedVariableIds)
+            || !value.resolvedVariableIds.includes('brandFitPoint')
+            || value?.scoreCalculated !== false
+            || value?.methodologyFinalized !== false
+            || value?.publicRouteActivated !== false
+            || value?.providerExecutionPerformed !== false
+            || value?.writeOperationsAuthorized !== false
+          ) {
+            console.error(JSON.stringify({
+              status: value?.status ?? null,
+              brandFitSourceState: brandFit?.sourceState ?? null,
+              brandFitAdapterState: brandFit?.adapterState ?? null,
+              brandFitReason: brandFit?.reason ?? null,
+              scoreCalculated: value?.scoreCalculated ?? null,
+              methodologyFinalized: value?.methodologyFinalized ?? null,
+              publicRouteActivated: value?.publicRouteActivated ?? null,
+              providerExecutionPerformed:
+                value?.providerExecutionPerformed ?? null,
+              writeOperationsAuthorized:
+                value?.writeOperationsAuthorized ?? null,
+            }));
+            process.exit(1);
+          }
+
+          console.log(JSON.stringify({
+            brandFitHostNeutralRuntime: 'ok',
+            sourceState: brandFit.sourceState,
+            adapterState: brandFit.adapterState,
+            reason: brandFit.reason,
+            providerCalls: 0,
+            blobWrites: 0,
+            databaseWrites: 0,
+            productActivations: 0,
+            publications: 0,
+          }));
+          NODE
+
+      - name: Stop host-neutral Brand Fit runtime
+        if: always()
+        run: >-
+          docker rm -f fandex-self-host-brand-fit-v1
+          >/dev/null 2>&1 || true
