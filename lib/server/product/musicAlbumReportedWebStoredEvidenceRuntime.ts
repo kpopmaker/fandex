@@ -40,6 +40,27 @@ export const FANDEX_MUSIC_ALBUM_PRODUCT_RUNTIME_ENV =
 
 type ReadOnlyBlobSdk = Pick<VercelBlobSdkPort, 'get' | 'list'>;
 
+export type MusicAlbumReportedWebStoredEvidenceServerRuntimeResult =
+  | Readonly<{
+      status: 'ok';
+      evidenceCount: number;
+      pathnames: readonly string[];
+      evidence: Extract<
+        ReportedAlbumSalesStoredEvidenceRuntimeReadResult,
+        { status: 'ok' }
+      >['evidence'];
+    }>
+  | Readonly<{
+      status: 'unavailable';
+      reason:
+        | 'durable-stored-evidence-runtime-unavailable'
+        | 'durable-stored-evidence-not-found';
+    }>
+  | Readonly<{
+      status: 'data-issue';
+      reason: string;
+    }>;
+
 export type MusicAlbumReportedWebStoredEvidenceRuntimeDependencies =
   Readonly<{
     client?: ReadOnlyBlobSdk;
@@ -111,7 +132,7 @@ export async function getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU(
     process.env,
   dependencies:
     MusicAlbumReportedWebStoredEvidenceRuntimeDependencies = {},
-): Promise<ReportedAlbumSalesStoredEvidenceRuntimeReadResult> {
+): Promise<MusicAlbumReportedWebStoredEvidenceServerRuntimeResult> {
   let store;
   try {
     store = createProductionMusicAlbumReportedWebReadStore(
@@ -121,14 +142,32 @@ export async function getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU(
   } catch {
     return Object.freeze({
       status: 'unavailable' as const,
-      contractVersion:
-        'reported-album-sales-stored-evidence-runtime-v1' as const,
-      reason: 'stored-evidence-not-found' as const,
+      reason:
+        'durable-stored-evidence-runtime-unavailable' as const,
     });
   }
 
-  return readReportedAlbumSalesStoredEvidenceRuntime({
+  const result = await readReportedAlbumSalesStoredEvidenceRuntime({
     canonicalArtistId: 'iu',
     store,
+  });
+
+  if (result.status === 'ok') {
+    return Object.freeze({
+      status: 'ok' as const,
+      evidenceCount: result.evidence.length,
+      pathnames: result.pathnames,
+      evidence: result.evidence,
+    });
+  }
+  if (result.status === 'unavailable') {
+    return Object.freeze({
+      status: 'unavailable' as const,
+      reason: 'durable-stored-evidence-not-found' as const,
+    });
+  }
+  return Object.freeze({
+    status: 'data-issue' as const,
+    reason: `reported-web-stored-evidence:${result.reason}`,
   });
 }
