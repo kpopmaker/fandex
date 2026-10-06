@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-06T10:17:55+09:00",
+  "collectedAt": "2026-10-06T10:23:31+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -6019,6 +6019,50 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-06T10:17:55+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "YOU NEVER WALK ALONE",
+        "releaseDate": "2017-02-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 373705,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-02-13",
+      "providerPeriodEnd": "2017-02-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T10:23:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "xportsnews:20170220:bts-you-never-walk-alone",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "XportsNews",
+          "sourceUrl": "https://www.xportsnews.com/article/821832",
+          "sourcePublicationDate": "2017-02-20",
+          "sourcePublishedAt": "2017-02-20T15:00:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T10:23:31+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
