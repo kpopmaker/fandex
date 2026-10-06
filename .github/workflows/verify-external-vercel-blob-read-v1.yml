@@ -50,7 +50,7 @@ jobs:
           import { list } from '@vercel/blob';
 
           const result = await list({
-            prefix: 'fandex-cloud-v10/brand-fit/immutable/iu/',
+            prefix: 'fandex/brand-fit/stored-evidence/v1/iu/',
             limit: 10,
             access: 'private',
             oidcToken: process.env.VERCEL_OIDC_TOKEN,
