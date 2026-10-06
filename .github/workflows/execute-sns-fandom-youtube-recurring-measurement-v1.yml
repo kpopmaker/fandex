@@ -2,9 +2,11 @@ name: Execute snsFandom YouTube recurring measurement v1
 
 on:
   schedule:
-    # Avoid GitHub Actions' documented top-of-hour schedule congestion.
-    # The runtime still maps the real observation into the current UTC hourly slot.
+    # Two off-top-of-hour opportunities per UTC hour reduce scheduler-drop risk.
+    # Runtime claim/receipt idempotency still permits at most one provider execution
+    # for the current UTC hourly slot.
     - cron: '17 * * * *'
+    - cron: '47 * * * *'
   workflow_dispatch:
 
 permissions:

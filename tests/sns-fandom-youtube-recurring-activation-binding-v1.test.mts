@@ -8,7 +8,7 @@ import {
 
 const SHA = '1111111111111111111111111111111111111111';
 
-test('checked-in activation binding is exact and ready for first real hourly slot', async () => {
+test('checked-in recurring state records first canonical slot and same-hour redundancy candidate', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -28,8 +28,13 @@ test('checked-in activation binding is exact and ready for first real hourly slo
   );
 
   const intendedCron = raw.intendedCron as string;
+  const fallbackCron = raw.redundantFallbackCronCandidate as string;
   assert.equal(intendedCron, '17 * * * *');
+  assert.equal(fallbackCron, '47 * * * *');
+  assert.equal(raw.schedulerTriggerOpportunitiesPerHourCandidate, 2);
+  assert.equal(raw.providerExecutionsPerUtcHourlySlotMax, 1);
   assert.match(workflow, /cron:\s*['"]17 \* \* \* \*['"]/);
+  assert.match(workflow, /cron:\s*['"]47 \* \* \* \*['"]/);
   assert.doesNotMatch(workflow, /cron:\s*['"]0 \* \* \* \*['"]/);
 
   const authorizedRevisionSha = raw.authorizedRevisionSha as string;
@@ -52,9 +57,17 @@ test('checked-in activation binding is exact and ready for first real hourly slo
       raw.evidenceStoreCredentialLocatorRef as string | null,
   });
 
-  assert.equal(raw.state, 'activation-bound-awaiting-first-successful-slot');
-  assert.equal(raw.measurementWindowStart, null);
-  assert.equal(raw.measurementWindowEnd, null);
+  assert.equal(
+    raw.state,
+    'active-canonical-window-materialized-continuity-gap-observed',
+  );
+  assert.equal(raw.measurementWindowStart, '2026-10-05T22:00:00.000Z');
+  assert.equal(raw.measurementWindowEnd, '2027-10-06T22:00:00.000Z');
+  assert.equal(raw.continuityGapObserved, true);
+  assert.deepEqual(raw.observedMissingSlotStarts, [
+    '2026-10-05T23:00:00.000Z',
+    '2026-10-06T00:00:00.000Z',
+  ]);
   assert.equal(result.state, 'activation-candidate-ready');
   assert.equal(result.activationBoundary, '2026-10-05T14:00:00.000Z');
   assert.equal(result.measurementWindowStart, '2026-10-05T14:00:00.000Z');
