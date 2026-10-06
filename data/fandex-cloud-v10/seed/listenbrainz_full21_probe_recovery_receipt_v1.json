@@ -56,7 +56,9 @@
     "priorCanonicalBindingsStillValid": true,
     "newProviderEpochEstablished": false,
     "zeroGrowthEstablished": false,
-    "distinctEpochDeltaCharacterizationEligible": false
+    "distinctEpochDeltaCharacterizationEligible": false,
+    "full21CohortObservationStableAcrossHardenedRuns": true,
+    "latestFreshReprobeNewProviderEpochEstablished": false
   },
   "nextGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
   "safety": {
@@ -74,5 +76,24 @@
     "databaseModified": false,
     "deploymentAuthorized": false,
     "mainMergeAuthorized": false
+  },
+  "latestFreshReprobe": {
+    "runId": 37479984874,
+    "runAttempt": 2,
+    "jobId": 112331126278,
+    "sourceHead": "ace4fc2d3a541879a6e8b6ac9a1779d48dc0d49a",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "unavailableArtistCount": 0,
+    "identityMismatchArtistCount": 0,
+    "newProviderEpochArtistCount": 0,
+    "staleProviderEpochArtistCount": 21,
+    "positiveAllTimeDeltaArtistCount": 0,
+    "negativeAllTimeDeltaArtistCount": 0,
+    "unchangedAllTimeArtistCount": 21,
+    "artifactId": 11421780640,
+    "artifactDigest": "sha256:b8d51fce05cbaf024f0be3c72dd7b806fedebba71633813471b6f759eed992c8",
+    "artifactExpiresAt": "2026-10-20T14:46:25Z"
   }
 }
