@@ -34,7 +34,7 @@ test('current IU Momentum is ready for explicit authorization without executing 
   );
   assert.equal(
     result.approvalInputTemplate.binding.currentEvaluationAttestationDigest,
-    '59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d',
+    'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
   );
   assert.equal(
     result.approvalInputTemplate.binding.currentEvaluationAttestationPath,
@@ -44,10 +44,10 @@ test('current IU Momentum is ready for explicit authorization without executing 
     result.approvalInputTemplate.binding.currentEvaluationAttestationWorkflow,
     {
       kind: 'github-actions-read-only-current-evaluation',
-      workflowRunId: 37469812804,
-      workflowJobId: 112311628571,
+      workflowRunId: 37477927827,
+      workflowJobId: 112319410564,
       workflowHeadSha:
-        '68f31f9ca993b2f90e124e569dc5f1bbed299d0c',
+        '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
     },
   );
   assert.equal(result.authorizationWithoutApproval.status, 'not-authorized');
