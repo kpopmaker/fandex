@@ -75,7 +75,11 @@ export type ReportedWebUsageReviewDecision = Readonly<{
 }>;
 
 export type ReportedWebUsageReviewMaterialized = Readonly<{
+  contractVersion: typeof REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION;
+  reviewId: string;
   requestId: string;
+  observationId: string;
+  underlyingProvider: string;
   rights: SourceAuthorizationDimensions;
   evidenceRefs: readonly string[];
   conditionRefs: readonly string[];
@@ -233,8 +237,10 @@ export function materializeReportedWebUsageReview(
     );
   }
 
-  return Object.freeze({
+  const reviewShape = {
     requestId: request.requestId,
+    observationId: request.observationId,
+    underlyingProvider: request.underlyingProvider,
     rights: Object.freeze({
       acquisitionState: decision.states.acquisitionState,
       automationState: request.fixedManualOnlyStates.automationState,
@@ -255,5 +261,53 @@ export function materializeReportedWebUsageReview(
     autoAuthorized: false as const,
     productActivationAuthorized: false as const,
     publicPublicationAuthorized: false as const,
+  };
+
+  return Object.freeze({
+    contractVersion:
+      REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION,
+    reviewId: sha256Canonical({
+      contractVersion:
+        REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION,
+      ...reviewShape,
+    }),
+    ...reviewShape,
   });
+}
+
+export function validateReportedWebUsageReview(
+  review: ReportedWebUsageReviewMaterialized,
+  observation: ReportedAlbumSalesObservation,
+): boolean {
+  if (
+    review.contractVersion
+      !== REPORTED_WEB_USAGE_REVIEW_REQUEST_VERSION
+    || review.requestId.trim() === ''
+    || review.observationId !== observation.observationId
+    || review.underlyingProvider !== observation.underlyingProvider
+    || review.evidenceRefs.length === 0
+    || review.reviewerRef.trim() === ''
+    || !validInstant(review.reviewedAt)
+    || review.autoAuthorized !== false
+    || review.productActivationAuthorized !== false
+    || review.publicPublicationAuthorized !== false
+    || review.rights.automationState !== 'blocked'
+    || review.rights.rawStorageState !== 'blocked'
+    || review.rights.rawRedistributionState !== 'blocked'
+  ) {
+    return false;
+  }
+
+  const {
+    contractVersion,
+    reviewId,
+    ...shape
+  } = review;
+
+  return (
+    reviewId === sha256Canonical({
+      contractVersion,
+      ...shape,
+    })
+  );
 }
