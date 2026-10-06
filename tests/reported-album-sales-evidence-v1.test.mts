@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 131);
+  assert.equal(input.drafts.length, 132);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 129);
+  assert.equal(deduped.length, 130);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 127);
+  assert.equal(hanteo.length, 128);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 127);
+  assert.equal(hanteoFirstWeek.length, 128);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    127,
+    128,
   );
 
   for (const [artistId, title, value] of [
@@ -484,6 +484,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['bts', 'WINGS', 347_426, '2016-10-10', '2016-10-16', 'provider-attributed-secondary'],
     ['bts', 'The Most Beautiful Moment in Life: Young Forever', 164_868, '2016-05-02', '2016-05-08', 'provider-attributed-secondary'],
     ['bts', 'YOU NEVER WALK ALONE', 373_705, '2017-02-13', '2017-02-19', 'provider-attributed-secondary'],
+    ['bts', 'LOVE YOURSELF 轉 \'Tear\'', 1_003_524, '2018-05-18', '2018-05-24', 'provider-attributed-secondary'],
     ['straykids', 'Clé : LEVANTER', 83_345, '2019-12-09', '2019-12-15', 'corroborated-secondary'],
     ['blackpink', 'KILL THIS LOVE', 146_094, '2019-04-23', '2019-04-29', 'provider-attributed-secondary'],
   ] as const) {
@@ -530,7 +531,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 44,
     'tier-c-discovery-only': 11,
-    'tier-b-provider-attributed-reputable': 101,
+    'tier-b-provider-attributed-reputable': 102,
   });
 
   const iuLilac = deduped.find(
