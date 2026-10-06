@@ -35,7 +35,7 @@
     "rebaselineAll21": {
       "count": 21,
       "min": 5.8,
-      "max": 68,
+      "max": 68.0,
       "mean": 28.766667,
       "median": 24.64,
       "populationStdDev": 18.743066,
@@ -44,7 +44,7 @@
     "rebaselineNewOnly11": {
       "count": 11,
       "min": 5.8,
-      "max": 68,
+      "max": 68.0,
       "mean": 23.575455,
       "median": 14.4,
       "populationStdDev": 19.609664,
@@ -106,7 +106,7 @@
         "rebaselineGlobalRank": 3,
         "frozenRank": 4,
         "rebaselineOverlapRank": 2,
-        "delta": 1,
+        "delta": 1.0,
         "ratio": 1.020117
       },
       {
