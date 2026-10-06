@@ -1,6 +1,6 @@
 {
   "contractVersion": "momentum-live-shadow-source-currentness-audit-v1",
-  "evaluatedAgainstMain": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890",
+  "evaluatedAgainstMain": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c",
   "canonicalArtistId": "iu",
   "carrier": {
     "carrierRecordId": "6bf29ed2e15a4c374f9985279e5d60e44eab404371fd807b62adad1bebf6cadd",
@@ -48,12 +48,12 @@
     "directionalConsensus": "direction-conflicted",
     "persistenceConsensus": "persistence-not-applicable",
     "attestationPath": null,
-    "attestationDigest": "faf5d09e3f0b74c9fb2f05342fa4c34e6a685334e08cb726de2e02ea4e73c98e",
+    "attestationDigest": "59fd99dbfce6b92c3fbb16ac2f1bf54bbc07787f92a4bfbb70c734c57dd6135d",
     "attestationWorkflow": {
       "kind": "github-actions-read-only-current-evaluation",
       "workflowRunId": 37469812804,
-      "workflowJobId": 112290054657,
-      "workflowHeadSha": "efcf3b2a3f1f0180ef2e68a9b619b81d48be3890"
+      "workflowJobId": 112311628571,
+      "workflowHeadSha": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c"
     }
   },
   "decision": {
