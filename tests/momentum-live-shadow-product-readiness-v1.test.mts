@@ -29,14 +29,14 @@ async function readAudit(): Promise<MomentumLiveShadowSourceCurrentnessAudit> {
   ) as MomentumLiveShadowSourceCurrentnessAudit;
 }
 
-test('current IU live-shadow readiness fails closed after the 2026-09-28 Last.fm source advance', async () => {
+test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op evaluation', async () => {
   const result = await getMomentumLiveShadowProductReadinessForIU();
 
-  assert.equal(result.state, 'current-categorical-evaluation-required');
+  assert.equal(result.state, 'public-route-candidate');
   assert.equal(result.runtimeShadowReadVerified, true);
   assert.equal(result.productActivationReady, false);
   assert.equal(result.productPublicationReady, false);
-  assert.equal(result.publicRouteDesignReady, false);
+  assert.equal(result.publicRouteDesignReady, true);
   assert.equal(result.productMomentumScore, null);
   assert.equal(result.numericProductEligible, false);
   assert.equal(result.previewFallbackAllowed, false);
@@ -47,7 +47,7 @@ test('current IU live-shadow readiness fails closed after the 2026-09-28 Last.fm
     alignmentCutoffAt: '2026-09-20T01:59:13.000Z',
     directionalConsensus: 'direction-conflicted',
     persistenceConsensus: 'persistence-not-applicable',
-    historicalOnly: true,
+    historicalOnly: false,
   });
 
   assert.equal(
@@ -56,24 +56,21 @@ test('current IU live-shadow readiness fails closed after the 2026-09-28 Last.fm
   );
   assert.equal(
     result.sourceCurrentness.naverCurrentStoredEvidenceReproducedForReadiness,
-    false,
+    true,
   );
   assert.deepEqual(result.currentEvaluation, {
-    performed: false,
+    performed: true,
     currentCarrierProduced: false,
-    currentNoOpEvaluationAttested: false,
-    satisfiesFreshness: false,
-    evaluatedAlignmentCutoffAt: null,
-    directionalConsensus: null,
-    persistenceConsensus: null,
+    currentNoOpEvaluationAttested: true,
+    satisfiesFreshness: true,
+    evaluatedAlignmentCutoffAt: '2026-10-06T03:33:21.000Z',
+    directionalConsensus: 'direction-conflicted',
+    persistenceConsensus: 'persistence-not-applicable',
     attestationPath: null,
-    attestationDigest: null,
+    attestationDigest:
+      'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
   });
-  assert.deepEqual(result.blockers, [
-    'current-naver-stored-evidence-not-reproduced-for-readiness',
-    'current-dual-source-categorical-evaluation-not-performed',
-    'historical-carrier-not-current-activation-evidence',
-  ]);
+  assert.deepEqual(result.blockers, []);
 });
 
 test('freshness policy still forbids arbitrary age thresholds and does not require a history append', async () => {
@@ -88,30 +85,77 @@ test('freshness policy still forbids arbitrary age thresholds and does not requi
   });
 });
 
-test('current source audit records the 2026-09-28 Last.fm advance and requires reevaluation', async () => {
+test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workflow attestation evidence', async () => {
   const audit = await readAudit();
 
   assert.equal(
     audit.evaluatedAgainstMain,
-    '3c3fd54e0bad7c8b328d4a62a21884ca58abc9a1',
+    '01d7d03047946691560163cc968621a55ae4d755',
   );
-  assert.equal(audit.lastfm.snapshotDate, '2026-09-28');
-  assert.equal(audit.lastfm.historyRowCount, 500);
-  assert.equal(audit.lastfm.snapshotDateCount, 50);
-  assert.equal(audit.lastfm.deltaReadyCount, 10);
+  assert.equal(audit.lastfm.snapshotDate, '2026-10-06');
+  assert.equal(audit.lastfm.historyRowCount, 607);
+  assert.equal(audit.lastfm.snapshotDateCount, 58);
+  assert.equal(audit.lastfm.deltaReadyCount, 19);
   assert.equal(audit.lastfm.needsReviewCount, 0);
-  assert.ok(audit.naverRuntime);
+  assert.equal(audit.lastfm.currentHistoryValid, true);
+  assert.ok(audit.naverBlobOnlyRecurring);
+  if (!audit.naverBlobOnlyRecurring) return;
   assert.equal(
-    audit.naverRuntime.currentStoredEvidenceReproducedForReadiness,
-    false,
+    audit.naverBlobOnlyRecurring.mode,
+    'github-actions-direct-blob-only',
+  );
+  assert.equal(audit.naverBlobOnlyRecurring.workflowRunId, 37455371774);
+  assert.equal(audit.naverBlobOnlyRecurring.workflowJobId, 112241560366);
+  assert.equal(
+    audit.naverBlobOnlyRecurring.currentStoredEvidenceReproducedForReadiness,
+    true,
   );
   assert.equal(
     audit.currentEvaluation.currentDualSourceCategoricalEvaluationPerformed,
-    false,
+    true,
   );
-  assert.equal(audit.currentEvaluation.currentNoOpEvaluationAttested, false);
-  assert.equal(audit.currentEvaluation.evaluatedAlignmentCutoffAt, null);
-  assert.equal(audit.currentEvaluation.attestationDigest, null);
+  assert.equal(audit.currentEvaluation.currentNoOpEvaluationAttested, true);
+  assert.equal(
+    audit.currentEvaluation.evaluatedAlignmentCutoffAt,
+    '2026-10-06T03:33:21.000Z',
+  );
+  assert.equal(
+    audit.currentEvaluation.attestationDigest,
+    'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
+  );
+  assert.equal(
+    audit.currentEvaluation.attestationWorkflow?.workflowRunId,
+    37455528430,
+  );
+  assert.equal(
+    audit.currentEvaluation.attestationWorkflow?.workflowJobId,
+    112242072242,
+  );
+});
+
+test('invalid Blob-only recurring evidence fails closed', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+  assert.ok(audit.naverBlobOnlyRecurring);
+  if (!audit.naverBlobOnlyRecurring) return;
+
+  const invalid = {
+    ...audit,
+    naverBlobOnlyRecurring: {
+      ...audit.naverBlobOnlyRecurring,
+      runStatus: 'failed',
+    },
+  } as unknown as MomentumLiveShadowSourceCurrentnessAudit;
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: invalid,
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.ok(result.blockers.includes('source-currentness-audit-invalid'));
 });
 
 test('current dual-source attestation preserves the v140 to v143 non-numeric boundary', async () => {
@@ -271,8 +315,7 @@ function directAuditFrom(
 
   return {
     contractVersion: audit.contractVersion,
-    evaluatedAgainstMain:
-      '79ac55100ec4b64be8eeb234dc0fa9b617960303',
+    evaluatedAgainstMain: audit.evaluatedAgainstMain,
     canonicalArtistId: audit.canonicalArtistId,
     carrier: {
       ...audit.carrier,
