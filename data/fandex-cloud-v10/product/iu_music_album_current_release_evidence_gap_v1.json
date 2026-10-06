@@ -1,0 +1,99 @@
+{
+  "contractVersion": "music-album-current-release-evidence-gap-v1",
+  "asOf": "2026-10-07T08:38:00+09:00",
+  "canonicalArtistId": "iu",
+  "variableId": "musicAlbumPoint",
+  "releaseScope": "physical-album-eligible",
+  "currentReleaseCandidate": {
+    "canonicalReleaseId": null,
+    "identityState": "candidate",
+    "latestPhysicalReleaseState": "candidate-latest",
+    "releaseTitle": "A Flower Bookmark 3",
+    "releaseTitleKo": "꽃갈피 셋",
+    "physicalReleaseDate": "2025-05-28",
+    "evidenceRefs": [
+      {
+        "evidenceId": "kakaoent-newsroom:2025-05-27:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "release-identity",
+        "sourceUrl": "https://newsroom.kakaoent.com/news/a-flower-bookmark-3-ius-nostalgic-vibe-blooms-in-her-remake-album-in-8-years/"
+      },
+      {
+        "evidenceId": "yes24:146827201:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "physical-product-release-identity",
+        "sourceUrl": "https://www.yes24.com/Product/Goods/146827201"
+      },
+      {
+        "evidenceId": "yonhap:2026-07-20:iu-sixth-album-postponed",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "newer-full-album-not-yet-released",
+        "sourceUrl": "https://www.yna.co.kr/amp/view/AKR20260720154600005"
+      },
+      {
+        "evidenceId": "yonhap:2026-09-10:iu-digital-single",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "newer-music-release-is-digital-single",
+        "sourceUrl": "https://en.yna.co.kr/view/AEN20260910002500315"
+      },
+      {
+        "evidenceId": "melon:14535765:unknown-planet",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "digital-single-format-confirmation",
+        "sourceUrl": "https://www.melon.com/album/detail.htm?albumId=14535765"
+      }
+    ],
+    "verificationBoundary": {
+      "exhaustiveLatestPhysicalReleaseReviewCompleted": false,
+      "currentSelectorEligible": false
+    }
+  },
+  "reportedHanteoFirstWeekClaim": {
+    "value": 79940,
+    "unit": "physical-copies",
+    "metricSemantic": "reported-hanteo-first-week-sales",
+    "underlyingProvider": "Hanteo Chart",
+    "providerPeriodStart": null,
+    "providerPeriodEnd": null,
+    "productionEvidenceState": "discovery-only",
+    "discoveryEvidenceRefs": [
+      {
+        "evidenceId": "majayo:2025-06-04:iu-a-flower-bookmark-3",
+        "sourceTier": "tier-c-discovery-only",
+        "sourceUrl": "https://majayo.com/20250529-iu/"
+      },
+      {
+        "evidenceId": "koreansales:iu-sales-summary:a-flower-bookmark-3",
+        "sourceTier": "tier-c-discovery-only",
+        "sourceUrl": "https://koreansalestwt.blogspot.com/2021/04/iu-sales-summary.html"
+      }
+    ],
+    "tierAOrBProductionEvidenceRefs": [],
+    "productionObservationEligible": false
+  },
+  "blockers": [
+    "latest-physical-release-not-human-reviewed",
+    "canonical-release-id-unresolved",
+    "tier-a-or-b-first-week-evidence-missing",
+    "explicit-provider-period-missing",
+    "reported-web-rights-review-not-materialized",
+    "durable-write-not-authorized"
+  ],
+  "semantics": {
+    "releaseDateDerivedProviderPeriodAllowed": false,
+    "discoveryOnlyPromotionAllowed": false,
+    "missingEqualsZero": false,
+    "missingEqualsStable": false,
+    "licensedFeedClaimAllowed": false,
+    "directHanteoApiClaimAllowed": false
+  },
+  "nextTargetedEvidenceNeeded": [
+    "human-reviewed latest physical release binding",
+    "Tier A or Tier B provider-attributed first-week Hanteo value source",
+    "explicit provider-period start and end from evidence",
+    "source-specific rights/usage review"
+  ],
+  "productActivationAuthorized": false,
+  "publicPublicationAuthorized": false,
+  "numericScoreDefined": false
+}
