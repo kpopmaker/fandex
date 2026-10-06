@@ -1,0 +1,90 @@
+name: Validate Momentum current runtime attestation readiness v1
+
+on:
+  push:
+    branches:
+      - work/momentum-current-runtime-attestation-readiness-v1
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json'
+      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
+      - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
+      - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
+      - 'lib/product/activation/momentumProductActivationReadiness.ts'
+      - 'tests/momentum-product-activation-readiness-v1.test.mts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Scope allowlist
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "+refs/heads/$PR_BASE_REF:refs/remotes/origin/$PR_BASE_REF"
+            BASE="$(git merge-base "refs/remotes/origin/$PR_BASE_REF" "$PR_HEAD_SHA")"
+            git diff --name-only "$BASE...$PR_HEAD_SHA" | sort > /tmp/changed.txt
+          else
+            git fetch origin "+refs/heads/main:refs/remotes/origin/main"
+            BASE="$(git merge-base refs/remotes/origin/main HEAD)"
+            git diff --name-only "$BASE...HEAD" | sort > /tmp/changed.txt
+          fi
+
+          cat > /tmp/allowed.txt <<'EOF'
+          .github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml
+          .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
+          .github/workflows/validate-momentum-productionization-current-main-v1.yml
+          lib/product/activation/momentumProductActivationReadiness.ts
+          tests/momentum-product-activation-readiness-v1.test.mts
+          data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
+          lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          tests/momentum-live-shadow-product-readiness-v1.test.mts
+          EOF
+          sort -o /tmp/allowed.txt /tmp/allowed.txt
+          diff -u /tmp/allowed.txt /tmp/changed.txt
+
+      - run: npm ci
+
+      - name: Live-shadow currentness
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-live-shadow-product-readiness-v1.test.mts
+
+      - name: Public route design regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-public-route-design-v1.test.mts
+
+      - name: Activation readiness regression
+        env:
+          NODE_OPTIONS: --conditions=react-server
+        run: npx tsx --test tests/momentum-product-activation-readiness-v1.test.mts
+
+      - name: Common Product adapter regression
+        run: npx tsx --test tests/momentum-fandex-variable-product-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build

@@ -22,6 +22,7 @@ type MomentumLiveShadowSourceCurrentnessAuditBase = Readonly<{
     snapshotDateCount: number;
     deltaReadyCount: number;
     needsReviewCount: number;
+    currentHistoryValid: boolean;
     sourceAdvancedBeyondCarrierCutoff: boolean;
   }>;
   freshnessPolicy: Readonly<{
@@ -40,6 +41,12 @@ type MomentumLiveShadowSourceCurrentnessAuditBase = Readonly<{
     persistenceConsensus: string | null;
     attestationPath: string | null;
     attestationDigest: string | null;
+    attestationWorkflow?: Readonly<{
+      kind: 'github-actions-read-only-current-evaluation';
+      workflowRunId: number;
+      workflowJobId: number;
+      workflowHeadSha: string;
+    }>;
   }>;
 }>;
 
@@ -67,17 +74,42 @@ type NaverGithubActionsDirectEvidence = Readonly<{
   currentStoredEvidenceReproducedForReadiness: boolean;
 }>;
 
+type NaverGithubActionsBlobOnlyEvidence = Readonly<{
+  mode: 'github-actions-direct-blob-only';
+  observedAt: string;
+  workflowRunId: number;
+  workflowJobId: number;
+  workflowHeadSha: string;
+  slotStart: string;
+  collectionKey: string;
+  jobId: string;
+  runStatus: 'collected-and-finalized' | 'already-finalized';
+  schedulerManifestFinalized: true;
+  exactOfficialProtocol: true;
+  schedulerObservedAfterCarrierCutoff: boolean;
+  currentStoredEvidenceReproducedForReadiness: boolean;
+}>;
+
 export type MomentumLiveShadowSourceCurrentnessAudit =
   | Readonly<
       MomentumLiveShadowSourceCurrentnessAuditBase & {
         naverRuntime: NaverVercelRuntimeEvidence;
         naverDirectRecurring?: never;
+        naverBlobOnlyRecurring?: never;
       }
     >
   | Readonly<
       MomentumLiveShadowSourceCurrentnessAuditBase & {
         naverRuntime?: never;
         naverDirectRecurring: NaverGithubActionsDirectEvidence;
+        naverBlobOnlyRecurring?: never;
+      }
+    >
+  | Readonly<
+      MomentumLiveShadowSourceCurrentnessAuditBase & {
+        naverRuntime?: never;
+        naverDirectRecurring?: never;
+        naverBlobOnlyRecurring: NaverGithubActionsBlobOnlyEvidence;
       }
     >;
 
@@ -159,22 +191,47 @@ function naverEvidenceState(
     });
   }
 
-  const direct = audit.naverDirectRecurring;
+  if (audit.naverDirectRecurring !== undefined) {
+    const direct = audit.naverDirectRecurring;
+    return Object.freeze({
+      valid:
+        direct.mode === 'github-actions-direct-recurring'
+        && validIso(direct.observedAt)
+        && validPositiveInteger(direct.workflowRunId)
+        && validPositiveInteger(direct.workflowJobId)
+        && /^[0-9a-f]{40}$/.test(direct.workflowHeadSha)
+        && validIso(direct.slotStart)
+        && direct.collectionKey.length > 0
+        && direct.status === 'applied'
+        && direct.exactOfficialProtocol === true,
+      schedulerObservedAfterCarrierCutoff:
+        direct.schedulerObservedAfterCarrierCutoff,
+      currentStoredEvidenceReproducedForReadiness:
+        direct.currentStoredEvidenceReproducedForReadiness,
+    });
+  }
+
+  const blob = audit.naverBlobOnlyRecurring;
   return Object.freeze({
     valid:
-      direct.mode === 'github-actions-direct-recurring'
-      && validIso(direct.observedAt)
-      && validPositiveInteger(direct.workflowRunId)
-      && validPositiveInteger(direct.workflowJobId)
-      && /^[0-9a-f]{40}$/.test(direct.workflowHeadSha)
-      && validIso(direct.slotStart)
-      && direct.collectionKey.length > 0
-      && direct.status === 'applied'
-      && direct.exactOfficialProtocol === true,
+      blob.mode === 'github-actions-direct-blob-only'
+      && validIso(blob.observedAt)
+      && validPositiveInteger(blob.workflowRunId)
+      && validPositiveInteger(blob.workflowJobId)
+      && /^[0-9a-f]{40}$/.test(blob.workflowHeadSha)
+      && validIso(blob.slotStart)
+      && blob.collectionKey.length > 0
+      && /^[0-9a-f]{64}$/.test(blob.jobId)
+      && (
+        blob.runStatus === 'collected-and-finalized'
+        || blob.runStatus === 'already-finalized'
+      )
+      && blob.schedulerManifestFinalized === true
+      && blob.exactOfficialProtocol === true,
     schedulerObservedAfterCarrierCutoff:
-      direct.schedulerObservedAfterCarrierCutoff,
+      blob.schedulerObservedAfterCarrierCutoff,
     currentStoredEvidenceReproducedForReadiness:
-      direct.currentStoredEvidenceReproducedForReadiness,
+      blob.currentStoredEvidenceReproducedForReadiness,
   });
 }
 
@@ -182,6 +239,20 @@ function validAudit(
   audit: MomentumLiveShadowSourceCurrentnessAudit,
 ): boolean {
   const naver = naverEvidenceState(audit);
+  const workflowAttestation = audit.currentEvaluation.attestationWorkflow;
+  const persistedAttestationValid =
+    audit.currentEvaluation.attestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && workflowAttestation === undefined;
+  const workflowAttestationValid =
+    audit.currentEvaluation.attestationPath === null
+    && workflowAttestation !== undefined
+    && workflowAttestation.kind
+      === 'github-actions-read-only-current-evaluation'
+    && validPositiveInteger(workflowAttestation.workflowRunId)
+    && validPositiveInteger(workflowAttestation.workflowJobId)
+    && /^[0-9a-f]{40}$/.test(workflowAttestation.workflowHeadSha)
+    && workflowAttestation.workflowHeadSha === audit.evaluatedAgainstMain;
   const noOpAttestationValid =
     !audit.currentEvaluation.currentNoOpEvaluationAttested
     || (
@@ -196,8 +267,7 @@ function validAudit(
         === audit.carrier.directionalConsensus
       && audit.currentEvaluation.persistenceConsensus
         === audit.carrier.persistenceConsensus
-      && audit.currentEvaluation.attestationPath
-        === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+      && (persistedAttestationValid || workflowAttestationValid)
       && typeof audit.currentEvaluation.attestationDigest === 'string'
       && /^[0-9a-f]{64}$/.test(audit.currentEvaluation.attestationDigest)
     );
@@ -212,8 +282,10 @@ function validAudit(
     && /^\d{4}-\d{2}-\d{2}$/.test(audit.lastfm.snapshotDate)
     && audit.lastfm.historyRowCount > 0
     && audit.lastfm.snapshotDateCount > 0
-    && audit.lastfm.deltaReadyCount === 10
+    && Number.isSafeInteger(audit.lastfm.deltaReadyCount)
+    && audit.lastfm.deltaReadyCount >= 10
     && audit.lastfm.needsReviewCount === 0
+    && audit.lastfm.currentHistoryValid === true
     && naver.valid
     && audit.freshnessPolicy.arbitraryAgeThresholdAllowed === false
     && audit.freshnessPolicy.maximumAgeDays === null
