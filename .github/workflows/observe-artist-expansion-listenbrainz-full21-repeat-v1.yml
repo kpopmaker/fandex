@@ -1,0 +1,50 @@
+name: Observe Artist Expansion ListenBrainz full21 repeat v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-listenbrainz-repeat-observation-v1
+
+permissions:
+  contents: read
+
+jobs:
+  repeat-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Collect repeat ListenBrainz observation
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_repeat_observation_v1.py
+
+      - name: Validate repeat evidence shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("listenbrainz_full21_repeat_observation_v1.json").read_text(encoding="utf-8"))
+          assert data["summary"]["targetArtistCount"] == 21
+          assert len(data["artists"]) == 21
+          assert data["summary"]["identityMismatchRangeCount"] == 0
+          assert data["summary"]["rateOrScoreComputed"] is False
+          assert data["summary"]["productActivationAuthorized"] is False
+          assert data["safety"]["missingIsZero"] is False
+          assert data["safety"]["unavailableIsZero"] is False
+          assert data["safety"]["newScoreFormulaDefined"] is False
+          assert data["safety"]["thresholdDefined"] is False
+          print("PASS: repeat observation shape validated")
+          PY
+
+      - name: Upload repeat observation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-full21-repeat-observation-v1
+          path: listenbrainz_full21_repeat_observation_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
