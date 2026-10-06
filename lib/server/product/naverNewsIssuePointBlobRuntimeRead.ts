@@ -112,6 +112,9 @@ export async function mintNaverNewsVercelProjectOidcToken(
   const accessToken = clean(environment.VERCEL_TOKEN);
   if (!accessToken) return undefined;
 
+  const { projectId, teamId } =
+    resolveExactVercelBinding(environment);
+
   const now = Date.now();
   if (
     cachedProjectOidc
@@ -119,9 +122,6 @@ export async function mintNaverNewsVercelProjectOidcToken(
   ) {
     return cachedProjectOidc.token;
   }
-
-  const { projectId, teamId } =
-    resolveExactVercelBinding(environment);
   const url = new URL(
     `https://api.vercel.com/v1/projects/${encodeURIComponent(
       projectId,
