@@ -71,7 +71,7 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
       'f87a72d11c38cbbf17058c625d13847b2eca25f4152e909cf2d8b7d3d59566ce',
     attestationWorkflow: {
       kind: 'github-actions-read-only-current-evaluation',
-      workflowRunId: 37469812804,
+      workflowRunId: 37477927827,
       workflowJobId: 112319410564,
       workflowHeadSha:
         '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
@@ -132,7 +132,7 @@ test('current source audit binds 2026-10-06 Last.fm, Blob-only NAVER, and workfl
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowRunId,
-    37469812804,
+    37477927827,
   );
   assert.equal(
     audit.currentEvaluation.attestationWorkflow?.workflowJobId,
