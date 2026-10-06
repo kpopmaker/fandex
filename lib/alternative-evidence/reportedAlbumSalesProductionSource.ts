@@ -1,5 +1,6 @@
 import { sha256Canonical } from '../shared/canonicalDigest';
 import {
+  createDefaultOffAuthorization,
   isAuthorizationGranted,
   type SourceAuthorizationDimensions,
 } from './onboarding';
@@ -14,6 +15,10 @@ import {
   validateReportedAlbumSalesProductionIdentityBinding,
   type ReportedAlbumSalesProductionIdentityBinding,
 } from './reportedAlbumSalesProductionIdentity';
+import {
+  validateReportedWebUsageReview,
+  type ReportedWebUsageReviewMaterialized,
+} from './reportedWebUsageReviewRequest';
 
 export const REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_CONTRACT_VERSION =
   'reported-album-sales-production-source-v1' as const;
@@ -51,6 +56,8 @@ export type ReportedAlbumSalesProductionBlocker =
   | 'source-tier-not-production-eligible'
   | 'source-publication-date-missing'
   | 'conflicting-evidence'
+  | 'rights-review-binding-required'
+  | 'rights-review-binding-invalid'
   | 'rights-acquisition-not-authorized'
   | 'rights-normalized-storage-not-authorized'
   | 'rights-retention-not-authorized'
@@ -103,6 +110,8 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   revision: ReportedAlbumSalesObservation['revision'];
   conflictState: ReportedAlbumSalesProductionConflictState;
   availability: ReportedAlbumSalesProductionAvailability;
+  rightsReviewId: string | null;
+  rightsReviewEvidenceRefs: readonly string[];
   rights: SourceAuthorizationDimensions;
   rightsState: ReportedAlbumSalesProductionRightsState;
   evidenceDigest: string;
@@ -287,7 +296,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
   input: Readonly<{
     observation: ReportedAlbumSalesObservation;
     asOfDate: string;
-    rights: SourceAuthorizationDimensions;
+    rightsReview?: ReportedWebUsageReviewMaterialized | null;
     conflict?: boolean;
     releaseIdentityBinding?:
       ReportedAlbumSalesProductionIdentityBinding | null;
@@ -300,6 +309,16 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
   }
 
   const conflict = input.conflict ?? false;
+  const rightsReview = input.rightsReview ?? null;
+  const rightsReviewValid =
+    rightsReview !== null
+    && validateReportedWebUsageReview(
+      rightsReview,
+      input.observation,
+    );
+  const rights = rightsReviewValid
+    ? rightsReview.rights
+    : createDefaultOffAuthorization();
   const releaseIdentityBinding =
     input.releaseIdentityBinding ?? null;
   const identityBindingValid =
@@ -318,20 +337,29 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     identityBindingValid
     && releaseIdentityState === 'resolved'
     && canonicalReleaseId !== null;
-  const blockers = productionBlockers({
-    observation: input.observation,
-    asOfDate: input.asOfDate,
-    conflict,
-    rights: input.rights,
-    identityBindingProvided: releaseIdentityBinding !== null,
-    identityBindingValid,
-    identityResolved,
-  });
+  const blockers = [
+    ...productionBlockers({
+      observation: input.observation,
+      asOfDate: input.asOfDate,
+      conflict,
+      rights,
+      identityBindingProvided: releaseIdentityBinding !== null,
+      identityBindingValid,
+      identityResolved,
+    }),
+    ...(
+      rightsReview === null
+        ? ['rights-review-binding-required' as const]
+        : rightsReviewValid
+          ? []
+          : ['rights-review-binding-invalid' as const]
+    ),
+  ].sort();
   const currentAvailability = availability(
     input.observation,
     input.asOfDate,
   );
-  const currentRightsState = rightsState(input.rights);
+  const currentRightsState = rightsState(rights);
   const evidenceRefs = Object.freeze(
     input.observation.supportingEvidence
       .map(item => Object.freeze({
@@ -409,7 +437,13 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
         ? 'conflicting-evidence' as const
         : 'none' as const,
     availability: currentAvailability,
-    rights: Object.freeze({ ...input.rights }),
+    rightsReviewId:
+      rightsReviewValid ? rightsReview.reviewId : null,
+    rightsReviewEvidenceRefs:
+      rightsReviewValid
+        ? Object.freeze([...rightsReview.evidenceRefs])
+        : Object.freeze([]),
+    rights: Object.freeze({ ...rights }),
     rightsState: currentRightsState,
     evidenceDigest,
     blockers,
@@ -426,7 +460,7 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
   input: Readonly<{
     history: ReportedAlbumSalesHistory;
     asOf: string;
-    rights: SourceAuthorizationDimensions;
+    rightsReviews?: readonly ReportedWebUsageReviewMaterialized[];
     identityBindings?:
       readonly ReportedAlbumSalesProductionIdentityBinding[];
   }>,
@@ -455,6 +489,19 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
   );
   const asOfDate = input.asOf.slice(0, 10);
   const conflicts = new Set(read.conflictingScopeIds);
+  const rightsReviews = new Map<
+    string,
+    ReportedWebUsageReviewMaterialized
+  >();
+  for (const review of input.rightsReviews ?? []) {
+    if (rightsReviews.has(review.observationId)) {
+      throw new Error(
+        'reported_album_sales_production_rights_review_duplicate',
+      );
+    }
+    rightsReviews.set(review.observationId, review);
+  }
+
   const identityBindings = new Map<
     string,
     ReportedAlbumSalesProductionIdentityBinding
@@ -476,7 +523,8 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
         buildReportedAlbumSalesProductionSourceCandidate({
           observation,
           asOfDate,
-          rights: input.rights,
+          rightsReview:
+            rightsReviews.get(observation.observationId) ?? null,
           conflict: conflicts.has(observation.observationScopeId),
           releaseIdentityBinding:
             identityBindings.get(observation.observationId) ?? null,
