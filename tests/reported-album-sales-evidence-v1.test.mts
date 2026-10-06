@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 135);
+  assert.equal(input.drafts.length, 136);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 133);
+  assert.equal(deduped.length, 134);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 131);
+  assert.equal(hanteo.length, 132);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 131);
+  assert.equal(hanteoFirstWeek.length, 132);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    131,
+    132,
   );
 
   for (const [artistId, title, value] of [
@@ -475,6 +475,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['txt', 'The Chaos Chapter: FREEZE', 630_563, '2021-05-31', '2021-06-06', 'corroborated-secondary'],
     ['txt', 'The Chaos Chapter: FIGHT OR ESCAPE', 483_911, '2021-08-17', '2021-08-23', 'provider-attributed-secondary'],
     ['txt', 'The Star Chapter: TOGETHER', 1_760_867, '2025-07-21', '2025-07-27', 'provider-attributed-secondary'],
+    ['txt', 'minisode1 : Blue Hour', 303_190, '2020-10-26', '2020-11-01', 'provider-attributed-secondary'],
     ['txt', 'The Dream Chapter: ETERNITY', 181_009, '2020-05-18', '2020-05-24', 'primary-official'],
     ['enhypen', 'THE SIN : VANISH', 2_075_056, '2026-01-16', '2026-01-22', 'primary-official'],
     ['enhypen', 'BORDER : DAY ONE', 280_873, '2020-11-30', '2020-12-06', 'provider-attributed-secondary'],
@@ -534,7 +535,7 @@ test('source tiers remain separate from evidence quality', () => {
   assert.deepEqual(tierCounts, {
     'tier-a-primary-official': 44,
     'tier-c-discovery-only': 11,
-    'tier-b-provider-attributed-reputable': 107,
+    'tier-b-provider-attributed-reputable': 108,
   });
 
   const iuLilac = deduped.find(

@@ -37,7 +37,7 @@ function history() {
 function researchInput() {
   return buildReportedAlbumSalesResearchInput(
     history(),
-    '2026-10-06T23:16:29+09:00',
+    '2026-10-06T23:30:11+09:00',
   );
 }
 
@@ -52,9 +52,9 @@ test('expanded canonical cohort becomes a reviewer-ready packet without automati
     REPORTED_ALBUM_SALES_RESEARCH_REVIEWER_PACKET_VERSION,
   );
   assert.equal(packet.inputState, 'reviewable');
-  assert.equal(packet.releaseCount, 131);
+  assert.equal(packet.releaseCount, 132);
   assert.equal(packet.artistCount, 21);
-  assert.equal(packet.observations.length, 131);
+  assert.equal(packet.observations.length, 132);
 
   assert.deepEqual(
     new Set(packet.observations.map(item => item.canonicalArtistId)),
@@ -113,13 +113,13 @@ test('expanded canonical cohort becomes a reviewer-ready packet without automati
   const coverage = packet.dimensions[0];
   assert.equal(coverage.mode, 'manual-only');
   assert.equal(coverage.candidateId, null);
-  assert.equal(coverage.coveredObservationIds.length, 131);
+  assert.equal(coverage.coveredObservationIds.length, 132);
   assert.equal(coverage.autoVerified, false);
 
   for (const dimension of packet.dimensions.slice(1)) {
     assert.equal(dimension.mode, 'derived-review-candidate');
     assert.ok(dimension.candidateId);
-    assert.equal(dimension.coveredObservationIds.length, 131);
+    assert.equal(dimension.coveredObservationIds.length, 132);
     assert.equal(dimension.autoVerified, false);
   }
 
