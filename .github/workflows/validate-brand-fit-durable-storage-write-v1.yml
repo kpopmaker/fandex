@@ -31,3 +31,111 @@ jobs:
         run: npx tsx --test tests/brand-fit-durable-storage-write-v1.test.mts
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Diagnose Vercel project OIDC Blob scope without writing
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v'
+          VERCEL_TEAM_ID: 'team_OrRPxuBxMwCYU3kk0r76AfOs'
+          BLOB_STORE_ID: 'store_oe4nEFW5ox93XB8v'
+          BRAND_FIT_PATHNAME: 'fandex/brand-fit/stored-evidence/v1/iu/estee-lauder/d597ee9e419cb8c5cd71a2206cc2b33b11652caa20bea3ff1f0fed3b68f91f96.json'
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          (async () => {
+            const accessToken = String(process.env.VERCEL_TOKEN ?? '').trim();
+            if (!accessToken) throw new Error('vercel_token_missing');
+
+            const url = new URL(
+              'https://api.vercel.com/v1/projects/'
+                + encodeURIComponent(process.env.VERCEL_PROJECT_ID)
+                + '/token',
+            );
+            url.searchParams.set('teamId', process.env.VERCEL_TEAM_ID);
+
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                Authorization: 'Bearer ' + accessToken,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                source: 'github-actions:brand-fit-oidc-diagnostic-v1',
+              }),
+            });
+            if (!response.ok) {
+              throw new Error('oidc_mint_failed:' + response.status);
+            }
+            const payload = await response.json();
+            const oidcToken = String(payload.token ?? '').trim();
+            if (!oidcToken) throw new Error('oidc_token_missing');
+            process.stdout.write('::add-mask::' + oidcToken + '\n');
+
+            const segments = oidcToken.split('.');
+            if (segments.length !== 3) throw new Error('oidc_token_not_jwt');
+            const claims = JSON.parse(
+              Buffer.from(segments[1], 'base64url').toString('utf8'),
+            );
+            console.log(JSON.stringify({
+              oidcProjectId: claims.project_id ?? null,
+              oidcEnvironment: claims.environment ?? null,
+              oidcSubject: claims.sub ?? null,
+              oidcOwnerId: claims.owner_id ?? null,
+            }));
+
+            const { get, list } = await import('@vercel/blob');
+            const auth = {
+              oidcToken,
+              storeId: process.env.BLOB_STORE_ID,
+            };
+
+            try {
+              const result = await list({
+                ...auth,
+                prefix: 'fandex/brand-fit/stored-evidence/v1/iu/estee-lauder/',
+                limit: 1,
+                mode: 'expanded',
+              });
+              console.log(JSON.stringify({
+                blobListStatus: 'success',
+                blobListCount: Array.isArray(result.blobs)
+                  ? result.blobs.length
+                  : null,
+              }));
+            } catch (error) {
+              console.log(JSON.stringify({
+                blobListStatus: 'failure',
+                errorName: error?.name ?? null,
+                errorMessage: error?.message ?? null,
+                statusCode: error?.statusCode ?? null,
+                code: error?.code ?? null,
+              }));
+            }
+
+            try {
+              const result = await get(process.env.BRAND_FIT_PATHNAME, {
+                access: 'private',
+                ...auth,
+                useCache: false,
+              });
+              console.log(JSON.stringify({
+                blobGetStatus: 'success',
+                blobFound: result !== null,
+                statusCode: result?.statusCode ?? null,
+              }));
+            } catch (error) {
+              console.log(JSON.stringify({
+                blobGetStatus: 'failure',
+                errorName: error?.name ?? null,
+                errorMessage: error?.message ?? null,
+                statusCode: error?.statusCode ?? null,
+                code: error?.code ?? null,
+              }));
+            }
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
