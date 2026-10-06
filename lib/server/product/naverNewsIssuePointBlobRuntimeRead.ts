@@ -30,6 +30,11 @@ export const NAVER_NEWS_ISSUE_POINT_BLOB_RUNTIME_READ_VERSION =
 export const FANDEX_PRODUCT_RUNTIME_ENV =
   'FANDEX_PRODUCT_RUNTIME_ENV' as const;
 
+export const FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID =
+  'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v' as const;
+export const FANDEX_NAVER_NEWS_VERCEL_TEAM_ID =
+  'team_OrRPxuBxMwCYU3kk0r76AfOs' as const;
+
 function isProductionRuntime(
   environment: Readonly<Record<string, string | undefined>>,
 ): boolean {
@@ -44,6 +49,123 @@ type ReadOnlyStore = Pick<
   ImmutableTextObjectStore,
   'readText' | 'listPathnames'
 >;
+
+let cachedProjectOidc:
+  | Readonly<{
+      token: string;
+      expiresAtMs: number;
+    }>
+  | null = null;
+
+function clean(value: string | undefined): string | null {
+  const trimmed = value?.trim() ?? '';
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function jwtExpiryMs(token: string): number | null {
+  try {
+    const segments = token.split('.');
+    if (segments.length !== 3) return null;
+    const payload = JSON.parse(
+      Buffer.from(segments[1] ?? '', 'base64url').toString('utf8'),
+    ) as { exp?: unknown };
+    return typeof payload.exp === 'number'
+      && Number.isFinite(payload.exp)
+      ? payload.exp * 1000
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveExactVercelBinding(
+  environment: Readonly<Record<string, string | undefined>>,
+): Readonly<{
+  projectId: typeof FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID;
+  teamId: typeof FANDEX_NAVER_NEWS_VERCEL_TEAM_ID;
+}> {
+  const projectId =
+    clean(environment.FANDEX_VERCEL_PROJECT_ID)
+    ?? clean(environment.VERCEL_PROJECT_ID)
+    ?? FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID;
+  const teamId =
+    clean(environment.FANDEX_VERCEL_TEAM_ID)
+    ?? clean(environment.VERCEL_TEAM_ID)
+    ?? FANDEX_NAVER_NEWS_VERCEL_TEAM_ID;
+
+  if (projectId !== FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID) {
+    throw new Error('naver_news_blob_runtime_vercel_project_binding_invalid');
+  }
+  if (teamId !== FANDEX_NAVER_NEWS_VERCEL_TEAM_ID) {
+    throw new Error('naver_news_blob_runtime_vercel_team_binding_invalid');
+  }
+
+  return Object.freeze({
+    projectId: FANDEX_NAVER_NEWS_VERCEL_PROJECT_ID,
+    teamId: FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
+  });
+}
+
+export async function mintNaverNewsVercelProjectOidcToken(
+  environment: Readonly<Record<string, string | undefined>>,
+): Promise<string | undefined> {
+  const accessToken = clean(environment.VERCEL_TOKEN);
+  if (!accessToken) return undefined;
+
+  const now = Date.now();
+  if (
+    cachedProjectOidc
+    && cachedProjectOidc.expiresAtMs > now + 60_000
+  ) {
+    return cachedProjectOidc.token;
+  }
+
+  const { projectId, teamId } =
+    resolveExactVercelBinding(environment);
+  const url = new URL(
+    `https://api.vercel.com/v1/projects/${encodeURIComponent(
+      projectId,
+    )}/token`,
+  );
+  url.searchParams.set('teamId', teamId);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      source: 'fandex:naver-news-product-runtime-read-v1',
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `naver_news_blob_runtime_project_oidc_mint_failed:${response.status}`,
+    );
+  }
+
+  const payload = await response.json() as { token?: unknown };
+  const token =
+    typeof payload.token === 'string'
+      ? payload.token.trim()
+      : '';
+
+  if (token.length < 32 || /\s/.test(token)) {
+    throw new Error(
+      'naver_news_blob_runtime_project_oidc_response_invalid',
+    );
+  }
+
+  cachedProjectOidc = Object.freeze({
+    token,
+    expiresAtMs:
+      jwtExpiryMs(token) ?? (now + 5 * 60_000),
+  });
+
+  return token;
+}
 
 export type NaverNewsIssuePointBlobRuntimeDependencies =
   Readonly<{
@@ -155,7 +277,15 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     const resolvedEnvironment = await runtimeEnvironment(
       environment,
       dependencies.resolveOidcToken
-        ?? (() => getVercelOidcToken()),
+        ?? (async () => {
+          const vercelOidc = clean(
+            await getVercelOidcToken(),
+          );
+          if (vercelOidc) return vercelOidc;
+          return mintNaverNewsVercelProjectOidcToken(
+            environment,
+          );
+        }),
     );
     store = (
       dependencies.createReadStore
