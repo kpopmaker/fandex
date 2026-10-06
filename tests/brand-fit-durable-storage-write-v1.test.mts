@@ -334,6 +334,80 @@ test('production workflow is pinned to the successful provider receipt and separ
   );
   assert.ok(workflow.includes('GITHUB_EVENT_PATH'));
   assert.ok(workflow.includes('lines.length !== 4'));
+  assert.ok(
+    workflow.includes(
+      'Mint short-lived Vercel project OIDC token',
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "VERCEL_PROJECT_ID: 'prj_aT3p8zmjyochu8iGmFOuNR1lSU7v'",
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "VERCEL_TEAM_ID: 'team_OrRPxuBxMwCYU3kk0r76AfOs'",
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID: 'store_oe4nEFW5ox93XB8v'",
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      'VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}',
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      'https://api.vercel.com/v1/projects/',
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "source: 'github-actions:brand-fit-durable-write-v1'",
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "process.stdout.write('::add-mask::' + oidcToken",
+    ),
+  );
+  assert.ok(
+    workflow.includes(
+      "'VERCEL_OIDC_TOKEN=' + oidcToken",
+    ),
+  );
+  assert.equal(
+    workflow.includes(
+      'FANDEX_BRAND_FIT_EVIDENCE_BLOB_READ_WRITE_TOKEN',
+    ),
+    false,
+  );
+  assert.equal(
+    workflow.includes(
+      'BLOB_READ_WRITE_TOKEN: ${{',
+    ),
+    false,
+  );
+
+  const authorizationGateIndex = workflow.indexOf(
+    'Validate owner durable storage authorization and one-shot consumption',
+  );
+  const oidcMintIndex = workflow.indexOf(
+    'Mint short-lived Vercel project OIDC token',
+  );
+  const receiptDownloadIndex = workflow.indexOf(
+    'Download canonical sanitized provider receipt',
+  );
+  const durableWriteIndex = workflow.indexOf(
+    'Write exactly one immutable Brand Fit durable evidence object',
+  );
+  assert.ok(authorizationGateIndex >= 0);
+  assert.ok(oidcMintIndex > authorizationGateIndex);
+  assert.ok(receiptDownloadIndex > oidcMintIndex);
+  assert.ok(durableWriteIndex > receiptDownloadIndex);
 
   const gateScript = readFileSync(
     new URL(
