@@ -184,6 +184,17 @@ export function evaluateMomentumProductActivationReadiness(
 
   const currentEvaluation = input.liveReadiness.currentEvaluation;
   const carrier = input.liveReadiness.currentCarrier;
+  const persistedAttestationBound =
+    currentEvaluation.attestationPath
+      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json';
+  const verifiedRuntimeAttestationBound =
+    currentEvaluation.attestationPath === null
+    && input.liveReadiness.state === 'public-route-candidate'
+    && input.liveReadiness.currentEvaluation.satisfiesFreshness === true
+    && input.liveReadiness.sourceCurrentness
+      .naverCurrentStoredEvidenceReproducedForReadiness === true
+    && input.liveReadiness.blockers.length === 0;
+
   checks['current-attestation-binding'] =
     currentEvaluation.currentNoOpEvaluationAttested === true
     && currentEvaluation.currentCarrierProduced === false
@@ -200,8 +211,7 @@ export function evaluateMomentumProductActivationReadiness(
     && currentEvaluation.persistenceConsensus !== null
     && currentEvaluation.persistenceConsensus
       === carrier.persistenceConsensus
-    && currentEvaluation.attestationPath
-      === 'data/momentum-product/iu_momentum_current_dual_source_evaluation_attestation_v1.json'
+    && (persistedAttestationBound || verifiedRuntimeAttestationBound)
     && typeof currentEvaluation.attestationDigest === 'string'
     && /^[0-9a-f]{64}$/.test(currentEvaluation.attestationDigest);
 

@@ -25,6 +25,12 @@ test('current IU Momentum is eligible for activation review without activation',
 
   assert.equal(result.status, 'eligible-for-activation-review');
   assert.equal(Object.values(result.checks).every(Boolean), true);
+  assert.equal(result.checks['current-attestation-binding'], true);
+  assert.equal(result.freshnessAttestation.attestationPath, null);
+  assert.equal(
+    result.freshnessAttestation.attestationDigest,
+    'c672354c652f0eec16487c1399a83d5511151eba8d7b1332d1ef51275bdd93a2',
+  );
   assert.equal(result.target.artistId, 'iu');
   assert.equal(result.target.legacyVariableId, 'growthMomentumPoint');
   assert.equal(result.target.constructId, 'momentumEvidenceConsensus');
