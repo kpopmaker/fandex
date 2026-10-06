@@ -11,12 +11,13 @@ permissions:
   contents: read
 
 jobs:
-  create:
+  create_token:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+      TRANSFER_PUBLIC_KEY_B64: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFzN2xGOGNLb3hLVDFaQ2N5dG8vYgpJa1hKV012RmtuQ2doZGJCRFJJV29La1JydS8rZ2g2VittRzFGQVdVWHBVeEFuQnBlem85bmF6a2tsc29FQWlMCmxUWkxEUmNIK293ellEOE1NMVlXamluODd2d3NRMldsODVsbnRXaHVJeHNxU0s1eEpTUFZZV3VaWkduYlpMMCsKQmY2czA1Q1d0VnNFSS8rRFAxZnF2bzBCVWI1SVNPckdsZHZKT09IeXQ4YU5SOUtXS25tL0U0Nm5kcUhuWlRxRgoxaldtNkNqbWNPbERNUjNUcnI0bUp2RGxRMGFhSTRIejA5cytWdUMrRDBqLytSNkxmQXdqYkRrbUxxbmx0N2llCmJMM3BtYlNjUWJBTGswZDlyekd6cWxDUG1ZNmJoMGRtWVpDUDlOdWRxcFRZNU14U0llaHJaRFprN2lYOGtRSU8KeHdJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
     steps:
       - name: Create project-scoped Vercel token
         shell: bash
@@ -25,18 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$VERCEL_TOKEN"
-
-          cat > /tmp/fandex-transfer-public.pem <<'PEM'
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs7lF8cKoxKT1ZCcyto/b
-IkXJWMvFknCghdbBDRIWoKkRru/+gh6V+mG1FAWUXpUxAnBpezo9nazkklsoEAiL
-lTZLDRcH+owzYD8MM1YWjin87vwsQ2Wl85lntWhuIxsqSK5xJSPVYWuZZGnbZL0+
-Bf6s05CWtVsEI/+DP1fqvo0BUb5ISOrGldvJOOHyt8aNR9KWKnm/E46ndqHnZTqF
-1jWm6CjmcOlDMR3Trr4mJvDlQ0aaI4Hz09s+VuC+D0j/+R6LfAwjbDkmLqnlt7ie
-bL3pmbScQbALk0d9rzGzqlCPmY6bh0dmYZCP9NudqpTY5MxSIehrZDZk7iX8kQIO
-xwIDAQAB
------END PUBLIC KEY-----
-PEM
+          printf '%s' "$TRANSFER_PUBLIC_KEY_B64"             | base64 -d             > /tmp/fandex-transfer-public.pem
 
           npx --yes vercel@latest tokens add             fandex-render-product-20261006             --project "$VERCEL_PROJECT_ID"             --format json             --token "$VERCEL_TOKEN"             > /tmp/vercel-token-create.json
 
