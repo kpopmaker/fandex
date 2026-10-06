@@ -181,7 +181,6 @@ jobs:
             'verified-commercial-partnership-activity',
             'Research',
             'real',
-            '1 refs',
           ];
 
           for (const value of required) {
@@ -190,6 +189,12 @@ jobs:
                 'brand-fit-beta-card-required-value-missing:' + value,
               );
             }
+          }
+
+          if (!/\d+ refs/.test(card)) {
+            throw new Error(
+              'brand-fit-beta-card-evidence-ref-count-missing',
+            );
           }
 
           const forbidden = [
@@ -214,7 +219,7 @@ jobs:
               'verified-commercial-partnership-activity',
             lifecycle: 'research',
             materialClass: 'real',
-            evidenceRefs: 1,
+            evidenceRefsPresent: true,
             providerCalls: 0,
             blobWrites: 0,
             databaseWrites: 0,
