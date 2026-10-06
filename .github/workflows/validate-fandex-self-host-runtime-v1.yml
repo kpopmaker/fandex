@@ -111,3 +111,118 @@ jobs:
       - name: Stop portable FANDEX runtime
         if: always()
         run: docker rm -f fandex-self-host-v1 >/dev/null 2>&1 || true
+
+      - name: Verify host-neutral Brand Fit durable Product runtime
+        if: >-
+          github.event_name == 'push' ||
+          github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+
+          docker run --rm -d \
+            --name fandex-self-host-brand-fit-v1 \
+            -p 3000:3000 \
+            -e FANDEX_PRODUCT_RUNTIME_ENV=production \
+            -e FANDEX_BRAND_FIT_EVIDENCE_BLOB_STORE_ID=store_oe4nEFW5ox93XB8v \
+            -e VERCEL_TOKEN="$VERCEL_TOKEN" \
+            fandex-self-host-v1
+
+          for attempt in $(seq 1 45); do
+            if curl --fail --silent --show-error \
+              http://127.0.0.1:3000/api/health \
+              > /tmp/fandex-brand-fit-health.json; then
+              break
+            fi
+            if [ "$attempt" -eq 45 ]; then
+              docker logs fandex-self-host-brand-fit-v1
+              exit 1
+            fi
+            sleep 1
+          done
+
+          for attempt in $(seq 1 10); do
+            if curl --fail --silent --show-error \
+              http://127.0.0.1:3000/artists/iu/fandex-beta \
+              > /tmp/fandex-brand-fit-beta.html; then
+              break
+            fi
+
+            if [ "$attempt" -eq 10 ]; then
+              docker logs fandex-self-host-brand-fit-v1
+              exit 1
+            fi
+
+            sleep 2
+          done
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync(
+            '/tmp/fandex-brand-fit-beta.html',
+            'utf8',
+          );
+
+          const start = html.indexOf('brandFitPoint');
+          const end = html.indexOf(
+            'comebackActivityPoint',
+            start + 'brandFitPoint'.length,
+          );
+
+          if (start < 0 || end < 0) {
+            throw new Error('brand-fit-beta-card-not-found');
+          }
+
+          const card = html.slice(start, end);
+
+          const required = [
+            'verified-commercial-partnership-activity',
+            'Research',
+            'real',
+          ];
+
+          for (const value of required) {
+            if (!card.includes(value)) {
+              throw new Error(
+                'brand-fit-beta-card-required-value-missing:' + value,
+              );
+            }
+          }
+
+          const forbidden = [
+            '런타임 확인 필요',
+            'durable-stored-evidence-runtime-unavailable',
+            'durable-stored-evidence-not-found',
+            'runtime-read-failed',
+          ];
+
+          for (const value of forbidden) {
+            if (card.includes(value)) {
+              throw new Error(
+                'brand-fit-beta-card-runtime-blocker-present:' + value,
+              );
+            }
+          }
+
+          console.log(JSON.stringify({
+            brandFitHostNeutralRuntime: 'ok',
+            productSurface: '/artists/iu/fandex-beta',
+            valueState:
+              'verified-commercial-partnership-activity',
+            lifecycle: 'research',
+            materialClass: 'real',
+            providerCalls: 0,
+            blobWrites: 0,
+            databaseWrites: 0,
+            productActivations: 0,
+            publications: 0,
+          }));
+          NODE
+
+      - name: Stop host-neutral Brand Fit runtime
+        if: always()
+        run: >-
+          docker rm -f fandex-self-host-brand-fit-v1
+          >/dev/null 2>&1 || true
