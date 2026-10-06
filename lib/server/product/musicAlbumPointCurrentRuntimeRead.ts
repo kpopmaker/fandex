@@ -29,6 +29,10 @@ import {
   evaluateMusicAlbumPointProductReadiness,
   type MusicAlbumPointProductReadiness,
 } from '../../product/readiness/musicAlbumPointProductReadiness';
+import {
+  getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU,
+  type MusicAlbumReportedWebStoredEvidenceServerRuntimeResult,
+} from './musicAlbumReportedWebStoredEvidenceRuntime';
 
 const TARGETS_PATH = resolve(
   process.cwd(),
@@ -61,13 +65,18 @@ export type MusicAlbumPointCurrentRuntimeReadResult =
         typeof MUSIC_ALBUM_POINT_CURRENT_RUNTIME_READ_VERSION;
       candidate: ProductMusicAlbumPointCandidateResult;
       readiness: MusicAlbumPointProductReadiness;
+      reportedWebStoredEvidence:
+        MusicAlbumReportedWebStoredEvidenceServerRuntimeResult;
       evidence: Readonly<{
-        sourceKind: 'repository-current-state';
+        sourceKind: 'repository-current-state+reported-web-durable-read';
         latestCheckDate: string;
         currentMusicObservationCount: number;
         albumProviderCount: 2;
         albumObservationCount: 0;
         albumHistoryState: 'research-only';
+        reportedWebDurableReadState:
+          MusicAlbumReportedWebStoredEvidenceServerRuntimeResult['status'];
+        reportedWebDurableEvidenceCount: number;
       }>;
     }>
   | Readonly<{
@@ -151,6 +160,8 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
   let candidates: unknown;
   let bugs: unknown;
   let historyCsv: string;
+  const reportedWebStoredEvidence =
+    await getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU();
 
   try {
     [targets, checkHistory, candidates, bugs, historyCsv] =
@@ -224,13 +235,21 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
       contractVersion: MUSIC_ALBUM_POINT_CURRENT_RUNTIME_READ_VERSION,
       candidate,
       readiness,
+      reportedWebStoredEvidence,
       evidence: Object.freeze({
-        sourceKind: 'repository-current-state' as const,
+        sourceKind:
+          'repository-current-state+reported-web-durable-read' as const,
         latestCheckDate: latest,
         currentMusicObservationCount: observations.length,
         albumProviderCount: 2 as const,
         albumObservationCount: 0 as const,
         albumHistoryState: 'research-only' as const,
+        reportedWebDurableReadState:
+          reportedWebStoredEvidence.status,
+        reportedWebDurableEvidenceCount:
+          reportedWebStoredEvidence.status === 'ok'
+            ? reportedWebStoredEvidence.evidenceCount
+            : 0,
       }),
     });
   } catch {
