@@ -38,6 +38,12 @@ test('Momentum approved activation evidence matches the code-level approval reco
     evidence.authorizationDecision,
     MOMENTUM_PRODUCT_ACTIVATION_APPROVAL_EVIDENCE.decision,
   );
+  assert.equal(evidence.binding.productionBindingCurrent, false);
+  assert.equal(evidence.binding.productionRevalidationRequired, true);
+  assert.equal(
+    evidence.binding.productionBlockReason,
+    'vercel-team-fair-use-block',
+  );
   assert.deepEqual(evidence.safetyBoundary, {
     databaseWrites: 0,
     registryMutations: 0,
