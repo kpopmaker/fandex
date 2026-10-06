@@ -27,23 +27,68 @@ jobs:
           node <<'NODE'
           const fs = require('node:fs');
           const html = fs.readFileSync('/tmp/fandex-beta.html', 'utf8');
-          const start = html.indexOf('brandFitPoint');
-          const end = html.indexOf('comebackActivityPoint', start + 1);
-          if (start < 0 || end < 0) {
+          const text = html
+            .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/&#x27;/g, "'")
+            .replace(/&amp;/g, '&')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          const summary = text.match(
+            /Runtime\s*(\d+)\s*\/\s*7.*?Real Production\s*(\d+)\s*\/\s*7.*?Blocked\s*(\d+)/i,
+          );
+          if (!summary) throw new Error('runtime-summary-not-found');
+
+          console.log('FANDEX_RENDER_RUNTIME=' + summary[1] + '/7');
+          console.log('FANDEX_RENDER_REAL_PRODUCTION=' + summary[2] + '/7');
+          console.log('FANDEX_RENDER_BLOCKED=' + summary[3]);
+
+          const vars = [
+            'musicAlbumPoint',
+            'newsIssuePoint',
+            'snsFandomPoint',
+            'brandFitPoint',
+            'comebackActivityPoint',
+            'growthMomentumPoint',
+            'riskAdjustmentPoint',
+          ];
+
+          for (let i = 0; i < vars.length; i += 1) {
+            const start = text.indexOf(vars[i]);
+            const end = i + 1 < vars.length
+              ? text.indexOf(vars[i + 1], start + 1)
+              : text.indexOf('이 Beta가 의미하는 것', start + 1);
+            if (start < 0) {
+              console.log('FANDEX_RENDER_VAR_' + vars[i] + '=MISSING_CARD');
+              continue;
+            }
+            const card = text.slice(
+              start,
+              end > start ? end : Math.min(text.length, start + 1200),
+            );
+            console.log(
+              'FANDEX_RENDER_VAR_' + vars[i] + '='
+                + card.slice(0, 900).replace(/\n/g, ' '),
+            );
+          }
+
+          const brandStart = text.indexOf('brandFitPoint');
+          const brandEnd = text.indexOf('comebackActivityPoint', brandStart + 1);
+          if (brandStart < 0 || brandEnd < 0) {
             throw new Error('brand-fit-card-not-found');
           }
-          const card = html.slice(start, end);
+          const brandCard = text.slice(brandStart, brandEnd);
           const unavailable =
-            card.includes('durable-stored-evidence-runtime-unavailable');
+            brandCard.includes('durable-stored-evidence-runtime-unavailable');
           const notFound =
-            card.includes('durable-stored-evidence-not-found');
+            brandCard.includes('durable-stored-evidence-not-found');
           console.log(
-            'FANDEX_RENDER_BRAND_FIT_RUNTIME_UNAVAILABLE='
-              + String(unavailable),
+            'FANDEX_RENDER_BRAND_FIT_RUNTIME_UNAVAILABLE=' + String(unavailable),
           );
           console.log(
-            'FANDEX_RENDER_BRAND_FIT_STORED_EVIDENCE_NOT_FOUND='
-              + String(notFound),
+            'FANDEX_RENDER_BRAND_FIT_STORED_EVIDENCE_NOT_FOUND=' + String(notFound),
           );
           console.log(
             'FANDEX_RENDER_BRAND_FIT_CARD_RESOLVED='
@@ -55,9 +100,8 @@ jobs:
       - name: Safety boundary
         if: always()
         run: |
+          rm -f /tmp/fandex-beta.html
           echo "FANDEX_RENDER_RUNTIME_PROBE_PROVIDER_EXECUTIONS=0"
           echo "FANDEX_RENDER_RUNTIME_PROBE_DATABASE_WRITES=0"
           echo "FANDEX_RENDER_RUNTIME_PROBE_BLOB_WRITES=0"
           echo "FANDEX_RENDER_RUNTIME_PROBE_RETRIES=0"
-
-# rerun after Render main 027d77a4 + env binding approval
