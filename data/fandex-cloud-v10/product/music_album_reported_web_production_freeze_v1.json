@@ -16,7 +16,8 @@
     "canonicalArtists": 21,
     "circleDrafts": 2,
     "allRawLifecycleResearch": true,
-    "allRawReleaseIdentityCandidate": true
+    "allRawReleaseIdentityCandidate": true,
+    "tierAOrBQualifyingDedupedHanteoObservations": 132
   },
   "semanticBoundary": {
     "productionMetricSemantic": "reported-hanteo-first-week-sales",
@@ -36,6 +37,8 @@
     "rightsUsageReviewStillRequired": true,
     "durableProductionEvidenceStillRequired": true,
     "methodologyLockStillRequired": true,
-    "productActivationAuthorized": false
+    "productActivationAuthorized": false,
+    "currentReleaseCoverageMustBeVerifiedSeparately": true,
+    "latestStoredHistoryDoesNotImplyCurrentRelease": true
   }
 }
