@@ -293,3 +293,42 @@ test('current combined Product remains time-unknown rather than inferring a fake
   assert.deepEqual(result.record.observationTime, { kind: 'unknown' });
   assert.equal(result.record.collectionTime, null);
 });
+
+
+test('reported-web current-source blocker is preserved in common Product evidence without inventing a Product value', () => {
+  const result = adaptMusicAlbumPointToFandexVariableProduct({
+    candidate: candidate(),
+    readiness: readiness(),
+    reportedWebCurrentRelease: {
+      status: 'unavailable',
+      contractVersion: 'reported-album-sales-current-release-v1',
+      canonicalArtistId: 'iu',
+      reason: 'latest-release-not-verified',
+      freshnessState: 'unknown',
+      value: null,
+      unit: null,
+      missingIsZero: false,
+      missingIsStable: false,
+    },
+  });
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-current:unavailable',
+    ),
+  );
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-reason:latest-release-not-verified',
+    ),
+  );
+  assert.deepEqual(result.record.valueRepresentation, {
+    kind: 'none',
+    reason: 'not-produced',
+  });
+  assert.equal(result.record.lifecycleState, 'shadow');
+  assert.equal(result.record.readinessState, 'research-only');
+});
