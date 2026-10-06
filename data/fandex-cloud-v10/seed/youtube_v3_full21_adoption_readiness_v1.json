@@ -90,6 +90,15 @@
       "mbidFallbackResolvesV": false,
       "mbidFallbackResolvesLisa": false,
       "blockerResolved": false
+    },
+    "alternativeCanonicalProviderCandidate": {
+      "provider": "ListenBrainz",
+      "evidencePath": "data/fandex-cloud-v10/seed/listenbrainz_v_lisa_candidate_v1.json",
+      "probeRunId": 37465020592,
+      "vCanonicalIdentitySupported": true,
+      "lisaCanonicalIdentitySupported": true,
+      "lastfmDropInReplacementReady": false,
+      "productParityResolved": false
     }
   },
   "allowedNow": {
@@ -129,9 +138,9 @@
     }
   ],
   "nextGate": {
-    "code": "ALTERNATIVE_CANONICAL_LASTFM_PROVIDER_OR_RUNTIME_CONTRACT_DECISION_REQUIRED",
-    "primaryBlocker": "lastfm:v,lisa",
-    "note": "Direct MBID fallback was live-probed and did not establish canonical-specific Last.fm stats for V or LISA. Product 21 remains blocked."
+    "code": "FULL_21_LISTENBRAINZ_CANONICAL_COHORT_SHADOW_REQUIRED",
+    "primaryBlocker": "cross-provider metric comparability",
+    "note": "ListenBrainz resolves V/LISA canonical identity at the provider layer, but cannot be mixed into the existing Last.fm cohort. Validate one common 21-artist ListenBrainz shadow before any Product Runtime source-contract decision."
   },
   "safety": {
     "missingIsZero": false,
