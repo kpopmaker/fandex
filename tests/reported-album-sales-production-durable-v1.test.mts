@@ -12,9 +12,10 @@ import {
 import {
   buildReportedAlbumSalesProductionSourceCandidate,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
-import type {
-  SourceAuthorizationDimensions,
-} from '../lib/alternative-evidence/onboarding';
+import {
+  buildReportedWebUsageReviewRequest,
+  materializeReportedWebUsageReview,
+} from '../lib/alternative-evidence/reportedWebUsageReviewRequest';
 import {
   buildReportedAlbumSalesImmutableEvidenceObjectCandidate,
   decodeReportedAlbumSalesImmutableEvidenceEnvelope,
@@ -34,17 +35,6 @@ import {
 import type {
   ImmutableTextObjectStore,
 } from '../lib/server/storage/immutableTextObjectStore';
-
-const authorizedRights: SourceAuthorizationDimensions = Object.freeze({
-  acquisitionState: 'allowed',
-  automationState: 'blocked',
-  rawStorageState: 'blocked',
-  normalizedStorageState: 'allowed',
-  retentionState: 'allowed',
-  commercialUseState: 'allowed-with-conditions',
-  derivedPublicationState: 'allowed-with-conditions',
-  rawRedistributionState: 'blocked',
-});
 
 function observation(input: Readonly<{
   value?: number;
@@ -100,6 +90,41 @@ function observation(input: Readonly<{
   });
 }
 
+function reviewedRights(
+  source: ReportedAlbumSalesObservation,
+) {
+  const request = buildReportedWebUsageReviewRequest({
+    observation: source,
+    rightsReviewReferences: [
+      {
+        referenceId: 'fixture:rights:durable',
+        sourceUrl: 'https://example.com/rights',
+        kind: 'legal-review-memo',
+        observedAt: '2026-10-08T10:05:00+09:00',
+        reviewSignal: 'fixture rights review',
+        authorizationStateNotInferred: true,
+      },
+    ],
+  });
+  return materializeReportedWebUsageReview({
+    request,
+    decision: {
+      requestId: request.requestId,
+      states: {
+        acquisitionState: 'allowed',
+        normalizedStorageState: 'allowed',
+        retentionState: 'allowed',
+        commercialUseState: 'allowed-with-conditions',
+        derivedPublicationState: 'allowed-with-conditions',
+      },
+      evidenceRefs: ['legal-review:reported-web:durable'],
+      conditionRefs: ['condition:factual-values-only'],
+      reviewerRef: 'reviewer:rights:durable',
+      reviewedAt: '2026-10-08T10:10:00+09:00',
+    },
+  });
+}
+
 function eligibleCandidate(source: ReportedAlbumSalesObservation) {
   const request =
     buildReportedAlbumSalesProductionIdentityReviewRequest(source);
@@ -122,7 +147,7 @@ function eligibleCandidate(source: ReportedAlbumSalesObservation) {
     buildReportedAlbumSalesProductionSourceCandidate({
       observation: source,
       asOfDate: '2026-10-08',
-      rights: authorizedRights,
+      rightsReview: reviewedRights(source),
       releaseIdentityBinding: binding,
     });
   assert.equal(candidate.productSourceEligible, true);
