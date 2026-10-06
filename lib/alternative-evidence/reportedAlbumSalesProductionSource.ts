@@ -3,6 +3,10 @@ import type {
   ReportedAlbumSalesObservation,
   ReportedAlbumSalesSupportingEvidence,
 } from './reportedAlbumSalesEvidence';
+import {
+  validateReportedAlbumSalesReleaseIdentityReview,
+  type ReportedAlbumSalesReleaseIdentityReview,
+} from './reportedAlbumSalesReleaseIdentityReview';
 
 export const REPORTED_ALBUM_SALES_PRODUCTION_SOURCE_VERSION =
   'reported-album-sales-production-source-v1' as const;
@@ -65,6 +69,8 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   reportingSources: readonly string[];
   sourcePublicationDates: readonly string[];
   evidenceQuality: ReportedAlbumSalesObservation['evidenceQuality'];
+  releaseIdentityReviewId: string | null;
+  releaseIdentityEvidenceRefs: readonly string[];
   availability: 'available' | 'unavailable';
   rightsUsageReview: ReportedWebUsageReview;
   storedMaterialClass: 'factual-values-and-provenance-only';
@@ -206,6 +212,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
   input: Readonly<{
     observation: ReportedAlbumSalesObservation;
     conflictState: ReportedAlbumSalesProductionConflictState;
+    releaseIdentityReview: ReportedAlbumSalesReleaseIdentityReview | null;
     rightsUsageReview: ReportedWebUsageReview;
   }>,
 ): ReportedAlbumSalesProductionSourceCandidate {
@@ -247,6 +254,17 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
   }
   if (observation.release.releaseDate === null) {
     blockers.push('release-date-unavailable');
+  }
+
+  const identityReviewIssues =
+    input.releaseIdentityReview === null
+      ? ['identity-review-missing']
+      : validateReportedAlbumSalesReleaseIdentityReview(
+          observation,
+          input.releaseIdentityReview,
+        );
+  if (identityReviewIssues.length > 0) {
+    blockers.push(...identityReviewIssues);
   }
 
   const qualifyingEvidence =
@@ -337,6 +355,12 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     reportingSources,
     sourcePublicationDates,
     evidenceQuality: observation.evidenceQuality,
+    releaseIdentityReviewId:
+      input.releaseIdentityReview?.reviewId ?? null,
+    releaseIdentityEvidenceRefs:
+      input.releaseIdentityReview === null
+        ? Object.freeze([])
+        : uniqueSorted(input.releaseIdentityReview.evidenceRefs),
     revisionState: observation.revision.state,
     supersedesObservationId:
       observation.revision.supersedesObservationId,
