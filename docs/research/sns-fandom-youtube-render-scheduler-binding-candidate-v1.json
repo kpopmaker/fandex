@@ -1,0 +1,41 @@
+{
+  "version": "sns_fandom_youtube_render_scheduler_binding_candidate_v1",
+  "state": "prepared-not-activated",
+  "trackingIssueRef": "github-issue://kpopmaker/fandex/issues/509",
+  "candidateAuthority": "render-cron-to-github-workflow-dispatch",
+  "candidateRenderJobName": "fandex-sns-fandom-hourly-external-trigger",
+  "candidateSchedule": "7 * * * *",
+  "candidateRegion": "singapore",
+  "candidateBranch": "main",
+  "candidateRepository": "https://github.com/kpopmaker/fandex",
+  "candidateWorkflowFile": ".github/workflows/execute-sns-fandom-youtube-render-trigger-v1.yml",
+  "candidateDispatchApproval": "approved-render-sns-fandom-recurring-v1",
+  "githubDispatchCredentialLocatorCandidate": "render-env://fandex-sns-fandom-hourly-external-trigger/FANDEX_GITHUB_ACTIONS_TOKEN",
+  "authorizedProviderRuntimeSha": "f030eaf54be5a08d517a7712dafb1596cb541ba6",
+  "sharedConcurrencyGroup": "fandex-sns-fandom-youtube-recurring-measurement-v1",
+  "providerExecutionsPerUtcHourlySlotMax": 1,
+  "existingGithubScheduleRemainsFallback": true,
+  "renderCronCreationAuthorized": false,
+  "renderEnvironmentMutationAuthorized": false,
+  "providerSubmissionAuthorized": false,
+  "productionCollectionAuthorized": false,
+  "productActivationAuthorized": false,
+  "canonicalWindowRebaselineAuthorized": false,
+  "syntheticBackfillAllowed": false,
+  "retrospectiveProviderObservationAllowed": false,
+  "retrospectiveReceiptSynthesisAllowed": false,
+  "evidenceBasis": {
+    "existingRenderCronJobName": "fandex-naver-hourly-external-trigger",
+    "existingRenderCronJobId": "crn-davsr6favr4c73da3ddg",
+    "existingRenderCronSchedule": "17 * * * *",
+    "existingRenderCronLastSuccessfulRunAt": "2026-10-06T11:17:09Z",
+    "existingPattern": "Render Cron dispatches a GitHub Actions workflow using a Render-bound GitHub Actions token"
+  },
+  "notes": [
+    "This file is a candidate binding contract only and does not create a Render cron job.",
+    "The candidate minute 7 is separated from the existing GitHub minute 17 and 47 fallbacks while remaining inside the same UTC hourly observation slot.",
+    "The external workflow uses the same repository-wide concurrency group and the same immutable slot claim/receipt runtime as the GitHub-scheduled path.",
+    "A real Render cron job creation and any environment-variable binding require separate explicit owner approval.",
+    "The currently materialized canonical window is not rebaselined by this candidate."
+  ]
+}
