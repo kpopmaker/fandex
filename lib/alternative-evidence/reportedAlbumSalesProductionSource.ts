@@ -46,6 +46,7 @@ export type ReportedAlbumSalesProductionBlocker =
   | 'provider-period-not-seven-calendar-days'
   | 'first-week-period-incomplete'
   | 'release-identity-not-resolved'
+  | 'release-identity-binding-required'
   | 'release-identity-binding-invalid'
   | 'source-tier-not-production-eligible'
   | 'source-publication-date-missing'
@@ -243,10 +244,9 @@ function productionBlockers(input: Readonly<{
     blockers.push('first-week-period-incomplete');
   }
 
-  if (
-    input.identityBindingProvided
-    && !input.identityBindingValid
-  ) {
+  if (!input.identityBindingProvided) {
+    blockers.push('release-identity-binding-required');
+  } else if (!input.identityBindingValid) {
     blockers.push('release-identity-binding-invalid');
   }
   if (!input.identityResolved) {
@@ -315,7 +315,8 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     ? 'resolved' as const
     : input.observation.release.identityState;
   const identityResolved =
-    releaseIdentityState === 'resolved'
+    identityBindingValid
+    && releaseIdentityState === 'resolved'
     && canonicalReleaseId !== null;
   const blockers = productionBlockers({
     observation: input.observation,
