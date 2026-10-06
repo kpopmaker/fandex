@@ -1,0 +1,35 @@
+{
+  "version": "listenbrainz_full21_rebaseline_evaluation_policy_v1",
+  "status": "evaluation_authorized_non_activating",
+  "selectedOption": "evaluate_uniform_full21_listenbrainz_rebaseline",
+  "authorization": {
+    "repeatedObservationResearch": true,
+    "characterizeAllTimeDeltaAcrossDistinctProviderEpochs": true,
+    "defineProductionScoreFormula": false,
+    "defineWeights": false,
+    "definePromotionThreshold": false,
+    "replaceLastfm": false,
+    "activateProduct": false,
+    "modifyRuntime": false,
+    "scheduleCollection": false,
+    "mutateDatabase": false,
+    "deploy": false,
+    "mergeMain": false
+  },
+  "metricSelection": {
+    "candidateObservationMetric": "all_time.total_listen_count",
+    "rationale": "It is the only validated ListenBrainz aggregate in the current shadow that is structurally suitable for repeated cumulative observation without inventing a listener/playcount mapping.",
+    "monthSelectedForDelta": false,
+    "weekSelectedForDelta": false,
+    "reasonMonthWeekExcluded": "Provider-defined ranged aggregates can move as the window rolls and are not treated as cumulative snapshots."
+  },
+  "deltaSemantics": {
+    "distinctProviderUpdateEpochRequired": true,
+    "sameProviderEpochObservationsMayNotBeInterpretedAsZeroGrowth": true,
+    "negativeAllTimeDeltaRequiresReview": true,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "observationTimeEqualsProviderUpdateTime": false
+  },
+  "nextGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED"
+}

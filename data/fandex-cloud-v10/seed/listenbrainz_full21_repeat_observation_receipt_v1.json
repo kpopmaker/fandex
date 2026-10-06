@@ -1,0 +1,71 @@
+{
+  "version": "listenbrainz_full21_repeat_observation_receipt_v1",
+  "status": "repeat_complete_same_provider_epoch_non_activating",
+  "policyVersion": "listenbrainz_full21_rebaseline_evaluation_policy_v1",
+  "previousObservation": {
+    "runId": 37468037307,
+    "head": "3961b82d39758b444eeecd53a11472e58b1f0d6c",
+    "artifactId": 11414893747,
+    "artifactDigest": "sha256:5dc52a38e224402aee016165644f11368136eb326166c272677987bb77dc7e9c",
+    "startedAt": "2026-10-06T13:05:08Z"
+  },
+  "repeatObservation": {
+    "supersededBroadRunId": 37471908453,
+    "supersededBroadRunConclusion": "success",
+    "authoritativeRunId": 37472054496,
+    "jobId": 112297777748,
+    "head": "77001456790001c90c5d3d8b26192961f0b14699",
+    "conclusion": "success",
+    "startedAt": "2026-10-06T13:35:49Z",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "unavailableRangeCount": 0,
+    "identityMismatchRangeCount": 0,
+    "observedRange": "all_time",
+    "allTimeNegativeDeltaArtistCount": 0,
+    "allTimePositiveDeltaArtistCount": 0,
+    "allTimeUnchangedArtistCount": 21,
+    "rateOrScoreComputed": false,
+    "zeroImputationUsed": false
+  },
+  "providerEpochEvidence": {
+    "providerField": "last_updated",
+    "distinctValueCount": 13,
+    "minimumEpoch": 1791063455,
+    "minimumIsoUtc": "2026-10-03T21:37:35Z",
+    "maximumEpoch": 1791063713,
+    "maximumIsoUtc": "2026-10-03T21:41:53Z",
+    "allReturnedProviderUpdatesPredatePreviousObservation": true,
+    "distinctProviderUpdateEpochBetweenObservationsEstablished": false,
+    "interpretation": "Both Oct 6 collection runs observed all_time counts from a provider data epoch whose reported last_updated values predate the first collection. The unchanged 21/21 counts therefore must not be labeled zero growth."
+  },
+  "artifact": {
+    "artifactId": 11416733310,
+    "name": "artist-expansion-listenbrainz-full21-repeat-observation-v1",
+    "sizeBytes": 3043,
+    "digest": "sha256:f5198d30fd0faac5b6c52b63392dab0d0d8a11f135966a31b6aea5cd1fa59162",
+    "expiresAt": "2026-10-20T13:36:11Z"
+  },
+  "decision": {
+    "allTimeCumulativeCandidateRejected": false,
+    "allTimeCumulativeCandidateConfirmedForScoring": false,
+    "zeroGrowthEstablished": false,
+    "scoreFormulaReady": false,
+    "nextGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
+    "requirement": "Obtain a later 21-artist observation after ListenBrainz reports a provider last_updated epoch newer than the currently observed 2026-10-03 epochs, then characterize all_time deltas without inventing weights or thresholds."
+  },
+  "safety": {
+    "sameEpochTreatedAsZeroGrowth": false,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
