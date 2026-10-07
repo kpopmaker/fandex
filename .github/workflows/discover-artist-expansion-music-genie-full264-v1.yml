@@ -1,0 +1,77 @@
+name: Discover Artist Expansion Music Genie full264 identities v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-genie-full264-v1
+
+permissions:
+  contents: read
+
+jobs:
+  discover-genie-full264:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+
+      - name: Materialize full355 target candidates
+        run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
+
+      - name: Run Genie full264 identity discovery
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_full264_identity_discovery_v1.py
+
+      - name: Validate discovery contract
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          d=json.loads(Path('music_genie_full264_identity_discovery_v1.json').read_text(encoding='utf-8'))
+          assert d['provider'] == 'genie'
+          assert d['canonicalUniverseCount'] == 355
+          assert d['musicCompatibilityBeforeDiscovery'] == {
+              'supportedCount':91,
+              'unresolvedCount':264,
+              'unsupportedCount':0,
+          }
+          assert d['targetUnresolvedCount'] == 264
+          assert d['requestCount'] == 264
+          assert sum(d['statusCodeCounts'].values()) == 264
+          assert sum(d['dispositionCounts'].values()) == 264
+          assert len(d['results']) == 264
+          assert len({r['canonicalArtistId'] for r in d['results']}) == 264
+          assert d['reviewSemantics']['uniqueExactCandidateIsReviewedBinding'] is False
+          assert d['reviewSemantics']['providerSearchPresenceEqualsChartPresence'] is False
+          assert all(v is False for v in d['safety'].values())
+          print(
+              'PASS: Genie full264 discovery contract | '
+              f"uniqueExact={len(d['uniqueExactCandidateCanonicalArtistIds'])} | "
+              f"uniqueWrapper={len(d['uniqueWrapperCandidateCanonicalArtistIds'])} | "
+              f"ambiguousExact={len(d['ambiguousExactCanonicalArtistIds'])} | "
+              f"failed={len(d['requestFailedCanonicalArtistIds'])}"
+          )
+          PY
+
+      - name: Upload Genie full264 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-full264-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_full264_identity_discovery_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
