@@ -107,7 +107,7 @@
     "discoveryProviderPeriodStart": "2025-05-28",
     "discoveryProviderPeriodEnd": "2025-06-03",
     "productionObservationEligible": false,
-    "searchOutcome": "targeted-public-web-search-exhausted-without-qualifying-exact-value-source"
+    "searchOutcome": "targeted-public-web-search-completed-without-qualifying-exact-value-source"
   },
   "productionBoundary": {
     "discoveryOnlyAutoPromotionAllowed": false,
