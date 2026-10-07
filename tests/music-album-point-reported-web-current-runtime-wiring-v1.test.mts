@@ -50,3 +50,31 @@ test('reported-web durable state does not claim Production activation or invent 
     /reportedWebStoredEvidence[\s\S]{0,1000}(?:productActivationAuthorized:\s*true|numericProductEligible:\s*true|productValue:\s*\d)/,
   );
 });
+
+
+test('current runtime exposes a human review request for the candidate latest physical release without auto-verifying it', () => {
+  const source = readFileSync(
+    new URL(
+      '../lib/server/product/musicAlbumPointCurrentRuntimeRead.ts',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(
+    source,
+    /buildReportedAlbumSalesCurrentReleaseReviewRequest/,
+  );
+  assert.match(
+    source,
+    /reportedWebCurrentReleaseReviewRequest/,
+  );
+  assert.doesNotMatch(
+    source,
+    /createReportedAlbumSalesCurrentReleaseBinding/,
+  );
+  assert.doesNotMatch(
+    source,
+    /latestReleaseState:\s*'verified-latest'/,
+  );
+});
