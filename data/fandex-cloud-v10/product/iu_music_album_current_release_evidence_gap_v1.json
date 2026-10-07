@@ -1,6 +1,6 @@
 {
   "contractVersion": "music-album-current-release-evidence-gap-v1",
-  "asOf": "2026-10-07T08:38:00+09:00",
+  "asOf": "2026-10-07T09:29:00+09:00",
   "canonicalArtistId": "iu",
   "variableId": "musicAlbumPoint",
   "releaseScope": "physical-album-eligible",
@@ -20,7 +20,7 @@
       },
       {
         "evidenceId": "yes24:146827201:a-flower-bookmark-3",
-        "sourceTier": "tier-a-primary-official",
+        "sourceTier": "tier-b-provider-attributed-reputable",
         "purpose": "physical-product-release-identity",
         "sourceUrl": "https://www.yes24.com/Product/Goods/146827201"
       },
@@ -41,11 +41,28 @@
         "sourceTier": "tier-a-primary-official",
         "purpose": "digital-single-format-confirmation",
         "sourceUrl": "https://www.melon.com/album/detail.htm?albumId=14535765"
+      },
+      {
+        "evidenceId": "hanteo:weekly:2025-W22:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "underlying-provider-physical-album-presence",
+        "sourceUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+        "note": "Hanteo weekly album chart for 2025-05-26 through 2025-06-01 lists 꽃갈피 셋 by IU at No. 6; this confirms provider presence but not the exact first-week unit total."
+      },
+      {
+        "evidenceId": "hanteo:weekly:2025-W23:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "underlying-provider-following-week-presence",
+        "sourceUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
+        "note": "Hanteo weekly album chart for 2025-06-02 through 2025-06-08 lists 꽃갈피 셋 by IU at No. 12; this does not establish the exact seven-day first-week provider period for the discovery-only 79,940 claim."
       }
     ],
     "verificationBoundary": {
       "exhaustiveLatestPhysicalReleaseReviewCompleted": false,
-      "currentSelectorEligible": false
+      "currentSelectorEligible": false,
+      "officialHanteoPhysicalPresenceConfirmed": true,
+      "exactFirstWeekValueStillUnqualified": true,
+      "exactSevenDayProviderPeriodStillUnqualified": true
     }
   },
   "reportedHanteoFirstWeekClaim": {
@@ -69,7 +86,12 @@
       }
     ],
     "tierAOrBProductionEvidenceRefs": [],
-    "productionObservationEligible": false
+    "productionObservationEligible": false,
+    "providerPresenceEvidenceRefs": [
+      "hanteo:weekly:2025-W22:a-flower-bookmark-3",
+      "hanteo:weekly:2025-W23:a-flower-bookmark-3"
+    ],
+    "providerPresenceDoesNotQualifyExactValue": true
   },
   "blockers": [
     "latest-physical-release-not-human-reviewed",
@@ -89,8 +111,8 @@
   },
   "nextTargetedEvidenceNeeded": [
     "human-reviewed latest physical release binding",
-    "Tier A or Tier B provider-attributed first-week Hanteo value source",
-    "explicit provider-period start and end from evidence",
+    "Tier A or Tier B provider-attributed source that explicitly states the exact Hanteo first-week value",
+    "explicit provider-period start and end bound to that exact value; do not infer from release date or weekly rank windows",
     "source-specific rights/usage review"
   ],
   "productActivationAuthorized": false,
