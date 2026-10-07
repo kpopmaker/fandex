@@ -1,0 +1,63 @@
+name: Validate Brand Fit activation authorization execution candidate v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-activation-authorization-execution-candidate-v1'
+    paths:
+      - 'lib/product/activation/brandFitProductionActivationAuthorizationExecutionCandidate.ts'
+      - 'tests/brand-fit-production-activation-authorization-execution-candidate-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-activation-authorization-execution-candidate-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/product/activation/brandFitProductionActivationAuthorizationExecutionCandidate.ts'
+      - 'tests/brand-fit-production-activation-authorization-execution-candidate-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-activation-authorization-execution-candidate-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Brand Fit activation authorization execution candidate regressions
+        run: npx tsx --test tests/brand-fit-production-activation-authorization-execution-candidate-v1.test.mts
+
+      - name: Existing Brand Fit activation readiness regressions
+        run: npx tsx --test tests/brand-fit-production-activation-readiness-v1.test.mts
+
+      - name: Existing Brand Fit Risk handoff regression
+        run: npx tsx --test tests/brand-fit-point-risk-quality-metadata-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "ownerApprovalRecorded=false"
+          echo "approvalMaterialized=false"
+          echo "authorizationExecuted=false"
+          echo "activationAuthorized=false"
+          echo "lifecycleCutoverExecuted=false"
+          echo "renderRedeployExecuted=false"
+          echo "publicationAuthorized=false"
+          echo "publicRouteCutoverAuthorized=false"
+          echo "riskConsumptionAuthorized=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "numericScoreProduced=false"
