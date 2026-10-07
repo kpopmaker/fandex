@@ -119,7 +119,7 @@ test('current readiness report keeps Product sufficiency separate from candidate
         variableId: 'musicAlbumPoint',
         state: 'excluded-upstream-readiness',
         acceptedForRiskConsumption: false,
-        exclusionReason: 'album-provider-production-not-authorized',
+        exclusionReason: 'music-album-reported-web-current-production-not-ready',
         unresolvedRequiredDimensions: [],
       },
       {
