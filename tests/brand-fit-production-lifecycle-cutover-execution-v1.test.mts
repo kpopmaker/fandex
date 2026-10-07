@@ -82,7 +82,7 @@ test('Brand Fit lifecycle cutover execution is durably bound to owner approval',
   assert.equal(
     BRAND_FIT_PRODUCTION_LIFECYCLE_CUTOVER_EXECUTION_APPROVAL
       .activationAuthorizationId,
-    'ops-activation-brand-fit-iu-20261007-v1',
+    'ops-activation-brand-fit-20261007t014520z-v1',
   );
 });
 
