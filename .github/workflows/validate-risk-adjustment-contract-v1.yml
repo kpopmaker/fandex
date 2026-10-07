@@ -24,6 +24,7 @@ on:
       - 'lib/intelligence/riskAdjustmentUpstreamReadinessWatch.ts'
       - 'lib/product/adapters/newsIssuePointRiskQualityMetadata.ts'
       - 'lib/product/adapters/activityExposureRiskQualityMetadata.ts'
+      - 'lib/product/adapters/brandFitPointRiskQualityMetadata.ts'
       - 'lib/intelligence/fandexMomentumCurrentReevaluationReadiness.ts'
       - 'lib/intelligence/fandexMomentumRecoveryContinuityGate.ts'
       - 'lib/server/ingestion/naverNewsBlobCurrentEvidenceCoverage.ts'
@@ -62,6 +63,7 @@ on:
       - 'tests/risk-adjustment-upstream-handoff-v1.test.mts'
       - 'tests/risk-adjustment-upstream-quality-envelope-v1.test.mts'
       - 'tests/risk-adjustment-producer-metadata-adapter-v1.test.mts'
+      - 'tests/brand-fit-point-risk-quality-metadata-v1.test.mts'
       - 'tests/risk-adjustment-current-main-news-producer-v1.test.mts'
       - 'tests/risk-adjustment-current-main-activity-producer-v1.test.mts'
       - 'tests/risk-adjustment-current-main-sns-fandom-eligibility-v1.test.mts'
@@ -90,5 +92,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts tests/risk-adjustment-categorical-states-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-product-contract-candidate-v1.test.mts tests/risk-adjustment-product-dependency-assembly-v1.test.mts tests/risk-adjustment-upstream-handoff-v1.test.mts tests/risk-adjustment-upstream-quality-envelope-v1.test.mts tests/risk-adjustment-producer-metadata-adapter-v1.test.mts tests/risk-adjustment-current-main-news-producer-v1.test.mts tests/risk-adjustment-current-main-activity-producer-v1.test.mts tests/risk-adjustment-current-main-sns-fandom-eligibility-v1.test.mts tests/risk-adjustment-current-main-sns-audit-readiness-v1.test.mts tests/risk-adjustment-current-main-sns-owner-handoff-v1.test.mts tests/risk-adjustment-current-main-sns-screenshot-integrity-v1.test.mts tests/risk-adjustment-current-upstream-eligibility-v1.test.mts tests/risk-adjustment-current-readiness-report-v1.test.mts tests/risk-adjustment-closeout-gate-v1.test.mts tests/risk-adjustment-quality-envelope-assembly-v1.test.mts tests/risk-adjustment-quality-envelope-record-v1.test.mts tests/risk-adjustment-quality-sufficiency-witness-v1.test.mts tests/risk-adjustment-quality-sufficiency-acceptance-v1.test.mts tests/risk-adjustment-quality-sufficiency-transition-v1.test.mts tests/risk-adjustment-upstream-readiness-watch-v1.test.mts
+      - run: npx tsx --test tests/risk-adjustment-point-contract-v1.test.mts tests/risk-adjustment-categorical-states-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts tests/risk-adjustment-activity-exposure-projection-v1.test.mts tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-product-contract-candidate-v1.test.mts tests/risk-adjustment-product-dependency-assembly-v1.test.mts tests/risk-adjustment-upstream-handoff-v1.test.mts tests/risk-adjustment-upstream-quality-envelope-v1.test.mts tests/risk-adjustment-producer-metadata-adapter-v1.test.mts tests/brand-fit-point-risk-quality-metadata-v1.test.mts tests/risk-adjustment-current-main-news-producer-v1.test.mts tests/risk-adjustment-current-main-activity-producer-v1.test.mts tests/risk-adjustment-current-main-sns-fandom-eligibility-v1.test.mts tests/risk-adjustment-current-main-sns-audit-readiness-v1.test.mts tests/risk-adjustment-current-main-sns-owner-handoff-v1.test.mts tests/risk-adjustment-current-main-sns-screenshot-integrity-v1.test.mts tests/risk-adjustment-current-upstream-eligibility-v1.test.mts tests/risk-adjustment-current-readiness-report-v1.test.mts tests/risk-adjustment-closeout-gate-v1.test.mts tests/risk-adjustment-quality-envelope-assembly-v1.test.mts tests/risk-adjustment-quality-envelope-record-v1.test.mts tests/risk-adjustment-quality-sufficiency-witness-v1.test.mts tests/risk-adjustment-quality-sufficiency-acceptance-v1.test.mts tests/risk-adjustment-quality-sufficiency-transition-v1.test.mts tests/risk-adjustment-upstream-readiness-watch-v1.test.mts
       - run: npm run typecheck
