@@ -1,0 +1,210 @@
+{
+  "version": "music_chart_full355_candidate_discovery_receipt_v1",
+  "status": "machine_candidates_discovered_review_required_non_activating",
+  "lineage": {
+    "canonicalConsolidationPr": 553,
+    "canonicalConsolidationHead": "b0ae73ce2dca21fa0ad2155b995fdf20cd173d6d",
+    "researchHead": "5962091894555fdd3cb9924647668c874798a432"
+  },
+  "targetMaterialization": {
+    "canonicalUniverseCount": 355,
+    "preservedReviewedSupportedCount": 21,
+    "unresolvedCandidateCount": 334,
+    "unsupportedCount": 0,
+    "aliasCollisionCount": 2,
+    "aliasCollisions": [
+      {
+        "normalizedAlias": "mamamoo",
+        "canonicalArtistIds": [
+          "mamamoo",
+          "mamamooplus"
+        ]
+      },
+      {
+        "normalizedAlias": "마마무",
+        "canonicalArtistIds": [
+          "mamamoo",
+          "mamamooplus"
+        ]
+      }
+    ],
+    "droppedShortAliasCount": 10,
+    "fuzzyAutoBinding": false,
+    "ambiguousAliasAutoSelection": false
+  },
+  "liveDiscovery": {
+    "workflow": "Discover Artist Expansion Music full355 candidates v1",
+    "runId": 37554027952,
+    "jobId": 112575954501,
+    "head": "5962091894555fdd3cb9924647668c874798a432",
+    "conclusion": "success",
+    "sourceCounts": {
+      "melon_top100": 100,
+      "genie_daily_page_1": 50,
+      "genie_daily_page_2": 50,
+      "genie_daily_page_3": 50,
+      "genie_daily_page_4": 50
+    },
+    "parsedChartRowCount": 300,
+    "candidateRowCount": 235,
+    "candidateCanonicalArtistCount": 80,
+    "reviewedSupportedHitArtistCount": 11,
+    "unresolvedHitArtistCount": 69,
+    "identityAmbiguityCount": 5
+  },
+  "artifact": {
+    "artifactId": 11454022856,
+    "name": "artist-expansion-music-full355-candidates-v1",
+    "sizeBytes": 43078,
+    "digest": "sha256:edf87a0f00ee6ea3d992275977a0676b02b5f7e5a12b280cd84e443335512b79",
+    "expiresAt": "2026-10-21T00:51:03Z"
+  },
+  "reviewPartition": {
+    "exactCanonicalAliasProviderDisplayCandidateCount": 34,
+    "exactCanonicalAliasProviderDisplayCanonicalArtistIds": [
+      "10cm",
+      "alldayproject",
+      "babymonster",
+      "bol4",
+      "carthegarden",
+      "choiyuree",
+      "chojungseok",
+      "crush",
+      "davichi",
+      "dkdecember",
+      "fromis9",
+      "gdragon",
+      "hanroro",
+      "huhgak",
+      "hwanggaram",
+      "jannabi",
+      "jungseunghwan",
+      "kimfeel",
+      "kimnayoung",
+      "kyoungseo",
+      "lee-youngji",
+      "leechangsub",
+      "leechanhyuk",
+      "limhanbyul",
+      "limjaehyun",
+      "limyoungwoong",
+      "melomance",
+      "nmixx",
+      "parkjaejung",
+      "paulkim",
+      "plave",
+      "qwer",
+      "sungsikyung",
+      "woodz"
+    ],
+    "compositeProviderDisplayCandidateCount": 35,
+    "compositeProviderDisplayCanonicalArtistIds": [
+      "ailee",
+      "akmu",
+      "bigbang",
+      "bignaughty",
+      "buzz",
+      "cortis",
+      "day6",
+      "dohkyungsoo",
+      "epikhigh",
+      "gaho",
+      "gidle",
+      "girlsgeneration",
+      "hearts2hearts",
+      "hwasa",
+      "illit",
+      "ioi",
+      "kiiikiii",
+      "leellamarz",
+      "maktub",
+      "nerdconnection",
+      "nflying",
+      "psy",
+      "redvelvet",
+      "rescene",
+      "seeya",
+      "shaun",
+      "soyeon",
+      "standingegg",
+      "taeyeon",
+      "thenuts",
+      "tws",
+      "woody",
+      "yena",
+      "younha",
+      "zico"
+    ],
+    "exactCandidateSemantics": "Provider artist display normalizes exactly to at least one canonical alias and the discovery resolved to one canonical artist. This is review evidence, not automatic support promotion.",
+    "compositeCandidateSemantics": "Provider artist display contains canonical alias material but is not exact after normalization. Manual/provider-identity review remains required.",
+    "ambiguitySemantics": "Any provider row matching more than one canonical artist is excluded from candidate promotion and remains fail-closed."
+  },
+  "ambiguities": [
+    {
+      "matchedArtist": "경서예지",
+      "candidateCanonicalArtistIds": [
+        "gyeongseoyeji",
+        "kyoungseo"
+      ]
+    },
+    {
+      "matchedArtist": "경서예지 & 전건호",
+      "candidateCanonicalArtistIds": [
+        "gyeongseoyeji",
+        "kyoungseo"
+      ]
+    },
+    {
+      "matchedArtist": "김민석 (멜로망스)",
+      "candidateCanonicalArtistIds": [
+        "kimminseok",
+        "melomance"
+      ]
+    },
+    {
+      "matchedArtist": "LE SSERAFIM (르세라핌) & j-hope",
+      "candidateCanonicalArtistIds": [
+        "jhope",
+        "lesserafim"
+      ]
+    },
+    {
+      "matchedArtist": "김민석 (멜로망스)",
+      "candidateCanonicalArtistIds": [
+        "kimminseok",
+        "melomance"
+      ]
+    }
+  ],
+  "currentCompatibility": {
+    "musicSupportedCount": 21,
+    "musicUnresolvedCount": 334,
+    "musicUnsupportedCount": 0,
+    "registryModified": false,
+    "activeTargetSeedModified": false
+  },
+  "decisionBoundary": {
+    "exact34EligibleForReviewedBindingReview": true,
+    "exact34AutoPromotedToSupported": false,
+    "composite35EligibleForAutomaticPromotion": false,
+    "ambiguitiesEligibleForAutomaticPromotion": false,
+    "nextGate": "MUSIC_FULL355_EXACT_CANDIDATE_REVIEW_REQUIRED"
+  },
+  "safety": {
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "machineCandidateIsReviewedBinding": false,
+    "exactAliasMatchAutoPromotesSupport": false,
+    "compositeDisplayAutoPromotesSupport": false,
+    "ambiguityAutoSelected": false,
+    "activeTargetSeedModified": false,
+    "compatibilityRegistryModified": false,
+    "productCohortModified": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
