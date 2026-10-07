@@ -13,6 +13,7 @@ export type ReportedAlbumSalesCurrentReleaseReviewRequest =
     releaseTitle: string;
     releaseDate: string;
     candidateCanonicalReleaseId: string | null;
+    candidateEdition: string | null;
     evidenceRefs: readonly string[];
     reviewerConclusionRequired: true;
     autoVerified: false;
@@ -26,6 +27,8 @@ export type ReportedAlbumSalesCurrentReleaseReviewDecision =
       | 'not-latest'
       | 'conflicting';
     canonicalReleaseId: string | null;
+    editionResolutionState: 'release-level' | 'edition-specific';
+    canonicalEditionId: string | null;
     supportingEvidenceRefs: readonly string[];
     reviewerRef: string;
     reviewedAt: string;
@@ -39,6 +42,9 @@ export type ReportedAlbumSalesCurrentReleaseBinding = Readonly<{
   canonicalArtistId: string;
   releaseScope: 'physical-album-eligible';
   canonicalReleaseId: string;
+  candidateEdition: string | null;
+  editionResolutionState: 'release-level' | 'edition-specific';
+  canonicalEditionId: string | null;
   releaseTitle: string;
   releaseDate: string;
   latestReleaseState: 'verified-latest';
@@ -72,6 +78,7 @@ export function buildReportedAlbumSalesCurrentReleaseReviewRequest(
     releaseTitle: string;
     releaseDate: string;
     candidateCanonicalReleaseId?: string | null;
+    candidateEdition?: string | null;
     evidenceRefs: readonly string[];
   }>,
 ): ReportedAlbumSalesCurrentReleaseReviewRequest {
@@ -80,6 +87,7 @@ export function buildReportedAlbumSalesCurrentReleaseReviewRequest(
   const releaseTitle = input.releaseTitle.trim();
   const candidateCanonicalReleaseId =
     input.candidateCanonicalReleaseId?.trim() || null;
+  const candidateEdition = input.candidateEdition?.trim() || null;
   const evidenceRefs = cleanRefs(input.evidenceRefs);
 
   if (
@@ -100,6 +108,7 @@ export function buildReportedAlbumSalesCurrentReleaseReviewRequest(
     releaseTitle,
     releaseDate: input.releaseDate,
     candidateCanonicalReleaseId,
+    candidateEdition,
     evidenceRefs,
     reviewerConclusionRequired: true as const,
     autoVerified: false as const,
@@ -142,12 +151,22 @@ export function createReportedAlbumSalesCurrentReleaseBinding(
 
   const canonicalReleaseId =
     decision.canonicalReleaseId?.trim() || '';
+  const canonicalEditionId =
+    decision.canonicalEditionId?.trim() || null;
   const supportingEvidenceRefs =
     cleanRefs(decision.supportingEvidenceRefs);
   const reviewerRef = decision.reviewerRef.trim();
 
   if (
     canonicalReleaseId === ''
+    || (
+      decision.editionResolutionState === 'edition-specific'
+      && canonicalEditionId === null
+    )
+    || (
+      decision.editionResolutionState === 'release-level'
+      && canonicalEditionId !== null
+    )
     || supportingEvidenceRefs.length === 0
     || reviewerRef === ''
     || !validInstant(decision.reviewedAt)
@@ -162,6 +181,9 @@ export function createReportedAlbumSalesCurrentReleaseBinding(
     canonicalArtistId: request.canonicalArtistId,
     releaseScope: request.releaseScope,
     canonicalReleaseId,
+    candidateEdition: request.candidateEdition,
+    editionResolutionState: decision.editionResolutionState,
+    canonicalEditionId,
     releaseTitle: request.releaseTitle,
     releaseDate: request.releaseDate,
     latestReleaseState: 'verified-latest' as const,
@@ -196,6 +218,17 @@ export function validateReportedAlbumSalesCurrentReleaseBinding(
     || binding.canonicalArtistId.trim() === ''
     || binding.releaseScope !== 'physical-album-eligible'
     || binding.canonicalReleaseId.trim() === ''
+    || (
+      binding.editionResolutionState === 'edition-specific'
+      && (
+        binding.canonicalEditionId === null
+        || binding.canonicalEditionId.trim() === ''
+      )
+    )
+    || (
+      binding.editionResolutionState === 'release-level'
+      && binding.canonicalEditionId !== null
+    )
     || binding.releaseTitle.trim() === ''
     || !validDate(binding.releaseDate)
     || binding.latestReleaseState !== 'verified-latest'
