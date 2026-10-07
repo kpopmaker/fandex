@@ -8,6 +8,10 @@ import {
   type ReportedAlbumSalesSourceTier,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  buildReportedAlbumSalesProductionEvidenceQualificationRequest,
+  createReportedAlbumSalesProductionEvidenceQualificationBinding,
+} from '../lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification';
+import {
   buildReportedAlbumSalesProductionIdentityReviewRequest,
   createReportedAlbumSalesProductionIdentityBinding,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionIdentity';
@@ -108,6 +112,33 @@ function reviewedReleaseBinding(
   });
 }
 
+function reviewedEvidenceQualification(
+  source: ReportedAlbumSalesObservation,
+) {
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      source,
+    );
+  return createReportedAlbumSalesProductionEvidenceQualificationBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      evidenceId: 'fixture:reported-web:1',
+      supportedClaims: [
+        'exact-value',
+        'explicit-provider-period',
+        'metric-semantic',
+        'underlying-provider',
+      ],
+      reviewEvidenceRefs: [
+        'review:fixture:reported-web:claims',
+      ],
+      reviewerRef: 'reviewer:music-album:fixture',
+      reviewedAt: '2026-10-08T10:15:00+09:00',
+    },
+  });
+}
+
 function reviewedRights(
   source: ReportedAlbumSalesObservation,
 ) {
@@ -154,6 +185,9 @@ function productionCandidate(
     asOfDate,
     rightsReview: reviewedRights(source),
     releaseIdentityBinding: reviewedReleaseBinding(source),
+    evidenceQualifications: [
+      reviewedEvidenceQualification(source),
+    ],
   });
 }
 
@@ -191,6 +225,16 @@ test('reported web evidence becomes a truthful production-source candidate witho
   assert.equal(candidate.numericScoreProduced, false);
   assert.equal(candidate.productSourceEligible, false);
   assert.equal(candidate.rightsState, 'review-required');
+  assert.ok(
+    candidate.blockers.includes(
+      'production-evidence-qualification-required',
+    ),
+  );
+  assert.ok(
+    candidate.blockers.includes(
+      'tier-a-or-b-exact-value-evidence-missing',
+    ),
+  );
   assert.ok(candidate.blockers.includes('rights-review-binding-required'));
   assert.ok(candidate.blockers.includes('release-identity-not-resolved'));
   assert.ok(candidate.blockers.includes('release-identity-binding-required'));
@@ -214,11 +258,24 @@ test('Tier B reviewed web evidence becomes source-eligible only after explicit r
     asOfDate: '2026-10-08',
     rightsReview,
     releaseIdentityBinding: reviewedReleaseBinding(source),
+    evidenceQualifications: [
+      reviewedEvidenceQualification(source),
+    ],
   });
 
   assert.equal(candidate.evidenceQuality, 'provider-attributed-secondary');
   assert.equal(candidate.availability, 'available');
   assert.equal(candidate.rightsState, 'authorized');
+  assert.deepEqual(
+    [...candidate.evidenceClaimCoverage].sort(),
+    [
+      'exact-value',
+      'explicit-provider-period',
+      'metric-semantic',
+      'underlying-provider',
+    ].sort(),
+  );
+  assert.equal(candidate.evidenceQualificationBindingIds.length, 1);
   assert.equal(candidate.editionResolutionState, 'release-level');
   assert.equal(candidate.canonicalEditionId, null);
   assert.deepEqual(candidate.blockers, []);
@@ -327,5 +384,57 @@ test('raw resolved identity flag without a Production identity binding remains b
   );
   assert.ok(
     candidate.blockers.includes('release-identity-not-resolved'),
+  );
+});
+
+
+test('an unrelated Tier B source cannot qualify a value that is only present in discovery evidence', () => {
+  const source = observation();
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      source,
+    );
+  const providerOnly =
+    createReportedAlbumSalesProductionEvidenceQualificationBinding({
+      request,
+      decision: {
+        requestId: request.requestId,
+        evidenceId: 'fixture:reported-web:1',
+        supportedClaims: ['underlying-provider'],
+        reviewEvidenceRefs: [
+          'review:fixture:provider-attribution-only',
+        ],
+        reviewerRef: 'reviewer:music-album:fixture',
+        reviewedAt: '2026-10-08T10:15:00+09:00',
+      },
+    });
+  const candidate =
+    buildReportedAlbumSalesProductionSourceCandidate({
+      observation: source,
+      asOfDate: '2026-10-08',
+      rightsReview: reviewedRights(source),
+      releaseIdentityBinding: reviewedReleaseBinding(source),
+      evidenceQualifications: [providerOnly],
+    });
+
+  assert.equal(candidate.productSourceEligible, false);
+  assert.deepEqual(
+    candidate.evidenceClaimCoverage,
+    ['underlying-provider'],
+  );
+  assert.ok(
+    candidate.blockers.includes(
+      'tier-a-or-b-exact-value-evidence-missing',
+    ),
+  );
+  assert.ok(
+    candidate.blockers.includes(
+      'tier-a-or-b-provider-period-evidence-missing',
+    ),
+  );
+  assert.ok(
+    candidate.blockers.includes(
+      'tier-a-or-b-metric-semantic-evidence-missing',
+    ),
   );
 });
