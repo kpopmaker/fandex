@@ -72,8 +72,7 @@ jobs:
           );
 
           if (!/^postgres(?:ql)?:\/\//i.test(raw)) {
-            process.exitCode = 2;
-            return;
+            throw new Error('runtime-url-not-postgres');
           }
 
           const parsed = new URL(raw);
