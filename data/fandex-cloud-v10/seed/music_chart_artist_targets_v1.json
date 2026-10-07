@@ -180,6 +180,304 @@
         "RIIZE",
         "라이즈"
       ]
+    },
+    {
+      "canonicalArtistId": "nmixx",
+      "artist": "NMIXX",
+      "aliases": [
+        "NMIXX",
+        "엔믹스"
+      ]
+    },
+    {
+      "canonicalArtistId": "babymonster",
+      "artist": "BABYMONSTER",
+      "aliases": [
+        "BABYMONSTER",
+        "BMON",
+        "베이비몬스터"
+      ]
+    },
+    {
+      "canonicalArtistId": "lee-youngji",
+      "artist": "Lee Young Ji",
+      "aliases": [
+        "Lee Young Ji",
+        "LYJ",
+        "Youngji",
+        "이영지"
+      ]
+    },
+    {
+      "canonicalArtistId": "qwer",
+      "artist": "QWER",
+      "aliases": [
+        "QWER",
+        "큐더블유이알"
+      ]
+    },
+    {
+      "canonicalArtistId": "gdragon",
+      "artist": "G-DRAGON",
+      "aliases": [
+        "G-DRAGON",
+        "GD",
+        "지드래곤",
+        "권지용"
+      ]
+    },
+    {
+      "canonicalArtistId": "fromis9",
+      "artist": "fromis_9",
+      "aliases": [
+        "fromis_9",
+        "프로미스나인"
+      ]
+    },
+    {
+      "canonicalArtistId": "alldayproject",
+      "artist": "ALLDAY PROJECT",
+      "aliases": [
+        "ALLDAY PROJECT",
+        "ADP",
+        "올데이 프로젝트"
+      ]
+    },
+    {
+      "canonicalArtistId": "limyoungwoong",
+      "artist": "Lim Young-woong",
+      "aliases": [
+        "Lim Young-woong",
+        "임영웅"
+      ]
+    },
+    {
+      "canonicalArtistId": "10cm",
+      "artist": "10CM",
+      "aliases": [
+        "10CM",
+        "십센치",
+        "권정열"
+      ]
+    },
+    {
+      "canonicalArtistId": "davichi",
+      "artist": "Davichi",
+      "aliases": [
+        "Davichi",
+        "다비치"
+      ]
+    },
+    {
+      "canonicalArtistId": "leechangsub",
+      "artist": "LEE CHANGSUB",
+      "aliases": [
+        "LEE CHANGSUB",
+        "이창섭"
+      ]
+    },
+    {
+      "canonicalArtistId": "hanroro",
+      "artist": "HANRORO",
+      "aliases": [
+        "HANRORO",
+        "한로로"
+      ]
+    },
+    {
+      "canonicalArtistId": "sungsikyung",
+      "artist": "SUNG SI KYUNG",
+      "aliases": [
+        "SUNG SI KYUNG",
+        "성시경"
+      ]
+    },
+    {
+      "canonicalArtistId": "choiyuree",
+      "artist": "Choi Yu Ree",
+      "aliases": [
+        "Choi Yu Ree",
+        "최유리"
+      ]
+    },
+    {
+      "canonicalArtistId": "carthegarden",
+      "artist": "Car, the garden",
+      "aliases": [
+        "Car, the garden",
+        "카더가든"
+      ]
+    },
+    {
+      "canonicalArtistId": "hwanggaram",
+      "artist": "Hwang Garam",
+      "aliases": [
+        "Hwang Garam",
+        "황가람"
+      ]
+    },
+    {
+      "canonicalArtistId": "crush",
+      "artist": "Crush",
+      "aliases": [
+        "Crush",
+        "크러쉬"
+      ]
+    },
+    {
+      "canonicalArtistId": "parkjaejung",
+      "artist": "Park Jae-jung",
+      "aliases": [
+        "Park Jae-jung",
+        "박재정"
+      ]
+    },
+    {
+      "canonicalArtistId": "jannabi",
+      "artist": "Jannabi",
+      "aliases": [
+        "Jannabi",
+        "잔나비"
+      ]
+    },
+    {
+      "canonicalArtistId": "paulkim",
+      "artist": "Paul Kim",
+      "aliases": [
+        "Paul Kim",
+        "폴킴",
+        "김태형"
+      ]
+    },
+    {
+      "canonicalArtistId": "bol4",
+      "artist": "BOL4",
+      "aliases": [
+        "BOL4",
+        "볼빨간사춘기",
+        "안지영",
+        "Bolbbalgan4"
+      ]
+    },
+    {
+      "canonicalArtistId": "woodz",
+      "artist": "WOODZ",
+      "aliases": [
+        "WOODZ",
+        "우즈",
+        "조승연"
+      ]
+    },
+    {
+      "canonicalArtistId": "leechanhyuk",
+      "artist": "LEE CHANHYUK",
+      "aliases": [
+        "LEE CHANHYUK",
+        "이찬혁"
+      ]
+    },
+    {
+      "canonicalArtistId": "jungseunghwan",
+      "artist": "Jung Seung Hwan",
+      "aliases": [
+        "Jung Seung Hwan",
+        "정승환"
+      ]
+    },
+    {
+      "canonicalArtistId": "kimnayoung",
+      "artist": "Kim Nayoung",
+      "aliases": [
+        "Kim Nayoung",
+        "김나영"
+      ]
+    },
+    {
+      "canonicalArtistId": "chojungseok",
+      "artist": "CHO JUNG SEOK",
+      "aliases": [
+        "CHO JUNG SEOK",
+        "조정석",
+        "Jo Jung-suk"
+      ]
+    },
+    {
+      "canonicalArtistId": "kyoungseo",
+      "artist": "KyoungSeo",
+      "aliases": [
+        "KyoungSeo",
+        "경서",
+        "이경서"
+      ]
+    },
+    {
+      "canonicalArtistId": "kimfeel",
+      "artist": "Kim Feel",
+      "aliases": [
+        "Kim Feel",
+        "김필"
+      ]
+    },
+    {
+      "canonicalArtistId": "limjaehyun",
+      "artist": "Lim Jae Hyun",
+      "aliases": [
+        "Lim Jae Hyun",
+        "임재현",
+        "Jaehyun Lim"
+      ]
+    },
+    {
+      "canonicalArtistId": "limhanbyul",
+      "artist": "Lim Han Byul",
+      "aliases": [
+        "Lim Han Byul",
+        "임한별",
+        "Onestar"
+      ]
+    },
+    {
+      "canonicalArtistId": "huhgak",
+      "artist": "Huh Gak",
+      "aliases": [
+        "Huh Gak",
+        "허각"
+      ]
+    },
+    {
+      "canonicalArtistId": "melomance",
+      "artist": "MeloMance",
+      "aliases": [
+        "MeloMance",
+        "멜로망스"
+      ]
+    },
+    {
+      "canonicalArtistId": "dkdecember",
+      "artist": "DK",
+      "aliases": [
+        "DK",
+        "DKDECEMBER",
+        "디셈버 DK",
+        "DK 디셈버"
+      ]
+    },
+    {
+      "canonicalArtistId": "plave",
+      "artist": "PLAVE",
+      "aliases": [
+        "PLAVE",
+        "플레이브"
+      ]
     }
-  ]
+  ],
+  "reviewedExpansion": {
+    "version": "music_chart_exact34_application_v1",
+    "sourceReview": "music_chart_full355_exact34_reviewed_bindings_v1",
+    "addedCanonicalArtistCount": 34,
+    "previousTargetCount": 21,
+    "targetCount": 55,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false
+  }
 }
