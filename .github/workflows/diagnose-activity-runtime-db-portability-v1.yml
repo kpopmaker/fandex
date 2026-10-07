@@ -60,6 +60,22 @@ jobs:
           const raw = process.env.FANDEX_RUNTIME_DATABASE_URL;
           if (!raw) throw new Error('runtime-url-missing');
 
+          console.log(
+            'FANDEX_ACTIVITY_DIAGNOSTIC_VERCEL_SECRET_SHAPE='
+              + JSON.stringify({
+                length: raw.length,
+                startsWithPostgres: /^postgres(?:ql)?:\/\//i.test(raw),
+                looksRedacted:
+                  raw === '***'
+                  || raw.toLowerCase().includes('redacted'),
+              }),
+          );
+
+          if (!/^postgres(?:ql)?:\/\//i.test(raw)) {
+            process.exitCode = 2;
+            return;
+          }
+
           const parsed = new URL(raw);
           const meta = {
             roleOk: decodeURIComponent(parsed.username) === 'fandex_runtime',
