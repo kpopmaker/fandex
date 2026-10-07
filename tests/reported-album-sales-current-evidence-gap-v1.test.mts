@@ -65,7 +65,7 @@ test('IU current physical-release gap remains fail-closed rather than promoting 
   );
   assert.deepEqual(
     payload.currentReleaseCandidate.editionCandidates.map(
-      (entry) => entry.candidateEdition,
+      (entry: { candidateEdition: string }) => entry.candidateEdition,
     ),
     ['standard-cd', 'cdp-limited'],
   );
