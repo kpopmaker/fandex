@@ -9,8 +9,8 @@ on:
       - main
     paths:
       - 'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json'
-      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts
-          lib/server/product/momentumLiveShadowProductReadiness.ts'
+      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
       - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
       - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
       - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
@@ -81,6 +81,7 @@ jobs:
           tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
           data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
