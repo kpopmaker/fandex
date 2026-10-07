@@ -87,6 +87,7 @@ on:
       - 'tests/iu-music-album-current-release-review-packet-v1.test.mts'
       - 'tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts'
       - 'tests/iu-music-album-first-week-source-search-audit-v1.test.mts'
+      - 'tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -101,6 +102,7 @@ on:
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
       - 'tests/music-album-reported-web-product-readiness-v1.test.mts'
       - 'tests/music-album-point-fandex-variable-product-v1.test.mts'
@@ -234,6 +236,7 @@ jobs:
           tests/iu-music-album-current-release-review-packet-v1.test.mts
           tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts
           tests/iu-music-album-first-week-source-search-audit-v1.test.mts
+          tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -248,6 +251,7 @@ jobs:
           data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json
           data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json
           data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
           tests/music-album-reported-web-product-readiness-v1.test.mts
           tests/music-album-point-fandex-variable-product-v1.test.mts
@@ -337,6 +341,9 @@ jobs:
 
       - name: IU exact-value source search audit regression
         run: npx tsx --test tests/iu-music-album-first-week-source-search-audit-v1.test.mts
+
+      - name: IU reported web rights review intake regression
+        run: npx tsx --test tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
 
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
