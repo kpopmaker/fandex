@@ -1,0 +1,45 @@
+{
+  "version": "sns_fandom_youtube_v2_cutover_runtime_readiness_v1",
+  "state": "prepared-not-activation-ready",
+  "generationRoot": "sns-fandom/youtube-audit/recurring/v2",
+  "runtime": {
+    "runtimePath": "scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts",
+    "runnerPath": "scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV2.ts",
+    "plannerPath": "lib/intelligence/snsFandomPointYoutubeRecurringMeasurementV2.ts",
+    "canonicalWindowPath": "sns-fandom/youtube-audit/recurring/v2/canonical-window.json",
+    "receiptPrefix": "sns-fandom/youtube-audit/recurring/v2/receipts/",
+    "claimPrefix": "sns-fandom/youtube-audit/recurring/v2/claims/"
+  },
+  "cutoverGuards": {
+    "exactAuthorizedRevisionRequired": true,
+    "durableIssue509ApprovalEvidenceRequired": true,
+    "canonicalRebaselineAuthorized": false,
+    "newGenerationProviderExecutionAuthorized": false,
+    "schedulerCutoverAuthorized": false,
+    "v1FallbackSuppressionBound": false,
+    "renderDispatchMutationPerformed": false,
+    "newGenerationProviderCallPerformed": false,
+    "cutoverApprovalEvidenceRef": null
+  },
+  "boundaryPolicy": {
+    "measurementWindowStart": null,
+    "measurementWindowEnd": null,
+    "materialization": "first-successful-v2-provider-slot-only",
+    "historicalV1ReceiptsReinterpreted": false,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false,
+    "retrospectiveProviderObservationAllowed": false
+  },
+  "authorityBoundary": {
+    "providerSubmissionAuthorized": false,
+    "productionCollectionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "notes": [
+    "This readiness file intentionally blocks live v2 execution.",
+    "The v2 Render-trigger workflow must fail before provider execution while v1FallbackSuppressionBound is false or the exact cutover approval evidence ref is null.",
+    "A later exact-revision activation change must bind v1 fallback suppression and the durable owner approval evidence before setting this readiness gate to activation-ready.",
+    "Render dispatch mutation is an external action performed only after that activation-ready revision is merged and separately authorized.",
+    "The existing v1 Render scheduler and GitHub fallback remain untouched by this candidate."
+  ]
+}
