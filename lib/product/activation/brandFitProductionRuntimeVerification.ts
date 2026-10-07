@@ -1,17 +1,42 @@
 export const BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION_CONTRACT_VERSION =
   'brand-fit-production-runtime-verification-v1' as const;
 
-export const BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION =
-  Object.freeze({
+export type BrandFitProductionRuntimeVerification = Readonly<{
+  contractVersion:
+    typeof BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION_CONTRACT_VERSION;
+  runtime: 'render-production';
+  serviceId: string;
+  verifiedRuntimeCommitSha: string;
+  productSurface: '/artists/iu/fandex-beta';
+  workflowRunId: number;
+  workflowJobId: number;
+  requiredMarkers: Readonly<{
+    valueState: 'verified-commercial-partnership-activity';
+    lifecycleDisplay: 'Research';
+    materialClass: 'real';
+  }>;
+  blockerMarkersAbsent: readonly string[];
+  sideEffects: Readonly<{
+    providerCalls: number;
+    blobWrites: number;
+    databaseWrites: number;
+    productActivations: number;
+    publications: number;
+  }>;
+  verified: boolean;
+}>;
+
+export const BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION:
+  BrandFitProductionRuntimeVerification = Object.freeze({
     contractVersion:
       BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION_CONTRACT_VERSION,
     runtime: 'render-production' as const,
-    serviceId: 'srv-db1fgpegekts73djbji0' as const,
+    serviceId: 'srv-db1fgpegekts73djbji0',
     verifiedRuntimeCommitSha:
-      'fd5d0330f8eddd04406b308e65b076ca74ccdc99' as const,
+      'fd5d0330f8eddd04406b308e65b076ca74ccdc99',
     productSurface: '/artists/iu/fandex-beta' as const,
-    workflowRunId: 37480201624 as const,
-    workflowJobId: 112332605128 as const,
+    workflowRunId: 37480201624,
+    workflowJobId: 112332605128,
     requiredMarkers: Object.freeze({
       valueState:
         'verified-commercial-partnership-activity' as const,
@@ -23,16 +48,13 @@ export const BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION =
       'durable-stored-evidence-runtime-unavailable',
       'durable-stored-evidence-not-found',
       'runtime-read-failed',
-    ] as const),
+    ]),
     sideEffects: Object.freeze({
-      providerCalls: 0 as const,
-      blobWrites: 0 as const,
-      databaseWrites: 0 as const,
-      productActivations: 0 as const,
-      publications: 0 as const,
+      providerCalls: 0,
+      blobWrites: 0,
+      databaseWrites: 0,
+      productActivations: 0,
+      publications: 0,
     }),
-    verified: true as const,
+    verified: true,
   });
-
-export type BrandFitProductionRuntimeVerification =
-  typeof BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION;
