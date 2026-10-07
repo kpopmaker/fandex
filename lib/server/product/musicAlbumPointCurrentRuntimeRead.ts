@@ -43,6 +43,10 @@ import {
   evaluateMusicAlbumReportedWebProductReadiness,
   type MusicAlbumReportedWebProductReadiness,
 } from '../../product/readiness/musicAlbumReportedWebProductReadiness';
+import {
+  buildReportedAlbumSalesCurrentReleaseReviewRequest,
+  type ReportedAlbumSalesCurrentReleaseReviewRequest,
+} from '../../alternative-evidence/reportedAlbumSalesCurrentReleaseReview';
 
 const TARGETS_PATH = resolve(
   process.cwd(),
@@ -83,6 +87,8 @@ export type MusicAlbumPointCurrentRuntimeReadResult =
         MusicAlbumReportedWebStoredEvidenceServerRuntimeResult;
       reportedWebCurrentRelease:
         ReportedAlbumSalesCurrentReleaseRead;
+      reportedWebCurrentReleaseReviewRequest:
+        ReportedAlbumSalesCurrentReleaseReviewRequest;
       reportedWebReadiness:
         MusicAlbumReportedWebProductReadiness;
       evidence: Readonly<{
@@ -290,6 +296,16 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
   }
 
   try {
+    const reportedWebCurrentReleaseReviewRequest =
+      buildReportedAlbumSalesCurrentReleaseReviewRequest({
+        canonicalArtistId: reportedWebDiscovery.canonicalArtistId,
+        releaseTitle: reportedWebDiscovery.releaseTitle ?? '',
+        releaseDate: reportedWebDiscovery.releaseDate ?? '',
+        candidateCanonicalReleaseId:
+          reportedWebDiscovery.canonicalReleaseId,
+        evidenceRefs: reportedWebDiscovery.evidenceRefs,
+      });
+
     const reportedWebCurrentRelease =
       selectReportedAlbumSalesCurrentRelease({
         discovery: reportedWebDiscovery,
@@ -348,6 +364,7 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
       readiness,
       reportedWebStoredEvidence,
       reportedWebCurrentRelease,
+      reportedWebCurrentReleaseReviewRequest,
       reportedWebReadiness,
       evidence: Object.freeze({
         sourceKind:
