@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-test('v2 cutover readiness is checked in fail-closed with runtime exact-revision owner approval verification', async () => {
+test('final v2 activation revision is owner-approval-gated and suppresses v1 scheduled fallback', async () => {
   const readiness = JSON.parse(
     await readFile(
       new URL(
@@ -36,7 +36,7 @@ test('v2 cutover readiness is checked in fail-closed with runtime exact-revision
     };
   };
 
-  assert.equal(readiness.state, 'prepared-not-activation-ready');
+  assert.equal(readiness.state, 'activation-ready-owner-approval-required');
   assert.equal(
     readiness.generationRoot,
     'sns-fandom/youtube-audit/recurring/v2',
@@ -50,16 +50,21 @@ test('v2 cutover readiness is checked in fail-closed with runtime exact-revision
     readiness.cutoverGuards.ownerApprovalVerificationMode,
     'runtime-github-issue-comment-exact-revision-v1',
   );
+
+  // Owner authority is never pre-baked into the revision itself.
   assert.equal(readiness.cutoverGuards.canonicalRebaselineAuthorized, false);
   assert.equal(
     readiness.cutoverGuards.newGenerationProviderExecutionAuthorized,
     false,
   );
   assert.equal(readiness.cutoverGuards.schedulerCutoverAuthorized, false);
-  assert.equal(readiness.cutoverGuards.v1FallbackSuppressionBound, false);
+
+  // This revision is the one that binds v1 scheduled fallback suppression.
+  assert.equal(readiness.cutoverGuards.v1FallbackSuppressionBound, true);
   assert.equal(readiness.cutoverGuards.cutoverApprovalEvidenceRef, null);
   assert.equal(readiness.cutoverGuards.renderDispatchMutationPerformed, false);
   assert.equal(readiness.cutoverGuards.newGenerationProviderCallPerformed, false);
+
   assert.equal(readiness.boundaryPolicy.measurementWindowStart, null);
   assert.equal(readiness.boundaryPolicy.measurementWindowEnd, null);
   assert.equal(readiness.boundaryPolicy.historicalV1ReceiptsReinterpreted, false);
@@ -67,7 +72,7 @@ test('v2 cutover readiness is checked in fail-closed with runtime exact-revision
   assert.equal(readiness.boundaryPolicy.retrospectiveReceiptSynthesisAllowed, false);
   assert.equal(readiness.boundaryPolicy.retrospectiveProviderObservationAllowed, false);
 
-  const workflow = await readFile(
+  const v2Workflow = await readFile(
     new URL(
       '../.github/workflows/execute-sns-fandom-youtube-v2-render-trigger-v1.yml',
       import.meta.url,
@@ -75,30 +80,58 @@ test('v2 cutover readiness is checked in fail-closed with runtime exact-revision
     'utf8',
   );
 
-  assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /\nschedule:/);
-  assert.match(workflow, /issues: read/);
-  assert.match(workflow, /approved-render-sns-fandom-v2-cutover-v1/);
+  assert.match(v2Workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(v2Workflow, /\nschedule:/);
+  assert.match(v2Workflow, /issues: read/);
+  assert.match(v2Workflow, /approved-render-sns-fandom-v2-cutover-v1/);
   assert.match(
-    workflow,
+    v2Workflow,
     /approved-sns-fandom-v2-rebaseline-provider-scheduler-cutover-v1/,
   );
-  assert.match(workflow, /sns_fandom_v2_cutover_readiness_blocked/);
   assert.match(
-    workflow,
+    v2Workflow,
+    /activation-ready-owner-approval-required/,
+  );
+  assert.match(
+    v2Workflow,
+    /guards\.canonicalRebaselineAuthorized !== false/,
+  );
+  assert.match(
+    v2Workflow,
+    /guards\.newGenerationProviderExecutionAuthorized !== false/,
+  );
+  assert.match(
+    v2Workflow,
+    /guards\.schedulerCutoverAuthorized !== false/,
+  );
+  assert.match(
+    v2Workflow,
     /guards\.v1FallbackSuppressionBound !== true/,
   );
   assert.match(
-    workflow,
+    v2Workflow,
     /runtime-github-issue-comment-exact-revision-v1/,
   );
   assert.match(
-    workflow,
+    v2Workflow,
     /guards\.cutoverApprovalEvidenceRef !== null/,
   );
   assert.match(
-    workflow,
+    v2Workflow,
     /snsFandomYoutubeV2CutoverApprovalEvidenceVerifierV1\.ts/,
   );
-  assert.match(workflow, /inputs\.authorized_revision_sha/);
+  assert.match(v2Workflow, /inputs\.authorized_revision_sha/);
+
+  const v1Workflow = await readFile(
+    new URL(
+      '../.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml',
+      import.meta.url,
+    ),
+    'utf8',
+  );
+
+  assert.match(v1Workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(v1Workflow, /\nschedule:/);
+  assert.doesNotMatch(v1Workflow, /cron: '17 \* \* \* \*'/);
+  assert.doesNotMatch(v1Workflow, /cron: '47 \* \* \* \*'/);
 });
