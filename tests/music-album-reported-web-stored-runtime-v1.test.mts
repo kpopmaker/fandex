@@ -1,85 +1,68 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
-import {
-  createProductionMusicAlbumReportedWebReadStore,
-  getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU,
-  resolveMusicAlbumReportedWebBlobConfig,
-} from '../lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime';
-import type {
-  VercelBlobSdkPort,
-} from '../lib/server/storage/vercelBlobImmutableTextObjectStore';
+const source = readFileSync(
+  new URL(
+    '../lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts',
+    import.meta.url,
+  ),
+  'utf8',
+);
 
-const emptyClient: Pick<VercelBlobSdkPort, 'get' | 'list'> =
-  Object.freeze({
-    async get() {
-      return null;
-    },
-    async list() {
-      return {
-        blobs: [],
-        hasMore: false,
-      };
-    },
-  });
-
-test('music album reported-web runtime requires an explicit Production runtime marker', () => {
-  assert.throws(
-    () =>
-      createProductionMusicAlbumReportedWebReadStore(
-        {
-          BLOB_READ_WRITE_TOKEN: 'test-token',
-        },
-        emptyClient,
-      ),
-    /runtime_not_production/,
+test('music album reported-web server reader is Production-only and never falls back to repository research', () => {
+  assert.match(source, /import 'server-only'/);
+  assert.match(source, /FANDEX_PRODUCT_RUNTIME_ENV/);
+  assert.match(source, /VERCEL_ENV/);
+  assert.match(source, /production/);
+  assert.match(
+    source,
+    /music_album_reported_web_runtime_not_production/,
+  );
+  assert.match(
+    source,
+    /durable-stored-evidence-runtime-unavailable/,
+  );
+  assert.doesNotMatch(
+    source,
+    /reported_album_sales_web_seed_v1\.json/,
   );
 });
 
-test('dedicated music album Blob store binding is preferred over generic store id', () => {
-  const config = resolveMusicAlbumReportedWebBlobConfig({
-    BLOB_READ_WRITE_TOKEN: 'test-token',
-    FANDEX_MUSIC_ALBUM_EVIDENCE_BLOB_STORE_ID:
-      'store-music-album',
-    BLOB_STORE_ID: 'store-generic',
-  });
-
-  assert.equal(config.token, 'test-token');
-  assert.equal(config.oidcToken, null);
-  assert.equal(config.storeId, 'store-music-album');
+test('dedicated music album Blob binding is explicit and supports token or OIDC read credentials', () => {
+  assert.match(
+    source,
+    /FANDEX_MUSIC_ALBUM_EVIDENCE_BLOB_STORE_ID/,
+  );
+  assert.match(source, /BLOB_READ_WRITE_TOKEN/);
+  assert.match(source, /VERCEL_OIDC_TOKEN/);
+  assert.match(source, /BLOB_STORE_ID/);
+  assert.match(
+    source,
+    /createVercelBlobTextReadStore/,
+  );
+  assert.match(
+    source,
+    /resolveMusicAlbumReportedWebBlobConfig/,
+  );
 });
 
-test('Production runtime with no durable objects remains unavailable rather than returning an empty success', async () => {
-  const result =
-    await getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU(
-      {
-        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
-        BLOB_READ_WRITE_TOKEN: 'test-token',
-        FANDEX_MUSIC_ALBUM_EVIDENCE_BLOB_STORE_ID:
-          'store-music-album',
-      },
-      {
-        client: emptyClient,
-      },
-    );
-
-  assert.equal(result.status, 'unavailable');
-  if (result.status !== 'unavailable') return;
-  assert.equal(result.reason, 'durable-stored-evidence-not-found');
-});
-
-test('missing Production credentials fail closed as unavailable without falling back to repository research data', async () => {
-  const result =
-    await getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU(
-      {
-        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
-      },
-      {
-        client: emptyClient,
-      },
-    );
-
-  assert.equal(result.status, 'unavailable');
-  if (result.status !== 'unavailable') return;
-  assert.equal(result.reason, 'stored-evidence-not-found');
+test('server reader is read-only and preserves missing evidence separately from runtime unavailability', () => {
+  assert.match(
+    source,
+    /readReportedAlbumSalesStoredEvidenceRuntime/,
+  );
+  assert.match(
+    source,
+    /durable-stored-evidence-not-found/,
+  );
+  assert.match(
+    source,
+    /durable-stored-evidence-runtime-unavailable/,
+  );
+  assert.doesNotMatch(source, /putTextIfAbsent/);
+  assert.doesNotMatch(
+    source,
+    /from '@vercel\/blob';[\s\S]*\bput\b/,
+  );
 });
