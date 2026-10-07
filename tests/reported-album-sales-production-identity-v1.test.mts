@@ -110,6 +110,7 @@ test('candidate release identity produces a deterministic human review request w
   assert.equal(first.observationId, observation.observationId);
   assert.equal(first.sourceIdentityState, 'candidate');
   assert.equal(first.sourceCanonicalReleaseId, null);
+  assert.equal(first.sourceEdition, null);
   assert.deepEqual(first.evidenceRefs, ['fixture:web:identity']);
   assert.equal(first.reviewerConclusionRequired, true);
   assert.equal(first.autoResolved, false);
@@ -125,6 +126,8 @@ test('review decision creates a resolved binding only with explicit canonical id
       decision: {
         requestId: request.requestId,
         canonicalReleaseId: 'release:iu:test-album:2026-10-01',
+        editionResolutionState: 'release-level',
+        canonicalEditionId: null,
         supportingEvidenceRefs: [
           'canonical-release-registry:iu:test-album',
           'fixture:web:identity',
@@ -141,6 +144,8 @@ test('review decision creates a resolved binding only with explicit canonical id
     binding.canonicalReleaseId,
     'release:iu:test-album:2026-10-01',
   );
+  assert.equal(binding.editionResolutionState, 'release-level');
+  assert.equal(binding.canonicalEditionId, null);
   assert.equal(
     validateReportedAlbumSalesProductionIdentityBinding(
       binding,
@@ -160,6 +165,8 @@ test('reviewed binding can resolve the Production source candidate without mutat
       decision: {
         requestId: request.requestId,
         canonicalReleaseId: 'release:iu:test-album:2026-10-01',
+        editionResolutionState: 'release-level',
+        canonicalEditionId: null,
         supportingEvidenceRefs: [
           'canonical-release-registry:iu:test-album',
         ],
@@ -199,6 +206,8 @@ test('stale or mismatched binding fails closed', () => {
       decision: {
         requestId: request.requestId,
         canonicalReleaseId: 'release:iu:test-album:2026-10-01',
+        editionResolutionState: 'release-level',
+        canonicalEditionId: null,
         supportingEvidenceRefs: ['canonical-release-registry:fixture'],
         reviewerRef: 'reviewer:music-album:fixture',
         reviewedAt: '2026-10-09T10:00:00+09:00',
@@ -238,6 +247,8 @@ test('identity binding creation never accepts a fabricated reviewer-free decisio
       decision: {
         requestId: request.requestId,
         canonicalReleaseId: 'release:iu:test-album:2026-10-01',
+        editionResolutionState: 'release-level',
+        canonicalEditionId: null,
         supportingEvidenceRefs: ['canonical-release-registry:fixture'],
         reviewerRef: '',
         reviewedAt: '2026-10-09T10:00:00+09:00',
