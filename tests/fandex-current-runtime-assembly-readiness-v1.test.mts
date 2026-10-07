@@ -473,6 +473,34 @@ test('adding durable brandFit evidence makes the same runtime builder reach full
   assert.deepEqual(result.blockedVariableIds, []);
   assert.deepEqual(result.resolvedVariableIds, FANDEX_VARIABLE_PRODUCT_IDS);
   assert.equal(result.records.length, 7);
+
+  const brandFitRecord = result.records.find(
+    (record) => record.variableId === 'brandFitPoint',
+  );
+  assert.ok(brandFitRecord);
+  assert.equal(brandFitRecord?.lifecycleState, 'production');
+  assert.equal(brandFitRecord?.materialClass, 'real');
+  assert.equal(brandFitRecord?.readinessState, 'production');
+  assert.equal(brandFitRecord?.availability, 'available');
+  assert.equal(
+    brandFitRecord?.evidenceRefs.includes(
+      'brand-fit-lifecycle-cutover-executed:true',
+    ),
+    true,
+  );
+  assert.equal(
+    brandFitRecord?.evidenceRefs.includes(
+      'brand-fit-publication-authorized:true',
+    ),
+    false,
+  );
+  assert.equal(
+    brandFitRecord?.evidenceRefs.includes(
+      'brand-fit-risk-consumption-authorized:true',
+    ),
+    false,
+  );
+
   assert.equal(result.assembly?.status, 'ok');
 
   if (result.assembly?.status !== 'ok') return;
