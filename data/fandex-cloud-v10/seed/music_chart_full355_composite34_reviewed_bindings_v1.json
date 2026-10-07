@@ -1,0 +1,99 @@
+{
+  "version": "music_chart_full355_composite34_reviewed_bindings_v1",
+  "status": "reviewed_supported_candidate_application_not_applied",
+  "source": "music_chart",
+  "evidence": {
+    "discoveryReceipt": "music_chart_full355_candidate_discovery_receipt_v1",
+    "discoveryRunId": 37554027952,
+    "artifactId": 11454022856,
+    "artifactDigest": "sha256:edf87a0f00ee6ea3d992275977a0676b02b5f7e5a12b280cd84e443335512b79",
+    "exact34ApplicationReceipt": "music_chart_full355_exact34_application_receipt_v1"
+  },
+  "reviewPolicy": {
+    "canonicalArtistIdAuthoritative": true,
+    "providerArtistDisplayMayWrapCanonicalAliasesInParentheses": true,
+    "wrappedAliasesMustAllResolveToSameCanonicalArtist": true,
+    "collisionFreeAliasRequired": true,
+    "atLeastOneNonAmbiguousLiveRowRequired": true,
+    "collaborationRowAloneSufficient": false,
+    "subgroupOrUnitDisplayMayPromoteParentGroup": false,
+    "fuzzyIdentityAllowed": false,
+    "ambiguousRowAutoSelectionAllowed": false,
+    "reviewedBindingActivatesProduct": false
+  },
+  "approvedReviewedSupportedCandidateCount": 34,
+  "approvedReviewedSupportedCanonicalArtistIds": [
+    "ailee",
+    "akmu",
+    "bigbang",
+    "bignaughty",
+    "buzz",
+    "cortis",
+    "day6",
+    "dohkyungsoo",
+    "epikhigh",
+    "gaho",
+    "gidle",
+    "hearts2hearts",
+    "hwasa",
+    "illit",
+    "ioi",
+    "kiiikiii",
+    "leellamarz",
+    "maktub",
+    "nerdconnection",
+    "nflying",
+    "psy",
+    "redvelvet",
+    "rescene",
+    "seeya",
+    "shaun",
+    "soyeon",
+    "standingegg",
+    "taeyeon",
+    "thenuts",
+    "tws",
+    "woody",
+    "yena",
+    "younha",
+    "zico"
+  ],
+  "deferredCount": 1,
+  "deferred": [
+    {
+      "canonicalArtistId": "girlsgeneration",
+      "reasonCode": "PROVIDER_DISPLAY_IS_SUBGROUP_OR_UNIT_NOT_PARENT_GROUP",
+      "observedProviderDisplays": [
+        "소녀시대-효리수 (Girls' Generation-HRS)",
+        "소녀시대-효리수 (Girls' Generation-HRS)"
+      ],
+      "decision": "remain_unresolved"
+    }
+  ],
+  "evidenceNotes": {
+    "maktub": "Approved from solo MAKTUB/마크툽 rows; duet row 박다혜 & 마크툽 is not used as sole identity evidence.",
+    "collaborationTrackTitles": "Featured artists in track titles do not alter provider artist-field identity when provider artist field itself resolves solely to the canonical artist.",
+    "girlsgeneration": "Only live provider artist field observed was the HRS/효리수 unit; parent-group support is not inferred."
+  },
+  "applicationPreview": {
+    "currentSupportedCount": 55,
+    "currentUnresolvedCount": 300,
+    "currentUnsupportedCount": 0,
+    "addReviewedSupportedCount": 34,
+    "proposedSupportedCount": 89,
+    "proposedUnresolvedCount": 266,
+    "proposedUnsupportedCount": 0
+  },
+  "decision": {
+    "selected": "approve_composite34_as_music_source_reviewed_supported_candidates_only",
+    "applicationToActiveTargetSeedAuthorized": false,
+    "applicationToCompatibilityRegistryAuthorized": false,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "nextGate": "MUSIC_FULL355_COMPOSITE34_APPLICATION_VALIDATION_REQUIRED"
+}
