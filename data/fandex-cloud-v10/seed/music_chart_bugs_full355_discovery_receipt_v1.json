@@ -1,0 +1,97 @@
+{
+  "version": "music_chart_bugs_full355_discovery_receipt_v1",
+  "status": "bugs_candidates_discovered_review_required_non_activating",
+  "lineage": {
+    "composite34ApplicationPr": 562,
+    "composite34ApplicationHead": "be9018f075b0aeee5ddce0ca465994d097bc283a",
+    "discoveryHead": "d4d7b7ca59475db448e3a3d4b9b6fb9e2c8a1e11"
+  },
+  "discovery": {
+    "workflow": "Discover Artist Expansion Music Bugs full355 v1",
+    "runId": 37558301311,
+    "jobId": 112589543570,
+    "conclusion": "success",
+    "targetArtistCount": 355,
+    "compatibilityBeforeDiscovery": {
+      "supportedCount": 89,
+      "unresolvedCount": 266,
+      "unsupportedCount": 0
+    },
+    "parsedChartRowCount": 100,
+    "candidateRowCount": 88,
+    "candidateCanonicalArtistCount": 50,
+    "supportedHitArtistCount": 47,
+    "unresolvedHitArtistCount": 3,
+    "unresolvedHitCanonicalArtistIds": [
+      "girlsgeneration",
+      "itzy",
+      "kickflip"
+    ],
+    "identityAmbiguityCount": 0,
+    "unsafeAliasMatchCount": 0
+  },
+  "artifact": {
+    "artifactId": 11455593889,
+    "name": "artist-expansion-music-bugs-full355-v1",
+    "sizeBytes": 15662,
+    "digest": "sha256:cec7bf1d0a20703972570eeb589f14fe3ef95a9cfebc423ba1c5a08c7ecca044",
+    "expiresAt": "2026-10-21T01:41:15Z"
+  },
+  "unresolvedHitEvidence": [
+    {
+      "canonicalArtistId": "itzy",
+      "observedProviderDisplays": [
+        "ITZY (있지)"
+      ],
+      "observedCandidateRowCount": 1,
+      "reviewDisposition": "eligible_for_reviewed_supported_binding",
+      "reason": "Provider artist field directly identifies the canonical artist in bilingual wrapper form."
+    },
+    {
+      "canonicalArtistId": "kickflip",
+      "observedProviderDisplays": [
+        "KickFlip(킥플립)"
+      ],
+      "observedCandidateRowCount": 8,
+      "reviewDisposition": "eligible_for_reviewed_supported_binding",
+      "reason": "Eight live Bugs rows consistently identify the same canonical artist in bilingual wrapper form."
+    },
+    {
+      "canonicalArtistId": "girlsgeneration",
+      "observedProviderDisplays": [
+        "소녀시대-효리수 (Girls' Generation-HRS)"
+      ],
+      "observedCandidateRowCount": 1,
+      "reviewDisposition": "remain_unresolved",
+      "reason": "Observed Bugs provider artist field is a subgroup/unit display and does not establish the parent Girls' Generation binding."
+    }
+  ],
+  "decisionBoundary": {
+    "reviewEligibleCanonicalArtistIds": [
+      "itzy",
+      "kickflip"
+    ],
+    "remainUnresolvedCanonicalArtistIds": [
+      "girlsgeneration"
+    ],
+    "machineCandidateAutoPromoted": false,
+    "nextGate": "MUSIC_BUGS_ITZY_KICKFLIP_REVIEW_REQUIRED"
+  },
+  "safety": {
+    "subgroupUnitPromotedToParentGroup": false,
+    "machineCandidateAutoPromoted": false,
+    "ambiguityAutoSelected": false,
+    "unsafeAliasAccepted": false,
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "compatibilityRegistryModified": false,
+    "activeTargetSeedModified": false,
+    "productCohortModified": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
