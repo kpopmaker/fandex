@@ -82,3 +82,5 @@ jobs:
           echo "FANDEX_RENDER_ASSEMBLY_PROBE_BLOB_WRITES=0"
 
 # rerun after Render 05c21bb3 deployment
+
+# rerun after News Blob store env binding
