@@ -28,6 +28,7 @@ on:
       - 'tests/momentum-product-activation-authorization-execution-candidate-evidence-v1.test.mts'
       - 'tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts'
       - 'tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts'
+      - '.github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml'
 
 permissions:
   contents: read
@@ -84,6 +85,7 @@ jobs:
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
           lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
+          .github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
