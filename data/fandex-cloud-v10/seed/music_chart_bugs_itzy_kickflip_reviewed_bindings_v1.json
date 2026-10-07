@@ -1,0 +1,82 @@
+{
+  "version": "music_chart_bugs_itzy_kickflip_reviewed_bindings_v1",
+  "status": "reviewed_supported_candidate_application_not_applied",
+  "source": "music_chart",
+  "providerEvidence": "bugs",
+  "evidence": {
+    "discoveryReceipt": "music_chart_bugs_full355_discovery_receipt_v1",
+    "discoveryRunId": 37558301311,
+    "artifactId": 11455593889,
+    "artifactDigest": "sha256:cec7bf1d0a20703972570eeb589f14fe3ef95a9cfebc423ba1c5a08c7ecca044"
+  },
+  "reviewPolicy": {
+    "canonicalArtistIdAuthoritative": true,
+    "bilingualWrapperAllowed": true,
+    "providerArtistFieldMustDirectlyIdentifyCanonicalArtist": true,
+    "subgroupUnitMayPromoteParentGroup": false,
+    "fuzzyIdentityAllowed": false,
+    "ambiguousRowAutoSelectionAllowed": false,
+    "reviewedBindingActivatesProduct": false
+  },
+  "reviewedSupportedCandidateCount": 2,
+  "reviewedSupportedBindings": [
+    {
+      "canonicalArtistId": "itzy",
+      "artist": "ITZY",
+      "aliases": [
+        "ITZY",
+        "있지"
+      ],
+      "providerDisplays": [
+        "ITZY (있지)"
+      ],
+      "observedCandidateRowCount": 1,
+      "decision": "reviewed_supported_candidate"
+    },
+    {
+      "canonicalArtistId": "kickflip",
+      "artist": "KickFlip",
+      "aliases": [
+        "KickFlip",
+        "KICKF",
+        "킥플립"
+      ],
+      "providerDisplays": [
+        "KickFlip(킥플립)"
+      ],
+      "observedCandidateRowCount": 8,
+      "decision": "reviewed_supported_candidate"
+    }
+  ],
+  "deferred": [
+    {
+      "canonicalArtistId": "girlsgeneration",
+      "reasonCode": "PROVIDER_DISPLAY_IS_SUBGROUP_OR_UNIT_NOT_PARENT_GROUP",
+      "providerDisplays": [
+        "소녀시대-효리수 (Girls' Generation-HRS)"
+      ],
+      "decision": "remain_unresolved"
+    }
+  ],
+  "applicationPreview": {
+    "currentSupportedCount": 89,
+    "currentUnresolvedCount": 266,
+    "currentUnsupportedCount": 0,
+    "addReviewedSupportedCount": 2,
+    "proposedSupportedCount": 91,
+    "proposedUnresolvedCount": 264,
+    "proposedUnsupportedCount": 0
+  },
+  "decision": {
+    "selected": "approve_itzy_kickflip_as_music_source_reviewed_supported_candidates_only",
+    "applicationToActiveTargetSeedAuthorized": false,
+    "applicationToCompatibilityRegistryAuthorized": false,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "nextGate": "MUSIC_BUGS_ITZY_KICKFLIP_APPLICATION_VALIDATION_REQUIRED"
+}
