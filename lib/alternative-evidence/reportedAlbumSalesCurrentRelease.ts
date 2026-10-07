@@ -217,6 +217,37 @@ export function selectReportedAlbumSalesCurrentRelease(
     );
   }
 
+  if (
+    discovery.editionResolutionState === 'candidate'
+    || discovery.editionResolutionState === 'unknown'
+  ) {
+    return unavailable(
+      canonicalArtistId,
+      'latest-release-edition-not-resolved',
+    );
+  }
+  if (
+    discovery.editionResolutionState === 'edition-specific'
+    && (
+      discovery.canonicalEditionId === null
+      || discovery.canonicalEditionId.trim() === ''
+    )
+  ) {
+    return unavailable(
+      canonicalArtistId,
+      'latest-release-edition-not-resolved',
+    );
+  }
+  if (
+    discovery.editionResolutionState === 'release-level'
+    && discovery.canonicalEditionId !== null
+  ) {
+    return dataIssue(
+      canonicalArtistId,
+      'discovery-contract-invalid',
+    );
+  }
+
   const currentReleaseBinding = input.currentReleaseBinding;
   if (
     currentReleaseBinding === null
@@ -258,37 +289,6 @@ export function selectReportedAlbumSalesCurrentRelease(
     return unavailable(
       canonicalArtistId,
       'latest-release-identity-not-resolved',
-    );
-  }
-
-  if (
-    discovery.editionResolutionState === 'candidate'
-    || discovery.editionResolutionState === 'unknown'
-  ) {
-    return unavailable(
-      canonicalArtistId,
-      'latest-release-edition-not-resolved',
-    );
-  }
-  if (
-    discovery.editionResolutionState === 'edition-specific'
-    && (
-      discovery.canonicalEditionId === null
-      || discovery.canonicalEditionId.trim() === ''
-    )
-  ) {
-    return unavailable(
-      canonicalArtistId,
-      'latest-release-edition-not-resolved',
-    );
-  }
-  if (
-    discovery.editionResolutionState === 'release-level'
-    && discovery.canonicalEditionId !== null
-  ) {
-    return dataIssue(
-      canonicalArtistId,
-      'discovery-contract-invalid',
     );
   }
 
