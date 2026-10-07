@@ -1,0 +1,41 @@
+{
+  "artifactVersion": "iu-music-album-current-release-review-decision-candidate-v1",
+  "lifecycle": "productionization-review-decision-candidate",
+  "canonicalArtistId": "iu",
+  "variableId": "musicAlbumPoint",
+  "assessedAt": "2026-10-07T09:29:00+09:00",
+  "reviewRequestRef": "data/fandex-cloud-v10/product/iu_music_album_current_release_review_packet_v1.json",
+  "proposedConclusion": {
+    "latestPhysicalReleaseFamily": "A Flower Bookmark 3",
+    "latestPhysicalReleaseFamilyState": "evidence-supported-candidate",
+    "editionResolutionState": "release-level",
+    "canonicalReleaseId": null,
+    "canonicalEditionId": null,
+    "releaseDate": "2025-05-28",
+    "rationale": [
+      "Kakao Entertainment identifies A Flower Bookmark 3 as the 2025 remake album release.",
+      "YES24 lists the standard physical CD on 2025-05-28.",
+      "YES24 separately labels the 2025-07-15 product as A Flower Bookmark 3 [CDP ver.][limited edition], supporting edition-level rather than separate-release treatment.",
+      "Yonhap reports the planned 2026 sixth studio album was postponed.",
+      "Yonhap reports the 2026-09-10 release as a digital single, so it does not replace the latest eligible physical-album release family."
+    ],
+    "supportingEvidenceRefs": [
+      "kakaoent-newsroom:2025-05-27:a-flower-bookmark-3",
+      "yes24:146827201:a-flower-bookmark-3",
+      "yes24:147561057:a-flower-bookmark-3-cdp",
+      "yonhap:2026-07-20:iu-sixth-album-postponed",
+      "yonhap:2026-09-10:iu-digital-single"
+    ]
+  },
+  "unresolvedBeforeBinding": [
+    "human-reviewer-must-confirm-latest-physical-release-family",
+    "human-reviewer-must-confirm-release-level-vs-edition-specific-resolution",
+    "canonical-release-id-must-be-assigned-under-repository-identity-convention"
+  ],
+  "humanReviewDecision": null,
+  "bindingMaterialized": false,
+  "autoVerified": false,
+  "productionObservationEligible": false,
+  "productActivationAuthorized": false,
+  "publicPublicationAuthorized": false
+}
