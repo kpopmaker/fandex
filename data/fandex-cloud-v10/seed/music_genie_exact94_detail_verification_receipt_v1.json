@@ -1,0 +1,100 @@
+{
+  "version": "music_genie_exact94_detail_verification_receipt_v1",
+  "status": "provider_detail_metadata_verified_review_required_non_activating",
+  "lineage": {
+    "sourceDiscoveryReceipt": "music_genie_full264_identity_discovery_receipt_v1",
+    "verificationHead": "2cc5117519152a80bbca2602eaa8aa4c3c7a400b"
+  },
+  "execution": {
+    "workflow": "Verify Artist Expansion Music Genie exact94 detail metadata v1",
+    "runId": 37560176276,
+    "jobId": 112595424502,
+    "conclusion": "success",
+    "targetCount": 94,
+    "dispositionCounts": {
+      "strong_metadata_consistent_candidate": 26,
+      "metadata_partial_candidate": 39,
+      "debut_year_mismatch": 5,
+      "entity_type_mismatch_or_unparsed": 23,
+      "detail_display_mismatch": 1,
+      "detail_fetch_failed": 0
+    },
+    "strongMetadataConsistentCanonicalArtistIds": [
+      "kissoflife",
+      "nctdream",
+      "nct127",
+      "2ne1",
+      "xdinaryheroes",
+      "katseye",
+      "p1harmony",
+      "cravity",
+      "btob",
+      "thenewsix",
+      "wjsn",
+      "sechskies",
+      "babydontcry",
+      "hifiunicorn",
+      "lightsum",
+      "nuest",
+      "mcnd",
+      "newbeat",
+      "keyvitup",
+      "vayonn",
+      "fantasyboys",
+      "aimers",
+      "justb",
+      "atbo",
+      "trcng",
+      "hinapia"
+    ],
+    "debutYearMismatchCanonicalArtistIds": [
+      "nctwish",
+      "kai",
+      "jisoo",
+      "verivery",
+      "boy"
+    ],
+    "entityTypeMismatchOrUnparsedCanonicalArtistIds": [
+      "treasure",
+      "jin",
+      "nctu",
+      "jeonsomi",
+      "viini",
+      "highlight",
+      "lucy",
+      "hori7on",
+      "xnghan",
+      "drippin",
+      "vvon",
+      "dkb",
+      "candyshop",
+      "naze",
+      "ichillinj",
+      "vixx",
+      "trendz",
+      "wei",
+      "ntx",
+      "hotissue",
+      "hyb",
+      "peniel",
+      "uau"
+    ]
+  },
+  "artifact": {
+    "artifactId": 11456228049,
+    "name": "artist-expansion-music-genie-exact94-detail-v1",
+    "sizeBytes": 80211,
+    "digest": "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f",
+    "expiresAt": "2026-10-21T02:05:46Z"
+  },
+  "strongCandidateContract": {
+    "stableProviderArtistIdRequired": true,
+    "providerDetailDisplayAliasMatchRequired": true,
+    "canonicalEntityTypeMatchRequired": true,
+    "canonicalDebutYearMatchRequired": true,
+    "displayNameOnlyBindingAllowed": false,
+    "metadataPartialAutoPromotionAllowed": false,
+    "metadataConflictAutoPromotionAllowed": false
+  },
+  "nextGate": "GENIE_STRONG26_REVIEWED_BINDING_DECISION_REQUIRED"
+}
