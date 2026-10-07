@@ -12,6 +12,11 @@ import {
   type ReportedAlbumSalesSourceTier,
 } from './reportedAlbumSalesEvidence';
 import {
+  validateReportedAlbumSalesProductionEvidenceQualificationBinding,
+  type ReportedAlbumSalesProductionEvidenceClaim,
+  type ReportedAlbumSalesProductionEvidenceQualificationBinding,
+} from './reportedAlbumSalesProductionEvidenceQualification';
+import {
   validateReportedAlbumSalesProductionIdentityBinding,
   type ReportedAlbumSalesProductionIdentityBinding,
 } from './reportedAlbumSalesProductionIdentity';
@@ -55,6 +60,12 @@ export type ReportedAlbumSalesProductionBlocker =
   | 'release-identity-binding-invalid'
   | 'source-tier-not-production-eligible'
   | 'source-publication-date-missing'
+  | 'production-evidence-qualification-required'
+  | 'production-evidence-qualification-invalid'
+  | 'tier-a-or-b-exact-value-evidence-missing'
+  | 'tier-a-or-b-provider-period-evidence-missing'
+  | 'tier-a-or-b-metric-semantic-evidence-missing'
+  | 'tier-a-or-b-underlying-provider-evidence-missing'
   | 'conflicting-evidence'
   | 'rights-review-binding-required'
   | 'rights-review-binding-invalid'
@@ -109,6 +120,9 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   providerPeriodEnd: string | null;
   evidenceQuality: ReportedAlbumSalesEvidenceQuality;
   evidenceRefs: readonly ReportedAlbumSalesProductionEvidenceRef[];
+  evidenceQualificationBindingIds: readonly string[];
+  evidenceClaimCoverage:
+    readonly ReportedAlbumSalesProductionEvidenceClaim[];
   revision: ReportedAlbumSalesObservation['revision'];
   conflictState: ReportedAlbumSalesProductionConflictState;
   availability: ReportedAlbumSalesProductionAvailability;
@@ -211,6 +225,10 @@ function productionBlockers(input: Readonly<{
   identityBindingProvided: boolean;
   identityBindingValid: boolean;
   identityResolved: boolean;
+  evidenceQualificationsProvided: boolean;
+  evidenceQualificationsValid: boolean;
+  evidenceClaimCoverage:
+    ReadonlySet<ReportedAlbumSalesProductionEvidenceClaim>;
 }>): readonly ReportedAlbumSalesProductionBlocker[] {
   const { observation } = input;
   const blockers: ReportedAlbumSalesProductionBlocker[] = [];
@@ -281,6 +299,24 @@ function productionBlockers(input: Readonly<{
     blockers.push('source-publication-date-missing');
   }
 
+  if (!input.evidenceQualificationsProvided) {
+    blockers.push('production-evidence-qualification-required');
+  } else if (!input.evidenceQualificationsValid) {
+    blockers.push('production-evidence-qualification-invalid');
+  }
+  if (!input.evidenceClaimCoverage.has('exact-value')) {
+    blockers.push('tier-a-or-b-exact-value-evidence-missing');
+  }
+  if (!input.evidenceClaimCoverage.has('explicit-provider-period')) {
+    blockers.push('tier-a-or-b-provider-period-evidence-missing');
+  }
+  if (!input.evidenceClaimCoverage.has('metric-semantic')) {
+    blockers.push('tier-a-or-b-metric-semantic-evidence-missing');
+  }
+  if (!input.evidenceClaimCoverage.has('underlying-provider')) {
+    blockers.push('tier-a-or-b-underlying-provider-evidence-missing');
+  }
+
   if (input.conflict) {
     blockers.push('conflicting-evidence');
   }
@@ -302,6 +338,8 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     conflict?: boolean;
     releaseIdentityBinding?:
       ReportedAlbumSalesProductionIdentityBinding | null;
+    evidenceQualifications?:
+      readonly ReportedAlbumSalesProductionEvidenceQualificationBinding[];
   }>,
 ): ReportedAlbumSalesProductionSourceCandidate {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.asOfDate)) {
@@ -339,6 +377,32 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     identityBindingValid
     && releaseIdentityState === 'resolved'
     && canonicalReleaseId !== null;
+  const evidenceQualifications =
+    input.evidenceQualifications ?? [];
+  const validEvidenceQualifications =
+    evidenceQualifications.filter(binding =>
+      validateReportedAlbumSalesProductionEvidenceQualificationBinding(
+        binding,
+        input.observation,
+      ),
+    );
+  const evidenceQualificationsValid =
+    validEvidenceQualifications.length === evidenceQualifications.length;
+  const evidenceClaimCoverage = new Set<
+    ReportedAlbumSalesProductionEvidenceClaim
+  >(
+    validEvidenceQualifications.flatMap(
+      binding => [...binding.supportedClaims],
+    ),
+  );
+  const evidenceQualificationBindingIds = Object.freeze(
+    validEvidenceQualifications
+      .map(binding => binding.bindingId)
+      .sort(),
+  );
+  const evidenceClaimCoverageList = Object.freeze(
+    [...evidenceClaimCoverage].sort(),
+  );
   const blockers = [
     ...productionBlockers({
       observation: input.observation,
@@ -348,6 +412,10 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       identityBindingProvided: releaseIdentityBinding !== null,
       identityBindingValid,
       identityResolved,
+      evidenceQualificationsProvided:
+        evidenceQualifications.length > 0,
+      evidenceQualificationsValid,
+      evidenceClaimCoverage,
     }),
     ...(
       rightsReview === null
@@ -394,6 +462,8 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       identityBindingValid
         ? releaseIdentityBinding.canonicalEditionId
         : null,
+    evidenceQualificationBindingIds,
+    evidenceClaimCoverage: evidenceClaimCoverageList,
   });
   const durableNormalizedStorageEligible =
     currentRightsState === 'authorized'
@@ -449,6 +519,8 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       input.observation.providerPeriodEnd,
     evidenceQuality: input.observation.evidenceQuality,
     evidenceRefs,
+    evidenceQualificationBindingIds,
+    evidenceClaimCoverage: evidenceClaimCoverageList,
     revision: input.observation.revision,
     conflictState:
       conflict
@@ -481,6 +553,8 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
     rightsReviews?: readonly ReportedWebUsageReviewMaterialized[];
     identityBindings?:
       readonly ReportedAlbumSalesProductionIdentityBinding[];
+    evidenceQualifications?:
+      readonly ReportedAlbumSalesProductionEvidenceQualificationBinding[];
   }>,
 ): ReportedAlbumSalesProductionSourceSnapshot {
   if (
@@ -532,6 +606,24 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
     }
     identityBindings.set(binding.observationId, binding);
   }
+  const evidenceQualifications = new Map<
+    string,
+    ReportedAlbumSalesProductionEvidenceQualificationBinding[]
+  >();
+  const seenEvidenceQualificationIds = new Set<string>();
+  for (const binding of input.evidenceQualifications ?? []) {
+    if (seenEvidenceQualificationIds.has(binding.bindingId)) {
+      throw new Error(
+        'reported_album_sales_production_evidence_qualification_duplicate',
+      );
+    }
+    seenEvidenceQualificationIds.add(binding.bindingId);
+    const list =
+      evidenceQualifications.get(binding.observationId) ?? [];
+    list.push(binding);
+    evidenceQualifications.set(binding.observationId, list);
+  }
+
   const candidates = Object.freeze(
     read.activeObservations
       .filter(observation =>
@@ -546,6 +638,8 @@ export function buildReportedAlbumSalesProductionSourceSnapshot(
           conflict: conflicts.has(observation.observationScopeId),
           releaseIdentityBinding:
             identityBindings.get(observation.observationId) ?? null,
+          evidenceQualifications:
+            evidenceQualifications.get(observation.observationId) ?? [],
         }))
       .sort((left, right) =>
         left.observationId.localeCompare(right.observationId)),
