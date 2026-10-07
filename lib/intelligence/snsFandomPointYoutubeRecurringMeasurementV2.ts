@@ -18,7 +18,7 @@ export type SnsFandomYoutubeRecurringMeasurementActivationV2 = Readonly<{
   authorizedRevisionSha: string | null;
 }>;
 
-export type SnsFandomYoutubeRecurringMeasurementPlanV2V2Input = Readonly<{
+export type SnsFandomYoutubeRecurringMeasurementPlanV2Input = Readonly<{
   currentRevisionSha: string;
   now: string;
   measurementWindowStart: string;
@@ -105,7 +105,7 @@ function floorUtcHour(value: string): string {
 }
 
 function baseResult(
-  input: SnsFandomYoutubeRecurringMeasurementPlanV2V2Input,
+  input: SnsFandomYoutubeRecurringMeasurementPlanV2Input,
   state: SnsFandomYoutubeRecurringMeasurementPlanV2['state'],
   blockers: readonly string[],
   slotStart: string | null = null,
@@ -146,7 +146,7 @@ function baseResult(
 }
 
 export function evaluateSnsFandomYoutubeRecurringMeasurementPlanV2V2(
-  input: SnsFandomYoutubeRecurringMeasurementPlanV2V2Input,
+  input: SnsFandomYoutubeRecurringMeasurementPlanV2Input,
 ): SnsFandomYoutubeRecurringMeasurementPlanV2 {
   const blockers: string[] = [];
 
