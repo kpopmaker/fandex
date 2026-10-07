@@ -135,6 +135,8 @@ function eligibleCandidate(source: ReportedAlbumSalesObservation) {
         requestId: request.requestId,
         canonicalReleaseId:
           'release:iu:current-physical-album:2026-10-01',
+        editionResolutionState: 'release-level',
+        canonicalEditionId: null,
         supportingEvidenceRefs: [
           'canonical-release-registry:iu:current-physical-album',
         ],
@@ -176,6 +178,7 @@ function currentReleaseBinding() {
       releaseDate: '2026-10-01',
       candidateCanonicalReleaseId:
         'release:iu:current-physical-album:2026-10-01',
+      candidateEdition: null,
       evidenceRefs: [
         'release-discovery:iu:current-physical-album',
       ],
@@ -187,6 +190,8 @@ function currentReleaseBinding() {
       conclusion: 'verified-latest-physical-release',
       canonicalReleaseId:
         'release:iu:current-physical-album:2026-10-01',
+      editionResolutionState: 'release-level',
+      canonicalEditionId: null,
       supportingEvidenceRefs: [
         'release-discovery:iu:current-physical-album',
       ],
