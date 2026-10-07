@@ -14,6 +14,7 @@ on:
       - "lib/server/product/**"
       - "data/fandex-cloud-v10/**"
       - "data/momentum-product/**"
+      - "data/lastfm-cloud/**"
   pull_request:
     paths:
       - ".dockerignore"
@@ -25,6 +26,7 @@ on:
       - "lib/server/product/**"
       - "data/fandex-cloud-v10/**"
       - "data/momentum-product/**"
+      - "data/lastfm-cloud/**"
 
 permissions:
   contents: read
@@ -98,7 +100,10 @@ jobs:
           const momentum = card('growthMomentumPoint', 'riskAdjustmentPoint');
           if (
             momentum.includes('upstream-read-not-ok')
+            || momentum.includes('upstream-readiness-blocked')
             || momentum.includes('runtime-read-failed')
+            || momentum.includes('source-currentness-audit-read-failed')
+            || momentum.includes('current-lastfm-status-read-failed')
           ) {
             throw new Error('momentum-repository-evidence-not-traced');
           }
