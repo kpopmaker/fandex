@@ -122,5 +122,36 @@
     "Locate a stable Tier A/B public report that explicitly states the exact Hanteo first-week unit total and period.",
     "Review any primary Hanteo/label/retailer evidence that exposes exact units without relying on screenshots or unsupported community transcription.",
     "If no qualifying source exists, keep IU current source blocked rather than falling back to older qualified history or changing the current-release semantic without methodology approval."
-  ]
+  ],
+  "searchExpansion": {
+    "assessedAt": "2026-10-07T10:36:00+09:00",
+    "queryVariants": [
+      "\"꽃갈피 셋\" \"79,940\" 아이유",
+      "\"꽃갈피 셋\" \"7만9940\" 아이유",
+      "\"꽃갈피 셋\" \"7만 9940\" 아이유",
+      "\"A Flower Bookmark 3\" \"79,940\" IU",
+      "\"꽃갈피 셋\" \"초동 판매량\" 아이유",
+      "\"꽃갈피 셋\" site:hanteonews.com 아이유",
+      "\"IU\" \"A Flower Bookmark 3\" site:hanteonews.com"
+    ],
+    "reputableDomainsChecked": [
+      "mk.co.kr",
+      "edaily.co.kr",
+      "osen.co.kr",
+      "starnewskorea.com",
+      "heraldcorp.com",
+      "newsis.com",
+      "soompi.com",
+      "koreatimes.co.kr",
+      "koreaherald.com",
+      "hanteonews.com",
+      "hanteochart.com"
+    ],
+    "outcome": "no-additional-tier-a-or-b-exact-value-source-located",
+    "notes": [
+      "YES24 and other retailer pages confirm Hanteo/Circle aggregation participation but do not state the exact IU first-week total.",
+      "Additional Hanteo/HanteoNews searches did not locate an official page explicitly stating 79,940 for A Flower Bookmark 3.",
+      "Discovery-only sources continue to state 79,940; no Production promotion is performed."
+    ]
+  }
 }
