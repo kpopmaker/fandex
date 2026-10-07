@@ -64,7 +64,8 @@ test('only current Real Production Product truth is accepted for Risk consumptio
         variableId: 'musicAlbumPoint',
         eligibilityState: 'not-current-real-production',
         acceptedForRiskConsumption: false,
-        exclusionReason: 'album-provider-production-not-authorized',
+        exclusionReason:
+          'music-album-reported-web-current-production-not-ready',
       },
       {
         variableId: 'snsFandomPoint',
@@ -105,4 +106,36 @@ test('excluded candidates carry owner scope and non-empty upstream evidence refs
       true,
     );
   }
+});
+
+
+test('musicAlbumPoint Risk exclusion no longer treats licensed provider issue 174 as the mandatory Production path', () => {
+  const album =
+    RISK_ADJUSTMENT_CURRENT_UPSTREAM_ELIGIBILITY.find(
+      entry => entry.variableId === 'musicAlbumPoint',
+    );
+  assert.ok(album);
+  if (!album) return;
+
+  assert.equal(album.acceptedForRiskConsumption, false);
+  assert.equal(
+    album.exclusionReason,
+    'music-album-reported-web-current-production-not-ready',
+  );
+  assert.equal(
+    album.evidenceRefs.includes(
+      'upstream-external-dependency:issue-174',
+    ),
+    false,
+  );
+  assert.ok(
+    album.evidenceRefs.includes(
+      'producer-contract:music-album-point-risk-quality-metadata-v1',
+    ),
+  );
+  assert.ok(
+    album.evidenceRefs.includes(
+      'source-contract:reported-album-sales-production-source-v1',
+    ),
+  );
 });
