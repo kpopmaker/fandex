@@ -7,11 +7,9 @@ export const SNS_FANDOM_YOUTUBE_V2_RENDER_SCHEDULE = '7 * * * *' as const;
 export const SNS_FANDOM_YOUTUBE_V1_GITHUB_FALLBACK_CRONS =
   Object.freeze(['17 * * * *', '47 * * * *'] as const);
 export const SNS_FANDOM_YOUTUBE_V2_WORKFLOW_PATH =
-  '.github/workflows/execute-sns-fandom-youtube-v2-render-trigger-v1.yml'
-  as const;
+  '.github/workflows/execute-sns-fandom-youtube-v2-render-trigger-v1.yml' as const;
 export const SNS_FANDOM_YOUTUBE_V1_WORKFLOW_PATH =
-  '.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml'
-  as const;
+  '.github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml' as const;
 
 export type SnsFandomYoutubeV2CutoverActivationCandidateV1Input = Readonly<{
   activationRevisionSha: string | null;
