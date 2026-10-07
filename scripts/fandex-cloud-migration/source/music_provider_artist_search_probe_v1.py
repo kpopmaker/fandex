@@ -92,16 +92,19 @@ def extract_candidates(provider: str, html: str) -> list[dict]:
             })
 
     elif provider == "genie":
-        pattern = re.compile(r"(?:artistInfo\?xxnm=|artistInfo\?xxnm%3D)(\d+)")
+        onclick_pattern = re.compile(r"fnViewArtist\(['\"](\d+)['\"]\)", re.I)
+        href_pattern = re.compile(r"artistInfo\?xxnm=(\d+)", re.I)
         for a in soup.find_all("a"):
             href = str(a.get("href") or "")
             onclick = str(a.get("onclick") or "")
-            blob = href + " " + onclick
-            m = pattern.search(blob)
+            m = onclick_pattern.search(onclick) or href_pattern.search(href)
             if not m:
                 continue
             provider_id = m.group(1)
             name = " ".join(a.stripped_strings).strip()
+            if not name:
+                img = a.find("img")
+                name = str(img.get("alt") or "").strip() if img else ""
             if not name:
                 continue
             key = (provider_id, name)
@@ -111,7 +114,7 @@ def extract_candidates(provider: str, html: str) -> list[dict]:
             found.append({
                 "providerArtistId": provider_id,
                 "providerDisplay": name,
-                "href": urljoin("https://www.genie.co.kr/", href) if href else "",
+                "href": f"https://www.genie.co.kr/detail/artistInfo?xxnm={provider_id}",
             })
 
     return found[:30]
