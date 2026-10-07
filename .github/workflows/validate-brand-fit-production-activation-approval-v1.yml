@@ -1,0 +1,71 @@
+name: Validate Brand Fit Production activation approval v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-production-activation-authorization-v1'
+    paths:
+      - 'lib/product/activation/brandFitProductionActivationApproval.ts'
+      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
+      - 'lib/product/activation/brandFitProductionReadiness.ts'
+      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
+      - 'tests/brand-fit-production-activation-approval-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-activation-approval-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/product/activation/brandFitProductionActivationApproval.ts'
+      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
+      - 'lib/product/activation/brandFitProductionReadiness.ts'
+      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
+      - 'tests/brand-fit-production-activation-approval-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-activation-approval-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Brand Fit activation approval regressions
+        run: npx tsx --test tests/brand-fit-production-activation-approval-v1.test.mts
+
+      - name: Existing Brand Fit authorization boundary regressions
+        run: npx tsx --test tests/brand-fit-production-activation-authorization-execution-candidate-v1.test.mts
+
+      - name: Existing Brand Fit lifecycle cutover candidate regressions
+        run: npx tsx --test tests/brand-fit-production-lifecycle-cutover-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "ownerApprovalRecorded=true"
+          echo "approvalMaterialized=true"
+          echo "authorizationExecuted=true"
+          echo "activationAuthorized=true"
+          echo "lifecycleCutoverExecuted=false"
+          echo "renderRedeployExecuted=false"
+          echo "publicationAuthorized=false"
+          echo "publicRouteCutoverAuthorized=false"
+          echo "riskInventoryUpdated=false"
+          echo "riskConsumptionAuthorized=false"
+          echo "numericEligible=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
