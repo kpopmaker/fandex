@@ -20,7 +20,8 @@ on:
       - 'lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts'
       - 'lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts'
       - 'lib/product/contracts/productMomentumEvidenceConsensus.ts'
-      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          lib/server/product/momentumLiveShadowProductReadiness.ts'
       - 'lib/product/readiness/momentumPublicRouteDesignCandidate.ts'
       - 'lib/server/ingestion/momentumEvidenceConsensusRepository.ts'
       - 'tests/momentum-carrier-attestation-lineage-v2.test.mts'
