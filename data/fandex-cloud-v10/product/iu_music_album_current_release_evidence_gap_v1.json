@@ -139,7 +139,14 @@
     "discoveryProviderPeriodEvidenceRefs": [
       "majayo:2025-06-04:iu-a-flower-bookmark-3"
     ],
-    "discoveryProviderPeriodProductionEligible": false
+    "discoveryProviderPeriodProductionEligible": false,
+    "sourceSearchAudit": {
+      "contractVersion": "iu-music-album-first-week-source-search-audit-v1",
+      "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json",
+      "assessedOn": "2026-10-07",
+      "tierAOrBExactValueSourceLocated": false,
+      "tierAOrBExactValueAndPeriodBindingLocated": false
+    }
   },
   "blockers": [
     "latest-physical-release-not-human-reviewed",
@@ -148,7 +155,8 @@
     "tier-a-or-b-first-week-evidence-missing",
     "explicit-provider-period-missing",
     "reported-web-rights-review-not-materialized",
-    "durable-write-not-authorized"
+    "durable-write-not-authorized",
+    "tier-a-or-b-exact-value-search-completed-no-qualified-source"
   ],
   "semantics": {
     "releaseDateDerivedProviderPeriodAllowed": false,
