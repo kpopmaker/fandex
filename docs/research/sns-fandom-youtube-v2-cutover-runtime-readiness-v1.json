@@ -1,6 +1,6 @@
 {
   "version": "sns_fandom_youtube_v2_cutover_runtime_readiness_v1",
-  "state": "prepared-not-activation-ready",
+  "state": "activation-ready-owner-approval-required",
   "generationRoot": "sns-fandom/youtube-audit/recurring/v2",
   "runtime": {
     "runtimePath": "scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts",
@@ -16,7 +16,7 @@
     "canonicalRebaselineAuthorized": false,
     "newGenerationProviderExecutionAuthorized": false,
     "schedulerCutoverAuthorized": false,
-    "v1FallbackSuppressionBound": false,
+    "v1FallbackSuppressionBound": true,
     "renderDispatchMutationPerformed": false,
     "newGenerationProviderCallPerformed": false,
     "cutoverApprovalEvidenceRef": null,
@@ -37,11 +37,11 @@
     "productActivationAuthorized": false
   },
   "notes": [
-    "This readiness file intentionally blocks live v2 execution.",
-    "The v2 Render-trigger workflow must fail before provider execution while v1FallbackSuppressionBound is false or owner authority is not activation-ready.",
-    "The durable #509 approval ref remains runtime input rather than checked-in state so the approval can bind the already-existing exact activation revision without changing that revision SHA.",
-    "At execution time the workflow must fetch the referenced #509 issue comment and verify repository OWNER identity, exact authorizedRevisionSha, canonical rebaseline authorization, new-generation provider execution authorization, and scheduler cutover authorization.",
-    "Render dispatch mutation is an external action performed only after an activation-ready revision is merged and separately authorized.",
-    "The existing v1 Render scheduler and GitHub fallback remain untouched by this candidate."
+    "This final activation revision is code-ready for cutover but still requires explicit owner approval bound to this exact revision before any v2 provider execution or Render scheduler mutation.",
+    "The v1 GitHub fallback schedule is suppressed by this revision while retaining workflow_dispatch for manual emergency use during the handoff.",
+    "The durable #509 approval ref remains runtime input so the approval can bind this exact revision without changing its SHA.",
+    "The v2 workflow must verify repository OWNER identity plus exact authorizedRevisionSha and all three cutover authorities in the supplied #509 comment before provider execution.",
+    "Render dispatch mutation remains external and is not performed by this revision.",
+    "Provider submission, Production collection, and Product activation remain unauthorized."
   ]
 }
