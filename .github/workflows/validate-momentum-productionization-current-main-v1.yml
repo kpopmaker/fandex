@@ -80,6 +80,7 @@ jobs:
           lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts
           lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
