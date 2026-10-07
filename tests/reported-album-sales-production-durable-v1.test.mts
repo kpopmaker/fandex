@@ -6,6 +6,10 @@ import {
   type ReportedAlbumSalesObservation,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  buildReportedAlbumSalesProductionEvidenceQualificationRequest,
+  createReportedAlbumSalesProductionEvidenceQualificationBinding,
+} from '../lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification';
+import {
   buildReportedAlbumSalesProductionIdentityReviewRequest,
   createReportedAlbumSalesProductionIdentityBinding,
 } from '../lib/alternative-evidence/reportedAlbumSalesProductionIdentity';
@@ -91,6 +95,33 @@ function observation(input: Readonly<{
   });
 }
 
+function reviewedEvidenceQualification(
+  source: ReportedAlbumSalesObservation,
+) {
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      source,
+    );
+  return createReportedAlbumSalesProductionEvidenceQualificationBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      evidenceId: 'fixture:reported-web:current',
+      supportedClaims: [
+        'exact-value',
+        'explicit-provider-period',
+        'metric-semantic',
+        'underlying-provider',
+      ],
+      reviewEvidenceRefs: [
+        'review:fixture:reported-web:current:claims',
+      ],
+      reviewerRef: 'reviewer:music-album:fixture',
+      reviewedAt: '2026-10-08T10:15:00+09:00',
+    },
+  });
+}
+
 function reviewedRights(
   source: ReportedAlbumSalesObservation,
 ) {
@@ -157,6 +188,9 @@ function eligibleCandidate(source: ReportedAlbumSalesObservation) {
       asOfDate: '2026-10-08',
       rightsReview: reviewedRights(source),
       releaseIdentityBinding: binding,
+      evidenceQualifications: [
+        reviewedEvidenceQualification(source),
+      ],
     });
   assert.equal(candidate.productSourceEligible, true);
   return candidate;
