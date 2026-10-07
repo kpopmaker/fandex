@@ -48,6 +48,8 @@ const WINDOW_PATH =
   'sns-fandom/youtube-audit/recurring/v2/canonical-window.json' as const;
 const RECEIPT_PREFIX =
   'sns-fandom/youtube-audit/recurring/v2/receipts/' as const;
+const PRIOR_GENERATION_RECEIPT_PREFIX =
+  'sns-fandom/youtube-audit/recurring/v1/receipts/' as const;
 const CADENCE_EVIDENCE_REF =
   'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631' as const;
 const PROVIDER_QUOTA_COST_EVIDENCE_REF =
@@ -150,6 +152,19 @@ function floorUtcHour(value: string): string {
 function exactUtcHour(value: string): boolean {
   return exactIso(value) && floorUtcHour(value) === value;
 }
+
+function slotObjectName(slotStart: string): string {
+  return slotStart
+    .replace(/[-:]/g, '')
+    .replace('.000Z', 'Z');
+}
+
+function priorGenerationReceiptPath(slotStart: string): string {
+  return PRIOR_GENERATION_RECEIPT_PREFIX
+    + slotObjectName(slotStart)
+    + '.json';
+}
+
 
 function object(value: unknown, reason: string): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -427,6 +442,17 @@ export async function runSnsFandomYoutubeRecurringActivatedRuntimeV2(
     : parseWindow(windowText, input);
 
   const firstAttempt = window === null;
+  if (firstAttempt) {
+    const candidateSlotStart = floorUtcHour(input.now);
+    const priorReceipt = await dependencies.store.readText(
+      priorGenerationReceiptPath(candidateSlotStart),
+    );
+    if (priorReceipt !== null) {
+      throw new Error(
+        'sns_fandom_recurring_v2_cutover_slot_already_recorded_by_v1',
+      );
+    }
+  }
   if (window === null) {
     window = candidateWindow(input);
   }

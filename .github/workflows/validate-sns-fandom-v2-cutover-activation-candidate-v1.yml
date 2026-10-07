@@ -1,0 +1,72 @@
+name: Validate snsFandom v2 cutover activation candidate v1
+
+on:
+  push:
+    branches:
+      - 'work/sns-fandom-v2-cutover-activation-candidate-v1'
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeV2CutoverActivationCandidateV1.ts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts'
+      - 'docs/research/sns-fandom-youtube-v2-cutover-activation-candidate-v1.json'
+      - 'tests/sns-fandom-youtube-v2-cutover-activation-candidate-v1.test.mts'
+      - 'tests/sns-fandom-youtube-recurring-activated-runtime-v2.test.mts'
+      - '.github/workflows/validate-sns-fandom-v2-cutover-activation-candidate-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomPointYoutubeV2CutoverActivationCandidateV1.ts'
+      - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts'
+      - 'docs/research/sns-fandom-youtube-v2-cutover-activation-candidate-v1.json'
+      - 'tests/sns-fandom-youtube-v2-cutover-activation-candidate-v1.test.mts'
+      - 'tests/sns-fandom-youtube-recurring-activated-runtime-v2.test.mts'
+      - '.github/workflows/validate-sns-fandom-v2-cutover-activation-candidate-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: V2 cutover activation candidate regressions
+        run: npx tsx --test tests/sns-fandom-youtube-v2-cutover-activation-candidate-v1.test.mts
+
+      - name: V2 runtime cross-generation cutover regressions
+        run: npx tsx --test tests/sns-fandom-youtube-recurring-activated-runtime-v2.test.mts
+
+      - name: V2 cutover readiness regressions
+        run: npx tsx --test tests/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.test.mts
+
+      - name: Future cutover contract regression
+        run: npx tsx --test tests/sns-fandom-youtube-window-rebaseline-future-cutover-v3.test.mts
+
+      - name: Existing v1 activated runtime regression
+        run: npx tsx --test tests/sns-fandom-youtube-recurring-activated-runtime-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "ownerCutoverApprovalBound=false"
+          echo "v1FallbackSuppressionApplied=false"
+          echo "renderV2DispatchMutationApplied=false"
+          echo "v2ProviderCalls=0"
+          echo "v2CanonicalWindowMaterialized=false"
+          echo "historicalV1ReceiptsReinterpreted=false"
+          echo "providerSubmissionAuthorized=false"
+          echo "productionCollectionAuthorized=false"
+          echo "productActivationAuthorized=false"
