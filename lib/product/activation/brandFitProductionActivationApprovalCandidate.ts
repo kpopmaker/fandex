@@ -135,8 +135,7 @@ export function createBrandFitProductionActivationApprovalCandidate(
         sourceLifecycle: 'research' as const,
         targetLifecycle: 'production' as const,
         claimScope:
-          'verified-commercial-partnership-event-only-no-numeric-score'
-            as const,
+          'verified-commercial-partnership-event-only-no-numeric-score' as const,
         restrictedRightsPublicationAllowed: false as const,
       }),
     });
