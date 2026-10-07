@@ -197,7 +197,6 @@ export function evaluateBrandFitProductionReadiness(input: Readonly<{
     riskConsumptionAuthorized: false as const,
     numericEligible: false as const,
     runtimeDeploymentState:
-      'verified-prior-live-runtime-redeploy-required-after-activation-merge'
-        as const,
+      'verified-prior-live-runtime-redeploy-required-after-activation-merge' as const,
   });
 }
