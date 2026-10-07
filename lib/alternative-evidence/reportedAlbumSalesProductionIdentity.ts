@@ -16,6 +16,7 @@ export type ReportedAlbumSalesProductionIdentityReviewRequest = Readonly<{
   artistName: string;
   sourceReleaseTitle: string;
   sourceReleaseDate: string | null;
+  sourceEdition: string | null;
   sourceCanonicalReleaseId: string | null;
   sourceIdentityState:
     ReportedAlbumSalesObservation['release']['identityState'];
@@ -27,6 +28,8 @@ export type ReportedAlbumSalesProductionIdentityReviewRequest = Readonly<{
 export type ReportedAlbumSalesProductionIdentityDecision = Readonly<{
   requestId: string;
   canonicalReleaseId: string;
+  editionResolutionState: 'release-level' | 'edition-specific';
+  canonicalEditionId: string | null;
   supportingEvidenceRefs: readonly string[];
   reviewerRef: string;
   reviewedAt: string;
@@ -43,7 +46,10 @@ export type ReportedAlbumSalesProductionIdentityBinding = Readonly<{
   canonicalArtistId: string;
   sourceReleaseTitle: string;
   sourceReleaseDate: string | null;
+  sourceEdition: string | null;
   canonicalReleaseId: string;
+  editionResolutionState: 'release-level' | 'edition-specific';
+  canonicalEditionId: string | null;
   resolutionState: 'resolved';
   reviewState: 'human-reviewed';
   supportingEvidenceRefs: readonly string[];
@@ -78,6 +84,7 @@ export function buildReportedAlbumSalesProductionIdentityReviewRequest(
     canonicalArtistId: observation.canonicalArtistId,
     sourceReleaseTitle: observation.release.releaseTitle,
     sourceReleaseDate: observation.release.releaseDate,
+    sourceEdition: observation.release.edition,
     sourceCanonicalReleaseId:
       observation.release.canonicalReleaseId,
     sourceIdentityState: observation.release.identityState,
@@ -94,6 +101,7 @@ export function buildReportedAlbumSalesProductionIdentityReviewRequest(
     artistName: observation.artistName,
     sourceReleaseTitle: observation.release.releaseTitle,
     sourceReleaseDate: observation.release.releaseDate,
+    sourceEdition: observation.release.edition,
     sourceCanonicalReleaseId:
       observation.release.canonicalReleaseId,
     sourceIdentityState: observation.release.identityState,
@@ -126,6 +134,8 @@ export function createReportedAlbumSalesProductionIdentityBinding(
   const canonicalReleaseId =
     input.decision.canonicalReleaseId.trim();
   const reviewerRef = input.decision.reviewerRef.trim();
+  const canonicalEditionId =
+    input.decision.canonicalEditionId?.trim() || null;
   const supportingEvidenceRefs =
     cleanRefs(input.decision.supportingEvidenceRefs);
 
@@ -137,6 +147,22 @@ export function createReportedAlbumSalesProductionIdentityBinding(
   if (reviewerRef === '') {
     throw new Error(
       'reported_album_sales_production_identity_reviewer_missing',
+    );
+  }
+  if (
+    input.decision.editionResolutionState === 'edition-specific'
+    && canonicalEditionId === null
+  ) {
+    throw new Error(
+      'reported_album_sales_production_identity_edition_id_missing',
+    );
+  }
+  if (
+    input.decision.editionResolutionState === 'release-level'
+    && canonicalEditionId !== null
+  ) {
+    throw new Error(
+      'reported_album_sales_production_identity_release_level_edition_id_forbidden',
     );
   }
   if (supportingEvidenceRefs.length === 0) {
@@ -161,7 +187,10 @@ export function createReportedAlbumSalesProductionIdentityBinding(
     canonicalArtistId: input.request.canonicalArtistId,
     sourceReleaseTitle: input.request.sourceReleaseTitle,
     sourceReleaseDate: input.request.sourceReleaseDate,
+    sourceEdition: input.request.sourceEdition,
     canonicalReleaseId,
+    editionResolutionState: input.decision.editionResolutionState,
+    canonicalEditionId,
     resolutionState: 'resolved' as const,
     reviewState: 'human-reviewed' as const,
     supportingEvidenceRefs,
@@ -190,7 +219,19 @@ export function validateReportedAlbumSalesProductionIdentityBinding(
     || binding.canonicalArtistId !== observation.canonicalArtistId
     || binding.sourceReleaseTitle !== observation.release.releaseTitle
     || binding.sourceReleaseDate !== observation.release.releaseDate
+    || binding.sourceEdition !== observation.release.edition
     || binding.canonicalReleaseId.trim() === ''
+    || (
+      binding.editionResolutionState === 'edition-specific'
+      && (
+        binding.canonicalEditionId === null
+        || binding.canonicalEditionId.trim() === ''
+      )
+    )
+    || (
+      binding.editionResolutionState === 'release-level'
+      && binding.canonicalEditionId !== null
+    )
     || binding.resolutionState !== 'resolved'
     || binding.reviewState !== 'human-reviewed'
     || binding.supportingEvidenceRefs.length === 0
