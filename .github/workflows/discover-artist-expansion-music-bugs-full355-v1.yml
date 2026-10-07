@@ -1,0 +1,80 @@
+name: Discover Artist Expansion Music Bugs full355 v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-bugs-full355-v1
+
+permissions:
+  contents: read
+
+jobs:
+  discover-bugs-full355:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+
+      - name: Materialize full355 target candidates from current 89/266 Music state
+        run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
+
+      - name: Prepare full355 config for Bugs discovery
+        run: cp music_chart_artist_targets_355_candidate_v1.json scripts/fandex-cloud-migration/source/music_chart_artist_targets_v1.json
+
+      - name: Run canonical Bugs full355 discovery
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_chart_discover_bugs_full355_v2.py
+
+      - name: Validate Bugs discovery contract
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('music_chart_bugs_full355_v2_latest.json').read_text(encoding='utf-8'))
+          assert d['targetArtistCount'] == 355
+          assert d['compatibilityBeforeDiscovery'] == {
+              'supportedCount':89,
+              'unresolvedCount':266,
+              'unsupportedCount':0,
+          }
+          assert d['parsedChartRowCount'] == 100
+          assert d['candidateRowCount'] == len(d['candidates'])
+          assert d['candidateCanonicalArtistCount'] == len(d['candidateCountsByCanonicalArtistId'])
+          assert d['unresolvedHitArtistCount'] == len(d['unresolvedHitCanonicalArtistIds'])
+          assert d['identityAmbiguityCount'] == len(d['identityAmbiguities'])
+          assert d['unsafeAliasMatchCount'] == len(d['unsafeAliasMatches'])
+          assert d['seedModified'] is False
+          assert d['compatibilityRegistryModified'] is False
+          assert d['productCohortModified'] is False
+          assert d['productRuntimeModified'] is False
+          print(
+              'PASS: Bugs full355 contract | '
+              f"candidateArtists={d['candidateCanonicalArtistCount']} | "
+              f"unresolvedHits={d['unresolvedHitArtistCount']} | "
+              f"ambiguities={d['identityAmbiguityCount']}"
+          )
+          PY
+
+      - name: Upload Bugs candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-bugs-full355-v1
+          path: |
+            music_chart_artist_targets_355_candidate_v1.json
+            scripts/fandex-cloud-migration/source/music_chart_bugs_full355_v2_latest.json
+          if-no-files-found: ignore
+          retention-days: 14
