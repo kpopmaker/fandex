@@ -1,0 +1,97 @@
+{
+  "version": "sns_fandom_youtube_v2_cutover_activation_candidate_v1",
+  "state": "prepared-owner-approval-required",
+  "preparedFromMainSha": "f038100016186d8d740f0c7de49b412d88ef0efd",
+  "activationRevisionSha": null,
+  "cutoverApprovalEvidenceRef": null,
+  "currentLiveState": {
+    "renderServiceName": "fandex-sns-fandom-hourly-external-trigger",
+    "renderServiceId": "crn-db2ekl6i0phs73ederu0",
+    "renderSchedule": "7 * * * *",
+    "renderDispatchWorkflow": "execute-sns-fandom-youtube-render-trigger-v1.yml",
+    "githubFallbackWorkflow": ".github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml",
+    "githubFallbackSchedules": [
+      "17 * * * *",
+      "47 * * * *"
+    ],
+    "activeGeneration": "v1",
+    "activeCanonicalWindowPath": "sns-fandom/youtube-audit/recurring/v1/canonical-window.json"
+  },
+  "targetCutoverState": {
+    "activeGeneration": "v2",
+    "generationRoot": "sns-fandom/youtube-audit/recurring/v2",
+    "canonicalWindowPath": "sns-fandom/youtube-audit/recurring/v2/canonical-window.json",
+    "renderSchedule": "7 * * * *",
+    "renderDispatchWorkflow": "execute-sns-fandom-youtube-v2-render-trigger-v1.yml",
+    "renderExecutionApproval": "approved-render-sns-fandom-v2-cutover-v1",
+    "runtimeExecutionApproval": "approved-sns-fandom-v2-rebaseline-provider-scheduler-cutover-v1",
+    "v1GithubFallbackTarget": "workflow-dispatch-only-during-cutover",
+    "postFirstSuccessCleanup": "disable-v1-workflow-dispatch-after-v2-first-success-is-durably-verified"
+  },
+  "preparedControls": {
+    "v1FallbackSuppressionPrepared": true,
+    "v1FallbackSuppressionApplied": false,
+    "renderV2DispatchMutationPrepared": true,
+    "renderV2DispatchMutationApplied": false,
+    "v2RuntimeBound": true,
+    "v2EvidenceStoreBound": true,
+    "crossGenerationFirstSlotGuardBound": true
+  },
+  "ownerAuthority": {
+    "canonicalRebaselineAuthorized": false,
+    "newGenerationProviderExecutionAuthorized": false,
+    "schedulerCutoverAuthorized": false
+  },
+  "cutoverSequence": [
+    {
+      "step": 1,
+      "action": "materialize durable #509 owner approval bound to the final exact activation revision",
+      "liveMutation": false
+    },
+    {
+      "step": 2,
+      "action": "merge final activation revision that removes v1 GitHub schedule triggers while retaining v1 workflow_dispatch during the handoff",
+      "liveMutation": true
+    },
+    {
+      "step": 3,
+      "action": "mutate the existing Render cron start command to dispatch the v2 workflow with the exact authorized revision and #509 approval evidence",
+      "liveMutation": true
+    },
+    {
+      "step": 4,
+      "action": "allow the next scheduled :07 Render execution to perform the first eligible v2 provider slot; do not manually backfill",
+      "liveMutation": true
+    },
+    {
+      "step": 5,
+      "action": "verify first v2 receipt and canonical window, then prepare cleanup that disables remaining v1 workflow_dispatch",
+      "liveMutation": false
+    }
+  ],
+  "sameHourDuplicatePrevention": {
+    "firstV2SlotChecksForV1Receipt": true,
+    "ifV1ReceiptAlreadyExists": "fail-closed-before-v2-claim-and-provider-call",
+    "manualSameHourBackfillAllowed": false
+  },
+  "boundaryPolicy": {
+    "measurementWindowStart": null,
+    "measurementWindowEnd": null,
+    "materialization": "first-successful-v2-provider-slot-only",
+    "historicalV1ReceiptsReinterpreted": false,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false,
+    "retrospectiveProviderObservationAllowed": false
+  },
+  "authorityBoundary": {
+    "providerSubmissionAuthorized": false,
+    "productionCollectionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "notes": [
+    "This candidate performs no live scheduler, Render, provider, or canonical mutation.",
+    "The exact activation revision remains null until the final approval-bound change is prepared.",
+    "The durable owner approval evidence remains null until the owner explicitly authorizes canonical rebaseline, new-generation provider execution, and scheduler cutover for one exact final revision.",
+    "Merging this candidate alone must not suppress the live v1 fallback or change the Render dispatch command."
+  ]
+}
