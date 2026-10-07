@@ -97,6 +97,8 @@ function reviewedReleaseBinding(
     decision: {
       requestId: request.requestId,
       canonicalReleaseId: 'release:iu:test-album',
+      editionResolutionState: 'release-level',
+      canonicalEditionId: null,
       supportingEvidenceRefs: [
         'canonical-release-registry:iu:test-album',
       ],
@@ -217,6 +219,8 @@ test('Tier B reviewed web evidence becomes source-eligible only after explicit r
   assert.equal(candidate.evidenceQuality, 'provider-attributed-secondary');
   assert.equal(candidate.availability, 'available');
   assert.equal(candidate.rightsState, 'authorized');
+  assert.equal(candidate.editionResolutionState, 'release-level');
+  assert.equal(candidate.canonicalEditionId, null);
   assert.deepEqual(candidate.blockers, []);
   assert.equal(candidate.durableNormalizedStorageEligible, true);
   assert.equal(candidate.productSourceEligible, true);
