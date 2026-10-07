@@ -79,7 +79,10 @@ jobs:
             || guards.newGenerationProviderExecutionAuthorized !== true
             || guards.schedulerCutoverAuthorized !== true
             || guards.v1FallbackSuppressionBound !== true
-            || guards.renderDispatchMutationPerformed !== true
+            || typeof guards.cutoverApprovalEvidenceRef !== 'string'
+            || guards.cutoverApprovalEvidenceRef.length === 0
+            || guards.cutoverApprovalEvidenceRef
+              !== process.env.FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF
           ) {
             console.error('sns_fandom_v2_cutover_readiness_blocked');
             process.exit(1);
