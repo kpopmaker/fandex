@@ -9,11 +9,15 @@ const candidate = JSON.parse(
   ),
 );
 
-test('IU review decision candidate records evidence-supported release-level proposal without pretending human review occurred', () => {
+test('IU review decision candidate records the explicitly approved human review without granting Production eligibility', () => {
   assert.equal(candidate.canonicalArtistId, 'iu');
   assert.equal(
     candidate.proposedConclusion.latestPhysicalReleaseFamily,
     'A Flower Bookmark 3',
+  );
+  assert.equal(
+    candidate.proposedConclusion.latestPhysicalReleaseFamilyState,
+    'human-reviewed',
   );
   assert.equal(
     candidate.proposedConclusion.editionResolutionState,
@@ -21,25 +25,32 @@ test('IU review decision candidate records evidence-supported release-level prop
   );
   assert.equal(
     candidate.proposedConclusion.canonicalReleaseId,
-    null,
+    'release:iu:a-flower-bookmark-3:2025-05-28',
   );
-  assert.equal(candidate.humanReviewDecision, null);
-  assert.equal(candidate.bindingMaterialized, false);
+  assert.equal(
+    candidate.humanReviewDecision.conclusion,
+    'verified-latest-physical-release',
+  );
+  assert.equal(candidate.bindingMaterialized, true);
+  assert.deepEqual(candidate.unresolvedBeforeBinding, []);
   assert.equal(candidate.autoVerified, false);
   assert.equal(candidate.productionObservationEligible, false);
   assert.equal(candidate.productActivationAuthorized, false);
   assert.equal(candidate.publicPublicationAuthorized, false);
 });
 
-test('decision candidate preserves the CDP limited edition as evidence for edition semantics rather than silently creating a second release', () => {
+test('approved release-level decision preserves the CDP limited edition evidence without silently creating a second canonical release', () => {
   assert.ok(
     candidate.proposedConclusion.supportingEvidenceRefs.includes(
       'yes24:147561057:a-flower-bookmark-3-cdp',
     ),
   );
-  assert.ok(
-    candidate.unresolvedBeforeBinding.includes(
-      'human-reviewer-must-confirm-release-level-vs-edition-specific-resolution',
-    ),
+  assert.equal(
+    candidate.humanReviewDecision.editionResolutionState,
+    'release-level',
+  );
+  assert.equal(
+    candidate.humanReviewDecision.canonicalEditionId,
+    null,
   );
 });
