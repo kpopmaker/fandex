@@ -45,6 +45,8 @@ import {
 } from '../../product/readiness/musicAlbumReportedWebProductReadiness';
 import {
   buildReportedAlbumSalesCurrentReleaseReviewRequest,
+  validateReportedAlbumSalesCurrentReleaseBinding,
+  type ReportedAlbumSalesCurrentReleaseBinding,
   type ReportedAlbumSalesCurrentReleaseReviewRequest,
 } from '../../alternative-evidence/reportedAlbumSalesCurrentReleaseReview';
 
@@ -72,6 +74,10 @@ const REPORTED_WEB_CURRENT_GAP_PATH = resolve(
   process.cwd(),
   'data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json',
 );
+const REPORTED_WEB_CURRENT_RELEASE_BINDING_PATH = resolve(
+  process.cwd(),
+  'data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json',
+);
 
 export const MUSIC_ALBUM_POINT_CURRENT_RUNTIME_READ_VERSION =
   'music-album-point-current-runtime-read-v1' as const;
@@ -89,6 +95,8 @@ export type MusicAlbumPointCurrentRuntimeReadResult =
         ReportedAlbumSalesCurrentReleaseRead;
       reportedWebCurrentReleaseReviewRequest:
         ReportedAlbumSalesCurrentReleaseReviewRequest;
+      reportedWebCurrentReleaseBinding:
+        ReportedAlbumSalesCurrentReleaseBinding;
       reportedWebReadiness:
         MusicAlbumReportedWebProductReadiness;
       evidence: Readonly<{
@@ -257,6 +265,18 @@ function reportedWebCurrentDiscovery(
   });
 }
 
+function reportedWebCurrentReleaseBindingFromJson(
+  value: unknown,
+): ReportedAlbumSalesCurrentReleaseBinding {
+  const candidate = value as ReportedAlbumSalesCurrentReleaseBinding;
+  if (!validateReportedAlbumSalesCurrentReleaseBinding(candidate)) {
+    throw new Error(
+      'music_album_runtime_reported_web_current_release_binding_invalid',
+    );
+  }
+  return candidate;
+}
+
 export async function getMusicAlbumPointCurrentRuntimeForIU():
   Promise<MusicAlbumPointCurrentRuntimeReadResult> {
   let targets: unknown;
@@ -265,19 +285,28 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
   let bugs: unknown;
   let historyCsv: string;
   let reportedWebCurrentGap: unknown;
+  let reportedWebCurrentReleaseBindingRaw: unknown;
   const reportedWebStoredEvidence =
     await getMusicAlbumReportedWebStoredEvidenceCurrentRuntimeForIU();
 
   try {
-    [targets, checkHistory, candidates, bugs, historyCsv, reportedWebCurrentGap] =
-      await Promise.all([
-        readJson(TARGETS_PATH),
-        readJson(CHECK_HISTORY_LATEST_PATH),
-        readJson(CANDIDATES_PATH),
-        readJson(BUGS_PATH),
-        readFile(CHECK_HISTORY_CSV_PATH, 'utf8'),
-        readJson(REPORTED_WEB_CURRENT_GAP_PATH),
-      ]);
+    [
+      targets,
+      checkHistory,
+      candidates,
+      bugs,
+      historyCsv,
+      reportedWebCurrentGap,
+      reportedWebCurrentReleaseBindingRaw,
+    ] = await Promise.all([
+      readJson(TARGETS_PATH),
+      readJson(CHECK_HISTORY_LATEST_PATH),
+      readJson(CANDIDATES_PATH),
+      readJson(BUGS_PATH),
+      readFile(CHECK_HISTORY_CSV_PATH, 'utf8'),
+      readJson(REPORTED_WEB_CURRENT_GAP_PATH),
+      readJson(REPORTED_WEB_CURRENT_RELEASE_BINDING_PATH),
+    ]);
   } catch {
     return Object.freeze({
       status: 'data-issue' as const,
@@ -289,12 +318,18 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
   let bindings: readonly MusicChartCanonicalBinding[];
   let latest: string;
   let reportedWebDiscovery: ReportedAlbumSalesCurrentReleaseDiscovery;
+  let reportedWebCurrentReleaseBinding:
+    ReportedAlbumSalesCurrentReleaseBinding;
   try {
     bindings = targetBindings(targets);
     latest = latestCheckDate(checkHistory);
     reportedWebDiscovery = reportedWebCurrentDiscovery(
       reportedWebCurrentGap,
     );
+    reportedWebCurrentReleaseBinding =
+      reportedWebCurrentReleaseBindingFromJson(
+        reportedWebCurrentReleaseBindingRaw,
+      );
   } catch {
     return Object.freeze({
       status: 'data-issue' as const,
@@ -315,10 +350,32 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
         evidenceRefs: reportedWebDiscovery.evidenceRefs,
       });
 
+    if (
+      reportedWebCurrentReleaseBinding.requestId
+        !== reportedWebCurrentReleaseReviewRequest.requestId
+    ) {
+      throw new Error(
+        'music_album_runtime_reported_web_current_release_binding_request_mismatch',
+      );
+    }
+
+    const reviewedReportedWebDiscovery =
+      Object.freeze({
+        ...reportedWebDiscovery,
+        canonicalReleaseId:
+          reportedWebCurrentReleaseBinding.canonicalReleaseId,
+        editionResolutionState:
+          reportedWebCurrentReleaseBinding.editionResolutionState,
+        canonicalEditionId:
+          reportedWebCurrentReleaseBinding.canonicalEditionId,
+        identityState: 'resolved' as const,
+        latestReleaseState: 'verified-latest' as const,
+      });
+
     const reportedWebCurrentRelease =
       selectReportedAlbumSalesCurrentRelease({
-        discovery: reportedWebDiscovery,
-        currentReleaseBinding: null,
+        discovery: reviewedReportedWebDiscovery,
+        currentReleaseBinding: reportedWebCurrentReleaseBinding,
         storedEvidence:
           reportedWebStoredEvidence.status === 'ok'
             ? reportedWebStoredEvidence.evidence
@@ -374,6 +431,7 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
       reportedWebStoredEvidence,
       reportedWebCurrentRelease,
       reportedWebCurrentReleaseReviewRequest,
+      reportedWebCurrentReleaseBinding,
       reportedWebReadiness,
       evidence: Object.freeze({
         sourceKind:
