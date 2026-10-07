@@ -48,6 +48,9 @@ export type ReportedAlbumSalesCurrentReleaseRead =
       canonicalReleaseId: string;
       releaseTitle: string;
       releaseDate: string;
+      edition: string | null;
+      editionResolutionState: 'release-level' | 'edition-specific';
+      canonicalEditionId: string | null;
       metricSemantic: 'reported-hanteo-first-week-sales';
       value: number;
       unit: 'physical-copies';
@@ -107,6 +110,7 @@ export type ReportedAlbumSalesCurrentReleaseRead =
         | 'current-release-review-binding-invalid'
         | 'stored-evidence-artist-mismatch'
         | 'stored-evidence-release-conflict'
+        | 'stored-evidence-edition-mismatch'
         | 'stored-evidence-duplicate-observation'
         | 'supersession-target-missing'
         | 'multiple-active-observations'
@@ -421,6 +425,19 @@ export function selectReportedAlbumSalesCurrentRelease(
   const candidate = selected.sourceCandidate;
 
   if (
+    candidate.edition !== discovery.edition
+    || candidate.editionResolutionState
+      !== discovery.editionResolutionState
+    || candidate.canonicalEditionId
+      !== discovery.canonicalEditionId
+  ) {
+    return dataIssue(
+      canonicalArtistId,
+      'stored-evidence-edition-mismatch',
+    );
+  }
+
+  if (
     candidate.providerPeriodStart
       !== discovery.providerPeriodStart
     || candidate.providerPeriodEnd
@@ -451,6 +468,11 @@ export function selectReportedAlbumSalesCurrentRelease(
     canonicalReleaseId: candidate.canonicalReleaseId,
     releaseTitle: candidate.releaseTitle,
     releaseDate: candidate.releaseDate,
+    edition: candidate.edition,
+    editionResolutionState: candidate.editionResolutionState as
+      | 'release-level'
+      | 'edition-specific',
+    canonicalEditionId: candidate.canonicalEditionId,
     metricSemantic:
       'reported-hanteo-first-week-sales' as const,
     value: candidate.value,
