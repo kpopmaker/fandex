@@ -17,6 +17,14 @@ export type ReportedAlbumSalesCurrentReleaseDiscovery = Readonly<{
   canonicalReleaseId: string | null;
   releaseTitle: string | null;
   releaseDate: string | null;
+  edition: string | null;
+  editionResolutionState:
+    | 'release-level'
+    | 'edition-specific'
+    | 'candidate'
+    | 'unknown'
+    | 'conflicting';
+  canonicalEditionId: string | null;
   identityState: 'resolved' | 'candidate' | 'unknown' | 'conflicting';
   latestReleaseState:
     | 'verified-latest'
@@ -80,6 +88,7 @@ export type ReportedAlbumSalesCurrentReleaseRead =
       reason:
         | 'latest-release-not-verified'
         | 'latest-release-identity-not-resolved'
+        | 'latest-release-edition-not-resolved'
         | 'first-week-completion-unknown';
       freshnessState: 'unknown';
       value: null;
@@ -189,6 +198,7 @@ export function selectReportedAlbumSalesCurrentRelease(
   if (
     discovery.latestReleaseState === 'conflicting'
     || discovery.identityState === 'conflicting'
+    || discovery.editionResolutionState === 'conflicting'
   ) {
     return dataIssue(
       canonicalArtistId,
@@ -219,6 +229,12 @@ export function selectReportedAlbumSalesCurrentRelease(
       !== discovery.releaseTitle
     || currentReleaseBinding.releaseDate
       !== discovery.releaseDate
+    || currentReleaseBinding.candidateEdition
+      !== discovery.edition
+    || currentReleaseBinding.editionResolutionState
+      !== discovery.editionResolutionState
+    || currentReleaseBinding.canonicalEditionId
+      !== discovery.canonicalEditionId
   ) {
     return dataIssue(
       canonicalArtistId,
@@ -238,6 +254,37 @@ export function selectReportedAlbumSalesCurrentRelease(
     return unavailable(
       canonicalArtistId,
       'latest-release-identity-not-resolved',
+    );
+  }
+
+  if (
+    discovery.editionResolutionState === 'candidate'
+    || discovery.editionResolutionState === 'unknown'
+  ) {
+    return unavailable(
+      canonicalArtistId,
+      'latest-release-edition-not-resolved',
+    );
+  }
+  if (
+    discovery.editionResolutionState === 'edition-specific'
+    && (
+      discovery.canonicalEditionId === null
+      || discovery.canonicalEditionId.trim() === ''
+    )
+  ) {
+    return unavailable(
+      canonicalArtistId,
+      'latest-release-edition-not-resolved',
+    );
+  }
+  if (
+    discovery.editionResolutionState === 'release-level'
+    && discovery.canonicalEditionId !== null
+  ) {
+    return dataIssue(
+      canonicalArtistId,
+      'discovery-contract-invalid',
     );
   }
 
