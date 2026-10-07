@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          python -m pip install beautifulsoup4
+          python -m pip install beautifulsoup4 requests
 
       - name: Materialize canonical 355 candidate targets
         run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
