@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import {
   evaluateMomentumLiveShadowProductReadiness,
@@ -11,15 +12,15 @@ import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from './momentumEvidenceConsensusRealProductRead';
 
-const AUDIT_URL = new URL(
-  '../../../data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json',
-  import.meta.url,
+const AUDIT_PATH = resolve(
+  process.cwd(),
+  'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json',
 );
 
 async function readSourceAudit():
   Promise<MomentumLiveShadowSourceCurrentnessAudit | null> {
   try {
-    const raw = await readFile(AUDIT_URL, 'utf8');
+    const raw = await readFile(AUDIT_PATH, 'utf8');
     return JSON.parse(raw) as MomentumLiveShadowSourceCurrentnessAudit;
   } catch {
     return null;
