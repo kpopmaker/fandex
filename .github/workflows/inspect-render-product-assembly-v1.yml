@@ -88,3 +88,5 @@ jobs:
 # rerun after Render f0213a08 deployment
 
 # rerun after FANDEX_RUNTIME_DATABASE_URL binding
+
+# rerun after faa4616 live with runtime DB binding
