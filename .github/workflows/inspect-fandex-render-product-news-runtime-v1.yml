@@ -16,8 +16,7 @@ concurrency:
 jobs:
   inspect:
     if: >-
-      github.repository == 'kpopmaker/fandex' &&
-      github.run_attempt == 1
+      github.repository == 'kpopmaker/fandex'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
