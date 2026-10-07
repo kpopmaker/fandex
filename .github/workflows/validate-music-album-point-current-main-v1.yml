@@ -82,6 +82,7 @@ on:
       - 'tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts'
       - 'tests/reported-web-usage-review-request-v1.test.mts'
       - 'tests/reported-album-sales-current-evidence-gap-v1.test.mts'
+      - 'tests/iu-music-album-current-release-review-packet-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -92,6 +93,7 @@ on:
       - 'data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json'
       - 'data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_current_release_review_packet_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
       - 'tests/music-album-reported-web-product-readiness-v1.test.mts'
       - 'tests/music-album-point-fandex-variable-product-v1.test.mts'
@@ -220,6 +222,7 @@ jobs:
           tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts
           tests/reported-web-usage-review-request-v1.test.mts
           tests/reported-album-sales-current-evidence-gap-v1.test.mts
+          tests/iu-music-album-current-release-review-packet-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -230,6 +233,7 @@ jobs:
           data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json
           data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json
           data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_current_release_review_packet_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
           tests/music-album-reported-web-product-readiness-v1.test.mts
           tests/music-album-point-fandex-variable-product-v1.test.mts
@@ -307,6 +311,9 @@ jobs:
 
       - name: Reported Album Sales current evidence gap regression
         run: npx tsx --test tests/reported-album-sales-current-evidence-gap-v1.test.mts
+
+      - name: IU current release reviewer packet regression
+        run: npx tsx --test tests/iu-music-album-current-release-review-packet-v1.test.mts
 
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
