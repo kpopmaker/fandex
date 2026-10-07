@@ -1,0 +1,140 @@
+name: Validate Artist Expansion Music Bugs ITZY KickFlip application v1
+
+on:
+  push:
+    branches:
+      - work/artist-expansion-music-bugs-itzy-kickflip-application-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-bugs-itzy-kickflip-application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+
+      - name: Validate applied Music partition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          target=json.loads(Path('data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json').read_text(encoding='utf-8-sig'))
+          compat=json.loads(Path('data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json').read_text(encoding='utf-8-sig'))
+
+          ids={row['canonicalArtistId'] for row in target['artists']}
+          assert len(target['artists']) == 91
+          assert len(ids) == 91
+          assert {'itzy','kickflip'} <= ids
+          assert 'girlsgeneration' not in ids
+
+          music=compat['sources']['music_chart']
+          supported=set(music['supportedCanonicalArtistIds'])
+          unresolved=set(music['unresolvedCanonicalArtistIds'])
+          unsupported=set(music['unsupportedCanonicalArtistIds'])
+          assert len(supported) == 91
+          assert len(unresolved) == 264
+          assert len(unsupported) == 0
+          assert {'itzy','kickflip'} <= supported
+          assert 'girlsgeneration' in unresolved
+          assert supported.isdisjoint(unresolved)
+          assert len(supported | unresolved | unsupported) == 355
+
+          exp=target['reviewedExpansionBugsItzyKickflip']
+          assert exp['addedCanonicalArtistCount'] == 2
+          assert exp['previousTargetCount'] == 89
+          assert exp['targetCount'] == 91
+          assert exp['deferredCanonicalArtistIds'] == ['girlsgeneration']
+          assert exp['productCohortExpansionAuthorized'] is False
+          assert exp['runtimeActivationAuthorized'] is False
+
+          print('PASS: Music Bugs application partition | targets=91 | supported=91 | unresolved=264 | unsupported=0')
+          PY
+
+      - name: Materialize full355 candidate targets from current 91/264 state
+        run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
+
+      - name: Prepare full355 config for Bugs validation
+        run: cp music_chart_artist_targets_355_candidate_v1.json scripts/fandex-cloud-migration/source/music_chart_artist_targets_v1.json
+
+      - name: Run Bugs full355 live validation
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_chart_discover_bugs_full355_v2.py
+
+      - name: Validate ITZY KickFlip supported hits
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          d=json.loads(Path('music_chart_bugs_full355_v2_latest.json').read_text(encoding='utf-8'))
+          supported_hits=set(d['supportedHitCanonicalArtistIds'])
+          unresolved_hits=set(d['unresolvedHitCanonicalArtistIds'])
+
+          assert d['targetArtistCount'] == 355
+          assert d['compatibilityBeforeDiscovery'] == {
+              'supportedCount':91,
+              'unresolvedCount':264,
+              'unsupportedCount':0,
+          }
+          assert {'itzy','kickflip'} <= supported_hits
+          assert 'girlsgeneration' in unresolved_hits
+          assert d['identityAmbiguityCount'] == 0
+          assert d['unsafeAliasMatchCount'] == 0
+
+          rows=[r for r in d['candidates'] if r['canonicalArtistId'] in {'itzy','kickflip'}]
+          by_id={}
+          for r in rows:
+              by_id.setdefault(r['canonicalArtistId'], []).append(r)
+
+          assert len(by_id.get('itzy', [])) >= 1
+          assert all(r['compatibilityBeforeDiscovery']=='supported' for r in by_id['itzy'])
+          assert all(r['matchedArtist']=='ITZY (있지)' for r in by_id['itzy'])
+
+          assert len(by_id.get('kickflip', [])) >= 1
+          assert all(r['compatibilityBeforeDiscovery']=='supported' for r in by_id['kickflip'])
+          assert all(r['matchedArtist']=='KickFlip(킥플립)' for r in by_id['kickflip'])
+
+          summary={
+              'targetArtistCount':355,
+              'supportedCount':91,
+              'unresolvedCount':264,
+              'itzyObservedRowCount':len(by_id['itzy']),
+              'kickflipObservedRowCount':len(by_id['kickflip']),
+              'girlsgenerationStillUnresolvedHit':'girlsgeneration' in unresolved_hits,
+              'candidateCanonicalArtistCount':d['candidateCanonicalArtistCount'],
+              'identityAmbiguityCount':d['identityAmbiguityCount'],
+              'unsafeAliasMatchCount':d['unsafeAliasMatchCount'],
+          }
+          Path('music_chart_bugs_itzy_kickflip_application_live_validation_v1.json').write_text(
+              json.dumps(summary,ensure_ascii=False,indent=2)+'\n',
+              encoding='utf-8',
+          )
+          print('PASS: Music Bugs ITZY/KickFlip live application | '+json.dumps(summary,ensure_ascii=False))
+          PY
+
+      - name: Upload application evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-bugs-itzy-kickflip-application-v1
+          path: |
+            scripts/fandex-cloud-migration/source/music_chart_bugs_full355_v2_latest.json
+            scripts/fandex-cloud-migration/source/music_chart_bugs_itzy_kickflip_application_live_validation_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
