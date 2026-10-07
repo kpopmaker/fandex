@@ -1,0 +1,80 @@
+name: Verify Artist Expansion Music Genie exact94 detail metadata v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-genie-exact94-detail-v1
+
+permissions:
+  contents: read
+
+jobs:
+  verify-genie-exact94-detail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+
+      - name: Materialize full355 target candidates
+        run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
+
+      - name: Materialize canonical identity metadata
+        run: npx tsx scripts/artist-expansion/materialize_music_genie_canonical_identity_metadata_v1.mts
+
+      - name: Reproduce Genie full264 identity discovery
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_full264_identity_discovery_v1.py
+
+      - name: Verify exact94 provider detail metadata
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_exact94_detail_verification_v1.py
+
+      - name: Validate exact94 detail contract
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          d=json.loads(Path('music_genie_exact94_detail_verification_v1.json').read_text(encoding='utf-8'))
+          assert d['provider'] == 'genie'
+          assert d['targetCount'] == 94
+          assert len(d['results']) == 94
+          assert len({r['canonicalArtistId'] for r in d['results']}) == 94
+          assert sum(d['dispositionCounts'].values()) == 94
+          assert d['reviewSemantics']['strongMetadataConsistentCandidateIsReviewedBinding'] is False
+          assert d['reviewSemantics']['displayNameOnlyBindingAllowed'] is False
+          assert d['reviewSemantics']['stableProviderArtistIdRequired'] is True
+          assert all(v is False for v in d['safety'].values())
+          print(
+              'PASS: Genie exact94 detail contract | '
+              f"strong={len(d['strongMetadataConsistentCanonicalArtistIds'])} | "
+              f"partial={len(d['metadataPartialCanonicalArtistIds'])} | "
+              f"debutMismatch={len(d['debutYearMismatchCanonicalArtistIds'])} | "
+              f"entityMismatch={len(d['entityTypeMismatchOrUnparsedCanonicalArtistIds'])}"
+          )
+          PY
+
+      - name: Upload Genie exact94 detail evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-exact94-detail-v1
+          path: |
+            scripts/fandex-cloud-migration/source/music_genie_full264_identity_discovery_v1.json
+            scripts/fandex-cloud-migration/source/music_genie_exact94_detail_verification_v1.json
+            music_genie_canonical_identity_metadata_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
