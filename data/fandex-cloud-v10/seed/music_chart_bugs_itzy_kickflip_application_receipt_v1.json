@@ -1,0 +1,82 @@
+{
+  "version": "music_chart_bugs_itzy_kickflip_application_receipt_v1",
+  "status": "source_application_validated_non_product",
+  "lineage": {
+    "composite34ApplicationPr": 562,
+    "discoveryHead": "262fe8c1d267796deaf64fddf90c928550d42fed",
+    "reviewHead": "3671e61bc638530b28be19ae70063d2dc3a86394",
+    "applicationHead": "bafc2601d16ee165a0310ec4a0c473b79ccf848d"
+  },
+  "application": {
+    "previousTargetCount": 89,
+    "appliedReviewedBindingCount": 2,
+    "targetCount": 91,
+    "previousSupportedCount": 89,
+    "supportedCount": 91,
+    "previousUnresolvedCount": 266,
+    "unresolvedCount": 264,
+    "unsupportedCount": 0,
+    "appliedCanonicalArtistIds": [
+      "itzy",
+      "kickflip"
+    ],
+    "deferredCanonicalArtistIds": [
+      "girlsgeneration"
+    ]
+  },
+  "liveValidation": {
+    "workflow": "Validate Artist Expansion Music Bugs ITZY KickFlip application v1",
+    "runId": 37558691392,
+    "jobId": 112590777401,
+    "head": "bafc2601d16ee165a0310ec4a0c473b79ccf848d",
+    "conclusion": "success",
+    "targetArtistCount": 355,
+    "supportedCount": 91,
+    "unresolvedCount": 264,
+    "itzyObservedRowCount": 1,
+    "kickflipObservedRowCount": 8,
+    "girlsgenerationStillUnresolvedHit": true,
+    "candidateCanonicalArtistCount": 50,
+    "identityAmbiguityCount": 0,
+    "unsafeAliasMatchCount": 0
+  },
+  "artifact": {
+    "artifactId": 11455519795,
+    "name": "artist-expansion-music-bugs-itzy-kickflip-application-v1",
+    "sizeBytes": 4754,
+    "digest": "sha256:129d4a247e655e689d161d6259128a54eebbeefb0765ac775bc788fc4e9681fa",
+    "expiresAt": "2026-10-21T01:46:12Z"
+  },
+  "decision": {
+    "sourceApplicationValidated": true,
+    "sourceBindingExpansionReadyForArtistExpansionLine": true,
+    "girlsgenerationRemainsUnresolved": true,
+    "productCohortExpansionAuthorized": false,
+    "productRuntimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "remainingMusicCoverage": {
+    "supportedCount": 91,
+    "unresolvedCount": 264,
+    "unsupportedCount": 0,
+    "nextGate": "MUSIC_FULL355_REMAINING264_DISCOVERY_STRATEGY_REQUIRED"
+  },
+  "safety": {
+    "subgroupUnitPromotedToParentGroup": false,
+    "machineCandidateAutoPromoted": false,
+    "ambiguityAutoSelected": false,
+    "unsafeAliasAccepted": false,
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "productCohortModified": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
