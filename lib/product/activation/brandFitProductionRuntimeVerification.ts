@@ -33,10 +33,10 @@ export const BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION:
     runtime: 'render-production' as const,
     serviceId: 'srv-db1fgpegekts73djbji0',
     verifiedRuntimeCommitSha:
-      '05c21bb3b4923ed093f7ae14e485daaae4e7bdec',
+      'faa4616d32c7257ba73d67941442743f57636b11',
     productSurface: '/artists/iu/fandex-beta' as const,
     workflowRunId: 37480201624,
-    workflowJobId: 112566060764,
+    workflowJobId: 112573138544,
     requiredMarkers: Object.freeze({
       valueState:
         'verified-commercial-partnership-activity' as const,
