@@ -5,9 +5,9 @@ import type {
   SnsFandomYoutubeBoundedMeasurementResult,
 } from '../../lib/intelligence/snsFandomPointYoutubeBoundedMeasurement';
 import {
-  evaluateSnsFandomYoutubeRecurringMeasurementPlan,
-  type SnsFandomYoutubeRecurringMeasurementActivation,
-} from '../../lib/intelligence/snsFandomPointYoutubeRecurringMeasurement';
+  evaluateSnsFandomYoutubeRecurringMeasurementPlanV2,
+  type SnsFandomYoutubeRecurringMeasurementActivationV2,
+} from '../../lib/intelligence/snsFandomPointYoutubeRecurringMeasurementV2';
 
 export const SNS_FANDOM_YOUTUBE_RECURRING_RECEIPT_VERSION_V2 =
   'sns-fandom-youtube-recurring-receipt-v2' as const;
@@ -20,7 +20,7 @@ export type SnsFandomYoutubeRecurringRunnerV2Input = Readonly<{
   measurementWindowStart: string;
   measurementWindowEnd: string;
   reactionSnapshotRunsPerDay: number;
-  activation: SnsFandomYoutubeRecurringMeasurementActivation;
+  activation: SnsFandomYoutubeRecurringMeasurementActivationV2;
 }>;
 
 export type SnsFandomYoutubeRecurringRunnerV2Dependencies = Readonly<{
@@ -195,7 +195,7 @@ export async function runSnsFandomYoutubeRecurringMeasurementSlotV2(
   input: SnsFandomYoutubeRecurringRunnerV2Input,
   dependencies: SnsFandomYoutubeRecurringRunnerV2Dependencies,
 ): Promise<SnsFandomYoutubeRecurringRunnerV2Result> {
-  const plan = evaluateSnsFandomYoutubeRecurringMeasurementPlan(input);
+  const plan = evaluateSnsFandomYoutubeRecurringMeasurementPlanV2(input);
   if (plan.state !== 'slot-ready') {
     return nonExecutingResult(
       plan.state,
@@ -239,7 +239,7 @@ export async function runSnsFandomYoutubeRecurringMeasurementSlotV2(
       'slot-claimed',
       plan.slotStart,
       path,
-      ['sns-fandom-recurring-slot-already-claimed'],
+      ['sns-fandom-recurring-v2-slot-already-claimed'],
       await buildCoverage(dependencies.store),
     );
   }
