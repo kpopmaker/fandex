@@ -85,7 +85,8 @@ jobs:
           tests/momentum-live-shadow-product-readiness-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
-          diff -u /tmp/allowed.txt /tmp/changed.txt
+          comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
+          test ! -s /tmp/disallowed.txt
 
       - run: npm ci
 
