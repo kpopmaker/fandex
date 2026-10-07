@@ -29,6 +29,7 @@ on:
       - 'tests/momentum-categorical-output-attestation-current-main-v1.test.mts'
       - 'tests/momentum-current-evaluation-execution-v1.test.mts'
       - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - 'tests/momentum-public-route-design-v1.test.mts'
       - 'tests/momentum-v2-carrier-record-candidate-v1.test.mts'
       - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
       - 'data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json'
@@ -83,6 +84,7 @@ jobs:
           lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-public-route-design-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
           .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
           data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
