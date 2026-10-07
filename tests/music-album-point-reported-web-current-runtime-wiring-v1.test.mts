@@ -52,7 +52,7 @@ test('reported-web durable state does not claim Production activation or invent 
 });
 
 
-test('current runtime exposes a human review request for the candidate latest physical release without auto-verifying it', () => {
+test('current runtime applies only the materialized human-reviewed binding and keeps source readiness fail-closed', () => {
   const source = readFileSync(
     new URL(
       '../lib/server/product/musicAlbumPointCurrentRuntimeRead.ts',
@@ -69,12 +69,28 @@ test('current runtime exposes a human review request for the candidate latest ph
     source,
     /reportedWebCurrentReleaseReviewRequest/,
   );
+  assert.match(
+    source,
+    /iu_music_album_current_release_binding_v1\.json/,
+  );
+  assert.match(
+    source,
+    /validateReportedAlbumSalesCurrentReleaseBinding/,
+  );
+  assert.match(
+    source,
+    /currentReleaseBinding: reportedWebCurrentReleaseBinding/,
+  );
+  assert.match(
+    source,
+    /firstWeekCompletionState: 'unknown'/,
+  );
   assert.doesNotMatch(
     source,
     /createReportedAlbumSalesCurrentReleaseBinding/,
   );
   assert.doesNotMatch(
     source,
-    /latestReleaseState:\s*'verified-latest'/,
+    /currentReleaseBinding: null/,
   );
 });
