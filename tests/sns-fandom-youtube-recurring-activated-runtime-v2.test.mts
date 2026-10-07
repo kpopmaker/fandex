@@ -337,3 +337,45 @@ test('v2 generation never reads or overwrites existing v1 canonical and receipts
     ),
   );
 });
+
+
+test('first v2 cutover slot fails closed if v1 already recorded the same UTC hour', async () => {
+  const store = new MemoryStore();
+  const v1ReceiptPath =
+    'sns-fandom/youtube-audit/recurring/v1/receipts/20261007T010000Z.json';
+  store.rows.set(
+    v1ReceiptPath,
+    JSON.stringify({
+      version: 'sns-fandom-youtube-recurring-receipt-v1',
+      state: 'completed',
+      slotStart: '2026-10-07T01:00:00.000Z',
+    }),
+  );
+  const dependencies = deps(store);
+
+  await assert.rejects(
+    runSnsFandomYoutubeRecurringActivatedRuntimeV2(
+      {
+        authorizedRevisionSha: SHA,
+        activationEvidenceRef: ACTIVATION_REF,
+        now: '2026-10-07T01:07:00.000Z',
+      },
+      dependencies.value,
+    ),
+    /sns_fandom_recurring_v2_cutover_slot_already_recorded_by_v1/,
+  );
+
+  assert.equal(dependencies.calls, 0);
+  assert.equal(
+    store.rows.has(
+      'sns-fandom/youtube-audit/recurring/v2/canonical-window.json',
+    ),
+    false,
+  );
+  assert.equal(
+    store.rows.has(
+      'sns-fandom/youtube-audit/recurring/v2/claims/20261007T010000Z.json',
+    ),
+    false,
+  );
+});
