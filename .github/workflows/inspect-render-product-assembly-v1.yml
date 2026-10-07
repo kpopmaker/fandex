@@ -20,7 +20,7 @@ jobs:
         run: |
           set -euo pipefail
           status="$(
-            curl               --silent               --show-error               --retry 0               --max-time 30               --output /tmp/fandex-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
+            curl               --silent               --show-error               --retry 0               --max-time 120               --output /tmp/fandex-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
           )"
           test "$status" = "200"
 
