@@ -30,6 +30,10 @@ jobs:
       - name: Materialize full355 targets from current source state
         run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
 
+      - name: Diagnose provider search HTML
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_provider_artist_search_html_diagnostic_v1.py
+
       - name: Run bounded Melon Genie artist search probe
         working-directory: scripts/fandex-cloud-migration/source
         run: python music_provider_artist_search_probe_v1.py
@@ -65,6 +69,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artist-expansion-music-provider-search-probe-v1
-          path: scripts/fandex-cloud-migration/source/music_provider_artist_search_probe_v1.json
+          path: |
+            scripts/fandex-cloud-migration/source/music_provider_artist_search_probe_v1.json
+            scripts/fandex-cloud-migration/source/music_provider_artist_search_html_diagnostic_v1.json
           if-no-files-found: ignore
           retention-days: 14
