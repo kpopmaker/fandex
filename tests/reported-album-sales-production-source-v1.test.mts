@@ -180,14 +180,19 @@ function productionCandidate(
   source: ReportedAlbumSalesObservation,
   asOfDate = '2026-10-08',
 ) {
+  const sourceTier = source.supportingEvidence[0]?.sourceTier;
+  const evidenceQualifications =
+    sourceTier === 'tier-a-primary-official'
+    || sourceTier === 'tier-b-provider-attributed-reputable'
+      ? [reviewedEvidenceQualification(source)]
+      : [];
+
   return buildReportedAlbumSalesProductionSourceCandidate({
     observation: source,
     asOfDate,
     rightsReview: reviewedRights(source),
     releaseIdentityBinding: reviewedReleaseBinding(source),
-    evidenceQualifications: [
-      reviewedEvidenceQualification(source),
-    ],
+    evidenceQualifications,
   });
 }
 
