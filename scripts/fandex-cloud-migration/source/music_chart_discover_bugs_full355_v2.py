@@ -25,10 +25,12 @@ def main():
 
     if len(discover.TARGET_ARTISTS) != 355:
         raise RuntimeError(f"expected_355_targets:{len(discover.TARGET_ARTISTS)}")
-    if len(supported) != 89 or len(unresolved) != 266 or len(unsupported) != 0:
+    if len(supported) + len(unresolved) + len(unsupported) != 355:
         raise RuntimeError(
-            f"unexpected_music_partition:{len(supported)}/{len(unresolved)}/{len(unsupported)}"
+            f"invalid_music_partition:{len(supported)}/{len(unresolved)}/{len(unsupported)}"
         )
+    if len(unsupported) != 0:
+        raise RuntimeError(f"music_unsupported_not_expected:{len(unsupported)}")
 
     page = bugs.fetch_bugs_chart()
     chart_rows = bugs.parse_bugs_chart(page)

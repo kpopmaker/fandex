@@ -754,6 +754,23 @@
         "지코",
         "우지호"
       ]
+    },
+    {
+      "canonicalArtistId": "itzy",
+      "artist": "ITZY",
+      "aliases": [
+        "ITZY",
+        "있지"
+      ]
+    },
+    {
+      "canonicalArtistId": "kickflip",
+      "artist": "KickFlip",
+      "aliases": [
+        "KickFlip",
+        "KICKF",
+        "킥플립"
+      ]
     }
   ],
   "reviewedExpansion": {
@@ -771,6 +788,18 @@
     "addedCanonicalArtistCount": 34,
     "previousTargetCount": 55,
     "targetCount": 89,
+    "deferredCanonicalArtistIds": [
+      "girlsgeneration"
+    ],
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false
+  },
+  "reviewedExpansionBugsItzyKickflip": {
+    "version": "music_chart_bugs_itzy_kickflip_application_v1",
+    "sourceReview": "music_chart_bugs_itzy_kickflip_reviewed_bindings_v1",
+    "addedCanonicalArtistCount": 2,
+    "previousTargetCount": 89,
+    "targetCount": 91,
     "deferredCanonicalArtistIds": [
       "girlsgeneration"
     ],

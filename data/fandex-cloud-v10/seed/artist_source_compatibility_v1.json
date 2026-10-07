@@ -378,7 +378,7 @@
     },
     "music_chart": {
       "bindingAuthority": "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
-      "basis": "Reviewed Music provider bindings: original validated 21 + exact34 + composite34 wrapper-qualified expansion candidate batches.",
+      "basis": "Reviewed Music provider bindings: original 21 + exact34 + composite34 + Bugs ITZY/KickFlip reviewed expansion candidate batches.",
       "supportedCanonicalArtistIds": [
         "aespa",
         "ive",
@@ -468,11 +468,12 @@
         "woody",
         "yena",
         "younha",
-        "zico"
+        "zico",
+        "itzy",
+        "kickflip"
       ],
       "unresolvedCanonicalArtistIds": [
         "zerobaseone",
-        "itzy",
         "kissoflife",
         "meovv",
         "izna",
@@ -522,7 +523,6 @@
         "unis",
         "jisoo",
         "jeonsomi",
-        "kickflip",
         "nowadays",
         "allhours",
         "thenewsix",
