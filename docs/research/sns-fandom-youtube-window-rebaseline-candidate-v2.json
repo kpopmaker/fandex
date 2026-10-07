@@ -1,7 +1,9 @@
 {
   "version": "sns_fandom_youtube_window_rebaseline_candidate_v2",
-  "state": "candidate-ready-owner-approval-required",
+  "state": "superseded-before-authorization",
   "preparedAtRepositoryHeadSha": "fd5d0330f8eddd04406b308e65b076ca74ccdc99",
+  "supersededBy": "sns_fandom_youtube_window_rebaseline_future_cutover_v3",
+  "safetyCorrectionEvidenceRef": "github-issue://kpopmaker/fandex/issues/509#issuecomment-6027895747",
   "currentMaterializedWindow": {
     "measurementWindowStart": "2026-10-05T22:00:00.000Z",
     "measurementWindowEnd": "2027-10-06T22:00:00.000Z",
@@ -21,50 +23,32 @@
     "authorizedProviderRuntimeSha": "f030eaf54be5a08d517a7712dafb1596cb541ba6",
     "continuityEvidenceRef": "github-issue://kpopmaker/fandex/issues/509#issuecomment-6027539700",
     "observedFirstSlotStart": "2026-10-06T15:00:00.000Z",
-    "observedLastSlotStart": "2026-10-06T23:00:00.000Z",
-    "observedConsecutiveSlotCount": 9,
-    "renderTriggeredWorkflowRuns": [
-      "github-actions://kpopmaker/fandex/runs/37484670341",
-      "github-actions://kpopmaker/fandex/runs/37493144170",
-      "github-actions://kpopmaker/fandex/runs/37501047298",
-      "github-actions://kpopmaker/fandex/runs/37508819694",
-      "github-actions://kpopmaker/fandex/runs/37516537495",
-      "github-actions://kpopmaker/fandex/runs/37524008549",
-      "github-actions://kpopmaker/fandex/runs/37531554512",
-      "github-actions://kpopmaker/fandex/runs/37538513096",
-      "github-actions://kpopmaker/fandex/runs/37544731629"
-    ],
-    "fallbackIdempotencyEvidence": {
-      "verified": true,
-      "observedFallbackRuns": [
-        "github-actions://kpopmaker/fandex/runs/37487838957",
-        "github-actions://kpopmaker/fandex/runs/37501675150",
-        "github-actions://kpopmaker/fandex/runs/37527498363",
-        "github-actions://kpopmaker/fandex/runs/37535276525"
-      ],
-      "fallbackState": "already-recorded",
-      "fallbackProviderCallsPerformed": false,
-      "providerExecutionsPerUtcHourlySlotMax": 1
-    }
+    "observedLastSlotStart": "2026-10-07T00:00:00.000Z",
+    "observedConsecutiveSlotCount": 10,
+    "observationsRemainBoundToCurrentWindow": true,
+    "latestVerifiedRunRef": "github-actions://kpopmaker/fandex/runs/37550256648",
+    "latestReceiptPath": "sns-fandom/youtube-audit/recurring/v1/receipts/20261007T000000Z.json"
   },
   "supersedingWindowCandidate": {
     "measurementWindowStart": "2026-10-06T15:00:00.000Z",
     "measurementWindowEnd": "2027-10-07T15:00:00.000Z",
     "durationDays": 366,
     "reactionSnapshotRunsPerDay": 24,
-    "boundaryBasis": "first-verified-render-backed-hourly-slot-after-token-propagating-redeploy",
+    "boundaryBasis": "historical-render-reliability-evidence-only",
+    "promotionAllowed": false,
     "canonicalWindowRebaselineAuthorized": false,
     "canonicalMutationPerformed": false,
+    "reasonPromotionBlocked": "observed-v1-receipts-are-contractually-bound-to-the-existing-materialized-window-and-cannot-be-retrospectively-reinterpreted-as-a-new-window",
     "syntheticBackfillAllowed": false,
     "retrospectiveReceiptSynthesisAllowed": false,
     "retrospectiveProviderObservationAllowed": false
   },
   "latestVerifiedCoverage": {
-    "lastSlotStart": "2026-10-06T23:00:00.000Z",
-    "latestReceiptPath": "sns-fandom/youtube-audit/recurring/v1/receipts/20261006T230000Z.json",
-    "receiptCount": 13,
-    "totalProviderCallsObserved": 1609,
-    "totalQuotaUnitsObserved": 1609,
+    "lastSlotStart": "2026-10-07T00:00:00.000Z",
+    "latestReceiptPath": "sns-fandom/youtube-audit/recurring/v1/receipts/20261007T000000Z.json",
+    "receiptCount": 14,
+    "totalProviderCallsObserved": 1734,
+    "totalQuotaUnitsObserved": 1734,
     "trueZeroReceiptCount": 1
   },
   "authorityBoundary": {
@@ -75,10 +59,9 @@
     "productActivationAuthorized": false
   },
   "notes": [
-    "This is a rebaseline candidate only. It does not mutate the current canonical window.",
-    "The candidate boundary is the first verified Render-backed hourly slot after the approved redeploy that propagated the GitHub dispatch token.",
-    "The nine observed consecutive slots are recorded as evidence, not as an invented minimum threshold for future approval.",
-    "Historical missing slots remain Missing and are not converted to zero or backfilled.",
-    "A separate explicit owner approval bound to the final rebaseline contract is required before any canonical supersession mutation."
+    "This v2 candidate is preserved as historical scheduler-reliability evidence but is superseded before authorization.",
+    "The fixed past boundary must not be promoted because all listed receipts were executed under the existing v1 measurement-window contract.",
+    "The valid next design must use a new immutable generation/path and materialize its window from the first real successful provider slot executed under that new contract.",
+    "Historical missing slots remain Missing and are not converted to zero or backfilled."
   ]
 }
