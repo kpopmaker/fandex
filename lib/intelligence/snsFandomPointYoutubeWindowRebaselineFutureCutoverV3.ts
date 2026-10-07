@@ -193,9 +193,9 @@ export function evaluateSnsFandomYoutubeWindowRebaselineFutureCutoverV3(
 
   if (
     input.firstSuccessfulNewGenerationReceiptRef === null
-    || !/^blob://sns-fandom/youtube-audit/recurring/v2/receipts/[0-9]{8}T[0-9]{6}Z\.json$/.test(
-      input.firstSuccessfulNewGenerationReceiptRef,
-    )
+    || !new RegExp(
+      '^blob://sns-fandom/youtube-audit/recurring/v2/receipts/[0-9]{8}T[0-9]{6}Z\\.json$',
+    ).test(input.firstSuccessfulNewGenerationReceiptRef)
   ) {
     return result(
       'blocked',
