@@ -145,7 +145,7 @@ function baseResult(
   });
 }
 
-export function evaluateSnsFandomYoutubeRecurringMeasurementPlanV2V2(
+export function evaluateSnsFandomYoutubeRecurringMeasurementPlanV2(
   input: SnsFandomYoutubeRecurringMeasurementPlanV2Input,
 ): SnsFandomYoutubeRecurringMeasurementPlanV2 {
   const blockers: string[] = [];
