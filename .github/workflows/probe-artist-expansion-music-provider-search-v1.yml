@@ -1,0 +1,70 @@
+name: Probe Artist Expansion Music provider artist search v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-provider-search-probe-v1
+
+permissions:
+  contents: read
+
+jobs:
+  probe-provider-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+
+      - name: Materialize full355 targets from current source state
+        run: npx tsx scripts/artist-expansion/materialize_music_chart_355_candidate_targets_v1.mts
+
+      - name: Run bounded Melon Genie artist search probe
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_provider_artist_search_probe_v1.py
+
+      - name: Validate probe output
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('music_provider_artist_search_probe_v1.json').read_text(encoding='utf-8'))
+          assert d['musicCompatibilityBeforeProbe'] == {
+              'supportedCount':91,
+              'unresolvedCount':264,
+              'unsupportedCount':0,
+          }
+          assert d['requestCount'] == 48
+          assert d['http200Count'] == 48
+          assert set(d['providers']) == {'melon','genie'}
+          assert len(d['controlCanonicalArtistIds']) == 4
+          assert len(d['unresolvedSampleCanonicalArtistIds']) == 20
+          assert all(v is False for v in d['safety'].values())
+          print(
+              'PASS: provider search probe contract | '
+              f"controlsWithCandidates={len(d['controlsWithProviderCandidates'])} | "
+              f"unresolvedWithCandidates={len(d['unresolvedWithProviderCandidates'])} | "
+              f"unresolvedExact={len(d['unresolvedWithExactAliasCandidates'])}"
+          )
+          PY
+
+      - name: Upload provider search probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-provider-search-probe-v1
+          path: scripts/fandex-cloud-migration/source/music_provider_artist_search_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
