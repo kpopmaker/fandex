@@ -5,6 +5,10 @@ import {
   createReportedAlbumSalesObservation,
 } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
 import {
+  buildReportedAlbumSalesProductionEvidenceQualificationRequest,
+  createReportedAlbumSalesProductionEvidenceQualificationBinding,
+} from '../lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification';
+import {
   buildReportedAlbumSalesProductionIdentityReviewRequest,
   createReportedAlbumSalesProductionIdentityBinding,
   validateReportedAlbumSalesProductionIdentityBinding,
@@ -61,6 +65,33 @@ function candidateObservation() {
       },
     ],
     lifecycle: 'research',
+  });
+}
+
+function reviewedEvidenceQualification(
+  observation: ReturnType<typeof candidateObservation>,
+) {
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      observation,
+    );
+  return createReportedAlbumSalesProductionEvidenceQualificationBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      evidenceId: 'fixture:web:identity',
+      supportedClaims: [
+        'exact-value',
+        'explicit-provider-period',
+        'metric-semantic',
+        'underlying-provider',
+      ],
+      reviewEvidenceRefs: [
+        'review:fixture:web:identity:claims',
+      ],
+      reviewerRef: 'reviewer:music-album:fixture',
+      reviewedAt: '2026-10-09T10:05:00+09:00',
+    },
   });
 }
 
@@ -181,6 +212,9 @@ test('reviewed binding can resolve the Production source candidate without mutat
       asOfDate: '2026-10-09',
       rightsReview: reviewedRights(observation),
       releaseIdentityBinding: binding,
+      evidenceQualifications: [
+        reviewedEvidenceQualification(observation),
+      ],
     });
 
   assert.equal(observation.release.identityState, 'candidate');
