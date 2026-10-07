@@ -298,11 +298,18 @@ export function validateReportedAlbumSalesProductionEvidenceQualificationBinding
   const evidence = observation.supportingEvidence.find(
     item => item.evidenceId === binding.evidenceId,
   );
+  const expectedRequest =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      observation,
+    );
+  const allowedClaims = new Set<
+    ReportedAlbumSalesProductionEvidenceClaim
+  >(REQUIRED_CLAIMS);
   if (
     binding.contractVersion
       !== REPORTED_ALBUM_SALES_PRODUCTION_EVIDENCE_QUALIFICATION_VERSION
     || binding.bindingId.trim() === ''
-    || binding.requestId.trim() === ''
+    || binding.requestId !== expectedRequest.requestId
     || binding.observationId !== observation.observationId
     || binding.observationScopeId !== observation.observationScopeId
     || binding.canonicalArtistId !== observation.canonicalArtistId
@@ -313,6 +320,9 @@ export function validateReportedAlbumSalesProductionEvidenceQualificationBinding
     || binding.sourceUrl !== evidence.sourceUrl
     || binding.sourcePublicationDate !== evidence.sourcePublicationDate
     || binding.supportedClaims.length === 0
+    || binding.supportedClaims.some(
+      claim => !allowedClaims.has(claim),
+    )
     || binding.reviewEvidenceRefs.length === 0
     || binding.reviewerRef.trim() === ''
     || !validInstant(binding.reviewedAt)
