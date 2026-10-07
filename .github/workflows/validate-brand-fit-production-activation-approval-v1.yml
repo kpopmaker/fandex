@@ -3,20 +3,14 @@ name: Validate Brand Fit Production activation approval v1
 on:
   push:
     branches:
-      - 'work/brand-fit-production-activation-authorization-v1'
+      - 'work/brand-fit-production-activation-approval-v1'
     paths:
       - 'lib/product/activation/brandFitProductionActivationApproval.ts'
-      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
-      - 'lib/product/activation/brandFitProductionReadiness.ts'
-      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
       - 'tests/brand-fit-production-activation-approval-v1.test.mts'
       - '.github/workflows/validate-brand-fit-production-activation-approval-v1.yml'
   pull_request:
     paths:
       - 'lib/product/activation/brandFitProductionActivationApproval.ts'
-      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
-      - 'lib/product/activation/brandFitProductionReadiness.ts'
-      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
       - 'tests/brand-fit-production-activation-approval-v1.test.mts'
       - '.github/workflows/validate-brand-fit-production-activation-approval-v1.yml'
   workflow_dispatch:
@@ -27,8 +21,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -42,11 +35,14 @@ jobs:
       - name: Brand Fit activation approval regressions
         run: npx tsx --test tests/brand-fit-production-activation-approval-v1.test.mts
 
-      - name: Existing Brand Fit authorization boundary regressions
-        run: npx tsx --test tests/brand-fit-production-activation-authorization-execution-candidate-v1.test.mts
-
       - name: Existing Brand Fit lifecycle cutover candidate regressions
         run: npx tsx --test tests/brand-fit-production-lifecycle-cutover-candidate-v1.test.mts
+
+      - name: Existing Brand Fit activation readiness regressions
+        run: npx tsx --test tests/brand-fit-production-activation-readiness-v1.test.mts
+
+      - name: Existing Brand Fit Risk handoff regression
+        run: npx tsx --test tests/brand-fit-point-risk-quality-metadata-v1.test.mts
 
       - run: npm run typecheck
       - run: npm run lint
@@ -56,16 +52,16 @@ jobs:
         if: always()
         run: |
           echo "ownerApprovalRecorded=true"
-          echo "approvalMaterialized=true"
-          echo "authorizationExecuted=true"
+          echo "activationAuthorizationMaterialized=true"
           echo "activationAuthorized=true"
+          echo "authoritativeLifecycle=research"
           echo "lifecycleCutoverExecuted=false"
           echo "renderRedeployExecuted=false"
           echo "publicationAuthorized=false"
           echo "publicRouteCutoverAuthorized=false"
           echo "riskInventoryUpdated=false"
           echo "riskConsumptionAuthorized=false"
-          echo "numericEligible=false"
           echo "providerCalls=0"
           echo "blobWrites=0"
           echo "databaseWrites=0"
+          echo "numericScoreProduced=false"
