@@ -1,0 +1,203 @@
+{
+  "version": "music_genie_strong26_provider_bindings_v1",
+  "status": "reviewed_provider_bindings_for_source_application_validation",
+  "provider": "genie",
+  "sourceEvidence": {
+    "exact94DetailArtifactId": 11456228049,
+    "exact94DetailArtifactDigest": "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f",
+    "exact94DetailRunId": 37560176276
+  },
+  "bindings": [
+    {
+      "canonicalArtistId": "kissoflife",
+      "providerArtistId": "82007551",
+      "providerDisplay": "KISS OF LIFE",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2023
+    },
+    {
+      "canonicalArtistId": "nctdream",
+      "providerArtistId": "80542006",
+      "providerDisplay": "NCT DREAM",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2016
+    },
+    {
+      "canonicalArtistId": "nct127",
+      "providerArtistId": "80533571",
+      "providerDisplay": "NCT 127",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2016
+    },
+    {
+      "canonicalArtistId": "2ne1",
+      "providerArtistId": "77690943",
+      "providerDisplay": "2NE1",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2009
+    },
+    {
+      "canonicalArtistId": "xdinaryheroes",
+      "providerArtistId": "81276815",
+      "providerDisplay": "Xdinary Heroes",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2021
+    },
+    {
+      "canonicalArtistId": "katseye",
+      "providerArtistId": "82541442",
+      "providerDisplay": "KATSEYE",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2024
+    },
+    {
+      "canonicalArtistId": "p1harmony",
+      "providerArtistId": "80932326",
+      "providerDisplay": "P1Harmony",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2020
+    },
+    {
+      "canonicalArtistId": "cravity",
+      "providerArtistId": "80830243",
+      "providerDisplay": "CRAVITY",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2020
+    },
+    {
+      "canonicalArtistId": "btob",
+      "providerArtistId": "80159187",
+      "providerDisplay": "비투비",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2012
+    },
+    {
+      "canonicalArtistId": "thenewsix",
+      "providerArtistId": "81401813",
+      "providerDisplay": "TNX",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2022
+    },
+    {
+      "canonicalArtistId": "wjsn",
+      "providerArtistId": "80505860",
+      "providerDisplay": "우주소녀",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2016
+    },
+    {
+      "canonicalArtistId": "sechskies",
+      "providerArtistId": "14940143",
+      "providerDisplay": "젝스키스",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 1997
+    },
+    {
+      "canonicalArtistId": "babydontcry",
+      "providerArtistId": "82934007",
+      "providerDisplay": "Baby DONT Cry",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2025
+    },
+    {
+      "canonicalArtistId": "hifiunicorn",
+      "providerArtistId": "82016387",
+      "providerDisplay": "Hi-Fi Un!corn",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2023
+    },
+    {
+      "canonicalArtistId": "lightsum",
+      "providerArtistId": "81131367",
+      "providerDisplay": "LIGHTSUM",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2021
+    },
+    {
+      "canonicalArtistId": "nuest",
+      "providerArtistId": "80158645",
+      "providerDisplay": "뉴이스트",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2012
+    },
+    {
+      "canonicalArtistId": "mcnd",
+      "providerArtistId": "80789185",
+      "providerDisplay": "MCND",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2020
+    },
+    {
+      "canonicalArtistId": "newbeat",
+      "providerArtistId": "82803996",
+      "providerDisplay": "NEWBEAT",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2025
+    },
+    {
+      "canonicalArtistId": "keyvitup",
+      "providerArtistId": "83262743",
+      "providerDisplay": "KEYVITUP",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2026
+    },
+    {
+      "canonicalArtistId": "vayonn",
+      "providerArtistId": "83355414",
+      "providerDisplay": "VAYONN",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2026
+    },
+    {
+      "canonicalArtistId": "fantasyboys",
+      "providerArtistId": "81865634",
+      "providerDisplay": "FANTASY BOYS",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2023
+    },
+    {
+      "canonicalArtistId": "aimers",
+      "providerArtistId": "81630946",
+      "providerDisplay": "AIMERS",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2022
+    },
+    {
+      "canonicalArtistId": "justb",
+      "providerArtistId": "81147283",
+      "providerDisplay": "JUSTB",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2021
+    },
+    {
+      "canonicalArtistId": "atbo",
+      "providerArtistId": "81491062",
+      "providerDisplay": "ATBO",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2022
+    },
+    {
+      "canonicalArtistId": "trcng",
+      "providerArtistId": "80597700",
+      "providerDisplay": "TRCNG",
+      "providerActivityType": "남성/그룹",
+      "providerDebutYear": 2017
+    },
+    {
+      "canonicalArtistId": "hinapia",
+      "providerArtistId": "80761877",
+      "providerDisplay": "HINAPIA",
+      "providerActivityType": "여성/그룹",
+      "providerDebutYear": 2019
+    }
+  ],
+  "semantics": {
+    "canonicalArtistIdAuthoritative": true,
+    "stableProviderArtistIdRequired": true,
+    "liveSearchMustResolveExpectedProviderArtistId": true,
+    "liveDetailMustMatchAlias": true,
+    "liveDetailEntityTypeMustMatch": true,
+    "liveDetailDebutYearMustMatch": true,
+    "productActivationAuthorized": false
+  }
+}
