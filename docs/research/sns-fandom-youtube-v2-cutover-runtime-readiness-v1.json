@@ -19,7 +19,8 @@
     "v1FallbackSuppressionBound": false,
     "renderDispatchMutationPerformed": false,
     "newGenerationProviderCallPerformed": false,
-    "cutoverApprovalEvidenceRef": null
+    "cutoverApprovalEvidenceRef": null,
+    "ownerApprovalVerificationMode": "runtime-github-issue-comment-exact-revision-v1"
   },
   "boundaryPolicy": {
     "measurementWindowStart": null,
@@ -37,9 +38,10 @@
   },
   "notes": [
     "This readiness file intentionally blocks live v2 execution.",
-    "The v2 Render-trigger workflow must fail before provider execution while v1FallbackSuppressionBound is false or the exact cutover approval evidence ref is null.",
-    "A later exact-revision activation change must bind v1 fallback suppression and the durable owner approval evidence before setting this readiness gate to activation-ready.",
-    "Render dispatch mutation is an external action performed only after that activation-ready revision is merged and separately authorized.",
+    "The v2 Render-trigger workflow must fail before provider execution while v1FallbackSuppressionBound is false or owner authority is not activation-ready.",
+    "The durable #509 approval ref remains runtime input rather than checked-in state so the approval can bind the already-existing exact activation revision without changing that revision SHA.",
+    "At execution time the workflow must fetch the referenced #509 issue comment and verify repository OWNER identity, exact authorizedRevisionSha, canonical rebaseline authorization, new-generation provider execution authorization, and scheduler cutover authorization.",
+    "Render dispatch mutation is an external action performed only after an activation-ready revision is merged and separately authorized.",
     "The existing v1 Render scheduler and GitHub fallback remain untouched by this candidate."
   ]
 }

@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: read
+  issues: read
 
 concurrency:
   group: fandex-sns-fandom-youtube-recurring-measurement-v2
@@ -79,15 +80,22 @@ jobs:
             || guards.newGenerationProviderExecutionAuthorized !== true
             || guards.schedulerCutoverAuthorized !== true
             || guards.v1FallbackSuppressionBound !== true
-            || typeof guards.cutoverApprovalEvidenceRef !== 'string'
-            || guards.cutoverApprovalEvidenceRef.length === 0
-            || guards.cutoverApprovalEvidenceRef
-              !== process.env.FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF
+            || guards.ownerApprovalVerificationMode
+              !== 'runtime-github-issue-comment-exact-revision-v1'
+            || guards.cutoverApprovalEvidenceRef !== null
           ) {
             console.error('sns_fandom_v2_cutover_readiness_blocked');
             process.exit(1);
           }
           NODE
+
+      - name: Verify durable #509 exact-revision owner approval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/operations/snsFandomYoutubeV2CutoverApprovalEvidenceVerifierV1.ts
 
       - name: Guard required secret bindings
         shell: bash
@@ -133,6 +141,7 @@ jobs:
         if: always()
         run: |
           echo "generation=v2"
+          echo "ownerApprovalVerification=runtime-github-issue-comment-exact-revision-v1"
           echo "historicalV1ReceiptsReinterpreted=false"
           echo "syntheticBackfillAllowed=false"
           echo "retrospectiveReceiptSynthesisAllowed=false"

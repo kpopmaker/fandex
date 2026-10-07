@@ -4,23 +4,30 @@ on:
   push:
     branches:
       - 'work/sns-fandom-v2-runtime-cutover-candidate-v1'
+      - 'work/sns-fandom-v2-cutover-owner-approval-binding-v1'
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeRecurringMeasurementV2.ts'
+      - 'lib/intelligence/snsFandomPointYoutubeV2CutoverApprovalEvidenceV1.ts'
       - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV2.ts'
       - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts'
+      - 'scripts/operations/snsFandomYoutubeV2CutoverApprovalEvidenceVerifierV1.ts'
       - 'docs/research/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.json'
       - 'tests/sns-fandom-youtube-recurring-activated-runtime-v2.test.mts'
       - 'tests/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.test.mts'
+      - 'tests/sns-fandom-youtube-v2-cutover-approval-evidence-v1.test.mts'
       - '.github/workflows/execute-sns-fandom-youtube-v2-render-trigger-v1.yml'
       - '.github/workflows/validate-sns-fandom-v2-runtime-cutover-candidate-v1.yml'
   pull_request:
     paths:
       - 'lib/intelligence/snsFandomPointYoutubeRecurringMeasurementV2.ts'
+      - 'lib/intelligence/snsFandomPointYoutubeV2CutoverApprovalEvidenceV1.ts'
       - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV2.ts'
       - 'scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts'
+      - 'scripts/operations/snsFandomYoutubeV2CutoverApprovalEvidenceVerifierV1.ts'
       - 'docs/research/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.json'
       - 'tests/sns-fandom-youtube-recurring-activated-runtime-v2.test.mts'
       - 'tests/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.test.mts'
+      - 'tests/sns-fandom-youtube-v2-cutover-approval-evidence-v1.test.mts'
       - '.github/workflows/execute-sns-fandom-youtube-v2-render-trigger-v1.yml'
       - '.github/workflows/validate-sns-fandom-v2-runtime-cutover-candidate-v1.yml'
   workflow_dispatch:
@@ -49,6 +56,9 @@ jobs:
       - name: V2 cutover readiness regressions
         run: npx tsx --test tests/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.test.mts
 
+      - name: V2 exact-revision owner approval evidence regressions
+        run: npx tsx --test tests/sns-fandom-youtube-v2-cutover-approval-evidence-v1.test.mts
+
       - name: Future cutover contract regression
         run: npx tsx --test tests/sns-fandom-youtube-window-rebaseline-future-cutover-v3.test.mts
 
@@ -65,6 +75,7 @@ jobs:
       - name: Safety boundary
         if: always()
         run: |
+          echo "ownerApprovalVerification=runtime-github-issue-comment-exact-revision-v1"
           echo "v2ScheduleActivated=false"
           echo "renderDispatchMutationPerformed=false"
           echo "v1SchedulerMutationPerformed=false"

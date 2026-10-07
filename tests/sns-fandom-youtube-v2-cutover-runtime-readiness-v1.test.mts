@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-test('v2 cutover readiness is checked in fail-closed and workflow has no schedule trigger', async () => {
+test('v2 cutover readiness is checked in fail-closed with runtime exact-revision owner approval verification', async () => {
   const readiness = JSON.parse(
     await readFile(
       new URL(
@@ -17,6 +17,7 @@ test('v2 cutover readiness is checked in fail-closed and workflow has no schedul
     cutoverGuards: {
       exactAuthorizedRevisionRequired: boolean;
       durableIssue509ApprovalEvidenceRequired: boolean;
+      ownerApprovalVerificationMode: string;
       canonicalRebaselineAuthorized: boolean;
       newGenerationProviderExecutionAuthorized: boolean;
       schedulerCutoverAuthorized: boolean;
@@ -45,6 +46,10 @@ test('v2 cutover readiness is checked in fail-closed and workflow has no schedul
     readiness.cutoverGuards.durableIssue509ApprovalEvidenceRequired,
     true,
   );
+  assert.equal(
+    readiness.cutoverGuards.ownerApprovalVerificationMode,
+    'runtime-github-issue-comment-exact-revision-v1',
+  );
   assert.equal(readiness.cutoverGuards.canonicalRebaselineAuthorized, false);
   assert.equal(
     readiness.cutoverGuards.newGenerationProviderExecutionAuthorized,
@@ -72,28 +77,28 @@ test('v2 cutover readiness is checked in fail-closed and workflow has no schedul
 
   assert.match(workflow, /workflow_dispatch:/);
   assert.doesNotMatch(workflow, /\nschedule:/);
-  assert.match(
-    workflow,
-    /approved-render-sns-fandom-v2-cutover-v1/,
-  );
+  assert.match(workflow, /issues: read/);
+  assert.match(workflow, /approved-render-sns-fandom-v2-cutover-v1/);
   assert.match(
     workflow,
     /approved-sns-fandom-v2-rebaseline-provider-scheduler-cutover-v1/,
   );
-  assert.match(
-    workflow,
-    /sns_fandom_v2_cutover_readiness_blocked/,
-  );
+  assert.match(workflow, /sns_fandom_v2_cutover_readiness_blocked/);
   assert.match(
     workflow,
     /guards\.v1FallbackSuppressionBound !== true/,
   );
   assert.match(
     workflow,
-    /guards\.cutoverApprovalEvidenceRef/,
+    /runtime-github-issue-comment-exact-revision-v1/,
   );
   assert.match(
     workflow,
-    /inputs\.authorized_revision_sha/,
+    /guards\.cutoverApprovalEvidenceRef !== null/,
   );
+  assert.match(
+    workflow,
+    /snsFandomYoutubeV2CutoverApprovalEvidenceVerifierV1\.ts/,
+  );
+  assert.match(workflow, /inputs\.authorized_revision_sha/);
 });
