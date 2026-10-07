@@ -28,6 +28,7 @@ on:
       - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
       - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
       - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
+      - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
 
 permissions:
   contents: read
@@ -73,6 +74,7 @@ jobs:
           .github/workflows/validate-momentum-post319-execution-currentness-v1.yml
           .github/workflows/validate-momentum-productionization-current-main-v1.yml
           lib/server/product/momentumLiveShadowProductReadiness.ts
+          .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
