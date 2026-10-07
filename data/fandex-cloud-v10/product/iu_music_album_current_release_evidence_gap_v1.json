@@ -149,9 +149,6 @@
     }
   },
   "blockers": [
-    "latest-physical-release-not-human-reviewed",
-    "canonical-release-id-unresolved",
-    "edition-semantics-unresolved-standard-vs-cdp",
     "tier-a-or-b-first-week-evidence-missing",
     "explicit-provider-period-missing",
     "reported-web-rights-review-not-materialized",
@@ -167,12 +164,20 @@
     "directHanteoApiClaimAllowed": false
   },
   "nextTargetedEvidenceNeeded": [
-    "human-reviewed latest physical release binding with explicit standard-vs-CDP edition conclusion",
     "Tier A or Tier B provider-attributed source that explicitly states the exact Hanteo first-week value",
     "explicit provider-period start and end bound to that exact value; do not infer from release date or weekly rank windows",
     "source-specific rights/usage review"
   ],
   "productActivationAuthorized": false,
   "publicPublicationAuthorized": false,
-  "numericScoreDefined": false
+  "numericScoreDefined": false,
+  "currentReleaseReview": {
+    "state": "human-reviewed-binding-materialized",
+    "bindingRef": "data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json",
+    "canonicalReleaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+    "editionResolutionState": "release-level",
+    "canonicalEditionId": null,
+    "reviewedAt": "2026-10-07T10:36:00+09:00",
+    "autoVerified": false
+  }
 }
