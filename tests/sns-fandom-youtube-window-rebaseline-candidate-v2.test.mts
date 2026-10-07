@@ -34,7 +34,7 @@ function baseInput() {
   };
 }
 
-test('checked-in v2 evidence produces a candidate but requires separate owner approval', async () => {
+test('checked-in v2 evidence is preserved but superseded before authorization', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -45,95 +45,54 @@ test('checked-in v2 evidence produces a candidate but requires separate owner ap
     ),
   ) as {
     state: string;
-    currentMaterializedWindow: {
-      measurementWindowStart: string;
-      measurementWindowEnd: string;
-    };
+    supersededBy: string;
+    safetyCorrectionEvidenceRef: string;
     renderBackedContinuity: {
-      renderServiceId: string;
-      renderSchedule: string;
-      authorizedProviderRuntimeSha: string;
-      continuityEvidenceRef: string;
-      observedFirstSlotStart: string;
-      observedLastSlotStart: string;
+      observationsRemainBoundToCurrentWindow: boolean;
       observedConsecutiveSlotCount: number;
-      fallbackIdempotencyEvidence: {
-        verified: boolean;
-        fallbackProviderCallsPerformed: boolean;
-        providerExecutionsPerUtcHourlySlotMax: number;
-      };
+      latestReceiptPath: string;
     };
     supersedingWindowCandidate: {
-      measurementWindowStart: string;
-      measurementWindowEnd: string;
-      durationDays: number;
-      reactionSnapshotRunsPerDay: number;
+      promotionAllowed: boolean;
       canonicalWindowRebaselineAuthorized: boolean;
       canonicalMutationPerformed: boolean;
       syntheticBackfillAllowed: boolean;
       retrospectiveReceiptSynthesisAllowed: boolean;
       retrospectiveProviderObservationAllowed: boolean;
     };
-    authorityBoundary: {
-      schedulerMutationAuthorizedByCandidate: boolean;
-      recurringProviderExecutionAuthorizedByCandidate: boolean;
-      providerSubmissionAuthorized: boolean;
-      productionCollectionAuthorized: boolean;
-      productActivationAuthorized: boolean;
+    latestVerifiedCoverage: {
+      receiptCount: number;
+      totalProviderCallsObserved: number;
+      totalQuotaUnitsObserved: number;
     };
   };
 
-  const result = evaluateSnsFandomYoutubeWindowRebaselineCandidateV2({
-    currentMaterializedWindowStart:
-      raw.currentMaterializedWindow.measurementWindowStart,
-    currentMaterializedWindowEnd:
-      raw.currentMaterializedWindow.measurementWindowEnd,
-    renderServiceId: raw.renderBackedContinuity.renderServiceId,
-    renderSchedule: raw.renderBackedContinuity.renderSchedule,
-    authorizedProviderRuntimeSha:
-      raw.renderBackedContinuity.authorizedProviderRuntimeSha,
-    continuityEvidenceRef:
-      raw.renderBackedContinuity.continuityEvidenceRef,
-    observedFirstSlotStart:
-      raw.renderBackedContinuity.observedFirstSlotStart,
-    observedLastSlotStart:
-      raw.renderBackedContinuity.observedLastSlotStart,
-    observedConsecutiveSlotCount:
-      raw.renderBackedContinuity.observedConsecutiveSlotCount,
-    rebaselineAuthorized:
-      raw.supersedingWindowCandidate.canonicalWindowRebaselineAuthorized,
-    canonicalMutationPerformed:
-      raw.supersedingWindowCandidate.canonicalMutationPerformed,
-  });
-
-  assert.equal(raw.state, 'candidate-ready-owner-approval-required');
-  assert.equal(result.state, 'candidate-ready-owner-approval-required');
-  assert.deepEqual(result.blockers, []);
-  assert.ok(result.candidate);
+  assert.equal(raw.state, 'superseded-before-authorization');
   assert.equal(
-    result.candidate?.measurementWindowStart,
-    '2026-10-06T15:00:00.000Z',
+    raw.supersededBy,
+    'sns_fandom_youtube_window_rebaseline_future_cutover_v3',
   );
   assert.equal(
-    result.candidate?.measurementWindowEnd,
-    '2027-10-07T15:00:00.000Z',
+    raw.safetyCorrectionEvidenceRef,
+    'github-issue://kpopmaker/fandex/issues/509#issuecomment-6027895747',
   );
-  assert.equal(result.candidate?.durationDays, 366);
-  assert.equal(result.candidate?.reactionSnapshotRunsPerDay, 24);
-  assert.equal(result.candidate?.observedConsecutiveSlotCount, 9);
   assert.equal(
-    raw.renderBackedContinuity.fallbackIdempotencyEvidence.verified,
+    raw.renderBackedContinuity.observationsRemainBoundToCurrentWindow,
     true,
   );
+  assert.equal(raw.renderBackedContinuity.observedConsecutiveSlotCount, 10);
   assert.equal(
-    raw.renderBackedContinuity.fallbackIdempotencyEvidence
-      .fallbackProviderCallsPerformed,
+    raw.renderBackedContinuity.latestReceiptPath,
+    'sns-fandom/youtube-audit/recurring/v1/receipts/20261007T000000Z.json',
+  );
+  assert.equal(raw.supersedingWindowCandidate.promotionAllowed, false);
+  assert.equal(
+    raw.supersedingWindowCandidate.canonicalWindowRebaselineAuthorized,
     false,
   );
   assert.equal(
-    raw.renderBackedContinuity.fallbackIdempotencyEvidence
-      .providerExecutionsPerUtcHourlySlotMax,
-    1,
+    raw.supersedingWindowCandidate.canonicalMutationPerformed,
+    false,
   );
   assert.equal(
     raw.supersedingWindowCandidate.syntheticBackfillAllowed,
@@ -147,22 +106,12 @@ test('checked-in v2 evidence produces a candidate but requires separate owner ap
     raw.supersedingWindowCandidate.retrospectiveProviderObservationAllowed,
     false,
   );
-  assert.equal(result.rebaselineAuthorized, false);
-  assert.equal(result.canonicalMutationPerformed, false);
-  assert.equal(
-    raw.authorityBoundary.schedulerMutationAuthorizedByCandidate,
-    false,
-  );
-  assert.equal(
-    raw.authorityBoundary.recurringProviderExecutionAuthorizedByCandidate,
-    false,
-  );
-  assert.equal(raw.authorityBoundary.providerSubmissionAuthorized, false);
-  assert.equal(raw.authorityBoundary.productionCollectionAuthorized, false);
-  assert.equal(raw.authorityBoundary.productActivationAuthorized, false);
+  assert.equal(raw.latestVerifiedCoverage.receiptCount, 14);
+  assert.equal(raw.latestVerifiedCoverage.totalProviderCallsObserved, 1734);
+  assert.equal(raw.latestVerifiedCoverage.totalQuotaUnitsObserved, 1734);
 });
 
-test('consecutive slot count is derived from the observed UTC-hour span, not an arbitrary threshold', () => {
+test('historical v2 evaluator still derives consecutive slot count instead of inventing a threshold', () => {
   const result = evaluateSnsFandomYoutubeWindowRebaselineCandidateV2({
     ...baseInput(),
     observedConsecutiveSlotCount: 8,
@@ -177,7 +126,7 @@ test('consecutive slot count is derived from the observed UTC-hour span, not an 
   );
 });
 
-test('canonical mutation fails closed without explicit rebaseline authorization', () => {
+test('historical v2 evaluator fails closed on canonical mutation without authorization', () => {
   const result = evaluateSnsFandomYoutubeWindowRebaselineCandidateV2({
     ...baseInput(),
     canonicalMutationPerformed: true,
@@ -192,7 +141,7 @@ test('canonical mutation fails closed without explicit rebaseline authorization'
   );
 });
 
-test('owner authorization can only move the candidate state and does not grant adjacent authorities', () => {
+test('historical v2 evaluator authorization never grants adjacent authorities', () => {
   const result = evaluateSnsFandomYoutubeWindowRebaselineCandidateV2({
     ...baseInput(),
     rebaselineAuthorized: true,

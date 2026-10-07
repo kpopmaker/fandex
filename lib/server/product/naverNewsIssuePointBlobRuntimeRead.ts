@@ -167,6 +167,25 @@ export async function mintNaverNewsVercelProjectOidcToken(
   return token;
 }
 
+export async function resolveNaverNewsRuntimeOidcToken(
+  environment: Readonly<Record<string, string | undefined>>,
+  resolveVercelNativeOidcToken: () =>
+    string | undefined | Promise<string | undefined> =
+      () => getVercelOidcToken(),
+): Promise<string | undefined> {
+  try {
+    const vercelOidc = clean(
+      await resolveVercelNativeOidcToken(),
+    );
+    if (vercelOidc) return vercelOidc;
+  } catch {
+    // Non-Vercel hosts can throw before returning an OIDC token.
+    // Fall through to the verified project-scoped mint path.
+  }
+
+  return mintNaverNewsVercelProjectOidcToken(environment);
+}
+
 export type NaverNewsIssuePointBlobRuntimeDependencies =
   Readonly<{
     createReadStore?: (
@@ -277,15 +296,7 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     const resolvedEnvironment = await runtimeEnvironment(
       environment,
       dependencies.resolveOidcToken
-        ?? (async () => {
-          const vercelOidc = clean(
-            await getVercelOidcToken(),
-          );
-          if (vercelOidc) return vercelOidc;
-          return mintNaverNewsVercelProjectOidcToken(
-            environment,
-          );
-        }),
+        ?? (() => resolveNaverNewsRuntimeOidcToken(environment)),
     );
     store = (
       dependencies.createReadStore

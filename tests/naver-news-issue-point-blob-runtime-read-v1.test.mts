@@ -6,6 +6,7 @@ import {
   FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
   getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
   mintNaverNewsVercelProjectOidcToken,
+  resolveNaverNewsRuntimeOidcToken,
 } from '../lib/server/product/naverNewsIssuePointBlobRuntimeRead';
 import {
   buildNaverNewsIngestionWritePlan,
@@ -456,6 +457,25 @@ test('News Render OIDC mint fails closed on unexpected Vercel project binding', 
         FANDEX_VERCEL_TEAM_ID:
           FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
       }),
+    /naver_news_blob_runtime_vercel_project_binding_invalid/,
+  );
+});
+
+
+test('News Render OIDC resolver falls back when Vercel-native OIDC throws', async () => {
+  await assert.rejects(
+    () =>
+      resolveNaverNewsRuntimeOidcToken(
+        {
+          VERCEL_TOKEN: 'render-project-access-token',
+          FANDEX_VERCEL_PROJECT_ID: 'prj_unexpected',
+          FANDEX_VERCEL_TEAM_ID:
+            FANDEX_NAVER_NEWS_VERCEL_TEAM_ID,
+        },
+        async () => {
+          throw new Error('vercel-native-oidc-unavailable');
+        },
+      ),
     /naver_news_blob_runtime_vercel_project_binding_invalid/,
   );
 });
