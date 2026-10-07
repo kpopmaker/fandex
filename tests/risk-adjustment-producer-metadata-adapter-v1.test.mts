@@ -12,6 +12,9 @@ import {
   ACTIVITY_EXPOSURE_RISK_QUALITY_METADATA_CONTRACT_VERSION,
 } from '../lib/product/adapters/activityExposureRiskQualityMetadata';
 import {
+  BRAND_FIT_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
+} from '../lib/product/adapters/brandFitPointRiskQualityMetadata';
+import {
   MUSIC_ALBUM_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
 } from '../lib/product/adapters/musicAlbumPointRiskQualityMetadata';
 import {
@@ -96,6 +99,7 @@ test('known producer contract identities are explicit and Variable-bound', () =>
   assert.deepEqual(RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS, {
     newsIssuePoint: 'news-issue-point-risk-quality-metadata-v1',
     comebackActivityPoint: 'activity-exposure-risk-quality-metadata-v1',
+    brandFitPoint: 'brand-fit-point-risk-quality-metadata-v1',
     musicAlbumPoint: 'music-album-point-risk-quality-metadata-v1',
   });
   assert.equal(
@@ -105,6 +109,10 @@ test('known producer contract identities are explicit and Variable-bound', () =>
   assert.equal(
     RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.comebackActivityPoint,
     ACTIVITY_EXPOSURE_RISK_QUALITY_METADATA_CONTRACT_VERSION,
+  );
+  assert.equal(
+    RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.brandFitPoint,
+    BRAND_FIT_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
   );
   assert.equal(
     RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.musicAlbumPoint,
