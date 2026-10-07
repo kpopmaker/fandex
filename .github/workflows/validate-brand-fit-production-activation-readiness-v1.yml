@@ -1,0 +1,66 @@
+name: Validate Brand Fit Production activation readiness v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-production-activation-readiness-v1'
+    paths:
+      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
+      - 'lib/product/activation/brandFitProductionReadiness.ts'
+      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
+      - 'lib/product/activation/brandFitProductionActivationApprovalCandidate.ts'
+      - 'tests/brand-fit-production-activation-readiness-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-activation-readiness-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/product/activation/brandFitProductionRuntimeVerification.ts'
+      - 'lib/product/activation/brandFitProductionReadiness.ts'
+      - 'lib/product/activation/brandFitProductionActivationAuthorization.ts'
+      - 'lib/product/activation/brandFitProductionActivationApprovalCandidate.ts'
+      - 'tests/brand-fit-production-activation-readiness-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-activation-readiness-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Brand Fit activation readiness regressions
+        run: npx tsx --test tests/brand-fit-production-activation-readiness-v1.test.mts
+
+      - name: Brand Fit Product adapter regression
+        run: npx tsx --test tests/brand-fit-point-fandex-variable-product-v1.test.mts
+
+      - name: Brand Fit Risk handoff regression
+        run: npx tsx --test tests/brand-fit-point-risk-quality-metadata-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "activationAuthorized=false"
+          echo "lifecycleMutationPerformed=false"
+          echo "renderRedeployPerformed=false"
+          echo "publicationAuthorized=false"
+          echo "publicRouteCutoverAuthorized=false"
+          echo "riskConsumptionAuthorized=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "numericScoreProduced=false"
