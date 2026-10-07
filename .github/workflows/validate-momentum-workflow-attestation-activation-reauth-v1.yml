@@ -26,6 +26,8 @@ on:
       - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
       - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
       - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
+      - '.github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
 
 permissions:
   contents: read
@@ -70,6 +72,8 @@ jobs:
           tests/momentum-product-activation-authorization-execution-candidate-v1.test.mts
           tests/momentum-product-activation-owner-attestation-evidence-v1.test.mts
           tests/momentum-product-activation-readiness-v1.test.mts
+          .github/workflows/validate-momentum-product-activation-reauthorization-approved-v2.yml
+          lib/server/product/momentumLiveShadowProductReadiness.ts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
