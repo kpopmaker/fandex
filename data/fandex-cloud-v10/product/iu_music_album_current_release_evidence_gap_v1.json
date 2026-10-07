@@ -149,11 +149,12 @@
     }
   },
   "blockers": [
-    "tier-a-or-b-first-week-evidence-missing",
-    "explicit-provider-period-missing",
-    "reported-web-rights-review-not-materialized",
     "durable-write-not-authorized",
-    "tier-a-or-b-exact-value-search-completed-no-qualified-source"
+    "explicit-provider-period-missing",
+    "hanteo-historical-exact-copies-selector-unverified",
+    "reported-web-rights-review-not-materialized",
+    "tier-a-or-b-exact-value-search-completed-no-qualified-source",
+    "tier-a-or-b-first-week-evidence-missing"
   ],
   "semantics": {
     "releaseDateDerivedProviderPeriodAllowed": false,
@@ -186,5 +187,12 @@
     "qualifyingSourceSpecificDecisionMaterialized": false,
     "rightsState": "review-required",
     "autoAuthorized": false
+  },
+  "hanteoHistoricalSelectorResearch": {
+    "state": "completed-no-verified-historical-selector",
+    "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json",
+    "exactCopiesSelectorLocated": false,
+    "liveHistoricalNetworkProbeExecuted": false,
+    "unstableResourceIdObservedAcrossWeeks": true
   }
 }
