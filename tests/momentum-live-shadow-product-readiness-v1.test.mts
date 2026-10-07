@@ -11,6 +11,7 @@ import {
 } from '../lib/server/product/momentumEvidenceConsensusRealProductRead';
 import {
   getMomentumLiveShadowProductReadinessForIU,
+  momentumLastfmAuditMatchesCurrentStatus,
 } from '../lib/server/product/momentumLiveShadowProductReadiness';
 import { sha256Canonical } from '../lib/shared/canonicalDigest';
 
@@ -78,6 +79,34 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
     },
   });
   assert.deepEqual(result.blockers, []);
+});
+
+test('current Last.fm status must match the checked-in source audit exactly', async () => {
+  const audit = await readAudit();
+
+  assert.equal(
+    momentumLastfmAuditMatchesCurrentStatus(audit, {
+      snapshotDate: '2026-10-06',
+      snapshotAppended: true,
+      historyRowCount: 607,
+      snapshotDateCount: 58,
+      deltaReadyCount: 19,
+      needsReviewCount: 0,
+    }),
+    true,
+  );
+
+  assert.equal(
+    momentumLastfmAuditMatchesCurrentStatus(audit, {
+      snapshotDate: '2026-10-07',
+      snapshotAppended: true,
+      historyRowCount: 626,
+      snapshotDateCount: 59,
+      deltaReadyCount: 19,
+      needsReviewCount: 0,
+    }),
+    false,
+  );
 });
 
 test('freshness policy still forbids arbitrary age thresholds and does not require a history append', async () => {
