@@ -77,10 +77,34 @@ test('IU current physical-release gap remains fail-closed rather than promoting 
   assert.ok(
     payload.blockers.includes('explicit-provider-period-missing'),
   );
-  assert.ok(
+  assert.equal(
+    payload.currentReleaseReview.state,
+    'human-reviewed-binding-materialized',
+  );
+  assert.equal(
+    payload.currentReleaseReview.canonicalReleaseId,
+    'release:iu:a-flower-bookmark-3:2025-05-28',
+  );
+  assert.equal(
+    payload.currentReleaseReview.editionResolutionState,
+    'release-level',
+  );
+  assert.equal(payload.currentReleaseReview.autoVerified, false);
+  assert.equal(
+    payload.blockers.includes(
+      'latest-physical-release-not-human-reviewed',
+    ),
+    false,
+  );
+  assert.equal(
+    payload.blockers.includes('canonical-release-id-unresolved'),
+    false,
+  );
+  assert.equal(
     payload.blockers.includes(
       'edition-semantics-unresolved-standard-vs-cdp',
     ),
+    false,
   );
   assert.equal(payload.semantics.missingEqualsZero, false);
   assert.equal(payload.semantics.missingEqualsStable, false);
