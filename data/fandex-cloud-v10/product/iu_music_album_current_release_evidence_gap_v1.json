@@ -179,5 +179,12 @@
     "canonicalEditionId": null,
     "reviewedAt": "2026-10-07T10:36:00+09:00",
     "autoVerified": false
+  },
+  "rightsReviewIntake": {
+    "state": "review-intake-prepared",
+    "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json",
+    "qualifyingSourceSpecificDecisionMaterialized": false,
+    "rightsState": "review-required",
+    "autoAuthorized": false
   }
 }
