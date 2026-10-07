@@ -3,7 +3,7 @@ name: Momentum current reevaluation readiness v1
 on:
   workflow_run:
     workflows:
-      - Momentum Blob recovery continuity gate v1
+      - NAVER News Blob-only recurring Production v1
       - FANDEX Last.fm Cloud History
     types:
       - completed
