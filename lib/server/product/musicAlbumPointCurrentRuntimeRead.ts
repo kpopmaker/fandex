@@ -39,6 +39,10 @@ import {
   type ReportedAlbumSalesCurrentReleaseDiscovery,
   type ReportedAlbumSalesCurrentReleaseRead,
 } from '../../alternative-evidence/reportedAlbumSalesCurrentRelease';
+import {
+  evaluateMusicAlbumReportedWebProductReadiness,
+  type MusicAlbumReportedWebProductReadiness,
+} from '../../product/readiness/musicAlbumReportedWebProductReadiness';
 
 const TARGETS_PATH = resolve(
   process.cwd(),
@@ -79,6 +83,8 @@ export type MusicAlbumPointCurrentRuntimeReadResult =
         MusicAlbumReportedWebStoredEvidenceServerRuntimeResult;
       reportedWebCurrentRelease:
         ReportedAlbumSalesCurrentReleaseRead;
+      reportedWebReadiness:
+        MusicAlbumReportedWebProductReadiness;
       evidence: Readonly<{
         sourceKind: 'repository-current-state+reported-web-durable-read';
         latestCheckDate: string;
@@ -294,6 +300,11 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
             : [],
       });
 
+    const reportedWebReadiness =
+      evaluateMusicAlbumReportedWebProductReadiness(
+        reportedWebCurrentRelease,
+      );
+
     const adapted = adaptMusicChartEvidence({
       checkHistoryPayload: checkHistory,
       melonGeniePayload: candidates,
@@ -337,6 +348,7 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
       readiness,
       reportedWebStoredEvidence,
       reportedWebCurrentRelease,
+      reportedWebReadiness,
       evidence: Object.freeze({
         sourceKind:
           'repository-current-state+reported-web-durable-read' as const,
