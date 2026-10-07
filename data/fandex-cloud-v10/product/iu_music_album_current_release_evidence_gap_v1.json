@@ -55,6 +55,24 @@
         "purpose": "underlying-provider-following-week-presence",
         "sourceUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
         "note": "Hanteo weekly album chart for 2025-06-02 through 2025-06-08 lists 꽃갈피 셋 by IU at No. 12; this does not establish the exact seven-day first-week provider period for the discovery-only 79,940 claim."
+      },
+      {
+        "evidenceId": "makestar:10531:a-flower-bookmark-3",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-product-release-identity",
+        "sourceUrl": "https://www.makestar.com/product/10531"
+      },
+      {
+        "evidenceId": "yes24:147561057:a-flower-bookmark-3-cdp",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-edition-identity",
+        "sourceUrl": "https://www.yes24.com/product/goods/147561057"
+      },
+      {
+        "evidenceId": "makestar:10841:a-flower-bookmark-3-cdp",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-edition-identity",
+        "sourceUrl": "https://www.makestar.com/product/10841"
       }
     ],
     "verificationBoundary": {
@@ -62,8 +80,32 @@
       "currentSelectorEligible": false,
       "officialHanteoPhysicalPresenceConfirmed": true,
       "exactFirstWeekValueStillUnqualified": true,
-      "exactSevenDayProviderPeriodStillUnqualified": true
-    }
+      "exactSevenDayProviderPeriodStillUnqualified": true,
+      "editionSemanticsResolved": false
+    },
+    "edition": null,
+    "editionResolutionState": "candidate",
+    "canonicalEditionId": null,
+    "editionCandidates": [
+      {
+        "candidateEdition": "standard-cd",
+        "physicalReleaseDate": "2025-05-28",
+        "evidenceRefs": [
+          "yes24:146827201:a-flower-bookmark-3",
+          "makestar:10531:a-flower-bookmark-3"
+        ],
+        "scopeState": "requires-human-review"
+      },
+      {
+        "candidateEdition": "cdp-limited",
+        "physicalReleaseDate": "2025-07-15",
+        "evidenceRefs": [
+          "yes24:147561057:a-flower-bookmark-3-cdp",
+          "makestar:10841:a-flower-bookmark-3-cdp"
+        ],
+        "scopeState": "requires-human-review"
+      }
+    ]
   },
   "reportedHanteoFirstWeekClaim": {
     "value": 79940,
@@ -91,11 +133,18 @@
       "hanteo:weekly:2025-W22:a-flower-bookmark-3",
       "hanteo:weekly:2025-W23:a-flower-bookmark-3"
     ],
-    "providerPresenceDoesNotQualifyExactValue": true
+    "providerPresenceDoesNotQualifyExactValue": true,
+    "discoveryProviderPeriodStart": "2025-05-28",
+    "discoveryProviderPeriodEnd": "2025-06-03",
+    "discoveryProviderPeriodEvidenceRefs": [
+      "majayo:2025-06-04:iu-a-flower-bookmark-3"
+    ],
+    "discoveryProviderPeriodProductionEligible": false
   },
   "blockers": [
     "latest-physical-release-not-human-reviewed",
     "canonical-release-id-unresolved",
+    "edition-semantics-unresolved-standard-vs-cdp",
     "tier-a-or-b-first-week-evidence-missing",
     "explicit-provider-period-missing",
     "reported-web-rights-review-not-materialized",
@@ -110,7 +159,7 @@
     "directHanteoApiClaimAllowed": false
   },
   "nextTargetedEvidenceNeeded": [
-    "human-reviewed latest physical release binding",
+    "human-reviewed latest physical release binding with explicit standard-vs-CDP edition conclusion",
     "Tier A or Tier B provider-attributed source that explicitly states the exact Hanteo first-week value",
     "explicit provider-period start and end bound to that exact value; do not infer from release date or weekly rank windows",
     "source-specific rights/usage review"
