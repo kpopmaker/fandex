@@ -1,0 +1,54 @@
+{
+  "contractVersion": "iu-music-album-reported-web-rights-review-intake-v1",
+  "lifecycle": "productionization-rights-review-intake",
+  "canonicalArtistId": "iu",
+  "variableId": "musicAlbumPoint",
+  "releaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+  "sourceType": "reported-web-evidence",
+  "accessMode": "manual-reviewed",
+  "underlyingProvider": "Hanteo Chart",
+  "materialBoundary": "factual-values-and-provenance-only",
+  "copyrightedArticleExpressionRequestedForStorage": false,
+  "fixedManualOnlyStates": {
+    "automationState": "blocked",
+    "rawStorageState": "blocked",
+    "rawRedistributionState": "blocked"
+  },
+  "requestedDimensions": [
+    "acquisitionState",
+    "normalizedStorageState",
+    "retentionState",
+    "commercialUseState",
+    "derivedPublicationState"
+  ],
+  "rightsReviewReferences": [
+    {
+      "referenceId": "hanteo:sales-data-copyright-restriction:2026-09",
+      "sourceUrl": "https://www.hanteonews.com/en/article/93728",
+      "kind": "underlying-provider-restriction",
+      "observedAt": "2026-10-07T10:36:00+09:00",
+      "reviewSignal": "Hanteo News states that sales-data copyright belongs to Hanteo Global and that unauthorized use, reproduction, or redistribution without consent is prohibited.",
+      "authorizationStateNotInferred": true
+    }
+  ],
+  "productionEvidenceContext": {
+    "exactValue": 79940,
+    "metricSemantic": "reported-hanteo-first-week-sales",
+    "discoveryOnly": true,
+    "qualifyingTierAOrBExactValueSourceLocated": false,
+    "qualifyingExplicitProviderPeriodSourceLocated": false,
+    "sourceSpecificRightsDecisionDeferredUntilQualifyingEvidenceSourceExists": true
+  },
+  "decision": null,
+  "reviewMaterialized": false,
+  "rightsState": "review-required",
+  "autoAuthorized": false,
+  "productActivationAuthorized": false,
+  "publicPublicationAuthorized": false,
+  "durableWriteAuthorized": false,
+  "blockers": [
+    "qualifying-production-evidence-source-not-yet-located",
+    "source-specific-rights-review-cannot-be-finalized",
+    "human-legal-or-rights-review-required"
+  ]
+}
