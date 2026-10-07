@@ -95,6 +95,8 @@ export type ReportedAlbumSalesProductionSourceCandidate = Readonly<{
   releaseTitle: string;
   releaseDate: string | null;
   edition: string | null;
+  editionResolutionState: 'release-level' | 'edition-specific' | 'unbound';
+  canonicalEditionId: string | null;
   providerReleaseId: string | null;
   metricSemantic: 'reported-hanteo-first-week-sales';
   underlyingMetricSemantic: 'hanteo-first-week-sales';
@@ -384,6 +386,14 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       identityBindingValid
         ? releaseIdentityBinding.bindingId
         : null,
+    editionResolutionState:
+      identityBindingValid
+        ? releaseIdentityBinding.editionResolutionState
+        : 'unbound',
+    canonicalEditionId:
+      identityBindingValid
+        ? releaseIdentityBinding.canonicalEditionId
+        : null,
   });
   const durableNormalizedStorageEligible =
     currentRightsState === 'authorized'
@@ -415,6 +425,14 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     releaseTitle: input.observation.release.releaseTitle,
     releaseDate: input.observation.release.releaseDate,
     edition: input.observation.release.edition,
+    editionResolutionState:
+      identityBindingValid
+        ? releaseIdentityBinding.editionResolutionState
+        : 'unbound' as const,
+    canonicalEditionId:
+      identityBindingValid
+        ? releaseIdentityBinding.canonicalEditionId
+        : null,
     providerReleaseId:
       input.observation.release.providerReleaseId,
     metricSemantic: 'reported-hanteo-first-week-sales' as const,
