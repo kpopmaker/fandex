@@ -1,0 +1,21 @@
+name: Validate Artist Expansion ListenBrainz second interval wait v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-listenbrainz-second-interval-wait-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-second-interval-wait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate second interval wait receipt
+        run: python tests/artist-expansion-listenbrainz-second-interval-wait-v1.py

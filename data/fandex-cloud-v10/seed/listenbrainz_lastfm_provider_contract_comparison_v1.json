@@ -1,0 +1,202 @@
+{
+  "version": "listenbrainz_lastfm_provider_contract_comparison_v1",
+  "status": "comparison_complete_non_activating",
+  "comparedAtLineageHead": "f64fb2f05a91767ea98132ac369e2dc5cfc532c0",
+  "sources": {
+    "lastfm": {
+      "cloudCollector": {
+        "path": "scripts/lastfm-cloud/lastfm_cloud_history_v1.py",
+        "blobSha": "d404f58fc4da9976126c2101e1ebfa5903df38da"
+      },
+      "scorePreview": {
+        "path": "scripts/fandex-cloud-migration/source/lastfm_global_interest_score_preview_v1.py",
+        "blobSha": "d59c93abdfc57cf8708c92278e2f0a4c555acb58"
+      },
+      "signalContract": {
+        "path": "lib/lastfm-signal/contracts.ts",
+        "blobSha": "c71cb3bb93153fedd5919cdb343fb4f36664e177"
+      },
+      "status": {
+        "path": "data/lastfm-cloud/lastfm_cloud_status_latest.json",
+        "blobSha": "fbd863fb4863d731004250f13529e38448c1ad91"
+      },
+      "binding": {
+        "path": "scripts/lastfm-cloud/lastfm_artist_seed_v1.csv",
+        "blobSha": "b1bf43bba51e0e42ffa8afdc596605f02abcda33"
+      },
+      "compatibility": {
+        "path": "data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json",
+        "blobSha": "80fdef952314fef1b85ec34d0a1a066001126d0f"
+      }
+    },
+    "listenbrainz": {
+      "receipt": {
+        "path": "data/fandex-cloud-v10/seed/listenbrainz_full21_canonical_shadow_receipt_v1.json",
+        "blobSha": "758215e8048420553c85263714a3b623c99ba24e"
+      }
+    }
+  },
+  "contracts": {
+    "lastfm": {
+      "provider": "Last.fm",
+      "bindingMode": "reviewed_canonicalArtistId_to_name_query",
+      "requestIdentity": "artist query string",
+      "returnedIdentityField": "lastfmName",
+      "rawMetrics": [
+        "listeners",
+        "playcount"
+      ],
+      "rawMetricCount": 2,
+      "temporalModel": "locally_collected_point_in_time_snapshots",
+      "derivedMetrics": [
+        "listenerDelta",
+        "playcountDelta",
+        "listenerDeltaPerDay",
+        "playcountDeltaPerDay"
+      ],
+      "negativeDeltaHandling": "needs_review",
+      "scorePreview": {
+        "usage": "preview_only_not_master_score",
+        "listenerTransform": "listenerDeltaPerDay -> log1p -> current-cohort minmax 0..100",
+        "playcountTransform": "playcountDeltaPerDay -> log1p -> current-cohort minmax 0..100",
+        "formula": "0.5 * listenerLogNormalized + 0.5 * playcountLogNormalized",
+        "listenerWeight": 0.5,
+        "playcountWeight": 0.5,
+        "masterModified": false,
+        "websiteModified": false
+      },
+      "currentEvidence": {
+        "snapshotDate": "2026-10-05",
+        "seedArtistCount": 19,
+        "deltaReadyCount": 19,
+        "needsReviewCount": 0,
+        "scorePreviewCount": 19,
+        "supportedCanonicalArtistCount": 19,
+        "unsupportedCanonicalArtistIds": [
+          "v",
+          "lisa"
+        ]
+      }
+    },
+    "listenbrainz": {
+      "provider": "ListenBrainz",
+      "bindingMode": "reviewed_canonicalArtistId_to_musicbrainz_artist_mbid",
+      "requestIdentity": "MusicBrainz artist MBID",
+      "returnedIdentityCheck": "exact artist_mbid echo",
+      "rawMetrics": [
+        "total_listen_count"
+      ],
+      "rawMetricCount": 1,
+      "temporalModel": "provider_defined_aggregate_range",
+      "ranges": [
+        "all_time",
+        "month",
+        "week"
+      ],
+      "derivedMetrics": [],
+      "scorePreview": null,
+      "currentEvidence": {
+        "targetArtistCount": 21,
+        "fullyObservedExactIdentityArtistCount": 21,
+        "unavailableArtistCount": 0,
+        "identityMismatchArtistCount": 0,
+        "supportedCanonicalArtistCount": 21,
+        "zeroImputationUsed": false
+      }
+    }
+  },
+  "comparison": {
+    "canonicalIdentity": {
+      "compatiblePrinciple": true,
+      "equivalentMechanism": false,
+      "note": "Both are anchored to canonicalArtistId, but Last.fm resolves a reviewed name query while ListenBrainz requests an exact reviewed MusicBrainz artist MBID and validates the echoed MBID."
+    },
+    "cohortCoverage": {
+      "exactMatch": false,
+      "lastfmSupportedCount": 19,
+      "listenbrainzObservedCount": 21,
+      "listenbrainzAddsCanonicalArtistIds": [
+        "v",
+        "lisa"
+      ],
+      "note": "ListenBrainz establishes a uniform 21-artist surface; Last.fm remains a reviewed 19-artist surface with V/LISA unsupported."
+    },
+    "rawMetricSchema": {
+      "equivalent": false,
+      "commonExactMetricNames": [],
+      "lastfm": [
+        "listeners",
+        "playcount"
+      ],
+      "listenbrainz": [
+        "total_listen_count"
+      ],
+      "note": "No exact raw metric field is shared. total_listen_count is not declared equivalent to either Last.fm listeners or Last.fm playcount."
+    },
+    "temporalSemantics": {
+      "equivalent": false,
+      "note": "Last.fm scoring consumes differences between locally collected cumulative snapshots and divides by elapsed days. ListenBrainz shadow returns provider-defined all_time/month/week aggregates from a single collection run."
+    },
+    "existingScoreFormulaCompatibility": {
+      "compatible": false,
+      "note": "The existing Last.fm preview requires both listenerDeltaPerDay and playcountDeltaPerDay. ListenBrainz supplies neither field under the validated contract, so the existing formula cannot be applied without defining a new mapping or metric."
+    },
+    "missingAndUnavailableSemantics": {
+      "compatiblePrinciple": true,
+      "missingIsZero": false,
+      "unavailableIsZero": false,
+      "note": "Neither provider contract may convert missing/unavailable observations to zero."
+    },
+    "directDropInReplacement": {
+      "allowed": false,
+      "reasonCodes": [
+        "RAW_METRIC_SCHEMA_MISMATCH",
+        "TEMPORAL_MODEL_MISMATCH",
+        "EXISTING_SCORE_INPUTS_UNAVAILABLE"
+      ]
+    },
+    "perArtistHybridSubstitution": {
+      "allowed": false,
+      "reasonCodes": [
+        "CROSS_PROVIDER_METRIC_SEMANTICS_NOT_EQUIVALENT",
+        "NO_APPROVED_CROSS_PROVIDER_NORMALIZATION",
+        "NO_APPROVED_SYNTHETIC_LISTENER_OR_PLAYCOUNT_MAPPING"
+      ]
+    }
+  },
+  "decision": {
+    "currentLastfmContractCanRemainUnchangedFor19": true,
+    "vLisaCanBeFilledByListenbrainzUnderCurrentFormula": false,
+    "full21ListenbrainzReplacementTechnicallyCoverable": true,
+    "full21ListenbrainzReplacementSemanticallyAuthorized": false,
+    "requiredChoice": [
+      {
+        "option": "preserve_lastfm_19",
+        "effect": "Keep the existing Last.fm preview contract and retain V/LISA as unsupported for this source."
+      },
+      {
+        "option": "design_full21_listenbrainz_rebaseline",
+        "effect": "Define and validate a new uniform ListenBrainz-based metric/score contract for all 21 artists; this is a new semantics/rebaseline path, not a Last.fm patch."
+      }
+    ],
+    "hybridOptionRejected": true
+  },
+  "nextGate": {
+    "code": "FULL21_GLOBAL_INTEREST_PROVIDER_POLICY_DECISION_REQUIRED",
+    "detail": "Choose between preserving the existing Last.fm 19-artist contract or authorizing design/evaluation of a new full21 ListenBrainz rebaseline contract. Hybrid V/LISA substitution is not eligible."
+  },
+  "safety": {
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "syntheticMetricDefined": false,
+    "lastfmSeedModified": false,
+    "lastfmCompatibilityRegistryModified": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
