@@ -1,0 +1,123 @@
+{
+  "version": "music_chart_full355_composite34_application_receipt_v1",
+  "status": "source_application_validated_non_product",
+  "lineage": {
+    "canonicalArtistExpansionPr": 553,
+    "exact34ApplicationPr": 559,
+    "composite34ReviewPr": 560,
+    "composite34ReviewHead": "fb3216234cd80914fa36f5ddf7601a56182aae22",
+    "applicationHead": "fbb908b6010f576a07890eac9ed42d232adc294e"
+  },
+  "application": {
+    "activeMusicTargetSeedModifiedOnCandidateBranch": true,
+    "sourceCompatibilityRegistryModifiedOnCandidateBranch": true,
+    "previousTargetCount": 55,
+    "appliedReviewedBindingCount": 34,
+    "targetCount": 89,
+    "previousSupportedCount": 55,
+    "supportedCount": 89,
+    "previousUnresolvedCount": 300,
+    "unresolvedCount": 266,
+    "unsupportedCount": 0,
+    "appliedCanonicalArtistIds": [
+      "ailee",
+      "akmu",
+      "bigbang",
+      "bignaughty",
+      "buzz",
+      "cortis",
+      "day6",
+      "dohkyungsoo",
+      "epikhigh",
+      "gaho",
+      "gidle",
+      "hearts2hearts",
+      "hwasa",
+      "illit",
+      "ioi",
+      "kiiikiii",
+      "leellamarz",
+      "maktub",
+      "nerdconnection",
+      "nflying",
+      "psy",
+      "redvelvet",
+      "rescene",
+      "seeya",
+      "shaun",
+      "soyeon",
+      "standingegg",
+      "taeyeon",
+      "thenuts",
+      "tws",
+      "woody",
+      "yena",
+      "younha",
+      "zico"
+    ],
+    "deferredCanonicalArtistIds": [
+      "girlsgeneration"
+    ]
+  },
+  "liveValidation": {
+    "workflow": "Validate Artist Expansion Music composite34 application v1",
+    "runId": 37556338334,
+    "jobId": 112583331231,
+    "head": "fbb908b6010f576a07890eac9ed42d232adc294e",
+    "conclusion": "success",
+    "sourceCounts": {
+      "melon_top100": 100,
+      "genie_daily_page_1": 50,
+      "genie_daily_page_2": 50,
+      "genie_daily_page_3": 50,
+      "genie_daily_page_4": 50
+    },
+    "parsedChartRowCount": 300,
+    "candidateRowCount": 239,
+    "candidateCanonicalArtistCount": 80,
+    "composite34ObservedCount": 34,
+    "composite34MissingCanonicalArtistIds": [],
+    "identityAmbiguityCount": 0
+  },
+  "artifact": {
+    "artifactId": 11455585122,
+    "name": "artist-expansion-music-composite34-application-v1",
+    "sizeBytes": 26788,
+    "digest": "sha256:7abcca4cc20c1eb9ccc5c51e2b3dc89d5881262abd4b17e9ad826a5eb6b6e769",
+    "expiresAt": "2026-10-21T01:17:35Z"
+  },
+  "decision": {
+    "sourceApplicationValidated": true,
+    "sourceBindingExpansionReadyForArtistExpansionLine": true,
+    "girlsgenerationRemainsUnresolved": true,
+    "productCohortExpansionAuthorized": false,
+    "productRuntimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "remainingMusicCoverage": {
+    "supportedCount": 89,
+    "unresolvedCount": 266,
+    "unsupportedCount": 0,
+    "knownDeferredLiveCandidateCanonicalArtistIds": [
+      "girlsgeneration"
+    ],
+    "nextGate": "MUSIC_FULL355_REMAINING266_DISCOVERY_STRATEGY_REQUIRED"
+  },
+  "safety": {
+    "subgroupUnitPromotedToParentGroup": false,
+    "machineCandidateAutoPromoted": false,
+    "ambiguityAutoSelected": false,
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "productCohortModified": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}

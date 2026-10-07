@@ -1,0 +1,131 @@
+name: Validate Artist Expansion Music composite34 application v1
+
+on:
+  push:
+    branches:
+      - work/artist-expansion-music-composite34-application-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-music-composite34-application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Music discovery dependencies
+        run: python -m pip install beautifulsoup4 requests
+
+      - name: Validate applied seed and compatibility partition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          target=json.loads(Path('data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json').read_text(encoding='utf-8-sig'))
+          compat=json.loads(Path('data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json').read_text(encoding='utf-8-sig'))
+          review=json.loads(Path('data/fandex-cloud-v10/seed/music_chart_full355_composite34_reviewed_bindings_v1.json').read_text(encoding='utf-8-sig'))
+
+          ids=[row['canonicalArtistId'] for row in target['artists']]
+          assert len(ids) == 89
+          assert len(set(ids)) == 89
+
+          approved=set(review['approvedReviewedSupportedCanonicalArtistIds'])
+          assert len(approved) == 34
+          assert approved <= set(ids)
+          assert 'girlsgeneration' not in approved
+          assert 'girlsgeneration' not in set(ids)
+
+          music=compat['sources']['music_chart']
+          supported=set(music['supportedCanonicalArtistIds'])
+          unresolved=set(music['unresolvedCanonicalArtistIds'])
+          unsupported=set(music['unsupportedCanonicalArtistIds'])
+          assert len(supported) == 89
+          assert len(unresolved) == 266
+          assert len(unsupported) == 0
+          assert approved <= supported
+          assert approved.isdisjoint(unresolved)
+          assert 'girlsgeneration' in unresolved
+          assert supported.isdisjoint(unresolved)
+          assert len(supported | unresolved | unsupported) == 355
+
+          expansion=target['reviewedExpansionComposite34']
+          assert expansion['addedCanonicalArtistCount'] == 34
+          assert expansion['previousTargetCount'] == 55
+          assert expansion['targetCount'] == 89
+          assert expansion['deferredCanonicalArtistIds'] == ['girlsgeneration']
+          assert expansion['productCohortExpansionAuthorized'] is False
+          assert expansion['runtimeActivationAuthorized'] is False
+
+          print('PASS: Music composite34 application partition | targets=89 | supported=89 | unresolved=266 | unsupported=0')
+          PY
+
+      - name: Prepare applied target config for existing discovery
+        run: cp data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json scripts/fandex-cloud-migration/source/music_chart_artist_targets_v1.json
+
+      - name: Run live 89-artist Melon Genie discovery
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_chart_discover_artist_candidates_v2.py
+
+      - name: Validate live composite34 coverage
+        working-directory: scripts/fandex-cloud-migration/source
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          out=json.loads(Path('music_chart_artist_candidates_v2_raw_latest.json').read_text(encoding='utf-8'))
+          review=json.loads(Path('../../../data/fandex-cloud-v10/seed/music_chart_full355_composite34_reviewed_bindings_v1.json').read_text(encoding='utf-8-sig'))
+          approved=set(review['approvedReviewedSupportedCanonicalArtistIds'])
+
+          observed={row['canonicalArtistId'] for row in out['candidates']}
+          approved_observed=sorted(approved & observed)
+          approved_missing=sorted(approved - observed)
+
+          assert out['targetArtistCount'] == 89
+          assert len(out['targetCanonicalArtistIds']) == 89
+          assert len(set(out['targetCanonicalArtistIds'])) == 89
+          assert approved <= set(out['targetCanonicalArtistIds'])
+          assert 'girlsgeneration' not in set(out['targetCanonicalArtistIds'])
+          assert out['seedModified'] is False
+          assert out['websiteModified'] is False
+          assert out['candidateCount'] == len(out['candidates'])
+          assert out['identityAmbiguityCount'] == len(out['identityAmbiguities'])
+          assert len(approved_observed) == 34, approved_missing
+
+          summary={
+            'targetArtistCount':89,
+            'candidateRowCount':out['candidateCount'],
+            'candidateCanonicalArtistCount':len(observed),
+            'composite34ObservedCount':len(approved_observed),
+            'composite34MissingCanonicalArtistIds':approved_missing,
+            'identityAmbiguityCount':out['identityAmbiguityCount'],
+            'sourceCounts':out['sourceCounts'],
+          }
+          Path('music_chart_composite34_application_live_validation_v1.json').write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2)+'\n',
+              encoding='utf-8',
+          )
+          print('PASS: Music composite34 live recollection | '+json.dumps(summary, ensure_ascii=False))
+          PY
+
+      - name: Compile existing Music discovery
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_chart_discover_artist_candidates_v2.py
+
+      - name: Upload application validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-composite34-application-v1
+          path: |
+            scripts/fandex-cloud-migration/source/music_chart_artist_candidates_v2_raw_latest.json
+            scripts/fandex-cloud-migration/source/music_chart_artist_candidates_v2_latest.csv
+            scripts/fandex-cloud-migration/source/MUSIC_CHART_ARTIST_CANDIDATES_V2_REPORT_latest.txt
+            scripts/fandex-cloud-migration/source/music_chart_composite34_application_live_validation_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

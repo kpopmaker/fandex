@@ -469,6 +469,291 @@
         "PLAVE",
         "플레이브"
       ]
+    },
+    {
+      "canonicalArtistId": "ailee",
+      "artist": "Ailee",
+      "aliases": [
+        "Ailee",
+        "에일리"
+      ]
+    },
+    {
+      "canonicalArtistId": "akmu",
+      "artist": "AKMU",
+      "aliases": [
+        "AKMU",
+        "악뮤",
+        "악동뮤지션"
+      ]
+    },
+    {
+      "canonicalArtistId": "bigbang",
+      "artist": "BIGBANG",
+      "aliases": [
+        "BIGBANG",
+        "빅뱅"
+      ]
+    },
+    {
+      "canonicalArtistId": "bignaughty",
+      "artist": "BIG Naughty",
+      "aliases": [
+        "BIG Naughty",
+        "서동현"
+      ]
+    },
+    {
+      "canonicalArtistId": "buzz",
+      "artist": "Buzz",
+      "aliases": [
+        "Buzz",
+        "버즈"
+      ]
+    },
+    {
+      "canonicalArtistId": "cortis",
+      "artist": "CORTIS",
+      "aliases": [
+        "CORTIS",
+        "코르티스"
+      ]
+    },
+    {
+      "canonicalArtistId": "day6",
+      "artist": "DAY6",
+      "aliases": [
+        "DAY6",
+        "데이식스"
+      ]
+    },
+    {
+      "canonicalArtistId": "dohkyungsoo",
+      "artist": "DOH KYUNG SOO",
+      "aliases": [
+        "DOH KYUNG SOO",
+        "도경수",
+        "D.O."
+      ]
+    },
+    {
+      "canonicalArtistId": "epikhigh",
+      "artist": "EPIK HIGH",
+      "aliases": [
+        "EPIK HIGH",
+        "에픽하이"
+      ]
+    },
+    {
+      "canonicalArtistId": "gaho",
+      "artist": "Gaho",
+      "aliases": [
+        "Gaho",
+        "가호"
+      ]
+    },
+    {
+      "canonicalArtistId": "gidle",
+      "artist": "(G)I-DLE",
+      "aliases": [
+        "(G)I-DLE",
+        "I-DLE",
+        "여자아이들",
+        "아이들"
+      ]
+    },
+    {
+      "canonicalArtistId": "hearts2hearts",
+      "artist": "Hearts2Hearts",
+      "aliases": [
+        "Hearts2Hearts",
+        "H2H",
+        "하츠투하츠"
+      ]
+    },
+    {
+      "canonicalArtistId": "hwasa",
+      "artist": "Hwasa",
+      "aliases": [
+        "Hwasa",
+        "화사",
+        "안혜진"
+      ]
+    },
+    {
+      "canonicalArtistId": "illit",
+      "artist": "ILLIT",
+      "aliases": [
+        "ILLIT",
+        "아일릿"
+      ]
+    },
+    {
+      "canonicalArtistId": "ioi",
+      "artist": "I.O.I",
+      "aliases": [
+        "I.O.I",
+        "아이오아이"
+      ]
+    },
+    {
+      "canonicalArtistId": "kiiikiii",
+      "artist": "KiiiKiii",
+      "aliases": [
+        "KiiiKiii",
+        "키키"
+      ]
+    },
+    {
+      "canonicalArtistId": "leellamarz",
+      "artist": "Leellamarz",
+      "aliases": [
+        "Leellamarz",
+        "릴러말즈"
+      ]
+    },
+    {
+      "canonicalArtistId": "maktub",
+      "artist": "MAKTUB",
+      "aliases": [
+        "MAKTUB",
+        "마크툽"
+      ]
+    },
+    {
+      "canonicalArtistId": "nerdconnection",
+      "artist": "Nerd Connection",
+      "aliases": [
+        "Nerd Connection",
+        "너드커넥션"
+      ]
+    },
+    {
+      "canonicalArtistId": "nflying",
+      "artist": "N.Flying",
+      "aliases": [
+        "N.Flying",
+        "엔플라잉"
+      ]
+    },
+    {
+      "canonicalArtistId": "psy",
+      "artist": "PSY",
+      "aliases": [
+        "PSY",
+        "싸이"
+      ]
+    },
+    {
+      "canonicalArtistId": "redvelvet",
+      "artist": "Red Velvet",
+      "aliases": [
+        "Red Velvet",
+        "RV",
+        "레드벨벳"
+      ]
+    },
+    {
+      "canonicalArtistId": "rescene",
+      "artist": "RESCENE",
+      "aliases": [
+        "RESCENE",
+        "리센느"
+      ]
+    },
+    {
+      "canonicalArtistId": "seeya",
+      "artist": "SeeYa",
+      "aliases": [
+        "SeeYa",
+        "씨야"
+      ]
+    },
+    {
+      "canonicalArtistId": "shaun",
+      "artist": "SHAUN",
+      "aliases": [
+        "SHAUN"
+      ]
+    },
+    {
+      "canonicalArtistId": "soyeon",
+      "artist": "SOYEON",
+      "aliases": [
+        "SOYEON",
+        "소연",
+        "전소연",
+        "Jeon Soyeon"
+      ]
+    },
+    {
+      "canonicalArtistId": "standingegg",
+      "artist": "Standing Egg",
+      "aliases": [
+        "Standing Egg",
+        "스탠딩 에그"
+      ]
+    },
+    {
+      "canonicalArtistId": "taeyeon",
+      "artist": "TAEYEON",
+      "aliases": [
+        "TAEYEON",
+        "태연",
+        "김태연"
+      ]
+    },
+    {
+      "canonicalArtistId": "thenuts",
+      "artist": "The NuTs",
+      "aliases": [
+        "The NuTs",
+        "더 넛츠"
+      ]
+    },
+    {
+      "canonicalArtistId": "tws",
+      "artist": "TWS",
+      "aliases": [
+        "TWS",
+        "투어스"
+      ]
+    },
+    {
+      "canonicalArtistId": "woody",
+      "artist": "WOODY",
+      "aliases": [
+        "WOODY",
+        "우디"
+      ]
+    },
+    {
+      "canonicalArtistId": "yena",
+      "artist": "YENA",
+      "aliases": [
+        "YENA",
+        "최예나",
+        "예나",
+        "Choi Yena"
+      ]
+    },
+    {
+      "canonicalArtistId": "younha",
+      "artist": "YOUNHA",
+      "aliases": [
+        "YOUNHA",
+        "윤하",
+        "고윤하"
+      ]
+    },
+    {
+      "canonicalArtistId": "zico",
+      "artist": "ZICO",
+      "aliases": [
+        "ZICO",
+        "지코",
+        "우지호"
+      ]
     }
   ],
   "reviewedExpansion": {
@@ -477,6 +762,18 @@
     "addedCanonicalArtistCount": 34,
     "previousTargetCount": 21,
     "targetCount": 55,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false
+  },
+  "reviewedExpansionComposite34": {
+    "version": "music_chart_composite34_application_v1",
+    "sourceReview": "music_chart_full355_composite34_reviewed_bindings_v1",
+    "addedCanonicalArtistCount": 34,
+    "previousTargetCount": 55,
+    "targetCount": 89,
+    "deferredCanonicalArtistIds": [
+      "girlsgeneration"
+    ],
     "productCohortExpansionAuthorized": false,
     "runtimeActivationAuthorized": false
   }
