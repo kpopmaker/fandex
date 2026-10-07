@@ -1,0 +1,138 @@
+name: Execute snsFandom YouTube v2 Render-triggered measurement v1
+
+on:
+  workflow_dispatch:
+    inputs:
+      execution_approval:
+        description: Exact approval token for snsFandom v2 cutover execution
+        required: true
+        type: string
+      authorized_revision_sha:
+        description: Exact authorized runtime revision SHA
+        required: true
+        type: string
+      cutover_approval_evidence_ref:
+        description: Durable #509 owner approval evidence ref
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fandex-sns-fandom-youtube-recurring-measurement-v2
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      github.ref == 'refs/heads/main' &&
+      github.run_attempt == 1 &&
+      inputs.execution_approval == 'approved-render-sns-fandom-v2-cutover-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FANDEX_SNS_FANDOM_RECURRING_V2_EXECUTION_APPROVAL: approved-sns-fandom-v2-rebaseline-provider-scheduler-cutover-v1
+      FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF: ${{ inputs.cutover_approval_evidence_ref }}
+      FANDEX_SNS_FANDOM_RECURRING_V2_AUTHORIZED_REVISION_SHA: ${{ inputs.authorized_revision_sha }}
+      FANDEX_SNS_FANDOM_YOUTUBE_API_KEY: ${{ secrets.FANDEX_SNS_FANDOM_YOUTUBE_API_KEY }}
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+
+    steps:
+      - name: Guard exact cutover inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$FANDEX_SNS_FANDOM_RECURRING_V2_AUTHORIZED_REVISION_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF" =~ ^github-issue://kpopmaker/fandex/issues/509#issuecomment-[1-9][0-9]*$ ]]
+
+      - name: Checkout exact authorized v2 runtime revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.authorized_revision_sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Guard v2 activation readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const p =
+            'docs/research/sns-fandom-youtube-v2-cutover-runtime-readiness-v1.json';
+          const value = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const guards = value.cutoverGuards ?? {};
+          if (
+            value.version !== 'sns_fandom_youtube_v2_cutover_runtime_readiness_v1'
+            || value.state !== 'activation-ready'
+            || guards.exactAuthorizedRevisionRequired !== true
+            || guards.durableIssue509ApprovalEvidenceRequired !== true
+            || guards.canonicalRebaselineAuthorized !== true
+            || guards.newGenerationProviderExecutionAuthorized !== true
+            || guards.schedulerCutoverAuthorized !== true
+            || guards.v1FallbackSuppressionBound !== true
+            || guards.renderDispatchMutationPerformed !== true
+          ) {
+            console.error('sns_fandom_v2_cutover_readiness_blocked');
+            process.exit(1);
+          }
+          NODE
+
+      - name: Guard required secret bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FANDEX_SNS_FANDOM_YOUTUBE_API_KEY"
+          test -n "$BLOB_READ_WRITE_TOKEN"
+
+      - name: Execute one authorized v2 recurring measurement slot
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx tsx scripts/operations/snsFandomYoutubeRecurringMeasurementRuntimeV2.ts             | tee /tmp/sns-fandom-v2-render-trigger-summary.json
+          node <<'NODE'
+          const fs = require('node:fs');
+          const lines = fs.readFileSync(
+            '/tmp/sns-fandom-v2-render-trigger-summary.json',
+            'utf8',
+          ).trim().split(/\r?\n/).filter(Boolean);
+          const summary = JSON.parse(lines.at(-1) ?? '{}');
+          const completed =
+            summary.state === 'completed'
+            && summary.providerCallsPerformed === true;
+          const noCall =
+            (summary.state === 'already-recorded'
+              || summary.state === 'window-complete')
+            && summary.providerCallsPerformed === false;
+          if (
+            summary.contractVersion
+              !== 'sns-fandom-youtube-recurring-activated-runtime-v2'
+            || (!completed && !noCall)
+            || summary.canonicalWindowPath
+              !== 'sns-fandom/youtube-audit/recurring/v2/canonical-window.json'
+            || summary.providerSubmissionAuthorized !== false
+            || summary.productionCollectionAuthorized !== false
+            || summary.productActivationAuthorized !== false
+          ) {
+            process.exit(1);
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "generation=v2"
+          echo "historicalV1ReceiptsReinterpreted=false"
+          echo "syntheticBackfillAllowed=false"
+          echo "retrospectiveReceiptSynthesisAllowed=false"
+          echo "providerSubmissionAuthorized=false"
+          echo "productionCollectionAuthorized=false"
+          echo "productActivationAuthorized=false"
