@@ -47,15 +47,20 @@ const supported = new Set(music.supportedCanonicalArtistIds);
 const unresolved = new Set(music.unresolvedCanonicalArtistIds);
 const unsupported = new Set(music.unsupportedCanonicalArtistIds);
 
-if (supported.size !== 21 || unresolved.size !== 334 || unsupported.size !== 0) {
+if (supported.size + unresolved.size + unsupported.size !== 355) {
   throw new Error(
-    `unexpected_music_compatibility:supported=${supported.size},unresolved=${unresolved.size},unsupported=${unsupported.size}`,
+    `invalid_music_partition:supported=${supported.size},unresolved=${unresolved.size},unsupported=${unsupported.size}`,
   );
+}
+if (unsupported.size !== 0) {
+  throw new Error(`music_unsupported_not_materializable:${unsupported.size}`);
 }
 
 const activeById = new Map(active.artists.map((row) => [row.canonicalArtistId, row]));
-if (activeById.size !== 21) {
-  throw new Error(`active_music_target_count_mismatch:${activeById.size}`);
+if (activeById.size !== supported.size) {
+  throw new Error(
+    `active_supported_count_mismatch:active=${activeById.size},supported=${supported.size}`,
+  );
 }
 for (const id of supported) {
   if (!activeById.has(id)) throw new Error(`supported_without_reviewed_target:${id}`);
