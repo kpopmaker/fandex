@@ -1,0 +1,83 @@
+{
+  "version": "music_genie_strong26_reviewed_bindings_v1",
+  "status": "reviewed_supported_candidate_application_not_applied",
+  "source": "music_chart",
+  "provider": "genie",
+  "evidence": {
+    "full264DiscoveryReceipt": "music_genie_full264_identity_discovery_receipt_v1",
+    "exact94DetailReceipt": "music_genie_exact94_detail_verification_receipt_v1",
+    "discoveryArtifactId": 11456271955,
+    "detailArtifactId": 11456228049
+  },
+  "reviewContract": {
+    "canonicalArtistIdAuthoritative": true,
+    "stableProviderArtistIdRequired": true,
+    "providerSearchExactAliasRequired": true,
+    "providerDetailDisplayAliasMatchRequired": true,
+    "canonicalEntityTypeMatchRequired": true,
+    "canonicalDebutYearMatchRequired": true,
+    "displayNameOnlyBindingAllowed": false,
+    "fuzzyIdentityAllowed": false,
+    "ambiguousProviderIdAutoSelectionAllowed": false,
+    "partialMetadataAutoPromotionAllowed": false,
+    "conflictingMetadataAutoPromotionAllowed": false,
+    "reviewedBindingActivatesProduct": false
+  },
+  "reviewedSupportedCandidateCount": 26,
+  "reviewedSupportedCanonicalArtistIds": [
+    "kissoflife",
+    "nctdream",
+    "nct127",
+    "2ne1",
+    "xdinaryheroes",
+    "katseye",
+    "p1harmony",
+    "cravity",
+    "btob",
+    "thenewsix",
+    "wjsn",
+    "sechskies",
+    "babydontcry",
+    "hifiunicorn",
+    "lightsum",
+    "nuest",
+    "mcnd",
+    "newbeat",
+    "keyvitup",
+    "vayonn",
+    "fantasyboys",
+    "aimers",
+    "justb",
+    "atbo",
+    "trcng",
+    "hinapia"
+  ],
+  "excludedFromThisReview": {
+    "metadataPartialCount": 39,
+    "debutYearMismatchCount": 5,
+    "entityTypeMismatchOrUnparsedCount": 23,
+    "detailDisplayMismatchCount": 1,
+    "detailFetchFailedCount": 0
+  },
+  "applicationPreview": {
+    "currentSupportedCount": 91,
+    "currentUnresolvedCount": 264,
+    "currentUnsupportedCount": 0,
+    "addReviewedSupportedCount": 26,
+    "proposedSupportedCount": 117,
+    "proposedUnresolvedCount": 238,
+    "proposedUnsupportedCount": 0
+  },
+  "decision": {
+    "selected": "approve_genie_strong26_as_music_source_reviewed_supported_candidates_only",
+    "applicationToActiveTargetSeedAuthorized": false,
+    "applicationToCompatibilityRegistryAuthorized": false,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "nextGate": "MUSIC_GENIE_STRONG26_APPLICATION_VALIDATION_REQUIRED"
+}
