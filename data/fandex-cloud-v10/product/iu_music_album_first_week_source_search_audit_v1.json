@@ -1,0 +1,126 @@
+{
+  "contractVersion": "iu-music-album-first-week-source-search-audit-v1",
+  "lifecycle": "productionization-evidence-search-audit",
+  "assessedOn": "2026-10-07",
+  "canonicalArtistId": "iu",
+  "releaseTitle": "A Flower Bookmark 3",
+  "releaseTitleKo": "꽃갈피 셋",
+  "objective": {
+    "metricSemantic": "reported-hanteo-first-week-sales",
+    "underlyingProvider": "Hanteo Chart",
+    "requiredEvidenceTier": [
+      "tier-a-primary-official",
+      "tier-b-provider-attributed-reputable"
+    ],
+    "requiredFacts": [
+      "exact-first-week-physical-copy-value",
+      "explicit-seven-day-provider-period-bound-to-that-value"
+    ]
+  },
+  "searchQueries": [
+    "\"꽃갈피 셋\" 79940 한터 초동",
+    "\"A Flower Bookmark 3\" \"79,940\" Hanteo",
+    "\"꽃갈피 셋\" \"79,940\"",
+    "\"꽃갈피 셋\" \"7만 9940\"",
+    "\"아이유\" \"79,940\" Hanteo",
+    "\"아이유\" \"79940\" 한터",
+    "\"꽃갈피 셋\" \"초동\" 한터",
+    "\"IU\" \"A Flower Bookmark 3\" \"first week\" Hanteo",
+    "\"아이유\" \"79,940\" \"한터차트\" on reputable Korean news domains",
+    "\"꽃갈피 셋\" \"초동 판매량\" on reputable Korean news domains",
+    "\"꽃갈피 셋\" \"한터차트\" \"판매량\" on reputable Korean news domains"
+  ],
+  "candidates": [
+    {
+      "evidenceId": "majayo:2025-06-04:iu-a-flower-bookmark-3",
+      "url": "https://majayo.com/20250529-iu/",
+      "sourceTier": "tier-c-discovery-only",
+      "exactValue": 79940,
+      "providerPeriodStart": "2025-05-28",
+      "providerPeriodEnd": "2025-06-03",
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Exact day-by-day and seven-day total are visible, but source remains discovery-only."
+    },
+    {
+      "evidenceId": "koreansales:iu-sales-summary:a-flower-bookmark-3",
+      "url": "https://koreansalestwt.blogspot.com/2021/04/iu-sales-summary.html",
+      "sourceTier": "tier-c-discovery-only",
+      "exactValue": 79940,
+      "providerPeriodStart": null,
+      "providerPeriodEnd": null,
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Exact Hanteo first-week value is visible, but source remains discovery-only."
+    },
+    {
+      "evidenceId": "hanteo:weekly:2025-W22:a-flower-bookmark-3",
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+      "sourceTier": "tier-a-primary-official",
+      "exactValue": null,
+      "providerPeriodStart": "2025-05-26",
+      "providerPeriodEnd": "2025-06-01",
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Official weekly chart confirms album presence/rank only; it does not expose the exact first-week unit total and its weekly window is not the album-specific first-week period."
+    },
+    {
+      "evidenceId": "hanteo:daily:2025-06-03:a-flower-bookmark-3",
+      "url": "https://www.hanteochart.com/en/charts/album/daily/2025-06-03",
+      "sourceTier": "tier-a-primary-official",
+      "exactValue": null,
+      "providerPeriodStart": "2025-06-03",
+      "providerPeriodEnd": "2025-06-03",
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Official daily chart confirms provider presence on the discovery day-7 date but does not expose a unit total."
+    },
+    {
+      "evidenceId": "mk:2025-06-06:hanteo-country-chart",
+      "url": "https://www.mk.co.kr/news/musics/11336032",
+      "sourceTier": "tier-b-provider-attributed-reputable",
+      "exactValue": null,
+      "providerPeriodStart": "2025-05-26",
+      "providerPeriodEnd": "2025-06-01",
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Provider-attributed reporting confirms Hanteo chart context and IU album presence but does not state the exact first-week unit total."
+    },
+    {
+      "evidenceId": "osen:2025-06-07:iu-music-core",
+      "url": "https://www.osen.co.kr/article/G1112586703",
+      "sourceTier": "tier-b-provider-attributed-reputable",
+      "exactValue": null,
+      "providerPeriodStart": null,
+      "providerPeriodEnd": null,
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Reputable reporting discusses the release but does not state IU's exact Hanteo first-week unit total."
+    }
+  ],
+  "result": {
+    "tierAOrBExactValueSourceLocated": false,
+    "tierAOrBExactValueAndPeriodBindingLocated": false,
+    "discoveryExactValueLocated": true,
+    "discoveryExactValue": 79940,
+    "discoveryExplicitSevenDayPeriodLocated": true,
+    "discoveryProviderPeriodStart": "2025-05-28",
+    "discoveryProviderPeriodEnd": "2025-06-03",
+    "productionObservationEligible": false,
+    "searchOutcome": "targeted-public-web-search-exhausted-without-qualifying-exact-value-source"
+  },
+  "productionBoundary": {
+    "discoveryOnlyAutoPromotionAllowed": false,
+    "providerPresenceSubstitutesForExactValue": false,
+    "weeklyChartWindowSubstitutesForFirstWeekPeriod": false,
+    "releaseDateDerivedPeriodAllowed": false,
+    "highestValueWins": false,
+    "directHanteoApiClaimAllowed": false,
+    "licensedFeedClaimAllowed": false
+  },
+  "nextEvidencePaths": [
+    "Locate a stable Tier A/B public report that explicitly states the exact Hanteo first-week unit total and period.",
+    "Review any primary Hanteo/label/retailer evidence that exposes exact units without relying on screenshots or unsupported community transcription.",
+    "If no qualifying source exists, keep IU current source blocked rather than falling back to older qualified history or changing the current-release semantic without methodology approval."
+  ]
+}
