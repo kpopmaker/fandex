@@ -204,6 +204,8 @@ function reportedWebCurrentDiscovery(
     || !/^\d{4}-\d{2}-\d{2}$/.test(current.physicalReleaseDate)
     || current.identityState !== 'candidate'
     || current.latestPhysicalReleaseState !== 'candidate-latest'
+    || current.editionResolutionState !== 'candidate'
+    || current.canonicalEditionId !== null
     || !Array.isArray(evidence)
   ) {
     throw new Error(
@@ -232,6 +234,12 @@ function reportedWebCurrentDiscovery(
     canonicalReleaseId: null,
     releaseTitle: current.releaseTitle.trim(),
     releaseDate: current.physicalReleaseDate,
+    edition:
+      typeof current.edition === 'string'
+        ? current.edition.trim() || null
+        : null,
+    editionResolutionState: 'candidate' as const,
+    canonicalEditionId: null,
     identityState: 'candidate' as const,
     latestReleaseState: 'candidate-latest' as const,
     firstWeekCompletionState: 'unknown' as const,
@@ -303,6 +311,7 @@ export async function getMusicAlbumPointCurrentRuntimeForIU():
         releaseDate: reportedWebDiscovery.releaseDate ?? '',
         candidateCanonicalReleaseId:
           reportedWebDiscovery.canonicalReleaseId,
+        candidateEdition: reportedWebDiscovery.edition,
         evidenceRefs: reportedWebDiscovery.evidenceRefs,
       });
 
