@@ -1,0 +1,49 @@
+{
+  "version": "music_genie_full264_identity_discovery_receipt_v1",
+  "status": "provider_identity_candidates_discovered_non_activating",
+  "lineage": {
+    "musicCoverageBeforeDiscovery": {
+      "supported": 91,
+      "unresolved": 264,
+      "unsupported": 0
+    },
+    "bugsApplicationPr": 569,
+    "discoveryHead": "b01fd6d74fa33a2576071d4d53a9df6e1dc105f3"
+  },
+  "execution": {
+    "workflow": "Discover Artist Expansion Music Genie full264 identities v1",
+    "runId": 37559756356,
+    "jobId": 112594138240,
+    "conclusion": "success",
+    "targetUnresolvedCount": 264,
+    "requestCount": 264,
+    "statusCodeCounts": {
+      "200": 263,
+      "500": 1
+    },
+    "dispositionCounts": {
+      "unique_exact_candidate": 94,
+      "ambiguous_exact_candidates": 46,
+      "unique_wrapper_candidate_review_required": 28,
+      "ambiguous_wrapper_candidates": 73,
+      "provider_candidates_without_alias_match": 20,
+      "no_provider_candidate": 3,
+      "request_failed": 0
+    }
+  },
+  "artifact": {
+    "artifactId": 11456271955,
+    "name": "artist-expansion-music-genie-full264-v1",
+    "sizeBytes": 45019,
+    "digest": "sha256:342d6bfc23ab8d39714058879101a16ca2c1ef7a89bf26407266848119005c0c",
+    "expiresAt": "2026-10-21T02:00:14Z"
+  },
+  "decisionBoundary": {
+    "uniqueExactCandidateIsReviewedBinding": false,
+    "wrapperCandidateIsReviewedBinding": false,
+    "ambiguousCandidateAutoSelected": false,
+    "displayNameOnlyBindingAllowed": false,
+    "providerSearchPresenceEqualsChartPresence": false,
+    "nextGate": "GENIE_EXACT94_DETAIL_METADATA_VERIFICATION_REQUIRED"
+  }
+}
