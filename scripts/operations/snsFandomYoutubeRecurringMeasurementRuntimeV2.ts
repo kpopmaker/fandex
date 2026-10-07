@@ -13,10 +13,12 @@ import {
   buildSnsFandomYoutubeQuotaMeasurementHandoff,
 } from '../../lib/intelligence/snsFandomPointYoutubeQuotaMeasurementHandoff';
 import {
-  evaluateSnsFandomYoutubeWindowSupersessionHandoff,
-  SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_END,
-  SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_START,
-} from '../../lib/intelligence/snsFandomPointYoutubeWindowSupersessionHandoff';
+  evaluateSnsFandomYoutubeWindowRebaselineFutureCutoverV3,
+  SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_END,
+  SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_START,
+  SNS_FANDOM_YOUTUBE_NEXT_GENERATION_ROOT,
+  SNS_FANDOM_YOUTUBE_REBASELINE_CORRECTION_EVIDENCE_REF,
+} from '../../lib/intelligence/snsFandomPointYoutubeWindowRebaselineFutureCutoverV3';
 import type {
   SnsFandomYoutubeAuditArtistBindingManifestInput,
 } from '../../lib/intelligence/snsFandomPointYoutubeAuditArtistBindingManifest';
@@ -36,7 +38,7 @@ export const SNS_FANDOM_YOUTUBE_RECURRING_ACTIVATED_RUNTIME_VERSION_V2 =
 export const SNS_FANDOM_YOUTUBE_RECURRING_V2_EXECUTION_APPROVAL_ENV =
   'FANDEX_SNS_FANDOM_RECURRING_V2_EXECUTION_APPROVAL' as const;
 export const SNS_FANDOM_YOUTUBE_RECURRING_V2_EXECUTION_APPROVAL_VALUE =
-  'approved-sns-fandom-recurring-youtube-v2' as const;
+  'approved-sns-fandom-v2-rebaseline-provider-scheduler-cutover-v1' as const;
 export const SNS_FANDOM_YOUTUBE_RECURRING_V2_CUTOVER_EVIDENCE_ENV =
   'FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF' as const;
 export const SNS_FANDOM_YOUTUBE_RECURRING_V2_AUTHORIZED_REVISION_ENV =
@@ -46,8 +48,6 @@ const WINDOW_PATH =
   'sns-fandom/youtube-audit/recurring/v2/canonical-window.json' as const;
 const RECEIPT_PREFIX =
   'sns-fandom/youtube-audit/recurring/v2/receipts/' as const;
-const POLICY_APPROVAL_EVIDENCE_REF =
-  'github-issue://kpopmaker/fandex/issues/495#issuecomment-5995024898' as const;
 const CADENCE_EVIDENCE_REF =
   'github-issue://kpopmaker/fandex/issues/424#issuecomment-5967962631' as const;
 const PROVIDER_QUOTA_COST_EVIDENCE_REF =
@@ -57,19 +57,25 @@ const WINDOW_DURATION_MS = 366 * 24 * 60 * 60 * 1_000;
 type CanonicalWindowManifest = Readonly<{
   version: 'sns-fandom-youtube-recurring-canonical-window-v2';
   state: 'active';
-  priorMeasurementWindowStart: typeof SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_START;
-  priorMeasurementWindowEnd: typeof SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_END;
+  priorGeneration: 'v1';
+  priorMeasurementWindowStart:
+    typeof SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_START;
+  priorMeasurementWindowEnd:
+    typeof SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_END;
   measurementWindowStart: string;
   measurementWindowEnd: string;
   durationDays: 366;
   reactionSnapshotRunsPerDay: 24;
-  policyApprovalEvidenceRef: typeof POLICY_APPROVAL_EVIDENCE_REF;
-  recurringActivationEvidenceRef: string;
+  cutoverApprovalEvidenceRef: string;
+  correctionEvidenceRef:
+    typeof SNS_FANDOM_YOUTUBE_REBASELINE_CORRECTION_EVIDENCE_REF;
   authorizedRevisionSha: string;
   cadenceEvidenceRef: typeof CADENCE_EVIDENCE_REF;
   firstSuccessfulSlotStart: string;
+  historicalV1ReceiptsReinterpreted: false;
   syntheticBackfillAllowed: false;
   retrospectiveReceiptSynthesisAllowed: false;
+  retrospectiveProviderObservationAllowed: false;
 }>;
 
 type ReceiptWindowEvidence = Readonly<{
@@ -130,7 +136,7 @@ function validSha(value: string): boolean {
 }
 
 function activationEvidence(value: string): boolean {
-  return /^github-issue:\/\/kpopmaker\/fandex\/issues\/498#issuecomment-[1-9][0-9]*$/.test(
+  return /^github-issue:\/\/kpopmaker\/fandex\/issues\/509#issuecomment-[1-9][0-9]*$/.test(
     value,
   );
 }
@@ -190,23 +196,27 @@ function parseWindow(
   if (
     value.version !== 'sns-fandom-youtube-recurring-canonical-window-v2'
     || value.state !== 'active'
+    || value.priorGeneration !== 'v1'
     || value.priorMeasurementWindowStart
-      !== SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_START
+      !== SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_START
     || value.priorMeasurementWindowEnd
-      !== SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_END
+      !== SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_END
     || !exactUtcHour(measurementWindowStart)
     || !exactIso(measurementWindowEnd)
     || Date.parse(measurementWindowEnd)
       !== Date.parse(measurementWindowStart) + WINDOW_DURATION_MS
     || value.durationDays !== 366
     || value.reactionSnapshotRunsPerDay !== 24
-    || value.policyApprovalEvidenceRef !== POLICY_APPROVAL_EVIDENCE_REF
-    || value.recurringActivationEvidenceRef !== input.activationEvidenceRef
+    || value.cutoverApprovalEvidenceRef !== input.activationEvidenceRef
+    || value.correctionEvidenceRef
+      !== SNS_FANDOM_YOUTUBE_REBASELINE_CORRECTION_EVIDENCE_REF
     || value.authorizedRevisionSha !== input.authorizedRevisionSha
     || value.cadenceEvidenceRef !== CADENCE_EVIDENCE_REF
     || value.firstSuccessfulSlotStart !== measurementWindowStart
+    || value.historicalV1ReceiptsReinterpreted !== false
     || value.syntheticBackfillAllowed !== false
     || value.retrospectiveReceiptSynthesisAllowed !== false
+    || value.retrospectiveProviderObservationAllowed !== false
   ) {
     throw new Error('sns_fandom_recurring_v2_window_manifest_invalid');
   }
@@ -223,56 +233,61 @@ function manifestBody(
 function candidateWindow(
   input: SnsFandomYoutubeRecurringActivatedRuntimeV2Input,
 ): CanonicalWindowManifest {
-  const activationBoundary = floorUtcHour(input.now);
-  const handoff = evaluateSnsFandomYoutubeWindowSupersessionHandoff({
-    currentRevisionSha: input.authorizedRevisionSha,
-    historicalMeasurementWindowStart:
-      SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_START,
-    historicalMeasurementWindowEnd:
-      SNS_FANDOM_YOUTUBE_HISTORICAL_WINDOW_END,
-    reactionSnapshotRunsPerDay: 24,
-    cadenceEvidenceRef: CADENCE_EVIDENCE_REF,
-    policyApprovalEvidenceRef: POLICY_APPROVAL_EVIDENCE_REF,
-    activation: {
-      enabled: true,
-      recurringExecutionAuthorized: true,
-      schedulerMutationAuthorized: true,
-      activationEvidenceRef: input.activationEvidenceRef,
-      authorizedRevisionSha: input.authorizedRevisionSha,
-      activationBoundary,
-      runtimeBound: true,
-      evidenceStoreBound: true,
-    },
+  const authorization = evaluateSnsFandomYoutubeWindowRebaselineFutureCutoverV3({
+    currentMeasurementWindowStart:
+      SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_START,
+    currentMeasurementWindowEnd:
+      SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_END,
+    nextGenerationRoot: SNS_FANDOM_YOUTUBE_NEXT_GENERATION_ROOT,
+    correctionEvidenceRef:
+      SNS_FANDOM_YOUTUBE_REBASELINE_CORRECTION_EVIDENCE_REF,
+    canonicalRebaselineAuthorized: true,
+    newGenerationProviderExecutionAuthorized: true,
+    schedulerCutoverAuthorized: true,
+    newGenerationRuntimeBound: true,
+    newGenerationEvidenceStoreBound: true,
+    firstSuccessfulNewGenerationSlotStart: null,
+    firstSuccessfulNewGenerationReceiptRef: null,
+    canonicalMutationPerformed: false,
   });
 
   if (
-    handoff.state !== 'supersession-candidate-ready'
-    || handoff.candidate === null
+    authorization.state
+      !== 'authorized-awaiting-first-successful-new-generation-slot'
   ) {
     throw new Error(
-      'sns_fandom_recurring_v2_window_supersession_blocked:'
-      + handoff.blockers.join(','),
+      'sns_fandom_recurring_v2_cutover_authorization_blocked:'
+      + authorization.blockers.join(','),
     );
   }
+
+  const measurementWindowStart = floorUtcHour(input.now);
+  const measurementWindowEnd = new Date(
+    Date.parse(measurementWindowStart) + WINDOW_DURATION_MS,
+  ).toISOString();
 
   return Object.freeze({
     version: 'sns-fandom-youtube-recurring-canonical-window-v2' as const,
     state: 'active' as const,
+    priorGeneration: 'v1' as const,
     priorMeasurementWindowStart:
-      handoff.candidate.priorMeasurementWindowStart,
+      SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_START,
     priorMeasurementWindowEnd:
-      handoff.candidate.priorMeasurementWindowEnd,
-    measurementWindowStart: handoff.candidate.measurementWindowStart,
-    measurementWindowEnd: handoff.candidate.measurementWindowEnd,
+      SNS_FANDOM_YOUTUBE_ACTIVE_V1_WINDOW_END,
+    measurementWindowStart,
+    measurementWindowEnd,
     durationDays: 366 as const,
     reactionSnapshotRunsPerDay: 24 as const,
-    policyApprovalEvidenceRef: POLICY_APPROVAL_EVIDENCE_REF,
-    recurringActivationEvidenceRef: input.activationEvidenceRef,
+    cutoverApprovalEvidenceRef: input.activationEvidenceRef,
+    correctionEvidenceRef:
+      SNS_FANDOM_YOUTUBE_REBASELINE_CORRECTION_EVIDENCE_REF,
     authorizedRevisionSha: input.authorizedRevisionSha,
     cadenceEvidenceRef: CADENCE_EVIDENCE_REF,
-    firstSuccessfulSlotStart: handoff.candidate.measurementWindowStart,
+    firstSuccessfulSlotStart: measurementWindowStart,
+    historicalV1ReceiptsReinterpreted: false as const,
     syntheticBackfillAllowed: false as const,
     retrospectiveReceiptSynthesisAllowed: false as const,
+    retrospectiveProviderObservationAllowed: false as const,
   });
 }
 
