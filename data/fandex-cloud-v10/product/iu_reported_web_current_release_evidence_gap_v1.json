@@ -1,0 +1,134 @@
+{
+  "contractVersion": "music-album-reported-web-current-release-gap-v1",
+  "lifecycle": "productionization-evidence-gap",
+  "canonicalArtistId": "iu",
+  "releaseScope": "physical-album-eligible",
+  "assessedAt": "2026-10-07T09:29:00+09:00",
+  "currentReleaseCandidate": {
+    "canonicalReleaseId": null,
+    "title": "꽃갈피 셋",
+    "englishTitle": "A Flower Bookmark 3",
+    "identityState": "candidate",
+    "latestReleaseState": "verified-latest-physical-album-candidate",
+    "releaseDateState": "requires-edition-review",
+    "officialReleaseDate": "2025-05-27",
+    "physicalRetailReleaseDate": "2025-05-28",
+    "editionNotes": [
+      "Kakao Entertainment newsroom states the album release on 2025-05-27 at 18:00 KST.",
+      "YES24 and MAKESTAR physical album listings show 2025-05-28 for the standard CD product.",
+      "A later CDP limited edition is separately listed in July 2025 and must not be merged into the standard-edition first-week period without review."
+    ]
+  },
+  "evidence": [
+    {
+      "evidenceId": "kakaoent-newsroom:a-flower-bookmark-3:2025-05-27",
+      "role": "release-identity-primary",
+      "sourceTier": "tier-a-primary-official",
+      "source": "Kakao Entertainment Newsroom",
+      "url": "https://newsroom.kakaoent.com/news/a-flower-bookmark-3-ius-nostalgic-vibe-blooms-in-her-remake-album-in-8-years/",
+      "supports": [
+        "artist",
+        "release-title",
+        "official-release-date"
+      ],
+      "productionValueEvidence": false
+    },
+    {
+      "evidenceId": "yes24:146827201",
+      "role": "physical-edition-identity",
+      "sourceTier": "tier-b-provider-attributed-reputable",
+      "source": "YES24",
+      "url": "https://www.yes24.com/Product/Goods/146827201",
+      "supports": [
+        "physical-cd",
+        "physical-retail-release-date",
+        "hanteo-counted-retailer"
+      ],
+      "productionValueEvidence": false
+    },
+    {
+      "evidenceId": "hanteo:weekly:2025-W22",
+      "role": "underlying-provider-presence",
+      "sourceTier": "tier-a-primary-official",
+      "source": "Hanteo Chart",
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+      "supports": [
+        "album-present-on-hanteo-weekly-chart",
+        "weekly-provider-period-2025-05-26-to-2025-06-01"
+      ],
+      "productionValueEvidence": false,
+      "note": "Weekly rank confirms provider presence but does not expose the exact first-week unit total required by the Production source contract."
+    },
+    {
+      "evidenceId": "hanteo:weekly:2025-W23",
+      "role": "underlying-provider-presence",
+      "sourceTier": "tier-a-primary-official",
+      "source": "Hanteo Chart",
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
+      "supports": [
+        "album-present-on-following-hanteo-weekly-chart",
+        "weekly-provider-period-2025-06-02-to-2025-06-08"
+      ],
+      "productionValueEvidence": false
+    },
+    {
+      "evidenceId": "korean-sales:iu-sales-summary:a-flower-bookmark-3",
+      "role": "first-week-value-discovery",
+      "sourceTier": "tier-c-discovery-only",
+      "source": "Korean Sales",
+      "url": "https://koreansalestwt.blogspot.com/2021/04/iu-sales-summary.html",
+      "reportedValue": 79940,
+      "unit": "physical-copies",
+      "semantic": "hanteo-first-week-sales",
+      "providerPeriodStart": null,
+      "providerPeriodEnd": null,
+      "productionValueEvidence": false
+    },
+    {
+      "evidenceId": "majayo:20250529-iu",
+      "role": "first-week-value-discovery",
+      "sourceTier": "tier-c-discovery-only",
+      "source": "Majayo",
+      "url": "https://majayo.com/20250529-iu/",
+      "reportedValue": 79940,
+      "unit": "physical-copies",
+      "semantic": "hanteo-first-week-sales",
+      "providerPeriodStart": null,
+      "providerPeriodEnd": null,
+      "productionValueEvidence": false
+    }
+  ],
+  "currentAssessment": {
+    "firstWeekCompletionState": "completed",
+    "exactFirstWeekValueCandidate": 79940,
+    "exactFirstWeekValueState": "discovery-only",
+    "providerPeriodState": "not-explicitly-qualified",
+    "conflictState": "unknown-until-qualified-value-source-review",
+    "rightsUsageState": "review-required",
+    "productionObservationEligible": false
+  },
+  "blockers": [
+    "canonical-release-identity-review-required",
+    "standard-vs-cdp-edition-semantics-review-required",
+    "tier-a-or-b-exact-first-week-value-source-not-yet-qualified",
+    "explicit-seven-day-provider-period-not-yet-qualified-for-79940",
+    "reported-web-rights-usage-review-not-materialized",
+    "durable-production-write-not-authorized",
+    "product-activation-not-authorized"
+  ],
+  "nextTargetedActions": [
+    "Find or validate a Tier A/B public source that explicitly attributes 79,940 (or any corrected value) to Hanteo first-week sales for the standard physical release.",
+    "Bind the exact seven-day provider period to that value without deriving it from release date.",
+    "Human-review the standard physical release identity and edition boundary.",
+    "Materialize source-specific rights/usage review evidence before durable write."
+  ],
+  "safetyBoundary": {
+    "missingEqualsZero": false,
+    "missingEqualsStable": false,
+    "discoveryOnlyAutoPromotion": false,
+    "highestValueWins": false,
+    "hanteoLicensedFeedClaim": false,
+    "hanteoApiClaim": false,
+    "productionActivationAuthorized": false
+  }
+}
