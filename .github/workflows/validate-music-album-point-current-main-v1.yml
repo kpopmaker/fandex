@@ -99,6 +99,7 @@ on:
       - 'tests/risk-adjustment-producer-metadata-adapter-v1.test.mts'
       - 'tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts'
       - 'tests/risk-adjustment-current-upstream-eligibility-v1.test.mts'
+      - 'tests/risk-adjustment-current-readiness-report-v1.test.mts'
       - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
       - 'tests/music-album-point-production-handoff-v1.test.mts'
       - 'tests/direct-album-provider-foundation-v1.test.mts'
@@ -236,6 +237,7 @@ jobs:
           tests/risk-adjustment-producer-metadata-adapter-v1.test.mts
           tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts
           tests/risk-adjustment-current-upstream-eligibility-v1.test.mts
+          tests/risk-adjustment-current-readiness-report-v1.test.mts
           tests/fandex-current-runtime-assembly-readiness-v1.test.mts
           tests/music-album-point-production-handoff-v1.test.mts
           EOF
