@@ -42,6 +42,33 @@ test('IU current physical-release gap remains fail-closed rather than promoting 
     payload.reportedHanteoFirstWeekClaim.providerPeriodEnd,
     null,
   );
+  assert.equal(
+    payload.reportedHanteoFirstWeekClaim.discoveryProviderPeriodStart,
+    '2025-05-28',
+  );
+  assert.equal(
+    payload.reportedHanteoFirstWeekClaim.discoveryProviderPeriodEnd,
+    '2025-06-03',
+  );
+  assert.equal(
+    payload.reportedHanteoFirstWeekClaim
+      .discoveryProviderPeriodProductionEligible,
+    false,
+  );
+  assert.equal(
+    payload.currentReleaseCandidate.editionResolutionState,
+    'candidate',
+  );
+  assert.equal(
+    payload.currentReleaseCandidate.canonicalEditionId,
+    null,
+  );
+  assert.deepEqual(
+    payload.currentReleaseCandidate.editionCandidates.map(
+      (entry) => entry.candidateEdition,
+    ),
+    ['standard-cd', 'cdp-limited'],
+  );
   assert.ok(
     payload.blockers.includes(
       'tier-a-or-b-first-week-evidence-missing',
@@ -49,6 +76,11 @@ test('IU current physical-release gap remains fail-closed rather than promoting 
   );
   assert.ok(
     payload.blockers.includes('explicit-provider-period-missing'),
+  );
+  assert.ok(
+    payload.blockers.includes(
+      'edition-semantics-unresolved-standard-vs-cdp',
+    ),
   );
   assert.equal(payload.semantics.missingEqualsZero, false);
   assert.equal(payload.semantics.missingEqualsStable, false);
