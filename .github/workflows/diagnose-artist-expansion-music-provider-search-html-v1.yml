@@ -1,0 +1,30 @@
+name: Diagnose Artist Expansion Music provider search HTML v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-provider-search-probe-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose-provider-search-html:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install requests
+        run: python -m pip install requests
+      - name: Diagnose provider search HTML
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_provider_artist_search_html_diagnostic_v1.py
+      - name: Upload diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-provider-search-html-diagnostic-v1
+          path: scripts/fandex-cloud-migration/source/music_provider_artist_search_html_diagnostic_v1.json
+          retention-days: 14
