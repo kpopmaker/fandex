@@ -12,6 +12,7 @@ on:
       - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
       - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
       - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - 'tests/momentum-public-route-design-v1.test.mts'
       - '.github/workflows/validate-momentum-current-runtime-attestation-readiness-v1.yml'
       - '.github/workflows/validate-momentum-post319-execution-currentness-v1.yml'
       - '.github/workflows/validate-momentum-productionization-current-main-v1.yml'
@@ -83,6 +84,7 @@ jobs:
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
           lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-public-route-design-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
           comm -23 /tmp/changed.txt /tmp/allowed.txt > /tmp/disallowed.txt
