@@ -41,6 +41,7 @@ on:
       - 'lib/product/contracts/albumNormalizationInput.ts'
       - 'lib/product/contracts/albumObservationHistory.ts'
       - 'lib/product/readiness/musicAlbumPointProductReadiness.ts'
+      - 'lib/product/readiness/musicAlbumReportedWebProductReadiness.ts'
       - 'lib/product/adapters/musicAlbumPointFandexVariableProduct.ts'
       - 'lib/product/adapters/musicAlbumPointRiskQualityMetadata.ts'
       - 'lib/intelligence/riskAdjustmentProducerMetadataAdapter.ts'
@@ -92,6 +93,7 @@ on:
       - 'data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
+      - 'tests/music-album-reported-web-product-readiness-v1.test.mts'
       - 'tests/music-album-point-fandex-variable-product-v1.test.mts'
       - 'tests/music-album-point-risk-quality-metadata-v1.test.mts'
       - 'tests/risk-adjustment-producer-metadata-adapter-v1.test.mts'
@@ -171,6 +173,7 @@ jobs:
           lib/product/contracts/albumNormalizationInput.ts
           lib/product/contracts/albumObservationHistory.ts
           lib/product/readiness/musicAlbumPointProductReadiness.ts
+          lib/product/readiness/musicAlbumReportedWebProductReadiness.ts
           lib/product/adapters/musicAlbumPointFandexVariableProduct.ts
           lib/product/adapters/musicAlbumPointRiskQualityMetadata.ts
           lib/intelligence/riskAdjustmentProducerMetadataAdapter.ts
@@ -227,6 +230,7 @@ jobs:
           data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json
           data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
+          tests/music-album-reported-web-product-readiness-v1.test.mts
           tests/music-album-point-fandex-variable-product-v1.test.mts
           tests/music-album-point-risk-quality-metadata-v1.test.mts
           tests/risk-adjustment-producer-metadata-adapter-v1.test.mts
@@ -346,6 +350,9 @@ jobs:
 
       - name: Music/Album Product contract readiness regression
         run: npx tsx --test tests/music-album-point-product-contract-readiness-v1.test.mts
+
+      - name: Music/Album reported web Product readiness regression
+        run: npx tsx --test tests/music-album-reported-web-product-readiness-v1.test.mts
 
       - name: Music/Album common Product adapter regression
         run: npx tsx --test tests/music-album-point-fandex-variable-product-v1.test.mts
