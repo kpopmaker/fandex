@@ -1,0 +1,89 @@
+{
+  "version": "listenbrainz_full21_second_interval_wait_receipt_v1",
+  "status": "second_distinct_interval_not_yet_available_non_activating",
+  "lineage": {
+    "deltaSignalHandoffPr": 544,
+    "firstDistinctIntervalReceipt": "listenbrainz_full21_distinct_epoch_delta_receipt_v1",
+    "firstDistinctIntervalRunId": 37548004659,
+    "firstDistinctIntervalHead": "4c358a7bffc2c4f3b0c52581888a83e9674db7e3"
+  },
+  "probe": {
+    "workflow": "Probe Artist Expansion ListenBrainz second distinct interval v1",
+    "runId": 37550156324,
+    "jobId": 112563437433,
+    "head": "332ad9180d279b6e9e3744ffbe82a03dc3194b76",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "newerPerArtistEpochCount": 0,
+    "stalePerArtistEpochCount": 21,
+    "unavailableArtistCount": 0,
+    "identityMismatchArtistCount": 0,
+    "secondDistinctIntervalEstablished": false,
+    "rateComputed": false,
+    "scoreComputed": false,
+    "normalizationComputed": false
+  },
+  "stalePerArtistEpochCanonicalArtistIds": [
+    "aespa",
+    "ateez",
+    "blackpink",
+    "boynextdoor",
+    "bts",
+    "enhypen",
+    "iu",
+    "ive",
+    "jennie",
+    "jimin",
+    "jungkook",
+    "lesserafim",
+    "lisa",
+    "newjeans",
+    "riize",
+    "rose",
+    "seventeen",
+    "straykids",
+    "twice",
+    "txt",
+    "v"
+  ],
+  "artifact": {
+    "artifactId": 11452298693,
+    "name": "artist-expansion-listenbrainz-second-distinct-interval-v1",
+    "sizeBytes": 2900,
+    "digest": "sha256:ecd13df110604a58433702accdcb3cd09aaedcd35933033ac76b55c636faed89",
+    "expiresAt": "2026-10-21T00:07:06Z"
+  },
+  "interpretation": {
+    "full21CanonicalObservationHealthy": true,
+    "secondDistinctProviderIntervalEstablished": false,
+    "allArtistsStillOnFirstIntervalPerArtistEpoch": true,
+    "staleEpochMeansZeroGrowth": false,
+    "secondIntervalDeltaComputed": false,
+    "multiEpochStabilityDecisionEligible": false,
+    "note": "All 21 artists were observed with exact canonical identity, but each returned the same provider last_updated value captured in the first distinct interval. No second-interval raw delta is formed."
+  },
+  "nextGate": {
+    "code": "LISTENBRAINZ_SECOND_DISTINCT_INTERVAL_REQUIRED",
+    "condition": "Each canonical artist must advance beyond its own currentLastUpdated recorded in listenbrainz_full21_distinct_epoch_delta_receipt_v1 before second-interval deltas are computed.",
+    "afterGate": "LISTENBRAINZ_MULTI_EPOCH_DELTA_STABILITY_DECISION_REQUIRED"
+  },
+  "safety": {
+    "staleEpochInterpretedAsZeroGrowth": false,
+    "secondIntervalDeltaSynthesized": false,
+    "partialEpochMixedIntoSecondInterval": false,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "newScoreFormulaDefined": false,
+    "newNormalizationDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "lastfmReplaced": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
