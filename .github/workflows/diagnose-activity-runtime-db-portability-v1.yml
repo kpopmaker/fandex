@@ -1,0 +1,189 @@
+name: Diagnose Activity runtime DB portability v1
+
+on:
+  push:
+    branches:
+      - test/product-render-runtime-verification-v1
+    paths:
+      - '.github/workflows/diagnose-activity-runtime-db-portability-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_OrRPxuBxMwCYU3kk0r76AfOs
+      VERCEL_PROJECT_ID: prj_aT3p8zmjyochu8iGmFOuNR1lSU7v
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: faa4616d32c7257ba73d67941442743f57636b11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull Vercel Production env without logging values
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          mkdir -p .vercel
+          cat > .vercel/project.json <<'JSON'
+          {"orgId":"team_OrRPxuBxMwCYU3kk0r76AfOs","projectId":"prj_aT3p8zmjyochu8iGmFOuNR1lSU7v"}
+          JSON
+
+          npx --yes vercel@latest env pull /tmp/.env.production.local             --environment=production             --yes             --token="$VERCEL_TOKEN"             >/tmp/vercel-env-pull.log 2>&1
+
+          grep -q '^FANDEX_RUNTIME_DATABASE_URL=' /tmp/.env.production.local
+          echo "FANDEX_ACTIVITY_DIAGNOSTIC_VERCEL_ENV_PULL=success"
+
+      - name: Execute runtime-equivalent read-only pg probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -a
+          . /tmp/.env.production.local
+          set +a
+
+          node <<'NODE'
+          const { Pool } = require('pg');
+          const { attachDatabasePool } = require('@vercel/functions');
+
+          const raw = process.env.FANDEX_RUNTIME_DATABASE_URL;
+          if (!raw) throw new Error('runtime-url-missing');
+
+          const parsed = new URL(raw);
+          const meta = {
+            roleOk: decodeURIComponent(parsed.username) === 'fandex_runtime',
+            dbOk: decodeURIComponent(parsed.pathname.slice(1)) === 'neondb',
+            pooler: parsed.hostname.toLowerCase().includes('pooler'),
+            sslmode: parsed.searchParams.get('sslmode'),
+            channelBinding: parsed.searchParams.get('channel_binding'),
+          };
+          console.log(
+            'FANDEX_ACTIVITY_DIAGNOSTIC_VERCEL_URL_META='
+              + JSON.stringify(meta),
+          );
+
+          if (!meta.roleOk || !meta.dbOk || !meta.pooler) {
+            throw new Error('runtime-url-identity-invalid');
+          }
+
+          if (parsed.searchParams.get('sslmode') === 'require') {
+            parsed.searchParams.set('sslmode', 'verify-full');
+          }
+
+          const pool = new Pool({
+            connectionString: parsed.toString(),
+            max: 5,
+            connectionTimeoutMillis: 5000,
+            query_timeout: 15000,
+            statement_timeout: 15000,
+            idleTimeoutMillis: 30000,
+            allowExitOnIdle: true,
+            ssl: { rejectUnauthorized: true },
+          });
+          attachDatabasePool(pool);
+
+          (async () => {
+            try {
+              const identity = await pool.query(
+                'select current_user as current_user, current_database() as current_database',
+              );
+              const user = identity.rows[0]?.current_user ?? null;
+              const db = identity.rows[0]?.current_database ?? null;
+              console.log(
+                'FANDEX_ACTIVITY_DIAGNOSTIC_DB_IDENTITY='
+                  + JSON.stringify({
+                    roleOk: user === 'fandex_runtime',
+                    dbOk: db === 'neondb',
+                  }),
+              );
+
+              const coverage = await pool.query(
+                `SELECT DISTINCT ON (runs.provider)
+                    runs.provider,
+                    runs.provider_artist_id,
+                    runs.collection_status,
+                    runs.coverage_state,
+                    runs.completed_at AS collected_at
+                 FROM fandex.activity_exposure_collection_runs runs
+                 WHERE runs.artist_id = $1
+                 ORDER BY runs.provider, runs.completed_at DESC, runs.run_id DESC`,
+                ['iu'],
+              );
+              const events = await pool.query(
+                `SELECT DISTINCT ON (events.event_id)
+                    events.event_record_id,
+                    events.source_observation_id,
+                    events.event_id,
+                    events.revision_id,
+                    events.artist_id,
+                    events.event_family,
+                    events.event_type,
+                    events.lifecycle_state,
+                    events.announced_at,
+                    events.scheduled_start_at,
+                    events.scheduled_end_at,
+                    events.occurred_at,
+                    events.occurred_at_precision,
+                    events.source_published_at,
+                    events.collected_at,
+                    events.source_provider,
+                    events.source_entity_type,
+                    events.source_entity_id,
+                    events.canonical_family_id,
+                    events.provider_artist_id,
+                    events.provider_artist_credits,
+                    events.evidence_ref,
+                    events.identity_state,
+                    events.missing_state,
+                    events.evidence_state,
+                    events.conflict_state,
+                    events.time_zone_state
+                 FROM fandex.activity_exposure_events events
+                 WHERE events.artist_id = $1
+                 ORDER BY events.event_id, events.collected_at DESC, events.event_record_id DESC`,
+                ['iu'],
+              );
+
+              console.log(
+                'FANDEX_ACTIVITY_DIAGNOSTIC_READ='
+                  + JSON.stringify({
+                    coverageRows: coverage.rows.length,
+                    eventRows: events.rows.length,
+                    providers: coverage.rows.map((x) => x.provider).sort(),
+                  }),
+              );
+            } catch (error) {
+              const code =
+                error && typeof error === 'object' && 'code' in error
+                  ? String(error.code)
+                  : 'unknown';
+              console.log(
+                'FANDEX_ACTIVITY_DIAGNOSTIC_PG_FAILURE='
+                  + JSON.stringify({ code }),
+              );
+              process.exitCode = 1;
+            } finally {
+              await pool.end().catch(() => undefined);
+            }
+          })();
+          NODE
+
+      - name: Safety cleanup
+        if: always()
+        shell: bash
+        run: |
+          rm -f             /tmp/.env.production.local             /tmp/vercel-env-pull.log             .vercel/project.json
+          echo "FANDEX_ACTIVITY_DIAGNOSTIC_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_ACTIVITY_DIAGNOSTIC_DATABASE_WRITES=0"
+          echo "FANDEX_ACTIVITY_DIAGNOSTIC_SECRET_LOGGING=false"
