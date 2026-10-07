@@ -1,0 +1,21 @@
+name: Validate Artist Expansion Music Bugs full355 discovery v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-bugs-full355-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-bugs-full355-discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Bugs full355 discovery receipt
+        run: python tests/artist-expansion-music-bugs-full355-discovery-v1.py
