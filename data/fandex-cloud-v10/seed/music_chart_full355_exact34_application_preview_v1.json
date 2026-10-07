@@ -1,0 +1,63 @@
+{
+  "version": "music_chart_full355_exact34_application_preview_v1",
+  "status": "application_preview_only_non_activating",
+  "basedOnReviewedBindings": "music_chart_full355_exact34_reviewed_bindings_v1",
+  "current": {
+    "supportedCount": 21,
+    "unresolvedCount": 334,
+    "unsupportedCount": 0
+  },
+  "proposed": {
+    "addReviewedSupportedCount": 34,
+    "supportedCount": 55,
+    "unresolvedCount": 300,
+    "unsupportedCount": 0,
+    "addedCanonicalArtistIds": [
+      "10cm",
+      "alldayproject",
+      "babymonster",
+      "bol4",
+      "carthegarden",
+      "choiyuree",
+      "chojungseok",
+      "crush",
+      "davichi",
+      "dkdecember",
+      "fromis9",
+      "gdragon",
+      "hanroro",
+      "huhgak",
+      "hwanggaram",
+      "jannabi",
+      "jungseunghwan",
+      "kimfeel",
+      "kimnayoung",
+      "kyoungseo",
+      "lee-youngji",
+      "leechangsub",
+      "leechanhyuk",
+      "limhanbyul",
+      "limjaehyun",
+      "limyoungwoong",
+      "melomance",
+      "nmixx",
+      "parkjaejung",
+      "paulkim",
+      "plave",
+      "qwer",
+      "sungsikyung",
+      "woodz"
+    ]
+  },
+  "invariants": {
+    "canonicalUniverseCount": 355,
+    "supportedPlusUnresolvedPlusUnsupported": 355,
+    "activeTargetSeedUnchanged": true,
+    "compatibilityRegistryUnchanged": true,
+    "productCohortUnchanged": true,
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false
+  },
+  "nextGate": "MUSIC_FULL355_EXACT34_APPLICATION_VALIDATION_REQUIRED"
+}
