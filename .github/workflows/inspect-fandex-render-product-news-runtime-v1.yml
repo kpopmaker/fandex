@@ -1,4 +1,4 @@
-name: Inspect FANDEX Render Product News runtime v1
+name: Inspect FANDEX Render Product runtime v1
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: inspect-fandex-render-product-news-runtime-v1
+  group: inspect-fandex-render-product-runtime-v1
   cancel-in-progress: false
 
 jobs:
@@ -36,7 +36,7 @@ jobs:
 
           echo "FANDEX_RENDER_PRODUCT_BETA_HTTP=200"
 
-      - name: Validate News runtime card only
+      - name: Validate News and Momentum runtime cards
         shell: bash
         run: |
           set -euo pipefail
@@ -56,13 +56,11 @@ jobs:
           );
 
           if (!newsCard) {
-            console.log(
-              'FANDEX_RENDER_NEWS_RUNTIME_CARD=missing',
-            );
+            console.log('FANDEX_RENDER_NEWS_RUNTIME_CARD=missing');
             process.exit(1);
           }
 
-          const text = newsCard
+          const newsText = newsCard
             .replace(/<script\b[\s\S]*?<\/script>/g, ' ')
             .replace(/<style\b[\s\S]*?<\/style>/g, ' ')
             .replace(/<[^>]+>/g, ' ')
@@ -71,15 +69,54 @@ jobs:
             .trim();
 
           const productionReal =
-            text.includes('newsIssuePoint')
-            && text.includes('Production')
-            && /Material\s+real/.test(text)
-            && !text.includes('확인 필요')
-            && !text.includes('runtime-read-failed');
+            newsText.includes('newsIssuePoint')
+            && newsText.includes('Production')
+            && /Material\s+real/.test(newsText)
+            && !newsText.includes('확인 필요')
+            && !newsText.includes('runtime-read-failed');
 
           if (!productionReal) {
             console.log(
               'FANDEX_RENDER_NEWS_RUNTIME_CARD=not-production-real',
+            );
+            process.exit(1);
+          }
+
+          function card(variableId, nextVariableId) {
+            const start = html.indexOf(variableId);
+            if (start < 0) {
+              throw new Error('missing-card:' + variableId);
+            }
+            const end = nextVariableId
+              ? html.indexOf(
+                  nextVariableId,
+                  start + variableId.length,
+                )
+              : html.length;
+            if (end < 0) {
+              throw new Error('missing-next-card:' + nextVariableId);
+            }
+            return html.slice(start, end);
+          }
+
+          const momentum = card(
+            'growthMomentumPoint',
+            'riskAdjustmentPoint',
+          );
+          const blockers = [
+            'upstream-read-not-ok',
+            'upstream-readiness-blocked',
+            'runtime-read-failed',
+            'source-currentness-audit-read-failed',
+            'current-lastfm-status-read-failed',
+          ];
+          const blocker = blockers.find((value) =>
+            momentum.includes(value),
+          );
+
+          if (blocker) {
+            console.log(
+              'FANDEX_RENDER_MOMENTUM_RUNTIME=blocked:' + blocker,
             );
             process.exit(1);
           }
@@ -90,16 +127,19 @@ jobs:
           console.log(
             'FANDEX_RENDER_NEWS_RUNTIME_READ=validated',
           );
+          console.log(
+            'FANDEX_RENDER_MOMENTUM_RUNTIME=readiness-traced',
+          );
           NODE
 
       - name: Safety boundary
         if: always()
         run: |
-          echo "FANDEX_RENDER_NEWS_RUNTIME_HTTP_GETS=1"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_PROVIDER_EXECUTIONS=0"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_DATABASE_WRITES=0"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_BLOB_WRITES=0"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_SCORE_WRITES=0"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_PUBLICATION_CHANGES=0"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_RAW_RESPONSE_LOGGED=false"
-          echo "FANDEX_RENDER_NEWS_RUNTIME_CREDENTIALS_LOGGED=false"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_HTTP_GETS=1"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_DATABASE_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_BLOB_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_SCORE_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_PUBLICATION_CHANGES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_RAW_RESPONSE_LOGGED=false"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_CREDENTIALS_LOGGED=false"
