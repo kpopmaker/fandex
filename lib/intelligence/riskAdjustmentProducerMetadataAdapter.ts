@@ -34,6 +34,7 @@ export const RISK_ADJUSTMENT_PRODUCER_METADATA_ADAPTER_VERSION =
 export const RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS = Object.freeze({
   newsIssuePoint: 'news-issue-point-risk-quality-metadata-v1',
   comebackActivityPoint: 'activity-exposure-risk-quality-metadata-v1',
+  brandFitPoint: 'brand-fit-point-risk-quality-metadata-v1',
 } as const);
 
 export type RiskAdjustmentKnownProducerVariableId =
@@ -104,6 +105,9 @@ function knownProducerContract(
   }
   if (variableId === 'comebackActivityPoint') {
     return RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.comebackActivityPoint;
+  }
+  if (variableId === 'brandFitPoint') {
+    return RISK_ADJUSTMENT_KNOWN_PRODUCER_CONTRACTS.brandFitPoint;
   }
   return null;
 }

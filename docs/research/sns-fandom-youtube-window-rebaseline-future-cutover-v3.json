@@ -1,0 +1,59 @@
+{
+  "version": "sns_fandom_youtube_window_rebaseline_future_cutover_v3",
+  "state": "prepared-awaiting-owner-authorization",
+  "preparedOnMainSha": "05c21bb3b4923ed093f7ae14e485daaae4e7bdec",
+  "currentWindow": {
+    "generation": "v1",
+    "root": "sns-fandom/youtube-audit/recurring/v1",
+    "measurementWindowStart": "2026-10-05T22:00:00.000Z",
+    "measurementWindowEnd": "2027-10-06T22:00:00.000Z",
+    "state": "active-with-historical-gaps"
+  },
+  "supersededCandidateV2": {
+    "documentRef": "repo://docs/research/sns-fandom-youtube-window-rebaseline-candidate-v2.json",
+    "state": "superseded-before-authorization",
+    "fixedPastBoundaryPromotionAllowed": false,
+    "safetyCorrectionEvidenceRef": "github-issue://kpopmaker/fandex/issues/509#issuecomment-6027895747"
+  },
+  "nextGeneration": {
+    "generation": "v2",
+    "root": "sns-fandom/youtube-audit/recurring/v2",
+    "canonicalWindowPath": "sns-fandom/youtube-audit/recurring/v2/canonical-window.json",
+    "receiptPrefix": "sns-fandom/youtube-audit/recurring/v2/receipts/",
+    "claimPrefix": "sns-fandom/youtube-audit/recurring/v2/claims/",
+    "boundaryMaterialization": "first-successful-new-generation-provider-slot",
+    "measurementWindowStart": null,
+    "measurementWindowEnd": null,
+    "durationDays": 366,
+    "reactionSnapshotRunsPerDay": 24
+  },
+  "authorization": {
+    "canonicalRebaselineAuthorized": false,
+    "newGenerationProviderExecutionAuthorized": false,
+    "schedulerCutoverAuthorized": false,
+    "newGenerationRuntimeBound": false,
+    "newGenerationEvidenceStoreBound": false,
+    "firstSuccessfulNewGenerationSlotStart": null,
+    "firstSuccessfulNewGenerationReceiptRef": null,
+    "canonicalMutationPerformed": false
+  },
+  "continuity": {
+    "currentV1SchedulerRemainsActiveUntilCutover": true,
+    "historicalV1ReceiptsReinterpreted": false,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false,
+    "retrospectiveProviderObservationAllowed": false
+  },
+  "authorityBoundary": {
+    "providerSubmissionAuthorized": false,
+    "productionCollectionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "notes": [
+    "No future canonical window start/end is calculated before an actual authorized v2 provider slot succeeds.",
+    "The existing v1 immutable canonical window and receipts remain durable history and are never overwritten.",
+    "The v2 root prevents collision with immutable v1 claims, receipts, and canonical-window objects.",
+    "Scheduler cutover and new-generation provider execution require explicit authorization before any v2 live execution.",
+    "The first successful v2 receipt, not prior v1 scheduler reliability evidence, establishes the new canonical boundary."
+  ]
+}

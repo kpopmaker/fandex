@@ -93,6 +93,7 @@ const CURRENT_ELIGIBILITY: Readonly<
     evidenceRefs: Object.freeze([
       'risk-readiness-issue:413:brandFitPoint',
       'brand-fit-handoff:issue-367',
+      'producer-contract:brand-fit-point-risk-quality-metadata-v1',
     ]),
   }),
 });
