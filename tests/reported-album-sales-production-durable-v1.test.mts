@@ -38,6 +38,7 @@ import type {
 
 function observation(input: Readonly<{
   value?: number;
+  edition?: string | null;
   revision?: Readonly<{
     state: 'original' | 'explicit-correction';
     supersedesObservationId: string | null;
@@ -52,7 +53,7 @@ function observation(input: Readonly<{
       identityState: 'candidate',
       releaseTitle: 'Current Physical Album',
       releaseDate: '2026-10-01',
-      edition: null,
+      edition: input.edition ?? null,
       skuOrBarcode: null,
       providerReleaseId: null,
     },
@@ -128,6 +129,7 @@ function reviewedRights(
 function eligibleCandidate(source: ReportedAlbumSalesObservation) {
   const request =
     buildReportedAlbumSalesProductionIdentityReviewRequest(source);
+  const editionSpecific = source.release.edition !== null;
   const binding =
     createReportedAlbumSalesProductionIdentityBinding({
       request,
@@ -135,8 +137,12 @@ function eligibleCandidate(source: ReportedAlbumSalesObservation) {
         requestId: request.requestId,
         canonicalReleaseId:
           'release:iu:current-physical-album:2026-10-01',
-        editionResolutionState: 'release-level',
-        canonicalEditionId: null,
+        editionResolutionState:
+          editionSpecific ? 'edition-specific' : 'release-level',
+        canonicalEditionId:
+          editionSpecific
+            ? `edition:${source.release.edition}`
+            : null,
         supportingEvidenceRefs: [
           'canonical-release-registry:iu:current-physical-album',
         ],
@@ -170,7 +176,13 @@ function envelope(source: ReportedAlbumSalesObservation) {
   };
 }
 
-function currentReleaseBinding() {
+function currentReleaseBinding(input: Readonly<{
+  edition?: string | null;
+  editionResolutionState?: 'release-level' | 'edition-specific';
+  canonicalEditionId?: string | null;
+}> = {}) {
+  const editionResolutionState =
+    input.editionResolutionState ?? 'release-level';
   const request =
     buildReportedAlbumSalesCurrentReleaseReviewRequest({
       canonicalArtistId: 'iu',
@@ -178,7 +190,7 @@ function currentReleaseBinding() {
       releaseDate: '2026-10-01',
       candidateCanonicalReleaseId:
         'release:iu:current-physical-album:2026-10-01',
-      candidateEdition: null,
+      candidateEdition: input.edition ?? null,
       evidenceRefs: [
         'release-discovery:iu:current-physical-album',
       ],
@@ -190,8 +202,8 @@ function currentReleaseBinding() {
       conclusion: 'verified-latest-physical-release',
       canonicalReleaseId:
         'release:iu:current-physical-album:2026-10-01',
-      editionResolutionState: 'release-level',
-      canonicalEditionId: null,
+      editionResolutionState,
+      canonicalEditionId: input.canonicalEditionId ?? null,
       supportingEvidenceRefs: [
         'release-discovery:iu:current-physical-album',
       ],
@@ -332,6 +344,8 @@ test('verified latest physical release selects exactly one active durable observ
     result.freshnessState,
     'verified-current-release',
   );
+  assert.equal(result.editionResolutionState, 'release-level');
+  assert.equal(result.canonicalEditionId, null);
   assert.equal(result.numericScoreDefined, false);
 });
 
@@ -440,4 +454,44 @@ test('verified-latest discovery without a reviewed current-release binding fails
     result.reason,
     'current-release-review-binding-invalid',
   );
+});
+
+
+test('current release cannot select durable evidence from a different physical edition scope', () => {
+  const standard = envelope(observation()).envelope;
+  const result = selectReportedAlbumSalesCurrentRelease({
+    discovery: {
+      contractVersion:
+        REPORTED_ALBUM_SALES_CURRENT_RELEASE_VERSION,
+      canonicalArtistId: 'iu',
+      releaseScope: 'physical-album-eligible',
+      canonicalReleaseId:
+        'release:iu:current-physical-album:2026-10-01',
+      releaseTitle: 'Current Physical Album',
+      releaseDate: '2026-10-01',
+      edition: 'cdp-limited',
+      editionResolutionState: 'edition-specific',
+      canonicalEditionId:
+        'edition:iu:current-physical-album:cdp-limited',
+      identityState: 'resolved',
+      latestReleaseState: 'verified-latest',
+      firstWeekCompletionState: 'completed',
+      providerPeriodStart: '2026-10-01',
+      providerPeriodEnd: '2026-10-07',
+      evidenceRefs: ['release-discovery:iu:current:cdp'],
+      observedAt: '2026-10-08T08:00:00+09:00',
+      collectedAt: '2026-10-08T09:00:00+09:00',
+    },
+    currentReleaseBinding: currentReleaseBinding({
+      edition: 'cdp-limited',
+      editionResolutionState: 'edition-specific',
+      canonicalEditionId:
+        'edition:iu:current-physical-album:cdp-limited',
+    }),
+    storedEvidence: [standard],
+  });
+
+  assert.equal(result.status, 'data-issue');
+  if (result.status !== 'data-issue') return;
+  assert.equal(result.reason, 'stored-evidence-edition-mismatch');
 });
