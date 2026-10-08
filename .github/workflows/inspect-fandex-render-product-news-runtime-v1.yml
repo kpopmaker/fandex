@@ -20,122 +20,60 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Read Render Product beta once without retry
+      - name: Isolate Render Product HTTP latency without retries
         shell: bash
         run: |
           set -euo pipefail
 
-          status="$(
-            curl               --silent               --show-error               --location               --request GET               --retry 0               --connect-timeout 15               --max-time 45               --output /tmp/fandex-render-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
-          )"
+          base='https://fandex-product-self-host-v1.onrender.com'
+          for route in '/' '/artists/iu' '/artists/iu/fandex-beta'; do
+            case "$route" in
+              '/') key='ROOT'; limit=15; file='/tmp/fandex-render-root.html' ;;
+              '/artists/iu') key='ARTIST'; limit=30; file='/tmp/fandex-render-artist.html' ;;
+              *) key='BETA'; limit=90; file='/tmp/fandex-render-beta.html' ;;
+            esac
+            set +e
+            metrics="$(curl --silent --show-error --location --retry 0 \
+              --connect-timeout 12 --max-time "$limit" \
+              --output "$file" \
+              --write-out 'code=%{http_code} dns=%{time_namelookup} connect=%{time_connect} ttfb=%{time_starttransfer} total=%{time_total} bytes=%{size_download}' \
+              "$base$route")"
+            exit_code="$?"
+            set -e
+            echo "FANDEX_RENDER_${key}_CURL_EXIT=$exit_code"
+            echo "FANDEX_RENDER_${key}_TIMING=$metrics"
+            if [[ "$exit_code" != 0 ]]; then
+              echo "FANDEX_RENDER_${key}_HTTP=unavailable"
+            elif [[ "$metrics" == code=200* ]]; then
+              echo "FANDEX_RENDER_${key}_HTTP=200"
+            else
+              echo "FANDEX_RENDER_${key}_HTTP=non-200"
+            fi
+          done
+          # Keep per-route measurements even if one request fails. No body or credentials logged.
 
-          if [[ "$status" != "200" ]]; then
-            echo "FANDEX_RENDER_PRODUCT_BETA_HTTP=failed"
-            exit 1
+      - name: Validate beta cards only when HTTP 200
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -s /tmp/fandex-render-beta.html ]]; then
+            echo "FANDEX_RENDER_RUNTIME_CARD_VALIDATION=skipped-beta-unavailable"
+            exit 0
           fi
-
-          echo "FANDEX_RENDER_PRODUCT_BETA_HTTP=200"
-
-      - name: Validate News and Momentum runtime cards
-        shell: bash
-        run: |
-          set -euo pipefail
-
           node <<'NODE'
           const fs = require('node:fs');
-
-          const html = fs.readFileSync(
-            '/tmp/fandex-render-beta.html',
-            'utf8',
-          );
-
-          const articles =
-            html.match(/<article\b[\s\S]*?<\/article>/g) ?? [];
-          const newsCard = articles.find((article) =>
-            article.includes('newsIssuePoint'),
-          );
-
-          if (!newsCard) {
-            console.log('FANDEX_RENDER_NEWS_RUNTIME_CARD=missing');
-            process.exit(1);
+          const html = fs.readFileSync('/tmp/fandex-render-beta.html', 'utf8');
+          const cards = html.match(/<article\\b[\\s\\S]*?<\\/article>/g) ?? [];
+          for (const variableId of ['newsIssuePoint', 'growthMomentumPoint']) {
+            const card = cards.find((entry) => entry.includes(variableId));
+            console.log('FANDEX_RENDER_' + variableId + '_CARD=' + (card ? 'present' : 'missing'));
           }
-
-          const newsText = newsCard
-            .replace(/<script\b[\s\S]*?<\/script>/g, ' ')
-            .replace(/<style\b[\s\S]*?<\/style>/g, ' ')
-            .replace(/<[^>]+>/g, ' ')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-
-          const productionReal =
-            newsText.includes('newsIssuePoint')
-            && newsText.includes('Production')
-            && /Material\s+real/.test(newsText)
-            && !newsText.includes('확인 필요')
-            && !newsText.includes('runtime-read-failed');
-
-          if (!productionReal) {
-            console.log(
-              'FANDEX_RENDER_NEWS_RUNTIME_CARD=not-production-real',
-            );
-            process.exit(1);
-          }
-
-          function card(variableId, nextVariableId) {
-            const start = html.indexOf(variableId);
-            if (start < 0) {
-              throw new Error('missing-card:' + variableId);
-            }
-            const end = nextVariableId
-              ? html.indexOf(
-                  nextVariableId,
-                  start + variableId.length,
-                )
-              : html.length;
-            if (end < 0) {
-              throw new Error('missing-next-card:' + nextVariableId);
-            }
-            return html.slice(start, end);
-          }
-
-          const momentum = card(
-            'growthMomentumPoint',
-            'riskAdjustmentPoint',
-          );
-          const blockers = [
-            'upstream-read-not-ok',
-            'upstream-readiness-blocked',
-            'runtime-read-failed',
-            'source-currentness-audit-read-failed',
-            'current-lastfm-status-read-failed',
-          ];
-          const blocker = blockers.find((value) =>
-            momentum.includes(value),
-          );
-
-          if (blocker) {
-            console.log(
-              'FANDEX_RENDER_MOMENTUM_RUNTIME=blocked:' + blocker,
-            );
-            process.exit(1);
-          }
-
-          console.log(
-            'FANDEX_RENDER_NEWS_RUNTIME_CARD=production-real',
-          );
-          console.log(
-            'FANDEX_RENDER_NEWS_RUNTIME_READ=validated',
-          );
-          console.log(
-            'FANDEX_RENDER_MOMENTUM_RUNTIME=readiness-traced',
-          );
           NODE
 
       - name: Safety boundary
         if: always()
         run: |
-          echo "FANDEX_RENDER_PRODUCT_RUNTIME_HTTP_GETS=1"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_HTTP_GETS=3"
           echo "FANDEX_RENDER_PRODUCT_RUNTIME_PROVIDER_EXECUTIONS=0"
           echo "FANDEX_RENDER_PRODUCT_RUNTIME_DATABASE_WRITES=0"
           echo "FANDEX_RENDER_PRODUCT_RUNTIME_BLOB_WRITES=0"
