@@ -96,6 +96,45 @@ def main() -> None:
         assert evidence["doesNotSupplyMissingGenieDetailYear"] is True
         assert evidence["authorizesSupport"] is False
 
+    scope = queue["yearSemanticsReview"]
+    assert scope["reviewStatus"] == "external_reported_evidence_not_human_approved_binding"
+    assert scope["reviewedAt"] == "2026-10-08"
+    assert scope["scopePolicy"] == "UNDECIDED_REQUIRES_HUMAN_REVIEW"
+    assert scope["providerDebutYearSemanticsKnown"] is False
+    assert scope["exceptionCount"] == 3
+    assert len(scope["records"]) == 3
+    expected_scope = {
+        "joyuri": (2018, 2021, "80661354"),
+        "hwangminhyun": (2012, 2023, "80441275"),
+        "kangseungyoon": (2010, 2013, "80089706"),
+    }
+    assert {x["canonicalArtistId"] for x in scope["records"]} == set(expected_scope)
+    for evidence in scope["records"]:
+        ident = evidence["canonicalArtistId"]
+        provider_year, solo_year, provider_id = expected_scope[ident]
+        row = next(x for x in rows if x["canonicalArtistId"] == ident)
+        assert row["evidenceGap"] == "canonical_debut_year_unavailable"
+        assert row["reviewStatus"] == "unresolved_additional_year_evidence_required"
+        assert row["canonicalDebutYear"] is None
+        assert row["genieDebutYear"] == evidence["genieDetailDebutYear"] == provider_year
+        assert row["genieProviderArtistId"] == evidence["genieProviderArtistId"] == provider_id
+        assert evidence["independentlyReportedSoloDebutYear"] == solo_year
+        assert provider_year != solo_year
+        assert evidence["yearScopeAssessment"]
+        assert evidence["evidence"]
+        assert all(
+            item["url"].startswith("https://")
+            and item["publisher"] and item["reportPublished"] and item["supports"]
+            for item in evidence["evidence"]
+        )
+        assert ident in unresolved and ident not in supported and ident not in targets
+    assert scope["safety"] == {
+        "noAutomaticCanonicalDebutYearFill": True,
+        "noProviderArtistIdRebinding": True,
+        "noSupportPromotion": True,
+        "noProductActivation": True,
+    }
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -125,7 +164,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | Music 117/238/0 | Product unchanged"
     )
 
 
