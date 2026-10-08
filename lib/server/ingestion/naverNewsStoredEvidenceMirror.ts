@@ -572,8 +572,27 @@ export async function mirrorNaverNewsStoredEvidence(
   });
 }
 
+export const NAVER_NEWS_CANONICAL_BATCH_READ_DIAGNOSTIC_VERSION =
+  'naver-news-canonical-batch-read-diagnostic-v1' as const;
+
+export type NaverNewsCanonicalBatchReadDiagnostic = Readonly<{
+  contractVersion: typeof NAVER_NEWS_CANONICAL_BATCH_READ_DIAGNOSTIC_VERSION;
+  outcome: 'fulfilled' | 'rejected';
+  requestedJobs: number;
+  startedReads: number;
+  missingJobs: number;
+  // Summed durations intentionally overlap across at most eight workers.
+  fetchTotalMs: number;
+  fetchMaxMs: number;
+  decodeTotalMs: number;
+  decodeMaxMs: number;
+}>;
+
 export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
   store: Pick<ImmutableTextObjectStore, 'readText'>,
+  options: Readonly<{
+    onBatchDiagnostic?: (diagnostic: NaverNewsCanonicalBatchReadDiagnostic) => void;
+  }> = {},
 ): NaverNewsCanonicalJobEvidenceReadRepository {
   async function readOne(
     jobId: string,
@@ -589,17 +608,81 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
       if (jobIds.some((jobId) => !isSha256(jobId))) {
         throw new Error('naver_news_canonical_job_id_invalid');
       }
-      const entries = await mapMirroredEvidenceBatched(
-        [...new Set(jobIds)],
-        async (jobId) => {
-          const stored = await readOne(jobId);
-          return stored ? [jobId, stored] as const : null;
-        },
-      );
-      return new Map(entries.filter(
-        (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
-          entry !== null,
-      ));
+      const uniqueJobIds = [...new Set(jobIds)];
+      const emit = options.onBatchDiagnostic;
+      if (!emit) {
+        const entries = await mapMirroredEvidenceBatched(
+          uniqueJobIds,
+          async (jobId) => {
+            const stored = await readOne(jobId);
+            return stored ? [jobId, stored] as const : null;
+          },
+        );
+        return new Map(entries.filter(
+          (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
+            entry !== null,
+        ));
+      }
+
+      let startedReads = 0;
+      let missingJobs = 0;
+      let fetchTotalMs = 0;
+      let fetchMaxMs = 0;
+      let decodeTotalMs = 0;
+      let decodeMaxMs = 0;
+      let outcome: NaverNewsCanonicalBatchReadDiagnostic['outcome'] = 'rejected';
+
+      try {
+        const entries = await mapMirroredEvidenceBatched(
+          uniqueJobIds,
+          async (jobId) => {
+            startedReads += 1;
+            const fetchStart = performance.now();
+            let body: string | null;
+            try {
+              body = await store.readText(objectPathForJob(jobId));
+            } finally {
+              const elapsed = Math.max(0, Math.round(performance.now() - fetchStart));
+              fetchTotalMs += elapsed;
+              fetchMaxMs = Math.max(fetchMaxMs, elapsed);
+            }
+            if (body === null) {
+              missingJobs += 1;
+              return null;
+            }
+            const decodeStart = performance.now();
+            try {
+              const stored = decodeJobEnvelope(body).storedEvidence;
+              return [jobId, stored] as const;
+            } finally {
+              const elapsed = Math.max(0, Math.round(performance.now() - decodeStart));
+              decodeTotalMs += elapsed;
+              decodeMaxMs = Math.max(decodeMaxMs, elapsed);
+            }
+          },
+        );
+        outcome = 'fulfilled';
+        return new Map(entries.filter(
+          (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
+            entry !== null,
+        ));
+      } finally {
+        try {
+          emit(Object.freeze({
+            contractVersion: NAVER_NEWS_CANONICAL_BATCH_READ_DIAGNOSTIC_VERSION,
+            outcome,
+            requestedJobs: uniqueJobIds.length,
+            startedReads,
+            missingJobs,
+            fetchTotalMs,
+            fetchMaxMs,
+            decodeTotalMs,
+            decodeMaxMs,
+          }));
+        } catch {
+          // Diagnostic sinks never replace an evidence read or validation error.
+        }
+      }
     },
   });
 }
