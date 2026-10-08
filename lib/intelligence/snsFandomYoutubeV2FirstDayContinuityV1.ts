@@ -59,7 +59,7 @@ function record(value: unknown): Record<string, unknown> | null {
 }
 
 function count(value: unknown): value is number {
-  return Number.isSafeInteger(value) && typeof value === 'number' && value >= 0;
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
 }
 
 function slotPath(slotStart: string): string {
