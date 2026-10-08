@@ -42,6 +42,7 @@ jobs:
             set -e
             echo "FANDEX_RENDER_${key}_CURL_EXIT=$exit_code"
             echo "FANDEX_RENDER_${key}_TIMING=$metrics"
+            printf '%s' "${metrics%% *}" | sed 's/^code=//' > "/tmp/fandex-render-${key,,}.status"
             if [[ "$exit_code" != 0 ]]; then
               echo "FANDEX_RENDER_${key}_HTTP=unavailable"
             elif [[ "$metrics" == code=200* ]]; then
@@ -50,23 +51,32 @@ jobs:
               echo "FANDEX_RENDER_${key}_HTTP=non-200"
             fi
           done
-          # Keep per-route measurements even if one request fails. No body or credentials logged.
+          # Emit all three route measurements before failing; do not log bodies or credentials.
+          # Fail closed on missing HTTP 200, including curl timeouts and Render 502.
+          for key in ROOT ARTIST BETA; do
+            if [[ "$(cat "/tmp/fandex-render-${key,,}.status" 2>/dev/null || true)" != "200" ]]; then
+              echo "FANDEX_RENDER_HTTP_GATES=failed"
+              exit 1
+            fi
+          done
+          echo "FANDEX_RENDER_HTTP_GATES=passed"
 
       - name: Validate beta cards only when HTTP 200
         shell: bash
         run: |
           set -euo pipefail
           if [[ ! -s /tmp/fandex-render-beta.html ]]; then
-            echo "FANDEX_RENDER_RUNTIME_CARD_VALIDATION=skipped-beta-unavailable"
-            exit 0
+            echo "FANDEX_RENDER_RUNTIME_CARD_VALIDATION=failed-beta-unavailable"
+            exit 1
           fi
           node <<'NODE'
           const fs = require('node:fs');
           const html = fs.readFileSync('/tmp/fandex-render-beta.html', 'utf8');
-          const cards = html.match(/<article\\b[\\s\\S]*?<\\/article>/g) ?? [];
+          const cards = html.split('<article ').slice(1).map((part) => part.split('</article>')[0]);
           for (const variableId of ['newsIssuePoint', 'growthMomentumPoint']) {
             const card = cards.find((entry) => entry.includes(variableId));
             console.log('FANDEX_RENDER_' + variableId + '_CARD=' + (card ? 'present' : 'missing'));
+            if (!card) process.exitCode = 1;
           }
           NODE
 
