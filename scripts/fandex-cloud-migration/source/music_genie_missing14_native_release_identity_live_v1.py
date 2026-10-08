@@ -50,6 +50,15 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8",
 }
 TRANSIENT = {429, 500, 502, 503, 504}
+EXPECTED_ACTIVITY = {
+    "nexz": "남성/그룹",
+    "afterschool": "여성/그룹",
+    "pow": "남성/그룹",
+    "ejel": "여성/솔로",
+    "chen": "남성/솔로",
+    "mirae": "남성/그룹",
+    "tiot": "남성/그룹",
+}
 
 
 def normalize(value: str) -> str:
@@ -96,6 +105,30 @@ def extract_links(soup: BeautifulSoup, target_name: str) -> list[dict]:
                 "linkKind": "provider_native_release_to_artist",
             }
     return [links[key] for key in sorted(links)]
+
+
+def provider_detail(provider_id: str) -> dict:
+    url = f"https://www.genie.co.kr/detail/artistInfo?xxnm={provider_id}"
+    response = fetch(url)
+    soup = BeautifulSoup(response["html"], "html.parser")
+    heading = soup.select_one(".info-zone h2.name") or soup.select_one("h2.name")
+    display = " ".join(heading.stripped_strings).strip() if heading else ""
+    def field(label: str) -> str | None:
+        icon = soup.find("img", attrs={"alt": label})
+        li = icon.find_parent("li") if icon is not None else None
+        return " ".join(li.stripped_strings).strip() if li is not None else None
+    debut_raw = field("데뷔")
+    match = re.search(r"(?:19|20)\d{2}", debut_raw or "")
+    return {
+        "providerArtistId": provider_id,
+        "detailUrl": url,
+        "responseStatusCode": response["statusCode"],
+        "providerDisplay": display,
+        "activityTypeRaw": field("활동유형"),
+        "debutRaw": debut_raw,
+        "providerDebutYear": int(match.group()) if match else None,
+        "providerCountry": field("국적"),
+    }
 
 
 def investigate(probe: dict) -> dict:
@@ -173,6 +206,36 @@ def main() -> None:
                     "musicSourceSupportedPromotionAuthorized": False,
                 }
     records = [mapping[probe["canonicalArtistId"]] for probe in PROBES]
+    # Independent direct artist-detail verification of each native release-linked ID.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        detail_futures = {
+            executor.submit(provider_detail, row["nativeExactProviderArtistIds"][0]): row["canonicalArtistId"]
+            for row in records if len(row["nativeExactProviderArtistIds"]) == 1
+        }
+        details = {}
+        for future in concurrent.futures.as_completed(detail_futures):
+            cid = detail_futures[future]
+            try:
+                details[cid] = future.result()
+            except Exception as exc:
+                details[cid] = {"providerArtistId": None, "responseStatusCode": None,
+                                "error": type(exc).__name__ + ":" + str(exc)[:200]}
+    for probe, row in zip(PROBES, records):
+        detail = details.get(row["canonicalArtistId"])
+        row["nativeCandidateDirectArtistDetail"] = detail
+        row["nativeArtistDetailQualified"] = bool(
+            detail
+            and detail["responseStatusCode"] == 200
+            and normalize(detail["providerDisplay"]) == normalize(probe["artistDisplay"])
+            and detail["activityTypeRaw"] == EXPECTED_ACTIVITY[row["canonicalArtistId"]]
+            and detail["providerArtistId"] in row["nativeExactProviderArtistIds"]
+        )
+        row["nativeDetailDebutYearComparedToCanonicalYear"] = (
+            detail.get("providerDebutYear") == probe["canonicalYear"]
+            if detail and detail.get("providerDebutYear") is not None and probe["canonicalYear"] is not None
+            else None
+        )
+        row["nativeDetailDoesNotOverrideFormalDebutYear"] = True
     confirmed = [x["canonicalArtistId"] for x in records if x["nativeSingleArtistIdentityConfirmed"]]
     held = [x["canonicalArtistId"] for x in records if not x["nativeSingleArtistIdentityConfirmed"]]
     payload = {
@@ -181,6 +244,7 @@ def main() -> None:
         "canonicalUniverseCount": 355, "provider": "genie",
         "checkCount": len(records), "confirmedNativeLinkCount": len(confirmed),
         "confirmedCanonicalArtistIds": confirmed, "heldCanonicalArtistIds": held,
+        "directArtistDetailQualifiedCount": sum(x["nativeArtistDetailQualified"] for x in records),
         "records": records, "providerIdentityCandidateOnly": True,
         "reviewedBindingApproved": False, "canonicalYearBackfilled": False,
         "artistRegistryChanged": False, "musicSupportedPromoted": False,
@@ -196,9 +260,16 @@ def main() -> None:
             "songOrAlbum": x.get("releaseId"),
             "nativeIds": x["nativeExactProviderArtistIds"],
             "issue": x["identityLinkageIssue"],
+            "detail": {
+                "name": (x["nativeCandidateDirectArtistDetail"] or {}).get("providerDisplay"),
+                "type": (x["nativeCandidateDirectArtistDetail"] or {}).get("activityTypeRaw"),
+                "year": (x["nativeCandidateDirectArtistDetail"] or {}).get("providerDebutYear"),
+                "qualified": x["nativeArtistDetailQualified"],
+            },
         } for x in records],
     }, ensure_ascii=False))
     assert len(records) == 7
+    assert all(x["nativeArtistDetailQualified"] for x in records), "native_artist_detail_identity_or_type_mismatch"
     assert all(x.get("responseStatusCode") == 200 for x in records), "genie_native_release_http_failed"
     assert all(x["musicSourceSupportedPromotionAuthorized"] is False for x in records)
     print("PASS: Genie missing14 native release identity investigation | 7 candidates | no auto-binding | Music 117/238/0")
