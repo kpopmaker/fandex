@@ -1,0 +1,134 @@
+{
+  "version": "music_genie_superjunior_maddox_identity_review_packet_v1",
+  "status": "provider_identity_evidence_qualified_human_review_and_scope_required_nonactivating",
+  "provider": "genie",
+  "source": "music_chart",
+  "sourceCanonicalUniverseCount": 355,
+  "observedHistoricalSourceDispositionsFrom": "music_genie_full264_cross_run_reconciliation_v1.json",
+  "liveVerification": {
+    "workflowRunId": 37783830387,
+    "workflowName": "Validate Artist Expansion Music Genie partial39 triage v1",
+    "investigationJobId": 113333373211,
+    "verifiedHead": "5cd164c2fe650eced08ee5becd224ffa088edb03",
+    "artifactId": 11553078588,
+    "artifactName": "music-genie-superjunior-maddox-identity-investigation-v1",
+    "artifactDigest": "sha256:09eeb8b970b4f6c92ecc1d1a9ae95f2f6c630dc080ad0fd7d203f25660de96ca",
+    "result": "success",
+    "sourceProviderHttpOk": true,
+    "noProducerApprovedBindings": true
+  },
+  "identityCandidates": [
+    {
+      "canonicalArtistId": "superjunior",
+      "canonicalEntityType": "group",
+      "canonicalDebutYear": 2005,
+      "providerQualifiedCandidate": {
+        "providerArtistId": "21060178",
+        "display": "SUPER JUNIOR (슈퍼주니어)",
+        "providerDebutYear": 2005,
+        "providerActivityType": "남성/그룹",
+        "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=21060178",
+        "evidence": "Genie full-group profile lists the members and 2005-11-06 debut with 2005 album Super Junior05, rather than just Super Junior-D&E",
+        "detailIdentityValidated": true,
+        "exactNameSearchReturned": false,
+        "sourceAliasWrapperReviewRequired": true
+      },
+      "otherHistoricalCandidate": {
+        "providerArtistId": "80150326",
+        "display": "SUPER JUNIOR-D&E",
+        "providerDebutYearField": 2005,
+        "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80150326",
+        "isSeparateSubunitOfCanonicalGroup": true,
+        "subunitMembers": [
+          "Donghae",
+          "Eunhyuk"
+        ],
+        "shouldNotBindToSuperjuniorGroup": true,
+        "doesNotMakeSuperjuniorUnsupported": true
+      },
+      "reviewStatus": "human_wrapper_alias_and_group_identity_review_pending",
+      "sourceStatus": "unresolved",
+      "sourceBindingApproved": false
+    },
+    {
+      "canonicalArtistId": "maddox",
+      "canonicalEntityType": "solo",
+      "independentDebutEvidence": {
+        "publisher": "TenAsia reporting KQ Entertainment",
+        "url": "https://www.tenasia.co.kr/article/2019032914164",
+        "officialSoloDebutDate": "2019-04-03",
+        "debutSingle": "But Maybe",
+        "firstOfficialSoloYear": 2019
+      },
+      "providerQualifiedCandidate": {
+        "providerArtistId": "80624750",
+        "display": "마독스 (Maddox)",
+        "providerDebutYear": 2019,
+        "providerActivityType": "남성/솔로",
+        "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80624750",
+        "nativeSongLinks": [
+          {
+            "title": "Knight",
+            "songId": "93307770",
+            "url": "https://www.genie.co.kr/detail/songInfo?xgnm=93307770",
+            "exactProviderArtistId": "80624750"
+          },
+          {
+            "title": "Engine",
+            "songId": "90418457",
+            "url": "https://www.genie.co.kr/detail/songInfo?xgnm=90418457",
+            "exactProviderArtistId": "80624750"
+          }
+        ],
+        "twoIndependentNativeSongArtistLinksAgree": true,
+        "providerDebutYearMatchesReportedYear": true,
+        "originalSearchExactNameNotSameAsKoreanOfficialDisplay": true
+      },
+      "otherHistoricalCandidates": [
+        {
+          "providerArtistId": "80431028",
+          "display": "Maddox",
+          "providerDebutYear": 2009,
+          "providerCountry": "브라질",
+          "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80431028",
+          "sourceCountryYearConflict": true,
+          "noKqSongBacklink": true,
+          "notQualifiedForCanonicalSolo": true
+        },
+        {
+          "providerArtistId": "81384545",
+          "display": "Maddox",
+          "providerDebutYear": null,
+          "providerCountry": "한국",
+          "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=81384545",
+          "recordedContext": "Dreamcatcher tracks rather than independently corroborated KQ MADDOX performance",
+          "noKqSongBacklink": true,
+          "identityNotQualified": true
+        }
+      ],
+      "reviewStatus": "human_kq_artist_identity_and_source_application_review_pending",
+      "sourceStatus": "unresolved",
+      "sourceBindingApproved": false
+    }
+  ],
+  "sourceSafety": {
+    "bothCanonicalIdsStillUnresolved": true,
+    "idsRemainDistinct": true,
+    "liveExactNameAloneDoesNotBind": true,
+    "wrappedNameOrHomonymRequiresManualIdentityReview": true,
+    "noCanonicalDebutYearMutation": true,
+    "noSourceRegistryChange": true,
+    "noActiveTargetChange": true,
+    "noProductActivation": true,
+    "noSchedulerActivation": true,
+    "noDatabaseMutation": true,
+    "noDeployment": true,
+    "noMainMerge": true
+  },
+  "sourcePartition": {
+    "supported": 117,
+    "unresolved": 238,
+    "unsupported": 0
+  },
+  "nextGate": "GENIE_SUPERJUNIOR_MADDOX_INDIVIDUAL_BINDING_AND_ALIAS_SCOPE_HUMAN_REVIEW_REQUIRED"
+}
