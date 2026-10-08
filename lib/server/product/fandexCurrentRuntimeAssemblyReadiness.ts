@@ -43,6 +43,11 @@ import {
   getSnsFandomPointCurrentRuntimeForIU,
 } from './snsFandomPointCurrentRuntimeRead';
 
+import {
+  settleRuntimeSourceReads,
+  singleFlightRuntimeRead,
+} from './boundedRuntimeSourceReads';
+
 export const FANDEX_CURRENT_RUNTIME_ARTIST_UNIVERSE_VERSION =
   'artist-universe-v4+artist-universe-expansion-v1' as const;
 
@@ -97,23 +102,27 @@ function measuredSourceRead<T>(
   });
 }
 
-export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
-  input: Readonly<{ generatedAt?: string }> = {},
-): Promise<FandexCurrentRuntimeAssemblyReadiness> {
-  const [
-    musicAlbumSettled,
-    newsSettled,
-    snsSettled,
-    brandFitSettled,
-    activitySettled,
-    momentumSettled,
-    momentumReadinessSettled,
-  ] = await Promise.allSettled([
-    measuredSourceRead(
+// IU Beta sources are shared across overlapping requests only. The
+// source values are not cached after settlement.
+const readIUProductRuntimeSources = singleFlightRuntimeRead(async () => {
+  let momentumShadowRead:
+    ReturnType<typeof getMomentumEvidenceConsensusShadowProductForIU>
+    | null = null;
+
+  const readMomentumShadowOnce = () => {
+    momentumShadowRead ??= measuredSourceRead(
+      'growthMomentumPoint.shadow',
+      () => getMomentumEvidenceConsensusShadowProductForIU(),
+    );
+    return momentumShadowRead;
+  };
+
+  return settleRuntimeSourceReads([
+    () => measuredSourceRead(
       'musicAlbumPoint',
       () => getMusicAlbumPointCurrentRuntimeForIU(),
     ),
-    measuredSourceRead(
+    () => measuredSourceRead(
       'newsIssuePoint',
       () => getArtistProductVariablePublicRoute(
         {
@@ -126,27 +135,40 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
         },
       ),
     ),
-    measuredSourceRead(
+    () => measuredSourceRead(
       'snsFandomPoint',
       () => getSnsFandomPointCurrentRuntimeForIU(),
     ),
-    measuredSourceRead(
+    () => measuredSourceRead(
       'brandFitPoint',
       () => getBrandFitStoredEvidenceCurrentRuntimeForIU(),
     ),
-    measuredSourceRead(
+    () => measuredSourceRead(
       'comebackActivityPoint',
       () => getActivityExposurePublicRouteForIU(),
     ),
-    measuredSourceRead(
-      'growthMomentumPoint.shadow',
-      () => getMomentumEvidenceConsensusShadowProductForIU(),
-    ),
-    measuredSourceRead(
+    () => readMomentumShadowOnce(),
+    () => measuredSourceRead(
       'growthMomentumPoint.readiness',
-      () => getMomentumLiveShadowProductReadinessForIU(),
+      () => getMomentumLiveShadowProductReadinessForIU(
+        readMomentumShadowOnce(),
+      ),
     ),
-  ]);
+  ] as const);
+});
+
+export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
+  input: Readonly<{ generatedAt?: string }> = {},
+): Promise<FandexCurrentRuntimeAssemblyReadiness> {
+  const [
+    musicAlbumSettled,
+    newsSettled,
+    snsSettled,
+    brandFitSettled,
+    activitySettled,
+    momentumSettled,
+    momentumReadinessSettled,
+  ] = await readIUProductRuntimeSources();
 
   const musicAlbumPoint =
     musicAlbumSettled.status === 'fulfilled'
