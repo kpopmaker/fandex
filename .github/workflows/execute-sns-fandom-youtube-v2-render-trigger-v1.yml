@@ -73,12 +73,12 @@ jobs:
           const guards = value.cutoverGuards ?? {};
           if (
             value.version !== 'sns_fandom_youtube_v2_cutover_runtime_readiness_v1'
-            || value.state !== 'activation-ready'
+            || value.state !== 'activation-ready-owner-approval-required'
             || guards.exactAuthorizedRevisionRequired !== true
             || guards.durableIssue509ApprovalEvidenceRequired !== true
-            || guards.canonicalRebaselineAuthorized !== true
-            || guards.newGenerationProviderExecutionAuthorized !== true
-            || guards.schedulerCutoverAuthorized !== true
+            || guards.canonicalRebaselineAuthorized !== false
+            || guards.newGenerationProviderExecutionAuthorized !== false
+            || guards.schedulerCutoverAuthorized !== false
             || guards.v1FallbackSuppressionBound !== true
             || guards.ownerApprovalVerificationMode
               !== 'runtime-github-issue-comment-exact-revision-v1'
@@ -142,6 +142,7 @@ jobs:
         run: |
           echo "generation=v2"
           echo "ownerApprovalVerification=runtime-github-issue-comment-exact-revision-v1"
+          echo "checkedInOwnerAuthorities=false"
           echo "historicalV1ReceiptsReinterpreted=false"
           echo "syntheticBackfillAllowed=false"
           echo "retrospectiveReceiptSynthesisAllowed=false"

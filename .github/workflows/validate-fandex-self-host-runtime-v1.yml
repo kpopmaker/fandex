@@ -184,7 +184,7 @@ jobs:
 
           const required = [
             'verified-commercial-partnership-activity',
-            'Research',
+            'Production',
             'real',
           ];
 
@@ -216,7 +216,7 @@ jobs:
             productSurface: '/artists/iu/fandex-beta',
             valueState:
               'verified-commercial-partnership-activity',
-            lifecycle: 'research',
+            lifecycle: 'production',
             materialClass: 'real',
             providerCalls: 0,
             blobWrites: 0,

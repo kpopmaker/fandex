@@ -37,6 +37,31 @@ export {
 const SCHEDULER_COLLECTION_KEY_PATTERN =
   /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
 
+const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8;
+
+// Bound simultaneous Blob SDK reads and decoded in-flight payloads.
+// No evidence is omitted, sampled, truncated, or reordered.
+async function mapMirroredEvidenceBatched<T, U>(
+  values: readonly T[],
+  read: (value: T) => Promise<U>,
+): Promise<U[]> {
+  const results: U[] = [];
+  for (
+    let start = 0;
+    start < values.length;
+    start += MAX_CONCURRENT_MIRROR_EVIDENCE_READS
+  ) {
+    const batch = await Promise.all(
+      values.slice(
+        start,
+        start + MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+      ).map(read),
+    );
+    results.push(...batch);
+  }
+  return results;
+}
+
 type MirrorJobPayload = Readonly<{
   contractVersion: typeof NAVER_NEWS_STORED_EVIDENCE_MIRROR_VERSION;
   kind: 'canonical-job-evidence';
@@ -549,11 +574,12 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
       if (jobIds.some((jobId) => !isSha256(jobId))) {
         throw new Error('naver_news_canonical_job_id_invalid');
       }
-      const entries = await Promise.all(
-        [...new Set(jobIds)].map(async (jobId) => {
+      const entries = await mapMirroredEvidenceBatched(
+        [...new Set(jobIds)],
+        async (jobId) => {
           const stored = await readOne(jobId);
           return stored ? [jobId, stored] as const : null;
-        }),
+        },
       );
       return new Map(entries.filter(
         (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
@@ -571,8 +597,9 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
       readonly NaverNewsSucceededSchedulerJob[]
     > {
       const pathnames = await store.listPathnames(SCHEDULER_MANIFEST_PREFIX);
-      const manifests = await Promise.all(
-        pathnames.map(async (pathname) => {
+      const manifests = await mapMirroredEvidenceBatched(
+        pathnames,
+        async (pathname) => {
           const body = await store.readText(pathname);
           if (body === null) {
             throw new Error(
@@ -580,7 +607,7 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
             );
           }
           return decodeManifestEnvelope(body);
-        }),
+        },
       );
       return Object.freeze(
         manifests.map((manifest) => Object.freeze({

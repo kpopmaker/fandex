@@ -17,6 +17,11 @@ import {
   type FandexCurrentRuntimeAssemblyReadiness,
 } from '../../product/runtime/fandexCurrentRuntimeAssemblyReadiness';
 import {
+  measureFandexProductRuntimeSourceRead,
+  type FandexProductRuntimeSourceId,
+  type FandexProductRuntimeSourceReadDiagnostic,
+} from '../../product/runtime/fandexProductRuntimeSourceReadDiagnostics';
+import {
   getActivityExposurePublicRouteForIU,
 } from './activityExposureRealProductRead';
 import {
@@ -66,6 +71,32 @@ function activityRuntimeReadFailed():
   });
 }
 
+function emitSourceReadDiagnostic(
+  diagnostic: FandexProductRuntimeSourceReadDiagnostic,
+): void {
+  if (process.env.FANDEX_PRODUCT_RUNTIME_ENV !== 'production') return;
+
+  // Strictly operational metadata: no observation times or values, no raw
+  // provider payloads, URLs, credentials, error names or messages.
+  console.info(
+    'FANDEX_PRODUCT_RUNTIME_SOURCE_READ='
+      + diagnostic.source
+      + ' durationMs=' + diagnostic.durationMs
+      + ' outcome=' + diagnostic.outcome,
+  );
+}
+
+function measuredSourceRead<T>(
+  source: FandexProductRuntimeSourceId,
+  read: () => Promise<T>,
+): Promise<T> {
+  return measureFandexProductRuntimeSourceRead({
+    source,
+    read,
+    emit: emitSourceReadDiagnostic,
+  });
+}
+
 export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
   input: Readonly<{ generatedAt?: string }> = {},
 ): Promise<FandexCurrentRuntimeAssemblyReadiness> {
@@ -78,22 +109,43 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     momentumSettled,
     momentumReadinessSettled,
   ] = await Promise.allSettled([
-    getMusicAlbumPointCurrentRuntimeForIU(),
-    getArtistProductVariablePublicRoute(
-      {
-        artistId: 'iu',
-        variableId: 'newsIssuePoint',
-      },
-      {
-        readNewsIssuePointReal:
-          getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
-      },
+    measuredSourceRead(
+      'musicAlbumPoint',
+      () => getMusicAlbumPointCurrentRuntimeForIU(),
     ),
-    getSnsFandomPointCurrentRuntimeForIU(),
-    getBrandFitStoredEvidenceCurrentRuntimeForIU(),
-    getActivityExposurePublicRouteForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-    getMomentumLiveShadowProductReadinessForIU(),
+    measuredSourceRead(
+      'newsIssuePoint',
+      () => getArtistProductVariablePublicRoute(
+        {
+          artistId: 'iu',
+          variableId: 'newsIssuePoint',
+        },
+        {
+          readNewsIssuePointReal:
+            getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+        },
+      ),
+    ),
+    measuredSourceRead(
+      'snsFandomPoint',
+      () => getSnsFandomPointCurrentRuntimeForIU(),
+    ),
+    measuredSourceRead(
+      'brandFitPoint',
+      () => getBrandFitStoredEvidenceCurrentRuntimeForIU(),
+    ),
+    measuredSourceRead(
+      'comebackActivityPoint',
+      () => getActivityExposurePublicRouteForIU(),
+    ),
+    measuredSourceRead(
+      'growthMomentumPoint.shadow',
+      () => getMomentumEvidenceConsensusShadowProductForIU(),
+    ),
+    measuredSourceRead(
+      'growthMomentumPoint.readiness',
+      () => getMomentumLiveShadowProductReadinessForIU(),
+    ),
   ]);
 
   const musicAlbumPoint =

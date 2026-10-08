@@ -1,0 +1,70 @@
+{
+  "version": "sns_fandom_youtube_v2_final_activation_revision_v1",
+  "state": "prepared-exact-owner-approval-required",
+  "preparedFromMainSha": "cbc1318d7b4f43fdd2174d2ebc504dec5012d6c6",
+  "activationRevisionSha": null,
+  "activationRevisionShaBinding": "final-git-head-external-owner-approval",
+  "cutoverApprovalEvidenceRef": null,
+  "readiness": {
+    "state": "activation-ready-owner-approval-required",
+    "ownerApprovalVerificationMode": "runtime-github-issue-comment-exact-revision-v1",
+    "checkedInOwnerAuthorities": false,
+    "v1FallbackSuppressionBound": true,
+    "renderDispatchMutationPerformed": false,
+    "newGenerationProviderCallPerformed": false
+  },
+  "v1FallbackSuppression": {
+    "workflowPath": ".github/workflows/execute-sns-fandom-youtube-recurring-measurement-v1.yml",
+    "scheduleTriggersRemovedInRevision": true,
+    "workflowDispatchRetained": true,
+    "liveMainMutationOccursOnlyOnMerge": true
+  },
+  "renderCutover": {
+    "serviceName": "fandex-sns-fandom-hourly-external-trigger",
+    "serviceId": "crn-db2ekl6i0phs73ederu0",
+    "schedule": "7 * * * *",
+    "currentDispatchWorkflow": "execute-sns-fandom-youtube-render-trigger-v1.yml",
+    "targetDispatchWorkflow": "execute-sns-fandom-youtube-v2-render-trigger-v1.yml",
+    "mutationPrepared": true,
+    "mutationPerformed": false
+  },
+  "ownerApproval": {
+    "issue": 509,
+    "requiredAuthorLogin": "kpopmaker",
+    "requiredAuthorAssociation": "OWNER",
+    "canonicalRebaselineAuthorizedInCheckedInRevision": false,
+    "newGenerationProviderExecutionAuthorizedInCheckedInRevision": false,
+    "schedulerCutoverAuthorizedInCheckedInRevision": false,
+    "authorityMaterialization": "durable-issue509-comment-after-final-exact-head"
+  },
+  "boundaryPolicy": {
+    "measurementWindowStart": null,
+    "measurementWindowEnd": null,
+    "materialization": "first-successful-v2-provider-slot-only",
+    "historicalV1ReceiptsReinterpreted": false,
+    "syntheticBackfillAllowed": false,
+    "retrospectiveProviderObservationAllowed": false,
+    "retrospectiveReceiptSynthesisAllowed": false
+  },
+  "authorityBoundary": {
+    "providerSubmissionAuthorized": false,
+    "productionCollectionAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "cutoverOrder": [
+    "freeze-final-exact-head",
+    "obtain-explicit-owner-authorization-bound-to-that-head",
+    "record-durable-issue509-owner-approval",
+    "merge-that-exact-head-to-suppress-v1-scheduled-fallback",
+    "separately-authorize-and-mutate-render-to-v2-dispatch",
+    "allow-next-natural-render-0700-minute-slot-no-manual-backfill",
+    "verify-first-v2-receipt-and-canonical-window",
+    "prepare-v1-workflow-dispatch-cleanup"
+  ],
+  "notes": [
+    "Preparing this revision performs no Render mutation and no provider call.",
+    "The exact activation SHA is the final immutable Git head and is intentionally not embedded into itself.",
+    "The owner approval comment is created only after that head is frozen and is verified at runtime.",
+    "Merging this revision changes the live GitHub fallback schedule, so merge requires an explicit approval after the owner approval evidence is durable."
+  ]
+}

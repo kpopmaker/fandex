@@ -14,6 +14,10 @@ import {
   type VercelBlobSdkPort,
 } from '../storage/vercelBlobImmutableTextObjectStore';
 
+import {
+  classifyBrandFitRuntimeSetupFailure,
+} from './brandFitRuntimeSetupDiagnostics';
+
 const blobSdk: Pick<VercelBlobSdkPort, 'get' | 'list'> =
   Object.freeze({
     async get(urlOrPathname, options) {
@@ -291,7 +295,10 @@ export async function getBrandFitStoredEvidenceCurrentRuntimeForIU(
       resolvedEnvironment,
       dependencies.client ?? blobSdk,
     );
-  } catch {
+  } catch (error) {
+    console.warn(
+      `FANDEX_BRAND_FIT_RUNTIME_DIAGNOSTIC=${classifyBrandFitRuntimeSetupFailure(error)}`,
+    );
     return Object.freeze({
       status: 'unavailable' as const,
       reason:
