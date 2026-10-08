@@ -8,7 +8,7 @@ import {
 
 const SHA = '1111111111111111111111111111111111111111';
 
-test('checked-in recurring state records first canonical slot and same-hour redundancy candidate', async () => {
+test('historical v1 recurring state is preserved while final v2 cutover suppresses current schedule triggers', async () => {
   const raw = JSON.parse(
     await readFile(
       new URL(
@@ -33,8 +33,13 @@ test('checked-in recurring state records first canonical slot and same-hour redu
   assert.equal(fallbackCron, '47 * * * *');
   assert.equal(raw.schedulerTriggerOpportunitiesPerHourCandidate, 2);
   assert.equal(raw.providerExecutionsPerUtcHourlySlotMax, 1);
-  assert.match(workflow, /cron:\s*['"]17 \* \* \* \*['"]/);
-  assert.match(workflow, /cron:\s*['"]47 \* \* \* \*['"]/);
+  // The historical activation record remains immutable evidence of the v1
+  // scheduler design, while the final v2 activation revision suppresses the
+  // current GitHub scheduled fallback and retains manual dispatch only.
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /\nschedule:/);
+  assert.doesNotMatch(workflow, /cron:\s*['"]17 \* \* \* \*['"]/);
+  assert.doesNotMatch(workflow, /cron:\s*['"]47 \* \* \* \*['"]/);
   assert.doesNotMatch(workflow, /cron:\s*['"]0 \* \* \* \*['"]/);
 
   const authorizedRevisionSha = raw.authorizedRevisionSha as string;

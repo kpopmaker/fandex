@@ -1,12 +1,10 @@
 name: Execute snsFandom YouTube recurring measurement v1
 
 on:
-  schedule:
-    # Two off-top-of-hour opportunities per UTC hour reduce scheduler-drop risk.
-    # Runtime claim/receipt idempotency still permits at most one provider execution
-    # for the current UTC hourly slot.
-    - cron: '17 * * * *'
-    - cron: '47 * * * *'
+  # During the v2 cutover handoff, v1 remains manually dispatchable only.
+  # Scheduled fallback triggers are intentionally suppressed by the final
+  # activation revision. Render remains on v1 until a separately authorized
+  # external scheduler mutation switches it to the v2 workflow.
   workflow_dispatch:
 
 permissions:
