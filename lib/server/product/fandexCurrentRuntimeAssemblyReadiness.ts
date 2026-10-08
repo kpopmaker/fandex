@@ -37,6 +37,10 @@ import {
 import {
   getSnsFandomPointCurrentRuntimeForIU,
 } from './snsFandomPointCurrentRuntimeRead';
+import {
+  observeFandexRuntimeSourceRead,
+  type FandexRuntimeSourceReadId,
+} from './fandexRuntimeSourceReadTimings';
 
 export const FANDEX_CURRENT_RUNTIME_ARTIST_UNIVERSE_VERSION =
   'artist-universe-v4+artist-universe-expansion-v1' as const;
@@ -69,6 +73,15 @@ function activityRuntimeReadFailed():
 export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
   input: Readonly<{ generatedAt?: string }> = {},
 ): Promise<FandexCurrentRuntimeAssemblyReadiness> {
+  const timingOptions = Object.freeze({
+    enabled: process.env.FANDEX_PRODUCT_RUNTIME_READ_TIMINGS === '1',
+  });
+  const timed = <T>(
+    source: FandexRuntimeSourceReadId,
+    read: Promise<T>,
+  ): Promise<T> =>
+    observeFandexRuntimeSourceRead(source, read, timingOptions);
+
   const [
     musicAlbumSettled,
     newsSettled,
@@ -78,22 +91,25 @@ export async function getFandexCurrentRuntimeAssemblyReadinessForIU(
     momentumSettled,
     momentumReadinessSettled,
   ] = await Promise.allSettled([
-    getMusicAlbumPointCurrentRuntimeForIU(),
-    getArtistProductVariablePublicRoute(
-      {
-        artistId: 'iu',
-        variableId: 'newsIssuePoint',
-      },
-      {
-        readNewsIssuePointReal:
-          getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
-      },
+    timed('musicAlbumPoint', getMusicAlbumPointCurrentRuntimeForIU()),
+    timed(
+      'newsIssuePoint',
+      getArtistProductVariablePublicRoute(
+        {
+          artistId: 'iu',
+          variableId: 'newsIssuePoint',
+        },
+        {
+          readNewsIssuePointReal:
+            getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot,
+        },
+      ),
     ),
-    getSnsFandomPointCurrentRuntimeForIU(),
-    getBrandFitStoredEvidenceCurrentRuntimeForIU(),
-    getActivityExposurePublicRouteForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-    getMomentumLiveShadowProductReadinessForIU(),
+    timed('snsFandomPoint', getSnsFandomPointCurrentRuntimeForIU()),
+    timed('brandFitPoint', getBrandFitStoredEvidenceCurrentRuntimeForIU()),
+    timed('comebackActivityPoint', getActivityExposurePublicRouteForIU()),
+    timed('growthMomentumPoint', getMomentumEvidenceConsensusShadowProductForIU()),
+    timed('growthMomentumReadiness', getMomentumLiveShadowProductReadinessForIU()),
   ]);
 
   const musicAlbumPoint =
