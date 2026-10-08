@@ -440,3 +440,82 @@ test('work-conserving Blob mirror reader still rejects later corrupt immutable e
     /naver_news_mirror_job_payload_invalid/,
   );
 });
+
+test('canonical Blob batch diagnostic distinguishes fetch from verified decode without identities', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 12 }, (_, index) => planAt(
+    new Date(Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000).toISOString(),
+  ));
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const diagnostics: unknown[] = [];
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    { onBatchDiagnostic: (diagnostic) => diagnostics.push(diagnostic) },
+  );
+  const readBatch = reader.readJobEvidenceBatch;
+  assert.ok(readBatch);
+  const jobs = await readBatch([
+    ...plans.map((plan) => plan.identity.jobId),
+    'f'.repeat(64),
+    plans[0]!.identity.jobId,
+  ]);
+
+  assert.equal(jobs.size, plans.length);
+  assert.equal(diagnostics.length, 1);
+  const record = diagnostics[0] as {
+    contractVersion: string;
+    outcome: string;
+    requestedJobs: number;
+    startedReads: number;
+    missingJobs: number;
+    fetchTotalMs: number;
+    fetchMaxMs: number;
+    decodeTotalMs: number;
+    decodeMaxMs: number;
+  };
+  assert.equal(record.contractVersion, 'naver-news-canonical-batch-read-diagnostic-v1');
+  assert.equal(record.outcome, 'fulfilled');
+  assert.equal(record.requestedJobs, plans.length + 1);
+  assert.equal(record.startedReads, plans.length + 1);
+  assert.equal(record.missingJobs, 1);
+  assert.ok(record.fetchTotalMs >= record.fetchMaxMs && record.fetchMaxMs >= 0);
+  assert.ok(record.decodeTotalMs >= record.decodeMaxMs && record.decodeMaxMs >= 0);
+  assert.equal(Object.isFrozen(record), true);
+  const serialized = JSON.stringify(record);
+  for (const plan of plans) {
+    assert.equal(serialized.includes(plan.identity.jobId), false);
+  }
+  assert.equal(serialized.includes('아이유 새 소식'), false);
+  assert.equal(serialized.includes('/jobs/'), false);
+});
+
+test('canonical Blob batch diagnostics preserve corruption failure and ignore broken logging sink', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 12 }, (_, index) => planAt(
+    new Date(Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000).toISOString(),
+  ));
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const corrupt = buildNaverNewsStoredEvidenceMirrorObjects(plans[10]!);
+  const payload = JSON.parse(corrupt.jobBody);
+  payload.storedEvidence.normalizedRecords[0].title = 'tampered';
+  store.values.set(corrupt.jobPathname, JSON.stringify(payload));
+  let failureOutcome: string | undefined;
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    {
+      onBatchDiagnostic(record) {
+        failureOutcome = record.outcome;
+        throw new Error('diagnostic-sink-failed');
+      },
+    },
+  );
+  const readBatch = reader.readJobEvidenceBatch;
+  assert.ok(readBatch);
+  await assert.rejects(
+    () => readBatch(plans.map((plan) => plan.identity.jobId)),
+    /naver_news_mirror_job_payload_invalid/,
+  );
+  assert.equal(failureOutcome, 'rejected');
+});
