@@ -1,0 +1,71 @@
+name: Validate Music Album IU Render live Beta HTTP smoke v1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/validate-music-album-iu-render-live-beta-http-smoke-v1.yml'
+  workflow_dispatch:
+    inputs:
+      read_intent:
+        description: 'Type read-only-iu-beta-smoke-v1'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: music-album-iu-live-beta-http-smoke-v1
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    if: >-
+      github.repository == 'kpopmaker/fandex' &&
+      (github.event_name == 'pull_request' ||
+        (github.event_name == 'workflow_dispatch' &&
+         github.ref == 'refs/heads/main' &&
+         inputs.read_intent == 'read-only-iu-beta-smoke-v1'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: GET deployed IU Beta HTML and check identity-only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          file="$RUNNER_TEMP/fandex-iu-beta-smoke.html"
+          url="https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta"
+          status="$(curl --silent --show-error --location --retry 0 --connect-timeout 15 --max-time 90 --output "$file" --write-out '%{http_code}' --header 'Cache-Control: no-cache' "$url")"
+          echo "IU_BETA_HTTP_STATUS=$status"
+          test "$status" = "200"
+          node - "$file" <<'NODE'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const html = fs.readFileSync(process.argv[2], 'utf8');
+          const expected = [
+            'Music Album · Reviewed release identity (not sales Production)',
+            'A Flower Bookmark 3',
+            '꽃갈피 셋',
+            '2025-05-28',
+            '초동 판매량: 적격 증빙 대기',
+            '점수 미산정',
+            'Production 미활성화',
+            '발매 정보 검증은 한터 초동 수량',
+          ];
+          for (const phrase of expected) {
+            assert.ok(html.includes(phrase), `missing reviewed IU release-only marker: ${phrase}`);
+          }
+          assert.doesNotMatch(html, /79,940|79940/, 'Tier C copy claim leaked into live Beta HTML');
+          console.log('IU_BETA_RELEASE_IDENTITY=verified-visible');
+          console.log('IU_BETA_SALES_QUALIFICATION=blocked');
+          console.log('IU_BETA_DISCOVERY_COPIES_EXPOSED=false');
+          NODE
+      - name: Read-only safety attestation
+        if: always()
+        run: |
+          echo 'IU_BETA_SMOKE_HTTP_GET_ONLY=true'
+          echo 'IU_BETA_SMOKE_PROVIDER_EXECUTIONS=0'
+          echo 'IU_BETA_SMOKE_DATABASE_WRITES=0'
+          echo 'IU_BETA_SMOKE_DEPLOYMENTS=0'
+          echo 'IU_BETA_SMOKE_HANTEO_OUTREACH=0'
+          echo 'IU_BETA_SMOKE_RAW_HTML_LOGGED=false'
