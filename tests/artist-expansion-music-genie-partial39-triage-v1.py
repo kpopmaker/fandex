@@ -756,6 +756,89 @@ def main() -> None:
         "MISSING14_PROVIDER_IDENTITY_GENDER_SCOPE_ALTERNATE_DETAIL_HUMAN_REVIEW_REQUIRED"
     )
 
+    # A native Genie song/album link and correct detail type are evidence, not approval.
+    native7 = load(SOURCE / "music_genie_missing14_native_release_identity_review_packet_v1.json")
+    assert native7["version"] == "music_genie_missing14_native_release_identity_review_packet_v1"
+    assert native7["status"] == "seven_release_linked_provider_identities_qualified_review_pending"
+    assert native7["provider"] == "genie" and native7["source"] == "music_chart"
+    assert native7["artistUniverseCount"] == 355
+    lineage = native7["immutableEvidence"]
+    assert lineage["initialExact94RunId"] == 37560176276
+    assert lineage["nativeLinkRunId"] == 37788670010
+    assert lineage["nativeLinkJobId"] == 113349925471
+    assert lineage["verifiedHead"] == "28877d8e47f5de5e5fd80ebaaea2a68dc51e41ba"
+    assert lineage["artifactId"] == 11555756085
+    assert lineage["artifactDigest"] == (
+        "sha256:51216846ed023f7c4455ac8b4710bb32bd3f4e31f80eaf636e5f810f3d8747cc"
+    )
+    assert lineage["nativeSongOrAlbumHttp200Count"] == 7
+    assert lineage["directArtistDetailHttp200Count"] == 7
+    assert lineage["providerArtistNativeLinkQualifiedCount"] == 7
+    assert lineage["providerIdentityTypeQualifiedCount"] == 7
+    expected_native = {
+        "nexz": ("81122242", "82295319", "남성/그룹", 2023, 2024, "87546464"),
+        "afterschool": ("82301148", "73393086", "여성/그룹", 2009, 2009, "76758548"),
+        "pow": ("14942969", "82162931", "남성/그룹", 2023, 2023, "103478669"),
+        "ejel": ("81567146", "81021446", "여성/솔로", 2021, None, "108199234"),
+        "chen": ("81098158", "80282512", "남성/솔로", 2014, None, "88728543"),
+        "mirae": ("81608365", "81037720", "남성/그룹", 2021, 2021, "92651112"),
+        "tiot": ("81972382", "82120880", "남성/그룹", 2023, 2024, "85026862"),
+    }
+    native_rows = native7["qualifiedRecords"]
+    assert len(native_rows) == len(expected_native) == 7
+    assert {r["canonicalArtistId"] for r in native_rows} == set(expected_native)
+    assert len({r["independentlyQualifiedNativeProviderArtistId"] for r in native_rows}) == 7
+    for row in native_rows:
+        cid = row["canonicalArtistId"]
+        old, new, typ, year, cyear, rid = expected_native[cid]
+        historical = next(x for x in rows if x["canonicalArtistId"] == cid)
+        assert row["oldCandidateProviderArtistId"] == historical["genieProviderArtistId"] == old
+        assert historical["genieDebutYear"] is None
+        assert historical["canonicalDebutYear"] == cyear
+        assert row["independentlyQualifiedNativeProviderArtistId"] == new
+        assert old != new
+        assert row["activityType"] == typ
+        assert row["genieProfileDebutYear"] == year
+        assert row["canonicalDebutYear"] == cyear
+        assert row["nativeRelease"]["nativeLinkedArtistId"] == new
+        assert row["nativeRelease"]["releaseId"] == rid
+        assert row["nativeRelease"]["url"].startswith("https://www.genie.co.kr/detail/")
+        assert row["directArtistProfileUrl"].endswith("xxnm=" + new)
+        for yes in (
+            "liveReleaseHttp200", "liveProfileHttp200", "exactNativeLinkValidated",
+            "profileNameAndEntityTypeValidated",
+        ):
+            assert row[yes] is True, (cid, yes)
+        assert row["sourceStatus"] == "unresolved"
+        assert row["humanReviewDecision"] == "pending"
+        for no in ("providerBindingApplied", "canonicalDebutYearFilled", "sourceSupportedPromoted"):
+            assert row[no] is False, (cid, no)
+        assert cid in unresolved and cid not in supported and cid not in unsupported and cid not in targets
+        assert all(x["canonicalArtistId"] != cid for x in strong["bindings"])
+    assert {x["canonicalArtistId"] for x in native7["yearSemanticExceptions"]} == {
+        "nexz", "chen", "tiot"
+    }
+    assert all(x["automaticYearEquivalence"] is False for x in native7["yearSemanticExceptions"])
+    guard7 = native7["reviewControls"]
+    assert guard7["reviewer"] is None and guard7["reviewedAt"] is None
+    assert guard7["reviewDecision"] is None and guard7["approvedBindings"] == []
+    assert set(guard7["deferredCanonicalArtistIds"]) == set(expected_native)
+    for yes in (
+        "nativeIdentityEvidenceIsNotHumanReviewedBinding", "missingYearDoesNotMeanUnsupported",
+        "sourcePartitionUnchanged", "genieYearCannotOverrideCanonicalFormalDebutYear",
+        "noFuzzyAliasAutoBinding", "noOldProviderIdAutomaticOverwrite",
+    ):
+        assert guard7[yes] is True, yes
+    for no in (
+        "productActivationAuthorized", "databaseMutationAuthorized",
+        "schedulerActivationAuthorized", "mainMergeAuthorized",
+    ):
+        assert guard7[no] is False, no
+    assert native7["partition"] == {"supported": 117, "unresolved": 238, "unsupported": 0}
+    assert native7["nextGate"] == (
+        "MISSING14_SEVEN_NATIVE_PROVIDER_IDENTITY_HUMAN_YEAR_SCOPE_AND_BINDING_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -779,7 +862,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 4 alternate profiles held | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked provider identity reviews held | Music 117/238/0 | Product unchanged"
     )
 
 
