@@ -160,6 +160,14 @@ def investigate(cid: str, target: dict) -> dict:
     }
 
 
+SUPERJUNIOR_NATIVE_SONGS = {
+    "Miracle": "33392229",
+    "SORRY, SORRY": "75594969",
+}
+SUPERJUNIOR_OFFICIAL_DISPLAY = "SUPER JUNIOR (슈퍼주니어)"
+SUPERJUNIOR_GROUP_ID = "21060178"
+SUPERJUNIOR_SUBUNIT_ID = "80150326"
+
 MADDOX_NATIVE_SONGS = {
     "Knight": "93307770",
     "Engine": "90418457",
@@ -168,7 +176,7 @@ MADDOX_OFFICIAL_DISPLAY = "마독스 (Maddox)"
 MADDOX_NATIVE_CANDIDATE_ID = "80624750"
 
 
-def native_song_link(song_id: str) -> dict:
+def native_song_link(song_id: str, artist_display: str) -> dict:
     url = f"https://www.genie.co.kr/detail/songInfo?xgnm={song_id}"
     response = fetch(url)
     soup = BeautifulSoup(response["html"], "html.parser")
@@ -181,14 +189,15 @@ def native_song_link(song_id: str) -> dict:
         if not name:
             img = a.find("img")
             name = str(img.get("alt") or "").strip() if img else ""
-        if normalize(name) != normalize(MADDOX_OFFICIAL_DISPLAY):
+        if normalize(name) != normalize(artist_display):
             continue
         match = pattern.search(str(a.get("onclick") or "")) or href.search(str(a.get("href") or ""))
         if match:
             linked[match.group(1)] = name
     return {
         "songId": song_id, "url": url, "statusCode": response["status"],
-        "songContainsMaddox": MADDOX_OFFICIAL_DISPLAY in plain,
+        "songContainsTargetArtist": artist_display in plain,
+        "expectedArtistDisplay": artist_display,
         "nativeArtistLinks": [{"providerArtistId": p, "display": n} for p,n in sorted(linked.items())],
         "nativeArtistIds": sorted(linked),
         "error": response["error"],
@@ -204,7 +213,17 @@ def main() -> None:
         assert ids == TARGETS[row["canonicalArtistId"]]["recordedIds"]
 
     rows = [investigate(cid, target) for cid, target in TARGETS.items()]
-    song_evidence = [native_song_link(song_id) for song_id in MADDOX_NATIVE_SONGS.values()]
+    song_evidence = [
+        native_song_link(song_id, MADDOX_OFFICIAL_DISPLAY)
+        for song_id in MADDOX_NATIVE_SONGS.values()
+    ]
+    superjunior_songs = [
+        native_song_link(song_id, SUPERJUNIOR_OFFICIAL_DISPLAY)
+        for song_id in SUPERJUNIOR_NATIVE_SONGS.values()
+    ]
+    superjunior_common_ids = sorted(
+        set.intersection(*(set(row["nativeArtistIds"]) for row in superjunior_songs))
+    )
     artist_id_sets = [set(x["nativeArtistIds"]) for x in song_evidence]
     jointly_linked_ids = sorted(set.intersection(*artist_id_sets)) if artist_id_sets else []
     maddox_native_detail = detail(MADDOX_NATIVE_CANDIDATE_ID)
@@ -214,6 +233,9 @@ def main() -> None:
         "sourceRunLineage": [37559756356, 37560176276],
         "canonicalIds": list(TARGETS), "rows": rows,
         "maddoxNativeSongEvidence": song_evidence,
+        "superjuniorNativeSongEvidence": superjunior_songs,
+        "superjuniorCommonNativeArtistIds": superjunior_common_ids,
+        "superjuniorGroupSubunitDistinct": True,
         "maddoxCommonNativeArtistIds": jointly_linked_ids,
         "maddoxNativeCandidateDetail": maddox_native_detail,
         "maddoxNativeArtistIdRequiresHumanReview": True,
@@ -238,6 +260,14 @@ def main() -> None:
         "commonProviderArtistIds": jointly_linked_ids,
         "candidateDetail": {k: v for k, v in maddox_native_detail.items() if k != "textContextSample"},
     }, ensure_ascii=False))
+    print("SUPERJUNIOR_NATIVE_SONGS " + json.dumps({
+        "songEvidence": superjunior_songs,
+        "commonProviderArtistIds": superjunior_common_ids,
+    }, ensure_ascii=False))
+    assert len(superjunior_songs) == 2
+    assert all(row["statusCode"] == 200 for row in superjunior_songs), "superjunior_native_song_page_unavailable"
+    assert superjunior_common_ids == [SUPERJUNIOR_GROUP_ID], "superjunior_song_artist_backlinks_not_group_only"
+    assert all(SUPERJUNIOR_SUBUNIT_ID not in row["nativeArtistIds"] for row in superjunior_songs), "subunit_misattributed_to_full_group_song"
     assert len(song_evidence) == 2
     assert all(x["statusCode"] == 200 for x in song_evidence), "maddox_native_song_page_unavailable"
     assert payload["maddoxNativeArtistIdRequiresHumanReview"] is True
