@@ -425,7 +425,9 @@ test('work-conserving Blob mirror reader still rejects later corrupt immutable e
   for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
 
   const corrupt = buildNaverNewsStoredEvidenceMirrorObjects(plans[14]!);
-  store.values.set(corrupt.jobPathname, '{"tampered":true}');
+  const tampered = JSON.parse(corrupt.jobBody);
+  tampered.storedEvidence.normalizedRecords[0].title = 'tampered';
+  store.values.set(corrupt.jobPathname, JSON.stringify(tampered));
 
   const reader =
     createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
