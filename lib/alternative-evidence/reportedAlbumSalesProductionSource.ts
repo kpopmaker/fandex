@@ -64,6 +64,7 @@ export type ReportedAlbumSalesProductionBlocker =
   | 'production-evidence-qualification-invalid'
   | 'tier-a-or-b-exact-value-evidence-missing'
   | 'tier-a-or-b-provider-period-evidence-missing'
+  | 'tier-a-or-b-exact-value-period-binding-missing'
   | 'tier-a-or-b-metric-semantic-evidence-missing'
   | 'tier-a-or-b-underlying-provider-evidence-missing'
   | 'conflicting-evidence'
@@ -227,6 +228,7 @@ function productionBlockers(input: Readonly<{
   identityResolved: boolean;
   evidenceQualificationsProvided: boolean;
   evidenceQualificationsValid: boolean;
+  exactValuePeriodSameEvidenceBinding: boolean;
   evidenceClaimCoverage:
     ReadonlySet<ReportedAlbumSalesProductionEvidenceClaim>;
 }>): readonly ReportedAlbumSalesProductionBlocker[] {
@@ -316,6 +318,15 @@ function productionBlockers(input: Readonly<{
   if (!input.evidenceClaimCoverage.has('underlying-provider')) {
     blockers.push('tier-a-or-b-underlying-provider-evidence-missing');
   }
+  // A value-only reviewer binding and a period-only reviewer binding must not
+  // be combined into a single supposedly verified first-week sales claim.
+  if (
+    input.evidenceClaimCoverage.has('exact-value')
+    && input.evidenceClaimCoverage.has('explicit-provider-period')
+    && !input.exactValuePeriodSameEvidenceBinding
+  ) {
+    blockers.push('tier-a-or-b-exact-value-period-binding-missing');
+  }
 
   if (input.conflict) {
     blockers.push('conflicting-evidence');
@@ -388,6 +399,11 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
     );
   const evidenceQualificationsValid =
     validEvidenceQualifications.length === evidenceQualifications.length;
+  const exactValuePeriodSameEvidenceBinding =
+    validEvidenceQualifications.some(binding =>
+      binding.supportedClaims.includes('exact-value')
+      && binding.supportedClaims.includes('explicit-provider-period'),
+    );
   const evidenceClaimCoverage = new Set<
     ReportedAlbumSalesProductionEvidenceClaim
   >(
@@ -415,6 +431,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       evidenceQualificationsProvided:
         evidenceQualifications.length > 0,
       evidenceQualificationsValid,
+      exactValuePeriodSameEvidenceBinding,
       evidenceClaimCoverage,
     }),
     ...(

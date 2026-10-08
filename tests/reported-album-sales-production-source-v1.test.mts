@@ -443,3 +443,112 @@ test('an unrelated Tier B source cannot qualify a value that is only present in 
     ),
   );
 });
+
+
+test('cross-source exact-value and first-week period laundering stays blocked even with rights approved', () => {
+  const original = observation();
+  const multipleSources = createReportedAlbumSalesObservation({
+    canonicalArtistId: original.canonicalArtistId,
+    artistName: original.artistName,
+    release: original.release,
+    metricSemantic: original.metricSemantic,
+    value: original.value,
+    unit: original.unit,
+    providerPeriodStart: original.providerPeriodStart,
+    providerPeriodEnd: original.providerPeriodEnd,
+    observedAt: original.observedAt,
+    reportedAt: original.reportedAt,
+    collectedAt: original.collectedAt,
+    underlyingProvider: original.underlyingProvider,
+    territory: original.territory,
+    format: original.format,
+    revision: original.revision,
+    supportingEvidence: [
+      ...original.supportingEvidence,
+      {
+        ...original.supportingEvidence[0],
+        evidenceId: 'fixture:reported-web:period-only',
+        reportingSource: 'Fixture Period Reporting',
+        sourceUrl: 'https://example.com/period-only',
+      },
+    ],
+    lifecycle: 'research',
+  });
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      multipleSources,
+    );
+  const bindingFor = (
+    evidenceId: string,
+    supportedClaims: (
+      | 'exact-value'
+      | 'explicit-provider-period'
+      | 'metric-semantic'
+      | 'underlying-provider'
+    )[],
+  ) => createReportedAlbumSalesProductionEvidenceQualificationBinding({
+    request,
+    decision: {
+      requestId: request.requestId,
+      evidenceId,
+      supportedClaims,
+      reviewEvidenceRefs: ['review:fixture:two-source-claim-review'],
+      reviewerRef: 'reviewer:music-album:fixture',
+      reviewedAt: '2026-10-08T10:15:00+09:00',
+    },
+  });
+  const valueOnly = bindingFor('fixture:reported-web:1', [
+    'exact-value',
+    'metric-semantic',
+    'underlying-provider',
+  ]);
+  const periodOnly = bindingFor('fixture:reported-web:period-only', [
+    'explicit-provider-period',
+  ]);
+  const base = {
+    observation: multipleSources,
+    asOfDate: '2026-10-08',
+    releaseIdentityBinding: reviewedReleaseBinding(multipleSources),
+    rightsReview: reviewedRights(multipleSources),
+  };
+
+  const combined = buildReportedAlbumSalesProductionSourceCandidate({
+    ...base,
+    evidenceQualifications: [valueOnly, periodOnly],
+  });
+  // All four claims are present in their union, but no reviewed Tier A/B
+  // evidence links the exact quantity to the explicit seven-day period.
+  assert.deepEqual(combined.evidenceClaimCoverage, [
+    'exact-value',
+    'explicit-provider-period',
+    'metric-semantic',
+    'underlying-provider',
+  ]);
+  assert.equal(combined.rightsState, 'authorized');
+  assert.equal(combined.availability, 'available');
+  assert.equal(combined.releaseIdentityReviewState, 'human-reviewed');
+  assert.equal(combined.productSourceEligible, false);
+  assert.equal(combined.durableNormalizedStorageEligible, false);
+  assert.ok(combined.blockers.includes(
+    'tier-a-or-b-exact-value-period-binding-missing',
+  ));
+  assert.equal(combined.numericScoreProduced, false);
+
+  const coherent = buildReportedAlbumSalesProductionSourceCandidate({
+    ...base,
+    evidenceQualifications: [
+      bindingFor('fixture:reported-web:1', [
+        'exact-value',
+        'explicit-provider-period',
+        'metric-semantic',
+        'underlying-provider',
+      ]),
+      periodOnly,
+    ],
+  });
+  assert.equal(coherent.blockers.includes(
+    'tier-a-or-b-exact-value-period-binding-missing',
+  ), false);
+  assert.deepEqual(coherent.blockers, []);
+  assert.equal(coherent.productSourceEligible, true);
+});
