@@ -20,6 +20,7 @@ on:
       - 'scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_missing14_remaining7_identity_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
@@ -201,5 +202,31 @@ jobs:
         with:
           name: artist-expansion-music-genie-remaining7-provider-identities-v1
           path: scripts/fandex-cloud-migration/source/music_genie_missing14_remaining7_identity_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-last2-release-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie HTML read-only dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile last2 native release probe
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py
+      - name: Probe Boy Story and GIRLSET native release artist links
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_missing14_last2_native_release_probe_v1.py
+      - name: Upload last2 non-activating identity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-genie-missing14-last2-native-release-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.json
           retention-days: 21
           if-no-files-found: warn
