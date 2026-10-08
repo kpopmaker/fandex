@@ -1057,6 +1057,23 @@
       "productActivationAuthorized": false,
       "mainMergeAuthorized": false
     },
-    "nextGate": "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED"
+    "nextGate": "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED",
+    "debutFieldParserCorrectionV6": {
+      "source": "music_genie_jinu_80441171_identity_review_packet_v1",
+      "verifiedLiveRunId": 37778706306,
+      "exactValidationHead": "a639cdb9482df87c1a9194ccb044b4b374267d07",
+      "artifactId": 11550358996,
+      "artifactDigest": "sha256:0a4ed427cad7b0f4b1bfa4b5e7b64b1d98a24a6fe2fe20a5efbeb8ec69bd9ccd",
+      "previousProviderDebutYearParsedNullWasParserLimitation": true,
+      "previousObservedWrongCandidate1996": true,
+      "alternateProviderDebutYearNowParsed": 2014,
+      "alternateProviderActivityType": "남성/솔로",
+      "officialWinnerGroupDebutYear": 2014,
+      "officialSoloDebutYear": 2019,
+      "canonicalDebutYearStillNull": true,
+      "identityReviewCandidatePrepared": true,
+      "humanBindingApproval": false,
+      "sourceSupportedPromotion": false
+    }
   }
 }
