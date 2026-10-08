@@ -16,6 +16,7 @@ on:
       - 'scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_changed_disposition_identity_live_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
@@ -145,5 +146,31 @@ jobs:
         with:
           name: music-genie-partial39-missing14-debut-recheck-v1
           path: scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-native-release-identities:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie provider HTML read-only dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile seven native release identity investigation
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.py
+      - name: Trace Genie song and album native artist links
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_missing14_native_release_identity_live_v1.py
+      - name: Upload non-activating native link research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-missing14-native-release-id-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.json
           retention-days: 21
           if-no-files-found: warn
