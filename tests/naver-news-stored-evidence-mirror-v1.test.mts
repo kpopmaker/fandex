@@ -290,3 +290,153 @@ test('Blob mirror readers cap parallel requests without dropping official slots 
   assert.ok(peak <= 8);
   assert.equal(active, 0);
 });
+
+test('Blob manifest reads keep eight slots working while an early request is stalled', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 20 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const paths = await store.listPathnames(
+    'fandex/naver-news/stored-evidence-mirror/v1/scheduler-manifests/',
+  );
+  const slowPath = paths[0];
+  let releaseSlow!: () => void;
+  const slowRead = new Promise<void>((resolve) => { releaseSlow = resolve; });
+  let started = 0;
+  let active = 0;
+  let peak = 0;
+  let slowFinished = false;
+  const meteredStore = {
+    listPathnames: (prefix: string) => store.listPathnames(prefix),
+    async readText(pathname: string): Promise<string | null> {
+      started += 1;
+      active += 1;
+      peak = Math.max(peak, active);
+      try {
+        if (pathname === slowPath) {
+          await slowRead;
+          slowFinished = true;
+        }
+        return store.readText(pathname);
+      } finally {
+        active -= 1;
+      }
+    },
+  };
+
+  const pending = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    meteredStore,
+  ).readSucceededSchedulerJobs();
+  let workContinued = false;
+  try {
+    for (let step = 0; step < 100; step += 1) {
+      await Promise.resolve();
+      if (started > 8) break;
+    }
+    workContinued = started > 8 && !slowFinished;
+  } finally {
+    releaseSlow();
+  }
+
+  const jobs = await pending;
+  assert.equal(workContinued, true);
+  assert.equal(jobs.length, plans.length);
+  assert.deepEqual(
+    new Set(jobs.map((job) => job.jobId)),
+    new Set(plans.map((plan) => plan.identity.jobId)),
+  );
+  assert.equal(active, 0);
+  assert.ok(peak <= 8);
+});
+
+test('Blob canonical reads continue past a slow first job and retain all validated jobs', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 20 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const slowPath = buildNaverNewsStoredEvidenceMirrorObjects(
+    plans[0]!,
+  ).jobPathname;
+  let releaseSlow!: () => void;
+  const slowRead = new Promise<void>((resolve) => { releaseSlow = resolve; });
+  let started = 0;
+  let active = 0;
+  let peak = 0;
+  let slowFinished = false;
+  const meteredStore = {
+    async readText(pathname: string): Promise<string | null> {
+      started += 1;
+      active += 1;
+      peak = Math.max(peak, active);
+      try {
+        if (pathname === slowPath) {
+          await slowRead;
+          slowFinished = true;
+        }
+        return store.readText(pathname);
+      } finally {
+        active -= 1;
+      }
+    },
+  };
+
+  const reader =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(meteredStore);
+  assert.ok(reader.readJobEvidenceBatch);
+  const pending = reader.readJobEvidenceBatch(
+    plans.map((plan) => plan.identity.jobId),
+  );
+  let workContinued = false;
+  try {
+    for (let step = 0; step < 100; step += 1) {
+      await Promise.resolve();
+      if (started > 8) break;
+    }
+    workContinued = started > 8 && !slowFinished;
+  } finally {
+    releaseSlow();
+  }
+  const jobs = await pending;
+
+  assert.equal(workContinued, true);
+  assert.equal(jobs.size, plans.length);
+  for (const plan of plans) {
+    assert.equal(jobs.get(plan.identity.jobId)?.job.jobId, plan.identity.jobId);
+  }
+  assert.equal(active, 0);
+  assert.ok(peak <= 8);
+});
+
+test('work-conserving Blob mirror reader still rejects later corrupt immutable evidence', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 20 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const corrupt = buildNaverNewsStoredEvidenceMirrorObjects(plans[14]!);
+  const tampered = JSON.parse(corrupt.jobBody);
+  tampered.storedEvidence.normalizedRecords[0].title = 'tampered';
+  store.values.set(corrupt.jobPathname, JSON.stringify(tampered));
+
+  const reader =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
+  const readBatch = reader.readJobEvidenceBatch;
+  assert.ok(readBatch);
+  await assert.rejects(
+    () => readBatch(
+      plans.map((plan) => plan.identity.jobId),
+    ),
+    /naver_news_mirror_job_payload_invalid/,
+  );
+});
