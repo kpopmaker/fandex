@@ -97,16 +97,47 @@ def detail(pid):
 def validate_one(binding,target,meta):
     aliases=[target["artist"],*(target.get("aliases") or [])]
     keys={compact(x) for x in aliases if compact(x)}
-    search_status,candidates=search_candidates(target["artist"])
-    exact=[c for c in candidates if compact(c["providerDisplay"]) in keys]
-    exact_ids=sorted({c["providerArtistId"] for c in exact})
     expected=binding["providerArtistId"]
+    queries=[]
+    seen=set()
+    for alias in aliases:
+        q=str(alias).strip()
+        key=compact(q)
+        if len(key)<2 or key in seen:
+            continue
+        seen.add(key)
+        queries.append(q)
+
+    # A missing result for one canonical spelling is not provider identity failure.
+    # Search a different reviewed alias, but never fuzzy-select a different ID.
+    search_checks=[]
+    exact_union=set()
+    for query in queries:
+        status,candidates=search_candidates(query)
+        exact_ids=sorted({
+            c["providerArtistId"] for c in candidates
+            if compact(c["providerDisplay"]) in keys
+        })
+        search_checks.append({
+            "query":query,
+            "statusCode":status,
+            "exactProviderArtistIds":exact_ids,
+        })
+        exact_union.update(exact_ids)
+        # One canonical exact ID is enough. Any conflict is fail-closed.
+        if exact_union and (exact_union!={expected} or expected in exact_union):
+            break
+
+    exact_ids=sorted(exact_union)
+    search_ok=any(x["statusCode"]==200 and expected in x["exactProviderArtistIds"] for x in search_checks)
+    conflicting_ids=sorted(exact_union-{expected})
     d=detail(expected)
     display_match=compact(d["providerDisplay"]) in keys
     entity_match=("그룹" in (d["providerActivityType"] or "")) if meta["entityType"]=="group" else ("솔로" in (d["providerActivityType"] or ""))
     debut_match=(meta["debutYear"]==d["providerDebutYear"])
     ok=(
-        search_status==200
+        search_ok
+        and not conflicting_ids
         and exact_ids==[expected]
         and d["statusCode"]==200
         and display_match
@@ -117,8 +148,10 @@ def validate_one(binding,target,meta):
     return {
         "canonicalArtistId":binding["canonicalArtistId"],
         "expectedProviderArtistId":expected,
-        "searchStatusCode":search_status,
+        "searchStatusCode":search_checks[-1]["statusCode"] if search_checks else None,
+        "searchChecks":search_checks,
         "exactProviderArtistIds":exact_ids,
+        "conflictingProviderArtistIds":conflicting_ids,
         "detailStatusCode":d["statusCode"],
         "providerDisplay":d["providerDisplay"],
         "displayAliasMatch":display_match,
