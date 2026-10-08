@@ -345,7 +345,19 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
       'resolved',
       momentum,
     );
-    states.push(result.state);
+    const upstreamBlockers =
+      input.sources.growthMomentumPoint.readiness.blockers;
+    states.push(
+      result.state.reason === 'upstream-readiness-blocked'
+        ? Object.freeze({
+            ...result.state,
+            reason: [
+              result.state.reason,
+              ...new Set(upstreamBlockers),
+            ].join('|'),
+          })
+        : result.state,
+    );
     adapters.set('growthMomentumPoint', result.adapter);
   }
 
