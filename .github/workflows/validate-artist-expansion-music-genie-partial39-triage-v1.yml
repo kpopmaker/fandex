@@ -64,9 +64,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install repository JavaScript dependencies
+        run: npm ci
+      - name: Materialize authoritative v4 canonical artist identity metadata
+        run: npx tsx scripts/artist-expansion/materialize_music_genie_canonical_identity_metadata_v1.mts
       - name: Install Genie HTML research dependencies
         run: python -m pip install requests beautifulsoup4
       - name: Compile six candidate research script
