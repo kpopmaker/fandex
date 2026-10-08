@@ -150,16 +150,35 @@ def main() -> None:
         if any(compact(name) == compact("JINU (김진우)") for name in item["providerDisplays"])
     ]
 
+    # Exact alternate names from live Genie search are *candidates*, never bindings.
+    winner_labeled_details = []
+    for alternate_pid in sorted(set(winner_labeled_ids)):
+        result = fetch(f"https://www.genie.co.kr/detail/artistInfo?xxnm={alternate_pid}")
+        alternate_detail = parse_detail(result["html"]) if result["statusCode"] == 200 else None
+        winner_labeled_details.append({
+            "providerArtistId": alternate_pid,
+            "statusCode": result["statusCode"],
+            "error": result["error"],
+            "detail": alternate_detail,
+        })
+
     historical_context = magazines["historical_jinu"]["markers"]
     winner_context = magazines["winner_jinu"]["markers"]
     direct_historical_markers = (
         bool(detail)
-        and detail["debutYearInVisibleText"] == 1996
-        and any(x in detail["observedReleaseOrSongMarkers"] for x in ("Jinujoke", "엉뚱한 상상"))
+        and {"Jinujoke", "엉뚱한 상상"}.issubset(set(detail["observedReleaseOrSongMarkers"]))
+        and detail["mentionsRollerCoaster"]
+    )
+    alternate_has_winner_release = any(
+        item["detail"] and (
+            any("HEYDAY" in title for title in item["detail"]["observedReleaseOrSongMarkers"])
+            or item["detail"]["mentionsWinner"]
+        )
+        for item in winner_labeled_details
     )
     if direct_historical_markers and historical_context["statesRollerCoasterMembership"]:
-        classification = "pinned_genie_id_historical_jinu_evidence_not_winner_hold"
-    elif PINNED in winner_labeled_ids and detail and detail["debutYearInVisibleText"] == 2019:
+        classification = "pinned_genie_id_historical_jinu_conflict_held"
+    elif PINNED in winner_labeled_ids and detail and detail["mentionsWinner"]:
         classification = "pinned_id_winner_labeled_but_manual_review_required"
     else:
         classification = "identity_linkage_unresolved"
@@ -174,6 +193,9 @@ def main() -> None:
         "exactNameSearches": searches,
         "exactNameProviderIds": search_id_candidates,
         "winnerLabeledCandidateProviderIds": sorted(set(winner_labeled_ids)),
+        "winnerLabeledCandidateDetails": winner_labeled_details,
+        "alternateCandidateHasWinnerReleaseEvidence": alternate_has_winner_release,
+        "historicalPinnedDetailMatches1996JinuEditorialIdentity": bool(direct_historical_markers and historical_context["statesRollerCoasterMembership"]),
         "genieEditorialContexts": magazines,
         "outcome": classification,
         "investigationOnly": True,
@@ -189,6 +211,7 @@ def main() -> None:
     print("PINNED_DETAIL " + json.dumps({"status": response["statusCode"], "detail": detail}, ensure_ascii=False))
     print("SEARCH_EXACT " + json.dumps(search_id_candidates, ensure_ascii=False))
     print("EDITORIAL_MARKERS " + json.dumps({k: v["markers"] for k, v in magazines.items()}, ensure_ascii=False))
+    print("WINNER_LABELED_DETAILS " + json.dumps(winner_labeled_details, ensure_ascii=False))
 
 
 if __name__ == "__main__":
