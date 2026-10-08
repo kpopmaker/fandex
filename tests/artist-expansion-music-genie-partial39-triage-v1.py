@@ -243,6 +243,33 @@ def main() -> None:
     }
     assert epoch["nextGate"] == "GENIE_PARTIAL39_IDENTITY_ENTITY_AND_DEBUT_EPOCH_HUMAN_REVIEW_REQUIRED"
 
+    # Same name and matching 1996 year are not proof of an artist ID linkage.
+    jinu_collision = queue["jinuCollisionIndependentEvidenceV4"]
+    assert jinu_collision["version"] == "music_genie_jinu_alias_collision_independent_evidence_v4"
+    assert jinu_collision["status"] == (
+        "two_distinct_artist_identities_evidenced_pinned_provider_id_not_yet_disambiguated"
+    )
+    assert jinu_collision["canonicalArtistId"] == "jinu"
+    assert jinu_collision["pinnedCandidateProviderArtistId"] == "14946516"
+    assert jinu_collision["pinnedGenieMetadataDebutYear"] == 1996
+    assert jinu_collision["pinnedIdLiveDetailLinkedToNeitherEntity"] is False
+    assert len(jinu_collision["competingIdentityAliases"]) == 2
+    assert len(jinu_collision["sources"]) == 6
+    assert {
+        e["scope"] for e in jinu_collision["sources"]
+    } == {"1996_historical_JINU", "2019_WINNER_JINU"}
+    for evidence in jinu_collision["sources"]:
+        assert evidence["url"].startswith("https://")
+        assert evidence["publisher"] and evidence["supports"]
+    jinu_row = next(row for row in rows if row["canonicalArtistId"] == "jinu")
+    assert jinu_row["genieProviderArtistId"] == "14946516"
+    assert jinu_row["genieDebutYear"] == 1996
+    assert jinu_row["canonicalDebutYear"] is None
+    assert "jinu" in unresolved and "jinu" not in supported
+    assert set(jinu_collision["uncertainty"].values()) == {True}
+    assert set(jinu_collision["mutationPermissions"].values()) == {False}
+    assert jinu_collision["nextGate"] == "JINU_PINNED_PROVIDER_ID_LIVE_RELEASE_LINKAGE_REQUIRED"
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -272,7 +299,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU ambiguity hold | Music 117/238/0 | Product unchanged"
     )
 
 
