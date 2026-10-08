@@ -165,6 +165,7 @@ MADDOX_NATIVE_SONGS = {
     "Engine": "90418457",
 }
 MADDOX_OFFICIAL_DISPLAY = "마독스 (Maddox)"
+MADDOX_NATIVE_CANDIDATE_ID = "80624750"
 
 
 def native_song_link(song_id: str) -> dict:
@@ -206,6 +207,7 @@ def main() -> None:
     song_evidence = [native_song_link(song_id) for song_id in MADDOX_NATIVE_SONGS.values()]
     artist_id_sets = [set(x["nativeArtistIds"]) for x in song_evidence]
     jointly_linked_ids = sorted(set.intersection(*artist_id_sets)) if artist_id_sets else []
+    maddox_native_detail = detail(MADDOX_NATIVE_CANDIDATE_ID)
     payload = {
         "version": "music_genie_changed_disposition_identity_live_v1",
         "checkedAtUtc": datetime.now(timezone.utc).isoformat(),
@@ -213,6 +215,7 @@ def main() -> None:
         "canonicalIds": list(TARGETS), "rows": rows,
         "maddoxNativeSongEvidence": song_evidence,
         "maddoxCommonNativeArtistIds": jointly_linked_ids,
+        "maddoxNativeCandidateDetail": maddox_native_detail,
         "maddoxNativeArtistIdRequiresHumanReview": True,
         "evidenceOnly": True, "humanReviewStillRequired": True,
         "anyAutoBound": False, "anySourceSupportedPromoted": False,
@@ -233,10 +236,15 @@ def main() -> None:
     print("MADDOX_NATIVE_SONGS " + json.dumps({
         "songEvidence": song_evidence,
         "commonProviderArtistIds": jointly_linked_ids,
+        "candidateDetail": {k: v for k, v in maddox_native_detail.items() if k != "textContextSample"},
     }, ensure_ascii=False))
     assert len(song_evidence) == 2
     assert all(x["statusCode"] == 200 for x in song_evidence), "maddox_native_song_page_unavailable"
     assert payload["maddoxNativeArtistIdRequiresHumanReview"] is True
+    assert jointly_linked_ids == [MADDOX_NATIVE_CANDIDATE_ID], "maddox_song_artist_backlinks_not_singleton"
+    assert maddox_native_detail["statusCode"] == 200, "maddox_direct_artist_detail_not_200"
+    assert normalize(maddox_native_detail["providerDisplay"]) == normalize(MADDOX_OFFICIAL_DISPLAY), "maddox_provider_display_mismatch"
+    assert "솔로" in (maddox_native_detail["providerActivityType"] or ""), "maddox_entity_type_mismatch"
     assert all(x not in jointly_linked_ids for x in TARGETS["maddox"]["recordedIds"]), "unexpected_historical_id_native_link"
     assert all(
         row["recordedProviderDetails"]
