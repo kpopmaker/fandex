@@ -542,6 +542,32 @@ test('News runtime stage timing is opt-in and excludes evidence, paths, and cred
     line.durationMs === null
     || (Number.isInteger(line.durationMs) && line.durationMs >= 0),
   ));
+  const batchPrefix = 'FANDEX_NAVER_NEWS_CANONICAL_BATCH_READ=';
+  const batchLogs = logs.filter((line) => line.startsWith(batchPrefix));
+  assert.equal(batchLogs.length, 1);
+  const batch = JSON.parse(batchLogs[0]!.slice(batchPrefix.length)) as {
+    contractVersion: string;
+    outcome: string;
+    requestedJobs: number;
+    startedReads: number;
+    missingJobs: number;
+    fetchTotalMs: number;
+    fetchMaxMs: number;
+    decodeTotalMs: number;
+    decodeMaxMs: number;
+  };
+  assert.equal(batch.contractVersion, 'naver-news-canonical-batch-read-diagnostic-v1');
+  assert.equal(batch.outcome, 'fulfilled');
+  assert.equal(batch.requestedJobs, 50);
+  assert.equal(batch.startedReads, 50);
+  assert.equal(batch.missingJobs, 0);
+  assert.ok(batch.fetchTotalMs >= batch.fetchMaxMs);
+  assert.ok(batch.decodeTotalMs >= batch.decodeMaxMs);
+  assert.deepEqual(Object.keys(batch).sort(), [
+    'contractVersion', 'outcome', 'requestedJobs', 'startedReads',
+    'missingJobs', 'fetchTotalMs', 'fetchMaxMs',
+    'decodeTotalMs', 'decodeMaxMs',
+  ].sort());
   assert.ok(logs.every((line) =>
     !line.includes('private-static-test-token')
     && !line.includes('stored-evidence-mirror/v1/')
