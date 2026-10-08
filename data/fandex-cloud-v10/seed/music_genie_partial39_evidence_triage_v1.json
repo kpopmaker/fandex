@@ -990,5 +990,73 @@
       "allowProductActivation": false,
       "allowMainMerge": false
     }
+  },
+  "jinuLiveIdentityResolutionV5": {
+    "version": "music_genie_jinu_live_provider_identity_resolution_v5",
+    "status": "pinned_candidate_rejected_as_wrong_artist_alternative_human_review_required",
+    "source": "genie",
+    "canonicalArtistId": "jinu",
+    "verifiedEvidence": {
+      "runId": 37777436998,
+      "jobId": 113311724896,
+      "conclusion": "success",
+      "exactHead": "e468ec88bddc03015fb0c4fdbafabbec1262715f",
+      "artifactId": 11550277277,
+      "artifactName": "artist-expansion-music-genie-jinu-identity-live-v1",
+      "artifactDigest": "sha256:e8b072d500e4a07d6eec755b24637573dce00fffa924864598a3b15dc28b078e",
+      "artifactExpiresAt": "2026-10-29T12:31:42Z",
+      "providerLiveResponseStatuses": [
+        200,
+        200
+      ],
+      "rawLiveObservationUrl": "https://github.com/kpopmaker/fandex/actions/runs/37777436998"
+    },
+    "wrongAliasCandidate": {
+      "providerArtistId": "14946516",
+      "providerDisplay": "JINU",
+      "providerDetailUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=14946516",
+      "firstRecordedProviderDebutYear": 1996,
+      "liveDetailDebutYearParsed": null,
+      "matchedReleaseEvidence": [
+        "Jinujoke",
+        "엉뚱한 상상"
+      ],
+      "matchesGenieHistoricalEditorialCareer": "Roller Coaster / Hitchhiker JINU",
+      "linkedToWinner": false,
+      "cannotUseAsWinnerProviderIdentity": true,
+      "canonicalArtistNotUnsupported": true
+    },
+    "alternateReviewedCandidateNotApplied": {
+      "providerArtistId": "80441171",
+      "providerDisplay": "JINU (김진우)",
+      "providerDetailUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=80441171",
+      "discoveredViaExactCanonicalAliasSearch": true,
+      "liveDetailStatusCode": 200,
+      "matchedReleaseEvidence": [
+        "JINU's HEYDAY",
+        "또또또"
+      ],
+      "matchedGroupContext": "WINNER",
+      "consistentWithOfficialYgRelease": true,
+      "providerDebutYearParsed": null,
+      "humanReviewedBindingApproved": false,
+      "providerIdAppliedToTargetSeed": false,
+      "sourceCompatibilityPromoted": false
+    },
+    "sourceBoundaries": {
+      "previousRecordedRawCandidateImmutable": true,
+      "originalExact94EvidenceImmutable": true,
+      "distinctPersonDisambiguationSupportedByLiveGenieReleaseEvidence": true,
+      "alternateCandidateRequiresHumanReviewedBinding": true,
+      "artistRemainsUnresolved": true,
+      "musicSupportedCount": 117,
+      "musicUnresolvedCount": 238,
+      "musicUnsupportedCount": 0,
+      "providerMissingIsNotUnsupported": true,
+      "noFuzzyAutoBinding": true,
+      "productActivationAuthorized": false,
+      "mainMergeAuthorized": false
+    },
+    "nextGate": "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED"
   }
 }
