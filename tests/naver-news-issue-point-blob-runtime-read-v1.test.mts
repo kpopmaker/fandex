@@ -538,6 +538,20 @@ test('News runtime stage timing is opt-in and excludes evidence, paths, and cred
     ].sort(),
   );
   assert.ok(stages.every((line) => line.outcome === 'fulfilled'));
+  const canonicalSummaries = logs.filter((line) =>
+    line.startsWith('FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE='),
+  );
+  assert.equal(canonicalSummaries.length, 1);
+  const phases = JSON.parse(canonicalSummaries[0]!.split('=')[1]!) as {
+    outcome: string;
+    objectsRequested: number;
+    objectsFound: number;
+    objectsMissing: number;
+  };
+  assert.equal(phases.outcome, 'fulfilled');
+  assert.equal(phases.objectsRequested, 50);
+  assert.equal(phases.objectsFound, 50);
+  assert.equal(phases.objectsMissing, 0);
   assert.ok(stages.every((line) =>
     line.durationMs === null
     || (Number.isInteger(line.durationMs) && line.durationMs >= 0),
