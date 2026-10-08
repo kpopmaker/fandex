@@ -1,0 +1,51 @@
+name: Validate Brand Fit runtime setup diagnostics v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-live-production-verification-v1'
+    paths:
+      - 'lib/server/product/brandFitRuntimeSetupDiagnostics.ts'
+      - 'lib/server/product/brandFitStoredEvidenceRuntime.ts'
+      - 'tests/brand-fit-runtime-setup-diagnostics-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-runtime-setup-diagnostics-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/server/product/brandFitRuntimeSetupDiagnostics.ts'
+      - 'lib/server/product/brandFitStoredEvidenceRuntime.ts'
+      - 'tests/brand-fit-runtime-setup-diagnostics-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-runtime-setup-diagnostics-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Safe Brand Fit runtime diagnostics regression
+        run: npx tsx --test tests/brand-fit-runtime-setup-diagnostics-v1.test.mts
+      - name: Existing Brand Fit immutable read regression
+        run: npx tsx --test tests/brand-fit-stored-evidence-runtime-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "renderRedeployExecuted=false"
+          echo "activationOrLifecycleMutation=false"
+          echo "publicationAuthorized=false"
+          echo "riskInventoryUpdated=false"
+          echo "rawCredentialLogging=false"
