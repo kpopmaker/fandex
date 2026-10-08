@@ -325,6 +325,88 @@ def main() -> None:
         "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED"
     )
 
+    # Identified provider entity is only a candidate until a human reviews year semantics.
+    jinu_packet = load(SOURCE / "music_genie_jinu_80441171_identity_review_packet_v1.json")
+    assert jinu_packet["version"] == "music_genie_jinu_80441171_identity_review_packet_v1"
+    assert jinu_packet["status"] == (
+        "provider_identity_qualified_human_review_and_debut_semantics_required"
+    )
+    assert jinu_packet["canonicalArtistId"] == "jinu"
+    identity = jinu_packet["canonicalIdentity"]
+    assert identity["memberOfGroup"] == "WINNER"
+    assert identity["entityType"] == "solo"
+    assert identity["groupCareerDebutYear"] == 2014
+    assert identity["firstOfficialSoloReleaseYear"] == 2019
+    assert identity["firstOfficialSoloReleaseDate"] == "2019-08-14"
+    assert identity["canonicalDebutYearNotYetAssigned"] is True
+
+    genie = jinu_packet["candidateProvider"]
+    assert genie["provider"] == "genie"
+    assert genie["providerArtistId"] == "80441171"
+    assert genie["providerDisplay"] == "JINU (김진우)"
+    assert genie["activityTypeRaw"] == "남성/솔로"
+    assert genie["providerDebutFieldRaw"] == "2014년"
+    assert genie["providerDebutYear"] == 2014
+    assert genie["providerSongId"] == "89300603"
+    assert genie["providerSongArtistLinkExact"] is True
+    assert genie["providerSongArtistLinkIds"] == ["80441171"]
+    assert genie["conflictingArtistIdOnOfficialSoloSong"] is False
+
+    wrong = jinu_packet["rejectedPriorCandidate"]
+    assert wrong["providerArtistId"] == "14946516"
+    assert wrong["providerDebutYear"] == 1996
+    assert wrong["rejectAsCanonicalJinuIdentity"] is True
+    assert wrong["doesNotMakeCanonicalArtistUnsupported"] is True
+    assert wrong["sourceOriginalCandidateReceiptPreserved"] is True
+    assert wrong["providerArtistId"] != genie["providerArtistId"]
+    assert jinu_row["genieProviderArtistId"] == wrong["providerArtistId"]
+
+    lineage = jinu_packet["liveEvidence"]
+    assert lineage["workflowRunId"] == 37778706306
+    assert lineage["jobId"] == 113316044515
+    assert lineage["workflowConclusion"] == "success"
+    assert lineage["verifiedExactHead"] == "a639cdb9482df87c1a9194ccb044b4b374267d07"
+    assert lineage["artifactId"] == 11550358996
+    assert lineage["artifactDigest"] == (
+        "sha256:0a4ed427cad7b0f4b1bfa4b5e7b64b1d98a24a6fe2fe20a5efbeb8ec69bd9ccd"
+    )
+    assert len(lineage["validatedChecks"]) == 6
+    assert {x["evidenceType"] for x in jinu_packet["sourceEvidence"]} == {
+        "provider_detail",
+        "provider_song_native_artist_link",
+        "label_official_discography",
+        "contemporaneous_solo_era_report",
+    }
+    assert all(e["url"].startswith("https://") for e in jinu_packet["sourceEvidence"])
+
+    gate = jinu_packet["reviewGate"]
+    assert gate["identityEvidenceQualified"] is True
+    assert gate["providerDebutYearMeansSoloDebut"] is False
+    assert gate["groupCareerYearAndSoloReleaseYearMustRemainSeparate"] is True
+    assert gate["canonicalYearScopePolicyHumanDecisionRequired"] is True
+    assert gate["providerDebutYearMatchingStrictStrong26Contract"] is False
+    assert gate["reviewStatus"] == "pending_human_review"
+    assert gate["reviewer"] is None and gate["reviewedAt"] is None
+    for key in (
+        "approvedForSourceApplication",
+        "approvedForMusicCompatibilityPromotion",
+        "providerBindingApplied",
+        "providerMutationAuthorized",
+        "productActivationAuthorized",
+        "scheduledCollectionAuthorized",
+        "mainMergeAuthorized",
+    ):
+        assert gate[key] is False, key
+    partition = jinu_packet["sourcePartitionAsOfCandidate"]
+    assert (partition["supported"], partition["unresolved"], partition["unsupported"]) == (117, 238, 0)
+    assert partition["jinuUnresolved"] is True
+    assert partition["jinuSourceSupported"] is False
+    assert "jinu" in unresolved and "jinu" not in supported
+    assert not any(binding["providerArtistId"] == genie["providerArtistId"] for binding in strong["bindings"])
+    assert jinu_packet["nextGate"] == (
+        "JINU_80441171_HUMAN_REVIEW_YEAR_SCOPE_AND_BINDING_AUTHORIZATION_REQUIRED"
+    )
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -354,7 +436,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU wrong-ID proof / alternate review | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU 80441171 review packet pending | Music 117/238/0 | Product unchanged"
     )
 
 
