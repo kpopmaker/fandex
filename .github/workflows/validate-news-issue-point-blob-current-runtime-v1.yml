@@ -12,6 +12,7 @@ on:
       - 'lib/server/ingestion/naverNewsLatestOfficialShadowSlot.ts'
       - 'tests/naver-news-issue-point-blob-runtime-read-v1.test.mts'
       - 'tests/naver-news-blob-current-evidence-coverage-v1.test.mts'
+      - 'tests/naver-news-stored-evidence-mirror-v1.test.mts'
       - 'tests/product-news-issue-point-real-read-boundary-v1.test.mts'
       - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
       - '.github/workflows/validate-news-issue-point-blob-current-runtime-v1.yml'
@@ -31,7 +32,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx tsx --test tests/naver-news-issue-point-blob-runtime-read-v1.test.mts tests/naver-news-blob-current-evidence-coverage-v1.test.mts tests/product-news-issue-point-real-read-boundary-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts
+      - run: npx tsx --test tests/naver-news-issue-point-blob-runtime-read-v1.test.mts tests/naver-news-blob-current-evidence-coverage-v1.test.mts tests/naver-news-stored-evidence-mirror-v1.test.mts tests/product-news-issue-point-real-read-boundary-v1.test.mts tests/fandex-current-runtime-assembly-readiness-v1.test.mts tests/risk-adjustment-news-issue-projection-v1.test.mts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build
