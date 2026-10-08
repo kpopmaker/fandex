@@ -1,0 +1,70 @@
+name: Validate Brand Fit Production lifecycle cutover execution v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-production-lifecycle-cutover-execution-v1'
+    paths:
+      - 'lib/product/activation/brandFitProductionLifecycleCutoverExecution.ts'
+      - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'tests/brand-fit-production-lifecycle-cutover-execution-v1.test.mts'
+      - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-lifecycle-cutover-execution-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/product/activation/brandFitProductionLifecycleCutoverExecution.ts'
+      - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'tests/brand-fit-production-lifecycle-cutover-execution-v1.test.mts'
+      - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
+      - '.github/workflows/validate-brand-fit-production-lifecycle-cutover-execution-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Brand Fit lifecycle cutover execution regression
+        run: npx tsx --test tests/brand-fit-production-lifecycle-cutover-execution-v1.test.mts
+
+      - name: Current 7-variable runtime assembly regression
+        run: npx tsx --test tests/fandex-current-runtime-assembly-readiness-v1.test.mts
+
+      - name: Existing Brand Fit activation approval regression
+        run: npx tsx --test tests/brand-fit-production-activation-approval-v1.test.mts
+
+      - name: Existing Brand Fit lifecycle candidate regression
+        run: npx tsx --test tests/brand-fit-production-lifecycle-cutover-candidate-v1.test.mts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "brandFitLifecycleCutoverExecuted=true"
+          echo "brandFitLifecycle=production"
+          echo "brandFitReadiness=production"
+          echo "renderRedeployExecuted=false"
+          echo "publicationAuthorized=false"
+          echo "publicRouteCutoverAuthorized=false"
+          echo "riskInventoryUpdated=false"
+          echo "riskConsumptionAuthorized=false"
+          echo "numericEligible=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
