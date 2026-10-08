@@ -1,0 +1,116 @@
+{
+  "version": "music_genie_jinu_80441171_identity_review_packet_v1",
+  "status": "provider_identity_qualified_human_review_and_debut_semantics_required",
+  "canonicalArtistId": "jinu",
+  "canonicalIdentity": {
+    "displayName": "JINU (김진우)",
+    "entityType": "solo",
+    "canonicalArtistUniverse": "artist_universe_v4",
+    "memberOfGroup": "WINNER",
+    "groupCareerDebutYear": 2014,
+    "firstOfficialSoloReleaseYear": 2019,
+    "firstOfficialSoloReleaseDate": "2019-08-14",
+    "canonicalDebutYearNotYetAssigned": true,
+    "officialLabel": "YG Entertainment"
+  },
+  "candidateProvider": {
+    "provider": "genie",
+    "providerArtistId": "80441171",
+    "providerDisplay": "JINU (김진우)",
+    "activityTypeRaw": "남성/솔로",
+    "providerDebutFieldRaw": "2014년",
+    "providerDebutYear": 2014,
+    "providerArtistUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=80441171",
+    "providerSongId": "89300603",
+    "providerSongTitle": "또또또 (Feat. MINO)",
+    "providerSongUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+    "providerAlbumDisplay": "JINU's HEYDAY",
+    "providerSongArtistLinkExact": true,
+    "providerSongArtistLinkIds": [
+      "80441171"
+    ],
+    "conflictingArtistIdOnOfficialSoloSong": false
+  },
+  "sourceEvidence": [
+    {
+      "source": "Genie artist details",
+      "url": "https://www.genie.co.kr/detail/artistInfo?xxnm=80441171",
+      "evidenceType": "provider_detail",
+      "observation": "Provider artist display JINU (김진우); male solo; year label 2014; 2019 release markers WINNER/JINU's HEYDAY/또또또."
+    },
+    {
+      "source": "Genie song",
+      "url": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+      "evidenceType": "provider_song_native_artist_link",
+      "observation": "Direct native Genie song link attributes '또또또 (Feat. MINO)' to provider artist ID 80441171; not 14946516."
+    },
+    {
+      "source": "YG Entertainment official discography",
+      "url": "https://www.ygfamily.com/ko/artists/jinu/discography/106",
+      "evidenceType": "label_official_discography",
+      "observation": "WINNER member Kim Jin-woo's solo track '또또또 (Feat.MINO)' released 2019-08-14 on JINU's HEYDAY."
+    },
+    {
+      "source": "YG Life",
+      "url": "https://yg-life.com/archives/136457?lang=en",
+      "evidenceType": "contemporaneous_solo_era_report",
+      "observation": "WINNER group debut in 2014 and first solo debut in 2019 are distinct epochs."
+    }
+  ],
+  "rejectedPriorCandidate": {
+    "providerArtistId": "14946516",
+    "providerDisplay": "JINU",
+    "providerDebutYear": 1996,
+    "providerDetailUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=14946516",
+    "releaseMarkers": [
+      "Jinujoke",
+      "엉뚱한 상상"
+    ],
+    "associatedHistoricalEntity": "1996 JINU linked to Roller Coaster / Hitchhiker",
+    "rejectAsCanonicalJinuIdentity": true,
+    "doesNotMakeCanonicalArtistUnsupported": true,
+    "sourceOriginalCandidateReceiptPreserved": true
+  },
+  "liveEvidence": {
+    "workflowRunId": 37778706306,
+    "jobId": 113316044515,
+    "workflowConclusion": "success",
+    "verifiedExactHead": "a639cdb9482df87c1a9194ccb044b4b374267d07",
+    "artifactId": 11550358996,
+    "artifactDigest": "sha256:0a4ed427cad7b0f4b1bfa4b5e7b64b1d98a24a6fe2fe20a5efbeb8ec69bd9ccd",
+    "artifactExpiry": "2026-10-29T12:42:02Z",
+    "validatedChecks": [
+      "pinned_historical_id_1996",
+      "alternate_artist_display_exact",
+      "alternate_provider_year_2014",
+      "alternate_entity_type_solo",
+      "solo_song_native_artist_link_80441171",
+      "old_artist_id_absent_from_solo_song"
+    ]
+  },
+  "reviewGate": {
+    "identityEvidenceQualified": true,
+    "providerDebutYearMeansSoloDebut": false,
+    "groupCareerYearAndSoloReleaseYearMustRemainSeparate": true,
+    "canonicalYearScopePolicyHumanDecisionRequired": true,
+    "providerDebutYearMatchingStrictStrong26Contract": false,
+    "reviewStatus": "pending_human_review",
+    "reviewer": null,
+    "reviewedAt": null,
+    "approvedForSourceApplication": false,
+    "approvedForMusicCompatibilityPromotion": false,
+    "providerBindingApplied": false,
+    "providerMutationAuthorized": false,
+    "productActivationAuthorized": false,
+    "scheduledCollectionAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "sourcePartitionAsOfCandidate": {
+    "supported": 117,
+    "unresolved": 238,
+    "unsupported": 0,
+    "jinuUnresolved": true,
+    "jinuSourceSupported": false
+  },
+  "nextGate": "JINU_80441171_HUMAN_REVIEW_YEAR_SCOPE_AND_BINDING_AUTHORIZATION_REQUIRED"
+}
