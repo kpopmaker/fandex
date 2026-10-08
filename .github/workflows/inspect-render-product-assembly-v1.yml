@@ -19,9 +19,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          status="$(
-            curl               --silent               --show-error               --retry 0               --max-time 120               --output /tmp/fandex-beta.html               --write-out '%{http_code}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
+          response="$(
+            curl               --silent               --show-error               --retry 0               --max-time 120               --output /tmp/fandex-beta.html               --write-out '%{http_code} %{time_total}'               'https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta'
           )"
+          status="${response%% *}"
+          elapsed_seconds="${response#* }"
+          echo "FANDEX_RENDER_BETA_REQUEST_TOTAL_SECONDS=$elapsed_seconds"
           test "$status" = "200"
 
           node <<'NODE'
@@ -96,3 +99,5 @@ jobs:
 # read-only verification after approved Render 93e8b208 live
 
 # read-only verification after Render 562dbbff (PR #577/#578) LIVE
+
+# read-only Beta after Render main 90ad93c69ce6f3e5a94678959609e9114cbbd072
