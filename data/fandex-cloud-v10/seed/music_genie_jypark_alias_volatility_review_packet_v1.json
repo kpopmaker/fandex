@@ -1,0 +1,97 @@
+{
+  "version": "music_genie_jypark_search_alias_temporal_volatility_review_packet_v1",
+  "status": "live_alias_search_non_determinism_documented_native_link_identity_supported_no_binding",
+  "canonicalArtistId": "jypark",
+  "provider": "genie",
+  "source": "music_chart",
+  "canonicalUniverseCount": 355,
+  "originalProviderId": "14945855",
+  "originalGenieDebutYear": 1994,
+  "independentCorroboratedDebutYear": 1994,
+  "originalCanonicalDebutYear": null,
+  "crossRunEvidence": [
+    {
+      "runId": 37861245410,
+      "jobId": 113597220738,
+      "sourceHead": "54c4f744698cba92e142a07d3a2a9f831b1c86b9",
+      "artifactId": 11586292051,
+      "artifactDigest": "sha256:b37a7473d3a5eae4a2789926037fbb6316f8ca8526a8393391be004be0a9f2a7",
+      "checkedAtUtc": "2026-10-08T23:46:50.616953+00:00",
+      "result": "strict_alias_check_failed",
+      "observedExactAliasProviderIds": [
+        "14945855",
+        "80776748",
+        "83183005"
+      ],
+      "failedIdentityCondition": "search_alias_identity_not_uniquely_pinned",
+      "genieOriginalDetailYear": 1994,
+      "matchedStrictAliasCountInSix": 5,
+      "yearConflict": false,
+      "automaticBindingAuthorized": false
+    },
+    {
+      "runId": 37861446921,
+      "jobId": 113597894133,
+      "sourceHead": "7c7906287e5a301a0d79311ca899e463be6dcc35",
+      "artifactId": 11586149025,
+      "artifactDigest": "sha256:01da577174113b5a49ccfe9aed7e3ca68865384f1e97294f6688568b81407712",
+      "checkedAtUtc": "2026-10-08T23:49:02.628479+00:00",
+      "result": "strict_alias_check_passed",
+      "observedExactAliasProviderIds": [
+        "14945855"
+      ],
+      "failedIdentityCondition": null,
+      "genieOriginalDetailYear": 1994,
+      "matchedStrictAliasCountInSix": 6,
+      "yearConflict": false,
+      "nativeSongArtistLinks": [
+        {
+          "title": "어머님이 누구니 (Feat. 제시)",
+          "songId": "83806325",
+          "url": "https://www.genie.co.kr/detail/songInfo?xgnm=83806325",
+          "nativeArtistId": "14945855",
+          "directProviderLinkHttp200": true
+        },
+        {
+          "title": "WET",
+          "songId": "116052509",
+          "url": "https://www.genie.co.kr/detail/songInfo?xgnm=116052509",
+          "nativeArtistId": "14945855",
+          "directProviderLinkHttp200": true
+        }
+      ],
+      "nativeSongsConvergeOnOriginalProviderId": true,
+      "automaticBindingAuthorized": false
+    }
+  ],
+  "searchTemporalVolatility": {
+    "firstExactNameSearchCandidateCount": 3,
+    "secondExactNameSearchCandidateCount": 1,
+    "candidateSetChangedWithinMinutes": true,
+    "perRunAliasUniquenessIsNotDurableIdentityProof": true,
+    "nativeReleaseLinkCorroboratesOriginalProviderId": true,
+    "allSourceOriginalEvidenceImmutable": true,
+    "doNotUseFirstResultOrFuzzySearchAutoBinding": true,
+    "dynamicProbeCanPassWithKnownHomonymQuarantineWithoutApprovingSource": true,
+    "unexpectedSearchYearOrNativeSongConflictsMustFailClosed": true
+  },
+  "safety": {
+    "pendingHumanReview": true,
+    "readOnlyResearchEvidenceOnly": true,
+    "existingSixReviewedBindingApplications": 0,
+    "musicSupportedChangeApproved": false,
+    "originalCandidateProviderIdChanged": false,
+    "canonicalYearBackfilled": false,
+    "sourceCompatibilityUpdated": false,
+    "productActivated": false,
+    "schedulerOrDatabaseChanged": false,
+    "mainMergeAuthorized": false,
+    "productionDeploymentAuthorized": false
+  },
+  "sourcePartitionActual": {
+    "supported": 117,
+    "unresolved": 238,
+    "unsupported": 0
+  },
+  "nextGate": "JYP_GENIE_ALIAS_VOLATILITY_INDEPENDENT_NATIVE_LINK_HUMAN_REVIEW_REQUIRED"
+}
