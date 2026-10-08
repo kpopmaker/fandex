@@ -1012,6 +1012,68 @@ def main() -> None:
         "GENIE_BOYSTORY_YEAR_SCOPE_AND_GIRLSET_NATIVE_RELEASE_ID_HUMAN_REVIEW_REQUIRED"
     )
 
+    # JYP alias-search homonyms can appear/disappear between live Genie snapshots;
+    # independent native song backlinks do not authorize a reviewed binding.
+    jyp_drift = load(SOURCE / "music_genie_jypark_alias_volatility_review_packet_v1.json")
+    assert jyp_drift["version"] == "music_genie_jypark_search_alias_temporal_volatility_review_packet_v1"
+    assert jyp_drift["status"] == (
+        "live_alias_search_non_determinism_documented_native_link_identity_supported_no_binding"
+    )
+    assert jyp_drift["canonicalArtistId"] == "jypark"
+    assert jyp_drift["originalProviderId"] == "14945855"
+    assert jyp_drift["originalGenieDebutYear"] == 1994
+    assert jyp_drift["independentCorroboratedDebutYear"] == 1994
+    assert jyp_drift["originalCanonicalDebutYear"] is None
+    first, repeat = jyp_drift["crossRunEvidence"]
+    assert (first["runId"], repeat["runId"]) == (37861245410, 37861446921)
+    assert first["sourceHead"] == "54c4f744698cba92e142a07d3a2a9f831b1c86b9"
+    assert repeat["sourceHead"] == "7c7906287e5a301a0d79311ca899e463be6dcc35"
+    assert (first["artifactId"], repeat["artifactId"]) == (11586292051, 11586149025)
+    assert first["artifactDigest"] == (
+        "sha256:b37a7473d3a5eae4a2789926037fbb6316f8ca8526a8393391be004be0a9f2a7"
+    )
+    assert repeat["artifactDigest"] == (
+        "sha256:01da577174113b5a49ccfe9aed7e3ca68865384f1e97294f6688568b81407712"
+    )
+    assert first["result"] == "strict_alias_check_failed"
+    assert first["failedIdentityCondition"] == "search_alias_identity_not_uniquely_pinned"
+    assert first["observedExactAliasProviderIds"] == [
+        "14945855", "80776748", "83183005",
+    ]
+    assert repeat["result"] == "strict_alias_check_passed"
+    assert repeat["failedIdentityCondition"] is None
+    assert repeat["observedExactAliasProviderIds"] == ["14945855"]
+    assert (first["matchedStrictAliasCountInSix"], repeat["matchedStrictAliasCountInSix"]) == (5, 6)
+    assert first["yearConflict"] is repeat["yearConflict"] is False
+    assert first["automaticBindingAuthorized"] is repeat["automaticBindingAuthorized"] is False
+    assert repeat["nativeSongsConvergeOnOriginalProviderId"] is True
+    assert {x["songId"] for x in repeat["nativeSongArtistLinks"]} == {
+        "83806325", "116052509",
+    }
+    assert all(x["nativeArtistId"] == "14945855" for x in repeat["nativeSongArtistLinks"])
+    assert all(x["directProviderLinkHttp200"] for x in repeat["nativeSongArtistLinks"])
+    drift = jyp_drift["searchTemporalVolatility"]
+    assert (drift["firstExactNameSearchCandidateCount"], drift["secondExactNameSearchCandidateCount"]) == (3, 1)
+    assert all(v is True for v in drift.values())
+    safety_jyp = jyp_drift["safety"]
+    assert safety_jyp["pendingHumanReview"] is True
+    assert safety_jyp["readOnlyResearchEvidenceOnly"] is True
+    assert safety_jyp["existingSixReviewedBindingApplications"] == 0
+    for k in (
+        "musicSupportedChangeApproved", "originalCandidateProviderIdChanged",
+        "canonicalYearBackfilled", "sourceCompatibilityUpdated", "productActivated",
+        "schedulerOrDatabaseChanged", "mainMergeAuthorized", "productionDeploymentAuthorized",
+    ):
+        assert safety_jyp[k] is False, k
+    assert jyp_drift["sourcePartitionActual"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    assert "jypark" in unresolved and "jypark" not in targets
+    assert not any(x["canonicalArtistId"] == "jypark" for x in strong["bindings"])
+    assert jyp_drift["nextGate"] == (
+        "JYP_GENIE_ALIAS_VOLATILITY_INDEPENDENT_NATIVE_LINK_HUMAN_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -1035,7 +1097,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native + BOY STORY album/1 GIRLSET alias-only held | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native + BOY STORY album/1 GIRLSET alias-only held | JYP live alias volatility pinned | Music 117/238/0 | Product unchanged"
     )
 
 
