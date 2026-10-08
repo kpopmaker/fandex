@@ -105,3 +105,5 @@ jobs:
 # read-only Beta after Render exact main 556b8d3129e1a77d627e3a3a0c0495195802bfb4
 
 # opt-in News Blob stage timing smoke after Render 7e63e37f LIVE
+
+# opt-in canonical remote Blob vs verified decode after exact c9ee1d71 LIVE
