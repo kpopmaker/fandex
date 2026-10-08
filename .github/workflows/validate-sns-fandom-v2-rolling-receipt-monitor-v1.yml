@@ -1,0 +1,89 @@
+name: Validate snsFandom v2 rolling receipt monitor v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomYoutubeV2RollingReceiptMonitorV1.ts'
+      - 'scripts/operations/snsFandomYoutubeV2RollingReceiptMonitorV1.mts'
+      - 'tests/sns-fandom-youtube-v2-rolling-receipt-monitor-v1.test.mts'
+      - '.github/workflows/validate-sns-fandom-v2-rolling-receipt-monitor-v1.yml'
+  workflow_dispatch:
+    inputs:
+      verify_live_blob:
+        description: Run read-only monitoring (requires separately verified scheduler evidence)
+        type: boolean
+        required: true
+        default: false
+      through_observed_slot_start:
+        description: Latest UTC hourly slot confirmed separately by operator from Render + Actions
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Rolling continuity contract and negative-control regressions
+        run: npx tsx --test tests/sns-fandom-youtube-v2-rolling-receipt-monitor-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo 'manualV2ProviderDispatch=false'
+          echo 'blobWrites=0'
+          echo 'providerCallsPerformed=false'
+          echo 'schedulerMutationPerformed=false'
+          echo 'historicalBackfillPerformed=false'
+          echo 'productActivationAuthorized=false'
+
+  live-readback:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      && github.ref == 'refs/heads/main'
+      && inputs.verify_live_blob == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.FANDEX_NAVER_EVIDENCE_BLOB_READ_WRITE_TOKEN }}
+      FANDEX_SNS_FANDOM_RECURRING_V2_AUTHORIZED_REVISION_SHA: '27a007c2afb4776cf2ae89c2e8bd4ba5f9a8f688'
+      FANDEX_SNS_FANDOM_RECURRING_V2_CUTOVER_EVIDENCE_REF: 'github-issue://kpopmaker/fandex/issues/509#issuecomment-6049459425'
+      FANDEX_SNS_FANDOM_V2_FIRST_SUCCESSFUL_SLOT_START: '2026-10-08T01:00:00.000Z'
+      FANDEX_SNS_FANDOM_V2_MONITOR_THROUGH_OBSERVED_SLOT: ${{ inputs.through_observed_slot_start }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read-only rolling canonical and receipt verification
+        run: |
+          test -n "$BLOB_READ_WRITE_TOKEN"
+          test -n "$FANDEX_SNS_FANDOM_V2_MONITOR_THROUGH_OBSERVED_SLOT"
+          npx tsx scripts/operations/snsFandomYoutubeV2RollingReceiptMonitorV1.mts
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo 'evidenceHorizon=operator-supplied-requires-separate-scheduler-verification'
+          echo 'blobWrites=0'
+          echo 'providerCallsPerformed=false'
+          echo 'historicalBackfillPerformed=false'
+          echo 'schedulerMutationPerformed=false'
+          echo 'productionCollectionAuthorized=false'
+          echo 'providerSubmissionAuthorized=false'
+          echo 'productActivationAuthorized=false'
