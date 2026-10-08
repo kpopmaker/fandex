@@ -512,3 +512,82 @@ test('adding durable brandFit evidence makes the same runtime builder reach full
   assert.equal(result.methodologyFinalized, false);
   assert.equal(result.publicRouteActivated, false);
 });
+
+
+test('Momentum readiness failures preserve exact upstream blocker codes without resolving or scoring the variable', () => {
+  const sources = baseSources();
+  const result = buildFandexCurrentRuntimeAssemblyReadiness({
+    sources: {
+      ...sources,
+      brandFitPoint: {
+        status: 'ok',
+        evidence: [brandEvidence()],
+      },
+      growthMomentumPoint: {
+        runtimeShadow: sources.growthMomentumPoint.runtimeShadow,
+        readiness: {
+          ...sources.growthMomentumPoint.readiness,
+          state: 'blocked',
+          blockers: [
+            'current-lastfm-source-advanced-beyond-audit',
+            'historical-carrier-not-current-activation-evidence',
+          ],
+        },
+      },
+    },
+    universeVersion: 'test-universe-v1',
+    artists: [{ id: 'iu' }],
+    generatedAt: '2026-10-08T00:17:00.000Z',
+  });
+
+  assert.equal(result.status, 'blocked');
+  assert.deepEqual(result.blockedVariableIds, ['growthMomentumPoint']);
+  assert.equal(result.resolvedVariableIds.length, 6);
+  assert.equal(result.assembly, null);
+  assert.equal(result.scoreCalculated, false);
+  assert.equal(result.publicRouteActivated, false);
+
+  const momentum = result.variableStates.find(
+    (entry) => entry.variableId === 'growthMomentumPoint',
+  );
+  assert.equal(momentum?.adapterState, 'blocked');
+  assert.equal(
+    momentum?.reason,
+    'upstream-readiness-blocked'
+      + '|current-lastfm-source-advanced-beyond-audit'
+      + '|historical-carrier-not-current-activation-evidence',
+  );
+  assert.equal(
+    result.records.some((record) => record.variableId === 'growthMomentumPoint'),
+    false,
+  );
+});
+
+test('Momentum diagnosis preserves generic fallback when no upstream blocker details exist', () => {
+  const sources = baseSources();
+  const result = buildFandexCurrentRuntimeAssemblyReadiness({
+    sources: {
+      ...sources,
+      brandFitPoint: {
+        status: 'ok',
+        evidence: [brandEvidence()],
+      },
+      growthMomentumPoint: {
+        runtimeShadow: sources.growthMomentumPoint.runtimeShadow,
+        readiness: {
+          ...sources.growthMomentumPoint.readiness,
+          state: 'blocked',
+          blockers: [],
+        },
+      },
+    },
+    universeVersion: 'test-universe-v1',
+    artists: [{ id: 'iu' }],
+    generatedAt: '2026-10-08T00:17:00.000Z',
+  });
+  const momentum = result.variableStates.find(
+    (entry) => entry.variableId === 'growthMomentumPoint',
+  );
+  assert.equal(momentum?.reason, 'upstream-readiness-blocked');
+  assert.equal(result.assembly, null);
+});
