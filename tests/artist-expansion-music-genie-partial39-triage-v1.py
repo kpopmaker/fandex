@@ -571,6 +571,74 @@ def main() -> None:
 
 
 
+    # Provider album/song links resolve prior ambiguous artists, but never approve them.
+    two_packet = load(SOURCE / "music_genie_superjunior_maddox_identity_review_packet_v1.json")
+    assert two_packet["version"] == "music_genie_superjunior_maddox_identity_review_packet_v1"
+    assert two_packet["status"] == (
+        "provider_identity_evidence_qualified_human_review_and_scope_required_nonactivating"
+    )
+    assert two_packet["provider"] == "genie"
+    assert two_packet["source"] == "music_chart"
+    assert two_packet["sourceCanonicalUniverseCount"] == 355
+    verified = two_packet["liveVerification"]
+    assert verified["workflowRunId"] == 37783830387
+    assert verified["investigationJobId"] == 113333373211
+    assert verified["verifiedHead"] == "5cd164c2fe650eced08ee5becd224ffa088edb03"
+    assert verified["artifactId"] == 11553078588
+    assert verified["artifactDigest"] == (
+        "sha256:09eeb8b970b4f6c92ecc1d1a9ae95f2f6c630dc080ad0fd7d203f25660de96ca"
+    )
+    assert verified["result"] == "success"
+    assert verified["sourceProviderHttpOk"] is True
+    assert verified["noProducerApprovedBindings"] is True
+    assert len(two_packet["identityCandidates"]) == 2
+    sj, maddox = two_packet["identityCandidates"]
+    assert (sj["canonicalArtistId"], maddox["canonicalArtistId"]) == ("superjunior", "maddox")
+    assert sj["canonicalDebutYear"] == 2005
+    assert sj["canonicalEntityType"] == "group"
+    assert sj["providerQualifiedCandidate"]["providerArtistId"] == "21060178"
+    assert sj["providerQualifiedCandidate"]["providerDebutYear"] == 2005
+    assert sj["providerQualifiedCandidate"]["providerActivityType"] == "남성/그룹"
+    assert sj["providerQualifiedCandidate"]["sourceAliasWrapperReviewRequired"] is True
+    assert sj["providerQualifiedCandidate"]["exactNameSearchReturned"] is False
+    assert sj["otherHistoricalCandidate"]["providerArtistId"] == "80150326"
+    assert sj["otherHistoricalCandidate"]["shouldNotBindToSuperjuniorGroup"] is True
+    assert sj["otherHistoricalCandidate"]["isSeparateSubunitOfCanonicalGroup"] is True
+    assert set(sj["otherHistoricalCandidate"]["subunitMembers"]) == {"Donghae", "Eunhyuk"}
+    assert sj["otherHistoricalCandidate"]["doesNotMakeSuperjuniorUnsupported"] is True
+
+    assert maddox["independentDebutEvidence"]["officialSoloDebutDate"] == "2019-04-03"
+    assert maddox["independentDebutEvidence"]["firstOfficialSoloYear"] == 2019
+    assert maddox["independentDebutEvidence"]["url"].startswith("https://")
+    md = maddox["providerQualifiedCandidate"]
+    assert md["providerArtistId"] == "80624750"
+    assert md["display"] == "마독스 (Maddox)"
+    assert md["providerDebutYear"] == 2019
+    assert md["providerActivityType"] == "남성/솔로"
+    assert md["twoIndependentNativeSongArtistLinksAgree"] is True
+    assert md["providerDebutYearMatchesReportedYear"] is True
+    assert len(md["nativeSongLinks"]) == 2
+    assert {x["songId"] for x in md["nativeSongLinks"]} == {"93307770", "90418457"}
+    assert all(x["exactProviderArtistId"] == "80624750" for x in md["nativeSongLinks"])
+    assert all(x["url"].startswith("https://") for x in md["nativeSongLinks"])
+    assert {x["providerArtistId"] for x in maddox["otherHistoricalCandidates"]} == {
+        "80431028", "81384545"
+    }
+    assert all(x["noKqSongBacklink"] for x in maddox["otherHistoricalCandidates"])
+    assert all(not x.get("sourceBindingApproved", False) for x in (sj, maddox))
+    assert sj["sourceStatus"] == maddox["sourceStatus"] == "unresolved"
+    assert {"superjunior", "maddox"}.issubset(unresolved)
+    assert {"superjunior", "maddox"}.isdisjoint(set(supported) | set(unsupported) | set(targets))
+    assert not {"superjunior", "maddox"}.intersection(
+        row["canonicalArtistId"] for row in strong["bindings"]
+    )
+    two_safety = two_packet["sourceSafety"]
+    assert set(two_safety.values()) == {True}
+    assert two_packet["sourcePartition"] == {"supported": 117, "unresolved": 238, "unsupported": 0}
+    assert two_packet["nextGate"] == (
+        "GENIE_SUPERJUNIOR_MADDOX_INDIVIDUAL_BINDING_AND_ALIAS_SCOPE_HUMAN_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -594,7 +662,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified pending review | Music 117/238/0 | Product unchanged"
     )
 
 
