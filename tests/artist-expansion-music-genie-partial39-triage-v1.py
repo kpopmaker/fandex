@@ -325,6 +325,21 @@ def main() -> None:
         "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED"
     )
 
+    correction = jinu_live["debutFieldParserCorrectionV6"]
+    assert correction["source"] == "music_genie_jinu_80441171_identity_review_packet_v1"
+    assert correction["verifiedLiveRunId"] == 37778706306
+    assert correction["artifactId"] == 11550358996
+    assert correction["previousProviderDebutYearParsedNullWasParserLimitation"] is True
+    assert correction["previousObservedWrongCandidate1996"] is True
+    assert correction["alternateProviderDebutYearNowParsed"] == 2014
+    assert correction["alternateProviderActivityType"] == "남성/솔로"
+    assert correction["officialWinnerGroupDebutYear"] == 2014
+    assert correction["officialSoloDebutYear"] == 2019
+    assert correction["canonicalDebutYearStillNull"] is True
+    assert correction["identityReviewCandidatePrepared"] is True
+    assert correction["humanBindingApproval"] is False
+    assert correction["sourceSupportedPromotion"] is False
+
     # Identified provider entity is only a candidate until a human reviews year semantics.
     jinu_packet = load(SOURCE / "music_genie_jinu_80441171_identity_review_packet_v1.json")
     assert jinu_packet["version"] == "music_genie_jinu_80441171_identity_review_packet_v1"
