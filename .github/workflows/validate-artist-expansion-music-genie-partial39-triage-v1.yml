@@ -1,0 +1,22 @@
+name: Validate Artist Expansion Music Genie partial39 triage v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-genie-partial39-triage-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-partial39-triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate fail-closed partial39 evidence triage
+        run: python tests/artist-expansion-music-genie-partial39-triage-v1.py
