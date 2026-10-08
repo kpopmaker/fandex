@@ -597,3 +597,53 @@ test('News stage timing preserves fail-closed credential resolution failure', as
   assert.match(matching[0]!, /"outcome":"rejected"/);
   assert.doesNotMatch(matching[0]!, /sensitive-token-lookup-failure/);
 });
+
+test('12-worker canonical experiment is gated to explicit Production env and preserves all official evidence', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(protocolStart + index * 60 * 60_000).toISOString(),
+    );
+  }
+  async function probe(setting: string | undefined) {
+    let active = 0;
+    let peak = 0;
+    const result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        BLOB_READ_WRITE_TOKEN: 'test-only-no-external-network',
+        ...(setting ? { FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY: setting } : {}),
+      },
+      {
+        createReadStore() {
+          return {
+            listPathnames: store.listPathnames,
+            async readText(pathname: string) {
+              if (!pathname.includes('/jobs/')) return store.readText(pathname);
+              active += 1;
+              peak = Math.max(active, peak);
+              try {
+                await new Promise<void>((resolve) => setTimeout(resolve, 3));
+                return await store.readText(pathname);
+              } finally {
+                active -= 1;
+              }
+            },
+          };
+        },
+      },
+    );
+    assert.equal(result.status, 'ok');
+    assert.equal(active, 0);
+    return peak;
+  }
+
+  const defaultPeak = await probe(undefined);
+  const unexpectedPeak = await probe('11');
+  const optedInPeak = await probe('12');
+  assert.ok(defaultPeak > 1 && defaultPeak <= 8);
+  assert.ok(unexpectedPeak > 1 && unexpectedPeak <= 8);
+  assert.ok(optedInPeak > 8 && optedInPeak <= 12);
+});

@@ -38,6 +38,10 @@ const SCHEDULER_COLLECTION_KEY_PATTERN =
   /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
 
 export const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8 as const;
+export const EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 12 as const;
+export type NaverNewsMirrorReadConcurrency =
+  | typeof MAX_CONCURRENT_MIRROR_EVIDENCE_READS
+  | typeof EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS;
 
 // Keep up to eight Blob reads in flight without head-of-line blocking at
 // batch boundaries. Retain every successful entry in its original order.
@@ -46,6 +50,7 @@ export const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8 as const;
 export async function mapMirroredEvidenceBatched<T, U>(
   values: readonly T[],
   read: (value: T) => Promise<U>,
+  maxConcurrency: NaverNewsMirrorReadConcurrency = MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
 ): Promise<U[]> {
   const results = new Array<U>(values.length);
   let nextIndex = 0;
@@ -68,7 +73,7 @@ export async function mapMirroredEvidenceBatched<T, U>(
 
   await Promise.all(
     Array.from(
-      { length: Math.min(MAX_CONCURRENT_MIRROR_EVIDENCE_READS, values.length) },
+      { length: Math.min(maxConcurrency, values.length) },
       () => readNext(),
     ),
   );
@@ -589,6 +594,9 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
   store: Pick<ImmutableTextObjectStore, 'readText'>,
   options: Readonly<{
     onBatchReadPhaseStats?: (record: NaverNewsMirrorCanonicalReadPhaseStats) => void;
+    // The default is always 8. Experimental 12 is only passed by an
+    // explicitly gated Production reader. Never applies to manifest reads.
+    maxConcurrentReads?: NaverNewsMirrorReadConcurrency;
   }> = {},
 ): NaverNewsCanonicalJobEvidenceReadRepository {
   async function readOne(
@@ -657,6 +665,7 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
               decodeMaxMs = Math.max(decodeMaxMs, ms);
             }
           },
+          options.maxConcurrentReads ?? MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
         );
         outcome = 'fulfilled';
         return new Map(entries.filter(
