@@ -21,6 +21,10 @@ import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from './momentumEvidenceConsensusRealProductRead';
 
+import type {
+  ProductMomentumEvidenceConsensusReadModelResult,
+} from '../../product/contracts/productMomentumEvidenceConsensus';
+
 const AUDIT_PATH = resolve(
   process.cwd(),
   'data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json',
@@ -108,15 +112,17 @@ async function readSourceAudit():
   }
 }
 
-export async function getMomentumLiveShadowProductReadinessForIU():
-  Promise<MomentumLiveShadowProductReadinessResult> {
+export async function getMomentumLiveShadowProductReadinessForIU(
+  runtimeShadowRead: Promise<ProductMomentumEvidenceConsensusReadModelResult> =
+    getMomentumEvidenceConsensusShadowProductForIU(),
+): Promise<MomentumLiveShadowProductReadinessResult> {
   const [
     runtimeShadow,
     sourceAudit,
     currentLastfm,
     currentNaver,
   ] = await Promise.all([
-    getMomentumEvidenceConsensusShadowProductForIU(),
+    runtimeShadowRead,
     readSourceAudit(),
     readCurrentLastfmSnapshotDate(),
     readCurrentNaverLatestOfficialSlot(),

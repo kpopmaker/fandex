@@ -1,0 +1,58 @@
+name: Validate FANDEX Product bounded memory reads v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-render-product-memory-bounded-runtime-v1'
+    paths:
+      - 'lib/server/product/boundedRuntimeSourceReads.ts'
+      - 'lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
+      - 'tests/fandex-product-runtime-memory-bounds-v1.test.mts'
+      - '.github/workflows/validate-fandex-product-memory-bounds-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/server/product/boundedRuntimeSourceReads.ts'
+      - 'lib/server/product/fandexCurrentRuntimeAssemblyReadiness.ts'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
+      - 'tests/fandex-product-runtime-memory-bounds-v1.test.mts'
+      - '.github/workflows/validate-fandex-product-memory-bounds-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Memory-bounded reads regressions
+        run: npx tsx --test tests/fandex-product-runtime-memory-bounds-v1.test.mts
+      - name: Existing current assembly contract regression
+        run: npx tsx --test tests/fandex-current-runtime-assembly-readiness-v1.test.mts
+      - name: Existing runtime binding regression
+        run: npx tsx --test tests/fandex-artist-runtime-binding-v1.test.mts
+      - name: Brand Fit immutable read regression
+        run: npx tsx --test tests/brand-fit-stored-evidence-runtime-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "maxConcurrentIndependentSourceReads=2"
+          echo "sharedCompletedEvidenceCache=false"
+          echo "numericScoreProduced=false"
+          echo "runtimeRightsChanged=false"
+          echo "renderDeployExecuted=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "publicationOrRiskMutation=false"
