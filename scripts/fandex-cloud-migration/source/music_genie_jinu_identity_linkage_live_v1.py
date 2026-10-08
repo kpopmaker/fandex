@@ -56,16 +56,31 @@ def fetch(url: str) -> dict:
     return {"statusCode": None, "responseLength": 0, "html": "", "error": last_error}
 
 
+def extract_provider_field(soup: BeautifulSoup, label: str) -> str | None:
+    node = soup.find("img", attrs={"alt": label})
+    if node is not None:
+        li = node.find_parent("li")
+        if li:
+            value = " ".join(li.stripped_strings).strip()
+            if value:
+                return value
+    return None
+
+
 def parse_detail(html: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     node = soup.select_one(".info-zone h2.name") or soup.select_one("h2.name")
     display = " ".join(node.stripped_strings).strip() if node else ""
     plain = " ".join(soup.stripped_strings)
     debut_match = re.search(r"데뷔\s*((?:19|20)\d{2})년", plain)
+    activity = extract_provider_field(soup, "활동유형")
+    debut_label = extract_provider_field(soup, "데뷔")
     album_names = ("Jinujoke", "엉뚱한 상상", "JINU's HEYDAY", "JINU’s HEYDAY", "또또또")
     observed = [name for name in album_names if compact(name) in compact(plain)]
     return {
         "providerDisplay": display,
+        "providerActivityType": activity,
+        "providerDebutFieldRaw": debut_label,
         "debutYearInVisibleText": int(debut_match.group(1)) if debut_match else None,
         "observedReleaseOrSongMarkers": observed,
         "mentionsRollerCoaster": "롤러코스터" in plain,
@@ -261,6 +276,11 @@ def main() -> None:
     OUTPUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     assert not payload["automaticRebindingAuthorized"]
     assert not payload["musicSupportedPromotionAuthorized"]
+    assert song_result["statusCode"] == 200, "genie_song_http_not_200"
+    assert song_linkage is not None, "genie_song_artist_linkage_missing"
+    assert song_linkage["exactWinnerArtistLinkObserved"] is True, "wrong_or_missing_genie_song_artist_id"
+    assert song_linkage["oldJinuProviderIdNotAttributed"] is True, "historical_artist_on_winner_solo_song"
+    assert classification == "pinned_genie_id_historical_jinu_conflict_held"
     print("PASS: JINU Genie live identity investigation non-activating | outcome=" + classification)
     print("PINNED_DETAIL " + json.dumps({"status": response["statusCode"], "detail": detail}, ensure_ascii=False))
     print("SEARCH_EXACT " + json.dumps(search_id_candidates, ensure_ascii=False))
