@@ -927,6 +927,91 @@ def main() -> None:
     assert remaining7["sourcePartitionActual"] == {"supported": 117, "unresolved": 238, "unsupported": 0}
     assert remaining7["nextGate"] == "MISSING14_REMAINING7_PROVIDER_ID_AND_DEBUT_ERA_HUMAN_REVIEW_REQUIRED"
 
+    # Last historical year-missing pair: BOY STORY native album; GIRLSET still alias-only.
+    last2 = load(SOURCE / "music_genie_missing14_last2_native_release_review_packet_v1.json")
+    assert last2["version"] == "music_genie_missing14_last2_native_release_review_packet_v1"
+    assert last2["status"] == (
+        "boystory_native_genie_album_link_qualified_girlset_provider_alias_only_pending"
+    )
+    assert last2["provider"] == "genie" and last2["source"] == "music_chart"
+    assert last2["canonicalUniverseCount"] == 355
+    receipt2 = last2["validation"]
+    assert receipt2["historicalFull264AndExact94Immutable"] is True
+    assert receipt2["firstLiveProbeHead"] == "c550fd7f02909c62933cf228b4708339aeb29548"
+    assert receipt2["runId"] == 37861067555
+    assert receipt2["jobId"] == 113596627420
+    assert receipt2["result"] == "success"
+    assert receipt2["artifactId"] == 11586232985
+    assert receipt2["artifactDigest"] == (
+        "sha256:3a3b1d65f80b7e6d4f0cc603a034f8be74b849c9e86c49efaf505a94787db14c"
+    )
+    assert receipt2["providerArtistDetailHttp200Count"] == 2
+    assert receipt2["nativeAlbumExactIdConfirmedCount"] == 1
+    assert receipt2["nativeGIRLSETSongLinkConfirmedCount"] == 0
+    assert receipt2["notExaminedAllPossibleGIRLSETGenieReleases"] is True
+    assert receipt2["jypOfficialContextRecordedNotFetchedByCollector"] is True
+    a, b = last2["records"]
+    assert (a["canonicalArtistId"], b["canonicalArtistId"]) == ("boystory", "girlset")
+    assert (a["originalProviderArtistId"], b["originalProviderArtistId"]) == (
+        "80899341", "83019445"
+    )
+    assert a["nativeQualifiedProviderArtistId"] == a["originalProviderArtistId"]
+    assert a["providerDisplay"] == "BOY STORY"
+    assert a["providerActivityType"] == "남성/그룹"
+    assert a["canonicalDebutYear"] == 2018 and a["currentProviderDebutYear"] is None
+    assert a["releaseEvidence"]["kind"] == "genie_native_album_artist_link"
+    assert a["releaseEvidence"]["albumId"] == "85406781"
+    assert a["releaseEvidence"]["url"] == (
+        "https://www.genie.co.kr/detail/albumInfo?axnm=85406781"
+    )
+    assert a["releaseEvidence"]["singleExactLinkedProviderArtistId"] == "80899341"
+    assert a["releaseEvidence"]["releaseDate"] == "2024-07-12"
+    assert a["releaseEvidence"]["providerHttp200"] is True
+    assert a["releaseEvidence"]["independentNativeAlbumToArtistMatch"] is True
+    assert a["reviewStatus"] == "native_identity_qualified_year_evidence_missing_human_review_pending"
+    assert b["providerQualifiedProfileArtistId"] == "83019445"
+    assert b["providerDisplay"] == "GIRLSET" and b["providerActivityType"] == "여성/그룹"
+    assert b["canonicalDebutYear"] is None and b["currentProviderDebutYear"] is None
+    assert b["genieSearchEvidence"]["searchedQueries"] == [
+        "GIRLSET Commas", "GIRLSET Little Miss", "GIRLSET",
+    ]
+    assert b["genieSearchEvidence"]["profilePageFetchedHttp200"] is True
+    assert b["genieSearchEvidence"]["genieNativeSongOrAlbumArtistIdConfirmed"] is False
+    assert b["genieSearchEvidence"]["confirmedNativeSongIds"] == []
+    assert b["genieSearchEvidence"]["nonDiscoveryCannotProveGenieAbsence"] is True
+    assert b["officialDiscographyContext"]["url"] == "https://girlset.jype.com/discography"
+    assert b["officialDiscographyContext"]["commsReleaseDate"] == "2025-08-29"
+    assert b["officialDiscographyContext"]["littleMissReleaseDate"] == "2025-11-14"
+    assert b["officialDiscographyContext"]["jypReferenceSeparateFromGenieNativeEvidence"] is True
+    assert b["reviewStatus"] == (
+        "alias_only_unresolved_native_release_identity_and_epoch_review_pending"
+    )
+    for row in (a, b):
+        assert row["reviewer"] is None
+        assert row["sourceStatus"] == "unresolved"
+        assert row["approvedReviewedBinding"] is False
+        assert row["sourceSupportedPromoted"] is False
+        cid = row["canonicalArtistId"]
+        assert cid in unresolved and cid not in supported and cid not in targets
+        assert all(r["canonicalArtistId"] != cid for r in strong["bindings"])
+    assert a["canonicalDebutYearBackfillApplied"] is False
+    summary2 = last2["missing14ResearchSummary"]
+    assert summary2["originalHistoricalProviderYearMissing"] == 14
+    assert summary2["independentlyGenieNativeReleaseLinkQualified"] == 13
+    assert summary2["aliasOnlyRemaining"] == 1
+    assert summary2["approvedBindingCount"] == 0
+    assert summary2["isReviewCandidateCountNotSupportedCount"] is True
+    assert summary2["sourcePartitionStill"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    assert sum(x["nativeRelease"] is not None for x in native7["qualifiedRecords"]) == 7
+    assert sum(x["nativeRelease"] is not None for x in remaining7["identityRecords"]) == 5
+    assert 7 + 5 + int(a["releaseEvidence"]["independentNativeAlbumToArtistMatch"]) == 13
+    assert set(last2["safety"].values()) == {False}
+    assert last2["nextGate"] == (
+        "GENIE_BOYSTORY_YEAR_SCOPE_AND_GIRLSET_NATIVE_RELEASE_ID_HUMAN_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -950,7 +1035,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native/2 alias-only reviews held | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native + BOY STORY album/1 GIRLSET alias-only held | Music 117/238/0 | Product unchanged"
     )
 
 
