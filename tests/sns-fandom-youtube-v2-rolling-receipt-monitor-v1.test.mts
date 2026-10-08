@@ -100,7 +100,7 @@ function inputs(throughIndex: number) {
 test('twelve actual slots verify continuously through an externally checked horizon', async () => {
   const store=fixture(12);
   const r=await evaluateSnsFandomV2RollingReceiptMonitor(store,inputs(11));
-  assert.equal(r.state,'continuous-to-operator-horizon');
+  assert.equal(r.state,'rolling-window-continuous');
   assert.equal(r.expectedSlots,12);
   assert.equal(r.verifiedReceipts,12);
   assert.equal(r.observedProviderCalls,12*120+9);
@@ -199,8 +199,31 @@ test('explicit observation horizon outside 366-day canonical window is rejected'
 
 test('later receipts never count toward a shorter operator horizon', async () => {
   const r=await evaluateSnsFandomV2RollingReceiptMonitor(fixture(25),inputs(11));
-  assert.equal(r.state,'continuous-to-operator-horizon');
+  assert.equal(r.state,'rolling-window-continuous');
   assert.equal(r.verifiedReceipts,12);
+});
+
+test('30 hours: only latest 24 receipt bodies revalidated, all earlier paths indexed', async () => {
+  const store=fixture(30);
+  const r=await evaluateSnsFandomV2RollingReceiptMonitor(store,inputs(29));
+  assert.equal(r.state,'rolling-window-continuous');
+  assert.equal(r.expectedSlots,30);
+  assert.equal(r.rollingReadbackStart,slot(6));
+  assert.equal(r.historicalIndexedReceipts,6);
+  assert.equal(r.historicalReceiptBodiesRevalidated,false);
+  assert.equal(r.verifiedReceipts,24);
+  assert.equal(store.readCount,25);
+  assert.equal(store.writeCount,0);
+});
+
+test('historical missing pathname is detected without fetching old receipt bodies', async () => {
+  const store=fixture(30);
+  store.rows.delete(pathname(3));
+  const r=await evaluateSnsFandomV2RollingReceiptMonitor(store,inputs(29));
+  assert.equal(r.state,'confirmed-internal-gap');
+  assert.deepEqual(r.missingSlotStarts,[slot(3)]);
+  assert.equal(r.verifiedReceipts,24);
+  assert.equal(store.readCount,25);
 });
 
 test('invalid approval evidence and invalid hour are fail-closed', async () => {
