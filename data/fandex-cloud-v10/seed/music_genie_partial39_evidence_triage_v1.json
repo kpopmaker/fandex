@@ -1,0 +1,507 @@
+{
+  "version": "music_genie_partial39_evidence_triage_v1",
+  "status": "non_activating_identity_evidence_triage_only",
+  "canonicalUniverseCount": 355,
+  "source": "music_chart",
+  "provider": "genie",
+  "sourceEvidence": {
+    "exact94DetailRunId": 37560176276,
+    "artifactId": 11456228049,
+    "artifactDigest": "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f",
+    "artifactFile": "scripts/fandex-cloud-migration/source/music_genie_exact94_detail_verification_v1.json",
+    "detailVerificationHead": "2cc5117519152a80bbca2602eaa8aa4c3c7a400b",
+    "reviewPr": 571,
+    "applicationPr": 575,
+    "applicationParentHead": "ffdb019b2144babb21a1948f7f22c85eccab2af3"
+  },
+  "disposition": {
+    "sourceMetadataPartialCount": 39,
+    "genieDebutYearUnavailableCount": 7,
+    "canonicalDebutYearUnavailableCount": 25,
+    "bothDebutYearsUnavailableCount": 7,
+    "reviewedForSupportCount": 0,
+    "automaticallyBoundCount": 0
+  },
+  "independentEvidenceExamples": [
+    {
+      "canonicalArtistId": "nexz",
+      "sourceType": "artist_label_official_discography",
+      "url": "https://nexz.jype.com/discography/i4k507u4?AmSeq=undefined&PgIndex=undefined",
+      "statement": "JYP identifies the 2024-05-20 Ride the Vibe release as NEXZ's debut single.",
+      "corroboratedCanonicalDebutYear": 2024,
+      "doesNotSupplyMissingGenieDetailYear": true,
+      "authorizesSupport": false
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "sourceType": "reported_label_statement",
+      "url": "https://en.yna.co.kr/view/AEN20180604007900315",
+      "statement": "Yonhap reports JYP's 2018 announcement of BOY STORY's planned September 2018 debut.",
+      "corroboratedCanonicalDebutYear": 2018,
+      "doesNotSupplyMissingGenieDetailYear": true,
+      "authorizesSupport": false
+    }
+  ],
+  "sourceIntegrityObservation": {
+    "full264RawArtifact": {
+      "ambiguousExact": 47,
+      "ambiguousWrapper": 72
+    },
+    "full264CommittedReceipt": {
+      "ambiguousExact": 46,
+      "ambiguousWrapper": 73
+    },
+    "status": "reconciliation_required_do_not_overwrite_original_evidence",
+    "affectsThisExact94PartialQueue": false
+  },
+  "candidates": [
+    {
+      "canonicalArtistId": "nexz",
+      "genieProviderArtistId": "81122242",
+      "canonicalDebutYear": 2024,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "brothersu",
+      "genieProviderArtistId": "79983812",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "eunjiwon",
+      "genieProviderArtistId": "14945865",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1997,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kangseungyoon",
+      "genieProviderArtistId": "80089706",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2010,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jinu",
+      "genieProviderArtistId": "14946516",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1996,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "mino",
+      "genieProviderArtistId": "80073343",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "bangyedam",
+      "genieProviderArtistId": "80211832",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2013,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leehi",
+      "genieProviderArtistId": "80158970",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjaejoong",
+      "genieProviderArtistId": "14954974",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2010,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "hwangminhyun",
+      "genieProviderArtistId": "80441275",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "yoonsanha",
+      "genieProviderArtistId": "80534174",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "hahyunsang",
+      "genieProviderArtistId": "80620455",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jypark",
+      "genieProviderArtistId": "14945855",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1994,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "genieProviderArtistId": "80899341",
+      "canonicalDebutYear": 2018,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "girlset",
+      "genieProviderArtistId": "83019445",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "sf9",
+      "genieProviderArtistId": "80546873",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "joyuri",
+      "genieProviderArtistId": "80661354",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjaehwan",
+      "genieProviderArtistId": "80587302",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "ejel",
+      "genieProviderArtistId": "81567146",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "lucidfall",
+      "genieProviderArtistId": "14940057",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2001,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leesangsoon",
+      "genieProviderArtistId": "80291913",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2011,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "afterschool",
+      "genieProviderArtistId": "82301148",
+      "canonicalDebutYear": 2009,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "bumzu",
+      "genieProviderArtistId": "80189465",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "up10tion",
+      "genieProviderArtistId": "81290806",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "b1a4",
+      "genieProviderArtistId": "80131588",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2011,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kard",
+      "genieProviderArtistId": "81305280",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "ahnyeeun",
+      "genieProviderArtistId": "80507988",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "xlov",
+      "genieProviderArtistId": "82757745",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2025,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "taeyang",
+      "genieProviderArtistId": "54232309",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2007,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "pow",
+      "genieProviderArtistId": "14942969",
+      "canonicalDebutYear": 2023,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "tiot",
+      "genieProviderArtistId": "81972382",
+      "canonicalDebutYear": 2024,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "mirae",
+      "genieProviderArtistId": "81608365",
+      "canonicalDebutYear": 2021,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "x1",
+      "genieProviderArtistId": "81522270",
+      "canonicalDebutYear": 2019,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "balmingtiger",
+      "genieProviderArtistId": "80639974",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jeongsewoon",
+      "genieProviderArtistId": "80590751",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2017,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leeseokhoon",
+      "genieProviderArtistId": "43241763",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2006,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "yoonmirae",
+      "genieProviderArtistId": "14936492",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1997,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "chen",
+      "genieProviderArtistId": "81098158",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjongkook",
+      "genieProviderArtistId": "14945901",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1995,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    }
+  ],
+  "safety": {
+    "canonicalArtistIdAuthoritative": true,
+    "sourceCandidateOnly": true,
+    "providerDetailYearRequiredForStrong26EquivalentPromotion": true,
+    "independentOfficialYearEvidenceDoesNotAutomaticallyReplaceGenieDetailYear": true,
+    "machineCandidateIsReviewedBinding": false,
+    "partialMetadataAutoPromotion": false,
+    "identityFuzzyAutoBinding": false,
+    "ambiguousProviderIdAutoSelection": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "nextGate": "MUSIC_GENIE_PARTIAL39_PROVIDER_AND_CANONICAL_DEBUT_EVIDENCE_REVIEW_REQUIRED"
+}
