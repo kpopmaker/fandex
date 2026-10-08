@@ -39,6 +39,9 @@ import {
 import {
   FANDEX_VARIABLE_PRODUCT_IDS,
 } from '../lib/product/contracts/fandexVariableProduct';
+import {
+  createFandexBetaArtistPresentation,
+} from '../lib/product/presentation/fandexBetaArtistPresentation';
 
 function musicCandidate(): ProductMusicAlbumPointCandidateResult {
   const model = {
@@ -561,6 +564,18 @@ test('Momentum readiness failures preserve exact upstream blocker codes without 
     result.records.some((record) => record.variableId === 'growthMomentumPoint'),
     false,
   );
+
+  const presentation = createFandexBetaArtistPresentation({
+    readiness: result,
+    generatedAt: '2026-10-08T00:17:00.000Z',
+  });
+  const momentumCard = presentation.components.find(
+    (entry) => entry.variableId === 'growthMomentumPoint',
+  );
+  assert.equal(momentumCard?.statusReason, momentum?.reason);
+  assert.equal(momentumCard?.displayValue, '런타임 확인 필요');
+  assert.equal(presentation.scoreStatus, 'not-defined');
+  assert.equal(presentation.fandexValue, null);
 });
 
 test('Momentum diagnosis preserves generic fallback when no upstream blocker details exist', () => {
