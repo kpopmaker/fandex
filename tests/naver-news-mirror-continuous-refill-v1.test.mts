@@ -133,24 +133,29 @@ test('canonical twelve-worker mode fails closed and stops scheduling after the f
   const failure = new Error('immutable-blob-unavailable');
   let started = 0;
   let active = 0;
-  await assert.rejects(
-    mapMirroredEvidenceBatched(
-      Array.from({ length: 30 }, (_, index) => index),
-      async (index) => {
-        started += 1;
-        active += 1;
-        try {
-          if (index === 2) throw failure;
-          await Promise.resolve();
-          return index;
-        } finally {
-          active -= 1;
-        }
-      },
-      MAX_CONCURRENT_MIRROR_CANONICAL_READS,
-    ),
-    (error) => error === failure,
+  let releaseInFlight!: () => void;
+  const held = new Promise<void>((resolve) => { releaseInFlight = resolve; });
+  const pending = mapMirroredEvidenceBatched(
+    Array.from({ length: 30 }, (_, index) => index),
+    async (index) => {
+      started += 1;
+      active += 1;
+      try {
+        if (index === 2) throw failure;
+        await held;
+        return index;
+      } finally {
+        active -= 1;
+      }
+    },
+    MAX_CONCURRENT_MIRROR_CANONICAL_READS,
   );
+  try {
+    for (let i = 0; i < 4; i += 1) await Promise.resolve();
+  } finally {
+    releaseInFlight();
+  }
+  await assert.rejects(pending, (error) => error === failure);
   assert.equal(active, 0);
-  assert.ok(started <= MAX_CONCURRENT_MIRROR_CANONICAL_READS);
+  assert.equal(started, MAX_CONCURRENT_MIRROR_CANONICAL_READS);
 });
