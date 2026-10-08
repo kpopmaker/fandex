@@ -35,7 +35,7 @@ test('public web seed keeps the requested research/shadow boundary', () => {
   const input = seed();
   assert.equal(input.contractVersion, 'reported-album-sales-web-seed-v1');
   assert.equal(input.lifecycle, 'research');
-  assert.equal(input.drafts.length, 96);
+  assert.equal(input.drafts.length, 136);
 
   const built = observations();
   assert.ok(built.every(item => item.productEligible === false));
@@ -51,7 +51,7 @@ test('same underlying Hanteo observation reported by multiple sources dedupes to
   const deduped =
     dedupeReportedAlbumSalesObservations(observations());
 
-  assert.equal(deduped.length, 94);
+  assert.equal(deduped.length, 134);
 
   const armageddon = deduped.find(
     item =>
@@ -95,16 +95,16 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
   const circle = deduped.filter(
     item => item.underlyingProvider === 'Circle Chart',
   );
-  assert.equal(hanteo.length, 92);
+  assert.equal(hanteo.length, 132);
   assert.equal(circle.length, 2);
 
   const hanteoFirstWeek = hanteo.filter(
     item => item.metricSemantic === 'hanteo-first-week-sales',
   );
-  assert.equal(hanteoFirstWeek.length, 92);
+  assert.equal(hanteoFirstWeek.length, 132);
   assert.equal(
     hanteoFirstWeek.filter(item => item.researchUsable).length,
-    92,
+    132,
   );
 
   for (const [artistId, title, value] of [
@@ -380,6 +380,7 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
 
   for (const [artistId, releaseTitle, value, periodStart, periodEnd, quality] of [
     ['newjeans', 'How Sweet', 884_717, '2024-05-24', '2024-05-30', 'corroborated-secondary'],
+    ['newjeans', 'Supernatural', 721_639, '2024-06-21', '2024-06-27', 'provider-attributed-secondary'],
     ['bts', 'Butter', 1_975_364, '2021-07-09', '2021-07-15', 'provider-attributed-secondary'],
     ['bts', 'MAP OF THE SOUL : PERSONA', 2_130_480, '2019-04-12', '2019-04-18', 'primary-official'],
     ['ive', "I'VE MINE", 1_605_948, '2023-10-13', '2023-10-19', 'provider-attributed-secondary'],
@@ -452,6 +453,44 @@ test('seed expands official Hanteo coverage while preserving provider/semantic s
     ['ive', 'ELEVEN', 152_229, '2021-12-01', '2021-12-07', 'provider-attributed-secondary'],
     ['ive', 'LOVE DIVE', 338_141, '2022-04-05', '2022-04-11', 'provider-attributed-secondary'],
     ['ive', 'IVE EMPATHY', 1_048_048, '2025-02-03', '2025-02-09', 'primary-official'],
+    ['seventeen', 'An Ode', 700_863, '2019-09-16', '2019-09-22', 'provider-attributed-secondary'],
+    ['seventeen', 'Heng:garæ', 1_097_891, '2020-06-22', '2020-06-28', 'provider-attributed-secondary'],
+    ['seventeen', '; [Semicolon]', 932_054, '2020-10-19', '2020-10-25', 'provider-attributed-secondary'],
+    ['seventeen', 'Your Choice', 1_364_127, '2021-06-18', '2021-06-24', 'provider-attributed-secondary'],
+    ['seventeen', 'TEEN, AGE', 215_669, '2017-11-06', '2017-11-12', 'provider-attributed-secondary'],
+    ['seventeen', 'Al1', 192_399, '2017-05-22', '2017-05-28', 'provider-attributed-secondary'],
+    ['seventeen', 'YOU MAKE MY DAY', 274_218, '2018-07-16', '2018-07-22', 'provider-attributed-secondary'],
+    ['seventeen', 'Love & Letter', 80_285, '2016-04-25', '2016-05-01', 'provider-attributed-secondary'],
+    ['seventeen', 'Going Seventeen', 131_998, '2016-12-05', '2016-12-11', 'corroborated-secondary'],
+    ['seventeen', 'YOU MADE MY DAWN', 338_153, '2019-01-21', '2019-01-27', 'provider-attributed-secondary'],
+    ['seventeen', 'SECTOR 17', 1_126_104, '2022-07-18', '2022-07-24', 'provider-attributed-secondary'],
+    ['twice', 'Feel Special', 154_028, '2019-09-23', '2019-09-29', 'corroborated-secondary'],
+    ['twice', 'MORE & MORE', 332_416, '2020-06-01', '2020-06-07', 'provider-attributed-secondary'],
+    ['aespa', 'Rich Man', 1_088_340, '2025-09-05', '2025-09-11', 'primary-official'],
+    ['aespa', 'LEMONADE', 909_167, '2026-05-29', '2026-06-04', 'primary-official'],
+    ['ateez', 'ZERO : FEVER Part.3', 665_350, '2021-09-13', '2021-09-19', 'corroborated-secondary'],
+    ['ateez', 'ZERO : FEVER Part.1', 233_399, '2020-07-29', '2020-08-04', 'corroborated-secondary'],
+    ['ateez', 'ZERO : FEVER Part.2', 304_585, '2021-03-01', '2021-03-07', 'corroborated-secondary'],
+    ['straykids', 'Christmas EveL', 471_312, '2021-11-29', '2021-12-05', 'corroborated-secondary'],
+    ['txt', 'The Chaos Chapter: FREEZE', 630_563, '2021-05-31', '2021-06-06', 'corroborated-secondary'],
+    ['txt', 'The Chaos Chapter: FIGHT OR ESCAPE', 483_911, '2021-08-17', '2021-08-23', 'provider-attributed-secondary'],
+    ['txt', 'The Star Chapter: TOGETHER', 1_760_867, '2025-07-21', '2025-07-27', 'provider-attributed-secondary'],
+    ['txt', 'minisode1 : Blue Hour', 303_190, '2020-10-26', '2020-11-01', 'provider-attributed-secondary'],
+    ['txt', 'The Dream Chapter: ETERNITY', 181_009, '2020-05-18', '2020-05-24', 'primary-official'],
+    ['enhypen', 'THE SIN : VANISH', 2_075_056, '2026-01-16', '2026-01-22', 'primary-official'],
+    ['enhypen', 'BORDER : DAY ONE', 280_873, '2020-11-30', '2020-12-06', 'provider-attributed-secondary'],
+    ['enhypen', 'BORDER : CARNIVAL', 384_699, '2021-04-26', '2021-05-02', 'provider-attributed-secondary'],
+    ['enhypen', 'THE SIN : BLISS', 2_099_048, '2026-08-21', '2026-08-27', 'provider-attributed-secondary'],
+    ['enhypen', 'DIMENSION : ANSWER', 514_291, '2022-01-10', '2022-01-16', 'corroborated-secondary'],
+    ['twice', 'Eyes wide open', 245_631, '2020-10-27', '2020-11-02', 'primary-official'],
+    ['bts', 'Love Yourself: Answer', 868_052, '2018-08-24', '2018-08-30', 'provider-attributed-secondary'],
+    ['bts', 'Love Yourself: Her', 759_263, '2017-09-18', '2017-09-24', 'provider-attributed-secondary'],
+    ['bts', 'WINGS', 347_426, '2016-10-10', '2016-10-16', 'provider-attributed-secondary'],
+    ['bts', 'The Most Beautiful Moment in Life: Young Forever', 164_868, '2016-05-02', '2016-05-08', 'provider-attributed-secondary'],
+    ['bts', 'YOU NEVER WALK ALONE', 373_705, '2017-02-13', '2017-02-19', 'provider-attributed-secondary'],
+    ['bts', 'LOVE YOURSELF 轉 \'Tear\'', 1_003_524, '2018-05-18', '2018-05-24', 'provider-attributed-secondary'],
+    ['straykids', 'Clé : LEVANTER', 83_345, '2019-12-09', '2019-12-15', 'corroborated-secondary'],
+    ['blackpink', 'KILL THIS LOVE', 146_094, '2019-04-23', '2019-04-29', 'provider-attributed-secondary'],
   ] as const) {
     const item = hanteoFirstWeek.find(
       observation =>
@@ -494,9 +533,9 @@ test('source tiers remain separate from evidence quality', () => {
   );
 
   assert.deepEqual(tierCounts, {
-    'tier-a-primary-official': 39,
-    'tier-c-discovery-only': 10,
-    'tier-b-provider-attributed-reputable': 62,
+    'tier-a-primary-official': 44,
+    'tier-c-discovery-only': 11,
+    'tier-b-provider-attributed-reputable': 108,
   });
 
   const iuLilac = deduped.find(
