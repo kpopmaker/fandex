@@ -9,8 +9,8 @@ import {
   BRAND_FIT_POINT_RISK_QUALITY_METADATA_CONTRACT_VERSION,
 } from '../adapters/brandFitPointRiskQualityMetadata';
 import {
-  authorizeBrandFitProductionActivation,
   BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_CONTRACT_VERSION,
+  authorizeBrandFitProductionActivation,
   type BrandFitProductionActivationApproval,
 } from './brandFitProductionActivationAuthorization';
 import {
@@ -22,7 +22,7 @@ import {
   BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION_CONTRACT_VERSION,
 } from './brandFitProductionRuntimeVerification';
 
-export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_EVIDENCE_CONTRACT_VERSION =
+export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_EVIDENCE_VERSION =
   'brand-fit-production-activation-approval-evidence-v1' as const;
 
 export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL =
@@ -32,8 +32,8 @@ export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL =
     action: 'authorize-production-lifecycle-cutover' as const,
     authority: 'product-operations-owner' as const,
     activationAuthorizationId:
-      'ops-activation-brand-fit-iu-20261007-v1',
-    authorizedAt: '2026-10-07T01:45:37.000Z',
+      'ops-activation-brand-fit-20261007t014520z-v1',
+    authorizedAt: '2026-10-07T01:45:20.000Z',
     target: Object.freeze({
       artistId: 'iu' as const,
       variableId: 'brandFitPoint' as const,
@@ -51,8 +51,7 @@ export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL =
       runtimeVerificationContractVersion:
         BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION_CONTRACT_VERSION,
       verifiedRuntimeCommitSha:
-        BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION
-          .verifiedRuntimeCommitSha,
+        BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION.verifiedRuntimeCommitSha,
       runtimeServiceId:
         BRAND_FIT_PRODUCTION_RUNTIME_VERIFICATION.serviceId,
       sourceLifecycle: 'research' as const,
@@ -66,22 +65,19 @@ export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL =
 export const BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_EVIDENCE =
   Object.freeze({
     contractVersion:
-      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_EVIDENCE_CONTRACT_VERSION,
+      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL_EVIDENCE_VERSION,
     approvedAt:
       BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.authorizedAt,
     authority: 'product-operations-owner' as const,
-    authorizationEvidenceCommentId: 6029106452 as const,
+    authorizationEvidenceCommentId: 6029102277 as const,
     authorizationEvidenceCommentUrl:
-      'https://github.com/kpopmaker/fandex/pull/561#issuecomment-6029106452' as const,
+      'https://github.com/kpopmaker/fandex/issues/413#issuecomment-6029102277' as const,
     authorizedMain:
       'e8a2fb2969a09dde4b9a149e759f9b9e31e600bd' as const,
     activationAuthorizationId:
-      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL
-        .activationAuthorizationId,
-    target:
-      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.target,
-    binding:
-      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.binding,
+      BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.activationAuthorizationId,
+    target: BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.target,
+    binding: BRAND_FIT_PRODUCTION_ACTIVATION_APPROVAL.binding,
     decision: Object.freeze({
       activationAuthorized: true as const,
       lifecycleState: 'research' as const,

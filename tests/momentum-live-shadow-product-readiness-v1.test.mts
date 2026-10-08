@@ -29,14 +29,14 @@ async function readAudit(): Promise<MomentumLiveShadowSourceCurrentnessAudit> {
   ) as MomentumLiveShadowSourceCurrentnessAudit;
 }
 
-test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op evaluation', async () => {
+test('current IU live-shadow readiness rejects a source audit older than the current Last.fm snapshot', async () => {
   const result = await getMomentumLiveShadowProductReadinessForIU();
 
-  assert.equal(result.state, 'public-route-candidate');
+  assert.equal(result.state, 'current-categorical-evaluation-required');
   assert.equal(result.runtimeShadowReadVerified, true);
   assert.equal(result.productActivationReady, false);
   assert.equal(result.productPublicationReady, false);
-  assert.equal(result.publicRouteDesignReady, true);
+  assert.equal(result.publicRouteDesignReady, false);
   assert.equal(result.productMomentumScore, null);
   assert.equal(result.numericProductEligible, false);
   assert.equal(result.previewFallbackAllowed, false);
@@ -62,7 +62,7 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
     performed: true,
     currentCarrierProduced: false,
     currentNoOpEvaluationAttested: true,
-    satisfiesFreshness: true,
+    satisfiesFreshness: false,
     evaluatedAlignmentCutoffAt: '2026-10-06T03:33:21.000Z',
     directionalConsensus: 'direction-conflicted',
     persistenceConsensus: 'persistence-not-applicable',
@@ -77,7 +77,61 @@ test('current IU live-shadow readiness accepts the 2026-10-06 read-only no-op ev
         '027d77a4ac6a2a7afd4ca09861b58d4bd3e4ac34',
     },
   });
-  assert.deepEqual(result.blockers, []);
+  assert.ok(
+    result.blockers.includes(
+      'current-lastfm-source-advanced-beyond-audit',
+    ),
+  );
+});
+
+test('current NAVER official slot newer than the audit requires reevaluation without using collection time', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: audit,
+    observedSourceCurrentness: {
+      lastfmReadOk: true,
+      lastfmSnapshotDate: audit.lastfm.snapshotDate,
+      naverReadOk: true,
+      naverLatestOfficialSlotStart: '2026-10-07T12:00:00.000Z',
+    },
+  });
+
+  assert.equal(result.state, 'current-categorical-evaluation-required');
+  assert.equal(result.currentEvaluation.satisfiesFreshness, false);
+  assert.ok(
+    result.blockers.includes(
+      'current-naver-source-advanced-beyond-audit',
+    ),
+  );
+});
+
+test('current source read failure is a hard Product readiness blocker', async () => {
+  const [runtimeShadow, audit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readAudit(),
+  ]);
+
+  const result = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow,
+    sourceAudit: audit,
+    observedSourceCurrentness: {
+      lastfmReadOk: false,
+      lastfmSnapshotDate: null,
+      naverReadOk: true,
+      naverLatestOfficialSlotStart: null,
+    },
+  });
+
+  assert.equal(result.state, 'blocked');
+  assert.equal(result.publicRouteDesignReady, false);
+  assert.ok(
+    result.blockers.includes('current-lastfm-status-read-failed'),
+  );
 });
 
 test('freshness policy still forbids arbitrary age thresholds and does not require a history append', async () => {

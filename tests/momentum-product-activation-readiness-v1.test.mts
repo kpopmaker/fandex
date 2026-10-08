@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import type {
@@ -11,17 +12,74 @@ import {
   createMomentumPublicRouteDesignCandidate,
 } from '../lib/product/readiness/momentumPublicRouteDesignCandidate';
 import {
+  evaluateMomentumLiveShadowProductReadiness,
+  type MomentumLiveShadowSourceCurrentnessAudit,
+} from '../lib/product/readiness/momentumLiveShadowProductReadiness';
+import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from '../lib/server/product/momentumEvidenceConsensusRealProductRead';
-import {
-  getMomentumLiveShadowProductReadinessForIU,
-} from '../lib/server/product/momentumLiveShadowProductReadiness';
 import {
   getMomentumProductActivationReadinessForIU,
 } from '../lib/server/product/momentumProductActivationReadiness';
 
-test('current IU Momentum is eligible for activation review without activation', async () => {
+const AUDIT_URL = new URL(
+  '../data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json',
+  import.meta.url,
+);
+
+async function getAuditBoundFreshFixture() {
+  const [source, rawAudit] = await Promise.all([
+    getMomentumEvidenceConsensusShadowProductForIU(),
+    readFile(AUDIT_URL, 'utf8'),
+  ]);
+
+  if (source.status !== 'ok') {
+    throw new Error('momentum-source-read-not-ok');
+  }
+
+  const sourceAudit = JSON.parse(
+    rawAudit,
+  ) as MomentumLiveShadowSourceCurrentnessAudit;
+  const liveReadiness = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow: source,
+    sourceAudit,
+  });
+  const routeDesign = createMomentumPublicRouteDesignCandidate(
+    liveReadiness,
+    source,
+  );
+
+  assert.equal(liveReadiness.state, 'public-route-candidate');
+  assert.equal(routeDesign.status, 'ready-for-owner-review');
+
+  return { source, liveReadiness, routeDesign };
+}
+
+test('current IU Momentum activation readiness fails closed while runtime source audit is stale', async () => {
   const result = await getMomentumProductActivationReadinessForIU();
+
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.checks['current-freshness'], false);
+  assert.equal(result.checks['current-attestation-binding'], false);
+  assert.equal(result.productActivationAuthorized, false);
+  assert.equal(result.productPublicationAuthorized, false);
+  assert.equal(result.publicRouteActivated, false);
+  assert.equal(result.productMomentumScore, null);
+  assert.equal(result.numericProductEligible, false);
+  assert.equal(result.requiredNextGate, null);
+});
+
+test('audit-bound fresh fixture remains eligible for activation review without activation', async () => {
+  const {
+    source,
+    liveReadiness,
+    routeDesign,
+  } = await getAuditBoundFreshFixture();
+  const result = evaluateMomentumProductActivationReadiness({
+    routeDesign,
+    liveReadiness,
+    source,
+  });
 
   assert.equal(result.status, 'eligible-for-activation-review');
   assert.equal(Object.values(result.checks).every(Boolean), true);
@@ -58,13 +116,11 @@ test('current IU Momentum is eligible for activation review without activation',
   );
 });
 
-test('premature source publication blocks activation readiness', async () => {
-  const [liveReadiness, source] = await Promise.all([
-    getMomentumLiveShadowProductReadinessForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-  ]);
-  assert.equal(source.status, 'ok');
-  if (source.status !== 'ok') return;
+test('premature source publication blocks activation readiness after freshness is isolated', async () => {
+  const {
+    source,
+    liveReadiness,
+  } = await getAuditBoundFreshFixture();
 
   const mutated: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({
@@ -90,13 +146,11 @@ test('premature source publication blocks activation readiness', async () => {
   assert.equal(result.publicRouteActivated, false);
 });
 
-test('carrier mismatch blocks activation readiness', async () => {
-  const [liveReadiness, source] = await Promise.all([
-    getMomentumLiveShadowProductReadinessForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-  ]);
-  assert.equal(source.status, 'ok');
-  if (source.status !== 'ok') return;
+test('carrier mismatch blocks activation readiness after freshness is isolated', async () => {
+  const {
+    source,
+    liveReadiness,
+  } = await getAuditBoundFreshFixture();
 
   const mutated: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({
@@ -126,7 +180,7 @@ test('carrier mismatch blocks activation readiness', async () => {
 });
 
 test('source read failure blocks activation readiness without fallback', async () => {
-  const liveReadiness = await getMomentumLiveShadowProductReadinessForIU();
+  const { liveReadiness } = await getAuditBoundFreshFixture();
   const source: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({
       status: 'missing' as const,

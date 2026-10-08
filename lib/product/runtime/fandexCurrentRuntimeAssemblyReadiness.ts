@@ -26,6 +26,9 @@ import {
   adaptBrandFitPointToFandexVariableProduct,
 } from '../adapters/brandFitPointFandexVariableProduct';
 import {
+  executeBrandFitProductionLifecycleCutover,
+} from '../activation/brandFitProductionLifecycleCutoverExecution';
+import {
   adaptMomentumToFandexVariableProduct,
 } from '../adapters/momentumFandexVariableProduct';
 import {
@@ -307,12 +310,14 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
 
   const brandFitSource = input.sources.brandFitPoint;
   if (brandFitSource.status === 'ok') {
-    const adapted = adaptSafely(() =>
-      adaptBrandFitPointToFandexVariableProduct({
+    const adapted = adaptSafely(() => {
+      const source = adaptBrandFitPointToFandexVariableProduct({
         canonicalArtistId: 'iu',
         evidence: brandFitSource.evidence,
-      }),
-    );
+      });
+      if (source.status !== 'ok') return source;
+      return executeBrandFitProductionLifecycleCutover(source.record);
+    });
     const result = adapterState('brandFitPoint', 'resolved', adapted);
     states.push(result.state);
     adapters.set('brandFitPoint', result.adapter);
