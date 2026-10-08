@@ -14,6 +14,7 @@ import {
   buildNaverNewsSchedulerPlan,
 } from '../lib/server/ingestion/naverNewsScheduler';
 import {
+  MAX_CONCURRENT_MIRROR_CANONICAL_READS,
   buildNaverNewsStoredEvidenceMirrorObjects,
   createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
   createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
@@ -286,8 +287,8 @@ test('Blob mirror readers cap parallel requests without dropping official slots 
   for (const plan of plans) {
     assert.equal(rows.get(plan.identity.jobId)?.job.jobId, plan.identity.jobId);
   }
-  assert.ok(peak > 1);
-  assert.ok(peak <= 8);
+  assert.ok(peak > 8, 'canonical reader actively uses additional safe parallel slots');
+  assert.ok(peak <= MAX_CONCURRENT_MIRROR_CANONICAL_READS);
   assert.equal(active, 0);
 });
 
@@ -412,7 +413,7 @@ test('Blob canonical reads continue past a slow first job and retain all validat
     assert.equal(jobs.get(plan.identity.jobId)?.job.jobId, plan.identity.jobId);
   }
   assert.equal(active, 0);
-  assert.ok(peak <= 8);
+  assert.ok(peak <= MAX_CONCURRENT_MIRROR_CANONICAL_READS);
 });
 
 test('work-conserving Blob mirror reader still rejects later corrupt immutable evidence', async () => {

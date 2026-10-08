@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+  MAX_CONCURRENT_MIRROR_CANONICAL_READS,
   mapMirroredEvidenceBatched,
 } from '../lib/server/ingestion/naverNewsStoredEvidenceMirror';
 
@@ -83,4 +84,89 @@ test('NAVER mirror reader fails closed when underlying Blob request rejects', as
     ),
     (reason) => reason === fail,
   );
+});
+
+test('canonical twelve-worker mode bounds in-flight reads, refills and preserves exact ordering', async () => {
+  assert.equal(MAX_CONCURRENT_MIRROR_EVIDENCE_READS, 8);
+  assert.equal(MAX_CONCURRENT_MIRROR_CANONICAL_READS, 12);
+  const started: number[] = [];
+  let running = 0;
+  let peak = 0;
+  let releaseFirst!: () => void;
+  let releaseOtherWorkers!: () => void;
+  const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
+  const otherWorkers = new Promise<void>((resolve) => {
+    releaseOtherWorkers = resolve;
+  });
+  const pending = mapMirroredEvidenceBatched(
+    Array.from({ length: 26 }, (_, index) => index),
+    async (index) => {
+      running += 1;
+      peak = Math.max(peak, running);
+      started.push(index);
+      try {
+        if (index === 0) await first;
+        if (index > 0 && index < MAX_CONCURRENT_MIRROR_CANONICAL_READS) {
+          await otherWorkers;
+        }
+        return index === 19 ? null : `verified-job-${index}`;
+      } finally {
+        running -= 1;
+      }
+    },
+    MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+  );
+  let refilledBeforeSlow = false;
+  try {
+    assert.equal(peak, MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+      'all twelve initial canonical slots must be occupied');
+    releaseOtherWorkers();
+    for (let i = 0; i < 60; i += 1) {
+      await Promise.resolve();
+      if (started.includes(12)) break;
+    }
+    refilledBeforeSlow = started.includes(12);
+  } finally {
+    releaseOtherWorkers();
+    releaseFirst();
+  }
+
+  const rows = await pending;
+  assert.equal(refilledBeforeSlow, true);
+  assert.equal(peak, 12);
+  assert.equal(running, 0);
+  assert.deepEqual(rows, Array.from({ length: 26 }, (_, index) =>
+    index === 19 ? null : `verified-job-${index}`,
+  ));
+});
+
+test('canonical twelve-worker mode fails closed and stops scheduling after the first read error', async () => {
+  const failure = new Error('immutable-blob-unavailable');
+  let started = 0;
+  let active = 0;
+  let releaseInFlight!: () => void;
+  const held = new Promise<void>((resolve) => { releaseInFlight = resolve; });
+  const pending = mapMirroredEvidenceBatched(
+    Array.from({ length: 30 }, (_, index) => index),
+    async (index) => {
+      started += 1;
+      active += 1;
+      try {
+        if (index === 2) throw failure;
+        await held;
+        return index;
+      } finally {
+        active -= 1;
+      }
+    },
+    MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+  );
+  try {
+    for (let i = 0; i < 4; i += 1) await Promise.resolve();
+  } finally {
+    releaseInFlight();
+  }
+  await assert.rejects(pending, (error) => error === failure);
+  assert.equal(active, 0);
+  assert.equal(started, MAX_CONCURRENT_MIRROR_CANONICAL_READS);
 });
