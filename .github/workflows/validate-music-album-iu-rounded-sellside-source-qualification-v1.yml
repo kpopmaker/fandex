@@ -1,0 +1,35 @@
+name: Validate Music Album IU rounded sell-side source qualification v1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/validate-music-album-iu-rounded-sellside-source-qualification-v1.yml'
+      - 'tests/music-album-iu-rounded-sellside-source-qualification-v1.test.mts'
+      - 'data/fandex-cloud-v10/product/iu_music_album_rounded_sellsider_research_source_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate rounded source is strictly nonqualifying
+        run: npx tsx --test tests/music-album-iu-rounded-sellside-source-qualification-v1.test.mts tests/iu-music-album-first-week-source-search-audit-v1.test.mts
+      - name: Safety attestation
+        if: always()
+        run: |
+          echo 'IU_ALBUM_SOURCE_RESEARCH_ONLY=true'
+          echo 'IU_ALBUM_HANTEO_OUTREACH=0'
+          echo 'IU_ALBUM_EXTERNAL_PROVIDER_QUERIES=0'
+          echo 'IU_ALBUM_DURABLE_WRITES=0'
+          echo 'IU_ALBUM_NUMERIC_PRODUCT_ACTIVATION=0'
+          echo 'IU_ALBUM_PUBLIC_PUBLICATION_CHANGES=0'
