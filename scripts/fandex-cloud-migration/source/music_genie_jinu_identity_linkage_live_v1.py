@@ -22,6 +22,8 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8",
 }
 PINNED = "14946516"
+WINNER_CANDIDATE = "80441171"
+WINNER_SOLO_SONG_URL = "https://www.genie.co.kr/detail/songInfo?xgnm=89300603"
 SEARCH_TERMS = ("JINU (김진우)", "지누", "JINU", "김진우")
 MAGAZINES = {
     "historical_jinu": "https://www.genie.co.kr/magazine/subMain?ctid=27&mgz_seq=13810",
@@ -97,6 +99,46 @@ def parse_search(html: str) -> list[dict]:
     return sorted(by_id.values(), key=lambda r: (r["providerArtistId"], r["providerDisplay"]))
 
 
+
+def extract_song_artist_links(html: str) -> dict:
+    """Resolve linked artist IDs from the provider's own solo-song page."""
+    soup = BeautifulSoup(html, "html.parser")
+    heading = soup.select_one("h2.name") or soup.select_one("h2")
+    title = " ".join(heading.stripped_strings).strip() if heading else ""
+    plain = " ".join(soup.stripped_strings)
+    found = {}
+    pat = re.compile(r"fnViewArtist\\(['\\\"]([0-9]+)['\\\"]\\)", re.I)
+    href_pat = re.compile(r"artistInfo\\?xxnm=([0-9]+)", re.I)
+    for anchor in soup.find_all("a"):
+        name = " ".join(anchor.stripped_strings).strip()
+        if not name:
+            img = anchor.find("img")
+            name = str(img.get("alt") or "").strip() if img else ""
+        if compact(name) != compact("JINU (김진우)"):
+            continue
+        onclick = str(anchor.get("onclick") or "")
+        href = str(anchor.get("href") or "")
+        match = pat.search(onclick) or href_pat.search(href)
+        if match:
+            found[(match.group(1), name)] = {
+                "providerArtistId": match.group(1),
+                "display": name,
+                "linkType": "provider_song_to_artist",
+            }
+    ids = sorted({item["providerArtistId"] for item in found.values()})
+    has_expected_song_context = (
+        "또또또" in plain and ("JINU's HEYDAY" in plain or "JINU’s HEYDAY" in plain)
+    )
+    return {
+        "songTitleExtracted": title,
+        "hasExpectedSoloSongAndAlbum": has_expected_song_context,
+        "providerArtistLinks": list(found.values()),
+        "linkedProviderArtistIds": ids,
+        "exactWinnerArtistLinkObserved": ids == [WINNER_CANDIDATE] and has_expected_song_context,
+        "oldJinuProviderIdNotAttributed": PINNED not in ids,
+    }
+
+
 def main() -> None:
     queue = json.loads(QUEUE.read_text(encoding="utf-8-sig"))
     candidate = next(r for r in queue["candidates"] if r["canonicalArtistId"] == "jinu")
@@ -162,6 +204,12 @@ def main() -> None:
             "detail": alternate_detail,
         })
 
+    # A provider song-to-artist link is stronger than a shared display name.
+    song_result = fetch(WINNER_SOLO_SONG_URL)
+    song_linkage = (
+        extract_song_artist_links(song_result["html"]) if song_result["statusCode"] == 200 else None
+    )
+
     historical_context = magazines["historical_jinu"]["markers"]
     winner_context = magazines["winner_jinu"]["markers"]
     direct_historical_markers = (
@@ -194,6 +242,12 @@ def main() -> None:
         "exactNameProviderIds": search_id_candidates,
         "winnerLabeledCandidateProviderIds": sorted(set(winner_labeled_ids)),
         "winnerLabeledCandidateDetails": winner_labeled_details,
+        "winnerSoloSongArtistLinkage": {
+            "url": WINNER_SOLO_SONG_URL,
+            "statusCode": song_result["statusCode"],
+            "error": song_result["error"],
+            "result": song_linkage,
+        },
         "alternateCandidateHasWinnerReleaseEvidence": alternate_has_winner_release,
         "historicalPinnedDetailMatches1996JinuEditorialIdentity": bool(direct_historical_markers and historical_context["statesRollerCoasterMembership"]),
         "genieEditorialContexts": magazines,
@@ -212,6 +266,7 @@ def main() -> None:
     print("SEARCH_EXACT " + json.dumps(search_id_candidates, ensure_ascii=False))
     print("EDITORIAL_MARKERS " + json.dumps({k: v["markers"] for k, v in magazines.items()}, ensure_ascii=False))
     print("WINNER_LABELED_DETAILS " + json.dumps(winner_labeled_details, ensure_ascii=False))
+    print("SONG_ARTIST_LINKAGE " + json.dumps({"statusCode": song_result["statusCode"], "linkage": song_linkage}, ensure_ascii=False))
 
 
 if __name__ == "__main__":
