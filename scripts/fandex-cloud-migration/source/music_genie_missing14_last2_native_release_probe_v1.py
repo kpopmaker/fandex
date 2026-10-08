@@ -228,7 +228,8 @@ def main() -> None:
         "stillAliasOnlyCanonicalIds": [
             x["canonicalArtistId"] for x in records if not x["nativeReleaseLinked"]
         ],
-        "officialJypDiscographyLinked": True,
+        "officialJypDiscographyDirectlyFetchedByCollector": False,
+        "officialJypDiscographySourcesRecorded": True,
         "identityEvidenceOnly": True, "bindingApproved": False,
         "sourceCompatibilityChanged": False, "productActivated": False,
         "currentMusicPartition": {"supported": 117, "unresolved": 238, "unsupported": 0},
@@ -249,6 +250,9 @@ def main() -> None:
         },
     }, ensure_ascii=False))
     assert len(records) == 2
+    boystory = next(x for x in records if x["canonicalArtistId"] == "boystory")
+    assert boystory["providerNativeAlbumConfirmed"] is True, "boystory_album_native_artist_id_unexpected"
+    assert boystory["albumEvidence"]["nativeProviderArtistIds"] == ["80899341"]
     assert all(x.get("profile", {}).get("statusCode") == 200 for x in records), "provider_identity_profile_not_200"
     assert all(x["humanBindingApproved"] is False and x["sourcePromoted"] is False for x in records)
     print("PASS: Genie missing14 last2 release-link research | 2 | no binding")
