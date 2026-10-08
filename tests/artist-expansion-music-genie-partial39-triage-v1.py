@@ -496,8 +496,80 @@ def main() -> None:
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
-    assert observation["status"] == "reconciliation_required_do_not_overwrite_original_evidence"
+    assert observation["status"] == "resolved_as_distinct_discovery_runs_source_receipts_immutable"
+    assert observation["originalReceiptArtifactId"] == 11456271955
+    assert observation["embeddedExact94ArtifactId"] == 11456228049
+    assert observation["reconciliationFile"] == "music_genie_full264_cross_run_reconciliation_v1.json"
+    assert observation["dispositionChangedCanonicalArtistIds"] == ["superjunior", "maddox"]
+    assert observation["identicalUniqueExact94Ids"] is True
+    assert observation["currentSourceActivationAuthorized"] is False
     assert observation["affectsThisExact94PartialQueue"] is False
+
+    cross = load(SOURCE / observation["reconciliationFile"])
+    assert cross["version"] == "music_genie_full264_cross_run_source_reconciliation_v1"
+    assert cross["status"] == (
+        "resolved_distinct_discovery_runs_different_provider_search_results_no_source_promotion"
+    )
+    assert cross["provider"] == "genie" and cross["source"] == "music_chart"
+    assert cross["canonicalUniverseCount"] == 355
+    original_run = cross["snapshots"]["originalFull264"]
+    embedded_run = cross["snapshots"]["embeddedInExact94"]
+    assert original_run["runId"] == 37559756356
+    assert original_run["artifactId"] == 11456271955
+    assert original_run["artifactDigest"] == (
+        "sha256:342d6bfc23ab8d39714058879101a16ca2c1ef7a89bf26407266848119005c0c"
+    )
+    assert embedded_run["runId"] == 37560176276
+    assert embedded_run["artifactId"] == 11456228049
+    assert embedded_run["artifactDigest"] == (
+        "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f"
+    )
+    assert original_run["createdAt"] != embedded_run["createdAt"]
+    assert original_run["requestCount"] == embedded_run["requestCount"] == 264
+    for snapshot in (original_run, embedded_run):
+        assert sum(snapshot["dispositionCounts"].values()) == 264
+        assert snapshot["dispositionCounts"]["unique_exact_candidate"] == 94
+    assert original_run["dispositionCounts"]["ambiguous_exact_candidates"] == 46
+    assert embedded_run["dispositionCounts"]["ambiguous_exact_candidates"] == 47
+    assert original_run["dispositionCounts"]["ambiguous_wrapper_candidates"] == 73
+    assert embedded_run["dispositionCounts"]["ambiguous_wrapper_candidates"] == 72
+    comparisons = cross["reconciliation"]
+    assert comparisons["sameCanonicalIdUniverse"] is True
+    assert comparisons["sameCanonicalIdCount"] == 264
+    assert comparisons["allCanonicalRowsIdentical"] is False
+    assert comparisons["rowsWithAnyRecordedContentDifference"] == 111
+    assert comparisons["rowsWithDispositionDifference"] == 2
+    assert comparisons["identicalUniqueExact94CanonicalArtistIds"] is True
+    assert comparisons["identicalUniqueExact94Count"] == 94
+    changes = comparisons["differingDispositions"]
+    assert [row["canonicalArtistId"] for row in changes] == ["superjunior", "maddox"]
+    assert changes[0]["originalDisposition"] == "ambiguous_wrapper_candidates"
+    assert changes[0]["embeddedDisposition"] == "provider_candidates_without_alias_match"
+    assert changes[0]["originalWrapperProviderArtistIds"] == ["21060178", "80150326"]
+    assert changes[0]["embeddedWrapperProviderArtistIds"] == []
+    assert changes[1]["originalDisposition"] == "provider_candidates_without_alias_match"
+    assert changes[1]["embeddedDisposition"] == "ambiguous_exact_candidates"
+    assert changes[1]["originalExactProviderArtistIds"] == []
+    assert changes[1]["embeddedExactProviderArtistIds"] == ["80431028", "81384545"]
+    assert all(not change["identityBindingAuthorized"] for change in changes)
+    assert comparisons["netCountDelta"] == {
+        "ambiguousExact": 1, "ambiguousWrapper": -1,
+        "providerCandidatesWithoutAliasMatch": 0,
+    }
+    impact = comparisons["reviewImpact"]
+    for no_change in (
+        "exact94SelectionChanged", "strong26SelectionChanged",
+        "partial39SelectionChanged", "superJuniorSourceSupported",
+        "maddoxSourceSupported", "ambiguitiesAutoResolved",
+        "sourceCompatibilityModified", "activeTargetSeedModified",
+        "productActivationAuthorized", "mainMergeAuthorized",
+    ):
+        assert impact[no_change] is False, no_change
+    assert cross["reviewStatus"] == (
+        "source_provenance_reconciled_candidate_dispositions_still_unresolved"
+    )
+
+
 
     safety = queue["safety"]
     for name in (
@@ -522,7 +594,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | Music 117/238/0 | Product unchanged"
     )
 
 
