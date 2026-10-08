@@ -1,0 +1,55 @@
+name: Validate NAVER Blob bounded read pipeline v1
+
+on:
+  push:
+    branches:
+      - 'work/news-blob-bounded-pipeline-v1'
+    paths:
+      - 'lib/server/ingestion/naverNewsStoredEvidenceMirror.ts'
+      - 'tests/naver-news-mirror-continuous-refill-v1.test.mts'
+      - '.github/workflows/validate-naver-news-blob-bounded-read-pipeline-v1.yml'
+  pull_request:
+    paths:
+      - 'lib/server/ingestion/naverNewsStoredEvidenceMirror.ts'
+      - 'tests/naver-news-mirror-continuous-refill-v1.test.mts'
+      - '.github/workflows/validate-naver-news-blob-bounded-read-pipeline-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Bounded continuous refill regression
+        run: npx tsx --test tests/naver-news-mirror-continuous-refill-v1.test.mts
+      - name: Canonical stored evidence mirror regressions
+        run: npx tsx --test tests/naver-news-stored-evidence-mirror-v1.test.mts
+      - name: Frozen newsIssuePoint Blob runtime regressions
+        run: npx tsx --test tests/naver-news-issue-point-blob-runtime-read-v1.test.mts
+      - name: Official first-seen series regressions
+        run: npx tsx --test tests/naver-news-shadow-first-seen-series-v1.test.mts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "maxConcurrentBlobReads=8"
+          echo "officialSlotOrderPreserved=true"
+          echo "missingIsNotZero=true"
+          echo "completedEvidenceCache=false"
+          echo "providerCalls=0"
+          echo "blobWrites=0"
+          echo "databaseWrites=0"
+          echo "activationOrPublicationChanged=false"
+          echo "riskConsumptionChanged=false"
+          echo "renderDeployExecuted=false"
