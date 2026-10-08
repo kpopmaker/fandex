@@ -149,3 +149,27 @@ export const COMEBACK_ACTIVITY_POINT_CURRENT_RISK_METADATA_GAP =
   evaluateRiskAdjustmentUpstreamMetadataGap(
     COMEBACK_ACTIVITY_POINT_CURRENT_RISK_METADATA_CAPABILITY,
   );
+
+
+export const MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_CAPABILITY:
+  RiskAdjustmentUpstreamMetadataCapability = Object.freeze({
+    variableId: 'musicAlbumPoint',
+    lifecycleExposed: true,
+    materialClassExposed: true,
+    qualityDimensions: Object.freeze({
+      availability: 'explicit',
+      identity: 'explicit',
+      confidence: 'explicit',
+      coverage: 'explicit',
+      freshness: 'explicit',
+      conflict: 'explicit',
+      revision: 'explicit',
+      history: 'explicit',
+      volatility: 'absent',
+    }),
+  });
+
+export const MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP =
+  evaluateRiskAdjustmentUpstreamMetadataGap(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_CAPABILITY,
+  );

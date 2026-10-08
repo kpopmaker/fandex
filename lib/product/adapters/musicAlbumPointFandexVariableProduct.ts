@@ -10,6 +10,12 @@ import {
   MUSIC_ALBUM_POINT_PRODUCT_READINESS_VERSION,
   type MusicAlbumPointProductReadiness,
 } from '../readiness/musicAlbumPointProductReadiness';
+import type {
+  ReportedAlbumSalesCurrentReleaseRead,
+} from '../../alternative-evidence/reportedAlbumSalesCurrentRelease';
+import type {
+  MusicAlbumReportedWebProductReadiness,
+} from '../readiness/musicAlbumReportedWebProductReadiness';
 
 export const MUSIC_ALBUM_POINT_FANDEX_VARIABLE_PRODUCT_ADAPTER_VERSION =
   'music-album-point-fandex-variable-product-adapter-v1' as const;
@@ -39,6 +45,10 @@ function orderedUnique(values: readonly string[]): readonly string[] {
 export function adaptMusicAlbumPointToFandexVariableProduct(input: Readonly<{
   candidate: ProductMusicAlbumPointCandidateResult;
   readiness: MusicAlbumPointProductReadiness;
+  reportedWebCurrentRelease?:
+    ReportedAlbumSalesCurrentReleaseRead;
+  reportedWebReadiness?:
+    MusicAlbumReportedWebProductReadiness;
 }>): MusicAlbumPointFandexVariableProductAdapterResult {
   if (input.candidate.status !== 'ok') {
     return Object.freeze({
@@ -104,10 +114,15 @@ export function adaptMusicAlbumPointToFandexVariableProduct(input: Readonly<{
     });
   }
 
+  const legacyDirectLanePresent =
+    input.reportedWebReadiness !== undefined;
+
   const providerRefs = model.components.album.providers.map(
     (provider) =>
       [
-        'music-album-provider',
+        legacyDirectLanePresent
+          ? 'music-album-legacy-direct-provider'
+          : 'music-album-provider',
         provider.providerId,
         provider.currentStage,
         provider.productionAuthorizationSatisfied
@@ -121,9 +136,73 @@ export function adaptMusicAlbumPointToFandexVariableProduct(input: Readonly<{
       `music-album-observation:${observation.observationId}`,
   );
 
-  const blockerRefs = readiness.blockers.map(
-    (blocker) => `music-album-readiness-blocker:${blocker}`,
-  );
+  const legacyDirectLaneBlockers = new Set<string>([
+    'album-provider-technical-qualified',
+    'album-real-physical-observation',
+    'album-release-identity-resolved',
+    'album-history-production-grade',
+    'album-rights-review-contract-defined',
+    'album-rights-authorized',
+    'album-normalization-input-contract-defined',
+    'album-normalization-input-usable',
+    'album-normalization-calibration-gate-defined',
+    'album-normalization-calibration-review-evidence-ready',
+    'album-normalization-calibration-eligible',
+    'album-normalization-defined',
+  ]);
+
+  const blockerRefs = readiness.blockers
+    .filter(
+      (blocker) =>
+        !legacyDirectLanePresent
+        || !legacyDirectLaneBlockers.has(blocker),
+    )
+    .map(
+      (blocker) =>
+        `music-album-readiness-blocker:${blocker}`,
+    );
+
+  const legacyDirectBlockerRefs = legacyDirectLanePresent
+    ? readiness.blockers
+        .filter((blocker) =>
+          legacyDirectLaneBlockers.has(blocker))
+        .map(
+          (blocker) =>
+            `music-album-legacy-direct-lane-blocker:${blocker}`,
+        )
+    : [];
+
+  const reportedWebRefs: string[] = [];
+  const reportedWeb = input.reportedWebCurrentRelease;
+  if (reportedWeb) {
+    reportedWebRefs.push(
+      `music-album-reported-web-current:${reportedWeb.status}`,
+    );
+    if (reportedWeb.status === 'available') {
+      reportedWebRefs.push(
+        `music-album-reported-web-release:${reportedWeb.canonicalReleaseId}`,
+        `music-album-reported-web-observation:${reportedWeb.observationId}`,
+        `music-album-reported-web-evidence-digest:${reportedWeb.evidenceDigest}`,
+        ...reportedWeb.evidenceRefs,
+      );
+    } else {
+      reportedWebRefs.push(
+        `music-album-reported-web-reason:${reportedWeb.reason}`,
+      );
+    }
+  }
+
+  const reportedWebReadinessRefs =
+    input.reportedWebReadiness === undefined
+      ? []
+      : [
+          `music-album-reported-web-readiness:${input.reportedWebReadiness.state}`,
+          `music-album-reported-web-readiness-contract:${input.reportedWebReadiness.contractVersion}`,
+          ...input.reportedWebReadiness.blockers.map(
+            (blocker) =>
+              `music-album-reported-web-blocker:${blocker}`,
+          ),
+        ];
 
   const record = createFandexVariableProductRecord({
     variableId: 'musicAlbumPoint',
@@ -154,6 +233,9 @@ export function adaptMusicAlbumPointToFandexVariableProduct(input: Readonly<{
       `album-history-state:${model.components.album.historyState}`,
       ...providerRefs,
       ...observationRefs,
+      ...reportedWebRefs,
+      ...reportedWebReadinessRefs,
+      ...legacyDirectBlockerRefs,
       ...blockerRefs,
     ]),
     methodologyVersion: model.components.album.methodologyVersion,

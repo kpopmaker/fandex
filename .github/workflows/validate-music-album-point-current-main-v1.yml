@@ -15,6 +15,18 @@ on:
       - 'lib/alternative-evidence/hanteoAlbum*.ts'
       - 'lib/alternative-evidence/index.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesEvidence.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesProductionSource.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts'
+      - 'lib/alternative-evidence/reportedAlbumSalesCurrentReleaseReview.ts'
+      - 'lib/alternative-evidence/reportedWebUsageReviewRequest.ts'
+      - 'lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts'
+      - 'lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts'
+      - 'lib/server/product/musicAlbumPointCurrentRuntimeRead.ts'
+      - 'lib/product/presentation/musicAlbumVerifiedReleaseIdentity.ts'
+      - 'app/artists/[artistId]/fandex-beta/page.tsx'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -32,6 +44,13 @@ on:
       - 'lib/product/contracts/albumNormalizationInput.ts'
       - 'lib/product/contracts/albumObservationHistory.ts'
       - 'lib/product/readiness/musicAlbumPointProductReadiness.ts'
+      - 'lib/product/readiness/musicAlbumReportedWebProductReadiness.ts'
+      - 'lib/product/adapters/musicAlbumPointFandexVariableProduct.ts'
+      - 'lib/product/adapters/musicAlbumPointRiskQualityMetadata.ts'
+      - 'lib/intelligence/riskAdjustmentProducerMetadataAdapter.ts'
+      - 'lib/intelligence/riskAdjustmentUpstreamMetadataRequirements.ts'
+      - 'lib/intelligence/riskAdjustmentCurrentUpstreamEligibility.ts'
+      - 'lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts'
       - 'lib/product/readiness/musicAlbumPointProductionHandoff.ts'
       - 'lib/product/readiness/albumNormalizationCalibrationGate.ts'
       - 'lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts'
@@ -59,6 +78,21 @@ on:
       - 'tests/album-provider-authorization-review-v1.test.mts'
       - 'tests/album-provider-authorization-request-v1.test.mts'
       - 'tests/reported-album-sales-evidence-v1.test.mts'
+      - 'tests/reported-album-sales-production-source-v1.test.mts'
+      - 'tests/reported-album-sales-production-evidence-qualification-v1.test.mts'
+      - 'tests/reported-album-sales-production-identity-v1.test.mts'
+      - 'tests/reported-album-sales-production-durable-v1.test.mts'
+      - 'tests/music-album-reported-web-stored-runtime-v1.test.mts'
+      - 'tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts'
+      - 'tests/reported-web-usage-review-request-v1.test.mts'
+      - 'tests/reported-album-sales-current-evidence-gap-v1.test.mts'
+      - 'tests/iu-music-album-current-release-review-packet-v1.test.mts'
+      - 'tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts'
+      - 'tests/iu-music-album-first-week-source-search-audit-v1.test.mts'
+      - 'tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts'
+      - 'tests/iu-music-album-official-first-week-evidence-request-v1.test.mts'
+      - 'tests/music-album-verified-release-identity-product-v1.test.mts'
+      - 'tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
       - 'tests/reported-album-sales-research-cohort-review-v1.test.mts'
@@ -67,7 +101,24 @@ on:
       - 'tests/reported-album-sales-research-review-intake-bundle-v1.test.mts'
       - 'tests/reported-album-sales-research-review-request-v1.test.mts'
       - 'data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json'
+      - 'data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_current_release_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_official_first_week_evidence_request_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
+      - 'tests/music-album-reported-web-product-readiness-v1.test.mts'
+      - 'tests/music-album-point-fandex-variable-product-v1.test.mts'
+      - 'tests/music-album-point-risk-quality-metadata-v1.test.mts'
+      - 'tests/risk-adjustment-producer-metadata-adapter-v1.test.mts'
+      - 'tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts'
+      - 'tests/risk-adjustment-current-upstream-eligibility-v1.test.mts'
+      - 'tests/risk-adjustment-current-readiness-report-v1.test.mts'
+      - 'tests/fandex-current-runtime-assembly-readiness-v1.test.mts'
       - 'tests/music-album-point-production-handoff-v1.test.mts'
       - 'tests/direct-album-provider-foundation-v1.test.mts'
       - 'tests/album-integrated-synthetic-validation-v1.test.mts'
@@ -115,6 +166,19 @@ jobs:
           lib/alternative-evidence/hanteoAlbumDiscovery.ts
           lib/alternative-evidence/index.ts
           lib/alternative-evidence/reportedAlbumSalesEvidence.ts
+          lib/alternative-evidence/reportedAlbumSalesProductionSource.ts
+          lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification.ts
+          lib/alternative-evidence/reportedAlbumSalesProductionIdentity.ts
+          lib/alternative-evidence/reportedAlbumSalesImmutableEvidenceRecord.ts
+          lib/alternative-evidence/reportedAlbumSalesCurrentRelease.ts
+          lib/alternative-evidence/reportedAlbumSalesCurrentReleaseReview.ts
+          lib/alternative-evidence/reportedWebUsageReviewRequest.ts
+          lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts
+          lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts
+          lib/server/product/musicAlbumPointCurrentRuntimeRead.ts
+          lib/product/presentation/musicAlbumVerifiedReleaseIdentity.ts
+          app/artists/[artistId]/fandex-beta/page.tsx
+          tests/music-album-verified-release-identity-product-v1.test.mts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
@@ -132,6 +196,13 @@ jobs:
           lib/product/contracts/albumNormalizationInput.ts
           lib/product/contracts/albumObservationHistory.ts
           lib/product/readiness/musicAlbumPointProductReadiness.ts
+          lib/product/readiness/musicAlbumReportedWebProductReadiness.ts
+          lib/product/adapters/musicAlbumPointFandexVariableProduct.ts
+          lib/product/adapters/musicAlbumPointRiskQualityMetadata.ts
+          lib/intelligence/riskAdjustmentProducerMetadataAdapter.ts
+          lib/intelligence/riskAdjustmentUpstreamMetadataRequirements.ts
+          lib/intelligence/riskAdjustmentCurrentUpstreamEligibility.ts
+          lib/product/runtime/fandexCurrentRuntimeAssemblyReadiness.ts
           lib/product/readiness/musicAlbumPointProductionHandoff.ts
           lib/product/readiness/albumNormalizationCalibrationGate.ts
           lib/product/readiness/albumNormalizationCalibrationEvidenceReview.ts
@@ -164,6 +235,20 @@ jobs:
           tests/album-provider-authorization-review-v1.test.mts
           tests/album-provider-authorization-request-v1.test.mts
           tests/reported-album-sales-evidence-v1.test.mts
+          tests/reported-album-sales-production-source-v1.test.mts
+          tests/reported-album-sales-production-evidence-qualification-v1.test.mts
+          tests/reported-album-sales-production-identity-v1.test.mts
+          tests/reported-album-sales-production-durable-v1.test.mts
+          tests/music-album-reported-web-stored-runtime-v1.test.mts
+          tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts
+          tests/reported-web-usage-review-request-v1.test.mts
+          tests/reported-album-sales-current-evidence-gap-v1.test.mts
+          tests/iu-music-album-current-release-review-packet-v1.test.mts
+          tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts
+          tests/iu-music-album-first-week-source-search-audit-v1.test.mts
+          tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts
+          tests/iu-music-album-official-first-week-evidence-request-v1.test.mts
+          tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
           tests/reported-album-sales-research-cohort-review-v1.test.mts
@@ -172,7 +257,24 @@ jobs:
           tests/reported-album-sales-research-review-intake-bundle-v1.test.mts
           tests/reported-album-sales-research-review-request-v1.test.mts
           data/fandex-cloud-v10/research/reported_album_sales_web_seed_v1.json
+          data/fandex-cloud-v10/product/music_album_reported_web_production_freeze_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_current_release_evidence_gap_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_current_release_review_packet_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_official_first_week_evidence_request_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
+          tests/music-album-reported-web-product-readiness-v1.test.mts
+          tests/music-album-point-fandex-variable-product-v1.test.mts
+          tests/music-album-point-risk-quality-metadata-v1.test.mts
+          tests/risk-adjustment-producer-metadata-adapter-v1.test.mts
+          tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts
+          tests/risk-adjustment-current-upstream-eligibility-v1.test.mts
+          tests/risk-adjustment-current-readiness-report-v1.test.mts
+          tests/fandex-current-runtime-assembly-readiness-v1.test.mts
           tests/music-album-point-production-handoff-v1.test.mts
           EOF
           sort -o /tmp/allowed.txt /tmp/allowed.txt
@@ -221,6 +323,50 @@ jobs:
       - name: Reported Album Sales web evidence regression
         run: npx tsx --test tests/reported-album-sales-evidence-v1.test.mts
 
+      - name: Reported Album Sales production source contract regression
+        run: npx tsx --test tests/reported-album-sales-production-source-v1.test.mts
+
+      - name: Reported Album Sales Production evidence qualification regression
+        run: npx tsx --test tests/reported-album-sales-production-evidence-qualification-v1.test.mts
+
+      - name: Reported Album Sales production identity review regression
+        run: npx tsx --test tests/reported-album-sales-production-identity-v1.test.mts
+
+      - name: Reported Album Sales durable evidence and current selector regression
+        run: npx tsx --test tests/reported-album-sales-production-durable-v1.test.mts
+
+      - name: Music Album reported web stored runtime regression
+        run: npx tsx --test tests/music-album-reported-web-stored-runtime-v1.test.mts
+
+      - name: Music Album reported web current runtime wiring
+        run: npx tsx --test tests/music-album-point-reported-web-current-runtime-wiring-v1.test.mts
+
+      - name: Reported Web rights review request regression
+        run: npx tsx --test tests/reported-web-usage-review-request-v1.test.mts
+
+      - name: Reported Album Sales current evidence gap regression
+        run: npx tsx --test tests/reported-album-sales-current-evidence-gap-v1.test.mts
+
+      - name: IU current release reviewer packet regression
+        run: npx tsx --test tests/iu-music-album-current-release-review-packet-v1.test.mts
+
+      - name: IU current release review decision candidate regression
+        run: npx tsx --test tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts
+
+      - name: IU exact-value source search audit regression
+        run: npx tsx --test tests/iu-music-album-first-week-source-search-audit-v1.test.mts
+
+      - name: IU Hanteo historical selector research regression
+        run: npx tsx --test tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts
+      - name: IU official first-week evidence request regression
+        run: npx tsx --test tests/iu-music-album-official-first-week-evidence-request-v1.test.mts
+
+      - name: Music Album reviewed release Product context regression
+        run: npx tsx --test tests/music-album-verified-release-identity-product-v1.test.mts
+
+      - name: IU reported web rights review intake regression
+        run: npx tsx --test tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
+
       - name: Reported Album Sales research history regression
         run: npx tsx --test tests/reported-album-sales-research-history-v1.test.mts
 
@@ -265,6 +411,18 @@ jobs:
 
       - name: Music/Album Product contract readiness regression
         run: npx tsx --test tests/music-album-point-product-contract-readiness-v1.test.mts
+
+      - name: Music/Album reported web Product readiness regression
+        run: npx tsx --test tests/music-album-reported-web-product-readiness-v1.test.mts
+
+      - name: Music/Album common Product adapter regression
+        run: npx tsx --test tests/music-album-point-fandex-variable-product-v1.test.mts
+
+      - name: Music/Album Risk quality metadata regression
+        run: npx tsx --test tests/music-album-point-risk-quality-metadata-v1.test.mts tests/risk-adjustment-producer-metadata-adapter-v1.test.mts tests/risk-adjustment-upstream-metadata-requirements-v1.test.mts tests/risk-adjustment-current-upstream-eligibility-v1.test.mts
+
+      - name: FANDEX current runtime assembly regression
+        run: npx tsx --test tests/fandex-current-runtime-assembly-readiness-v1.test.mts
 
       - name: Music/Album Production blocker handoff regression
         run: npx tsx --test tests/music-album-point-production-handoff-v1.test.mts

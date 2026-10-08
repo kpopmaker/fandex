@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   COMEBACK_ACTIVITY_POINT_CURRENT_RISK_METADATA_GAP,
   NEWS_ISSUE_POINT_CURRENT_RISK_METADATA_GAP,
+  MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP,
   RISK_ADJUSTMENT_REQUIRED_QUALITY_DIMENSIONS,
   evaluateRiskAdjustmentUpstreamMetadataGap,
 } from '../lib/intelligence/riskAdjustmentUpstreamMetadataRequirements';
@@ -136,6 +137,33 @@ test('current Activity Exposure producer exposes all required Risk metadata dime
   );
   assert.deepEqual(
     COMEBACK_ACTIVITY_POINT_CURRENT_RISK_METADATA_GAP.blockers,
+    [],
+  );
+});
+
+
+test('musicAlbumPoint producer now exposes every required Risk metadata dimension without becoming Risk-eligible', () => {
+  assert.equal(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP.status,
+    'ready',
+  );
+  assert.deepEqual(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP
+      .missingRequiredDimensions,
+    [],
+  );
+  assert.deepEqual(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP
+      .unknownRequiredDimensions,
+    [],
+  );
+  assert.deepEqual(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP
+      .absentOptionalDimensions,
+    ['volatility'],
+  );
+  assert.deepEqual(
+    MUSIC_ALBUM_POINT_CURRENT_RISK_METADATA_GAP.blockers,
     [],
   );
 });

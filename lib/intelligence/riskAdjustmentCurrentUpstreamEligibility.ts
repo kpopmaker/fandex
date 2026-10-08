@@ -17,7 +17,7 @@ export type RiskAdjustmentCurrentUpstreamEligibilityState =
 
 export type RiskAdjustmentCurrentUpstreamExclusionReason =
   | 'momentum-publication-not-production'
-  | 'album-provider-production-not-authorized'
+  | 'music-album-reported-web-current-production-not-ready'
   | 'sns-fandom-provider-and-product-gates-open'
   | 'brand-fit-product-activation-not-authorized';
 
@@ -69,10 +69,14 @@ const CURRENT_ELIGIBILITY: Readonly<
   musicAlbumPoint: Object.freeze({
     eligibilityState: 'not-current-real-production' as const,
     acceptedForRiskConsumption: false,
-    exclusionReason: 'album-provider-production-not-authorized' as const,
+    exclusionReason:
+      'music-album-reported-web-current-production-not-ready' as const,
     evidenceRefs: Object.freeze([
       'risk-readiness-issue:413:musicAlbumPoint',
-      'upstream-external-dependency:issue-174',
+      'producer-contract:music-album-point-risk-quality-metadata-v1',
+      'source-contract:reported-album-sales-production-source-v1',
+      'current-source:reported-album-sales-current-release-v1',
+      'current-gap:iu_music_album_current_release_evidence_gap_v1',
     ]),
   }),
   snsFandomPoint: Object.freeze({

@@ -1,0 +1,198 @@
+{
+  "contractVersion": "music-album-current-release-evidence-gap-v1",
+  "asOf": "2026-10-07T09:29:00+09:00",
+  "canonicalArtistId": "iu",
+  "variableId": "musicAlbumPoint",
+  "releaseScope": "physical-album-eligible",
+  "currentReleaseCandidate": {
+    "canonicalReleaseId": null,
+    "identityState": "candidate",
+    "latestPhysicalReleaseState": "candidate-latest",
+    "releaseTitle": "A Flower Bookmark 3",
+    "releaseTitleKo": "꽃갈피 셋",
+    "physicalReleaseDate": "2025-05-28",
+    "evidenceRefs": [
+      {
+        "evidenceId": "kakaoent-newsroom:2025-05-27:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "release-identity",
+        "sourceUrl": "https://newsroom.kakaoent.com/news/a-flower-bookmark-3-ius-nostalgic-vibe-blooms-in-her-remake-album-in-8-years/"
+      },
+      {
+        "evidenceId": "yes24:146827201:a-flower-bookmark-3",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-product-release-identity",
+        "sourceUrl": "https://www.yes24.com/Product/Goods/146827201"
+      },
+      {
+        "evidenceId": "yonhap:2026-07-20:iu-sixth-album-postponed",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "newer-full-album-not-yet-released",
+        "sourceUrl": "https://www.yna.co.kr/amp/view/AKR20260720154600005"
+      },
+      {
+        "evidenceId": "yonhap:2026-09-10:iu-digital-single",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "newer-music-release-is-digital-single",
+        "sourceUrl": "https://en.yna.co.kr/view/AEN20260910002500315"
+      },
+      {
+        "evidenceId": "melon:14535765:unknown-planet",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "digital-single-format-confirmation",
+        "sourceUrl": "https://www.melon.com/album/detail.htm?albumId=14535765"
+      },
+      {
+        "evidenceId": "hanteo:weekly:2025-W22:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "underlying-provider-physical-album-presence",
+        "sourceUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+        "note": "Hanteo weekly album chart for 2025-05-26 through 2025-06-01 lists 꽃갈피 셋 by IU at No. 6; this confirms provider presence but not the exact first-week unit total."
+      },
+      {
+        "evidenceId": "hanteo:weekly:2025-W23:a-flower-bookmark-3",
+        "sourceTier": "tier-a-primary-official",
+        "purpose": "underlying-provider-following-week-presence",
+        "sourceUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
+        "note": "Hanteo weekly album chart for 2025-06-02 through 2025-06-08 lists 꽃갈피 셋 by IU at No. 12; this does not establish the exact seven-day first-week provider period for the discovery-only 79,940 claim."
+      },
+      {
+        "evidenceId": "makestar:10531:a-flower-bookmark-3",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-product-release-identity",
+        "sourceUrl": "https://www.makestar.com/product/10531"
+      },
+      {
+        "evidenceId": "yes24:147561057:a-flower-bookmark-3-cdp",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-edition-identity",
+        "sourceUrl": "https://www.yes24.com/product/goods/147561057"
+      },
+      {
+        "evidenceId": "makestar:10841:a-flower-bookmark-3-cdp",
+        "sourceTier": "tier-b-provider-attributed-reputable",
+        "purpose": "physical-edition-identity",
+        "sourceUrl": "https://www.makestar.com/product/10841"
+      }
+    ],
+    "verificationBoundary": {
+      "exhaustiveLatestPhysicalReleaseReviewCompleted": false,
+      "currentSelectorEligible": false,
+      "officialHanteoPhysicalPresenceConfirmed": true,
+      "exactFirstWeekValueStillUnqualified": true,
+      "exactSevenDayProviderPeriodStillUnqualified": true,
+      "editionSemanticsResolved": false
+    },
+    "edition": null,
+    "editionResolutionState": "candidate",
+    "canonicalEditionId": null,
+    "editionCandidates": [
+      {
+        "candidateEdition": "standard-cd",
+        "physicalReleaseDate": "2025-05-28",
+        "evidenceRefs": [
+          "yes24:146827201:a-flower-bookmark-3",
+          "makestar:10531:a-flower-bookmark-3"
+        ],
+        "scopeState": "requires-human-review"
+      },
+      {
+        "candidateEdition": "cdp-limited",
+        "physicalReleaseDate": "2025-07-15",
+        "evidenceRefs": [
+          "yes24:147561057:a-flower-bookmark-3-cdp",
+          "makestar:10841:a-flower-bookmark-3-cdp"
+        ],
+        "scopeState": "requires-human-review"
+      }
+    ]
+  },
+  "reportedHanteoFirstWeekClaim": {
+    "value": 79940,
+    "unit": "physical-copies",
+    "metricSemantic": "reported-hanteo-first-week-sales",
+    "underlyingProvider": "Hanteo Chart",
+    "providerPeriodStart": null,
+    "providerPeriodEnd": null,
+    "productionEvidenceState": "discovery-only",
+    "discoveryEvidenceRefs": [
+      {
+        "evidenceId": "majayo:2025-06-04:iu-a-flower-bookmark-3",
+        "sourceTier": "tier-c-discovery-only",
+        "sourceUrl": "https://majayo.com/20250529-iu/"
+      },
+      {
+        "evidenceId": "koreansales:iu-sales-summary:a-flower-bookmark-3",
+        "sourceTier": "tier-c-discovery-only",
+        "sourceUrl": "https://koreansalestwt.blogspot.com/2021/04/iu-sales-summary.html"
+      }
+    ],
+    "tierAOrBProductionEvidenceRefs": [],
+    "productionObservationEligible": false,
+    "providerPresenceEvidenceRefs": [
+      "hanteo:weekly:2025-W22:a-flower-bookmark-3",
+      "hanteo:weekly:2025-W23:a-flower-bookmark-3"
+    ],
+    "providerPresenceDoesNotQualifyExactValue": true,
+    "discoveryProviderPeriodStart": "2025-05-28",
+    "discoveryProviderPeriodEnd": "2025-06-03",
+    "discoveryProviderPeriodEvidenceRefs": [
+      "majayo:2025-06-04:iu-a-flower-bookmark-3"
+    ],
+    "discoveryProviderPeriodProductionEligible": false,
+    "sourceSearchAudit": {
+      "contractVersion": "iu-music-album-first-week-source-search-audit-v1",
+      "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json",
+      "assessedOn": "2026-10-07",
+      "tierAOrBExactValueSourceLocated": false,
+      "tierAOrBExactValueAndPeriodBindingLocated": false
+    }
+  },
+  "blockers": [
+    "durable-write-not-authorized",
+    "explicit-provider-period-missing",
+    "hanteo-historical-exact-copies-selector-unverified",
+    "reported-web-rights-review-not-materialized",
+    "tier-a-or-b-exact-value-search-completed-no-qualified-source",
+    "tier-a-or-b-first-week-evidence-missing"
+  ],
+  "semantics": {
+    "releaseDateDerivedProviderPeriodAllowed": false,
+    "discoveryOnlyPromotionAllowed": false,
+    "missingEqualsZero": false,
+    "missingEqualsStable": false,
+    "licensedFeedClaimAllowed": false,
+    "directHanteoApiClaimAllowed": false
+  },
+  "nextTargetedEvidenceNeeded": [
+    "Tier A or Tier B provider-attributed source that explicitly states the exact Hanteo first-week value",
+    "explicit provider-period start and end bound to that exact value; do not infer from release date or weekly rank windows",
+    "source-specific rights/usage review"
+  ],
+  "productActivationAuthorized": false,
+  "publicPublicationAuthorized": false,
+  "numericScoreDefined": false,
+  "currentReleaseReview": {
+    "state": "human-reviewed-binding-materialized",
+    "bindingRef": "data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json",
+    "canonicalReleaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+    "editionResolutionState": "release-level",
+    "canonicalEditionId": null,
+    "reviewedAt": "2026-10-07T10:36:00+09:00",
+    "autoVerified": false
+  },
+  "rightsReviewIntake": {
+    "state": "review-intake-prepared",
+    "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json",
+    "qualifyingSourceSpecificDecisionMaterialized": false,
+    "rightsState": "review-required",
+    "autoAuthorized": false
+  },
+  "hanteoHistoricalSelectorResearch": {
+    "state": "completed-no-verified-historical-selector",
+    "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json",
+    "exactCopiesSelectorLocated": false,
+    "liveHistoricalNetworkProbeExecuted": false,
+    "unstableResourceIdObservedAcrossWeeks": true
+  }
+}

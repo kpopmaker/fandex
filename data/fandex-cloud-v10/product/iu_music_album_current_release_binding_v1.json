@@ -1,0 +1,26 @@
+{
+  "contractVersion": "reported-album-sales-current-release-review-v1",
+  "bindingId": "43864fb79dbfcbbff8aa7fb200386466536e8c491d769a17b275c94a1ed127a7",
+  "requestId": "564c97b69e534ae5dd667e820a75476a617e15d9ad1b909a5013745b4890b6d9",
+  "canonicalArtistId": "iu",
+  "releaseScope": "physical-album-eligible",
+  "canonicalReleaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+  "candidateEdition": null,
+  "editionResolutionState": "release-level",
+  "canonicalEditionId": null,
+  "releaseTitle": "A Flower Bookmark 3",
+  "releaseDate": "2025-05-28",
+  "latestReleaseState": "verified-latest",
+  "identityState": "resolved",
+  "reviewState": "human-reviewed",
+  "supportingEvidenceRefs": [
+    "kakaoent-newsroom:2025-05-27:a-flower-bookmark-3",
+    "yes24:146827201:a-flower-bookmark-3",
+    "yes24:147561057:a-flower-bookmark-3-cdp",
+    "yonhap:2026-07-20:iu-sixth-album-postponed",
+    "yonhap:2026-09-10:iu-digital-single"
+  ],
+  "reviewerRef": "reviewer:explicit-user-approval:music-album",
+  "reviewedAt": "2026-10-07T10:36:00+09:00",
+  "autoVerified": false
+}

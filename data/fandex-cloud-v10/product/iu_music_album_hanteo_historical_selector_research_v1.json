@@ -1,0 +1,134 @@
+{
+  "contractVersion": "iu-music-album-hanteo-historical-selector-research-v1",
+  "lifecycle": "productionization-selector-research",
+  "assessedOn": "2026-10-07",
+  "canonicalArtistId": "iu",
+  "releaseTitle": "A Flower Bookmark 3",
+  "releaseTitleKo": "꽃갈피 셋",
+  "objective": "determine whether official Hanteo public/API surfaces expose a verified historical selector capable of recovering exact historical physical-copy sales",
+  "officialHistoricalPageObservations": [
+    {
+      "periodKey": "2025-W22",
+      "periodStart": "2025-05-26",
+      "periodEnd": "2025-06-01",
+      "rank": 6,
+      "publicPageUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+      "resourceAlbumIdObserved": "900544062",
+      "exactSalesCopiesExposedOnPage": false
+    },
+    {
+      "periodKey": "2025-W23",
+      "periodStart": "2025-06-02",
+      "periodEnd": "2025-06-08",
+      "rank": 12,
+      "publicPageUrl": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
+      "resourceAlbumIdObserved": "900544267",
+      "exactSalesCopiesExposedOnPage": false
+    }
+  ],
+  "identityFinding": {
+    "sameReleaseResourceIdStableAcrossWeeks": false,
+    "interpretation": "resource/target identifiers observed on historical chart pages must not be treated as a stable canonical release identifier without separate provider documentation",
+    "releaseIdentityAutoResolutionAllowed": false
+  },
+  "currentApiKnowledge": {
+    "baseUrl": "https://api.hanteochart.io",
+    "weeklyPath": "/v4/ranking/list/ALBUM/WEEKLY/BASIC",
+    "verifiedCurrentRequestShape": "?limit=<positive-integer>",
+    "currentResponseSalesField": "detail.salesVolume",
+    "currentResponseSalesSemantic": "physical-sales-copies",
+    "historicalSelectorVerified": false,
+    "guessedHistoricalParametersAllowed": false
+  },
+  "externalWrapperResearch": {
+    "package": "hanteo-circle-api",
+    "documentationState": "public-wrapper-docs-reviewed",
+    "documentedHanteoHistoricalOverride": false,
+    "documentedHistoricExamplesProvider": "Circle-only",
+    "evidentiaryUse": "discovery-only-not-provider-authority"
+  },
+  "result": {
+    "historicalExactCopiesSelectorLocated": false,
+    "historicalSalesVolumeRecoveryAuthorized": false,
+    "exact79940Qualified": false,
+    "explicitFirstWeekPeriodQualified": false,
+    "productionObservationEligible": false,
+    "blocker": "hanteo-historical-exact-copies-selector-unverified"
+  },
+  "nextSafeActions": [
+    "Locate provider-documented historical selector or archived first-party JSON evidence; do not guess query parameters.",
+    "Treat period-specific resource IDs as discovery metadata only.",
+    "If no first-party historical selector is documented, continue searching Tier A/B reported sources for the exact first-week value and explicit provider period."
+  ],
+  "productionBoundary": {
+    "liveHistoricalNetworkProbeExecuted": false,
+    "directHanteoApiClaimAllowed": false,
+    "discoveryOnlyPromotionAllowed": false,
+    "durableWriteAuthorized": false,
+    "productActivationAuthorized": false,
+    "publicPublicationAuthorized": false
+  },
+  "boundedPublicImplementationCrosscheck": {
+    "assessedOn": "2026-10-08",
+    "researchScope": "public documented evidence and retrieved third-party source code; no historical Hanteo API request",
+    "officialHistoricalWeb": {
+      "urls": [
+        "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+        "https://www.hanteochart.com/en/charts/album/weekly/2025-W23"
+      ],
+      "retrievalSurface": "rendered official public chart pages",
+      "periodSpecificRanksExposed": true,
+      "exactPhysicalCopiesExposed": false,
+      "firstWeekProviderPeriodBoundToExactValue": false,
+      "frontendBundleOriginalSourceInspected": false,
+      "historicalXhrRequestShapeValidated": false
+    },
+    "sourceInspectedImplementations": [
+      {
+        "url": "https://github.com/echo178/Personal-Projects/blob/2aa353c3446c398c10b30ed8f918ab809c10758c/Backend/musicAPI/Hanteo.js",
+        "requestPath": "/v4/ranking/list/ALBUM/REAL/BASIC",
+        "queryParametersObserved": [
+          "limit"
+        ],
+        "sourceCodeInspected": true,
+        "historicalAlbumSelectorImplemented": false,
+        "authority": "third-party-source-not-provider-authorization"
+      },
+      {
+        "url": "https://github.com/clarsbyte/korean-charts/blob/50cf6526f700fc8d735362133e08e72b300c0e09/app/api/index.js",
+        "requestPath": "/v4/ranking/list/ALBUM/REAL/BASIC",
+        "queryParametersObserved": [
+          "limit",
+          "lang"
+        ],
+        "sourceCodeInspected": true,
+        "historicalAlbumSelectorImplemented": false,
+        "authority": "third-party-source-not-provider-authorization"
+      }
+    ],
+    "wrapperDocumentation": {
+      "url": "https://socket.dev/npm/package/hanteo-circle-chart-api/overview/1.0.0",
+      "packageName": "hanteo-circle-chart-api",
+      "version": "1.0.0",
+      "archiveState": "package-removed-from-registry-per-socket",
+      "archivedReadmeInspected": true,
+      "originalImplementationSourceInspected": false,
+      "hanteoHistoricalOverrideDocumented": false,
+      "circleHistoricalOverridesDocumented": true,
+      "warning": "absence in archived README and inspected public examples does not prove that no private/provider historical endpoint exists"
+    },
+    "verifiedHistoricalAlbumRequestShape": null,
+    "noSelectorInferenceFromWeeklyPageUrl": true,
+    "currentSalesVolumeCannotBeReinterpretedAsHistoricalInitialChodong": true,
+    "directProviderApiCommercialUseAuthorization": false,
+    "outcome": "historical-exact-copy-api-selector-remains-unverified",
+    "productionBoundary": {
+      "guessedHistoricalQueryForbidden": true,
+      "historicalNetworkProbeExecuted": false,
+      "exact79940ProductionQualified": false,
+      "productionObservationEligible": false,
+      "durableWriteAuthorized": false,
+      "productActivationAuthorized": false
+    }
+  }
+}

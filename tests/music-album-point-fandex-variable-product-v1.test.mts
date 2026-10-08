@@ -13,6 +13,9 @@ import {
   MUSIC_ALBUM_POINT_PRODUCT_READINESS_VERSION,
   type MusicAlbumPointProductReadiness,
 } from '../lib/product/readiness/musicAlbumPointProductReadiness';
+import {
+  evaluateMusicAlbumReportedWebProductReadiness,
+} from '../lib/product/readiness/musicAlbumReportedWebProductReadiness';
 
 function candidate(): ProductMusicAlbumPointCandidateResult {
   const model = {
@@ -292,4 +295,67 @@ test('current combined Product remains time-unknown rather than inferring a fake
   assert.equal(result.record.asOf, null);
   assert.deepEqual(result.record.observationTime, { kind: 'unknown' });
   assert.equal(result.record.collectionTime, null);
+});
+
+
+test('reported-web current-source blocker is preserved in common Product evidence without inventing a Product value', () => {
+  const current = {
+    status: 'unavailable' as const,
+    contractVersion: 'reported-album-sales-current-release-v1' as const,
+    canonicalArtistId: 'iu',
+    reason: 'latest-release-not-verified' as const,
+    freshnessState: 'unknown' as const,
+    value: null,
+    unit: null,
+    missingIsZero: false as const,
+    missingIsStable: false as const,
+  };
+  const result = adaptMusicAlbumPointToFandexVariableProduct({
+    candidate: candidate(),
+    readiness: readiness(),
+    reportedWebCurrentRelease: current,
+    reportedWebReadiness:
+      evaluateMusicAlbumReportedWebProductReadiness(current),
+  });
+
+  assert.equal(result.status, 'ok');
+  if (result.status !== 'ok') return;
+
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-current:unavailable',
+    ),
+  );
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-reason:latest-release-not-verified',
+    ),
+  );
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-readiness:source-blocked',
+    ),
+  );
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-reported-web-blocker:current-observation-available',
+    ),
+  );
+  assert.ok(
+    result.record.evidenceRefs.includes(
+      'music-album-legacy-direct-lane-blocker:album-rights-authorized',
+    ),
+  );
+  assert.equal(
+    result.record.evidenceRefs.includes(
+      'music-album-readiness-blocker:album-rights-authorized',
+    ),
+    false,
+  );
+  assert.deepEqual(result.record.valueRepresentation, {
+    kind: 'none',
+    reason: 'not-produced',
+  });
+  assert.equal(result.record.lifecycleState, 'shadow');
+  assert.equal(result.record.readinessState, 'research-only');
 });

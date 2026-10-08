@@ -61,6 +61,12 @@ import type {
   ProductMusicAlbumPointCandidateResult,
 } from '../contracts/productMusicAlbumPointCandidate';
 import type {
+  ReportedAlbumSalesCurrentReleaseRead,
+} from '../../alternative-evidence/reportedAlbumSalesCurrentRelease';
+import type {
+  MusicAlbumReportedWebProductReadiness,
+} from '../readiness/musicAlbumReportedWebProductReadiness';
+import type {
   ProductVariableReadModelResult,
 } from '../contracts/productVariable';
 import {
@@ -83,6 +89,10 @@ export type FandexCurrentRuntimeMusicAlbumSource =
       status: 'ok';
       candidate: ProductMusicAlbumPointCandidateResult;
       readiness: MusicAlbumPointProductReadiness;
+      reportedWebCurrentRelease?:
+        ReportedAlbumSalesCurrentReleaseRead;
+      reportedWebReadiness?:
+        MusicAlbumReportedWebProductReadiness;
     }>
   | Readonly<{
       status: 'data-issue';
@@ -247,6 +257,10 @@ export function buildFandexCurrentRuntimeAssemblyReadiness(
       adaptMusicAlbumPointToFandexVariableProduct({
         candidate: musicAlbumSource.candidate,
         readiness: musicAlbumSource.readiness,
+        reportedWebCurrentRelease:
+          musicAlbumSource.reportedWebCurrentRelease,
+        reportedWebReadiness:
+          musicAlbumSource.reportedWebReadiness,
       }),
     );
     const result = adapterState('musicAlbumPoint', 'resolved', adapted);
