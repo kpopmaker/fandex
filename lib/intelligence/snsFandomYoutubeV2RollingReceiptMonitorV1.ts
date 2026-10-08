@@ -10,6 +10,7 @@ const WINDOW_PATH = ROOT + '/canonical-window.json';
 const RECEIPTS = ROOT + '/receipts/';
 const HOUR_MS = 60 * 60 * 1_000;
 const DURATION_HOURS = 366 * 24;
+const LATEST_RECEIPT_BODY_READ_LIMIT = 24;
 
 type ReadStore = Pick<ImmutableTextObjectStore, 'readText' | 'listPathnames'>;
 
@@ -24,7 +25,7 @@ export type SnsFandomV2RollingMonitorInput = Readonly<{
 
 export type SnsFandomV2RollingMonitorResult = Readonly<{
   version: typeof SNS_FANDOM_V2_ROLLING_RECEIPT_MONITOR_VERSION;
-  state: 'continuous-to-operator-horizon' | 'trailing-evidence-unconfirmed'
+  state: 'rolling-window-continuous' | 'trailing-evidence-unconfirmed'
     | 'confirmed-internal-gap' | 'blocked';
   evidenceSource: 'immutable-private-blob-readback';
   horizonSource: 'operator-supplied-requires-scheduler-corroboration';
@@ -32,7 +33,10 @@ export type SnsFandomV2RollingMonitorResult = Readonly<{
   firstSuccessfulSlotStart: string;
   throughObservedSlotStart: string;
   expectedSlots: number;
+  rollingReadbackStart: string | null;
   verifiedReceipts: number;
+  historicalIndexedReceipts: number;
+  historicalReceiptBodiesRevalidated: false;
   lastVerifiedSlotStart: string | null;
   missingSlotStarts: readonly string[];
   blockers: readonly string[];
@@ -76,6 +80,8 @@ export async function evaluateSnsFandomV2RollingReceiptMonitor(
   const missingSlotStarts: string[] = [];
   let verifiedReceipts = 0;
   let expectedSlots = 0;
+  let rollingReadbackStart: string | null = null;
+  let historicalIndexedReceipts = 0;
   let observedProviderCalls = 0;
   let observedQuotaUnits = 0;
   let trueZeroReceipts = 0;
@@ -86,7 +92,7 @@ export async function evaluateSnsFandomV2RollingReceiptMonitor(
     const state = blockers.length > 0 ? 'blocked' as const
       : internalGap ? 'confirmed-internal-gap' as const
         : missingSlotStarts.length > 0 ? 'trailing-evidence-unconfirmed' as const
-          : 'continuous-to-operator-horizon' as const;
+          : 'rolling-window-continuous' as const;
     return Object.freeze({
       version: SNS_FANDOM_V2_ROLLING_RECEIPT_MONITOR_VERSION,
       state,
@@ -96,7 +102,10 @@ export async function evaluateSnsFandomV2RollingReceiptMonitor(
       firstSuccessfulSlotStart: input.firstSuccessfulSlotStart,
       throughObservedSlotStart: input.throughObservedSlotStart,
       expectedSlots,
+      rollingReadbackStart,
       verifiedReceipts,
+      historicalIndexedReceipts,
+      historicalReceiptBodiesRevalidated: false as const,
       lastVerifiedSlotStart,
       missingSlotStarts: Object.freeze([...missingSlotStarts]),
       blockers: Object.freeze([...new Set(blockers)].sort()),
@@ -135,6 +144,8 @@ export async function evaluateSnsFandomV2RollingReceiptMonitor(
     return output();
   }
   expectedSlots = Math.floor((throughMs - startMs) / HOUR_MS) + 1;
+  const rollingStartIndex = Math.max(0, expectedSlots - LATEST_RECEIPT_BODY_READ_LIMIT);
+  rollingReadbackStart = new Date(startMs + rollingStartIndex * HOUR_MS).toISOString();
 
   const text = await store.readText(WINDOW_PATH);
   if (text === null) {
@@ -183,6 +194,12 @@ export async function evaluateSnsFandomV2RollingReceiptMonitor(
       continue;
     }
     latestPresentIndex = index;
+    if (index < rollingStartIndex) {
+      // Historical receipts are checked for existence in the immutable index,
+      // not re-fetched or misrepresented as body-verified in each rolling run.
+      historicalIndexedReceipts += 1;
+      continue;
+    }
     const receiptText = await store.readText(expectedReceiptPath(slot));
     if (receiptText === null) {
       blockers.push('sns-fandom-rolling-v2-listed-receipt-unreadable');
