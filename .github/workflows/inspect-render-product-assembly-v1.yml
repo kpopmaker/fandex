@@ -94,3 +94,5 @@ jobs:
 # rerun after Render 2a0daebd deployment
 
 # read-only verification after approved Render 93e8b208 live
+
+# read-only verification after Render 562dbbff (PR #577/#578) LIVE
