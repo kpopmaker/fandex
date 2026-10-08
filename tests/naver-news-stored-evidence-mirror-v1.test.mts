@@ -431,9 +431,10 @@ test('work-conserving Blob mirror reader still rejects later corrupt immutable e
 
   const reader =
     createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(store);
-  assert.ok(reader.readJobEvidenceBatch);
+  const readBatch = reader.readJobEvidenceBatch;
+  assert.ok(readBatch);
   await assert.rejects(
-    () => reader.readJobEvidenceBatch(
+    () => readBatch(
       plans.map((plan) => plan.identity.jobId),
     ),
     /naver_news_mirror_job_payload_invalid/,
