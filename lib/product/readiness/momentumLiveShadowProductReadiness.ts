@@ -304,11 +304,33 @@ function validAudit(
   );
 }
 
+export type MomentumObservedSourceCurrentness = Readonly<{
+  lastfmReadOk: boolean;
+  lastfmSnapshotDate: string | null;
+  naverReadOk: boolean;
+  naverLatestOfficialSlotStart: string | null;
+}>;
+
+function auditNaverOfficialSlotStart(
+  audit: MomentumLiveShadowSourceCurrentnessAudit,
+): string | null {
+  if (audit.naverDirectRecurring !== undefined) {
+    return audit.naverDirectRecurring.slotStart;
+  }
+
+  if (audit.naverBlobOnlyRecurring !== undefined) {
+    return audit.naverBlobOnlyRecurring.slotStart;
+  }
+
+  return null;
+}
+
 export function evaluateMomentumLiveShadowProductReadiness(
   input: Readonly<{
     runtimeShadow:
       ProductMomentumEvidenceConsensusReadModelResult;
     sourceAudit: MomentumLiveShadowSourceCurrentnessAudit;
+    observedSourceCurrentness?: MomentumObservedSourceCurrentness;
   }>,
 ): MomentumLiveShadowProductReadinessResult {
   const blockers: string[] = [];
@@ -351,6 +373,43 @@ export function evaluateMomentumLiveShadowProductReadiness(
     audit.lastfm.sourceAdvancedBeyondCarrierCutoff
     || naver.schedulerObservedAfterCarrierCutoff;
 
+  const observed = input.observedSourceCurrentness;
+  const auditNaverSlotStart = auditNaverOfficialSlotStart(audit);
+  let currentSourceAuditStale = false;
+
+  if (observed !== undefined) {
+    if (!observed.lastfmReadOk) {
+      blockers.push('current-lastfm-status-read-failed');
+    } else if (
+      observed.lastfmSnapshotDate === null
+      || !/^\d{4}-\d{2}-\d{2}$/.test(observed.lastfmSnapshotDate)
+    ) {
+      blockers.push('current-lastfm-status-invalid');
+    } else if (
+      observed.lastfmSnapshotDate > audit.lastfm.snapshotDate
+    ) {
+      currentSourceAuditStale = true;
+      blockers.push('current-lastfm-source-advanced-beyond-audit');
+    }
+
+    if (!observed.naverReadOk) {
+      blockers.push('current-naver-latest-slot-read-failed');
+    } else if (
+      observed.naverLatestOfficialSlotStart !== null
+      && !validIso(observed.naverLatestOfficialSlotStart)
+    ) {
+      blockers.push('current-naver-latest-slot-invalid');
+    } else if (
+      observed.naverLatestOfficialSlotStart !== null
+      && auditNaverSlotStart !== null
+      && Date.parse(observed.naverLatestOfficialSlotStart)
+        > Date.parse(auditNaverSlotStart)
+    ) {
+      currentSourceAuditStale = true;
+      blockers.push('current-naver-source-advanced-beyond-audit');
+    }
+  }
+
   const evaluationPerformed =
     audit.currentEvaluation.currentDualSourceCategoricalEvaluationPerformed;
   const currentEvaluationArtifactPresent =
@@ -360,7 +419,8 @@ export function evaluateMomentumLiveShadowProductReadiness(
   const satisfiesFreshness =
     evaluationPerformed
     && currentEvaluationArtifactPresent
-    && naver.currentStoredEvidenceReproducedForReadiness;
+    && naver.currentStoredEvidenceReproducedForReadiness
+    && !currentSourceAuditStale;
 
   if (
     sourceAdvancementObserved
@@ -383,6 +443,10 @@ export function evaluateMomentumLiveShadowProductReadiness(
     blocker === 'source-currentness-audit-invalid'
     || blocker === 'runtime-shadow-read-not-ok'
     || blocker === 'runtime-carrier-source-audit-mismatch'
+    || blocker === 'current-lastfm-status-read-failed'
+    || blocker === 'current-lastfm-status-invalid'
+    || blocker === 'current-naver-latest-slot-read-failed'
+    || blocker === 'current-naver-latest-slot-invalid'
   );
 
   const state = hardBlocked

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import type {
@@ -8,72 +9,65 @@ import {
   createMomentumPublicRouteDesignCandidate,
 } from '../lib/product/readiness/momentumPublicRouteDesignCandidate';
 import {
+  evaluateMomentumLiveShadowProductReadiness,
+  type MomentumLiveShadowSourceCurrentnessAudit,
+} from '../lib/product/readiness/momentumLiveShadowProductReadiness';
+import {
   getMomentumEvidenceConsensusShadowProductForIU,
 } from '../lib/server/product/momentumEvidenceConsensusRealProductRead';
-import {
-  getMomentumLiveShadowProductReadinessForIU,
-} from '../lib/server/product/momentumLiveShadowProductReadiness';
 import {
   getMomentumPublicRouteDesignCandidateForIU,
 } from '../lib/server/product/momentumPublicRouteDesignCandidate';
 
-test('current IU Momentum produces a route design candidate without authorizing publication', async () => {
-  const result = await getMomentumPublicRouteDesignCandidateForIU();
+const AUDIT_URL = new URL(
+  '../data/momentum-product/iu_momentum_live_shadow_source_currentness_audit_v1.json',
+  import.meta.url,
+);
 
-  assert.equal(result.status, 'ready-for-owner-review');
-  if (result.status !== 'ready-for-owner-review') return;
-
-  assert.deepEqual(result.target, {
-    artistId: 'iu',
-    legacyVariableId: 'growthMomentumPoint',
-    constructId: 'momentumEvidenceConsensus',
-  });
-  assert.equal(
-    result.claimScope,
-    'structured-categorical-evidence-only-no-numeric-score',
-  );
-  assert.deepEqual(result.routeShape, {
-    alignmentCutoffAt: true,
-    directionalConsensus: true,
-    persistenceConsensus: true,
-    conflictState: true,
-    storedEvidenceTrace: true,
-    numericScore: false,
-  });
-  assert.deepEqual(result.sourceBoundary, {
-    dataOrigin: 'observed',
-    publication: 'shadow',
-    presentation: 'standard',
-    previewFallbackUsed: false,
-    productMetricReadPerformed: false,
-  });
-  assert.equal(result.currentCarrier.directionalConsensus, 'direction-conflicted');
-  assert.equal(
-    result.currentCarrier.persistenceConsensus,
-    'persistence-not-applicable',
-  );
-  assert.equal(result.decision.productActivationAuthorized, false);
-  assert.equal(result.decision.productPublicationAuthorized, false);
-  assert.equal(result.decision.publicRouteActivated, false);
-  assert.equal(result.decision.publication, 'shadow');
-  assert.equal(result.decision.productMomentumScore, null);
-  assert.equal(result.decision.numericProductEligible, false);
-  assert.equal(result.decision.legacyGrowthMomentumPointReuseAllowed, false);
-  assert.equal(result.decision.previewFallbackAllowed, false);
-  assert.equal(
-    result.decision.requiredNextGate,
-    'explicit-momentum-product-activation-readiness',
-  );
-});
-
-test('premature source publication fails closed', async () => {
-  const [readiness, source] = await Promise.all([
-    getMomentumLiveShadowProductReadinessForIU(),
+async function getAuditBoundFreshFixture() {
+  const [source, rawAudit] = await Promise.all([
     getMomentumEvidenceConsensusShadowProductForIU(),
+    readFile(AUDIT_URL, 'utf8'),
   ]);
 
-  assert.equal(source.status, 'ok');
-  if (source.status !== 'ok') return;
+  if (source.status !== 'ok') {
+    throw new Error('momentum-source-read-not-ok');
+  }
+
+  const sourceAudit = JSON.parse(
+    rawAudit,
+  ) as MomentumLiveShadowSourceCurrentnessAudit;
+  const readiness = evaluateMomentumLiveShadowProductReadiness({
+    runtimeShadow: source,
+    sourceAudit,
+  });
+
+  assert.equal(readiness.state, 'public-route-candidate');
+  assert.equal(readiness.publicRouteDesignReady, true);
+  assert.deepEqual(readiness.blockers, []);
+
+  return { source, readiness };
+}
+
+test('current IU Momentum route design fails closed while runtime source audit is stale', async () => {
+  const result = await getMomentumPublicRouteDesignCandidateForIU();
+
+  assert.equal(result.status, 'blocked');
+  if (result.status !== 'blocked') return;
+
+  assert.equal(result.reason, 'live-shadow-readiness-not-ready');
+  assert.equal(result.productActivationAuthorized, false);
+  assert.equal(result.productPublicationAuthorized, false);
+  assert.equal(result.publicRouteActivated, false);
+  assert.equal(result.publication, 'shadow');
+  assert.equal(result.productMomentumScore, null);
+  assert.equal(result.numericProductEligible, false);
+  assert.equal(result.legacyGrowthMomentumPointReuseAllowed, false);
+  assert.equal(result.previewFallbackAllowed, false);
+});
+
+test('premature source publication fails closed after freshness is isolated', async () => {
+  const { readiness, source } = await getAuditBoundFreshFixture();
 
   const prematurePublication: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({
@@ -100,14 +94,8 @@ test('premature source publication fails closed', async () => {
   assert.equal(result.productMomentumScore, null);
 });
 
-test('runtime carrier mismatch fails closed before route activation design', async () => {
-  const [readiness, source] = await Promise.all([
-    getMomentumLiveShadowProductReadinessForIU(),
-    getMomentumEvidenceConsensusShadowProductForIU(),
-  ]);
-
-  assert.equal(source.status, 'ok');
-  if (source.status !== 'ok') return;
+test('runtime carrier mismatch fails closed after freshness is isolated', async () => {
+  const { readiness, source } = await getAuditBoundFreshFixture();
 
   const mismatchedCarrier: ProductMomentumEvidenceConsensusReadModelResult =
     Object.freeze({

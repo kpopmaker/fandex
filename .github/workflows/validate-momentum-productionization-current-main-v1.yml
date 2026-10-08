@@ -21,6 +21,7 @@ on:
       - 'lib/product/adapters/momentumEvidenceConsensusProductReadModel.ts'
       - 'lib/product/contracts/productMomentumEvidenceConsensus.ts'
       - 'lib/product/readiness/momentumLiveShadowProductReadiness.ts'
+      - 'lib/server/product/momentumLiveShadowProductReadiness.ts'
       - 'lib/product/readiness/momentumPublicRouteDesignCandidate.ts'
       - 'lib/server/ingestion/momentumEvidenceConsensusRepository.ts'
       - 'tests/momentum-carrier-attestation-lineage-v2.test.mts'
@@ -28,6 +29,7 @@ on:
       - 'tests/momentum-categorical-output-attestation-current-main-v1.test.mts'
       - 'tests/momentum-current-evaluation-execution-v1.test.mts'
       - 'tests/momentum-live-shadow-product-readiness-v1.test.mts'
+      - 'tests/momentum-public-route-design-v1.test.mts'
       - 'tests/momentum-v2-carrier-record-candidate-v1.test.mts'
       - '.github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml'
       - 'data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json'
@@ -79,8 +81,10 @@ jobs:
           lib/intelligence/fandexMomentumCurrentEvaluationExecution.ts
           lib/intelligence/fandexMomentumV2CarrierRecordCandidate.ts
           lib/product/readiness/momentumLiveShadowProductReadiness.ts
+          lib/server/product/momentumLiveShadowProductReadiness.ts
           tests/momentum-current-evaluation-execution-v1.test.mts
           tests/momentum-live-shadow-product-readiness-v1.test.mts
+          tests/momentum-public-route-design-v1.test.mts
           tests/momentum-v2-carrier-record-candidate-v1.test.mts
           .github/workflows/validate-momentum-workflow-attestation-activation-reauth-v1.yml
           data/momentum-product/iu_momentum_product_activation_authorization_execution_candidate_v1.json
