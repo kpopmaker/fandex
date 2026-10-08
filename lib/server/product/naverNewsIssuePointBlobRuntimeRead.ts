@@ -19,6 +19,7 @@ import {
 import {
   createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
   createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  type NaverNewsMirrorReadConcurrency,
 } from '../ingestion/naverNewsStoredEvidenceMirror';
 import {
   createProductionNaverNewsBlobEvidenceReadStore,
@@ -245,20 +246,26 @@ function runtime(
   store: ReadOnlyStore,
   stageTimer: ReturnType<typeof createNaverNewsBlobReadStageTimer>,
   emitCanonicalReadPhases: boolean,
+  canonicalReadConcurrency: NaverNewsMirrorReadConcurrency,
 ): ProductVariableRealReadRuntime {
   return Object.freeze({
     async readNewsIssuePointFrozenMethodology(input) {
       const repository =
         createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
           store,
-          emitCanonicalReadPhases
-            ? {
-                onBatchReadPhaseStats: (record) => console.info(
-                  'FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE='
-                    + JSON.stringify(record),
-                ),
-              }
-            : {},
+          {
+            // Explicit opt-in changes only the job GET worker limit. It does
+            // not skip jobs, relax validation, cache results, or touch manifests.
+            maxConcurrentReads: canonicalReadConcurrency,
+            ...(emitCanonicalReadPhases
+              ? {
+                  onBatchReadPhaseStats: (record: import('../ingestion/naverNewsStoredEvidenceMirror').NaverNewsMirrorCanonicalReadPhaseStats) => console.info(
+                    'FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE='
+                      + JSON.stringify(record),
+                  ),
+                }
+              : {}),
+          },
         );
       const profiledRepository = Object.freeze({
         ...repository,
@@ -309,6 +316,11 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
   const stageTimingEnabled =
     isProductionRuntime(environment)
     && environment.FANDEX_NAVER_NEWS_STAGE_TIMINGS?.trim() === '1';
+  const canonicalReadConcurrency: NaverNewsMirrorReadConcurrency =
+    isProductionRuntime(environment)
+    && environment.FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY?.trim() === '12'
+      ? 12
+      : 8;
   const stageTimer = createNaverNewsBlobReadStageTimer({
     // Opt-in is required even on the Production host; no default log noise.
     enabled: stageTimingEnabled,
@@ -403,6 +415,6 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       variableId: 'newsIssuePoint',
       throughSlotStart,
     },
-    runtime(store, stageTimer, stageTimingEnabled),
+    runtime(store, stageTimer, stageTimingEnabled, canonicalReadConcurrency),
   );
 }
