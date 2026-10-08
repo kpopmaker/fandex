@@ -42,7 +42,7 @@ export async function main(
   });
 
   process.stdout.write(JSON.stringify(result) + '\n');
-  if (result.state !== 'continuous-to-operator-horizon') {
+  if (result.state !== 'rolling-window-continuous') {
     process.exitCode = 1;
   }
 }
