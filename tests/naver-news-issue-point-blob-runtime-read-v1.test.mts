@@ -601,7 +601,7 @@ test('News stage timing preserves fail-closed credential resolution failure', as
 test('12-worker canonical experiment is gated to explicit Production env and preserves all official evidence', async () => {
   const store = memoryStore();
   const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
-  for (let index = 0; index < 36; index += 1) {
+  for (let index = 0; index < 50; index += 1) {
     await stageOfficial(
       store,
       new Date(protocolStart + index * 60 * 60_000).toISOString(),
