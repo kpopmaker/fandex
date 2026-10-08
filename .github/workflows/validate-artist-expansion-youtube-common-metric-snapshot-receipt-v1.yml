@@ -1,0 +1,21 @@
+name: Validate Artist Expansion YouTube snapshot receipt v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-youtube-common-metric-snapshot-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-snapshot-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate durable snapshot receipt
+        run: python tests/artist-expansion-youtube-common-metric-snapshot-receipt-v1.py

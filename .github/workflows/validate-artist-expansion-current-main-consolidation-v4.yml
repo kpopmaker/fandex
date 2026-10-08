@@ -1,0 +1,137 @@
+name: Validate Artist Expansion current-main consolidation v4
+
+on:
+  push:
+    branches:
+      - integration/artist-expansion-current-main-consolidation-v4
+
+permissions:
+  contents: read
+
+jobs:
+  validate-consolidation-v4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run all Artist Expansion Python regressions
+        run: |
+          set -euo pipefail
+          count=0
+          for test_file in tests/artist-expansion-*.py; do
+            echo "RUN $test_file"
+            python "$test_file"
+            count=$((count+1))
+          done
+          echo "artistExpansionTestCount=$count"
+          test "$count" -eq 17
+
+      - name: Compile Artist Expansion provider scripts
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_v3_common_distribution_comparison_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_v3_common_metric_snapshot_v1.py \
+            scripts/lastfm-cloud/lastfm_mbid_v_lisa_probe_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_canonical_shadow_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_distinct_epoch_delta_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_provider_epoch_probe_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_repeat_observation_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_second_distinct_interval_probe_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_v_lisa_probe_v1.py \
+            scripts/listenbrainz-cloud/musicbrainz_21_artist_candidates_v1.py
+
+      - name: Validate 355-artist universe and source compatibility
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expansion=json.loads(Path("data/artist-universe-expansion-v1.json").read_text(encoding="utf-8-sig"))
+          compat=json.loads(Path("data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json").read_text(encoding="utf-8-sig"))
+
+          assert expansion["version"] == "artist_universe_expansion_v1"
+          assert len(expansion["artists"]) == 255
+          assert compat["version"] == "artist_source_compatibility_v1"
+          assert compat["canonicalUniverseVersion"] == "artist_universe_v4"
+          assert compat["canonicalUniverseCount"] == 355
+          assert 355 - len(expansion["artists"]) == 100
+          assert set(compat["statusSemantics"]) == {"supported", "unresolved", "unsupported"}
+
+          n=compat["sources"]["naver_news"]
+          assert len(n["supportedCanonicalArtistIds"]) == 355
+          assert len(n["unresolvedCanonicalArtistIds"]) == 0
+          assert len(n["unsupportedCanonicalArtistIds"]) == 0
+
+          m=compat["sources"]["music_chart"]
+          assert len(m["supportedCanonicalArtistIds"]) == 21
+          assert len(m["unresolvedCanonicalArtistIds"]) == 334
+          assert len(m["unsupportedCanonicalArtistIds"]) == 0
+
+          l=compat["sources"]["lastfm"]
+          assert len(l["supportedCanonicalArtistIds"]) == 19
+          assert len(l["unresolvedCanonicalArtistIds"]) == 334
+          assert set(l["unsupportedCanonicalArtistIds"]) == {"v","lisa"}
+
+          print("PASS: universe=355 | baseline=100 | expansion=255 | NAVER=355/355 | Music=21 | Last.fm=19+2 unsupported")
+          PY
+
+      - name: Validate Product availability matrix semantics
+        run: npx tsx --test tests/fandex-artist-availability-matrix-v1.test.mts
+
+      - name: Validate canonical NAVER artist read adapter
+        run: npx tsx --test tests/intelligence-naver-canonical-artist-read-adapter-v1.test.mts
+
+      - name: Typecheck current main integration
+        run: npm run typecheck
+
+      - name: Validate consolidation v4 manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p=Path("data/fandex-cloud-v10/seed/artist_expansion_current_main_consolidation_v4.json")
+          d=json.loads(p.read_text(encoding="utf-8"))
+          assert d["version"] == "artist_expansion_current_main_consolidation_v4"
+          assert d["status"] == "current_main_consolidated_waiting_second_listenbrainz_interval"
+          assert d["baseMainSha"] == "faa4616d32c7257ba73d67941442743f57636b11"
+          assert d["sourceEvidenceHead"] == "be37d633c638d3d352f94e71bdbaf8404794f6ac"
+          assert d["consolidatedSourceFileCount"] == 74
+          assert len(d["consolidatedSourceFiles"]) == 74
+          assert len(set(d["consolidatedSourceFiles"])) == 74
+          assert d["canonicalUniverse"] == {
+              "version":"artist_universe_v4",
+              "totalArtistCount":355,
+              "baselineArtistCount":100,
+              "expansionArtistCount":255,
+          }
+          assert d["sourceCompatibility"]["naverNews"] == {"supported":355,"unresolved":0,"unsupported":0}
+          assert d["sourceCompatibility"]["musicChart"] == {"supported":21,"unresolved":334,"unsupported":0}
+          assert d["sourceCompatibility"]["lastfm"]["supported"] == 19
+          assert d["sourceCompatibility"]["lastfm"]["unresolved"] == 334
+          assert d["sourceCompatibility"]["lastfm"]["unsupported"] == 2
+          assert set(d["sourceCompatibility"]["lastfm"]["unsupportedCanonicalArtistIds"]) == {"v","lisa"}
+          assert d["listenbrainz"]["canonicalCoverage"] == "21/21"
+          assert d["listenbrainz"]["firstDistinctIntervalEstablished"] is True
+          assert d["listenbrainz"]["secondDistinctIntervalEstablished"] is False
+          assert d["listenbrainz"]["latestSecondIntervalNewerEpoch"] == "0/21"
+          assert d["nextGate"] == "LISTENBRAINZ_SECOND_DISTINCT_INTERVAL_REQUIRED"
+          assert all(value is False for value in d["semantics"].values())
+          assert all(value is False for value in d["preservation"].values())
+          for path in d["consolidatedSourceFiles"]:
+              assert Path(path).is_file(), path
+          print("PASS: consolidation v4 | sourceFiles=74 | universe=355 | next=second-distinct-interval")
+          PY
