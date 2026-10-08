@@ -270,6 +270,61 @@ def main() -> None:
     assert set(jinu_collision["mutationPermissions"].values()) == {False}
     assert jinu_collision["nextGate"] == "JINU_PINNED_PROVIDER_ID_LIVE_RELEASE_LINKAGE_REQUIRED"
 
+    # Live release proof rejects the old PIN, but cannot auto-apply the alternate.
+    jinu_live = queue["jinuLiveIdentityResolutionV5"]
+    assert jinu_live["version"] == "music_genie_jinu_live_provider_identity_resolution_v5"
+    assert jinu_live["status"] == (
+        "pinned_candidate_rejected_as_wrong_artist_alternative_human_review_required"
+    )
+    assert jinu_live["canonicalArtistId"] == "jinu"
+    lineage = jinu_live["verifiedEvidence"]
+    assert lineage["runId"] == 37777436998
+    assert lineage["jobId"] == 113311724896
+    assert lineage["conclusion"] == "success"
+    assert lineage["exactHead"] == "e468ec88bddc03015fb0c4fdbafabbec1262715f"
+    assert lineage["artifactId"] == 11550277277
+    assert lineage["artifactDigest"] == (
+        "sha256:e8b072d500e4a07d6eec755b24637573dce00fffa924864598a3b15dc28b078e"
+    )
+    assert lineage["providerLiveResponseStatuses"] == [200, 200]
+    wrong = jinu_live["wrongAliasCandidate"]
+    alternate = jinu_live["alternateReviewedCandidateNotApplied"]
+    assert wrong["providerArtistId"] == "14946516"
+    assert wrong["providerDisplay"] == "JINU"
+    assert wrong["firstRecordedProviderDebutYear"] == 1996
+    assert wrong["liveDetailDebutYearParsed"] is None
+    assert set(wrong["matchedReleaseEvidence"]) == {"Jinujoke", "엉뚱한 상상"}
+    assert wrong["linkedToWinner"] is False
+    assert wrong["cannotUseAsWinnerProviderIdentity"] is True
+    assert wrong["canonicalArtistNotUnsupported"] is True
+    assert alternate["providerArtistId"] == "80441171"
+    assert alternate["providerDisplay"] == "JINU (김진우)"
+    assert alternate["liveDetailStatusCode"] == 200
+    assert set(alternate["matchedReleaseEvidence"]) == {"JINU's HEYDAY", "또또또"}
+    assert alternate["matchedGroupContext"] == "WINNER"
+    assert alternate["providerDebutYearParsed"] is None
+    for no_binding in (
+        "humanReviewedBindingApproved",
+        "providerIdAppliedToTargetSeed",
+        "sourceCompatibilityPromoted",
+    ):
+        assert alternate[no_binding] is False
+    assert wrong["providerArtistId"] != alternate["providerArtistId"]
+    jinu_row = next(row for row in rows if row["canonicalArtistId"] == "jinu")
+    assert jinu_row["genieProviderArtistId"] == wrong["providerArtistId"]
+    assert "jinu" in unresolved and "jinu" not in supported and "jinu" not in unsupported
+    boundaries = jinu_live["sourceBoundaries"]
+    assert boundaries["musicSupportedCount"] == 117
+    assert boundaries["musicUnresolvedCount"] == 238
+    assert boundaries["musicUnsupportedCount"] == 0
+    assert boundaries["alternateCandidateRequiresHumanReviewedBinding"] is True
+    assert boundaries["artistRemainsUnresolved"] is True
+    assert boundaries["productActivationAuthorized"] is False
+    assert boundaries["mainMergeAuthorized"] is False
+    assert jinu_live["nextGate"] == (
+        "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED"
+    )
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -299,7 +354,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU ambiguity hold | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU wrong-ID proof / alternate review | Music 117/238/0 | Product unchanged"
     )
 
 
