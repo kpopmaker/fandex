@@ -172,8 +172,8 @@ def native_song_link(song_id: str) -> dict:
     response = fetch(url)
     soup = BeautifulSoup(response["html"], "html.parser")
     plain = " ".join(soup.stripped_strings)
-    pattern = re.compile(r"""fnViewArtist\\(['"]([0-9]+)['"]\\)""", re.I)
-    href = re.compile(r"artistInfo\\?xxnm=([0-9]+)", re.I)
+    pattern = re.compile(r"""fnViewArtist\(['"]([0-9]+)['"]\)""", re.I)
+    href = re.compile(r"artistInfo\?xxnm=([0-9]+)", re.I)
     linked = {}
     for a in soup.find_all("a"):
         name = " ".join(a.stripped_strings).strip()
