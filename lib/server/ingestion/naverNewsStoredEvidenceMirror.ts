@@ -39,26 +39,41 @@ const SCHEDULER_COLLECTION_KEY_PATTERN =
 
 const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8;
 
-// Bound simultaneous Blob SDK reads and decoded in-flight payloads.
-// No evidence is omitted, sampled, truncated, or reordered.
+// Keep up to eight Blob reads in flight without head-of-line blocking at
+// batch boundaries. Retain every successful entry in its original order.
+// On any read or validation failure, stop scheduling new work, wait for
+// in-flight reads to settle, then fail closed with the original rejection.
 async function mapMirroredEvidenceBatched<T, U>(
   values: readonly T[],
   read: (value: T) => Promise<U>,
 ): Promise<U[]> {
-  const results: U[] = [];
-  for (
-    let start = 0;
-    start < values.length;
-    start += MAX_CONCURRENT_MIRROR_EVIDENCE_READS
-  ) {
-    const batch = await Promise.all(
-      values.slice(
-        start,
-        start + MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
-      ).map(read),
-    );
-    results.push(...batch);
+  const results = new Array<U>(values.length);
+  let nextIndex = 0;
+  let failed = false;
+  let firstFailure: unknown;
+
+  async function readNext(): Promise<void> {
+    while (!failed && nextIndex < values.length) {
+      const index = nextIndex++;
+      try {
+        results[index] = await read(values[index]!);
+      } catch (error) {
+        if (!failed) {
+          failed = true;
+          firstFailure = error;
+        }
+      }
+    }
   }
+
+  await Promise.all(
+    Array.from(
+      { length: Math.min(MAX_CONCURRENT_MIRROR_EVIDENCE_READS, values.length) },
+      () => readNext(),
+    ),
+  );
+
+  if (failed) throw firstFailure;
   return results;
 }
 
