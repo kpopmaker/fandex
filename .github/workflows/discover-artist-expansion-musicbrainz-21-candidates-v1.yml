@@ -1,0 +1,29 @@
+name: Discover Artist Expansion MusicBrainz 21 candidates v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-musicbrainz-21-candidates-v1
+
+permissions:
+  contents: read
+
+jobs:
+  discover-musicbrainz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Discover MusicBrainz candidates
+        run: python scripts/listenbrainz-cloud/musicbrainz_21_artist_candidates_v1.py
+      - name: Upload candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-musicbrainz-21-candidates-v1
+          path: musicbrainz_21_artist_candidates_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

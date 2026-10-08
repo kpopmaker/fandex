@@ -1,0 +1,100 @@
+{
+  "version": "youtube_v3_common_seed_selection_policy_v1",
+  "status": "materialized_for_rebaseline_evaluation_only",
+  "authorization": {
+    "handoffPath": "data/fandex-cloud-v10/seed/youtube_v3_rebaseline_policy_handoff_v1.json",
+    "selectedOption": "approve_full_21_rebaseline",
+    "rebaselinePreparationAuthorized": true,
+    "productExpansionAuthorized": false,
+    "productionActivationAuthorized": false
+  },
+  "targetCohort": {
+    "authorityPath": "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
+    "canonicalArtistCount": 21,
+    "canonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt",
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ]
+  },
+  "evidencePool": {
+    "mode": "frozen_reviewed_approval_pool",
+    "manifestPath": "data/fandex-cloud-v10/seed/youtube_v3_common_seed_manifest_v1.json",
+    "frozenValidationHead": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+    "frozenValidationRunId": 36841902398,
+    "selectedVideoCount": 74,
+    "historicalRecoveredApprovedCount": 47,
+    "currentReviewedApprovedCount": 27,
+    "historicalOriginalSeedCompleteness": false
+  },
+  "commonSelectionRules": [
+    "canonicalArtistId is authoritative; display names and aliases cannot override canonical identity",
+    "include every video in the frozen reviewed approval pool for the 21 target artists; no artist-specific cap, quota, weighting, or silent substitution is allowed",
+    "a videoId may belong to only one canonical artist in this policy revision",
+    "ambiguous artist identity fails closed and the video is excluded until separately reviewed",
+    "provider unavailability or an unavailable selected video is unresolved for the common snapshot; it is not zero, Missing, or Unsupported",
+    "new or replacement videos require a new reviewed evidence revision and may not enter this frozen policy automatically",
+    "historical recovered approval provenance is evidence for the new rebaseline only and does not claim reconstruction of the original frozen Product seed"
+  ],
+  "videoTypeResolution": {
+    "rule": "use preserved reviewed/historical video type when present; otherwise use the existing deterministic live-title classifier used by the recovered YouTube v3 shadow",
+    "perArtistOverridesAllowed": false,
+    "newWeightsAllowed": false
+  },
+  "comparableMetricSnapshotContract": {
+    "required": true,
+    "allSelectedVideoIdsRequired": true,
+    "oneCommonCollectionRunRequired": true,
+    "partialArtistSnapshotAllowed": false,
+    "unavailableSelectedVideoHandling": "block_common_snapshot_and_record_unresolved",
+    "zeroImputationAllowed": false
+  },
+  "scoreContract": {
+    "formulaVersion": "youtube_publish_v3_uncapped_additive_scaled",
+    "sameFormulaForAllArtists": true,
+    "perArtistFormulaOverrideAllowed": false,
+    "thresholdForPromotionDefined": false,
+    "frozenProductPointsReplacedByThisPolicy": false
+  },
+  "coverageSemantics": {
+    "selectedArtistCount": 21,
+    "selectedVideoCount": 74,
+    "perArtistVideoCap": null,
+    "equalVideoCountRequired": false,
+    "reason": "The common contract is the reviewed inclusion predicate and common metric/scoring procedure; inventing an equal-cardinality cap would create a new unsupported threshold."
+  },
+  "nextGate": {
+    "code": "COMMON_21_ARTIST_METRIC_SNAPSHOT_REQUIRED",
+    "detail": "Collect one comparable live metrics snapshot for all 74 selected video IDs, then score all 21 artists with the recovered v3 formula before any Product eligibility evaluation."
+  },
+  "safety": {
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "reviewedEvidenceImpliesProductEligibility": false,
+    "automaticProductExpansionAllowed": false,
+    "automaticRescalingAllowed": false,
+    "activeYoutubeRankingModified": false,
+    "productRuntimeModified": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false
+  }
+}

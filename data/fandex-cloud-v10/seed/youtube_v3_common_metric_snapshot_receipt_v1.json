@@ -1,0 +1,243 @@
+{
+  "version": "youtube_v3_common_metric_snapshot_receipt_v1",
+  "status": "measurement_complete_non_activating",
+  "measurement": {
+    "workflow": "Measure Artist Expansion YouTube common snapshot v1",
+    "runId": 37398978361,
+    "jobId": 112061595185,
+    "measurementHead": "c0124d8833f996437d591671b6a546d2eca76034",
+    "branch": "work/artist-expansion-youtube-common-metric-snapshot-v1",
+    "conclusion": "success",
+    "measuredAt": "2026-10-06T01:24:20Z",
+    "targetArtistCount": 21,
+    "requestedVideoCount": 74,
+    "returnedVideoCount": 74,
+    "requestBatchCount": 2,
+    "zeroImputationUsed": false,
+    "oneCommonCollectionRun": true
+  },
+  "artifact": {
+    "artifactId": 11383589365,
+    "name": "artist-expansion-youtube-common-metric-snapshot-v1",
+    "sizeBytes": 18070,
+    "digest": "sha256:f56a999d3d7fa90804d8259b9c03b0df98c02bd4e4c7132d43b061e928c7fae8",
+    "expiresAt": "2026-10-20T01:24:21Z"
+  },
+  "methodology": {
+    "policyVersion": "youtube_v3_common_seed_selection_policy_v1",
+    "manifestVersion": "youtube_v3_common_seed_manifest_v1",
+    "formulaVersion": "youtube_publish_v3_uncapped_additive_scaled",
+    "formulaSourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+    "formulaSourceBlob": "6942fc2cabaa9259f7aac7fc4e79bce3a492bc86",
+    "classifierSourceBlob": "4048769abade9fab0d3e2bfde066289274554b5f",
+    "historicalCollectorChannelTitlePropagation": false,
+    "channelMultiplierForRebaseline": 1,
+    "promotionThresholdDefined": false
+  },
+  "ranking": [
+    {
+      "snapshotRank": 1,
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 68,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 2,
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 54.47,
+      "frozenYoutubePoint": 52.76,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 3,
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoCount": 7,
+      "youtubePointV3RebaselineSnapshot": 50.71,
+      "frozenYoutubePoint": 49.71,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 4,
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 49.2,
+      "frozenYoutubePoint": 47.99,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 5,
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 45.09,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 6,
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoCount": 5,
+      "youtubePointV3RebaselineSnapshot": 43.89,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 7,
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 43.54,
+      "frozenYoutubePoint": 42.85,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 8,
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoCount": 6,
+      "youtubePointV3RebaselineSnapshot": 43.44,
+      "frozenYoutubePoint": 79.04,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 9,
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoCount": 5,
+      "youtubePointV3RebaselineSnapshot": 37.66,
+      "frozenYoutubePoint": 37.2,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 10,
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "videoCount": 2,
+      "youtubePointV3RebaselineSnapshot": 24.83,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 11,
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "videoCount": 2,
+      "youtubePointV3RebaselineSnapshot": 24.64,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 12,
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videoCount": 4,
+      "youtubePointV3RebaselineSnapshot": 22.57,
+      "frozenYoutubePoint": 21.54,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 13,
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videoCount": 3,
+      "youtubePointV3RebaselineSnapshot": 21.97,
+      "frozenYoutubePoint": 52.43,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 14,
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "videoCount": 2,
+      "youtubePointV3RebaselineSnapshot": 14.75,
+      "frozenYoutubePoint": 49.63,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 15,
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 14.4,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 16,
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 12.8,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 17,
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 6.8,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 18,
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 6.66,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 19,
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "videoCount": 2,
+      "youtubePointV3RebaselineSnapshot": 6.46,
+      "frozenYoutubePoint": 35.42,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 20,
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 6.42,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    },
+    {
+      "snapshotRank": 21,
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "videoCount": 1,
+      "youtubePointV3RebaselineSnapshot": 5.8,
+      "frozenYoutubePoint": null,
+      "productEligibility": "not_evaluated"
+    }
+  ],
+  "nextGate": {
+    "code": "COMMON_21_ARTIST_DISTRIBUTION_COMPARISON_REQUIRED",
+    "detail": "Compare the common 21-artist rebaseline snapshot with the frozen 10 snapshot without inventing a promotion threshold."
+  },
+  "safety": {
+    "missingIsZero": false,
+    "activeYoutubeRankingModified": false,
+    "productCohortModified": false,
+    "productEligibilityEvaluated": false,
+    "productActivationAuthorized": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
