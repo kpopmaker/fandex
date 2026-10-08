@@ -51,8 +51,17 @@
       "ambiguousExact": 46,
       "ambiguousWrapper": 73
     },
-    "status": "reconciliation_required_do_not_overwrite_original_evidence",
-    "affectsThisExact94PartialQueue": false
+    "status": "resolved_as_distinct_discovery_runs_source_receipts_immutable",
+    "affectsThisExact94PartialQueue": false,
+    "originalReceiptArtifactId": 11456271955,
+    "embeddedExact94ArtifactId": 11456228049,
+    "reconciliationFile": "music_genie_full264_cross_run_reconciliation_v1.json",
+    "dispositionChangedCanonicalArtistIds": [
+      "superjunior",
+      "maddox"
+    ],
+    "identicalUniqueExact94Ids": true,
+    "currentSourceActivationAuthorized": false
   },
   "candidates": [
     {
