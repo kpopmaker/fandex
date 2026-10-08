@@ -910,5 +910,85 @@
       "noProductActivation": true
     },
     "nextGate": "GENIE_PARTIAL39_IDENTITY_ENTITY_AND_DEBUT_EPOCH_HUMAN_REVIEW_REQUIRED"
+  },
+  "jinuCollisionIndependentEvidenceV4": {
+    "version": "music_genie_jinu_alias_collision_independent_evidence_v4",
+    "status": "two_distinct_artist_identities_evidenced_pinned_provider_id_not_yet_disambiguated",
+    "reviewedDate": "2026-10-08",
+    "canonicalArtistId": "jinu",
+    "canonicalIntendedEntity": "WINNER vocalist Kim Jin-woo; 2014 group debut, 2019 first solo release",
+    "pinnedCandidateProviderArtistId": "14946516",
+    "pinnedGenieMetadataDebutYear": 1996,
+    "pinnedIdLiveDetailLinkedToNeitherEntity": false,
+    "competingIdentityAliases": [
+      {
+        "label": "JINU (김진우)",
+        "identity": "Kim Jin-woo, WINNER member",
+        "firstSoloReleaseYear": 2019,
+        "primaryEvidence": "https://www.ygfamily.com/en/artists/jinu/discography/471"
+      },
+      {
+        "label": "JINU (지누)",
+        "identity": "1996 recording artist later active in Roller Coaster and as Hitchhiker",
+        "firstSoloReleaseYear": 1996,
+        "primaryEvidence": "https://www.genie.co.kr/magazine/subMain?ctid=27&mgz_seq=13810"
+      }
+    ],
+    "sources": [
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/magazine/subMain?ctid=27&mgz_seq=13810",
+        "supports": "Genie editorial reports 1996 JINU debut song '엉뚱한 상상' and later Roller Coaster / Hitchhiker career",
+        "scope": "1996_historical_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/detail/songInfo?xgnm=20956877",
+        "supports": "Genie song metadata attributes '엉뚱한 상상' to JINU on Jinujoke album",
+        "scope": "1996_historical_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/magazine/subMain?ctid=1&mgz_seq=7198",
+        "supports": "Genie editorial explicitly calls JINU (김진우) member of WINNER and names JINU's HEYDAY solo album in 2019",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+        "supports": "Genie song metadata credits JINU (김진우) performing '또또또 (Feat. MINO)' on JINU's HEYDAY",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "YG Entertainment",
+        "url": "https://www.ygfamily.com/en/artists/jinu/profile",
+        "supports": "YG official JINU profile states solo debut 2019-08-14 and birthdate 1991-09-26",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "YG Entertainment",
+        "url": "https://www.ygfamily.com/en/artists/jinu/discography/471",
+        "supports": "YG album page identifies JINU of WINNER and first solo JINU's HEYDAY release 2019-08-14",
+        "scope": "2019_WINNER_JINU"
+      }
+    ],
+    "uncertainty": {
+      "pinnedIdDetailPageLiveQueryStillRequired": true,
+      "directAssociationOfPinnedIdTo1996JinuNotEstablished": true,
+      "directAssociationOfPinnedIdToWinnerJinuNotEstablished": true,
+      "sameDisplayNameDoesNotProveIdentity": true,
+      "entityTypeAndAliasCannotResolveThisCollision": true,
+      "currentStatusShouldRemainUnresolved": true,
+      "officialAlternateGenieProviderArtistIdNotSelected": true
+    },
+    "nextGate": "JINU_PINNED_PROVIDER_ID_LIVE_RELEASE_LINKAGE_REQUIRED",
+    "mutationPermissions": {
+      "allowSupportedPromotion": false,
+      "allowUnsupportedDisposition": false,
+      "allowProviderRebinding": false,
+      "allowCanonicalDebutYearFill": false,
+      "allowProductActivation": false,
+      "allowMainMerge": false
+    }
   }
 }
