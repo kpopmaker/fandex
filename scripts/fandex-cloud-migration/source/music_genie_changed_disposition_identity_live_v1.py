@@ -160,6 +160,40 @@ def investigate(cid: str, target: dict) -> dict:
     }
 
 
+MADDOX_NATIVE_SONGS = {
+    "Knight": "93307770",
+    "Engine": "90418457",
+}
+MADDOX_OFFICIAL_DISPLAY = "마독스 (Maddox)"
+
+
+def native_song_link(song_id: str) -> dict:
+    url = f"https://www.genie.co.kr/detail/songInfo?xgnm={song_id}"
+    response = fetch(url)
+    soup = BeautifulSoup(response["html"], "html.parser")
+    plain = " ".join(soup.stripped_strings)
+    pattern = re.compile(r"""fnViewArtist\\(['"]([0-9]+)['"]\\)""", re.I)
+    href = re.compile(r"artistInfo\\?xxnm=([0-9]+)", re.I)
+    linked = {}
+    for a in soup.find_all("a"):
+        name = " ".join(a.stripped_strings).strip()
+        if not name:
+            img = a.find("img")
+            name = str(img.get("alt") or "").strip() if img else ""
+        if normalize(name) != normalize(MADDOX_OFFICIAL_DISPLAY):
+            continue
+        match = pattern.search(str(a.get("onclick") or "")) or href.search(str(a.get("href") or ""))
+        if match:
+            linked[match.group(1)] = name
+    return {
+        "songId": song_id, "url": url, "statusCode": response["status"],
+        "songContainsMaddox": MADDOX_OFFICIAL_DISPLAY in plain,
+        "nativeArtistLinks": [{"providerArtistId": p, "display": n} for p,n in sorted(linked.items())],
+        "nativeArtistIds": sorted(linked),
+        "error": response["error"],
+    }
+
+
 def main() -> None:
     recon = json.loads(RECON.read_text(encoding="utf-8-sig"))
     originals = recon["reconciliation"]["differingDispositions"]
@@ -169,11 +203,17 @@ def main() -> None:
         assert ids == TARGETS[row["canonicalArtistId"]]["recordedIds"]
 
     rows = [investigate(cid, target) for cid, target in TARGETS.items()]
+    song_evidence = [native_song_link(song_id) for song_id in MADDOX_NATIVE_SONGS.values()]
+    artist_id_sets = [set(x["nativeArtistIds"]) for x in song_evidence]
+    jointly_linked_ids = sorted(set.intersection(*artist_id_sets)) if artist_id_sets else []
     payload = {
         "version": "music_genie_changed_disposition_identity_live_v1",
         "checkedAtUtc": datetime.now(timezone.utc).isoformat(),
         "sourceRunLineage": [37559756356, 37560176276],
         "canonicalIds": list(TARGETS), "rows": rows,
+        "maddoxNativeSongEvidence": song_evidence,
+        "maddoxCommonNativeArtistIds": jointly_linked_ids,
+        "maddoxNativeArtistIdRequiresHumanReview": True,
         "evidenceOnly": True, "humanReviewStillRequired": True,
         "anyAutoBound": False, "anySourceSupportedPromoted": False,
         "musicPartitionUnchanged": {"supported": 117, "unresolved": 238, "unsupported": 0},
@@ -190,6 +230,14 @@ def main() -> None:
             } for x in row["recordedProviderDetails"]],
             "assessments": row["assessments"],
         }, ensure_ascii=False))
+    print("MADDOX_NATIVE_SONGS " + json.dumps({
+        "songEvidence": song_evidence,
+        "commonProviderArtistIds": jointly_linked_ids,
+    }, ensure_ascii=False))
+    assert len(song_evidence) == 2
+    assert all(x["statusCode"] == 200 for x in song_evidence), "maddox_native_song_page_unavailable"
+    assert payload["maddoxNativeArtistIdRequiresHumanReview"] is True
+    assert all(x not in jointly_linked_ids for x in TARGETS["maddox"]["recordedIds"]), "unexpected_historical_id_native_link"
     assert all(
         row["recordedProviderDetails"]
         and all(x["statusCode"] == 200 and x["providerDisplay"] for x in row["recordedProviderDetails"])
