@@ -25,6 +25,8 @@ on:
       - 'lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts'
       - 'lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts'
       - 'lib/server/product/musicAlbumPointCurrentRuntimeRead.ts'
+      - 'lib/product/presentation/musicAlbumVerifiedReleaseIdentity.ts'
+      - 'app/artists/[artistId]/fandex-beta/page.tsx'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchInput.ts'
       - 'lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts'
@@ -89,6 +91,7 @@ on:
       - 'tests/iu-music-album-first-week-source-search-audit-v1.test.mts'
       - 'tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts'
       - 'tests/iu-music-album-official-first-week-evidence-request-v1.test.mts'
+      - 'tests/music-album-verified-release-identity-product-v1.test.mts'
       - 'tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
@@ -354,6 +357,9 @@ jobs:
         run: npx tsx --test tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts
       - name: IU official first-week evidence request regression
         run: npx tsx --test tests/iu-music-album-official-first-week-evidence-request-v1.test.mts
+
+      - name: Music Album reviewed release Product context regression
+        run: npx tsx --test tests/music-album-verified-release-identity-product-v1.test.mts
 
       - name: IU reported web rights review intake regression
         run: npx tsx --test tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts

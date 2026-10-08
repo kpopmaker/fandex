@@ -1,5 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import approvedIuReleaseBinding from '../../../../data/fandex-cloud-v10/product/iu_music_album_current_release_binding_v1.json';
+import {
+  buildMusicAlbumVerifiedReleaseIdentity,
+} from '../../../../lib/product/presentation/musicAlbumVerifiedReleaseIdentity';
 import {
   getFandexCurrentRuntimeAssemblyReadinessForIU,
 } from '../../../../lib/server/product/fandexCurrentRuntimeAssemblyReadiness';
@@ -179,6 +183,11 @@ export default async function FandexBetaArtistPage({ params }: PageProps) {
     readiness,
     generatedAt,
   });
+  // This exposes reviewed release *identity*, not unqualified Hanteo copies.
+  const releaseIdentity = buildMusicAlbumVerifiedReleaseIdentity({
+    binding: approvedIuReleaseBinding,
+    expectedCanonicalArtistId: artistId,
+  });
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
@@ -262,6 +271,33 @@ export default async function FandexBetaArtistPage({ params }: PageProps) {
             </span>
           </div>
         </section>
+
+        {releaseIdentity.status === 'verified-identity-only' ? (
+          <section className="rounded-3xl border border-slate-200 bg-white p-5">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-400">
+              Music Album · Reviewed release identity (not sales Production)
+            </p>
+            <h2 className="mt-2 text-xl font-black text-slate-950">
+              {releaseIdentity.releaseTitle} · 꽃갈피 셋
+            </h2>
+            <p className="mt-2 text-sm text-slate-700">
+              실물 발매일: {releaseIdentity.physicalReleaseDate} ·
+              앨범 단위 식별 검토 완료
+            </p>
+            <p className="mt-3 text-sm font-bold text-amber-800">
+              초동 판매량: 적격 증빙 대기 · 점수 미산정 · Production 미활성화
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              발매 정보 검증은 한터 초동 수량, 집계기간, 이용권한의 검증을 대신하지 않습니다.
+            </p>
+            <Link
+              href="https://www.makestar.com/product/10531"
+              className="mt-3 inline-block text-sm font-bold text-cyan-700 underline underline-offset-4"
+            >
+              실물 발매 정보 출처
+            </Link>
+          </section>
+        ) : null}
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {presentation.components.map((component) => (
