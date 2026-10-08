@@ -440,3 +440,73 @@ test('work-conserving Blob mirror reader still rejects later corrupt immutable e
     /naver_news_mirror_job_payload_invalid/,
   );
 });
+
+test('canonical Blob phase summary distinguishes remote reads and validated decode without identifiers', async () => {
+  const store = new MemoryImmutableStore();
+  const first = planAt('2026-10-03T01:00:00.000Z');
+  const second = planAt('2026-10-03T02:00:00.000Z');
+  await mirrorNaverNewsStoredEvidence(first, store);
+  await mirrorNaverNewsStoredEvidence(second, store);
+
+  const summaries: unknown[] = [];
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    { onBatchReadPhaseStats: (record) => summaries.push(record) },
+  );
+  assert.ok(reader.readJobEvidenceBatch);
+  const result = await reader.readJobEvidenceBatch([
+    first.identity.jobId,
+    second.identity.jobId,
+    first.identity.jobId,
+    'f'.repeat(64),
+  ]);
+  assert.equal(result.size, 2);
+  assert.equal(summaries.length, 1);
+  const record = summaries[0] as Record<string, unknown>;
+  assert.equal(record.contractVersion, 'naver-news-mirror-canonical-read-phase-v1');
+  assert.equal(record.outcome, 'fulfilled');
+  assert.equal(record.objectsRequested, 3);
+  assert.equal(record.objectsFound, 2);
+  assert.equal(record.objectsMissing, 1);
+  for (const field of [
+    'remoteReadSumMs', 'remoteReadMaxMs',
+    'decodeSumMs', 'decodeMaxMs', 'batchWallMs',
+  ]) {
+    assert.ok(Number.isInteger(record[field]) && (record[field] as number) >= 0, field);
+  }
+  const serialized = JSON.stringify(record);
+  assert.doesNotMatch(serialized, /아이유|news\.example|stored-evidence-mirror\/v1\//);
+  assert.ok(!serialized.includes(first.identity.jobId));
+  assert.ok(!serialized.includes(second.identity.jobId));
+});
+
+test('canonical phase observer cannot override original Blob evidence errors or successful reads', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-10-03T03:00:00.000Z');
+  await mirrorNaverNewsStoredEvidence(plan, store);
+  const withBrokenObserver = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    { onBatchReadPhaseStats() { throw new Error('telemetry-failed'); } },
+  );
+  assert.equal(
+    (await withBrokenObserver.readJobEvidenceBatch!([plan.identity.jobId])).size,
+    1,
+  );
+
+  const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
+  const tampered = JSON.parse(objects.jobBody);
+  tampered.storedEvidence.normalizedRecords[0].title = 'tampered';
+  store.values.set(objects.jobPathname, JSON.stringify(tampered));
+
+  const summaries: { outcome: string }[] = [];
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    { onBatchReadPhaseStats: (record) => summaries.push(record) },
+  );
+  await assert.rejects(
+    () => reader.readJobEvidenceBatch!([plan.identity.jobId]),
+    /naver_news_mirror_job_payload_invalid/,
+  );
+  assert.equal(summaries.length, 1);
+  assert.equal(summaries[0]?.outcome, 'rejected');
+});
