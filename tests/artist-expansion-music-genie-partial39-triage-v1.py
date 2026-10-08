@@ -839,6 +839,94 @@ def main() -> None:
         "MISSING14_SEVEN_NATIVE_PROVIDER_IDENTITY_HUMAN_YEAR_SCOPE_AND_BINDING_REVIEW_REQUIRED"
     )
 
+    # Remaining seven candidates are qualified or alias-only, never approved bindings.
+    remaining7 = load(SOURCE / "music_genie_missing14_remaining7_identity_review_packet_v1.json")
+    assert remaining7["version"] == "music_genie_missing14_remaining7_identity_review_packet_v1"
+    assert remaining7["status"] == (
+        "five_native_release_identity_candidates_and_two_alias_only_candidates_human_review_required"
+    )
+    assert remaining7["provider"] == "genie" and remaining7["source"] == "music_chart"
+    assert remaining7["canonicalUniverseCount"] == 355
+    lineage7 = remaining7["sourceLineage"]
+    assert lineage7["originalExact94RunId"] == 37560176276
+    assert lineage7["liveRunId"] == 37790480424
+    assert lineage7["jobId"] == 113356228259
+    assert lineage7["verifiedExactHead"] == "87f71d068f13e7a019915374146d856b4d532e21"
+    assert lineage7["artifactId"] == 11556272318
+    assert lineage7["artifactDigest"] == (
+        "sha256:1b146eae1237df2fab8e8319d24fdcfb6625c3afff4f42cb098527c34b0ac114"
+    )
+    assert lineage7["liveJobResult"] == "success"
+    assert (lineage7["nativeReleaseLinkedCount"], lineage7["exactAliasSearchOnlyCount"], lineage7["checkedCount"]) == (5, 2, 7)
+    expected7 = {
+        "brothersu": ("79983812", "80010932", "남성/솔로", 2010, None, "80643017"),
+        "mino": ("80073343", "80438375", "남성/솔로", 2014, None, "88391129"),
+        "kard": ("81305280", "80556366", "혼성/그룹", 2016, None, "87304018"),
+        "up10tion": ("81290806", "80445602", "남성/그룹", 2015, None, "80749357"),
+        "x1": ("81522270", "80743451", "남성/그룹", 2019, 2019, "89330963"),
+        "boystory": ("80899341", "80899341", "남성/그룹", None, 2018, None),
+        "girlset": ("83019445", "83019445", "여성/그룹", None, None, None),
+    }
+    remaining_rows = remaining7["identityRecords"]
+    assert len(remaining_rows) == 7
+    assert {x["canonicalArtistId"] for x in remaining_rows} == set(expected7)
+    assert len({x["providerArtistIdCandidate"] for x in remaining_rows}) == 7
+    assert sum(x["nativeRelease"] is not None for x in remaining_rows) == 5
+    for r in remaining_rows:
+        cid = r["canonicalArtistId"]
+        old, new, typ, year, canonical_year, release_id = expected7[cid]
+        source_candidate = next(x for x in rows if x["canonicalArtistId"] == cid)
+        assert source_candidate["genieProviderArtistId"] == r["originalProviderArtistId"] == old
+        assert source_candidate["genieDebutYear"] is None
+        assert source_candidate["canonicalDebutYear"] == r["canonicalDebutYear"] == canonical_year
+        assert r["providerArtistIdCandidate"] == new
+        assert r["profileActivityType"] == typ
+        assert r["providerDebutYear"] == year
+        assert r["profileUrl"].endswith("xxnm=" + new)
+        assert r["profileMatchValidated"] and r["providerDetailHttp200"]
+        assert r["reviewStatus"] == "identity_and_year_scope_human_review_pending"
+        assert r["sourceCompatibilityStatus"] == "unresolved"
+        for no in ("reviewedBindingApproved", "sourceTargetRebound", "canonicalYearBackfilled", "sourceSupportedPromoted"):
+            assert r[no] is False, (cid, no)
+        if release_id is None:
+            assert r["nativeRelease"] is None
+            assert r["evidenceMethod"] == "provider_exact_alias_search_only"
+            assert old == new
+        else:
+            assert r["evidenceMethod"] == "genie_native_release_link"
+            assert r["nativeRelease"]["id"] == release_id
+            assert r["nativeRelease"]["artistLinkedProviderId"] == new
+            assert r["nativeRelease"]["url"].startswith("https://www.genie.co.kr/detail/")
+            assert old != new
+        assert cid in unresolved and cid not in supported and cid not in unsupported and cid not in targets
+        assert all(x["canonicalArtistId"] != cid for x in strong["bindings"])
+    semantic7 = remaining7["semanticReviewHolds"]
+    assert semantic7["mino"] == {
+        "providerYear": 2014, "groupCareerYear": 2014,
+        "firstSoloAlbumYear": 2018, "autoYearEquivalence": False,
+    }
+    assert semantic7["kard"] == {
+        "providerYear": 2016, "predebutActivityYear": 2016,
+        "formalDebutYear": 2017, "autoYearEquivalence": False,
+    }
+    assert semantic7["boystory"]["providerDebutYear"] is None
+    assert semantic7["boystory"]["requiresIndependentYearEvidence"] is True
+    assert semantic7["girlset"]["providerDebutYear"] is None
+    assert semantic7["girlset"]["groupRenameAndDebutAreDistinct"] is True
+    guards7 = remaining7["guards"]
+    assert guards7["reviewer"] is None
+    assert guards7["reviewedAt"] is None
+    assert guards7["approvalEvidence"] is None
+    assert guards7["approvedIds"] == []
+    assert set(guards7["deferredIds"]) == set(expected7)
+    for yes in ("unresolvedIsNotUnsupported", "noAliasOnlyAutoBinding", "noNativeReleaseAutoBinding"):
+        assert guards7[yes] is True
+    for no in ("sourceTargetSeedUpdated", "sourceCompatibilityUpdated", "productCohortChanged",
+               "dbModified", "schedulerChanged", "deploymentTriggered", "mainMergeApproved"):
+        assert guards7[no] is False
+    assert remaining7["sourcePartitionActual"] == {"supported": 117, "unresolved": 238, "unsupported": 0}
+    assert remaining7["nextGate"] == "MISSING14_REMAINING7_PROVIDER_ID_AND_DEBUT_ERA_HUMAN_REVIEW_REQUIRED"
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -862,7 +950,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked provider identity reviews held | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native/2 alias-only reviews held | Music 117/238/0 | Product unchanged"
     )
 
 
