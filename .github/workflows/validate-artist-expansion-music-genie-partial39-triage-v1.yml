@@ -7,6 +7,8 @@ on:
   pull_request:
     paths:
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json'
+      - 'scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
