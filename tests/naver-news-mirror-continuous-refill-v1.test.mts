@@ -93,7 +93,11 @@ test('canonical twelve-worker mode bounds in-flight reads, refills and preserves
   let running = 0;
   let peak = 0;
   let releaseFirst!: () => void;
+  let releaseOtherWorkers!: () => void;
   const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
+  const otherWorkers = new Promise<void>((resolve) => {
+    releaseOtherWorkers = resolve;
+  });
   const pending = mapMirroredEvidenceBatched(
     Array.from({ length: 26 }, (_, index) => index),
     async (index) => {
@@ -102,6 +106,9 @@ test('canonical twelve-worker mode bounds in-flight reads, refills and preserves
       started.push(index);
       try {
         if (index === 0) await first;
+        if (index > 0 && index < MAX_CONCURRENT_MIRROR_CANONICAL_READS) {
+          await otherWorkers;
+        }
         return index === 19 ? null : `verified-job-${index}`;
       } finally {
         running -= 1;
@@ -111,12 +118,16 @@ test('canonical twelve-worker mode bounds in-flight reads, refills and preserves
   );
   let refilledBeforeSlow = false;
   try {
+    assert.equal(peak, MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+      'all twelve initial canonical slots must be occupied');
+    releaseOtherWorkers();
     for (let i = 0; i < 60; i += 1) {
       await Promise.resolve();
       if (started.includes(12)) break;
     }
     refilledBeforeSlow = started.includes(12);
   } finally {
+    releaseOtherWorkers();
     releaseFirst();
   }
 
