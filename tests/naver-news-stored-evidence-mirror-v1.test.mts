@@ -472,7 +472,8 @@ test('canonical Blob phase summary distinguishes remote reads and validated deco
     'remoteReadSumMs', 'remoteReadMaxMs',
     'decodeSumMs', 'decodeMaxMs', 'batchWallMs',
   ]) {
-    assert.ok(Number.isInteger(record[field]) && (record[field] as number) >= 0, field);
+    const observed = record[field];
+    assert.ok(typeof observed === 'number' && Number.isInteger(observed) && observed >= 0, field);
   }
   const serialized = JSON.stringify(record);
   assert.doesNotMatch(serialized, /아이유|news\.example|stored-evidence-mirror\/v1\//);
