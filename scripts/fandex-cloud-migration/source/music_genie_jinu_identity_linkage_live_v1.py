@@ -75,12 +75,14 @@ def parse_detail(html: str) -> dict:
     debut_match = re.search(r"데뷔\s*((?:19|20)\d{2})년", plain)
     activity = extract_provider_field(soup, "활동유형")
     debut_label = extract_provider_field(soup, "데뷔")
+    direct_debut_match = re.search(r"(19|20)\d{2}", debut_label or "")
     album_names = ("Jinujoke", "엉뚱한 상상", "JINU's HEYDAY", "JINU’s HEYDAY", "또또또")
     observed = [name for name in album_names if compact(name) in compact(plain)]
     return {
         "providerDisplay": display,
         "providerActivityType": activity,
         "providerDebutFieldRaw": debut_label,
+        "providerDebutYear": int(direct_debut_match.group(0)) if direct_debut_match else None,
         "debutYearInVisibleText": int(debut_match.group(1)) if debut_match else None,
         "observedReleaseOrSongMarkers": observed,
         "mentionsRollerCoaster": "롤러코스터" in plain,
@@ -281,6 +283,17 @@ def main() -> None:
     assert song_linkage["exactWinnerArtistLinkObserved"] is True, "wrong_or_missing_genie_song_artist_id"
     assert song_linkage["oldJinuProviderIdNotAttributed"] is True, "historical_artist_on_winner_solo_song"
     assert classification == "pinned_genie_id_historical_jinu_conflict_held"
+    assert detail and detail["providerDebutYear"] == 1996
+    assert detail["providerActivityType"] and "솔로" in detail["providerActivityType"]
+    winner_qualified = [
+        x for x in winner_labeled_details
+        if x["providerArtistId"] == WINNER_CANDIDATE and x["statusCode"] == 200
+    ]
+    assert len(winner_qualified) == 1, "winner_candidate_detail_missing_or_duplicated"
+    winner_detail = winner_qualified[0]["detail"]
+    assert winner_detail and winner_detail["providerDebutYear"] == 2014, "winner_group_career_year_conflict"
+    assert winner_detail["providerActivityType"] and "솔로" in winner_detail["providerActivityType"]
+
     print("PASS: JINU Genie live identity investigation non-activating | outcome=" + classification)
     print("PINNED_DETAIL " + json.dumps({"status": response["statusCode"], "detail": detail}, ensure_ascii=False))
     print("SEARCH_EXACT " + json.dumps(search_id_candidates, ensure_ascii=False))
