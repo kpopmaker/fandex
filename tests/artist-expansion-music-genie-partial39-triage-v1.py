@@ -422,6 +422,77 @@ def main() -> None:
         "JINU_80441171_HUMAN_REVIEW_YEAR_SCOPE_AND_BINDING_AUTHORIZATION_REQUIRED"
     )
 
+    # A 6/6 live-qualified identity candidate is still not a human-reviewed binding.
+    six_packet = load(SOURCE / "music_genie_partial39_six_year_match_review_packet_v1.json")
+    assert six_packet["version"] == "music_genie_partial39_six_year_match_review_packet_v1"
+    assert six_packet["status"] == "qualified_six_identity_year_evidence_human_review_pending"
+    assert six_packet["canonicalUniverseCount"] == 355
+    assert six_packet["provider"] == "genie"
+    assert six_packet["source"] == "music_chart"
+    verified = six_packet["validation"]
+    assert verified["sourceHead"] == "8bffc02a486eb87a7abf1c1d18b2f3b6484f0731"
+    assert verified["workflowRunId"] == 37780140385
+    assert verified["jobId"] == 113320877994
+    assert verified["conclusion"] == "success"
+    assert verified["artifactId"] == 11551079972
+    assert verified["artifactDigest"] == (
+        "sha256:3d2581c018d5712cdc891c2ced4aadf74b590b76396490aaead56f4e27a2be6f"
+    )
+    assert (verified["validatedCount"], verified["failedCount"]) == (6, 0)
+    expected_six = {
+        "leehi": ("80158970", 2012),
+        "jypark": ("14945855", 1994),
+        "sf9": ("80546873", 2016),
+        "b1a4": ("80131588", 2011),
+        "jeongsewoon": ("80590751", 2017),
+        "xlov": ("82757745", 2025),
+    }
+    six_rows = six_packet["reviewedCandidates"]
+    assert len(six_rows) == len(expected_six) == 6
+    assert {item["canonicalArtistId"] for item in six_rows} == set(expected_six)
+    assert len({item["genieProviderArtistId"] for item in six_rows}) == 6
+    for item in six_rows:
+        ident = item["canonicalArtistId"]
+        pid, year = expected_six[ident]
+        source_candidate = next(row for row in rows if row["canonicalArtistId"] == ident)
+        assert item["genieProviderArtistId"] == source_candidate["genieProviderArtistId"] == pid
+        assert item["genieDebutYear"] == source_candidate["genieDebutYear"] == year
+        assert source_candidate["canonicalDebutYear"] is None
+        assert item["canonicalYearMissing"] is True
+        assert item["sourceUrl"].startswith("https://")
+        assert item["sourceGap"] == "canonical_debut_year_unavailable"
+        assert item["exactSearchIdentityLiveValidated"] is True
+        assert item["providerDetailTypeLiveValidated"] is True
+        assert item["providerDetailYearLiveValidated"] is True
+        assert item["sourceStatus"] == "unresolved"
+        assert item["identityReviewDecision"] == "pending_human_review"
+        assert item["reviewer"] is None and item["reviewedAt"] is None
+        assert item["sourceBindingApproved"] is False
+        assert item["sourceApplicationAuthorized"] is False
+        assert item["productRuntimeAuthorized"] is False
+        assert ident in unresolved and ident not in supported and ident not in targets
+        assert not any(binding["canonicalArtistId"] == ident for binding in strong["bindings"])
+    six_decision = six_packet["decision"]
+    assert six_decision["reviewStatus"] == "pending_human_review"
+    assert six_decision["decisionType"] is None
+    assert six_decision["reviewer"] is None and six_decision["decisionAt"] is None
+    assert six_decision["approvedCanonicalArtistIds"] == []
+    assert six_decision["rejectedCanonicalArtistIds"] == []
+    assert set(six_decision["deferredCanonicalArtistIds"]) == set(expected_six)
+    for key in (
+        "sourceRegistryModified", "sourceTargetModified",
+        "licensedDataActivationAuthorized", "productActivationAuthorized",
+        "mainMergeAuthorized",
+    ):
+        assert six_decision[key] is False, key
+    projection = six_packet["sourceCompatibilityProjection"]
+    assert (projection["currentSupported"], projection["currentUnresolved"], projection["currentUnsupported"]) == (117, 238, 0)
+    assert (projection["possibleSupportedAfterApprovedApplication"], projection["possibleUnresolvedAfterApprovedApplication"]) == (123, 232)
+    assert projection["isForecastOnly"] is True
+    assert six_packet["nextGate"] == (
+        "GENIE_SIX_METADATA_PARTIAL_YEAR_SCOPE_HUMAN_REVIEW_AND_SOURCE_APPLICATION_AUTHORIZATION_REQUIRED"
+    )
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -451,7 +522,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU 80441171 review packet pending | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | Music 117/238/0 | Product unchanged"
     )
 
 
