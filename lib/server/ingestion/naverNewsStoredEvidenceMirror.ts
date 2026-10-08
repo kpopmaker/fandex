@@ -572,8 +572,24 @@ export async function mirrorNaverNewsStoredEvidence(
   });
 }
 
+export type NaverNewsMirrorCanonicalReadPhaseStats = Readonly<{
+  contractVersion: 'naver-news-mirror-canonical-read-phase-v1';
+  outcome: 'fulfilled' | 'rejected';
+  objectsRequested: number;
+  objectsFound: number;
+  objectsMissing: number;
+  remoteReadSumMs: number;
+  remoteReadMaxMs: number;
+  decodeSumMs: number;
+  decodeMaxMs: number;
+  batchWallMs: number;
+}>;
+
 export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
   store: Pick<ImmutableTextObjectStore, 'readText'>,
+  options: Readonly<{
+    onBatchReadPhaseStats?: (record: NaverNewsMirrorCanonicalReadPhaseStats) => void;
+  }> = {},
 ): NaverNewsCanonicalJobEvidenceReadRepository {
   async function readOne(
     jobId: string,
@@ -589,17 +605,84 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
       if (jobIds.some((jobId) => !isSha256(jobId))) {
         throw new Error('naver_news_canonical_job_id_invalid');
       }
-      const entries = await mapMirroredEvidenceBatched(
-        [...new Set(jobIds)],
-        async (jobId) => {
-          const stored = await readOne(jobId);
-          return stored ? [jobId, stored] as const : null;
-        },
-      );
-      return new Map(entries.filter(
-        (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
-          entry !== null,
-      ));
+      const uniqueJobIds = [...new Set(jobIds)];
+      const observer = options.onBatchReadPhaseStats;
+      const started = observer ? performance.now() : 0;
+      let objectsFound = 0;
+      let objectsMissing = 0;
+      let remoteReadSumMs = 0;
+      let remoteReadMaxMs = 0;
+      let decodeSumMs = 0;
+      let decodeMaxMs = 0;
+      let outcome: NaverNewsMirrorCanonicalReadPhaseStats['outcome'] =
+        'rejected';
+
+      function elapsed(start: number): number {
+        return Math.max(0, Math.round(performance.now() - start));
+      }
+
+      try {
+        const entries = await mapMirroredEvidenceBatched(
+          uniqueJobIds,
+          async (jobId) => {
+            if (!observer) {
+              const stored = await readOne(jobId);
+              return stored ? [jobId, stored] as const : null;
+            }
+
+            // Aggregate metrics only. Never log paths, job IDs, evidence,
+            // access tokens, or error messages.
+            const remoteStarted = performance.now();
+            let body: string | null;
+            try {
+              body = await store.readText(objectPathForJob(jobId));
+            } finally {
+              const ms = elapsed(remoteStarted);
+              remoteReadSumMs += ms;
+              remoteReadMaxMs = Math.max(remoteReadMaxMs, ms);
+            }
+            if (body === null) {
+              objectsMissing += 1;
+              return null;
+            }
+
+            const decodeStarted = performance.now();
+            try {
+              const stored = decodeJobEnvelope(body).storedEvidence;
+              objectsFound += 1;
+              return [jobId, stored] as const;
+            } finally {
+              const ms = elapsed(decodeStarted);
+              decodeSumMs += ms;
+              decodeMaxMs = Math.max(decodeMaxMs, ms);
+            }
+          },
+        );
+        outcome = 'fulfilled';
+        return new Map(entries.filter(
+          (entry): entry is readonly [string, NaverNewsCanonicalJobStoredEvidence] =>
+            entry !== null,
+        ));
+      } finally {
+        if (observer) {
+          try {
+            observer(Object.freeze({
+              contractVersion: 'naver-news-mirror-canonical-read-phase-v1',
+              outcome,
+              objectsRequested: uniqueJobIds.length,
+              objectsFound,
+              objectsMissing,
+              remoteReadSumMs,
+              remoteReadMaxMs,
+              decodeSumMs,
+              decodeMaxMs,
+              batchWallMs: elapsed(started),
+            }));
+          } catch {
+            // Diagnostics must never override evidence values or failures.
+          }
+        }
+      }
     },
   });
 }
