@@ -227,3 +227,65 @@ test('mirror implementation has no Postgres or runtime database dependency', asy
   assert.doesNotMatch(source, /BEGIN READ ONLY/);
   assert.doesNotMatch(source, /INSERT INTO|UPDATE .* SET|DELETE FROM/);
 });
+
+
+test('Blob mirror readers cap parallel requests without dropping official slots or canonical jobs', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 20 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-01T00:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) {
+    await mirrorNaverNewsStoredEvidence(plan, store);
+  }
+
+  let active = 0;
+  let peak = 0;
+  const meteredStore = {
+    listPathnames: (prefix: string) => store.listPathnames(prefix),
+    async readText(pathname: string): Promise<string | null> {
+      active += 1;
+      peak = Math.max(peak, active);
+      try {
+        await new Promise<void>((resolve) => setTimeout(resolve, 2));
+        return store.readText(pathname);
+      } finally {
+        active -= 1;
+      }
+    },
+  };
+
+  const scheduler =
+    createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+      meteredStore,
+    );
+  const official = await scheduler.readSucceededSchedulerJobs();
+  assert.equal(official.length, plans.length);
+  assert.deepEqual(
+    new Set(official.map((entry) => entry.jobId)),
+    new Set(plans.map((entry) => entry.identity.jobId)),
+  );
+  assert.ok(peak > 1);
+  assert.ok(peak <= 8);
+  assert.equal(active, 0);
+
+  active = 0;
+  peak = 0;
+  const canonical =
+    createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+      meteredStore,
+    );
+  assert.ok(canonical.readJobEvidenceBatch);
+  const rows = await canonical.readJobEvidenceBatch([
+    ...plans.map((plan) => plan.identity.jobId),
+    'f'.repeat(64),
+  ]);
+  assert.equal(rows.size, plans.length);
+  for (const plan of plans) {
+    assert.equal(rows.get(plan.identity.jobId)?.job.jobId, plan.identity.jobId);
+  }
+  assert.ok(peak > 1);
+  assert.ok(peak <= 8);
+  assert.equal(active, 0);
+});
