@@ -176,6 +176,9 @@ jobs:
           lib/product/runtime/reportedAlbumSalesStoredEvidenceRuntime.ts
           lib/server/product/musicAlbumReportedWebStoredEvidenceRuntime.ts
           lib/server/product/musicAlbumPointCurrentRuntimeRead.ts
+          lib/product/presentation/musicAlbumVerifiedReleaseIdentity.ts
+          app/artists/[artistId]/fandex-beta/page.tsx
+          tests/music-album-verified-release-identity-product-v1.test.mts
           lib/alternative-evidence/reportedAlbumSalesResearchHistory.ts
           lib/alternative-evidence/reportedAlbumSalesResearchInput.ts
           lib/alternative-evidence/reportedAlbumSalesResearchCohortReview.ts
