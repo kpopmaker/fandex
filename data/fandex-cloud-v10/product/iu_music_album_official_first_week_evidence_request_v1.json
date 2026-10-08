@@ -1,0 +1,101 @@
+{
+  "contractVersion": "iu-music-album-official-first-week-evidence-request-v1",
+  "lifecycle": "productionization-official-evidence-request-prepared",
+  "assessedOn": "2026-10-08",
+  "canonicalArtistId": "iu",
+  "variableId": "musicAlbumPoint",
+  "canonicalReleaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+  "releaseTitle": "A Flower Bookmark 3",
+  "releaseTitleKo": "꽃갈피 셋",
+  "approvedIdentityScope": {
+    "resolution": "release-level",
+    "standardCdPhysicalReleaseDate": "2025-05-28",
+    "cdpLimitedEditionPhysicalReleaseDate": "2025-07-15",
+    "editionScopeMustBeExplicit": true
+  },
+  "inquiryDestinationClass": "Hanteo Chart / Hanteo News official data and rights owner, or a separately verified authorized reporting source",
+  "inquirySent": false,
+  "contactVerifiedForThisRequest": false,
+  "paymentOrLicenseCommitmentAuthorized": false,
+  "discoveryHypothesis": {
+    "exactFirstWeekPhysicalCopies": 79940,
+    "candidateProviderPeriodStart": "2025-05-28",
+    "candidateProviderPeriodEnd": "2025-06-03",
+    "sourceTier": "tier-c-discovery-only",
+    "evidenceRefs": [
+      "majayo:2025-06-04:iu-a-flower-bookmark-3",
+      "koreansales:iu-sales-summary:a-flower-bookmark-3"
+    ],
+    "treatedAsVerifiedProviderData": false
+  },
+  "requiredWrittenEvidence": [
+    {
+      "id": "exact-value",
+      "question": "What is the exact Hanteo Initial Chodong first-week physical-copy total for IU A Flower Bookmark 3? Please provide a stable official statement or an authorized attributed report.",
+      "confirmedValue": null,
+      "verified": false
+    },
+    {
+      "id": "explicit-provider-period",
+      "question": "What are the explicit start and end calendar dates (inclusive, KST) corresponding to that exact value? Confirm whether 2025-05-28 through 2025-06-03 is correct without inferring it from the release date.",
+      "confirmedStart": null,
+      "confirmedEnd": null,
+      "verified": false
+    },
+    {
+      "id": "metric-and-edition-scope",
+      "question": "Is the figure explicitly Initial Chodong physical-copy sales, and is it release-level or edition-specific? Distinguish May standard CD from July CDP limited edition and report corrections/supersessions.",
+      "verified": false
+    },
+    {
+      "id": "source-provenance",
+      "question": "Provide publisher, publication date, permanent URL or document reference, and a human reviewer/verifiable attribution to Hanteo Chart.",
+      "verified": false
+    }
+  ],
+  "rightsReviewQuestions": [
+    "Does the rights holder permit manually extracting factual sales values and source provenance?",
+    "Is normalized factual-value storage and retention permitted in a commercial FANDEX runtime, and on what terms?",
+    "May the derived first-week result/attribution be shown publicly? Identify permitted granularity and required attribution.",
+    "Are API historical queries and automated acquisition prohibited, licensed, or separately authorized? This request does not authorize execution.",
+    "Confirm that raw article text/image redistribution remains excluded and provide source-specific restrictions."
+  ],
+  "providerReferenceExamples": [
+    {
+      "url": "https://www.hanteonews.com/en/article/76048",
+      "role": "illustrative official first-week reporting for a different artist; not IU evidence"
+    },
+    {
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+      "role": "official IU presence in weekly chart; not exact first-week copies"
+    },
+    {
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W23",
+      "role": "official IU presence in following weekly chart; not exact first-week copies"
+    },
+    {
+      "url": "https://www.hanteonews.com/en/article/93728",
+      "role": "sales-data rights restriction; not IU exact-value evidence"
+    }
+  ],
+  "qualification": {
+    "requestedSourceTier": [
+      "tier-a-primary-official",
+      "tier-b-provider-attributed-reputable"
+    ],
+    "exactValueBoundToPeriodLocated": false,
+    "claimLevelEvidenceReviewMaterialized": false,
+    "sourceSpecificRightsDecisionMaterialized": false,
+    "historicalApiSelectorVerified": false,
+    "productionObservationEligible": false
+  },
+  "authorizationBoundary": {
+    "automatedHistoricalQueryAllowed": false,
+    "guessedHistoricalParametersAllowed": false,
+    "durableProductionWriteAuthorized": false,
+    "methodologyLocked": false,
+    "productActivationAuthorized": false,
+    "publicPublicationAuthorized": false
+  },
+  "nextStep": "Submit only after an explicit outreach decision; validate a returned stable Tier A/B source, claim-level period and source-specific rights before any Production promotion."
+}
