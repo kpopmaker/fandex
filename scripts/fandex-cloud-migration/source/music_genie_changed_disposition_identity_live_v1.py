@@ -18,7 +18,7 @@ TARGETS = {
     "superjunior": {"queries": ["Super Junior", "슈퍼주니어", "SUPER JUNIOR"],
                     "recordedIds": ["21060178", "80150326"],
                     "expectedEntityType": "group", "canonicalDebutYear": 2005},
-    "maddox": {"queries": ["MADDOX", "매독스"],
+    "maddox": {"queries": ["MADDOX", "마독스", "마독스 (Maddox)"],
                "recordedIds": ["80431028", "81384545"],
                "expectedEntityType": "solo", "canonicalDebutYear": None},
 }
