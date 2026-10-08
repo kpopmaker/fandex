@@ -64,7 +64,7 @@ def check(row: dict) -> dict:
     display = " ".join(node.stripped_strings).strip() if node else ""
     year_raw = detail_field(soup, "데뷔")
     activity_raw = detail_field(soup, "활동유형")
-    match = re.search(r"(?:19|20)\\d{2}", year_raw or "")
+    match = re.search(r"(?:19|20)\d{2}", year_raw or "")
     current_year = int(match.group()) if match else None
     if response["statusCode"] != 200 or not display:
         observed = "provider_detail_unavailable"
