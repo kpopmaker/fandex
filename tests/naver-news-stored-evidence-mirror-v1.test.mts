@@ -17,6 +17,7 @@ import {
   buildNaverNewsStoredEvidenceMirrorObjects,
   createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
   createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
   finalizeNaverNewsStoredEvidenceMirrorByJobId,
   mirrorNaverNewsStoredEvidence,
   stageNaverNewsStoredEvidenceMirror,
@@ -510,4 +511,70 @@ test('canonical phase observer cannot override original Blob evidence errors or 
   );
   assert.equal(summaries.length, 1);
   assert.equal(summaries[0]?.outcome, 'rejected');
+});
+
+test('explicit 12-worker canonical read experiment retains every immutable job and never exceeds its cap', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 29 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  let active = 0;
+  let peak = 0;
+  const meteredStore = {
+    async readText(pathname: string): Promise<string | null> {
+      active += 1;
+      peak = Math.max(active, peak);
+      try {
+        await new Promise<void>((resolve) => setTimeout(resolve, 3));
+        return await store.readText(pathname);
+      } finally {
+        active -= 1;
+      }
+    },
+  };
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    meteredStore,
+    { maxConcurrentReads: EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS },
+  );
+  const batch = reader.readJobEvidenceBatch;
+  assert.ok(batch);
+  const observed = await batch([
+    ...plans.map((plan) => plan.identity.jobId),
+    plans[0]!.identity.jobId,
+  ]);
+  assert.equal(observed.size, plans.length);
+  assert.deepEqual(
+    [...observed.keys()],
+    plans.map((plan) => plan.identity.jobId),
+  );
+  assert.ok(peak > 8);
+  assert.ok(peak <= EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS);
+  assert.equal(active, 0);
+});
+
+test('experimental 12-worker canonical reader still fails closed on corrupted later evidence', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = Array.from({ length: 28 }, (_, index) =>
+    planAt(new Date(
+      Date.parse('2026-10-03T01:00:00.000Z') + index * 60 * 60_000,
+    ).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+  const corrupt = buildNaverNewsStoredEvidenceMirrorObjects(plans[24]!);
+  const tampered = JSON.parse(corrupt.jobBody);
+  tampered.storedEvidence.normalizedRecords[0].title = 'tampered';
+  store.values.set(corrupt.jobPathname, JSON.stringify(tampered));
+  const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
+    store,
+    { maxConcurrentReads: EXPERIMENTAL_MAX_CONCURRENT_MIRROR_EVIDENCE_READS },
+  );
+  assert.ok(reader.readJobEvidenceBatch);
+  await assert.rejects(
+    () => reader.readJobEvidenceBatch!(plans.map((plan) => plan.identity.jobId)),
+    /naver_news_mirror_job_payload_invalid/,
+  );
 });
