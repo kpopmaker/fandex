@@ -738,5 +738,171 @@
       "productActivationAuthorized": false
     },
     "nextGate": "HUMAN_REVIEW_DEBUT_YEAR_SEMANTICS_AND_PROVIDER_ID_DETAILS"
+  },
+  "providerIdentityEpochReviewV3": {
+    "version": "music_genie_partial39_identity_epoch_review_v3",
+    "evaluatedOn": "2026-10-08",
+    "status": "reported_external_identity_evidence_requires_human_review_non_activating",
+    "cohortCount": 5,
+    "originalGenieDataLineage": "music_genie_exact94_detail_verification_receipt_v1",
+    "providerDetailRefetchPerformed": false,
+    "individualRecords": [
+      {
+        "canonicalArtistId": "jinu",
+        "pinnedGenieProviderArtistId": "14946516",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 1996,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2014,
+        "independentlyReportedSoloDebutYear": 2019,
+        "artistEntityScope": "solo_JINU_of_WINNER",
+        "disposition": "potential_provider_identity_collision_requires_independent_genie_entity_linkage",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/jinu/profile",
+            "evidence": "Official JINU solo artist profile DEBUT 2019-08-14 and birthdate 1991-09-26",
+            "authority": "official_label_artist_profile"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/jinu/discography/471",
+            "evidence": "WINNER vocalist JINU first solo single JINU's HEYDAY, release 2019-08-14",
+            "authority": "official_label_discography"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/winner/discography/528",
+            "evidence": "WINNER discography includes 2014 debut-era album 2014 S/S and identifies JINU as solo performer in 2020 release",
+            "authority": "official_label_discography"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "mino",
+        "pinnedGenieProviderArtistId": "80073343",
+        "genieDetailDebutYearRecordedInOriginalArtifact": null,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2014,
+        "independentlyReportedSoloDebutYear": 2018,
+        "artistEntityScope": "solo_MINO_of_WINNER",
+        "disposition": "debut_era_scope_and_missing_genie_year_require_review",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/mino/discography/441",
+            "evidence": "First MINO solo album XX released 2018-11-26, contrasted with career activity as WINNER since 2014",
+            "authority": "official_label_discography"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/ko/artists/winner/profile",
+            "evidence": "WINNER group official Korean profile identifies debut in August 2014",
+            "authority": "official_label_group_profile"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "bangyedam",
+        "pinnedGenieProviderArtistId": "80211832",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 2013,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2020,
+        "independentlyReportedSoloDebutYear": 2023,
+        "artistEntityScope": "solo_BANG_YEDAM_former_TREASURE",
+        "disposition": "genie_year_2013_origin_unverified_and_solo_group_era_conflict",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/treasure/profile",
+            "evidence": "Official TREASURE group profile lists debut 2020-08-07",
+            "authority": "official_label_group_profile"
+          },
+          {
+            "publisher": "Soompi reporting GF Entertainment",
+            "url": "https://www.soompi.com/article/1622976wpp/former-treasure-member-bang-ye-dam-announces-solo-debut-date-launches-social-media-accounts",
+            "evidence": "GF Entertainment-announced official solo debut album ONLY ONE released 2023-11-23, after departure from TREASURE; 2013 Genie value not verified as debut for same music identity",
+            "authority": "reported_label_announcement"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "chen",
+        "pinnedGenieProviderArtistId": "81098158",
+        "genieDetailDebutYearRecordedInOriginalArtifact": null,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2012,
+        "independentlyReportedSoloDebutYear": 2019,
+        "artistEntityScope": "solo_CHEN_of_EXO",
+        "disposition": "solo_group_era_distinction_and_absent_genie_year_require_review",
+        "sourceEvidence": [
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/1314368wpp/chen-talks-about-being-1st-exo-member-to-make-korean-solo-debut-how-other-members-showed-support",
+            "evidence": "Chen's first Korean solo mini-album April, and a flower debuted on 2019-04-01",
+            "authority": "contemporaneous_solo_debut_report"
+          },
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/1314552wpp/exos-chen-sweeps-itunes-charts-worldwide-with-solo-debut",
+            "evidence": "Confirms first CHEN solo mini album release 2019-04-01",
+            "authority": "contemporaneous_solo_debut_report"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "kimjongkook",
+        "pinnedGenieProviderArtistId": "14945901",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 1995,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 1995,
+        "independentlyReportedSoloDebutYear": 2001,
+        "artistEntityScope": "solo_KIM_JONG_KOOK_former_TURBO",
+        "disposition": "genie_year_1995_matches_group_career_not_solo_album_scope",
+        "sourceEvidence": [
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/359306wpp/artist-of-the-week-kim-jong-kook",
+            "evidence": "Kim Jong Kook debuted with TURBO in September 1995 and began solo career with Renaissance album in 2001",
+            "authority": "retrospective_artist_profile"
+          },
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/360010wpp/artist-of-the-week-kim-jong-kook-1",
+            "evidence": "Independent Soompi artist profile explains 1995 TURBO and December 2001 solo debut distinction",
+            "authority": "retrospective_artist_profile"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      }
+    ],
+    "reviewGates": {
+      "jinuProviderIdentityCollisionPossibilityUnresolved": true,
+      "providerDebutYearSemanticsGloballyUnverified": true,
+      "distinctGroupAndSoloDebutYearsCannotBeCollapsed": true,
+      "allFiveRetainUnresolvedCompatibility": true,
+      "noCanonicalYearBackfill": true,
+      "noProviderArtistIdAutobind": true,
+      "noProductActivation": true
+    },
+    "nextGate": "GENIE_PARTIAL39_IDENTITY_ENTITY_AND_DEBUT_EPOCH_HUMAN_REVIEW_REQUIRED"
   }
 }
