@@ -188,6 +188,61 @@ def main() -> None:
     assert decision["productActivationAuthorized"] is False
     assert independent["nextGate"] == "HUMAN_REVIEW_DEBUT_YEAR_SEMANTICS_AND_PROVIDER_ID_DETAILS"
 
+    epoch = queue["providerIdentityEpochReviewV3"]
+    assert epoch["version"] == "music_genie_partial39_identity_epoch_review_v3"
+    assert epoch["status"] == (
+        "reported_external_identity_evidence_requires_human_review_non_activating"
+    )
+    assert epoch["evaluatedOn"] == "2026-10-08"
+    assert epoch["providerDetailRefetchPerformed"] is False
+    assert epoch["cohortCount"] == len(epoch["individualRecords"]) == 5
+    expected_epoch = {
+        "jinu": ("14946516", 1996, 2014, 2019),
+        "mino": ("80073343", None, 2014, 2018),
+        "bangyedam": ("80211832", 2013, 2020, 2023),
+        "chen": ("81098158", None, 2012, 2019),
+        "kimjongkook": ("14945901", 1995, 1995, 2001),
+    }
+    assert {e["canonicalArtistId"] for e in epoch["individualRecords"]} == set(expected_epoch)
+    assert len({e["pinnedGenieProviderArtistId"] for e in epoch["individualRecords"]}) == 5
+    for evidence in epoch["individualRecords"]:
+        ident = evidence["canonicalArtistId"]
+        pid, genie_year, group_year, solo_year = expected_epoch[ident]
+        row = next(x for x in rows if x["canonicalArtistId"] == ident)
+        assert ident in unresolved and ident not in supported and ident not in targets
+        assert row["reviewStatus"] == "unresolved_additional_year_evidence_required"
+        assert row["canonicalDebutYear"] is None
+        assert row["genieProviderArtistId"] == evidence["pinnedGenieProviderArtistId"] == pid
+        assert row["genieDebutYear"] == evidence["genieDetailDebutYearRecordedInOriginalArtifact"] == genie_year
+        assert evidence["independentlyReportedGroupOrCareerDebutYear"] == group_year
+        assert evidence["independentlyReportedSoloDebutYear"] == solo_year
+        assert evidence["genieDetailFreshFetchPerformed"] is False
+        assert evidence["reviewState"] == "identity_or_year_scope_human_review_required"
+        assert evidence["disposition"] and evidence["artistEntityScope"]
+        assert evidence["sourceEvidence"]
+        for source in evidence["sourceEvidence"]:
+            assert source["url"].startswith("https://")
+            assert source["publisher"] and source["evidence"] and source["authority"]
+        assert evidence["canonicalYearPopulated"] is False
+        assert evidence["providerIdBindingAuthorized"] is False
+        assert evidence["musicSourceSupportPromotionAuthorized"] is False
+    assert next(x for x in epoch["individualRecords"] if x["canonicalArtistId"] == "jinu")[
+        "disposition"
+    ] == "potential_provider_identity_collision_requires_independent_genie_entity_linkage"
+    assert next(x for x in epoch["individualRecords"] if x["canonicalArtistId"] == "chen")[
+        "sourceEvidence"
+    ][0]["authority"] == "official_group_profile"
+    assert epoch["reviewGates"] == {
+        "jinuProviderIdentityCollisionPossibilityUnresolved": True,
+        "providerDebutYearSemanticsGloballyUnverified": True,
+        "distinctGroupAndSoloDebutYearsCannotBeCollapsed": True,
+        "allFiveRetainUnresolvedCompatibility": True,
+        "noCanonicalYearBackfill": True,
+        "noProviderArtistIdAutobind": True,
+        "noProductActivation": True,
+    }
+    assert epoch["nextGate"] == "GENIE_PARTIAL39_IDENTITY_ENTITY_AND_DEBUT_EPOCH_HUMAN_REVIEW_REQUIRED"
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -217,7 +272,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | Music 117/238/0 | Product unchanged"
     )
 
 
