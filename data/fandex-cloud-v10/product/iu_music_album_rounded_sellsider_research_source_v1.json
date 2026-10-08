@@ -1,0 +1,63 @@
+{
+  "contractVersion": "iu-music-album-rounded-sellside-source-qualification-v1",
+  "assessedOn": "2026-10-08",
+  "lifecycle": "research-source-qualification-only",
+  "canonicalArtistId": "iu",
+  "targetReleaseId": "release:iu:a-flower-bookmark-3:2025-05-28",
+  "source": {
+    "evidenceId": "daishin:2025-06-02:entertainment-weekly-points:figure-18:iu",
+    "url": "https://www.hankyung.com/koreamarket/consensus/pdf/2025-06-03f3471a5b40b3b930364357e740996c",
+    "publishedDocumentDate": "2025-06-02",
+    "reportedTitle": "Daishin Finance Weekly — Entertainment Weekly Points",
+    "issuer": "Daishin Securities Research Center",
+    "chartTitle": "2025년 5월 초동판매량 비교",
+    "figureNumber": 18,
+    "pdfPageIndex": 4,
+    "printedPageNumber": 5,
+    "underlyingDataProvider": "Hanteo Chart",
+    "tier": "tier-b-provider-attributed-reputable",
+    "provenanceFormat": "public-sellside-research-chart",
+    "contentsCaptured": "minimal-factual-chart-metadata-only",
+    "fullPdfOrChartStored": false
+  },
+  "observedChart": {
+    "artistLabel": "아이유",
+    "displayedNumber": 7.2,
+    "unit": "ten-thousand-copies",
+    "displayPrecision": "one-decimal-rounded",
+    "valueType": "rounded-comparative-figure",
+    "scope": "may-2025-cross-artist-initial-sales-comparison",
+    "explicitAlbumReleaseBinding": false,
+    "explicitProviderPeriodStart": null,
+    "explicitProviderPeriodEnd": null,
+    "explicitSevenDayClaimBoundToFigure": false,
+    "exactPhysicalCopyValue": null
+  },
+  "qualification": {
+    "sourceTierSuitableForContext": true,
+    "qualifyingExactAlbumValue": false,
+    "qualifyingSevenDayProviderPeriod": false,
+    "eligibleAsExactReportedHanteoFirstWeekObservation": false,
+    "qualifiesDiscoveryOnly79940": false,
+    "canReplaceDiscoveryValue": false,
+    "canInferExactValueByScaling": false,
+    "canInferPeriodFromReleaseDate": false,
+    "olderOrEarlierChartCanSupersedeLatestRelease": false,
+    "normalizedStorageUseAuthorized": false,
+    "commercialUseAuthorized": false,
+    "derivedPublicationAuthorized": false,
+    "sourceSpecificRightsReviewState": "review-required",
+    "productionDurableWriteAuthorized": false,
+    "numericProductEligible": false,
+    "methodologyLockAuthorized": false,
+    "productActivationAuthorized": false
+  },
+  "explanation": [
+    "Figure 18 prints IU at 7.2 (unit: ten-thousand copies) in a May-2025 Hanteo-attributed artist-comparison chart.",
+    "One-decimal plotting precision is not an exact physical-copy observation. The chart does not expressly bind the IU bar to a specific album edition or to an inclusive seven-day provider period.",
+    "The June-2-dated report precedes the discovery-only hypothesis's June-3 end date; the comparison may reflect a different observation cutoff and must not be treated as a contradictory or replacing final seven-day exact total.",
+    "A reputable Hanteo-attributed source is not sufficient to promote Tier C first-week exact units. Source-specific normalized/commercial usage remains review-required. No contact with Hanteo or any other party was made."
+  ],
+  "disposition": "reputable-provider-attributed-rounded-context-only-not-current-sales-production-evidence",
+  "noOutreachPerformed": true
+}
