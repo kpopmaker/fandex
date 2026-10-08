@@ -67,3 +67,26 @@ test('every Tier A/B candidate lacking the exact value remains explicitly non-qu
     ),
   );
 });
+
+test('2026-10-08 official Initial Chodong showcase is not an IU exact claim or provider-period source', () => {
+  const review = audit.officialInitialChodongExpansion;
+  assert.equal(review.officialSurface, 'https://www.hanteochart.com/en/honors/initial');
+  assert.equal(review.publicPageShowsExactValuesForOtherRecords, true);
+  assert.equal(review.publicPageShowsIuAlbum, false);
+  assert.equal(review.qualifyingIuExactCopies, false);
+  assert.equal(review.qualifyingIuProviderPeriod, false);
+  assert.equal(review.inferredIuValueFromOtherChartsAllowed, false);
+  assert.equal(review.outreachSent, false);
+  const candidate = audit.candidates.find(
+    (x: { evidenceId: string }) => x.evidenceId === 'hanteo:initial-hall-of-fame:2026-10-08:iu-screen',
+  );
+  assert.ok(candidate);
+  assert.equal(candidate.sourceTier, 'tier-a-primary-official');
+  assert.equal(candidate.exactValue, null);
+  assert.equal(candidate.providerPeriodStart, null);
+  assert.equal(candidate.providerPeriodEnd, null);
+  assert.equal(candidate.exactValueQualifiedForProduction, false);
+  assert.equal(candidate.periodQualifiedForProduction, false);
+  assert.equal(audit.result.tierAOrBExactValueAndPeriodBindingLocated, false);
+  assert.equal(audit.result.productionObservationEligible, false);
+});

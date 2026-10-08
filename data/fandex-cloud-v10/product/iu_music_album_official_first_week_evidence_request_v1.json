@@ -97,5 +97,46 @@
     "productActivationAuthorized": false,
     "publicPublicationAuthorized": false
   },
-  "nextStep": "Submit only after an explicit outreach decision; validate a returned stable Tier A/B source, claim-level period and source-specific rights before any Production promotion."
+  "nextStep": "Submit only after an explicit outreach decision; validate a returned stable Tier A/B source, claim-level period and source-specific rights before any Production promotion.",
+  "publicOfficialContactRoutingReview": {
+    "assessedOn": "2026-10-08",
+    "publisher": "Hanteo News / Hanteo Global",
+    "publishedContactReference": "https://www.hanteonews.com/en/company/home",
+    "publishedBusinessPartnershipContact": {
+      "email": "news.cs@hanteo.com",
+      "officialPageContactCategory": "Advertising & Partnership Inquiries",
+      "officialPublishedContactVerified": true,
+      "hanteoChartSalesDataRightsRecipientVerified": false,
+      "proposedUse": "pre-outreach inquiry-routing candidate only, not proof of sales-data rights authority"
+    },
+    "alternativeNewsTipContact": {
+      "email": "news@hanteo.com",
+      "officialPageContactCategory": "Press Registration & News Tips",
+      "salesDataLicensingRecipientVerified": false,
+      "selectedForSalesRightsRequest": false
+    },
+    "publishedRestrictionReference": "https://www.hanteonews.com/en/article/93728",
+    "restrictionReviewed": true,
+    "specificHistoricInitialChodongRequestAcceptedByContact": false,
+    "directSalesDataRightsHolderAuthorized": false,
+    "contactVerifiedForThisRequest": false,
+    "requestDraftPrepared": true,
+    "outreachApprovalRequired": true,
+    "outreachAuthorized": false,
+    "outreachSent": false,
+    "repliesOrRightsDecisionsReceived": false,
+    "nextGate": "explicit user authorization to contact verified public business/partnership channel; confirm responsible data/rightsholder destination before relying on any reply"
+  },
+  "additionalOfficialEvidenceSurfaceReview": {
+    "url": "https://www.hanteochart.com/en/honors/initial",
+    "assessedOn": "2026-10-08",
+    "provider": "Hanteo Chart",
+    "showsInitialChodongValuesForFeaturedRecords": true,
+    "includesCurrentRecentTopFiveAndYearTopTen": true,
+    "reviewedPublicPageContainsIUFlowerBookmark3": false,
+    "exactIU79940Exposed": false,
+    "IUSpecificFirstWeekPeriodExposed": false,
+    "productionExactClaimQualified": false,
+    "use": "public first-party source search only; no historical selector inference or rights authorization"
+  }
 }

@@ -32,3 +32,24 @@ test('official evidence request is preparation only: no outreach, API probe, rig
   assert.equal(packet.authorizationBoundary.publicPublicationAuthorized, false);
   assert.equal(packet.authorizationBoundary.methodologyLocked, false);
 });
+
+test('2026-10-08 verified public inquiry routing cannot be mistaken for rights-holder or dispatch authorization', () => {
+  const review = packet.publicOfficialContactRoutingReview;
+  assert.equal(review.publishedContactReference, 'https://www.hanteonews.com/en/company/home');
+  assert.equal(review.publishedBusinessPartnershipContact.email, 'news.cs@hanteo.com');
+  assert.equal(review.publishedBusinessPartnershipContact.officialPublishedContactVerified, true);
+  assert.equal(review.publishedBusinessPartnershipContact.hanteoChartSalesDataRightsRecipientVerified, false);
+  assert.equal(review.alternativeNewsTipContact.selectedForSalesRightsRequest, false);
+  assert.equal(review.contactVerifiedForThisRequest, false);
+  assert.equal(review.outreachApprovalRequired, true);
+  assert.equal(review.outreachAuthorized, false);
+  assert.equal(review.outreachSent, false);
+  assert.equal(review.directSalesDataRightsHolderAuthorized, false);
+  assert.equal(review.repliesOrRightsDecisionsReceived, false);
+  const hall = packet.additionalOfficialEvidenceSurfaceReview;
+  assert.equal(hall.showsInitialChodongValuesForFeaturedRecords, true);
+  assert.equal(hall.reviewedPublicPageContainsIUFlowerBookmark3, false);
+  assert.equal(hall.exactIU79940Exposed, false);
+  assert.equal(hall.IUSpecificFirstWeekPeriodExposed, false);
+  assert.equal(hall.productionExactClaimQualified, false);
+});

@@ -96,6 +96,17 @@
       "exactValueQualifiedForProduction": false,
       "periodQualifiedForProduction": false,
       "reason": "Reputable reporting discusses the release but does not state IU's exact Hanteo first-week unit total."
+    },
+    {
+      "evidenceId": "hanteo:initial-hall-of-fame:2026-10-08:iu-screen",
+      "url": "https://www.hanteochart.com/en/honors/initial",
+      "sourceTier": "tier-a-primary-official",
+      "exactValue": null,
+      "providerPeriodStart": null,
+      "providerPeriodEnd": null,
+      "exactValueQualifiedForProduction": false,
+      "periodQualifiedForProduction": false,
+      "reason": "Official Initial Chodong page exposes values for featured top-five/yearly-top-ten albums but the reviewed public page does not display IU A Flower Bookmark 3; neither IU's exact 79,940 nor its first-week period is stated."
     }
   ],
   "result": {
@@ -153,5 +164,25 @@
       "Additional Hanteo/HanteoNews searches did not locate an official page explicitly stating 79,940 for A Flower Bookmark 3.",
       "Discovery-only sources continue to state 79,940; no Production promotion is performed."
     ]
+  },
+  "officialInitialChodongExpansion": {
+    "assessedOn": "2026-10-08",
+    "officialSurface": "https://www.hanteochart.com/en/honors/initial",
+    "surfaceType": "hanteo-initial-chodong-hall-of-fame",
+    "displayedRecordScope": "recent completed top 5 and yearly top 10; this is not a searchable historical IU exact-sales archive verified here",
+    "publicPageShowsExactValuesForOtherRecords": true,
+    "publicPageShowsIuAlbum": false,
+    "qualifyingIuExactCopies": false,
+    "qualifyingIuProviderPeriod": false,
+    "inferredIuValueFromOtherChartsAllowed": false,
+    "additionalWebChecks": [
+      "site:hanteochart.com IU A Flower Bookmark 3 exact initial Chodong",
+      "site:hanteonews.com IU 꽃갈피 셋 79940",
+      "IU A Flower Bookmark 3 79,940 Hanteo excluding discovery-only sources"
+    ],
+    "result": "no eligible Tier A/B claim-binding source located in this bounded expansion",
+    "outreachRoutingReference": "https://www.hanteonews.com/en/company/home",
+    "externalRequestAlreadyPrepared": true,
+    "outreachSent": false
   }
 }
