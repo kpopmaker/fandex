@@ -184,5 +184,23 @@
     "outreachRoutingReference": "https://www.hanteonews.com/en/company/home",
     "externalRequestAlreadyPrepared": true,
     "outreachSent": false
+  },
+  "roundedSellsideSourceFollowUp": {
+    "assessedOn": "2026-10-08",
+    "sourceEvidenceId": "daishin:2025-06-02:entertainment-weekly-points:figure-18:iu",
+    "artifactPath": "data/fandex-cloud-v10/product/iu_music_album_rounded_sellsider_research_source_v1.json",
+    "evidenceTier": "tier-b-provider-attributed-reputable",
+    "sourceFormat": "dated-analyst-report-rounded-comparative-chart",
+    "displaysIuBar": true,
+    "exactAlbumUnitCopies": null,
+    "explicitProviderPeriodStart": null,
+    "explicitProviderPeriodEnd": null,
+    "qualifiesExactFirstWeekClaim": false,
+    "qualifiesExplicitProviderPeriod": false,
+    "providesSpecificNormalizedCommercialRights": false,
+    "periodOrPrecisionInferenceAllowed": false,
+    "discoveryClaimRemainsUnqualified": true,
+    "outreachSent": false,
+    "result": "new-Tier-B-rounded-context-discovered-but-no-exact-units-or-provider-period"
   }
 }
