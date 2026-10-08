@@ -22,6 +22,12 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8",
 }
 TRANSIENT = {429, 500, 502, 503, 504}
+JYP_KNOWN_NATIVE_RELEASES = (
+    {"songId": "83806325", "title": "어머님이 누구니 (Feat. 제시)"},
+    {"songId": "116052509", "title": "WET"},
+)
+JYP_PROVIDER_ID = "14945855"
+
 
 
 def compact(value: str) -> str:
@@ -99,6 +105,28 @@ def provider_search(query: str, accepted_keys: set[str]) -> dict:
     return {"query": query, "statusCode": resp.status_code, "exactAliasProviderIds": sorted(names), "exactAliasDisplays": names}
 
 
+def jyp_native_song_backlink(song_id: str) -> dict:
+    url = f"https://www.genie.co.kr/detail/songInfo?xgnm={song_id}"
+    response = get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    onclick = re.compile(r"""fnViewArtist\(['"](\d+)['"]\)""", re.I)
+    href = re.compile(r"artistInfo\?xxnm=(\d+)", re.I)
+    artist_ids = {}
+    for a in soup.find_all("a"):
+        display = " ".join(a.stripped_strings).strip()
+        if compact(display) != compact("박진영"):
+            continue
+        match = onclick.search(str(a.get("onclick") or "")) or href.search(str(a.get("href") or ""))
+        if match:
+            artist_ids[match.group(1)] = display
+    return {
+        "songId": song_id, "url": url, "statusCode": response.status_code,
+        "exactNativeArtistIds": sorted(artist_ids),
+        "nativeDisplayById": artist_ids,
+        "linksOnlyToOriginalJyp": sorted(artist_ids) == [JYP_PROVIDER_ID],
+    }
+
+
 def validate(row: dict, metadata: dict, independent: dict) -> dict:
     cid = row["canonicalArtistId"]
     expected = row["genieProviderArtistId"]
@@ -149,6 +177,17 @@ def validate(row: dict, metadata: dict, independent: dict) -> dict:
         issues.append("provider_vs_historical_detail_year_conflict")
     if row["canonicalDebutYear"] is not None:
         issues.append("canonical_year_was_mutated")
+    jyp_release_evidence = [jyp_native_song_backlink(x["songId"]) for x in JYP_KNOWN_NATIVE_RELEASES] if cid == "jypark" else []
+    jyp_release_links_verified = (
+        len(jyp_release_evidence) == 2
+        and all(x["statusCode"] == 200 and x["linksOnlyToOriginalJyp"] for x in jyp_release_evidence)
+    ) if cid == "jypark" else None
+    known_homonym_quarantine = (
+        cid == "jypark"
+        and "search_alias_identity_not_uniquely_pinned" in issues
+        and len(issues) == 1
+        and jyp_release_links_verified
+    )
     return {
         "canonicalArtistId": cid, "expectedProviderArtistId": expected,
         "canonicalName": metadata["canonicalName"],
@@ -159,7 +198,12 @@ def validate(row: dict, metadata: dict, independent: dict) -> dict:
         "searchChecks": search_checks, "observedExactAliasProviderIds": sorted(exact_ids),
         "detail": detail, "entityTypeMatch": type_match,
         "identityAndYearEvidenceConsistent": not issues,
-        "reviewStatus": "research_live_validated_not_human_reviewed",
+        "jypNativeReleaseEvidence": jyp_release_evidence,
+        "jypNativeReleaseLinksVerified": jyp_release_links_verified,
+        "jypExactAliasHomonymQuarantined": bool(known_homonym_quarantine),
+        "reviewStatus": ("research_homonym_collision_quarantined_human_review_required"
+                         if known_homonym_quarantine
+                         else "research_live_validated_not_human_reviewed"),
         "issues": issues,
     }
 
@@ -198,6 +242,8 @@ def main() -> None:
     results.sort(key=lambda r: TARGETS.index(r["canonicalArtistId"]))
     valid = [r["canonicalArtistId"] for r in results if r["identityAndYearEvidenceConsistent"]]
     invalid = [r["canonicalArtistId"] for r in results if not r["identityAndYearEvidenceConsistent"]]
+    quarantined = [r["canonicalArtistId"] for r in results if r.get("jypExactAliasHomonymQuarantined")]
+    unexpected_invalid = [id for id in invalid if id not in quarantined]
     payload = {
         "version": "music_genie_partial39_six_year_match_live_v1",
         "checkedAtUtc": datetime.now(timezone.utc).isoformat(),
@@ -205,6 +251,9 @@ def main() -> None:
         "sampleSize": len(TARGETS), "identityAndYearMatchedCount": len(valid),
         "notYetMatchedCount": len(invalid), "matchedCanonicalArtistIds": valid,
         "unmatchedCanonicalArtistIds": invalid, "results": results,
+        "quarantinedHistoricalHomonymCanonicalArtistIds": quarantined,
+        "unexpectedInvalidCanonicalArtistIds": unexpected_invalid,
+        "strictAliasUniqueCandidateCount": len(valid),
         "candidateReviewOnly": True, "reviewedBindingApproved": False,
         "canonicalMetadataYearChanged": False, "musicSupportedPromoted": False,
         "musicPartitionUnchanged": {"supported": 117, "unresolved": 238, "unsupported": 0},
@@ -215,9 +264,14 @@ def main() -> None:
         "matched": valid, "unmatched": invalid,
         "issues": {r["canonicalArtistId"]: r["issues"] for r in results if r["issues"]},
     }, ensure_ascii=False))
-    if invalid:
-        raise RuntimeError("genie_six_year_match_live_failed:" + ",".join(invalid))
-    print("PASS: Genie partial39 external-year six live identity | 6/6 | source remains 117/238/0")
+    if unexpected_invalid:
+        raise RuntimeError("genie_six_year_match_live_unexpected_failure:" + ",".join(unexpected_invalid))
+    if quarantined:
+        assert quarantined == ["jypark"] and valid == ["leehi", "sf9", "b1a4", "jeongsewoon", "xlov"]
+        print("PASS: Genie six-year live research | 5/6 strict alias | J.Y. Park native-linked but homonym-quarantined | Music 117/238/0")
+    else:
+        assert len(valid) == 6
+        print("PASS: Genie six-year live research | 6/6 strict alias | Music 117/238/0")
 
 
 if __name__ == "__main__":
