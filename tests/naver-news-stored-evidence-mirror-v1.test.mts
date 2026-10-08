@@ -142,8 +142,9 @@ test('staged scheduler evidence becomes official only after canonical job-id fin
 
 test('mirror-backed latest official slot repository resolves exact scheduler protocol', async () => {
   const store = new MemoryImmutableStore();
-  const first = planAt('2026-09-28T02:00:00.000Z');
-  const latest = planAt('2026-09-28T03:00:00.000Z');
+  // The recovery epoch begins on 2026-10-03; earlier slots cannot be official.
+  const first = planAt('2026-10-03T02:00:00.000Z');
+  const latest = planAt('2026-10-03T03:00:00.000Z');
 
   await mirrorNaverNewsStoredEvidence(first, store);
   await mirrorNaverNewsStoredEvidence(latest, store);
@@ -155,7 +156,7 @@ test('mirror-backed latest official slot repository resolves exact scheduler pro
 
   assert.equal(result.status, 'ok');
   if (result.status !== 'ok') return;
-  assert.equal(result.throughSlotStart, '2026-09-28T03:00:00.000Z');
+  assert.equal(result.throughSlotStart, '2026-10-03T03:00:00.000Z');
   assert.equal(result.jobId, latest.identity.jobId);
   assert.equal(result.collectionKey, latest.identity.request.collectionKey);
 });
