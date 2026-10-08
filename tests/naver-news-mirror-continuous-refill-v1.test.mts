@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+  MAX_CONCURRENT_MIRROR_CANONICAL_READS,
   mapMirroredEvidenceBatched,
 } from '../lib/server/ingestion/naverNewsStoredEvidenceMirror';
 
@@ -83,4 +84,73 @@ test('NAVER mirror reader fails closed when underlying Blob request rejects', as
     ),
     (reason) => reason === fail,
   );
+});
+
+test('canonical twelve-worker mode bounds in-flight reads, refills and preserves exact ordering', async () => {
+  assert.equal(MAX_CONCURRENT_MIRROR_EVIDENCE_READS, 8);
+  assert.equal(MAX_CONCURRENT_MIRROR_CANONICAL_READS, 12);
+  const started: number[] = [];
+  let running = 0;
+  let peak = 0;
+  let releaseFirst!: () => void;
+  const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
+  const pending = mapMirroredEvidenceBatched(
+    Array.from({ length: 26 }, (_, index) => index),
+    async (index) => {
+      running += 1;
+      peak = Math.max(peak, running);
+      started.push(index);
+      try {
+        if (index === 0) await first;
+        return index === 19 ? null : `verified-job-${index}`;
+      } finally {
+        running -= 1;
+      }
+    },
+    MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+  );
+  let refilledBeforeSlow = false;
+  try {
+    for (let i = 0; i < 60; i += 1) {
+      await Promise.resolve();
+      if (started.includes(12)) break;
+    }
+    refilledBeforeSlow = started.includes(12);
+  } finally {
+    releaseFirst();
+  }
+
+  const rows = await pending;
+  assert.equal(refilledBeforeSlow, true);
+  assert.equal(peak, 12);
+  assert.equal(running, 0);
+  assert.deepEqual(rows, Array.from({ length: 26 }, (_, index) =>
+    index === 19 ? null : `verified-job-${index}`,
+  ));
+});
+
+test('canonical twelve-worker mode fails closed and stops scheduling after the first read error', async () => {
+  const failure = new Error('immutable-blob-unavailable');
+  let started = 0;
+  let active = 0;
+  await assert.rejects(
+    mapMirroredEvidenceBatched(
+      Array.from({ length: 30 }, (_, index) => index),
+      async (index) => {
+        started += 1;
+        active += 1;
+        try {
+          if (index === 2) throw failure;
+          await Promise.resolve();
+          return index;
+        } finally {
+          active -= 1;
+        }
+      },
+      MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+    ),
+    (error) => error === failure,
+  );
+  assert.equal(active, 0);
+  assert.ok(started <= MAX_CONCURRENT_MIRROR_CANONICAL_READS);
 });
