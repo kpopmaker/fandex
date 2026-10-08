@@ -54,6 +54,7 @@ jobs:
         working-directory: scripts/fandex-cloud-migration/source
         run: python music_genie_strong26_application_live_validation_v1.py
       - name: Upload strong26 application evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: artist-expansion-music-genie-strong26-application-v1

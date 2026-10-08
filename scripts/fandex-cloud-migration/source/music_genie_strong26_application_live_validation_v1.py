@@ -177,6 +177,7 @@ def main():
     }
     OUTPUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     if failed:
+        print("FAIL: strong26 live identity metadata mismatch | "+json.dumps([r for r in results if not r["validated"]],ensure_ascii=False))
         raise RuntimeError("strong26_live_validation_failed:"+",".join(failed))
     print("PASS: Genie strong26 application live validation | bindings=26/26 | coverage=117/238/0")
 
