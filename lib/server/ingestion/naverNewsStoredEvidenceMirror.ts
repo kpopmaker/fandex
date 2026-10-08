@@ -37,13 +37,13 @@ export {
 const SCHEDULER_COLLECTION_KEY_PATTERN =
   /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
 
-const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8;
+export const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8 as const;
 
 // Keep up to eight Blob reads in flight without head-of-line blocking at
 // batch boundaries. Retain every successful entry in its original order.
 // On any read or validation failure, stop scheduling new work, wait for
 // in-flight reads to settle, then fail closed with the original rejection.
-async function mapMirroredEvidenceBatched<T, U>(
+export async function mapMirroredEvidenceBatched<T, U>(
   values: readonly T[],
   read: (value: T) => Promise<U>,
 ): Promise<U[]> {

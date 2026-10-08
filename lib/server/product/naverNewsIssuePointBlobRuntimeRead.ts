@@ -1,4 +1,7 @@
 import { getVercelOidcToken } from '@vercel/functions/oidc';
+import {
+  createNaverNewsBlobReadStageTimer,
+} from './naverNewsBlobReadStageTiming';
 
 import {
   getArtistProductVariableRealReadModel,
@@ -238,28 +241,49 @@ function diagnostic(reason: string): void {
   );
 }
 
-function runtime(store: ReadOnlyStore): ProductVariableRealReadRuntime {
+function runtime(
+  store: ReadOnlyStore,
+  stageTimer: ReturnType<typeof createNaverNewsBlobReadStageTimer>,
+): ProductVariableRealReadRuntime {
   return Object.freeze({
     async readNewsIssuePointFrozenMethodology(input) {
       const repository =
         createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
           store,
         );
+      const profiledRepository = Object.freeze({
+        ...repository,
+        ...(repository.readJobEvidenceBatch
+          ? {
+              readJobEvidenceBatch: (jobIds: readonly string[]) =>
+                stageTimer.measure(
+                  'canonical-evidence-batch',
+                  () => repository.readJobEvidenceBatch!(jobIds),
+                ),
+            }
+          : {}),
+      });
       let series;
       try {
-        series = await assembleOfficialNaverNewsShadowFirstSeenSeries(
-          {
-            canonicalArtistId: input.canonicalArtistId,
-            throughSlotStart: input.throughSlotStart,
-          },
-          repository,
+        series = await stageTimer.measure(
+          'series-assembly',
+          () => assembleOfficialNaverNewsShadowFirstSeenSeries(
+            {
+              canonicalArtistId: input.canonicalArtistId,
+              throughSlotStart: input.throughSlotStart,
+            },
+            profiledRepository,
+          ),
         );
       } catch {
         diagnostic('canonical-evidence-read-failed');
         throw new Error('naver_news_blob_canonical_evidence_read_failed');
       }
       try {
-        return evaluateNaverNewsIssuePointFrozenMethodology(series);
+        return await stageTimer.measure(
+          'methodology-evaluation',
+          () => evaluateNaverNewsIssuePointFrozenMethodology(series),
+        );
       } catch {
         diagnostic('methodology-evaluation-failed');
         throw new Error('naver_news_blob_methodology_evaluation_failed');
@@ -273,6 +297,12 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     process.env,
   dependencies: NaverNewsIssuePointBlobRuntimeDependencies = {},
 ) {
+  const stageTimer = createNaverNewsBlobReadStageTimer({
+    // Opt-in is required even on the Production host; no default log noise.
+    enabled:
+      isProductionRuntime(environment)
+      && environment.FANDEX_NAVER_NEWS_STAGE_TIMINGS?.trim() === '1',
+  });
   if (!isProductionRuntime(environment)) {
     diagnostic('production-runtime-gate-failed');
     return getArtistProductVariableRealReadModel(
@@ -293,15 +323,21 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
 
   let store: ReadOnlyStore;
   try {
-    const resolvedEnvironment = await runtimeEnvironment(
-      environment,
-      dependencies.resolveOidcToken
-        ?? (() => resolveNaverNewsRuntimeOidcToken(environment)),
+    const resolvedEnvironment = await stageTimer.measure(
+      'credential-resolution',
+      () => runtimeEnvironment(
+        environment,
+        dependencies.resolveOidcToken
+          ?? (() => resolveNaverNewsRuntimeOidcToken(environment)),
+      ),
     );
-    store = (
-      dependencies.createReadStore
-      ?? createProductionNaverNewsBlobEvidenceReadStore
-    )(resolvedEnvironment);
+    store = await stageTimer.measure(
+      'store-initialization',
+      () => (
+        dependencies.createReadStore
+        ?? createProductionNaverNewsBlobEvidenceReadStore
+      )(resolvedEnvironment),
+    );
   } catch {
     diagnostic('blob-store-init-failed');
     return getArtistProductVariableRealReadModel(
@@ -320,14 +356,31 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     );
   }
 
+  const profiledStore = Object.freeze({
+    readText: (pathname: string) => store.readText(pathname),
+    listPathnames: (prefix: string) =>
+      stageTimer.measure(
+        'manifest-list',
+        () => store.listPathnames(prefix),
+      ),
+  });
   const latestRepository =
     createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
-      store,
+      profiledStore,
     );
-  const latest =
-    await resolveLatestOfficialNaverNewsShadowThroughSlotStart(
-      latestRepository,
-    );
+  const profiledLatestRepository = Object.freeze({
+    readSucceededSchedulerJobs: () =>
+      stageTimer.measure(
+        'manifest-load',
+        () => latestRepository.readSucceededSchedulerJobs(),
+      ),
+  });
+  const latest = await stageTimer.measure(
+    'latest-slot-resolution',
+    () => resolveLatestOfficialNaverNewsShadowThroughSlotStart(
+      profiledLatestRepository,
+    ),
+  );
   if (latest.status !== 'ok') {
     diagnostic(latest.reason);
   }
@@ -340,6 +393,6 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       variableId: 'newsIssuePoint',
       throughSlotStart,
     },
-    runtime(store),
+    runtime(store, stageTimer),
   );
 }
