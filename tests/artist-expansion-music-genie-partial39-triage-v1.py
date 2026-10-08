@@ -1054,7 +1054,9 @@ def main() -> None:
     assert all(x["directProviderLinkHttp200"] for x in repeat["nativeSongArtistLinks"])
     drift = jyp_drift["searchTemporalVolatility"]
     assert (drift["firstExactNameSearchCandidateCount"], drift["secondExactNameSearchCandidateCount"]) == (3, 1)
-    assert all(v is True for v in drift.values())
+    assert all(v is True for k, v in drift.items() if k not in (
+        "firstExactNameSearchCandidateCount", "secondExactNameSearchCandidateCount"
+    ))
     safety_jyp = jyp_drift["safety"]
     assert safety_jyp["pendingHumanReview"] is True
     assert safety_jyp["readOnlyResearchEvidenceOnly"] is True
