@@ -479,3 +479,107 @@ test('News Render OIDC resolver falls back when Vercel-native OIDC throws', asyn
     /naver_news_blob_runtime_vercel_project_binding_invalid/,
   );
 });
+
+test('News runtime stage timing is opt-in and excludes evidence, paths, and credentials', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(protocolStart + index * 60 * 60 * 1_000).toISOString(),
+    );
+  }
+
+  const logs: string[] = [];
+  const originalInfo = console.info;
+  console.info = (...values: unknown[]) => {
+    logs.push(values.map(String).join(' '));
+  };
+  let result;
+  try {
+    result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        FANDEX_NAVER_NEWS_STAGE_TIMINGS: '1',
+        BLOB_READ_WRITE_TOKEN: 'private-static-test-token',
+      },
+      {
+        createReadStore() {
+          return {
+            readText: store.readText,
+            listPathnames: store.listPathnames,
+          };
+        },
+      },
+    );
+  } finally {
+    console.info = originalInfo;
+  }
+
+  assert.equal(result.status, 'ok');
+  const prefix = 'FANDEX_NAVER_NEWS_BLOB_READ_STAGE=';
+  const stages = logs.filter((line) => line.startsWith(prefix))
+    .map((line) => JSON.parse(line.slice(prefix.length)) as {
+      stage: string;
+      outcome: string;
+      durationMs: number | null;
+    });
+  assert.deepEqual(
+    stages.map((line) => line.stage).sort(),
+    [
+      'credential-resolution',
+      'store-initialization',
+      'manifest-list',
+      'manifest-load',
+      'latest-slot-resolution',
+      'canonical-evidence-batch',
+      'series-assembly',
+      'methodology-evaluation',
+    ].sort(),
+  );
+  assert.ok(stages.every((line) => line.outcome === 'fulfilled'));
+  assert.ok(stages.every((line) =>
+    line.durationMs === null
+    || (Number.isInteger(line.durationMs) && line.durationMs >= 0),
+  ));
+  assert.ok(logs.every((line) =>
+    !line.includes('private-static-test-token')
+    && !line.includes('stored-evidence-mirror/v1/')
+    && !line.includes('아이유 기사'),
+  ));
+});
+
+test('News stage timing preserves fail-closed credential resolution failure', async () => {
+  const logs: string[] = [];
+  const originalInfo = console.info;
+  console.info = (...values: unknown[]) => logs.push(values.map(String).join(' '));
+  let result;
+  try {
+    result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        FANDEX_NAVER_NEWS_STAGE_TIMINGS: '1',
+        BLOB_STORE_ID: 'store_test',
+      },
+      {
+        resolveOidcToken: () => {
+          throw new Error('sensitive-token-lookup-failure');
+        },
+        createReadStore() {
+          throw new Error('must-not-be-called');
+        },
+      },
+    );
+  } finally {
+    console.info = originalInfo;
+  }
+
+  assert.equal(result.status, 'data-issue');
+  const matching = logs.filter((line) =>
+    line.startsWith('FANDEX_NAVER_NEWS_BLOB_READ_STAGE='),
+  );
+  assert.equal(matching.length, 1);
+  assert.match(matching[0]!, /"stage":"credential-resolution"/);
+  assert.match(matching[0]!, /"outcome":"rejected"/);
+  assert.doesNotMatch(matching[0]!, /sensitive-token-lookup-failure/);
+});
