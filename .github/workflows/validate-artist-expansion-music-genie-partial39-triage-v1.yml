@@ -9,6 +9,7 @@ on:
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json'
       - 'scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
@@ -53,5 +54,31 @@ jobs:
         with:
           name: artist-expansion-music-genie-jinu-identity-live-v1
           path: scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-six-year-matches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie HTML research dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile six candidate research script
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.py
+      - name: Live verify provider identity and independently sourced debut year
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_six_year_match_live_v1.py
+      - name: Upload six candidate non-activating evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-partial39-six-year-match-live-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.json
           retention-days: 21
           if-no-files-found: warn
