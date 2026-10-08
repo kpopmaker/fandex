@@ -503,5 +503,81 @@
     "deploymentAuthorized": false,
     "mainMergeAuthorized": false
   },
-  "nextGate": "MUSIC_GENIE_PARTIAL39_PROVIDER_AND_CANONICAL_DEBUT_EVIDENCE_REVIEW_REQUIRED"
+  "nextGate": "MUSIC_GENIE_PARTIAL39_PROVIDER_AND_CANONICAL_DEBUT_EVIDENCE_REVIEW_REQUIRED",
+  "yearSemanticsReview": {
+    "reviewStatus": "external_reported_evidence_not_human_approved_binding",
+    "reviewedAt": "2026-10-08",
+    "purpose": "distinguish_first_artist_career_debut_from_first_solo_release_debut_before_canonical_metadata_completion",
+    "scopePolicy": "UNDECIDED_REQUIRES_HUMAN_REVIEW",
+    "exceptionCount": 3,
+    "providerDebutYearSemanticsKnown": false,
+    "records": [
+      {
+        "canonicalArtistId": "joyuri",
+        "genieProviderArtistId": "80661354",
+        "genieDetailDebutYear": 2018,
+        "earliestGroupCareerDebutYear": 2018,
+        "independentlyReportedSoloDebutYear": 2021,
+        "yearScopeAssessment": "genie_year_matches_izone_group_debut_but_not_2021_solo_debut",
+        "evidence": [
+          {
+            "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=430955&id=&lang=e&menu_cate=artist&page=17",
+            "publisher": "KBS WORLD",
+            "reportPublished": "2022-11-14",
+            "supports": "IZ*ONE-related debut in 2018; solo album Glassy in October 2021"
+          },
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/former-izone-member-jo-yuri-to-make-her-solo-debut/10633693",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2021-09-24",
+            "supports": "WAKEONE agency-announced first solo single October 7, 2021"
+          }
+        ]
+      },
+      {
+        "canonicalArtistId": "hwangminhyun",
+        "genieProviderArtistId": "80441275",
+        "genieDetailDebutYear": 2012,
+        "earliestGroupCareerDebutYear": 2012,
+        "independentlyReportedSoloDebutYear": 2023,
+        "yearScopeAssessment": "genie_year_matches_nuest_group_debut_but_not_2023_solo_album_debut",
+        "evidence": [
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/singer-actor-minhyun-to-release-his-first-solo-ep-truth-or-lie-on-feb-27/10463584",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2023-02-06",
+            "supports": "Pledis announcement of first solo EP in 2023 and NU'EST group debut in 2012"
+          },
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/hwang-minhyun-gets-a-third-fresh-start-this-time-as-a-solo-artist/10240716",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2023-02-27",
+            "supports": "2023 debut solo EP showcase 11 years after NU'EST debut"
+          }
+        ]
+      },
+      {
+        "canonicalArtistId": "kangseungyoon",
+        "genieProviderArtistId": "80089706",
+        "genieDetailDebutYear": 2010,
+        "earliestGroupCareerDebutYear": null,
+        "independentlyReportedSoloDebutYear": 2013,
+        "yearScopeAssessment": "genie_year_2010_conflicts_with_reported_2013_official_solo_debut;2010_origin_requires_separate_interpretation",
+        "evidence": [
+          {
+            "url": "https://www.soompi.com/article/505672wpp/yg-entertainment-announces-kang-seung-yoons-debut",
+            "publisher": "Soompi reporting YG announcement",
+            "reportPublished": "2013-06-20",
+            "supports": "YG announces 2013 solo debut after approximately three years' training"
+          }
+        ]
+      }
+    ],
+    "safety": {
+      "noAutomaticCanonicalDebutYearFill": true,
+      "noProviderArtistIdRebinding": true,
+      "noSupportPromotion": true,
+      "noProductActivation": true
+    }
+  }
 }
