@@ -50,8 +50,12 @@ def main():
         assert live[k]==26, k
     assert live["failedBindingCount"]==0
     assert all(v is False for v in d["safety"].values())
-    for k,v in d["currentScope"].items():
-        assert v is (k=="candidateBranchOnly"),k
+    scope=d["currentScope"]
+    assert scope["candidateBranchOnly"] is True
+    assert scope["canonicalUniverseCount"]==355
+    for k,v in scope.items():
+        if k not in {"candidateBranchOnly","canonicalUniverseCount"}:
+            assert v is False,k
     assert d["nextGate"]=="MUSIC_GENIE_REMAINING238_REVIEW_OR_ALTERNATE_PROVIDER_EVIDENCE_REQUIRED"
     print("PASS: Music Genie strong26 source receipt | providerIds=26 unique | live=26/26 | Music=117/238/0 | Product=UNCHANGED")
 
