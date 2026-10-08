@@ -26,6 +26,13 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8",
 }
 TRANSIENT = {429, 500, 502, 503, 504}
+# Native Genie artist-detail URLs identified independently; none is an approved binding.
+ALTERNATE_PROFILES = {
+    "nexz": {"id": "82295319", "display": "NEXZ (넥스지)", "type": "남성/그룹", "year": 2023},
+    "afterschool": {"id": "73393086", "display": "애프터스쿨 (After School)", "type": "여성/그룹", "year": 2009},
+    "pow": {"id": "82162931", "display": "POW (파우)", "type": "남성/그룹", "year": 2023},
+    "ejel": {"id": "81021446", "display": "이젤 (EJel)", "type": "여성/솔로", "year": 2021},
+}
 
 
 def fetch(url: str) -> dict:
@@ -147,6 +154,46 @@ def main() -> None:
         r["canonicalArtistId"] for r in records
         if r["observation"] == "provider_year_visible_matches_existing_canonical_year"
     ]
+    # Separate profile links can contradict the original exact-alias search winner.
+    # These are independent review alternatives, not provider ID replacements.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        alt_futures = {
+            pool.submit(check, {
+                "canonicalArtistId": cid,
+                "genieProviderArtistId": candidate["id"],
+                "evidenceGap": rows_by_id[cid]["evidenceGap"],
+                "canonicalDebutYear": rows_by_id[cid]["canonicalDebutYear"],
+                "genieDebutYear": None,
+            }): cid
+            for cid, candidate in ALTERNATE_PROFILES.items()
+        }
+        alternates = {}
+        for future in concurrent.futures.as_completed(alt_futures):
+            cid = alt_futures[future]
+            alternates[cid] = future.result()
+    alternative_rows = []
+    for cid, target in ALTERNATE_PROFILES.items():
+        row = alternates[cid]
+        normalized = lambda value: re.sub(r"[^0-9a-z가-힣]+", "", (value or "").lower())
+        match = (
+            row["providerStatusCode"] == 200
+            and normalized(row["currentProviderDisplay"]) == normalized(target["display"])
+            and row["currentProviderActivityTypeRaw"] == target["type"]
+            and row["currentProviderDebutYear"] == target["year"]
+        )
+        alternative_rows.append({
+            "canonicalArtistId": cid,
+            "originalProviderArtistId": rows_by_id[cid]["genieProviderArtistId"],
+            "alternateProfileArtistId": target["id"],
+            "expectedAlternateDisplay": target["display"],
+            "expectedAlternateType": target["type"],
+            "expectedAlternateYear": target["year"],
+            "providerDetail": row,
+            "liveProfileMetadataMatches": match,
+            "newProviderArtistIdNotApproved": True,
+            "providerDebutYearIsNotAutomaticallyFormalGroupDebut": cid == "nexz",
+            "humanIdentityAndEraReviewRequired": True,
+        })
     payload = {
         "version": "music_genie_partial39_missing14_debut_live_v1",
         "checkedAtUtc": datetime.now(timezone.utc).isoformat(),
@@ -157,6 +204,8 @@ def main() -> None:
         "observationCounts": counts,
         "yearMatchingProviderVisibilityCandidates": eligible,
         "records": records,
+        "alternateProfileEvidence": alternative_rows,
+        "alternateProfilesValidatedCount": sum(x["liveProfileMetadataMatches"] for x in alternative_rows),
         "humanIdentityAndYearScopeReviewRequired": True,
         "originalExact94SnapshotMustStayImmutable": True,
         "currentSourcePartition": {"supported": 117, "unresolved": 238, "unsupported": 0},
@@ -178,6 +227,20 @@ def main() -> None:
             "observation": r["observation"],
         } for r in records],
     }, ensure_ascii=False))
+    print("MISSING14_ALTERNATE_PROFILES " + json.dumps({
+        "rows": [{
+            "id": x["canonicalArtistId"],
+            "old": x["originalProviderArtistId"],
+            "alt": x["alternateProfileArtistId"],
+            "display": x["providerDetail"]["currentProviderDisplay"],
+            "activity": x["providerDetail"]["currentProviderActivityTypeRaw"],
+            "year": x["providerDetail"]["currentProviderDebutYear"],
+            "matched": x["liveProfileMetadataMatches"],
+        } for x in alternative_rows],
+    }, ensure_ascii=False))
+    assert len(alternative_rows) == 4
+    assert all(x["liveProfileMetadataMatches"] for x in alternative_rows), "alternate_profile_metadata_mismatch"
+    assert all(x["newProviderArtistIdNotApproved"] for x in alternative_rows)
     assert payload["checkedCount"] == 14
     assert len(eligible) <= 7
     assert all(r["newProviderBindingApproved"] is False for r in records)
