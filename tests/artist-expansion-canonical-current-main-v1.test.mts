@@ -25,6 +25,30 @@ function readCsvIds(path: string) {
   return lines.slice(1).map((line) => line.split(',')[idIndex].trim());
 }
 
+const originalMusic21CanonicalArtistIds = [
+  "iu",
+  "aespa",
+  "ateez",
+  "boynextdoor",
+  "ive",
+  "lesserafim",
+  "newjeans",
+  "seventeen",
+  "straykids",
+  "txt",
+  "bts",
+  "blackpink",
+  "twice",
+  "enhypen",
+  "jungkook",
+  "jimin",
+  "v",
+  "jennie",
+  "lisa",
+  "rose",
+  "riize"
+];
+
 test('canonical artist universe is 355 with a preserved 100-artist baseline', () => {
   assert.equal(ARTIST_UNIVERSE_V4_BASELINE_COUNT, 100);
   assert.equal(artistUniverseV4.length, 355);
@@ -32,15 +56,16 @@ test('canonical artist universe is 355 with a preserved 100-artist baseline', ()
   assert.equal(new Set(ids).size, 355);
 });
 
-test('active Music 21 and Last.fm 19 bindings are canonical-universe subsets', () => {
+test('candidate Music coverage preserves original 21 and Last.fm 19 canonical bindings', () => {
   const universe = new Set(artistUniverseV4.map((artist) => artist.id));
   const music = readJson(
     'data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json',
   ).artists.map((row: { canonicalArtistId: string }) => row.canonicalArtistId);
   const lastfm = readCsvIds('scripts/lastfm-cloud/lastfm_artist_seed_v1.csv');
 
-  assert.equal(music.length, 21);
-  assert.equal(new Set(music).size, 21);
+  assert.ok(music.length >= originalMusic21CanonicalArtistIds.length);
+  assert.equal(new Set(music).size, music.length);
+  assert.ok(originalMusic21CanonicalArtistIds.every((id) => music.includes(id)));
   assert.equal(lastfm.length, 19);
   assert.equal(new Set(lastfm).size, 19);
   assert.ok(music.every((id: string) => universe.has(id)));
@@ -66,14 +91,21 @@ test('source compatibility partitions the 355-artist universe fail-closed', () =
     }
     for (const id of unresolved) assert.ok(!unsupported.has(id));
 
+    assert.equal(supported.size, source.supportedCanonicalArtistIds.length);
+    assert.equal(unresolved.size, source.unresolvedCanonicalArtistIds.length);
+    assert.equal(unsupported.size, source.unsupportedCanonicalArtistIds.length);
+
     const union = new Set([...supported, ...unresolved, ...unsupported]);
+    assert.deepEqual(union, new Set(artistUniverseV4.map((artist) => artist.id)));
     assert.equal(union.size, 355);
   }
 
-  assert.equal(
-    compatibility.sources.music_chart.supportedCanonicalArtistIds.length,
-    21,
-  );
+  const musicTargetIds = readJson(
+    'data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json',
+  ).artists.map((row: { canonicalArtistId: string }) => row.canonicalArtistId);
+  const musicSupportedIds = compatibility.sources.music_chart.supportedCanonicalArtistIds;
+  assert.equal(musicSupportedIds.length, musicTargetIds.length);
+  assert.deepEqual(new Set(musicSupportedIds), new Set(musicTargetIds));
   assert.equal(
     compatibility.sources.lastfm.supportedCanonicalArtistIds.length,
     19,

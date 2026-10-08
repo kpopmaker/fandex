@@ -771,6 +771,224 @@
         "KICKF",
         "킥플립"
       ]
+    },
+    {
+      "canonicalArtistId": "kissoflife",
+      "artist": "KISS OF LIFE",
+      "aliases": [
+        "KISS OF LIFE",
+        "KIOF",
+        "키스오브라이프"
+      ]
+    },
+    {
+      "canonicalArtistId": "nctdream",
+      "artist": "NCT DREAM",
+      "aliases": [
+        "NCT DREAM",
+        "NCTDRM",
+        "엔시티 드림",
+        "NCT드림"
+      ]
+    },
+    {
+      "canonicalArtistId": "nct127",
+      "artist": "NCT 127",
+      "aliases": [
+        "NCT 127",
+        "엔시티 127"
+      ]
+    },
+    {
+      "canonicalArtistId": "2ne1",
+      "artist": "2NE1",
+      "aliases": [
+        "2NE1",
+        "투애니원"
+      ]
+    },
+    {
+      "canonicalArtistId": "xdinaryheroes",
+      "artist": "Xdinary Heroes",
+      "aliases": [
+        "Xdinary Heroes",
+        "XH",
+        "엑스디너리 히어로즈"
+      ]
+    },
+    {
+      "canonicalArtistId": "katseye",
+      "artist": "KATSEYE",
+      "aliases": [
+        "KATSEYE",
+        "캣츠아이"
+      ]
+    },
+    {
+      "canonicalArtistId": "p1harmony",
+      "artist": "P1Harmony",
+      "aliases": [
+        "P1Harmony",
+        "P1H",
+        "피원하모니"
+      ]
+    },
+    {
+      "canonicalArtistId": "cravity",
+      "artist": "CRAVITY",
+      "aliases": [
+        "CRAVITY",
+        "CRVT",
+        "크래비티"
+      ]
+    },
+    {
+      "canonicalArtistId": "btob",
+      "artist": "BTOB",
+      "aliases": [
+        "BTOB",
+        "비투비"
+      ]
+    },
+    {
+      "canonicalArtistId": "thenewsix",
+      "artist": "THE NEW SIX",
+      "aliases": [
+        "THE NEW SIX",
+        "TNX",
+        "더뉴식스"
+      ]
+    },
+    {
+      "canonicalArtistId": "wjsn",
+      "artist": "WJSN",
+      "aliases": [
+        "WJSN",
+        "Cosmic Girls",
+        "우주소녀"
+      ]
+    },
+    {
+      "canonicalArtistId": "sechskies",
+      "artist": "SECHSKIES",
+      "aliases": [
+        "SECHSKIES",
+        "젝스키스"
+      ]
+    },
+    {
+      "canonicalArtistId": "babydontcry",
+      "artist": "Baby DONT Cry",
+      "aliases": [
+        "Baby DONT Cry",
+        "베이비돈크라이"
+      ]
+    },
+    {
+      "canonicalArtistId": "hifiunicorn",
+      "artist": "Hi-Fi Un!corn",
+      "aliases": [
+        "Hi-Fi Un!corn",
+        "HIFIUNICORN",
+        "하이파이유니콘"
+      ]
+    },
+    {
+      "canonicalArtistId": "lightsum",
+      "artist": "LIGHTSUM",
+      "aliases": [
+        "LIGHTSUM",
+        "라잇썸"
+      ]
+    },
+    {
+      "canonicalArtistId": "nuest",
+      "artist": "NU'EST",
+      "aliases": [
+        "NU'EST",
+        "뉴이스트"
+      ]
+    },
+    {
+      "canonicalArtistId": "mcnd",
+      "artist": "MCND",
+      "aliases": [
+        "MCND",
+        "엠씨엔디"
+      ]
+    },
+    {
+      "canonicalArtistId": "newbeat",
+      "artist": "NEWBEAT",
+      "aliases": [
+        "NEWBEAT",
+        "뉴비트"
+      ]
+    },
+    {
+      "canonicalArtistId": "keyvitup",
+      "artist": "KEYVITUP",
+      "aliases": [
+        "KEYVITUP",
+        "키빗업"
+      ]
+    },
+    {
+      "canonicalArtistId": "vayonn",
+      "artist": "VAYONN",
+      "aliases": [
+        "VAYONN",
+        "베이온"
+      ]
+    },
+    {
+      "canonicalArtistId": "fantasyboys",
+      "artist": "FANTASY BOYS",
+      "aliases": [
+        "FANTASY BOYS",
+        "판타지 보이즈"
+      ]
+    },
+    {
+      "canonicalArtistId": "aimers",
+      "artist": "AIMERS",
+      "aliases": [
+        "AIMERS",
+        "에이머스"
+      ]
+    },
+    {
+      "canonicalArtistId": "justb",
+      "artist": "JUST B",
+      "aliases": [
+        "JUST B",
+        "저스트비"
+      ]
+    },
+    {
+      "canonicalArtistId": "atbo",
+      "artist": "ATBO",
+      "aliases": [
+        "ATBO",
+        "에이티비오"
+      ]
+    },
+    {
+      "canonicalArtistId": "trcng",
+      "artist": "TRCNG",
+      "aliases": [
+        "TRCNG",
+        "티알씨엔지",
+        "Teen Rising Champion in a New Generation"
+      ]
+    },
+    {
+      "canonicalArtistId": "hinapia",
+      "artist": "HINAPIA",
+      "aliases": [
+        "HINAPIA",
+        "희나피아"
+      ]
     }
   ],
   "reviewedExpansion": {
@@ -803,6 +1021,15 @@
     "deferredCanonicalArtistIds": [
       "girlsgeneration"
     ],
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false
+  },
+  "reviewedExpansionGenieStrong26": {
+    "version": "music_genie_strong26_application_v1",
+    "sourceReview": "music_genie_strong26_reviewed_bindings_v1",
+    "addedCanonicalArtistCount": 26,
+    "previousTargetCount": 91,
+    "targetCount": 117,
     "productCohortExpansionAuthorized": false,
     "runtimeActivationAuthorized": false
   }

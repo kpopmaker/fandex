@@ -1,0 +1,62 @@
+name: Validate Artist Expansion Music Genie strong26 application v1
+
+on:
+  push:
+    branches:
+      - work/artist-expansion-music-genie-strong26-application-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-genie-strong26-application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install beautifulsoup4 requests
+      - name: Materialize canonical identity metadata
+        run: npx tsx scripts/artist-expansion/materialize_music_genie_canonical_identity_metadata_v1.mts
+      - name: Validate applied partition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          t=json.loads(Path('data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json').read_text(encoding='utf-8-sig'))
+          c=json.loads(Path('data/fandex-cloud-v10/seed/artist_source_compatibility_v1.json').read_text(encoding='utf-8-sig'))
+          r=json.loads(Path('data/fandex-cloud-v10/seed/music_genie_strong26_reviewed_bindings_v1.json').read_text(encoding='utf-8-sig'))
+          ids=set(r['reviewedSupportedCanonicalArtistIds'])
+          target_ids={x['canonicalArtistId'] for x in t['artists']}
+          m=c['sources']['music_chart']
+          assert len(t['artists'])==117 and len(target_ids)==117
+          assert len(m['supportedCanonicalArtistIds'])==117
+          assert len(m['unresolvedCanonicalArtistIds'])==238
+          assert len(m['unsupportedCanonicalArtistIds'])==0
+          assert ids <= target_ids
+          assert ids <= set(m['supportedCanonicalArtistIds'])
+          assert ids.isdisjoint(m['unresolvedCanonicalArtistIds'])
+          assert t['reviewedExpansionGenieStrong26']['addedCanonicalArtistCount']==26
+          assert t['reviewedExpansionGenieStrong26']['productCohortExpansionAuthorized'] is False
+          assert t['reviewedExpansionGenieStrong26']['runtimeActivationAuthorized'] is False
+          print('PASS: Genie strong26 application partition | targets=117 | compatibility=117/238/0')
+          PY
+      - name: Run live Genie strong26 validation
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_strong26_application_live_validation_v1.py
+      - name: Upload strong26 application evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-strong26-application-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_strong26_application_live_validation_v1.json
+          retention-days: 14

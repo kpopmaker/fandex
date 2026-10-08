@@ -1,0 +1,83 @@
+{
+  "version": "music_genie_strong26_source_application_receipt_v1",
+  "status": "source_candidate_application_validated_non_product",
+  "source": "music_chart",
+  "provider": "genie",
+  "lineage": {
+    "reviewPr": 571,
+    "reviewHead": "7f8af10af40fd0a0cd436c2a738aa2ab07b0abe0",
+    "appliedHead": "c965c3f9376a6b96b15c65746fd64e6f39038acd",
+    "detailEvidenceRunId": 37560176276,
+    "detailEvidenceArtifactId": 11456228049
+  },
+  "application": {
+    "previousSupportedCount": 91,
+    "previousUnresolvedCount": 264,
+    "addedReviewedBindings": 26,
+    "supportedCount": 117,
+    "unresolvedCount": 238,
+    "unsupportedCount": 0,
+    "targetCount": 117,
+    "appliedCanonicalArtistIds": [
+      "kissoflife",
+      "nctdream",
+      "nct127",
+      "2ne1",
+      "xdinaryheroes",
+      "katseye",
+      "p1harmony",
+      "cravity",
+      "btob",
+      "thenewsix",
+      "wjsn",
+      "sechskies",
+      "babydontcry",
+      "hifiunicorn",
+      "lightsum",
+      "nuest",
+      "mcnd",
+      "newbeat",
+      "keyvitup",
+      "vayonn",
+      "fantasyboys",
+      "aimers",
+      "justb",
+      "atbo",
+      "trcng",
+      "hinapia"
+    ]
+  },
+  "liveValidation": {
+    "runId": 37560876534,
+    "conclusion": "success",
+    "validatedBindingCount": 26,
+    "failedBindingCount": 0,
+    "expectedExactGenieProviderIdObservedCount": 26,
+    "detailAliasMatchCount": 26,
+    "detailEntityTypeMatchCount": 26,
+    "detailDebutYearMatchCount": 26,
+    "artifactId": 11456194778,
+    "artifactDigest": "sha256:edc27c27b39b85732f25834a6600370247d790f77bdba37cc96ba1b7e9da7b39",
+    "applicationValidationHead": "c965c3f9376a6b96b15c65746fd64e6f39038acd"
+  },
+  "currentScope": {
+    "candidateBranchOnly": true,
+    "canonicalUniverseCount": 355,
+    "productCohortChanged": false,
+    "productRuntimeChanged": false,
+    "sourceActivationOrScheduledCollectionAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "safety": {
+    "ambiguousProviderIdAutoSelected": false,
+    "partialMetadataAutoPromoted": false,
+    "conflictingMetadataAutoPromoted": false,
+    "fuzzyIdentityAutoBinding": false,
+    "missingIsZero": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false
+  },
+  "nextGate": "MUSIC_GENIE_REMAINING238_REVIEW_OR_ALTERNATE_PROVIDER_EVIDENCE_REQUIRED"
+}
