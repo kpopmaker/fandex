@@ -244,12 +244,20 @@ function diagnostic(reason: string): void {
 function runtime(
   store: ReadOnlyStore,
   stageTimer: ReturnType<typeof createNaverNewsBlobReadStageTimer>,
+  emitBatchDiagnostic: boolean,
 ): ProductVariableRealReadRuntime {
   return Object.freeze({
     async readNewsIssuePointFrozenMethodology(input) {
       const repository =
         createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
           store,
+          emitBatchDiagnostic
+            ? {
+                onBatchDiagnostic: (record) => console.info(
+                  'FANDEX_NAVER_NEWS_CANONICAL_BATCH_READ=' + JSON.stringify(record),
+                ),
+              }
+            : {},
         );
       const profiledRepository = Object.freeze({
         ...repository,
@@ -297,11 +305,12 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
     process.env,
   dependencies: NaverNewsIssuePointBlobRuntimeDependencies = {},
 ) {
+  const stageTimingEnabled =
+    isProductionRuntime(environment)
+    && environment.FANDEX_NAVER_NEWS_STAGE_TIMINGS?.trim() === '1';
   const stageTimer = createNaverNewsBlobReadStageTimer({
     // Opt-in is required even on the Production host; no default log noise.
-    enabled:
-      isProductionRuntime(environment)
-      && environment.FANDEX_NAVER_NEWS_STAGE_TIMINGS?.trim() === '1',
+    enabled: stageTimingEnabled,
   });
   if (!isProductionRuntime(environment)) {
     diagnostic('production-runtime-gate-failed');
@@ -393,6 +402,6 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       variableId: 'newsIssuePoint',
       throughSlotStart,
     },
-    runtime(store, stageTimer),
+    runtime(store, stageTimer, stageTimingEnabled),
   );
 }
