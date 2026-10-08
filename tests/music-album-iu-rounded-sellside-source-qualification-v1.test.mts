@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { createReportedAlbumSalesObservation } from '../lib/alternative-evidence/reportedAlbumSalesEvidence';
+import { buildReportedAlbumSalesProductionEvidenceQualificationRequest, createReportedAlbumSalesProductionEvidenceQualificationBinding } from '../lib/alternative-evidence/reportedAlbumSalesProductionEvidenceQualification';
+import { buildReportedAlbumSalesProductionSourceCandidate } from '../lib/alternative-evidence/reportedAlbumSalesProductionSource';
 
 const source = JSON.parse(readFileSync(
   'data/fandex-cloud-v10/product/iu_music_album_rounded_sellsider_research_source_v1.json',
@@ -61,4 +64,98 @@ test('rights, durable writes, public score and evidence redistribution remain bl
     'productActivationAuthorized',
   ]) assert.equal(source.qualification[field], false, field);
   assert.equal(source.noOutreachPerformed, true);
+});
+
+test('rounded Tier B sell-side evidence fails actual numeric production gate', () => {
+  // Preserve the original chart precision: an exact integer observation and
+  // an inclusive seven-day provider period are NOT present in this source.
+  const observation = createReportedAlbumSalesObservation({
+    canonicalArtistId: source.canonicalArtistId,
+    artistName: 'IU',
+    release: {
+      canonicalReleaseId: null,
+      identityState: 'candidate',
+      releaseTitle: 'A Flower Bookmark 3',
+      releaseDate: '2025-05-28',
+      edition: null,
+      skuOrBarcode: null,
+      providerReleaseId: null,
+    },
+    metricSemantic: 'hanteo-first-week-sales',
+    value: source.observedChart.exactPhysicalCopyValue,
+    unit: 'physical-copies',
+    providerPeriodStart: source.observedChart.explicitProviderPeriodStart,
+    providerPeriodEnd: source.observedChart.explicitProviderPeriodEnd,
+    observedAt: null,
+    reportedAt: null,
+    collectedAt: '2026-10-08T13:00:00+09:00',
+    underlyingProvider: source.source.underlyingDataProvider,
+    territory: null,
+    format: 'physical-album',
+    supportingEvidence: [{
+      evidenceId: source.source.evidenceId,
+      sourceTier: source.source.tier,
+      reportingSource: source.source.issuer,
+      sourceUrl: source.source.url,
+      sourcePublicationDate: source.source.publishedDocumentDate,
+      sourcePublishedAt: null,
+      reportedAt: null,
+      collectedAt: '2026-10-08T13:00:00+09:00',
+      extractionMethod: 'manual-reviewed-web-research',
+      underlyingProvider: source.source.underlyingDataProvider,
+    }],
+    lifecycle: 'research',
+  });
+
+  const request = buildReportedAlbumSalesProductionEvidenceQualificationRequest(observation);
+  assert.equal(request.value, null);
+  assert.equal(request.providerPeriodStart, null);
+  assert.equal(request.providerPeriodEnd, null);
+  const decision = (supportedClaims: Array<
+    'exact-value' | 'explicit-provider-period' | 'underlying-provider'
+  >) => ({
+    requestId: request.requestId,
+    evidenceId: source.source.evidenceId,
+    supportedClaims,
+    reviewEvidenceRefs: ['test:rounded-source-review'],
+    reviewerRef: 'test:reviewer',
+    reviewedAt: '2026-10-08T13:05:00+09:00',
+  });
+
+  // Merely marking the chart as Tier B and manually reviewing it
+  // cannot manufacture an exact copy count or provider-period evidence.
+  assert.throws(
+    () => createReportedAlbumSalesProductionEvidenceQualificationBinding({
+      request, decision: decision(['exact-value']),
+    }),
+    /exact_value_missing/,
+  );
+  assert.throws(
+    () => createReportedAlbumSalesProductionEvidenceQualificationBinding({
+      request, decision: decision(['explicit-provider-period']),
+    }),
+    /period_missing/,
+  );
+
+  // A reviewer may bind an underlying-provider attribution, but a partial
+  // source claim must never qualify the numeric observation as Production.
+  const providerOnly = createReportedAlbumSalesProductionEvidenceQualificationBinding({
+    request, decision: decision(['underlying-provider']),
+  });
+  assert.equal(providerOnly.confirmedValue, null);
+  assert.equal(providerOnly.confirmedProviderPeriodStart, null);
+  assert.equal(providerOnly.confirmedProviderPeriodEnd, null);
+  const candidate = buildReportedAlbumSalesProductionSourceCandidate({
+    observation,
+    asOfDate: '2026-10-08',
+    evidenceQualifications: [providerOnly],
+  });
+  assert.equal(candidate.productSourceEligible, false);
+  assert.equal(candidate.durableNormalizedStorageEligible, false);
+  assert.equal(candidate.numericScoreProduced, false);
+  assert.ok(candidate.blockers.includes('exact-value-unavailable'));
+  assert.ok(candidate.blockers.includes('provider-period-incomplete'));
+  assert.ok(candidate.blockers.includes('tier-a-or-b-exact-value-evidence-missing'));
+  assert.ok(candidate.blockers.includes('tier-a-or-b-provider-period-evidence-missing'));
+  assert.ok(candidate.blockers.includes('rights-commercial-use-not-authorized'));
 });
