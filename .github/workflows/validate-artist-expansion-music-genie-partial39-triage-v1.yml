@@ -13,6 +13,7 @@ on:
       - 'data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_missing14_last2_native_release_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json'
       - 'scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.py'
