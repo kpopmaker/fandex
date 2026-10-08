@@ -135,6 +135,59 @@ def main() -> None:
         "noProductActivation": True,
     }
 
+    # An independent debut-year report is evidence, NOT a provider detail-year backfill.
+    independent = queue["independentDebutYearCorroborationV2"]
+    assert independent["version"] == "music_genie_partial39_independent_year_evidence_batch_v2"
+    assert independent["status"] == "external_evidence_verified_candidate_only_no_binding"
+    assert independent["reviewedOn"] == "2026-10-08"
+    assert independent["count"] == len(independent["records"]) == 8
+    assert independent["dispositionCounts"] == {
+        "canonical_debut_year_unavailable": 6,
+        "both_debut_years_unavailable": 2,
+    }
+    source_expected = {
+        "leehi": (2012, 2012, "80158970"),
+        "jypark": (1994, 1994, "14945855"),
+        "sf9": (2016, 2016, "80546873"),
+        "b1a4": (2011, 2011, "80131588"),
+        "jeongsewoon": (2017, 2017, "80590751"),
+        "kard": (2017, None, "81305280"),
+        "up10tion": (2015, None, "81290806"),
+        "xlov": (2025, 2025, "82757745"),
+    }
+    assert {r["canonicalArtistId"] for r in independent["records"]} == set(source_expected)
+    assert len({r["pinnedGenieProviderArtistId"] for r in independent["records"]}) == 8
+    for source_report in independent["records"]:
+        ident = source_report["canonicalArtistId"]
+        reported_year, provider_year, provider_id = source_expected[ident]
+        row = next(x for x in rows if x["canonicalArtistId"] == ident)
+        assert ident in unresolved and ident not in supported and ident not in targets
+        assert row["genieProviderArtistId"] == source_report["pinnedGenieProviderArtistId"] == provider_id
+        assert row["genieDebutYear"] == source_report["genieDetailDebutYear"] == provider_year
+        assert row["canonicalDebutYear"] is None
+        assert row["evidenceGap"] == source_report["sourceDisposition"]
+        assert source_report["externallyCorroboratedDebutYear"] == reported_year
+        assert source_report["evidencePublisher"] and source_report["evidenceType"]
+        assert source_report["evidenceYearSemantics"]
+        assert source_report["summary"]
+        assert source_report["url"].startswith("https://")
+        assert source_report["reviewStatus"] == "external_corroboration_candidate_not_reviewed_binding"
+        assert source_report["canonicalYearPopulated"] is False
+        assert source_report["genieYearBackfilled"] is False
+        assert source_report["musicSupportedPromoted"] is False
+    decision = independent["decisionBoundary"]
+    for key in (
+        "externalDebutYearDoesNotReplaceProviderDetailYear",
+        "canonicalArtistIdAuthoritative",
+        "groupCareerDebutAndSoloDebutAreNotInterchangeable",
+        "independentlyReportedDebutYearDoesNotMakeReviewedBinding",
+        "allEightRemainUnresolved",
+        "doesNotReduceMusicUnresolvedCount",
+    ):
+        assert decision[key] is True, key
+    assert decision["productActivationAuthorized"] is False
+    assert independent["nextGate"] == "HUMAN_REVIEW_DEBUT_YEAR_SEMANTICS_AND_PROVIDER_ID_DETAILS"
+
     observation = queue["sourceIntegrityObservation"]
     assert observation["full264RawArtifact"] == {"ambiguousExact": 47, "ambiguousWrapper": 72}
     assert observation["full264CommittedReceipt"] == {"ambiguousExact": 46, "ambiguousWrapper": 73}
@@ -164,7 +217,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | Music 117/238/0 | Product unchanged"
     )
 
 
