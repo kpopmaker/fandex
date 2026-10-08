@@ -660,6 +660,102 @@ def main() -> None:
         "GENIE_SUPERJUNIOR_MADDOX_INDIVIDUAL_BINDING_AND_ALIAS_SCOPE_HUMAN_REVIEW_REQUIRED"
     )
 
+    # A blank native Genie '년' field and matching romanized display are not a binding.
+    missing14 = load(SOURCE / "music_genie_partial39_missing14_year_and_alias_conflict_review_packet_v1.json")
+    assert missing14["version"] == (
+        "music_genie_partial39_missing14_year_and_alias_conflict_review_packet_v1"
+    )
+    assert missing14["status"] == (
+        "live_provider_blanks_and_four_independent_alternate_profiles_qualified_nonactivating"
+    )
+    assert missing14["source"] == "music_chart" and missing14["provider"] == "genie"
+    assert missing14["canonicalUniverseCount"] == 355
+    assert missing14["sourceGapCohorts"] == {
+        "originalGenieYearOnlyMissing": 7,
+        "originalBothYearsMissing": 7,
+        "total14": 14,
+    }
+    origin = missing14["sourceLineage"]
+    assert origin["originalGenieExact94RunId"] == 37560176276
+    assert origin["readOnlyLiveRunId"] == 37787288229
+    assert origin["liveJobId"] == 113345190993
+    assert origin["liveExactHead"] == "4113b23b00bb33dfea329019e089050d2272ff6a"
+    assert origin["artifactId"] == 11553979146
+    assert origin["artifactDigest"] == (
+        "sha256:d64b90f5542ceeb4962b9988618b383f5d1974ff10b76d46ecd58308fbd79d45"
+    )
+    records14 = missing14["historicalSelectedProviderRecords"]
+    expected_ids14 = {
+        "nexz", "boystory", "afterschool", "pow", "tiot", "mirae", "x1",
+        "brothersu", "mino", "girlset", "ejel", "up10tion", "kard", "chen",
+    }
+    assert len(records14) == len(expected_ids14) == 14
+    assert {row["canonicalArtistId"] for row in records14} == expected_ids14
+    assert len({row["historicallySelectedProviderArtistId"] for row in records14}) == 14
+    assert sum(row["canonicalDebutYear"] is not None for row in records14) == 7
+    for row in records14:
+        cid = row["canonicalArtistId"]
+        originally_selected = next(x for x in rows if x["canonicalArtistId"] == cid)
+        assert row["historicallySelectedProviderArtistId"] == originally_selected["genieProviderArtistId"]
+        assert row["originalYearGap"] == originally_selected["evidenceGap"]
+        assert row["canonicalDebutYear"] == originally_selected["canonicalDebutYear"]
+        assert row["originalGenieDebutYear"] is None
+        assert originally_selected["genieDebutYear"] is None
+        assert row["currentGenieYearFieldRaw"] == "년"
+        assert row["currentProviderDebutYear"] is None
+        assert row["currentDetailFetchedHttp200"] is True
+        assert row["currentProviderActivityTypeRaw"]
+        assert row["providerAliasWasOriginalExact94Candidate"] is True
+        assert row["identicalNamedEntitiesNotSufficientForBinding"] is True
+        assert row["currentSourceState"] == "unresolved"
+        for flag in ("automaticBindingApproved", "canonicalYearBackfillApproved", "sourceSupportedPromotionApproved"):
+            assert row[flag] is False
+        assert cid in unresolved and cid not in supported and cid not in unsupported
+    expected_alternates = {
+        "nexz": ("81122242", "82295319", "남성/그룹", 2023, 2024),
+        "afterschool": ("82301148", "73393086", "여성/그룹", 2009, 2009),
+        "pow": ("14942969", "82162931", "남성/그룹", 2023, 2023),
+        "ejel": ("81567146", "81021446", "여성/솔로", 2021, None),
+    }
+    alternatives = missing14["alternativeIdentityReviewCandidates"]
+    assert len(alternatives) == len(expected_alternates) == 4
+    assert {x["canonicalArtistId"] for x in alternatives} == set(expected_alternates)
+    assert len({x["qualifiedAlternateProviderArtistId"] for x in alternatives}) == 4
+    for alt in alternatives:
+        cid = alt["canonicalArtistId"]
+        old_id, alternate_id, activity, year, canonical_year = expected_alternates[cid]
+        assert alt["originalSelectedProviderArtistId"] == old_id
+        assert alt["qualifiedAlternateProviderArtistId"] == alternate_id
+        assert old_id != alternate_id
+        assert alt["alternateActivityType"] == activity
+        assert alt["alternateProviderDebutYear"] == year
+        assert alt["canonicalDebutYear"] == canonical_year
+        assert alt["providerDetailUrl"] == (
+            "https://www.genie.co.kr/detail/artistInfo?xxnm=" + alternate_id
+        )
+        assert alt["liveDetailHttp200"] is True
+        assert alt["liveAliasAndTypeAndYearMatched"] is True
+        assert alt["reviewStatus"] == "identity_and_debut_scope_human_review_pending"
+        assert alt["alternateProviderIdBindingApproved"] is False
+        assert alt["sourceYearBackfillApproved"] is False
+        assert alt["sourceSupportedPromotionApproved"] is False
+        assert cid in unresolved and cid not in targets
+    assert missing14["dispositionSummary"]["newProviderYearRecoveredOnHistoricallySelectedId"] == 0
+    assert missing14["dispositionSummary"]["independentAlternateProfilesMetadataMatched"] == 4
+    assert missing14["dispositionSummary"]["oldCandidateProviderIdsReplacedInAnyActiveSeed"] == 0
+    assert missing14["dispositionSummary"]["chenSelectedCandidateRawActivityType"] == "여성/솔로"
+    assert missing14["dispositionSummary"]["ejelSelectedCandidateRawActivityType"] == "남성/솔로"
+    assert missing14["dispositionSummary"]["nexzAlternateGenieYear"] == 2023
+    assert missing14["dispositionSummary"]["nexzCanonicalFormalDebutYear"] == 2024
+    assert missing14["dispositionSummary"]["providerDebutYearCannotBeAssumedFormalReleaseDebut"] is True
+    assert set(missing14["safety"].values()) == {True}
+    assert missing14["currentMusicSourcePartition"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    assert missing14["nextGate"] == (
+        "MISSING14_PROVIDER_IDENTITY_GENDER_SCOPE_ALTERNATE_DETAIL_HUMAN_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -683,7 +779,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 4 alternate profiles held | Music 117/238/0 | Product unchanged"
     )
 
 
