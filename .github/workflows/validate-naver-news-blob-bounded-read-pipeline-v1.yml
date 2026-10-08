@@ -43,7 +43,8 @@ jobs:
       - name: Safety boundary
         if: always()
         run: |
-          echo "maxConcurrentBlobReads=8"
+          echo "maxConcurrentManifestBlobReads=8"
+          echo "maxConcurrentCanonicalBlobReads=12"
           echo "officialSlotOrderPreserved=true"
           echo "missingIsNotZero=true"
           echo "completedEvidenceCache=false"
