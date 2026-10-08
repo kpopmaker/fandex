@@ -552,3 +552,104 @@ test('cross-source exact-value and first-week period laundering stays blocked ev
   assert.deepEqual(coherent.blockers, []);
   assert.equal(coherent.productSourceEligible, true);
 });
+
+
+test('unrelated dated source cannot rescue undated exact-sales period evidence', () => {
+  const undatedSource = observation({ sourcePublicationDate: null });
+  const mixedSources = createReportedAlbumSalesObservation({
+    canonicalArtistId: undatedSource.canonicalArtistId,
+    artistName: undatedSource.artistName,
+    release: undatedSource.release,
+    metricSemantic: undatedSource.metricSemantic,
+    value: undatedSource.value,
+    unit: undatedSource.unit,
+    providerPeriodStart: undatedSource.providerPeriodStart,
+    providerPeriodEnd: undatedSource.providerPeriodEnd,
+    observedAt: undatedSource.observedAt,
+    reportedAt: undatedSource.reportedAt,
+    collectedAt: undatedSource.collectedAt,
+    underlyingProvider: undatedSource.underlyingProvider,
+    territory: undatedSource.territory,
+    format: undatedSource.format,
+    revision: undatedSource.revision,
+    supportingEvidence: [
+      ...undatedSource.supportingEvidence,
+      {
+        ...undatedSource.supportingEvidence[0],
+        evidenceId: 'fixture:dated-but-unrelated',
+        reportingSource: 'Fixture Unrelated Dated News',
+        sourceUrl: 'https://example.com/unrelated-dated-source',
+        sourcePublicationDate: '2026-10-08',
+      },
+    ],
+    lifecycle: 'research',
+  });
+  const request =
+    buildReportedAlbumSalesProductionEvidenceQualificationRequest(
+      mixedSources,
+    );
+  const reviewed = (evidenceId: string) =>
+    createReportedAlbumSalesProductionEvidenceQualificationBinding({
+      request,
+      decision: {
+        requestId: request.requestId,
+        evidenceId,
+        supportedClaims: [
+          'exact-value',
+          'explicit-provider-period',
+          'metric-semantic',
+          'underlying-provider',
+        ],
+        reviewEvidenceRefs: ['review:fixture:same-source-period-claims'],
+        reviewerRef: 'reviewer:music-album:fixture',
+        reviewedAt: '2026-10-08T10:15:00+09:00',
+      },
+    });
+
+  const base = {
+    observation: mixedSources,
+    asOfDate: '2026-10-08',
+    rightsReview: reviewedRights(mixedSources),
+    releaseIdentityBinding: reviewedReleaseBinding(mixedSources),
+  };
+  // This was previously erroneously eligible: some unrelated Tier B evidence
+  // was dated, while the actual exact-sales+period binding was undated.
+  const undatedQualified = buildReportedAlbumSalesProductionSourceCandidate({
+    ...base,
+    evidenceQualifications: [reviewed('fixture:reported-web:1')],
+  });
+  assert.equal(undatedQualified.rightsState, 'authorized');
+  assert.equal(undatedQualified.availability, 'available');
+  assert.equal(undatedQualified.releaseIdentityReviewState, 'human-reviewed');
+  assert.deepEqual(undatedQualified.evidenceClaimCoverage, [
+    'exact-value',
+    'explicit-provider-period',
+    'metric-semantic',
+    'underlying-provider',
+  ]);
+  assert.equal(undatedQualified.productSourceEligible, false);
+  assert.equal(undatedQualified.durableNormalizedStorageEligible, false);
+  assert.ok(undatedQualified.blockers.includes(
+    'source-publication-date-missing',
+  ));
+  assert.equal(undatedQualified.numericScoreProduced, false);
+
+  // Positive control: a separate *dated and actually reviewed* source can
+  // satisfy provenance; no requirement for every candidate source to be dated.
+  const datedQualified = buildReportedAlbumSalesProductionSourceCandidate({
+    ...base,
+    evidenceQualifications: [reviewed('fixture:dated-but-unrelated')],
+  });
+  assert.deepEqual(datedQualified.blockers, []);
+  assert.equal(datedQualified.productSourceEligible, true);
+
+  const twoBindings = buildReportedAlbumSalesProductionSourceCandidate({
+    ...base,
+    evidenceQualifications: [
+      reviewed('fixture:reported-web:1'),
+      reviewed('fixture:dated-but-unrelated'),
+    ],
+  });
+  assert.deepEqual(twoBindings.blockers, []);
+  assert.equal(twoBindings.productSourceEligible, true);
+});
