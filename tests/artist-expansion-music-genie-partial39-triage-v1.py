@@ -601,6 +601,27 @@ def main() -> None:
     assert sj["providerQualifiedCandidate"]["providerActivityType"] == "남성/그룹"
     assert sj["providerQualifiedCandidate"]["sourceAliasWrapperReviewRequired"] is True
     assert sj["providerQualifiedCandidate"]["exactNameSearchReturned"] is False
+    sj_native = sj["providerQualifiedCandidate"]["nativeSongLinks"]
+    assert sj["providerQualifiedCandidate"]["twoIndependentNativeSongArtistLinksAgree"] is True
+    assert len(sj_native) == 2
+    assert {x["songId"] for x in sj_native} == {"33392229", "75594969"}
+    assert all(x["exactProviderArtistId"] == "21060178" for x in sj_native)
+    assert all(x["url"].startswith("https://www.genie.co.kr/detail/songInfo?") for x in sj_native)
+    assert sj["otherHistoricalCandidate"]["excludedFromFullGroupSongLinks"] is True
+    native_cross = verified["nativeGroupReleaseCrosscheck"]
+    assert native_cross["workflowRunId"] == 37784929571
+    assert native_cross["jobId"] == 113337120064
+    assert native_cross["exactHead"] == "46170892c84a31521c576d7e01bfb4d654d1a80b"
+    assert native_cross["artifactId"] == 11554181025
+    assert native_cross["artifactDigest"] == (
+        "sha256:face4ba0759703ee0094812dac670294e96294e5b86981da6305e177e6df0ed8"
+    )
+    assert native_cross["result"] == "success"
+    assert native_cross["validatedGenieSongIds"] == ["33392229", "75594969"]
+    assert native_cross["verifiedFullGroupId"] == "21060178"
+    assert native_cross["confirmedNotSubunitId"] == "80150326"
+    assert native_cross["allNativeArtistLinksHttp200"] is True
+    assert native_cross["noBindingApplication"] is True
     assert sj["otherHistoricalCandidate"]["providerArtistId"] == "80150326"
     assert sj["otherHistoricalCandidate"]["shouldNotBindToSuperjuniorGroup"] is True
     assert sj["otherHistoricalCandidate"]["isSeparateSubunitOfCanonicalGroup"] is True
@@ -662,7 +683,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified pending review | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | Music 117/238/0 | Product unchanged"
     )
 
 
