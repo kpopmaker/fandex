@@ -107,8 +107,8 @@ def extract_song_artist_links(html: str) -> dict:
     title = " ".join(heading.stripped_strings).strip() if heading else ""
     plain = " ".join(soup.stripped_strings)
     found = {}
-    pat = re.compile(r"fnViewArtist\\(['\\\"]([0-9]+)['\\\"]\\)", re.I)
-    href_pat = re.compile(r"artistInfo\\?xxnm=([0-9]+)", re.I)
+    pat = re.compile(r"""fnViewArtist\(['"]([0-9]+)['"]\)""", re.I)
+    href_pat = re.compile(r"artistInfo\?xxnm=([0-9]+)", re.I)
     for anchor in soup.find_all("a"):
         name = " ".join(anchor.stripped_strings).strip()
         if not name:
