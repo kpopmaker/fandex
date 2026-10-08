@@ -88,6 +88,7 @@ on:
       - 'tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts'
       - 'tests/iu-music-album-first-week-source-search-audit-v1.test.mts'
       - 'tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts'
+      - 'tests/iu-music-album-official-first-week-evidence-request-v1.test.mts'
       - 'tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts'
       - 'tests/reported-album-sales-research-history-v1.test.mts'
       - 'tests/reported-album-sales-research-input-v1.test.mts'
@@ -104,6 +105,7 @@ on:
       - 'data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json'
+      - 'data/fandex-cloud-v10/product/iu_music_album_official_first_week_evidence_request_v1.json'
       - 'data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json'
       - 'tests/music-album-point-product-contract-readiness-v1.test.mts'
       - 'tests/music-album-reported-web-product-readiness-v1.test.mts'
@@ -239,6 +241,7 @@ jobs:
           tests/iu-music-album-current-release-review-decision-candidate-v1.test.mts
           tests/iu-music-album-first-week-source-search-audit-v1.test.mts
           tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts
+          tests/iu-music-album-official-first-week-evidence-request-v1.test.mts
           tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
           tests/reported-album-sales-research-history-v1.test.mts
           tests/reported-album-sales-research-input-v1.test.mts
@@ -255,6 +258,7 @@ jobs:
           data/fandex-cloud-v10/product/iu_music_album_current_release_review_decision_candidate_v1.json
           data/fandex-cloud-v10/product/iu_music_album_first_week_source_search_audit_v1.json
           data/fandex-cloud-v10/product/iu_music_album_hanteo_historical_selector_research_v1.json
+          data/fandex-cloud-v10/product/iu_music_album_official_first_week_evidence_request_v1.json
           data/fandex-cloud-v10/product/iu_music_album_reported_web_rights_review_intake_v1.json
           tests/music-album-point-product-contract-readiness-v1.test.mts
           tests/music-album-reported-web-product-readiness-v1.test.mts
@@ -348,6 +352,8 @@ jobs:
 
       - name: IU Hanteo historical selector research regression
         run: npx tsx --test tests/iu-music-album-hanteo-historical-selector-research-v1.test.mts
+      - name: IU official first-week evidence request regression
+        run: npx tsx --test tests/iu-music-album-official-first-week-evidence-request-v1.test.mts
 
       - name: IU reported web rights review intake regression
         run: npx tsx --test tests/iu-music-album-reported-web-rights-review-intake-v1.test.mts
