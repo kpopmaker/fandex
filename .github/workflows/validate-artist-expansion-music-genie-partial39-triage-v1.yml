@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - research/artist-expansion-music-genie-partial39-triage-v1
+  pull_request:
+    paths:
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
+      - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
+      - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,6 +20,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
