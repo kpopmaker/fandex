@@ -229,6 +229,7 @@ function productionBlockers(input: Readonly<{
   evidenceQualificationsProvided: boolean;
   evidenceQualificationsValid: boolean;
   exactValuePeriodSameEvidenceBinding: boolean;
+  exactValuePeriodDatedEvidenceBinding: boolean;
   evidenceClaimCoverage:
     ReadonlySet<ReportedAlbumSalesProductionEvidenceClaim>;
 }>): readonly ReportedAlbumSalesProductionBlocker[] {
@@ -294,8 +295,14 @@ function productionBlockers(input: Readonly<{
   }
   if (
     eligibleEvidence.length > 0
-    && eligibleEvidence.every(
-      item => item.sourcePublicationDate === null,
+    && (
+      eligibleEvidence.every(
+        item => item.sourcePublicationDate === null,
+      )
+      || (
+        input.exactValuePeriodSameEvidenceBinding
+        && !input.exactValuePeriodDatedEvidenceBinding
+      )
     )
   ) {
     blockers.push('source-publication-date-missing');
@@ -404,6 +411,14 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       binding.supportedClaims.includes('exact-value')
       && binding.supportedClaims.includes('explicit-provider-period'),
     );
+  // An unrelated dated source must not supply the publication-date
+  // provenance for an undated exact-copies + provider-period review.
+  const exactValuePeriodDatedEvidenceBinding =
+    validEvidenceQualifications.some(binding =>
+      binding.supportedClaims.includes('exact-value')
+      && binding.supportedClaims.includes('explicit-provider-period')
+      && binding.sourcePublicationDate !== null,
+    );
   const evidenceClaimCoverage = new Set<
     ReportedAlbumSalesProductionEvidenceClaim
   >(
@@ -432,6 +447,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
         evidenceQualifications.length > 0,
       evidenceQualificationsValid,
       exactValuePeriodSameEvidenceBinding,
+      exactValuePeriodDatedEvidenceBinding,
       evidenceClaimCoverage,
     }),
     ...(
