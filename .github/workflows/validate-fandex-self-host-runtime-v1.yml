@@ -231,3 +231,129 @@ jobs:
         run: >-
           docker rm -f fandex-self-host-brand-fit-v1
           >/dev/null 2>&1 || true
+
+      - name: Verify Render Production Brand Fit Product runtime
+        run: |
+          set -euo pipefail
+          base='https://fandex-product-self-host-v1.onrender.com'
+
+          for attempt in $(seq 1 40); do
+            status="$(curl               --silent               --show-error               --location               --retry 0               --connect-timeout 10               --max-time 20               --output /tmp/fandex-render-health.json               --write-out '%{http_code}'               "${base}/api/health" || true)"
+
+            if [[ "${status}" == "200" ]]; then
+              break
+            fi
+
+            if [[ "${attempt}" -eq 40 ]]; then
+              echo "FANDEX_RENDER_HEALTH_HTTP=${status:-request-failed}"
+              exit 1
+            fi
+
+            sleep 3
+          done
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = JSON.parse(
+            fs.readFileSync('/tmp/fandex-render-health.json', 'utf8'),
+          );
+
+          if (
+            value?.ok !== true
+            || value?.service !== 'fandex'
+            || value?.runtime !== 'nodejs'
+          ) {
+            throw new Error('render-health-contract-failed');
+          }
+          NODE
+
+          url="${base}/artists/iu/fandex-beta"
+
+          for attempt in $(seq 1 20); do
+            status="$(curl               --silent               --show-error               --location               --retry 0               --connect-timeout 10               --max-time 30               --output /tmp/fandex-render-beta.html               --write-out '%{http_code}'               "${url}" || true)"
+
+            if [[ "${status}" == "200" ]]; then
+              break
+            fi
+
+            if [[ "${attempt}" -eq 20 ]]; then
+              echo "FANDEX_RENDER_BETA_HTTP=${status:-request-failed}"
+              exit 1
+            fi
+
+            sleep 3
+          done
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync(
+            '/tmp/fandex-render-beta.html',
+            'utf8',
+          );
+
+          const start = html.indexOf('brandFitPoint');
+          const end = html.indexOf(
+            'comebackActivityPoint',
+            start + 'brandFitPoint'.length,
+          );
+
+          if (start < 0 || end < 0) {
+            throw new Error('render-brand-fit-card-not-found');
+          }
+
+          const card = html.slice(start, end);
+
+          const required = [
+            'verified-commercial-partnership-activity',
+            'Research',
+            'real',
+          ];
+          const forbidden = [
+            '런타임 확인 필요',
+            'durable-stored-evidence-runtime-unavailable',
+            'durable-stored-evidence-not-found',
+            'runtime-read-failed',
+          ];
+
+          const requiredPresence = Object.fromEntries(
+            required.map((value) => [value, card.includes(value)]),
+          );
+          const blockerPresence = Object.fromEntries(
+            forbidden.map((value) => [value, card.includes(value)]),
+          );
+
+          console.log(JSON.stringify({
+            renderBrandFitRequiredPresence: requiredPresence,
+            renderBrandFitBlockerPresence: blockerPresence,
+          }));
+
+          for (const value of forbidden) {
+            if (card.includes(value)) {
+              throw new Error(
+                'render-brand-fit-runtime-blocker-present:' + value,
+              );
+            }
+          }
+
+          for (const value of required) {
+            if (!card.includes(value)) {
+              throw new Error(
+                'render-brand-fit-required-value-missing:' + value,
+              );
+            }
+          }
+
+          console.log(JSON.stringify({
+            renderBrandFitRuntime: 'ok',
+            productSurface: '/artists/iu/fandex-beta',
+            valueState:
+              'verified-commercial-partnership-activity',
+            lifecycle: 'research',
+            materialClass: 'real',
+            providerCalls: 0,
+            blobWrites: 0,
+            databaseWrites: 0,
+            productActivations: 0,
+            publications: 0,
+          }));
+          NODE
