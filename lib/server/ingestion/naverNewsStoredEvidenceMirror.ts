@@ -728,6 +728,10 @@ export type NaverNewsMirrorManifestReadPhaseStats = Readonly<{
   manifestsRequested: number;
   manifestsFound: number;
   manifestsMissing: number;
+  // Fixed safe repository ceiling; never sourced from an environment secret.
+  configuredMaxConcurrentReads: typeof MAX_CONCURRENT_MIRROR_EVIDENCE_READS;
+  // Actual overlap of remote readText calls, not a request-rate estimate.
+  peakConcurrentRemoteReads: number;
   listWallMs: number;
   remoteReadSumMs: number;
   remoteReadMaxMs: number;
@@ -751,6 +755,8 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
       let manifestsRequested = 0;
       let manifestsFound = 0;
       let manifestsMissing = 0;
+      let activeRemoteReads = 0;
+      let peakConcurrentRemoteReads = 0;
       let listWallMs = 0;
       let remoteReadSumMs = 0;
       let remoteReadMaxMs = 0;
@@ -787,9 +793,15 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
 
             const readStarted = performance.now();
             let body: string | null;
+            activeRemoteReads += 1;
+            peakConcurrentRemoteReads = Math.max(
+              peakConcurrentRemoteReads,
+              activeRemoteReads,
+            );
             try {
               body = await store.readText(pathname);
             } finally {
+              activeRemoteReads -= 1;
               const duration = elapsed(readStarted);
               remoteReadSumMs += duration;
               remoteReadMaxMs = Math.max(remoteReadMaxMs, duration);
@@ -827,6 +839,8 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
               manifestsRequested,
               manifestsFound,
               manifestsMissing,
+              configuredMaxConcurrentReads: MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+              peakConcurrentRemoteReads,
               listWallMs,
               remoteReadSumMs,
               remoteReadMaxMs,
