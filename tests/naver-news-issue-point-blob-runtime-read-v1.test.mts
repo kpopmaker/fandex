@@ -597,3 +597,76 @@ test('News stage timing preserves fail-closed credential resolution failure', as
   assert.match(matching[0]!, /"outcome":"rejected"/);
   assert.doesNotMatch(matching[0]!, /sensitive-token-lookup-failure/);
 });
+
+
+test('canonical concurrency experiment is independent of stage timings and requires exact Production opt-in', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(protocolStart + index * 60 * 60_000).toISOString(),
+    );
+  }
+
+  async function probe(concurrency: string | undefined, stageTimings: string | undefined) {
+    let active = 0;
+    let peak = 0;
+    const result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        BLOB_READ_WRITE_TOKEN: 'test-only-no-remote-requests',
+        ...(stageTimings ? { FANDEX_NAVER_NEWS_STAGE_TIMINGS: stageTimings } : {}),
+        ...(concurrency ? { FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY: concurrency } : {}),
+      },
+      {
+        createReadStore() {
+          return {
+            listPathnames: store.listPathnames,
+            async readText(pathname: string) {
+              if (!pathname.includes('/jobs/')) return store.readText(pathname);
+              active += 1;
+              peak = Math.max(peak, active);
+              try {
+                await new Promise<void>((resolve) => setTimeout(resolve, 3));
+                return await store.readText(pathname);
+              } finally {
+                active -= 1;
+              }
+            },
+          };
+        },
+      },
+    );
+    assert.equal(result.status, 'ok');
+    assert.equal(active, 0);
+    return peak;
+  }
+
+  // Render already enables STAGE_TIMINGS=1; this alone must never enable 12.
+  const baseline = await probe(undefined, '1');
+  const unknown = await probe('11', '1');
+  const optedIn = await probe('12', '1');
+  const withoutDiagnostics = await probe('12', undefined);
+  assert.ok(baseline > 1 && baseline <= 8);
+  assert.ok(unknown > 1 && unknown <= 8);
+  assert.ok(optedIn > 8 && optedIn <= 12);
+  assert.ok(withoutDiagnostics > 8 && withoutDiagnostics <= 12);
+
+  let createReadStoreCalled = false;
+  const nonProduction = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+    {
+      FANDEX_PRODUCT_RUNTIME_ENV: 'preview',
+      FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY: '12',
+      BLOB_READ_WRITE_TOKEN: 'test-only-no-remote-requests',
+    },
+    {
+      createReadStore() {
+        createReadStoreCalled = true;
+        throw new Error('non-production-store-must-not-be-created');
+      },
+    },
+  );
+  assert.equal(nonProduction.status, 'data-issue');
+  assert.equal(createReadStoreCalled, false);
+});
