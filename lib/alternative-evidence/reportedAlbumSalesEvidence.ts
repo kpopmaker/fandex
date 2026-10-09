@@ -171,14 +171,24 @@ function assertInstant(
   }
 }
 
+// Strict civil-calendar dates: JS Date.parse normalizes impossible days
+// (for example, 2025-02-30 becomes 2025-03-02). No implicit repair is allowed.
+export function isReportedAlbumSalesCalendarDate(
+  value: string | null,
+): value is string {
+  if (value === null || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+  const instant = Date.parse(`${value}T00:00:00Z`);
+  return Number.isFinite(instant)
+    && new Date(instant).toISOString().slice(0, 10) === value;
+}
+
 function validateDate(
   label: string,
   value: string | null,
 ): void {
-  if (
-    value !== null
-    && !/^\d{4}-\d{2}-\d{2}$/.test(value)
-  ) {
+  if (value !== null && !isReportedAlbumSalesCalendarDate(value)) {
     throw new Error(
       `reported_album_sales_${label}_invalid:${value}`,
     );
