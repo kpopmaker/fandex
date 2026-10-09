@@ -139,9 +139,14 @@ test('manifest read phase summarizes complete verified evidence without leaking 
   assert.equal(summary.manifestsRequested, 2);
   assert.equal(summary.manifestsFound, 2);
   assert.equal(summary.manifestsMissing, 0);
+  assert.equal(summary.configuredMaxConcurrentReads, 8);
+  assert.ok(typeof summary.peakConcurrentRemoteReads === 'number');
+  assert.ok((summary.peakConcurrentRemoteReads as number) >= 1);
+  assert.ok((summary.peakConcurrentRemoteReads as number) <= 8);
   assert.deepEqual(Object.keys(summary).sort(), [
     'contractVersion', 'outcome', 'manifestsRequested', 'manifestsFound',
-    'manifestsMissing', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'manifestsMissing', 'configuredMaxConcurrentReads',
+    'peakConcurrentRemoteReads', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
     'decodeSumMs', 'decodeMaxMs', 'wallMs',
   ].sort());
   for (const key of [
@@ -153,6 +158,54 @@ test('manifest read phase summarizes complete verified evidence without leaking 
   const serialized = JSON.stringify(summary);
   assert.ok(plans.every((plan) => !serialized.includes(plan.identity.jobId)));
   assert.doesNotMatch(serialized, /stored-evidence-mirror\/v1\/|news\.example|아이유/);
+});
+
+test('manifest remote read peak measures actual overlap without exceeding eight slots', async () => {
+  const store = new MemoryImmutableStore();
+  const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
+  const plans = Array.from({ length: 29 }, (_, index) =>
+    planAt(new Date(protocolStart + index * 60 * 60_000).toISOString()),
+  );
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  let active = 0;
+  let observedPeak = 0;
+  const meteredStore = {
+    listPathnames: (prefix: string) => store.listPathnames(prefix),
+    async readText(pathname: string): Promise<string | null> {
+      active += 1;
+      observedPeak = Math.max(observedPeak, active);
+      try {
+        await new Promise<void>((resolve) => setTimeout(resolve, 3));
+        return await store.readText(pathname);
+      } finally {
+        active -= 1;
+      }
+    },
+  };
+  const summaries: Array<{
+    outcome: string;
+    manifestsRequested: number;
+    manifestsFound: number;
+    manifestsMissing: number;
+    configuredMaxConcurrentReads: number;
+    peakConcurrentRemoteReads: number;
+  }> = [];
+  const reader = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    meteredStore,
+    { onManifestReadPhaseStats: (stats) => summaries.push(stats) },
+  );
+  const jobs = await reader.readSucceededSchedulerJobs();
+  assert.equal(jobs.length, plans.length);
+  assert.equal(active, 0);
+  assert.equal(observedPeak, 8);
+  assert.equal(summaries.length, 1);
+  assert.equal(summaries[0]?.outcome, 'fulfilled');
+  assert.equal(summaries[0]?.manifestsRequested, 29);
+  assert.equal(summaries[0]?.manifestsFound, 29);
+  assert.equal(summaries[0]?.manifestsMissing, 0);
+  assert.equal(summaries[0]?.configuredMaxConcurrentReads, 8);
+  assert.equal(summaries[0]?.peakConcurrentRemoteReads, observedPeak);
 });
 
 test('manifest phase failure remains fail closed for missing or corrupt immutable objects', async () => {
@@ -179,6 +232,8 @@ test('manifest phase failure remains fail closed for missing or corrupt immutabl
   assert.equal(records.length, 1);
   assert.equal(records[0]?.outcome, 'rejected');
   assert.equal(records[0]?.manifestsMissing, 1);
+  assert.equal(records[0]?.configuredMaxConcurrentReads, 8);
+  assert.equal(records[0]?.peakConcurrentRemoteReads, 1);
 
   const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
   assert.ok(objects.schedulerManifestPathname);
