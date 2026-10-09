@@ -5,6 +5,7 @@ import {
   type SourceAuthorizationDimensions,
 } from './onboarding';
 import {
+  isReportedAlbumSalesCalendarDate,
   readReportedAlbumSalesHistoryAsOf,
   type ReportedAlbumSalesEvidenceQuality,
   type ReportedAlbumSalesHistory,
@@ -173,7 +174,7 @@ const REQUIRED_RIGHTS = Object.freeze([
 )[]);
 
 function validDate(value: string | null): value is string {
-  return value !== null && /^\d{4}-\d{2}-\d{2}$/.test(value);
+  return isReportedAlbumSalesCalendarDate(value);
 }
 
 function inclusiveDays(
@@ -360,7 +361,7 @@ export function buildReportedAlbumSalesProductionSourceCandidate(
       readonly ReportedAlbumSalesProductionEvidenceQualificationBinding[];
   }>,
 ): ReportedAlbumSalesProductionSourceCandidate {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.asOfDate)) {
+  if (!validDate(input.asOfDate)) {
     throw new Error(
       'reported_album_sales_production_source_as_of_date_invalid',
     );
