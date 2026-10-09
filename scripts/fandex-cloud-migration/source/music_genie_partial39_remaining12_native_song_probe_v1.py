@@ -220,7 +220,7 @@ def main() -> None:
         if not item["identityEvidenceQualifiedForHumanReview"]
     ]
     payload = {
-        "version": "music_genie_partial39_remaining18_six_native_song_probe_v1",
+        "version": "music_genie_partial39_remaining12_native_song_probe_v1",
         "checkedAtUtc": datetime.now(timezone.utc).isoformat(),
         "sourceQueue": "music_genie_partial39_evidence_triage_v1.json",
         "sourceDecisionQueue": "music_genie_partial39_decision_readiness_review_packet_v1.json",
