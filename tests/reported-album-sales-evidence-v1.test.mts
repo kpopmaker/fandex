@@ -5,6 +5,7 @@ import test from 'node:test';
 import {
   buildReportedAlbumSalesHistory,
   createReportedAlbumSalesObservation,
+  isReportedAlbumSalesCalendarDate,
   dedupeReportedAlbumSalesObservations,
   readReportedAlbumSalesHistoryAsOf,
   type ReportedAlbumSalesObservationDraft,
@@ -747,4 +748,55 @@ test('research history never becomes a Product or numeric-normalization surface'
   assert.equal(history.numericNormalizationDefined, false);
   assert.equal(history.scoreFieldsPresent, false);
   assert.equal(history.conflicts.length, 0);
+});
+
+
+test('impossible civil dates fail closed at reported album observation ingestion', () => {
+  const baseline = seed().drafts[0];
+  assert.equal(isReportedAlbumSalesCalendarDate('2024-02-29'), true);
+  assert.equal(isReportedAlbumSalesCalendarDate('2025-02-28'), true);
+  for (const impossible of [
+    '2025-02-29',
+    '2025-02-30',
+    '2025-04-31',
+    '2025-13-01',
+    '2025-00-09',
+  ]) {
+    assert.equal(isReportedAlbumSalesCalendarDate(impossible), false);
+    assert.throws(
+      () => createReportedAlbumSalesObservation({
+        ...baseline,
+        release: { ...baseline.release, releaseDate: impossible },
+      }),
+      /reported_album_sales_release_date_invalid/,
+    );
+    assert.throws(
+      () => createReportedAlbumSalesObservation({
+        ...baseline,
+        providerPeriodStart: impossible,
+      }),
+      /reported_album_sales_provider_period_start_invalid/,
+    );
+    assert.throws(
+      () => createReportedAlbumSalesObservation({
+        ...baseline,
+        providerPeriodEnd: impossible,
+      }),
+      /reported_album_sales_provider_period_end_invalid/,
+    );
+    assert.throws(
+      () => createReportedAlbumSalesObservation({
+        ...baseline,
+        supportingEvidence: [{
+          ...baseline.supportingEvidence[0],
+          sourcePublicationDate: impossible,
+        }],
+      }),
+      /reported_album_sales_evidence_source_publication_date_invalid/,
+    );
+  }
+  assert.ok(createReportedAlbumSalesObservation({
+    ...baseline,
+    release: { ...baseline.release, releaseDate: '2024-02-29' },
+  }));
 });

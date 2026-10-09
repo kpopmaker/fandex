@@ -653,3 +653,22 @@ test('unrelated dated source cannot rescue undated exact-sales period evidence',
   assert.deepEqual(twoBindings.blockers, []);
   assert.equal(twoBindings.productSourceEligible, true);
 });
+
+
+test('Production as-of rejects impossible calendar dates before availability or rights eligibility', () => {
+  const source = observation();
+  assert.throws(
+    () => buildReportedAlbumSalesProductionSourceCandidate({
+      observation: source,
+      asOfDate: '2026-02-30',
+      releaseIdentityBinding: reviewedReleaseBinding(source),
+      rightsReview: reviewedRights(source),
+      evidenceQualifications: [reviewedEvidenceQualification(source)],
+    }),
+    /reported_album_sales_production_source_as_of_date_invalid/,
+  );
+  assert.equal(
+    productionCandidate(source, '2026-10-08').productSourceEligible,
+    true,
+  );
+});
