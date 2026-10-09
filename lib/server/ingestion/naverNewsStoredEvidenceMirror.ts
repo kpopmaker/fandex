@@ -744,7 +744,7 @@ export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
 
       try {
         const listStarted = observer ? performance.now() : 0;
-        let pathnames: string[];
+        let pathnames: readonly string[];
         try {
           pathnames = await store.listPathnames(SCHEDULER_MANIFEST_PREFIX);
         } finally {
