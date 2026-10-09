@@ -120,6 +120,9 @@ def discover(url: str, method: str, query: str | None = None) -> dict:
         ]
         if not exact_titles:
             continue
+        # A same-title release by another artist is never an eligible GIRLSET native link.
+        if method == "search_main" and normalize(DISPLAY) not in normalize(text_row):
+            continue
         outer = str(row)[:16000]
         ids = sorted(set(
             re.findall(
@@ -211,6 +214,8 @@ def main() -> None:
     candidates = {}
     for page in discovered_pages:
         for item in page["candidateReleases"]:
+            if page["method"] == "search_main" and normalize(DISPLAY) not in normalize(item["rowContext"]):
+                continue
             key = (item["kind"], item["providerId"])
             old = candidates.get(key)
             if old is None or (not old["matchedReleaseTitles"] and item["matchedReleaseTitles"]):
@@ -218,11 +223,11 @@ def main() -> None:
     ordered = sorted(
         candidates.values(),
         key=lambda x: (
+            0 if x["discoveredBy"].startswith(("artist_info", "artist_song_list")) else 1,
             0 if x["matchedReleaseTitles"] else 1,
-            0 if x["discoveredBy"] == "artist_info" else 1,
             x["kind"], x["providerId"],
         ),
-    )[:16]
+    )[:30]
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
         verified = list(pool.map(verify_release, ordered))
 
