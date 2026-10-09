@@ -38,11 +38,14 @@ const SCHEDULER_COLLECTION_KEY_PATTERN =
   /^sched-v125-naver-news-\d{8}t\d{6}z-[0-9a-f]{12}$/;
 
 export const MAX_CONCURRENT_MIRROR_EVIDENCE_READS = 8 as const;
-// Canonical-only experiment: 133 verified immutable jobs required 19-20 s
-// at eight workers on the 512 MiB Render service (observed peak ~134 MiB).
-// Keep manifest reads at eight; allow at most twelve canonical Blob reads.
+// Keep eight concurrent Blob reads by default for every repository.
+// The optional twelve-worker ceiling is exclusively a guarded canonical
+// evidence trial, not an implicit consequence of enabling diagnostic logs.
 // The cap is not a throughput guarantee and needs exact-SHA Production A/B.
 export const MAX_CONCURRENT_MIRROR_CANONICAL_READS = 12 as const;
+export type NaverNewsMirrorReadConcurrency =
+  | typeof MAX_CONCURRENT_MIRROR_EVIDENCE_READS
+  | typeof MAX_CONCURRENT_MIRROR_CANONICAL_READS;
 
 // Keep a bounded number of Blob reads in flight without head-of-line blocking at
 // batch boundaries. Retain every successful entry in its original order.
@@ -51,9 +54,8 @@ export const MAX_CONCURRENT_MIRROR_CANONICAL_READS = 12 as const;
 export async function mapMirroredEvidenceBatched<T, U>(
   values: readonly T[],
   read: (value: T) => Promise<U>,
-  maxConcurrentReads:
-    | typeof MAX_CONCURRENT_MIRROR_EVIDENCE_READS
-    | typeof MAX_CONCURRENT_MIRROR_CANONICAL_READS = MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+  maxConcurrentReads: NaverNewsMirrorReadConcurrency =
+    MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
 ): Promise<U[]> {
   const results = new Array<U>(values.length);
   let nextIndex = 0;
@@ -597,6 +599,8 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
   store: Pick<ImmutableTextObjectStore, 'readText'>,
   options: Readonly<{
     onBatchReadPhaseStats?: (record: NaverNewsMirrorCanonicalReadPhaseStats) => void;
+    // Never infer higher concurrency from the presence of a telemetry observer.
+    maxConcurrentReads?: NaverNewsMirrorReadConcurrency;
   }> = {},
 ): NaverNewsCanonicalJobEvidenceReadRepository {
   async function readOne(
@@ -665,7 +669,7 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
               decodeMaxMs = Math.max(decodeMaxMs, ms);
             }
           },
-          MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+          options.maxConcurrentReads ?? MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
         );
         outcome = 'fulfilled';
         return new Map(entries.filter(
