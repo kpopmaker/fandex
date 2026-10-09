@@ -21,6 +21,7 @@ def main() -> None:
     jinu = load("music_genie_jinu_80441171_identity_review_packet_v1.json")
     six = load("music_genie_partial39_six_year_match_review_packet_v1.json")
     song_six = load("music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json")
+    song_twelve = load("music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json")
     compat = load("artist_source_compatibility_v1.json")
     target = load("music_chart_artist_targets_v1.json")
 
@@ -59,6 +60,46 @@ def main() -> None:
     assert not set(native_a) & set(native_b)
     six_by_id = {r["canonicalArtistId"]: r for r in six["reviewedCandidates"]}
     song_six_by_id = {r["canonicalArtistId"]: r for r in song_six["records"]}
+    song_twelve_by_id = {r["canonicalArtistId"]: r for r in song_twelve["records"]}
+    assert len(song_twelve_by_id) == 12
+    assert not set(song_twelve_by_id) & set(song_six_by_id)
+    assert song_twelve["version"] == "music_genie_partial39_remaining12_native_song_identity_review_packet_v1"
+    assert song_twelve["status"] == (
+        "twelve_provider_native_song_identity_links_qualified_human_debut_scope_and_binding_review_pending"
+    )
+    tw_lineage = song_twelve["lineage"]
+    assert tw_lineage["researchHead"] == "cd54d65b6e0e4d1c3c93dcf9be4b2ebda0e66a67"
+    assert tw_lineage["pushRunId"] == 37952794243
+    assert tw_lineage["pushJobId"] == 113895623937
+    assert tw_lineage["prRunId"] == 37952803110
+    assert tw_lineage["prJobId"] == 113895652159
+    assert tw_lineage["prArtifactId"] == 11626288830
+    assert tw_lineage["prArtifactDigest"] == (
+        "sha256:8c2bc8b4d7dcc0f4de25f9f2fb6529e011aba47495d2bb791ffba83e46d1f8a4"
+    )
+    assert tw_lineage["pushSuccess"] is True and tw_lineage["prSuccess"] is True
+    assert tw_lineage["outcomesAgreeExactly12Identities"] is True
+    assert song_twelve["verification"] == {
+        "probed": 12, "nativeIdentityQualified": 12, "heldNativeAttribution": 0,
+        "canonicalDebutYearReviewed": 0, "reviewedBindingsApproved": 0,
+        "sourceSupportedPromotions": 0,
+    }
+    assert song_twelve["candidatePartitionAsOfResearch"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    for flag in (
+        "humanReviewRequired", "nativeAttributionNotFirstDebutProof",
+        "groupSoloCareerYearPolicyNotInvented", "historicalPinnedIdImmutable",
+    ):
+        assert song_twelve["safety"][flag] is True
+    for flag in (
+        "sourceTargetMutationAuthorized", "sourceCompatibilityMutationAuthorized",
+        "productActivationAuthorized", "schedulerDatabaseDeploymentAuthorized",
+        "mainMergeAuthorized",
+    ):
+        assert song_twelve["safety"][flag] is False
+    assert len({item["providerSongId"] for item in song_twelve["records"]}) == 12
+    assert len({item["genieProviderArtistId"] for item in song_twelve["records"]}) == 12
     assert len(song_six_by_id) == 6
     assert song_six["evidenceRun"]["exactHead"] == "ba4eae2ee86b3dc4d162fc55b4182e40ab082ab0"
     assert song_six["evidenceRun"]["workflowRunId"] == 37951562117
@@ -189,6 +230,41 @@ def main() -> None:
             assert (
                 "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
             ) in row["evidencePacketPaths"]
+        elif artist_id in song_twelve_by_id:
+            assert lane == "remaining12_native_song_identity_qualified"
+            item = song_twelve_by_id[artist_id]
+            assert item["genieProviderArtistId"] == original["genieProviderArtistId"] == later_id
+            assert item["originalGenieDebutYear"] == original["genieDebutYear"]
+            assert item["directNativeSongToPinnedArtistLinkVerified"] is True
+            assert item["providerArtistDetailTypeAndYearMatchedExact94"] is True
+            assert item["canonicalDebutYear"] is None
+            assert item["yearScopeRequiresHumanReview"] is True
+            assert item["canonicalDebutYearScope"] == (
+                "semantic_scope_held_" + row["existingSemanticHold"]
+                if row["existingSemanticHold"] else "canonical_year_unresolved"
+            )
+            assert review["qualifiedCandidateProviderArtistId"] == item["genieProviderArtistId"]
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == item["originalGenieDebutYear"]
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["nativeReleaseEvidenceUrl"] == item["genieNativeSongUrl"]
+            assert review["differsFromOriginalResearchCandidate"] is False
+            assert item["genieNativeSongUrl"] == (
+                "https://www.genie.co.kr/detail/songInfo?xgnm=" + item["providerSongId"]
+            )
+            assert item["genieArtistProfileUrl"] == (
+                "https://www.genie.co.kr/detail/artistInfo?xxnm=" + item["genieProviderArtistId"]
+            )
+            assert item["reviewer"] is None and item["reviewedAt"] is None
+            for flag in (
+                "reviewedBindingApproved", "canonicalYearBackfilled",
+                "sourceSupportedPromoted", "productActivated",
+            ):
+                assert item[flag] is False
+            assert "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING" not in questions
+            assert "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING" in questions
+            assert (
+                "data/fandex-cloud-v10/seed/music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json"
+            ) in row["evidencePacketPaths"]
         else:
             assert lane == "remaining_gap_or_semantics_research"
             assert later_id is None
@@ -228,16 +304,20 @@ def main() -> None:
         "six_year_match_review": 6,
         "jinu_wrong_historical_candidate_review": 1,
         "remaining18_native_song_identity_qualified": 6,
-        "remaining_gap_or_semantics_research": 12,
+        "remaining12_native_song_identity_qualified": 12,
     }
     assert lanes == expected_lanes
     summary = decision["summary"]
     assert summary["totalCandidates"] == 39
-    assert summary["mutuallyExclusiveEvidenceLanes"] == expected_lanes
+    assert summary["mutuallyExclusiveEvidenceLanes"] == {
+        **expected_lanes, "remaining_gap_or_semantics_research": 0,
+    }
     assert summary["historicalMissing14NativeIdentityQualified"] == 14
     assert summary["historicalMissing14ProviderCandidateChangedFromOriginal"] == 12
     assert summary["remaining18SixNativeSongIdentityQualified"] == 6
-    assert summary["remaining18StillNeedingNativeOrOtherEvidence"] == 12
+    assert summary["remaining18StillNeedingNativeOrOtherEvidence"] == 0
+    assert summary["remaining12NativeSongIdentityQualified"] == 12
+    assert summary["remaining18TotalNativeSongIdentityQualified"] == 18
     assert summary["immutableOriginalResearchCandidateRetained"] == 39
     assert (summary["reviewedBindingApproved"], summary["supportedPromotionApproved"]) == (0, 0)
     assert decision["nextGate"] == (
@@ -246,7 +326,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 reviewer queue | 14 historical native-linked "
         "| 12 provisional-ID differences | 6 year-match | 1 JINU | "
-        "6 more native-qualified | 12 remaining | 39 pending | Music 117/238/0 | Product unchanged"
+        "18 additional native-qualified | 0 remaining native evidence gaps | 39 pending human review | Music 117/238/0 | Product unchanged"
     )
 
 
