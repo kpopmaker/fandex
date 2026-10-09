@@ -176,9 +176,23 @@ def main() -> None:
     for item in PROBES:
         artist_id = item["canonicalArtistId"]
         original = originals[artist_id]
-        assert review_rows[artist_id]["evidenceReviewLane"] == (
-            "remaining_gap_or_semantics_research"
+        review = review_rows[artist_id]
+        assert review["evidenceReviewLane"] in (
+            "remaining_gap_or_semantics_research",
+            "remaining18_native_song_identity_qualified",
         )
+        if review["evidenceReviewLane"] == "remaining18_native_song_identity_qualified":
+            # The research probe is rerunnable after the reviewer queue has moved
+            # forward; only the same pinned native identity may be rechecked.
+            later = review["laterProviderIdentityEvidence"]
+            assert later["qualifiedCandidateProviderArtistId"] == item["pinnedId"]
+            assert later["providerDebutYearFromLaterQualifiedCandidate"] == item["providerYearRecordedInExact94"]
+            assert later["nativeReleaseEvidenceUrl"] == (
+                ROOT_URL + "songInfo?xgnm=" + item["songId"]
+            )
+            assert later["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["reviewedBindingApproved"] is False
+            assert review["supportedPromotionApproved"] is False
         assert original["genieProviderArtistId"] == item["pinnedId"]
         assert original["genieDebutYear"] == item["providerYearRecordedInExact94"]
         assert original["canonicalDebutYear"] is None
