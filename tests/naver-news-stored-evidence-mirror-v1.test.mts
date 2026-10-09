@@ -364,9 +364,14 @@ test('Blob mirror readers cap parallel requests without dropping official slots 
 
   active = 0;
   peak = 0;
+  const defaultCapSummaries: Array<{
+    configuredMaxConcurrentReads: number;
+    peakConcurrentRemoteReads: number;
+  }> = [];
   const canonical =
     createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
       meteredStore,
+      { onBatchReadPhaseStats: (summary) => defaultCapSummaries.push(summary) },
     );
   assert.ok(canonical.readJobEvidenceBatch);
   const rows = await canonical.readJobEvidenceBatch([
@@ -380,6 +385,9 @@ test('Blob mirror readers cap parallel requests without dropping official slots 
   assert.ok(peak > 1);
   assert.ok(peak <= MAX_CONCURRENT_MIRROR_EVIDENCE_READS);
   assert.equal(active, 0);
+  assert.equal(defaultCapSummaries.length, 1);
+  assert.equal(defaultCapSummaries[0]?.configuredMaxConcurrentReads, 8);
+  assert.equal(defaultCapSummaries[0]?.peakConcurrentRemoteReads, peak);
 });
 
 test('Blob manifest reads keep eight slots working while an early request is stalled', async () => {
@@ -559,6 +567,10 @@ test('canonical Blob phase summary distinguishes remote reads and validated deco
   assert.equal(record.objectsRequested, 3);
   assert.equal(record.objectsFound, 2);
   assert.equal(record.objectsMissing, 1);
+  assert.equal(record.configuredMaxConcurrentReads, 8);
+  assert.ok(typeof record.peakConcurrentRemoteReads === 'number');
+  assert.ok((record.peakConcurrentRemoteReads as number) >= 1);
+  assert.ok((record.peakConcurrentRemoteReads as number) <= 8);
   for (const field of [
     'remoteReadSumMs', 'remoteReadMaxMs',
     'decodeSumMs', 'decodeMaxMs', 'batchWallMs',
@@ -647,6 +659,14 @@ test('explicit canonical twelve-worker option verifies every job and never sched
   assert.equal(summaries[0]?.objectsRequested, 29);
   assert.equal(summaries[0]?.objectsFound, 29);
   assert.equal(summaries[0]?.objectsMissing, 0);
+  assert.equal(
+    (summaries[0] as { configuredMaxConcurrentReads: number }).configuredMaxConcurrentReads,
+    12,
+  );
+  assert.equal(
+    (summaries[0] as { peakConcurrentRemoteReads: number }).peakConcurrentRemoteReads,
+    peak,
+  );
 });
 
 test('opted-in twelve-worker canonical read remains fail-closed for later tampering', async () => {
@@ -661,12 +681,16 @@ test('opted-in twelve-worker canonical read remains fail-closed for later tamper
   const tampered = JSON.parse(corrupt.jobBody);
   tampered.storedEvidence.normalizedRecords[0].title = 'tampered';
   store.values.set(corrupt.jobPathname, JSON.stringify(tampered));
-  const outcomes: string[] = [];
+  const outcomes: Array<{
+    outcome: string;
+    configuredMaxConcurrentReads: number;
+    peakConcurrentRemoteReads: number;
+  }> = [];
   const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
     store,
     {
       maxConcurrentReads: MAX_CONCURRENT_MIRROR_CANONICAL_READS,
-      onBatchReadPhaseStats(record) { outcomes.push(record.outcome); },
+      onBatchReadPhaseStats(record) { outcomes.push(record); },
     },
   );
   assert.ok(reader.readJobEvidenceBatch);
@@ -674,5 +698,8 @@ test('opted-in twelve-worker canonical read remains fail-closed for later tamper
     () => reader.readJobEvidenceBatch!(plans.map((plan) => plan.identity.jobId)),
     /naver_news_mirror_job_payload_invalid/,
   );
-  assert.deepEqual(outcomes, ['rejected']);
+  assert.equal(outcomes.length, 1);
+  assert.equal(outcomes[0]?.outcome, 'rejected');
+  assert.equal(outcomes[0]?.configuredMaxConcurrentReads, 12);
+  assert.ok((outcomes[0]?.peakConcurrentRemoteReads ?? 0) <= 12);
 });
