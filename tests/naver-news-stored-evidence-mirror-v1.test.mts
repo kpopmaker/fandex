@@ -213,7 +213,12 @@ test('manifest phase failure remains fail closed for missing or corrupt immutabl
   const plan = planAt('2026-10-03T03:00:00.000Z');
   await mirrorNaverNewsStoredEvidence(plan, store);
 
-  const records: { outcome: string; manifestsMissing: number }[] = [];
+  const records: {
+    outcome: string;
+    manifestsMissing: number;
+    configuredMaxConcurrentReads: number;
+    peakConcurrentRemoteReads: number;
+  }[] = [];
   const missingStore = {
     listPathnames: (prefix: string) => store.listPathnames(prefix),
     async readText(pathname: string): Promise<string | null> {
