@@ -202,5 +202,60 @@
     "discoveryClaimRemainsUnqualified": true,
     "outreachSent": false,
     "result": "new-Tier-B-rounded-context-discovered-but-no-exact-units-or-provider-period"
+  },
+  "weeklyCommunityTranscriptFollowUp": {
+    "assessedOn": "2026-10-09",
+    "evidenceId": "pttweb:2025-06-02:hanteo-weekly-2025-W22:iu-repost",
+    "mirroredThreadUrl": "https://www.pttweb.cc/bbs/KoreanPop/M.1748877689.A.563",
+    "linkedOriginalThreadUrl": "https://www.ptt.cc/bbs/KoreanPop/M.1748877689.A.563.html",
+    "originalThreadVerifiedDirectly": false,
+    "sourceType": "user-generated-community-transcription-of-a-chart",
+    "sourceTier": "tier-c-discovery-only",
+    "postDate": "2025-06-02",
+    "weeklyChartWindow": {
+      "start": "2025-05-26",
+      "end": "2025-06-01"
+    },
+    "communityTranscribedWeeklyFigure": {
+      "artist": "IU",
+      "releaseLabel": "花書籤3",
+      "rank": 6,
+      "reportedWeeklyCopies": 72140,
+      "unit": "physical-copies",
+      "providerAttribution": "Hanteo Chart",
+      "officialWeeklyCopiesVerified": false
+    },
+    "officialChartCrosscheck": {
+      "url": "https://www.hanteochart.com/en/charts/album/weekly/2025-W22",
+      "artistAndAlbumPresent": true,
+      "rank": 6,
+      "dateWindowConfirmed": true,
+      "exactCopiesVisible": false
+    },
+    "initialChodongDiscoveryComparison": {
+      "sourceId": "majayo:2025-06-04:iu-a-flower-bookmark-3",
+      "discoveryOnlyValue": 79940,
+      "discoveryOnlyPeriodStart": "2025-05-28",
+      "discoveryOnlyPeriodEnd": "2025-06-03",
+      "samePeriodAsWeeklyChart": false,
+      "weeklyWindowCoversEntireSevenDayFirstWeek": false,
+      "weeklyReportedCopiesCanReplaceFirstWeekValue": false,
+      "subtractionOrExtrapolationAllowed": false,
+      "earlierSellsideRoundedFigureIsIndependentExactCorroboration": false
+    },
+    "qualification": {
+      "verifiedPrimaryWeeklyCopies": null,
+      "verifiedFirstWeekCopies": null,
+      "firstWeekProviderPeriodStart": null,
+      "firstWeekProviderPeriodEnd": null,
+      "qualifyingTierABFirstWeekValue": false,
+      "qualifyingTierABSameSourceValuePeriodBinding": false,
+      "usageRightsAuthorized": false,
+      "normalizedStorageAuthorized": false,
+      "numericProductEligible": false,
+      "productActivationAuthorized": false
+    },
+    "reason": "The repost transcribes an IU entry with 72,140 under the May-26–Jun-01 weekly chart (week 22), whereas the release-specific seven-day first-week discovery window is May-28–Jun-03. Hanteo's first-party weekly page confirms rank and calendar window but does not reveal exact weekly units on the reviewed public page. Do not substitute the repost value, mix provider periods, infer missing later dates, treat the rounded sell-side figure as an exact corroboration, or infer usage rights.",
+    "outreachSent": false
   }
 }
