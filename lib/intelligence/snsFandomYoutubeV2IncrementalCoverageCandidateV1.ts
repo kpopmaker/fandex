@@ -9,6 +9,10 @@ const RECEIPT_PREFIX = ROOT + '/receipts/';
 const CHECKPOINT_PREFIX = ROOT + '/coverage-candidate/v1/checkpoints/';
 const HOUR_MS = 60 * 60 * 1_000;
 const TOTAL_SLOTS = 366 * 24;
+// This candidate binds ONLY the already-approved existing v2 evidence lineage.
+const EXACT_SOURCE_SHA = '27a007c2afb4776cf2ae89c2e8bd4ba5f9a8f688';
+const EXACT_OWNER_EVIDENCE =
+  'github-issue://kpopmaker/fandex/issues/509#issuecomment-6049459425';
 
 type RecordValue = Record<string, unknown>;
 
@@ -139,13 +143,12 @@ export function evaluateSnsFandomV2IncrementalCoverageCandidateV1(
     });
   }
 
-  if (!/^[0-9a-f]{40}$/.test(input.expectedAuthorizedRevisionSha)) {
+  if (input.expectedAuthorizedRevisionSha !== EXACT_SOURCE_SHA) {
     blockers.push('incremental-v2-invalid-authorized-revision');
   }
-  if (
-    !/^github-issue:\/\/kpopmaker\/fandex\/issues\/509#issuecomment-[1-9][0-9]*$/
-      .test(input.expectedOwnerEvidenceRef)
-  ) blockers.push('incremental-v2-invalid-owner-evidence');
+  if (input.expectedOwnerEvidenceRef !== EXACT_OWNER_EVIDENCE) {
+    blockers.push('incremental-v2-invalid-owner-evidence');
+  }
   const canonical = parseObject(input.canonicalText);
   if (!canonical) {
     blockers.push('incremental-v2-invalid-canonical-json');
