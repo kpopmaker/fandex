@@ -637,7 +637,13 @@ test('explicit canonical twelve-worker option verifies every job and never sched
       }
     },
   };
-  const summaries: { objectsRequested: number; objectsFound: number; objectsMissing: number }[] = [];
+  const summaries: Array<{
+    objectsRequested: number;
+    objectsFound: number;
+    objectsMissing: number;
+    configuredMaxConcurrentReads: number;
+    peakConcurrentRemoteReads: number;
+  }> = [];
   const reader = createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
     meteredStore,
     {
@@ -659,14 +665,8 @@ test('explicit canonical twelve-worker option verifies every job and never sched
   assert.equal(summaries[0]?.objectsRequested, 29);
   assert.equal(summaries[0]?.objectsFound, 29);
   assert.equal(summaries[0]?.objectsMissing, 0);
-  assert.equal(
-    (summaries[0] as { configuredMaxConcurrentReads: number }).configuredMaxConcurrentReads,
-    12,
-  );
-  assert.equal(
-    (summaries[0] as { peakConcurrentRemoteReads: number }).peakConcurrentRemoteReads,
-    peak,
-  );
+  assert.equal(summaries[0]?.configuredMaxConcurrentReads, 12);
+  assert.equal(summaries[0]?.peakConcurrentRemoteReads, peak);
 });
 
 test('opted-in twelve-worker canonical read remains fail-closed for later tampering', async () => {
