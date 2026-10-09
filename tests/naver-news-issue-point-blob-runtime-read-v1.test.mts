@@ -566,7 +566,7 @@ test('News runtime stage timing is opt-in and excludes evidence, paths, and cred
 test('Production stage timing emits one safe manifest read phase summary without changing latest evidence', async () => {
   const store = memoryStore();
   const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
-  for (let index = 0; index < 3; index += 1) {
+  for (let index = 0; index < 50; index += 1) {
     await stageOfficial(
       store,
       new Date(protocolStart + index * 60 * 60_000).toISOString(),
@@ -610,8 +610,8 @@ test('Production stage timing emits one safe manifest read phase summary without
   ].sort());
   assert.equal(record.contractVersion, 'naver-news-mirror-manifest-read-phase-v1');
   assert.equal(record.outcome, 'fulfilled');
-  assert.equal(record.manifestsRequested, 3);
-  assert.equal(record.manifestsFound, 3);
+  assert.equal(record.manifestsRequested, 50);
+  assert.equal(record.manifestsFound, 50);
   assert.equal(record.manifestsMissing, 0);
   for (const key of [
     'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
