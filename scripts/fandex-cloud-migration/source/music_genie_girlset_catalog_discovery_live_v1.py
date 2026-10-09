@@ -105,6 +105,55 @@ def discover(url: str, method: str, query: str | None = None) -> dict:
             "matchedReleaseTitles": title_matches,
             "discoveredBy": method,
         }
+    # Genie catalog tables can expose songid on <tr> rather than on a linked <a>.
+    # Only IDs that appear within a row with a named release are considered;
+    # every candidate must still pass the independent song-detail backlink check.
+    release_rows = []
+    row_candidates = {}
+    for row in soup.select("tr, li"):
+        text_row = " ".join(row.stripped_strings).strip()
+        if not text_row or len(text_row) > 900:
+            continue
+        exact_titles = [
+            item["title"] for item in RELEASES
+            if normalize(item["title"]) in normalize(text_row)
+        ]
+        if not exact_titles:
+            continue
+        outer = str(row)[:16000]
+        ids = sorted(set(
+            re.findall(
+                r"""(?:\bsongid\b|\bdata-song-id\b|\bdata-songid\b|\bxgnm\b)\s*=\s*['"]?(\d{7,10})""",
+                outer, re.I,
+            )
+            + re.findall(r"""fnPlaySong\(\s*['"](\d{7,10})['"]""", outer, re.I)
+            + re.findall(r"""fnViewSong\(\s*['"](\d{7,10})['"]""", outer, re.I)
+        ))
+        album_ids = sorted(set(
+            re.findall(r"""\b(?:axnm|albumid|data-album-id)\s*=\s*['"]?(\d{7,10})""", outer, re.I)
+        ))
+        release_rows.append({
+            "releaseNames": exact_titles, "rowLabel": text_row[:230],
+            "songIds": ids[:12], "albumIds": album_ids[:12],
+            "rowHtmlDiagnostic": outer[:900] if not ids and not album_ids else None,
+        })
+        for pid in ids[:12]:
+            row_candidates[("song", pid)] = {
+                "kind": "song", "providerId": pid,
+                "linkLabel": text_row[:90], "rowContext": text_row[:250],
+                "matchedReleaseTitles": exact_titles,
+                "discoveredBy": method + "_songid_row",
+            }
+        for pid in album_ids[:12]:
+            row_candidates[("album", pid)] = {
+                "kind": "album", "providerId": pid,
+                "linkLabel": text_row[:90], "rowContext": text_row[:250],
+                "matchedReleaseTitles": exact_titles,
+                "discoveredBy": method + "_albumid_row",
+            }
+        if len(release_rows) >= 24:
+            break
+    discoveries.update(row_candidates)
     # No generated candidate IDs from free-text or guessed ranges.
     return {
         "method": method, "query": query, "url": url,
@@ -113,6 +162,8 @@ def discover(url: str, method: str, query: str | None = None) -> dict:
         "pageReleaseTitles": [x["title"] for x in RELEASES if normalize(x["title"]) in normalize(text)],
         "nativeArtistLinks": artist_links(soup),
         "candidateReleases": list(discoveries.values())[:40],
+        "releaseRowsSample": release_rows[:12],
+        "releaseRowSongIdCandidateCount": sum(len(x["songIds"]) for x in release_rows),
         "pageSample": text[:220],
     }
 
