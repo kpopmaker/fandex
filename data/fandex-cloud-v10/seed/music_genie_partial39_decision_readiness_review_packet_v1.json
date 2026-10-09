@@ -1,0 +1,1377 @@
+{
+  "version": "music_genie_partial39_decision_readiness_review_packet_v1",
+  "status": "research_evidence_synthesis_only_all_human_decisions_pending",
+  "basedOnExactResearchHead": "6556f91025685c412d2e50bb7a31aee23597b8ec",
+  "canonicalUniverseCount": 355,
+  "derivedFromPinnedEvidence": [
+    "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_missing14_last2_native_release_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_girlset_native_song_attribution_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json"
+  ],
+  "scope": "39 metadata-partial Genie candidates; consolidated reviewer queue, not binding approval",
+  "summary": {
+    "totalCandidates": 39,
+    "originalGapPartition": {
+      "providerYearMissing": 7,
+      "canonicalYearMissing": 25,
+      "bothMissing": 7
+    },
+    "mutuallyExclusiveEvidenceLanes": {
+      "historical_missing14_native_identity_qualified": 14,
+      "remaining_gap_or_semantics_research": 18,
+      "jinu_wrong_historical_candidate_review": 1,
+      "six_year_match_review": 6
+    },
+    "historicalMissing14NativeIdentityQualified": 14,
+    "historicalMissing14ProviderCandidateChangedFromOriginal": 12,
+    "immutableOriginalResearchCandidateRetained": 39,
+    "reviewedBindingApproved": 0,
+    "supportedPromotionApproved": 0,
+    "actualStackedMusicPartition": {
+      "supported": 117,
+      "unresolved": 238,
+      "unsupported": 0
+    }
+  },
+  "decisionPolicy": {
+    "candidateNativeSongAttributionDoesNotEstablishDebutYear": true,
+    "laterProviderProfileYearDoesNotAutomaticallyReplaceMissingCanonicalYear": true,
+    "preDebutFormalGroupSoloAndRebrandEpochsNeedHumanPolicy": true,
+    "anyOriginalIdDifferenceRequiresReviewedBindingDecision": true,
+    "partial39SourceSupportedAutomaticPromotion": false,
+    "prodRuntimeSchedulerDatabaseDeploymentAndMainMergeAuthorized": false
+  },
+  "candidates": [
+    {
+      "canonicalArtistId": "nexz",
+      "originalResearchCandidate": {
+        "providerArtistId": "81122242",
+        "canonicalDebutYear": 2024,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "82295319",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2023,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=87546464",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "RECONCILE_PROVIDER_YEAR_VS_CANONICAL_FORMAL_DEBUT",
+        "RESOLVE_PREDEBUT_VS_FORMAL_DEBUT"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "brothersu",
+      "originalResearchCandidate": {
+        "providerArtistId": "79983812",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80010932",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2010,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=80643017",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "eunjiwon",
+      "originalResearchCandidate": {
+        "providerArtistId": "14945865",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 1997,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "kangseungyoon",
+      "originalResearchCandidate": {
+        "providerArtistId": "80089706",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2010,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "jinu",
+      "originalResearchCandidate": {
+        "providerArtistId": "14946516",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 1996,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "jinu_wrong_historical_candidate_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80441171",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2014,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "REJECT_HISTORICAL_ID_FOR_WINNER_JINU_AND_REVIEW_ALTERNATE",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "mino",
+      "originalResearchCandidate": {
+        "providerArtistId": "80073343",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80438375",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2014,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=88391129",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "bangyedam",
+      "originalResearchCandidate": {
+        "providerArtistId": "80211832",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2013,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "leehi",
+      "originalResearchCandidate": {
+        "providerArtistId": "80158970",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2012,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80158970",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 2012,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2012,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.ygfamily.com/en/news/notice/2995"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "kimjaejoong",
+      "originalResearchCandidate": {
+        "providerArtistId": "14954974",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2010,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "hwangminhyun",
+      "originalResearchCandidate": {
+        "providerArtistId": "80441275",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2012,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "yoonsanha",
+      "originalResearchCandidate": {
+        "providerArtistId": "80534174",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2016,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "hahyunsang",
+      "originalResearchCandidate": {
+        "providerArtistId": "80620455",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2018,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "jypark",
+      "originalResearchCandidate": {
+        "providerArtistId": "14945855",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 1994,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "14945855",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 1994,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 1994,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.jyppub.com/ko/artists/1"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "REVIEW_EXACT_ALIAS_TEMPORAL_HOMONYM_VOLATILITY"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "originalResearchCandidate": {
+        "providerArtistId": "80899341",
+        "canonicalDebutYear": 2018,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80899341",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=85406781",
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_last2_native_release_review_packet_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "girlset",
+      "originalResearchCandidate": {
+        "providerArtistId": "83019445",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "83019445",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=111546614",
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "rebrand_identity_epoch",
+      "unresolvedReviewerQuestions": [
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_VCHA_2024_TO_GIRLSET_2025_IDENTITY_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_girlset_native_song_attribution_review_packet_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "sf9",
+      "originalResearchCandidate": {
+        "providerArtistId": "80546873",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2016,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80546873",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 2016,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2016,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=360019&lang=e"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "joyuri",
+      "originalResearchCandidate": {
+        "providerArtistId": "80661354",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2018,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "kimjaehwan",
+      "originalResearchCandidate": {
+        "providerArtistId": "80587302",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2016,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "ejel",
+      "originalResearchCandidate": {
+        "providerArtistId": "81567146",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "81021446",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2021,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=108199234",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "lucidfall",
+      "originalResearchCandidate": {
+        "providerArtistId": "14940057",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2001,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "leesangsoon",
+      "originalResearchCandidate": {
+        "providerArtistId": "80291913",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2011,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "afterschool",
+      "originalResearchCandidate": {
+        "providerArtistId": "82301148",
+        "canonicalDebutYear": 2009,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "73393086",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2009,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=76758548",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "bumzu",
+      "originalResearchCandidate": {
+        "providerArtistId": "80189465",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2012,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "up10tion",
+      "originalResearchCandidate": {
+        "providerArtistId": "81290806",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80445602",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2015,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=80749357",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2015,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://www.soompi.com/article/1351555wpp/up10tion-shares-heartfelt-messages-to-fans-for-4th-debut-anniversary"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "b1a4",
+      "originalResearchCandidate": {
+        "providerArtistId": "80131588",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2011,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80131588",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 2011,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2011,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://www.soompi.com/article/846891wpp/b1a4-thanks-fans-for-their-5th-debut-anniversary"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "kard",
+      "originalResearchCandidate": {
+        "providerArtistId": "81305280",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80556366",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2016,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=87304018",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2017,
+        "yearScope": "named_group_formal_debut",
+        "sourceUrl": "https://ichannela.com/news/detail/000000044447.do"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_PREDEBUT_VS_FORMAL_DEBUT"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "ahnyeeun",
+      "originalResearchCandidate": {
+        "providerArtistId": "80507988",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2016,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "xlov",
+      "originalResearchCandidate": {
+        "providerArtistId": "82757745",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2025,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "82757745",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 2025,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2025,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://sports.khan.co.kr/article/202501071835003"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "taeyang",
+      "originalResearchCandidate": {
+        "providerArtistId": "54232309",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2007,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "pow",
+      "originalResearchCandidate": {
+        "providerArtistId": "14942969",
+        "canonicalDebutYear": 2023,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "82162931",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2023,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=103478669",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "tiot",
+      "originalResearchCandidate": {
+        "providerArtistId": "81972382",
+        "canonicalDebutYear": 2024,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "82120880",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2023,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=85026862",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "RECONCILE_PROVIDER_YEAR_VS_CANONICAL_FORMAL_DEBUT",
+        "RESOLVE_PREDEBUT_VS_FORMAL_DEBUT"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "mirae",
+      "originalResearchCandidate": {
+        "providerArtistId": "81608365",
+        "canonicalDebutYear": 2021,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "81037720",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2021,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=92651112",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "x1",
+      "originalResearchCandidate": {
+        "providerArtistId": "81522270",
+        "canonicalDebutYear": 2019,
+        "genieDebutYear": null,
+        "evidenceGap": "genie_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80743451",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2019,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=89330963",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "balmingtiger",
+      "originalResearchCandidate": {
+        "providerArtistId": "80639974",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2018,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "jeongsewoon",
+      "originalResearchCandidate": {
+        "providerArtistId": "80590751",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2017,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "six_year_match_review",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80590751",
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": 2017,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": {
+        "reportedYear": 2017,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.soompi.com/article/1024115wpp/starship-entertainment-announces-plans-broadcast-jung-se-woons-debut-showcase-live"
+      },
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "leeseokhoon",
+      "originalResearchCandidate": {
+        "providerArtistId": "43241763",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 2006,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "yoonmirae",
+      "originalResearchCandidate": {
+        "providerArtistId": "14936492",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 1997,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": null,
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "chen",
+      "originalResearchCandidate": {
+        "providerArtistId": "81098158",
+        "canonicalDebutYear": null,
+        "genieDebutYear": null,
+        "evidenceGap": "both_debut_years_unavailable"
+      },
+      "evidenceReviewLane": "historical_missing14_native_identity_qualified",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": "80282512",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2014,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=88728543",
+        "differsFromOriginalResearchCandidate": true
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "unresolvedReviewerQuestions": [
+        "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    },
+    {
+      "canonicalArtistId": "kimjongkook",
+      "originalResearchCandidate": {
+        "providerArtistId": "14945901",
+        "canonicalDebutYear": null,
+        "genieDebutYear": 1995,
+        "evidenceGap": "canonical_debut_year_unavailable"
+      },
+      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "laterProviderIdentityEvidence": {
+        "qualifiedCandidateProviderArtistId": null,
+        "nativeSongOrAlbumArtistLinkVerified": false,
+        "providerDebutYearFromLaterQualifiedCandidate": null,
+        "nativeReleaseEvidenceUrl": null,
+        "differsFromOriginalResearchCandidate": false
+      },
+      "independentYearCorroboration": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "unresolvedReviewerQuestions": [
+        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
+        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
+      ],
+      "evidencePacketPaths": [
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+      ],
+      "reviewerDecision": "pending",
+      "reviewer": null,
+      "reviewedAt": null,
+      "reviewedBindingApproved": false,
+      "supportedPromotionApproved": false,
+      "productActivationApproved": false
+    }
+  ],
+  "nextGate": "PARTIAL39_HUMAN_CANONICAL_YEAR_SCOPE_AND_PROVIDER_BINDING_DECISION_BY_ARTIST_REQUIRED"
+}
