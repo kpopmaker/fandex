@@ -159,7 +159,9 @@ test('existing immutable checkpoint with conflicting bytes fails closed', () => 
 test('tampered prior totals fail previous checkpoint digest validation', () => {
   const a = advance(0, null);
   const old = checkpoint(a.checkpointBody);
-  const r = advance(1, JSON.stringify({...old,totalQuotaUnitsObserved:100}));
+  const r = advance(1, JSON.stringify({
+    ...old,totalQuotaUnitsObserved:100,totalProviderCallsObserved:100,
+  }));
   assert.equal(r.state, 'blocked');
   assert.ok(r.blockers.includes('incremental-v2-previous-checkpoint-digest-mismatch'));
 });
@@ -185,6 +187,26 @@ test('canonical must bind first real slot, approved immutable revision and owner
     assert.equal(r.state, 'blocked');
     assert.ok(r.blockers.includes('incremental-v2-canonical-contract-mismatch'));
   }
+});
+
+test('a plausible but unapproved different SHA and issue comment cannot reauthorize lineage', () => {
+  const impostorSha = 'f'.repeat(40);
+  const impostorRef =
+    'github-issue://kpopmaker/fandex/issues/509#issuecomment-9999999999';
+  const r = evaluateSnsFandomV2IncrementalCoverageCandidateV1({
+    ...inp(0),
+    canonicalText: JSON.stringify({
+      ...canonical(),
+      authorizedRevisionSha: impostorSha,
+      cutoverApprovalEvidenceRef: impostorRef,
+    }),
+    receiptText: JSON.stringify({...receipt(0),sourceMainSha:impostorSha}),
+    expectedAuthorizedRevisionSha: impostorSha,
+    expectedOwnerEvidenceRef: impostorRef,
+  });
+  assert.equal(r.state, 'blocked');
+  assert.ok(r.blockers.includes('incremental-v2-invalid-authorized-revision'));
+  assert.ok(r.blockers.includes('incremental-v2-invalid-owner-evidence'));
 });
 
 test('invalid receipt revision, observation time, and raw statistics fail closed', () => {
