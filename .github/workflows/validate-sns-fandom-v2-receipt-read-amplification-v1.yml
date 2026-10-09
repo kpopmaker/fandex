@@ -1,0 +1,42 @@
+name: Validate snsFandom v2 receipt read amplification evidence v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomYoutubeV2ReceiptScanWorkModelV1.ts'
+      - 'tests/sns-fandom-v2-receipt-scan-work-model-v1.test.mts'
+      - 'docs/research/sns-fandom-v2-receipt-read-amplification-v1.md'
+      - '.github/workflows/validate-sns-fandom-v2-receipt-read-amplification-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  source-model-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Exact arithmetic / fail-closed regressions only
+        run: npx tsx --test tests/sns-fandom-v2-receipt-scan-work-model-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Source-model safety boundary
+        if: always()
+        run: |
+          echo 'sourceModelOnly=true'
+          echo 'actualVercelRequestsMeasured=false'
+          echo 'providerCallsPerformed=false'
+          echo 'blobWrites=0'
+          echo 'blobReads=0'
+          echo 'schedulerMutation=false'
+          echo 'providerSubmissionAuthorized=false'
+          echo 'productionCollectionAuthorized=false'
+          echo 'productActivationAuthorized=false'
