@@ -4,7 +4,8 @@ export const SNS_FANDOM_V2_INCREMENTAL_COVERAGE_CANDIDATE_VERSION =
   'sns-fandom-v2-incremental-coverage-candidate-v1' as const;
 
 const ROOT = 'sns-fandom/youtube-audit/recurring/v2' as const;
-const CANONICAL_PATH = ROOT + '/canonical-window.json' as const;
+const CANONICAL_PATH =
+  'sns-fandom/youtube-audit/recurring/v2/canonical-window.json' as const;
 const RECEIPT_PREFIX = ROOT + '/receipts/';
 const CHECKPOINT_PREFIX = ROOT + '/coverage-candidate/v1/checkpoints/';
 const HOUR_MS = 60 * 60 * 1_000;
