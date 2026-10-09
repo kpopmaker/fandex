@@ -11,7 +11,8 @@
     "data/fandex-cloud-v10/seed/music_genie_girlset_native_song_attribution_review_packet_v1.json",
     "data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json",
     "data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json",
-    "data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json"
+    "data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json",
+    "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
   ],
   "scope": "39 metadata-partial Genie candidates; consolidated reviewer queue, not binding approval",
   "summary": {
@@ -23,9 +24,10 @@
     },
     "mutuallyExclusiveEvidenceLanes": {
       "historical_missing14_native_identity_qualified": 14,
-      "remaining_gap_or_semantics_research": 18,
+      "six_year_match_review": 6,
       "jinu_wrong_historical_candidate_review": 1,
-      "six_year_match_review": 6
+      "remaining18_native_song_identity_qualified": 6,
+      "remaining_gap_or_semantics_research": 12
     },
     "historicalMissing14NativeIdentityQualified": 14,
     "historicalMissing14ProviderCandidateChangedFromOriginal": 12,
@@ -36,7 +38,9 @@
       "supported": 117,
       "unresolved": 238,
       "unsupported": 0
-    }
+    },
+    "remaining18SixNativeSongIdentityQualified": 6,
+    "remaining18StillNeedingNativeOrOtherEvidence": 12
   },
   "decisionPolicy": {
     "candidateNativeSongAttributionDoesNotEstablishDebutYear": true,
@@ -422,22 +426,23 @@
         "genieDebutYear": 2018,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "80620455",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2018,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=95286227",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
@@ -694,22 +699,23 @@
         "genieDebutYear": 2001,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "14940057",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2001,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=16188214",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
@@ -726,22 +732,23 @@
         "genieDebutYear": 2011,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "80291913",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2011,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=93455972",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
@@ -933,22 +940,23 @@
         "genieDebutYear": 2016,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "80507988",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2016,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=87001968",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
@@ -1001,22 +1009,23 @@
         "genieDebutYear": 2007,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "54232309",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2007,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=82614801",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
@@ -1231,22 +1240,23 @@
         "genieDebutYear": 2006,
         "evidenceGap": "canonical_debut_year_unavailable"
       },
-      "evidenceReviewLane": "remaining_gap_or_semantics_research",
+      "evidenceReviewLane": "remaining18_native_song_identity_qualified",
       "laterProviderIdentityEvidence": {
-        "qualifiedCandidateProviderArtistId": null,
-        "nativeSongOrAlbumArtistLinkVerified": false,
-        "providerDebutYearFromLaterQualifiedCandidate": null,
-        "nativeReleaseEvidenceUrl": null,
+        "qualifiedCandidateProviderArtistId": "43241763",
+        "nativeSongOrAlbumArtistLinkVerified": true,
+        "providerDebutYearFromLaterQualifiedCandidate": 2006,
+        "nativeReleaseEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=80710177",
         "differsFromOriginalResearchCandidate": false
       },
       "independentYearCorroboration": null,
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
-        "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
+        "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
+        "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING"
       ],
       "evidencePacketPaths": [
-        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json"
+        "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+        "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
       ],
       "reviewerDecision": "pending",
       "reviewer": null,
