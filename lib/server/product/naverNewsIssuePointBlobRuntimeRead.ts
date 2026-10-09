@@ -19,6 +19,10 @@ import {
 import {
   createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository,
   createObjectStoreNaverNewsLatestOfficialShadowSlotRepository,
+  MAX_CONCURRENT_MIRROR_CANONICAL_READS,
+  MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+  type NaverNewsMirrorCanonicalReadPhaseStats,
+  type NaverNewsMirrorReadConcurrency,
 } from '../ingestion/naverNewsStoredEvidenceMirror';
 import {
   createProductionNaverNewsBlobEvidenceReadStore,
@@ -245,20 +249,28 @@ function runtime(
   store: ReadOnlyStore,
   stageTimer: ReturnType<typeof createNaverNewsBlobReadStageTimer>,
   emitCanonicalReadPhases: boolean,
+  canonicalReadConcurrency: NaverNewsMirrorReadConcurrency,
 ): ProductVariableRealReadRuntime {
   return Object.freeze({
     async readNewsIssuePointFrozenMethodology(input) {
       const repository =
         createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
           store,
-          emitCanonicalReadPhases
-            ? {
-                onBatchReadPhaseStats: (record) => console.info(
-                  'FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE='
-                    + JSON.stringify(record),
-                ),
-              }
-            : {},
+          {
+            // The metadata-only diagnostic flag never changes the worker cap.
+            // Explicit Production opt-in is resolved separately at the entry.
+            maxConcurrentReads: canonicalReadConcurrency,
+            ...(emitCanonicalReadPhases
+              ? {
+                  onBatchReadPhaseStats: (
+                    record: NaverNewsMirrorCanonicalReadPhaseStats
+                  ) => console.info(
+                    'FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE='
+                      + JSON.stringify(record),
+                  ),
+                }
+              : {}),
+          },
         );
       const profiledRepository = Object.freeze({
         ...repository,
@@ -309,6 +321,13 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
   const stageTimingEnabled =
     isProductionRuntime(environment)
     && environment.FANDEX_NAVER_NEWS_STAGE_TIMINGS?.trim() === '1';
+  // Fail closed to the original eight-worker ceiling on all non-Production
+  // runtimes, unset flags, and unexpected values. Diagnostics are independent.
+  const canonicalReadConcurrency: NaverNewsMirrorReadConcurrency =
+    isProductionRuntime(environment)
+    && environment.FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY?.trim() === '12'
+      ? MAX_CONCURRENT_MIRROR_CANONICAL_READS
+      : MAX_CONCURRENT_MIRROR_EVIDENCE_READS;
   const stageTimer = createNaverNewsBlobReadStageTimer({
     // Opt-in is required even on the Production host; no default log noise.
     enabled: stageTimingEnabled,
@@ -403,6 +422,6 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
       variableId: 'newsIssuePoint',
       throughSlotStart,
     },
-    runtime(store, stageTimer, stageTimingEnabled),
+    runtime(store, stageTimer, stageTimingEnabled, canonicalReadConcurrency),
   );
 }

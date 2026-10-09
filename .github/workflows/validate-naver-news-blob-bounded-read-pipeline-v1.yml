@@ -44,7 +44,9 @@ jobs:
         if: always()
         run: |
           echo "maxConcurrentManifestBlobReads=8"
-          echo "maxConcurrentCanonicalBlobReads=12"
+          echo "maxConcurrentCanonicalBlobReadsDefault=8"
+          echo "maxConcurrentCanonicalBlobReadsOptIn=12"
+          echo "canonicalTwelveRequiresProductionEnv=true"
           echo "officialSlotOrderPreserved=true"
           echo "missingIsNotZero=true"
           echo "completedEvidenceCache=false"
