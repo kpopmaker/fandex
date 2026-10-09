@@ -4,15 +4,15 @@ Owner: #602, linked to #424. This is a **source-level arithmetic model**, not a 
 
 ## Exact existing source binding
 
-- Approved immutable provider runtime revision: \`27a007c2afb4776cf2ae89c2e8bd4ba5f9a8f688\`.
-- \`scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV2.ts\`: a newly completed slot returns a new receipt, then calls \`buildCoverage(dependencies.store)\`.
-- \`buildCoverage\` lists the existing \`sns-fandom/youtube-audit/recurring/v2/receipts/\` prefix and sequentially \`readText\`s **each** receipt to calculate the count, cumulative provider calls, cumulative quota units and true-zero receipts.
-- \`lib/server/storage/vercelBlobImmutableTextObjectStore.ts\`: production \`readText\` uses \`client.get(..., { access: 'private', useCache: false })\`; \`listPathnames\` uses paginated list.
+- Approved immutable provider runtime revision: `27a007c2afb4776cf2ae89c2e8bd4ba5f9a8f688`.
+- `scripts/operations/snsFandomYoutubeRecurringMeasurementRunnerV2.ts`: a newly completed slot returns a new receipt, then calls `buildCoverage(dependencies.store)`.
+- `buildCoverage` lists the existing `sns-fandom/youtube-audit/recurring/v2/receipts/` prefix and sequentially `readText`s **each** receipt to calculate the count, cumulative provider calls, cumulative quota units and true-zero receipts.
+- `lib/server/storage/vercelBlobImmutableTextObjectStore.ts`: production `readText` uses `client.get(..., { access: 'private', useCache: false })`; `listPathnames` uses paginated list.
 - This model does not profile timing, Vercel billing, provider API calls, quotas, failures, or actual request logs. No limits/budgets have been assumed.
 
 ## One-new-receipt-per-natural-hour projection
 
-The current v2 canonical requires 366 × 24 = **8,784** hourly observations. Under one successful newly completed slot per hour, exactly one resulting \`buildCoverage\` pass each hour, without retries, recovery branches, duplicate runs, or additional reads:
+The current v2 canonical requires 366 × 24 = **8,784** hourly observations. Under one successful newly completed slot per hour, exactly one resulting `buildCoverage` pass each hour, without retries, recovery branches, duplicate runs, or additional reads:
 
 | Observed natural slots n | Receipt GETs in the nth coverage call | Cumulative receipt GETs from successful coverage passes |
 |---:|---:|---:|
@@ -21,9 +21,9 @@ The current v2 canonical requires 366 × 24 = **8,784** hourly observations. Und
 | 37 | 37 | 703 |
 | 8,784 | 8,784 | 38,583,720 |
 
-Source-derived formula: \`n*(n+1)/2\`. These **logical read operations** are the output of a deterministic work model and are not measurements of real billed Vercel usage. They also exclude non-coverage reads, list pagination, retries and any recovered/missed slots.
+Source-derived formula: `n*(n+1)/2`. These **logical read operations** are the output of a deterministic work model and are not measurements of real billed Vercel usage. They also exclude non-coverage reads, list pagination, retries and any recovered/missed slots.
 
-\`SNS_FANDOM_V2_TOTAL_PLANNED_SLOTS\` and \`modelSnsFandomV2ReceiptScanWorkV1\` provide identical arithmetic with unit-test negative controls. No absolute budget or guessed operational failure threshold is introduced.
+`SNS_FANDOM_V2_TOTAL_PLANNED_SLOTS` and `modelSnsFandomV2ReceiptScanWorkV1` provide identical arithmetic with unit-test negative controls. No absolute budget or guessed operational failure threshold is introduced.
 
 ## Decision boundary
 
