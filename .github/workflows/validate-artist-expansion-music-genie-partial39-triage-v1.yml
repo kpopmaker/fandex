@@ -28,6 +28,7 @@ on:
       - 'scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_partial39_remaining18_six_native_song_probe_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - 'tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
@@ -290,5 +291,31 @@ jobs:
         with:
           name: artist-expansion-genie-partial39-remaining18-six-native-songs-v1
           path: scripts/fandex-cloud-migration/source/music_genie_partial39_remaining18_six_native_song_probe_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-remaining12-native-songs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only Genie HTML probe dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile remaining12 native song probe
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.py
+      - name: Check 12 remaining exact candidate identities via native song pages
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_remaining12_native_song_probe_v1.py
+      - name: Upload 12 candidate native artist ID evidence and holds
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-genie-partial39-remaining12-native-song-probe-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.json
           retention-days: 21
           if-no-files-found: warn
