@@ -117,6 +117,95 @@ test('validated NAVER write plan becomes immutable mirror evidence without Postg
   );
 });
 
+test('manifest read phase summarizes complete verified evidence without leaking identities', async () => {
+  const store = new MemoryImmutableStore();
+  const plans = [
+    planAt('2026-10-03T01:00:00.000Z'),
+    planAt('2026-10-03T02:00:00.000Z'),
+  ];
+  for (const plan of plans) await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const records: Record<string, unknown>[] = [];
+  const reader = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    store,
+    { onManifestReadPhaseStats: (record) => records.push(record) },
+  );
+  const jobs = await reader.readSucceededSchedulerJobs();
+  assert.equal(jobs.length, plans.length);
+  assert.equal(records.length, 1);
+  const summary = records[0]!;
+  assert.equal(summary.contractVersion, 'naver-news-mirror-manifest-read-phase-v1');
+  assert.equal(summary.outcome, 'fulfilled');
+  assert.equal(summary.manifestsRequested, 2);
+  assert.equal(summary.manifestsFound, 2);
+  assert.equal(summary.manifestsMissing, 0);
+  assert.deepEqual(Object.keys(summary).sort(), [
+    'contractVersion', 'outcome', 'manifestsRequested', 'manifestsFound',
+    'manifestsMissing', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'decodeSumMs', 'decodeMaxMs', 'wallMs',
+  ].sort());
+  for (const key of [
+    'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'decodeSumMs', 'decodeMaxMs', 'wallMs',
+  ]) {
+    assert.ok(Number.isInteger(summary[key]) && (summary[key] as number) >= 0);
+  }
+  const serialized = JSON.stringify(summary);
+  assert.ok(plans.every((plan) => !serialized.includes(plan.identity.jobId)));
+  assert.doesNotMatch(serialized, /stored-evidence-mirror\/v1\/|news\.example|아이유/);
+});
+
+test('manifest phase failure remains fail closed for missing or corrupt immutable objects', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-10-03T03:00:00.000Z');
+  await mirrorNaverNewsStoredEvidence(plan, store);
+
+  const records: { outcome: string; manifestsMissing: number }[] = [];
+  const missingStore = {
+    listPathnames: (prefix: string) => store.listPathnames(prefix),
+    async readText(pathname: string): Promise<string | null> {
+      if (pathname.includes('/scheduler-manifests/')) return null;
+      return store.readText(pathname);
+    },
+  };
+  const missingReader = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    missingStore,
+    { onManifestReadPhaseStats: (record) => records.push(record) },
+  );
+  await assert.rejects(
+    () => missingReader.readSucceededSchedulerJobs(),
+    /naver_news_latest_official_slot_stored_job_invalid/,
+  );
+  assert.equal(records.length, 1);
+  assert.equal(records[0]?.outcome, 'rejected');
+  assert.equal(records[0]?.manifestsMissing, 1);
+
+  const objects = buildNaverNewsStoredEvidenceMirrorObjects(plan);
+  assert.ok(objects.schedulerManifestPathname);
+  const tampered = JSON.parse(objects.schedulerManifestBody!);
+  tampered.jobPayloadDigest = 'f'.repeat(64);
+  store.values.set(objects.schedulerManifestPathname!, JSON.stringify(tampered));
+  const corrupted = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    store,
+    { onManifestReadPhaseStats() { throw new Error('ignored-observer-error'); } },
+  );
+  await assert.rejects(
+    () => corrupted.readSucceededSchedulerJobs(),
+    /naver_news_latest_official_slot_stored_job_invalid/,
+  );
+});
+
+test('throwing manifest observer cannot override a successful verified read', async () => {
+  const store = new MemoryImmutableStore();
+  const plan = planAt('2026-10-03T04:00:00.000Z');
+  await mirrorNaverNewsStoredEvidence(plan, store);
+  const reader = createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
+    store,
+    { onManifestReadPhaseStats() { throw new Error('ignored-observer-error'); } },
+  );
+  assert.equal((await reader.readSucceededSchedulerJobs()).length, 1);
+});
+
 test('staged scheduler evidence becomes official only after canonical job-id finalization', async () => {
   const store = new MemoryImmutableStore();
   const plan = planAt('2026-10-02T01:00:00.000Z');

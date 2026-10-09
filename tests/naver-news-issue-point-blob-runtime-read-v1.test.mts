@@ -563,6 +563,69 @@ test('News runtime stage timing is opt-in and excludes evidence, paths, and cred
   ));
 });
 
+test('Production stage timing emits one safe manifest read phase summary without changing latest evidence', async () => {
+  const store = memoryStore();
+  const protocolStart = Date.parse('2026-10-03T01:00:00.000Z');
+  for (let index = 0; index < 50; index += 1) {
+    await stageOfficial(
+      store,
+      new Date(protocolStart + index * 60 * 60_000).toISOString(),
+    );
+  }
+
+  const logs: string[] = [];
+  const originalInfo = console.info;
+  console.info = (...values: unknown[]) =>
+    logs.push(values.map(String).join(' '));
+  let result;
+  try {
+    result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+      {
+        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+        FANDEX_NAVER_NEWS_STAGE_TIMINGS: '1',
+        BLOB_READ_WRITE_TOKEN: 'private-manifest-attribution-test-token',
+      },
+      {
+        createReadStore() {
+          return {
+            readText: store.readText,
+            listPathnames: store.listPathnames,
+          };
+        },
+      },
+    );
+  } finally {
+    console.info = originalInfo;
+  }
+
+  assert.equal(result.status, 'ok');
+  const prefix = 'FANDEX_NAVER_NEWS_BLOB_MANIFEST_READ_PHASE=';
+  const records = logs.filter((line) => line.startsWith(prefix));
+  assert.equal(records.length, 1);
+  const record = JSON.parse(records[0]!.slice(prefix.length)) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(record).sort(), [
+    'contractVersion', 'outcome', 'manifestsRequested', 'manifestsFound',
+    'manifestsMissing', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'decodeSumMs', 'decodeMaxMs', 'wallMs',
+  ].sort());
+  assert.equal(record.contractVersion, 'naver-news-mirror-manifest-read-phase-v1');
+  assert.equal(record.outcome, 'fulfilled');
+  assert.equal(record.manifestsRequested, 50);
+  assert.equal(record.manifestsFound, 50);
+  assert.equal(record.manifestsMissing, 0);
+  for (const key of [
+    'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'decodeSumMs', 'decodeMaxMs', 'wallMs',
+  ]) {
+    assert.ok(Number.isInteger(record[key]) && (record[key] as number) >= 0);
+  }
+  assert.ok(logs.every((line) =>
+    !line.includes('private-manifest-attribution-test-token')
+    && !line.includes('stored-evidence-mirror/v1/')
+    && !line.includes('아이유 새 소식'),
+  ));
+});
+
 test('News stage timing preserves fail-closed credential resolution failure', async () => {
   const logs: string[] = [];
   const originalInfo = console.info;

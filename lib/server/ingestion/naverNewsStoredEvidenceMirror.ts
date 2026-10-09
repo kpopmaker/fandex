@@ -700,33 +700,129 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
   });
 }
 
+// Metadata-only opt-in attribution. Per-Blob SUMs overlap across eight
+// workers; neither SUM may be added to wall time. Never emit object identity,
+// pathname, provider payload, token, or rejected error strings.
+export const NAVER_NEWS_MIRROR_MANIFEST_READ_PHASE_VERSION =
+  'naver-news-mirror-manifest-read-phase-v1' as const;
+
+export type NaverNewsMirrorManifestReadPhaseStats = Readonly<{
+  contractVersion: typeof NAVER_NEWS_MIRROR_MANIFEST_READ_PHASE_VERSION;
+  outcome: 'fulfilled' | 'rejected';
+  manifestsRequested: number;
+  manifestsFound: number;
+  manifestsMissing: number;
+  listWallMs: number;
+  remoteReadSumMs: number;
+  remoteReadMaxMs: number;
+  decodeSumMs: number;
+  decodeMaxMs: number;
+  wallMs: number;
+}>;
+
 export function createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
   store: Pick<ImmutableTextObjectStore, 'readText' | 'listPathnames'>,
+  options: Readonly<{
+    onManifestReadPhaseStats?: (stats: NaverNewsMirrorManifestReadPhaseStats) => void;
+  }> = {},
 ): NaverNewsLatestOfficialShadowSlotReadRepository {
   return Object.freeze({
     async readSucceededSchedulerJobs(): Promise<
       readonly NaverNewsSucceededSchedulerJob[]
     > {
-      const pathnames = await store.listPathnames(SCHEDULER_MANIFEST_PREFIX);
-      const manifests = await mapMirroredEvidenceBatched(
-        pathnames,
-        async (pathname) => {
-          const body = await store.readText(pathname);
-          if (body === null) {
-            throw new Error(
-              'naver_news_latest_official_slot_stored_job_invalid',
-            );
+      const observer = options.onManifestReadPhaseStats;
+      const started = observer ? performance.now() : 0;
+      let manifestsRequested = 0;
+      let manifestsFound = 0;
+      let manifestsMissing = 0;
+      let listWallMs = 0;
+      let remoteReadSumMs = 0;
+      let remoteReadMaxMs = 0;
+      let decodeSumMs = 0;
+      let decodeMaxMs = 0;
+      let outcome: NaverNewsMirrorManifestReadPhaseStats['outcome'] = 'rejected';
+
+      function elapsed(since: number): number {
+        return Math.max(0, Math.round(performance.now() - since));
+      }
+
+      try {
+        const listStarted = observer ? performance.now() : 0;
+        let pathnames: readonly string[];
+        try {
+          pathnames = await store.listPathnames(SCHEDULER_MANIFEST_PREFIX);
+        } finally {
+          if (observer) listWallMs = elapsed(listStarted);
+        }
+        manifestsRequested = pathnames.length;
+
+        const manifests = await mapMirroredEvidenceBatched(
+          pathnames,
+          async (pathname) => {
+            if (!observer) {
+              const body = await store.readText(pathname);
+              if (body === null) {
+                throw new Error(
+                  'naver_news_latest_official_slot_stored_job_invalid',
+                );
+              }
+              return decodeManifestEnvelope(body);
+            }
+
+            const readStarted = performance.now();
+            let body: string | null;
+            try {
+              body = await store.readText(pathname);
+            } finally {
+              const duration = elapsed(readStarted);
+              remoteReadSumMs += duration;
+              remoteReadMaxMs = Math.max(remoteReadMaxMs, duration);
+            }
+            if (body === null) {
+              manifestsMissing += 1;
+              throw new Error('naver_news_latest_official_slot_stored_job_invalid');
+            }
+            const decodeStarted = performance.now();
+            try {
+              const decoded = decodeManifestEnvelope(body);
+              manifestsFound += 1;
+              return decoded;
+            } finally {
+              const duration = elapsed(decodeStarted);
+              decodeSumMs += duration;
+              decodeMaxMs = Math.max(decodeMaxMs, duration);
+            }
+          },
+        );
+        outcome = 'fulfilled';
+        return Object.freeze(
+          manifests.map((manifest) => Object.freeze({
+            jobId: manifest.jobId,
+            collectionKey: manifest.collectionKey,
+            requestContract: manifest.requestContract,
+          })),
+        );
+      } finally {
+        if (observer) {
+          try {
+            observer(Object.freeze({
+              contractVersion: NAVER_NEWS_MIRROR_MANIFEST_READ_PHASE_VERSION,
+              outcome,
+              manifestsRequested,
+              manifestsFound,
+              manifestsMissing,
+              listWallMs,
+              remoteReadSumMs,
+              remoteReadMaxMs,
+              decodeSumMs,
+              decodeMaxMs,
+              wallMs: elapsed(started),
+            }));
+          } catch {
+            // Telemetry must not override original evidence or failures.
           }
-          return decodeManifestEnvelope(body);
-        },
-      );
-      return Object.freeze(
-        manifests.map((manifest) => Object.freeze({
-          jobId: manifest.jobId,
-          collectionKey: manifest.collectionKey,
-          requestContract: manifest.requestContract,
-        })),
-      );
+        }
+      }
     },
   });
 }
