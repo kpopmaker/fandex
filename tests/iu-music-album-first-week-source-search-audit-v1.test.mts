@@ -90,3 +90,64 @@ test('2026-10-08 official Initial Chodong showcase is not an IU exact claim or p
   assert.equal(audit.result.tierAOrBExactValueAndPeriodBindingLocated, false);
   assert.equal(audit.result.productionObservationEligible, false);
 });
+
+
+test('2025-W22 community transcript must not qualify seven-day IU first-week copies', () => {
+  const review = audit.weeklyCommunityTranscriptFollowUp;
+  assert.equal(review.sourceTier, 'tier-c-discovery-only');
+  assert.equal(review.sourceType, 'user-generated-community-transcription-of-a-chart');
+  assert.equal(review.originalThreadVerifiedDirectly, false);
+  assert.equal(review.postDate, '2025-06-02');
+  assert.equal(review.communityTranscribedWeeklyFigure.artist, 'IU');
+  assert.equal(review.communityTranscribedWeeklyFigure.releaseLabel, '花書籤3');
+  assert.equal(review.communityTranscribedWeeklyFigure.reportedWeeklyCopies, 72_140);
+  assert.equal(review.communityTranscribedWeeklyFigure.rank, 6);
+  assert.equal(review.communityTranscribedWeeklyFigure.officialWeeklyCopiesVerified, false);
+  assert.equal(review.weeklyChartWindow.start, '2025-05-26');
+  assert.equal(review.weeklyChartWindow.end, '2025-06-01');
+
+  const official = review.officialChartCrosscheck;
+  assert.equal(official.artistAndAlbumPresent, true);
+  assert.equal(official.rank, 6);
+  assert.equal(official.dateWindowConfirmed, true);
+  assert.equal(official.exactCopiesVisible, false);
+
+  const firstWeek = review.initialChodongDiscoveryComparison;
+  assert.equal(firstWeek.discoveryOnlyValue, 79_940);
+  assert.equal(firstWeek.discoveryOnlyPeriodStart, '2025-05-28');
+  assert.equal(firstWeek.discoveryOnlyPeriodEnd, '2025-06-03');
+  assert.notEqual(review.weeklyChartWindow.start, firstWeek.discoveryOnlyPeriodStart);
+  assert.notEqual(review.weeklyChartWindow.end, firstWeek.discoveryOnlyPeriodEnd);
+  for (const property of [
+    'samePeriodAsWeeklyChart',
+    'weeklyWindowCoversEntireSevenDayFirstWeek',
+    'weeklyReportedCopiesCanReplaceFirstWeekValue',
+    'subtractionOrExtrapolationAllowed',
+    'earlierSellsideRoundedFigureIsIndependentExactCorroboration',
+  ]) {
+    assert.equal(firstWeek[property], false, property);
+  }
+
+  for (const property of [
+    'verifiedPrimaryWeeklyCopies',
+    'verifiedFirstWeekCopies',
+    'firstWeekProviderPeriodStart',
+    'firstWeekProviderPeriodEnd',
+  ]) {
+    assert.equal(review.qualification[property], null, property);
+  }
+  for (const property of [
+    'qualifyingTierABFirstWeekValue',
+    'qualifyingTierABSameSourceValuePeriodBinding',
+    'usageRightsAuthorized',
+    'normalizedStorageAuthorized',
+    'numericProductEligible',
+    'productActivationAuthorized',
+  ]) {
+    assert.equal(review.qualification[property], false, property);
+  }
+  assert.equal(review.outreachSent, false);
+  assert.equal(audit.result.tierAOrBExactValueSourceLocated, false);
+  assert.equal(audit.result.tierAOrBExactValueAndPeriodBindingLocated, false);
+  assert.equal(audit.result.productionObservationEligible, false);
+});
