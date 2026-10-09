@@ -1076,6 +1076,127 @@ def main() -> None:
         "JYP_GENIE_ALIAS_VOLATILITY_INDEPENDENT_NATIVE_LINK_HUMAN_REVIEW_REQUIRED"
     )
 
+    # Last missing14 candidate now has official Genie song-detail backlinks.
+    # Historical alias-only receipt remains immutable as a separate older observation.
+    native_girlset = load(
+        SOURCE / "music_genie_girlset_native_song_attribution_review_packet_v1.json"
+    )
+    assert native_girlset["version"] == "music_genie_girlset_native_song_attribution_review_packet_v1"
+    assert native_girlset["status"] == (
+        "four_named_lead_songs_native_genie_attribution_qualified_human_year_epoch_review_pending"
+    )
+    assert native_girlset["canonicalArtistId"] == "girlset"
+    assert native_girlset["provider"] == "genie"
+    assert native_girlset["source"] == "music_chart"
+    assert native_girlset["canonicalUniverseCount"] == 355
+    assert native_girlset["historicalProviderArtistId"] == "83019445"
+    assert native_girlset["currentNativeLinkedProviderArtistId"] == "83019445"
+    assert native_girlset["originalCanonicalDebutYear"] is None
+    assert native_girlset["originalGenieProfileDebutYear"] is None
+    assert native_girlset["originalAliasOnlyReceipt"] == (
+        "music_genie_missing14_last2_native_release_review_packet_v1.json"
+    )
+    live_girlset = native_girlset["providerPageInvestigation"]
+    assert live_girlset["initialNoIdRunId"] == 37865597546
+    assert live_girlset["initialNoIdArtifactId"] == 11587819564
+    assert live_girlset["rowAttributeParsingRunId"] == 37865737240
+    assert live_girlset["rowAttributeArtifactId"] == 11588296285
+    assert live_girlset["expandedVerificationRunId"] == 37865842068
+    assert live_girlset["expandedVerificationHead"] == (
+        "3310a11e47111b3f341c1dae8a7c61476fe1eb76"
+    )
+    assert live_girlset["expandedVerificationJobId"] == 113612245328
+    assert live_girlset["expandedVerificationArtifactId"] == 11587648959
+    assert live_girlset["expandedVerificationArtifactDigest"] == (
+        "sha256:8777c6164dd17d4697557fdbc8fd9728207ff22386af87ced5259d2bdea81ed9"
+    )
+    assert live_girlset["artistProfileHttpStatus"] == 200
+    assert live_girlset["artistSongListHttpStatus"] == 200
+    assert live_girlset["artistAlbumListHttpStatus"] == 200
+    assert live_girlset["requestedDiscoveryPageCount"] == 10
+    assert live_girlset["requestedSearchQueryCount"] == 7
+    assert live_girlset["uniqueNativeCandidateCount"] == 38
+    assert live_girlset["directNativeDetailVerificationCount"] == 30
+    assert live_girlset["exactArtistNativeLinkedSongCount"] == 29
+    assert live_girlset["contradictingNativeArtistIdCount"] == 0
+    assert live_girlset["songRowsRequireSongidTableAttributeParsing"] is True
+    assert live_girlset["initialNoIdResultWasCollectorBlindSpotNotEvidenceOfCatalogAbsence"] is True
+    assert live_girlset["verifiedSongCountDoesNotRepresentUniquePrimaryReleases"] is True
+
+    expected_girlset_songs = {
+        "Commas": ("111546614", "2025-08-29"),
+        "Little Miss": ("112640558", "2025-11-14"),
+        "Tweak": ("114158735", "2026-03-06"),
+        "CHAT": ("115957845", "2026-07-17"),
+    }
+    main_songs = native_girlset["primaryNativeSongs"]
+    assert len(main_songs) == 4
+    assert {x["title"] for x in main_songs} == set(expected_girlset_songs)
+    assert len({x["songId"] for x in main_songs}) == 4
+    for track in main_songs:
+        sid, date = expected_girlset_songs[track["title"]]
+        assert track["songId"] == sid
+        assert track["reportedReleaseDate"] == date
+        assert track["genieSongUrl"] == (
+            "https://www.genie.co.kr/detail/songInfo?xgnm=" + sid
+        )
+        assert track["nativeLinkedArtistId"] == "83019445"
+        assert track["providerDetailFetchedHttp200"] is True
+        assert track["titlePresentOnNativeDetail"] is True
+        assert track["nativeArtistLinkExclusiveForExactDisplay"] is True
+        assert track["sourceReviewApproved"] is False
+
+    original_girlset = next(x for x in rows if x["canonicalArtistId"] == "girlset")
+    assert original_girlset["genieProviderArtistId"] == "83019445"
+    assert original_girlset["canonicalDebutYear"] is None
+    assert original_girlset["genieDebutYear"] is None
+    assert "girlset" in unresolved
+    assert "girlset" not in supported and "girlset" not in unsupported
+    assert "girlset" not in targets
+    assert all(x["canonicalArtistId"] != "girlset" for x in strong["bindings"])
+
+    epoch = native_girlset["canonicalEpochReview"]
+    assert epoch["vchaGroupHistoryYear"] == 2024
+    assert epoch["girlsetRebrandYear"] == 2025
+    assert epoch["genieProfileDebutYear"] is None
+    assert epoch["canonicalDebutYear"] is None
+    for key in (
+        "groupIdentityContinuityVersusNewRebrandScopeUnresolved",
+        "providerReleaseDatesAreNotCanonicalDebutYear",
+        "doNotBackfillMissingYearFromEarliestSong",
+    ):
+        assert epoch[key] is True, key
+
+    research14 = native_girlset["reconciledMissing14ResearchCohort"]
+    assert research14["originalHistoricalGenieProviderDebutYearMissingCount"] == 14
+    assert research14["priorNativeReleaseLinkedCount"] == 13
+    assert research14["thisAdditionalNativeReleaseLinkedCanonicalArtistIds"] == ["girlset"]
+    assert research14["nowNativeReleaseLinkedCandidateCount"] == 14
+    assert research14["nowAliasOnlyCandidateCount"] == 0
+    assert research14["currentApprovedReviewedBindingCount"] == 0
+    assert research14["supportedIncreaseByThisResearch"] == 0
+    assert research14["thisIsResearchEvidenceOnly"] is True
+    assert last2["missing14ResearchSummary"]["aliasOnlyRemaining"] == 1
+    assert last2["missing14ResearchSummary"]["independentlyGenieNativeReleaseLinkQualified"] == 13
+    guards_girlset = native_girlset["reviewAndSafety"]
+    assert guards_girlset["reviewer"] is None
+    assert guards_girlset["reviewedAt"] is None
+    assert guards_girlset["reviewDecision"] is None
+    for key in (
+        "providerIdentityBindingApproved", "canonicalDebutYearBackfilled",
+        "sourceCompatibilityModified", "originalExact94EvidenceOverwritten",
+        "productCohortExpanded", "databaseChanged", "schedulerChanged",
+        "deploymentAuthorized", "mainMergeAuthorized",
+    ):
+        assert guards_girlset[key] is False, key
+    assert guards_girlset["genieSongAttributionNotProviderLicense"] is True
+    assert native_girlset["actualCandidatePartition"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    assert native_girlset["nextGate"] == (
+        "GIRLSET_NATIVE_IDENTITY_CONFIRMED_YEAR_EPOCH_AND_PROVIDER_BINDING_HUMAN_REVIEW_REQUIRED"
+    )
+
     safety = queue["safety"]
     for name in (
         "machineCandidateIsReviewedBinding",
@@ -1099,7 +1220,7 @@ def main() -> None:
     print(
         "PASS: Genie partial39 evidence triage | 7 provider-year missing | "
         "25 canonical-year missing | 7 both missing | "
-        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native + BOY STORY album/1 GIRLSET alias-only held | JYP live alias volatility pinned | Music 117/238/0 | Product unchanged"
+        "39 unresolved | 3 debut-semantic scope holds | 8 external year records | 5 identity-era holds | JINU review pending | six year-matched review pending | full264 source runs reconciled | 2 ambiguous artist identities qualified + SJ 2-song link | missing14 rechecked; 7 native-linked + 5 remaining native + BOY STORY album/1 GIRLSET alias-only held | JYP live alias volatility pinned | GIRLSET 4 lead-song native links + missing14 14/14 under review | Music 117/238/0 | Product unchanged"
     )
 
 
