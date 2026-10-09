@@ -134,7 +134,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -167,7 +166,6 @@
       "existingSemanticHold": "solo_vs_group_debut_year",
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
         "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
       ],
@@ -270,7 +268,6 @@
       "existingSemanticHold": "group_solo_career_epoch",
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
         "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
       ],
@@ -340,7 +337,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -373,7 +369,6 @@
       "existingSemanticHold": "solo_vs_group_debut_year",
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
         "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
       ],
@@ -407,7 +402,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -440,7 +434,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -615,7 +608,6 @@
       "existingSemanticHold": "solo_vs_group_debut_year",
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
         "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE"
       ],
@@ -649,7 +641,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -715,7 +706,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -748,7 +738,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -813,7 +802,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -957,7 +945,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -1026,7 +1013,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -1189,7 +1175,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -1258,7 +1243,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -1291,7 +1275,6 @@
       "existingSemanticHold": null,
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE"
       ],
       "evidencePacketPaths": [
@@ -1358,7 +1341,6 @@
       "existingSemanticHold": "group_solo_career_epoch",
       "unresolvedReviewerQuestions": [
         "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING",
-        "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL",
         "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE",
         "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH"
       ],
