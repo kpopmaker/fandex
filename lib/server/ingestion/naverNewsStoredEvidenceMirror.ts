@@ -588,6 +588,10 @@ export type NaverNewsMirrorCanonicalReadPhaseStats = Readonly<{
   objectsRequested: number;
   objectsFound: number;
   objectsMissing: number;
+  // Resolved, non-sensitive worker cap; never include raw environment values.
+  configuredMaxConcurrentReads: NaverNewsMirrorReadConcurrency;
+  // Actual concurrent remote readText calls, not CPU workers or requests issued.
+  peakConcurrentRemoteReads: number;
   remoteReadSumMs: number;
   remoteReadMaxMs: number;
   decodeSumMs: number;
@@ -619,7 +623,11 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
       }
       const uniqueJobIds = [...new Set(jobIds)];
       const observer = options.onBatchReadPhaseStats;
+      const maxConcurrentReads =
+        options.maxConcurrentReads ?? MAX_CONCURRENT_MIRROR_EVIDENCE_READS;
       const started = observer ? performance.now() : 0;
+      let activeRemoteReads = 0;
+      let peakConcurrentRemoteReads = 0;
       let objectsFound = 0;
       let objectsMissing = 0;
       let remoteReadSumMs = 0;
@@ -646,9 +654,15 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
             // access tokens, or error messages.
             const remoteStarted = performance.now();
             let body: string | null;
+            activeRemoteReads += 1;
+            peakConcurrentRemoteReads = Math.max(
+              peakConcurrentRemoteReads,
+              activeRemoteReads,
+            );
             try {
               body = await store.readText(objectPathForJob(jobId));
             } finally {
+              activeRemoteReads -= 1;
               const ms = elapsed(remoteStarted);
               remoteReadSumMs += ms;
               remoteReadMaxMs = Math.max(remoteReadMaxMs, ms);
@@ -669,7 +683,7 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
               decodeMaxMs = Math.max(decodeMaxMs, ms);
             }
           },
-          options.maxConcurrentReads ?? MAX_CONCURRENT_MIRROR_EVIDENCE_READS,
+          maxConcurrentReads,
         );
         outcome = 'fulfilled';
         return new Map(entries.filter(
@@ -685,6 +699,8 @@ export function createObjectStoreNaverNewsCanonicalJobEvidenceReadRepository(
               objectsRequested: uniqueJobIds.length,
               objectsFound,
               objectsMissing,
+              configuredMaxConcurrentReads: maxConcurrentReads,
+              peakConcurrentRemoteReads,
               remoteReadSumMs,
               remoteReadMaxMs,
               decodeSumMs,

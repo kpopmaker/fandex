@@ -675,34 +675,62 @@ test('canonical concurrency experiment is independent of stage timings and requi
   async function probe(concurrency: string | undefined, stageTimings: string | undefined) {
     let active = 0;
     let peak = 0;
-    const result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
-      {
-        FANDEX_PRODUCT_RUNTIME_ENV: 'production',
-        BLOB_READ_WRITE_TOKEN: 'test-only-no-remote-requests',
-        ...(stageTimings ? { FANDEX_NAVER_NEWS_STAGE_TIMINGS: stageTimings } : {}),
-        ...(concurrency ? { FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY: concurrency } : {}),
-      },
-      {
-        createReadStore() {
-          return {
-            listPathnames: store.listPathnames,
-            async readText(pathname: string) {
-              if (!pathname.includes('/jobs/')) return store.readText(pathname);
-              active += 1;
-              peak = Math.max(peak, active);
-              try {
-                await new Promise<void>((resolve) => setTimeout(resolve, 3));
-                return await store.readText(pathname);
-              } finally {
-                active -= 1;
-              }
-            },
-          };
+    const logLines: string[] = [];
+    const originalInfo = console.info;
+    console.info = (...values: unknown[]) =>
+      logLines.push(values.map(String).join(' '));
+    let result: Awaited<ReturnType<
+      typeof getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot
+    >>;
+    try {
+      result = await getNaverNewsIssuePointBlobProductVariableAtLatestOfficialSlot(
+        {
+          FANDEX_PRODUCT_RUNTIME_ENV: 'production',
+          BLOB_READ_WRITE_TOKEN: 'test-only-no-remote-requests',
+          ...(stageTimings ? { FANDEX_NAVER_NEWS_STAGE_TIMINGS: stageTimings } : {}),
+          ...(concurrency ? { FANDEX_NAVER_NEWS_CANONICAL_READ_CONCURRENCY: concurrency } : {}),
         },
-      },
-    );
+        {
+          createReadStore() {
+            return {
+              listPathnames: store.listPathnames,
+              async readText(pathname: string) {
+                if (!pathname.includes('/jobs/')) return store.readText(pathname);
+                active += 1;
+                peak = Math.max(peak, active);
+                try {
+                  await new Promise<void>((resolve) => setTimeout(resolve, 3));
+                  return await store.readText(pathname);
+                } finally {
+                  active -= 1;
+                }
+              },
+            };
+          },
+        },
+      );
+    } finally {
+      console.info = originalInfo;
+    }
     assert.equal(result.status, 'ok');
     assert.equal(active, 0);
+    const prefix = 'FANDEX_NAVER_NEWS_BLOB_CANONICAL_READ_PHASE=';
+    const canonicalLogs = logLines.filter((line) => line.startsWith(prefix));
+    if (stageTimings === '1') {
+      assert.equal(canonicalLogs.length, 1);
+      const stats = JSON.parse(canonicalLogs[0]!.slice(prefix.length)) as {
+        configuredMaxConcurrentReads: number;
+        peakConcurrentRemoteReads: number;
+        objectsFound: number;
+        objectsMissing: number;
+      };
+      assert.equal(stats.configuredMaxConcurrentReads, concurrency === '12' ? 12 : 8);
+      assert.equal(stats.peakConcurrentRemoteReads, peak);
+      assert.equal(stats.objectsFound, 50);
+      assert.equal(stats.objectsMissing, 0);
+    } else {
+      assert.equal(canonicalLogs.length, 0, 'no telemetry unless stage timing is enabled');
+    }
     return peak;
   }
 
