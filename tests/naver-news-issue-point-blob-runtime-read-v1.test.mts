@@ -605,7 +605,8 @@ test('Production stage timing emits one safe manifest read phase summary without
   const record = JSON.parse(records[0]!.slice(prefix.length)) as Record<string, unknown>;
   assert.deepEqual(Object.keys(record).sort(), [
     'contractVersion', 'outcome', 'manifestsRequested', 'manifestsFound',
-    'manifestsMissing', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
+    'manifestsMissing', 'configuredMaxConcurrentReads',
+    'peakConcurrentRemoteReads', 'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
     'decodeSumMs', 'decodeMaxMs', 'wallMs',
   ].sort());
   assert.equal(record.contractVersion, 'naver-news-mirror-manifest-read-phase-v1');
@@ -613,6 +614,10 @@ test('Production stage timing emits one safe manifest read phase summary without
   assert.equal(record.manifestsRequested, 50);
   assert.equal(record.manifestsFound, 50);
   assert.equal(record.manifestsMissing, 0);
+  assert.equal(record.configuredMaxConcurrentReads, 8);
+  assert.ok(typeof record.peakConcurrentRemoteReads === 'number');
+  assert.ok((record.peakConcurrentRemoteReads as number) >= 1);
+  assert.ok((record.peakConcurrentRemoteReads as number) <= 8);
   for (const key of [
     'listWallMs', 'remoteReadSumMs', 'remoteReadMaxMs',
     'decodeSumMs', 'decodeMaxMs', 'wallMs',
