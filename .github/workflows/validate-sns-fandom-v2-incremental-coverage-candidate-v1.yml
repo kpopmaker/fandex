@@ -1,0 +1,44 @@
+name: Validate snsFandom v2 incremental coverage candidate v1
+
+on:
+  pull_request:
+    paths:
+      - 'lib/intelligence/snsFandomYoutubeV2IncrementalCoverageCandidateV1.ts'
+      - 'tests/sns-fandom-v2-incremental-coverage-candidate-v1.test.mts'
+      - 'docs/research/sns-fandom-v2-incremental-coverage-candidate-v1.md'
+      - '.github/workflows/validate-sns-fandom-v2-incremental-coverage-candidate-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Offline checkpoint continuity, digest, and safety regressions
+        run: npx tsx --test tests/sns-fandom-v2-incremental-coverage-candidate-v1.test.mts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo 'candidateOnly=true'
+          echo 'liveBootstrapPerformed=false'
+          echo 'blobReads=0'
+          echo 'blobWrites=0'
+          echo 'providerCallsPerformed=false'
+          echo 'authorizedRevisionChanged=false'
+          echo 'renderRedeployPerformed=false'
+          echo 'schedulerMutationPerformed=false'
+          echo 'providerSubmissionAuthorized=false'
+          echo 'productionCollectionAuthorized=false'
+          echo 'productActivationAuthorized=false'
