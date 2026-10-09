@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - work/product-self-host-runtime-v1
+      - work/brand-fit-live-production-verification-v1
     paths:
       - ".dockerignore"
       - "Dockerfile"
