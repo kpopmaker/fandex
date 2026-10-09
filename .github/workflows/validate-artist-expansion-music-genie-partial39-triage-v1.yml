@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_decision_readiness_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_full264_cross_run_reconciliation_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_superjunior_maddox_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_missing14_year_and_alias_conflict_review_packet_v1.json'
@@ -26,6 +27,7 @@ on:
       - 'scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py'
       - 'scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
+      - 'tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
 
@@ -45,6 +47,8 @@ jobs:
           python-version: '3.12'
       - name: Validate fail-closed partial39 evidence triage
         run: python tests/artist-expansion-music-genie-partial39-triage-v1.py
+      - name: Validate partial39 reviewer decision readiness without promotion
+        run: python tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py
 
   investigate-jinu-linkage:
     runs-on: ubuntu-latest
