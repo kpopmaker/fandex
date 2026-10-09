@@ -8,6 +8,7 @@ on:
     paths:
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_decision_readiness_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_full264_cross_run_reconciliation_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_superjunior_maddox_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_missing14_year_and_alias_conflict_review_packet_v1.json'
