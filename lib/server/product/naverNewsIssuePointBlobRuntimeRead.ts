@@ -377,6 +377,14 @@ export async function getNaverNewsIssuePointBlobProductVariableAtLatestOfficialS
   const latestRepository =
     createObjectStoreNaverNewsLatestOfficialShadowSlotRepository(
       profiledStore,
+      stageTimingEnabled
+        ? {
+            onManifestReadPhaseStats: (record) => console.info(
+              'FANDEX_NAVER_NEWS_BLOB_MANIFEST_READ_PHASE='
+                + JSON.stringify(record),
+            ),
+          }
+        : {},
     );
   const profiledLatestRepository = Object.freeze({
     readSucceededSchedulerJobs: () =>
