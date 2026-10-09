@@ -33,6 +33,14 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8",
 }
 TRANSIENT = {429, 500, 502, 503, 504}
+# Independently observed Genie native song detail links from the catalog research.
+# This pin is an evidence continuity check, not authorization for source binding.
+GIRLSET_PINNED_NATIVE_SONGS = {
+    "Commas": "111546614",
+    "Little Miss": "112640558",
+    "Tweak": "114158735",
+    "CHAT": "115957845",
+}
 ARTIST_ONCLICK = re.compile(r"""fnViewArtist\(['"](\d+)['"]\)""", re.I)
 ARTIST_HREF = re.compile(r"artistInfo\?xxnm=(\d+)", re.I)
 SONG_ONCLICK = re.compile(r"""fnViewSong\(['"](\d+)['"]\)""", re.I)
@@ -267,6 +275,23 @@ def main() -> None:
         "confirmedNative": payload["confirmedNativeAttributionIds"],
         "contradictingNative": payload["confirmedContradictingArtistIds"],
     }, ensure_ascii=False))
+    primary_links = {
+        name: next(
+            (x for x in confirmed if x["kind"] == "song"
+             and x["providerId"] == pid
+             and name in x["releaseNameMatches"]),
+            None,
+        )
+        for name, pid in GIRLSET_PINNED_NATIVE_SONGS.items()
+    }
+    print("GIRLSET_PRIMARY_NATIVE_IDS " + json.dumps({
+        name: {"songId": row["providerId"], "nativeArtistIds": row["nativeArtistIds"]}
+        if row is not None else None
+        for name, row in primary_links.items()
+    }, ensure_ascii=False))
+    assert len(primary_links) == 4
+    assert all(row is not None and row["nativeArtistIds"] == [ARTIST_ID]
+               for row in primary_links.values()), "GIRLSET_primary_song_native_artist_backlink_missing"
     assert len(discovered_pages) == len(sites) == 10
     assert discovered_pages[0]["httpStatus"] == 200, "pinned_GIRLSET_artist_profile_not_200"
     assert payload["approvedProviderBinding"] is False
