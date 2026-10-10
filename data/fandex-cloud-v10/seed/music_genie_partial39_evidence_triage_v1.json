@@ -1,0 +1,1088 @@
+{
+  "version": "music_genie_partial39_evidence_triage_v1",
+  "status": "non_activating_identity_evidence_triage_only",
+  "canonicalUniverseCount": 355,
+  "source": "music_chart",
+  "provider": "genie",
+  "sourceEvidence": {
+    "exact94DetailRunId": 37560176276,
+    "artifactId": 11456228049,
+    "artifactDigest": "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f",
+    "artifactFile": "scripts/fandex-cloud-migration/source/music_genie_exact94_detail_verification_v1.json",
+    "detailVerificationHead": "2cc5117519152a80bbca2602eaa8aa4c3c7a400b",
+    "reviewPr": 571,
+    "applicationPr": 575,
+    "applicationParentHead": "ffdb019b2144babb21a1948f7f22c85eccab2af3"
+  },
+  "disposition": {
+    "sourceMetadataPartialCount": 39,
+    "genieDebutYearUnavailableCount": 7,
+    "canonicalDebutYearUnavailableCount": 25,
+    "bothDebutYearsUnavailableCount": 7,
+    "reviewedForSupportCount": 0,
+    "automaticallyBoundCount": 0
+  },
+  "independentEvidenceExamples": [
+    {
+      "canonicalArtistId": "nexz",
+      "sourceType": "artist_label_official_discography",
+      "url": "https://nexz.jype.com/discography/i4k507u4?AmSeq=undefined&PgIndex=undefined",
+      "statement": "JYP identifies the 2024-05-20 Ride the Vibe release as NEXZ's debut single.",
+      "corroboratedCanonicalDebutYear": 2024,
+      "doesNotSupplyMissingGenieDetailYear": true,
+      "authorizesSupport": false
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "sourceType": "reported_label_statement",
+      "url": "https://en.yna.co.kr/view/AEN20180604007900315",
+      "statement": "Yonhap reports JYP's 2018 announcement of BOY STORY's planned September 2018 debut.",
+      "corroboratedCanonicalDebutYear": 2018,
+      "doesNotSupplyMissingGenieDetailYear": true,
+      "authorizesSupport": false
+    }
+  ],
+  "sourceIntegrityObservation": {
+    "full264RawArtifact": {
+      "ambiguousExact": 47,
+      "ambiguousWrapper": 72
+    },
+    "full264CommittedReceipt": {
+      "ambiguousExact": 46,
+      "ambiguousWrapper": 73
+    },
+    "status": "resolved_as_distinct_discovery_runs_source_receipts_immutable",
+    "affectsThisExact94PartialQueue": false,
+    "originalReceiptArtifactId": 11456271955,
+    "embeddedExact94ArtifactId": 11456228049,
+    "reconciliationFile": "music_genie_full264_cross_run_reconciliation_v1.json",
+    "dispositionChangedCanonicalArtistIds": [
+      "superjunior",
+      "maddox"
+    ],
+    "identicalUniqueExact94Ids": true,
+    "currentSourceActivationAuthorized": false
+  },
+  "candidates": [
+    {
+      "canonicalArtistId": "nexz",
+      "genieProviderArtistId": "81122242",
+      "canonicalDebutYear": 2024,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "brothersu",
+      "genieProviderArtistId": "79983812",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "eunjiwon",
+      "genieProviderArtistId": "14945865",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1997,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kangseungyoon",
+      "genieProviderArtistId": "80089706",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2010,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jinu",
+      "genieProviderArtistId": "14946516",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1996,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "mino",
+      "genieProviderArtistId": "80073343",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "bangyedam",
+      "genieProviderArtistId": "80211832",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2013,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leehi",
+      "genieProviderArtistId": "80158970",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjaejoong",
+      "genieProviderArtistId": "14954974",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2010,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "hwangminhyun",
+      "genieProviderArtistId": "80441275",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "yoonsanha",
+      "genieProviderArtistId": "80534174",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "hahyunsang",
+      "genieProviderArtistId": "80620455",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jypark",
+      "genieProviderArtistId": "14945855",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1994,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "genieProviderArtistId": "80899341",
+      "canonicalDebutYear": 2018,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "girlset",
+      "genieProviderArtistId": "83019445",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "sf9",
+      "genieProviderArtistId": "80546873",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "joyuri",
+      "genieProviderArtistId": "80661354",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjaehwan",
+      "genieProviderArtistId": "80587302",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "ejel",
+      "genieProviderArtistId": "81567146",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "lucidfall",
+      "genieProviderArtistId": "14940057",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2001,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leesangsoon",
+      "genieProviderArtistId": "80291913",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2011,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "afterschool",
+      "genieProviderArtistId": "82301148",
+      "canonicalDebutYear": 2009,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "bumzu",
+      "genieProviderArtistId": "80189465",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2012,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "up10tion",
+      "genieProviderArtistId": "81290806",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "b1a4",
+      "genieProviderArtistId": "80131588",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2011,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kard",
+      "genieProviderArtistId": "81305280",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "ahnyeeun",
+      "genieProviderArtistId": "80507988",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2016,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "xlov",
+      "genieProviderArtistId": "82757745",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2025,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "taeyang",
+      "genieProviderArtistId": "54232309",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2007,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "pow",
+      "genieProviderArtistId": "14942969",
+      "canonicalDebutYear": 2023,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "tiot",
+      "genieProviderArtistId": "81972382",
+      "canonicalDebutYear": 2024,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "mirae",
+      "genieProviderArtistId": "81608365",
+      "canonicalDebutYear": 2021,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "x1",
+      "genieProviderArtistId": "81522270",
+      "canonicalDebutYear": 2019,
+      "genieDebutYear": null,
+      "evidenceGap": "genie_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "balmingtiger",
+      "genieProviderArtistId": "80639974",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2018,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "jeongsewoon",
+      "genieProviderArtistId": "80590751",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2017,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "leeseokhoon",
+      "genieProviderArtistId": "43241763",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 2006,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "yoonmirae",
+      "genieProviderArtistId": "14936492",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1997,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "chen",
+      "genieProviderArtistId": "81098158",
+      "canonicalDebutYear": null,
+      "genieDebutYear": null,
+      "evidenceGap": "both_debut_years_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    },
+    {
+      "canonicalArtistId": "kimjongkook",
+      "genieProviderArtistId": "14945901",
+      "canonicalDebutYear": null,
+      "genieDebutYear": 1995,
+      "evidenceGap": "canonical_debut_year_unavailable",
+      "exactAliasSearchCandidate": true,
+      "detailDisplayAliasMatch": true,
+      "detailEntityTypeMatch": true,
+      "reviewStatus": "unresolved_additional_year_evidence_required"
+    }
+  ],
+  "safety": {
+    "canonicalArtistIdAuthoritative": true,
+    "sourceCandidateOnly": true,
+    "providerDetailYearRequiredForStrong26EquivalentPromotion": true,
+    "independentOfficialYearEvidenceDoesNotAutomaticallyReplaceGenieDetailYear": true,
+    "machineCandidateIsReviewedBinding": false,
+    "partialMetadataAutoPromotion": false,
+    "identityFuzzyAutoBinding": false,
+    "ambiguousProviderIdAutoSelection": false,
+    "unresolvedIsMissing": false,
+    "unresolvedIsUnsupported": false,
+    "productCohortExpansionAuthorized": false,
+    "runtimeActivationAuthorized": false,
+    "schedulerActivationAuthorized": false,
+    "databaseMutationAuthorized": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  },
+  "nextGate": "MUSIC_GENIE_PARTIAL39_PROVIDER_AND_CANONICAL_DEBUT_EVIDENCE_REVIEW_REQUIRED",
+  "yearSemanticsReview": {
+    "reviewStatus": "external_reported_evidence_not_human_approved_binding",
+    "reviewedAt": "2026-10-08",
+    "purpose": "distinguish_first_artist_career_debut_from_first_solo_release_debut_before_canonical_metadata_completion",
+    "scopePolicy": "UNDECIDED_REQUIRES_HUMAN_REVIEW",
+    "exceptionCount": 3,
+    "providerDebutYearSemanticsKnown": false,
+    "records": [
+      {
+        "canonicalArtistId": "joyuri",
+        "genieProviderArtistId": "80661354",
+        "genieDetailDebutYear": 2018,
+        "earliestGroupCareerDebutYear": 2018,
+        "independentlyReportedSoloDebutYear": 2021,
+        "yearScopeAssessment": "genie_year_matches_izone_group_debut_but_not_2021_solo_debut",
+        "evidence": [
+          {
+            "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=430955&id=&lang=e&menu_cate=artist&page=17",
+            "publisher": "KBS WORLD",
+            "reportPublished": "2022-11-14",
+            "supports": "IZ*ONE-related debut in 2018; solo album Glassy in October 2021"
+          },
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/former-izone-member-jo-yuri-to-make-her-solo-debut/10633693",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2021-09-24",
+            "supports": "WAKEONE agency-announced first solo single October 7, 2021"
+          }
+        ]
+      },
+      {
+        "canonicalArtistId": "hwangminhyun",
+        "genieProviderArtistId": "80441275",
+        "genieDetailDebutYear": 2012,
+        "earliestGroupCareerDebutYear": 2012,
+        "independentlyReportedSoloDebutYear": 2023,
+        "yearScopeAssessment": "genie_year_matches_nuest_group_debut_but_not_2023_solo_album_debut",
+        "evidence": [
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/singer-actor-minhyun-to-release-his-first-solo-ep-truth-or-lie-on-feb-27/10463584",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2023-02-06",
+            "supports": "Pledis announcement of first solo EP in 2023 and NU'EST group debut in 2012"
+          },
+          {
+            "url": "https://www.koreajoongangdaily.com/entertainment/hwang-minhyun-gets-a-third-fresh-start-this-time-as-a-solo-artist/10240716",
+            "publisher": "Korea JoongAng Daily",
+            "reportPublished": "2023-02-27",
+            "supports": "2023 debut solo EP showcase 11 years after NU'EST debut"
+          }
+        ]
+      },
+      {
+        "canonicalArtistId": "kangseungyoon",
+        "genieProviderArtistId": "80089706",
+        "genieDetailDebutYear": 2010,
+        "earliestGroupCareerDebutYear": null,
+        "independentlyReportedSoloDebutYear": 2013,
+        "yearScopeAssessment": "genie_year_2010_conflicts_with_reported_2013_official_solo_debut;2010_origin_requires_separate_interpretation",
+        "evidence": [
+          {
+            "url": "https://www.soompi.com/article/505672wpp/yg-entertainment-announces-kang-seung-yoons-debut",
+            "publisher": "Soompi reporting YG announcement",
+            "reportPublished": "2013-06-20",
+            "supports": "YG announces 2013 solo debut after approximately three years' training"
+          }
+        ]
+      }
+    ],
+    "safety": {
+      "noAutomaticCanonicalDebutYearFill": true,
+      "noProviderArtistIdRebinding": true,
+      "noSupportPromotion": true,
+      "noProductActivation": true
+    }
+  },
+  "independentDebutYearCorroborationV2": {
+    "version": "music_genie_partial39_independent_year_evidence_batch_v2",
+    "reviewedOn": "2026-10-08",
+    "status": "external_evidence_verified_candidate_only_no_binding",
+    "scope": "artist-entity-specific first named-artist debut; not necessarily first individual music activity",
+    "count": 8,
+    "dispositionCounts": {
+      "canonical_debut_year_unavailable": 6,
+      "both_debut_years_unavailable": 2
+    },
+    "records": [
+      {
+        "canonicalArtistId": "leehi",
+        "pinnedGenieProviderArtistId": "80158970",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 2012,
+        "externallyCorroboratedDebutYear": 2012,
+        "evidenceYearSemantics": "solo_artist_debut",
+        "evidenceType": "official_label_debut_single",
+        "evidencePublisher": "YG Entertainment",
+        "evidencePublishedDate": "2012-10-26",
+        "url": "https://www.ygfamily.com/en/news/notice/2995",
+        "summary": "YG announces Lee Hi debut single 1,2,3,4 for October 29, 2012.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "jypark",
+        "pinnedGenieProviderArtistId": "14945855",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 1994,
+        "externallyCorroboratedDebutYear": 1994,
+        "evidenceYearSemantics": "solo_artist_debut",
+        "evidenceType": "official_publisher_artist_profile",
+        "evidencePublisher": "JYP Publishing",
+        "evidencePublishedDate": null,
+        "url": "https://www.jyppub.com/ko/artists/1",
+        "summary": "Publisher artist profile states J.Y. Park's debut with Don't Leave Me in 1994.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "sf9",
+        "pinnedGenieProviderArtistId": "80546873",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 2016,
+        "externallyCorroboratedDebutYear": 2016,
+        "evidenceYearSemantics": "named_group_debut",
+        "evidenceType": "public_broadcaster_artist_profile",
+        "evidencePublisher": "KBS WORLD",
+        "evidencePublishedDate": "2021-12-20",
+        "url": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=360019&lang=e",
+        "summary": "KBS WORLD dates the group's Feeling Sensation debut to October 5, 2016.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "b1a4",
+        "pinnedGenieProviderArtistId": "80131588",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 2011,
+        "externallyCorroboratedDebutYear": 2011,
+        "evidenceYearSemantics": "named_group_debut",
+        "evidenceType": "anniversary_report",
+        "evidencePublisher": "Soompi",
+        "evidencePublishedDate": "2016-04-23",
+        "url": "https://www.soompi.com/article/846891wpp/b1a4-thanks-fans-for-their-5th-debut-anniversary",
+        "summary": "Fifth anniversary retrospective dates the debut of B1A4 and O.K to April 23, 2011.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "jeongsewoon",
+        "pinnedGenieProviderArtistId": "80590751",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 2017,
+        "externallyCorroboratedDebutYear": 2017,
+        "evidenceYearSemantics": "solo_artist_debut",
+        "evidenceType": "reported_label_debut_announcement",
+        "evidencePublisher": "Soompi reporting Starship Entertainment",
+        "evidencePublishedDate": "2017-08-09",
+        "url": "https://www.soompi.com/article/1024115wpp/starship-entertainment-announces-plans-broadcast-jung-se-woons-debut-showcase-live",
+        "summary": "Starship announced Jeong Sewoon debut showcase featuring debut track on August 31, 2017.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "kard",
+        "pinnedGenieProviderArtistId": "81305280",
+        "sourceDisposition": "both_debut_years_unavailable",
+        "genieDetailDebutYear": null,
+        "externallyCorroboratedDebutYear": 2017,
+        "evidenceYearSemantics": "named_group_formal_debut",
+        "evidenceType": "reported_label_debut_announcement",
+        "evidencePublisher": "Channel A reporting DSP Media",
+        "evidencePublishedDate": "2017-07-01",
+        "url": "https://ichannela.com/news/detail/000000044447.do",
+        "summary": "DSP formal debut announcement names July 19, 2017 Hola Hola; pre-debut tracks are a distinct earlier activity.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "up10tion",
+        "pinnedGenieProviderArtistId": "81290806",
+        "sourceDisposition": "both_debut_years_unavailable",
+        "genieDetailDebutYear": null,
+        "externallyCorroboratedDebutYear": 2015,
+        "evidenceYearSemantics": "named_group_debut",
+        "evidenceType": "anniversary_report",
+        "evidencePublisher": "Soompi",
+        "evidencePublishedDate": "2019-09-10",
+        "url": "https://www.soompi.com/article/1351555wpp/up10tion-shares-heartfelt-messages-to-fans-for-4th-debut-anniversary",
+        "summary": "Fourth anniversary coverage identifies September 2015 debut performances and album.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      },
+      {
+        "canonicalArtistId": "xlov",
+        "pinnedGenieProviderArtistId": "82757745",
+        "sourceDisposition": "canonical_debut_year_unavailable",
+        "genieDetailDebutYear": 2025,
+        "externallyCorroboratedDebutYear": 2025,
+        "evidenceYearSemantics": "named_group_debut",
+        "evidenceType": "reported_label_debut_release",
+        "evidencePublisher": "Sports Kyunghyang reporting 257 Entertainment",
+        "evidencePublishedDate": "2025-01-07",
+        "url": "https://sports.khan.co.kr/article/202501071835003",
+        "summary": "257 Entertainment statement identifies January 7, 2025 release of XLOV debut single I'mma Be.",
+        "reviewStatus": "external_corroboration_candidate_not_reviewed_binding",
+        "canonicalYearPopulated": false,
+        "genieYearBackfilled": false,
+        "musicSupportedPromoted": false
+      }
+    ],
+    "decisionBoundary": {
+      "externalDebutYearDoesNotReplaceProviderDetailYear": true,
+      "canonicalArtistIdAuthoritative": true,
+      "groupCareerDebutAndSoloDebutAreNotInterchangeable": true,
+      "independentlyReportedDebutYearDoesNotMakeReviewedBinding": true,
+      "allEightRemainUnresolved": true,
+      "doesNotReduceMusicUnresolvedCount": true,
+      "productActivationAuthorized": false
+    },
+    "nextGate": "HUMAN_REVIEW_DEBUT_YEAR_SEMANTICS_AND_PROVIDER_ID_DETAILS"
+  },
+  "providerIdentityEpochReviewV3": {
+    "version": "music_genie_partial39_identity_epoch_review_v3",
+    "evaluatedOn": "2026-10-08",
+    "status": "reported_external_identity_evidence_requires_human_review_non_activating",
+    "cohortCount": 5,
+    "originalGenieDataLineage": "music_genie_exact94_detail_verification_receipt_v1",
+    "providerDetailRefetchPerformed": false,
+    "individualRecords": [
+      {
+        "canonicalArtistId": "jinu",
+        "pinnedGenieProviderArtistId": "14946516",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 1996,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2014,
+        "independentlyReportedSoloDebutYear": 2019,
+        "artistEntityScope": "solo_JINU_of_WINNER",
+        "disposition": "potential_provider_identity_collision_requires_independent_genie_entity_linkage",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/jinu/profile",
+            "evidence": "Official JINU solo artist profile DEBUT 2019-08-14 and birthdate 1991-09-26",
+            "authority": "official_label_artist_profile"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/jinu/discography/471",
+            "evidence": "WINNER vocalist JINU first solo single JINU's HEYDAY, release 2019-08-14",
+            "authority": "official_label_discography"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/winner/discography/528",
+            "evidence": "WINNER discography includes 2014 debut-era album 2014 S/S and identifies JINU as solo performer in 2020 release",
+            "authority": "official_label_discography"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "mino",
+        "pinnedGenieProviderArtistId": "80073343",
+        "genieDetailDebutYearRecordedInOriginalArtifact": null,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2014,
+        "independentlyReportedSoloDebutYear": 2018,
+        "artistEntityScope": "solo_MINO_of_WINNER",
+        "disposition": "debut_era_scope_and_missing_genie_year_require_review",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/mino/discography/441",
+            "evidence": "First MINO solo album XX released 2018-11-26, contrasted with career activity as WINNER since 2014",
+            "authority": "official_label_discography"
+          },
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/ko/artists/winner/profile",
+            "evidence": "WINNER group official Korean profile identifies debut in August 2014",
+            "authority": "official_label_group_profile"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "bangyedam",
+        "pinnedGenieProviderArtistId": "80211832",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 2013,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2020,
+        "independentlyReportedSoloDebutYear": 2023,
+        "artistEntityScope": "solo_BANG_YEDAM_former_TREASURE",
+        "disposition": "genie_year_2013_origin_unverified_and_solo_group_era_conflict",
+        "sourceEvidence": [
+          {
+            "publisher": "YG Entertainment",
+            "url": "https://www.ygfamily.com/en/artists/treasure/profile",
+            "evidence": "Official TREASURE group profile lists debut 2020-08-07",
+            "authority": "official_label_group_profile"
+          },
+          {
+            "publisher": "Soompi reporting GF Entertainment",
+            "url": "https://www.soompi.com/article/1622976wpp/former-treasure-member-bang-ye-dam-announces-solo-debut-date-launches-social-media-accounts",
+            "evidence": "GF Entertainment-announced official solo debut album ONLY ONE released 2023-11-23, after departure from TREASURE; 2013 Genie value not verified as debut for same music identity",
+            "authority": "reported_label_announcement"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "chen",
+        "pinnedGenieProviderArtistId": "81098158",
+        "genieDetailDebutYearRecordedInOriginalArtifact": null,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 2012,
+        "independentlyReportedSoloDebutYear": 2019,
+        "artistEntityScope": "solo_CHEN_of_EXO",
+        "disposition": "solo_group_era_distinction_and_absent_genie_year_require_review",
+        "sourceEvidence": [
+          {
+            "publisher": "EXO Official Website / SM Entertainment",
+            "url": "https://exo-jp.net/en/profile.php?n=0",
+            "evidence": "EXO official group profile states debut in Korea and China on April 8, 2012",
+            "authority": "official_group_profile"
+          },
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/1314368wpp/chen-talks-about-being-1st-exo-member-to-make-korean-solo-debut-how-other-members-showed-support",
+            "evidence": "Chen's first Korean solo mini-album April, and a flower debuted on 2019-04-01",
+            "authority": "contemporaneous_solo_debut_report"
+          },
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/1314552wpp/exos-chen-sweeps-itunes-charts-worldwide-with-solo-debut",
+            "evidence": "Confirms first CHEN solo mini album release 2019-04-01",
+            "authority": "contemporaneous_solo_debut_report"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      },
+      {
+        "canonicalArtistId": "kimjongkook",
+        "pinnedGenieProviderArtistId": "14945901",
+        "genieDetailDebutYearRecordedInOriginalArtifact": 1995,
+        "genieDetailFreshFetchPerformed": false,
+        "independentlyReportedGroupOrCareerDebutYear": 1995,
+        "independentlyReportedSoloDebutYear": 2001,
+        "artistEntityScope": "solo_KIM_JONG_KOOK_former_TURBO",
+        "disposition": "genie_year_1995_matches_group_career_not_solo_album_scope",
+        "sourceEvidence": [
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/359306wpp/artist-of-the-week-kim-jong-kook",
+            "evidence": "Kim Jong Kook debuted with TURBO in September 1995 and began solo career with Renaissance album in 2001",
+            "authority": "retrospective_artist_profile"
+          },
+          {
+            "publisher": "Soompi",
+            "url": "https://www.soompi.com/article/360010wpp/artist-of-the-week-kim-jong-kook-1",
+            "evidence": "Independent Soompi artist profile explains 1995 TURBO and December 2001 solo debut distinction",
+            "authority": "retrospective_artist_profile"
+          }
+        ],
+        "reviewState": "identity_or_year_scope_human_review_required",
+        "canonicalYearPopulated": false,
+        "providerIdBindingAuthorized": false,
+        "musicSourceSupportPromotionAuthorized": false
+      }
+    ],
+    "reviewGates": {
+      "jinuProviderIdentityCollisionPossibilityUnresolved": true,
+      "providerDebutYearSemanticsGloballyUnverified": true,
+      "distinctGroupAndSoloDebutYearsCannotBeCollapsed": true,
+      "allFiveRetainUnresolvedCompatibility": true,
+      "noCanonicalYearBackfill": true,
+      "noProviderArtistIdAutobind": true,
+      "noProductActivation": true
+    },
+    "nextGate": "GENIE_PARTIAL39_IDENTITY_ENTITY_AND_DEBUT_EPOCH_HUMAN_REVIEW_REQUIRED"
+  },
+  "jinuCollisionIndependentEvidenceV4": {
+    "version": "music_genie_jinu_alias_collision_independent_evidence_v4",
+    "status": "two_distinct_artist_identities_evidenced_pinned_provider_id_not_yet_disambiguated",
+    "reviewedDate": "2026-10-08",
+    "canonicalArtistId": "jinu",
+    "canonicalIntendedEntity": "WINNER vocalist Kim Jin-woo; 2014 group debut, 2019 first solo release",
+    "pinnedCandidateProviderArtistId": "14946516",
+    "pinnedGenieMetadataDebutYear": 1996,
+    "pinnedIdLiveDetailLinkedToNeitherEntity": false,
+    "competingIdentityAliases": [
+      {
+        "label": "JINU (김진우)",
+        "identity": "Kim Jin-woo, WINNER member",
+        "firstSoloReleaseYear": 2019,
+        "primaryEvidence": "https://www.ygfamily.com/en/artists/jinu/discography/471"
+      },
+      {
+        "label": "JINU (지누)",
+        "identity": "1996 recording artist later active in Roller Coaster and as Hitchhiker",
+        "firstSoloReleaseYear": 1996,
+        "primaryEvidence": "https://www.genie.co.kr/magazine/subMain?ctid=27&mgz_seq=13810"
+      }
+    ],
+    "sources": [
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/magazine/subMain?ctid=27&mgz_seq=13810",
+        "supports": "Genie editorial reports 1996 JINU debut song '엉뚱한 상상' and later Roller Coaster / Hitchhiker career",
+        "scope": "1996_historical_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/detail/songInfo?xgnm=20956877",
+        "supports": "Genie song metadata attributes '엉뚱한 상상' to JINU on Jinujoke album",
+        "scope": "1996_historical_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/magazine/subMain?ctid=1&mgz_seq=7198",
+        "supports": "Genie editorial explicitly calls JINU (김진우) member of WINNER and names JINU's HEYDAY solo album in 2019",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "Genie Music",
+        "url": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+        "supports": "Genie song metadata credits JINU (김진우) performing '또또또 (Feat. MINO)' on JINU's HEYDAY",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "YG Entertainment",
+        "url": "https://www.ygfamily.com/en/artists/jinu/profile",
+        "supports": "YG official JINU profile states solo debut 2019-08-14 and birthdate 1991-09-26",
+        "scope": "2019_WINNER_JINU"
+      },
+      {
+        "publisher": "YG Entertainment",
+        "url": "https://www.ygfamily.com/en/artists/jinu/discography/471",
+        "supports": "YG album page identifies JINU of WINNER and first solo JINU's HEYDAY release 2019-08-14",
+        "scope": "2019_WINNER_JINU"
+      }
+    ],
+    "uncertainty": {
+      "pinnedIdDetailPageLiveQueryStillRequired": true,
+      "directAssociationOfPinnedIdTo1996JinuNotEstablished": true,
+      "directAssociationOfPinnedIdToWinnerJinuNotEstablished": true,
+      "sameDisplayNameDoesNotProveIdentity": true,
+      "entityTypeAndAliasCannotResolveThisCollision": true,
+      "currentStatusShouldRemainUnresolved": true,
+      "officialAlternateGenieProviderArtistIdNotSelected": true
+    },
+    "nextGate": "JINU_PINNED_PROVIDER_ID_LIVE_RELEASE_LINKAGE_REQUIRED",
+    "mutationPermissions": {
+      "allowSupportedPromotion": false,
+      "allowUnsupportedDisposition": false,
+      "allowProviderRebinding": false,
+      "allowCanonicalDebutYearFill": false,
+      "allowProductActivation": false,
+      "allowMainMerge": false
+    }
+  },
+  "jinuLiveIdentityResolutionV5": {
+    "version": "music_genie_jinu_live_provider_identity_resolution_v5",
+    "status": "pinned_candidate_rejected_as_wrong_artist_alternative_human_review_required",
+    "source": "genie",
+    "canonicalArtistId": "jinu",
+    "verifiedEvidence": {
+      "runId": 37777436998,
+      "jobId": 113311724896,
+      "conclusion": "success",
+      "exactHead": "e468ec88bddc03015fb0c4fdbafabbec1262715f",
+      "artifactId": 11550277277,
+      "artifactName": "artist-expansion-music-genie-jinu-identity-live-v1",
+      "artifactDigest": "sha256:e8b072d500e4a07d6eec755b24637573dce00fffa924864598a3b15dc28b078e",
+      "artifactExpiresAt": "2026-10-29T12:31:42Z",
+      "providerLiveResponseStatuses": [
+        200,
+        200
+      ],
+      "rawLiveObservationUrl": "https://github.com/kpopmaker/fandex/actions/runs/37777436998"
+    },
+    "wrongAliasCandidate": {
+      "providerArtistId": "14946516",
+      "providerDisplay": "JINU",
+      "providerDetailUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=14946516",
+      "firstRecordedProviderDebutYear": 1996,
+      "liveDetailDebutYearParsed": null,
+      "matchedReleaseEvidence": [
+        "Jinujoke",
+        "엉뚱한 상상"
+      ],
+      "matchesGenieHistoricalEditorialCareer": "Roller Coaster / Hitchhiker JINU",
+      "linkedToWinner": false,
+      "cannotUseAsWinnerProviderIdentity": true,
+      "canonicalArtistNotUnsupported": true
+    },
+    "alternateReviewedCandidateNotApplied": {
+      "providerArtistId": "80441171",
+      "providerDisplay": "JINU (김진우)",
+      "providerDetailUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=80441171",
+      "discoveredViaExactCanonicalAliasSearch": true,
+      "liveDetailStatusCode": 200,
+      "matchedReleaseEvidence": [
+        "JINU's HEYDAY",
+        "또또또"
+      ],
+      "matchedGroupContext": "WINNER",
+      "consistentWithOfficialYgRelease": true,
+      "providerDebutYearParsed": null,
+      "humanReviewedBindingApproved": false,
+      "providerIdAppliedToTargetSeed": false,
+      "sourceCompatibilityPromoted": false
+    },
+    "sourceBoundaries": {
+      "previousRecordedRawCandidateImmutable": true,
+      "originalExact94EvidenceImmutable": true,
+      "distinctPersonDisambiguationSupportedByLiveGenieReleaseEvidence": true,
+      "alternateCandidateRequiresHumanReviewedBinding": true,
+      "artistRemainsUnresolved": true,
+      "musicSupportedCount": 117,
+      "musicUnresolvedCount": 238,
+      "musicUnsupportedCount": 0,
+      "providerMissingIsNotUnsupported": true,
+      "noFuzzyAutoBinding": true,
+      "productActivationAuthorized": false,
+      "mainMergeAuthorized": false
+    },
+    "nextGate": "JINU_80441171_HUMAN_REVIEWED_BINDING_AND_DEBUT_SEMANTICS_REQUIRED",
+    "debutFieldParserCorrectionV6": {
+      "source": "music_genie_jinu_80441171_identity_review_packet_v1",
+      "verifiedLiveRunId": 37778706306,
+      "exactValidationHead": "a639cdb9482df87c1a9194ccb044b4b374267d07",
+      "artifactId": 11550358996,
+      "artifactDigest": "sha256:0a4ed427cad7b0f4b1bfa4b5e7b64b1d98a24a6fe2fe20a5efbeb8ec69bd9ccd",
+      "previousProviderDebutYearParsedNullWasParserLimitation": true,
+      "previousObservedWrongCandidate1996": true,
+      "alternateProviderDebutYearNowParsed": 2014,
+      "alternateProviderActivityType": "남성/솔로",
+      "officialWinnerGroupDebutYear": 2014,
+      "officialSoloDebutYear": 2019,
+      "canonicalDebutYearStillNull": true,
+      "identityReviewCandidatePrepared": true,
+      "humanBindingApproval": false,
+      "sourceSupportedPromotion": false
+    }
+  }
+}

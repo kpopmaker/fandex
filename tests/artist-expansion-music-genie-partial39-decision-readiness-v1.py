@@ -1,0 +1,334 @@
+from __future__ import annotations
+
+import json
+from collections import Counter
+from pathlib import Path
+
+SEED = Path(__file__).resolve().parents[1] / "data/fandex-cloud-v10/seed"
+
+
+def load(filename: str) -> dict:
+    return json.loads((SEED / filename).read_text(encoding="utf-8-sig"))
+
+
+def main() -> None:
+    source = load("music_genie_partial39_evidence_triage_v1.json")
+    decision = load("music_genie_partial39_decision_readiness_review_packet_v1.json")
+    native7 = load("music_genie_missing14_native_release_identity_review_packet_v1.json")
+    other7 = load("music_genie_missing14_remaining7_identity_review_packet_v1.json")
+    last2 = load("music_genie_missing14_last2_native_release_review_packet_v1.json")
+    girlset = load("music_genie_girlset_native_song_attribution_review_packet_v1.json")
+    jinu = load("music_genie_jinu_80441171_identity_review_packet_v1.json")
+    six = load("music_genie_partial39_six_year_match_review_packet_v1.json")
+    song_six = load("music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json")
+    song_twelve = load("music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json")
+    compat = load("artist_source_compatibility_v1.json")
+    target = load("music_chart_artist_targets_v1.json")
+
+    assert decision["version"] == "music_genie_partial39_decision_readiness_review_packet_v1"
+    assert decision["status"] == "research_evidence_synthesis_only_all_human_decisions_pending"
+    assert decision["basedOnExactResearchHead"] == "6556f91025685c412d2e50bb7a31aee23597b8ec"
+    assert decision["canonicalUniverseCount"] == source["canonicalUniverseCount"] == 355
+    assert decision["decisionPolicy"]["partial39SourceSupportedAutomaticPromotion"] is False
+    assert decision["decisionPolicy"]["prodRuntimeSchedulerDatabaseDeploymentAndMainMergeAuthorized"] is False
+    for path in decision["derivedFromPinnedEvidence"]:
+        assert path.startswith("data/fandex-cloud-v10/seed/")
+        assert (SEED / Path(path).name).exists(), path
+
+    rows = decision["candidates"]
+    originals = source["candidates"]
+    assert len(rows) == len(originals) == 39
+    assert [r["canonicalArtistId"] for r in rows] == [
+        r["canonicalArtistId"] for r in originals
+    ]
+    assert len({r["canonicalArtistId"] for r in rows}) == 39
+    active = compat["sources"]["music_chart"]
+    supported = set(active["supportedCanonicalArtistIds"])
+    unresolved = set(active["unresolvedCanonicalArtistIds"])
+    unsupported = set(active["unsupportedCanonicalArtistIds"])
+    target_ids = {r["canonicalArtistId"] for r in target["artists"]}
+    assert (len(supported), len(unresolved), len(unsupported)) == (117, 238, 0)
+    assert target_ids == supported
+    assert len(supported | unresolved | unsupported) == 355
+    assert decision["summary"]["actualStackedMusicPartition"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+
+    native_a = {r["canonicalArtistId"]: r for r in native7["qualifiedRecords"]}
+    native_b = {r["canonicalArtistId"]: r for r in other7["identityRecords"]}
+    assert len(native_a) == 7 and len(native_b) == 7
+    assert not set(native_a) & set(native_b)
+    six_by_id = {r["canonicalArtistId"]: r for r in six["reviewedCandidates"]}
+    song_six_by_id = {r["canonicalArtistId"]: r for r in song_six["records"]}
+    song_twelve_by_id = {r["canonicalArtistId"]: r for r in song_twelve["records"]}
+    assert len(song_twelve_by_id) == 12
+    assert not set(song_twelve_by_id) & set(song_six_by_id)
+    assert song_twelve["version"] == "music_genie_partial39_remaining12_native_song_identity_review_packet_v1"
+    assert song_twelve["status"] == (
+        "twelve_provider_native_song_identity_links_qualified_human_debut_scope_and_binding_review_pending"
+    )
+    tw_lineage = song_twelve["lineage"]
+    assert tw_lineage["researchHead"] == "cd54d65b6e0e4d1c3c93dcf9be4b2ebda0e66a67"
+    assert tw_lineage["pushRunId"] == 37952794243
+    assert tw_lineage["pushJobId"] == 113895623937
+    assert tw_lineage["prRunId"] == 37952803110
+    assert tw_lineage["prJobId"] == 113895652159
+    assert tw_lineage["prArtifactId"] == 11626288830
+    assert tw_lineage["prArtifactDigest"] == (
+        "sha256:8c2bc8b4d7dcc0f4de25f9f2fb6529e011aba47495d2bb791ffba83e46d1f8a4"
+    )
+    assert tw_lineage["pushSuccess"] is True and tw_lineage["prSuccess"] is True
+    assert tw_lineage["outcomesAgreeExactly12Identities"] is True
+    assert song_twelve["verification"] == {
+        "probed": 12, "nativeIdentityQualified": 12, "heldNativeAttribution": 0,
+        "canonicalDebutYearReviewed": 0, "reviewedBindingsApproved": 0,
+        "sourceSupportedPromotions": 0,
+    }
+    assert song_twelve["candidatePartitionAsOfResearch"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    for flag in (
+        "humanReviewRequired", "nativeAttributionNotFirstDebutProof",
+        "groupSoloCareerYearPolicyNotInvented", "historicalPinnedIdImmutable",
+    ):
+        assert song_twelve["safety"][flag] is True
+    for flag in (
+        "sourceTargetMutationAuthorized", "sourceCompatibilityMutationAuthorized",
+        "productActivationAuthorized", "schedulerDatabaseDeploymentAuthorized",
+        "mainMergeAuthorized",
+    ):
+        assert song_twelve["safety"][flag] is False
+    assert len({item["providerSongId"] for item in song_twelve["records"]}) == 12
+    assert len({item["genieProviderArtistId"] for item in song_twelve["records"]}) == 12
+    assert len(song_six_by_id) == 6
+    assert song_six["evidenceRun"]["exactHead"] == "ba4eae2ee86b3dc4d162fc55b4182e40ab082ab0"
+    assert song_six["evidenceRun"]["workflowRunId"] == 37951562117
+    assert song_six["evidenceRun"]["jobId"] == 113891367864
+    assert song_six["evidenceRun"]["artifactId"] == 11625708529
+    assert song_six["evidenceRun"]["artifactDigest"] == (
+        "sha256:cb472abbbf5e62e85fe9726ed1e21473f5bb34a62a40eb088ab0ee16dc3f45bd"
+    )
+    assert song_six["evidenceRun"]["workflowConclusion"] == "success"
+    assert song_six["resultSummary"]["nativeSongArtistIdIdentityQualifiedCount"] == 6
+    assert song_six["resultSummary"]["canonicalDebutYearScopeHumanApprovedCount"] == 0
+    assert song_six["resultSummary"]["reviewedBindingApprovedCount"] == 0
+    assert song_six["resultSummary"]["supportedPromotionCount"] == 0
+    assert song_six["musicCandidatePartitionAsObserved"] == {
+        "supported": 117, "unresolved": 238, "unsupported": 0,
+    }
+    assert song_six["scopeAndSafety"]["canonicalYearNotBackfilled"] is True
+    assert song_six["scopeAndSafety"]["sourceCompatibilityUpdated"] is False
+    assert song_six["scopeAndSafety"]["productActivationAuthorized"] is False
+    year_by_id = {
+        r["canonicalArtistId"]: r
+        for r in source["independentDebutYearCorroborationV2"]["records"]
+    }
+    semantic = {
+        r["canonicalArtistId"]
+        for r in source["yearSemanticsReview"]["records"]
+    }
+    epoch = {
+        r["canonicalArtistId"]
+        for r in source["providerIdentityEpochReviewV3"]["individualRecords"]
+    }
+    last2_boy_story = next(
+        r for r in last2["records"] if r["canonicalArtistId"] == "boystory"
+    )
+
+    lanes = Counter()
+    changed_original_ids = 0
+    for row, original in zip(rows, originals):
+        artist_id = row["canonicalArtistId"]
+        assert artist_id in unresolved and artist_id not in supported | unsupported
+        assert row["originalResearchCandidate"] == {
+            "providerArtistId": original["genieProviderArtistId"],
+            "canonicalDebutYear": original["canonicalDebutYear"],
+            "genieDebutYear": original["genieDebutYear"],
+            "evidenceGap": original["evidenceGap"],
+        }
+        assert row["reviewerDecision"] == "pending"
+        assert row["reviewer"] is None and row["reviewedAt"] is None
+        for flag in (
+            "reviewedBindingApproved", "supportedPromotionApproved",
+            "productActivationApproved",
+        ):
+            assert row[flag] is False, (artist_id, flag)
+        assert row["evidencePacketPaths"]
+        assert len(row["evidencePacketPaths"]) == len(set(row["evidencePacketPaths"]))
+        for path in row["evidencePacketPaths"]:
+            assert (SEED / Path(path).name).exists(), path
+        questions = row["unresolvedReviewerQuestions"]
+        assert questions and len(set(questions)) == len(questions)
+        if original["canonicalDebutYear"] is None:
+            assert "DEFINE_CANONICAL_DEBUT_YEAR_SCOPE" in questions
+        review = row["laterProviderIdentityEvidence"]
+        later_id = review["qualifiedCandidateProviderArtistId"]
+        assert review["differsFromOriginalResearchCandidate"] == (
+            later_id is not None and later_id != original["genieProviderArtistId"]
+        )
+        if later_id != original["genieProviderArtistId"] and later_id is not None:
+            assert "REVIEW_ORIGINAL_VS_NATIVE_PROVIDER_ID" in questions
+
+        lane = row["evidenceReviewLane"]
+        lanes[lane] += 1
+        if artist_id in native_a or artist_id in native_b:
+            assert lane == "historical_missing14_native_identity_qualified"
+            if artist_id in native_a:
+                item = native_a[artist_id]
+                expected_id = item["independentlyQualifiedNativeProviderArtistId"]
+                expected_year = item["genieProfileDebutYear"]
+                release_url = item["nativeRelease"]["url"]
+                assert item["exactNativeLinkValidated"] is True
+            else:
+                item = native_b[artist_id]
+                expected_id = item["providerArtistIdCandidate"]
+                expected_year = item["providerDebutYear"]
+                release_url = item["nativeRelease"]["url"] if item["nativeRelease"] else None
+                if artist_id == "boystory":
+                    release_url = last2_boy_story["releaseEvidence"]["url"]
+                if artist_id == "girlset":
+                    release_url = girlset["primaryNativeSongs"][0]["genieSongUrl"]
+            assert review["qualifiedCandidateProviderArtistId"] == expected_id
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == expected_year
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["nativeReleaseEvidenceUrl"] == release_url
+            assert release_url.startswith("https://www.genie.co.kr/")
+            if review["differsFromOriginalResearchCandidate"]:
+                changed_original_ids += 1
+        elif artist_id == "jinu":
+            assert lane == "jinu_wrong_historical_candidate_review"
+            assert review["qualifiedCandidateProviderArtistId"] == "80441171"
+            assert review["qualifiedCandidateProviderArtistId"] == jinu["candidateProvider"]["providerArtistId"]
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == 2014
+            assert review["nativeReleaseEvidenceUrl"] == jinu["candidateProvider"]["providerSongUrl"]
+            assert "REJECT_HISTORICAL_ID_FOR_WINNER_JINU_AND_REVIEW_ALTERNATE" in questions
+        elif artist_id in six_by_id:
+            assert lane == "six_year_match_review"
+            item = six_by_id[artist_id]
+            assert later_id == item["genieProviderArtistId"]
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == item["genieDebutYear"]
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is False
+        elif artist_id in song_six_by_id:
+            assert lane == "remaining18_native_song_identity_qualified"
+            item = song_six_by_id[artist_id]
+            assert item["originalResearchCandidateProviderArtistId"] == original["genieProviderArtistId"]
+            assert item["qualifiedNativeSongArtistId"] == original["genieProviderArtistId"] == later_id
+            assert item["genieProfileDebutYear"] == original["genieDebutYear"]
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == item["genieProfileDebutYear"]
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["nativeReleaseEvidenceUrl"] == item["songDetailUrl"]
+            assert review["differsFromOriginalResearchCandidate"] is False
+            assert item["exactNativeSongToArtistLinkVerified"] is True
+            assert item["canonicalDebutYear"] is None
+            assert item["independentlyCorroboratedCanonicalDebutYear"] is None
+            assert item["canonicalDebutYearScopeDecision"] == "pending_human_review"
+            for flag in ("sourceBindingApproved", "sourceSupportedPromoted", "productActivated"):
+                assert item[flag] is False
+            assert "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING" in questions
+            assert "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING" not in questions
+            assert (
+                "data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json"
+            ) in row["evidencePacketPaths"]
+        elif artist_id in song_twelve_by_id:
+            assert lane == "remaining12_native_song_identity_qualified"
+            item = song_twelve_by_id[artist_id]
+            assert item["genieProviderArtistId"] == original["genieProviderArtistId"] == later_id
+            assert item["originalGenieDebutYear"] == original["genieDebutYear"]
+            assert item["directNativeSongToPinnedArtistLinkVerified"] is True
+            assert item["providerArtistDetailTypeAndYearMatchedExact94"] is True
+            assert item["canonicalDebutYear"] is None
+            assert item["yearScopeRequiresHumanReview"] is True
+            assert item["canonicalDebutYearScope"] == (
+                "semantic_scope_held_" + row["existingSemanticHold"]
+                if row["existingSemanticHold"] else "canonical_year_unresolved"
+            )
+            assert review["qualifiedCandidateProviderArtistId"] == item["genieProviderArtistId"]
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] == item["originalGenieDebutYear"]
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is True
+            assert review["nativeReleaseEvidenceUrl"] == item["genieNativeSongUrl"]
+            assert review["differsFromOriginalResearchCandidate"] is False
+            assert item["genieNativeSongUrl"] == (
+                "https://www.genie.co.kr/detail/songInfo?xgnm=" + item["providerSongId"]
+            )
+            assert item["genieArtistProfileUrl"] == (
+                "https://www.genie.co.kr/detail/artistInfo?xxnm=" + item["genieProviderArtistId"]
+            )
+            assert item["reviewer"] is None and item["reviewedAt"] is None
+            for flag in (
+                "reviewedBindingApproved", "canonicalYearBackfilled",
+                "sourceSupportedPromoted", "productActivated",
+            ):
+                assert item[flag] is False
+            assert "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING" not in questions
+            assert "HUMAN_REVIEW_CANONICAL_DEBUT_YEAR_SCOPE_BEFORE_BINDING" in questions
+            assert (
+                "data/fandex-cloud-v10/seed/music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json"
+            ) in row["evidencePacketPaths"]
+        else:
+            assert lane == "remaining_gap_or_semantics_research"
+            assert later_id is None
+            assert review["nativeSongOrAlbumArtistLinkVerified"] is False
+            assert review["providerDebutYearFromLaterQualifiedCandidate"] is None
+            assert review["nativeReleaseEvidenceUrl"] is None
+            assert "QUALIFY_NATIVE_PROVIDER_IDENTITY_BEFORE_BINDING" in questions
+            assert "PROVIDER_PROFILE_YEAR_ABSENT_NO_BACKFILL" not in questions
+
+        if artist_id in year_by_id:
+            evidence = row["independentYearCorroboration"]
+            source_year = year_by_id[artist_id]
+            assert evidence == {
+                "reportedYear": source_year["externallyCorroboratedDebutYear"],
+                "yearScope": source_year["evidenceYearSemantics"],
+                "sourceUrl": source_year["url"],
+            }
+        else:
+            assert row["independentYearCorroboration"] is None
+        if artist_id in semantic:
+            assert row["existingSemanticHold"] == "solo_vs_group_debut_year"
+            assert "RESOLVE_SOLO_VS_GROUP_YEAR_SCOPE" in questions
+        elif artist_id in epoch:
+            assert row["existingSemanticHold"] == "group_solo_career_epoch"
+            assert "RESOLVE_GROUP_SOLO_OR_CAREER_EPOCH" in questions
+        elif artist_id == "girlset":
+            assert row["existingSemanticHold"] == "rebrand_identity_epoch"
+            assert "RESOLVE_VCHA_2024_TO_GIRLSET_2025_IDENTITY_EPOCH" in questions
+        else:
+            assert row["existingSemanticHold"] is None
+        if artist_id == "jypark":
+            assert "REVIEW_EXACT_ALIAS_TEMPORAL_HOMONYM_VOLATILITY" in questions
+
+    assert changed_original_ids == 12
+    expected_lanes = {
+        "historical_missing14_native_identity_qualified": 14,
+        "six_year_match_review": 6,
+        "jinu_wrong_historical_candidate_review": 1,
+        "remaining18_native_song_identity_qualified": 6,
+        "remaining12_native_song_identity_qualified": 12,
+    }
+    assert lanes == expected_lanes
+    summary = decision["summary"]
+    assert summary["totalCandidates"] == 39
+    assert summary["mutuallyExclusiveEvidenceLanes"] == {
+        **expected_lanes, "remaining_gap_or_semantics_research": 0,
+    }
+    assert summary["historicalMissing14NativeIdentityQualified"] == 14
+    assert summary["historicalMissing14ProviderCandidateChangedFromOriginal"] == 12
+    assert summary["remaining18SixNativeSongIdentityQualified"] == 6
+    assert summary["remaining18StillNeedingNativeOrOtherEvidence"] == 0
+    assert summary["remaining12NativeSongIdentityQualified"] == 12
+    assert summary["remaining18TotalNativeSongIdentityQualified"] == 18
+    assert summary["immutableOriginalResearchCandidateRetained"] == 39
+    assert (summary["reviewedBindingApproved"], summary["supportedPromotionApproved"]) == (0, 0)
+    assert decision["nextGate"] == (
+        "PARTIAL39_HUMAN_CANONICAL_YEAR_SCOPE_AND_PROVIDER_BINDING_DECISION_BY_ARTIST_REQUIRED"
+    )
+    print(
+        "PASS: Genie partial39 reviewer queue | 14 historical native-linked "
+        "| 12 provisional-ID differences | 6 year-match | 1 JINU | "
+        "18 additional native-qualified | 0 remaining native evidence gaps | 39 pending human review | Music 117/238/0 | Product unchanged"
+    )
+
+
+if __name__ == "__main__":
+    main()

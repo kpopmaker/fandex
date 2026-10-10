@@ -1,0 +1,135 @@
+{
+  "version": "music_genie_girlset_native_song_attribution_review_packet_v1",
+  "status": "four_named_lead_songs_native_genie_attribution_qualified_human_year_epoch_review_pending",
+  "provider": "genie",
+  "source": "music_chart",
+  "canonicalArtistId": "girlset",
+  "canonicalUniverseCount": 355,
+  "originalAliasOnlyReceipt": "music_genie_missing14_last2_native_release_review_packet_v1.json",
+  "historicalProviderArtistId": "83019445",
+  "currentNativeLinkedProviderArtistId": "83019445",
+  "genieArtistUrl": "https://www.genie.co.kr/detail/artistInfo?xxnm=83019445",
+  "originalCanonicalDebutYear": null,
+  "originalGenieProfileDebutYear": null,
+  "providerPageInvestigation": {
+    "collector": "scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.py",
+    "initialNoIdRunId": 37865597546,
+    "initialNoIdArtifactId": 11587819564,
+    "initialNoIdArtifactDigest": "sha256:d8a6a48f122a44ff258e499d25de9f87b852fb353778527ff078a77003e75db1",
+    "rowAttributeParsingRunId": 37865737240,
+    "rowAttributeArtifactId": 11588296285,
+    "rowAttributeArtifactDigest": "sha256:614cd6d08a4d6895f012e93c7354529e90cd6d8b6fb5c2520aba75f3be95b276",
+    "expandedVerificationRunId": 37865842068,
+    "expandedVerificationHead": "3310a11e47111b3f341c1dae8a7c61476fe1eb76",
+    "expandedVerificationJobId": 113612245328,
+    "expandedVerificationArtifactId": 11587648959,
+    "expandedVerificationArtifactDigest": "sha256:8777c6164dd17d4697557fdbc8fd9728207ff22386af87ced5259d2bdea81ed9",
+    "artistProfileHttpStatus": 200,
+    "artistSongListHttpStatus": 200,
+    "artistAlbumListHttpStatus": 200,
+    "requestedDiscoveryPageCount": 10,
+    "requestedSearchQueryCount": 7,
+    "uniqueNativeCandidateCount": 38,
+    "directNativeDetailVerificationCount": 30,
+    "exactArtistNativeLinkedSongCount": 29,
+    "contradictingNativeArtistIdCount": 0,
+    "songRowsRequireSongidTableAttributeParsing": true,
+    "initialNoIdResultWasCollectorBlindSpotNotEvidenceOfCatalogAbsence": true,
+    "verifiedSongCountDoesNotRepresentUniquePrimaryReleases": true
+  },
+  "primaryNativeSongs": [
+    {
+      "title": "Commas",
+      "songId": "111546614",
+      "reportedReleaseDate": "2025-08-29",
+      "genieSongUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=111546614",
+      "nativeLinkedArtistId": "83019445",
+      "providerDetailFetchedHttp200": true,
+      "titlePresentOnNativeDetail": true,
+      "nativeArtistLinkExclusiveForExactDisplay": true,
+      "sourceReviewApproved": false
+    },
+    {
+      "title": "Little Miss",
+      "songId": "112640558",
+      "reportedReleaseDate": "2025-11-14",
+      "genieSongUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=112640558",
+      "nativeLinkedArtistId": "83019445",
+      "providerDetailFetchedHttp200": true,
+      "titlePresentOnNativeDetail": true,
+      "nativeArtistLinkExclusiveForExactDisplay": true,
+      "sourceReviewApproved": false
+    },
+    {
+      "title": "Tweak",
+      "songId": "114158735",
+      "reportedReleaseDate": "2026-03-06",
+      "genieSongUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=114158735",
+      "nativeLinkedArtistId": "83019445",
+      "providerDetailFetchedHttp200": true,
+      "titlePresentOnNativeDetail": true,
+      "nativeArtistLinkExclusiveForExactDisplay": true,
+      "sourceReviewApproved": false
+    },
+    {
+      "title": "CHAT",
+      "songId": "115957845",
+      "reportedReleaseDate": "2026-07-17",
+      "genieSongUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=115957845",
+      "nativeLinkedArtistId": "83019445",
+      "providerDetailFetchedHttp200": true,
+      "titlePresentOnNativeDetail": true,
+      "nativeArtistLinkExclusiveForExactDisplay": true,
+      "sourceReviewApproved": false
+    }
+  ],
+  "otherNativeRemixesOrVariantsObserved": true,
+  "jypExternalProvenance": {
+    "officialDiscographyUrl": "https://girlset.jype.com/discography",
+    "independentBugsArtistUrl": "https://music.bugs.co.kr/artist/80409542",
+    "independentAppleMusicArtistUrl": "https://music.apple.com/us/artist/girlset/1833111616",
+    "externalProviderEvidenceIsNotGenieBindingApproval": true
+  },
+  "canonicalEpochReview": {
+    "vchaGroupHistoryYear": 2024,
+    "girlsetRebrandYear": 2025,
+    "genieProfileDebutYear": null,
+    "canonicalDebutYear": null,
+    "groupIdentityContinuityVersusNewRebrandScopeUnresolved": true,
+    "providerReleaseDatesAreNotCanonicalDebutYear": true,
+    "doNotBackfillMissingYearFromEarliestSong": true
+  },
+  "reconciledMissing14ResearchCohort": {
+    "originalHistoricalGenieProviderDebutYearMissingCount": 14,
+    "priorNativeReleaseLinkedCount": 13,
+    "thisAdditionalNativeReleaseLinkedCanonicalArtistIds": [
+      "girlset"
+    ],
+    "nowNativeReleaseLinkedCandidateCount": 14,
+    "nowAliasOnlyCandidateCount": 0,
+    "currentApprovedReviewedBindingCount": 0,
+    "supportedIncreaseByThisResearch": 0,
+    "thisIsResearchEvidenceOnly": true
+  },
+  "reviewAndSafety": {
+    "reviewer": null,
+    "reviewedAt": null,
+    "reviewDecision": null,
+    "providerIdentityBindingApproved": false,
+    "canonicalDebutYearBackfilled": false,
+    "sourceCompatibilityModified": false,
+    "originalExact94EvidenceOverwritten": false,
+    "productCohortExpanded": false,
+    "databaseChanged": false,
+    "schedulerChanged": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false,
+    "genieSongAttributionNotProviderLicense": true
+  },
+  "actualCandidatePartition": {
+    "supported": 117,
+    "unresolved": 238,
+    "unsupported": 0
+  },
+  "nextGate": "GIRLSET_NATIVE_IDENTITY_CONFIRMED_YEAR_EPOCH_AND_PROVIDER_BINDING_HUMAN_REVIEW_REQUIRED"
+}

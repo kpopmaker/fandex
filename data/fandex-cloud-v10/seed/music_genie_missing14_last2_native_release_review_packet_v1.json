@@ -1,0 +1,120 @@
+{
+  "version": "music_genie_missing14_last2_native_release_review_packet_v1",
+  "status": "boystory_native_genie_album_link_qualified_girlset_provider_alias_only_pending",
+  "canonicalUniverseCount": 355,
+  "provider": "genie",
+  "source": "music_chart",
+  "originalQueue": "music_genie_partial39_evidence_triage_v1.json",
+  "validation": {
+    "historicalFull264AndExact94Immutable": true,
+    "firstLiveProbeHead": "c550fd7f02909c62933cf228b4708339aeb29548",
+    "runId": 37861067555,
+    "jobId": 113596627420,
+    "runUrl": "https://github.com/kpopmaker/fandex/actions/runs/37861067555",
+    "result": "success",
+    "artifactId": 11586232985,
+    "artifactName": "music-genie-missing14-last2-native-release-v1",
+    "artifactDigest": "sha256:3a3b1d65f80b7e6d4f0cc603a034f8be74b849c9e86c49efaf505a94787db14c",
+    "collector": "scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py",
+    "providerArtistDetailHttp200Count": 2,
+    "nativeAlbumExactIdConfirmedCount": 1,
+    "nativeGIRLSETSongLinkConfirmedCount": 0,
+    "notExaminedAllPossibleGIRLSETGenieReleases": true,
+    "jypOfficialContextRecordedNotFetchedByCollector": true
+  },
+  "records": [
+    {
+      "canonicalArtistId": "boystory",
+      "originalProviderArtistId": "80899341",
+      "nativeQualifiedProviderArtistId": "80899341",
+      "providerDisplay": "BOY STORY",
+      "providerActivityType": "남성/그룹",
+      "canonicalDebutYear": 2018,
+      "currentProviderDebutYear": null,
+      "releaseEvidence": {
+        "kind": "genie_native_album_artist_link",
+        "title": "UP",
+        "albumId": "85406781",
+        "url": "https://www.genie.co.kr/detail/albumInfo?axnm=85406781",
+        "releaseDate": "2024-07-12",
+        "distributor": "Dreamus",
+        "agency": "NCC ENTERTAINMENT",
+        "singleExactLinkedProviderArtistId": "80899341",
+        "providerHttp200": true,
+        "independentNativeAlbumToArtistMatch": true
+      },
+      "labelEvidence": {
+        "publisher": "JYP Entertainment",
+        "url": "https://www.jype.com/ko/Artist",
+        "claim": "BOY STORY appears in JYP artist roster",
+        "genre": "Chinese-language boy group"
+      },
+      "reviewStatus": "native_identity_qualified_year_evidence_missing_human_review_pending",
+      "reviewer": null,
+      "sourceStatus": "unresolved",
+      "canonicalDebutYearBackfillApplied": false,
+      "approvedReviewedBinding": false,
+      "sourceSupportedPromoted": false
+    },
+    {
+      "canonicalArtistId": "girlset",
+      "originalProviderArtistId": "83019445",
+      "providerQualifiedProfileArtistId": "83019445",
+      "providerDisplay": "GIRLSET",
+      "providerActivityType": "여성/그룹",
+      "canonicalDebutYear": null,
+      "currentProviderDebutYear": null,
+      "genieSearchEvidence": {
+        "searchedQueries": [
+          "GIRLSET Commas",
+          "GIRLSET Little Miss",
+          "GIRLSET"
+        ],
+        "profilePageFetchedHttp200": true,
+        "genieNativeSongOrAlbumArtistIdConfirmed": false,
+        "confirmedNativeSongIds": [],
+        "nonDiscoveryCannotProveGenieAbsence": true
+      },
+      "officialDiscographyContext": {
+        "publisher": "JYP Entertainment",
+        "url": "https://girlset.jype.com/discography",
+        "rebrandName": "GIRLSET",
+        "commsSingle": "Commas",
+        "commsReleaseDate": "2025-08-29",
+        "littleMissSingle": "Little Miss",
+        "littleMissReleaseDate": "2025-11-14",
+        "jypReferenceSeparateFromGenieNativeEvidence": true
+      },
+      "reviewStatus": "alias_only_unresolved_native_release_identity_and_epoch_review_pending",
+      "reviewer": null,
+      "sourceStatus": "unresolved",
+      "approvedReviewedBinding": false,
+      "sourceSupportedPromoted": false
+    }
+  ],
+  "missing14ResearchSummary": {
+    "originalHistoricalProviderYearMissing": 14,
+    "independentlyGenieNativeReleaseLinkQualified": 13,
+    "aliasOnlyRemaining": 1,
+    "approvedBindingCount": 0,
+    "sourcePartitionStill": {
+      "supported": 117,
+      "unresolved": 238,
+      "unsupported": 0
+    },
+    "isReviewCandidateCountNotSupportedCount": true
+  },
+  "safety": {
+    "sourceTargetRebindingApproved": false,
+    "canonicalMetadataYearBackfillApproved": false,
+    "approvedGIRLSETNativeLink": false,
+    "missingGenieReleaseAssumedUnsupported": false,
+    "sourceCompatibilityChanged": false,
+    "productActivationApproved": false,
+    "schedulerMutationApproved": false,
+    "databaseMutationApproved": false,
+    "mainMergeApproved": false,
+    "productionDeploymentApproved": false
+  },
+  "nextGate": "GENIE_BOYSTORY_YEAR_SCOPE_AND_GIRLSET_NATIVE_RELEASE_ID_HUMAN_REVIEW_REQUIRED"
+}

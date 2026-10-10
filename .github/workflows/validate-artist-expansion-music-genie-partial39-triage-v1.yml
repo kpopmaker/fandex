@@ -1,0 +1,326 @@
+name: Validate Artist Expansion Music Genie partial39 triage v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-music-genie-partial39-triage-v1
+  pull_request:
+    paths:
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_decision_readiness_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_debut_epoch_scope_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_full264_cross_run_reconciliation_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_superjunior_maddox_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_missing14_year_and_alias_conflict_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_missing14_native_release_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_missing14_remaining7_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_missing14_last2_native_release_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_jypark_alias_volatility_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_girlset_native_song_attribution_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_jinu_80441171_identity_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_six_year_match_review_packet_v1.json'
+      - 'scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_changed_disposition_identity_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_missing14_remaining7_identity_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_remaining18_six_native_song_probe_v1.py'
+      - 'scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.py'
+      - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
+      - 'tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py'
+      - 'tests/artist-expansion-music-genie-partial39-debut-epoch-scope-v1.py'
+      - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-partial39-triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate fail-closed partial39 evidence triage
+        run: python tests/artist-expansion-music-genie-partial39-triage-v1.py
+      - name: Validate partial39 reviewer decision readiness without promotion
+        run: python tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py
+      - name: Validate partial39 debut event scope and human-review holds
+        run: python tests/artist-expansion-music-genie-partial39-debut-epoch-scope-v1.py
+
+  investigate-jinu-linkage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie HTML investigation dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile JINU Genie investigation script
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.py
+      - name: Record JINU Genie provider identity evidence without activation
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_jinu_identity_linkage_live_v1.py
+      - name: Upload JINU provider evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-jinu-identity-live-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_jinu_identity_linkage_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-six-year-matches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install repository JavaScript dependencies
+        run: npm ci
+      - name: Materialize authoritative v4 canonical artist identity metadata
+        run: npx tsx scripts/artist-expansion/materialize_music_genie_canonical_identity_metadata_v1.mts
+      - name: Install Genie HTML research dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile six candidate research script
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.py
+      - name: Live verify provider identity and independently sourced debut year
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_six_year_match_live_v1.py
+      - name: Upload six candidate non-activating evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-partial39-six-year-match-live-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_six_year_match_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-ambiguous-artist-ids:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only Genie HTML dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile original ambiguity investigation
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_changed_disposition_identity_live_v1.py
+      - name: Compare historical Genie provider IDs against live details
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_changed_disposition_identity_live_v1.py
+      - name: Upload ambiguity evidence even if provider fetch fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-genie-superjunior-maddox-identity-investigation-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_changed_disposition_identity_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-historical-missing14-provider-years:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie provider metadata dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Check missing14 source-only script syntax
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.py
+      - name: Re-observe historical missing14 Genie provider debut fields
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_missing14_debut_live_v1.py
+      - name: Upload 14-artist original-vs-current evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-genie-partial39-missing14-debut-recheck-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_missing14_debut_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-native-release-identities:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie provider HTML read-only dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile seven native release identity investigation
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.py
+      - name: Trace Genie song and album native artist links
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_missing14_native_release_identity_live_v1.py
+      - name: Upload non-activating native link research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-missing14-native-release-id-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_missing14_native_release_identity_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-remaining7-provider-identities:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie provider dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile remaining7 provider investigation
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_missing14_remaining7_identity_live_v1.py
+      - name: Trace release-native IDs and exact search aliases
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_missing14_remaining7_identity_live_v1.py
+      - name: Upload source-only remaining7 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-remaining7-provider-identities-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_missing14_remaining7_identity_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-last2-release-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Genie HTML read-only dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile last2 native release probe
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.py
+      - name: Probe Boy Story and GIRLSET native release artist links
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_missing14_last2_native_release_probe_v1.py
+      - name: Upload last2 non-activating identity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-genie-missing14-last2-native-release-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_missing14_last2_native_release_probe_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-girlset-catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only Genie HTML dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile GIRLSET catalog investigator
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.py
+      - name: Trace GIRLSET artist, song, album and search routes
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_girlset_catalog_discovery_live_v1.py
+      - name: Upload GIRLSET catalog findings even if provider conflict occurs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-music-genie-girlset-catalog-discovery-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_girlset_catalog_discovery_live_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-remaining18-six-native-songs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only Genie HTML probe dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile remaining18 native song probe
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_remaining18_six_native_song_probe_v1.py
+      - name: Qualify or hold six original artist identities via native song IDs
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_remaining18_six_native_song_probe_v1.py
+      - name: Upload six-artists non-promoting attribution evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-genie-partial39-remaining18-six-native-songs-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_remaining18_six_native_song_probe_v1.json
+          retention-days: 21
+          if-no-files-found: warn
+
+  investigate-remaining12-native-songs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only Genie HTML probe dependencies
+        run: python -m pip install requests beautifulsoup4
+      - name: Compile remaining12 native song probe
+        run: python -m py_compile scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.py
+      - name: Check 12 remaining exact candidate identities via native song pages
+        working-directory: scripts/fandex-cloud-migration/source
+        run: python music_genie_partial39_remaining12_native_song_probe_v1.py
+      - name: Upload 12 candidate native artist ID evidence and holds
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-genie-partial39-remaining12-native-song-probe-v1
+          path: scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.json
+          retention-days: 21
+          if-no-files-found: warn

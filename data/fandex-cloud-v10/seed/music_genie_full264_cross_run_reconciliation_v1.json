@@ -1,0 +1,123 @@
+{
+  "version": "music_genie_full264_cross_run_source_reconciliation_v1",
+  "status": "resolved_distinct_discovery_runs_different_provider_search_results_no_source_promotion",
+  "provider": "genie",
+  "source": "music_chart",
+  "canonicalUniverseCount": 355,
+  "snapshots": {
+    "originalFull264": {
+      "runId": 37559756356,
+      "artifactId": 11456271955,
+      "artifactName": "artist-expansion-music-genie-full264-v1",
+      "artifactDigest": "sha256:342d6bfc23ab8d39714058879101a16ca2c1ef7a89bf26407266848119005c0c",
+      "createdAt": "2026-10-07T02:00:14",
+      "requestCount": 264,
+      "dispositionCounts": {
+        "unique_exact_candidate": 94,
+        "ambiguous_exact_candidates": 46,
+        "unique_wrapper_candidate_review_required": 28,
+        "ambiguous_wrapper_candidates": 73,
+        "provider_candidates_without_alias_match": 20,
+        "no_provider_candidate": 3,
+        "request_failed": 0
+      }
+    },
+    "embeddedInExact94": {
+      "runId": 37560176276,
+      "artifactId": 11456228049,
+      "artifactName": "artist-expansion-music-genie-exact94-detail-v1",
+      "artifactDigest": "sha256:df2d9059f99d7ed4461c45ab72c5f15721daf27e0c0f7ba025bcfeae1282ba0f",
+      "embeddedPath": "scripts/fandex-cloud-migration/source/music_genie_full264_identity_discovery_v1.json",
+      "createdAt": "2026-10-07T02:05:29",
+      "requestCount": 264,
+      "dispositionCounts": {
+        "unique_exact_candidate": 94,
+        "ambiguous_exact_candidates": 47,
+        "unique_wrapper_candidate_review_required": 28,
+        "ambiguous_wrapper_candidates": 72,
+        "provider_candidates_without_alias_match": 20,
+        "no_provider_candidate": 3,
+        "request_failed": 0
+      }
+    }
+  },
+  "reconciliation": {
+    "sameCanonicalIdUniverse": true,
+    "sameCanonicalIdCount": 264,
+    "allCanonicalRowsIdentical": false,
+    "rowsWithAnyRecordedContentDifference": 111,
+    "rowsWithDispositionDifference": 2,
+    "identicalUniqueExact94CanonicalArtistIds": true,
+    "identicalUniqueExact94Count": 94,
+    "differingDispositions": [
+      {
+        "canonicalArtistId": "superjunior",
+        "query": "Super Junior",
+        "originalDisposition": "ambiguous_wrapper_candidates",
+        "embeddedDisposition": "provider_candidates_without_alias_match",
+        "originalExactProviderArtistIds": [],
+        "embeddedExactProviderArtistIds": [],
+        "originalWrapperProviderArtistIds": [
+          "21060178",
+          "80150326"
+        ],
+        "embeddedWrapperProviderArtistIds": [],
+        "originalSearchCandidateCount": 5,
+        "embeddedSearchCandidateCount": 10,
+        "reason": "provider_search_result_changed_between_independently_collected_snapshots",
+        "identityBindingAuthorized": false
+      },
+      {
+        "canonicalArtistId": "maddox",
+        "query": "MADDOX",
+        "originalDisposition": "provider_candidates_without_alias_match",
+        "embeddedDisposition": "ambiguous_exact_candidates",
+        "originalExactProviderArtistIds": [],
+        "embeddedExactProviderArtistIds": [
+          "80431028",
+          "81384545"
+        ],
+        "originalWrapperProviderArtistIds": [],
+        "embeddedWrapperProviderArtistIds": [
+          "80624750",
+          "80653656",
+          "80749845",
+          "80766152",
+          "81008428",
+          "82283273",
+          "82439537",
+          "82586308",
+          "83490796"
+        ],
+        "originalSearchCandidateCount": 13,
+        "embeddedSearchCandidateCount": 14,
+        "reason": "provider_search_result_changed_between_independently_collected_snapshots",
+        "identityBindingAuthorized": false
+      }
+    ],
+    "netCountDelta": {
+      "ambiguousExact": 1,
+      "ambiguousWrapper": -1,
+      "providerCandidatesWithoutAliasMatch": 0
+    },
+    "notes": "Super Junior leaves ambiguous wrapper (-1) and enters no alias (+1); MADDOX leaves no alias (-1) and enters ambiguous exact (+1). The no-alias net cancels. Search HTML and candidate results changed between independently collected snapshots; neither record may be retroactively overwritten.",
+    "reviewImpact": {
+      "exact94SelectionChanged": false,
+      "strong26SelectionChanged": false,
+      "partial39SelectionChanged": false,
+      "superJuniorSourceSupported": false,
+      "maddoxSourceSupported": false,
+      "ambiguitiesAutoResolved": false,
+      "reportedWebDataIsHistoricalImmutable": true,
+      "newProviderIdentityHumanReviewRequired": true,
+      "originalFirstRunReceiptsPreserved": true,
+      "embeddedSecondRunReceiptsPreserved": true,
+      "sourceCompatibilityModified": false,
+      "activeTargetSeedModified": false,
+      "productActivationAuthorized": false,
+      "mainMergeAuthorized": false
+    }
+  },
+  "reviewStatus": "source_provenance_reconciled_candidate_dispositions_still_unresolved",
+  "nextGate": "MUSIC_GENIE_SNAPSHOT_PROVENANCE_PINNING_AND_INDIVIDUAL_AMBIGUITY_REVIEW"
+}
