@@ -1,0 +1,1586 @@
+{
+  "version": "music_genie_partial39_debut_epoch_scope_review_packet_v1",
+  "status": "independent_scope_evidence_plus_reviewer_decision_options_no_automatic_policy",
+  "researchObservedAt": "2026-10-10",
+  "sourcePinnedHead": "ad9787199b3396ede61d590d4a9e7621d4149db9",
+  "sourceOriginalQueue": "data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json",
+  "sourceNativeIdentityQueue": "data/fandex-cloud-v10/seed/music_genie_partial39_decision_readiness_review_packet_v1.json",
+  "externalCrossChecks": "NEXZ official 2023/2024; KARD reported DSP 2016/2017; VCHA/GIRLSET JYP statements 2024/2025",
+  "criteria": {
+    "nativeArtistLinkOnlyQualifiesProviderIdentityNotDebutEvent": true,
+    "providerProfileYearMustNotDetermineSoloVsGroupScope": true,
+    "predebutReleaseNotAutomaticallyEquivalentToFormalDebut": true,
+    "successorBrandNameYearNotAutomaticallyEquivalentToPredecessorDebut": true,
+    "reviewerMayChooseYearOnlyAfterExplicitCanonicalEntityScopeAndYearMeaning": true,
+    "noFallbackFromMissingToZeroOrStable": true,
+    "twoConflictingYearEventsMustRemainSeparate": true,
+    "allOriginalPinnedYearsMustRemainUnchanged": true
+  },
+  "summary": {
+    "cases": 39,
+    "originalIdDiffers": 13,
+    "canonicalYearAlreadyPresent": 7,
+    "nativeProfileYearAbsent": 2,
+    "explicitSemanticHolds": 9,
+    "newExternalIndependentScopeEvidenceArtists": 3,
+    "noExplicitScopeEventEvidence": 21,
+    "zeroHumanApprovals": true
+  },
+  "records": [
+    {
+      "canonicalArtistId": "nexz",
+      "originalPinnedGenieArtistId": "81122242",
+      "nativeQualifiedGenieArtistId": "82295319",
+      "originalCanonicalDebutYear": 2024,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2023,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=87546464",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "pre_debut_release",
+          "year": 2023,
+          "publisher": "NEXZ Official Website (Sony Music / JYP)",
+          "sourceUrl": "https://nexz-official.com/s/n180/page/profile?ima=1400",
+          "evidence": "Official profile distinguishes December 2023 Miracle pre-release",
+          "sourceContext": "external_public_official_verified_2026_10_10"
+        },
+        {
+          "event": "formal_group_debut",
+          "year": 2024,
+          "publisher": "NEXZ Official Website (Sony Music / JYP)",
+          "sourceUrl": "https://nexz-official.com/s/n180/page/profile?ima=1400",
+          "evidence": "Official profile distinguishes May 2024 global debut with Ride the Vibe",
+          "sourceContext": "external_public_official_verified_2026_10_10"
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_predebut_or_first_public_release_vs_formal_debut",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "brothersu",
+      "originalPinnedGenieArtistId": "79983812",
+      "nativeQualifiedGenieArtistId": "80010932",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2010,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=80643017",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "eunjiwon",
+      "originalPinnedGenieArtistId": "14945865",
+      "nativeQualifiedGenieArtistId": "14945865",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 1997,
+      "nativeGenieProfileDebutYear": 1997,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=53612096",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "kangseungyoon",
+      "originalPinnedGenieArtistId": "80089706",
+      "nativeQualifiedGenieArtistId": "80089706",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2010,
+      "nativeGenieProfileDebutYear": 2010,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=92789316",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "named_solo_debut",
+          "year": 2013,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/505672wpp/yg-entertainment-announces-kang-seung-yoons-debut"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "jinu",
+      "originalPinnedGenieArtistId": "14946516",
+      "nativeQualifiedGenieArtistId": "80441171",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 1996,
+      "nativeGenieProfileDebutYear": 2014,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=89300603",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_or_career",
+          "year": 2014,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/jinu/profile",
+            "https://www.ygfamily.com/en/artists/jinu/discography/471",
+            "https://www.ygfamily.com/en/artists/winner/discography/528"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2019,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/jinu/profile",
+            "https://www.ygfamily.com/en/artists/jinu/discography/471",
+            "https://www.ygfamily.com/en/artists/winner/discography/528"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "reject_historical_homonym_before_selecting_alternate_provider_id",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "mino",
+      "originalPinnedGenieArtistId": "80073343",
+      "nativeQualifiedGenieArtistId": "80438375",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2014,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=88391129",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_or_career",
+          "year": 2014,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/mino/discography/441",
+            "https://www.ygfamily.com/ko/artists/winner/profile"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2018,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/mino/discography/441",
+            "https://www.ygfamily.com/ko/artists/winner/profile"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "bangyedam",
+      "originalPinnedGenieArtistId": "80211832",
+      "nativeQualifiedGenieArtistId": "80211832",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2013,
+      "nativeGenieProfileDebutYear": 2013,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=104472021",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_or_career",
+          "year": 2020,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/treasure/profile",
+            "https://www.soompi.com/article/1622976wpp/former-treasure-member-bang-ye-dam-announces-solo-debut-date-launches-social-media-accounts"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2023,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/artists/treasure/profile",
+            "https://www.soompi.com/article/1622976wpp/former-treasure-member-bang-ye-dam-announces-solo-debut-date-launches-social-media-accounts"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "leehi",
+      "originalPinnedGenieArtistId": "80158970",
+      "nativeQualifiedGenieArtistId": "80158970",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2012,
+      "nativeGenieProfileDebutYear": 2012,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2012,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.ygfamily.com/en/news/notice/2995"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2012,
+          "yearScope": "solo_artist_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.ygfamily.com/en/news/notice/2995"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "kimjaejoong",
+      "originalPinnedGenieArtistId": "14954974",
+      "nativeQualifiedGenieArtistId": "14954974",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2010,
+      "nativeGenieProfileDebutYear": 2010,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=81811427",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "hwangminhyun",
+      "originalPinnedGenieArtistId": "80441275",
+      "nativeQualifiedGenieArtistId": "80441275",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2012,
+      "nativeGenieProfileDebutYear": 2012,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=100651382",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_career",
+          "year": 2012,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.koreajoongangdaily.com/entertainment/singer-actor-minhyun-to-release-his-first-solo-ep-truth-or-lie-on-feb-27/10463584",
+            "https://www.koreajoongangdaily.com/entertainment/hwang-minhyun-gets-a-third-fresh-start-this-time-as-a-solo-artist/10240716"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2023,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.koreajoongangdaily.com/entertainment/singer-actor-minhyun-to-release-his-first-solo-ep-truth-or-lie-on-feb-27/10463584",
+            "https://www.koreajoongangdaily.com/entertainment/hwang-minhyun-gets-a-third-fresh-start-this-time-as-a-solo-artist/10240716"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "yoonsanha",
+      "originalPinnedGenieArtistId": "80534174",
+      "nativeQualifiedGenieArtistId": "80534174",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2016,
+      "nativeGenieProfileDebutYear": 2016,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=107422097",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "hahyunsang",
+      "originalPinnedGenieArtistId": "80620455",
+      "nativeQualifiedGenieArtistId": "80620455",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2018,
+      "nativeGenieProfileDebutYear": 2018,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=95286227",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "jypark",
+      "originalPinnedGenieArtistId": "14945855",
+      "nativeQualifiedGenieArtistId": "14945855",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 1994,
+      "nativeGenieProfileDebutYear": 1994,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 1994,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.jyppub.com/ko/artists/1"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 1994,
+          "yearScope": "solo_artist_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.jyppub.com/ko/artists/1"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "revalidate_temporal_homonym_provider_alias",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "boystory",
+      "originalPinnedGenieArtistId": "80899341",
+      "nativeQualifiedGenieArtistId": "80899341",
+      "originalCanonicalDebutYear": 2018,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": null,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=85406781",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "keep_provider_profile_year_absent",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "girlset",
+      "originalPinnedGenieArtistId": "83019445",
+      "nativeQualifiedGenieArtistId": "83019445",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": null,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=111546614",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "rebrand_identity_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "predecessor_group_formal_debut",
+          "year": 2024,
+          "publisher": "Yonhap News reporting JYP Entertainment",
+          "sourceUrl": "https://www.yna.co.kr/view/AKR20240126041300005",
+          "evidence": "VCHA formally debuted January 26, 2024 with Girls of the Year",
+          "sourceContext": "external_public_report_verified_2026_10_10"
+        },
+        {
+          "event": "successor_group_rebrand",
+          "year": 2025,
+          "publisher": "iMBC reporting JYP Entertainment",
+          "sourceUrl": "https://enews.imbc.com/News/RetrieveNewsInfo/471510",
+          "evidence": "VCHA rebranded to GIRLSET announced August 7, 2025",
+          "sourceContext": "external_public_report_verified_2026_10_10"
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_predecessor_entity_vs_successor_rebrand_entity",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "keep_provider_profile_year_absent",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "sf9",
+      "originalPinnedGenieArtistId": "80546873",
+      "nativeQualifiedGenieArtistId": "80546873",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2016,
+      "nativeGenieProfileDebutYear": 2016,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2016,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://world.kbs.co.kr/service/contents_view.htm?board_seq=360019&lang=e"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2016,
+          "yearScope": "named_group_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://world.kbs.co.kr/service/contents_view.htm?board_seq=360019&lang=e"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "joyuri",
+      "originalPinnedGenieArtistId": "80661354",
+      "nativeQualifiedGenieArtistId": "80661354",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2018,
+      "nativeGenieProfileDebutYear": 2018,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=94500788",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "solo_vs_group_debut_year",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_career",
+          "year": 2018,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://world.kbs.co.kr/service/contents_view.htm?board_seq=430955&id=&lang=e&menu_cate=artist&page=17",
+            "https://www.koreajoongangdaily.com/entertainment/former-izone-member-jo-yuri-to-make-her-solo-debut/10633693"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2021,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://world.kbs.co.kr/service/contents_view.htm?board_seq=430955&id=&lang=e&menu_cate=artist&page=17",
+            "https://www.koreajoongangdaily.com/entertainment/former-izone-member-jo-yuri-to-make-her-solo-debut/10633693"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "kimjaehwan",
+      "originalPinnedGenieArtistId": "80587302",
+      "nativeQualifiedGenieArtistId": "80587302",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2016,
+      "nativeGenieProfileDebutYear": 2016,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=88951935",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "ejel",
+      "originalPinnedGenieArtistId": "81567146",
+      "nativeQualifiedGenieArtistId": "81021446",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2021,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=108199234",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "lucidfall",
+      "originalPinnedGenieArtistId": "14940057",
+      "nativeQualifiedGenieArtistId": "14940057",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2001,
+      "nativeGenieProfileDebutYear": 2001,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=16188214",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "leesangsoon",
+      "originalPinnedGenieArtistId": "80291913",
+      "nativeQualifiedGenieArtistId": "80291913",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2011,
+      "nativeGenieProfileDebutYear": 2011,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=93455972",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "afterschool",
+      "originalPinnedGenieArtistId": "82301148",
+      "nativeQualifiedGenieArtistId": "73393086",
+      "originalCanonicalDebutYear": 2009,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2009,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=76758548",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "bumzu",
+      "originalPinnedGenieArtistId": "80189465",
+      "nativeQualifiedGenieArtistId": "80189465",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2012,
+      "nativeGenieProfileDebutYear": 2012,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=83160545",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "up10tion",
+      "originalPinnedGenieArtistId": "81290806",
+      "nativeQualifiedGenieArtistId": "80445602",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2015,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=80749357",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2015,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://www.soompi.com/article/1351555wpp/up10tion-shares-heartfelt-messages-to-fans-for-4th-debut-anniversary"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2015,
+          "yearScope": "named_group_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/1351555wpp/up10tion-shares-heartfelt-messages-to-fans-for-4th-debut-anniversary"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "b1a4",
+      "originalPinnedGenieArtistId": "80131588",
+      "nativeQualifiedGenieArtistId": "80131588",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2011,
+      "nativeGenieProfileDebutYear": 2011,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2011,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://www.soompi.com/article/846891wpp/b1a4-thanks-fans-for-their-5th-debut-anniversary"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2011,
+          "yearScope": "named_group_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/846891wpp/b1a4-thanks-fans-for-their-5th-debut-anniversary"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "kard",
+      "originalPinnedGenieArtistId": "81305280",
+      "nativeQualifiedGenieArtistId": "80556366",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2016,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=87304018",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2017,
+        "yearScope": "named_group_formal_debut",
+        "sourceUrl": "https://ichannela.com/news/detail/000000044447.do"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2017,
+          "yearScope": "named_group_formal_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://ichannela.com/news/detail/000000044447.do"
+          ]
+        },
+        {
+          "event": "pre_debut_project",
+          "year": 2016,
+          "publisher": "Soompi contemporary reported DSP Media",
+          "sourceUrl": "https://www.soompi.com/article/1004739wpp/k-r-d-announces-official-debut-date-new-teaser-image",
+          "evidence": "2016 project singles before formal debut",
+          "sourceContext": "external_public_report_verified_2026_10_10"
+        },
+        {
+          "event": "formal_group_debut",
+          "year": 2017,
+          "publisher": "OSEN reporting DSP Media",
+          "sourceUrl": "https://www.osen.co.kr/article/G1110678767",
+          "evidence": "July 19, 2017 Hola Hola formally announced debut",
+          "sourceContext": "external_public_report_verified_2026_10_10"
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_predebut_or_first_public_release_vs_formal_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "ahnyeeun",
+      "originalPinnedGenieArtistId": "80507988",
+      "nativeQualifiedGenieArtistId": "80507988",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2016,
+      "nativeGenieProfileDebutYear": 2016,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=87001968",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "xlov",
+      "originalPinnedGenieArtistId": "82757745",
+      "nativeQualifiedGenieArtistId": "82757745",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2025,
+      "nativeGenieProfileDebutYear": 2025,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2025,
+        "yearScope": "named_group_debut",
+        "sourceUrl": "https://sports.khan.co.kr/article/202501071835003"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2025,
+          "yearScope": "named_group_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://sports.khan.co.kr/article/202501071835003"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "taeyang",
+      "originalPinnedGenieArtistId": "54232309",
+      "nativeQualifiedGenieArtistId": "54232309",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2007,
+      "nativeGenieProfileDebutYear": 2007,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=82614801",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "pow",
+      "originalPinnedGenieArtistId": "14942969",
+      "nativeQualifiedGenieArtistId": "82162931",
+      "originalCanonicalDebutYear": 2023,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2023,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=103478669",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "tiot",
+      "originalPinnedGenieArtistId": "81972382",
+      "nativeQualifiedGenieArtistId": "82120880",
+      "originalCanonicalDebutYear": 2024,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2023,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/albumInfo?axnm=85026862",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_predebut_or_first_public_release_vs_formal_debut",
+        "obtain_independent_primary_or_contemporaneous_predebut_formal_release_evidence",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "mirae",
+      "originalPinnedGenieArtistId": "81608365",
+      "nativeQualifiedGenieArtistId": "81037720",
+      "originalCanonicalDebutYear": 2021,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2021,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=92651112",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "x1",
+      "originalPinnedGenieArtistId": "81522270",
+      "nativeQualifiedGenieArtistId": "80743451",
+      "originalCanonicalDebutYear": 2019,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2019,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=89330963",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "balmingtiger",
+      "originalPinnedGenieArtistId": "80639974",
+      "nativeQualifiedGenieArtistId": "80639974",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2018,
+      "nativeGenieProfileDebutYear": 2018,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=103974552",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "jeongsewoon",
+      "originalPinnedGenieArtistId": "80590751",
+      "nativeQualifiedGenieArtistId": "80590751",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2017,
+      "nativeGenieProfileDebutYear": 2017,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": null,
+      "nativeAttributionQualified": false,
+      "independentDebutYearEvidence": {
+        "reportedYear": 2017,
+        "yearScope": "solo_artist_debut",
+        "sourceUrl": "https://www.soompi.com/article/1024115wpp/starship-entertainment-announces-plans-broadcast-jung-se-woons-debut-showcase-live"
+      },
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "externally_reported_artist_or_group_debut",
+          "year": 2017,
+          "yearScope": "solo_artist_debut",
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/1024115wpp/starship-entertainment-announces-plans-broadcast-jung-se-woons-debut-showcase-live"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "review_independent_year_scope_not_auto_backfill",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "leeseokhoon",
+      "originalPinnedGenieArtistId": "43241763",
+      "nativeQualifiedGenieArtistId": "43241763",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 2006,
+      "nativeGenieProfileDebutYear": 2006,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=80710177",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "yoonmirae",
+      "originalPinnedGenieArtistId": "14936492",
+      "nativeQualifiedGenieArtistId": "14936492",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 1997,
+      "nativeGenieProfileDebutYear": 1997,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=46601193",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": null,
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "chen",
+      "originalPinnedGenieArtistId": "81098158",
+      "nativeQualifiedGenieArtistId": "80282512",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": null,
+      "nativeGenieProfileDebutYear": 2014,
+      "originalVsNativeProviderIdDiffers": true,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=88728543",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_or_career",
+          "year": 2012,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://exo-jp.net/en/profile.php?n=0",
+            "https://www.soompi.com/article/1314368wpp/chen-talks-about-being-1st-exo-member-to-make-korean-solo-debut-how-other-members-showed-support",
+            "https://www.soompi.com/article/1314552wpp/exos-chen-sweeps-itunes-charts-worldwide-with-solo-debut"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2019,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://exo-jp.net/en/profile.php?n=0",
+            "https://www.soompi.com/article/1314368wpp/chen-talks-about-being-1st-exo-member-to-make-korean-solo-debut-how-other-members-showed-support",
+            "https://www.soompi.com/article/1314552wpp/exos-chen-sweeps-itunes-charts-worldwide-with-solo-debut"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "review_original_vs_native_provider_artist_id",
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    },
+    {
+      "canonicalArtistId": "kimjongkook",
+      "originalPinnedGenieArtistId": "14945901",
+      "nativeQualifiedGenieArtistId": "14945901",
+      "originalCanonicalDebutYear": null,
+      "originalGenieProfileDebutYear": 1995,
+      "nativeGenieProfileDebutYear": 1995,
+      "originalVsNativeProviderIdDiffers": false,
+      "nativeAttributionEvidenceUrl": "https://www.genie.co.kr/detail/songInfo?xgnm=18401777",
+      "nativeAttributionQualified": true,
+      "independentDebutYearEvidence": null,
+      "existingSemanticHold": "group_solo_career_epoch",
+      "pinnedSourceEventsAndNewlyVerifiedExternalEvents": [
+        {
+          "event": "earlier_group_or_career",
+          "year": 1995,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/359306wpp/artist-of-the-week-kim-jong-kook",
+            "https://www.soompi.com/article/360010wpp/artist-of-the-week-kim-jong-kook-1"
+          ]
+        },
+        {
+          "event": "named_solo_debut",
+          "year": 2001,
+          "sourceContext": "pinned_external_report",
+          "sources": [
+            "https://www.soompi.com/article/359306wpp/artist-of-the-week-kim-jong-kook",
+            "https://www.soompi.com/article/360010wpp/artist-of-the-week-kim-jong-kook-1"
+          ]
+        }
+      ],
+      "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
+      "humanReviewRequired": [
+        "adjudicate_group_career_vs_solo_named_artist_debut",
+        "review_canonical_debut_year_definition_for_named_entity",
+        "human_signoff_on_entity_scope_and_provider_binding"
+      ],
+      "eligibility": "review_evidence_only",
+      "approval": {
+        "providerIdentityBinding": "pending",
+        "canonicalEntityScope": "pending",
+        "debutEventType": "pending",
+        "canonicalYearApplication": "pending",
+        "sourcePromotion": "not_authorized",
+        "productActivation": "not_authorized"
+      },
+      "proposedCanonicalDebutYear": null,
+      "overwriteOriginalCanonicalDebutYearAuthorized": false,
+      "originallyPinnedResearchValuesRetained": true
+    }
+  ],
+  "sourceCandidatePartitionUnchanged": {
+    "supported": 117,
+    "unresolved": 238,
+    "unsupported": 0
+  },
+  "humanApprovalState": "all_39_pending",
+  "nextGate": "PARTIAL39_REVIEWER_SIGNOFF_ON_ENTITY_IDENTITY_AND_DEBUT_EVENT_SCOPE_BEFORE_ANY_CANONICAL_YEAR_APPLICATION"
+}
