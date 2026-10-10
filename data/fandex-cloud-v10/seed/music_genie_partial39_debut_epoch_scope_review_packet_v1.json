@@ -14,7 +14,8 @@
     "reviewerMayChooseYearOnlyAfterExplicitCanonicalEntityScopeAndYearMeaning": true,
     "noFallbackFromMissingToZeroOrStable": true,
     "twoConflictingYearEventsMustRemainSeparate": true,
-    "allOriginalPinnedYearsMustRemainUnchanged": true
+    "allOriginalPinnedYearsMustRemainUnchanged": true,
+    "exactProviderProfileAndYearMatchDoesNotQualifyNativeSongArtistLink": true
   },
   "summary": {
     "cases": 39,
@@ -24,13 +25,14 @@
     "explicitSemanticHolds": 9,
     "newExternalIndependentScopeEvidenceArtists": 3,
     "noExplicitScopeEventEvidence": 21,
-    "zeroHumanApprovals": true
+    "zeroHumanApprovals": true,
+    "nativeAttributionQualifiedCount": 33,
+    "nativeAttributionNotYetQualifiedCount": 6
   },
   "records": [
     {
       "canonicalArtistId": "nexz",
       "originalPinnedGenieArtistId": "81122242",
-      "nativeQualifiedGenieArtistId": "82295319",
       "originalCanonicalDebutYear": 2024,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2023,
@@ -74,12 +76,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "82295319",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "brothersu",
       "originalPinnedGenieArtistId": "79983812",
-      "nativeQualifiedGenieArtistId": "80010932",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2010,
@@ -106,12 +109,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80010932",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "eunjiwon",
       "originalPinnedGenieArtistId": "14945865",
-      "nativeQualifiedGenieArtistId": "14945865",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 1997,
       "nativeGenieProfileDebutYear": 1997,
@@ -137,12 +141,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14945865",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "kangseungyoon",
       "originalPinnedGenieArtistId": "80089706",
-      "nativeQualifiedGenieArtistId": "80089706",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2010,
       "nativeGenieProfileDebutYear": 2010,
@@ -178,12 +183,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80089706",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "jinu",
       "originalPinnedGenieArtistId": "14946516",
-      "nativeQualifiedGenieArtistId": "80441171",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 1996,
       "nativeGenieProfileDebutYear": 2014,
@@ -233,12 +239,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80441171",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "mino",
       "originalPinnedGenieArtistId": "80073343",
-      "nativeQualifiedGenieArtistId": "80438375",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2014,
@@ -285,12 +292,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80438375",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "bangyedam",
       "originalPinnedGenieArtistId": "80211832",
-      "nativeQualifiedGenieArtistId": "80211832",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2013,
       "nativeGenieProfileDebutYear": 2013,
@@ -336,12 +344,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80211832",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "leehi",
       "originalPinnedGenieArtistId": "80158970",
-      "nativeQualifiedGenieArtistId": "80158970",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2012,
       "nativeGenieProfileDebutYear": 2012,
@@ -367,6 +376,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
         "human_signoff_on_entity_scope_and_provider_binding"
@@ -382,12 +392,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80158970",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "kimjaejoong",
       "originalPinnedGenieArtistId": "14954974",
-      "nativeQualifiedGenieArtistId": "14954974",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2010,
       "nativeGenieProfileDebutYear": 2010,
@@ -413,12 +424,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14954974",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "hwangminhyun",
       "originalPinnedGenieArtistId": "80441275",
-      "nativeQualifiedGenieArtistId": "80441275",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2012,
       "nativeGenieProfileDebutYear": 2012,
@@ -464,12 +476,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80441275",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "yoonsanha",
       "originalPinnedGenieArtistId": "80534174",
-      "nativeQualifiedGenieArtistId": "80534174",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2016,
       "nativeGenieProfileDebutYear": 2016,
@@ -495,12 +508,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80534174",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "hahyunsang",
       "originalPinnedGenieArtistId": "80620455",
-      "nativeQualifiedGenieArtistId": "80620455",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2018,
       "nativeGenieProfileDebutYear": 2018,
@@ -526,12 +540,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80620455",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "jypark",
       "originalPinnedGenieArtistId": "14945855",
-      "nativeQualifiedGenieArtistId": "14945855",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 1994,
       "nativeGenieProfileDebutYear": 1994,
@@ -557,6 +572,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "revalidate_temporal_homonym_provider_alias",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
@@ -573,12 +589,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14945855",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "boystory",
       "originalPinnedGenieArtistId": "80899341",
-      "nativeQualifiedGenieArtistId": "80899341",
       "originalCanonicalDebutYear": 2018,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": null,
@@ -604,12 +621,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80899341",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "girlset",
       "originalPinnedGenieArtistId": "83019445",
-      "nativeQualifiedGenieArtistId": "83019445",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": null,
@@ -654,12 +672,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "83019445",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "sf9",
       "originalPinnedGenieArtistId": "80546873",
-      "nativeQualifiedGenieArtistId": "80546873",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2016,
       "nativeGenieProfileDebutYear": 2016,
@@ -685,6 +704,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
         "human_signoff_on_entity_scope_and_provider_binding"
@@ -700,12 +720,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80546873",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "joyuri",
       "originalPinnedGenieArtistId": "80661354",
-      "nativeQualifiedGenieArtistId": "80661354",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2018,
       "nativeGenieProfileDebutYear": 2018,
@@ -751,12 +772,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80661354",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "kimjaehwan",
       "originalPinnedGenieArtistId": "80587302",
-      "nativeQualifiedGenieArtistId": "80587302",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2016,
       "nativeGenieProfileDebutYear": 2016,
@@ -782,12 +804,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80587302",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "ejel",
       "originalPinnedGenieArtistId": "81567146",
-      "nativeQualifiedGenieArtistId": "81021446",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2021,
@@ -814,12 +837,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "81021446",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "lucidfall",
       "originalPinnedGenieArtistId": "14940057",
-      "nativeQualifiedGenieArtistId": "14940057",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2001,
       "nativeGenieProfileDebutYear": 2001,
@@ -845,12 +869,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14940057",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "leesangsoon",
       "originalPinnedGenieArtistId": "80291913",
-      "nativeQualifiedGenieArtistId": "80291913",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2011,
       "nativeGenieProfileDebutYear": 2011,
@@ -876,12 +901,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80291913",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "afterschool",
       "originalPinnedGenieArtistId": "82301148",
-      "nativeQualifiedGenieArtistId": "73393086",
       "originalCanonicalDebutYear": 2009,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2009,
@@ -907,12 +933,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "73393086",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "bumzu",
       "originalPinnedGenieArtistId": "80189465",
-      "nativeQualifiedGenieArtistId": "80189465",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2012,
       "nativeGenieProfileDebutYear": 2012,
@@ -938,12 +965,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80189465",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "up10tion",
       "originalPinnedGenieArtistId": "81290806",
-      "nativeQualifiedGenieArtistId": "80445602",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2015,
@@ -985,12 +1013,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80445602",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "b1a4",
       "originalPinnedGenieArtistId": "80131588",
-      "nativeQualifiedGenieArtistId": "80131588",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2011,
       "nativeGenieProfileDebutYear": 2011,
@@ -1016,6 +1045,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
         "human_signoff_on_entity_scope_and_provider_binding"
@@ -1031,12 +1061,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80131588",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "kard",
       "originalPinnedGenieArtistId": "81305280",
-      "nativeQualifiedGenieArtistId": "80556366",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2016,
@@ -1095,12 +1126,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80556366",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "ahnyeeun",
       "originalPinnedGenieArtistId": "80507988",
-      "nativeQualifiedGenieArtistId": "80507988",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2016,
       "nativeGenieProfileDebutYear": 2016,
@@ -1126,12 +1158,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80507988",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "xlov",
       "originalPinnedGenieArtistId": "82757745",
-      "nativeQualifiedGenieArtistId": "82757745",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2025,
       "nativeGenieProfileDebutYear": 2025,
@@ -1157,6 +1190,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
         "human_signoff_on_entity_scope_and_provider_binding"
@@ -1172,12 +1206,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "82757745",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "taeyang",
       "originalPinnedGenieArtistId": "54232309",
-      "nativeQualifiedGenieArtistId": "54232309",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2007,
       "nativeGenieProfileDebutYear": 2007,
@@ -1203,12 +1238,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "54232309",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "pow",
       "originalPinnedGenieArtistId": "14942969",
-      "nativeQualifiedGenieArtistId": "82162931",
       "originalCanonicalDebutYear": 2023,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2023,
@@ -1234,12 +1270,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "82162931",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "tiot",
       "originalPinnedGenieArtistId": "81972382",
-      "nativeQualifiedGenieArtistId": "82120880",
       "originalCanonicalDebutYear": 2024,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2023,
@@ -1267,12 +1304,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "82120880",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "mirae",
       "originalPinnedGenieArtistId": "81608365",
-      "nativeQualifiedGenieArtistId": "81037720",
       "originalCanonicalDebutYear": 2021,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2021,
@@ -1298,12 +1336,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "81037720",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "x1",
       "originalPinnedGenieArtistId": "81522270",
-      "nativeQualifiedGenieArtistId": "80743451",
       "originalCanonicalDebutYear": 2019,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2019,
@@ -1329,12 +1368,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80743451",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "balmingtiger",
       "originalPinnedGenieArtistId": "80639974",
-      "nativeQualifiedGenieArtistId": "80639974",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2018,
       "nativeGenieProfileDebutYear": 2018,
@@ -1360,12 +1400,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80639974",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "jeongsewoon",
       "originalPinnedGenieArtistId": "80590751",
-      "nativeQualifiedGenieArtistId": "80590751",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2017,
       "nativeGenieProfileDebutYear": 2017,
@@ -1391,6 +1432,7 @@
       ],
       "sourceEventNotes": "Provider profile debut is a provider data field; it is not automatically the named canonical entity's formal debut.",
       "humanReviewRequired": [
+        "qualify_provider_native_song_or_album_artist_link_before_binding",
         "review_canonical_debut_year_definition_for_named_entity",
         "review_independent_year_scope_not_auto_backfill",
         "human_signoff_on_entity_scope_and_provider_binding"
@@ -1406,12 +1448,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80590751",
+      "attributionEvidenceClass": "exact_provider_profile_and_reported_year_only_native_link_pending"
     },
     {
       "canonicalArtistId": "leeseokhoon",
       "originalPinnedGenieArtistId": "43241763",
-      "nativeQualifiedGenieArtistId": "43241763",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 2006,
       "nativeGenieProfileDebutYear": 2006,
@@ -1437,12 +1480,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "43241763",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "yoonmirae",
       "originalPinnedGenieArtistId": "14936492",
-      "nativeQualifiedGenieArtistId": "14936492",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 1997,
       "nativeGenieProfileDebutYear": 1997,
@@ -1468,12 +1512,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14936492",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "chen",
       "originalPinnedGenieArtistId": "81098158",
-      "nativeQualifiedGenieArtistId": "80282512",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": null,
       "nativeGenieProfileDebutYear": 2014,
@@ -1522,12 +1567,13 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "80282512",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     },
     {
       "canonicalArtistId": "kimjongkook",
       "originalPinnedGenieArtistId": "14945901",
-      "nativeQualifiedGenieArtistId": "14945901",
       "originalCanonicalDebutYear": null,
       "originalGenieProfileDebutYear": 1995,
       "nativeGenieProfileDebutYear": 1995,
@@ -1573,7 +1619,9 @@
       },
       "proposedCanonicalDebutYear": null,
       "overwriteOriginalCanonicalDebutYearAuthorized": false,
-      "originallyPinnedResearchValuesRetained": true
+      "originallyPinnedResearchValuesRetained": true,
+      "reviewCandidateGenieArtistId": "14945901",
+      "attributionEvidenceClass": "provider_native_song_or_album_artist_link"
     }
   ],
   "sourceCandidatePartitionUnchanged": {
@@ -1582,5 +1630,5 @@
     "unsupported": 0
   },
   "humanApprovalState": "all_39_pending",
-  "nextGate": "PARTIAL39_REVIEWER_SIGNOFF_ON_ENTITY_IDENTITY_AND_DEBUT_EVENT_SCOPE_BEFORE_ANY_CANONICAL_YEAR_APPLICATION"
+  "nextGate": "PARTIAL39_SIX_YEAR_MATCH_CANDIDATES_REQUIRE_NATIVE_SONG_LINK_PLUS_ALL_39_NEED_ENTITY_SCOPE_AND_BINDING_HUMAN_REVIEW"
 }
