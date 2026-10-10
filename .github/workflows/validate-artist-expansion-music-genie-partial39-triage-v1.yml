@@ -8,6 +8,7 @@ on:
     paths:
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_evidence_triage_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_decision_readiness_review_packet_v1.json'
+      - 'data/fandex-cloud-v10/seed/music_genie_partial39_debut_epoch_scope_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_remaining18_six_native_song_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_partial39_remaining12_native_song_identity_review_packet_v1.json'
       - 'data/fandex-cloud-v10/seed/music_genie_full264_cross_run_reconciliation_v1.json'
@@ -32,6 +33,7 @@ on:
       - 'scripts/fandex-cloud-migration/source/music_genie_partial39_remaining12_native_song_probe_v1.py'
       - 'tests/artist-expansion-music-genie-partial39-triage-v1.py'
       - 'tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py'
+      - 'tests/artist-expansion-music-genie-partial39-debut-epoch-scope-v1.py'
       - '.github/workflows/validate-artist-expansion-music-genie-partial39-triage-v1.yml'
   workflow_dispatch:
 
@@ -53,6 +55,8 @@ jobs:
         run: python tests/artist-expansion-music-genie-partial39-triage-v1.py
       - name: Validate partial39 reviewer decision readiness without promotion
         run: python tests/artist-expansion-music-genie-partial39-decision-readiness-v1.py
+      - name: Validate partial39 debut event scope and human-review holds
+        run: python tests/artist-expansion-music-genie-partial39-debut-epoch-scope-v1.py
 
   investigate-jinu-linkage:
     runs-on: ubuntu-latest
