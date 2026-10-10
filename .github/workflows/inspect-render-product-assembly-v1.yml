@@ -109,3 +109,5 @@ jobs:
 # opt-in canonical remote Blob vs verified decode after exact c9ee1d71 LIVE
 
 # single approved read-only News Blob verification after Render 197ef429 LIVE (2026-10-09)
+
+# one approved read-only Beta News canonical+manifest concurrency probe after Render 27a39070 LIVE (2026-10-10)
