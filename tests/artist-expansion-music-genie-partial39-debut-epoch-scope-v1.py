@@ -33,6 +33,7 @@ def main() -> None:
         "noFallbackFromMissingToZeroOrStable": True,
         "twoConflictingYearEventsMustRemainSeparate": True,
         "allOriginalPinnedYearsMustRemainUnchanged": True,
+        "exactProviderProfileAndYearMatchDoesNotQualifyNativeSongArtistLink": True,
     }
 
     by_id = {r["canonicalArtistId"]: r for r in audit["records"]}
@@ -60,17 +61,27 @@ def main() -> None:
         pinned, native = d["originalResearchCandidate"], d["laterProviderIdentityEvidence"]
         assert r["originalPinnedGenieArtistId"] == o["genieProviderArtistId"]
         assert r["originalPinnedGenieArtistId"] == pinned["providerArtistId"]
-        assert r["nativeQualifiedGenieArtistId"] == native["qualifiedCandidateProviderArtistId"]
+        assert r["reviewCandidateGenieArtistId"] == native["qualifiedCandidateProviderArtistId"]
         assert r["originalCanonicalDebutYear"] == o["canonicalDebutYear"]
         assert r["originalGenieProfileDebutYear"] == o["genieDebutYear"]
         assert r["nativeGenieProfileDebutYear"] == native["providerDebutYearFromLaterQualifiedCandidate"]
         assert r["originalVsNativeProviderIdDiffers"] is (
-            r["originalPinnedGenieArtistId"] != r["nativeQualifiedGenieArtistId"]
+            r["originalPinnedGenieArtistId"] != r["reviewCandidateGenieArtistId"]
         )
         assert r["originalVsNativeProviderIdDiffers"] == native["differsFromOriginalResearchCandidate"]
-        assert r["nativeAttributionQualified"] is True
+        assert r["nativeAttributionQualified"] is native["nativeSongOrAlbumArtistLinkVerified"]
         assert r["nativeAttributionEvidenceUrl"] == native["nativeReleaseEvidenceUrl"]
-        assert r["nativeAttributionEvidenceUrl"].startswith("https://www.genie.co.kr/")
+        if r["nativeAttributionQualified"]:
+            assert r["attributionEvidenceClass"] == "provider_native_song_or_album_artist_link"
+            assert r["nativeAttributionEvidenceUrl"].startswith("https://www.genie.co.kr/")
+        else:
+            assert r["attributionEvidenceClass"] == (
+                "exact_provider_profile_and_reported_year_only_native_link_pending"
+            )
+            assert r["nativeAttributionEvidenceUrl"] is None
+            assert "qualify_provider_native_song_or_album_artist_link_before_binding" in (
+                r["humanReviewRequired"]
+            )
         assert r["existingSemanticHold"] == d["existingSemanticHold"]
         assert r["independentDebutYearEvidence"] == d["independentYearCorroboration"]
         assert r["proposedCanonicalDebutYear"] is None
@@ -123,6 +134,8 @@ def main() -> None:
         "newExternalIndependentScopeEvidenceArtists": 3,
         "noExplicitScopeEventEvidence": 21,
         "zeroHumanApprovals": True,
+        "nativeAttributionQualifiedCount": 33,
+        "nativeAttributionNotYetQualifiedCount": 6,
     }
     externals = {
         "nexz": {("pre_debut_release", 2023), ("formal_group_debut", 2024)},
@@ -139,6 +152,9 @@ def main() -> None:
         assert observed == expected, (artist, observed)
         assert all(e["publisher"] and e["sourceUrl"].startswith("https://")
                    for e in events if e["sourceContext"].startswith("external_public_"))
+    assert {artist for artist, item in by_id.items() if not item["nativeAttributionQualified"]} == {
+        "leehi", "jypark", "sf9", "b1a4", "jeongsewoon", "xlov",
+    }
     assert by_id["tiot"]["pinnedSourceEventsAndNewlyVerifiedExternalEvents"] == []
     assert "obtain_independent_primary_or_contemporaneous_predebut_formal_release_evidence" in (
         by_id["tiot"]["humanReviewRequired"]
@@ -162,7 +178,8 @@ def main() -> None:
     }
     print(
         "PASS: Genie partial39 debut-event scope audit | 39 pending "
-        "| 13 original/native IDs differ | 9 explicit semantic holds "
+        "| 13 original/candidate IDs differ | 9 explicit semantic holds "
+        "| 33 native-linked and 6 profile-year candidates "
         "| NEXZ/KARD/GIRLSET external event evidence | no auto-year or promotion"
     )
 
