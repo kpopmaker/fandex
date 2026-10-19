@@ -1,0 +1,97 @@
+name: FANDEX preview check
+
+# work/* 브랜치에 올리면 lint, 타입체크, 빌드를 돌리고 주요 화면 스크린샷을 남긴다.
+# (Vercel은 main만 배포하므로, main에 올리기 전 화면 확인용)
+on:
+  push:
+    branches:
+      - 'work/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npx eslint app/page.tsx app/layout.tsx app/ranking app/artists/page.tsx "app/artists/[artistId]/page.tsx" app/compare/page.tsx app/methodology app/components/market lib/market
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Screenshots
+        run: |
+          npx --yes playwright@1.56.1 install --with-deps chromium
+          npm run start -- -p 3000 > server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:3000/ > /dev/null && break; sleep 1; done
+          cat > shoot.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const pages = [
+            ['home', '/'],
+            ['ranking', '/ranking'],
+            ['ranking-rise', '/ranking?sort=rise&period=1D'],
+            ['artists', '/artists'],
+            ['artist', '/artists/aespa'],
+            ['compare', '/compare?ids=aespa,ive,riize'],
+            ['methodology', '/methodology'],
+          ];
+          const browser = await chromium.launch();
+          const errors = [];
+          for (const theme of ['day', 'night']) {
+            const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+            await context.addInitScript((t) => localStorage.setItem('fandex-theme', t), theme);
+            const page = await context.newPage();
+            page.on('pageerror', (e) => errors.push(`${theme} ${page.url()} ${e.message}`));
+            page.on('console', (m) => { if (m.type() === 'error') errors.push(`${theme} ${page.url()} console: ${m.text()}`); });
+            for (const [name, path] of pages) {
+              const res = await page.goto(`http://localhost:3000${path}`, { waitUntil: 'networkidle' });
+              if (!res || res.status() >= 400) errors.push(`${theme} ${path} HTTP ${res && res.status()}`);
+              await page.waitForTimeout(600);
+              await page.screenshot({ path: `shots/${theme}-${name}.png`, fullPage: true });
+            }
+            await context.close();
+          }
+          const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+          const m = await mobile.newPage();
+          for (const [name, path] of [['home', '/'], ['artist', '/artists/aespa']]) {
+            await m.goto(`http://localhost:3000${path}`, { waitUntil: 'networkidle' });
+            await m.waitForTimeout(600);
+            await m.screenshot({ path: `shots/mobile-${name}.png`, fullPage: true });
+          }
+          await browser.close();
+          const fs = await import('node:fs');
+          fs.writeFileSync('shots/errors.txt', errors.join('\n') || 'no errors');
+          console.log(errors.join('\n') || 'no browser errors');
+          EOF
+          mkdir -p shots
+          npm i --no-save playwright@1.56.1
+          node shoot.mjs
+          cp server.log shots/server.log
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-shots
+          path: shots/
+          retention-days: 7
