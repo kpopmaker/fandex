@@ -29,6 +29,26 @@ type Props = {
   domain?: [number | 'auto', number | 'auto'];
 };
 
+function paddedDomain(
+  data: Props['data'],
+  lines: LineDefinition[],
+): [number, number] {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const row of data) {
+    for (const line of lines) {
+      const value = row[line.key];
+      if (Number.isFinite(value)) {
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      }
+    }
+  }
+  if (!Number.isFinite(min)) return [0, 1];
+  const pad = (max - min) * 0.12 || Math.abs(max) * 0.05 || 1;
+  return [min - pad, max + pad];
+}
+
 export default function MultiLineChart({
   data,
   lines,
@@ -36,8 +56,9 @@ export default function MultiLineChart({
   height = 300,
   formatValue,
   referenceY,
-  domain = ['auto', 'auto'],
+  domain,
 }: Props) {
+  const yDomain = domain ?? paddedDomain(data, lines);
   return (
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -56,7 +77,7 @@ export default function MultiLineChart({
           />
           <YAxis
             orientation="right"
-            domain={domain}
+            domain={yDomain}
             tickFormatter={(value: number) => formatValue(value)}
             tick={{ fill: 'var(--fx-faint)', fontSize: 12 }}
             tickLine={false}

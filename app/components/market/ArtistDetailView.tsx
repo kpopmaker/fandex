@@ -111,7 +111,7 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
           <h2 id="variables-title" className="text-[19px] font-bold text-fx-ink">
             변수별 분석
           </h2>
-          <p className="text-[13px] text-fx-sub">카드를 눌러 아래 차트에 겹쳐 보세요. 원점수는 0~100이에요.</p>
+          <p className="text-[13px] text-fx-sub">카드를 눌러 아래 차트에 겹쳐 보세요. 원점수는 0~100점이에요.</p>
         </div>
 
         <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
@@ -159,7 +159,6 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
               period={period}
               height={280}
               formatValue={(value) => formatPoint(value)}
-              domain={[0, 100]}
             />
           ) : (
             <p className="rounded-xl bg-fx-raised py-16 text-center text-sm text-fx-sub">
