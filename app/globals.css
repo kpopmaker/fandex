@@ -75,14 +75,75 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-fx-canvas: var(--fx-canvas);
+  --color-fx-surface: var(--fx-surface);
+  --color-fx-raised: var(--fx-raised);
+  --color-fx-ink: var(--fx-ink);
+  --color-fx-sub: var(--fx-sub);
+  --color-fx-faint: var(--fx-faint);
+  --color-fx-line: var(--fx-line);
+  --color-fx-up: var(--fx-up);
+  --color-fx-down: var(--fx-down);
+  --color-fx-brand: var(--fx-brand);
+  --color-fx-brand-soft: var(--fx-brand-soft);
+  --color-fx-up-soft: var(--fx-up-soft);
+  --color-fx-down-soft: var(--fx-down-soft);
+}
+
+/* FANDEX market design tokens. 한국 증시 관례대로 상승=빨강, 하락=파랑 */
+:root {
+  --fx-canvas: #f2f3f6;
+  --fx-surface: #ffffff;
+  --fx-raised: #f7f8fa;
+  --fx-ink: #16171b;
+  --fx-sub: #6b707a;
+  --fx-faint: #a3a8b1;
+  --fx-line: #e3e5e9;
+  --fx-up: #e22b3a;
+  --fx-down: #2a6de0;
+  --fx-up-soft: rgba(226, 43, 58, 0.09);
+  --fx-down-soft: rgba(42, 109, 224, 0.09);
+  --fx-brand: #6527e8;
+  --fx-brand-soft: rgba(101, 39, 232, 0.09);
+  --fx-grid: rgba(22, 23, 27, 0.06);
+  color-scheme: light;
+}
+
+:root[data-theme='night'] {
+  --fx-canvas: #0d0e11;
+  --fx-surface: #16171c;
+  --fx-raised: #1d1f25;
+  --fx-ink: #eff0f3;
+  --fx-sub: #8f949e;
+  --fx-faint: #5b606a;
+  --fx-line: #262830;
+  --fx-up: #ff4c5a;
+  --fx-down: #4b8dff;
+  --fx-up-soft: rgba(255, 76, 90, 0.12);
+  --fx-down-soft: rgba(75, 141, 255, 0.12);
+  --fx-brand: #a07bff;
+  --fx-brand-soft: rgba(160, 123, 255, 0.14);
+  --fx-grid: rgba(239, 240, 243, 0.06);
+  color-scheme: dark;
+}
+
+.fx-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fx-brand);
+  outline-offset: 2px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fx-canvas);
+  color: var(--fx-ink);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
 }
 
 @layer utilities {

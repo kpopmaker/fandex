@@ -4,26 +4,34 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# FANDEX guarded publish flow
+# FANDEX 작업 기준 (2026-10-20부터)
 
-For branches matching `v[0-9]+-*` or `integration/*` and targeting `main`:
+## 제품
+K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 그룹별 FANDEX 가격을 만들고,
+시가총액식 K-pop 종합지수(KMI)를 낸다. 투자 상품이 아니라는 고지를 항상 유지한다.
 
-1. Inspect the intended diff, run the relevant checks, commit, and push the current guarded branch.
-2. Search for an existing PR from the current branch before creating one. Never create a duplicate PR.
-3. Create a **Draft** PR targeting `main` unless the user explicitly authorizes ready-for-review for that exact head. Prefer the GitHub connector; use authenticated `gh` only if the connector cannot create the PR.
-4. Treat ready-for-review, owner attestation, and merge authorization as separate states. Never add the `production-merge-approved` label without explicit merge authorization for the exact PR base and head.
-5. Do not call GitHub merge or enable-auto-merge tools for guarded PRs. This solo-maintainer repository uses the workflow `.github/workflows/codex-version-pr-auto-merge.yml`, which can create and push an exact-base/head merge commit only while the PR is open, owner-authored by the repository owner's human `User` account, and still targets `main`. It requires all checks to pass, at least one current repository-owner issue comment with `author_association: OWNER` whose body is exactly the three lines below, and the exact `production-merge-approved` label. Any different base/head or edited/deleted attestation is unauthorized.
+- **홈 `/`**: KMI 값과 선 차트(기간 선택) → 아래로 주요 뉴스 Top 10, 종합 Top 5, 급상승 Top 5
+- **랭킹 `/ranking`**: 1~100위. 기준(종합/급상승/급하락/팬캡/변수별), 기간(1일/1주/1달), 그룹(전체/보이/걸), 오름·내림차순
+- **아티스트 `/artists`, `/artists/[id]`**: 검색, 가격 선 차트(기본 1주, 1일~1년), 변수별 분석과 변수 차트
+- **비교 `/compare?ids=a,b,c`**: 최대 3팀 수익률·가격 차트와 변수 비교
+- **산정 방식 `/methodology`**
+- 그 밖의 예전 페이지는 `page.hidden.tsx`로 숨겨 두었다(라우트에서 빠짐). `youtube-analytics-evidence`, `privacy`, `terms`는 Google API 심사·약관용으로 유지.
 
-   ```text
-   FANDEX_PRODUCTION_MERGE_ATTESTATION v1
-   base_sha=<exact 40-character lowercase base SHA>
-   head_sha=<exact 40-character lowercase head SHA>
-   ```
+## 데이터와 계산
+- 코드: `lib/market/` (variables, artists, time, engine, queries, mockSource)
+- 대상: 아이돌 **그룹만**. 솔로 제외.
+- 변수와 계수: 음원/음반 1.25, 뉴스/이슈 1.1, SNS/팬덤 1.1, 브랜드 적합도 0.9, 컴백/활동 0.8, 성장 모멘텀 1.0, 조정 신호 −1.4
+- 점수 = (Σ 원점수×계수 − 조정×1.4) ÷ 양의 계수 합, 가격 = 100·e^((점수−50)/50), 팬캡 = 가격×팬덤 규모, KMI = Σ팬캡 ÷ 제수(2026-01-01 = 1,000)
+- 갱신 단위: 15분 슬롯.
+- **실데이터가 없는 변수는 화면에 내지 않는다** (`variables.ts`의 `enabled`). 데이터가 생기면 켠다.
+- 지금은 `mockSource.ts`(결정적 예시 데이터). 실데이터는 같은 `MarketDataSource` 인터페이스로 구현해 `engine.ts`의 `dataSource` 한 줄만 바꾼다. mock일 때 화면에 "예시 데이터" 표시가 나와야 한다.
 
-   The merge job must keep PR and issue-comment metadata read-only and update `main` only through an exact expected-base `--force-with-lease`; unconditional force is prohibited. The lease must fail if `main` moves from the authorized base, including when it moves to the PR head or one of its ancestors, and the workflow must not leave a persistent GitHub auto-merge reservation.
-6. If merge is explicitly authorized, confirm the exact open/Ready/base/head state first, post the exact owner-attestation comment, then add the merge-authorization label last so the guarded workflow runs. Poll the PR and remote `main` until the PR is merged or the workflow reports a failure. Report Vercel failure, timeout, conflict, a changed PR base/head, an edited/deleted/missing owner attestation, or removed authorization instead of forcing a merge.
-7. If merge or Production deployment is excluded, do not post the owner attestation or add the merge-authorization label. Preserve any separately authorized Ready state; otherwise keep a newly created PR Draft, and stop after the authorized Preview/checks state.
-8. After an authorized merge, preserve unrelated and untracked files, switch the separate local main worktree to `main`, and fast-forward it with `git pull --ff-only origin main`.
-9. Report the PR number, Draft/authorization state, Vercel result, merge SHA if any, remote `main` SHA, local `main` SHA, and divergence.
+## 디자인
+- PC 우선, 다크 모드 지원(`data-theme="night"`). 레퍼런스: NH투자증권, 토스증권.
+- 한국 증시 관례: 상승 빨강(`fx-up`), 하락 파랑(`fx-down`). 색은 `globals.css`의 `--fx-*` 토큰만 쓴다.
+- 글꼴 Pretendard, 숫자는 `fx-num`(고정폭 숫자).
 
-The GitHub plugin is session-scoped. A plugin installed or enabled after a Codex session started is available only to a new session. If a connector call returns `The GitHub tool has been disabled`, do not retry merge calls in that session; the repository workflow owns the merge step.
+## 작업 방식
+- 바이브코딩: 작게 고치고, 화면으로 확인하고, main에 바로 커밋·푸시한다. 예전의 승인 게이트·attestation 머지 절차는 쓰지 않는다.
+- 푸시 전 `npm run lint`, `npm run typecheck`, `npm run build`가 통과해야 한다.
+- 수집 파이프라인 교체 전까지 `app/api/**`와 Render 크론이 부르는 GitHub 워크플로는 지우지 않는다.

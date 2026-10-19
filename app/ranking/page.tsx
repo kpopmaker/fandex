@@ -1,79 +1,51 @@
-import {
-  artistIndexChartProfiles,
-  calculateSixMonthDelta,
-  getIndexTrendBand,
-  getLastSixMonthHistory,
-} from '../data/v4/charts/artistIndexChartData';
-import {
-  getLatestArtistMetricBreakdown,
-  getTopMetricItemsForArtist,
-} from '../data/v4/metrics/artistMonthlyMetricHelpers';
-import type { FandexVariableKey } from '../data/v4/metrics/fandexMetricTypes';
-import RankingExplorer, { type RankingExplorerRow } from './RankingExplorer';
-import {
-  compareRankingFandexDesc,
-  normalizeRankingFandexPoint,
-} from './rankingTruth';
+import DataNotice from '../components/market/DataNotice';
+import RankingTable, {
+  type RankingGroup,
+  type RankingOrder,
+  type RankingPeriod,
+  type RankingSort,
+  type RankingState,
+} from '../components/market/RankingTable';
+import { getRankingModel } from '../../lib/market/queries';
+import { ENABLED_VARIABLES } from '../../lib/market/variables';
 
-function getLatestPoint(profile: (typeof artistIndexChartProfiles)[number]) {
-  return profile.history[profile.history.length - 1];
+export const dynamic = 'force-dynamic';
+
+type PageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const SORTS: readonly string[] = ['overall', 'rise', 'fall', 'fancap', ...ENABLED_VARIABLES.map((v) => v.id)];
+
+function pick<T extends string>(value: unknown, allowed: readonly string[], fallback: T): T {
+  return typeof value === 'string' && allowed.includes(value) ? (value as T) : fallback;
 }
 
-function createRankingRows(): RankingExplorerRow[] {
-  return artistIndexChartProfiles
-    .map((profile) => {
-      const latest = getLatestPoint(profile);
-      const sixMonthHistory = getLastSixMonthHistory(profile);
-      const metricBreakdown = getLatestArtistMetricBreakdown(profile.artistId);
-      const topMetricItems = getTopMetricItemsForArtist(profile.artistId, 2);
-      const metricScores = Object.fromEntries(
-        (metricBreakdown?.items ?? []).map((item) => [item.key, item.score]),
-      ) as Partial<Record<FandexVariableKey, number>>;
+export default async function RankingPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const model = getRankingModel();
 
-      return {
-        artistId: profile.artistId,
-        artistName: profile.artistName,
-        ticker: profile.ticker,
-        groupType: profile.groupType,
-        coverageStatus: profile.coverageStatus,
-        currentFandexPoint: normalizeRankingFandexPoint(latest?.fandexPoint),
-        sixMonthDelta: calculateSixMonthDelta(sixMonthHistory),
-        trendBand: getIndexTrendBand(sixMonthHistory),
-        confidenceLevel: latest?.confidenceLevel ?? 'low',
-        lastUpdated: profile.lastUpdated,
-        topMetricLabels: topMetricItems.map((item) => item.label),
-        metricScores,
-        metricMonthLabel: metricBreakdown?.label ?? '',
-      };
-    })
-    .sort((a, b) => compareRankingFandexDesc(a.currentFandexPoint, b.currentFandexPoint));
-}
-
-export default function RankingPage() {
-  const rows = createRankingRows();
+  const initial: RankingState = {
+    sort: pick<RankingSort>(params.sort, SORTS, 'overall'),
+    period: pick<RankingPeriod>(params.period, ['1D', '1W', '1M'], '1D'),
+    order: pick<RankingOrder>(params.order, ['desc', 'asc'], 'desc'),
+    group: pick<RankingGroup>(params.group, ['all', 'boy_group', 'girl_group'], 'all'),
+  };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950">
-      <section className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10">
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">
-            FANDEX 랭킹
+    <main className="mx-auto max-w-[1280px] px-4 pb-16 pt-6 lg:px-8">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-[26px] font-bold tracking-[-0.03em] text-fx-ink">랭킹</h1>
+          <p className="mt-1 text-[15px] text-fx-sub">
+            K-pop 그룹 1위부터 100위까지, 원하는 기준으로 정렬해 보세요.
           </p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
-            K-pop 아티스트 랭킹 탐색
-          </h1>
-          <p className="mt-4 max-w-3xl text-sm font-bold leading-7 text-slate-600 md:text-base">
-            지금 FANDEX에서 강하게 잡히는 아티스트를 볼 수 있습니다.
-            검색하거나 필터를 바꿔서 원하는 아티스트를 찾아보세요.
-          </p>
-          <p className="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-800">
-            이 순위는 공식 K-pop 순위가 아니라 FANDEX 내부 리서치 지수입니다.
-            금융상품/투자정보가 아닙니다.
-          </p>
-        </section>
-
-        <RankingExplorer rows={rows} />
-      </section>
+        </div>
+        <DataNotice meta={model.meta} />
+      </div>
+      <div className="mt-5">
+        <RankingTable quotes={model.quotes} initial={initial} />
+      </div>
     </main>
   );
 }
