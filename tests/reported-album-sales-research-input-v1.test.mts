@@ -33,7 +33,7 @@ function seedHistory() {
 test('actual public seed yields a score-free same-semantic Hanteo first-week research input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:55:40+09:00',
+    '2026-10-06T23:30:11+09:00',
   );
 
   assert.equal(input.state, 'reviewable');
@@ -44,7 +44,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
   );
   assert.equal(input.target.unit, 'physical-copies');
 
-  assert.equal(input.releaseCount, 92);
+  assert.equal(input.releaseCount, 132);
   assert.equal(input.artistCount, 21);
   assert.deepEqual(
     new Set(input.includedArtistIds),
@@ -54,19 +54,43 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
     new Set(input.entries.map(entry => entry.releaseTitle)),
     new Set([
       'Armageddon',
+      'Rich Man',
+      'LEMONADE',
       'IVE SECRET',
       'EASY',
       'UNFORGIVEN',
       'GOLDEN HOUR : Part.5',
+      'ZERO : FEVER Part.3',
+      'ZERO : FEVER Part.1',
+      'ZERO : FEVER Part.2',
+      'Christmas EveL',
       'MAXIDENT',
       '7TH YEAR: 가시덤불에 잠시 바람이 멈췄을 때',
+      'The Chaos Chapter: FREEZE',
+      'The Chaos Chapter: FIGHT OR ESCAPE',
+      'The Dream Chapter: ETERNITY',
       'The Action',
       'SEVENTEENTH HEAVEN',
       'Get Up',
+      'Supernatural',
       'LILAC',
       'ARIRANG',
       'READY TO BE',
       'ROMANCE : UNTOLD',
+      'BORDER : DAY ONE',
+      'BORDER : CARNIVAL',
+      'THE SIN : VANISH',
+      'THE SIN : BLISS',
+      'DIMENSION : ANSWER',
+      'Eyes wide open',
+      'Love Yourself: Answer',
+      'Love Yourself: Her',
+      'WINGS',
+      'The Most Beautiful Moment in Life: Young Forever',
+      'YOU NEVER WALK ALONE',
+      'LOVE YOURSELF 轉 \'Tear\'',
+      'Clé : LEVANTER',
+      'KILL THIS LOVE',
       'Fame',
       'DEADLINE',
       'GOLDEN',
@@ -98,6 +122,8 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'DARK BLOOD',
       'SPILL THE FEELS',
       'The Star Chapter: SANCTUARY',
+      'The Star Chapter: TOGETHER',
+      'minisode1 : Blue Hour',
       'SKZ IT TAPE ‘DO IT’',
       'TEN: The Story Goes On',
       'MANIFESTO : DAY 1',
@@ -126,8 +152,22 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
       'ANTIFRAGILE',
       'Get A Guitar',
       'Face the Sun',
+      'An Ode',
+      'Heng:garæ',
+      '; [Semicolon]',
+      'Your Choice',
+      'TEEN, AGE',
+      'Al1',
+      'YOU MAKE MY DAY',
+      'Love & Letter',
+      'Going Seventeen',
+      'YOU MADE MY DAWN',
+      'SECTOR 17',
       'NOEASY',
+      'IN LIFE',
       'BETWEEN 1&2',
+      'Feel Special',
+      'MORE & MORE',
       'FEARLESS',
       'DIMENSION : DILEMMA',
       'How Sweet',
@@ -329,6 +369,8 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 
   for (const [artistId, releaseTitle] of [
     ['newjeans', 'How Sweet'],
+    ['txt', 'The Chaos Chapter: FIGHT OR ESCAPE'],
+    ['bts', 'Love Yourself: Her'],
     ['bts', 'Butter'],
     ['bts', 'MAP OF THE SOUL : PERSONA'],
     ['ive', "I'VE MINE"],
@@ -425,7 +467,7 @@ test('actual public seed yields a score-free same-semantic Hanteo first-week res
 test('upgraded IVE SWITCH evidence enters the research input while provider-mismatched Circle rows remain excluded', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:55:40+09:00',
+    '2026-10-06T23:30:11+09:00',
   );
 
   assert.ok(
@@ -505,7 +547,7 @@ test('upgraded IVE SWITCH evidence enters the research input while provider-mism
 test('Circle distribution and retail observations never enter the Hanteo first-week input', () => {
   const input = buildReportedAlbumSalesResearchInput(
     seedHistory(),
-    '2026-10-03T18:55:40+09:00',
+    '2026-10-06T23:30:11+09:00',
   );
 
   assert.ok(
