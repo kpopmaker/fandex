@@ -1,0 +1,33 @@
+name: Probe Artist Expansion Last.fm MBID V LISA v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-lastfm-mbid-v-lisa-v1
+
+permissions:
+  contents: read
+
+jobs:
+  probe-lastfm-mbid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Probe name-query vs MBID-query
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python scripts/lastfm-cloud/lastfm_mbid_v_lisa_probe_v1.py
+
+      - name: Upload probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-lastfm-mbid-v-lisa-v1
+          path: lastfm_mbid_v_lisa_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14
