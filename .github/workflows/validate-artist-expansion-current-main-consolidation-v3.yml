@@ -1,0 +1,72 @@
+name: Validate Artist Expansion current-main consolidation v3
+
+on:
+  push:
+    branches:
+      - integration/artist-expansion-current-main-consolidation-v3
+
+permissions:
+  contents: read
+
+jobs:
+  validate-consolidation-v3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run all Artist Expansion regressions
+        run: |
+          set -euo pipefail
+          count=0
+          for test_file in tests/artist-expansion-*.py; do
+            echo "RUN $test_file"
+            python "$test_file"
+            count=$((count+1))
+          done
+          echo "artistExpansionTestCount=$count"
+          test "$count" -ge 14
+
+      - name: Compile consolidated provider scripts
+        run: |
+          python -m py_compile \
+            scripts/fandex-cloud-migration/source/youtube_v3_common_distribution_comparison_v1.py \
+            scripts/fandex-cloud-migration/source/youtube_v3_common_metric_snapshot_v1.py \
+            scripts/lastfm-cloud/lastfm_mbid_v_lisa_probe_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_canonical_shadow_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_provider_epoch_probe_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_full21_repeat_observation_v1.py \
+            scripts/listenbrainz-cloud/listenbrainz_v_lisa_probe_v1.py \
+            scripts/listenbrainz-cloud/musicbrainz_21_artist_candidates_v1.py
+
+      - name: Validate consolidation v3 manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p=Path("data/fandex-cloud-v10/seed/artist_expansion_current_main_consolidation_v3.json")
+          d=json.loads(p.read_text(encoding="utf-8"))
+          assert d["version"] == "artist_expansion_current_main_consolidation_v3"
+          assert d["status"] == "current_main_consolidated_waiting_provider_epoch"
+          assert d["baseMainSha"] == "fd5d0330f8eddd04406b308e65b076ca74ccdc99"
+          assert d["sourceEvidenceHead"] == "8d772cbea0161c53e47458086214ec3c77c655da"
+          assert d["consolidatedSourceFileCount"] == 61
+          assert len(d["consolidatedSourceFiles"]) == 61
+          assert len(set(d["consolidatedSourceFiles"])) == 61
+          assert d["currentReadiness"]["listenbrainzCanonicalCoverage"] == "21/21"
+          assert d["currentReadiness"]["listenbrainzHardenedProbeStable"] is True
+          assert d["currentReadiness"]["listenbrainzLatestHardenedRunAttempt"] == 2
+          assert d["currentReadiness"]["listenbrainzProviderNewEpochObserved"] == "0/21"
+          assert d["nextGate"] == "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED"
+          assert all(value is False for value in d["semantics"].values())
+          assert all(value is False for value in d["preservation"].values())
+          for path in d["consolidatedSourceFiles"]:
+              assert Path(path).is_file(), path
+          print("PASS: consolidation v3 | files=61 | coverage=21/21 | newEpoch=0/21")
+          PY

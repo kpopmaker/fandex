@@ -1,0 +1,90 @@
+{
+  "version": "listenbrainz_full21_provider_epoch_reprobe_receipt_v2",
+  "status": "provider_epoch_still_not_advanced_non_activating",
+  "baseConsolidation": {
+    "pr": 530,
+    "head": "f9f633e06a9b804547618f3e6a1505cb8974fbf0",
+    "baseMainSha": "68f31f9ca993b2f90e124e569dc5f1bbed299d0c"
+  },
+  "probeCode": {
+    "path": "scripts/listenbrainz-cloud/listenbrainz_full21_provider_epoch_probe_v1.py",
+    "blobSha": "f696861c6c1930980775be2494402017cf7b009b",
+    "identicalToConsolidatedBlob": true
+  },
+  "previousEpochBoundary": {
+    "maximumEpoch": 1791063713,
+    "maximumIsoUtc": "2026-10-03T21:41:53Z"
+  },
+  "freshReprobe": {
+    "workflow": "Probe Artist Expansion ListenBrainz provider epoch v1",
+    "runId": 37473219665,
+    "runAttempt": 2,
+    "jobId": 112311434493,
+    "sourceHead": "7af398e8e373f168e481ea65a7833bc58ff6a073",
+    "conclusion": "success",
+    "startedAt": "2026-10-06T14:04:59Z",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "newProviderEpochArtistCount": 0,
+    "staleProviderEpochArtistCount": 21,
+    "unavailableArtistCount": 0,
+    "identityMismatchArtistCount": 0,
+    "negativeAllTimeDeltaArtistCount": 0,
+    "positiveAllTimeDeltaArtistCount": 0,
+    "unchangedAllTimeArtistCount": 21,
+    "rateOrScoreComputed": false,
+    "productActivationAuthorized": false
+  },
+  "staleProviderEpochCanonicalArtistIds": [
+    "aespa",
+    "ateez",
+    "blackpink",
+    "boynextdoor",
+    "bts",
+    "enhypen",
+    "iu",
+    "ive",
+    "jennie",
+    "jimin",
+    "jungkook",
+    "lesserafim",
+    "lisa",
+    "newjeans",
+    "riize",
+    "rose",
+    "seventeen",
+    "straykids",
+    "twice",
+    "txt",
+    "v"
+  ],
+  "artifact": {
+    "artifactId": 11418962780,
+    "name": "artist-expansion-listenbrainz-provider-epoch-v1",
+    "sizeBytes": 2495,
+    "digest": "sha256:a2b41cb3a2d81440d939f5cd4619d36c4ed4d9dc9b86596d5228cc6cb41308a1",
+    "expiresAt": "2026-10-20T14:05:15Z"
+  },
+  "interpretation": {
+    "distinctProviderUpdateEpochEstablished": false,
+    "zeroGrowthEstablished": false,
+    "allTimeDeltaCharacterizationEligible": false,
+    "blockerChanged": false,
+    "reason": "A fresh rerun using the exact same probe code still observed 0/21 artists beyond the Oct 3 provider epoch. All 21 unchanged all_time counts remain stale-epoch observations, not zero-growth evidence."
+  },
+  "nextGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
+  "safety": {
+    "staleEpochInterpretedAsZeroGrowth": false,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}

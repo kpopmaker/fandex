@@ -1,0 +1,100 @@
+{
+  "version": "listenbrainz_v_lisa_candidate_v1",
+  "status": "canonical_provider_candidate_supported_not_drop_in_lastfm",
+  "provider": {
+    "name": "ListenBrainz",
+    "identityAuthority": "MusicBrainz artist MBID",
+    "endpoint": "/1/stats/artist/{artist_mbid}/listeners",
+    "documentedPrimaryMetric": "total_listen_count",
+    "documentedTopListenerList": true,
+    "documentedTotalUniqueListenerCount": false,
+    "allowedRanges": [
+      "this_week",
+      "this_month",
+      "this_year",
+      "week",
+      "month",
+      "quarter",
+      "year",
+      "half_yearly",
+      "all_time"
+    ]
+  },
+  "probe": {
+    "runId": 37465020592,
+    "runConclusion": "success",
+    "head": "e2a6d0c7b4019e5eb79f44fbde1b0106434e6f7d",
+    "artifactId": 11414358389,
+    "artifactDigest": "sha256:023b9541fa26dc2735e6abe2843be291474830dfe28e99e7ffb45dfcbac952fa",
+    "ranges": [
+      "all_time",
+      "month",
+      "week"
+    ]
+  },
+  "targets": [
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "musicBrainzArtistMbid": "83096042-3785-481e-8843-dee69f1aad12",
+      "exactMbidEchoAcrossSuccessfulRanges": true,
+      "successfulRangeCount": 3,
+      "allTimeTotalListenCount": 16730535,
+      "monthTotalListenCount": 183871,
+      "weekTotalListenCount": 43275,
+      "canonicalSpecificListeningSignalSupported": true
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "LISA",
+      "musicBrainzArtistMbid": "30aeb57f-bb16-47fa-86ca-79fc57b4d12c",
+      "exactMbidEchoAcrossSuccessfulRanges": true,
+      "successfulRangeCount": 3,
+      "allTimeTotalListenCount": 219417,
+      "monthTotalListenCount": 10673,
+      "weekTotalListenCount": 2148,
+      "canonicalSpecificListeningSignalSupported": true
+    }
+  ],
+  "compatibilityDecision": {
+    "alternativeCanonicalProviderFound": true,
+    "vResolvedAtIdentityLayer": true,
+    "lisaResolvedAtIdentityLayer": true,
+    "lastfmUnsupportedStatusShouldChangeNow": false,
+    "reasonLastfmStatusStaysUnsupported": "ListenBrainz is a different provider and metric contract; it does not repair Last.fm identity.",
+    "vLisaOnlyMetricSubstitutionAllowed": false,
+    "reasonVLisaOnlySubstitutionForbidden": "Current Last.fm score uses both listener and playcount deltas normalized across one provider cohort. ListenBrainz exposes canonical total listen count but not a semantically equivalent total unique listener metric, so mixing only two artists would violate cohort comparability.",
+    "full21ListenBrainzShadowCandidateReady": true
+  },
+  "requiredNextValidation": {
+    "code": "FULL_21_LISTENBRAINZ_CANONICAL_COHORT_SHADOW_REQUIRED",
+    "requirements": [
+      "bind all 21 target artists to reviewed MusicBrainz artist MBIDs",
+      "query the same ListenBrainz endpoint and range contract for all 21 in one shadow execution",
+      "require exact MBID echo for every successful artist response",
+      "do not synthesize a Last.fm listener metric",
+      "do not invent a score formula or promotion threshold",
+      "treat 204/no-content as unavailable evidence, not zero",
+      "keep Product and active Last.fm source unchanged"
+    ]
+  },
+  "productBoundary": {
+    "currentLastfmProductReadyCount": 19,
+    "currentProduct21Ready": false,
+    "productRuntimeContractChangeRequiredBeforeListenBrainzCanReplaceLastfm": true,
+    "automaticProviderReplacementAllowed": false,
+    "automaticScoreFormulaChangeAllowed": false
+  },
+  "safety": {
+    "lastfmCompatibilityRegistryModified": false,
+    "lastfmSeedModified": false,
+    "productSourceChanged": false,
+    "scoreFormulaChanged": false,
+    "missingIsZero": false,
+    "unsupportedIsMissing": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
