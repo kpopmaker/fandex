@@ -1,0 +1,46 @@
+name: Probe Artist Expansion ListenBrainz provider epoch v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-listenbrainz-provider-epoch-v1
+
+permissions:
+  contents: read
+
+jobs:
+  provider-epoch-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Probe full21 provider epoch
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_provider_epoch_probe_v1.py
+
+      - name: Validate probe shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("listenbrainz_full21_provider_epoch_probe_v1.json").read_text())
+          assert d["summary"]["targetArtistCount"] == 21
+          assert len(d["artists"]) == 21
+          assert d["summary"]["rateOrScoreComputed"] is False
+          assert d["summary"]["productActivationAuthorized"] is False
+          assert d["safety"]["staleEpochInterpretedAsZeroGrowth"] is False
+          assert d["safety"]["newScoreFormulaDefined"] is False
+          print("PASS: provider epoch probe shape")
+          PY
+
+      - name: Upload provider epoch evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-provider-epoch-v1
+          path: listenbrainz_full21_provider_epoch_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

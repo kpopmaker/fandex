@@ -1,0 +1,49 @@
+name: Recover Artist Expansion ListenBrainz full21 observation v1
+
+on:
+  push:
+    branches:
+      - fix/artist-expansion-listenbrainz-probe-recovery-v1
+
+permissions:
+  contents: read
+
+jobs:
+  recover-full21-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run hardened full21 provider epoch probe
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_provider_epoch_probe_v1.py
+
+      - name: Validate recovery evidence shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("listenbrainz_full21_provider_epoch_probe_v1.json").read_text())
+          assert d["summary"]["targetArtistCount"] == 21
+          assert len(d["artists"]) == 21
+          assert d["summary"]["rateOrScoreComputed"] is False
+          assert d["summary"]["productActivationAuthorized"] is False
+          assert d["probeTransport"]["mode"] == "serial"
+          assert d["probeTransport"]["maxAttemptsPerArtist"] == 6
+          assert d["safety"]["staleEpochInterpretedAsZeroGrowth"] is False
+          assert d["safety"]["missingIsZero"] is False
+          assert d["safety"]["unavailableIsZero"] is False
+          print("PASS: hardened recovery probe shape")
+          PY
+
+      - name: Upload hardened recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-full21-recovery-v1
+          path: listenbrainz_full21_provider_epoch_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

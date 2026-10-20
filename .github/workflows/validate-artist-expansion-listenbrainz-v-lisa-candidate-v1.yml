@@ -1,0 +1,21 @@
+name: Validate Artist Expansion ListenBrainz V LISA candidate v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-listenbrainz-v-lisa-candidate-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-listenbrainz-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate ListenBrainz V LISA candidate
+        run: python tests/artist-expansion-listenbrainz-v-lisa-candidate-v1.py

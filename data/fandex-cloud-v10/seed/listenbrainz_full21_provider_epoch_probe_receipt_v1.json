@@ -1,0 +1,80 @@
+{
+  "version": "listenbrainz_full21_provider_epoch_probe_receipt_v1",
+  "status": "provider_epoch_not_advanced_non_activating",
+  "previousEpochBoundary": {
+    "maximumEpoch": 1791063713,
+    "maximumIsoUtc": "2026-10-03T21:41:53Z",
+    "sourceReceipt": "listenbrainz_full21_repeat_observation_receipt_v1"
+  },
+  "probe": {
+    "workflow": "Probe Artist Expansion ListenBrainz provider epoch v1",
+    "runId": 37473219665,
+    "jobId": 112301840045,
+    "head": "7af398e8e373f168e481ea65a7833bc58ff6a073",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "newProviderEpochArtistCount": 0,
+    "staleProviderEpochArtistCount": 21,
+    "unavailableArtistCount": 0,
+    "identityMismatchArtistCount": 0,
+    "negativeAllTimeDeltaArtistCount": 0,
+    "positiveAllTimeDeltaArtistCount": 0,
+    "unchangedAllTimeArtistCount": 21,
+    "rateOrScoreComputed": false
+  },
+  "staleProviderEpochCanonicalArtistIds": [
+    "aespa",
+    "ateez",
+    "blackpink",
+    "boynextdoor",
+    "bts",
+    "enhypen",
+    "iu",
+    "ive",
+    "jennie",
+    "jimin",
+    "jungkook",
+    "lesserafim",
+    "lisa",
+    "newjeans",
+    "riize",
+    "rose",
+    "seventeen",
+    "straykids",
+    "twice",
+    "txt",
+    "v"
+  ],
+  "artifact": {
+    "artifactId": 11418036005,
+    "name": "artist-expansion-listenbrainz-provider-epoch-v1",
+    "sizeBytes": 2495,
+    "digest": "sha256:089c8f0a08feb0f8555297fd941e7af613370040186ff48247999189b69ec6a7",
+    "expiresAt": "2026-10-20T13:44:54Z"
+  },
+  "interpretation": {
+    "distinctProviderUpdateEpochEstablished": false,
+    "zeroGrowthEstablished": false,
+    "allTimeDeltaCharacterizationEligible": false,
+    "reason": "All 21 canonical artists remained at or before the previously observed maximum ListenBrainz provider epoch. Unchanged counts are stale-epoch observations, not zero-growth evidence."
+  },
+  "nextGate": {
+    "code": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
+    "condition": "At least a later provider epoch must be observed; full21 delta characterization requires a coherent later cohort epoch rather than stale observations."
+  },
+  "safety": {
+    "staleEpochInterpretedAsZeroGrowth": false,
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}

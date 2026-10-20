@@ -1,0 +1,133 @@
+{
+  "version": "lastfm_v_lisa_mbid_resolution_v1",
+  "status": "mbid_fallback_rejected_keep_unsupported",
+  "probe": {
+    "workflow": "Probe Artist Expansion Last.fm MBID V LISA v1",
+    "initialRunId": 37464058017,
+    "initialRunConclusion": "failure",
+    "initialFailure": "Probe stopped on Last.fm error 6 before both targets completed.",
+    "completedRunId": 37464237518,
+    "completedRunConclusion": "success",
+    "completedRunHead": "3b7ff23684b492669cd0282c036f7321a51ad2a8",
+    "artifactId": 11413847735,
+    "artifactDigest": "sha256:1458035802adb13a69aaad0bb13f8d96894c58e542458346e91aa3aae4a58d2c",
+    "activationAuthorized": false
+  },
+  "officialApiCapability": {
+    "artistGetInfoAcceptsMbid": true,
+    "artistGetTopTracksAcceptsMbid": true,
+    "note": "API capability exists, but provider-side identity behavior must still prove canonical specificity."
+  },
+  "targets": [
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "expectedMusicBrainzArtistMbid": "83096042-3785-481e-8843-dee69f1aad12",
+      "expectedIdentity": "V (BTS)",
+      "lastfmNameQuery": {
+        "returnedName": "V",
+        "returnedMbid": "6ea37194-8483-470c-8b3d-ca545903a853",
+        "url": "https://www.last.fm/music/V",
+        "listeners": 981666,
+        "playcount": 757223383
+      },
+      "lastfmMbidQuery": {
+        "requestedMbid": "83096042-3785-481e-8843-dee69f1aad12",
+        "returnedName": "V",
+        "returnedMbid": "6ea37194-8483-470c-8b3d-ca545903a853",
+        "url": "https://www.last.fm/music/V",
+        "listeners": 981666,
+        "playcount": 757223383
+      },
+      "topTrackEvidence": {
+        "examples": [
+          "Love Me Again",
+          "Sweet Night",
+          "Slow Dancing",
+          "Rainy Days",
+          "FRI(END)S",
+          "Christmas Tree",
+          "Winter Bear"
+        ],
+        "returnedArtistMbid": "6ea37194-8483-470c-8b3d-ca545903a853",
+        "interpretation": "Returned tracks are associated with BTS V repertoire, but Last.fm labels the artist with an MBID belonging to a different V entity. Provider identity is internally conflated."
+      },
+      "findings": {
+        "expectedMbidReturned": false,
+        "nameAndMbidStatsEqual": true,
+        "nameAndMbidUrlEqual": true,
+        "artistSearchExpectedMbidMatchCount": 0,
+        "canonicalSpecificStatsProven": false,
+        "providerIdentityConflationObserved": true
+      },
+      "disposition": "unsupported_under_current_lastfm_provider_identity_model"
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "LISA",
+      "expectedMusicBrainzArtistMbid": "30aeb57f-bb16-47fa-86ca-79fc57b4d12c",
+      "expectedIdentity": "LISA (BLACKPINK)",
+      "lastfmNameQuery": {
+        "returnedName": "Lisa",
+        "returnedMbid": "70198b37-f6c7-4cc7-a728-4224e860a15f",
+        "url": "https://www.last.fm/music/Lisa",
+        "listeners": 2080262,
+        "playcount": 138280548
+      },
+      "lastfmMbidQuery": {
+        "requestedMbid": "30aeb57f-bb16-47fa-86ca-79fc57b4d12c",
+        "apiErrorCode": 6,
+        "apiErrorMessage": "The artist you supplied could not be found"
+      },
+      "findings": {
+        "expectedMbidReturned": false,
+        "artistSearchExpectedMbidMatchCount": 0,
+        "canonicalSpecificStatsProven": false,
+        "providerIdentityConflationObservedOrUnresolvable": true
+      },
+      "disposition": "unsupported_under_current_lastfm_provider_identity_model"
+    }
+  ],
+  "decision": {
+    "mbidFallbackResolvesV": false,
+    "mbidFallbackResolvesLisa": false,
+    "mbidFallbackResolvesProductParity": false,
+    "keepCompatibilityRegistryUnsupported": [
+      "v",
+      "lisa"
+    ],
+    "doNotPromoteToLastfmSeed": [
+      "v",
+      "lisa"
+    ],
+    "fuzzyOrDisplayNameFallbackAllowed": false,
+    "missingAsZeroAllowed": false
+  },
+  "crossSourceImpact": {
+    "youtubeFull21CandidateReady": true,
+    "lastfmProductReadyCountForTarget21": 19,
+    "product21Ready": false,
+    "blockerCode": "LASTFM_V_LISA_PRODUCT_PARITY_BLOCK",
+    "blockerHardenedByLiveMbidEvidence": true
+  },
+  "nextGate": {
+    "code": "ALTERNATIVE_CANONICAL_LASTFM_PROVIDER_OR_RUNTIME_CONTRACT_DECISION_REQUIRED",
+    "options": [
+      "find a different canonical-specific Last.fm-compatible provider surface with reviewed identity evidence",
+      "change Product Runtime source-availability contract without coercing unsupported/missing to zero",
+      "retain frozen10 Product cohort"
+    ],
+    "automaticDecisionAllowed": false
+  },
+  "safety": {
+    "compatibilityRegistryModified": false,
+    "lastfmSeedModified": false,
+    "activeProductModified": false,
+    "missingIsZero": false,
+    "unsupportedIsMissing": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
