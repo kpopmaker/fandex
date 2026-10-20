@@ -1,0 +1,91 @@
+name: Verify Brand Fit Render live Production v1
+
+on:
+  push:
+    branches:
+      - 'work/brand-fit-live-production-verification-v1'
+    paths:
+      - '.github/workflows/verify-brand-fit-render-live-production-v1.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/verify-brand-fit-render-live-production-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Read Render Product Beta surface
+        run: |
+          set -euo pipefail
+          url="https://fandex-product-self-host-v1.onrender.com/artists/iu/fandex-beta"
+          for attempt in $(seq 1 18); do
+            status="$(curl \
+              --silent --show-error --location --retry 0 \
+              --connect-timeout 10 --max-time 25 \
+              --output /tmp/brand-fit-live-production.html \
+              --write-out '%{http_code}' \
+              "$url" || true)"
+            if [[ "$status" == "200" ]]; then break; fi
+            if [[ "$attempt" -eq 18 ]]; then
+              echo "render_read_failed_status=$status"
+              exit 1
+            fi
+            sleep 3
+          done
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('/tmp/brand-fit-live-production.html', 'utf8');
+          const start = html.indexOf('brandFitPoint');
+          const end = html.indexOf('comebackActivityPoint', start + 1);
+          if (start < 0 || end < 0) {
+            throw new Error('brand-fit-card-boundary-missing');
+          }
+
+          const card = html.slice(start, end);
+          const required = [
+            'verified-commercial-partnership-activity',
+            'Production',
+            'real',
+          ];
+          const forbidden = [
+            'Research',
+            '런타임 확인 필요',
+            'durable-stored-evidence-runtime-unavailable',
+            'durable-stored-evidence-not-found',
+            'runtime-read-failed',
+          ];
+          const requiredPresence = Object.fromEntries(
+            required.map(value => [value, card.includes(value)]),
+          );
+          const blockerPresence = Object.fromEntries(
+            forbidden.map(value => [value, card.includes(value)]),
+          );
+          const scoreWithheld = html.includes('산정 보류');
+
+          console.log(JSON.stringify({
+            renderBrandFitRequiredPresence: requiredPresence,
+            renderBrandFitBlockerPresence: blockerPresence,
+            fandexScoreWithheld: scoreWithheld,
+          }));
+          if (
+            Object.values(requiredPresence).some(value => !value)
+            || Object.values(blockerPresence).some(Boolean)
+            || !scoreWithheld
+          ) {
+            throw new Error('render-brand-fit-production-surface-verification-failed');
+          }
+          console.log(JSON.stringify({
+            renderBrandFitRuntime: 'ok',
+            surface: '/artists/iu/fandex-beta',
+            valueState: 'verified-commercial-partnership-activity',
+            lifecycle: 'production',
+            material: 'real',
+            requestMode: 'read-only-get',
+          }));
+          NODE
