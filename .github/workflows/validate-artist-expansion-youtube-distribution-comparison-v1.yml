@@ -1,0 +1,28 @@
+name: Validate Artist Expansion YouTube distribution comparison v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-youtube-distribution-comparison-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-distribution-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Recompute deterministic comparison
+        run: python scripts/fandex-cloud-migration/source/youtube_v3_common_distribution_comparison_v1.py
+
+      - name: Validate comparison contract
+        run: python tests/artist-expansion-youtube-common-distribution-comparison-v1.py
+
+      - name: Verify materialized evidence is deterministic
+        run: git diff --exit-code -- data/fandex-cloud-v10/seed/youtube_v3_common_distribution_comparison_v1.json

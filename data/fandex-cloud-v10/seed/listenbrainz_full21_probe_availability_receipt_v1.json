@@ -1,0 +1,79 @@
+{
+  "version": "listenbrainz_full21_probe_availability_receipt_v1",
+  "status": "latest_probe_partial_inconclusive_non_activating",
+  "lineage": {
+    "consolidationPr": 530,
+    "priorFreshReprobePr": 531,
+    "priorFreshReprobeHead": "ae56518b0c410ce7748ba81f9095b3fdb0747dfb",
+    "previousCompleteAttempt": 2
+  },
+  "latestProbeAttempt": {
+    "workflow": "Probe Artist Expansion ListenBrainz provider epoch v1",
+    "runId": 37473219665,
+    "runAttempt": 3,
+    "jobId": 112317941300,
+    "sourceHead": "7af398e8e373f168e481ea65a7833bc58ff6a073",
+    "conclusion": "success",
+    "startedAt": "2026-10-06T14:18:32Z",
+    "completedAt": "2026-10-06T14:24:39Z",
+    "targetArtistCount": 21,
+    "exactIdentityObservedCount": 2,
+    "newProviderEpochObservedCount": 0,
+    "staleProviderEpochObservedCount": 2,
+    "staleProviderEpochCanonicalArtistIds": [
+      "lisa",
+      "riize"
+    ],
+    "nonExactOrUnavailableCount": 19,
+    "positiveAllTimeDeltaObservedCount": 0,
+    "negativeAllTimeDeltaObservedCount": 0,
+    "unchangedAllTimeObservedCount": 2,
+    "rateOrScoreComputed": false
+  },
+  "artifact": {
+    "artifactId": 11420860486,
+    "name": "artist-expansion-listenbrainz-provider-epoch-v1",
+    "sizeBytes": 2343,
+    "digest": "sha256:735cca287bc5fff828ae2d722b771a80f5e5ab06bf38248ee5298656388a8be5",
+    "expiresAt": "2026-10-20T14:24:35Z"
+  },
+  "comparisonToAttempt2": {
+    "attempt2ExactIdentityCount": 21,
+    "attempt2NewProviderEpochCount": 0,
+    "attempt2StaleProviderEpochCount": 21,
+    "attempt3ExactIdentityCount": 2,
+    "attempt3NewProviderEpochCount": 0,
+    "attempt3StaleProviderEpochCount": 2,
+    "latestAttemptEstablishesFull21EpochState": false,
+    "priorCompleteAttemptStillLatestCompleteCohortObservation": true
+  },
+  "interpretation": {
+    "newProviderEpochEstablished": false,
+    "full21StaleEpochEstablishedByLatestAttempt": false,
+    "zeroGrowthEstablished": false,
+    "distinctEpochDeltaCharacterizationEligible": false,
+    "providerAvailabilityOrObservabilityDegraded": true,
+    "note": "Attempt 3 completed successfully at the workflow level but only produced two exact canonical observations. It is therefore an incomplete provider observation, not evidence that the other 19 artists are Missing, Unsupported, zero-growth, or on a new epoch."
+  },
+  "nextGate": {
+    "code": "LISTENBRAINZ_FULL21_COHORT_REOBSERVATION_REQUIRED",
+    "afterRecoveryGate": "LISTENBRAINZ_PROVIDER_UPDATE_EPOCH_REQUIRED",
+    "condition": "Restore one complete 21/21 exact-identity observation first. If complete coverage returns, compare provider last_updated against the Oct 3 boundary before any delta characterization."
+  },
+  "safety": {
+    "nonObservedIsMissing": false,
+    "nonObservedIsUnsupported": false,
+    "nonObservedIsZero": false,
+    "staleEpochInterpretedAsZeroGrowth": false,
+    "latestPartialAttemptSupersedesPriorCompleteEvidence": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}

@@ -1,0 +1,21 @@
+name: Validate Artist Expansion ListenBrainz full21 receipt v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-listenbrainz-full21-shadow-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate-full21-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate durable ListenBrainz full21 receipt
+        run: python tests/artist-expansion-listenbrainz-full21-shadow-receipt-v1.py
