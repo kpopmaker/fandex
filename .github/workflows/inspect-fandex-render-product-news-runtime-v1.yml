@@ -1,0 +1,93 @@
+name: Inspect FANDEX Render Product runtime v1
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/inspect-fandex-render-product-news-runtime-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inspect-fandex-render-product-runtime-v1
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: >-
+      github.repository == 'kpopmaker/fandex'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Isolate Render Product HTTP latency without retries
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          base='https://fandex-product-self-host-v1.onrender.com'
+          for route in '/' '/artists/iu' '/artists/iu/fandex-beta'; do
+            case "$route" in
+              '/') key='ROOT'; limit=15; file='/tmp/fandex-render-root.html' ;;
+              '/artists/iu') key='ARTIST'; limit=30; file='/tmp/fandex-render-artist.html' ;;
+              *) key='BETA'; limit=90; file='/tmp/fandex-render-beta.html' ;;
+            esac
+            set +e
+            metrics="$(curl --silent --show-error --location --retry 0 \
+              --connect-timeout 12 --max-time "$limit" \
+              --output "$file" \
+              --write-out 'code=%{http_code} dns=%{time_namelookup} connect=%{time_connect} ttfb=%{time_starttransfer} total=%{time_total} bytes=%{size_download}' \
+              "$base$route")"
+            exit_code="$?"
+            set -e
+            echo "FANDEX_RENDER_${key}_CURL_EXIT=$exit_code"
+            echo "FANDEX_RENDER_${key}_TIMING=$metrics"
+            printf '%s' "${metrics%% *}" | sed 's/^code=//' > "/tmp/fandex-render-${key,,}.status"
+            if [[ "$exit_code" != 0 ]]; then
+              echo "FANDEX_RENDER_${key}_HTTP=unavailable"
+            elif [[ "$metrics" == code=200* ]]; then
+              echo "FANDEX_RENDER_${key}_HTTP=200"
+            else
+              echo "FANDEX_RENDER_${key}_HTTP=non-200"
+            fi
+          done
+          # Emit all three route measurements before failing; do not log bodies or credentials.
+          # Fail closed on missing HTTP 200, including curl timeouts and Render 502.
+          for key in ROOT ARTIST BETA; do
+            if [[ "$(cat "/tmp/fandex-render-${key,,}.status" 2>/dev/null || true)" != "200" ]]; then
+              echo "FANDEX_RENDER_HTTP_GATES=failed"
+              exit 1
+            fi
+          done
+          echo "FANDEX_RENDER_HTTP_GATES=passed"
+
+      - name: Validate beta cards only when HTTP 200
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -s /tmp/fandex-render-beta.html ]]; then
+            echo "FANDEX_RENDER_RUNTIME_CARD_VALIDATION=failed-beta-unavailable"
+            exit 1
+          fi
+          node <<'NODE'
+          const fs = require('node:fs');
+          const html = fs.readFileSync('/tmp/fandex-render-beta.html', 'utf8');
+          const cards = html.split('<article ').slice(1).map((part) => part.split('</article>')[0]);
+          for (const variableId of ['newsIssuePoint', 'growthMomentumPoint']) {
+            const card = cards.find((entry) => entry.includes(variableId));
+            console.log('FANDEX_RENDER_' + variableId + '_CARD=' + (card ? 'present' : 'missing'));
+            if (!card) process.exitCode = 1;
+          }
+          NODE
+
+      - name: Safety boundary
+        if: always()
+        run: |
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_HTTP_GETS=3"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_PROVIDER_EXECUTIONS=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_DATABASE_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_BLOB_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_SCORE_WRITES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_PUBLICATION_CHANGES=0"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_RAW_RESPONSE_LOGGED=false"
+          echo "FANDEX_RENDER_PRODUCT_RUNTIME_CREDENTIALS_LOGGED=false"
