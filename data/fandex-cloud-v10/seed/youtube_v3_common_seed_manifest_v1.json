@@ -1,0 +1,1022 @@
+{
+  "version": "youtube_v3_common_seed_manifest_v1",
+  "status": "candidate_only_not_product_active",
+  "derivedFromPolicy": "youtube_v3_common_seed_selection_policy_v1",
+  "targetAuthority": {
+    "path": "data/fandex-cloud-v10/seed/music_chart_artist_targets_v1.json",
+    "version": "music_chart_artist_targets_v1",
+    "targetArtistCount": 21
+  },
+  "evidenceFreeze": {
+    "validationHead": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+    "validationRunId": 36841902398,
+    "historicalSource": {
+      "path": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+      "blobSha": "a5595de0416c9c67a112d194e975b94316500d3d",
+      "selectedVideoCount": 47,
+      "lineageComplete": false
+    },
+    "currentReviewedSource": {
+      "path": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+      "blobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192",
+      "selectedVideoCount": 27
+    }
+  },
+  "selectedArtistCount": 21,
+  "selectedVideoCount": 74,
+  "videoCountByCanonicalArtistId": {
+    "iu": 2,
+    "aespa": 6,
+    "ateez": 3,
+    "boynextdoor": 2,
+    "ive": 5,
+    "lesserafim": 6,
+    "newjeans": 4,
+    "seventeen": 6,
+    "straykids": 6,
+    "txt": 7,
+    "bts": 6,
+    "blackpink": 1,
+    "twice": 1,
+    "enhypen": 5,
+    "jungkook": 1,
+    "jimin": 1,
+    "v": 1,
+    "jennie": 2,
+    "lisa": 2,
+    "rose": 1,
+    "riize": 6
+  },
+  "selectedVideos": [
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "videoId": "ax1csKKQnns",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "live_clip",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "videoId": "IBWfp7odPmE",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "shorts",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "83C3TZ4Zm_o",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "eq7jZgVR6IM",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "shorts",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "3K15XOwICnc",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "shorts",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "r2eoeCk171I",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "broadcast_clip",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "0aEgFTk7B9o",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "broadcast_clip",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "videoId": "XxvANTF-19g",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "broadcast_clip",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videoId": "ke0UrNoe7-k",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videoId": "vcbIP2YvDOo",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "videoId": "R9hv2cLYK-w",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "broadcast_clip",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "videoId": "53KJej_aLuQ",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "shorts",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "videoId": "YAhZMuKJsIw",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": "shorts",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoId": "TNDF5Qr6ayo",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoId": "mx8VPWBWKmY",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoId": "uVpGElT--E8",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoId": "9qkpcLK422o",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "videoId": "1Lmy7qwmSMc",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "V1Lr-_AxeR8",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "a2grcJdfXmY",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "1v2KMsfBDjc",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "Gnn4GRSzRXI",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "3YC4-RYEhBs",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "videoId": "ox9Bw-lmn6s",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videoId": "NNbaTJX_9go",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videoId": "Fq-A3aLqmms",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videoId": "9MaO43ekbHs",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "videoId": "Jx_58YiWxP0",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "N9X1o0q4aIc",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "dZNPbNkKAss",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "5A7qyhj-HjE",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "zsdueA_zcl8",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "b7gHOIJiGgI",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "videoId": "G0G3pLRyraY",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "Q7IFjVUUb_E",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "l8sSQAa1kNM",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "F0UIsSnotlA",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "kQjidaLtpvk",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "hQUVIT8m-c0",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "videoId": "jDREKfYqgkw",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "jOnLqqDRfY4",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "vlmXpQOE75c",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "mNLiZ25srkI",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "uKFlZmn4eQk",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "b5j01yC0LeY",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "TBS3VbzEQis",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "videoId": "EUERJYKCzWU",
+      "evidenceClass": "historical_approval_recovered",
+      "reviewedVideoType": null,
+      "typeResolution": "live_title_classifier_fallback",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_historical_approved_seed_manifest_v1.json",
+        "sourceBlobSha": "a5595de0416c9c67a112d194e975b94316500d3d"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "_gyultVTesk",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "b4iVv91Z6lY",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "GEk4jHwfFTA",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "A1nu9jg6ciY",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "8AYxDDrG5uQ",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "videoId": "GyJS58cAN94",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "external_content",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "videoId": "2GJfWMYCWY0",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "videoId": "FD_oc92GO6k",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "performance_video",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoId": "MT-4Bk1Lw8g",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoId": "K5SXamqxoio",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoId": "bPjrHu60278",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoId": "vU43ebmiPRk",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "videoId": "X42ixwTgUJk",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "external_content",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "videoId": "p0nPyE-dv9Q",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "performance_video",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "videoId": "Y7do-6qV5Dw",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "performance_video",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "videoId": "s466YCiHfKw",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "videoId": "_IT83Y_HcAw",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "videoId": "FyS5dAywkEo",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "videoId": "J77i-E_0JWg",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "performance_video",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "videoId": "Lufa9QAFFeY",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "4PBRfhGY1qs",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "p3hkvshy5ko",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "FM9l_F_tlUc",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "dance_practice",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "HDGCTtuW-Yo",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "yfKBI5l81-A",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "videoId": "RsDXsGIst-s",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "official_mv",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "videoId": "sY19m7EZTw4",
+      "evidenceClass": "current_reviewed_approval",
+      "reviewedVideoType": "external_content",
+      "typeResolution": "preserved_reviewed_or_historical_type",
+      "evidenceRef": {
+        "sourceCommit": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+        "sourcePath": "data/fandex-cloud-v10/seed/youtube_seed_videos_candidate_v1.csv",
+        "sourceBlobSha": "41c80a16709274c3ab13f0e8c3c60ee2d4aef192"
+      }
+    }
+  ],
+  "safety": {
+    "historicalLineageClaimedComplete": false,
+    "missingIsZero": false,
+    "productEligibilityImplied": false,
+    "activeYoutubeRankingModified": false,
+    "productCohortModified": false,
+    "deploymentAuthorized": false
+  }
+}

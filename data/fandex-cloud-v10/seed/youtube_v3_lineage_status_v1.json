@@ -1,0 +1,207 @@
+{
+  "version": "youtube_v3_lineage_status_v1",
+  "source": "youtube_v3",
+  "activeProductState": {
+    "mode": "frozen_cutover_snapshot",
+    "rankingFile": "data/fandex-cloud-v10/seed/fandex_youtube_ranking_v3_latest.json",
+    "artistCount": 10,
+    "canonicalArtists": [
+      {
+        "canonicalArtistId": "aespa",
+        "artist": "에스파"
+      },
+      {
+        "canonicalArtistId": "ateez",
+        "artist": "에이티즈"
+      },
+      {
+        "canonicalArtistId": "iu",
+        "artist": "아이유"
+      },
+      {
+        "canonicalArtistId": "lesserafim",
+        "artist": "르세라핌"
+      },
+      {
+        "canonicalArtistId": "newjeans",
+        "artist": "뉴진스"
+      },
+      {
+        "canonicalArtistId": "ive",
+        "artist": "아이브"
+      },
+      {
+        "canonicalArtistId": "boynextdoor",
+        "artist": "보이넥스트도어"
+      },
+      {
+        "canonicalArtistId": "txt",
+        "artist": "투모로우바이투게더"
+      },
+      {
+        "canonicalArtistId": "seventeen",
+        "artist": "세븐틴"
+      },
+      {
+        "canonicalArtistId": "straykids",
+        "artist": "스트레이키즈"
+      }
+    ]
+  },
+  "recoveredPipeline": {
+    "formulaVersion": "youtube_publish_v3_uncapped_additive_scaled",
+    "formulaRecovered": true,
+    "collectorRecovered": true,
+    "discoveryRecovered": true,
+    "originalRawSeedFileRecovered": false,
+    "originalRawMetricsRecovered": false,
+    "historicalApprovalScriptsRecovered": true,
+    "recoveredApprovedVideoIdCount": 47,
+    "historicalApprovedArtistCount": 10
+  },
+  "legacyLineage": {
+    "exactReproductionPossible": false,
+    "reason": "The original youtube_seed_videos_v1.csv and raw metrics were never committed and were not found in accessible backup storage. Historical approval scripts preserve additions, not the complete original baseline for the initial four seeded artists.",
+    "knownIncompleteBaselineCanonicalArtistIds": [
+      "iu",
+      "aespa",
+      "ateez",
+      "boynextdoor"
+    ],
+    "historicalReproducibilityRun": {
+      "runId": 36839650818,
+      "jobId": 110295424226,
+      "validationHead": "7cf855ae3287ec099b5d330cf90d0c1bc7142ebf",
+      "conclusion": "success"
+    },
+    "comparisons": [
+      {
+        "canonicalArtistId": "newjeans",
+        "frozenYoutubePoint": 21.54,
+        "reproducedApprovedSeedPoint": 22.56
+      },
+      {
+        "canonicalArtistId": "lesserafim",
+        "frozenYoutubePoint": 52.76,
+        "reproducedApprovedSeedPoint": 54.4
+      },
+      {
+        "canonicalArtistId": "boynextdoor",
+        "frozenYoutubePoint": 35.42,
+        "reproducedApprovedSeedPoint": 6.46
+      },
+      {
+        "canonicalArtistId": "seventeen",
+        "frozenYoutubePoint": 42.85,
+        "reproducedApprovedSeedPoint": 43.51
+      },
+      {
+        "canonicalArtistId": "straykids",
+        "frozenYoutubePoint": 47.99,
+        "reproducedApprovedSeedPoint": 49.16
+      },
+      {
+        "canonicalArtistId": "ive",
+        "frozenYoutubePoint": 37.2,
+        "reproducedApprovedSeedPoint": 37.63
+      },
+      {
+        "canonicalArtistId": "iu",
+        "frozenYoutubePoint": 49.63,
+        "reproducedApprovedSeedPoint": 14.75
+      },
+      {
+        "canonicalArtistId": "aespa",
+        "frozenYoutubePoint": 79.04,
+        "reproducedApprovedSeedPoint": 43.39
+      },
+      {
+        "canonicalArtistId": "ateez",
+        "frozenYoutubePoint": 52.43,
+        "reproducedApprovedSeedPoint": 21.89
+      },
+      {
+        "canonicalArtistId": "txt",
+        "frozenYoutubePoint": 49.71,
+        "reproducedApprovedSeedPoint": 50.66
+      }
+    ],
+    "comparabilityThresholdDefined": false
+  },
+  "newReviewedSeedEvidence": {
+    "targetArtistCount": 21,
+    "approvedVideoCount": 27,
+    "approvedArtistCount": 11,
+    "approvedCanonicalArtistIds": [
+      "bts",
+      "blackpink",
+      "twice",
+      "enhypen",
+      "jungkook",
+      "jimin",
+      "v",
+      "jennie",
+      "lisa",
+      "rose",
+      "riize"
+    ],
+    "unresolvedCanonicalArtistIds": [],
+    "liveShadowRun": {
+      "runId": 36841474383,
+      "jobId": 110301352445,
+      "validationHead": "83bb923d5545b6cf8d28992db6c06ae97ca1fdc4",
+      "conclusion": "success"
+    },
+    "activationState": "reviewed_seed_candidate_only",
+    "productEligibility": "not_evaluated",
+    "vEvidence": {
+      "videoId": "sY19m7EZTw4",
+      "title": "V's NORMAL LOG #2026BTSFESTA",
+      "channelId": "UCLkAepWjdylmXSltofFvsYQ",
+      "channelTitle": "BANGTANTV",
+      "publishedAt": "2026-06-07T12:00:00Z",
+      "verificationRunId": 36841151084,
+      "verificationJobId": 110300308697,
+      "videoType": "external_content",
+      "shadowPoint": 6.42
+    }
+  },
+  "productExpansion": {
+    "eligibility": "blocked_incomplete_legacy_scale_lineage",
+    "currentFrozenCohortAllowed": true,
+    "expandedOrChangedYoutubeCohortAllowed": false,
+    "reason": "All 11 newly targeted artists now have reviewed YouTube seed evidence, but those shadow scores still cannot be mixed with the frozen Product snapshot until a common comparable YouTube scoring baseline is explicitly established. The original raw baseline for four frozen artists remains unrecovered. No rescaling or threshold is authorized by this contract.",
+    "resolutionOptions": [
+      "recover_complete_original_seed_and_metric_lineage",
+      "approve_a_full_cohort_youtube_v3_rebaseline_under_one_reviewed_seed_policy"
+    ],
+    "nextDecisionBoundary": {
+      "type": "youtube_full_cohort_rebaseline_policy",
+      "technicalEvidenceReady": true,
+      "automaticDecisionAllowed": false,
+      "note": "A 21-artist / 74-video shadow exists under the recovered historical formula, but seed evidence is heterogeneous and four frozen Product artists still lack complete original baseline lineage. A full-cohort rebaseline policy must be explicitly approved before replacing the frozen Product YouTube v3 snapshot."
+    }
+  },
+  "safety": {
+    "missingIsZero": false,
+    "reviewedSeedImpliesProductEligibility": false,
+    "automaticRescalingAllowed": false,
+    "automaticProductExpansionAllowed": false
+  },
+  "fullReviewedCohortShadow": {
+    "runId": 36841902398,
+    "jobId": 110302730391,
+    "validationHead": "5b2bf2bb4e8d25523b409053087daa582bb5fd2f",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "reviewedSeedVideoCount": 74,
+    "historicalRecoveredArtistCount": 10,
+    "currentReviewedArtistCount": 11,
+    "historicalLineageComplete": false,
+    "commonSeedSelectionPolicyEstablished": false,
+    "comparabilityThresholdDefined": false,
+    "productEligibilityEvaluated": false,
+    "rebaselineAuthorized": false,
+    "activeYouTubeRankingModified": false
+  }
+}

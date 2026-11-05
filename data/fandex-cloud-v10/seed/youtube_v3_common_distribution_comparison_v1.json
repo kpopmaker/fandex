@@ -1,0 +1,266 @@
+{
+  "version": "youtube_v3_common_distribution_comparison_v1",
+  "status": "comparison_complete_non_activating",
+  "inputs": {
+    "commonMetricReceiptVersion": "youtube_v3_common_metric_snapshot_receipt_v1",
+    "commonMetricRunId": 37398978361,
+    "commonMetricHead": "c0124d8833f996437d591671b6a546d2eca76034",
+    "frozenRankingVersion": "cloud_seed_from_production_v10_status_2026-08-31",
+    "lineageVersion": "youtube_v3_lineage_status_v1"
+  },
+  "cohorts": {
+    "frozenOverlapArtistCount": 10,
+    "commonRebaselineArtistCount": 21,
+    "newOnlyArtistCount": 11
+  },
+  "distribution": {
+    "frozen10": {
+      "count": 10,
+      "min": 21.54,
+      "max": 79.04,
+      "mean": 46.857,
+      "median": 48.81,
+      "populationStdDev": 14.141539,
+      "sum": 468.57
+    },
+    "rebaselineOverlap10": {
+      "count": 10,
+      "min": 6.46,
+      "max": 54.47,
+      "mean": 34.477,
+      "median": 40.55,
+      "populationStdDev": 15.889967,
+      "sum": 344.77
+    },
+    "rebaselineAll21": {
+      "count": 21,
+      "min": 5.8,
+      "max": 68.0,
+      "mean": 28.766667,
+      "median": 24.64,
+      "populationStdDev": 18.743066,
+      "sum": 604.1
+    },
+    "rebaselineNewOnly11": {
+      "count": 11,
+      "min": 5.8,
+      "max": 68.0,
+      "mean": 23.575455,
+      "median": 14.4,
+      "populationStdDev": 19.609664,
+      "sum": 259.33
+    }
+  },
+  "pairedOverlap": {
+    "positiveDeltaCount": 6,
+    "negativeDeltaCount": 4,
+    "zeroDeltaCount": 0,
+    "meanDelta": -12.38,
+    "medianDelta": 0.575,
+    "minRatio": 0.182383,
+    "maxRatio": 1.047818,
+    "meanRatio": 0.760224,
+    "medianRatio": 1.014235,
+    "pearsonPointCorrelation": 0.40047,
+    "spearmanRankCorrelation": 0.430303,
+    "squaredRankDistance": 94,
+    "pairs": [
+      {
+        "canonicalArtistId": "aespa",
+        "artist": "에스파",
+        "frozenPoint": 79.04,
+        "rebaselinePoint": 43.44,
+        "rebaselineGlobalRank": 8,
+        "frozenRank": 1,
+        "rebaselineOverlapRank": 5,
+        "delta": -35.6,
+        "ratio": 0.549595
+      },
+      {
+        "canonicalArtistId": "lesserafim",
+        "artist": "르세라핌",
+        "frozenPoint": 52.76,
+        "rebaselinePoint": 54.47,
+        "rebaselineGlobalRank": 2,
+        "frozenRank": 2,
+        "rebaselineOverlapRank": 1,
+        "delta": 1.71,
+        "ratio": 1.032411
+      },
+      {
+        "canonicalArtistId": "ateez",
+        "artist": "에이티즈",
+        "frozenPoint": 52.43,
+        "rebaselinePoint": 21.97,
+        "rebaselineGlobalRank": 13,
+        "frozenRank": 3,
+        "rebaselineOverlapRank": 8,
+        "delta": -30.46,
+        "ratio": 0.419035
+      },
+      {
+        "canonicalArtistId": "txt",
+        "artist": "투모로우바이투게더",
+        "frozenPoint": 49.71,
+        "rebaselinePoint": 50.71,
+        "rebaselineGlobalRank": 3,
+        "frozenRank": 4,
+        "rebaselineOverlapRank": 2,
+        "delta": 1.0,
+        "ratio": 1.020117
+      },
+      {
+        "canonicalArtistId": "iu",
+        "artist": "아이유",
+        "frozenPoint": 49.63,
+        "rebaselinePoint": 14.75,
+        "rebaselineGlobalRank": 14,
+        "frozenRank": 5,
+        "rebaselineOverlapRank": 9,
+        "delta": -34.88,
+        "ratio": 0.297199
+      },
+      {
+        "canonicalArtistId": "straykids",
+        "artist": "스트레이키즈",
+        "frozenPoint": 47.99,
+        "rebaselinePoint": 49.2,
+        "rebaselineGlobalRank": 4,
+        "frozenRank": 6,
+        "rebaselineOverlapRank": 3,
+        "delta": 1.21,
+        "ratio": 1.025214
+      },
+      {
+        "canonicalArtistId": "seventeen",
+        "artist": "세븐틴",
+        "frozenPoint": 42.85,
+        "rebaselinePoint": 43.54,
+        "rebaselineGlobalRank": 7,
+        "frozenRank": 7,
+        "rebaselineOverlapRank": 4,
+        "delta": 0.69,
+        "ratio": 1.016103
+      },
+      {
+        "canonicalArtistId": "ive",
+        "artist": "아이브",
+        "frozenPoint": 37.2,
+        "rebaselinePoint": 37.66,
+        "rebaselineGlobalRank": 9,
+        "frozenRank": 8,
+        "rebaselineOverlapRank": 6,
+        "delta": 0.46,
+        "ratio": 1.012366
+      },
+      {
+        "canonicalArtistId": "boynextdoor",
+        "artist": "보이넥스트도어",
+        "frozenPoint": 35.42,
+        "rebaselinePoint": 6.46,
+        "rebaselineGlobalRank": 19,
+        "frozenRank": 9,
+        "rebaselineOverlapRank": 10,
+        "delta": -28.96,
+        "ratio": 0.182383
+      },
+      {
+        "canonicalArtistId": "newjeans",
+        "artist": "뉴진스",
+        "frozenPoint": 21.54,
+        "rebaselinePoint": 22.57,
+        "rebaselineGlobalRank": 12,
+        "frozenRank": 10,
+        "rebaselineOverlapRank": 7,
+        "delta": 1.03,
+        "ratio": 1.047818
+      }
+    ]
+  },
+  "lineagePartition": {
+    "knownIncompleteLegacy": {
+      "canonicalArtistIds": [
+        "aespa",
+        "ateez",
+        "boynextdoor",
+        "iu"
+      ],
+      "count": 4,
+      "deltaRange": [
+        -35.6,
+        -28.96
+      ],
+      "ratioRange": [
+        0.182383,
+        0.549595
+      ]
+    },
+    "notMarkedIncompleteLegacy": {
+      "canonicalArtistIds": [
+        "ive",
+        "lesserafim",
+        "newjeans",
+        "seventeen",
+        "straykids",
+        "txt"
+      ],
+      "count": 6,
+      "deltaRange": [
+        0.46,
+        1.71
+      ],
+      "ratioRange": [
+        1.012366,
+        1.047818
+      ]
+    }
+  },
+  "structuralFindings": {
+    "singleMultiplicativeScaleMapsFrozenToRebaseline": false,
+    "frozenOverlapRankOrderPreserved": false,
+    "negativeDeltaCanonicalArtistIds": [
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "iu"
+    ],
+    "positiveDeltaCanonicalArtistIds": [
+      "ive",
+      "lesserafim",
+      "newjeans",
+      "seventeen",
+      "straykids",
+      "txt"
+    ],
+    "knownIncompleteLegacyCanonicalArtistIds": [
+      "aespa",
+      "ateez",
+      "boynextdoor",
+      "iu"
+    ],
+    "negativeDeltaSetExactlyMatchesKnownIncompleteLegacySet": true,
+    "allKnownCompleteLegacyArtistsHavePositiveDelta": true,
+    "allKnownIncompleteLegacyArtistsHaveNegativeDelta": true,
+    "interpretation": "The frozen 10 and the common 21 rebaseline are not one scalar-equivalent score surface. The four negative overlap deltas exactly coincide with the four artists whose original raw seed baseline is known incomplete. Therefore frozen and rebaseline points must not be mixed into one Product cohort without an explicit full-cohort adoption decision."
+  },
+  "decisionBoundary": {
+    "automaticProductEligibilityEstablished": false,
+    "mixedFrozenAndRebaselineProductScaleAllowed": false,
+    "full21RebaselineTechnicalBaselineEstablished": true,
+    "promotionThresholdDefined": false,
+    "thresholdInventedForThisComparison": false,
+    "nextGate": "FULL_21_REBASELINE_COHORT_ADOPTION_DECISION_REQUIRED",
+    "note": "Technical comparison is complete. Any decision to replace the frozen 10 with the common 21 baseline is a separate explicit Product adoption decision; this comparison does not activate it."
+  },
+  "safety": {
+    "missingIsZero": false,
+    "automaticRescalingAllowed": false,
+    "automaticProductExpansionAllowed": false,
+    "activeYoutubeRankingModified": false,
+    "productRuntimeModified": false,
+    "databaseModified": false,
+    "schedulerModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
