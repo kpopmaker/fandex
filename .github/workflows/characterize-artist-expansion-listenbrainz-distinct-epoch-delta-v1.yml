@@ -1,0 +1,49 @@
+name: Characterize Artist Expansion ListenBrainz distinct epoch delta v1
+
+on:
+  push:
+    branches:
+      - evidence/artist-expansion-listenbrainz-distinct-epoch-delta-v1
+
+permissions:
+  contents: read
+
+jobs:
+  characterize-delta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Characterize full21 distinct-epoch raw delta
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_distinct_epoch_delta_v1.py
+
+      - name: Validate characterization shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("listenbrainz_full21_distinct_epoch_delta_v1.json").read_text())
+          assert d["summary"]["targetArtistCount"] == 21
+          assert len(d["artists"]) == 21
+          assert d["contract"]["rateComputed"] is False
+          assert d["contract"]["scoreComputed"] is False
+          assert d["contract"]["normalizationComputed"] is False
+          assert d["contract"]["weightDefined"] is False
+          assert d["contract"]["thresholdDefined"] is False
+          assert d["safety"]["rawDeltaRankingUsedAsScore"] is False
+          assert d["safety"]["newScoreFormulaDefined"] is False
+          print("PASS: distinct-epoch delta characterization shape")
+          PY
+
+      - name: Upload distinct-epoch delta evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-distinct-epoch-delta-v1
+          path: listenbrainz_full21_distinct_epoch_delta_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

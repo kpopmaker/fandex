@@ -1,0 +1,53 @@
+name: Shadow Artist Expansion ListenBrainz full21 canonical v1
+
+on:
+  push:
+    branches:
+      - work/artist-expansion-listenbrainz-full21-shadow-v1
+
+permissions:
+  contents: read
+
+jobs:
+  full21-listenbrainz-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate reviewed MusicBrainz bindings
+        run: python tests/artist-expansion-musicbrainz-21-bindings-reviewed-v1.py
+
+      - name: Collect common 21-artist ListenBrainz shadow
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_canonical_shadow_v1.py
+
+      - name: Validate shadow shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("listenbrainz_full21_canonical_shadow_v1.json").read_text(encoding="utf-8"))
+          assert data["summary"]["targetArtistCount"] == 21
+          assert len(data["artists"]) == 21
+          assert len({r["canonicalArtistId"] for r in data["artists"]}) == 21
+          assert data["summary"]["identityMismatchArtistCount"] == 0
+          assert data["summary"]["scoreFormulaDefined"] is False
+          assert data["summary"]["promotionThresholdDefined"] is False
+          assert data["summary"]["productActivationAuthorized"] is False
+          assert data["safety"]["missingIsZero"] is False
+          assert data["safety"]["unavailableIsZero"] is False
+          print("PASS: full21 ListenBrainz shadow shape validated")
+          PY
+
+      - name: Upload full21 shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-full21-canonical-shadow-v1
+          path: listenbrainz_full21_canonical_shadow_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

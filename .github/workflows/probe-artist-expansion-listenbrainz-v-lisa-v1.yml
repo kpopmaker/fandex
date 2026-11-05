@@ -1,0 +1,31 @@
+name: Probe Artist Expansion ListenBrainz V LISA v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-listenbrainz-v-lisa-v1
+
+permissions:
+  contents: read
+
+jobs:
+  probe-listenbrainz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Probe canonical MBID listening stats
+        run: python scripts/listenbrainz-cloud/listenbrainz_v_lisa_probe_v1.py
+
+      - name: Upload ListenBrainz probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-v-lisa-v1
+          path: listenbrainz_v_lisa_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

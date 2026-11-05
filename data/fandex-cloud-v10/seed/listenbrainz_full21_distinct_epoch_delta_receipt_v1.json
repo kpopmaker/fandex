@@ -1,0 +1,418 @@
+{
+  "version": "listenbrainz_full21_distinct_epoch_delta_receipt_v1",
+  "status": "distinct_epoch_raw_delta_characterized_non_activating",
+  "lineage": {
+    "canonicalConsolidationPr": 539,
+    "canonicalConsolidationHead": "0be0b5dd50346915906131467c64ee3f7fdaf40b",
+    "previousProviderEpochMaximum": 1791063713,
+    "previousProviderEpochMaximumIsoUtc": "2026-10-03T21:41:53Z"
+  },
+  "characterization": {
+    "workflow": "Characterize Artist Expansion ListenBrainz distinct epoch delta v1",
+    "runId": 37548004659,
+    "jobId": 112556571411,
+    "head": "4c358a7bffc2c4f3b0c52581888a83e9674db7e3",
+    "conclusion": "success",
+    "targetArtistCount": 21,
+    "exactIdentityArtistCount": 21,
+    "newProviderEpochArtistCount": 21,
+    "positiveDeltaArtistCount": 21,
+    "negativeDeltaArtistCount": 0,
+    "unchangedDeltaArtistCount": 0,
+    "currentProviderEpochMinimum": 1791315569,
+    "currentProviderEpochMaximum": 1791315826,
+    "rawDeltaStats": {
+      "count": 21,
+      "sum": 306827,
+      "min": 29,
+      "max": 244625,
+      "mean": 14610.809523809523,
+      "median": 850
+    },
+    "rateComputed": false,
+    "scoreComputed": false,
+    "normalizationComputed": false
+  },
+  "artifact": {
+    "artifactId": 11451054983,
+    "name": "artist-expansion-listenbrainz-distinct-epoch-delta-v1",
+    "sizeBytes": 3249,
+    "digest": "sha256:f382d3dcc3152e0c364d2cc7d77c8218873ea969873a0d48c1181a15b3a1fdd2",
+    "expiresAt": "2026-10-20T23:42:55Z"
+  },
+  "artists": [
+    {
+      "canonicalArtistId": "iu",
+      "artist": "아이유",
+      "musicBrainzArtistMbid": "b9545342-1e6d-4dae-84ac-013374ad8d7c",
+      "previousAllTimeTotalListenCount": 502874,
+      "currentAllTimeTotalListenCount": 503491,
+      "rawAllTimeDelta": 617,
+      "currentLastUpdated": 1791315745,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artist": "에스파",
+      "musicBrainzArtistMbid": "b51c672b-85e0-48fe-8648-470a2422229f",
+      "previousAllTimeTotalListenCount": 1037712,
+      "currentAllTimeTotalListenCount": 1038562,
+      "rawAllTimeDelta": 850,
+      "currentLastUpdated": 1791315591,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artist": "에이티즈",
+      "musicBrainzArtistMbid": "cf0dbc16-4e24-4957-b5b4-955c8978f690",
+      "previousAllTimeTotalListenCount": 364449,
+      "currentAllTimeTotalListenCount": 364973,
+      "rawAllTimeDelta": 524,
+      "currentLastUpdated": 1791315613,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "boynextdoor",
+      "artist": "보이넥스트도어",
+      "musicBrainzArtistMbid": "656d0024-7b5f-4089-9d3e-ce383f15f1b7",
+      "previousAllTimeTotalListenCount": 110652,
+      "currentAllTimeTotalListenCount": 111336,
+      "rawAllTimeDelta": 684,
+      "currentLastUpdated": 1791315689,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "ive",
+      "artist": "아이브",
+      "musicBrainzArtistMbid": "b2f2216a-d7a9-4ce0-8b8f-f494d9a8c196",
+      "previousAllTimeTotalListenCount": 502019,
+      "currentAllTimeTotalListenCount": 502438,
+      "rawAllTimeDelta": 419,
+      "currentLastUpdated": 1791315715,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "lesserafim",
+      "artist": "르세라핌",
+      "musicBrainzArtistMbid": "1ee37742-1e3d-4e61-84d2-bc85f4c1459a",
+      "previousAllTimeTotalListenCount": 2061833,
+      "currentAllTimeTotalListenCount": 2064392,
+      "rawAllTimeDelta": 2559,
+      "currentLastUpdated": 1791315784,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artist": "뉴진스",
+      "musicBrainzArtistMbid": "49204a7a-ed85-407a-828f-6fd46f1d8126",
+      "previousAllTimeTotalListenCount": 720742,
+      "currentAllTimeTotalListenCount": 723524,
+      "rawAllTimeDelta": 2782,
+      "currentLastUpdated": 1791315613,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artist": "세븐틴",
+      "musicBrainzArtistMbid": "e04d239e-9fa8-49b3-b9b7-9e439c3cb1d1",
+      "previousAllTimeTotalListenCount": 347542,
+      "currentAllTimeTotalListenCount": 347813,
+      "rawAllTimeDelta": 271,
+      "currentLastUpdated": 1791315569,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artist": "스트레이키즈",
+      "musicBrainzArtistMbid": "142b343d-bf5a-428c-a64f-6d1a7566bbe9",
+      "previousAllTimeTotalListenCount": 768902,
+      "currentAllTimeTotalListenCount": 769705,
+      "rawAllTimeDelta": 803,
+      "currentLastUpdated": 1791315826,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artist": "투모로우바이투게더",
+      "musicBrainzArtistMbid": "9d027d72-790e-40ec-bbb7-61aa613457de",
+      "previousAllTimeTotalListenCount": 862878,
+      "currentAllTimeTotalListenCount": 864047,
+      "rawAllTimeDelta": 1169,
+      "currentLastUpdated": 1791315826,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artist": "방탄소년단",
+      "musicBrainzArtistMbid": "0d79fe8e-ba27-4859-bb8c-2f255f346853",
+      "previousAllTimeTotalListenCount": 92936753,
+      "currentAllTimeTotalListenCount": 93181378,
+      "rawAllTimeDelta": 244625,
+      "currentLastUpdated": 1791315730,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artist": "BLACKPINK",
+      "musicBrainzArtistMbid": "48646387-1664-4c9a-9139-9bfd091b823c",
+      "previousAllTimeTotalListenCount": 1097063,
+      "currentAllTimeTotalListenCount": 1098210,
+      "rawAllTimeDelta": 1147,
+      "currentLastUpdated": 1791315633,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artist": "트와이스",
+      "musicBrainzArtistMbid": "8da127cc-c432-418f-b356-ef36210d82ac",
+      "previousAllTimeTotalListenCount": 1961513,
+      "currentAllTimeTotalListenCount": 1963150,
+      "rawAllTimeDelta": 1637,
+      "currentLastUpdated": 1791315715,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artist": "엔하이픈",
+      "musicBrainzArtistMbid": "95663592-1447-4579-90f7-c94733476667",
+      "previousAllTimeTotalListenCount": 430781,
+      "currentAllTimeTotalListenCount": 431500,
+      "rawAllTimeDelta": 719,
+      "currentLastUpdated": 1791315745,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "jungkook",
+      "artist": "정국",
+      "musicBrainzArtistMbid": "23c8056b-ee13-4cfc-a772-2f5292e35bb5",
+      "previousAllTimeTotalListenCount": 20082836,
+      "currentAllTimeTotalListenCount": 20097780,
+      "rawAllTimeDelta": 14944,
+      "currentLastUpdated": 1791315730,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "jimin",
+      "artist": "지민",
+      "musicBrainzArtistMbid": "d2582c77-6b0f-4b2f-802f-8f3cad1a5fec",
+      "previousAllTimeTotalListenCount": 13147312,
+      "currentAllTimeTotalListenCount": 13164786,
+      "rawAllTimeDelta": 17474,
+      "currentLastUpdated": 1791315796,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "v",
+      "artist": "V",
+      "musicBrainzArtistMbid": "83096042-3785-481e-8843-dee69f1aad12",
+      "previousAllTimeTotalListenCount": 16730535,
+      "currentAllTimeTotalListenCount": 16744365,
+      "rawAllTimeDelta": 13830,
+      "currentLastUpdated": 1791315689,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "jennie",
+      "artist": "제니 (JENNIE)",
+      "musicBrainzArtistMbid": "779351de-0da5-4943-928b-495a3c40e8c0",
+      "previousAllTimeTotalListenCount": 933247,
+      "currentAllTimeTotalListenCount": 934292,
+      "rawAllTimeDelta": 1045,
+      "currentLastUpdated": 1791315579,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "lisa",
+      "artist": "리사(LISA)",
+      "musicBrainzArtistMbid": "30aeb57f-bb16-47fa-86ca-79fc57b4d12c",
+      "previousAllTimeTotalListenCount": 219417,
+      "currentAllTimeTotalListenCount": 219713,
+      "rawAllTimeDelta": 296,
+      "currentLastUpdated": 1791315633,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "rose",
+      "artist": "로제(ROSÉ)",
+      "musicBrainzArtistMbid": "7f233cda-eacb-4235-b681-5f7be343a1a2",
+      "previousAllTimeTotalListenCount": 282102,
+      "currentAllTimeTotalListenCount": 282505,
+      "rawAllTimeDelta": 403,
+      "currentLastUpdated": 1791315613,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    },
+    {
+      "canonicalArtistId": "riize",
+      "artist": "RIIZE",
+      "musicBrainzArtistMbid": "f3eaa943-71b3-44b6-8b66-74c787742aae",
+      "previousAllTimeTotalListenCount": 47332,
+      "currentAllTimeTotalListenCount": 47361,
+      "rawAllTimeDelta": 29,
+      "currentLastUpdated": 1791315730,
+      "newerThanPreviousMaxEpoch": true,
+      "status": "ok"
+    }
+  ],
+  "rawDeltaRankingDescriptiveOnly": [
+    {
+      "rank": 1,
+      "canonicalArtistId": "bts",
+      "rawAllTimeDelta": 244625
+    },
+    {
+      "rank": 2,
+      "canonicalArtistId": "jimin",
+      "rawAllTimeDelta": 17474
+    },
+    {
+      "rank": 3,
+      "canonicalArtistId": "jungkook",
+      "rawAllTimeDelta": 14944
+    },
+    {
+      "rank": 4,
+      "canonicalArtistId": "v",
+      "rawAllTimeDelta": 13830
+    },
+    {
+      "rank": 5,
+      "canonicalArtistId": "newjeans",
+      "rawAllTimeDelta": 2782
+    },
+    {
+      "rank": 6,
+      "canonicalArtistId": "lesserafim",
+      "rawAllTimeDelta": 2559
+    },
+    {
+      "rank": 7,
+      "canonicalArtistId": "twice",
+      "rawAllTimeDelta": 1637
+    },
+    {
+      "rank": 8,
+      "canonicalArtistId": "txt",
+      "rawAllTimeDelta": 1169
+    },
+    {
+      "rank": 9,
+      "canonicalArtistId": "blackpink",
+      "rawAllTimeDelta": 1147
+    },
+    {
+      "rank": 10,
+      "canonicalArtistId": "jennie",
+      "rawAllTimeDelta": 1045
+    },
+    {
+      "rank": 11,
+      "canonicalArtistId": "aespa",
+      "rawAllTimeDelta": 850
+    },
+    {
+      "rank": 12,
+      "canonicalArtistId": "straykids",
+      "rawAllTimeDelta": 803
+    },
+    {
+      "rank": 13,
+      "canonicalArtistId": "enhypen",
+      "rawAllTimeDelta": 719
+    },
+    {
+      "rank": 14,
+      "canonicalArtistId": "boynextdoor",
+      "rawAllTimeDelta": 684
+    },
+    {
+      "rank": 15,
+      "canonicalArtistId": "iu",
+      "rawAllTimeDelta": 617
+    },
+    {
+      "rank": 16,
+      "canonicalArtistId": "ateez",
+      "rawAllTimeDelta": 524
+    },
+    {
+      "rank": 17,
+      "canonicalArtistId": "ive",
+      "rawAllTimeDelta": 419
+    },
+    {
+      "rank": 18,
+      "canonicalArtistId": "rose",
+      "rawAllTimeDelta": 403
+    },
+    {
+      "rank": 19,
+      "canonicalArtistId": "lisa",
+      "rawAllTimeDelta": 296
+    },
+    {
+      "rank": 20,
+      "canonicalArtistId": "seventeen",
+      "rawAllTimeDelta": 271
+    },
+    {
+      "rank": 21,
+      "canonicalArtistId": "riize",
+      "rawAllTimeDelta": 29
+    }
+  ],
+  "interpretation": {
+    "distinctProviderEpochEstablishedForAll21": true,
+    "all21CanonicalIdentityObserved": true,
+    "all21RawDeltaPositive": true,
+    "negativeCumulativeMovementObserved": false,
+    "rawCumulativeDeltaObservableAsUniformFull21Signal": true,
+    "rawDeltaRankingIsScore": false,
+    "rawDeltaRankingIsProductRanking": false,
+    "productionScoreContractEstablished": false,
+    "rateContractEstablished": false,
+    "note": "This establishes a uniform 21-artist raw cumulative ListenBrainz delta across distinct provider update epochs. It does not establish a cross-artist score, normalization, weighting, promotion threshold, or Product contract."
+  },
+  "decisionBoundary": {
+    "eligibleForSignalContractDesign": true,
+    "directUseAsProductScoreAuthorized": false,
+    "directLastfmReplacementAuthorized": false,
+    "perArtistHybridProviderMixingAuthorized": false,
+    "newFormulaAuthorized": false,
+    "nextGate": "LISTENBRAINZ_FULL21_DELTA_SIGNAL_CONTRACT_DECISION_REQUIRED"
+  },
+  "safety": {
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "rawDeltaRankingUsedAsScore": false,
+    "newScoreFormulaDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "lastfmReplaced": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}

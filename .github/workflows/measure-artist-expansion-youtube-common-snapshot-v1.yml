@@ -1,0 +1,64 @@
+name: Measure Artist Expansion YouTube common snapshot v1
+
+on:
+  push:
+    branches:
+      - work/artist-expansion-youtube-common-metric-snapshot-v1
+
+permissions:
+  contents: read
+
+jobs:
+  common-youtube-snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Snapshot script syntax
+        run: python -m py_compile scripts/fandex-cloud-migration/source/youtube_v3_common_metric_snapshot_v1.py
+
+      - name: Collect all 74 metrics and score all 21 artists
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/fandex-cloud-migration/source/youtube_v3_common_metric_snapshot_v1.py
+
+      - name: Validate snapshot receipt
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path("youtube_v3_common_metric_snapshot_v1_latest.json")
+          data = json.loads(p.read_text(encoding="utf-8"))
+          assert data["snapshotComplete"] is True
+          assert data["targetArtistCount"] == 21
+          assert data["requestedVideoCount"] == 74
+          assert data["returnedVideoCount"] == 74
+          assert data["requestBatchCount"] == 2
+          assert data["zeroImputationUsed"] is False
+          assert data["oneCommonCollectionRun"] is True
+          assert len(data["ranking"]) == 21
+          assert len(data["metrics"]) == 74
+          assert len({r["videoId"] for r in data["metrics"]}) == 74
+          assert len({r["canonicalArtistId"] for r in data["ranking"]}) == 21
+          assert data["nextGate"]["code"] == "COMMON_21_ARTIST_DISTRIBUTION_COMPARISON_REQUIRED"
+          assert data["safety"]["activeYoutubeRankingModified"] is False
+          assert data["safety"]["productEligibilityEvaluated"] is False
+          assert data["safety"]["productActivationAuthorized"] is False
+          print("PASS: exact common snapshot receipt validated")
+          PY
+
+      - name: Upload common snapshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-youtube-common-metric-snapshot-v1
+          path: |
+            youtube_v3_common_metric_snapshot_v1_latest.json
+            youtube_v3_common_metric_snapshot_v1_latest.csv
+          if-no-files-found: ignore
+          retention-days: 14

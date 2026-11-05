@@ -1,0 +1,47 @@
+name: Probe Artist Expansion ListenBrainz second distinct interval v1
+
+on:
+  push:
+    branches:
+      - research/artist-expansion-listenbrainz-second-interval-v1
+
+permissions:
+  contents: read
+
+jobs:
+  probe-second-interval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Probe second distinct interval
+        run: python scripts/listenbrainz-cloud/listenbrainz_full21_second_distinct_interval_probe_v1.py
+
+      - name: Validate second-interval probe shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("listenbrainz_full21_second_distinct_interval_probe_v1.json").read_text())
+          assert d["summary"]["targetArtistCount"] == 21
+          assert len(d["artists"]) == 21
+          assert d["summary"]["rateComputed"] is False
+          assert d["summary"]["scoreComputed"] is False
+          assert d["summary"]["normalizationComputed"] is False
+          assert d["safety"]["partialEpochMixedIntoSecondInterval"] is False
+          assert d["safety"]["staleEpochInterpretedAsZeroGrowth"] is False
+          print("PASS: second distinct interval probe shape")
+          PY
+
+      - name: Upload second-interval evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artist-expansion-listenbrainz-second-distinct-interval-v1
+          path: listenbrainz_full21_second_distinct_interval_probe_v1.json
+          if-no-files-found: ignore
+          retention-days: 14

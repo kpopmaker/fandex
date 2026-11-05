@@ -1,0 +1,84 @@
+{
+  "version": "listenbrainz_full21_delta_signal_contract_handoff_v1",
+  "status": "shadow_signal_candidate_requires_second_distinct_interval",
+  "evidence": {
+    "receipt": "listenbrainz_full21_distinct_epoch_delta_receipt_v1",
+    "runId": 37548004659,
+    "exactIdentity": "21/21",
+    "newProviderEpoch": "21/21",
+    "positiveRawDelta": "21/21",
+    "negativeRawDelta": "0/21",
+    "rawDeltaSum": 306827,
+    "rawDeltaMedian": 850,
+    "rawDeltaMin": 29,
+    "rawDeltaMax": 244625
+  },
+  "selectedPolicy": {
+    "option": "retain_raw_cumulative_delta_as_shadow_signal_candidate_only",
+    "reason": [
+      "A uniform 21-artist raw cumulative delta is now empirically observable across distinct provider update epochs.",
+      "Only one distinct interval has been characterized, so repeatability and interval stability are not yet established.",
+      "Raw counts are scale-dependent and must not be promoted directly into a cross-artist score or Product ranking.",
+      "No approved mapping exists from ListenBrainz total_listen_count delta to the current Last.fm listeners/playcount score contract."
+    ]
+  },
+  "authorizedNow": {
+    "continueFull21ListenBrainzShadow": true,
+    "persistPerArtistCountsAndProviderUpdateEpochs": true,
+    "characterizeAnotherDistinctProviderInterval": true,
+    "compareDeltaSignsAndDistributionsAcrossIntervals": true
+  },
+  "notAuthorizedNow": {
+    "productionScoreFormula": true,
+    "normalizationFormula": true,
+    "weightDefinition": true,
+    "promotionThreshold": true,
+    "rawDeltaAsProductScore": true,
+    "rawDeltaRankingAsProductRanking": true,
+    "lastfmReplacement": true,
+    "hybridLastfmListenbrainzMix": true,
+    "productActivation": true,
+    "runtimeChange": true,
+    "schedulerActivation": true,
+    "databaseMutation": true,
+    "deployment": true,
+    "mainMerge": true
+  },
+  "requiredNextObservation": {
+    "code": "LISTENBRAINZ_SECOND_DISTINCT_INTERVAL_REQUIRED",
+    "baselineReceipt": "listenbrainz_full21_distinct_epoch_delta_receipt_v1",
+    "requirements": [
+      "observe all 21 canonical artists with exact MusicBrainz MBID identity",
+      "require each artist provider last_updated to be newer than its current per-artist epoch captured in the first distinct-epoch receipt",
+      "compute second raw all_time.total_listen_count delta from the first distinct-epoch receipt",
+      "persist per-artist provider elapsed seconds between the two distinct epochs",
+      "do not treat missing or unavailable as zero",
+      "do not define a score, weight, normalization, or threshold"
+    ]
+  },
+  "nextDecisionAfterObservation": {
+    "code": "LISTENBRAINZ_MULTI_EPOCH_DELTA_STABILITY_DECISION_REQUIRED",
+    "questions": [
+      "Are raw cumulative deltas non-negative and observable for all 21 across a second distinct interval?",
+      "Is provider update timing sufficiently coherent to support a time-normalized signal candidate?",
+      "Does any candidate rate require explicit new semantics rather than reuse of the Last.fm contract?"
+    ]
+  },
+  "safety": {
+    "missingIsZero": false,
+    "unavailableIsZero": false,
+    "rawDeltaIsScore": false,
+    "rawDeltaRankingIsProductRanking": false,
+    "newScoreFormulaDefined": false,
+    "newNormalizationDefined": false,
+    "newWeightDefined": false,
+    "thresholdDefined": false,
+    "lastfmReplaced": false,
+    "productSourceChanged": false,
+    "productRuntimeModified": false,
+    "schedulerModified": false,
+    "databaseModified": false,
+    "deploymentAuthorized": false,
+    "mainMergeAuthorized": false
+  }
+}
