@@ -1,7 +1,7 @@
 {
   "contractVersion": "reported-album-sales-web-seed-v1",
   "lifecycle": "research",
-  "collectedAt": "2026-10-03T18:55:40+09:00",
+  "collectedAt": "2026-10-06T23:30:11+09:00",
   "cohortBasis": "existing musicAlbumPoint canonical cohort",
   "drafts": [
     {
@@ -4403,6 +4403,1910 @@
           "sourcePublishedAt": null,
           "reportedAt": null,
           "collectedAt": "2026-10-03T18:55:40+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "IN LIFE",
+        "releaseDate": "2020-09-14",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 233381,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-09-14",
+      "providerPeriodEnd": "2020-09-20",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T19:51:18+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1426729:stray-kids-in-life",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1426729wpp/stray-kids-sets-new-personal-record-for-1st-week-sales-with-latest-album",
+          "sourcePublicationDate": "2020-09-21",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T19:51:18+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "An Ode",
+        "releaseDate": "2019-09-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 700863,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-09-16",
+      "providerPeriodEnd": "2019-09-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T20:11:42+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "tenasia:2019092372364:seventeen-an-ode",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "TenAsia",
+          "sourceUrl": "https://www.tenasia.co.kr/article/2019092372364",
+          "sourcePublicationDate": "2019-09-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T20:11:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Heng:garæ",
+        "releaseDate": "2020-06-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1097891,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-06-22",
+      "providerPeriodEnd": "2020-06-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T20:41:42+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1409752wpp:seventeen-henggarae",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1409752wpp/seventeen-earns-title-of-million-seller-with-impressive-1st-week-sales-of-henggarae",
+          "sourcePublicationDate": "2020-06-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T20:41:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "; [Semicolon]",
+        "releaseDate": "2020-10-19",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 932054,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-10-19",
+      "providerPeriodEnd": "2020-10-25",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T20:50:56+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20201028:seventeen-semicolon",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2020/10/28/seventeens-semicolon-sells-932000-copies-to-top-weekly-album-chart/",
+          "sourcePublicationDate": "2020-10-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T20:50:56+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Your Choice",
+        "releaseDate": "2021-06-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1364127,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-06-18",
+      "providerPeriodEnd": "2021-06-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T21:07:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20210629:seventeen-your-choice",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/6/29/seventeen-lands-on-billboard-200-for-first-time-since-debut-resumes-activities",
+          "sourcePublicationDate": "2021-06-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T21:07:31+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "TEEN, AGE",
+        "releaseDate": "2017-11-06",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 215669,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-11-06",
+      "providerPeriodEnd": "2017-11-12",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T21:16:43+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1076639:seventeen-teen-age",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1076639wpp/seventeen-breaks-personal-record-first-week-album-sales-teen-age",
+          "sourcePublicationDate": "2017-11-13",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T21:16:43+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Al1",
+        "releaseDate": "2017-05-22",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 192399,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-05-22",
+      "providerPeriodEnd": "2017-05-28",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T22:43:54+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:991059:seventeen-al1",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/991059wpp/seventeens-latest-album-al1-sells-190000-copies-week",
+          "sourcePublicationDate": "2017-05-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T22:43:54+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "YOU MAKE MY DAY",
+        "releaseDate": "2018-07-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 274218,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2018-07-16",
+      "providerPeriodEnd": "2018-07-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T23:14:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sportschosun:20180723:seventeen-you-make-my-day",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Chosun",
+          "sourceUrl": "https://www.sportschosun.com/entertainment/2018-07-23/201807230100210690016089",
+          "sourcePublicationDate": "2018-07-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:14:11+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Love & Letter",
+        "releaseDate": "2016-04-25",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 80285,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2016-04-25",
+      "providerPeriodEnd": "2016-05-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T23:23:28+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:850477:seventeen-love-letter",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/850477wpp/seventeen-sells-amazing-number-of-albums-in-first-week",
+          "sourcePublicationDate": "2016-05-03",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:23:28+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Going Seventeen",
+        "releaseDate": "2016-12-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 131998,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2016-12-05",
+      "providerPeriodEnd": "2016-12-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-03T23:39:21+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:925417:seventeen-going-seventeen-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/925417wpp/seventeens-new-album-boombooming-popularity",
+          "sourcePublicationDate": "2016-12-15",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:39:21+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "imbc:206482:seventeen-going-seventeen-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "iMBC Entertainment",
+          "sourceUrl": "https://enews.imbc.com/News/RetrieveNewsInfo/206482",
+          "sourcePublicationDate": "2017-05-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-03T23:39:21+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "YOU MADE MY DAWN",
+        "releaseDate": "2019-01-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 338153,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-01-21",
+      "providerPeriodEnd": "2019-01-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T00:12:34+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "xportsnews:1070316:seventeen-you-made-my-dawn",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Xports News",
+          "sourceUrl": "https://www.xportsnews.com/article/1070316/",
+          "sourcePublicationDate": "2019-01-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T00:12:34+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "seventeen",
+      "artistName": "SEVENTEEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "SECTOR 17",
+        "releaseDate": "2022-07-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1126104,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-07-18",
+      "providerPeriodEnd": "2022-07-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T00:41:39+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20220725:seventeen-sector-17",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2022/7/25/seventeens-sector-17-sells-1-1-million-copies-in-one-week-itzy-no-2-on-chart",
+          "sourcePublicationDate": "2022-07-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T00:41:39+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Feel Special",
+        "releaseDate": "2019-09-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 154028,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-09-23",
+      "providerPeriodEnd": "2019-09-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T01:00:42+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1355815:twice-feel-special-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1355815wpp/twice-sets-k-pop-girl-group-record-for-first-week-album-sales-with-feel-special",
+          "sourcePublicationDate": "2019-09-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:00:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "sportsdonga:98119781:twice-feel-special-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Donga",
+          "sourceUrl": "https://sports.donga.com/ent/article/all/20191029/98119781/1",
+          "sourcePublicationDate": "2019-10-29",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:00:42+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "MORE & MORE",
+        "releaseDate": "2020-06-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 332416,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-06-01",
+      "providerPeriodEnd": "2020-06-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T01:44:00+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "newsis:20200609:twice-more-and-more",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Newsis",
+          "sourceUrl": "https://www.newsis.com/view/NISX20200609_0001053315",
+          "sourcePublicationDate": "2020-06-09",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T01:44:00+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Rich Man",
+        "releaseDate": "2025-09-05",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1088340,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-09-05",
+      "providerPeriodEnd": "2025-09-11",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T13:51:02+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:82993",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/82993",
+          "sourcePublicationDate": "2025-09-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T13:51:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "forbes:20250912:aespa-rich-man",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Forbes",
+          "sourceUrl": "https://www.forbes.com/sites/jeffbenjamin/2025/09/12/sm-entertainment-stock-gets-tiny-bump-after-aespas-hit-one-million-plus-sales-with-rich-man/",
+          "sourcePublicationDate": "2025-09-12",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T13:51:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.3",
+        "releaseDate": "2021-09-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 665350,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-09-13",
+      "providerPeriodEnd": "2021-09-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T16:06:44+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1489456:ateez-zero-fever-part3",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1489456wpp/ateez-achieves-5th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history",
+          "sourcePublicationDate": "2021-09-19",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:06:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "newsis:20210920:ateez-zero-fever-part3",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Newsis",
+          "sourceUrl": "https://www.newsis.com/view/NISX20210920_0001589351",
+          "sourcePublicationDate": "2021-09-20",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:06:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.1",
+        "releaseDate": "2020-07-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 233399,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-07-29",
+      "providerPeriodEnd": "2020-08-04",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T16:30:22+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1417372:ateez-zero-fever-part1-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1417372wpp/ateez-nearly-quadruples-their-own-1st-week-sales-record-with-zero-fever-part-1",
+          "sourcePublicationDate": "2020-08-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:30:22+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "sportsworld:20200806510506:ateez-zero-fever-part1-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports World",
+          "sourceUrl": "https://www.sportsworldi.com/newsView/20200806510506",
+          "sourcePublicationDate": "2020-08-06",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T16:30:22+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Chaos Chapter: FREEZE",
+        "releaseDate": "2021-05-31",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 630563,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-05-31",
+      "providerPeriodEnd": "2021-06-06",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T17:09:27+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1473351:txt-chaos-chapter-freeze",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1473351wpp/txt-achieves-6th-highest-1st-week-sales-of-any-boy-group-in-hanteo-history-with-the-chaos-chapter-freeze",
+          "sourcePublicationDate": "2021-06-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T17:09:27+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "manila-bulletin:20210607:txt-freeze",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/6/7/txts-freeze-sells-631000-copies-of-freeze-in-first-week-tops-hanteo-chart",
+          "sourcePublicationDate": "2021-06-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T17:09:27+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Dream Chapter: ETERNITY",
+        "releaseDate": "2020-05-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 181009,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-05-18",
+      "providerPeriodEnd": "2020-05-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T22:05:04+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "universal-music-japan:20200526:txt-eternity",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Universal Music Japan / TOMORROW X TOGETHER",
+          "sourceUrl": "https://www.universal-music.co.jp/txt/news/2020-05-26/",
+          "sourcePublicationDate": "2020-05-26",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T22:05:04+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE SIN : VANISH",
+        "releaseDate": "2026-01-16",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2075056,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-01-16",
+      "providerPeriodEnd": "2026-01-22",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T22:20:41+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:87417",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/87417",
+          "sourcePublicationDate": "2026-01-23",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T22:20:41+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "BORDER : DAY ONE",
+        "releaseDate": "2020-11-30",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 280873,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-11-30",
+      "providerPeriodEnd": "2020-12-06",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-04T23:02:39+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1442119:enhypen-border-day-one",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1442119wpp/enhypen-breaks-record-for-highest-1st-week-sales-among-2020-rookies-with-debut-album-border-day-one",
+          "sourcePublicationDate": "2020-12-07",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-04T23:02:39+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "THE SIN : BLISS",
+        "releaseDate": "2026-08-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 2099048,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-08-21",
+      "providerPeriodEnd": "2026-08-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T00:10:49+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sports-khan:20260828:enhypen-the-sin-bliss",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Sports Kyunghyang",
+          "sourceUrl": "https://sports.khan.co.kr/en/article/202608282107007",
+          "sourcePublicationDate": "2026-08-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:10:49+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "DIMENSION : ANSWER",
+        "releaseDate": "2022-01-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 514291,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2022-01-10",
+      "providerPeriodEnd": "2022-01-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T00:31:10+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20220117:enhypen-dimension-answer",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2022/01/17/k-pop-group-enhypen-sells-more-than-500000-copies-of-dimension-answer-in-first-week/",
+          "sourcePublicationDate": "2022-01-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:31:10+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "yonhap:20220117:enhypen-dimension-answer",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Yonhap News Agency",
+          "sourceUrl": "https://www.yna.co.kr/view/AKR20220117148800005",
+          "sourcePublicationDate": "2022-01-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:31:10+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "twice",
+      "artistName": "TWICE",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Eyes wide open",
+        "releaseDate": "2020-10-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 245631,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-10-27",
+      "providerPeriodEnd": "2020-11-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T00:42:23+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteo-news:20210131:twice-eyes-wide-open",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News",
+          "sourceUrl": "https://www.hanteonews.com/en/article/17047",
+          "sourcePublicationDate": "2021-01-31",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:42:23+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "daebak:20201103:twice-eyes-wide-open",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Daebak",
+          "sourceUrl": "https://daebak.tokyo/?p=160114",
+          "sourcePublicationDate": "2020-11-03",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T00:42:23+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Love Yourself: Answer",
+        "releaseDate": "2018-08-24",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 868052,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2018-08-24",
+      "providerPeriodEnd": "2018-08-30",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T10:10:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:20180830:bts-love-yourself-answer",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1222963wpp/btss-love-answer-records-impressive-number-sales-first-week",
+          "sourcePublicationDate": "2018-08-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T10:10:31+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Clé : LEVANTER",
+        "releaseDate": "2019-12-09",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 83345,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-12-09",
+      "providerPeriodEnd": "2019-12-15",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T21:15:02+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:20200624:stray-kids-cle-levanter",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1408918wpp/stray-kids-breaks-personal-1st-week-sales-record-with-new-album",
+          "sourcePublicationDate": "2020-06-24",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:15:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "seoul:20191227:stray-kids-cle-levanter",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Seoul Shinmun",
+          "sourceUrl": "https://m.seoul.co.kr/news/2019/12/27/20191227500164",
+          "sourcePublicationDate": "2019-12-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:15:02+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "blackpink",
+      "artistName": "BLACKPINK",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "KILL THIS LOVE",
+        "releaseDate": "2019-04-23",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 146094,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2019-04-23",
+      "providerPeriodEnd": "2019-04-29",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T21:55:12+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:20190430:blackpink-kill-this-love",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1321012wpp/twice-sets-new-girl-group-record-for-first-week-album-sales-with-fancy-you",
+          "sourcePublicationDate": "2019-04-30",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:55:12+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "namu:kill-this-love:first-week-table",
+          "sourceTier": "tier-c-discovery-only",
+          "reportingSource": "NamuWiki",
+          "sourceUrl": "https://namu.moe/w/KILL%20THIS%20LOVE",
+          "sourcePublicationDate": null,
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T21:55:12+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "aespa",
+      "artistName": "aespa",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LEMONADE",
+        "releaseDate": "2026-05-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 909167,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2026-05-29",
+      "providerPeriodEnd": "2026-06-04",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T22:43:48+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "hanteonews:92676:aespa-lemonade",
+          "sourceTier": "tier-a-primary-official",
+          "reportingSource": "Hanteo News / Hanteo Chart",
+          "sourceUrl": "https://www.hanteonews.com/en/article/92676",
+          "sourcePublicationDate": "2026-06-27",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T22:43:48+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "newjeans",
+      "artistName": "NewJeans",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Supernatural",
+        "releaseDate": "2024-06-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 721639,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2024-06-21",
+      "providerPeriodEnd": "2024-06-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T23:02:48+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "daebak:20240628:newjeans-supernatural",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Daebak",
+          "sourceUrl": "https://daebak.tokyo/2024/06/28/newjeans-supernatural-japan-first-week-sales/",
+          "sourcePublicationDate": "2024-06-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T23:02:48+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Chaos Chapter: FIGHT OR ESCAPE",
+        "releaseDate": "2021-08-17",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 483911,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-08-17",
+      "providerPeriodEnd": "2021-08-23",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-05T23:30:46+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "soompi:1485321:txt-fight-or-escape",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Soompi",
+          "sourceUrl": "https://www.soompi.com/article/1485321wpp/txt-achieves-3rd-highest-1st-week-sales-of-any-repackaged-album-in-hanteo-history",
+          "sourcePublicationDate": "2021-08-24",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-05T23:30:46+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Love Yourself: Her",
+        "releaseDate": "2017-09-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 759263,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-09-18",
+      "providerPeriodEnd": "2017-09-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T00:17:09+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "yonhap:20170925:bts-love-yourself-her",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Yonhap News Agency",
+          "sourceUrl": "https://en.yna.co.kr/view/AEN20170925001400315",
+          "sourcePublicationDate": "2017-09-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T00:17:09+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "enhypen",
+      "artistName": "ENHYPEN",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "BORDER : CARNIVAL",
+        "releaseDate": "2021-04-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 384699,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-04-26",
+      "providerPeriodEnd": "2021-05-02",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T00:49:18+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "kstyle:2167743:enhypen-border-carnival",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Kstyle",
+          "sourceUrl": "https://kstyle.com/article.ksn?articleNo=2167743",
+          "sourcePublicationDate": "2021-05-03",
+          "sourcePublishedAt": "2021-05-03T18:25:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T00:49:18+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "WINGS",
+        "releaseDate": "2016-10-10",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 347426,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2016-10-10",
+      "providerPeriodEnd": "2016-10-16",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T01:01:38+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "tenasia:20161017:bts-wings",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "TenAsia",
+          "sourceUrl": "https://www.tenasia.co.kr/article/2016101784674",
+          "sourcePublicationDate": "2016-10-17",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T01:01:38+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Most Beautiful Moment in Life: Young Forever",
+        "releaseDate": "2016-05-02",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 164868,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2016-05-02",
+      "providerPeriodEnd": "2016-05-08",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T10:17:55+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "sbs:20160510:bts-young-forever",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "SBS News",
+          "sourceUrl": "https://news.sbs.co.kr/news/endPage.do?news_id=N1003565280",
+          "sourcePublicationDate": "2016-05-10",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T10:17:55+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "YOU NEVER WALK ALONE",
+        "releaseDate": "2017-02-13",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 373705,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2017-02-13",
+      "providerPeriodEnd": "2017-02-19",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T10:23:31+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "xportsnews:20170220:bts-you-never-walk-alone",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "XportsNews",
+          "sourceUrl": "https://www.xportsnews.com/article/821832",
+          "sourcePublicationDate": "2017-02-20",
+          "sourcePublishedAt": "2017-02-20T15:00:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T10:23:31+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "bts",
+      "artistName": "BTS",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "LOVE YOURSELF 轉 'Tear'",
+        "releaseDate": "2018-05-18",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1003524,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2018-05-18",
+      "providerPeriodEnd": "2018-05-24",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T21:57:29+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "xportsnews:20180525:bts-love-yourself-tear",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "XportsNews",
+          "sourceUrl": "https://www.xportsnews.com/article/978534",
+          "sourcePublicationDate": "2018-05-25",
+          "sourcePublishedAt": "2018-05-25T07:04:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T21:57:29+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "ateez",
+      "artistName": "ATEEZ",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "ZERO : FEVER Part.2",
+        "releaseDate": "2021-03-01",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 304585,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-03-01",
+      "providerPeriodEnd": "2021-03-07",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T22:46:44+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "tenasia:2021030965104:ateez-zero-fever-part2-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "TenAsia",
+          "sourceUrl": "https://www.tenasia.co.kr/article/2021030965104",
+          "sourcePublicationDate": "2021-03-09",
+          "sourcePublishedAt": "2021-03-09T11:38:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:46:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "xportsnews:1397919:ateez-zero-fever-part2-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "XportsNews",
+          "sourceUrl": "https://www.xportsnews.com/article/1397919",
+          "sourcePublicationDate": "2021-03-08",
+          "sourcePublishedAt": "2021-03-08T14:10:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:46:44+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "straykids",
+      "artistName": "Stray Kids",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "Christmas EveL",
+        "releaseDate": "2021-11-29",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 471312,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2021-11-29",
+      "providerPeriodEnd": "2021-12-05",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T22:58:15+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "manila-bulletin:20211225:stray-kids-christmas-evel-exact",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Manila Bulletin",
+          "sourceUrl": "https://mb.com.ph/2021/12/25/here-are-the-k-pop-artists-with-the-highest-first-week-album-sales-in-2021",
+          "sourcePublicationDate": "2021-12-25",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:58:15+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        },
+        {
+          "evidenceId": "asiatoday-nate:20211213:stray-kids-christmas-evel-period",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "AsiaToday (via Nate)",
+          "sourceUrl": "https://m.news.nate.com/view/20211213n06205",
+          "sourcePublicationDate": "2021-12-13",
+          "sourcePublishedAt": "2021-12-13T09:16:00+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T22:58:15+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "The Star Chapter: TOGETHER",
+        "releaseDate": "2025-07-21",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 1760867,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2025-07-21",
+      "providerPeriodEnd": "2025-07-27",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T23:16:29+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "korea-joongang-daily:20250728:txt-star-chapter-together",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Korea JoongAng Daily",
+          "sourceUrl": "https://www.koreajoongangdaily.com/entertainment/tomorrow-x-togethers-latest-album-the-star-chapter-together-sells-over-176-million-copies-in-1st-week/11980172",
+          "sourcePublicationDate": "2025-07-28",
+          "sourcePublishedAt": null,
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T23:16:29+09:00",
+          "extractionMethod": "manual-reviewed-web-research",
+          "underlyingProvider": "Hanteo Chart"
+        }
+      ]
+    },
+    {
+      "canonicalArtistId": "txt",
+      "artistName": "TOMORROW X TOGETHER",
+      "release": {
+        "canonicalReleaseId": null,
+        "identityState": "candidate",
+        "releaseTitle": "minisode1 : Blue Hour",
+        "releaseDate": "2020-10-26",
+        "edition": null,
+        "skuOrBarcode": null,
+        "providerReleaseId": null
+      },
+      "metricSemantic": "hanteo-first-week-sales",
+      "value": 303190,
+      "unit": "physical-copies",
+      "providerPeriodStart": "2020-10-26",
+      "providerPeriodEnd": "2020-11-01",
+      "observedAt": null,
+      "reportedAt": null,
+      "collectedAt": "2026-10-06T23:30:11+09:00",
+      "underlyingProvider": "Hanteo Chart",
+      "territory": null,
+      "format": "physical-album",
+      "revision": {
+        "state": "original",
+        "supersedesObservationId": null,
+        "revisionObservedAt": null
+      },
+      "lifecycle": "research",
+      "supportingEvidence": [
+        {
+          "evidenceId": "mk-star-today:9587830:txt-minisode1-blue-hour",
+          "sourceTier": "tier-b-provider-attributed-reputable",
+          "reportingSource": "Maeil Business Star Today",
+          "sourceUrl": "https://www.mk.co.kr/news/musics/9587830",
+          "sourcePublicationDate": "2020-11-02",
+          "sourcePublishedAt": "2020-11-02T14:10:09+09:00",
+          "reportedAt": null,
+          "collectedAt": "2026-10-06T23:30:11+09:00",
           "extractionMethod": "manual-reviewed-web-research",
           "underlyingProvider": "Hanteo Chart"
         }
