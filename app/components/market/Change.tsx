@@ -10,7 +10,15 @@ export function toneClass(value: number) {
   return TONE[direction(value)];
 }
 
-export function ChangeRate({ rate, className = '' }: { rate: number; className?: string }) {
+/** 비교할 과거 기록이 없으면 '—' */
+export function ChangeRate({ rate, className = '' }: { rate: number | null; className?: string }) {
+  if (rate === null) {
+    return (
+      <span className={`fx-num text-fx-faint ${className}`} title="비교할 기록이 아직 없어요">
+        —
+      </span>
+    );
+  }
   return <span className={`fx-num ${toneClass(rate)} ${className}`}>{formatSignedPercent(rate)}</span>;
 }
 
@@ -33,7 +41,8 @@ export function ChangeAmount({
   );
 }
 
-export function PointDelta({ delta, className = '' }: { delta: number; className?: string }) {
+export function PointDelta({ delta, className = '' }: { delta: number | null; className?: string }) {
+  if (delta === null) return <span className={`fx-num text-fx-faint ${className}`}>—</span>;
   return (
     <span className={`fx-num ${toneClass(delta)} ${className}`}>
       {formatSignedNumber(delta, 1)}

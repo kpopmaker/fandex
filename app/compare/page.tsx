@@ -1,6 +1,8 @@
 import CompareView from '../components/market/CompareView';
 import DataNotice from '../components/market/DataNotice';
-import { getCompareModel } from '../../lib/market/queries';
+import DataUnavailable from '../components/market/DataUnavailable';
+import { MarketDataUnavailableError } from '../../lib/market/dataset';
+import { getCompareModel, type CompareModel } from '../../lib/market/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +13,13 @@ type PageProps = {
 export default async function ComparePage({ searchParams }: PageProps) {
   const params = await searchParams;
   const raw = typeof params.ids === 'string' ? params.ids : '';
-  const model = getCompareModel(raw.split(',').map((id) => id.trim()).filter(Boolean));
+  let model: CompareModel;
+  try {
+    model = await getCompareModel(raw.split(',').map((id) => id.trim().replace(/-/g, '')).filter(Boolean));
+  } catch (error) {
+    if (error instanceof MarketDataUnavailableError) return <DataUnavailable />;
+    throw error;
+  }
 
   return (
     <main className="mx-auto max-w-[1280px] px-4 pb-16 pt-6 lg:px-8">

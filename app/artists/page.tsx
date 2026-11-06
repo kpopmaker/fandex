@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import DataNotice from '../components/market/DataNotice';
+import DataUnavailable from '../components/market/DataUnavailable';
+import { MarketDataUnavailableError } from '../../lib/market/dataset';
 import { ChangeRate } from '../components/market/Change';
-import { GROUP_TYPE_LABEL } from '../../lib/market/artists';
+import { GROUP_TYPE_LABEL, findArtist, matchesQuery } from '../../lib/market/artists';
 import { formatPrice } from '../../lib/market/format';
-import { getDirectoryModel } from '../../lib/market/queries';
+import { getDirectoryModel, type DirectoryModel } from '../../lib/market/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,20 +13,21 @@ type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-function normalize(value: string) {
-  return value.trim().toLowerCase().replace(/\s+/g, '');
-}
-
 export default async function ArtistsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : '';
-  const model = getDirectoryModel();
-  const needle = normalize(query);
+  let model: DirectoryModel;
+  try {
+    model = await getDirectoryModel();
+  } catch (error) {
+    if (error instanceof MarketDataUnavailableError) return <DataUnavailable />;
+    throw error;
+  }
   const results = [...model.quotes]
-    .filter((quote) =>
-      !needle ||
-      normalize(`${quote.id}${quote.name}${quote.koreanName}${quote.ticker}`).includes(needle),
-    )
+    .filter((quote) => {
+      const artist = findArtist(quote.id);
+      return artist ? matchesQuery(artist, query) : false;
+    })
     .sort((a, b) => a.koreanName.localeCompare(b.koreanName, 'ko'));
 
   return (

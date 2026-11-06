@@ -1,8 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { changeRateOf, formatFanCap, formatIndex } from '../../../lib/market/format';
-import { DEFAULT_PERIOD, PERIODS } from '../../../lib/market/time';
+import {
+  changeRateOf,
+  comparisonLabel,
+  formatDate,
+  formatFanCap,
+  formatIndex,
+} from '../../../lib/market/format';
+import { DEFAULT_PERIOD, getPeriod } from '../../../lib/market/time';
 import type { PeriodId, SeriesPoint } from '../../../lib/market/types';
 import { ChangeAmount } from './Change';
 import PeriodTabs from './PeriodTabs';
@@ -15,6 +21,8 @@ type Props = {
   decliners: number;
   artistCount: number;
   totalFanCap: number;
+  startedAt: number;
+  hasDayHistory: boolean;
 };
 
 export default function IndexHero({
@@ -24,13 +32,19 @@ export default function IndexHero({
   decliners,
   artistCount,
   totalFanCap,
+  startedAt,
+  hasDayHistory,
 }: Props) {
   const [period, setPeriod] = useState<PeriodId>(DEFAULT_PERIOD);
   const points = series[period];
-  const start = points[0]?.value ?? value;
+  const first = points[0];
+  const last = points[points.length - 1];
+  const start = first?.value ?? value;
   const rate = changeRateOf(value, start);
+  const definition = getPeriod(period);
+  const label =
+    first && last ? comparisonLabel(first.time, last.time, definition.span, definition.label) : '';
   const unchanged = Math.max(0, artistCount - advancers - decliners);
-  const periodLabel = PERIODS.find((item) => item.id === period)?.label ?? '';
 
   return (
     <section aria-labelledby="kmi-title" className="grid gap-px overflow-hidden rounded-2xl border border-fx-line bg-fx-line lg:grid-cols-[1fr_300px]">
@@ -44,14 +58,20 @@ export default function IndexHero({
               {formatIndex(value)}
             </p>
             <p className="mt-3 text-[15px]">
-              <ChangeAmount amount={value - start} rate={rate} className="font-semibold" />
-              <span className="ml-2 text-fx-faint">{periodLabel} 전 대비</span>
+              {points.length > 1 ? (
+                <>
+                  <ChangeAmount amount={value - start} rate={rate} className="font-semibold" />
+                  <span className="ml-2 text-fx-faint">{label}</span>
+                </>
+              ) : (
+                <span className="text-fx-faint">첫 기록이에요</span>
+              )}
             </p>
           </div>
           <PeriodTabs value={period} onChange={setPeriod} />
         </div>
         <div className="mt-6">
-          <PriceChart points={points} period={period} height={340} valueLabel="KMI" />
+          <PriceChart points={points} height={340} valueLabel="KMI" />
         </div>
       </div>
 
@@ -59,17 +79,23 @@ export default function IndexHero({
         <h2 className="text-[15px] font-bold text-fx-ink">오늘의 시장</h2>
         <dl className="mt-5 space-y-5">
           <div>
-            <dt className="text-[13px] text-fx-sub">상승·하락 그룹</dt>
+            <dt className="text-[13px] text-fx-sub">하루 전보다 오른·내린 그룹</dt>
             <dd className="mt-2">
-              <div className="flex h-2 overflow-hidden rounded-full bg-fx-raised">
-                <span className="bg-fx-up" style={{ width: `${(advancers / artistCount) * 100}%` }} />
-                <span className="bg-fx-faint/40" style={{ width: `${(unchanged / artistCount) * 100}%` }} />
-                <span className="bg-fx-down" style={{ width: `${(decliners / artistCount) * 100}%` }} />
-              </div>
-              <div className="fx-num mt-2 flex justify-between text-sm font-semibold">
-                <span className="text-fx-up">상승 {advancers}</span>
-                <span className="text-fx-down">하락 {decliners}</span>
-              </div>
+              {hasDayHistory ? (
+                <>
+                  <div className="flex h-2 overflow-hidden rounded-full bg-fx-raised">
+                    <span className="bg-fx-up" style={{ width: `${(advancers / artistCount) * 100}%` }} />
+                    <span className="bg-fx-faint/40" style={{ width: `${(unchanged / artistCount) * 100}%` }} />
+                    <span className="bg-fx-down" style={{ width: `${(decliners / artistCount) * 100}%` }} />
+                  </div>
+                  <div className="fx-num mt-2 flex justify-between text-sm font-semibold">
+                    <span className="text-fx-up">상승 {advancers}</span>
+                    <span className="text-fx-down">하락 {decliners}</span>
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm text-fx-faint">24시간치 기록이 쌓이면 보여드려요.</p>
+              )}
             </dd>
           </div>
           <div className="flex items-baseline justify-between border-t border-fx-line pt-5">
@@ -82,7 +108,8 @@ export default function IndexHero({
           </div>
         </dl>
         <p className="mt-auto pt-6 text-xs leading-relaxed text-fx-faint">
-          KMI는 모든 그룹의 팬캡(가격 × 팬덤 규모)을 더한 시가총액식 지수예요. 2026년 1월 1일을 1,000으로 놓고 계산해요.
+          KMI는 모든 그룹의 팬캡(가격 × 팬덤 규모)을 더한 시가총액식 지수예요. 수집을 시작한{' '}
+          {formatDate(startedAt)}을 1,000으로 놓고 계산해요.
         </p>
       </aside>
     </section>

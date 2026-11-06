@@ -9,11 +9,13 @@ export default function QuoteList({
   quotes,
   moreHref,
   caption,
+  emptyText,
 }: {
   title: string;
   quotes: SparkQuote[];
   moreHref: string;
   caption: string;
+  emptyText: string;
 }) {
   return (
     <section className="rounded-2xl border border-fx-line bg-fx-surface" aria-label={title}>
@@ -24,6 +26,7 @@ export default function QuoteList({
         </Link>
       </div>
       <p className="px-5 text-xs text-fx-faint">{caption}</p>
+      {quotes.length === 0 && <p className="px-5 pb-6 pt-4 text-sm text-fx-sub">{emptyText}</p>}
       <ol className="mt-2 pb-2">
         {quotes.map((quote, index) => (
           <li key={quote.id}>

@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ArtistDetailView from '../../components/market/ArtistDetailView';
 import DataNotice from '../../components/market/DataNotice';
+import DataUnavailable from '../../components/market/DataUnavailable';
 import { findArtist } from '../../../lib/market/artists';
-import { getArtistDetailModel } from '../../../lib/market/queries';
+import { MarketDataUnavailableError } from '../../../lib/market/dataset';
+import { getArtistDetailModel, type ArtistDetailModel } from '../../../lib/market/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +21,20 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ArtistPage({ params }: PageProps) {
   const { artistId } = await params;
-  const model = getArtistDetailModel(artistId);
+  if (!findArtist(artistId)) {
+    // 예전 주소(stray-kids 등)는 새 주소로 보낸다.
+    const compact = artistId.replace(/-/g, '');
+    if (compact !== artistId && findArtist(compact)) redirect(`/artists/${compact}`);
+    notFound();
+  }
+
+  let model: ArtistDetailModel | null;
+  try {
+    model = await getArtistDetailModel(artistId);
+  } catch (error) {
+    if (error instanceof MarketDataUnavailableError) return <DataUnavailable />;
+    throw error;
+  }
   if (!model) notFound();
 
   return (

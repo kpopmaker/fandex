@@ -1,4 +1,6 @@
 import DataNotice from '../components/market/DataNotice';
+import DataUnavailable from '../components/market/DataUnavailable';
+import { MarketDataUnavailableError } from '../../lib/market/dataset';
 import RankingTable, {
   type RankingGroup,
   type RankingOrder,
@@ -6,7 +8,7 @@ import RankingTable, {
   type RankingSort,
   type RankingState,
 } from '../components/market/RankingTable';
-import { getRankingModel } from '../../lib/market/queries';
+import { getRankingModel, type RankingModel } from '../../lib/market/queries';
 import { ENABLED_VARIABLES } from '../../lib/market/variables';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +25,13 @@ function pick<T extends string>(value: unknown, allowed: readonly string[], fall
 
 export default async function RankingPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const model = getRankingModel();
+  let model: RankingModel;
+  try {
+    model = await getRankingModel();
+  } catch (error) {
+    if (error instanceof MarketDataUnavailableError) return <DataUnavailable />;
+    throw error;
+  }
 
   const initial: RankingState = {
     sort: pick<RankingSort>(params.sort, SORTS, 'overall'),
@@ -38,7 +46,7 @@ export default async function RankingPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-[26px] font-bold tracking-[-0.03em] text-fx-ink">랭킹</h1>
           <p className="mt-1 text-[15px] text-fx-sub">
-            K-pop 그룹 1위부터 100위까지, 원하는 기준으로 정렬해 보세요.
+            활동 중인 K-pop 그룹 1위부터 100위까지, 원하는 기준으로 정렬해 보세요.
           </p>
         </div>
         <DataNotice meta={model.meta} />

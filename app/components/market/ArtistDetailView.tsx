@@ -2,9 +2,16 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { changeRateOf, formatPoint, formatPrice, formatSignedNumber } from '../../../lib/market/format';
+import {
+  changeRateOf,
+  comparisonLabel,
+  formatPoint,
+  formatPrice,
+  formatRelative,
+  formatSignedNumber,
+} from '../../../lib/market/format';
 import type { ArtistDetailModel } from '../../../lib/market/queries';
-import { DEFAULT_PERIOD, PERIODS } from '../../../lib/market/time';
+import { DEFAULT_PERIOD, getPeriod } from '../../../lib/market/time';
 import type { PeriodId } from '../../../lib/market/types';
 import { ENABLED_VARIABLES, getVariable, type VariableId } from '../../../lib/market/variables';
 import { ChangeAmount, PointDelta } from './Change';
@@ -22,7 +29,12 @@ const VARIABLE_COLORS: Record<VariableId, string> = {
   riskAdjustment: '#64748b',
 };
 
-const GROUP_LABEL = { boy_group: '보이그룹', girl_group: '걸그룹', mixed: '혼성그룹' } as const;
+const GROUP_LABEL = {
+  boy_group: '보이그룹',
+  girl_group: '걸그룹',
+  mixed: '혼성그룹',
+  unknown: '그룹',
+} as const;
 
 export default function ArtistDetailView({ model }: { model: ArtistDetailModel }) {
   const { quote } = model;
@@ -30,9 +42,15 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
   const [selected, setSelected] = useState<VariableId[]>(['musicAlbum', 'newsIssue', 'snsFandom']);
 
   const points = model.priceSeries[period];
-  const start = points[0]?.value ?? quote.price;
+  const first = points[0];
+  const last = points[points.length - 1];
+  const start = first?.value ?? quote.price;
   const rate = changeRateOf(quote.price, start);
-  const periodLabel = PERIODS.find((item) => item.id === period)?.label ?? '';
+  const definition = getPeriod(period);
+  const label = first && last ? comparisonLabel(first.time, last.time, definition.span, definition.label) : '';
+  const values = points.map((point) => point.value);
+  const high = values.length ? Math.max(...values) : quote.price;
+  const low = values.length ? Math.min(...values) : quote.price;
 
   const variableLines: LineDefinition[] = selected.map((id) => ({
     key: id,
@@ -72,8 +90,14 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
               {formatPrice(quote.price)}
             </p>
             <p className="mt-3 text-[15px]">
-              <ChangeAmount amount={quote.price - start} rate={rate} className="font-semibold" />
-              <span className="ml-2 text-fx-faint">{periodLabel} 전 대비</span>
+              {points.length > 1 ? (
+                <>
+                  <ChangeAmount amount={quote.price - start} rate={rate} className="font-semibold" />
+                  <span className="ml-2 text-fx-faint">{label}</span>
+                </>
+              ) : (
+                <span className="text-fx-faint">첫 기록이에요</span>
+              )}
             </p>
           </div>
           <div className="flex flex-col items-end gap-3">
@@ -88,13 +112,13 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
         </div>
 
         <div className="mt-6">
-          <PriceChart points={points} period={period} height={340} />
+          <PriceChart points={points} height={340} />
         </div>
 
         <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-fx-line bg-fx-line sm:grid-cols-4">
           {[
-            { label: `${periodLabel} 최고`, value: formatPrice(model.periodHigh[period]) },
-            { label: `${periodLabel} 최저`, value: formatPrice(model.periodLow[period]) },
+            { label: '차트 구간 최고', value: formatPrice(high) },
+            { label: '차트 구간 최저', value: formatPrice(low) },
             { label: 'FANDEX 점수', value: formatPoint(quote.score) },
             { label: '팬캡', value: Math.round(quote.fanCap).toLocaleString('ko-KR') },
           ].map((item) => (
@@ -137,11 +161,12 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
                     {variable.label}
                   </span>
                   <span className="fx-num mt-2 block text-[24px] font-bold text-fx-ink">{formatPoint(item.raw)}</span>
-                  <span className="mt-1 block text-xs text-fx-sub">
-                    1주 <PointDelta delta={item.change1W} className="font-semibold" />
-                  </span>
+                  <span className="mt-1 block text-xs text-fx-sub">{item.basis}</span>
                   <span className="mt-3 block border-t border-fx-line pt-2 text-xs text-fx-faint">
-                    가격 기여 <span className="fx-num font-semibold text-fx-sub">{formatSignedNumber(item.contribution, 1)}점</span>
+                    1주 변화 <PointDelta delta={item.change1W} className="font-semibold" />
+                    <br />
+                    가격 기여{' '}
+                    <span className="fx-num font-semibold text-fx-sub">{formatSignedNumber(item.contribution, 1)}점</span>
                     <br />
                     {variable.penalty ? '낮은 순' : '전체'} {item.rank}위
                   </span>
@@ -156,7 +181,6 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
             <MultiLineChart
               data={variableData}
               lines={variableLines}
-              period={period}
               height={280}
               formatValue={(value) => formatPoint(value)}
             />
@@ -175,6 +199,42 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
           ))}
         </ul>
       </section>
+
+      <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <section className="rounded-2xl border border-fx-line bg-fx-surface p-6" aria-labelledby="headlines-title">
+          <h2 id="headlines-title" className="text-[17px] font-bold text-fx-ink">최근 24시간 뉴스</h2>
+          {model.headlines.length === 0 ? (
+            <p className="mt-3 text-sm text-fx-sub">최근 24시간 동안 관련 기사가 없어요.</p>
+          ) : (
+            <ul className="mt-3 divide-y divide-fx-line">
+              {model.headlines.map((headline) => (
+                <li key={headline.url} className="py-2.5">
+                  <a href={headline.url} target="_blank" rel="noreferrer" className="text-[15px] text-fx-ink hover:underline">
+                    {headline.title}
+                  </a>
+                  <span className="ml-2 text-xs text-fx-faint">{formatRelative(headline.publishedAt)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-fx-line bg-fx-surface p-6" aria-labelledby="chart-title">
+          <h2 id="chart-title" className="text-[17px] font-bold text-fx-ink">벅스 실시간 차트</h2>
+          {model.chartTracks.length === 0 ? (
+            <p className="mt-3 text-sm text-fx-sub">지금 TOP100에 든 곡이 없어요.</p>
+          ) : (
+            <ol className="mt-3 space-y-2">
+              {model.chartTracks.map((track) => (
+                <li key={`${track.rank}-${track.title}`} className="flex items-baseline gap-3 text-[15px]">
+                  <span className="fx-num w-10 shrink-0 font-bold text-fx-brand">{track.rank}위</span>
+                  <span className="truncate text-fx-ink">{track.title}</span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

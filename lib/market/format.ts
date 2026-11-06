@@ -82,11 +82,31 @@ export function formatDateTime(time: number): string {
   return dateTimeFormatter.format(time);
 }
 
-/** 차트 축 라벨: 1일은 시각, 나머지는 날짜 */
-export function formatAxis(time: number, period: string): string {
-  if (period === '1D') return timeFormatter.format(time);
-  if (period === '1Y') return fullDateFormatter.format(time).replace(/\.\s?$/, '');
+/** 차트 축 라벨: 실제 데이터 폭이 이틀 이하면 시각, 그 이상이면 날짜 */
+export function formatAxis(time: number, dataSpanMs: number): string {
+  if (dataSpanMs <= 2 * 24 * 60 * 60 * 1000) return timeFormatter.format(time);
+  if (dataSpanMs > 200 * 24 * 60 * 60 * 1000) return fullDateFormatter.format(time).replace(/\.\s?$/, '');
   return dateFormatter.format(time).replace(/\.\s?$/, '');
+}
+
+export function formatDate(time: number): string {
+  return fullDateFormatter.format(time).replace(/\.\s?$/, '');
+}
+
+export function formatRelative(time: number, now = Date.now()): string {
+  const minutes = Math.max(0, Math.round((now - time) / 60000));
+  if (minutes < 1) return '방금';
+  if (minutes < 60) return `${minutes}분 전`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}시간 전`;
+  return `${Math.round(hours / 24)}일 전`;
+}
+
+/**
+ * 차트 첫 점 기준 비교 문구. 기록이 기간만큼 쌓이지 않았으면 '수집 시작 이후'.
+ */
+export function comparisonLabel(firstTime: number, lastTime: number, spanMs: number, periodLabel: string): string {
+  return lastTime - firstTime >= spanMs * 0.9 ? `${periodLabel} 전 대비` : '수집 시작 이후';
 }
 
 export function changeRateOf(current: number, previous: number): number {

@@ -12,11 +12,10 @@ import {
   YAxis,
 } from 'recharts';
 import { direction, formatAxis, formatDateTime, formatPrice } from '../../../lib/market/format';
-import type { PeriodId, SeriesPoint } from '../../../lib/market/types';
+import type { SeriesPoint } from '../../../lib/market/types';
 
 type Props = {
   points: SeriesPoint[];
-  period: PeriodId;
   height?: number;
   valueLabel?: string;
 };
@@ -27,8 +26,9 @@ const COLOR = {
   flat: 'var(--fx-sub)',
 } as const;
 
-export default function PriceChart({ points, period, height = 320, valueLabel = '가격' }: Props) {
+export default function PriceChart({ points, height = 320, valueLabel = '가격' }: Props) {
   const gradientId = useId().replace(/:/g, '');
+  const dataSpan = (points[points.length - 1]?.time ?? 0) - (points[0]?.time ?? 0);
   const first = points[0]?.value ?? 0;
   const last = points[points.length - 1]?.value ?? 0;
   const tone = direction(last - first);
@@ -41,6 +41,14 @@ export default function PriceChart({ points, period, height = 320, valueLabel = 
     const pad = (max - min) * 0.12 || max * 0.01 || 1;
     return [min - pad, max + pad] as [number, number];
   }, [points]);
+
+  if (points.length < 2) {
+    return (
+      <div style={{ height }} className="flex w-full items-center justify-center rounded-xl bg-fx-raised text-sm text-fx-sub">
+        기록이 쌓이는 중이에요. 15분마다 점이 하나씩 늘어나요.
+      </div>
+    );
+  }
 
   return (
     <div style={{ height }} className="w-full">
@@ -58,7 +66,7 @@ export default function PriceChart({ points, period, height = 320, valueLabel = 
             type="number"
             scale="time"
             domain={['dataMin', 'dataMax']}
-            tickFormatter={(time: number) => formatAxis(time, period)}
+            tickFormatter={(time: number) => formatAxis(time, dataSpan)}
             tick={{ fill: 'var(--fx-faint)', fontSize: 12 }}
             tickLine={false}
             axisLine={false}

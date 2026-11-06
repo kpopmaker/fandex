@@ -1,48 +1,30 @@
-import {
-  artistMetadata,
-  type ArtistMetadata,
-} from '../../app/data/v4/charts/artistMetadata';
+import universeFile from '../../data/market/universe.json';
+
+export type GroupType = 'boy_group' | 'girl_group' | 'mixed' | 'unknown';
 
 export type MarketArtist = {
   id: string;
   name: string;
   koreanName: string;
   ticker: string;
-  groupType: 'boy_group' | 'girl_group' | 'mixed';
-  company: string | null;
+  groupType: GroupType;
+  agency: string | null;
   searchText: string;
 };
 
-function isGroup(
-  artist: ArtistMetadata,
-): artist is ArtistMetadata & { groupType: MarketArtist['groupType'] } {
-  return (
-    artist.groupType === 'boy_group' ||
-    artist.groupType === 'girl_group' ||
-    artist.groupType === 'mixed'
-  );
+function normalize(value: string) {
+  return value.toLowerCase().replace(/\s+/g, '');
 }
 
-export const MARKET_ARTISTS: readonly MarketArtist[] = artistMetadata
-  .filter(isGroup)
-  .map((artist) => ({
-    id: artist.artistId,
-    name: artist.displayName,
-    koreanName: artist.koreanName,
-    ticker: artist.ticker,
-    groupType: artist.groupType,
-    company: artist.company ?? null,
-    searchText: [
-      artist.artistId,
-      artist.displayName,
-      artist.koreanName,
-      artist.ticker,
-      ...artist.aliases,
-    ]
-      .join(' ')
-      .toLowerCase()
-      .replace(/\s+/g, ''),
-  }));
+export const MARKET_ARTISTS: readonly MarketArtist[] = universeFile.groups.map((group) => ({
+  id: group.id,
+  name: group.englishName,
+  koreanName: group.koreanName,
+  ticker: group.ticker,
+  groupType: group.groupType as GroupType,
+  agency: group.agency,
+  searchText: normalize([group.id, group.ticker, ...group.matchNames].join(' ')),
+}));
 
 const BY_ID = new Map(MARKET_ARTISTS.map((artist) => [artist.id, artist]));
 
@@ -50,14 +32,14 @@ export function findArtist(id: string): MarketArtist | null {
   return BY_ID.get(id) ?? null;
 }
 
-export function searchArtists(query: string): MarketArtist[] {
-  const normalized = query.trim().toLowerCase().replace(/\s+/g, '');
-  if (!normalized) return [...MARKET_ARTISTS];
-  return MARKET_ARTISTS.filter((artist) => artist.searchText.includes(normalized));
+export function matchesQuery(artist: { searchText: string }, query: string): boolean {
+  const needle = normalize(query);
+  return !needle || artist.searchText.includes(needle);
 }
 
-export const GROUP_TYPE_LABEL: Record<MarketArtist['groupType'], string> = {
+export const GROUP_TYPE_LABEL: Record<GroupType, string> = {
   boy_group: '보이그룹',
   girl_group: '걸그룹',
   mixed: '혼성그룹',
+  unknown: '그룹',
 };

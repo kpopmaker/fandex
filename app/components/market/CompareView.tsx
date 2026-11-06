@@ -35,12 +35,7 @@ export default function CompareView({ model }: { model: CompareModel }) {
     if (!needle) return [];
     return model.options
       .filter((option) => !ids.includes(option.id))
-      .filter((option) =>
-        `${option.id}${option.name}${option.koreanName}${option.ticker}`
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(needle),
-      )
+      .filter((option) => option.searchText.includes(needle))
       .slice(0, 6);
   }, [query, model.options, ids]);
 
@@ -52,13 +47,20 @@ export default function CompareView({ model }: { model: CompareModel }) {
 
   const chartData = useMemo(() => {
     if (model.entries.length === 0) return [];
-    const base = model.entries[0].priceSeries[period];
-    return base.map((point, index) => {
-      const row: { time: number } & Record<string, number> = { time: point.time };
-      for (const entry of model.entries) {
-        const series = entry.priceSeries[period];
-        const value = series[index]?.value ?? series[series.length - 1].value;
-        row[entry.quote.id] = mode === 'return' ? (value / series[0].value - 1) * 100 : value;
+    // 시각을 기준으로 맞춘다(그룹마다 기록 시작 시점이 다를 수 있다).
+    const times = [...new Set(model.entries.flatMap((entry) => entry.priceSeries[period].map((p) => p.time)))].sort(
+      (a, b) => a - b,
+    );
+    const lookups = model.entries.map((entry) => {
+      const series = entry.priceSeries[period];
+      return { id: entry.quote.id, first: series[0]?.value ?? 1, byTime: new Map(series.map((p) => [p.time, p.value])) };
+    });
+    return times.map((time) => {
+      const row: { time: number } & Record<string, number> = { time };
+      for (const lookup of lookups) {
+        const value = lookup.byTime.get(time);
+        if (value === undefined) continue;
+        row[lookup.id] = mode === 'return' ? (value / lookup.first - 1) * 100 : value;
       }
       return row;
     });
@@ -160,7 +162,6 @@ export default function CompareView({ model }: { model: CompareModel }) {
               <MultiLineChart
                 data={chartData}
                 lines={lines}
-                period={period}
                 height={340}
                 referenceY={mode === 'return' ? 0 : undefined}
                 formatValue={(value) =>

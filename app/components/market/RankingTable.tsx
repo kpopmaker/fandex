@@ -39,7 +39,7 @@ const GROUP_OPTIONS: { id: RankingGroup; label: string }[] = [
   { id: 'girl_group', label: '걸그룹' },
 ];
 
-function sortValue(quote: ArtistQuote, state: RankingState): number {
+function sortValue(quote: ArtistQuote, state: RankingState): number | null {
   switch (state.sort) {
     case 'overall':
       return quote.price;
@@ -111,7 +111,11 @@ export default function RankingTable({
     const descending = naturalDescending(state.sort) === (state.order === 'desc');
     return [...filtered]
       .sort((a, b) => {
-        const diff = sortValue(a, state) - sortValue(b, state);
+        const left = sortValue(a, state);
+        const right = sortValue(b, state);
+        // 비교할 기록이 없는 그룹은 항상 맨 뒤로
+        if (left === null || right === null) return left === null ? (right === null ? 0 : 1) : -1;
+        const diff = left - right;
         return descending ? -diff : diff;
       })
       .slice(0, 100);
@@ -232,6 +236,11 @@ export default function RankingTable({
             ))}
           </tbody>
         </table>
+        {rows.length > 0 && (state.sort === 'rise' || state.sort === 'fall') && rows.every((row) => row.change[state.period] === null) && (
+          <p className="border-t border-fx-line px-5 py-4 text-center text-sm text-fx-sub">
+            {periodLabel}치 기록이 쌓이면 등락률 순위가 나와요. 지금은 가격 순으로 보여드려요.
+          </p>
+        )}
         {rows.length === 0 && (
           <p className="px-5 py-10 text-center text-sm text-fx-sub">조건에 맞는 그룹이 없어요. 그룹 필터를 전체로 바꿔 보세요.</p>
         )}

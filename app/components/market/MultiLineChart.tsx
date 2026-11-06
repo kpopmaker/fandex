@@ -11,7 +11,6 @@ import {
   YAxis,
 } from 'recharts';
 import { formatAxis, formatDateTime } from '../../../lib/market/format';
-import type { PeriodId } from '../../../lib/market/types';
 
 export type LineDefinition = {
   key: string;
@@ -22,7 +21,6 @@ export type LineDefinition = {
 type Props = {
   data: Array<{ time: number } & Record<string, number>>;
   lines: LineDefinition[];
-  period: PeriodId;
   height?: number;
   formatValue: (value: number) => string;
   referenceY?: number;
@@ -52,13 +50,21 @@ function paddedDomain(
 export default function MultiLineChart({
   data,
   lines,
-  period,
   height = 300,
   formatValue,
   referenceY,
   domain,
 }: Props) {
   const yDomain = domain ?? paddedDomain(data, lines);
+  const dataSpan = (data[data.length - 1]?.time ?? 0) - (data[0]?.time ?? 0);
+  if (data.length < 2) {
+    return (
+      <div style={{ height }} className="flex w-full items-center justify-center rounded-xl bg-fx-raised text-sm text-fx-sub">
+        기록이 쌓이는 중이에요. 15분마다 점이 하나씩 늘어나요.
+      </div>
+    );
+  }
+
   return (
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -69,7 +75,7 @@ export default function MultiLineChart({
             type="number"
             scale="time"
             domain={['dataMin', 'dataMax']}
-            tickFormatter={(time: number) => formatAxis(time, period)}
+            tickFormatter={(time: number) => formatAxis(time, dataSpan)}
             tick={{ fill: 'var(--fx-faint)', fontSize: 12 }}
             tickLine={false}
             axisLine={false}
