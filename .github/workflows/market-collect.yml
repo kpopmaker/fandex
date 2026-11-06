@@ -6,17 +6,6 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
-  # 개발 중 확인용: 수집기 코드를 work 브랜치에 올리면 한 번 돌려 본다.
-  push:
-    branches:
-      - 'work/market-live-*'
-    paths:
-      - 'scripts/market/**'
-      - 'data/market/**'
-      - 'lib/market/formula.ts'
-      - 'lib/market/variables.ts'
-      - 'lib/market/dataFiles.ts'
-      - '.github/workflows/market-collect.yml'
 
 permissions:
   contents: write
