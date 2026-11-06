@@ -393,22 +393,61 @@ function matchChartArtist(artistText: string): string | null {
   return null;
 }
 
+const BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
+
+/** 벅스가 일부 클라이언트의 연결을 끊어서, Node → curl → 파이썬 순서로 시도한다. */
+async function fetchBugsHtml(attempts: string[]): Promise<string> {
+  const url = 'https://music.bugs.co.kr/chart';
+  try {
+    const response = await fetch(url, {
+      headers: { 'User-Agent': BROWSER_UA, 'Accept-Language': 'ko-KR,ko;q=0.9' },
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    attempts.push('node:ok');
+    return await response.text();
+  } catch (error) {
+    const cause = (error as Error & { cause?: { code?: string } }).cause;
+    attempts.push(`node:${cause?.code ?? (error as Error).message}`);
+  }
+  const { execFileSync } = await import('node:child_process');
+  try {
+    const html = execFileSync(
+      'curl',
+      ['-sSL', '--max-time', '30', '-A', BROWSER_UA, '-H', 'Accept-Language: ko-KR,ko;q=0.9', url],
+      { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
+    );
+    attempts.push('curl:ok');
+    return html;
+  } catch (error) {
+    attempts.push(`curl:${(error as Error).message.split('\n')[0].slice(0, 120)}`);
+  }
+  try {
+    const html = execFileSync(
+      'python3',
+      [
+        '-c',
+        `import urllib.request,sys;r=urllib.request.Request(${JSON.stringify(url)},headers={"User-Agent":"FANDEX-Cloud-v10/1.0"});sys.stdout.write(urllib.request.urlopen(r,timeout=30).read().decode("utf-8","replace"))`,
+      ],
+      { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
+    );
+    attempts.push('python:ok');
+    return html;
+  } catch (error) {
+    attempts.push(`python:${(error as Error).message.split('\n')[0].slice(0, 120)}`);
+  }
+  throw new Error('all bugs fetch attempts failed');
+}
+
 async function refreshChart(): Promise<void> {
   const age = state.chart ? NOW - state.chart.at : Infinity;
   if (age < 55 * 60 * 1000) {
     report.sources.bugs = { status: 'cached', at: state.chart!.at };
     return;
   }
+  const attempts: string[] = [];
   try {
-    const response = await fetch('https://music.bugs.co.kr/chart', {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-        'Accept-Language': 'ko-KR,ko;q=0.9',
-      },
-    });
-    if (!response.ok) throw new Error(`bugs ${response.status}`);
-    const rows = parseBugs(await response.text());
+    const rows = parseBugs(await fetchBugsHtml(attempts));
     if (rows.length < 50) throw new Error(`bugs parsed only ${rows.length} rows`);
 
     const pointsById: Record<string, number> = {};
@@ -421,6 +460,7 @@ async function refreshChart(): Promise<void> {
     report.sources.bugs = {
       status: 'ok',
       at: NOW,
+      attempts,
       rows: rows.length,
       matchedRows: entries.filter((entry) => entry.artistId).length,
       matchedGroups: Object.keys(pointsById).length,
@@ -430,6 +470,7 @@ async function refreshChart(): Promise<void> {
     report.sources.bugs = {
       status: 'failed',
       detail: `${(error as Error).message}${cause ? ` (${cause.code ?? ''} ${cause.message ?? ''})` : ''}`,
+      attempts,
     };
   }
 }
@@ -614,8 +655,14 @@ async function main() {
 
   // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스·차트·Last.fm이 모두 있어야만 만든다.
   if (state.divisor === null && (!state.news || !state.lastfm || !state.chart)) {
+    // 지수 기준은 만들지 않되, 다음 실행이 다시 받지 않도록 상태와 진단 리포트는 남긴다.
+    report.notes.push('waiting for all sources before the first snapshot');
+    mkdirSync(OUT_DIR, { recursive: true });
+    writeFileSync(join(OUT_DIR, 'state.json.gz'), gzipSync(JSON.stringify(state)));
+    writeFileSync(join(OUT_DIR, 'run-report.json'), JSON.stringify(report, null, 1));
+    writeFileSync(join(OUT_DIR, 'vercel.json'), JSON.stringify({ git: { deploymentEnabled: false } }));
     console.log(JSON.stringify(report.sources));
-    throw new Error('first snapshot needs both news and Last.fm data; nothing written');
+    return;
   }
 
   const raws = computeRaw();
