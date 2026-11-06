@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -59,8 +59,11 @@ jobs:
       - name: Screenshots
         id: shots
         if: steps.build.outcome == 'success'
+        shell: bash
         run: |
-          npx --yes playwright@1.56.1 install --with-deps chromium
+          set -o pipefail
+          mkdir -p shots
+          npx --yes playwright@1.56.1 install --with-deps chromium 2>&1 | tail -20 > shots/install.log
           npm run start -- -p 3000 > server.log 2>&1 &
           for i in $(seq 1 60); do curl -sf http://localhost:3000/ > /dev/null && break; sleep 1; done
           cat > shoot.mjs <<'EOF'
