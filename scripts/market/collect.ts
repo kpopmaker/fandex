@@ -62,8 +62,12 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 
+/** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
+const DATA_EPOCH = 2;
+
 type State = {
   version: string;
+  epoch?: number;
   divisor: number | null;
   prevPrices: Record<string, number>;
   prevFloats: Record<string, number>;
@@ -90,8 +94,12 @@ function readJson<T>(path: string, gz = false): T | null {
   }
 }
 
-const state: State = readJson<State>(join(PREV_DIR, 'state.json.gz'), true) ?? {
+const previousState = readJson<State>(join(PREV_DIR, 'state.json.gz'), true);
+const sameEpoch = previousState?.epoch === DATA_EPOCH;
+
+const state: State = (sameEpoch ? previousState : null) ?? {
   version: MARKET_DATA_VERSION,
+  epoch: DATA_EPOCH,
   divisor: null,
   prevPrices: {},
   prevFloats: {},
@@ -101,7 +109,7 @@ const state: State = readJson<State>(join(PREV_DIR, 'state.json.gz'), true) ?? {
   lastfm: null,
 };
 
-const history: HistoryFile = readJson<HistoryFile>(join(PREV_DIR, 'history.json.gz'), true) ?? {
+const history: HistoryFile = (sameEpoch ? readJson<HistoryFile>(join(PREV_DIR, 'history.json.gz'), true) : null) ?? {
   version: MARKET_DATA_VERSION,
   ids: [],
   startedAt: SLOT_TIME,
