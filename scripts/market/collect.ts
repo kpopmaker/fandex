@@ -63,7 +63,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 2;
+const DATA_EPOCH = 3;
 
 type State = {
   version: string;
@@ -181,6 +181,14 @@ const AMBIGUOUS_IDS = new Set([
   'unchild', 'apink', 'day6', 'exo', 'onf', 'xlov', 'newbeat', 'davichi',
 ]);
 
+/** 사진만 있는 기사([포토] 등)는 행사 하나에 수백 건씩 나와서 기사 수에서 뺀다. */
+const PHOTO_TITLE = /^\s*[\[(【<]?\s*(포토|사진|PHOTO|Photo|화보\s*\+|스타포토|MD포토|포토엔|포토S|TD포토|SS포토|HD포토|영상|VIDEO|Video|움짤)/;
+const PHOTO_TAG = /\[(?:[^\]]*포토[^\]]*|[^\]]*PHOTO[^\]]*|사진)\]/;
+
+function isPhotoArticle(title: string): boolean {
+  return PHOTO_TITLE.test(title) || PHOTO_TAG.test(title) || /\[포토\]|\(포토\)|\[사진\]/.test(title);
+}
+
 function hashLink(link: string): string {
   return createHash('sha1').update(link).digest('hex').slice(0, 12);
 }
@@ -221,45 +229,63 @@ type GroupNews = {
   pages: number;
 };
 
+type NewsDiagnostics = { queries: string[]; fetched: number; nameHits: number; photoSkipped: number; contextMiss: number };
+const newsDiagnostics: Record<string, NewsDiagnostics> = {};
+
 async function collectGroupNews(group: Group): Promise<GroupNews> {
-  // 흔한 단어 이름은 '한글명 영문명'을 함께 검색한다(기사는 보통 '그룹 카드(KARD)'처럼 둘 다 쓴다).
-  const query =
-    AMBIGUOUS_IDS.has(group.id) && group.englishName !== group.koreanName
-      ? `${group.koreanName} ${group.englishName}`
-      : group.koreanName;
+  const ambiguous = AMBIGUOUS_IDS.has(group.id) && group.englishName !== group.koreanName;
+  // 흔한 단어 이름은 '한글명 영문명'으로 먼저 찾고, 적게 나오면 영문명으로 한 번 더 찾는다.
+  const queries = ambiguous
+    ? [`${group.koreanName} ${group.englishName}`, group.englishName]
+    : [group.koreanName];
   const matcher = MATCHERS.get(group.id)!;
   const cutoff = NOW - DAY_MS;
   const seen = new Set<string>();
   // 같은 보도자료가 여러 매체에 그대로 실리면 한 건으로 센다.
   const seenTitles = new Set<string>();
   const relevant: Array<{ item: NaverItem; time: number; text: string }> = [];
+  const diag: NewsDiagnostics = { queries: [], fetched: 0, nameHits: 0, photoSkipped: 0, contextMiss: 0 };
   let fetched = 0;
   let pages = 0;
 
-  for (let start = 1; start <= 301; start += 100) {
-    const items = await naverSearch(query, start);
-    pages += 1;
-    fetched += items.length;
-    let oldest = Infinity;
-    for (const item of items) {
-      const time = Date.parse(item.pubDate);
-      if (Number.isFinite(time)) oldest = Math.min(oldest, time);
-      const key = item.originallink || item.link;
-      if (!key || seen.has(key)) continue;
-      seen.add(key);
-      const title = decodeEntities(item.title);
-      const text = `${title} ${decodeEntities(item.description)}`;
-      if (!matcher.test(text)) continue;
-      if (group.excludeKeywords.some((word) => text.includes(word))) continue;
-      if (!containsAny(text, CONTEXT_WORDS)) continue;
-      const titleKey = title.replace(/[^0-9A-Za-z가-힣]/g, '').slice(0, 40);
-      if (seenTitles.has(titleKey)) continue;
-      seenTitles.add(titleKey);
-      relevant.push({ item: { ...item, title }, time, text });
+  for (const query of queries) {
+    if (diag.queries.length && relevant.length >= 5) break;
+    diag.queries.push(query);
+    for (let start = 1; start <= 301; start += 100) {
+      const items = await naverSearch(query, start);
+      pages += 1;
+      fetched += items.length;
+      let oldest = Infinity;
+      for (const item of items) {
+        const time = Date.parse(item.pubDate);
+        if (Number.isFinite(time)) oldest = Math.min(oldest, time);
+        const key = item.originallink || item.link;
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        const title = decodeEntities(item.title);
+        const text = `${title} ${decodeEntities(item.description)}`;
+        if (!matcher.test(text)) continue;
+        diag.nameHits += 1;
+        if (group.excludeKeywords.some((word) => text.includes(word))) continue;
+        if (isPhotoArticle(title)) {
+          diag.photoSkipped += 1;
+          continue;
+        }
+        if (!containsAny(text, CONTEXT_WORDS)) {
+          diag.contextMiss += 1;
+          continue;
+        }
+        const titleKey = title.replace(/[^0-9A-Za-z가-힣]/g, '').slice(0, 40);
+        if (seenTitles.has(titleKey)) continue;
+        seenTitles.add(titleKey);
+        relevant.push({ item: { ...item, title }, time, text });
+      }
+      // 한 페이지(100건)가 모두 24시간 안이면 다음 페이지를 더 본다.
+      if (items.length < 100 || oldest < cutoff) break;
     }
-    // 한 페이지(100건)가 모두 24시간 안이면 다음 페이지를 더 본다.
-    if (items.length < 100 || oldest < cutoff) break;
   }
+  diag.fetched = fetched;
+  if (ambiguous || relevant.length >= 150) newsDiagnostics[group.id] = diag;
 
   const within24h = relevant.filter((entry) => entry.time >= cutoff);
   const tagged: TaggedArticle[] = [];
@@ -351,6 +377,7 @@ async function refreshNews(): Promise<void> {
     fetched,
     failures: failures.slice(0, 20),
     failureCount: failures.length,
+    diagnostics: newsDiagnostics,
   };
 }
 
