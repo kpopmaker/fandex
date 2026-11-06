@@ -1,0 +1,2928 @@
+{
+ "version": "market-universe-v1",
+ "source": "app/data/v4/artistUniverse.ts",
+ "count": 177,
+ "groups": [
+  {
+   "id": "aespa",
+   "koreanName": "에스파",
+   "englishName": "aespa",
+   "ticker": "AESPA",
+   "groupType": "girl_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2020-11-17",
+   "naverQuery": "에스파 aespa",
+   "matchNames": [
+    "에스파",
+    "aespa",
+    "Aespa"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "aespa"
+  },
+  {
+   "id": "ive",
+   "koreanName": "아이브",
+   "englishName": "IVE",
+   "ticker": "IVE",
+   "groupType": "girl_group",
+   "agency": "Starship Entertainment",
+   "debutDate": "2021-12-01",
+   "naverQuery": "아이브 IVE",
+   "matchNames": [
+    "아이브",
+    "IVE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "IVE"
+  },
+  {
+   "id": "riize",
+   "koreanName": "라이즈",
+   "englishName": "RIIZE",
+   "ticker": "RIIZE",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2023-09-04",
+   "naverQuery": "라이즈 RIIZE",
+   "matchNames": [
+    "라이즈",
+    "RIIZE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "RIIZE"
+  },
+  {
+   "id": "illit",
+   "koreanName": "아일릿",
+   "englishName": "ILLIT",
+   "ticker": "ILLIT",
+   "groupType": "girl_group",
+   "agency": "Belift Lab",
+   "debutDate": "2024-03-25",
+   "naverQuery": "아일릿 ILLIT",
+   "matchNames": [
+    "아일릿",
+    "ILLIT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ILLIT"
+  },
+  {
+   "id": "tws",
+   "koreanName": "투어스",
+   "englishName": "TWS",
+   "ticker": "TWS",
+   "groupType": "boy_group",
+   "agency": "Pledis Entertainment",
+   "debutDate": "2024-01-22",
+   "naverQuery": "투어스 TWS",
+   "matchNames": [
+    "투어스",
+    "TWS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TWS"
+  },
+  {
+   "id": "lesserafim",
+   "koreanName": "르세라핌",
+   "englishName": "LE SSERAFIM",
+   "ticker": "LSF",
+   "groupType": "girl_group",
+   "agency": "Source Music",
+   "debutDate": "2022-05-02",
+   "naverQuery": "르세라핌 LE SSERAFIM",
+   "matchNames": [
+    "르세라핌",
+    "LE SSERAFIM"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "LE SSERAFIM"
+  },
+  {
+   "id": "newjeans",
+   "koreanName": "뉴진스",
+   "englishName": "NewJeans",
+   "ticker": "NWJNS",
+   "groupType": "girl_group",
+   "agency": "ADOR",
+   "debutDate": "2022-07-22",
+   "naverQuery": "뉴진스 NewJeans",
+   "matchNames": [
+    "뉴진스",
+    "NewJeans"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NewJeans"
+  },
+  {
+   "id": "nmixx",
+   "koreanName": "엔믹스",
+   "englishName": "NMIXX",
+   "ticker": "NMIXX",
+   "groupType": "girl_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2022-02-22",
+   "naverQuery": "엔믹스 NMIXX",
+   "matchNames": [
+    "엔믹스",
+    "NMIXX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NMIXX"
+  },
+  {
+   "id": "babymonster",
+   "koreanName": "베이비몬스터",
+   "englishName": "BABYMONSTER",
+   "ticker": "BMON",
+   "groupType": "girl_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2024-04-01",
+   "naverQuery": "베이비몬스터 BABYMONSTER",
+   "matchNames": [
+    "베이비몬스터",
+    "BABYMONSTER"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BABYMONSTER"
+  },
+  {
+   "id": "boynextdoor",
+   "koreanName": "보이넥스트도어",
+   "englishName": "BOYNEXTDOOR",
+   "ticker": "BND",
+   "groupType": "boy_group",
+   "agency": "KOZ Entertainment",
+   "debutDate": "2023-05-30",
+   "naverQuery": "보이넥스트도어 BOYNEXTDOOR",
+   "matchNames": [
+    "보이넥스트도어",
+    "BOYNEXTDOOR"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BOYNEXTDOOR"
+  },
+  {
+   "id": "straykids",
+   "koreanName": "스트레이 키즈",
+   "englishName": "Stray Kids",
+   "ticker": "SKZ",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2018-03-25",
+   "naverQuery": "스트레이 키즈 Stray Kids",
+   "matchNames": [
+    "스트레이 키즈",
+    "Stray Kids",
+    "스트레이키즈",
+    "SKZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Stray Kids"
+  },
+  {
+   "id": "seventeen",
+   "koreanName": "세븐틴",
+   "englishName": "SEVENTEEN",
+   "ticker": "SVT",
+   "groupType": "boy_group",
+   "agency": "Pledis Entertainment",
+   "debutDate": "2015-05-26",
+   "naverQuery": "세븐틴 SEVENTEEN",
+   "matchNames": [
+    "세븐틴",
+    "SEVENTEEN",
+    "SVT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SEVENTEEN"
+  },
+  {
+   "id": "bts",
+   "koreanName": "방탄소년단",
+   "englishName": "BTS",
+   "ticker": "BTS",
+   "groupType": "boy_group",
+   "agency": "BIGHIT MUSIC",
+   "debutDate": "2013-06-13",
+   "naverQuery": "방탄소년단 BTS",
+   "matchNames": [
+    "방탄소년단",
+    "BTS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BTS"
+  },
+  {
+   "id": "blackpink",
+   "koreanName": "블랙핑크",
+   "englishName": "BLACKPINK",
+   "ticker": "BLKPNK",
+   "groupType": "girl_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2016-08-08",
+   "naverQuery": "블랙핑크 BLACKPINK",
+   "matchNames": [
+    "블랙핑크",
+    "BLACKPINK"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BLACKPINK"
+  },
+  {
+   "id": "twice",
+   "koreanName": "트와이스",
+   "englishName": "TWICE",
+   "ticker": "TWICE",
+   "groupType": "girl_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2015-10-20",
+   "naverQuery": "트와이스 TWICE",
+   "matchNames": [
+    "트와이스",
+    "TWICE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TWICE"
+  },
+  {
+   "id": "enhypen",
+   "koreanName": "엔하이픈",
+   "englishName": "ENHYPEN",
+   "ticker": "ENHYP",
+   "groupType": "boy_group",
+   "agency": "Belift Lab",
+   "debutDate": "2020-11-30",
+   "naverQuery": "엔하이픈 ENHYPEN",
+   "matchNames": [
+    "엔하이픈",
+    "ENHYPEN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ENHYPEN"
+  },
+  {
+   "id": "txt",
+   "koreanName": "투모로우바이투게더",
+   "englishName": "Tomorrow X Together",
+   "ticker": "TXT",
+   "groupType": "boy_group",
+   "agency": "BIGHIT MUSIC",
+   "debutDate": "2019-03-04",
+   "naverQuery": "TXT 투모로우바이투게더",
+   "matchNames": [
+    "투모로우바이투게더",
+    "Tomorrow X Together",
+    "TXT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Tomorrow X Together"
+  },
+  {
+   "id": "ateez",
+   "koreanName": "에이티즈",
+   "englishName": "ATEEZ",
+   "ticker": "ATEEZ",
+   "groupType": "boy_group",
+   "agency": "KQ Entertainment",
+   "debutDate": "2018-10-24",
+   "naverQuery": "에이티즈 ATEEZ",
+   "matchNames": [
+    "에이티즈",
+    "ATEEZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ATEEZ"
+  },
+  {
+   "id": "zerobaseone",
+   "koreanName": "제로베이스원",
+   "englishName": "ZEROBASEONE",
+   "ticker": "ZB1",
+   "groupType": "boy_group",
+   "agency": "WakeOne",
+   "debutDate": "2023-07-10",
+   "naverQuery": "제로베이스원 ZEROBASEONE",
+   "matchNames": [
+    "제로베이스원",
+    "ZEROBASEONE",
+    "ZB1"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ZEROBASEONE"
+  },
+  {
+   "id": "gidle",
+   "koreanName": "여자아이들",
+   "englishName": "(G)I-DLE",
+   "ticker": "GIDLE",
+   "groupType": "girl_group",
+   "agency": "Cube Entertainment",
+   "debutDate": "2018-05-02",
+   "naverQuery": "여자아이들 (G)I-DLE",
+   "matchNames": [
+    "여자아이들",
+    "(G)I-DLE",
+    "GIDLE",
+    "I-DLE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "(G)I-DLE"
+  },
+  {
+   "id": "itzy",
+   "koreanName": "있지",
+   "englishName": "ITZY",
+   "ticker": "ITZY",
+   "groupType": "girl_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2019-02-12",
+   "naverQuery": "있지 ITZY",
+   "matchNames": [
+    "있지",
+    "ITZY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ITZY"
+  },
+  {
+   "id": "kissoflife",
+   "koreanName": "키스오브라이프",
+   "englishName": "KISS OF LIFE",
+   "ticker": "KIOF",
+   "groupType": "girl_group",
+   "agency": "S2 Entertainment",
+   "debutDate": "2023-07-05",
+   "naverQuery": "키스오브라이프 KISS OF LIFE",
+   "matchNames": [
+    "키스오브라이프",
+    "KISS OF LIFE",
+    "KIOF"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KISS OF LIFE"
+  },
+  {
+   "id": "meovv",
+   "koreanName": "미야오",
+   "englishName": "MEOVV",
+   "ticker": "MEOVV",
+   "groupType": "girl_group",
+   "agency": "THEBLACKLABEL",
+   "debutDate": "2024-09-06",
+   "naverQuery": "미야오 MEOVV",
+   "matchNames": [
+    "미야오",
+    "MEOVV"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MEOVV"
+  },
+  {
+   "id": "izna",
+   "koreanName": "이즈나",
+   "englishName": "izna",
+   "ticker": "IZNA",
+   "groupType": "girl_group",
+   "agency": "WakeOne",
+   "debutDate": "2024-11-25",
+   "naverQuery": "이즈나 izna",
+   "matchNames": [
+    "이즈나",
+    "izna"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "izna"
+  },
+  {
+   "id": "nctdream",
+   "koreanName": "엔시티 드림",
+   "englishName": "NCT DREAM",
+   "ticker": "NCTDRM",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2016-08-25",
+   "naverQuery": "NCT DREAM 엔시티 드림",
+   "matchNames": [
+    "엔시티 드림",
+    "NCT DREAM",
+    "NCT드림"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NCT DREAM"
+  },
+  {
+   "id": "nct127",
+   "koreanName": "엔시티 127",
+   "englishName": "NCT 127",
+   "ticker": "NCT127",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2016-07-07",
+   "naverQuery": "NCT 127 엔시티 127",
+   "matchNames": [
+    "엔시티 127",
+    "NCT 127",
+    "엔시티127",
+    "NCT127"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NCT 127"
+  },
+  {
+   "id": "nctwish",
+   "koreanName": "엔시티 위시",
+   "englishName": "NCT WISH",
+   "ticker": "NCTW",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2024-02-21",
+   "naverQuery": "NCT WISH 엔시티 위시",
+   "matchNames": [
+    "엔시티 위시",
+    "NCT WISH"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NCT WISH"
+  },
+  {
+   "id": "treasure",
+   "koreanName": "트레저",
+   "englishName": "TREASURE",
+   "ticker": "TRSR",
+   "groupType": "boy_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2020-08-07",
+   "naverQuery": "트레저 TREASURE",
+   "matchNames": [
+    "트레저",
+    "TREASURE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TREASURE"
+  },
+  {
+   "id": "theboyz",
+   "koreanName": "더보이즈",
+   "englishName": "THE BOYZ",
+   "ticker": "TBZ",
+   "groupType": "boy_group",
+   "agency": "One Hundred",
+   "debutDate": "2017-12-06",
+   "naverQuery": "더보이즈 THE BOYZ",
+   "matchNames": [
+    "더보이즈",
+    "THE BOYZ",
+    "The Boyz",
+    "TBZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "THE BOYZ"
+  },
+  {
+   "id": "monstax",
+   "koreanName": "몬스타엑스",
+   "englishName": "MONSTA X",
+   "ticker": "MX",
+   "groupType": "boy_group",
+   "agency": "Starship Entertainment",
+   "debutDate": "2015-05-14",
+   "naverQuery": "몬스타엑스 MONSTA X",
+   "matchNames": [
+    "몬스타엑스",
+    "MONSTA X"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MONSTA X"
+  },
+  {
+   "id": "exo",
+   "koreanName": "엑소",
+   "englishName": "EXO",
+   "ticker": "EXO",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2012-04-08",
+   "naverQuery": "엑소 EXO",
+   "matchNames": [
+    "엑소",
+    "EXO"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "EXO"
+  },
+  {
+   "id": "redvelvet",
+   "koreanName": "레드벨벳",
+   "englishName": "Red Velvet",
+   "ticker": "RV",
+   "groupType": "girl_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2014-08-01",
+   "naverQuery": "레드벨벳 Red Velvet",
+   "matchNames": [
+    "레드벨벳",
+    "Red Velvet"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Red Velvet"
+  },
+  {
+   "id": "mamamoo",
+   "koreanName": "마마무",
+   "englishName": "MAMAMOO",
+   "ticker": "MMM",
+   "groupType": "girl_group",
+   "agency": "RBW",
+   "debutDate": "2014-06-18",
+   "naverQuery": "마마무 MAMAMOO",
+   "matchNames": [
+    "마마무",
+    "MAMAMOO"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MAMAMOO"
+  },
+  {
+   "id": "day6",
+   "koreanName": "데이식스",
+   "englishName": "DAY6",
+   "ticker": "DAY6",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2015-09-07",
+   "naverQuery": "데이식스 DAY6",
+   "matchNames": [
+    "데이식스",
+    "DAY6"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "DAY6"
+  },
+  {
+   "id": "qwer",
+   "koreanName": "큐더블유이알",
+   "englishName": "QWER",
+   "ticker": "QWER",
+   "groupType": "girl_group",
+   "agency": "3Y Corporation",
+   "debutDate": "2023-10-18",
+   "naverQuery": "QWER 큐더블유이알",
+   "matchNames": [
+    "큐더블유이알",
+    "QWER"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "QWER"
+  },
+  {
+   "id": "girlsgeneration",
+   "koreanName": "소녀시대",
+   "englishName": "Girls' Generation",
+   "ticker": "SNSD",
+   "groupType": "girl_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2007-08-05",
+   "naverQuery": "소녀시대 Girls Generation",
+   "matchNames": [
+    "소녀시대",
+    "Girls' Generation",
+    "SNSD"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Girls' Generation"
+  },
+  {
+   "id": "shinee",
+   "koreanName": "샤이니",
+   "englishName": "SHINee",
+   "ticker": "SHINee",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2008-05-25",
+   "naverQuery": "샤이니 SHINee",
+   "matchNames": [
+    "샤이니",
+    "SHINee"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SHINee"
+  },
+  {
+   "id": "superjunior",
+   "koreanName": "슈퍼주니어",
+   "englishName": "Super Junior",
+   "ticker": "SJ",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2005-11-06",
+   "naverQuery": "슈퍼주니어 Super Junior",
+   "matchNames": [
+    "슈퍼주니어",
+    "Super Junior",
+    "SJ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Super Junior"
+  },
+  {
+   "id": "tvxq",
+   "koreanName": "동방신기",
+   "englishName": "TVXQ",
+   "ticker": "TVXQ",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2003-12-26",
+   "naverQuery": "동방신기 TVXQ",
+   "matchNames": [
+    "동방신기",
+    "TVXQ",
+    "DBSK"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TVXQ"
+  },
+  {
+   "id": "wayv",
+   "koreanName": "웨이션브이",
+   "englishName": "WayV",
+   "ticker": "WAYV",
+   "groupType": "boy_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2019-01-17",
+   "naverQuery": "WayV 웨이션브이",
+   "matchNames": [
+    "웨이션브이",
+    "WayV"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WayV"
+  },
+  {
+   "id": "bigbang",
+   "koreanName": "빅뱅",
+   "englishName": "BIGBANG",
+   "ticker": "BIGBANG",
+   "groupType": "boy_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2006-08-19",
+   "naverQuery": "빅뱅 BIGBANG",
+   "matchNames": [
+    "빅뱅",
+    "BIGBANG"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BIGBANG"
+  },
+  {
+   "id": "2ne1",
+   "koreanName": "투애니원",
+   "englishName": "2NE1",
+   "ticker": "2NE1",
+   "groupType": "girl_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2009-05-06",
+   "naverQuery": "투애니원 2NE1",
+   "matchNames": [
+    "투애니원",
+    "2NE1"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "2NE1"
+  },
+  {
+   "id": "winner",
+   "koreanName": "위너",
+   "englishName": "WINNER",
+   "ticker": "WINNER",
+   "groupType": "boy_group",
+   "agency": "YG Entertainment",
+   "debutDate": "2014-08-17",
+   "naverQuery": "위너 WINNER",
+   "matchNames": [
+    "위너",
+    "WINNER"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WINNER"
+  },
+  {
+   "id": "niziu",
+   "koreanName": "니쥬",
+   "englishName": "NiziU",
+   "ticker": "NIZIU",
+   "groupType": "girl_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2020-12-02",
+   "naverQuery": "NiziU 니쥬",
+   "matchNames": [
+    "니쥬",
+    "NiziU"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NiziU"
+  },
+  {
+   "id": "xdinaryheroes",
+   "koreanName": "엑스디너리 히어로즈",
+   "englishName": "Xdinary Heroes",
+   "ticker": "XH",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2021-12-06",
+   "naverQuery": "엑스디너리 히어로즈 Xdinary Heroes",
+   "matchNames": [
+    "엑스디너리 히어로즈",
+    "Xdinary Heroes",
+    "XH"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Xdinary Heroes"
+  },
+  {
+   "id": "andteam",
+   "koreanName": "앤팀",
+   "englishName": "&TEAM",
+   "ticker": "ANDTEAM",
+   "groupType": "boy_group",
+   "agency": "HYBE Labels Japan",
+   "debutDate": "2022-12-07",
+   "naverQuery": "&TEAM 앤팀",
+   "matchNames": [
+    "앤팀",
+    "&TEAM",
+    "andTEAM"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "&TEAM"
+  },
+  {
+   "id": "katseye",
+   "koreanName": "캣츠아이",
+   "englishName": "KATSEYE",
+   "ticker": "KATSEYE",
+   "groupType": "girl_group",
+   "agency": "HYBE x Geffen",
+   "debutDate": "2024-06-28",
+   "naverQuery": "KATSEYE 캣츠아이",
+   "matchNames": [
+    "캣츠아이",
+    "KATSEYE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KATSEYE"
+  },
+  {
+   "id": "stayc",
+   "koreanName": "스테이씨",
+   "englishName": "STAYC",
+   "ticker": "STAYC",
+   "groupType": "girl_group",
+   "agency": "High Up Entertainment",
+   "debutDate": "2020-11-12",
+   "naverQuery": "스테이씨 STAYC",
+   "matchNames": [
+    "스테이씨",
+    "STAYC"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "STAYC"
+  },
+  {
+   "id": "triples",
+   "koreanName": "트리플에스",
+   "englishName": "tripleS",
+   "ticker": "TRIPLES",
+   "groupType": "girl_group",
+   "agency": "MODHAUS",
+   "debutDate": "2023-02-13",
+   "naverQuery": "트리플에스 tripleS",
+   "matchNames": [
+    "트리플에스",
+    "tripleS",
+    "TripleS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "tripleS"
+  },
+  {
+   "id": "dreamcatcher",
+   "koreanName": "드림캐쳐",
+   "englishName": "Dreamcatcher",
+   "ticker": "DREAMC",
+   "groupType": "girl_group",
+   "agency": "Dreamcatcher Company",
+   "debutDate": "2017-01-13",
+   "naverQuery": "드림캐쳐 Dreamcatcher",
+   "matchNames": [
+    "드림캐쳐",
+    "Dreamcatcher"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Dreamcatcher"
+  },
+  {
+   "id": "billlie",
+   "koreanName": "빌리",
+   "englishName": "Billlie",
+   "ticker": "BLLLIE",
+   "groupType": "girl_group",
+   "agency": "MYSTIC STORY",
+   "debutDate": "2021-11-10",
+   "naverQuery": "빌리 Billlie",
+   "matchNames": [
+    "빌리",
+    "Billlie"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Billlie"
+  },
+  {
+   "id": "p1harmony",
+   "koreanName": "피원하모니",
+   "englishName": "P1Harmony",
+   "ticker": "P1H",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": "2020-10-28",
+   "naverQuery": "피원하모니 P1Harmony",
+   "matchNames": [
+    "피원하모니",
+    "P1Harmony",
+    "P1H"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "P1Harmony"
+  },
+  {
+   "id": "xikers",
+   "koreanName": "싸이커스",
+   "englishName": "xikers",
+   "ticker": "XIKERS",
+   "groupType": "boy_group",
+   "agency": "KQ Entertainment",
+   "debutDate": "2023-03-30",
+   "naverQuery": "싸이커스 xikers",
+   "matchNames": [
+    "싸이커스",
+    "xikers"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "xikers"
+  },
+  {
+   "id": "cravity",
+   "koreanName": "크래비티",
+   "englishName": "CRAVITY",
+   "ticker": "CRVT",
+   "groupType": "boy_group",
+   "agency": "Starship Entertainment",
+   "debutDate": "2020-04-14",
+   "naverQuery": "크래비티 CRAVITY",
+   "matchNames": [
+    "크래비티",
+    "CRAVITY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CRAVITY"
+  },
+  {
+   "id": "oneus",
+   "koreanName": "원어스",
+   "englishName": "ONEUS",
+   "ticker": "ONEUS",
+   "groupType": "boy_group",
+   "agency": "RBW",
+   "debutDate": "2019-01-09",
+   "naverQuery": "원어스 ONEUS",
+   "matchNames": [
+    "원어스",
+    "ONEUS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ONEUS"
+  },
+  {
+   "id": "btob",
+   "koreanName": "비투비",
+   "englishName": "BTOB",
+   "ticker": "BTOB",
+   "groupType": "boy_group",
+   "agency": "BTOB Company",
+   "debutDate": "2012-03-21",
+   "naverQuery": "비투비 BTOB",
+   "matchNames": [
+    "비투비",
+    "BTOB"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BTOB"
+  },
+  {
+   "id": "apink",
+   "koreanName": "에이핑크",
+   "englishName": "Apink",
+   "ticker": "APINK",
+   "groupType": "girl_group",
+   "agency": "Choi Creative Lab",
+   "debutDate": "2011-04-19",
+   "naverQuery": "에이핑크 Apink",
+   "matchNames": [
+    "에이핑크",
+    "Apink"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Apink"
+  },
+  {
+   "id": "ohmygirl",
+   "koreanName": "오마이걸",
+   "englishName": "OH MY GIRL",
+   "ticker": "OMG",
+   "groupType": "girl_group",
+   "agency": "DSP Media",
+   "debutDate": "2015-04-20",
+   "naverQuery": "오마이걸 OH MY GIRL",
+   "matchNames": [
+    "오마이걸",
+    "OH MY GIRL",
+    "OMG"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "OH MY GIRL"
+  },
+  {
+   "id": "viviz",
+   "koreanName": "비비지",
+   "englishName": "VIVIZ",
+   "ticker": "VIVIZ",
+   "groupType": "girl_group",
+   "agency": "BPM Entertainment",
+   "debutDate": "2022-02-09",
+   "naverQuery": "비비지 VIVIZ",
+   "matchNames": [
+    "비비지",
+    "VIVIZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "VIVIZ"
+  },
+  {
+   "id": "fromis9",
+   "koreanName": "프로미스나인",
+   "englishName": "fromis_9",
+   "ticker": "FROMIS9",
+   "groupType": "girl_group",
+   "agency": "Pledis Entertainment",
+   "debutDate": "2018-01-24",
+   "naverQuery": "프로미스나인 fromis_9",
+   "matchNames": [
+    "프로미스나인",
+    "fromis_9",
+    "fromis9"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "fromis_9"
+  },
+  {
+   "id": "hearts2hearts",
+   "koreanName": "하츠투하츠",
+   "englishName": "Hearts2Hearts",
+   "ticker": "H2H",
+   "groupType": "girl_group",
+   "agency": "SM Entertainment",
+   "debutDate": "2025-02-24",
+   "naverQuery": "Hearts2Hearts 하츠투하츠",
+   "matchNames": [
+    "하츠투하츠",
+    "Hearts2Hearts",
+    "H2H"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Hearts2Hearts"
+  },
+  {
+   "id": "nexz",
+   "koreanName": "넥스지",
+   "englishName": "NEXZ",
+   "ticker": "NEXZ",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2024-05-20",
+   "naverQuery": "NEXZ 넥스지",
+   "matchNames": [
+    "넥스지",
+    "NEXZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NEXZ"
+  },
+  {
+   "id": "kep1er",
+   "koreanName": "케플러",
+   "englishName": "Kep1er",
+   "ticker": "KEP1ER",
+   "groupType": "girl_group",
+   "agency": "WakeOne",
+   "debutDate": "2022-01-03",
+   "naverQuery": "케플러 Kep1er",
+   "matchNames": [
+    "케플러",
+    "Kep1er"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Kep1er"
+  },
+  {
+   "id": "onf",
+   "koreanName": "온앤오프",
+   "englishName": "ONF",
+   "ticker": "ONF",
+   "groupType": "boy_group",
+   "agency": "KI Entertainment",
+   "debutDate": "2017-08-03",
+   "naverQuery": "온앤오프 ONF",
+   "matchNames": [
+    "온앤오프",
+    "ONF"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ONF"
+  },
+  {
+   "id": "artms",
+   "koreanName": "아르테미스",
+   "englishName": "ARTMS",
+   "ticker": "ARTMS",
+   "groupType": "girl_group",
+   "agency": "MODHAUS",
+   "debutDate": "2024-05-31",
+   "naverQuery": "아르테미스 ARTMS",
+   "matchNames": [
+    "아르테미스",
+    "ARTMS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ARTMS"
+  },
+  {
+   "id": "unis",
+   "koreanName": "유니스",
+   "englishName": "UNIS",
+   "ticker": "UNIS",
+   "groupType": "girl_group",
+   "agency": "F&F Entertainment",
+   "debutDate": "2024-03-27",
+   "naverQuery": "유니스 UNIS",
+   "matchNames": [
+    "유니스",
+    "UNIS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "UNIS"
+  },
+  {
+   "id": "kickflip",
+   "koreanName": "킥플립",
+   "englishName": "KickFlip",
+   "ticker": "KICKF",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": "2025-01-20",
+   "naverQuery": "킥플립 KickFlip",
+   "matchNames": [
+    "킥플립",
+    "KickFlip"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KickFlip"
+  },
+  {
+   "id": "nowadays",
+   "koreanName": "나우즈",
+   "englishName": "NOWZ",
+   "ticker": "NOWAD",
+   "groupType": "boy_group",
+   "agency": "Cube Entertainment",
+   "debutDate": "2024-04-02",
+   "naverQuery": "나우즈 NOWZ 나우어데이즈 NOWADAYS",
+   "matchNames": [
+    "나우즈",
+    "NOWZ",
+    "나우어데이즈",
+    "NOWADAYS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NOWZ"
+  },
+  {
+   "id": "allhours",
+   "koreanName": "올아워즈",
+   "englishName": "ALL(H)OURS",
+   "ticker": "ALLHRS",
+   "groupType": "boy_group",
+   "agency": "Eden Entertainment",
+   "debutDate": "2024-01-10",
+   "naverQuery": "올아워즈 ALL(H)OURS",
+   "matchNames": [
+    "올아워즈",
+    "ALL(H)OURS",
+    "ALLHOURS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ALL(H)OURS"
+  },
+  {
+   "id": "rescene",
+   "koreanName": "리센느",
+   "englishName": "RESCENE",
+   "ticker": "RESCENE",
+   "groupType": "girl_group",
+   "agency": "THE MUZE Entertainment",
+   "debutDate": "2024-03-26",
+   "naverQuery": "리센느 RESCENE",
+   "matchNames": [
+    "리센느",
+    "RESCENE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "RESCENE"
+  },
+  {
+   "id": "thenewsix",
+   "koreanName": "더뉴식스",
+   "englishName": "THE NEW SIX",
+   "ticker": "TNX",
+   "groupType": "boy_group",
+   "agency": "P NATION",
+   "debutDate": "2022-05-17",
+   "naverQuery": "더뉴식스 THE NEW SIX TNX",
+   "matchNames": [
+    "더뉴식스",
+    "THE NEW SIX",
+    "TNX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "THE NEW SIX"
+  },
+  {
+   "id": "epex",
+   "koreanName": "이펙스",
+   "englishName": "EPEX",
+   "ticker": "EPEX",
+   "groupType": "boy_group",
+   "agency": "C9 Entertainment",
+   "debutDate": "2021-06-08",
+   "naverQuery": "이펙스 EPEX",
+   "matchNames": [
+    "이펙스",
+    "EPEX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "EPEX"
+  },
+  {
+   "id": "tempest",
+   "koreanName": "템페스트",
+   "englishName": "TEMPEST",
+   "ticker": "TEMPEST",
+   "groupType": "boy_group",
+   "agency": "YH ENTERTAINMENT",
+   "debutDate": "2022-03-02",
+   "naverQuery": "템페스트 TEMPEST",
+   "matchNames": [
+    "템페스트",
+    "TEMPEST"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TEMPEST"
+  },
+  {
+   "id": "8turn",
+   "koreanName": "에잇턴",
+   "englishName": "8TURN",
+   "ticker": "8TURN",
+   "groupType": "boy_group",
+   "agency": "MNH Entertainment",
+   "debutDate": "2023-01-30",
+   "naverQuery": "에잇턴 8TURN",
+   "matchNames": [
+    "에잇턴",
+    "8TURN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "8TURN"
+  },
+  {
+   "id": "younite",
+   "koreanName": "유나이트",
+   "englishName": "YOUNITE",
+   "ticker": "YOUNITE",
+   "groupType": "boy_group",
+   "agency": "PARA MUSIC",
+   "debutDate": "2022-04-20",
+   "naverQuery": "유나이트 YOUNITE",
+   "matchNames": [
+    "유나이트",
+    "YOUNITE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "YOUNITE"
+  },
+  {
+   "id": "wjsn",
+   "koreanName": "우주소녀",
+   "englishName": "WJSN",
+   "ticker": "WJSN",
+   "groupType": "girl_group",
+   "agency": "Starship Entertainment",
+   "debutDate": "2016-02-25",
+   "naverQuery": "우주소녀 WJSN Cosmic Girls",
+   "matchNames": [
+    "우주소녀",
+    "WJSN",
+    "Cosmic Girls"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WJSN"
+  },
+  {
+   "id": "kiiikiii",
+   "koreanName": "키키",
+   "englishName": "KiiiKiii",
+   "ticker": "KIIIKIII",
+   "groupType": "girl_group",
+   "agency": "Starship Entertainment",
+   "debutDate": null,
+   "naverQuery": "키키 KiiiKiii",
+   "matchNames": [
+    "키키",
+    "KiiiKiii"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KiiiKiii"
+  },
+  {
+   "id": "alldayproject",
+   "koreanName": "올데이 프로젝트",
+   "englishName": "ALLDAY PROJECT",
+   "ticker": "ADP",
+   "groupType": "mixed",
+   "agency": "THEBLACKLABEL",
+   "debutDate": null,
+   "naverQuery": "올데이 프로젝트 ALLDAY PROJECT",
+   "matchNames": [
+    "올데이 프로젝트",
+    "ALLDAY PROJECT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ALLDAY PROJECT"
+  },
+  {
+   "id": "cortis",
+   "koreanName": "코르티스",
+   "englishName": "CORTIS",
+   "ticker": "CORTIS",
+   "groupType": "boy_group",
+   "agency": "BIGHIT MUSIC",
+   "debutDate": null,
+   "naverQuery": "코르티스 CORTIS",
+   "matchNames": [
+    "코르티스",
+    "CORTIS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CORTIS"
+  },
+  {
+   "id": "buzz",
+   "koreanName": "버즈",
+   "englishName": "Buzz",
+   "ticker": "BUZZ",
+   "groupType": "boy_group",
+   "agency": "inNextTrend",
+   "debutDate": null,
+   "naverQuery": "버즈 Buzz 밴드",
+   "matchNames": [
+    "버즈",
+    "Buzz",
+    "BUZZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Buzz"
+  },
+  {
+   "id": "seeya",
+   "koreanName": "씨야",
+   "englishName": "SeeYa",
+   "ticker": "SEEYA",
+   "groupType": "girl_group",
+   "agency": "SeeYa Entertainment",
+   "debutDate": null,
+   "naverQuery": "씨야 SeeYa",
+   "matchNames": [
+    "씨야",
+    "SeeYa",
+    "SEEYA"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SeeYa"
+  },
+  {
+   "id": "davichi",
+   "koreanName": "다비치",
+   "englishName": "Davichi",
+   "ticker": "DAVICHI",
+   "groupType": "girl_group",
+   "agency": "CAM WITH US",
+   "debutDate": null,
+   "naverQuery": "다비치 Davichi",
+   "matchNames": [
+    "다비치",
+    "Davichi",
+    "DAVICHI"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Davichi"
+  },
+  {
+   "id": "jannabi",
+   "koreanName": "잔나비",
+   "englishName": "Jannabi",
+   "ticker": "JANNABI",
+   "groupType": "boy_group",
+   "agency": "Peponi Music",
+   "debutDate": null,
+   "naverQuery": "잔나비 Jannabi",
+   "matchNames": [
+    "잔나비",
+    "Jannabi",
+    "JANNABI"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Jannabi"
+  },
+  {
+   "id": "gyeongseoyeji",
+   "koreanName": "경서예지",
+   "englishName": "GyeongseoYeji",
+   "ticker": "GYEONGSEOYEJI",
+   "groupType": "girl_group",
+   "agency": "Everglow",
+   "debutDate": null,
+   "naverQuery": "경서예지 GyeongseoYeji",
+   "matchNames": [
+    "경서예지",
+    "GyeongseoYeji",
+    "Gyeongseo Yeji"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "GyeongseoYeji"
+  },
+  {
+   "id": "nflying",
+   "koreanName": "엔플라잉",
+   "englishName": "N.Flying",
+   "ticker": "NFLYING",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": null,
+   "naverQuery": "엔플라잉 N.Flying",
+   "matchNames": [
+    "엔플라잉",
+    "N.Flying",
+    "N Flying",
+    "N.FLYING"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "N.Flying"
+  },
+  {
+   "id": "epikhigh",
+   "koreanName": "에픽하이",
+   "englishName": "EPIK HIGH",
+   "ticker": "EPIKHIGH",
+   "groupType": "boy_group",
+   "agency": "Ours Co.",
+   "debutDate": null,
+   "naverQuery": "에픽하이 EPIK HIGH",
+   "matchNames": [
+    "에픽하이",
+    "EPIK HIGH",
+    "Epik High"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "EPIK HIGH"
+  },
+  {
+   "id": "melomance",
+   "koreanName": "멜로망스",
+   "englishName": "MeloMance",
+   "ticker": "MELOMANCE",
+   "groupType": "boy_group",
+   "agency": "ABYSS COMPANY",
+   "debutDate": null,
+   "naverQuery": "멜로망스 MeloMance",
+   "matchNames": [
+    "멜로망스",
+    "MeloMance",
+    "MELOMANCE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MeloMance"
+  },
+  {
+   "id": "nerdconnection",
+   "koreanName": "너드커넥션",
+   "englishName": "Nerd Connection",
+   "ticker": "NERDCONNECTION",
+   "groupType": "boy_group",
+   "agency": "Your Summer",
+   "debutDate": null,
+   "naverQuery": "너드커넥션 Nerd Connection",
+   "matchNames": [
+    "너드커넥션",
+    "Nerd Connection",
+    "NERD CONNECTION"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Nerd Connection"
+  },
+  {
+   "id": "standingegg",
+   "koreanName": "스탠딩 에그",
+   "englishName": "Standing Egg",
+   "ticker": "STANDINGEGG",
+   "groupType": "boy_group",
+   "agency": "본엔터테인먼트",
+   "debutDate": null,
+   "naverQuery": "스탠딩에그 Standing Egg",
+   "matchNames": [
+    "스탠딩 에그",
+    "Standing Egg",
+    "스탠딩에그",
+    "STANDING EGG"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Standing Egg"
+  },
+  {
+   "id": "ioi",
+   "koreanName": "아이오아이",
+   "englishName": "I.O.I",
+   "ticker": "IOI",
+   "groupType": "girl_group",
+   "agency": "Swing Entertainment",
+   "debutDate": null,
+   "naverQuery": "아이오아이 I.O.I",
+   "matchNames": [
+    "아이오아이",
+    "I.O.I",
+    "IOI"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "I.O.I"
+  },
+  {
+   "id": "thenuts",
+   "koreanName": "더 넛츠",
+   "englishName": "The NuTs",
+   "ticker": "THENUTS",
+   "groupType": "boy_group",
+   "agency": "The NuTs Company",
+   "debutDate": null,
+   "naverQuery": "더 넛츠 The NuTs",
+   "matchNames": [
+    "더 넛츠",
+    "The NuTs",
+    "The Nuts"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "The NuTs"
+  },
+  {
+   "id": "idid",
+   "koreanName": "아이딧",
+   "englishName": "IDID",
+   "ticker": "IDID",
+   "groupType": "boy_group",
+   "agency": "Starship Entertainment",
+   "debutDate": null,
+   "naverQuery": "아이딧 IDID",
+   "matchNames": [
+    "아이딧",
+    "IDID"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "IDID"
+  },
+  {
+   "id": "aen",
+   "koreanName": "에이엔",
+   "englishName": "AEN",
+   "ticker": "AEN",
+   "groupType": "unknown",
+   "agency": "Starship Entertainment / Amuse",
+   "debutDate": null,
+   "naverQuery": "에이엔 AEN 스타쉽",
+   "matchNames": [
+    "에이엔",
+    "AEN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AEN"
+  },
+  {
+   "id": "ikon",
+   "koreanName": "아이콘",
+   "englishName": "iKON",
+   "ticker": "IKON",
+   "groupType": "boy_group",
+   "agency": "143 Entertainment",
+   "debutDate": null,
+   "naverQuery": "아이콘 iKON 143엔터테인먼트",
+   "matchNames": [
+    "아이콘",
+    "iKON",
+    "IKON"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "iKON"
+  },
+  {
+   "id": "82major",
+   "koreanName": "82메이저",
+   "englishName": "82MAJOR",
+   "ticker": "82MAJOR",
+   "groupType": "boy_group",
+   "agency": "GREAT M Entertainment",
+   "debutDate": null,
+   "naverQuery": "82메이저 82MAJOR",
+   "matchNames": [
+    "82메이저",
+    "82MAJOR"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "82MAJOR"
+  },
+  {
+   "id": "highlight",
+   "koreanName": "하이라이트",
+   "englishName": "HIGHLIGHT",
+   "ticker": "HIGHLIGHT",
+   "groupType": "boy_group",
+   "agency": "Around US Entertainment",
+   "debutDate": null,
+   "naverQuery": "하이라이트 HIGHLIGHT",
+   "matchNames": [
+    "하이라이트",
+    "HIGHLIGHT",
+    "Highlight"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "HIGHLIGHT"
+  },
+  {
+   "id": "ahof",
+   "koreanName": "아홉",
+   "englishName": "AHOF",
+   "ticker": "AHOF",
+   "groupType": "boy_group",
+   "agency": "F&F Entertainment",
+   "debutDate": null,
+   "naverQuery": "아홉 AHOF",
+   "matchNames": [
+    "아홉",
+    "AHOF"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AHOF"
+  },
+  {
+   "id": "ampersandone",
+   "koreanName": "앰퍼샌드원",
+   "englishName": "AMPERS&ONE",
+   "ticker": "AMPERSONE",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": null,
+   "naverQuery": "앰퍼샌드원 AMPERS&ONE",
+   "matchNames": [
+    "앰퍼샌드원",
+    "AMPERS&ONE",
+    "AMPERSAND ONE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AMPERS&ONE"
+  },
+  {
+   "id": "plave",
+   "koreanName": "플레이브",
+   "englishName": "PLAVE",
+   "ticker": "PLAVE",
+   "groupType": "boy_group",
+   "agency": "VLAST",
+   "debutDate": null,
+   "naverQuery": "플레이브 PLAVE",
+   "matchNames": [
+    "플레이브",
+    "PLAVE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "PLAVE"
+  },
+  {
+   "id": "touched",
+   "koreanName": "터치드",
+   "englishName": "TOUCHED",
+   "ticker": "TOUCHED",
+   "groupType": "boy_group",
+   "agency": "MPMG MUSIC",
+   "debutDate": null,
+   "naverQuery": "터치드 TOUCHED",
+   "matchNames": [
+    "터치드",
+    "TOUCHED",
+    "Touched"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TOUCHED"
+  },
+  {
+   "id": "and2ble",
+   "koreanName": "앤더블",
+   "englishName": "AND2BLE",
+   "ticker": "AND2BLE",
+   "groupType": "unknown",
+   "agency": "YH ENTERTAINMENT",
+   "debutDate": "2026-05-26",
+   "naverQuery": "앤더블 AND2BLE",
+   "matchNames": [
+    "앤더블",
+    "AND2BLE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AND2BLE"
+  },
+  {
+   "id": "lucy",
+   "koreanName": "루시",
+   "englishName": "LUCY",
+   "ticker": "LUCY",
+   "groupType": "boy_group",
+   "agency": "MYSTIC STORY",
+   "debutDate": null,
+   "naverQuery": "루시 LUCY 밴드",
+   "matchNames": [
+    "루시",
+    "LUCY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "LUCY"
+  },
+  {
+   "id": "nssign",
+   "koreanName": "엔싸인",
+   "englishName": "n.SSign",
+   "ticker": "NSSIGN",
+   "groupType": "boy_group",
+   "agency": "nCH Entertainment",
+   "debutDate": null,
+   "naverQuery": "엔싸인 n.SSign",
+   "matchNames": [
+    "엔싸인",
+    "n.SSign",
+    "nSSign",
+    "N.SSIGN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "n.SSign"
+  },
+  {
+   "id": "hori7on",
+   "koreanName": "호라이즌",
+   "englishName": "HORI7ON",
+   "ticker": "HORI7ON",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": "2023-07-24",
+   "naverQuery": "HORI7ON 호라이즌",
+   "matchNames": [
+    "호라이즌",
+    "HORI7ON",
+    "Hori7on"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "HORI7ON"
+  },
+  {
+   "id": "2pm",
+   "koreanName": "투피엠",
+   "englishName": "2PM",
+   "ticker": "2PM",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment",
+   "debutDate": null,
+   "naverQuery": "2PM 투피엠",
+   "matchNames": [
+    "투피엠",
+    "2PM"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "2PM"
+  },
+  {
+   "id": "boystory",
+   "koreanName": "보이스토리",
+   "englishName": "BOY STORY",
+   "ticker": "BOYSTORY",
+   "groupType": "boy_group",
+   "agency": "JYP Entertainment China",
+   "debutDate": "2018-09-21",
+   "naverQuery": "BOY STORY 보이스토리",
+   "matchNames": [
+    "보이스토리",
+    "BOY STORY",
+    "Boy Story"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BOY STORY"
+  },
+  {
+   "id": "girlset",
+   "koreanName": "걸셋",
+   "englishName": "GIRLSET",
+   "ticker": "GIRLSET",
+   "groupType": "girl_group",
+   "agency": "JYP Entertainment America",
+   "debutDate": null,
+   "naverQuery": "GIRLSET 걸셋",
+   "matchNames": [
+    "걸셋",
+    "GIRLSET",
+    "Girlset"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "GIRLSET"
+  },
+  {
+   "id": "babydontcry",
+   "koreanName": "베이비돈크라이",
+   "englishName": "Baby DONT Cry",
+   "ticker": "BABYDONTCRY",
+   "groupType": "girl_group",
+   "agency": "P NATION",
+   "debutDate": "2025-06-23",
+   "naverQuery": "베이비돈크라이 Baby DONT Cry",
+   "matchNames": [
+    "베이비돈크라이",
+    "Baby DONT Cry",
+    "BABY DONT CRY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Baby DONT Cry"
+  },
+  {
+   "id": "ftisland",
+   "koreanName": "FT아일랜드",
+   "englishName": "FTISLAND",
+   "ticker": "FTISLAND",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": null,
+   "naverQuery": "FT아일랜드 FTISLAND",
+   "matchNames": [
+    "FT아일랜드",
+    "FTISLAND",
+    "F.T. Island"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "FTISLAND"
+  },
+  {
+   "id": "cnblue",
+   "koreanName": "씨엔블루",
+   "englishName": "CNBLUE",
+   "ticker": "CNBLUE",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": null,
+   "naverQuery": "씨엔블루 CNBLUE",
+   "matchNames": [
+    "씨엔블루",
+    "CNBLUE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CNBLUE"
+  },
+  {
+   "id": "sf9",
+   "koreanName": "에스에프나인",
+   "englishName": "SF9",
+   "ticker": "SF9",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": null,
+   "naverQuery": "SF9 에스에프나인",
+   "matchNames": [
+    "에스에프나인",
+    "SF9"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SF9"
+  },
+  {
+   "id": "hifiunicorn",
+   "koreanName": "하이파이유니콘",
+   "englishName": "Hi-Fi Un!corn",
+   "ticker": "HIFIUNICORN",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": "2023-06-26",
+   "naverQuery": "하이파이유니콘 Hi-Fi Un!corn",
+   "matchNames": [
+    "하이파이유니콘",
+    "Hi-Fi Un!corn",
+    "Hi-Fi Unicorn"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Hi-Fi Un!corn"
+  },
+  {
+   "id": "axmxp",
+   "koreanName": "에이엑스엠엑스피",
+   "englishName": "AxMxP",
+   "ticker": "AXMXP",
+   "groupType": "boy_group",
+   "agency": "FNC Entertainment",
+   "debutDate": "2025-09-10",
+   "naverQuery": "AxMxP 에이엑스엠엑스피",
+   "matchNames": [
+    "에이엑스엠엑스피",
+    "AxMxP"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AxMxP"
+  },
+  {
+   "id": "goldenchild",
+   "koreanName": "골든차일드",
+   "englishName": "GOLDEN CHILD",
+   "ticker": "GOLDENCHILD",
+   "groupType": "boy_group",
+   "agency": "Woollim Entertainment",
+   "debutDate": "2017-08-28",
+   "naverQuery": "골든차일드 GOLDEN CHILD",
+   "matchNames": [
+    "골든차일드",
+    "GOLDEN CHILD",
+    "Golden Child"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "GOLDEN CHILD"
+  },
+  {
+   "id": "drippin",
+   "koreanName": "드리핀",
+   "englishName": "DRIPPIN",
+   "ticker": "DRIPPIN",
+   "groupType": "boy_group",
+   "agency": "Woollim Entertainment",
+   "debutDate": "2020-10-28",
+   "naverQuery": "드리핀 DRIPPIN",
+   "matchNames": [
+    "드리핀",
+    "DRIPPIN",
+    "Drippin"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "DRIPPIN"
+  },
+  {
+   "id": "unchild",
+   "koreanName": "언차일드",
+   "englishName": "UNCHILD",
+   "ticker": "UNCHILD",
+   "groupType": "unknown",
+   "agency": "High Up Entertainment",
+   "debutDate": "2026-04-21",
+   "naverQuery": "언차일드 UNCHILD",
+   "matchNames": [
+    "언차일드",
+    "UNCHILD"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "UNCHILD"
+  },
+  {
+   "id": "onewe",
+   "koreanName": "원위",
+   "englishName": "ONEWE",
+   "ticker": "ONEWE",
+   "groupType": "boy_group",
+   "agency": "RBW",
+   "debutDate": null,
+   "naverQuery": "원위 ONEWE",
+   "matchNames": [
+    "원위",
+    "ONEWE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ONEWE"
+  },
+  {
+   "id": "purplekiss",
+   "koreanName": "퍼플키스",
+   "englishName": "PURPLE KISS",
+   "ticker": "PURPLEKISS",
+   "groupType": "girl_group",
+   "agency": "RBW",
+   "debutDate": null,
+   "naverQuery": "퍼플키스 PURPLE KISS",
+   "matchNames": [
+    "퍼플키스",
+    "PURPLE KISS",
+    "PURPLE K!SS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "PURPLE KISS"
+  },
+  {
+   "id": "alphadriveone",
+   "koreanName": "알파드라이브원",
+   "englishName": "ALPHA DRIVE ONE",
+   "ticker": "ALPHADRIVEONE",
+   "groupType": "boy_group",
+   "agency": "WAKEONE",
+   "debutDate": null,
+   "naverQuery": "알파드라이브원 ALPHA DRIVE ONE",
+   "matchNames": [
+    "알파드라이브원",
+    "ALPHA DRIVE ONE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ALPHA DRIVE ONE"
+  },
+  {
+   "id": "lun8",
+   "koreanName": "루네이트",
+   "englishName": "LUN8",
+   "ticker": "LUN8",
+   "groupType": "boy_group",
+   "agency": "Fantagio",
+   "debutDate": "2023-06-15",
+   "naverQuery": "루네이트 LUN8",
+   "matchNames": [
+    "루네이트",
+    "LUN8"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "LUN8"
+  },
+  {
+   "id": "astro",
+   "koreanName": "아스트로",
+   "englishName": "ASTRO",
+   "ticker": "ASTRO",
+   "groupType": "boy_group",
+   "agency": "Fantagio",
+   "debutDate": "2016-02-23",
+   "naverQuery": "아스트로 ASTRO",
+   "matchNames": [
+    "아스트로",
+    "ASTRO",
+    "Astro"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ASTRO"
+  },
+  {
+   "id": "flareu",
+   "koreanName": "플레어 유",
+   "englishName": "FLARE U",
+   "ticker": "FLAREU",
+   "groupType": "unknown",
+   "agency": "FNC Entertainment",
+   "debutDate": "2026-05-13",
+   "naverQuery": "플레어 유 FLARE U",
+   "matchNames": [
+    "플레어 유",
+    "FLARE U",
+    "플레어유",
+    "Flare U"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "FLARE U"
+  },
+  {
+   "id": "modyssey",
+   "koreanName": "모디세이",
+   "englishName": "MODYSSEY",
+   "ticker": "MODYSSEY",
+   "groupType": "unknown",
+   "agency": "ONECEAD",
+   "debutDate": "2026-04-13",
+   "naverQuery": "모디세이 MODYSSEY",
+   "matchNames": [
+    "모디세이",
+    "MODYSSEY",
+    "Modyssey"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MODYSSEY"
+  },
+  {
+   "id": "lightsum",
+   "koreanName": "라잇썸",
+   "englishName": "LIGHTSUM",
+   "ticker": "LIGHTSUM",
+   "groupType": "girl_group",
+   "agency": "Cube Entertainment",
+   "debutDate": "2021-06-10",
+   "naverQuery": "라잇썸 LIGHTSUM",
+   "matchNames": [
+    "라잇썸",
+    "LIGHTSUM",
+    "Lightsum"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "LIGHTSUM"
+  },
+  {
+   "id": "pentagon",
+   "koreanName": "펜타곤",
+   "englishName": "PENTAGON",
+   "ticker": "PENTAGON",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": "2016-10-10",
+   "naverQuery": "펜타곤 PENTAGON 10주년",
+   "matchNames": [
+    "펜타곤",
+    "PENTAGON",
+    "Pentagon"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "PENTAGON"
+  },
+  {
+   "id": "peppertones",
+   "koreanName": "페퍼톤스",
+   "englishName": "PEPPERTONES",
+   "ticker": "PEPPERTONES",
+   "groupType": "boy_group",
+   "agency": "Antenna",
+   "debutDate": null,
+   "naverQuery": "페퍼톤스 PEPPERTONES",
+   "matchNames": [
+    "페퍼톤스",
+    "PEPPERTONES",
+    "Peppertones"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "PEPPERTONES"
+  },
+  {
+   "id": "dragonpony",
+   "koreanName": "드래곤포니",
+   "englishName": "Dragon Pony",
+   "ticker": "DRAGONPONY",
+   "groupType": "boy_group",
+   "agency": "Antenna",
+   "debutDate": "2024-09-26",
+   "naverQuery": "드래곤포니 Dragon Pony",
+   "matchNames": [
+    "드래곤포니",
+    "Dragon Pony",
+    "DRAGON PONY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Dragon Pony"
+  },
+  {
+   "id": "oddyouth",
+   "koreanName": "오드유스",
+   "englishName": "ODD YOUTH",
+   "ticker": "ODDYOUTH",
+   "groupType": "boy_group",
+   "agency": "TOP Media",
+   "debutDate": "2024-11-01",
+   "naverQuery": "오드유스 ODD YOUTH",
+   "matchNames": [
+    "오드유스",
+    "ODD YOUTH",
+    "Odd Youth"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ODD YOUTH"
+  },
+  {
+   "id": "mcnd",
+   "koreanName": "엠씨엔디",
+   "englishName": "MCND",
+   "ticker": "MCND",
+   "groupType": "boy_group",
+   "agency": "TOP Media",
+   "debutDate": "2020-02-27",
+   "naverQuery": "MCND 엠씨엔디",
+   "matchNames": [
+    "엠씨엔디",
+    "MCND"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MCND"
+  },
+  {
+   "id": "teentop",
+   "koreanName": "틴탑",
+   "englishName": "TEEN TOP",
+   "ticker": "TEENTOP",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": null,
+   "naverQuery": "틴탑 TEEN TOP",
+   "matchNames": [
+    "틴탑",
+    "TEEN TOP",
+    "TEENTOP"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TEEN TOP"
+  },
+  {
+   "id": "kara",
+   "koreanName": "카라",
+   "englishName": "KARA",
+   "ticker": "KARA",
+   "groupType": "girl_group",
+   "agency": null,
+   "debutDate": null,
+   "naverQuery": "카라 KARA 걸그룹",
+   "matchNames": [
+    "카라",
+    "KARA",
+    "Kara"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KARA"
+  },
+  {
+   "id": "b1a4",
+   "koreanName": "비원에이포",
+   "englishName": "B1A4",
+   "ticker": "B1A4",
+   "groupType": "boy_group",
+   "agency": "Hieutpieup Co., Ltd.",
+   "debutDate": null,
+   "naverQuery": "비원에이포 B1A4",
+   "matchNames": [
+    "비원에이포",
+    "B1A4"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "B1A4"
+  },
+  {
+   "id": "kard",
+   "koreanName": "카드",
+   "englishName": "KARD",
+   "ticker": "KARD",
+   "groupType": "mixed",
+   "agency": "DSP Media",
+   "debutDate": null,
+   "naverQuery": "카드 KARD 혼성그룹",
+   "matchNames": [
+    "카드",
+    "KARD"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KARD"
+  },
+  {
+   "id": "csr",
+   "koreanName": "첫사랑",
+   "englishName": "CSR",
+   "ticker": "CSR",
+   "groupType": "girl_group",
+   "agency": null,
+   "debutDate": "2022-07-27",
+   "naverQuery": "첫사랑 CSR 걸그룹",
+   "matchNames": [
+    "첫사랑",
+    "CSR"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CSR"
+  },
+  {
+   "id": "youngposse",
+   "koreanName": "영파씨",
+   "englishName": "YOUNG POSSE",
+   "ticker": "YOUNGPOSSE",
+   "groupType": "girl_group",
+   "agency": "DSP Media / BEATS Entertainment",
+   "debutDate": "2023-10-18",
+   "naverQuery": "영파씨 YOUNG POSSE",
+   "matchNames": [
+    "영파씨",
+    "YOUNG POSSE",
+    "Young Posse"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "YOUNG POSSE"
+  },
+  {
+   "id": "xlov",
+   "koreanName": "엑스러브",
+   "englishName": "XLOV",
+   "ticker": "XLOV",
+   "groupType": "boy_group",
+   "agency": "StrangeLab",
+   "debutDate": null,
+   "naverQuery": "엑스러브 XLOV",
+   "matchNames": [
+    "엑스러브",
+    "XLOV"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "XLOV"
+  },
+  {
+   "id": "secret",
+   "koreanName": "시크릿",
+   "englishName": "SECRET",
+   "ticker": "SECRET",
+   "groupType": "girl_group",
+   "agency": null,
+   "debutDate": null,
+   "naverQuery": "시크릿 SECRET 걸그룹 2026",
+   "matchNames": [
+    "시크릿",
+    "SECRET",
+    "Secret"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SECRET"
+  },
+  {
+   "id": "dkb",
+   "koreanName": "다크비",
+   "englishName": "DKB",
+   "ticker": "DKB",
+   "groupType": "boy_group",
+   "agency": "Brave Entertainment",
+   "debutDate": "2020-02-03",
+   "naverQuery": "다크비 DKB 브레이브엔터테인먼트",
+   "matchNames": [
+    "다크비",
+    "DKB"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "DKB"
+  },
+  {
+   "id": "candyshop",
+   "koreanName": "캔디샵",
+   "englishName": "Candy Shop",
+   "ticker": "CANDYSHOP",
+   "groupType": "girl_group",
+   "agency": "Brave Entertainment",
+   "debutDate": "2024-03-27",
+   "naverQuery": "캔디샵 Candy Shop 브레이브엔터테인먼트",
+   "matchNames": [
+    "캔디샵",
+    "Candy Shop",
+    "CANDY SHOP"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Candy Shop"
+  },
+  {
+   "id": "tunexx",
+   "koreanName": "튜넥스",
+   "englishName": "TUNEXX",
+   "ticker": "TUNEXX",
+   "groupType": "boy_group",
+   "agency": "IST Entertainment",
+   "debutDate": "2026-03-03",
+   "naverQuery": "튜넥스 TUNEXX IST엔터테인먼트",
+   "matchNames": [
+    "튜넥스",
+    "TUNEXX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TUNEXX"
+  },
+  {
+   "id": "badvillain",
+   "koreanName": "배드빌런",
+   "englishName": "BADVILLAIN",
+   "ticker": "BADVILLAIN",
+   "groupType": "girl_group",
+   "agency": "Big Planet Made",
+   "debutDate": "2024-06-03",
+   "naverQuery": "배드빌런 BADVILLAIN 빅플래닛메이드",
+   "matchNames": [
+    "배드빌런",
+    "BADVILLAIN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BADVILLAIN"
+  },
+  {
+   "id": "naze",
+   "koreanName": "네이즈",
+   "englishName": "NAZE",
+   "ticker": "NAZE",
+   "groupType": "unknown",
+   "agency": "C9 Entertainment",
+   "debutDate": "2026-05-04",
+   "naverQuery": "네이즈 NAZE C9엔터테인먼트",
+   "matchNames": [
+    "네이즈",
+    "NAZE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NAZE"
+  },
+  {
+   "id": "h1key",
+   "koreanName": "하이키",
+   "englishName": "H1-KEY",
+   "ticker": "H1KEY",
+   "groupType": "girl_group",
+   "agency": "CHOI CREATIVE LAB",
+   "debutDate": "2022-01-05",
+   "naverQuery": "하이키 H1-KEY 초이크리에이티브랩",
+   "matchNames": [
+    "하이키",
+    "H1-KEY",
+    "H1KEY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "H1-KEY"
+  },
+  {
+   "id": "newbeat",
+   "koreanName": "뉴비트",
+   "englishName": "NEWBEAT",
+   "ticker": "NEWBEAT",
+   "groupType": "boy_group",
+   "agency": "BEAT INTERACTIVE",
+   "debutDate": "2025-03-24",
+   "naverQuery": "뉴비트 NEWBEAT 비트인터렉티브",
+   "matchNames": [
+    "뉴비트",
+    "NEWBEAT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NEWBEAT"
+  },
+  {
+   "id": "saymyname",
+   "koreanName": "세이마이네임",
+   "englishName": "SAY MY NAME",
+   "ticker": "SAYMYNAME",
+   "groupType": "girl_group",
+   "agency": "iNKODE Entertainment",
+   "debutDate": "2024-10-16",
+   "naverQuery": "세이마이네임 SAY MY NAME 인코드",
+   "matchNames": [
+    "세이마이네임",
+    "SAY MY NAME",
+    "Say My Name"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "SAY MY NAME"
+  },
+  {
+   "id": "keyvitup",
+   "koreanName": "키빗업",
+   "englishName": "KEYVITUP",
+   "ticker": "KEYVITUP",
+   "groupType": "unknown",
+   "agency": "iNKODE Entertainment",
+   "debutDate": "2026-04-08",
+   "naverQuery": "키빗업 KEYVITUP 인코드",
+   "matchNames": [
+    "키빗업",
+    "KEYVITUP"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "KEYVITUP"
+  },
+  {
+   "id": "vayonn",
+   "koreanName": "베이온",
+   "englishName": "VAYONN",
+   "ticker": "VAYONN",
+   "groupType": "unknown",
+   "agency": "iNKODE Entertainment",
+   "debutDate": "2026-07-06",
+   "naverQuery": "베이온 VAYONN 인코드",
+   "matchNames": [
+    "베이온",
+    "VAYONN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "VAYONN"
+  },
+  {
+   "id": "fiftyfifty",
+   "koreanName": "피프티피프티",
+   "englishName": "FIFTY FIFTY",
+   "ticker": "FIFTYFIFTY",
+   "groupType": "girl_group",
+   "agency": "ATTRAKT",
+   "debutDate": "2022-11-18",
+   "naverQuery": "피프티피프티 FIFTY FIFTY 어트랙트",
+   "matchNames": [
+    "피프티피프티",
+    "FIFTY FIFTY",
+    "피프티 피프티",
+    "FIFTYFIFTY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "FIFTY FIFTY"
+  },
+  {
+   "id": "ichillin",
+   "koreanName": "아이칠린",
+   "englishName": "ICHILLIN'",
+   "ticker": "ICHILLIN",
+   "groupType": "girl_group",
+   "agency": "KM Entertainment",
+   "debutDate": "2021-09-08",
+   "naverQuery": "아이칠린 ICHILLIN KM엔터테인먼트",
+   "matchNames": [
+    "아이칠린",
+    "ICHILLIN'",
+    "ICHILLIN"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ICHILLIN'"
+  },
+  {
+   "id": "asc2nt",
+   "koreanName": "어센트",
+   "englishName": "ASC2NT",
+   "ticker": "ASC2NT",
+   "groupType": "boy_group",
+   "agency": "NEW WAYS COMPANY",
+   "debutDate": "2024-05-07",
+   "naverQuery": "어센트 ASC2NT 뉴웨이즈컴퍼니",
+   "matchNames": [
+    "어센트",
+    "ASC2NT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ASC2NT"
+  },
+  {
+   "id": "evnne",
+   "koreanName": "이븐",
+   "englishName": "EVNNE",
+   "ticker": "EVNNE",
+   "groupType": "boy_group",
+   "agency": "Jellyfish Entertainment",
+   "debutDate": "2023-09-19",
+   "naverQuery": "이븐 EVNNE 젤리피쉬엔터테인먼트",
+   "matchNames": [
+    "이븐",
+    "EVNNE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "EVNNE"
+  },
+  {
+   "id": "vixx",
+   "koreanName": "빅스",
+   "englishName": "VIXX",
+   "ticker": "VIXX",
+   "groupType": "boy_group",
+   "agency": "Jellyfish Entertainment",
+   "debutDate": "2012-05-24",
+   "naverQuery": "빅스 VIXX 젤리피쉬엔터테인먼트",
+   "matchNames": [
+    "빅스",
+    "VIXX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "VIXX"
+  },
+  {
+   "id": "verivery",
+   "koreanName": "베리베리",
+   "englishName": "VERIVERY",
+   "ticker": "VERIVERY",
+   "groupType": "boy_group",
+   "agency": "Jellyfish Entertainment",
+   "debutDate": "2019-01-09",
+   "naverQuery": "베리베리 VERIVERY 젤리피쉬엔터테인먼트",
+   "matchNames": [
+    "베리베리",
+    "VERIVERY"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "VERIVERY"
+  },
+  {
+   "id": "idntt",
+   "koreanName": "아이덴티티",
+   "englishName": "idntt",
+   "ticker": "IDNTT",
+   "groupType": "boy_group",
+   "agency": "MODHAUS",
+   "debutDate": null,
+   "naverQuery": "아이덴티티 idntt 모드하우스",
+   "matchNames": [
+    "아이덴티티",
+    "idntt",
+    "IDNTT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "idntt"
+  },
+  {
+   "id": "onepact",
+   "koreanName": "원팩트",
+   "englishName": "ONE PACT",
+   "ticker": "ONEPACT",
+   "groupType": "boy_group",
+   "agency": "ARMADA ENT",
+   "debutDate": "2023-11-30",
+   "naverQuery": "원팩트 ONE PACT ARMADA ENT",
+   "matchNames": [
+    "원팩트",
+    "ONE PACT",
+    "ONEPACT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ONE PACT"
+  },
+  {
+   "id": "madein",
+   "koreanName": "메이딘",
+   "englishName": "MADEIN",
+   "ticker": "MADEIN",
+   "groupType": "girl_group",
+   "agency": "143 Entertainment",
+   "debutDate": "2024-09-03",
+   "naverQuery": "메이딘 MADEIN 143엔터테인먼트",
+   "matchNames": [
+    "메이딘",
+    "MADEIN",
+    "라임라잇",
+    "LIMELIGHT",
+    "Limelight"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "MADEIN"
+  },
+  {
+   "id": "waker",
+   "koreanName": "웨이커",
+   "englishName": "WAKER",
+   "ticker": "WAKER",
+   "groupType": "boy_group",
+   "agency": "Howling Entertainment",
+   "debutDate": "2024-01-08",
+   "naverQuery": "웨이커 WAKER 하울링엔터테인먼트",
+   "matchNames": [
+    "웨이커",
+    "WAKER"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WAKER"
+  },
+  {
+   "id": "dxmon",
+   "koreanName": "다이몬",
+   "englishName": "DXMON",
+   "ticker": "DXMON",
+   "groupType": "boy_group",
+   "agency": "H Music Entertainment",
+   "debutDate": "2024-01-17",
+   "naverQuery": "다이몬 DXMON 에이치뮤직엔터테인먼트",
+   "matchNames": [
+    "다이몬",
+    "DXMON"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "DXMON"
+  },
+  {
+   "id": "classy",
+   "koreanName": "클라씨",
+   "englishName": "CLASS:y",
+   "ticker": "CLASSY",
+   "groupType": "girl_group",
+   "agency": "K-TIGERS Entertainment",
+   "debutDate": null,
+   "naverQuery": "클라씨 CLASS:y K타이거즈 엔터테인먼트",
+   "matchNames": [
+    "클라씨",
+    "CLASS:y",
+    "CLASSy",
+    "CLASS:Y"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CLASS:y"
+  },
+  {
+   "id": "vvup",
+   "koreanName": "비비업",
+   "englishName": "VVUP",
+   "ticker": "VVUP",
+   "groupType": "girl_group",
+   "agency": "egoENT",
+   "debutDate": "2024-04-01",
+   "naverQuery": "비비업 VVUP egoENT",
+   "matchNames": [
+    "비비업",
+    "VVUP"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "VVUP"
+  },
+  {
+   "id": "fantasyboys",
+   "koreanName": "판타지 보이즈",
+   "englishName": "FANTASY BOYS",
+   "ticker": "FANTASYBOYS",
+   "groupType": "boy_group",
+   "agency": "PocketDol Studio",
+   "debutDate": "2023-09-21",
+   "naverQuery": "판타지 보이즈 FANTASY BOYS 포켓돌스튜디오",
+   "matchNames": [
+    "판타지 보이즈",
+    "FANTASY BOYS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "FANTASY BOYS"
+  },
+  {
+   "id": "pow",
+   "koreanName": "파우",
+   "englishName": "POW",
+   "ticker": "POW",
+   "groupType": "boy_group",
+   "agency": "GRID Entertainment",
+   "debutDate": "2023-10-11",
+   "naverQuery": "파우 POW 그리드 엔터테인먼트",
+   "matchNames": [
+    "파우",
+    "POW"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "POW"
+  },
+  {
+   "id": "whib",
+   "koreanName": "휘브",
+   "englishName": "WHIB",
+   "ticker": "WHIB",
+   "groupType": "boy_group",
+   "agency": "C-JeS Studio",
+   "debutDate": "2023-11-08",
+   "naverQuery": "휘브 WHIB 씨제스 스튜디오",
+   "matchNames": [
+    "휘브",
+    "WHIB"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WHIB"
+  },
+  {
+   "id": "aimers",
+   "koreanName": "에이머스",
+   "englishName": "AIMERS",
+   "ticker": "AIMERS",
+   "groupType": "boy_group",
+   "agency": "HYPER RHYTHM",
+   "debutDate": "2022-11-17",
+   "naverQuery": "에이머스 AIMERS 하이퍼리듬",
+   "matchNames": [
+    "에이머스",
+    "AIMERS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AIMERS"
+  },
+  {
+   "id": "trendz",
+   "koreanName": "트렌드지",
+   "englishName": "TRENDZ",
+   "ticker": "TRENDZ",
+   "groupType": "boy_group",
+   "agency": "Global H Media",
+   "debutDate": "2022-01-05",
+   "naverQuery": "트렌드지 TRENDZ 글로벌에이치미디어",
+   "matchNames": [
+    "트렌드지",
+    "TRENDZ"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TRENDZ"
+  },
+  {
+   "id": "tiot",
+   "koreanName": "티아이오티",
+   "englishName": "TIOT",
+   "ticker": "TIOT",
+   "groupType": "boy_group",
+   "agency": "Redstart ENM",
+   "debutDate": "2024-04-22",
+   "naverQuery": "티아이오티 TIOT 레드스타트이엔엠",
+   "matchNames": [
+    "티아이오티",
+    "TIOT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "TIOT"
+  },
+  {
+   "id": "blitzers",
+   "koreanName": "블리처스",
+   "englishName": "BLITZERS",
+   "ticker": "BLITZERS",
+   "groupType": "boy_group",
+   "agency": "WUZO Entertainment",
+   "debutDate": "2021-05-12",
+   "naverQuery": "블리처스 BLITZERS 우조엔터테인먼트",
+   "matchNames": [
+    "블리처스",
+    "BLITZERS"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "BLITZERS"
+  },
+  {
+   "id": "justb",
+   "koreanName": "저스트비",
+   "englishName": "JUST B",
+   "ticker": "JUSTB",
+   "groupType": "boy_group",
+   "agency": "BLUEDOT Entertainment",
+   "debutDate": "2021-06-30",
+   "naverQuery": "저스트비 JUST B 블루닷엔터테인먼트",
+   "matchNames": [
+    "저스트비",
+    "JUST B",
+    "JUSTB"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "JUST B"
+  },
+  {
+   "id": "ghost9",
+   "koreanName": "고스트나인",
+   "englishName": "GHOST9",
+   "ticker": "GHOST9",
+   "groupType": "boy_group",
+   "agency": "Maroo Entertainment",
+   "debutDate": "2020-09-23",
+   "naverQuery": "고스트나인 GHOST9 마루기획",
+   "matchNames": [
+    "고스트나인",
+    "GHOST9"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "GHOST9"
+  },
+  {
+   "id": "wei",
+   "koreanName": "위아이",
+   "englishName": "WEi",
+   "ticker": "WEI",
+   "groupType": "boy_group",
+   "agency": "OUI Entertainment",
+   "debutDate": "2020-10-05",
+   "naverQuery": "위아이 WEi 위엔터테인먼트",
+   "matchNames": [
+    "위아이",
+    "WEi",
+    "WEI"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "WEi"
+  },
+  {
+   "id": "ntx",
+   "koreanName": "엔티엑스",
+   "englishName": "NTX",
+   "ticker": "NTX",
+   "groupType": "boy_group",
+   "agency": "Victory Company",
+   "debutDate": "2021-03-30",
+   "naverQuery": "엔티엑스 NTX 빅토리컴퍼니",
+   "matchNames": [
+    "엔티엑스",
+    "NTX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NTX"
+  },
+  {
+   "id": "ninei",
+   "koreanName": "나인아이",
+   "englishName": "NINE.i",
+   "ticker": "NINEI",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": "2022-03-30",
+   "naverQuery": "나인아이 NINE.i",
+   "matchNames": [
+    "나인아이",
+    "NINE.i",
+    "NINEI",
+    "NINE I"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "NINE.i"
+  },
+  {
+   "id": "omegax",
+   "koreanName": "오메가엑스",
+   "englishName": "OMEGA X",
+   "ticker": "OMEGAX",
+   "groupType": "boy_group",
+   "agency": "IPQ",
+   "debutDate": "2021-06-30",
+   "naverQuery": "오메가엑스 OMEGA X 아이피큐 IPQ",
+   "matchNames": [
+    "오메가엑스",
+    "OMEGA X",
+    "OMEGAX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "OMEGA X"
+  },
+  {
+   "id": "ab6ix",
+   "koreanName": "에이비식스",
+   "englishName": "AB6IX",
+   "ticker": "AB6IX",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": "2019-05-22",
+   "naverQuery": "에이비식스 AB6IX",
+   "matchNames": [
+    "에이비식스",
+    "AB6IX"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AB6IX"
+  },
+  {
+   "id": "balmingtiger",
+   "koreanName": "바밍타이거",
+   "englishName": "Balming Tiger",
+   "ticker": "BALMINGTIGER",
+   "groupType": "mixed",
+   "agency": "CAM WITH US",
+   "debutDate": null,
+   "naverQuery": "바밍타이거 Balming Tiger CAM WITH US",
+   "matchNames": [
+    "바밍타이거",
+    "Balming Tiger"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Balming Tiger"
+  },
+  {
+   "id": "silicagel",
+   "koreanName": "실리카겔",
+   "englishName": "Silica Gel",
+   "ticker": "SILICAGEL",
+   "groupType": "boy_group",
+   "agency": "CAM WITH US",
+   "debutDate": null,
+   "naverQuery": "실리카겔 Silica Gel CAM WITH US",
+   "matchNames": [
+    "실리카겔",
+    "Silica Gel"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "Silica Gel"
+  },
+  {
+   "id": "idiotape",
+   "koreanName": "이디오테잎",
+   "englishName": "IDIOTAPE",
+   "ticker": "IDIOTAPE",
+   "groupType": "boy_group",
+   "agency": "CAM WITH US",
+   "debutDate": null,
+   "naverQuery": "이디오테잎 IDIOTAPE CAM WITH US",
+   "matchNames": [
+    "이디오테잎",
+    "IDIOTAPE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "IDIOTAPE"
+  }
+ ]
+}
