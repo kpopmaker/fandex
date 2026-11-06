@@ -214,10 +214,16 @@ type GroupNews = {
 };
 
 async function collectGroupNews(group: Group): Promise<GroupNews> {
-  const query = AMBIGUOUS_IDS.has(group.id) ? group.naverQuery : group.koreanName;
+  // 흔한 단어 이름은 '한글명 영문명'을 함께 검색한다(기사는 보통 '그룹 카드(KARD)'처럼 둘 다 쓴다).
+  const query =
+    AMBIGUOUS_IDS.has(group.id) && group.englishName !== group.koreanName
+      ? `${group.koreanName} ${group.englishName}`
+      : group.koreanName;
   const matcher = MATCHERS.get(group.id)!;
   const cutoff = NOW - DAY_MS;
   const seen = new Set<string>();
+  // 같은 보도자료가 여러 매체에 그대로 실리면 한 건으로 센다.
+  const seenTitles = new Set<string>();
   const relevant: Array<{ item: NaverItem; time: number; text: string }> = [];
   let fetched = 0;
   let pages = 0;
@@ -238,6 +244,9 @@ async function collectGroupNews(group: Group): Promise<GroupNews> {
       if (!matcher.test(text)) continue;
       if (group.excludeKeywords.some((word) => text.includes(word))) continue;
       if (!containsAny(text, CONTEXT_WORDS)) continue;
+      const titleKey = title.replace(/[^0-9A-Za-z가-힣]/g, '').slice(0, 40);
+      if (seenTitles.has(titleKey)) continue;
+      seenTitles.add(titleKey);
       relevant.push({ item: { ...item, title }, time, text });
     }
     // 한 페이지(100건)가 모두 24시간 안이면 다음 페이지를 더 본다.
@@ -409,7 +418,11 @@ async function refreshChart(): Promise<void> {
       matchedGroups: Object.keys(pointsById).length,
     };
   } catch (error) {
-    report.sources.bugs = { status: 'failed', detail: (error as Error).message };
+    const cause = (error as Error & { cause?: { code?: string; message?: string } }).cause;
+    report.sources.bugs = {
+      status: 'failed',
+      detail: `${(error as Error).message}${cause ? ` (${cause.code ?? ''} ${cause.message ?? ''})` : ''}`,
+    };
   }
 }
 
@@ -591,8 +604,8 @@ function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
 async function main() {
   await Promise.all([refreshNews(), refreshChart(), refreshLastfm()]);
 
-  // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스와 Last.fm이 모두 있어야만 만든다.
-  if (state.divisor === null && (!state.news || !state.lastfm)) {
+  // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스·차트·Last.fm이 모두 있어야만 만든다.
+  if (state.divisor === null && (!state.news || !state.lastfm || !state.chart)) {
     console.log(JSON.stringify(report.sources));
     throw new Error('first snapshot needs both news and Last.fm data; nothing written');
   }

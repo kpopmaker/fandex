@@ -30,16 +30,35 @@ jobs:
       - name: Install
         run: npm ci --no-audit --no-fund
 
+      # 로그는 preview-shots 브랜치에도 남긴다(Actions 로그를 못 볼 때 확인용).
       - name: Lint
-        run: npx eslint app/page.tsx app/layout.tsx app/ranking app/artists/page.tsx "app/artists/[artistId]/page.tsx" app/compare/page.tsx app/methodology app/components/market lib/market
+        id: lint
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p shots
+          npx eslint app/page.tsx app/layout.tsx app/ranking app/artists/page.tsx "app/artists/[artistId]/page.tsx" app/compare/page.tsx app/methodology app/components/market lib/market scripts/market 2>&1 | tee shots/lint.log
 
       - name: Typecheck
-        run: npm run typecheck
+        id: typecheck
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run typecheck 2>&1 | tee shots/typecheck.log
 
       - name: Build
-        run: npm run build
+        id: build
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tail -60 | tee shots/build.log
 
       - name: Screenshots
+        id: shots
+        if: steps.build.outcome == 'success'
         run: |
           npx --yes playwright@1.56.1 install --with-deps chromium
           npm run start -- -p 3000 > server.log 2>&1 &
@@ -103,10 +122,8 @@ jobs:
           git commit -q -m "preview shots for ${GITHUB_SHA}"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" preview-shots:preview-shots
 
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: preview-shots
-          path: shots/
-          retention-days: 7
+      - name: Fail when a check failed
+        if: steps.lint.outcome != 'success' || steps.typecheck.outcome != 'success' || steps.build.outcome != 'success' || steps.shots.outcome == 'failure'
+        run: |
+          echo "lint=${{ steps.lint.outcome }} typecheck=${{ steps.typecheck.outcome }} build=${{ steps.build.outcome }} shots=${{ steps.shots.outcome }}"
+          exit 1
