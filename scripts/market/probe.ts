@@ -79,7 +79,15 @@ async function main() {
   report.melon = melon;
 
   const bugsPast = curl('https://music.bugs.co.kr/chart/track/day/total?chartdate=20261101');
-  report.bugsDayPast = { ok: bugsPast.ok, size: bugsPast.size, rows: (bugsPast.html.match(/trackid=/g) ?? []).length, dates: pageDates(bugsPast.html) };
+  const firstRank = bugsPast.html.search(/class="ranking"/);
+  report.bugsDayPast = {
+    ok: bugsPast.ok,
+    size: bugsPast.size,
+    rows: (bugsPast.html.match(/trackid=/gi) ?? []).length,
+    trCount: (bugsPast.html.match(/<tr/gi) ?? []).length,
+    dates: pageDates(bugsPast.html),
+    sample: firstRank > 0 ? bugsPast.html.slice(Math.max(0, firstRank - 1500), firstRank + 2500) : bugsPast.html.slice(0, 3000),
+  };
 
   // 네이버 뉴스: 그룹마다 최대 10페이지(1,000건)로 며칠 전까지 거슬러 갈 수 있는지
   const id = process.env.FANDEX_NAVER_NEWS_CLIENT_ID ?? '';
@@ -90,7 +98,7 @@ async function main() {
   const groups = universeFile.groups;
   let index = 0;
   await Promise.all(
-    Array.from({ length: 4 }, async () => {
+    Array.from({ length: 2 }, async () => {
       while (index < groups.length) {
         const group = groups[index++];
         const query = group.newsQueries.length ? group.newsQueries[0] : group.koreanName;
@@ -104,6 +112,11 @@ async function main() {
           );
           calls += 1;
           pages += 1;
+          if (response.status === 429) {
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            start -= 100;
+            continue;
+          }
           if (!response.ok) break;
           const body = (await response.json()) as { items?: Array<{ pubDate: string }> };
           const list = body.items ?? [];
@@ -113,7 +126,7 @@ async function main() {
             if (Number.isFinite(time)) oldest = Math.min(oldest, time);
           }
           if (list.length < 100 || now - oldest > 31 * 86400000) break;
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 250));
         }
         coverage[group.id] = { days: Math.round(((now - oldest) / 86400000) * 10) / 10, items, pages };
       }
