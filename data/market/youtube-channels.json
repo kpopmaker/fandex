@@ -1,0 +1,24 @@
+{
+ "version": "youtube-channels-v1",
+ "note": "사람이 확인한 그룹 공식 유튜브 채널. 수집기는 이 목록만 쓴다.",
+ "channels": {
+  "blackpink": {
+   "channelId": "UCOmHUn--16B90oW2L6FRR3A",
+   "title": "",
+   "source": "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
+   "verifiedAt": "2026-10-02"
+  },
+  "twice": {
+   "channelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
+   "title": "",
+   "source": "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
+   "verifiedAt": "2026-10-02"
+  },
+  "riize": {
+   "channelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+   "title": "",
+   "source": "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
+   "verifiedAt": "2026-10-02"
+  }
+ }
+}

@@ -1,23 +1,37 @@
 name: FANDEX market collect
 
-# 15분마다 실데이터를 모아 market-data 브랜치를 새로 만든다.
-# (사이트는 market-data 브랜치의 latest.json, history.json.gz를 읽는다)
+# 실데이터를 모아 market-data 브랜치를 새로 만든다(사이트가 latest.json, history.json.gz를 읽는다).
+#
+# 트리거
+# - Render 크론(매시 17분) → naver-news-blob-only-recurring-production-v1.yml → 여기(loop_minutes=44)
+#   한 번 불리면 약 45분 동안 새 15분 구간이 시작될 때마다 수집한다(:17, :30, :45, :00).
+# - GitHub 스케줄(매시 5분)은 예비. GitHub 스케줄은 자주 건너뛰어서 이것만으로는 15분 간격을 못 지킨다.
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '5 * * * *'
   workflow_dispatch:
+    inputs:
+      loop_minutes:
+        description: '몇 분 동안 15분마다 반복할지(0이면 한 번만)'
+        required: false
+        default: '0'
+  workflow_call:
+    inputs:
+      loop_minutes:
+        type: number
+        required: false
+        default: 0
 
 permissions:
   contents: write
 
-concurrency:
-  group: fandex-market-collect
-  cancel-in-progress: false
-
 jobs:
   collect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 60
+    concurrency:
+      group: fandex-market-collect
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,34 +41,48 @@ jobs:
         with:
           node-version: 22
 
-      - name: Load previous market data
-        run: |
-          mkdir -p market-prev
-          if git fetch --depth=1 origin market-data:refs/remotes/origin/market-data; then
-            git archive origin/market-data | tar -x -C market-prev
-          else
-            echo "No previous market data. Starting fresh."
-          fi
-
       - name: Collect
+        shell: bash
         env:
-          PREV_DIR: market-prev
-          OUT_DIR: market-out
+          LOOP_MINUTES: ${{ inputs.loop_minutes || 0 }}
           FANDEX_NAVER_NEWS_CLIENT_ID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
           FANDEX_NAVER_NEWS_CLIENT_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           # 벅스처럼 중간 인증서를 빠뜨리는 사이트도 받을 수 있게 시스템 인증서를 쓴다.
           NODE_OPTIONS: --use-system-ca
-        run: npx --yes tsx@4.23.12 scripts/market/collect.ts
-
-      - name: Publish market-data branch
-        shell: bash
+          PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
         run: |
-          set -euo pipefail
-          cd market-out
-          git init -q -b market-data
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -q -m "market data $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" market-data:market-data
+          set -uo pipefail
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          collect_once() {
+            rm -rf market-prev market-out
+            mkdir -p market-prev
+            # 이전 데이터를 못 받으면 이번 구간은 건너뛴다(빈 상태로 돌면 기록이 처음부터 다시 시작된다).
+            git fetch -q --depth=1 origin +market-data:refs/remotes/origin/market-data || return 1
+            git archive origin/market-data | tar -x -C market-prev || return 1
+            PREV_DIR=market-prev OUT_DIR=market-out npx --yes tsx@4.23.12 scripts/market/collect.ts || return 1
+            (
+              cd market-out
+              git init -q -b market-data
+              git add -A
+              git commit -q -m "market data $(date -u +%Y-%m-%dT%H:%MZ)"
+              git push -q -f "$PUSH_URL" market-data:market-data
+            )
+          }
+
+          deadline=$(( $(date +%s) + LOOP_MINUTES * 60 ))
+          last_slot=""
+          failures=0
+          while true; do
+            slot=$(( $(date +%s) / 900 ))
+            if [ "$slot" != "$last_slot" ]; then
+              echo "::group::collect slot $slot ($(date -u +%H:%MZ))"
+              if collect_once; then last_slot=$slot; else failures=$((failures + 1)); last_slot=$slot; fi
+              echo "::endgroup::"
+            fi
+            [ "$(date +%s)" -ge "$deadline" ] && break
+            sleep 30
+          done
+          [ "$failures" -eq 0 ]

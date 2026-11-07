@@ -75,7 +75,6 @@ jobs:
             ['artists', '/artists'],
             ['artist', '/artists/aespa'],
             ['compare', '/compare?ids=aespa,ive,riize'],
-            ['methodology', '/methodology'],
           ];
           const browser = await chromium.launch();
           const errors = [];

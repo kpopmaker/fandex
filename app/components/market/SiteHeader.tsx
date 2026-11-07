@@ -10,7 +10,6 @@ const NAV = [
   { href: '/ranking', label: '랭킹' },
   { href: '/artists', label: '아티스트' },
   { href: '/compare', label: '비교' },
-  { href: '/methodology', label: '산정 방식' },
 ];
 
 function isActive(pathname: string, href: string) {

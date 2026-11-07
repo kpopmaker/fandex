@@ -1,0 +1,49 @@
+name: FANDEX YouTube channel resolve
+
+# 177팀 공식 유튜브 채널 후보를 찾아 youtube-resolve 브랜치에 쌓는다.
+# 검색은 하루 할당량(약 100번)이 있어서 며칠에 나눠 돈다. 사람이 확인한 결과는 data/market/youtube-channels.json으로 옮긴다.
+on:
+  schedule:
+    # 할당량은 태평양 시간 자정(한국 16~17시)에 초기화된다.
+    - cron: '20 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fandex-youtube-resolve
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolve
+        shell: bash
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.FANDEX_SNS_FANDOM_YOUTUBE_API_KEY }}
+          PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+        run: |
+          set -euo pipefail
+          mkdir -p yt-prev
+          if git fetch -q --depth=1 origin +youtube-resolve:refs/remotes/origin/youtube-resolve; then
+            git archive origin/youtube-resolve | tar -x -C yt-prev
+          fi
+          PREV_DIR=yt-prev OUT_DIR=yt-out npx --yes tsx@4.23.12 scripts/market/resolve-youtube.ts
+          cd yt-out
+          git init -q -b youtube-resolve
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "youtube resolve $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "$PUSH_URL" youtube-resolve:youtube-resolve
