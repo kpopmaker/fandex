@@ -1,0 +1,622 @@
+{
+ "runAt": 1794083422578,
+ "slotTime": 1794083400000,
+ "sources": {
+  "melon": {
+   "status": "cached",
+   "at": 1794081627293
+  },
+  "lastfm": {
+   "status": "cached",
+   "detail": "2026-11-08"
+  },
+  "youtube": {
+   "status": "cached",
+   "detail": "2026-11-08"
+  },
+  "naver": {
+   "status": "ok",
+   "at": 1794083422578,
+   "calls": 203,
+   "pages": 203,
+   "fetched": 20101,
+   "failures": [],
+   "failureCount": 0,
+   "deepFetched": [],
+   "diagnostics": {
+    "itzy": {
+     "queries": [
+      "있지 ITZY"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 56,
+     "contextMiss": 8,
+     "lineupSkipped": 2,
+     "coverageDays": 4.5
+    },
+    "izna": {
+     "queries": [
+      "이즈나 izna"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 16,
+     "contextMiss": 9,
+     "lineupSkipped": 22,
+     "coverageDays": 39.6
+    },
+    "treasure": {
+     "queries": [
+      "트레저 TREASURE"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 3,
+     "contextMiss": 16,
+     "lineupSkipped": 25,
+     "coverageDays": 24.8
+    },
+    "exo": {
+     "queries": [
+      "엑소 EXO"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 18,
+     "contextMiss": 15,
+     "lineupSkipped": 8,
+     "coverageDays": 18.8
+    },
+    "day6": {
+     "queries": [
+      "데이식스 DAY6"
+     ],
+     "fetched": 100,
+     "nameHits": 99,
+     "photoSkipped": 0,
+     "contextMiss": 19,
+     "lineupSkipped": 18,
+     "coverageDays": 24.9
+    },
+    "winner": {
+     "queries": [
+      "위너 WINNER"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 11,
+     "contextMiss": 49,
+     "lineupSkipped": 1,
+     "coverageDays": 26.7
+    },
+    "billlie": {
+     "queries": [
+      "빌리 Billlie"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 8,
+     "contextMiss": 2,
+     "lineupSkipped": 6,
+     "coverageDays": 22.3
+    },
+    "apink": {
+     "queries": [
+      "에이핑크 Apink"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 18,
+     "contextMiss": 2,
+     "lineupSkipped": 8,
+     "coverageDays": 108.8
+    },
+    "onf": {
+     "queries": [
+      "온앤오프 ONF"
+     ],
+     "fetched": 100,
+     "nameHits": 99,
+     "photoSkipped": 0,
+     "contextMiss": 3,
+     "lineupSkipped": 1,
+     "coverageDays": 64.8
+    },
+    "unis": {
+     "queries": [
+      "유니스 UNIS"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 2,
+     "lineupSkipped": 5,
+     "coverageDays": 58.4
+    },
+    "epex": {
+     "queries": [
+      "이펙스 EPEX"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 3,
+     "lineupSkipped": 0,
+     "coverageDays": 121.9
+    },
+    "tempest": {
+     "queries": [
+      "템페스트 TEMPEST"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 18,
+     "contextMiss": 8,
+     "lineupSkipped": 4,
+     "coverageDays": 71.9
+    },
+    "kiiikiii": {
+     "queries": [
+      "키키 KiiiKiii"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 16,
+     "contextMiss": 5,
+     "lineupSkipped": 26,
+     "coverageDays": 9.6
+    },
+    "buzz": {
+     "queries": [
+      "버즈 Buzz"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 78,
+     "lineupSkipped": 0,
+     "coverageDays": 228.5
+    },
+    "seeya": {
+     "queries": [
+      "씨야 SeeYa"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 1,
+     "contextMiss": 8,
+     "lineupSkipped": 21,
+     "coverageDays": 160.5
+    },
+    "davichi": {
+     "queries": [
+      "다비치 Davichi"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 25,
+     "lineupSkipped": 3,
+     "coverageDays": 655.5
+    },
+    "idid": {
+     "queries": [
+      "아이딧 IDID"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 2,
+     "contextMiss": 21,
+     "lineupSkipped": 42,
+     "coverageDays": 43.5
+    },
+    "aen": {
+     "queries": [
+      "에이엔 AEN"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 4,
+     "lineupSkipped": 44,
+     "coverageDays": 66.5
+    },
+    "ikon": {
+     "queries": [
+      "아이콘 iKON"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 2,
+     "lineupSkipped": 6,
+     "coverageDays": 110.8
+    },
+    "highlight": {
+     "queries": [
+      "하이라이트 HIGHLIGHT"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 44,
+     "lineupSkipped": 3,
+     "coverageDays": 53.7
+    },
+    "ahof": {
+     "queries": [
+      "아홉 AHOF"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 8,
+     "contextMiss": 4,
+     "lineupSkipped": 7,
+     "coverageDays": 72.2
+    },
+    "touched": {
+     "queries": [
+      "터치드 TOUCHED"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 2,
+     "lineupSkipped": 6,
+     "coverageDays": 79.5
+    },
+    "and2ble": {
+     "queries": [
+      "앤더블 AND2BLE"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 64,
+     "contextMiss": 4,
+     "lineupSkipped": 7,
+     "coverageDays": 3.5
+    },
+    "lucy": {
+     "queries": [
+      "루시 LUCY"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 2,
+     "contextMiss": 19,
+     "lineupSkipped": 0,
+     "coverageDays": 26.6
+    },
+    "unchild": {
+     "queries": [
+      "언차일드 UNCHILD"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 51,
+     "contextMiss": 2,
+     "lineupSkipped": 7,
+     "coverageDays": 2.5
+    },
+    "onewe": {
+     "queries": [
+      "원위 ONEWE"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 4,
+     "lineupSkipped": 15,
+     "coverageDays": 47.6
+    },
+    "astro": {
+     "queries": [
+      "아스트로 ASTRO"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 2,
+     "contextMiss": 48,
+     "lineupSkipped": 1,
+     "coverageDays": 182.7
+    },
+    "pentagon": {
+     "queries": [
+      "펜타곤 PENTAGON"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 7,
+     "lineupSkipped": 4,
+     "coverageDays": 72.9
+    },
+    "kara": {
+     "queries": [
+      "카라 KARA"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 3,
+     "contextMiss": 48,
+     "lineupSkipped": 11,
+     "coverageDays": 90.8
+    },
+    "kard": {
+     "queries": [
+      "카드 KARD"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 21,
+     "contextMiss": 3,
+     "lineupSkipped": 12,
+     "coverageDays": 100.8
+    },
+    "csr": {
+     "queries": [
+      "첫사랑 CSR"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 85,
+     "contextMiss": 1,
+     "lineupSkipped": 1,
+     "coverageDays": 213.4
+    },
+    "secret": {
+     "queries": [
+      "시크릿 SECRET"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 6,
+     "contextMiss": 46,
+     "lineupSkipped": 0,
+     "coverageDays": 37.6
+    },
+    "xlov": {
+     "queries": [
+      "엑스러브 XLOV",
+      "XLOV"
+     ],
+     "fetched": 200,
+     "nameHits": 158,
+     "photoSkipped": 149,
+     "contextMiss": 0,
+     "lineupSkipped": 5,
+     "coverageDays": 4.5
+    },
+    "naze": {
+     "queries": [
+      "네이즈 NAZE"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 20,
+     "contextMiss": 6,
+     "lineupSkipped": 6,
+     "coverageDays": 155.5
+    },
+    "newbeat": {
+     "queries": [
+      "뉴비트 NEWBEAT"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 34,
+     "contextMiss": 16,
+     "lineupSkipped": 4,
+     "coverageDays": 105.3
+    },
+    "evnne": {
+     "queries": [
+      "이븐 EVNNE"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 94,
+     "contextMiss": 0,
+     "lineupSkipped": 1,
+     "coverageDays": 4.4
+    },
+    "vixx": {
+     "queries": [
+      "빅스 VIXX"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 4,
+     "contextMiss": 2,
+     "lineupSkipped": 2,
+     "coverageDays": 150.6
+    },
+    "madein": {
+     "queries": [
+      "메이딘 MADEIN"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 9,
+     "contextMiss": 0,
+     "lineupSkipped": 6,
+     "coverageDays": 108.6
+    },
+    "waker": {
+     "queries": [
+      "웨이커 WAKER"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 11,
+     "lineupSkipped": 23,
+     "coverageDays": 300.7
+    },
+    "dxmon": {
+     "queries": [
+      "다이몬 DXMON"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 55,
+     "contextMiss": 1,
+     "lineupSkipped": 1,
+     "coverageDays": 706.5
+    },
+    "classy": {
+     "queries": [
+      "클라씨 CLASS:y"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 9,
+     "contextMiss": 2,
+     "lineupSkipped": 6,
+     "coverageDays": 536.8
+    },
+    "pow": {
+     "queries": [
+      "파우 POW"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 6,
+     "contextMiss": 2,
+     "lineupSkipped": 12,
+     "coverageDays": 84.6
+    },
+    "whib": {
+     "queries": [
+      "휘브 WHIB"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 49,
+     "contextMiss": 3,
+     "lineupSkipped": 12,
+     "coverageDays": 87.5
+    },
+    "aimers": {
+     "queries": [
+      "에이머스 AIMERS"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 93,
+     "lineupSkipped": 0,
+     "coverageDays": 215.5
+    },
+    "trendz": {
+     "queries": [
+      "트렌드지 TRENDZ"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 70,
+     "contextMiss": 4,
+     "lineupSkipped": 7,
+     "coverageDays": 108.5
+    },
+    "tiot": {
+     "queries": [
+      "티아이오티 TIOT"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 56,
+     "contextMiss": 2,
+     "lineupSkipped": 4,
+     "coverageDays": 31.5
+    },
+    "blitzers": {
+     "queries": [
+      "블리처스 BLITZERS"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 48,
+     "contextMiss": 0,
+     "lineupSkipped": 22,
+     "coverageDays": 848.6
+    },
+    "wei": {
+     "queries": [
+      "위아이 WEi"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 0,
+     "contextMiss": 3,
+     "lineupSkipped": 7,
+     "coverageDays": 247.9
+    },
+    "justb": {
+     "queries": [
+      "저스트비 JUST B",
+      "JUST B"
+     ],
+     "fetched": 200,
+     "nameHits": 100,
+     "photoSkipped": 94,
+     "contextMiss": 0,
+     "lineupSkipped": 4,
+     "coverageDays": 4.4
+    },
+    "ntx": {
+     "queries": [
+      "엔티엑스 NTX"
+     ],
+     "fetched": 100,
+     "nameHits": 100,
+     "photoSkipped": 1,
+     "contextMiss": 1,
+     "lineupSkipped": 3,
+     "coverageDays": 585.5
+    },
+    "ninei": {
+     "queries": [
+      "나인아이 NINE.i"
+     ],
+     "fetched": 100,
+     "nameHits": 61,
+     "photoSkipped": 2,
+     "contextMiss": 0,
+     "lineupSkipped": 0,
+     "coverageDays": 571.8
+    }
+   }
+  }
+ },
+ "notes": [],
+ "summary": {
+  "groups": 188,
+  "kmi": 1099.18,
+  "historyRecent": 23,
+  "historyHourly": 6,
+  "historyDaily": 15,
+  "groupsWithNews": 83,
+  "groupsOnChart": 29,
+  "groupsWithListeners": 181,
+  "groupsWithSubscribers": 173,
+  "topNews": [
+   "rescene:63",
+   "monstax:59",
+   "tws:35",
+   "bts:35",
+   "cnblue:23",
+   "redvelvet:19",
+   "illit:17",
+   "p1harmony:17",
+   "theboyz:16",
+   "shinee:16",
+   "ive:13",
+   "blackpink:13",
+   "a2olite:13",
+   "ateez:12",
+   "cortis:11"
+  ]
+ }
+}
