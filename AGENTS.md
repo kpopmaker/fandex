@@ -17,7 +17,7 @@ K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 �
 - 산정 방식(`/methodology`)은 사용자 요청으로 2026-11-07 메뉴와 페이지 모두 숨겼다. 그 밖의 예전 페이지도 `page.hidden.tsx`로 숨겨 두었다(라우트에서 빠짐). `youtube-analytics-evidence`, `privacy`, `terms`는 Google API 심사·약관용으로 유지.
 
 ## 데이터와 계산
-- 대상: `data/market/universe.json` — 활동 중인 그룹 177팀(솔로 제외). 원본은 `app/data/v4/artistUniverse.ts`, 다시 만들 때 `npx tsx scripts/market/build-universe.mts`.
+- 대상: `data/market/universe.json` — 활동 중인 그룹 186팀(솔로 제외, 원본 177팀 + build-universe.mts의 EXTRA_GROUPS 9팀). 원본은 `app/data/v4/artistUniverse.ts`, 다시 만들 때 `npx tsx scripts/market/build-universe.mts`.
 - 수집: Render 크론(매시 17분)이 `naver-news-blob-only-recurring-production-v1.yml`을 부르고, 그게 `market-collect.yml`(loop_minutes=44)을 불러 약 45분 동안 15분 구간마다 `scripts/market/collect.ts` 실행(GitHub 스케줄은 자주 건너뛰어 매시 5분 예비용만 둠) → `market-data` 브랜치(latest.json, history.json.gz, run-report.json)를 통째로 새로 올린다. 네이버 뉴스 30분, 벅스 실시간 1시간(Node가 끊기면 curl), Last.fm 하루 1번.
 - 진단은 `market-data` 브랜치의 `run-report.json`을 본다(Actions 로그는 이 환경에서 못 읽음). 기준을 다시 잡으려면 collect.ts의 `DATA_EPOCH`를 올린다.
 - 사이트: `lib/market/dataset.ts`가 market-data를 읽고(2분 캐시), `engine.ts`/`queries.ts`가 가격·등락률·시리즈를 만든다. 계산식은 `lib/market/formula.ts` 하나뿐(수집기와 공유).
@@ -25,7 +25,7 @@ K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 �
 - 가격 = 100·e^((점수−50)/50), 팬캡 = 가격×(Last.fm 청취자와 유튜브 구독자 평균/10만), KMI = Σ팬캡÷제수(유튜브 반영 후 다시 잡은 기준 2026-11-07 = 1,000, 팬덤 규모 변경 시 제수 조정).
 - 기록이 기간만큼 없으면 등락률은 null('—'). 거짓 숫자를 채우지 않는다.
 - **실데이터가 없는 변수는 화면에 내지 않는다** (`variables.ts`의 `enabled`).
-- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고(163팀, 잘못 잡힌 14팀은 excluded), 수집기는 그 목록의 구독자 수를 하루 1번 받는다. SNS/팬덤 = Last.fm 청취자 점수와 구독자 점수 평균.
+- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고(171팀, 잘못 잡힌 15팀은 excluded), 수집기는 그 목록의 구독자 수를 하루 1번 받는다. SNS/팬덤 = Last.fm 청취자 점수와 구독자 점수 평균.
 
 ## 디자인
 - PC 우선, 다크 모드 지원(`data-theme="night"`). 레퍼런스: NH투자증권, 토스증권.

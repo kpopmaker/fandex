@@ -30,6 +30,20 @@
    "source": "youtube-resolve search, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
+  "a2olite": {
+   "channelId": "UCw98hcIDLRffhOC1_ttd4Zg",
+   "title": "A2O LITE",
+   "handle": "@a2olite",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "a2osoul": {
+   "channelId": "UCAdLPETtxpZeRVqsq_QTneA",
+   "title": "A2O SOUL",
+   "handle": "@a2osoul",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
   "ab6ix": {
    "channelId": "UCwytna6i1rFCt13a3Qvuk-A",
    "title": "AB6IX",
@@ -140,6 +154,13 @@
    "title": "ATEEZ",
    "handle": "@ateezofficial",
    "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "atheart": {
+   "channelId": "UCgSDdHK0MNXOHv7oBC2dHXA",
+   "title": "AtHeart",
+   "handle": "@atheart_titan",
+   "source": "youtube-resolve search, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
   "axmxp": {
@@ -253,6 +274,13 @@
    "source": "youtube-resolve search, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
+  "closeyoureyes": {
+   "channelId": "UCXdExKJErLyZN2KoeeZb92g",
+   "title": "Close Your Eyes",
+   "handle": "@closeyoureyes",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
   "cnblue": {
    "channelId": "UC-CVBl3-ryi3GtZBXtc2_IA",
    "title": "CNBLUE (씨엔블루)",
@@ -334,6 +362,13 @@
    "channelId": "UCTcEu0jaf3DrsTjnGwwvsvA",
    "title": "EPIK HIGH",
    "handle": "@officialepikhigh",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "everglow": {
+   "channelId": "UCVXzBnzP5i5W-3snrxu8kfg",
+   "title": "EVERGLOW",
+   "handle": "@everglowofficial",
    "source": "youtube-resolve handle, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
@@ -421,6 +456,13 @@
    "source": "youtube-resolve handle, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
+  "got7": {
+   "channelId": "UC8HEl74jL3bLLwfDP1OALxw",
+   "title": "GOT7",
+   "handle": "@got7",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
   "gyeongseoyeji": {
    "channelId": "UC9BlmMw2Kz7gogJuEqqqd3A",
    "title": "경서예지 GyeongseoYeji Channel",
@@ -489,6 +531,13 @@
    "title": "idntt",
    "handle": "@idntt_cosmo",
    "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ifeye": {
+   "channelId": "UCnQRdSArF-aqtycrmMKFQAg",
+   "title": "ifeye 이프아이",
+   "handle": "@ifeye",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
   "ikon": {
@@ -601,6 +650,13 @@
    "title": "LIGHTSUM 라잇썸 (Official YouTube Channel)",
    "handle": "@lightsumofficial",
    "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "lngshot": {
+   "channelId": "UC8PPjyqCQJtNfEwHBcq_uxw",
+   "title": "LNGSHOT",
+   "handle": "@lngshot4sho",
+   "source": "youtube-resolve search, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
   "lun8": {
@@ -1145,6 +1201,7 @@
   "buzz": "파파버즈(다른 채널)",
   "csr": "Consumer Research Studios(다른 채널)",
   "dxmon": "구독자 148명 채널",
+  "infinite": "Infinite(구독자 2,600만 해외 채널, 그룹과 무관)",
   "ioi": "Innovative India(다른 채널)",
   "kara": "Kara and Nate(다른 채널)",
   "lucy": "Lucy Bella(다른 채널)",
