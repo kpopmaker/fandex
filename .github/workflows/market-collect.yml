@@ -48,6 +48,7 @@ jobs:
           FANDEX_NAVER_NEWS_CLIENT_ID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
           FANDEX_NAVER_NEWS_CLIENT_SECRET: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.FANDEX_SNS_FANDOM_YOUTUBE_API_KEY }}
           # 벅스처럼 중간 인증서를 빠뜨리는 사이트도 받을 수 있게 시스템 인증서를 쓴다.
           NODE_OPTIONS: --use-system-ca
           PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git

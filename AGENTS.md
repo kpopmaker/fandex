@@ -22,10 +22,10 @@ K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 �
 - 진단은 `market-data` 브랜치의 `run-report.json`을 본다(Actions 로그는 이 환경에서 못 읽음). 기준을 다시 잡으려면 collect.ts의 `DATA_EPOCH`를 올린다.
 - 사이트: `lib/market/dataset.ts`가 market-data를 읽고(2분 캐시), `engine.ts`/`queries.ts`가 가격·등락률·시리즈를 만든다. 계산식은 `lib/market/formula.ts` 하나뿐(수집기와 공유).
 - 원점수: 실제 숫자를 로그 눈금으로 0~100점(SCORE_REF 기준치). 계수: 음원 1.25, 뉴스 1.1, SNS 1.1, 브랜드 0.9, 활동 0.8, 모멘텀 1.0, 조정 −1.4.
-- 가격 = 100·e^((점수−50)/50), 팬캡 = 가격×(Last.fm 청취자/10만), KMI = Σ팬캡÷제수(수집 시작 2026-11-06 = 1,000, 팬덤 규모 변경 시 제수 조정).
+- 가격 = 100·e^((점수−50)/50), 팬캡 = 가격×(Last.fm 청취자와 유튜브 구독자 평균/10만), KMI = Σ팬캡÷제수(유튜브 반영 후 다시 잡은 기준 2026-11-07 = 1,000, 팬덤 규모 변경 시 제수 조정).
 - 기록이 기간만큼 없으면 등락률은 null('—'). 거짓 숫자를 채우지 않는다.
 - **실데이터가 없는 변수는 화면에 내지 않는다** (`variables.ts`의 `enabled`).
-- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고, 수집기는 그 목록만 쓴다.
+- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고(163팀, 잘못 잡힌 14팀은 excluded), 수집기는 그 목록의 구독자 수를 하루 1번 받는다. SNS/팬덤 = Last.fm 청취자 점수와 구독자 점수 평균.
 
 ## 디자인
 - PC 우선, 다크 모드 지원(`data-theme="night"`). 레퍼런스: NH투자증권, 토스증권.

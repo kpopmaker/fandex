@@ -12,11 +12,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { gunzipSync, gzipSync } from 'node:zlib';
 import universeFile from '../../data/market/universe.json';
+import youtubeChannelsFile from '../../data/market/youtube-channels.json';
 import {
   SCORE_REF,
   VARIABLE_ORDER,
   fanFloat,
-  listenerScore,
+  fandomScore,
   logScore,
   momentumScore,
   packRaw,
@@ -63,7 +64,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 3;
+const DATA_EPOCH = 4;
 
 type State = {
   version: string;
@@ -80,6 +81,10 @@ type State = {
   lastfm: {
     date: string;
     byId: Record<string, { listeners: number; playcount: number; name: string } | null>;
+  } | null;
+  youtube?: {
+    date: string;
+    byId: Record<string, { subscribers: number | null; views: number; videos: number }>;
   } | null;
 };
 
@@ -567,6 +572,67 @@ async function refreshLastfm(): Promise<void> {
   };
 }
 
+// ─────────────────────────── 유튜브 ───────────────────────────
+
+const YOUTUBE_KEY = process.env.YOUTUBE_API_KEY ?? '';
+const YOUTUBE_CHANNELS = youtubeChannelsFile.channels as Record<string, { channelId: string }>;
+
+async function refreshYoutube(): Promise<void> {
+  const today = kstDateString(NOW);
+  if (state.youtube?.date === today) {
+    report.sources.youtube = { status: 'cached', detail: today };
+    return;
+  }
+  if (!YOUTUBE_KEY) {
+    report.sources.youtube = { status: 'skipped', detail: 'missing credentials' };
+    return;
+  }
+  const entries = Object.entries(YOUTUBE_CHANNELS);
+  const byChannel = new Map(entries.map(([id, channel]) => [channel.channelId, id]));
+  const byId: NonNullable<State['youtube']>['byId'] = {};
+  try {
+    for (let start = 0; start < entries.length; start += 50) {
+      const ids = entries.slice(start, start + 50).map(([, channel]) => channel.channelId);
+      const response = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${ids.join(',')}&key=${YOUTUBE_KEY}`,
+      );
+      if (!response.ok) throw new Error(`youtube ${response.status}`);
+      const body = (await response.json()) as {
+        items?: Array<{
+          id: string;
+          statistics?: { subscriberCount?: string; hiddenSubscriberCount?: boolean; viewCount?: string; videoCount?: string };
+        }>;
+      };
+      for (const item of body.items ?? []) {
+        const groupId = byChannel.get(item.id);
+        if (!groupId) continue;
+        byId[groupId] = {
+          subscribers: item.statistics?.hiddenSubscriberCount ? null : Number(item.statistics?.subscriberCount ?? 0),
+          views: Number(item.statistics?.viewCount ?? 0),
+          videos: Number(item.statistics?.videoCount ?? 0),
+        };
+      }
+    }
+    state.youtube = { date: today, byId };
+    report.sources.youtube = {
+      status: 'ok',
+      detail: today,
+      channels: entries.length,
+      received: Object.keys(byId).length,
+    };
+  } catch (error) {
+    report.sources.youtube = { status: 'failed', detail: (error as Error).message };
+  }
+}
+
+function subscribersOf(id: string): number | null {
+  return state.youtube?.byId[id]?.subscribers ?? null;
+}
+
+function listenersOf(id: string): number | null {
+  return state.lastfm?.byId[id]?.listeners ?? null;
+}
+
 // ─────────────────────────── 원점수와 지수 ───────────────────────────
 
 function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number): number {
@@ -601,11 +667,10 @@ function computeRaw(): Record<string, RawScores> {
   const baseline = baselineEntry();
   const result: Record<string, RawScores> = {};
   for (const group of GROUPS) {
-    const listeners = state.lastfm?.byId[group.id]?.listeners ?? null;
     const raw: RawScores = {
       musicAlbum: logScore(state.chart?.pointsById[group.id] ?? 0, SCORE_REF.chartPoints),
       newsIssue: logScore(state.news?.byId[group.id]?.count ?? 0, SCORE_REF.news24h),
-      snsFandom: listenerScore(listeners),
+      snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
       brandFit: logScore(countTagged(group.id, 'b', 30), SCORE_REF.brand30d),
       comebackActivity: logScore(countTagged(group.id, 'c', 14), SCORE_REF.comeback14d),
       growthMomentum: 50,
@@ -622,7 +687,7 @@ function computeIndex(raws: Record<string, RawScores>) {
   const floats: Record<string, number> = {};
   for (const group of GROUPS) {
     prices[group.id] = priceFromRaw(raws[group.id]);
-    floats[group.id] = fanFloat(state.lastfm?.byId[group.id]?.listeners ?? null);
+    floats[group.id] = fanFloat(listenersOf(group.id), subscribersOf(group.id));
   }
 
   // 팬덤 규모나 종목 구성이 바뀌어도 지수가 튀지 않게 제수를 조정한다(주가지수와 같은 방식).
@@ -678,10 +743,10 @@ function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
 // ─────────────────────────── 실행 ───────────────────────────
 
 async function main() {
-  await Promise.all([refreshNews(), refreshChart(), refreshLastfm()]);
+  await Promise.all([refreshNews(), refreshChart(), refreshLastfm(), refreshYoutube()]);
 
   // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스·차트·Last.fm이 모두 있어야만 만든다.
-  if (state.divisor === null && (!state.news || !state.lastfm || !state.chart)) {
+  if (state.divisor === null && (!state.news || !state.lastfm || !state.chart || (YOUTUBE_KEY && !state.youtube))) {
     // 지수 기준은 만들지 않되, 다음 실행이 다시 받지 않도록 상태와 진단 리포트는 남긴다.
     report.notes.push('waiting for all sources before the first snapshot');
     mkdirSync(OUT_DIR, { recursive: true });
@@ -708,7 +773,8 @@ async function main() {
         {
           raw: packRaw(raws[group.id]),
           float: Math.round(floats[group.id] * 10000) / 10000,
-          listeners: state.lastfm?.byId[group.id]?.listeners ?? null,
+          listeners: listenersOf(group.id),
+          subscribers: subscribersOf(group.id),
           news24h: state.news?.byId[group.id]?.count ?? 0,
           chartPoints: state.chart?.pointsById[group.id] ?? 0,
           brand30d: countTagged(group.id, 'b', 30),
@@ -723,6 +789,7 @@ async function main() {
       naver: state.news?.at ?? null,
       bugs: state.chart?.at ?? null,
       lastfm: state.lastfm?.date ?? null,
+      youtube: state.youtube?.date ?? null,
     },
   };
 
@@ -735,6 +802,7 @@ async function main() {
     groupsWithNews: Object.values(latest.groups).filter((group) => group.news24h > 0).length,
     groupsOnChart: Object.values(latest.groups).filter((group) => group.chartPoints > 0).length,
     groupsWithListeners: Object.values(latest.groups).filter((group) => group.listeners).length,
+    groupsWithSubscribers: Object.values(latest.groups).filter((group) => group.subscribers).length,
     topNews: Object.entries(latest.groups)
       .sort((a, b) => b[1].news24h - a[1].news24h)
       .slice(0, 15)

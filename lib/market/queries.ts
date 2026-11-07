@@ -214,14 +214,24 @@ export type ArtistDetailModel = {
   chartTracks: { rank: number; title: string }[];
 };
 
+function compactCount(value: number): string {
+  if (value >= 10_000) return `${(value / 10_000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}만`;
+  return value.toLocaleString('ko-KR');
+}
+
 function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean): string {
   switch (id) {
     case 'musicAlbum':
       return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : '벅스 TOP100 밖';
     case 'newsIssue':
       return `24시간 기사 ${group.news24h}건`;
-    case 'snsFandom':
-      return group.listeners ? `청취자 ${group.listeners.toLocaleString('ko-KR')}명` : 'Last.fm 확인 안 됨';
+    case 'snsFandom': {
+      const parts = [
+        group.listeners ? `청취자 ${compactCount(group.listeners)}` : null,
+        group.subscribers ? `구독자 ${compactCount(group.subscribers)}` : null,
+      ].filter(Boolean);
+      return parts.length ? parts.join(' · ') : '확인된 채널 없음';
+    }
     case 'brandFit':
       return `30일 기사 ${group.brand30d}건`;
     case 'comebackActivity':

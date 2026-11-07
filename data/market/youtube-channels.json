@@ -2,11 +2,997 @@
  "version": "youtube-channels-v1",
  "note": "사람이 확인한 그룹 공식 유튜브 채널. 수집기는 이 목록만 쓴다.",
  "channels": {
+  "2ne1": {
+   "channelId": "UCnsQjCVzmEd-YvlQZbo6zCg",
+   "title": "2NE1",
+   "handle": "@2ne1",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "2pm": {
+   "channelId": "UCBpzJvEhkemwMOkYLq9yUsA",
+   "title": "2PM",
+   "handle": "@2pm",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "82major": {
+   "channelId": "UC6H_3Rv-q8Z23jtMofgPGsw",
+   "title": "82MAJOR",
+   "handle": "@82major_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "8turn": {
+   "channelId": "UCZzpLKZPTSNNycp-qQc2kLw",
+   "title": "8TURN",
+   "handle": "@8turn.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ab6ix": {
+   "channelId": "UCwytna6i1rFCt13a3Qvuk-A",
+   "title": "AB6IX",
+   "handle": "@ab6ix",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "aen": {
+   "channelId": "UCcoN40F0rQRP0K5cgmFYLOQ",
+   "title": "AEN",
+   "handle": "@aen_offcl",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "aespa": {
+   "channelId": "UC9GtSLeksfK4yuJ_g1lgQbg",
+   "title": "aespa",
+   "handle": "@aespa",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ahof": {
+   "channelId": "UCwoSFXX8kraikB-WClx2pVQ",
+   "title": "AHOF",
+   "handle": "@ahof_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "aimers": {
+   "channelId": "UC8TL_tJdbQDZcyfIRkjJldw",
+   "title": "AIMERS",
+   "handle": "@aimers_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "alldayproject": {
+   "channelId": "UCKOY4n0sv1pAPs5E4LxtSXQ",
+   "title": "ALLDAY PROJECT",
+   "handle": "@allday_project",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "allhours": {
+   "channelId": "UC1buRciG8QIL9kRtHxI_tpw",
+   "title": "올아워즈 ALL(H)OURS ",
+   "handle": "@all_h_ours",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "alphadriveone": {
+   "channelId": "UCC4wzWbk_zdQNZstCwcfFLA",
+   "title": "ALPHA DRIVE ONE",
+   "handle": "@ald1.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ampersandone": {
+   "channelId": "UCH9IB4tD3U2TSjT3ZLICXTA",
+   "title": "앰퍼샌드원 (AMPERS&ONE)",
+   "handle": "@ampersandone",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "and2ble": {
+   "channelId": "UCoe0BXYv01VCt0JRhX1zSug",
+   "title": "AND2BLE",
+   "handle": "@and2ble",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "andteam": {
+   "channelId": "UCHD1jo5RhijLfx5-0Ehe_cg",
+   "title": "&TEAM",
+   "handle": "@andteam_official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "apink": {
+   "channelId": "UCmW1Pq56lA-k-GWpX1z8WPg",
+   "title": "Apink (에이핑크)",
+   "handle": "@officialapink",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "artms": {
+   "channelId": "UChXC6ok0LaZIpf-50SIFf0Q",
+   "title": "Official ARTMS",
+   "handle": "@official_artms",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "asc2nt": {
+   "channelId": "UCVLAG6m7fWINBLJxNQNTdBQ",
+   "title": "ASC2NT(어센트)",
+   "handle": "@asc2nt_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "astro": {
+   "channelId": "UCZqY2yIsAM9wh3vvMwKd27g",
+   "title": "ASTRO 아스트로",
+   "handle": "@offclastro",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ateez": {
+   "channelId": "UC2e4Ukj5Pfr7cb3KpJAFBdQ",
+   "title": "ATEEZ",
+   "handle": "@ateezofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "axmxp": {
+   "channelId": "UC8caKDwgP2a51iuGEb4b3yA",
+   "title": "AxMxP",
+   "handle": "@axmxp_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "b1a4": {
+   "channelId": "UCDBLl8TPgGzAzUGaqbpwAZA",
+   "title": "B1A4 OFFICIAL +",
+   "handle": "@chb1a4",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "babydontcry": {
+   "channelId": "UCRjREQVSiThsjfgEGXnEBpw",
+   "title": "Baby DONT Cry",
+   "handle": "@babydontcry.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "babymonster": {
+   "channelId": "UCqwUnggBBct-AY2lAdI88jQ",
+   "title": "BABYMONSTER",
+   "handle": "@babymonster",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "badvillain": {
+   "channelId": "UCh0KpQuSJ9m0DaENZmnYwzw",
+   "title": "BADVILLAIN",
+   "handle": "@badvillain_bpm",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "balmingtiger": {
+   "channelId": "UCbBzKnCYcG7E3EIkSTdsawA",
+   "title": "Balming Tiger",
+   "handle": "@balmingtiger",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "bigbang": {
+   "channelId": "UCzw-C7fNfs018R1FzIKnlaA",
+   "title": "BIGBANG",
+   "handle": "@bigbang",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "billlie": {
+   "channelId": "UCyc9sUCxELTDK9vELO5Fzeg",
+   "title": "Billlie",
+   "handle": "@billlie",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
   "blackpink": {
    "channelId": "UCOmHUn--16B90oW2L6FRR3A",
    "title": "",
    "source": "https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A",
    "verifiedAt": "2026-10-02"
+  },
+  "blitzers": {
+   "channelId": "UC5aJQH0Q8HSOaCRXGy0YCwQ",
+   "title": "BLITZERS OFFICIAL",
+   "handle": "@blitzersofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "boynextdoor": {
+   "channelId": "UChhKBlh_wvspTh5n4mL0b5g",
+   "title": "BOYNEXTDOOR",
+   "handle": "@boynextdoor_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "boystory": {
+   "channelId": "UCZlgP_2MRnrPXRmqR5320BQ",
+   "title": "BOY STORY",
+   "handle": "@boystoryofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "btob": {
+   "channelId": "UCgB7A457ULlgm5c3948vr-w",
+   "title": "BTOB 비투비 (Official YouTube Channel)",
+   "handle": "@officialbtob",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "bts": {
+   "channelId": "UCLkAepWjdylmXSltofFvsYQ",
+   "title": "BANGTANTV",
+   "handle": "@bts",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "candyshop": {
+   "channelId": "UC91GO3fs8uYWbJz1PBP92Ww",
+   "title": "Candy Shop",
+   "handle": "@brave.candyshop",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "classy": {
+   "channelId": "UCbCyYn2M_1ccicwj-KU7t0Q",
+   "title": "CLASSy(클라씨)",
+   "handle": "@official_classy",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "cnblue": {
+   "channelId": "UC-CVBl3-ryi3GtZBXtc2_IA",
+   "title": "CNBLUE (씨엔블루)",
+   "handle": "@cnblueofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "cortis": {
+   "channelId": "UCZMYvSPulDSUdx7bdtTFdrg",
+   "title": "CORTIS",
+   "handle": "@cortis_bighit",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "cravity": {
+   "channelId": "UCRm-0JVuUFh5HV7NGG7qXlQ",
+   "title": "CRAVITY",
+   "handle": "@cravityofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "davichi": {
+   "channelId": "UCwZMmIVr07VLAfNcuqg9LZA",
+   "title": "다비치 DAVICHI",
+   "handle": "@davichiofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "day6": {
+   "channelId": "UCp-pqXsizklX3ZHvLxXyhxw",
+   "title": "DAY6",
+   "handle": "@day6official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "dkb": {
+   "channelId": "UCCwfiPqSomsqZkkmbjPK5wg",
+   "title": "DKB 다크비",
+   "handle": "@dkbofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "dragonpony": {
+   "channelId": "UC8h8waPH2sQRRbvRqOfv0Bg",
+   "title": "Dragon Pony",
+   "handle": "@dragonpony_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "dreamcatcher": {
+   "channelId": "UCijULR2sXLutCRBtW3_WEfA",
+   "title": "Dreamcatcher official",
+   "handle": "@dreamcatcherofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "drippin": {
+   "channelId": "UCNf1JFLCOec-SUhREgZaR6w",
+   "title": "DRIPPIN",
+   "handle": "@drippin",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "enhypen": {
+   "channelId": "UCArLZtok93cO5R9RI4_Y5Jw",
+   "title": "ENHYPEN",
+   "handle": "@enhypenofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "epex": {
+   "channelId": "UCKHl-9B-aa4AK5ZR9XLOg8A",
+   "title": "EPEX",
+   "handle": "@epexofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "epikhigh": {
+   "channelId": "UCTcEu0jaf3DrsTjnGwwvsvA",
+   "title": "EPIK HIGH",
+   "handle": "@officialepikhigh",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "evnne": {
+   "channelId": "UCPfy6bHYRud15zu2tmoSB8Q",
+   "title": "EVNNE",
+   "handle": "@evnne",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "exo": {
+   "channelId": "UCzCedBCSSltI1TFd3bKyN6g",
+   "title": "EXO",
+   "handle": "@weareoneexo",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "fantasyboys": {
+   "channelId": "UC7yQCrSgQGyDUgJlPPOIm2g",
+   "title": "Fantasy Boys_Official",
+   "handle": "@fantasyboys__official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "fiftyfifty": {
+   "channelId": "UCJEER74X9kBenMT_x9iK9Mw",
+   "title": "FIFTY FIFTY Official",
+   "handle": "@we_fiftyfifty",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "flareu": {
+   "channelId": "UCrHCkXuYLQyx90BtAuunKQg",
+   "title": "FLARE U",
+   "handle": "@flareu_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "fromis9": {
+   "channelId": "UC8qO5racajmy4YgPgNJkVXg",
+   "title": "Official fromis_9",
+   "handle": "@officialfromis9",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ftisland": {
+   "channelId": "UCi00aT1kuoR7QNa45Xnwd7Q",
+   "title": "FTISLAND (FT아일랜드)",
+   "handle": "@ftisland",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ghost9": {
+   "channelId": "UCwBsVtDcTVG4QCorkVNJ5Sg",
+   "title": "GHOST9 Official",
+   "handle": "@ghost9official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "gidle": {
+   "channelId": "UCritGVo7pLJLUS8wEu32vow",
+   "title": "i-dle (아이들)",
+   "handle": "@official_i_dle",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "girlset": {
+   "channelId": "UCSskmnvIhEy3nSZxxVKTeIg",
+   "title": "GIRLSET",
+   "handle": "@girlset",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "girlsgeneration": {
+   "channelId": "UCPENYtHg4Xhmm6oX8zaQA7Q",
+   "title": "GIRLS' GENERATION",
+   "handle": "@girlsgeneration",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "goldenchild": {
+   "channelId": "UC2EeIV6pzZDIAgp8hV_MGew",
+   "title": "Golden Child",
+   "handle": "@goldenchild",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "gyeongseoyeji": {
+   "channelId": "UC9BlmMw2Kz7gogJuEqqqd3A",
+   "title": "경서예지 GyeongseoYeji Channel",
+   "handle": "@gyeongseoyeji",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "h1key": {
+   "channelId": "UC0novDS2VRX59Trmbf83I3g",
+   "title": "H1-KEY",
+   "handle": "@h1key_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "hearts2hearts": {
+   "channelId": "UC7Q3HUnJA3nvjZR2JeMn2Cw",
+   "title": "Hearts2Hearts",
+   "handle": "@hearts2hearts.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "hifiunicorn": {
+   "channelId": "UCIN1B0QaNvjhcL7yPdAJY9w",
+   "title": "Hi-Fi Un!corn",
+   "handle": "@hfu_official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "highlight": {
+   "channelId": "UCGdZ_-svzY_hPLYVSKvMFvw",
+   "title": "OFFICIAL HIGHLIGHT",
+   "handle": "@officialhighlight",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "hori7on": {
+   "channelId": "UCY4aMouOyVJvk1E3Hzr1xVg",
+   "title": "HORI7ON",
+   "handle": "@hori7on_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ichillin": {
+   "channelId": "UC7IR4SfiQGtmLKzSnC7CYww",
+   "title": "ICHILLIN' 아이칠린",
+   "handle": "@ichillin",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "idid": {
+   "channelId": "UC4Jxwum4U7lwpgdyPX0NvvA",
+   "title": "IDID",
+   "handle": "@idid_starship",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "idiotape": {
+   "channelId": "UCH4qSQBQ6qlvqQfnxTp6UoA",
+   "title": "IDIOTAPE",
+   "handle": "@idiotape",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "idntt": {
+   "channelId": "UCmnuDfK6fqL2hIWKjAmXJ-Q",
+   "title": "idntt",
+   "handle": "@idntt_cosmo",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ikon": {
+   "channelId": "UCWxCyZibDIWIrGIgP25mbfw",
+   "title": "iKON",
+   "handle": "@ikon",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "illit": {
+   "channelId": "UCEpFoWeCMCo5z3EvWaz6hQQ",
+   "title": "ILLIT",
+   "handle": "@illit_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "itzy": {
+   "channelId": "UCDhM2k2Cua-JdobAh5moMFg",
+   "title": "ITZY",
+   "handle": "@itzy",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ive": {
+   "channelId": "UC-Fnix71vRP64WXeo0ikd0Q",
+   "title": "IVE",
+   "handle": "@ivestarship",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "izna": {
+   "channelId": "UCfbYNlxgLuKJXQZEhkMmaCQ",
+   "title": "izna (이즈나)",
+   "handle": "@izna_offcl",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "jannabi": {
+   "channelId": "UCMIUx2zV4VvZGyrt4CetTbA",
+   "title": "잔나비 JANNABI",
+   "handle": "@bandjannabi",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "justb": {
+   "channelId": "UCcpodGf_wkyawcTc-fXa82g",
+   "title": "JUSTB",
+   "handle": "@justb_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "kard": {
+   "channelId": "UC5OwlwvsVmf_lXHguB6OYFw",
+   "title": "KARD",
+   "handle": "@kard",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "katseye": {
+   "channelId": "UCA61H4fWOMHikLcUFKyQUog",
+   "title": "KATSEYE",
+   "handle": "@katseyeworld",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "kep1er": {
+   "channelId": "UC8whlOg70m2Yr3qSMjUhh0g",
+   "title": "Kep1er",
+   "handle": "@kep1er_offcl",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "keyvitup": {
+   "channelId": "UC7BiEfNxBqxc7oihI0sVPMg",
+   "title": "KEYVITUP",
+   "handle": "@keyvitup",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "kickflip": {
+   "channelId": "UCmq9jjpHA69PwAwlA0DwOsg",
+   "title": "KickFlip",
+   "handle": "@kickflip_jype",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "kiiikiii": {
+   "channelId": "UCaHwGJXFb28TekZMf7iFg5Q",
+   "title": "KiiiKiii",
+   "handle": "@kiiikiii_starship",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "kissoflife": {
+   "channelId": "UCvEEeBssb4XxIfWWIB8IjMw",
+   "title": "KISS OF LIFE",
+   "handle": "@kissoflife_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "lesserafim": {
+   "channelId": "UCs-QBT4qkj_YiQw1ZntDO3g",
+   "title": "LE SSERAFIM",
+   "handle": "@lesserafim_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "lightsum": {
+   "channelId": "UCeQlMQ-4cedE7SNmF5JsdsA",
+   "title": "LIGHTSUM 라잇썸 (Official YouTube Channel)",
+   "handle": "@lightsumofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "lun8": {
+   "channelId": "UCHx0MD2c0DTNGAtc0Yq6YPQ",
+   "title": "LUN8 루네이트",
+   "handle": "@lun8_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "madein": {
+   "channelId": "UCQZy15R31id90AlisaiOg2Q",
+   "title": "MADEIN",
+   "handle": "@madein_u",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "mamamoo": {
+   "channelId": "UCuhAUMLzJxlP1W7mEk0_6lA",
+   "title": "MAMAMOO",
+   "handle": "@mamamoo_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "mcnd": {
+   "channelId": "UCNC_wxtoMCuvRVQzpbHPaZw",
+   "title": "MCND Official",
+   "handle": "@mcndofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "melomance": {
+   "channelId": "UCsIsXXMl7f4S3qnTRuJGPaA",
+   "title": "멜로망스 MeloMance",
+   "handle": "@melomance",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "meovv": {
+   "channelId": "UCowiwt93gqGlNG4k5VDxO-w",
+   "title": "MEOVV",
+   "handle": "@meovv_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "modyssey": {
+   "channelId": "UCOOO_pMsNM_Q7dd0LG26-Tw",
+   "title": "MODYSSEY",
+   "handle": "@modyssey.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "monstax": {
+   "channelId": "UCZvCP6sWj75MwpUP4LVtpNw",
+   "title": "MONSTA X",
+   "handle": "@monstax",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "naze": {
+   "channelId": "UC3-pYgOVYBAuuJdWAfVrtKg",
+   "title": "NAZE",
+   "handle": "@naze_officl",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nct127": {
+   "channelId": "UCk2E0dbAyEJWnrN2bbQOcbg",
+   "title": "NCT 127",
+   "handle": "@nct127",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nctdream": {
+   "channelId": "UCXURHJRGr4-EB3l87kcbElw",
+   "title": "NCT DREAM",
+   "handle": "@nctdream",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nctwish": {
+   "channelId": "UCiZqWVAeChfqlom5ZPR3ZJA",
+   "title": "NCT WISH",
+   "handle": "@nctwish",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nerdconnection": {
+   "channelId": "UCgI0yyuYZGo2iqlBk-Rn8YQ",
+   "title": "NERD CONNECTION",
+   "handle": "@nerdconnection",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "newbeat": {
+   "channelId": "UCPsuhauIjL1o8xClEmoIArA",
+   "title": "NEWBEAT ",
+   "handle": "@newbeatofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "newjeans": {
+   "channelId": "UCMki_UkHb4qSc0qyEcOHHJw",
+   "title": "NewJeans",
+   "handle": "@newjeans_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nexz": {
+   "channelId": "UC-o9yrZxu5Ru-DVGhnmeTug",
+   "title": "NEXZ",
+   "handle": "@nexz_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nflying": {
+   "channelId": "UC8vm0EzlH9mRHwnTLILpQjQ",
+   "title": "N.Flying (엔플라잉)",
+   "handle": "@nflyingofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ninei": {
+   "channelId": "UCFIi7EJQFFv1cn5Pcz6Kk7A",
+   "title": "NINE.i OFFICIAL",
+   "handle": "@nineiofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "niziu": {
+   "channelId": "UCHp2q2i85qt_9nn2H7AvGOw",
+   "title": "NiziU Official",
+   "handle": "@niziuofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nmixx": {
+   "channelId": "UCnUAyD4t2LkvW68YrDh7fDg",
+   "title": "NMIXX",
+   "handle": "@nmixxofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nowadays": {
+   "channelId": "UCFD41EQGXbR5JCRsvNTb9lw",
+   "title": "NOWZ 나우즈 (Official YouTube Channel)",
+   "handle": "@cube_nowz",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "nssign": {
+   "channelId": "UCTqED_cpwrZiemsBGyT7ZCg",
+   "title": "nSSign",
+   "handle": "@nssign_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ntx": {
+   "channelId": "UCX54t2bVWYxV-txSJIorQPA",
+   "title": "NTX",
+   "handle": "@ntx_official_",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "oddyouth": {
+   "channelId": "UC01qd2I1K6MHpoiv9m5W2IQ",
+   "title": "ODD YOUTH (오드유스)",
+   "handle": "@odd_youth",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "ohmygirl": {
+   "channelId": "UC-qYkzKFdekoEniRu_FS3zg",
+   "title": "OH MY GIRL",
+   "handle": "@ohmygirl",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "omegax": {
+   "channelId": "UCHJsN50Lr5fyzokVnjhvZ8g",
+   "title": "OMEGA X",
+   "handle": "@omegaxofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "onepact": {
+   "channelId": "UCb7q-fXh21T-pq02dC9H3xg",
+   "title": "ONE PACT",
+   "handle": "@one_pact",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "oneus": {
+   "channelId": "UCWTYf4xModfNsyq2NUYjF5g",
+   "title": "ONEUS",
+   "handle": "@oneus",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "onewe": {
+   "channelId": "UCj-dtq6jHfj4_fufifPzMEQ",
+   "title": "ONEWE",
+   "handle": "@onewe",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "onf": {
+   "channelId": "UCgdj5bL5_Il2tqsQ7J4k6zw",
+   "title": "ONF OFFICIAL",
+   "handle": "@onf_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "p1harmony": {
+   "channelId": "UCe-XzQhLaq4zS_mPXzuc_2Q",
+   "title": "P1Harmony",
+   "handle": "@p1harmonyofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "pentagon": {
+   "channelId": "UCw4NcAAtRsjL-cGlBrUnMTQ",
+   "title": "PENTAGON 펜타곤 (Official YouTube Channel)",
+   "handle": "@cube_ptg",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "plave": {
+   "channelId": "UCPZIPuQPrfrUG9Xe_okEmQA",
+   "title": "PLAVE 플레이브",
+   "handle": "@plave_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "pow": {
+   "channelId": "UCc8hWuK9dgKvB04rzZL23sQ",
+   "title": "POW Official",
+   "handle": "@pow_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "purplekiss": {
+   "channelId": "UCor8nQnEdMs4eBcU-uVBQ8g",
+   "title": "PURPLE KISS",
+   "handle": "@purplekiss",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "qwer": {
+   "channelId": "UCgD0APk2x9uBlLM0UsmhQjw",
+   "title": "QWER",
+   "handle": "@qwer_band_official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "redvelvet": {
+   "channelId": "UCk9GmdlDTBfgGRb7vXeRMoQ",
+   "title": "Red Velvet",
+   "handle": "@redvelvet",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "rescene": {
+   "channelId": "UCtKtCiaWRz-d3EZn2xd1mdA",
+   "title": "RESCENE",
+   "handle": "@rescene_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "riize": {
+   "channelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
+   "title": "",
+   "source": "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
+   "verifiedAt": "2026-10-02"
+  },
+  "seventeen": {
+   "channelId": "UCfkXDY7vwkcJ8ddFGz8KusA",
+   "title": "SEVENTEEN",
+   "handle": "@pledis17",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "sf9": {
+   "channelId": "UC8HNshpReWjQv1WpwzhPHjA",
+   "title": "SF9",
+   "handle": "@sf9official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "shinee": {
+   "channelId": "UCyPwRgc3gQGqhk6RoGS50Ug",
+   "title": "SHINee",
+   "handle": "@shinee",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "silicagel": {
+   "channelId": "UCXteMTpHAvyDP05G0QULuZA",
+   "title": "Silica Gel 실리카겔",
+   "handle": "@silicagel",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "standingegg": {
+   "channelId": "UCLpL59_S_VweDoY3kut93vw",
+   "title": "STANDING EGG",
+   "handle": "@standingegg",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "stayc": {
+   "channelId": "UCod5V2dpnpJLklGvVOv5FcQ",
+   "title": "STAYC",
+   "handle": "@stayc",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "straykids": {
+   "channelId": "UC9rMiEjNaCSsebs31MRDCRA",
+   "title": "Stray Kids",
+   "handle": "@straykids",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "superjunior": {
+   "channelId": "UCFipx49muiJ8-d2YsnLlNVw",
+   "title": "SUPER JUNIOR",
+   "handle": "@superjunior",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "teentop": {
+   "channelId": "UCzIrJF-paJrXpvdYpS5LnTw",
+   "title": "TEEN TOP Official",
+   "handle": "@teentopofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "tempest": {
+   "channelId": "UCCViKQ1A1tXhIVKAVEazcaA",
+   "title": "TEMPEST",
+   "handle": "@tpstofficial",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "theboyz": {
+   "channelId": "UCkJ1rbOrsyPfBuHNfnLPm-Q",
+   "title": "THE BOYZ",
+   "handle": "@theboyzofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "thenewsix": {
+   "channelId": "UC8Icvoedxf-HwIKm6o2Gzlg",
+   "title": "TNX",
+   "handle": "@official_tnx",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "tiot": {
+   "channelId": "UC4AVxeN8iY5j8kzg2WE0Vng",
+   "title": "TIOT 티아이오티",
+   "handle": "@tiot_now",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "touched": {
+   "channelId": "UC1VarYVKLPA6DL8rLclYxBg",
+   "title": "터치드 TOUCHED",
+   "handle": "@touched_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "treasure": {
+   "channelId": "UCx9hXYOCvUYwrprEqe4ZQHA",
+   "title": "TREASURE (트레저)",
+   "handle": "@treasure",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "triples": {
+   "channelId": "UCJnL-TBcsYrF2SLs7tmiC8Q",
+   "title": "tripleS official",
+   "handle": "@triplescosmos",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "tvxq": {
+   "channelId": "UC6dXhxQtzjlEGauwEGtLuSw",
+   "title": "TVXQ!",
+   "handle": "@tvxq",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
   },
   "twice": {
    "channelId": "UCzgxx_DM2Dcb9Y1spb9mUJA",
@@ -14,11 +1000,161 @@
    "source": "https://www.youtube.com/channel/UCzgxx_DM2Dcb9Y1spb9mUJA",
    "verifiedAt": "2026-10-02"
   },
-  "riize": {
-   "channelId": "UCdVD0MsYecQaIE5Ru-pOIQQ",
-   "title": "",
-   "source": "https://www.youtube.com/channel/UCdVD0MsYecQaIE5Ru-pOIQQ",
-   "verifiedAt": "2026-10-02"
+  "tws": {
+   "channelId": "UC8C6QOPDVYwmuaSBZksefdg",
+   "title": "TWS",
+   "handle": "@tws_pledis",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "txt": {
+   "channelId": "UCtiObj3CsEAdNU6ZPWDsddQ",
+   "title": "TOMORROW X TOGETHER OFFICIAL",
+   "handle": "@txt_bighit",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "unchild": {
+   "channelId": "UCpDgvA1XqZbA7WBiv3DMCXA",
+   "title": "UNCHILD",
+   "handle": "@official_unchild",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "unis": {
+   "channelId": "UCspnElmzSLPhrZJDG9v7JWw",
+   "title": "UNIS",
+   "handle": "@unis_offcl",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "vayonn": {
+   "channelId": "UCpX7owSyMVoaj9kee9jkcig",
+   "title": "VAYONN",
+   "handle": "@vay-onn",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "verivery": {
+   "channelId": "UC4t_pYSKIhLWFgutdzIK66Q",
+   "title": "VERIVERY",
+   "handle": "@verivery",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "viviz": {
+   "channelId": "UCWFMjDuWKlct0jy89k2kkRA",
+   "title": "VIVIZ",
+   "handle": "@viviz.official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "vvup": {
+   "channelId": "UCOCmok56Fc0yODLljdcOS9Q",
+   "title": "VVUP",
+   "handle": "@vvup_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "waker": {
+   "channelId": "UCeMeIvv3qjMpdEC03ssxlzw",
+   "title": "WAKER (웨이커)",
+   "handle": "@waker_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "wayv": {
+   "channelId": "UC-ZHt5Zgadfx-B1CM63Lqew",
+   "title": "WayV",
+   "handle": "@wayv",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "wei": {
+   "channelId": "UC_sMGOWZ7FP7rsUAnQSM4HQ",
+   "title": "WEi",
+   "handle": "@weiofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "whib": {
+   "channelId": "UC_isDbPZQyyQqXX-POFFPIw",
+   "title": "WHIB",
+   "handle": "@whib_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "winner": {
+   "channelId": "UCayQxFAoFCvGariuQCtHRGQ",
+   "title": "WINNER",
+   "handle": "@winner",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "wjsn": {
+   "channelId": "UCVaIiqzfKQsi7Qw4-X8TmmA",
+   "title": "우주소녀 WJSN",
+   "handle": "@wjsnofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "xdinaryheroes": {
+   "channelId": "UCO9GhtdQcCRf67GIdSQ0HNQ",
+   "title": "Xdinary Heroes",
+   "handle": "@xdinaryheroesofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "xikers": {
+   "channelId": "UCPtC0MXSW40Qq7RkhsCXjUQ",
+   "title": "xikers",
+   "handle": "@xikers_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "xlov": {
+   "channelId": "UCHWhn9xw7x8NPPnV6eWQDQA",
+   "title": "XLOV",
+   "handle": "@xlov_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "youngposse": {
+   "channelId": "UCYvGSZPvQj09LgpcziCszyA",
+   "title": "YOUNG POSSE • 영파씨",
+   "handle": "@youngposseup",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "younite": {
+   "channelId": "UCJxiqlG8f1XCAQvgITzkK7A",
+   "title": "YOUNITE",
+   "handle": "@youniteofficial",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "zerobaseone": {
+   "channelId": "UCSAp0Yl9S0Zq5uDqE6im_XQ",
+   "title": "ZEROBASEONE",
+   "handle": "@zb1_official",
+   "source": "youtube-resolve search, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
   }
+ },
+ "excluded": {
+  "buzz": "파파버즈(다른 채널)",
+  "csr": "Consumer Research Studios(다른 채널)",
+  "dxmon": "구독자 148명 채널",
+  "ioi": "Innovative India(다른 채널)",
+  "kara": "Kara and Nate(다른 채널)",
+  "lucy": "Lucy Bella(다른 채널)",
+  "peppertones": "구독자 수 비공개, 확인 불가",
+  "saymyname": "다른 채널",
+  "secret": "SECRET NUMBER(다른 그룹)",
+  "seeya": "보람씨야(다른 채널)",
+  "thenuts": "개인 채널",
+  "trendz": "Trendz Now(다른 채널)",
+  "tunexx": "구독자 9명 채널",
+  "vixx": "구독자 115명 채널"
  }
 }

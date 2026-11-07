@@ -42,6 +42,7 @@ export type LatestGroup = {
   raw: number[];
   float: number;
   listeners: number | null;
+  subscribers: number | null;
   news24h: number;
   chartPoints: number;
   brand30d: number;
@@ -62,6 +63,7 @@ export type LatestFile = {
     naver: number | null;
     bugs: number | null;
     lastfm: string | null;
+    youtube: string | null;
   };
 };
 

@@ -46,9 +46,30 @@ export function listenerScore(listeners: number | null): number {
   return clamp100((100 * (Math.log10(listeners) - 4)) / (Math.log10(5_000_000) - 4));
 }
 
-/** 팬캡에 쓰는 팬덤 규모(유통 물량). Last.fm 청취자 10만 명 = 1. */
-export function fanFloat(listeners: number | null): number {
-  return Math.max(listeners ?? 0, 10_000) / 100_000;
+/** 유튜브 구독자 1만 명 → 0점, 2,000만 명 → 100점 */
+export function subscriberScore(subscribers: number | null): number {
+  if (!subscribers || subscribers <= 0) return 0;
+  return clamp100((100 * (Math.log10(subscribers) - 4)) / (Math.log10(20_000_000) - 4));
+}
+
+/** SNS/팬덤: Last.fm 청취자와 유튜브 구독자 점수의 평균(한쪽만 있으면 그 점수) */
+export function fandomScore(listeners: number | null, subscribers: number | null): number {
+  const scores = [
+    listeners ? listenerScore(listeners) : null,
+    subscribers ? subscriberScore(subscribers) : null,
+  ].filter((score): score is number => score !== null);
+  if (!scores.length) return 0;
+  return scores.reduce((sum, score) => sum + score, 0) / scores.length;
+}
+
+/**
+ * 팬캡에 쓰는 팬덤 규모(유통 물량). 10만 명 = 1.
+ * Last.fm 청취자와 유튜브 구독자가 둘 다 있으면 평균, 한쪽만 있으면 그 값.
+ */
+export function fanFloat(listeners: number | null, subscribers: number | null = null): number {
+  const counts = [listeners, subscribers].filter((count): count is number => !!count && count > 0);
+  const people = counts.length ? counts.reduce((sum, count) => sum + count, 0) / counts.length : 0;
+  return Math.max(people, 10_000) / 100_000;
 }
 
 export const MOMENTUM_SOURCES: readonly VariableId[] = [
