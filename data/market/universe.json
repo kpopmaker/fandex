@@ -1,7 +1,7 @@
 {
  "version": "market-universe-v1",
  "source": "app/data/v4/artistUniverse.ts",
- "count": 177,
+ "count": 186,
  "groups": [
   {
    "id": "aespa",
@@ -18,7 +18,8 @@
     "Aespa"
    ],
    "excludeKeywords": [],
-   "lastfmName": "aespa"
+   "lastfmName": "aespa",
+   "newsQueries": []
   },
   {
    "id": "ive",
@@ -34,7 +35,8 @@
     "IVE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "IVE"
+   "lastfmName": "IVE",
+   "newsQueries": []
   },
   {
    "id": "riize",
@@ -50,7 +52,8 @@
     "RIIZE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "RIIZE"
+   "lastfmName": "RIIZE",
+   "newsQueries": []
   },
   {
    "id": "illit",
@@ -66,7 +69,8 @@
     "ILLIT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ILLIT"
+   "lastfmName": "ILLIT",
+   "newsQueries": []
   },
   {
    "id": "tws",
@@ -82,7 +86,8 @@
     "TWS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TWS"
+   "lastfmName": "TWS",
+   "newsQueries": []
   },
   {
    "id": "lesserafim",
@@ -98,7 +103,8 @@
     "LE SSERAFIM"
    ],
    "excludeKeywords": [],
-   "lastfmName": "LE SSERAFIM"
+   "lastfmName": "LE SSERAFIM",
+   "newsQueries": []
   },
   {
    "id": "newjeans",
@@ -114,7 +120,8 @@
     "NewJeans"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NewJeans"
+   "lastfmName": "NewJeans",
+   "newsQueries": []
   },
   {
    "id": "nmixx",
@@ -130,7 +137,8 @@
     "NMIXX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NMIXX"
+   "lastfmName": "NMIXX",
+   "newsQueries": []
   },
   {
    "id": "babymonster",
@@ -146,7 +154,8 @@
     "BABYMONSTER"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BABYMONSTER"
+   "lastfmName": "BABYMONSTER",
+   "newsQueries": []
   },
   {
    "id": "boynextdoor",
@@ -162,7 +171,8 @@
     "BOYNEXTDOOR"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BOYNEXTDOOR"
+   "lastfmName": "BOYNEXTDOOR",
+   "newsQueries": []
   },
   {
    "id": "straykids",
@@ -180,7 +190,8 @@
     "SKZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Stray Kids"
+   "lastfmName": "Stray Kids",
+   "newsQueries": []
   },
   {
    "id": "seventeen",
@@ -197,7 +208,8 @@
     "SVT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SEVENTEEN"
+   "lastfmName": "SEVENTEEN",
+   "newsQueries": []
   },
   {
    "id": "bts",
@@ -213,7 +225,8 @@
     "BTS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BTS"
+   "lastfmName": "BTS",
+   "newsQueries": []
   },
   {
    "id": "blackpink",
@@ -229,7 +242,8 @@
     "BLACKPINK"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BLACKPINK"
+   "lastfmName": "BLACKPINK",
+   "newsQueries": []
   },
   {
    "id": "twice",
@@ -245,7 +259,8 @@
     "TWICE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TWICE"
+   "lastfmName": "TWICE",
+   "newsQueries": []
   },
   {
    "id": "enhypen",
@@ -261,7 +276,8 @@
     "ENHYPEN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ENHYPEN"
+   "lastfmName": "ENHYPEN",
+   "newsQueries": []
   },
   {
    "id": "txt",
@@ -278,7 +294,8 @@
     "TXT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Tomorrow X Together"
+   "lastfmName": "Tomorrow X Together",
+   "newsQueries": []
   },
   {
    "id": "ateez",
@@ -294,7 +311,8 @@
     "ATEEZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ATEEZ"
+   "lastfmName": "ATEEZ",
+   "newsQueries": []
   },
   {
    "id": "zerobaseone",
@@ -311,7 +329,8 @@
     "ZB1"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ZEROBASEONE"
+   "lastfmName": "ZEROBASEONE",
+   "newsQueries": []
   },
   {
    "id": "gidle",
@@ -329,7 +348,8 @@
     "I-DLE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "(G)I-DLE"
+   "lastfmName": "(G)I-DLE",
+   "newsQueries": []
   },
   {
    "id": "itzy",
@@ -345,7 +365,8 @@
     "ITZY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ITZY"
+   "lastfmName": "ITZY",
+   "newsQueries": []
   },
   {
    "id": "kissoflife",
@@ -362,7 +383,8 @@
     "KIOF"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KISS OF LIFE"
+   "lastfmName": "KISS OF LIFE",
+   "newsQueries": []
   },
   {
    "id": "meovv",
@@ -378,7 +400,8 @@
     "MEOVV"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MEOVV"
+   "lastfmName": "MEOVV",
+   "newsQueries": []
   },
   {
    "id": "izna",
@@ -394,7 +417,8 @@
     "izna"
    ],
    "excludeKeywords": [],
-   "lastfmName": "izna"
+   "lastfmName": "izna",
+   "newsQueries": []
   },
   {
    "id": "nctdream",
@@ -411,7 +435,8 @@
     "NCT드림"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NCT DREAM"
+   "lastfmName": "NCT DREAM",
+   "newsQueries": []
   },
   {
    "id": "nct127",
@@ -429,7 +454,8 @@
     "NCT127"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NCT 127"
+   "lastfmName": "NCT 127",
+   "newsQueries": []
   },
   {
    "id": "nctwish",
@@ -445,7 +471,8 @@
     "NCT WISH"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NCT WISH"
+   "lastfmName": "NCT WISH",
+   "newsQueries": []
   },
   {
    "id": "treasure",
@@ -461,7 +488,8 @@
     "TREASURE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TREASURE"
+   "lastfmName": "TREASURE",
+   "newsQueries": []
   },
   {
    "id": "theboyz",
@@ -479,7 +507,8 @@
     "TBZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "THE BOYZ"
+   "lastfmName": "THE BOYZ",
+   "newsQueries": []
   },
   {
    "id": "monstax",
@@ -495,7 +524,8 @@
     "MONSTA X"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MONSTA X"
+   "lastfmName": "MONSTA X",
+   "newsQueries": []
   },
   {
    "id": "exo",
@@ -511,7 +541,8 @@
     "EXO"
    ],
    "excludeKeywords": [],
-   "lastfmName": "EXO"
+   "lastfmName": "EXO",
+   "newsQueries": []
   },
   {
    "id": "redvelvet",
@@ -527,7 +558,8 @@
     "Red Velvet"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Red Velvet"
+   "lastfmName": "Red Velvet",
+   "newsQueries": []
   },
   {
    "id": "mamamoo",
@@ -543,7 +575,8 @@
     "MAMAMOO"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MAMAMOO"
+   "lastfmName": "MAMAMOO",
+   "newsQueries": []
   },
   {
    "id": "day6",
@@ -559,7 +592,8 @@
     "DAY6"
    ],
    "excludeKeywords": [],
-   "lastfmName": "DAY6"
+   "lastfmName": "DAY6",
+   "newsQueries": []
   },
   {
    "id": "qwer",
@@ -575,7 +609,8 @@
     "QWER"
    ],
    "excludeKeywords": [],
-   "lastfmName": "QWER"
+   "lastfmName": "QWER",
+   "newsQueries": []
   },
   {
    "id": "girlsgeneration",
@@ -592,7 +627,8 @@
     "SNSD"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Girls' Generation"
+   "lastfmName": "Girls' Generation",
+   "newsQueries": []
   },
   {
    "id": "shinee",
@@ -608,7 +644,8 @@
     "SHINee"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SHINee"
+   "lastfmName": "SHINee",
+   "newsQueries": []
   },
   {
    "id": "superjunior",
@@ -625,7 +662,8 @@
     "SJ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Super Junior"
+   "lastfmName": "Super Junior",
+   "newsQueries": []
   },
   {
    "id": "tvxq",
@@ -642,7 +680,8 @@
     "DBSK"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TVXQ"
+   "lastfmName": "TVXQ",
+   "newsQueries": []
   },
   {
    "id": "wayv",
@@ -658,7 +697,8 @@
     "WayV"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WayV"
+   "lastfmName": "WayV",
+   "newsQueries": []
   },
   {
    "id": "bigbang",
@@ -674,7 +714,8 @@
     "BIGBANG"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BIGBANG"
+   "lastfmName": "BIGBANG",
+   "newsQueries": []
   },
   {
    "id": "2ne1",
@@ -690,7 +731,8 @@
     "2NE1"
    ],
    "excludeKeywords": [],
-   "lastfmName": "2NE1"
+   "lastfmName": "2NE1",
+   "newsQueries": []
   },
   {
    "id": "winner",
@@ -706,7 +748,8 @@
     "WINNER"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WINNER"
+   "lastfmName": "WINNER",
+   "newsQueries": []
   },
   {
    "id": "niziu",
@@ -722,7 +765,8 @@
     "NiziU"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NiziU"
+   "lastfmName": "NiziU",
+   "newsQueries": []
   },
   {
    "id": "xdinaryheroes",
@@ -739,7 +783,8 @@
     "XH"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Xdinary Heroes"
+   "lastfmName": "Xdinary Heroes",
+   "newsQueries": []
   },
   {
    "id": "andteam",
@@ -756,7 +801,8 @@
     "andTEAM"
    ],
    "excludeKeywords": [],
-   "lastfmName": "&TEAM"
+   "lastfmName": "&TEAM",
+   "newsQueries": []
   },
   {
    "id": "katseye",
@@ -772,7 +818,8 @@
     "KATSEYE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KATSEYE"
+   "lastfmName": "KATSEYE",
+   "newsQueries": []
   },
   {
    "id": "stayc",
@@ -788,7 +835,8 @@
     "STAYC"
    ],
    "excludeKeywords": [],
-   "lastfmName": "STAYC"
+   "lastfmName": "STAYC",
+   "newsQueries": []
   },
   {
    "id": "triples",
@@ -805,7 +853,8 @@
     "TripleS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "tripleS"
+   "lastfmName": "tripleS",
+   "newsQueries": []
   },
   {
    "id": "dreamcatcher",
@@ -821,7 +870,8 @@
     "Dreamcatcher"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Dreamcatcher"
+   "lastfmName": "Dreamcatcher",
+   "newsQueries": []
   },
   {
    "id": "billlie",
@@ -837,7 +887,8 @@
     "Billlie"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Billlie"
+   "lastfmName": "Billlie",
+   "newsQueries": []
   },
   {
    "id": "p1harmony",
@@ -854,7 +905,8 @@
     "P1H"
    ],
    "excludeKeywords": [],
-   "lastfmName": "P1Harmony"
+   "lastfmName": "P1Harmony",
+   "newsQueries": []
   },
   {
    "id": "xikers",
@@ -870,7 +922,8 @@
     "xikers"
    ],
    "excludeKeywords": [],
-   "lastfmName": "xikers"
+   "lastfmName": "xikers",
+   "newsQueries": []
   },
   {
    "id": "cravity",
@@ -886,7 +939,8 @@
     "CRAVITY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "CRAVITY"
+   "lastfmName": "CRAVITY",
+   "newsQueries": []
   },
   {
    "id": "oneus",
@@ -902,7 +956,8 @@
     "ONEUS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ONEUS"
+   "lastfmName": "ONEUS",
+   "newsQueries": []
   },
   {
    "id": "btob",
@@ -918,7 +973,8 @@
     "BTOB"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BTOB"
+   "lastfmName": "BTOB",
+   "newsQueries": []
   },
   {
    "id": "apink",
@@ -934,7 +990,8 @@
     "Apink"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Apink"
+   "lastfmName": "Apink",
+   "newsQueries": []
   },
   {
    "id": "ohmygirl",
@@ -951,7 +1008,8 @@
     "OMG"
    ],
    "excludeKeywords": [],
-   "lastfmName": "OH MY GIRL"
+   "lastfmName": "OH MY GIRL",
+   "newsQueries": []
   },
   {
    "id": "viviz",
@@ -967,7 +1025,8 @@
     "VIVIZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "VIVIZ"
+   "lastfmName": "VIVIZ",
+   "newsQueries": []
   },
   {
    "id": "fromis9",
@@ -984,7 +1043,8 @@
     "fromis9"
    ],
    "excludeKeywords": [],
-   "lastfmName": "fromis_9"
+   "lastfmName": "fromis_9",
+   "newsQueries": []
   },
   {
    "id": "hearts2hearts",
@@ -1001,7 +1061,8 @@
     "H2H"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Hearts2Hearts"
+   "lastfmName": "Hearts2Hearts",
+   "newsQueries": []
   },
   {
    "id": "nexz",
@@ -1017,7 +1078,8 @@
     "NEXZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NEXZ"
+   "lastfmName": "NEXZ",
+   "newsQueries": []
   },
   {
    "id": "kep1er",
@@ -1033,7 +1095,8 @@
     "Kep1er"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Kep1er"
+   "lastfmName": "Kep1er",
+   "newsQueries": []
   },
   {
    "id": "onf",
@@ -1049,7 +1112,8 @@
     "ONF"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ONF"
+   "lastfmName": "ONF",
+   "newsQueries": []
   },
   {
    "id": "artms",
@@ -1065,7 +1129,8 @@
     "ARTMS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ARTMS"
+   "lastfmName": "ARTMS",
+   "newsQueries": []
   },
   {
    "id": "unis",
@@ -1081,7 +1146,8 @@
     "UNIS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "UNIS"
+   "lastfmName": "UNIS",
+   "newsQueries": []
   },
   {
    "id": "kickflip",
@@ -1097,7 +1163,8 @@
     "KickFlip"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KickFlip"
+   "lastfmName": "KickFlip",
+   "newsQueries": []
   },
   {
    "id": "nowadays",
@@ -1115,7 +1182,8 @@
     "NOWADAYS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NOWZ"
+   "lastfmName": "NOWZ",
+   "newsQueries": []
   },
   {
    "id": "allhours",
@@ -1132,7 +1200,8 @@
     "ALLHOURS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ALL(H)OURS"
+   "lastfmName": "ALL(H)OURS",
+   "newsQueries": []
   },
   {
    "id": "rescene",
@@ -1148,7 +1217,8 @@
     "RESCENE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "RESCENE"
+   "lastfmName": "RESCENE",
+   "newsQueries": []
   },
   {
    "id": "thenewsix",
@@ -1165,7 +1235,8 @@
     "TNX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "THE NEW SIX"
+   "lastfmName": "THE NEW SIX",
+   "newsQueries": []
   },
   {
    "id": "epex",
@@ -1181,7 +1252,8 @@
     "EPEX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "EPEX"
+   "lastfmName": "EPEX",
+   "newsQueries": []
   },
   {
    "id": "tempest",
@@ -1197,7 +1269,8 @@
     "TEMPEST"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TEMPEST"
+   "lastfmName": "TEMPEST",
+   "newsQueries": []
   },
   {
    "id": "8turn",
@@ -1213,7 +1286,8 @@
     "8TURN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "8TURN"
+   "lastfmName": "8TURN",
+   "newsQueries": []
   },
   {
    "id": "younite",
@@ -1229,7 +1303,8 @@
     "YOUNITE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "YOUNITE"
+   "lastfmName": "YOUNITE",
+   "newsQueries": []
   },
   {
    "id": "wjsn",
@@ -1246,7 +1321,8 @@
     "Cosmic Girls"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WJSN"
+   "lastfmName": "WJSN",
+   "newsQueries": []
   },
   {
    "id": "kiiikiii",
@@ -1262,7 +1338,8 @@
     "KiiiKiii"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KiiiKiii"
+   "lastfmName": "KiiiKiii",
+   "newsQueries": []
   },
   {
    "id": "alldayproject",
@@ -1278,7 +1355,8 @@
     "ALLDAY PROJECT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ALLDAY PROJECT"
+   "lastfmName": "ALLDAY PROJECT",
+   "newsQueries": []
   },
   {
    "id": "cortis",
@@ -1294,7 +1372,8 @@
     "CORTIS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "CORTIS"
+   "lastfmName": "CORTIS",
+   "newsQueries": []
   },
   {
    "id": "buzz",
@@ -1311,7 +1390,8 @@
     "BUZZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Buzz"
+   "lastfmName": "Buzz",
+   "newsQueries": []
   },
   {
    "id": "seeya",
@@ -1328,7 +1408,8 @@
     "SEEYA"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SeeYa"
+   "lastfmName": "SeeYa",
+   "newsQueries": []
   },
   {
    "id": "davichi",
@@ -1345,7 +1426,8 @@
     "DAVICHI"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Davichi"
+   "lastfmName": "Davichi",
+   "newsQueries": []
   },
   {
    "id": "jannabi",
@@ -1362,7 +1444,8 @@
     "JANNABI"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Jannabi"
+   "lastfmName": "Jannabi",
+   "newsQueries": []
   },
   {
    "id": "gyeongseoyeji",
@@ -1379,7 +1462,8 @@
     "Gyeongseo Yeji"
    ],
    "excludeKeywords": [],
-   "lastfmName": "GyeongseoYeji"
+   "lastfmName": "GyeongseoYeji",
+   "newsQueries": []
   },
   {
    "id": "nflying",
@@ -1397,7 +1481,8 @@
     "N.FLYING"
    ],
    "excludeKeywords": [],
-   "lastfmName": "N.Flying"
+   "lastfmName": "N.Flying",
+   "newsQueries": []
   },
   {
    "id": "epikhigh",
@@ -1414,7 +1499,8 @@
     "Epik High"
    ],
    "excludeKeywords": [],
-   "lastfmName": "EPIK HIGH"
+   "lastfmName": "EPIK HIGH",
+   "newsQueries": []
   },
   {
    "id": "melomance",
@@ -1431,7 +1517,8 @@
     "MELOMANCE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MeloMance"
+   "lastfmName": "MeloMance",
+   "newsQueries": []
   },
   {
    "id": "nerdconnection",
@@ -1448,7 +1535,8 @@
     "NERD CONNECTION"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Nerd Connection"
+   "lastfmName": "Nerd Connection",
+   "newsQueries": []
   },
   {
    "id": "standingegg",
@@ -1466,7 +1554,8 @@
     "STANDING EGG"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Standing Egg"
+   "lastfmName": "Standing Egg",
+   "newsQueries": []
   },
   {
    "id": "ioi",
@@ -1483,7 +1572,8 @@
     "IOI"
    ],
    "excludeKeywords": [],
-   "lastfmName": "I.O.I"
+   "lastfmName": "I.O.I",
+   "newsQueries": []
   },
   {
    "id": "thenuts",
@@ -1500,7 +1590,8 @@
     "The Nuts"
    ],
    "excludeKeywords": [],
-   "lastfmName": "The NuTs"
+   "lastfmName": "The NuTs",
+   "newsQueries": []
   },
   {
    "id": "idid",
@@ -1516,7 +1607,8 @@
     "IDID"
    ],
    "excludeKeywords": [],
-   "lastfmName": "IDID"
+   "lastfmName": "IDID",
+   "newsQueries": []
   },
   {
    "id": "aen",
@@ -1532,7 +1624,8 @@
     "AEN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AEN"
+   "lastfmName": "AEN",
+   "newsQueries": []
   },
   {
    "id": "ikon",
@@ -1549,7 +1642,8 @@
     "IKON"
    ],
    "excludeKeywords": [],
-   "lastfmName": "iKON"
+   "lastfmName": "iKON",
+   "newsQueries": []
   },
   {
    "id": "82major",
@@ -1565,7 +1659,8 @@
     "82MAJOR"
    ],
    "excludeKeywords": [],
-   "lastfmName": "82MAJOR"
+   "lastfmName": "82MAJOR",
+   "newsQueries": []
   },
   {
    "id": "highlight",
@@ -1582,7 +1677,8 @@
     "Highlight"
    ],
    "excludeKeywords": [],
-   "lastfmName": "HIGHLIGHT"
+   "lastfmName": "HIGHLIGHT",
+   "newsQueries": []
   },
   {
    "id": "ahof",
@@ -1598,7 +1694,8 @@
     "AHOF"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AHOF"
+   "lastfmName": "AHOF",
+   "newsQueries": []
   },
   {
    "id": "ampersandone",
@@ -1615,7 +1712,8 @@
     "AMPERSAND ONE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AMPERS&ONE"
+   "lastfmName": "AMPERS&ONE",
+   "newsQueries": []
   },
   {
    "id": "plave",
@@ -1631,7 +1729,8 @@
     "PLAVE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "PLAVE"
+   "lastfmName": "PLAVE",
+   "newsQueries": []
   },
   {
    "id": "touched",
@@ -1648,7 +1747,8 @@
     "Touched"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TOUCHED"
+   "lastfmName": "TOUCHED",
+   "newsQueries": []
   },
   {
    "id": "and2ble",
@@ -1664,7 +1764,8 @@
     "AND2BLE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AND2BLE"
+   "lastfmName": "AND2BLE",
+   "newsQueries": []
   },
   {
    "id": "lucy",
@@ -1680,7 +1781,8 @@
     "LUCY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "LUCY"
+   "lastfmName": "LUCY",
+   "newsQueries": []
   },
   {
    "id": "nssign",
@@ -1698,7 +1800,8 @@
     "N.SSIGN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "n.SSign"
+   "lastfmName": "n.SSign",
+   "newsQueries": []
   },
   {
    "id": "hori7on",
@@ -1715,7 +1818,8 @@
     "Hori7on"
    ],
    "excludeKeywords": [],
-   "lastfmName": "HORI7ON"
+   "lastfmName": "HORI7ON",
+   "newsQueries": []
   },
   {
    "id": "2pm",
@@ -1731,7 +1835,8 @@
     "2PM"
    ],
    "excludeKeywords": [],
-   "lastfmName": "2PM"
+   "lastfmName": "2PM",
+   "newsQueries": []
   },
   {
    "id": "boystory",
@@ -1748,7 +1853,8 @@
     "Boy Story"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BOY STORY"
+   "lastfmName": "BOY STORY",
+   "newsQueries": []
   },
   {
    "id": "girlset",
@@ -1765,7 +1871,8 @@
     "Girlset"
    ],
    "excludeKeywords": [],
-   "lastfmName": "GIRLSET"
+   "lastfmName": "GIRLSET",
+   "newsQueries": []
   },
   {
    "id": "babydontcry",
@@ -1782,7 +1889,8 @@
     "BABY DONT CRY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Baby DONT Cry"
+   "lastfmName": "Baby DONT Cry",
+   "newsQueries": []
   },
   {
    "id": "ftisland",
@@ -1799,7 +1907,8 @@
     "F.T. Island"
    ],
    "excludeKeywords": [],
-   "lastfmName": "FTISLAND"
+   "lastfmName": "FTISLAND",
+   "newsQueries": []
   },
   {
    "id": "cnblue",
@@ -1815,7 +1924,8 @@
     "CNBLUE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "CNBLUE"
+   "lastfmName": "CNBLUE",
+   "newsQueries": []
   },
   {
    "id": "sf9",
@@ -1831,7 +1941,8 @@
     "SF9"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SF9"
+   "lastfmName": "SF9",
+   "newsQueries": []
   },
   {
    "id": "hifiunicorn",
@@ -1848,7 +1959,8 @@
     "Hi-Fi Unicorn"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Hi-Fi Un!corn"
+   "lastfmName": "Hi-Fi Un!corn",
+   "newsQueries": []
   },
   {
    "id": "axmxp",
@@ -1864,7 +1976,8 @@
     "AxMxP"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AxMxP"
+   "lastfmName": "AxMxP",
+   "newsQueries": []
   },
   {
    "id": "goldenchild",
@@ -1881,7 +1994,8 @@
     "Golden Child"
    ],
    "excludeKeywords": [],
-   "lastfmName": "GOLDEN CHILD"
+   "lastfmName": "GOLDEN CHILD",
+   "newsQueries": []
   },
   {
    "id": "drippin",
@@ -1898,7 +2012,8 @@
     "Drippin"
    ],
    "excludeKeywords": [],
-   "lastfmName": "DRIPPIN"
+   "lastfmName": "DRIPPIN",
+   "newsQueries": []
   },
   {
    "id": "unchild",
@@ -1914,7 +2029,8 @@
     "UNCHILD"
    ],
    "excludeKeywords": [],
-   "lastfmName": "UNCHILD"
+   "lastfmName": "UNCHILD",
+   "newsQueries": []
   },
   {
    "id": "onewe",
@@ -1930,7 +2046,8 @@
     "ONEWE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ONEWE"
+   "lastfmName": "ONEWE",
+   "newsQueries": []
   },
   {
    "id": "purplekiss",
@@ -1947,7 +2064,8 @@
     "PURPLE K!SS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "PURPLE KISS"
+   "lastfmName": "PURPLE KISS",
+   "newsQueries": []
   },
   {
    "id": "alphadriveone",
@@ -1963,7 +2081,8 @@
     "ALPHA DRIVE ONE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ALPHA DRIVE ONE"
+   "lastfmName": "ALPHA DRIVE ONE",
+   "newsQueries": []
   },
   {
    "id": "lun8",
@@ -1979,7 +2098,8 @@
     "LUN8"
    ],
    "excludeKeywords": [],
-   "lastfmName": "LUN8"
+   "lastfmName": "LUN8",
+   "newsQueries": []
   },
   {
    "id": "astro",
@@ -1996,7 +2116,8 @@
     "Astro"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ASTRO"
+   "lastfmName": "ASTRO",
+   "newsQueries": []
   },
   {
    "id": "flareu",
@@ -2014,7 +2135,8 @@
     "Flare U"
    ],
    "excludeKeywords": [],
-   "lastfmName": "FLARE U"
+   "lastfmName": "FLARE U",
+   "newsQueries": []
   },
   {
    "id": "modyssey",
@@ -2031,7 +2153,8 @@
     "Modyssey"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MODYSSEY"
+   "lastfmName": "MODYSSEY",
+   "newsQueries": []
   },
   {
    "id": "lightsum",
@@ -2048,7 +2171,8 @@
     "Lightsum"
    ],
    "excludeKeywords": [],
-   "lastfmName": "LIGHTSUM"
+   "lastfmName": "LIGHTSUM",
+   "newsQueries": []
   },
   {
    "id": "pentagon",
@@ -2065,7 +2189,8 @@
     "Pentagon"
    ],
    "excludeKeywords": [],
-   "lastfmName": "PENTAGON"
+   "lastfmName": "PENTAGON",
+   "newsQueries": []
   },
   {
    "id": "peppertones",
@@ -2082,7 +2207,8 @@
     "Peppertones"
    ],
    "excludeKeywords": [],
-   "lastfmName": "PEPPERTONES"
+   "lastfmName": "PEPPERTONES",
+   "newsQueries": []
   },
   {
    "id": "dragonpony",
@@ -2099,7 +2225,8 @@
     "DRAGON PONY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Dragon Pony"
+   "lastfmName": "Dragon Pony",
+   "newsQueries": []
   },
   {
    "id": "oddyouth",
@@ -2116,7 +2243,8 @@
     "Odd Youth"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ODD YOUTH"
+   "lastfmName": "ODD YOUTH",
+   "newsQueries": []
   },
   {
    "id": "mcnd",
@@ -2132,7 +2260,8 @@
     "MCND"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MCND"
+   "lastfmName": "MCND",
+   "newsQueries": []
   },
   {
    "id": "teentop",
@@ -2149,7 +2278,8 @@
     "TEENTOP"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TEEN TOP"
+   "lastfmName": "TEEN TOP",
+   "newsQueries": []
   },
   {
    "id": "kara",
@@ -2166,7 +2296,8 @@
     "Kara"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KARA"
+   "lastfmName": "KARA",
+   "newsQueries": []
   },
   {
    "id": "b1a4",
@@ -2182,7 +2313,8 @@
     "B1A4"
    ],
    "excludeKeywords": [],
-   "lastfmName": "B1A4"
+   "lastfmName": "B1A4",
+   "newsQueries": []
   },
   {
    "id": "kard",
@@ -2198,7 +2330,8 @@
     "KARD"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KARD"
+   "lastfmName": "KARD",
+   "newsQueries": []
   },
   {
    "id": "csr",
@@ -2214,7 +2347,8 @@
     "CSR"
    ],
    "excludeKeywords": [],
-   "lastfmName": "CSR"
+   "lastfmName": "CSR",
+   "newsQueries": []
   },
   {
    "id": "youngposse",
@@ -2231,7 +2365,8 @@
     "Young Posse"
    ],
    "excludeKeywords": [],
-   "lastfmName": "YOUNG POSSE"
+   "lastfmName": "YOUNG POSSE",
+   "newsQueries": []
   },
   {
    "id": "xlov",
@@ -2247,7 +2382,8 @@
     "XLOV"
    ],
    "excludeKeywords": [],
-   "lastfmName": "XLOV"
+   "lastfmName": "XLOV",
+   "newsQueries": []
   },
   {
    "id": "secret",
@@ -2264,7 +2400,8 @@
     "Secret"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SECRET"
+   "lastfmName": "SECRET",
+   "newsQueries": []
   },
   {
    "id": "dkb",
@@ -2280,7 +2417,8 @@
     "DKB"
    ],
    "excludeKeywords": [],
-   "lastfmName": "DKB"
+   "lastfmName": "DKB",
+   "newsQueries": []
   },
   {
    "id": "candyshop",
@@ -2297,7 +2435,8 @@
     "CANDY SHOP"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Candy Shop"
+   "lastfmName": "Candy Shop",
+   "newsQueries": []
   },
   {
    "id": "tunexx",
@@ -2313,7 +2452,8 @@
     "TUNEXX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TUNEXX"
+   "lastfmName": "TUNEXX",
+   "newsQueries": []
   },
   {
    "id": "badvillain",
@@ -2329,7 +2469,8 @@
     "BADVILLAIN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BADVILLAIN"
+   "lastfmName": "BADVILLAIN",
+   "newsQueries": []
   },
   {
    "id": "naze",
@@ -2345,7 +2486,8 @@
     "NAZE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NAZE"
+   "lastfmName": "NAZE",
+   "newsQueries": []
   },
   {
    "id": "h1key",
@@ -2362,7 +2504,8 @@
     "H1KEY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "H1-KEY"
+   "lastfmName": "H1-KEY",
+   "newsQueries": []
   },
   {
    "id": "newbeat",
@@ -2378,7 +2521,8 @@
     "NEWBEAT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NEWBEAT"
+   "lastfmName": "NEWBEAT",
+   "newsQueries": []
   },
   {
    "id": "saymyname",
@@ -2395,7 +2539,8 @@
     "Say My Name"
    ],
    "excludeKeywords": [],
-   "lastfmName": "SAY MY NAME"
+   "lastfmName": "SAY MY NAME",
+   "newsQueries": []
   },
   {
    "id": "keyvitup",
@@ -2411,7 +2556,8 @@
     "KEYVITUP"
    ],
    "excludeKeywords": [],
-   "lastfmName": "KEYVITUP"
+   "lastfmName": "KEYVITUP",
+   "newsQueries": []
   },
   {
    "id": "vayonn",
@@ -2427,7 +2573,8 @@
     "VAYONN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "VAYONN"
+   "lastfmName": "VAYONN",
+   "newsQueries": []
   },
   {
    "id": "fiftyfifty",
@@ -2445,7 +2592,8 @@
     "FIFTYFIFTY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "FIFTY FIFTY"
+   "lastfmName": "FIFTY FIFTY",
+   "newsQueries": []
   },
   {
    "id": "ichillin",
@@ -2462,7 +2610,8 @@
     "ICHILLIN"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ICHILLIN'"
+   "lastfmName": "ICHILLIN'",
+   "newsQueries": []
   },
   {
    "id": "asc2nt",
@@ -2478,7 +2627,8 @@
     "ASC2NT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ASC2NT"
+   "lastfmName": "ASC2NT",
+   "newsQueries": []
   },
   {
    "id": "evnne",
@@ -2494,7 +2644,8 @@
     "EVNNE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "EVNNE"
+   "lastfmName": "EVNNE",
+   "newsQueries": []
   },
   {
    "id": "vixx",
@@ -2510,7 +2661,8 @@
     "VIXX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "VIXX"
+   "lastfmName": "VIXX",
+   "newsQueries": []
   },
   {
    "id": "verivery",
@@ -2526,7 +2678,8 @@
     "VERIVERY"
    ],
    "excludeKeywords": [],
-   "lastfmName": "VERIVERY"
+   "lastfmName": "VERIVERY",
+   "newsQueries": []
   },
   {
    "id": "idntt",
@@ -2543,7 +2696,8 @@
     "IDNTT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "idntt"
+   "lastfmName": "idntt",
+   "newsQueries": []
   },
   {
    "id": "onepact",
@@ -2560,7 +2714,8 @@
     "ONEPACT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "ONE PACT"
+   "lastfmName": "ONE PACT",
+   "newsQueries": []
   },
   {
    "id": "madein",
@@ -2579,7 +2734,8 @@
     "Limelight"
    ],
    "excludeKeywords": [],
-   "lastfmName": "MADEIN"
+   "lastfmName": "MADEIN",
+   "newsQueries": []
   },
   {
    "id": "waker",
@@ -2595,7 +2751,8 @@
     "WAKER"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WAKER"
+   "lastfmName": "WAKER",
+   "newsQueries": []
   },
   {
    "id": "dxmon",
@@ -2611,7 +2768,8 @@
     "DXMON"
    ],
    "excludeKeywords": [],
-   "lastfmName": "DXMON"
+   "lastfmName": "DXMON",
+   "newsQueries": []
   },
   {
    "id": "classy",
@@ -2629,7 +2787,8 @@
     "CLASS:Y"
    ],
    "excludeKeywords": [],
-   "lastfmName": "CLASS:y"
+   "lastfmName": "CLASS:y",
+   "newsQueries": []
   },
   {
    "id": "vvup",
@@ -2645,7 +2804,8 @@
     "VVUP"
    ],
    "excludeKeywords": [],
-   "lastfmName": "VVUP"
+   "lastfmName": "VVUP",
+   "newsQueries": []
   },
   {
    "id": "fantasyboys",
@@ -2661,7 +2821,8 @@
     "FANTASY BOYS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "FANTASY BOYS"
+   "lastfmName": "FANTASY BOYS",
+   "newsQueries": []
   },
   {
    "id": "pow",
@@ -2677,7 +2838,8 @@
     "POW"
    ],
    "excludeKeywords": [],
-   "lastfmName": "POW"
+   "lastfmName": "POW",
+   "newsQueries": []
   },
   {
    "id": "whib",
@@ -2693,7 +2855,8 @@
     "WHIB"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WHIB"
+   "lastfmName": "WHIB",
+   "newsQueries": []
   },
   {
    "id": "aimers",
@@ -2709,7 +2872,8 @@
     "AIMERS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AIMERS"
+   "lastfmName": "AIMERS",
+   "newsQueries": []
   },
   {
    "id": "trendz",
@@ -2725,7 +2889,8 @@
     "TRENDZ"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TRENDZ"
+   "lastfmName": "TRENDZ",
+   "newsQueries": []
   },
   {
    "id": "tiot",
@@ -2741,7 +2906,8 @@
     "TIOT"
    ],
    "excludeKeywords": [],
-   "lastfmName": "TIOT"
+   "lastfmName": "TIOT",
+   "newsQueries": []
   },
   {
    "id": "blitzers",
@@ -2757,7 +2923,8 @@
     "BLITZERS"
    ],
    "excludeKeywords": [],
-   "lastfmName": "BLITZERS"
+   "lastfmName": "BLITZERS",
+   "newsQueries": []
   },
   {
    "id": "justb",
@@ -2774,7 +2941,8 @@
     "JUSTB"
    ],
    "excludeKeywords": [],
-   "lastfmName": "JUST B"
+   "lastfmName": "JUST B",
+   "newsQueries": []
   },
   {
    "id": "ghost9",
@@ -2790,7 +2958,8 @@
     "GHOST9"
    ],
    "excludeKeywords": [],
-   "lastfmName": "GHOST9"
+   "lastfmName": "GHOST9",
+   "newsQueries": []
   },
   {
    "id": "wei",
@@ -2807,7 +2976,8 @@
     "WEI"
    ],
    "excludeKeywords": [],
-   "lastfmName": "WEi"
+   "lastfmName": "WEi",
+   "newsQueries": []
   },
   {
    "id": "ntx",
@@ -2823,7 +2993,8 @@
     "NTX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NTX"
+   "lastfmName": "NTX",
+   "newsQueries": []
   },
   {
    "id": "ninei",
@@ -2841,7 +3012,8 @@
     "NINE I"
    ],
    "excludeKeywords": [],
-   "lastfmName": "NINE.i"
+   "lastfmName": "NINE.i",
+   "newsQueries": []
   },
   {
    "id": "omegax",
@@ -2858,7 +3030,8 @@
     "OMEGAX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "OMEGA X"
+   "lastfmName": "OMEGA X",
+   "newsQueries": []
   },
   {
    "id": "ab6ix",
@@ -2874,7 +3047,8 @@
     "AB6IX"
    ],
    "excludeKeywords": [],
-   "lastfmName": "AB6IX"
+   "lastfmName": "AB6IX",
+   "newsQueries": []
   },
   {
    "id": "balmingtiger",
@@ -2890,7 +3064,8 @@
     "Balming Tiger"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Balming Tiger"
+   "lastfmName": "Balming Tiger",
+   "newsQueries": []
   },
   {
    "id": "silicagel",
@@ -2906,7 +3081,8 @@
     "Silica Gel"
    ],
    "excludeKeywords": [],
-   "lastfmName": "Silica Gel"
+   "lastfmName": "Silica Gel",
+   "newsQueries": []
   },
   {
    "id": "idiotape",
@@ -2922,7 +3098,186 @@
     "IDIOTAPE"
    ],
    "excludeKeywords": [],
-   "lastfmName": "IDIOTAPE"
+   "lastfmName": "IDIOTAPE",
+   "newsQueries": []
+  },
+  {
+   "id": "a2olite",
+   "koreanName": "A2O LITE",
+   "englishName": "A2O LITE",
+   "ticker": "A2OL",
+   "groupType": "girl_group",
+   "agency": "A2O Entertainment",
+   "debutDate": "2026-10-13",
+   "naverQuery": "A2O LITE",
+   "matchNames": [
+    "A2O LITE",
+    "A2O 라이트",
+    "에이투오 라이트"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "A2O LITE",
+   "newsQueries": [
+    "A2O LITE"
+   ]
+  },
+  {
+   "id": "a2osoul",
+   "koreanName": "A2O SOUL",
+   "englishName": "A2O SOUL",
+   "ticker": "A2OS",
+   "groupType": "boy_group",
+   "agency": "A2O Entertainment",
+   "debutDate": "2026-10-13",
+   "naverQuery": "A2O SOUL",
+   "matchNames": [
+    "A2O SOUL",
+    "A2O 소울",
+    "에이투오 소울"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "A2O SOUL",
+   "newsQueries": [
+    "A2O SOUL"
+   ]
+  },
+  {
+   "id": "lngshot",
+   "koreanName": "롱샷",
+   "englishName": "LNGSHOT",
+   "ticker": "LNGSHOT",
+   "groupType": "boy_group",
+   "agency": "MORE VISION",
+   "debutDate": "2026-01-13",
+   "naverQuery": "롱샷 LNGSHOT",
+   "matchNames": [
+    "롱샷",
+    "LNGSHOT"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "LNGSHOT",
+   "newsQueries": [
+    "롱샷 LNGSHOT",
+    "LNGSHOT"
+   ]
+  },
+  {
+   "id": "closeyoureyes",
+   "koreanName": "클로즈 유어 아이즈",
+   "englishName": "CLOSE YOUR EYES",
+   "ticker": "CYE",
+   "groupType": "boy_group",
+   "agency": "UNCORE",
+   "debutDate": null,
+   "naverQuery": "클로즈 유어 아이즈",
+   "matchNames": [
+    "클로즈 유어 아이즈",
+    "클로즈유어아이즈",
+    "CLOSE YOUR EYES",
+    "클유아"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "CLOSE YOUR EYES",
+   "newsQueries": [
+    "클로즈 유어 아이즈"
+   ]
+  },
+  {
+   "id": "atheart",
+   "koreanName": "앳하트",
+   "englishName": "AtHeart",
+   "ticker": "ATHRT",
+   "groupType": "girl_group",
+   "agency": "Titan Content",
+   "debutDate": null,
+   "naverQuery": "앳하트",
+   "matchNames": [
+    "앳하트",
+    "AtHeart",
+    "ATHEART"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "AtHeart",
+   "newsQueries": [
+    "앳하트"
+   ]
+  },
+  {
+   "id": "ifeye",
+   "koreanName": "이프아이",
+   "englishName": "ifeye",
+   "ticker": "IFEYE",
+   "groupType": "girl_group",
+   "agency": null,
+   "debutDate": null,
+   "naverQuery": "이프아이",
+   "matchNames": [
+    "이프아이",
+    "ifeye",
+    "IFEYE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "ifeye",
+   "newsQueries": [
+    "이프아이"
+   ]
+  },
+  {
+   "id": "everglow",
+   "koreanName": "에버글로우",
+   "englishName": "EVERGLOW",
+   "ticker": "EVGLW",
+   "groupType": "girl_group",
+   "agency": "CHXXTA COMPANY",
+   "debutDate": "2019-03-18",
+   "naverQuery": "에버글로우",
+   "matchNames": [
+    "에버글로우",
+    "EVERGLOW"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "EVERGLOW",
+   "newsQueries": [
+    "에버글로우"
+   ]
+  },
+  {
+   "id": "got7",
+   "koreanName": "갓세븐",
+   "englishName": "GOT7",
+   "ticker": "GOT7",
+   "groupType": "boy_group",
+   "agency": null,
+   "debutDate": "2014-01-16",
+   "naverQuery": "갓세븐",
+   "matchNames": [
+    "갓세븐",
+    "GOT7"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "GOT7",
+   "newsQueries": [
+    "갓세븐"
+   ]
+  },
+  {
+   "id": "infinite",
+   "koreanName": "인피니트",
+   "englishName": "INFINITE",
+   "ticker": "INFNT",
+   "groupType": "boy_group",
+   "agency": "INFINITE COMPANY",
+   "debutDate": "2010-06-09",
+   "naverQuery": "인피니트",
+   "matchNames": [
+    "인피니트",
+    "INFINITE"
+   ],
+   "excludeKeywords": [],
+   "lastfmName": "INFINITE",
+   "newsQueries": [
+    "인피니트"
+   ]
   }
  ]
 }

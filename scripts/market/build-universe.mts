@@ -34,6 +34,19 @@ const BOY = new Set([
   'silicagel', 'idiotape',
 ]);
 
+// 355팀 원본 명단에 없는 그룹(2026-11-07 사용자 요청으로 추가). newsQueries가 있으면 수집기가 그 검색어를 쓴다.
+const EXTRA_GROUPS = [
+  { id: 'a2olite', koreanName: 'A2O LITE', englishName: 'A2O LITE', ticker: 'A2OL', groupType: 'girl_group', agency: 'A2O Entertainment', debutDate: '2026-10-13', matchNames: ['A2O LITE', 'A2O 라이트', '에이투오 라이트'], newsQueries: ['A2O LITE'] },
+  { id: 'a2osoul', koreanName: 'A2O SOUL', englishName: 'A2O SOUL', ticker: 'A2OS', groupType: 'boy_group', agency: 'A2O Entertainment', debutDate: '2026-10-13', matchNames: ['A2O SOUL', 'A2O 소울', '에이투오 소울'], newsQueries: ['A2O SOUL'] },
+  { id: 'lngshot', koreanName: '롱샷', englishName: 'LNGSHOT', ticker: 'LNGSHOT', groupType: 'boy_group', agency: 'MORE VISION', debutDate: '2026-01-13', matchNames: ['롱샷', 'LNGSHOT'], newsQueries: ['롱샷 LNGSHOT', 'LNGSHOT'] },
+  { id: 'closeyoureyes', koreanName: '클로즈 유어 아이즈', englishName: 'CLOSE YOUR EYES', ticker: 'CYE', groupType: 'boy_group', agency: 'UNCORE', debutDate: null, matchNames: ['클로즈 유어 아이즈', '클로즈유어아이즈', 'CLOSE YOUR EYES', '클유아'], newsQueries: ['클로즈 유어 아이즈'] },
+  { id: 'atheart', koreanName: '앳하트', englishName: 'AtHeart', ticker: 'ATHRT', groupType: 'girl_group', agency: 'Titan Content', debutDate: null, matchNames: ['앳하트', 'AtHeart', 'ATHEART'], newsQueries: ['앳하트'] },
+  { id: 'ifeye', koreanName: '이프아이', englishName: 'ifeye', ticker: 'IFEYE', groupType: 'girl_group', agency: null, debutDate: null, matchNames: ['이프아이', 'ifeye', 'IFEYE'], newsQueries: ['이프아이'] },
+  { id: 'everglow', koreanName: '에버글로우', englishName: 'EVERGLOW', ticker: 'EVGLW', groupType: 'girl_group', agency: 'CHXXTA COMPANY', debutDate: '2019-03-18', matchNames: ['에버글로우', 'EVERGLOW'], newsQueries: ['에버글로우'] },
+  { id: 'got7', koreanName: '갓세븐', englishName: 'GOT7', ticker: 'GOT7', groupType: 'boy_group', agency: null, debutDate: '2014-01-16', matchNames: ['갓세븐', 'GOT7'], newsQueries: ['갓세븐'] },
+  { id: 'infinite', koreanName: '인피니트', englishName: 'INFINITE', ticker: 'INFNT', groupType: 'boy_group', agency: 'INFINITE COMPANY', debutDate: '2010-06-09', matchNames: ['인피니트', 'INFINITE'], newsQueries: ['인피니트'] },
+] as const;
+
 function groupType(id: string): GroupType {
   if (GIRL.has(id)) return 'girl_group';
   if (BOY.has(id)) return 'boy_group';
@@ -69,8 +82,27 @@ const universe = groups.map((artist) => {
     matchNames,
     excludeKeywords: artist.profile.excludeKeywords,
     lastfmName: englishName,
+    newsQueries: [] as string[],
   };
 });
+
+for (const extra of EXTRA_GROUPS) {
+  if (universe.some((group) => group.id === extra.id)) continue;
+  universe.push({
+    id: extra.id,
+    koreanName: extra.koreanName,
+    englishName: extra.englishName,
+    ticker: extra.ticker,
+    groupType: extra.groupType,
+    agency: extra.agency,
+    debutDate: extra.debutDate,
+    naverQuery: extra.newsQueries[0],
+    matchNames: [...extra.matchNames],
+    excludeKeywords: [],
+    lastfmName: extra.englishName,
+    newsQueries: [...extra.newsQueries],
+  });
+}
 
 mkdirSync('data/market', { recursive: true });
 writeFileSync(

@@ -240,9 +240,11 @@ const newsDiagnostics: Record<string, NewsDiagnostics> = {};
 async function collectGroupNews(group: Group): Promise<GroupNews> {
   const ambiguous = AMBIGUOUS_IDS.has(group.id) && group.englishName !== group.koreanName;
   // 흔한 단어 이름은 '한글명 영문명'으로 먼저 찾고, 적게 나오면 영문명으로 한 번 더 찾는다.
-  const queries = ambiguous
-    ? [`${group.koreanName} ${group.englishName}`, group.englishName]
-    : [group.koreanName];
+  const queries = group.newsQueries.length
+    ? group.newsQueries
+    : ambiguous
+      ? [`${group.koreanName} ${group.englishName}`, group.englishName]
+      : [group.koreanName];
   const matcher = MATCHERS.get(group.id)!;
   const cutoff = NOW - DAY_MS;
   const seen = new Set<string>();
@@ -531,7 +533,10 @@ async function lastfmInfo(name: string) {
 
 async function refreshLastfm(): Promise<void> {
   const today = kstDateString(NOW);
-  if (state.lastfm?.date === today) {
+  // 오늘 이미 받았으면 새로 추가된 그룹만 받는다.
+  const sameDay = state.lastfm?.date === today;
+  const targets = sameDay ? GROUPS.filter((group) => !(group.id in state.lastfm!.byId)) : GROUPS;
+  if (!targets.length) {
     report.sources.lastfm = { status: 'cached', detail: today };
     return;
   }
@@ -539,11 +544,11 @@ async function refreshLastfm(): Promise<void> {
     report.sources.lastfm = { status: 'skipped', detail: 'missing credentials' };
     return;
   }
-  const byId: NonNullable<State['lastfm']>['byId'] = {};
+  const byId: NonNullable<State['lastfm']>['byId'] = sameDay ? { ...state.lastfm!.byId } : {};
   const unverified: string[] = [];
   let failures = 0;
 
-  await runWithConcurrency(GROUPS, 3, async (group) => {
+  await runWithConcurrency(targets, 3, async (group) => {
     try {
       let info = await lastfmInfo(group.lastfmName);
       if (!info?.korean) {
@@ -562,10 +567,11 @@ async function refreshLastfm(): Promise<void> {
     }
   });
 
-  if (failures < GROUPS.length / 2) state.lastfm = { date: today, byId };
+  if (failures < targets.length / 2) state.lastfm = { date: today, byId };
   report.sources.lastfm = {
     status: failures ? 'partial' : 'ok',
     detail: today,
+    fetched: targets.length,
     verified: Object.values(byId).filter(Boolean).length,
     unverified,
     failureCount: failures,
@@ -579,7 +585,12 @@ const YOUTUBE_CHANNELS = youtubeChannelsFile.channels as Record<string, { channe
 
 async function refreshYoutube(): Promise<void> {
   const today = kstDateString(NOW);
-  if (state.youtube?.date === today) {
+  // 오늘 이미 받았으면 새로 연결된 채널만 받는다.
+  const sameDay = state.youtube?.date === today;
+  const entries = Object.entries(YOUTUBE_CHANNELS).filter(
+    ([id]) => !sameDay || !(id in state.youtube!.byId),
+  );
+  if (!entries.length) {
     report.sources.youtube = { status: 'cached', detail: today };
     return;
   }
@@ -587,9 +598,8 @@ async function refreshYoutube(): Promise<void> {
     report.sources.youtube = { status: 'skipped', detail: 'missing credentials' };
     return;
   }
-  const entries = Object.entries(YOUTUBE_CHANNELS);
   const byChannel = new Map(entries.map(([id, channel]) => [channel.channelId, id]));
-  const byId: NonNullable<State['youtube']>['byId'] = {};
+  const byId: NonNullable<State['youtube']>['byId'] = sameDay ? { ...state.youtube!.byId } : {};
   try {
     for (let start = 0; start < entries.length; start += 50) {
       const ids = entries.slice(start, start + 50).map(([, channel]) => channel.channelId);
@@ -619,6 +629,7 @@ async function refreshYoutube(): Promise<void> {
       detail: today,
       channels: entries.length,
       received: Object.keys(byId).length,
+      partialRefresh: sameDay,
     };
   } catch (error) {
     report.sources.youtube = { status: 'failed', detail: (error as Error).message };
