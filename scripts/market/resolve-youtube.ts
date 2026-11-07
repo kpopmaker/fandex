@@ -54,9 +54,17 @@ function normalize(text: string): string {
   return text.toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
 }
 
+type ChannelItem = {
+  id: string;
+  snippet?: { title?: string; customUrl?: string };
+  statistics?: { subscriberCount?: string; hiddenSubscriberCount?: boolean; videoCount?: string; viewCount?: string };
+};
+type SearchItem = { id?: { channelId?: string } };
+type ApiList<T> = { items?: T[] };
+
 const BAD_TITLE = /topic|lyrics|fan ?cam|fanpage|fan page|fansub|subs|translation|archive|가사|자막|팬페이지|직캠|reaction/i;
 
-async function api(path: string, params: Record<string, string>, cost: number): Promise<any> {
+async function api<T>(path: string, params: Record<string, string>, cost: number): Promise<ApiList<T>> {
   const query = new URLSearchParams({ ...params, key: KEY });
   const response = await fetch(`https://www.googleapis.com/youtube/v3/${path}?${query}`);
   units += cost;
@@ -65,10 +73,10 @@ async function api(path: string, params: Record<string, string>, cost: number): 
     const reason = body.match(/"reason":\s*"([^"]+)"/)?.[1] ?? String(response.status);
     throw new Error(`${path} ${reason}`);
   }
-  return response.json();
+  return (await response.json()) as ApiList<T>;
 }
 
-function toCandidate(item: any, via: Candidate['via'], group: Group): Candidate {
+function toCandidate(item: ChannelItem, via: Candidate['via'], group: Group): Candidate {
   const title: string = item.snippet?.title ?? '';
   const names = group.matchNames.map(normalize).filter((name) => name.length >= 2);
   const normalizedTitle = normalize(title);
@@ -145,7 +153,7 @@ async function main() {
       if (entry.triedHandles.includes(handle)) continue;
       entry.triedHandles.push(handle);
       try {
-        const body = await api('channels', { part: 'snippet,statistics', forHandle: `@${handle}` }, 1);
+        const body = await api<ChannelItem>('channels', { part: 'snippet,statistics', forHandle: `@${handle}` }, 1);
         for (const item of body.items ?? []) {
           if (!entry.candidates.some((candidate) => candidate.channelId === item.id)) {
             entry.candidates.push(toCandidate(item, 'handle', group));
@@ -166,15 +174,15 @@ async function main() {
     if (searches >= SEARCH_BUDGET) break;
     try {
       searches += 1;
-      const found = await api(
+      const found = await api<SearchItem>(
         'search',
         { part: 'snippet', type: 'channel', q: `${group.englishName} ${group.koreanName} official`, maxResults: '5' },
         100,
       );
-      const ids = (found.items ?? []).map((item: any) => item.id?.channelId).filter(Boolean);
+      const ids = (found.items ?? []).map((item) => item.id?.channelId).filter((id): id is string => Boolean(id));
       entry.searched = true;
       if (ids.length) {
-        const details = await api('channels', { part: 'snippet,statistics', id: ids.join(',') }, 1);
+        const details = await api<ChannelItem>('channels', { part: 'snippet,statistics', id: ids.join(',') }, 1);
         for (const item of details.items ?? []) {
           if (!entry.candidates.some((candidate) => candidate.channelId === item.id)) {
             entry.candidates.push(toCandidate(item, 'search', group));
