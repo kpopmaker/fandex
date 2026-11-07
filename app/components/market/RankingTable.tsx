@@ -179,7 +179,7 @@ export default function RankingTable({
           <caption className="sr-only">FANDEX 그룹 랭킹</caption>
           <thead>
             <tr className="border-b border-fx-line text-left text-xs font-semibold text-fx-sub">
-              <th scope="col" className="w-14 px-5 py-3 text-center">순위</th>
+              <th scope="col" className="w-16 whitespace-nowrap px-5 py-3 text-center">순위</th>
               <th scope="col" className="px-3 py-3">그룹</th>
               <th scope="col" className="px-3 py-3">세대</th>
               <th scope="col" className="px-3 py-3 text-right">가격</th>
