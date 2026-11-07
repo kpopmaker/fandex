@@ -237,7 +237,7 @@ export default function RankingTable({
           </p>
         )}
         {rows.length === 0 && (
-          <p className="px-5 py-10 text-center text-sm text-fx-sub">조건에 맞는 그룹이 없어요. 그룹이나 세대를 '전체'로 바꿔 보세요.</p>
+          <p className="px-5 py-10 text-center text-sm text-fx-sub">조건에 맞는 그룹이 없어요. 그룹이나 세대를 전체로 바꿔 보세요.</p>
         )}
       </div>
     </div>

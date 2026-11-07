@@ -2,6 +2,13 @@
  "version": "youtube-channels-v1",
  "note": "사람이 확인한 그룹 공식 유튜브 채널. 수집기는 이 목록만 쓴다.",
  "channels": {
+  "1verse": {
+   "channelId": "UCoE7w2oR9kh2vt57YqpYlTg",
+   "title": "1VERSE",
+   "handle": "@1verse_official",
+   "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
   "2ne1": {
    "channelId": "UCnsQjCVzmEd-YvlQZbo6zCg",
    "title": "2NE1",
@@ -503,6 +510,13 @@
    "title": "HORI7ON",
    "handle": "@hori7on_official",
    "source": "youtube-resolve handle, 2026-11-07 검토",
+   "verifiedAt": "2026-11-07"
+  },
+  "hypeprincess": {
+   "channelId": "UCgCA4Qj2HRVw5STi2F3DY3g",
+   "title": "H//PE Princess",
+   "handle": "@hiipe_princess",
+   "source": "youtube-resolve search, 2026-11-07 검토",
    "verifiedAt": "2026-11-07"
   },
   "ichillin": {

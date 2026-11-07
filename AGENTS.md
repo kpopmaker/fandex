@@ -28,7 +28,7 @@ K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 �
 - 가격 = 100·e^((점수−50)/50), 팬캡 = 가격×(Last.fm 청취자와 유튜브 구독자 평균/10만), KMI = Σ팬캡÷제수(과거 복원 첫날 마감 = 1,000, 팬덤 규모·종목 변경 시 제수 조정). 등락률은 전일·7일 전·30일 전 마감 대비.
 - 기록이 기간만큼 없으면 등락률은 null('—'). 거짓 숫자를 채우지 않는다.
 - **실데이터가 없는 변수는 화면에 내지 않는다** (`variables.ts`의 `enabled`).
-- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고(171팀, 잘못 잡힌 15팀은 excluded), 수집기는 그 목록의 구독자 수를 하루 1번 받는다. SNS/팬덤 = Last.fm 청취자 점수와 구독자 점수 평균.
+- 유튜브: `youtube-resolve.yml`(매일)이 공식 채널 후보를 `youtube-resolve` 브랜치에 쌓는다. 사람이 확인한 채널만 `data/market/youtube-channels.json`에 넣고(173팀, 잘못 잡힌 15팀은 excluded), 수집기는 그 목록의 구독자 수를 하루 1번 받는다. SNS/팬덤 = Last.fm 청취자 점수와 구독자 점수 평균.
 
 ## 디자인
 - PC 우선, 다크 모드 지원(`data-theme="night"`). 레퍼런스: NH투자증권, 토스증권.
