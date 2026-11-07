@@ -64,7 +64,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 4;
+const DATA_EPOCH = 5;
 
 type State = {
   version: string;
@@ -77,7 +77,12 @@ type State = {
     byId: Record<string, { count: number; headlines: NewsHeadline[] }>;
   } | null;
   tagged: Record<string, TaggedArticle[]>;
-  chart: { at: number; entries: ChartEntry[]; pointsById: Record<string, number> } | null;
+  /**
+   * 그룹별로 기사를 빠짐없이 가지고 있는 시작 시각(ms). 0이면 처음부터 전부.
+   * 네이버는 최근 1,000건까지만 주므로 기사가 많은 그룹은 이보다 앞선 기사가 없다.
+   */
+  coverageFrom?: Record<string, number>;
+  chart: { at: number; entries: ChartEntry[]; pointsById: Record<string, number>; source?: 'melon' | 'bugs' } | null;
   lastfm: {
     date: string;
     byId: Record<string, { listeners: number; playcount: number; name: string } | null>;
@@ -161,6 +166,21 @@ function nameMatcher(names: string[]): RegExp {
 
 const MATCHERS = new Map(GROUPS.map((group) => [group.id, nameMatcher(group.matchNames)]));
 
+/** 라인업·시상식 기사 판별용 이름(3글자 이상만, 흔한 2글자 이름은 오탐이 많아 뺀다) */
+const LINEUP_NAMES = GROUPS.map((group) => group.matchNames.filter((name) => name.length >= 3));
+
+/** 여러 그룹이 함께 나열된 기사(라인업, 수상자 명단 등)인지 */
+function isLineupArticle(text: string): boolean {
+  let groups = 0;
+  for (const names of LINEUP_NAMES) {
+    if (names.some((name) => text.includes(name))) {
+      groups += 1;
+      if (groups >= 3) return true;
+    }
+  }
+  return false;
+}
+
 /** 아이돌 기사라면 거의 항상 들어가는 맥락어. 동음이의어(카드, 시크릿 등) 기사를 걸러낸다. */
 const CONTEXT_WORDS = [
   '그룹', '멤버', '컴백', '앨범', '아이돌', '걸그룹', '보이그룹', '데뷔', '무대', '신곡', '콘서트',
@@ -179,7 +199,7 @@ function containsAny(text: string, words: readonly string[]): boolean {
 
 /** 이름이 흔한 단어라 맥락어 없이 검색하면 다른 기사가 쏟아지는 그룹 */
 const AMBIGUOUS_IDS = new Set([
-  'kard', 'buzz', 'secret', 'ikon', 'winner', 'kara', 'vixx', 'pow', 'kiiikiii', 'billlie', 'lucy',
+  'itzy', 'kard', 'buzz', 'secret', 'ikon', 'winner', 'kara', 'vixx', 'pow', 'kiiikiii', 'billlie', 'lucy',
   'ahof', 'onewe', 'seeya', 'whib', 'dxmon', 'csr', 'highlight', 'astro', 'pentagon', 'treasure',
   'tempest', 'evnne', 'touched', 'waker', 'epex', 'aen', 'blitzers', 'trendz', 'ninei', 'and2ble',
   'unis', 'izna', 'naze', 'idid', 'justb', 'classy', 'madein', 'wei', 'ntx', 'tiot', 'aimers',
@@ -234,10 +254,27 @@ type GroupNews = {
   pages: number;
 };
 
-type NewsDiagnostics = { queries: string[]; fetched: number; nameHits: number; photoSkipped: number; contextMiss: number };
+type NewsDiagnostics = {
+  queries: string[];
+  fetched: number;
+  nameHits: number;
+  photoSkipped: number;
+  contextMiss: number;
+  lineupSkipped: number;
+  coverageDays?: number;
+};
 const newsDiagnostics: Record<string, NewsDiagnostics> = {};
 
-async function collectGroupNews(group: Group): Promise<GroupNews> {
+type NewsEntry = { item: NaverItem; time: number; text: string; titleMatch: boolean };
+
+/**
+ * days: 며칠 전까지 거슬러 볼지(실시간 수집 1일, 과거 복원은 더 길게)
+ * maxStart: 네이버가 허용하는 마지막 시작 위치(최대 1000건)
+ */
+async function collectGroupNews(
+  group: Group,
+  options: { days: number; maxStart: number } = { days: 1, maxStart: 301 },
+): Promise<GroupNews & { entries: NewsEntry[]; coverageFrom: number }> {
   const ambiguous = AMBIGUOUS_IDS.has(group.id) && group.englishName !== group.koreanName;
   // 흔한 단어 이름은 '한글명 영문명'으로 먼저 찾고, 적게 나오면 영문명으로 한 번 더 찾는다.
   const queries = group.newsQueries.length
@@ -247,18 +284,20 @@ async function collectGroupNews(group: Group): Promise<GroupNews> {
       : [group.koreanName];
   const matcher = MATCHERS.get(group.id)!;
   const cutoff = NOW - DAY_MS;
+  const pageUntil = NOW - options.days * DAY_MS;
+  let coverageFrom = NOW;
   const seen = new Set<string>();
   // 같은 보도자료가 여러 매체에 그대로 실리면 한 건으로 센다.
   const seenTitles = new Set<string>();
-  const relevant: Array<{ item: NaverItem; time: number; text: string }> = [];
-  const diag: NewsDiagnostics = { queries: [], fetched: 0, nameHits: 0, photoSkipped: 0, contextMiss: 0 };
+  const relevant: NewsEntry[] = [];
+  const diag: NewsDiagnostics = { queries: [], fetched: 0, nameHits: 0, photoSkipped: 0, contextMiss: 0, lineupSkipped: 0 };
   let fetched = 0;
   let pages = 0;
 
   for (const query of queries) {
     if (diag.queries.length && relevant.length >= 5) break;
     diag.queries.push(query);
-    for (let start = 1; start <= 301; start += 100) {
+    for (let start = 1; start <= options.maxStart; start += 100) {
       const items = await naverSearch(query, start);
       pages += 1;
       fetched += items.length;
@@ -285,12 +324,23 @@ async function collectGroupNews(group: Group): Promise<GroupNews> {
         const titleKey = title.replace(/[^0-9A-Za-z가-힣]/g, '').slice(0, 40);
         if (seenTitles.has(titleKey)) continue;
         seenTitles.add(titleKey);
-        relevant.push({ item: { ...item, title }, time, text });
+        // 제목에 그룹명이 없고 여러 그룹이 나열된 기사(라인업·수상 명단)는 이 그룹 기사로 보지 않는다.
+        const titleMatch = matcher.test(title);
+        if (!titleMatch && isLineupArticle(text)) {
+          diag.lineupSkipped += 1;
+          continue;
+        }
+        relevant.push({ item: { ...item, title }, time, text, titleMatch });
       }
-      // 한 페이지(100건)가 모두 24시간 안이면 다음 페이지를 더 본다.
-      if (items.length < 100 || oldest < cutoff) break;
+      if (Number.isFinite(oldest)) coverageFrom = Math.min(coverageFrom, oldest);
+      // 이번 페이지가 모두 볼 기간 안이면 다음 페이지를 더 본다.
+      if (items.length < 100 || oldest < pageUntil) {
+        if (items.length < 100) coverageFrom = Math.min(coverageFrom, 0);
+        break;
+      }
     }
   }
+  diag.coverageDays = coverageFrom === 0 ? Infinity : Math.round(((NOW - coverageFrom) / DAY_MS) * 10) / 10;
   diag.fetched = fetched;
   if (ambiguous || relevant.length >= 150) newsDiagnostics[group.id] = diag;
 
@@ -312,7 +362,8 @@ async function collectGroupNews(group: Group): Promise<GroupNews> {
 
   return {
     count: within24h.length,
-    headlines: within24h.slice(0, 3).map((entry) => ({
+    // 대표 기사는 제목에 그룹명이 들어간 기사만(본문에 이름만 스친 기사를 보여주지 않게)
+    headlines: within24h.filter((entry) => entry.titleMatch).slice(0, 3).map((entry) => ({
       title: entry.item.title,
       url: entry.item.originallink || entry.item.link,
       publishedAt: entry.time,
@@ -320,6 +371,8 @@ async function collectGroupNews(group: Group): Promise<GroupNews> {
     tagged,
     fetched,
     pages,
+    entries: relevant,
+    coverageFrom,
   };
 }
 
@@ -341,6 +394,11 @@ async function runWithConcurrency<T>(
   );
 }
 
+/** 지난 기사까지 깊게 받을 때: 최대 45일, 최대 1,000건 */
+const DEEP_NEWS = { days: 45, maxStart: 901 };
+/** 깊게 받은 그룹의 관련 기사 시각(과거 복원에 쓴다) */
+const deepNewsTimes = new Map<string, number[]>();
+
 async function refreshNews(): Promise<void> {
   const age = state.news ? NOW - state.news.at : Infinity;
   if (age < 25 * 60 * 1000) {
@@ -358,9 +416,18 @@ async function refreshNews(): Promise<void> {
   let pages = 0;
   const today = kstDay(NOW);
 
-  await runWithConcurrency(GROUPS, 4, async (group) => {
+  state.coverageFrom ??= {};
+  const deepFetched: string[] = [];
+  await runWithConcurrency(GROUPS, 3, async (group) => {
     try {
-      const result = await collectGroupNews(group);
+      // 처음 보는 그룹은 지난 기사까지 깊게 받아 30일 집계를 바로 채운다.
+      const deep = !(group.id in state.coverageFrom!);
+      const result = await collectGroupNews(group, deep ? DEEP_NEWS : undefined);
+      if (deep) {
+        state.coverageFrom![group.id] = result.coverageFrom;
+        deepFetched.push(group.id);
+        deepNewsTimes.set(group.id, result.entries.map((entry) => entry.time));
+      }
       byId[group.id] = { count: result.count, headlines: result.headlines };
       fetched += result.fetched;
       pages += result.pages;
@@ -384,6 +451,7 @@ async function refreshNews(): Promise<void> {
     fetched,
     failures: failures.slice(0, 20),
     failureCount: failures.length,
+    deepFetched,
     diagnostics: newsDiagnostics,
   };
 }
@@ -430,13 +498,30 @@ function matchChartArtist(artistText: string): string | null {
 const BROWSER_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
 
-/** 벅스가 일부 클라이언트의 연결을 끊어서, Node → curl → 파이썬 순서로 시도한다. */
-async function fetchBugsHtml(attempts: string[]): Promise<string> {
-  const url = 'https://music.bugs.co.kr/chart';
+/** 멜론 TOP100(1시간마다 갱신) */
+function parseMelon(html: string): Array<{ rank: number; title: string; artist: string }> {
+  const rows = html.match(/<tr[^>]*data-song-no=[^>]*>[\s\S]*?<\/tr>/gi) ?? [];
+  const entries: Array<{ rank: number; title: string; artist: string }> = [];
+  for (const row of rows) {
+    const rank = row.match(/<span class="rank[^"]*"[^>]*>\s*(\d+)\s*<\/span>/i)?.[1];
+    const titleBlock = row.match(/<div class="ellipsis rank01">([\s\S]*?)<\/div>/i)?.[1] ?? '';
+    const artistBlock = row.match(/<div class="ellipsis rank02">([\s\S]*?)<\/div>/i)?.[1] ?? '';
+    const title = decodeEntities(titleBlock.match(/<a[^>]*>([\s\S]*?)<\/a>/i)?.[1] ?? titleBlock);
+    const visible = artistBlock.match(/<span class="checkEllipsis"[^>]*>([\s\S]*?)<\/span>/i)?.[1] ?? artistBlock;
+    const artists = [...visible.matchAll(/<a[^>]*>([\s\S]*?)<\/a>/gi)].map((match) => decodeEntities(match[1]));
+    const artist = artists.length ? artists.join(', ') : decodeEntities(visible);
+    if (!rank || !title || !artist) continue;
+    entries.push({ rank: Number(rank), title, artist });
+  }
+  return entries.sort((a, b) => a.rank - b.rank);
+}
+
+/** Node fetch가 끊기면 curl로 다시 받는다. */
+async function fetchHtml(url: string, attempts: string[], referer?: string): Promise<string> {
+  const headers: Record<string, string> = { 'User-Agent': BROWSER_UA, 'Accept-Language': 'ko-KR,ko;q=0.9' };
+  if (referer) headers.Referer = referer;
   try {
-    const response = await fetch(url, {
-      headers: { 'User-Agent': BROWSER_UA, 'Accept-Language': 'ko-KR,ko;q=0.9' },
-    });
+    const response = await fetch(url, { headers });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     attempts.push('node:ok');
     return await response.text();
@@ -448,50 +533,41 @@ async function fetchBugsHtml(attempts: string[]): Promise<string> {
   try {
     const html = execFileSync(
       'curl',
-      ['-sSL', '--max-time', '30', '-A', BROWSER_UA, '-H', 'Accept-Language: ko-KR,ko;q=0.9', url],
-      { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
+      ['-sSL', '--max-time', '30', '-A', BROWSER_UA, '-H', 'Accept-Language: ko-KR,ko;q=0.9', ...(referer ? ['-H', `Referer: ${referer}`] : []), url],
+      { encoding: 'utf8', maxBuffer: 30 * 1024 * 1024 },
     );
     attempts.push('curl:ok');
     return html;
   } catch (error) {
     attempts.push(`curl:${(error as Error).message.split('\n')[0].slice(0, 120)}`);
   }
-  try {
-    const html = execFileSync(
-      'python3',
-      [
-        '-c',
-        `import urllib.request,sys;r=urllib.request.Request(${JSON.stringify(url)},headers={"User-Agent":"FANDEX-Cloud-v10/1.0"});sys.stdout.write(urllib.request.urlopen(r,timeout=30).read().decode("utf-8","replace"))`,
-      ],
-      { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
-    );
-    attempts.push('python:ok');
-    return html;
-  } catch (error) {
-    attempts.push(`python:${(error as Error).message.split('\n')[0].slice(0, 120)}`);
-  }
-  throw new Error('all bugs fetch attempts failed');
+  throw new Error(`fetch failed: ${url}`);
+}
+
+function chartEntries(rows: Array<{ rank: number; title: string; artist: string }>) {
+  const pointsById: Record<string, number> = {};
+  const entries: ChartEntry[] = rows.map((row) => {
+    const artistId = matchChartArtist(row.artist);
+    if (artistId) pointsById[artistId] = (pointsById[artistId] ?? 0) + (101 - row.rank);
+    return { rank: row.rank, title: row.title, artist: row.artist, artistId };
+  });
+  return { entries, pointsById };
 }
 
 async function refreshChart(): Promise<void> {
   const age = state.chart ? NOW - state.chart.at : Infinity;
-  if (age < 55 * 60 * 1000) {
-    report.sources.bugs = { status: 'cached', at: state.chart!.at };
+  if (age < 55 * 60 * 1000 && state.chart?.source === 'melon') {
+    report.sources.melon = { status: 'cached', at: state.chart!.at };
     return;
   }
   const attempts: string[] = [];
   try {
-    const rows = parseBugs(await fetchBugsHtml(attempts));
-    if (rows.length < 50) throw new Error(`bugs parsed only ${rows.length} rows`);
+    const rows = parseMelon(await fetchHtml('https://www.melon.com/chart/index.htm', attempts, 'https://www.melon.com/'));
+    if (rows.length < 50) throw new Error(`melon parsed only ${rows.length} rows`);
 
-    const pointsById: Record<string, number> = {};
-    const entries: ChartEntry[] = rows.map((row) => {
-      const artistId = matchChartArtist(row.artist);
-      if (artistId) pointsById[artistId] = (pointsById[artistId] ?? 0) + (101 - row.rank);
-      return { rank: row.rank, title: row.title, artist: row.artist, artistId };
-    });
-    state.chart = { at: NOW, entries, pointsById };
-    report.sources.bugs = {
+    const { entries, pointsById } = chartEntries(rows);
+    state.chart = { at: NOW, entries, pointsById, source: 'melon' };
+    report.sources.melon = {
       status: 'ok',
       at: NOW,
       attempts,
@@ -501,7 +577,7 @@ async function refreshChart(): Promise<void> {
     };
   } catch (error) {
     const cause = (error as Error & { cause?: { code?: string; message?: string } }).cause;
-    report.sources.bugs = {
+    report.sources.melon = {
       status: 'failed',
       detail: `${(error as Error).message}${cause ? ` (${cause.code ?? ''} ${cause.message ?? ''})` : ''}`,
       attempts,
@@ -646,9 +722,20 @@ function listenersOf(id: string): number | null {
 
 // ─────────────────────────── 원점수와 지수 ───────────────────────────
 
-function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number): number {
-  const today = kstDay(NOW);
-  return (state.tagged[id] ?? []).filter((article) => article[flag] && today - article.d < days).length;
+/**
+ * 최근 days일 동안 flag가 붙은 기사 수(at 시점 기준).
+ * 그 기간을 다 덮는 기사 기록이 없으면(기사가 너무 많은 그룹) 덮은 기간의 하루 평균으로 늘려 추정한다.
+ */
+function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number, at = NOW): number {
+  const day = kstDay(at);
+  const count = (state.tagged[id] ?? []).filter(
+    (article) => article[flag] && article.d <= day && day - article.d < days,
+  ).length;
+  const from = state.coverageFrom?.[id];
+  if (from === undefined || from === 0) return count;
+  const coveredDays = Math.min(days, day - kstDay(from) + 1);
+  if (coveredDays >= days || coveredDays < 1) return count;
+  return Math.round((count * days) / coveredDays);
 }
 
 function ensureIds(): void {
@@ -753,6 +840,123 @@ function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
 
 // ─────────────────────────── 실행 ───────────────────────────
 
+// ─────────────────────────── 과거 복원(새 기준으로 처음 시작할 때 한 번) ───────────────────────────
+
+const BACKFILL_DAYS = Number(process.env.BACKFILL_DAYS ?? 14);
+
+function dayStart(day: number): number {
+  return day * DAY_MS - KST_OFFSET_MS;
+}
+
+function dayCompact(day: number): string {
+  return new Date(day * DAY_MS).toISOString().slice(0, 10).replace(/-/g, '');
+}
+
+/**
+ * 지난 BACKFILL_DAYS일의 하루 마감 기록을 만든다.
+ * - 뉴스·브랜드·활동·조정: 깊게 받은 네이버 기사로 그날 기준 다시 센다.
+ * - 음원: 멜론은 지난 날짜 차트를 주지 않아 벅스 일간 차트(그날 기준)를 쓴다.
+ * - SNS/팬덤·팬덤 규모: Last.fm·유튜브는 과거 값을 주지 않아 현재 값을 쓴다.
+ * 기사가 너무 많아 그날까지 거슬러 가지 못한 그룹의 24시간 기사 수는 가장 가까운 복원 가능한 날 값을 쓴다.
+ */
+async function backfillDaily(): Promise<void> {
+  const today = kstDay(NOW);
+  const days = Array.from({ length: BACKFILL_DAYS }, (_, index) => today - BACKFILL_DAYS + index);
+  ensureIds();
+
+  const chartByDay = new Map<number, Record<string, number>>();
+  const chartFailures: string[] = [];
+  for (const day of days) {
+    const attempts: string[] = [];
+    try {
+      const html = await fetchHtml(`https://music.bugs.co.kr/chart/track/day/total?chartdate=${dayCompact(day)}`, attempts);
+      const rows = parseBugs(html);
+      if (rows.length < 50) throw new Error(`rows ${rows.length}`);
+      chartByDay.set(day, chartEntries(rows).pointsById);
+    } catch (error) {
+      chartFailures.push(`${dayCompact(day)} ${(error as Error).message} ${attempts.join(',')}`);
+    }
+    await sleep(300);
+  }
+
+  // 그날 24시간 기사 수(정확히 셀 수 있으면 숫자, 아니면 null)
+  const newsByDay = new Map<string, Array<number | null>>();
+  const imputed: string[] = [];
+  for (const group of GROUPS) {
+    const times = deepNewsTimes.get(group.id);
+    const from = state.coverageFrom?.[group.id] ?? NOW;
+    const counts = days.map((day) => {
+      const end = dayStart(day + 1);
+      if (!times || (from !== 0 && from > end - DAY_MS)) return null;
+      return times.filter((time) => time > end - DAY_MS && time <= end).length;
+    });
+    // 앞쪽 빈 날은 가장 가까운 셀 수 있는 날 값으로
+    const firstKnown = counts.findIndex((count) => count !== null);
+    if (firstKnown > 0) imputed.push(`${group.id}:${firstKnown}d`);
+    newsByDay.set(
+      group.id,
+      counts.map((count) => count ?? (firstKnown >= 0 ? (counts[firstKnown] ?? 0) : 0)),
+    );
+  }
+
+  const entries: HistoryEntry[] = [];
+  const rawsByDay: Array<Record<string, RawScores>> = [];
+  days.forEach((day, dayIndex) => {
+    const at = dayStart(day + 1) - 1;
+    // 벅스 차트를 못 받은 날은 가장 가까운 앞날 차트를 쓴다.
+    let chart = chartByDay.get(day);
+    for (let back = 1; !chart && back <= dayIndex; back += 1) chart = chartByDay.get(day - back);
+    for (let ahead = 1; !chart && ahead < days.length - dayIndex; ahead += 1) chart = chartByDay.get(day + ahead);
+
+    const raws: Record<string, RawScores> = {};
+    for (const group of GROUPS) {
+      const raw: RawScores = {
+        musicAlbum: logScore(chart?.[group.id] ?? 0, SCORE_REF.chartPoints),
+        newsIssue: logScore(newsByDay.get(group.id)?.[dayIndex] ?? 0, SCORE_REF.news24h),
+        snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
+        brandFit: logScore(countTagged(group.id, 'b', 30, at), SCORE_REF.brand30d),
+        comebackActivity: logScore(countTagged(group.id, 'c', 14, at), SCORE_REF.comeback14d),
+        growthMomentum: 50,
+        riskAdjustment: logScore(countTagged(group.id, 'r', 7, at), SCORE_REF.risk7d),
+      };
+      const weekAgo = rawsByDay[dayIndex - 7]?.[group.id] ?? null;
+      raw.growthMomentum = momentumScore(raw, weekAgo);
+      raws[group.id] = raw;
+    }
+    rawsByDay.push(raws);
+
+    const packed: number[] = [];
+    for (const id of history.ids) packed.push(...(raws[id] ? packRaw(raws[id]) : VARIABLE_ORDER.map(() => -1)));
+    entries.push({ t: dayStart(day + 1) - SLOT_MS, k: 0, r: packed });
+  });
+
+  // 지수 기준: 복원 첫날 마감 = 1,000
+  const floats = Object.fromEntries(
+    GROUPS.map((group) => [group.id, fanFloat(listenersOf(group.id), subscribersOf(group.id))]),
+  );
+  const capOf = (raws: Record<string, RawScores>) =>
+    GROUPS.reduce((sum, group) => sum + priceFromRaw(raws[group.id]) * floats[group.id], 0);
+  state.divisor = capOf(rawsByDay[0]) / 1000;
+  entries.forEach((entry, index) => {
+    entry.k = Math.round((capOf(rawsByDay[index]) / state.divisor!) * 100) / 100;
+  });
+
+  history.daily = entries;
+  history.hourly = [];
+  history.recent = [];
+  history.startedAt = entries[0].t;
+
+  report.backfill = {
+    days: BACKFILL_DAYS,
+    from: dayCompact(days[0]),
+    to: dayCompact(days[days.length - 1]),
+    chartDays: chartByDay.size,
+    chartFailures,
+    newsImputed: imputed,
+    kmi: entries.map((entry) => entry.k),
+  };
+}
+
 async function main() {
   await Promise.all([refreshNews(), refreshChart(), refreshLastfm(), refreshYoutube()]);
 
@@ -760,12 +964,19 @@ async function main() {
   if (state.divisor === null && (!state.news || !state.lastfm || !state.chart || (YOUTUBE_KEY && !state.youtube))) {
     // 지수 기준은 만들지 않되, 다음 실행이 다시 받지 않도록 상태와 진단 리포트는 남긴다.
     report.notes.push('waiting for all sources before the first snapshot');
+    // 과거 복원은 깊게 받은 기사가 필요하므로, 다음 실행이 다시 깊게 받도록 범위 기록을 지운다.
+    delete state.coverageFrom;
     mkdirSync(OUT_DIR, { recursive: true });
     writeFileSync(join(OUT_DIR, 'state.json.gz'), gzipSync(JSON.stringify(state)));
     writeFileSync(join(OUT_DIR, 'run-report.json'), JSON.stringify(report, null, 1));
     writeFileSync(join(OUT_DIR, 'vercel.json'), JSON.stringify({ git: { deploymentEnabled: false } }));
     console.log(JSON.stringify(report.sources));
     return;
+  }
+
+  // 새 기준으로 처음 시작하면 지난 기록부터 만든다.
+  if (state.divisor === null && history.daily.length === 0 && BACKFILL_DAYS > 0 && deepNewsTimes.size) {
+    await backfillDaily();
   }
 
   const raws = computeRaw();
@@ -798,7 +1009,7 @@ async function main() {
     chart: (state.chart?.entries ?? []).filter((entry) => entry.artistId),
     sourceTimes: {
       naver: state.news?.at ?? null,
-      bugs: state.chart?.at ?? null,
+      chart: state.chart?.at ?? null,
       lastfm: state.lastfm?.date ?? null,
       youtube: state.youtube?.date ?? null,
     },

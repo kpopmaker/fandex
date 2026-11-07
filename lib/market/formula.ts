@@ -36,7 +36,7 @@ export const SCORE_REF = {
   comeback14d: 150,
   /** 최근 7일 부정 키워드 기사 수 */
   risk7d: 40,
-  /** 벅스 실시간 TOP100 점수 합(1위 100점 … 100위 1점) */
+  /** 멜론 TOP100 점수 합(1위 100점 … 100위 1점). 과거 복원 구간은 벅스 일간 차트 */
   chartPoints: 600,
 } as const;
 

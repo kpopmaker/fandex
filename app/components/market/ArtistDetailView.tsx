@@ -220,7 +220,7 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
         </section>
 
         <section className="rounded-2xl border border-fx-line bg-fx-surface p-6" aria-labelledby="chart-title">
-          <h2 id="chart-title" className="text-[17px] font-bold text-fx-ink">벅스 실시간 차트</h2>
+          <h2 id="chart-title" className="text-[17px] font-bold text-fx-ink">멜론 TOP100</h2>
           {model.chartTracks.length === 0 ? (
             <p className="mt-3 text-sm text-fx-sub">지금 TOP100에 든 곡이 없어요.</p>
           ) : (

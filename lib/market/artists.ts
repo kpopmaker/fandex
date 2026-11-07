@@ -9,6 +9,8 @@ export type MarketArtist = {
   ticker: string;
   groupType: GroupType;
   agency: string | null;
+  debutYear: number | null;
+  generation: number | null;
   searchText: string;
 };
 
@@ -23,6 +25,8 @@ export const MARKET_ARTISTS: readonly MarketArtist[] = universeFile.groups.map((
   ticker: group.ticker,
   groupType: group.groupType as GroupType,
   agency: group.agency,
+  debutYear: group.debutYear,
+  generation: group.generation,
   searchText: normalize([group.id, group.ticker, ...group.matchNames].join(' ')),
 }));
 
@@ -43,3 +47,9 @@ export const GROUP_TYPE_LABEL: Record<GroupType, string> = {
   mixed: '혼성그룹',
   unknown: '그룹',
 };
+
+export const GENERATIONS = [1, 2, 3, 4, 5] as const;
+
+export function generationLabel(generation: number | null): string {
+  return generation ? `${generation}세대` : '';
+}

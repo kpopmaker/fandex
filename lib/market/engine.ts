@@ -22,44 +22,70 @@ export function latestEntry(dataset: MarketDataset): HistoryEntry {
   return recent[recent.length - 1];
 }
 
+const KST_OFFSET_MS = 9 * HOUR_MS;
+
+function kstDay(time: number): number {
+  return Math.floor((time + KST_OFFSET_MS) / DAY_MS);
+}
+
+/**
+ * 촘촘한 기록이 시작되기 전 구간은 거친 기록으로 이어 붙인다.
+ * 예) 1주 차트 = 복원된 일별 마감 기록 + 수집 시작 뒤 시간별 기록
+ */
+function stitched(dataset: MarketDataset, tier: 'recent' | 'hourly' | 'daily'): HistoryEntry[] {
+  const { daily, hourly, recent } = dataset.history;
+  if (tier === 'daily') return daily;
+  const fine = tier === 'recent' ? recent : hourly;
+  const fineStart = fine[0]?.t ?? Infinity;
+  const coarse =
+    tier === 'recent'
+      ? [...daily.filter((entry) => entry.t < (hourly[0]?.t ?? fineStart)), ...hourly]
+      : daily;
+  return [...coarse.filter((entry) => entry.t < fineStart), ...fine];
+}
+
 /** 차트에 쓸 기록: 기간에 맞는 단위로 고르고, 마지막은 항상 최신 시점 */
 export function periodEntries(dataset: MarketDataset, period: PeriodId): HistoryEntry[] {
   const definition = getPeriod(period);
   const latest = latestEntry(dataset);
   const from = latest.t - definition.span;
 
-  let entries = dataset.history[definition.tier].filter((entry) => entry.t >= from);
-  // 수집 초기에는 긴 기간 단위 기록이 적으니, 더 촘촘한 기록으로 채운다.
-  if (entries.length < 3 && definition.tier === 'daily') {
-    entries = dataset.history.hourly.filter((entry) => entry.t >= from);
-  }
-  if (entries.length < 3 && definition.tier !== 'recent') {
-    entries = dataset.history.recent.filter((entry) => entry.t >= from);
-  }
+  const all = stitched(dataset, definition.tier);
+  // 기간 바로 앞의 기록 하나를 시작점으로 넣어 '기간 전 대비'가 맞게 한다.
+  const firstInside = all.findIndex((entry) => entry.t >= from);
+  const entries = firstInside > 0 ? all.slice(firstInside - 1) : firstInside === 0 ? all : [];
 
   const thinned = entries.filter(
-    (_, index) => (entries.length - 1 - index) % definition.every === 0,
+    (_, index) => index === 0 || (entries.length - 1 - index) % definition.every === 0,
   );
   if (thinned[thinned.length - 1]?.t !== latest.t) thinned.push(latest);
   return thinned;
 }
 
 /**
- * span 전 시점의 기록. 기록이 그만큼 쌓이지 않았으면 null.
- * 허용 오차: 1일은 1시간, 그 이상은 하루.
+ * daysBack일 전 마감 기록(한국 시간 기준 그날의 마지막 값). 없으면 null.
+ * 1일 등락률 = 전일 마감 대비(증권 앱의 '전일 대비'와 같다).
  */
+export function closeAgo(dataset: MarketDataset, daysBack: number): HistoryEntry | null {
+  const latest = latestEntry(dataset);
+  const target = kstDay(latest.t) - daysBack;
+  let best: HistoryEntry | null = null;
+  for (const entry of dataset.history.daily) {
+    const day = kstDay(entry.t);
+    if (day === target) return entry;
+    // 그날 기록이 없으면 그 전날까지 중 가장 가까운 마감
+    if (day < target && day >= target - 2 && (!best || entry.t > best.t)) best = entry;
+  }
+  return best;
+}
+
+/** span 전 시점과 가장 가까운 기록(차트 구간 계산용). 없으면 null. */
 export function entryAgo(dataset: MarketDataset, span: number): HistoryEntry | null {
   const latest = latestEntry(dataset);
   const target = latest.t - span;
   const tolerance = span <= DAY_MS ? HOUR_MS : DAY_MS;
-  const pool =
-    span <= 2 * DAY_MS
-      ? dataset.history.recent
-      : span <= 35 * DAY_MS
-        ? dataset.history.hourly
-        : dataset.history.daily;
   let best: HistoryEntry | null = null;
-  for (const entry of pool) {
+  for (const entry of stitched(dataset, span <= 2 * DAY_MS ? 'recent' : 'hourly')) {
     if (Math.abs(entry.t - target) > tolerance) continue;
     if (!best || Math.abs(entry.t - target) < Math.abs(best.t - target)) best = entry;
   }

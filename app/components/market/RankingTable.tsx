@@ -9,14 +9,16 @@ import { ChangeRate } from './Change';
 
 export type RankingSort = 'overall' | 'rise' | 'fall' | 'fancap' | VariableId;
 export type RankingPeriod = '1D' | '1W' | '1M';
-export type RankingGroup = 'all' | 'boy_group' | 'girl_group';
+export type RankingGroup = 'all' | 'boy_group' | 'girl_group' | 'mixed';
 export type RankingOrder = 'desc' | 'asc';
+export type RankingGeneration = 'all' | '1' | '2' | '3' | '4' | '5';
 
 export type RankingState = {
   sort: RankingSort;
   period: RankingPeriod;
   order: RankingOrder;
   group: RankingGroup;
+  gen: RankingGeneration;
 };
 
 const SORT_OPTIONS: { id: RankingSort; label: string }[] = [
@@ -34,9 +36,24 @@ const PERIOD_OPTIONS: { id: RankingPeriod; label: string }[] = [
 ];
 
 const GROUP_OPTIONS: { id: RankingGroup; label: string }[] = [
-  { id: 'all', label: '전체' },
+  { id: 'all', label: '전체 그룹' },
   { id: 'boy_group', label: '보이그룹' },
   { id: 'girl_group', label: '걸그룹' },
+  { id: 'mixed', label: '혼성그룹' },
+];
+
+const GENERATION_OPTIONS: { id: RankingGeneration; label: string }[] = [
+  { id: 'all', label: '전체 세대' },
+  { id: '1', label: '1세대 (~2002 데뷔)' },
+  { id: '2', label: '2세대 (2003~2011)' },
+  { id: '3', label: '3세대 (2012~2017)' },
+  { id: '4', label: '4세대 (2018~2022)' },
+  { id: '5', label: '5세대 (2023~)' },
+];
+
+const ORDER_OPTIONS: { id: RankingOrder; label: string }[] = [
+  { id: 'desc', label: '내림차순' },
+  { id: 'asc', label: '오름차순' },
 ];
 
 function sortValue(quote: ArtistQuote, state: RankingState): number | null {
@@ -58,28 +75,44 @@ function naturalDescending(sort: RankingSort): boolean {
   return sort !== 'fall';
 }
 
-function Chip({
-  selected,
-  onClick,
-  children,
+function Dropdown<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
 }: {
-  selected: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
+  label: string;
+  value: T;
+  options: { id: T; label: string }[];
+  onChange: (value: T) => void;
 }) {
   return (
-    <button
-      type="button"
-      aria-pressed={selected}
-      onClick={onClick}
-      className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] transition-colors ${
-        selected
-          ? 'border-fx-ink bg-fx-ink font-bold text-fx-surface'
-          : 'border-fx-line bg-fx-surface font-medium text-fx-sub hover:border-fx-sub hover:text-fx-ink'
-      }`}
-    >
-      {children}
-    </button>
+    <label className="flex min-w-0 flex-col gap-1.5">
+      <span className="text-xs font-semibold text-fx-sub">{label}</span>
+      <span className="relative">
+        <select
+          value={value}
+          onChange={(event) => onChange(event.target.value as T)}
+          className="h-10 w-full cursor-pointer appearance-none rounded-xl border border-fx-line bg-fx-surface pl-3.5 pr-9 text-sm font-semibold text-fx-ink transition-colors hover:border-fx-sub"
+        >
+          {options.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <svg
+          viewBox="0 0 20 20"
+          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fx-sub"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden="true"
+        >
+          <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+    </label>
   );
 }
 
@@ -100,13 +133,16 @@ export default function RankingTable({
       period: next.period,
       order: next.order,
       group: next.group,
+      gen: next.gen,
     });
     window.history.replaceState(null, '', `/ranking?${params.toString()}`);
   }
 
   const rows = useMemo(() => {
     const filtered = quotes.filter(
-      (quote) => state.group === 'all' || quote.groupType === state.group,
+      (quote) =>
+        (state.group === 'all' || quote.groupType === state.group) &&
+        (state.gen === 'all' || String(quote.generation) === state.gen),
     );
     const descending = naturalDescending(state.sort) === (state.order === 'desc');
     return [...filtered]
@@ -125,62 +161,17 @@ export default function RankingTable({
 
   return (
     <div>
-      <div className="space-y-3 rounded-2xl border border-fx-line bg-fx-surface p-5">
-        <div className="flex items-start gap-4">
-          <span className="w-14 shrink-0 pt-2 text-[13px] font-semibold text-fx-sub">기준</span>
-          <div className="flex flex-wrap gap-2">
-            {SORT_OPTIONS.map((option) => (
-              <Chip
-                key={option.id}
-                selected={state.sort === option.id}
-                onClick={() => update({ sort: option.id, order: 'desc' })}
-              >
-                {option.label}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-          <div className="flex items-center gap-4">
-            <span className="w-14 shrink-0 text-[13px] font-semibold text-fx-sub">기간</span>
-            <div className="flex gap-2">
-              {PERIOD_OPTIONS.map((option) => (
-                <Chip
-                  key={option.id}
-                  selected={state.period === option.id}
-                  onClick={() => update({ period: option.id })}
-                >
-                  {option.label}
-                </Chip>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="shrink-0 text-[13px] font-semibold text-fx-sub">그룹</span>
-            <div className="flex gap-2">
-              {GROUP_OPTIONS.map((option) => (
-                <Chip
-                  key={option.id}
-                  selected={state.group === option.id}
-                  onClick={() => update({ group: option.id })}
-                >
-                  {option.label}
-                </Chip>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="shrink-0 text-[13px] font-semibold text-fx-sub">순서</span>
-            <div className="flex gap-2">
-              <Chip selected={state.order === 'desc'} onClick={() => update({ order: 'desc' })}>
-                내림차순
-              </Chip>
-              <Chip selected={state.order === 'asc'} onClick={() => update({ order: 'asc' })}>
-                오름차순
-              </Chip>
-            </div>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-3 rounded-2xl border border-fx-line bg-fx-surface p-5 sm:grid-cols-3 lg:grid-cols-5">
+        <Dropdown
+          label="기준"
+          value={state.sort}
+          options={SORT_OPTIONS}
+          onChange={(sort) => update({ sort, order: 'desc' })}
+        />
+        <Dropdown label="기간" value={state.period} options={PERIOD_OPTIONS} onChange={(period) => update({ period })} />
+        <Dropdown label="그룹" value={state.group} options={GROUP_OPTIONS} onChange={(group) => update({ group })} />
+        <Dropdown label="세대" value={state.gen} options={GENERATION_OPTIONS} onChange={(gen) => update({ gen })} />
+        <Dropdown label="순서" value={state.order} options={ORDER_OPTIONS} onChange={(order) => update({ order })} />
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-2xl border border-fx-line bg-fx-surface">
@@ -190,6 +181,7 @@ export default function RankingTable({
             <tr className="border-b border-fx-line text-left text-xs font-semibold text-fx-sub">
               <th scope="col" className="w-14 px-5 py-3 text-center">순위</th>
               <th scope="col" className="px-3 py-3">그룹</th>
+              <th scope="col" className="px-3 py-3">세대</th>
               <th scope="col" className="px-3 py-3 text-right">가격</th>
               <th scope="col" className="px-3 py-3 text-right">{periodLabel} 등락률</th>
               <th scope="col" className="px-3 py-3 text-right">팬캡</th>
@@ -214,6 +206,9 @@ export default function RankingTable({
                     <span className="font-semibold text-fx-ink group-hover:underline">{quote.koreanName}</span>
                     <span className="ml-2 text-xs text-fx-faint">{quote.ticker}</span>
                   </Link>
+                </td>
+                <td className="px-3 py-3 text-xs text-fx-sub" title={quote.debutYear ? `${quote.debutYear}년 데뷔` : undefined}>
+                  {quote.generation ? `${quote.generation}세대` : '—'}
                 </td>
                 <td className="fx-num px-3 py-3 text-right font-semibold text-fx-ink">
                   {formatPrice(quote.price)}
@@ -242,7 +237,7 @@ export default function RankingTable({
           </p>
         )}
         {rows.length === 0 && (
-          <p className="px-5 py-10 text-center text-sm text-fx-sub">조건에 맞는 그룹이 없어요. 그룹 필터를 전체로 바꿔 보세요.</p>
+          <p className="px-5 py-10 text-center text-sm text-fx-sub">조건에 맞는 그룹이 없어요. 그룹이나 세대를 '전체'로 바꿔 보세요.</p>
         )}
       </div>
     </div>

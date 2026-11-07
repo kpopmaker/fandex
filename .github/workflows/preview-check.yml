@@ -72,6 +72,7 @@ jobs:
             ['home', '/'],
             ['ranking', '/ranking'],
             ['ranking-rise', '/ranking?sort=rise&period=1D'],
+            ['ranking-gen', '/ranking?gen=5&group=girl_group'],
             ['artists', '/artists'],
             ['artist', '/artists/aespa'],
             ['compare', '/compare?ids=aespa,ive,riize'],

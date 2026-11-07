@@ -45,7 +45,31 @@ const EXTRA_GROUPS = [
   { id: 'everglow', koreanName: '에버글로우', englishName: 'EVERGLOW', ticker: 'EVGLW', groupType: 'girl_group', agency: 'CHXXTA COMPANY', debutDate: '2019-03-18', matchNames: ['에버글로우', 'EVERGLOW'], newsQueries: ['에버글로우'] },
   { id: 'got7', koreanName: '갓세븐', englishName: 'GOT7', ticker: 'GOT7', groupType: 'boy_group', agency: null, debutDate: '2014-01-16', matchNames: ['갓세븐', 'GOT7'], newsQueries: ['갓세븐'] },
   { id: 'infinite', koreanName: '인피니트', englishName: 'INFINITE', ticker: 'INFNT', groupType: 'boy_group', agency: 'INFINITE COMPANY', debutDate: '2010-06-09', matchNames: ['인피니트', 'INFINITE'], newsQueries: ['인피니트'] },
+  // 2026-11-07 2차 점검으로 추가
+  { id: 'hypeprincess', koreanName: '하입프린세스', englishName: 'H//PE Princess', ticker: 'HYPEP', groupType: 'girl_group', agency: null, debutDate: '2026-05-27', matchNames: ['하입프린세스', '하입 프린세스', 'H//PE Princess', 'HYPE PRINCESS'], newsQueries: ['하입프린세스'] },
+  { id: '1verse', koreanName: '원버스', englishName: '1VERSE', ticker: '1VERSE', groupType: 'boy_group', agency: 'Singing Beetle', debutDate: null, matchNames: ['원버스', '1VERSE'], newsQueries: ['원버스 1VERSE', '1VERSE'] },
 ] as const;
+
+// 원본에 데뷔일이 없는 그룹의 데뷔 연도(세대 구분용). 확실하지 않은 팀은 넣지 않는다.
+const DEBUT_YEAR: Record<string, number> = {
+  kiiikiii: 2025, alldayproject: 2025, cortis: 2025, buzz: 2003, seeya: 2006, davichi: 2008,
+  jannabi: 2014, nflying: 2015, epikhigh: 2003, melomance: 2015, nerdconnection: 2017,
+  standingegg: 2010, ioi: 2016, thenuts: 2002, idid: 2025, aen: 2026, ikon: 2015, '82major': 2023,
+  highlight: 2009, ahof: 2025, ampersandone: 2023, plave: 2023, touched: 2023, lucy: 2020,
+  nssign: 2023, '2pm': 2008, girlset: 2024, ftisland: 2007, cnblue: 2010, sf9: 2016, onewe: 2019,
+  purplekiss: 2021, alphadriveone: 2026, peppertones: 2004, teentop: 2010, kara: 2007, b1a4: 2011,
+  kard: 2017, xlov: 2025, secret: 2009, idntt: 2025, classy: 2022, balmingtiger: 2018,
+  silicagel: 2015, idiotape: 2010, closeyoureyes: 2025, atheart: 2025, ifeye: 2025, '1verse': 2025,
+};
+
+function generationOf(year: number | null): number | null {
+  if (!year) return null;
+  if (year <= 2002) return 1;
+  if (year <= 2011) return 2;
+  if (year <= 2017) return 3;
+  if (year <= 2022) return 4;
+  return 5;
+}
 
 function groupType(id: string): GroupType {
   if (GIRL.has(id)) return 'girl_group';
@@ -83,6 +107,8 @@ const universe = groups.map((artist) => {
     excludeKeywords: artist.profile.excludeKeywords,
     lastfmName: englishName,
     newsQueries: [] as string[],
+    debutYear: null as number | null,
+    generation: null as number | null,
   };
 });
 
@@ -101,7 +127,15 @@ for (const extra of EXTRA_GROUPS) {
     excludeKeywords: [],
     lastfmName: extra.englishName,
     newsQueries: [...extra.newsQueries],
+    debutYear: null,
+    generation: null,
   });
+}
+
+for (const group of universe) {
+  const year = group.debutDate ? Number(group.debutDate.slice(0, 4)) : (DEBUT_YEAR[group.id] ?? null);
+  group.debutYear = year;
+  group.generation = generationOf(year);
 }
 
 mkdirSync('data/market', { recursive: true });
@@ -111,4 +145,6 @@ writeFileSync(
 );
 
 const unknown = universe.filter((group) => group.groupType === 'unknown').map((group) => group.id);
+const noGeneration = universe.filter((group) => group.generation === null).map((group) => group.id);
 console.log(`groups: ${universe.length}, gender unknown: ${unknown.length} (${unknown.join(', ')})`);
+console.log(`generation unknown: ${noGeneration.length} (${noGeneration.join(', ')})`);

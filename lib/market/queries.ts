@@ -5,6 +5,7 @@ import type { HistoryEntry, LatestGroup, NewsHeadline } from './dataFiles';
 import { loadMarketDataset, type MarketDataset } from './dataset';
 import {
   changeRate,
+  closeAgo,
   entryAgo,
   indexSeries,
   priceOf,
@@ -13,7 +14,7 @@ import {
   variableSeries,
 } from './engine';
 import { scoreFromRaw, priceFromScore, unpackRaw } from './formula';
-import { DAY_MS, PERIODS, getPeriod } from './time';
+import { DAY_MS, PERIODS } from './time';
 import type { PeriodId, RawVariablePoints, SeriesPoint, VariableSeriesPoint } from './types';
 import { ENABLED_VARIABLES, POSITIVE_COEFFICIENT_SUM, type VariableId } from './variables';
 
@@ -25,6 +26,8 @@ export type ArtistQuote = {
   koreanName: string;
   ticker: string;
   groupType: GroupType;
+  generation: number | null;
+  debutYear: number | null;
   rank: number;
   price: number;
   score: number;
@@ -51,9 +54,12 @@ function rawDelta(current: RawVariablePoints, previous: RawVariablePoints): RawV
 }
 
 function buildQuotes(dataset: MarketDataset): ArtistQuote[] {
-  const before = Object.fromEntries(
-    QUOTE_PERIODS.map((period) => [period, entryAgo(dataset, getPeriod(period).span)]),
-  ) as Record<(typeof QUOTE_PERIODS)[number], HistoryEntry | null>;
+  // 등락률은 그날 마감 기준: 1일 = 전일 마감, 1주 = 7일 전 마감, 1달 = 30일 전 마감
+  const before = {
+    '1D': closeAgo(dataset, 1),
+    '1W': closeAgo(dataset, 7),
+    '1M': closeAgo(dataset, 30),
+  } as Record<(typeof QUOTE_PERIODS)[number], HistoryEntry | null>;
 
   const quotes: ArtistQuote[] = [];
   for (const artist of MARKET_ARTISTS) {
@@ -76,6 +82,8 @@ function buildQuotes(dataset: MarketDataset): ArtistQuote[] {
       koreanName: artist.koreanName,
       ticker: artist.ticker,
       groupType: artist.groupType,
+      generation: artist.generation,
+      debutYear: artist.debutYear,
       rank: 0,
       price,
       score,
@@ -137,7 +145,7 @@ export async function getHomeModel(): Promise<HomeModel> {
   const dataset = await loadMarketDataset();
   const quotes = buildQuotes(dataset);
   const value = dataset.latest.kmi;
-  const dayAgo = entryAgo(dataset, DAY_MS);
+  const dayAgo = closeAgo(dataset, 1);
 
   const withSpark = (quote: ArtistQuote): SparkQuote => ({
     ...quote,
@@ -151,7 +159,8 @@ export async function getHomeModel(): Promise<HomeModel> {
       count: group.news24h,
       headline: group.headlines[0] ?? null,
     }))
-    .filter((item) => item.count > 0)
+    // 제목에 그룹명이 들어간 기사가 있는 그룹만(순위와 기사 내용이 어긋나지 않게)
+    .filter((item) => item.count > 0 && item.headline !== null)
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
@@ -222,7 +231,7 @@ function compactCount(value: number): string {
 function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean): string {
   switch (id) {
     case 'musicAlbum':
-      return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : '벅스 TOP100 밖';
+      return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : '멜론 TOP100 밖';
     case 'newsIssue':
       return `24시간 기사 ${group.news24h}건`;
     case 'snsFandom': {
@@ -252,7 +261,7 @@ export async function getArtistDetailModel(artistId: string): Promise<ArtistDeta
   const group = dataset.latest.groups[artist.id];
   if (!quote || !group) return null;
 
-  const hasMomentumBase = entryAgo(dataset, 7 * DAY_MS) !== null || entryAgo(dataset, DAY_MS) !== null;
+  const hasMomentumBase = closeAgo(dataset, 1) !== null || entryAgo(dataset, DAY_MS) !== null;
 
   const breakdown = ENABLED_VARIABLES.map((variable) => {
     const ordered = [...quotes].sort((a, b) =>

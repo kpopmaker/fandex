@@ -61,7 +61,8 @@ export type LatestFile = {
   chart: ChartEntry[];
   sourceTimes: {
     naver: number | null;
-    bugs: number | null;
+    /** 멜론 TOP100 수집 시각 */
+    chart: number | null;
     lastfm: string | null;
     youtube: string | null;
   };
@@ -80,4 +81,5 @@ export type RunReport = {
   sources: Record<string, SourceReport>;
   notes: string[];
   summary?: Record<string, unknown>;
+  backfill?: Record<string, unknown>;
 };

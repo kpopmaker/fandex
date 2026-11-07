@@ -2,6 +2,7 @@ import DataNotice from '../components/market/DataNotice';
 import DataUnavailable from '../components/market/DataUnavailable';
 import { MarketDataUnavailableError } from '../../lib/market/dataset';
 import RankingTable, {
+  type RankingGeneration,
   type RankingGroup,
   type RankingOrder,
   type RankingPeriod,
@@ -37,7 +38,8 @@ export default async function RankingPage({ searchParams }: PageProps) {
     sort: pick<RankingSort>(params.sort, SORTS, 'overall'),
     period: pick<RankingPeriod>(params.period, ['1D', '1W', '1M'], '1D'),
     order: pick<RankingOrder>(params.order, ['desc', 'asc'], 'desc'),
-    group: pick<RankingGroup>(params.group, ['all', 'boy_group', 'girl_group'], 'all'),
+    group: pick<RankingGroup>(params.group, ['all', 'boy_group', 'girl_group', 'mixed'], 'all'),
+    gen: pick<RankingGeneration>(params.gen, ['all', '1', '2', '3', '4', '5'], 'all'),
   };
 
   return (
@@ -46,7 +48,7 @@ export default async function RankingPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-[26px] font-bold tracking-[-0.03em] text-fx-ink">랭킹</h1>
           <p className="mt-1 text-[15px] text-fx-sub">
-            활동 중인 K-pop 그룹 1위부터 100위까지, 원하는 기준으로 정렬해 보세요.
+            활동 중인 K-pop 그룹 1위부터 100위까지, 기준·그룹·세대별로 골라 보세요.
           </p>
         </div>
         <DataNotice meta={model.meta} />
