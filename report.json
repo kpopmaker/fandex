@@ -1,0 +1,208 @@
+{
+ "runAt": "2026-11-07T14:33:24.068Z",
+ "melon": {
+  "top100": {
+   "ok": true,
+   "size": 437379,
+   "rows": 100,
+   "first": [
+    {
+     "rank": "1",
+     "title": "With",
+     "artist": "RESCENE&nbsp;(리센느) RESCENE&nbsp;(리센느)"
+    },
+    {
+     "rank": "2",
+     "title": "NEON",
+     "artist": "A2O , A2O&nbsp;LITE A2O , A2O&nbsp;LITE"
+    },
+    {
+     "rank": "3",
+     "title": "꿈꾸던 어른이 되었나요?",
+     "artist": "머무르 머무르"
+    }
+   ],
+   "dates": [
+    "2026.11.07",
+    "2019.12.26",
+    "2022.12.25"
+   ]
+  },
+  "day": {
+   "ok": true,
+   "size": 436028,
+   "rows": 100,
+   "first": [
+    {
+     "rank": "1",
+     "title": "NEON",
+     "artist": "A2O , A2O&nbsp;LITE A2O , A2O&nbsp;LITE"
+    },
+    {
+     "rank": "2",
+     "title": "With",
+     "artist": "RESCENE&nbsp;(리센느) RESCENE&nbsp;(리센느)"
+    },
+    {
+     "rank": "3",
+     "title": "꿈꾸던 어른이 되었나요?",
+     "artist": "머무르 머무르"
+    }
+   ],
+   "dates": [
+    "2026.11.06",
+    "2019.12.26",
+    "2022.12.25"
+   ]
+  },
+  "week": {
+   "ok": true,
+   "size": 440116,
+   "rows": 100,
+   "first": [
+    {
+     "rank": "1",
+     "title": "NEON",
+     "artist": "A2O , A2O&nbsp;LITE A2O , A2O&nbsp;LITE"
+    },
+    {
+     "rank": "2",
+     "title": "꿈꾸던 어른이 되었나요?",
+     "artist": "머무르 머무르"
+    },
+    {
+     "rank": "3",
+     "title": "퇴사할게여 (Narr. 기안84)",
+     "artist": "소연&nbsp;(SOYEON) 소연&nbsp;(SOYEON)"
+    }
+   ],
+   "dates": [
+    "2026.10.26",
+    "2026.11.01",
+    "2019.12.26",
+    "2022.12.25"
+   ]
+  },
+  "weekPast": {
+   "ok": true,
+   "size": 440216,
+   "rows": 100,
+   "first": [
+    {
+     "rank": "1",
+     "title": "NEON",
+     "artist": "A2O , A2O&nbsp;LITE A2O , A2O&nbsp;LITE"
+    },
+    {
+     "rank": "2",
+     "title": "꿈꾸던 어른이 되었나요?",
+     "artist": "머무르 머무르"
+    },
+    {
+     "rank": "3",
+     "title": "퇴사할게여 (Narr. 기안84)",
+     "artist": "소연&nbsp;(SOYEON) 소연&nbsp;(SOYEON)"
+    }
+   ],
+   "dates": [
+    "2026.10.26",
+    "2026.11.01",
+    "2019.12.26",
+    "2022.12.25"
+   ]
+  },
+  "dayPastParam": {
+   "ok": true,
+   "size": 436056,
+   "rows": 100,
+   "first": [
+    {
+     "rank": "1",
+     "title": "NEON",
+     "artist": "A2O , A2O&nbsp;LITE A2O , A2O&nbsp;LITE"
+    },
+    {
+     "rank": "2",
+     "title": "With",
+     "artist": "RESCENE&nbsp;(리센느) RESCENE&nbsp;(리센느)"
+    },
+    {
+     "rank": "3",
+     "title": "꿈꾸던 어른이 되었나요?",
+     "artist": "머무르 머무르"
+    }
+   ],
+   "dates": [
+    "2026.11.06",
+    "2019.12.26",
+    "2022.12.25"
+   ]
+  },
+  "finderWeek": {
+   "ok": true,
+   "size": 0,
+   "rows": 0,
+   "first": [],
+   "dates": [],
+   "snippet": ""
+  },
+  "finderDay": {
+   "ok": true,
+   "size": 0,
+   "rows": 0,
+   "first": [],
+   "dates": [],
+   "snippet": ""
+  },
+  "nodeFetch": {
+   "status": 200,
+   "rows": 100
+  }
+ },
+ "bugsDayPast": {
+  "ok": true,
+  "size": 363321,
+  "rows": 100,
+  "trCount": 104,
+  "dates": [
+   "2026.11.01"
+  ],
+  "sample": "ype=\"checkbox\" id=\"checkCHARTday\" onclick=\"bugs.wiselog.area('list_tr_01_chart');\" name=\"checkAll\" title=\"곡 목록 전체\">\r\n</label>\r\n<span class=\"btns\">\r\n<a href=\"javascript:;\" onclick=\"bugs.wiselog.area('list_tr_02_chart');__trackListCHARTday.listen(this,true);\r\n\"\r\nclass=\"btnNormal play\" aria-label=\"새창\"><span class=\"blind\">선택된 곡 재생</span>듣기</a>\r\n<a href=\"javascript:;\" onclick=\"bugs.wiselog.area('list_tr_03_chart');__trackListCHARTday.listen(this,false);\r\n\"\r\nclass=\"btnNormal addPlaylist\" aria-label=\"새창\">재생목록에 추가</a>\r\n<a href=\"javascript:;\" onclick=\"bugs.wiselog.area('list_tr_04_chart');__trackListCHARTday.addToMyAlbum(this);\r\n\"\r\nclass=\"btnNormal addAlbum\" aria-label=\"새창\">내 앨범에 담기</a>\r\n<a href=\"javascript:;\" onclick=\" bugs.wiselog.area('list_tr_05_chart');bugs.ui.showLoginLayer();\" class=\"btnNormal download\" data-restricted=\"hangame\" aria-label=\"새창\">다운로드</a>\r\n</span>\r\n<span class=\"btns play\">\r\n<span class=\"leftBar\"></span>\r\n<a href=\"javascript:;\" onclick=\"bugs.wiselog.area('list_tr_06_chart');__trackListCHARTday.listenAll(this,'ALL', false);\r\n\"\r\nclass=\"btnNormal play\" aria-label=\"새창\">전체 듣기<small>(재생목록 추가)</small></a>\r\n<a href=\"javascript:;\" onclick=\"bugs.wiselog.area('list_tr_18_chart');__trackListCHARTday.listenAll(this,'ALL', true);\r\n\"\r\nclass=\"btnNormal play changePlaylist\" aria-label=\"새창\">전체 듣기<small>(재생목록 교체)</small></a>\r\n</span>\r\n</div>\r\n</div>\r\n<table class=\"list trackList byChart\">\r\n<caption>곡 목록</caption>\r\n<thead >\r\n<tr>\r\n<th scope=\"col\" class=\"check\"></th>\r\n<th scope=\"col\" class=\"ranking\"><span>순위</span></th>\r\n<th scope=\"col\" class=\"albumArt\"></th>\r\n<th scope=\"col\" class=\"trackInfo\"></th>\r\n<th scope=\"col\" class=\"title\"><span>곡</span></th>\r\n<th scope=\"col\" class=\"artist\"><span>아티스트</span></th>\r\n<th scope=\"col\" class=\"album\"><span>앨범</span></th>\r\n<th scope=\"col\" class=\"action play\"><span>듣기</span></th>\r\n<th scope=\"col\" class=\"action add01\"><span>재생목록</span></th>\r\n<th scope=\"col\" class=\"action add02\"><span>내앨범</span></th>\r\n<th scope=\"col\" class=\"action download\"><span>다운</span></th>\r\n<th scope=\"col\" class=\"action mv\"><span>영상</span></th>\r\n<th scope=\"col\" class=\"action etc\"><span>기타</span></th>\r\n</tr>\r\n</thead>\r\n<tbody>\r\n<tr albumId=\"4156473\" artistId=\"80409316\" mvId=\"641880\" trackId=\"6511885\" multiArtist=\"Y\" rowType=\"track\" >\r\n<input type=\"hidden\" name=\"_isStream\" value=\"6511885\" />\r\n<input type=\"hidden\" name=\"_isDown\" value=\"6511885\" />\r\n<td class=\"check\"><input type=\"checkbox\" value=\"6511885\" name=\"check\" disc_id=\"1\" title=\"NEON\" buyMinQuality=\"T\"></td>\r\n<td>\r\n<div class=\"ranking\">\r\n<strong>1</strong>\r\n<p class=\"change duration\"><em>19일</em></p>\r\n</div>\r\n</td>\r\n<td>\r\n<a href=\"https://music.bugs.co.kr/album/4156473?wl_ref=list_tr_07_chart\" class=\"thumbnail\"\r\nonclick=\"\r\n\">\r\n<span class=\"mask\"></span>\r\n<img src=\"https://image.bugsm.co.kr/album/images/50/41564/4156473.jpg?version=20261029065344\" onerror=\"bugs.utils.imgError(this);\" alt=\"NEON 대표이미지\">\r\n</a>\r\n</td>\r\n<td >\r\n<a href=\"https://music.bugs.co.kr/track/6511885?wl_ref=list_tr_08_chart\" class=\"trackInfo\"\r\nonclick=\"\r\n\">곡정보</a>\r\n</td>\r\n<th scope=\"row\">\r\n<p class=\"title\" adult_yn=\"N\">\r\n<a href=\"javascript:;\" adultCheckVal=\"1\"\r\nonclick=\"bugs.wiselog.area('list_tr_09_chart');bugs.music.listen('6511885',true);\r\n\"\r\ntitle=\"NEON\" aria-label=\"새창\">NEON</a>\r\n</p>\r\n</th>\r\n<td class=\"left\">\r\n<p class=\"artist\">\r\n<!-- a tag title -->\r\n<a href=\"https://music.bugs.co.kr/artist/80409316?wl_ref=list_tr_10_chart\" class=\"artistTitle\" title=\"A2O\" >A2O</a>\r\n<!-- a tag link -->\r\n<a href=\"javascript:void(0);\" name=\"atag_martist_list\" class=\"more\" title=\"아티스트 전체보기\" wise_log_str=\"?wl_ref=list_tr_10_chart\" onclick=\"bugs.layermenu.openMultiArtistSearchResultPopLayer(this, 'A2O||A2O||80409316||OK\\\\nA2O LITE||A2O LITE||14891482||OK', ''); return false;\">\r\nA2O\r\n</a> </p>\r\n</td>\r\n<td class=\"left\" >\r\n<a href=\"https://music.bugs.co.kr/album/4156473?wl_ref=list_tr_11_chart\" class=\"album\" title=\"NEON\"\r\nonclick=\"\r\n\">NEON</a>\r\n</td>\r\n<td>\r\n<a href=\"javascript:;\" adultCheckVal=\"1\"\r\nonclick=\"bugs.wiselog.area('list_"
+ },
+ "naver": {
+  "calls": 845,
+  "groupsCovering": {
+   "7d": 182,
+   "14d": 174,
+   "30d": 152,
+   "total": 186
+  },
+  "shortest": [
+   "kard:1.3d",
+   "itzy:1.6d",
+   "rescene:4.2d",
+   "ive:5.3d",
+   "highlight:8.3d",
+   "ikon:9.4d",
+   "bts:9.6d",
+   "blackpink:10.5d",
+   "billlie:11d",
+   "and2ble:11.3d",
+   "illit:12.3d",
+   "ateez:12.3d",
+   "ahof:14.3d",
+   "bigbang:15.8d",
+   "kiiikiii:16.4d",
+   "a2olite:17.2d",
+   "riize:17.4d",
+   "nmixx:17.7d",
+   "flareu:18.3d",
+   "evnne:19.5d",
+   "csr:19.6d",
+   "aespa:21d",
+   "twice:22.2d",
+   "a2osoul:22.2d",
+   "straykids:22.6d"
+  ]
+ }
+}
