@@ -1,0 +1,16 @@
+name: site check (probe)
+on:
+  push:
+    branches: ['sitecheck-probe']
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Probe live site
+        run: |
+          for p in / /ranking /artists /artists/aespa /api/health / ; do
+            out=$(curl -s -o body.html -w "%{http_code} %{time_starttransfer}s %{time_total}s %{size_download}B" --max-time 150 "https://fandex-product-self-host-v1.onrender.com$p" || echo "curl-exit-$?")
+            title=$(grep -o '<title>[^<]*' body.html | head -1 | sed 's/<title>//')
+            err=$(grep -o 'DataUnavailable\|데이터를 불러오지\|Application error\|Internal Server Error' body.html | head -1)
+            echo "::notice title=$p::$out title=[$title] err=[$err]"
+          done
