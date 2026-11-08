@@ -8,9 +8,18 @@ jobs:
     steps:
       - name: Probe live site
         run: |
-          for p in / /ranking /artists /artists/aespa /api/health / ; do
-            out=$(curl -s -o body.html -w "%{http_code} %{time_starttransfer}s %{time_total}s %{size_download}B" --max-time 150 "https://fandex-product-self-host-v1.onrender.com$p" || echo "curl-exit-$?")
+          base=https://fandex-product-self-host-v1.onrender.com
+          # 배포가 끝날 때까지 health를 기다린다(최대 12분)
+          for i in $(seq 1 24); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$base/api/health" || true)
+            [ "$code" = 200 ] && break
+            sleep 30
+          done
+          echo "::notice title=health-wait::attempts=$i code=$code"
+          for p in / /ranking /artists /artists/aespa "/compare?ids=aespa,ive" / ; do
+            out=$(curl -s -o body.html -w "%{http_code} ttfb=%{time_starttransfer}s total=%{time_total}s %{size_download}B" --max-time 90 "$base$p" || echo "curl-exit-$?")
             title=$(grep -o '<title>[^<]*' body.html | head -1 | sed 's/<title>//')
-            err=$(grep -o 'DataUnavailable\|데이터를 불러오지\|Application error\|Internal Server Error' body.html | head -1)
-            echo "::notice title=$p::$out title=[$title] err=[$err]"
+            kmi=$(grep -o 'KMI[^<]\{0,40\}' body.html | head -1)
+            err=$(grep -o '데이터를 불러오지[^<]*\|Application error\|Internal Server Error' body.html | head -1)
+            echo "::notice title=$p::$out title=[$title] kmi=[$kmi] err=[$err]"
           done
