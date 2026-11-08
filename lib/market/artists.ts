@@ -10,12 +10,20 @@ export type MarketArtist = {
   groupType: GroupType;
   agency: string | null;
   debutYear: number | null;
+  /** 데뷔 시각(ms, 한국 시간 0시). 날짜를 모르면 데뷔연도 1월 1일, 연도도 모르면 null */
+  debutAt: number | null;
   generation: number | null;
   searchText: string;
 };
 
 function normalize(value: string) {
   return value.toLowerCase().replace(/\s+/g, '');
+}
+
+function debutTime(date: string | null | undefined, year: number | null): number | null {
+  if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) return Date.parse(`${date}T00:00:00+09:00`);
+  if (year) return Date.parse(`${year}-01-01T00:00:00+09:00`);
+  return null;
 }
 
 export const MARKET_ARTISTS: readonly MarketArtist[] = universeFile.groups.map((group) => ({
@@ -26,6 +34,7 @@ export const MARKET_ARTISTS: readonly MarketArtist[] = universeFile.groups.map((
   groupType: group.groupType as GroupType,
   agency: group.agency,
   debutYear: group.debutYear,
+  debutAt: debutTime(group.debutDate, group.debutYear),
   generation: group.generation,
   searchText: normalize([group.id, group.ticker, ...group.matchNames].join(' ')),
 }));

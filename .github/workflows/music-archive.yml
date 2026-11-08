@@ -1,0 +1,53 @@
+name: FANDEX music archive
+
+# 장기 음원 기록: 벅스 일간 TOP100을 2006년부터 모아 music-archive 브랜치에 쌓는다.
+# 한 번에 다 못 받으면 받은 만큼 저장하고 다음 실행이 이어서 받는다(처음 채울 때 1~2번).
+# - 매일 03:43(한국 시간) 전날 차트를 더한다.
+# - music-archive-run 브랜치에 푸시하면 바로 한 번 돈다(처음 채울 때).
+on:
+  schedule:
+    - cron: '43 18 * * *'
+  push:
+    branches: ['music-archive-run']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fandex-music-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Collect Bugs daily charts
+        shell: bash
+        env:
+          TIME_BUDGET_MIN: '50'
+          CONCURRENCY: '3'
+          PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+        run: |
+          set -euo pipefail
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p archive-prev
+          if git fetch -q --depth=1 origin +music-archive:refs/remotes/origin/music-archive; then
+            git archive origin/music-archive | tar -x -C archive-prev
+          fi
+          PREV_DIR=archive-prev OUT_DIR=archive-out npx --yes tsx@4.23.12 scripts/market/music-archive.ts
+          cd archive-out
+          git init -q -b music-archive
+          git add -A
+          git commit -q -m "music archive $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "$PUSH_URL" music-archive:music-archive

@@ -27,6 +27,8 @@ let inflight: Promise<MarketDataset> | null = null;
 async function fetchBuffer(path: string): Promise<Buffer> {
   const response = await fetch(`${DATA_URL}/${path}?t=${Math.floor(Date.now() / 60000)}`, {
     cache: 'no-store',
+    // 응답이 멈추면 페이지가 끝없이 로딩되지 않게
+    signal: AbortSignal.timeout(20_000),
   });
   if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
   return Buffer.from(await response.arrayBuffer());

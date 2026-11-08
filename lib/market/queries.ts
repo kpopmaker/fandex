@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { MARKET_ARTISTS, findArtist, type GroupType } from './artists';
-import type { HistoryEntry, LatestGroup, NewsHeadline } from './dataFiles';
+import { METRIC_ORDER, type HistoryEntry, type LatestGroup, type NewsHeadline } from './dataFiles';
 import { loadMarketDataset, type MarketDataset } from './dataset';
 import {
   changeRate,
@@ -13,6 +13,9 @@ import {
   rawFromEntry,
   variableSeries,
 } from './engine';
+import { explainVariable, type Metrics, type VariableDetail } from './explain';
+import { compactToTime, dayNumberToTime, loadMusicHistory } from './musicHistory';
+import type { MusicHistoryFile } from './musicHistoryFile';
 import { scoreFromRaw, priceFromScore, unpackRaw } from './formula';
 import { DAY_MS, PERIODS } from './time';
 import type { PeriodId, RawVariablePoints, SeriesPoint, VariableSeriesPoint } from './types';
@@ -53,6 +56,17 @@ function rawDelta(current: RawVariablePoints, previous: RawVariablePoints): RawV
   return delta;
 }
 
+/** 데뷔 전 시점이면 true(데뷔일을 모르면 false) */
+function beforeDebut(artistId: string, time: number): boolean {
+  const debutAt = findArtist(artistId)?.debutAt ?? null;
+  return debutAt !== null && time < debutAt;
+}
+
+/** 차트는 데뷔일부터: 데뷔 전 시점은 뺀다 */
+function sinceDebut<T extends { time: number }>(artistId: string, points: T[]): T[] {
+  return points.filter((point) => !beforeDebut(artistId, point.time));
+}
+
 function buildQuotes(dataset: MarketDataset): ArtistQuote[] {
   // 등락률은 그날 마감 기준: 1일 = 전일 마감, 1주 = 7일 전 마감, 1달 = 30일 전 마감
   const before = {
@@ -68,12 +82,14 @@ function buildQuotes(dataset: MarketDataset): ArtistQuote[] {
     const raw = unpackRaw(latest.raw);
     const score = scoreFromRaw(raw);
     const price = priceFromScore(score);
-    const weekAgoRaw = before['1W'] ? rawFromEntry(dataset, before['1W'], artist.id) : null;
+    const weekAgoEntry = before['1W'] && !beforeDebut(artist.id, before['1W'].t) ? before['1W'] : null;
+    const weekAgoRaw = weekAgoEntry ? rawFromEntry(dataset, weekAgoEntry, artist.id) : null;
 
     const change = {} as ChangeSet;
     for (const period of QUOTE_PERIODS) {
       const entry = before[period];
-      change[period] = entry ? changeRate(price, priceOf(dataset, entry, artist.id)) : null;
+      change[period] =
+        entry && !beforeDebut(artist.id, entry.t) ? changeRate(price, priceOf(dataset, entry, artist.id)) : null;
     }
 
     quotes.push({
@@ -210,6 +226,7 @@ export type VariableBreakdown = {
   contribution: number;
   rank: number;
   basis: string;
+  detail: VariableDetail;
 };
 
 export type ArtistDetailModel = {
@@ -221,7 +238,76 @@ export type ArtistDetailModel = {
   breakdown: VariableBreakdown[];
   headlines: NewsHeadline[];
   chartTracks: { rank: number; title: string }[];
+  /** 데뷔 시각(차트는 이때부터) */
+  debutAt: number | null;
+  /** 데뷔일(또는 기록 시작일)부터의 장기 음원 기록. 아직 없으면 null */
+  musicHistory: MusicHistoryModel | null;
 };
+
+export type MusicHistoryModel = {
+  source: string;
+  /** 이 그룹 차트의 시작(데뷔일과 기록 시작일 중 늦은 날) */
+  from: number;
+  /** 기록이 데뷔일보다 늦게 시작해 데뷔 직후가 빠졌는지 */
+  startsAfterDebut: boolean;
+  archiveFrom: number;
+  archiveTo: number;
+  /** 주마다 하루 평균 차트 점수 */
+  points: SeriesPoint[];
+  firstChart: number | null;
+  chartDays: number;
+  best: { rank: number; title: string; date: number } | null;
+};
+
+function buildMusicHistory(file: MusicHistoryFile | null, artistId: string, debutAt: number | null): MusicHistoryModel | null {
+  if (!file?.from || !file.to || !file.weeks.length) return null;
+  const archiveFrom = compactToTime(file.from);
+  const from = Math.max(archiveFrom, debutAt ?? archiveFrom);
+  const group = file.groups[artistId];
+  const values = new Map((group?.w ?? []).map(([week, value]) => [week, value / 10]));
+  const points = file.weeks
+    .map((week) => ({ time: dayNumberToTime(week), value: values.get(week) ?? 0 }))
+    // 데뷔 주부터
+    .filter((point) => point.time + 7 * DAY_MS > from);
+  if (points.length < 2) return null;
+  return {
+    source: file.source,
+    from,
+    startsAfterDebut: debutAt !== null && archiveFrom > debutAt,
+    archiveFrom,
+    archiveTo: compactToTime(file.to),
+    points,
+    firstChart: group ? compactToTime(group.first) : null,
+    chartDays: group?.chartDays ?? 0,
+    best: group ? { rank: group.best.rank, title: group.best.title, date: compactToTime(group.best.date) } : null,
+  };
+}
+
+/** 하루 기록에 남은 근거 숫자 */
+function metricsAt(dataset: MarketDataset, entry: HistoryEntry | null, id: string): Metrics | null {
+  const position = dataset.index.get(id);
+  if (!entry?.m || position === undefined) return null;
+  const offset = position * METRIC_ORDER.length;
+  if (entry.m[offset] === undefined) return null;
+  const metrics = {} as Metrics;
+  METRIC_ORDER.forEach((key, index) => {
+    const value = entry.m![offset + index];
+    metrics[key] = value === undefined || value < 0 ? null : value;
+  });
+  return metrics;
+}
+
+function latestMetrics(group: LatestGroup): Metrics {
+  return {
+    chartPoints: group.chartPoints,
+    news7d: group.news7d ?? null,
+    brand30d: group.brand30d,
+    comeback14d: group.comeback14d,
+    risk7d: group.risk7d,
+    listenersK: group.listeners ? Math.round(group.listeners / 1000) : null,
+    subscribersK: group.subscribers ? Math.round(group.subscribers / 1000) : null,
+  };
+}
 
 function compactCount(value: number): string {
   if (value >= 10_000) return `${(value / 10_000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}만`;
@@ -233,7 +319,7 @@ function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean)
     case 'musicAlbum':
       return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : '멜론 TOP100 밖';
     case 'newsIssue':
-      return `24시간 기사 ${group.news24h}건`;
+      return group.news7d === undefined ? `24시간 기사 ${group.news24h}건` : `7일 기사 ${group.news7d}건`;
     case 'snsFandom': {
       const parts = [
         group.listeners ? `청취자 ${compactCount(group.listeners)}` : null,
@@ -255,13 +341,21 @@ function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean)
 export async function getArtistDetailModel(artistId: string): Promise<ArtistDetailModel | null> {
   const artist = findArtist(artistId);
   if (!artist) return null;
-  const dataset = await loadMarketDataset();
+  const [dataset, musicFile] = await Promise.all([loadMarketDataset(), loadMusicHistory()]);
   const quotes = buildQuotes(dataset);
   const quote = quotes.find((item) => item.id === artist.id);
   const group = dataset.latest.groups[artist.id];
   if (!quote || !group) return null;
 
   const hasMomentumBase = closeAgo(dataset, 1) !== null || entryAgo(dataset, DAY_MS) !== null;
+  const weekAgo = closeAgo(dataset, 7);
+  const weekAgoUsable = weekAgo && !beforeDebut(artist.id, weekAgo.t) ? weekAgo : null;
+  const weekAgoRaw = weekAgoUsable ? rawFromEntry(dataset, weekAgoUsable, artist.id) : null;
+  const weekAgoMetrics = metricsAt(dataset, weekAgoUsable, artist.id);
+  const metrics = latestMetrics(group);
+  const chartTracks = dataset.latest.chart
+    .filter((entry) => entry.artistId === artist.id)
+    .map((entry) => ({ rank: entry.rank, title: entry.title }));
 
   const breakdown = ENABLED_VARIABLES.map((variable) => {
     const ordered = [...quotes].sort((a, b) =>
@@ -276,6 +370,16 @@ export async function getArtistDetailModel(artistId: string): Promise<ArtistDeta
         POSITIVE_COEFFICIENT_SUM,
       rank: ordered.findIndex((item) => item.id === artist.id) + 1,
       basis: basisText(variable.id, group, hasMomentumBase),
+      detail: explainVariable({
+        id: variable.id,
+        raw: quote.raw,
+        weekAgoRaw,
+        metrics,
+        weekAgoMetrics,
+        weekAgoBackfilled: weekAgoUsable?.b === 1,
+        group,
+        chartTracks,
+      }),
     };
   });
 
@@ -283,13 +387,13 @@ export async function getArtistDetailModel(artistId: string): Promise<ArtistDeta
     meta: meta(dataset),
     quote,
     totalArtists: quotes.length,
-    priceSeries: seriesByPeriod((period) => priceSeries(dataset, artist.id, period)),
-    variableSeries: seriesByPeriod((period) => variableSeries(dataset, artist.id, period)),
+    priceSeries: seriesByPeriod((period) => sinceDebut(artist.id, priceSeries(dataset, artist.id, period))),
+    variableSeries: seriesByPeriod((period) => sinceDebut(artist.id, variableSeries(dataset, artist.id, period))),
     breakdown,
     headlines: group.headlines,
-    chartTracks: dataset.latest.chart
-      .filter((entry) => entry.artistId === artist.id)
-      .map((entry) => ({ rank: entry.rank, title: entry.title })),
+    chartTracks,
+    debutAt: artist.debutAt,
+    musicHistory: buildMusicHistory(musicFile, artist.id, artist.debutAt),
   };
 }
 
@@ -319,7 +423,7 @@ export async function getCompareModel(ids: string[]): Promise<CompareModel> {
     meta: meta(dataset),
     entries: unique.map((id) => ({
       quote: quotes.find((quote) => quote.id === id)!,
-      priceSeries: seriesByPeriod((period) => priceSeries(dataset, id, period)),
+      priceSeries: seriesByPeriod((period) => sinceDebut(id, priceSeries(dataset, id, period))),
     })),
     options: MARKET_ARTISTS.map((artist) => ({
       id: artist.id,

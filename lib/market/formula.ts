@@ -15,21 +15,22 @@ export const VARIABLE_ORDER: readonly VariableId[] = [
   'riskAdjustment',
 ];
 
-export function clamp100(value: number): number {
+/** 0 아래만 막는다. 원점수에는 위쪽 한계(100점)가 없다(2026-11-08 사용자 요청). */
+export function nonNegative(value: number): number {
   if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.min(100, value));
+  return Math.max(0, value);
 }
 
-/** 절대 규모 로그 점수: 0 → 0점, ref 이상 → 100점 */
+/** 절대 규모 로그 점수: 0 → 0점, ref → 100점, ref보다 크면 100점을 넘는다. */
 export function logScore(value: number, ref: number): number {
   if (!Number.isFinite(value) || value <= 0) return 0;
-  return clamp100((100 * Math.log10(1 + value)) / Math.log10(1 + ref));
+  return nonNegative((100 * Math.log10(1 + value)) / Math.log10(1 + ref));
 }
 
-/** 원점수 환산 기준. 이 값 이상이면 100점. */
+/** 원점수 환산 기준. 이 값이면 100점(상한 아님, 넘으면 100점 이상). */
 export const SCORE_REF = {
-  /** 최근 24시간 관련 기사 수 */
-  news24h: 300,
+  /** 최근 7일 하루 평균 관련 기사 수(하루 한두 건에 가격이 출렁이지 않게 7일 평균을 쓴다) */
+  newsDaily: 300,
   /** 최근 30일 광고·모델·협업 기사 수 */
   brand30d: 60,
   /** 최근 14일 컴백·발매·무대 기사 수 */
@@ -40,16 +41,16 @@ export const SCORE_REF = {
   chartPoints: 600,
 } as const;
 
-/** Last.fm 청취자 1만 명 → 0점, 500만 명 → 100점 */
+/** Last.fm 청취자 1만 명 → 0점, 500만 명 → 100점(더 많으면 100점 이상) */
 export function listenerScore(listeners: number | null): number {
   if (!listeners || listeners <= 0) return 0;
-  return clamp100((100 * (Math.log10(listeners) - 4)) / (Math.log10(5_000_000) - 4));
+  return nonNegative((100 * (Math.log10(listeners) - 4)) / (Math.log10(5_000_000) - 4));
 }
 
-/** 유튜브 구독자 1만 명 → 0점, 2,000만 명 → 100점 */
+/** 유튜브 구독자 1만 명 → 0점, 2,000만 명 → 100점(더 많으면 100점 이상) */
 export function subscriberScore(subscribers: number | null): number {
   if (!subscribers || subscribers <= 0) return 0;
-  return clamp100((100 * (Math.log10(subscribers) - 4)) / (Math.log10(20_000_000) - 4));
+  return nonNegative((100 * (Math.log10(subscribers) - 4)) / (Math.log10(20_000_000) - 4));
 }
 
 /** SNS/팬덤: Last.fm 청취자와 유튜브 구독자 점수의 평균(한쪽만 있으면 그 점수) */
@@ -79,12 +80,12 @@ export const MOMENTUM_SOURCES: readonly VariableId[] = [
   'brandFit',
 ];
 
-/** 7일 전 대비 상승 속도. 비교할 과거 값이 없으면 50(중립). */
+/** 7일 전 대비 상승 속도(뉴스는 이미 7일 평균이라 하루 기사 몇 건에 흔들리지 않는다). 비교할 과거 값이 없으면 50(중립). */
 export function momentumScore(now: RawScores, before: RawScores | null): number {
   if (!before) return 50;
   const avg = (scores: RawScores) =>
     MOMENTUM_SOURCES.reduce((sum, id) => sum + scores[id], 0) / MOMENTUM_SOURCES.length;
-  return clamp100(50 + (avg(now) - avg(before)) * 2.2);
+  return nonNegative(50 + (avg(now) - avg(before)) * 2.2);
 }
 
 export function scoreFromRaw(raw: RawScores): number {
@@ -104,9 +105,9 @@ export function priceFromRaw(raw: RawScores): number {
   return priceFromScore(scoreFromRaw(raw));
 }
 
-/** 저장용: 원점수를 0~1000 정수로 */
+/** 저장용: 원점수×10 정수(0 이상, 상한 없음) */
 export function packRaw(raw: RawScores): number[] {
-  return VARIABLE_ORDER.map((id) => Math.round(clamp100(raw[id]) * 10));
+  return VARIABLE_ORDER.map((id) => Math.round(nonNegative(raw[id]) * 10));
 }
 
 export function unpackRaw(packed: readonly number[], offset = 0): RawScores {

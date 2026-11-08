@@ -1,16 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import {
   changeRateOf,
   comparisonLabel,
+  formatDate,
   formatPoint,
   formatPrice,
   formatRelative,
   formatSignedNumber,
 } from '../../../lib/market/format';
-import type { ArtistDetailModel } from '../../../lib/market/queries';
+import type { VariableDetail } from '../../../lib/market/explain';
+import type { ArtistDetailModel, MusicHistoryModel } from '../../../lib/market/queries';
 import { DEFAULT_PERIOD, getPeriod } from '../../../lib/market/time';
 import type { PeriodId } from '../../../lib/market/types';
 import { ENABLED_VARIABLES, getVariable, type VariableId } from '../../../lib/market/variables';
@@ -40,6 +42,7 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
   const { quote } = model;
   const [period, setPeriod] = useState<PeriodId>(DEFAULT_PERIOD);
   const [selected, setSelected] = useState<VariableId[]>(['musicAlbum', 'newsIssue', 'snsFandom']);
+  const [expanded, setExpanded] = useState<VariableId | null>(null);
 
   const points = model.priceSeries[period];
   const first = points[0];
@@ -135,43 +138,69 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
           <h2 id="variables-title" className="text-[19px] font-bold text-fx-ink">
             변수별 분석
           </h2>
-          <p className="text-[13px] text-fx-sub">카드를 눌러 아래 차트에 겹쳐 보세요. 원점수는 0~100점이에요.</p>
+          <p className="text-[13px] text-fx-sub">
+            카드를 눌러 아래 차트에 겹쳐 보세요. 원점수는 기준치를 100점으로 둔 점수라 100점을 넘을 수 있어요.
+          </p>
         </div>
 
-        <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+        <ul className="mt-5 grid grid-flow-row-dense gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
           {model.breakdown.map((item) => {
             const variable = getVariable(item.id);
             const active = selected.includes(item.id);
+            const open = expanded === item.id;
             return (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => toggleVariable(item.id)}
-                  className={`h-full w-full rounded-xl border p-4 text-left transition-colors ${
+              <Fragment key={item.id}>
+                <li
+                  className={`flex flex-col overflow-hidden rounded-xl border transition-colors ${
                     active ? 'border-fx-ink bg-fx-raised' : 'border-fx-line hover:border-fx-sub'
                   }`}
                 >
-                  <span className="flex items-center gap-1.5 text-[13px] font-semibold text-fx-sub">
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ background: active ? VARIABLE_COLORS[item.id] : 'var(--fx-line)' }}
-                      aria-hidden="true"
-                    />
-                    {variable.label}
-                  </span>
-                  <span className="fx-num mt-2 block text-[24px] font-bold text-fx-ink">{formatPoint(item.raw)}</span>
-                  <span className="mt-1 block text-xs text-fx-sub">{item.basis}</span>
-                  <span className="mt-3 block border-t border-fx-line pt-2 text-xs text-fx-faint">
-                    1주 변화 <PointDelta delta={item.change1W} className="font-semibold" />
-                    <br />
-                    가격 기여{' '}
-                    <span className="fx-num font-semibold text-fx-sub">{formatSignedNumber(item.contribution, 1)}점</span>
-                    <br />
-                    {variable.penalty ? '낮은 순' : '전체'} {item.rank}위
-                  </span>
-                </button>
-              </li>
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => toggleVariable(item.id)}
+                    className="w-full flex-1 p-4 text-left"
+                  >
+                    <span className="flex items-center gap-1.5 text-[13px] font-semibold text-fx-sub">
+                      <span
+                        className="h-2 w-2 rounded-full"
+                        style={{ background: active ? VARIABLE_COLORS[item.id] : 'var(--fx-line)' }}
+                        aria-hidden="true"
+                      />
+                      {variable.label}
+                    </span>
+                    <span className="fx-num mt-2 block text-[24px] font-bold text-fx-ink">{formatPoint(item.raw)}</span>
+                    <span className="mt-1 block text-xs text-fx-sub">{item.basis}</span>
+                    <span className="mt-3 block border-t border-fx-line pt-2 text-xs text-fx-faint">
+                      1주 변화 <PointDelta delta={item.change1W} className="font-semibold" />
+                      <br />
+                      가격 기여{' '}
+                      <span className="fx-num font-semibold text-fx-sub">{formatSignedNumber(item.contribution, 1)}점</span>
+                      <br />
+                      {variable.penalty ? '낮은 순' : '전체'} {item.rank}위
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={`detail-${item.id}`}
+                    onClick={() => setExpanded(open ? null : item.id)}
+                    className={`flex w-full items-center justify-center gap-1 border-t border-fx-line py-2 text-xs font-semibold transition-colors ${
+                      open ? 'bg-fx-ink text-fx-surface' : 'text-fx-sub hover:bg-fx-raised hover:text-fx-ink'
+                    }`}
+                  >
+                    {open ? '접기' : '더보기'}
+                    <svg viewBox="0 0 20 20" className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </li>
+                {open && (
+                  <li id={`detail-${item.id}`} className="col-span-full">
+                    <VariableDetailPanel label={variable.label} detail={item.detail} />
+                  </li>
+                )}
+              </Fragment>
             );
           })}
         </ul>
@@ -199,6 +228,8 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
           ))}
         </ul>
       </section>
+
+      {model.musicHistory && <MusicHistorySection history={model.musicHistory} debutAt={model.debutAt} />}
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <section className="rounded-2xl border border-fx-line bg-fx-surface p-6" aria-labelledby="headlines-title">
@@ -236,5 +267,133 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
         </section>
       </div>
     </div>
+  );
+}
+
+function VariableDetailPanel({ label, detail }: { label: string; detail: VariableDetail }) {
+  return (
+    <div className="rounded-xl border border-fx-line bg-fx-raised p-5">
+      <p className="text-xs font-semibold text-fx-sub">{label} · 왜 이렇게 움직였나요?</p>
+      <p className="mt-2 text-[15px] font-semibold leading-relaxed text-fx-ink">{detail.summary}</p>
+      <ul className="mt-3 space-y-1.5 text-[13px] leading-relaxed text-fx-sub">
+        {detail.lines.map((line) => (
+          <li key={line} className="flex gap-2">
+            <span aria-hidden="true" className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-fx-faint" />
+            <span>{line}</span>
+          </li>
+        ))}
+      </ul>
+      {detail.itemsTitle && (
+        <div className="mt-4">
+          <p className="text-xs font-semibold text-fx-sub">{detail.itemsTitle}</p>
+          {detail.items.length === 0 ? (
+            <p className="mt-1.5 text-[13px] text-fx-faint">해당하는 기사·곡이 없어요.</p>
+          ) : (
+            <ul className="mt-1.5 divide-y divide-fx-line rounded-lg border border-fx-line bg-fx-surface">
+              {detail.items.map((item) => (
+                <li key={`${item.title}-${item.meta}`} className="flex items-baseline justify-between gap-3 px-3 py-2 text-[13px]">
+                  {item.url ? (
+                    <a href={item.url} target="_blank" rel="noreferrer" className="min-w-0 truncate text-fx-ink hover:underline">
+                      {item.title}
+                    </a>
+                  ) : (
+                    <span className="min-w-0 truncate text-fx-ink">{item.title}</span>
+                  )}
+                  {item.meta && <span className="fx-num shrink-0 text-xs text-fx-faint">{item.meta}</span>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      {detail.note && <p className="mt-3 text-xs text-fx-faint">{detail.note}</p>}
+    </div>
+  );
+}
+
+const HISTORY_RANGES = [
+  { id: '1Y', label: '1년', years: 1 },
+  { id: '5Y', label: '5년', years: 5 },
+  { id: 'ALL', label: '데뷔부터', years: null },
+] as const;
+
+const MUSIC_LINE: LineDefinition[] = [{ key: 'value', label: '하루 평균 차트 점수', color: '#7c4dff' }];
+
+function MusicHistorySection({ history, debutAt }: { history: MusicHistoryModel; debutAt: number | null }) {
+  const [range, setRange] = useState<(typeof HISTORY_RANGES)[number]['id']>('ALL');
+  const years = HISTORY_RANGES.find((item) => item.id === range)?.years ?? null;
+  const data = useMemo(() => {
+    const last = history.points[history.points.length - 1]?.time ?? 0;
+    const from = years === null ? -Infinity : last - years * 365.25 * 86_400_000;
+    return history.points.filter((point) => point.time >= from) as unknown as Array<{ time: number } & Record<string, number>>;
+  }, [history.points, years]);
+
+  const stats = [
+    { label: '처음 차트인', value: history.firstChart ? formatDate(history.firstChart) : '기록 없음' },
+    {
+      label: '최고 순위',
+      value: history.best ? `${history.best.rank}위` : '—',
+      sub: history.best ? `${history.best.title} · ${formatDate(history.best.date)}` : undefined,
+    },
+    { label: '차트에 든 날', value: `${history.chartDays.toLocaleString('ko-KR')}일` },
+    { label: debutAt ? '데뷔' : '기록 시작', value: formatDate(debutAt ?? history.from) },
+  ];
+
+  return (
+    <section className="rounded-2xl border border-fx-line bg-fx-surface p-6 lg:p-8" aria-labelledby="music-history-title">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 id="music-history-title" className="text-[19px] font-bold text-fx-ink">
+            음원 차트 기록
+          </h2>
+          <p className="mt-1 text-[13px] text-fx-sub">
+            {history.source} 기준, 주마다 하루 평균 차트 점수(1위 100점 … 100위 1점, 여러 곡이면 합)
+          </p>
+        </div>
+        <div className="flex rounded-xl bg-fx-raised p-1" role="tablist" aria-label="기간">
+          {HISTORY_RANGES.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={range === item.id}
+              onClick={() => setRange(item.id)}
+              className={`rounded-lg px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                range === item.id ? 'bg-fx-surface text-fx-ink shadow-sm' : 'text-fx-sub hover:text-fx-ink'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <MultiLineChart
+          data={data}
+          lines={MUSIC_LINE}
+          height={260}
+          formatValue={(value) => value.toFixed(0)}
+          formatTooltipTime={(time) => `${formatDate(time)} 주`}
+          domain={[0, 'auto']}
+        />
+      </div>
+
+      <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-fx-line bg-fx-line sm:grid-cols-4">
+        {stats.map((item) => (
+          <div key={item.label} className="bg-fx-surface px-4 py-3">
+            <dt className="text-xs text-fx-sub">{item.label}</dt>
+            <dd className="fx-num mt-1 text-[15px] font-bold text-fx-ink">{item.value}</dd>
+            {item.sub && <dd className="mt-0.5 truncate text-xs text-fx-faint">{item.sub}</dd>}
+          </div>
+        ))}
+      </dl>
+
+      <p className="mt-3 text-xs text-fx-faint">
+        멜론은 지난 차트를 주지 않아 장기 기록은 벅스 일간 차트로 만들었어요({formatDate(history.archiveFrom)}~{formatDate(history.archiveTo)}).
+        {history.startsAfterDebut && ' 벅스 일간 차트가 그보다 앞선 기록을 주지 않아 데뷔 직후 구간은 비어 있어요.'} FANDEX 가격과 뉴스·팬덤
+        변수는 이보다 짧은 기간만 있어요.
+      </p>
+    </section>
   );
 }

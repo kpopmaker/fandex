@@ -1,7 +1,7 @@
 // FANDEX 실데이터 수집기. GitHub Actions에서 15분마다 실행된다.
 //
 //   네이버 뉴스(30분) ─┐
-//   벅스 실시간(1시간) ─┼─▶ 변수별 원점수(0~100) ─▶ 가격·KMI ─▶ market-data 브랜치
+//   멜론 TOP100(1시간) ─┼─▶ 변수별 원점수(0 이상, 상한 없음) ─▶ 가격·KMI ─▶ market-data 브랜치
 //   Last.fm(하루 1번) ─┘
 //
 // 실행: PREV_DIR=<이전 market-data 내용> OUT_DIR=<출력 폴더> npx tsx scripts/market/collect.ts
@@ -13,6 +13,7 @@ import { join } from 'node:path';
 import { gunzipSync, gzipSync } from 'node:zlib';
 import universeFile from '../../data/market/universe.json';
 import youtubeChannelsFile from '../../data/market/youtube-channels.json';
+import { createChartMatcher, decodeEntities, parseBugs } from './charts';
 import {
   SCORE_REF,
   VARIABLE_ORDER,
@@ -26,6 +27,7 @@ import {
   type RawScores,
 } from '../../lib/market/formula';
 import {
+  METRIC_ORDER,
   type ChartEntry,
   type HistoryFile,
   type HistoryEntry,
@@ -62,9 +64,12 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // ─────────────────────────── 상태 파일 ───────────────────────────
 
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
+type ExampleFlag = 'b' | 'c' | 'r';
+/** 예시 기사를 남겨 둘 기간(그 변수의 집계 기간과 같다) */
+const EXAMPLE_DAYS: Record<ExampleFlag, number> = { b: 30, c: 14, r: 7 };
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 6;
+const DATA_EPOCH = 7;
 
 type State = {
   version: string;
@@ -82,6 +87,10 @@ type State = {
    * 네이버는 최근 1,000건까지만 주므로 기사가 많은 그룹은 이보다 앞선 기사가 없다.
    */
   coverageFrom?: Record<string, number>;
+  /** 그룹별 최근 8일 관련 기사(링크 해시, 발행 시각). 뉴스/이슈 = 7일 하루 평균 */
+  newsTimes?: Record<string, Array<[string, number]>>;
+  /** 브랜드·활동·조정 점수에 잡힌 최근 기사 예시 */
+  examples?: Record<string, Record<ExampleFlag, NewsHeadline[]>>;
   chart: { at: number; entries: ChartEntry[]; pointsById: Record<string, number>; source?: 'melon' | 'bugs' } | null;
   lastfm: {
     date: string;
@@ -136,20 +145,6 @@ const report: RunReport = {
 };
 
 // ─────────────────────────── 공통 텍스트 처리 ───────────────────────────
-
-function decodeEntities(text: string): string {
-  return text
-    .replace(/<[^>]+>/g, '')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#(\d+);/g, (_, code: string) => String.fromCharCode(Number(code)))
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 function escapeRegExp(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -250,6 +245,7 @@ type GroupNews = {
   count: number;
   headlines: NewsHeadline[];
   tagged: TaggedArticle[];
+  examples: Record<ExampleFlag, NewsHeadline[]>;
   fetched: number;
   pages: number;
 };
@@ -346,11 +342,19 @@ async function collectGroupNews(
 
   const within24h = relevant.filter((entry) => entry.time >= cutoff);
   const tagged: TaggedArticle[] = [];
+  const examples: Record<ExampleFlag, NewsHeadline[]> = { b: [], c: [], r: [] };
   for (const entry of relevant) {
     const brand = containsAny(entry.text, BRAND_WORDS);
     const comeback = containsAny(entry.text, COMEBACK_WORDS);
     const risk = containsAny(entry.text, RISK_WORDS);
     if (!brand && !comeback && !risk) continue;
+    // 예시는 제목에 그룹명이 있는 기사만(무슨 기사가 점수를 움직였는지 보여주는 용도)
+    if (entry.titleMatch) {
+      const headline = { title: entry.item.title, url: entry.item.originallink || entry.item.link, publishedAt: entry.time };
+      if (brand && examples.b.length < 5) examples.b.push(headline);
+      if (comeback && examples.c.length < 5) examples.c.push(headline);
+      if (risk && examples.r.length < 5) examples.r.push(headline);
+    }
     tagged.push({
       h: hashLink(entry.item.originallink || entry.item.link),
       d: kstDay(entry.time),
@@ -369,6 +373,7 @@ async function collectGroupNews(
       publishedAt: entry.time,
     })),
     tagged,
+    examples,
     fetched,
     pages,
     entries: relevant,
@@ -419,6 +424,8 @@ async function refreshNews(): Promise<void> {
   const today = kstDay(NOW);
 
   state.coverageFrom ??= {};
+  state.newsTimes ??= {};
+  state.examples ??= {};
   const deepFetched: string[] = [];
   // 실시간은 30일 집계면 충분하지만, 과거 복원 전에는 복원 첫날의 30일 집계에 쓸 기사까지 남겨 둔다.
   const keepDays = state.divisor === null ? BACKFILL_DAYS + 31 : 31;
@@ -438,6 +445,22 @@ async function refreshNews(): Promise<void> {
       const existing = new Map((state.tagged[group.id] ?? []).map((article) => [article.h, article]));
       for (const article of result.tagged) existing.set(article.h, article);
       state.tagged[group.id] = [...existing.values()].filter((article) => today - article.d < keepDays);
+
+      // 뉴스/이슈(7일 하루 평균)에 쓸 최근 8일 기사
+      const times = new Map(state.newsTimes![group.id] ?? []);
+      for (const entry of result.entries) times.set(hashLink(entry.item.originallink || entry.item.link), entry.time);
+      state.newsTimes![group.id] = [...times.entries()].filter(([, time]) => time > NOW - 8 * DAY_MS);
+
+      const previousExamples = state.examples![group.id] ?? { b: [], c: [], r: [] };
+      const merged = {} as Record<ExampleFlag, NewsHeadline[]>;
+      for (const flag of ['b', 'c', 'r'] as const) {
+        const byUrl = new Map([...previousExamples[flag], ...result.examples[flag]].map((item) => [item.url, item]));
+        merged[flag] = [...byUrl.values()]
+          .filter((item) => item.publishedAt > NOW - EXAMPLE_DAYS[flag] * DAY_MS)
+          .sort((a, b) => b.publishedAt - a.publishedAt)
+          .slice(0, 3);
+      }
+      state.examples![group.id] = merged;
     } catch (error) {
       failures.push(`${group.id}: ${(error as Error).message}`);
       const previous = state.news?.byId[group.id];
@@ -462,42 +485,7 @@ async function refreshNews(): Promise<void> {
 
 // ─────────────────────────── 벅스 실시간 차트 ───────────────────────────
 
-function normalizeName(text: string): string {
-  return text.toLowerCase().replace(/[\s\[\]{}()'"“”‘’·.,!?:;_\-&]/g, '');
-}
-
-function parseBugs(html: string): Array<{ rank: number; title: string; artist: string }> {
-  const rows = html.match(/<tr[^>]*trackid=[^>]*>[\s\S]*?<\/tr>/gi) ?? [];
-  const entries: Array<{ rank: number; title: string; artist: string }> = [];
-  for (const row of rows) {
-    const rank = row.match(/<div[^>]+class="ranking"[^>]*>[\s\S]*?<strong>(\d+)<\/strong>/i)?.[1];
-    const title = row.match(/<p[^>]+class="title"[^>]*>([\s\S]*?)<\/p>/i)?.[1];
-    const artist = row.match(/<p[^>]+class="artist"[^>]*>([\s\S]*?)<\/p>/i)?.[1];
-    if (!rank || !title || !artist) continue;
-    entries.push({ rank: Number(rank), title: decodeEntities(title), artist: decodeEntities(artist) });
-  }
-  return entries.sort((a, b) => a.rank - b.rank);
-}
-
-const CHART_NAMES = GROUPS.map((group) => ({
-  id: group.id,
-  names: group.matchNames.map(normalizeName).filter((name) => name.length >= 2),
-}));
-
-function matchChartArtist(artistText: string): string | null {
-  const tokens = artistText
-    .split(/,|&|\/|\(|\)|feat\.?|Feat\.?|\bx\b|×/)
-    .map(normalizeName)
-    .filter(Boolean);
-  const whole = normalizeName(artistText);
-  for (const { id, names } of CHART_NAMES) {
-    for (const name of names) {
-      if (tokens.includes(name)) return id;
-      if (name.length >= 4 && whole.includes(name)) return id;
-    }
-  }
-  return null;
-}
+const matchChartArtist = createChartMatcher(GROUPS);
 
 const BROWSER_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
@@ -746,6 +734,46 @@ function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number, at = NOW):
   return Math.round((count * days) / coveredDays);
 }
 
+/**
+ * at 시점까지 최근 7일 관련 기사 수. 기사 기록이 7일을 다 덮지 못하면(기사가 너무 많은 그룹) 덮은 기간으로 늘려 추정한다.
+ * times를 주면 그 목록으로 센다(과거 복원).
+ */
+function newsWeekCount(id: string, at = NOW, times?: number[]): number {
+  const list = times ?? (state.newsTimes?.[id] ?? []).map(([, time]) => time);
+  const from = at - 7 * DAY_MS;
+  const count = list.filter((time) => time > from && time <= at).length;
+  const covered = state.coverageFrom?.[id];
+  if (covered === undefined || covered === 0 || covered <= from) return count;
+  const coveredDays = (at - covered) / DAY_MS;
+  return coveredDays >= 1 ? Math.round((count * 7) / coveredDays) : count;
+}
+
+/** 원점수의 근거 숫자(METRIC_ORDER 순서) */
+type Metrics = Record<(typeof METRIC_ORDER)[number], number | null>;
+
+function liveMetrics(id: string): Metrics {
+  const listeners = listenersOf(id);
+  const subscribers = subscribersOf(id);
+  return {
+    chartPoints: state.chart?.pointsById[id] ?? 0,
+    news7d: newsWeekCount(id),
+    brand30d: countTagged(id, 'b', 30),
+    comeback14d: countTagged(id, 'c', 14),
+    risk7d: countTagged(id, 'r', 7),
+    listenersK: listeners ? Math.round(listeners / 1000) : null,
+    subscribersK: subscribers ? Math.round(subscribers / 1000) : null,
+  };
+}
+
+function packMetrics(byId: Record<string, Metrics>): number[] {
+  const packed: number[] = [];
+  for (const id of history.ids) {
+    const metrics = byId[id];
+    for (const key of METRIC_ORDER) packed.push(metrics?.[key] ?? -1);
+  }
+  return packed;
+}
+
 function ensureIds(): void {
   for (const group of GROUPS) {
     if (!history.ids.includes(group.id)) history.ids.push(group.id);
@@ -775,7 +803,7 @@ function computeRaw(): Record<string, RawScores> {
   for (const group of GROUPS) {
     const raw: RawScores = {
       musicAlbum: logScore(state.chart?.pointsById[group.id] ?? 0, SCORE_REF.chartPoints),
-      newsIssue: logScore(state.news?.byId[group.id]?.count ?? 0, SCORE_REF.news24h),
+      newsIssue: logScore(newsWeekCount(group.id) / 7, SCORE_REF.newsDaily),
       snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
       brandFit: logScore(countTagged(group.id, 'b', 30), SCORE_REF.brand30d),
       comebackActivity: logScore(countTagged(group.id, 'c', 14), SCORE_REF.comeback14d),
@@ -828,7 +856,7 @@ function upsert(list: HistoryEntry[], entry: HistoryEntry, bucket: (time: number
   else list.push(entry);
 }
 
-function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
+function appendHistory(raws: Record<string, RawScores>, kmi: number, metrics: Record<string, Metrics>): void {
   ensureIds();
   const packed: number[] = [];
   for (const id of history.ids) {
@@ -840,7 +868,7 @@ function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
 
   upsert(history.recent, entry, (time) => Math.floor(time / SLOT_MS));
   upsert(history.hourly, entry, (time) => Math.floor(time / HOUR_MS));
-  upsert(history.daily, entry, kstDay);
+  upsert(history.daily, { ...entry, m: packMetrics(metrics) }, kstDay);
 
   history.recent = history.recent.filter((item) => item.t > SLOT_TIME - 49 * HOUR_MS);
   history.hourly = history.hourly.filter((item) => item.t > SLOT_TIME - 36 * DAY_MS);
@@ -885,28 +913,35 @@ async function backfillDaily(): Promise<void> {
     await sleep(300);
   }
 
-  // 그날 24시간 기사 수(정확히 셀 수 있으면 숫자, 아니면 null)
-  const newsByDay = new Map<string, Array<number | null>>();
+  // 그날 24시간 기사 수(정확히 셀 수 있으면 숫자, 아니면 null). 7일 평균을 내려고 복원 첫날 6일 전부터 센다.
+  const countDays = Array.from({ length: days.length + 6 }, (_, index) => days[0] - 6 + index);
+  const newsByDay = new Map<string, number[]>();
   const imputed: string[] = [];
   for (const group of GROUPS) {
     const times = deepNewsTimes.get(group.id);
     const from = state.coverageFrom?.[group.id] ?? NOW;
-    const counts = days.map((day) => {
+    const counts = countDays.map((day) => {
       const end = dayStart(day + 1);
       if (!times || (from !== 0 && from > end - DAY_MS)) return null;
       return times.filter((time) => time > end - DAY_MS && time <= end).length;
     });
     // 앞쪽 빈 날은 가장 가까운 셀 수 있는 날 값으로
     const firstKnown = counts.findIndex((count) => count !== null);
-    if (firstKnown > 0) imputed.push(`${group.id}:${firstKnown}d`);
+    const imputedDays = Math.max(0, firstKnown - 6);
+    if (imputedDays > 0) imputed.push(`${group.id}:${imputedDays}d`);
     newsByDay.set(
       group.id,
       counts.map((count) => count ?? (firstKnown >= 0 ? (counts[firstKnown] ?? 0) : 0)),
     );
   }
+  /** 복원 dayIndex일까지 최근 7일 기사 수 */
+  const weekNews = (id: string, dayIndex: number) =>
+    (newsByDay.get(id) ?? []).slice(dayIndex, dayIndex + 7).reduce((sum, count) => sum + count, 0);
 
   const entries: HistoryEntry[] = [];
   const rawsByDay: Array<Record<string, RawScores>> = [];
+  const listenersK = (id: string) => (listenersOf(id) ? Math.round(listenersOf(id)! / 1000) : null);
+  const subscribersK = (id: string) => (subscribersOf(id) ? Math.round(subscribersOf(id)! / 1000) : null);
   days.forEach((day, dayIndex) => {
     const at = dayStart(day + 1) - 1;
     // 벅스 차트를 못 받은 날은 가장 가까운 앞날 차트를 쓴다.
@@ -915,10 +950,20 @@ async function backfillDaily(): Promise<void> {
     for (let ahead = 1; !chart && ahead < days.length - dayIndex; ahead += 1) chart = chartByDay.get(day + ahead);
 
     const raws: Record<string, RawScores> = {};
+    const metrics: Record<string, Metrics> = {};
     for (const group of GROUPS) {
+      metrics[group.id] = {
+        chartPoints: chart?.[group.id] ?? 0,
+        news7d: weekNews(group.id, dayIndex),
+        brand30d: countTagged(group.id, 'b', 30, at),
+        comeback14d: countTagged(group.id, 'c', 14, at),
+        risk7d: countTagged(group.id, 'r', 7, at),
+        listenersK: listenersK(group.id),
+        subscribersK: subscribersK(group.id),
+      };
       const raw: RawScores = {
         musicAlbum: logScore(chart?.[group.id] ?? 0, SCORE_REF.chartPoints),
-        newsIssue: logScore(newsByDay.get(group.id)?.[dayIndex] ?? 0, SCORE_REF.news24h),
+        newsIssue: logScore(weekNews(group.id, dayIndex) / 7, SCORE_REF.newsDaily),
         snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
         brandFit: logScore(countTagged(group.id, 'b', 30, at), SCORE_REF.brand30d),
         comebackActivity: logScore(countTagged(group.id, 'c', 14, at), SCORE_REF.comeback14d),
@@ -933,7 +978,7 @@ async function backfillDaily(): Promise<void> {
 
     const packed: number[] = [];
     for (const id of history.ids) packed.push(...(raws[id] ? packRaw(raws[id]) : VARIABLE_ORDER.map(() => -1)));
-    entries.push({ t: dayStart(day + 1) - SLOT_MS, k: 0, r: packed });
+    entries.push({ t: dayStart(day + 1) - SLOT_MS, k: 0, r: packed, m: packMetrics(metrics), b: 1 });
   });
 
   // 지수 기준: 복원 첫날 마감 = 1,000
@@ -987,7 +1032,8 @@ async function main() {
 
   const raws = computeRaw();
   const { floats, kmi } = computeIndex(raws);
-  appendHistory(raws, kmi);
+  const metrics = Object.fromEntries(GROUPS.map((group) => [group.id, liveMetrics(group.id)]));
+  appendHistory(raws, kmi, metrics);
 
   const latest: LatestFile = {
     version: MARKET_DATA_VERSION,
@@ -1004,11 +1050,17 @@ async function main() {
           listeners: listenersOf(group.id),
           subscribers: subscribersOf(group.id),
           news24h: state.news?.byId[group.id]?.count ?? 0,
+          news7d: metrics[group.id].news7d ?? 0,
           chartPoints: state.chart?.pointsById[group.id] ?? 0,
           brand30d: countTagged(group.id, 'b', 30),
           comeback14d: countTagged(group.id, 'c', 14),
           risk7d: countTagged(group.id, 'r', 7),
           headlines: state.news?.byId[group.id]?.headlines ?? [],
+          examples: {
+            brand: state.examples?.[group.id]?.b ?? [],
+            comeback: state.examples?.[group.id]?.c ?? [],
+            risk: state.examples?.[group.id]?.r ?? [],
+          },
         },
       ]),
     ),

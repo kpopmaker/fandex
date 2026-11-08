@@ -25,6 +25,8 @@ type Props = {
   formatValue: (value: number) => string;
   referenceY?: number;
   domain?: [number | 'auto', number | 'auto'];
+  /** 툴팁 시각 표기(기본: 월·일 시각) */
+  formatTooltipTime?: (time: number) => string;
 };
 
 function paddedDomain(
@@ -54,6 +56,7 @@ export default function MultiLineChart({
   formatValue,
   referenceY,
   domain,
+  formatTooltipTime = formatDateTime,
 }: Props) {
   const yDomain = domain ?? paddedDomain(data, lines);
   const dataSpan = (data[data.length - 1]?.time ?? 0) - (data[0]?.time ?? 0);
@@ -100,7 +103,7 @@ export default function MultiLineChart({
               if (!active || !row) return null;
               return (
                 <div className="min-w-40 rounded-lg border border-fx-line bg-fx-surface px-3 py-2 text-xs shadow-lg">
-                  <p className="mb-1 text-fx-sub">{formatDateTime(row.time)}</p>
+                  <p className="mb-1 text-fx-sub">{formatTooltipTime(row.time)}</p>
                   {lines.map((line) => (
                     <p key={line.key} className="flex items-center justify-between gap-4 py-0.5">
                       <span className="flex items-center gap-1.5 text-fx-sub">

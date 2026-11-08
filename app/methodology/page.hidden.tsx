@@ -51,7 +51,7 @@ export default function MethodologyPage() {
             <span className="font-semibold">원점수</span>
             <span className="text-fx-sub">
               {' '}= 실제 숫자를 로그 눈금으로 0~100점에 놓아요. 0건이면 0점, 기준치 이상이면 100점이에요. 기준치는
-              24시간 기사 {SCORE_REF.news24h}건, 30일 브랜드 기사 {SCORE_REF.brand30d}건, 14일 활동 기사{' '}
+              7일 하루 평균 기사 {SCORE_REF.newsDaily}건, 30일 브랜드 기사 {SCORE_REF.brand30d}건, 14일 활동 기사{' '}
               {SCORE_REF.comeback14d}건, 7일 부정 기사 {SCORE_REF.risk7d}건, 차트 점수 {SCORE_REF.chartPoints}점,
               Last.fm 청취자 500만 명(1만 명 이하는 0점)이에요. 순위가 아니라 절대 규모라서 시장 전체가 조용하면
               모두 함께 낮아져요.
