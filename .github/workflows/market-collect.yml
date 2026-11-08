@@ -3,8 +3,9 @@ name: FANDEX market collect
 # 실데이터를 모아 market-data 브랜치를 새로 만든다(사이트가 latest.json, history.json.gz를 읽는다).
 #
 # 트리거
-# - Render 크론(매시 17분) → naver-news-blob-only-recurring-production-v1.yml → 여기(loop_minutes=44)
-#   한 번 불리면 약 45분 동안 새 15분 구간이 시작될 때마다 수집한다(:17, :30, :45, :00).
+# - Render 크론(매시 17분) → naver-news-blob-only-recurring-production-v1.yml → 여기(loop_minutes=52)
+#   한 번 불리면 약 52분 동안 새 15분 구간이 시작될 때마다 수집한다(:17, :30, :45, :00).
+#   그동안 사이트도 4분마다 불러 Render 무료 서버가 잠들지 않게 한다(다음 호출까지 공백 약 8분).
 # - GitHub 스케줄(매시 5분)은 예비. GitHub 스케줄은 자주 건너뛰어서 이것만으로는 15분 간격을 못 지킨다.
 on:
   schedule:
@@ -28,7 +29,7 @@ permissions:
 jobs:
   collect:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 70
     concurrency:
       group: fandex-market-collect
       cancel-in-progress: false
@@ -52,6 +53,7 @@ jobs:
           # 벅스처럼 중간 인증서를 빠뜨리는 사이트도 받을 수 있게 시스템 인증서를 쓴다.
           NODE_OPTIONS: --use-system-ca
           PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+          SITE_URL: https://fandex-product-self-host-v1.onrender.com
         run: |
           set -uo pipefail
           git config --global user.name "github-actions[bot]"
@@ -72,6 +74,14 @@ jobs:
               git push -q -f "$PUSH_URL" market-data:market-data
             )
           }
+
+          # Render 무료 서버는 15분 동안 접속이 없으면 잠들고, 깨어나지 못하고 멈추는 일이 있어(2026-11-08)
+          # 수집하는 동안 4분마다 사이트를 불러 깨어 있게 한다.
+          if [ "$LOOP_MINUTES" -gt 0 ]; then
+            ( while true; do curl -s -o /dev/null --max-time 60 "$SITE_URL/api/health" || true; sleep 240; done ) &
+            pinger=$!
+            trap 'kill $pinger 2>/dev/null || true' EXIT
+          fi
 
           deadline=$(( $(date +%s) + LOOP_MINUTES * 60 ))
           last_slot=""

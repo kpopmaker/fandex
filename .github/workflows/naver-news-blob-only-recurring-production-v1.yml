@@ -18,5 +18,5 @@ jobs:
   collect:
     uses: ./.github/workflows/market-collect.yml
     with:
-      loop_minutes: 44
+      loop_minutes: 52
     secrets: inherit
