@@ -90,6 +90,15 @@ jobs:
               if (!res || res.status() >= 400) errors.push(`${theme} ${path} HTTP ${res && res.status()}`);
               await page.waitForTimeout(600);
               await page.screenshot({ path: `shots/${theme}-${name}.png`, fullPage: true });
+              // 변수 '더보기'를 연 화면(브랜드 적합도)
+              if (name === 'artist') {
+                const more = page.getByRole('button', { name: '더보기' });
+                if (await more.count() >= 4) {
+                  await more.nth(3).click();
+                  await page.waitForTimeout(400);
+                  await page.screenshot({ path: `shots/${theme}-artist-more.png`, fullPage: true });
+                }
+              }
             }
             await context.close();
           }
