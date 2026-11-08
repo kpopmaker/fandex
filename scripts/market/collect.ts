@@ -64,7 +64,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 5;
+const DATA_EPOCH = 6;
 
 type State = {
   version: string;
@@ -394,8 +394,10 @@ async function runWithConcurrency<T>(
   );
 }
 
-/** 지난 기사까지 깊게 받을 때: 최대 45일, 최대 1,000건 */
-const DEEP_NEWS = { days: 45, maxStart: 901 };
+/** 과거 복원 일수(새 기준으로 처음 시작할 때 이만큼의 일별 마감 기록을 만든다) */
+const BACKFILL_DAYS = Number(process.env.BACKFILL_DAYS ?? 90);
+/** 지난 기사까지 깊게 받을 때: 복원 첫날의 30일 집계까지, 최대 1,000건(네이버 한도) */
+const DEEP_NEWS = { days: BACKFILL_DAYS + 31, maxStart: 901 };
 /** 깊게 받은 그룹의 관련 기사 시각(과거 복원에 쓴다) */
 const deepNewsTimes = new Map<string, number[]>();
 
@@ -418,6 +420,8 @@ async function refreshNews(): Promise<void> {
 
   state.coverageFrom ??= {};
   const deepFetched: string[] = [];
+  // 실시간은 30일 집계면 충분하지만, 과거 복원 전에는 복원 첫날의 30일 집계에 쓸 기사까지 남겨 둔다.
+  const keepDays = state.divisor === null ? BACKFILL_DAYS + 31 : 31;
   await runWithConcurrency(GROUPS, 3, async (group) => {
     try {
       // 처음 보는 그룹은 지난 기사까지 깊게 받아 30일 집계를 바로 채운다.
@@ -433,7 +437,7 @@ async function refreshNews(): Promise<void> {
       pages += result.pages;
       const existing = new Map((state.tagged[group.id] ?? []).map((article) => [article.h, article]));
       for (const article of result.tagged) existing.set(article.h, article);
-      state.tagged[group.id] = [...existing.values()].filter((article) => today - article.d < 31);
+      state.tagged[group.id] = [...existing.values()].filter((article) => today - article.d < keepDays);
     } catch (error) {
       failures.push(`${group.id}: ${(error as Error).message}`);
       const previous = state.news?.byId[group.id];
@@ -727,11 +731,15 @@ function listenersOf(id: string): number | null {
  * 그 기간을 다 덮는 기사 기록이 없으면(기사가 너무 많은 그룹) 덮은 기간의 하루 평균으로 늘려 추정한다.
  */
 function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number, at = NOW): number {
-  const day = kstDay(at);
+  const from = state.coverageFrom?.[id];
+  let day = kstDay(at);
+  // 기사 기록이 시작되기 전 날짜(과거 복원)는, 최소 일주일치(7일 집계는 그 기간 전체) 기록이 있는 가장 이른 날 값으로 본다.
+  if (from !== undefined && from !== 0) {
+    day = Math.max(day, Math.min(kstDay(NOW), kstDay(from) + Math.min(days, 7) - 1));
+  }
   const count = (state.tagged[id] ?? []).filter(
     (article) => article[flag] && article.d <= day && day - article.d < days,
   ).length;
-  const from = state.coverageFrom?.[id];
   if (from === undefined || from === 0) return count;
   const coveredDays = Math.min(days, day - kstDay(from) + 1);
   if (coveredDays >= days || coveredDays < 1) return count;
@@ -841,8 +849,6 @@ function appendHistory(raws: Record<string, RawScores>, kmi: number): void {
 // ─────────────────────────── 실행 ───────────────────────────
 
 // ─────────────────────────── 과거 복원(새 기준으로 처음 시작할 때 한 번) ───────────────────────────
-
-const BACKFILL_DAYS = Number(process.env.BACKFILL_DAYS ?? 14);
 
 function dayStart(day: number): number {
   return day * DAY_MS - KST_OFFSET_MS;
