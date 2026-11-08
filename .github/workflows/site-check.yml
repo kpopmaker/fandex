@@ -12,7 +12,7 @@ jobs:
           NSEC: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
         run: |
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36'
-          for d in 19970101 20000101 20040101 20060101 20070101 20080101 20090101 20100101 20120101 20150101; do
+          for d in 20060601 20061001 20061201; do
             code=$(curl -s -A "$UA" -o b.html -w "%{http_code}" --max-time 40 "https://music.bugs.co.kr/chart/track/day/total?chartdate=$d" || echo x)
             rows=$(grep -c 'class="title"' b.html || true); shown=$(grep -o 'chartdate=[0-9]\{8\}' b.html | head -1)
             first=$(grep -o 'title="[^"]*"' b.html | sed -n '20p')
