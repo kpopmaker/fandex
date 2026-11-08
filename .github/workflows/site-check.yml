@@ -6,20 +6,28 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Probe live site
+      - name: Probe historical sources
+        env:
+          NID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
+          NSEC: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
         run: |
-          base=https://fandex-product-self-host-v1.onrender.com
-          # 배포가 끝날 때까지 health를 기다린다(최대 12분)
-          for i in $(seq 1 24); do
-            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$base/api/health" || true)
-            [ "$code" = 200 ] && break
-            sleep 30
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36'
+          for d in 19970101 20000101 20040101 20060101 20070101 20080101 20090101 20100101 20120101 20150101; do
+            code=$(curl -s -A "$UA" -o b.html -w "%{http_code}" --max-time 40 "https://music.bugs.co.kr/chart/track/day/total?chartdate=$d" || echo x)
+            rows=$(grep -c 'class="title"' b.html || true); shown=$(grep -o 'chartdate=[0-9]\{8\}' b.html | head -1)
+            first=$(grep -o 'title="[^"]*"' b.html | sed -n '20p')
+            echo "::notice title=bugs $d::code=$code rows=$rows $shown $first"
           done
-          echo "::notice title=health-wait::attempts=$i code=$code"
-          for p in / /ranking /artists /artists/aespa "/compare?ids=aespa,ive" / ; do
-            out=$(curl -s -o body.html -w "%{http_code} ttfb=%{time_starttransfer}s total=%{time_total}s %{size_download}B" --max-time 90 "$base$p" || echo "curl-exit-$?")
-            title=$(grep -o '<title>[^<]*' body.html | head -1 | sed 's/<title>//')
-            kmi=$(grep -o 'KMI[^<]\{0,40\}' body.html | head -1)
-            err=$(grep -o '데이터를 불러오지[^<]*\|Application error\|Internal Server Error' body.html | head -1)
-            echo "::notice title=$p::$out title=[$title] kmi=[$kmi] err=[$err]"
+          for y in 2004 2008 2012; do
+            code=$(curl -s -A "$UA" -o m.html -w "%{http_code}" --max-time 40 "https://www.melon.com/chart/search/list.htm?chartType=WE&age=2000&year=$y&mon=01&day=${y}0105%5E${y}0111&classCd=DM0000&startDay=${y}0105&endDay=${y}0111&moved=Y" -H 'Referer: https://www.melon.com/chart/search/index.htm' || echo x)
+            rows=$(grep -c 'wrap_song_info\|class="ellipsis rank01"' m.html || true)
+            echo "::notice title=melon weekly $y::code=$code rows=$rows size=$(wc -c < m.html)"
           done
+          body='{"startDate":"2016-01-01","endDate":"2016-12-31","timeUnit":"month","keywordGroups":[{"groupName":"bts","keywords":["방탄소년단"]},{"groupName":"twice","keywords":["트와이스"]}]}'
+          code=$(curl -s -o dl.json -w "%{http_code}" --max-time 40 -X POST https://openapi.naver.com/v1/datalab/search -H "X-Naver-Client-Id: $NID" -H "X-Naver-Client-Secret: $NSEC" -H 'Content-Type: application/json' -d "$body" || echo x)
+          echo "::notice title=naver datalab 2016::code=$code $(head -c 300 dl.json | tr -d '\n' | sed 's/"/'"'"'/g')"
+          body2='{"startDate":"2007-01-01","endDate":"2015-12-31","timeUnit":"month","keywordGroups":[{"groupName":"bts","keywords":["방탄소년단"]}]}'
+          code=$(curl -s -o dl2.json -w "%{http_code}" --max-time 40 -X POST https://openapi.naver.com/v1/datalab/search -H "X-Naver-Client-Id: $NID" -H "X-Naver-Client-Secret: $NSEC" -H 'Content-Type: application/json' -d "$body2" || echo x)
+          echo "::notice title=naver datalab 2007::code=$code $(head -c 200 dl2.json | tr -d '\n' | sed 's/"/'"'"'/g')"
+          code=$(curl -s -A "$UA" -o c.html -w "%{http_code}" --max-time 40 "https://circlechart.kr/page_chart/onoff.circle?nationGbn=T&serviceGbn=ALL&termGbn=week&hitYear=2010&targetTime=10&yearTime=3" || echo x)
+          echo "::notice title=circle 2010::code=$code size=$(wc -c < c.html)"
