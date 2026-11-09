@@ -24,7 +24,7 @@ K-pop 아이돌 그룹을 주식처럼 보여주는 플랫폼. 7개 변수로 �
 - 뉴스/이슈 점수는 최근 7일 관련 기사 수의 하루 평균(하루 300건 = 100점). 24시간 기사 수로 하면 하루 한두 건에 가격이 크게 출렁여서 2026-11-08 바꿨다(하루 10% 넘는 변동 20%→약 4%). 모멘텀은 그 점수들로 7일 전과 비교. 홈 '주요 뉴스'와 대표 기사는 여전히 24시간 기준.
 - 아티스트 상세 '더보기': `lib/market/explain.ts`가 history daily의 근거 숫자(`m`, METRIC_ORDER)와 latest의 예시 기사(`examples`)로 변수별 변화 이유를 만든다. 과거 복원 기록은 `b: 1`.
 - 차트·등락률은 데뷔일부터(`artists.ts`의 debutAt, 날짜가 없으면 데뷔연도 1월 1일). 데뷔 전 기록은 숨긴다.
-- 장기 음원 기록: `music-archive.yml`(매일 + `music-archive-run` 브랜치 푸시)이 `scripts/market/music-archive.ts`로 벅스 일간 TOP100을 2006년부터 모아 `music-archive` 브랜치(bugs-daily.json.gz 원본, music-history.json.gz 그룹별 주간 점수, report.json)에 쌓는다. 30년 전 기록은 출처가 없고(벅스는 2006년 가을부터, 멜론 과거 차트는 막힘, 네이버 뉴스 API는 최근 1,000건, 팬덤은 과거 기록 없음) 그래서 FANDEX 가격은 90일, 음원만 장기로 보여준다(2026-11-08 사용자 선택). 네이버 데이터랩(2016~ 검색 추이)은 앱에 권한이 없어 401.
+- 장기 음원 기록: `music-archive.yml`(매일 + `music-archive-run` 브랜치 푸시)이 `scripts/market/music-archive.ts`로 멜론 주간 TOP100을 모아 `music-archive` 브랜치(melon-weekly.json.gz 원본, music-history.json.gz 그룹별 주간 차트 점수, report.json)에 쌓는다. 2026-11-09 사용자 요청으로 벅스 대신 멜론 기준. 멜론은 `chart/week/index.htm?startDay=&endDay=`로 2016-12-26 주부터만 주고, 지난 일간 차트(`chart/day`는 날짜를 무시)와 차트 파인더(`chart/search`, 406)는 막혀 있다. 30년 전 기록은 출처가 없고(네이버 뉴스 API는 최근 1,000건, 팬덤은 과거 기록 없음) 그래서 FANDEX 가격은 90일, 음원만 장기로 보여준다. 네이버 데이터랩(2016~ 검색 추이)은 앱에 권한이 없어 401.
 - 뉴스: 제목에 그룹명이 없고 3팀 이상 나열된 기사(라인업·수상 명단)는 빼고, 대표 기사는 제목에 그룹명이 있는 기사만 쓴다.
 - 진단은 `market-data` 브랜치의 `run-report.json`을 본다(Actions 로그는 이 환경에서 못 읽음). 기준을 다시 잡으려면 collect.ts의 `DATA_EPOCH`를 올린다.
 - 사이트: `lib/market/dataset.ts`가 market-data를 읽고(2분 캐시), `engine.ts`/`queries.ts`가 가격·등락률·시리즈를 만든다. 계산식은 `lib/market/formula.ts` 하나뿐(수집기와 공유).

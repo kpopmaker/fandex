@@ -317,25 +317,31 @@ const HISTORY_RANGES = [
   { id: 'ALL', label: '데뷔부터', years: null },
 ] as const;
 
-const MUSIC_LINE: LineDefinition[] = [{ key: 'value', label: '하루 평균 차트 점수', color: '#7c4dff' }];
-
 function MusicHistorySection({ history, debutAt }: { history: MusicHistoryModel; debutAt: number | null }) {
   const [range, setRange] = useState<(typeof HISTORY_RANGES)[number]['id']>('ALL');
   const years = HISTORY_RANGES.find((item) => item.id === range)?.years ?? null;
+  const weekly = history.unit === 'week';
+  const line: LineDefinition[] = [
+    { key: 'value', label: weekly ? '주간 차트 점수' : '하루 평균 차트 점수', color: '#7c4dff' },
+  ];
   const data = useMemo(() => {
     const last = history.points[history.points.length - 1]?.time ?? 0;
     const from = years === null ? -Infinity : last - years * 365.25 * 86_400_000;
     return history.points.filter((point) => point.time >= from) as unknown as Array<{ time: number } & Record<string, number>>;
   }, [history.points, years]);
+  const weekSuffix = weekly ? ' 주' : '';
 
   const stats = [
-    { label: '처음 차트인', value: history.firstChart ? formatDate(history.firstChart) : '기록 없음' },
+    { label: '처음 차트인', value: history.firstChart ? `${formatDate(history.firstChart)}${weekSuffix}` : '기록 없음' },
     {
       label: '최고 순위',
       value: history.best ? `${history.best.rank}위` : '—',
-      sub: history.best ? `${history.best.title} · ${formatDate(history.best.date)}` : undefined,
+      sub: history.best ? `${history.best.title} · ${formatDate(history.best.date)}${weekSuffix}` : undefined,
     },
-    { label: '차트에 든 날', value: `${history.chartDays.toLocaleString('ko-KR')}일` },
+    {
+      label: weekly ? '차트에 든 주' : '차트에 든 날',
+      value: `${history.chartDays.toLocaleString('ko-KR')}${weekly ? '주' : '일'}`,
+    },
     { label: debutAt ? '데뷔' : '기록 시작', value: formatDate(debutAt ?? history.from) },
   ];
 
@@ -347,7 +353,7 @@ function MusicHistorySection({ history, debutAt }: { history: MusicHistoryModel;
             음원 차트 기록
           </h2>
           <p className="mt-1 text-[13px] text-fx-sub">
-            {history.source} 기준, 주마다 하루 평균 차트 점수(1위 100점 … 100위 1점, 여러 곡이면 합)
+            {history.source} 기준, {weekly ? '주마다 차트 점수' : '주마다 하루 평균 차트 점수'}(1위 100점 … 100위 1점, 여러 곡이면 합)
           </p>
         </div>
         <div className="flex rounded-xl bg-fx-raised p-1" role="tablist" aria-label="기간">
@@ -371,7 +377,7 @@ function MusicHistorySection({ history, debutAt }: { history: MusicHistoryModel;
       <div className="mt-5">
         <MultiLineChart
           data={data}
-          lines={MUSIC_LINE}
+          lines={line}
           height={260}
           formatValue={(value) => value.toFixed(0)}
           formatTooltipTime={(time) => `${formatDate(time)} 주`}
@@ -390,9 +396,11 @@ function MusicHistorySection({ history, debutAt }: { history: MusicHistoryModel;
       </dl>
 
       <p className="mt-3 text-xs text-fx-faint">
-        멜론은 지난 차트를 주지 않아 장기 기록은 벅스 일간 차트로 만들었어요({formatDate(history.archiveFrom)}~{formatDate(history.archiveTo)}).
-        {history.startsAfterDebut && ' 벅스 일간 차트가 그보다 앞선 기록을 주지 않아 데뷔 직후 구간은 비어 있어요.'} FANDEX 가격과 뉴스·팬덤
-        변수는 이보다 짧은 기간만 있어요.
+        {weekly
+          ? `멜론은 지난 주간 차트를 ${formatDate(history.archiveFrom)} 주부터만 주고 지난 일간 차트는 주지 않아, 장기 기록은 주간 차트로 만들었어요(${formatDate(history.archiveFrom)}~${formatDate(history.archiveTo)}).`
+          : `장기 기록은 ${history.source}로 만들었어요(${formatDate(history.archiveFrom)}~${formatDate(history.archiveTo)}).`}
+        {history.startsAfterDebut && ' 데뷔가 그보다 이르면 그 이전 구간은 비어 있어요.'} FANDEX 가격과 뉴스·팬덤 변수는 이보다 짧은
+        기간만 있어요.
       </p>
     </section>
   );

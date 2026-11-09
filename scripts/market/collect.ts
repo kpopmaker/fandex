@@ -13,7 +13,7 @@ import { join } from 'node:path';
 import { gunzipSync, gzipSync } from 'node:zlib';
 import universeFile from '../../data/market/universe.json';
 import youtubeChannelsFile from '../../data/market/youtube-channels.json';
-import { createChartMatcher, decodeEntities, parseBugs } from './charts';
+import { createChartMatcher, decodeEntities, parseBugs, parseMelon } from './charts';
 import {
   SCORE_REF,
   VARIABLE_ORDER,
@@ -489,24 +489,6 @@ const matchChartArtist = createChartMatcher(GROUPS);
 
 const BROWSER_UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
-
-/** 멜론 TOP100(1시간마다 갱신) */
-function parseMelon(html: string): Array<{ rank: number; title: string; artist: string }> {
-  const rows = html.match(/<tr[^>]*data-song-no=[^>]*>[\s\S]*?<\/tr>/gi) ?? [];
-  const entries: Array<{ rank: number; title: string; artist: string }> = [];
-  for (const row of rows) {
-    const rank = row.match(/<span class="rank[^"]*"[^>]*>\s*(\d+)\s*<\/span>/i)?.[1];
-    const titleBlock = row.match(/<div class="ellipsis rank01">([\s\S]*?)<\/div>/i)?.[1] ?? '';
-    const artistBlock = row.match(/<div class="ellipsis rank02">([\s\S]*?)<\/div>/i)?.[1] ?? '';
-    const title = decodeEntities(titleBlock.match(/<a[^>]*>([\s\S]*?)<\/a>/i)?.[1] ?? titleBlock);
-    const visible = artistBlock.match(/<span class="checkEllipsis"[^>]*>([\s\S]*?)<\/span>/i)?.[1] ?? artistBlock;
-    const artists = [...visible.matchAll(/<a[^>]*>([\s\S]*?)<\/a>/gi)].map((match) => decodeEntities(match[1]));
-    const artist = artists.length ? artists.join(', ') : decodeEntities(visible);
-    if (!rank || !title || !artist) continue;
-    entries.push({ rank: Number(rank), title, artist });
-  }
-  return entries.sort((a, b) => a.rank - b.rank);
-}
 
 /** Node fetch가 끊기면 curl로 다시 받는다. */
 async function fetchHtml(url: string, attempts: string[], referer?: string): Promise<string> {

@@ -246,6 +246,7 @@ export type ArtistDetailModel = {
 
 export type MusicHistoryModel = {
   source: string;
+  unit: 'day' | 'week';
   /** 이 그룹 차트의 시작(데뷔일과 기록 시작일 중 늦은 날) */
   from: number;
   /** 기록이 데뷔일보다 늦게 시작해 데뷔 직후가 빠졌는지 */
@@ -272,6 +273,7 @@ function buildMusicHistory(file: MusicHistoryFile | null, artistId: string, debu
   if (points.length < 2) return null;
   return {
     source: file.source,
+    unit: file.unit ?? 'day',
     from,
     startsAfterDebut: debutAt !== null && archiveFrom > debutAt,
     archiveFrom,

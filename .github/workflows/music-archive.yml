@@ -1,8 +1,8 @@
 name: FANDEX music archive
 
-# 장기 음원 기록: 벅스 일간 TOP100을 2006년부터 모아 music-archive 브랜치에 쌓는다.
+# 장기 음원 기록: 멜론 주간 TOP100을 2016년 12월(멜론이 주는 가장 이른 주)부터 모아 music-archive 브랜치에 쌓는다.
 # 한 번에 다 못 받으면 받은 만큼 저장하고 다음 실행이 이어서 받는다(처음 채울 때 1~2번).
-# - 매일 03:43(한국 시간) 전날 차트를 더한다.
+# - 매일 03:43(한국 시간) 새로 나온 주간 차트를 더한다.
 # - music-archive-run 브랜치에 푸시하면 바로 한 번 돈다(처음 채울 때).
 on:
   schedule:
@@ -31,11 +31,11 @@ jobs:
         with:
           node-version: 22
 
-      - name: Collect Bugs daily charts
+      - name: Collect Melon weekly charts
         shell: bash
         env:
           TIME_BUDGET_MIN: '50'
-          CONCURRENCY: '3'
+          CONCURRENCY: '2'
           PUSH_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
         run: |
           set -euo pipefail
