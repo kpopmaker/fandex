@@ -6,24 +6,23 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Probe Melon chart finder
+      - name: Probe Melon week/day pages
         run: |
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
           try() {
-            name=$1; url=$2; shift 2
-            code=$(curl -s -A "$UA" -o m.html -w "%{http_code}" --max-time 40 "$@" "$url" || echo x)
+            name=$1; url=$2
+            code=$(curl -s -A "$UA" -o m.html -w "%{http_code}" --max-time 40 -H 'Referer: https://www.melon.com/' "$url" || echo x)
             rows=$(grep -c 'class="ellipsis rank01"' m.html || true)
-            first=$(grep -o 'class="ellipsis rank01">[^<]*<span>[^<]*<a[^>]*>[^<]*' m.html | head -1 | sed 's/.*>//')
-            echo "::notice title=$name::code=$code size=$(wc -c < m.html) rows=$rows first=[$first]"
+            dates=$(grep -o '[12][0-9]\{3\}\.[01][0-9]\.[0-3][0-9]' m.html | sort -u | head -4 | tr '\n' ' ')
+            first=$(grep -o 'title="[^"]* 재생"' m.html | head -1)
+            echo "::notice title=$name::code=$code rows=$rows dates=[$dates] $first"
           }
-          H=(-H 'Accept: text/html, */*; q=0.01' -H 'Accept-Language: ko-KR,ko;q=0.9' -H 'X-Requested-With: XMLHttpRequest' -H 'Referer: https://www.melon.com/chart/search/index.htm')
-          try week2024-xhr "https://www.melon.com/chart/search/list.htm?chartType=WE&age=2020&year=2024&mon=01&day=20240101%5E20240107&classCd=DM0000&startDay=20240101&endDay=20240107&moved=Y" "${H[@]}"
-          try week2012-xhr "https://www.melon.com/chart/search/list.htm?chartType=WE&age=2010&year=2012&mon=01&day=20120102%5E20120108&classCd=DM0000&startDay=20120102&endDay=20120108&moved=Y" "${H[@]}"
-          try week2005-xhr "https://www.melon.com/chart/search/list.htm?chartType=WE&age=2000&year=2005&mon=01&day=20050103%5E20050109&classCd=DM0000&startDay=20050103&endDay=20050109&moved=Y" "${H[@]}"
-          try month2015-xhr "https://www.melon.com/chart/search/list.htm?chartType=MO&age=2010&year=2015&mon=03&day=201503&classCd=DM0000&moved=Y" "${H[@]}"
-          try week2024-plain "https://www.melon.com/chart/search/list.htm?chartType=WE&age=2020&year=2024&mon=01&day=20240101%5E20240107&classCd=DM0000&startDay=20240101&endDay=20240107&moved=Y" -H 'Referer: https://www.melon.com/chart/search/index.htm'
-          try week-current "https://www.melon.com/chart/week/index.htm" -H 'Referer: https://www.melon.com/'
-          try week-current-param "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20241028&endDay=20241103&moved=Y" -H 'Referer: https://www.melon.com/'
-          try day-current "https://www.melon.com/chart/day/index.htm" -H 'Referer: https://www.melon.com/'
-          try day-param "https://www.melon.com/chart/day/index.htm?classCd=DM0000&day=20241101" -H 'Referer: https://www.melon.com/'
-          grep -o 'chart/search[^"]*' m.html | head -3 || true
+          try w2024 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20241028&endDay=20241103&moved=Y"
+          try w2020 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20200106&endDay=20200112&moved=Y"
+          try w2015 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20150105&endDay=20150111&moved=Y"
+          try w2010 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20100104&endDay=20100110&moved=Y"
+          try w2005 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20050103&endDay=20050109&moved=Y"
+          try d20241101 "https://www.melon.com/chart/day/index.htm?classCd=DM0000&day=20241101"
+          try d20200101 "https://www.melon.com/chart/day/index.htm?classCd=DM0000&day=20200101"
+          try d20261101 "https://www.melon.com/chart/day/index.htm?classCd=DM0000&day=20261101"
+          try m201503 "https://www.melon.com/chart/month/index.htm?classCd=DM0000&moved=Y&rankMonth=201503"
