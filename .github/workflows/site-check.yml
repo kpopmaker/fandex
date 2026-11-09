@@ -14,15 +14,13 @@ jobs:
             code=$(curl -s -A "$UA" -o m.html -w "%{http_code}" --max-time 40 -H 'Referer: https://www.melon.com/' "$url" || echo x)
             rows=$(grep -c 'class="ellipsis rank01"' m.html || true)
             dates=$(grep -o '[12][0-9]\{3\}\.[01][0-9]\.[0-3][0-9]' m.html | sort -u | head -4 | tr '\n' ' ')
-            first=$(grep -o 'title="[^"]* 재생"' m.html | head -1)
+            first=$(grep -o 'title="[^"]* 재생"' m.html | head -3 | sed 's/title="//;s/ 재생"//' | tr '\n' '|')
             echo "::notice title=$name::code=$code rows=$rows dates=[$dates] $first"
           }
-          try w20150601 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20150601&endDay=20150607&moved=Y"
-          try w20160104 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20160104&endDay=20160110&moved=Y"
-          try w20160704 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20160704&endDay=20160710&moved=Y"
+          try w20160905 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20160905&endDay=20160911&moved=Y"
+          try w20161031 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20161031&endDay=20161106&moved=Y"
+          try w20161226 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20161226&endDay=20170101&moved=Y"
           try w20170102 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20170102&endDay=20170108&moved=Y"
-          try w20170703 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20170703&endDay=20170709&moved=Y"
-          try w20180101 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20180101&endDay=20180107&moved=Y"
-          try w20180702 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20180702&endDay=20180708&moved=Y"
-          try w20190107 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20190107&endDay=20190113&moved=Y"
-          try w20190701 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20190701&endDay=20190707&moved=Y"
+          try w20170109 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20170109&endDay=20170115&moved=Y"
+          try w20170206 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20170206&endDay=20170212&moved=Y"
+          try w20170306 "https://www.melon.com/chart/week/index.htm?classCd=DM0000&startDay=20170306&endDay=20170312&moved=Y"
