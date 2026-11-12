@@ -166,7 +166,7 @@ export default function RankingTable({
           label="기준"
           value={state.sort}
           options={SORT_OPTIONS}
-          onChange={(sort) => update({ sort, order: 'desc' })}
+          onChange={(sort) => update({ sort })}
         />
         <Dropdown label="기간" value={state.period} options={PERIOD_OPTIONS} onChange={(period) => update({ period })} />
         <Dropdown label="그룹" value={state.group} options={GROUP_OPTIONS} onChange={(group) => update({ group })} />
@@ -202,7 +202,8 @@ export default function RankingTable({
               <tr key={quote.id} className="border-b border-fx-line last:border-0 hover:bg-fx-raised">
                 <td className="fx-num px-5 py-3 text-center font-bold text-fx-ink">{index + 1}</td>
                 <td className="px-3 py-3">
-                  <Link href={`/artists/${quote.id}`} className="group block">
+                  {/* 표가 다시 정렬될 때마다 100개 링크를 미리 받지 않게(서버가 느려져 새로고침처럼 느껴졌다) */}
+                  <Link href={`/artists/${quote.id}`} prefetch={false} className="group block">
                     <span className="font-semibold text-fx-ink group-hover:underline">{quote.koreanName}</span>
                     <span className="ml-2 text-xs text-fx-faint">{quote.ticker}</span>
                   </Link>

@@ -271,42 +271,52 @@ export default function ArtistDetailView({ model }: { model: ArtistDetailModel }
 }
 
 function VariableDetailPanel({ label, detail }: { label: string; detail: VariableDetail }) {
+  const toneClass = { up: 'text-fx-up', down: 'text-fx-down', neutral: 'text-fx-sub' } as const;
   return (
     <div className="rounded-xl border border-fx-line bg-fx-raised p-5">
-      <p className="text-xs font-semibold text-fx-sub">{label} · 왜 이렇게 움직였나요?</p>
-      <p className="mt-2 text-[15px] font-semibold leading-relaxed text-fx-ink">{detail.summary}</p>
-      <ul className="mt-3 space-y-1.5 text-[13px] leading-relaxed text-fx-sub">
-        {detail.lines.map((line) => (
-          <li key={line} className="flex gap-2">
-            <span aria-hidden="true" className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-fx-faint" />
-            <span>{line}</span>
-          </li>
-        ))}
-      </ul>
-      {detail.itemsTitle && (
+      <p className="text-xs font-semibold text-fx-sub">{label} · 무엇 때문에 이 점수가 나왔나요?</p>
+      <p className="mt-2 text-[15px] font-semibold leading-relaxed text-fx-ink">{detail.headline}</p>
+
+      {detail.causes.length > 0 && (
         <div className="mt-4">
-          <p className="text-xs font-semibold text-fx-sub">{detail.itemsTitle}</p>
-          {detail.items.length === 0 ? (
-            <p className="mt-1.5 text-[13px] text-fx-faint">해당하는 기사·곡이 없어요.</p>
-          ) : (
-            <ul className="mt-1.5 divide-y divide-fx-line rounded-lg border border-fx-line bg-fx-surface">
-              {detail.items.map((item) => (
-                <li key={`${item.title}-${item.meta}`} className="flex items-baseline justify-between gap-3 px-3 py-2 text-[13px]">
-                  {item.url ? (
-                    <a href={item.url} target="_blank" rel="noreferrer" className="min-w-0 truncate text-fx-ink hover:underline">
-                      {item.title}
-                    </a>
-                  ) : (
-                    <span className="min-w-0 truncate text-fx-ink">{item.title}</span>
-                  )}
-                  {item.meta && <span className="fx-num shrink-0 text-xs text-fx-faint">{item.meta}</span>}
-                </li>
-              ))}
-            </ul>
-          )}
+          {detail.causesTitle && <p className="text-xs font-semibold text-fx-sub">{detail.causesTitle}</p>}
+          <ul className="mt-1.5 divide-y divide-fx-line rounded-lg border border-fx-line bg-fx-surface">
+            {detail.causes.map((item, index) => (
+              <li key={`${index}-${item.title}`} className="flex items-baseline gap-3 px-3 py-2 text-[13px]">
+                {item.tag && (
+                  <span
+                    className={`fx-num shrink-0 rounded-md bg-fx-raised px-1.5 py-0.5 text-[11px] font-semibold ${
+                      toneClass[item.tone ?? 'neutral']
+                    }`}
+                  >
+                    {item.tag}
+                  </span>
+                )}
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noreferrer" className="min-w-0 flex-1 truncate text-fx-ink hover:underline">
+                    {item.title}
+                  </a>
+                ) : (
+                  <span className="min-w-0 flex-1 truncate text-fx-ink">{item.title}</span>
+                )}
+                {item.meta && <span className="fx-num shrink-0 text-xs text-fx-faint">{item.meta}</span>}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
-      {detail.note && <p className="mt-3 text-xs text-fx-faint">{detail.note}</p>}
+
+      <p className="mt-3 text-[13px] text-fx-sub">{detail.change}</p>
+
+      <details className="mt-3 text-xs text-fx-faint">
+        <summary className="cursor-pointer select-none font-semibold text-fx-sub hover:text-fx-ink">계산 방법</summary>
+        <ul className="mt-1.5 space-y-1 leading-relaxed">
+          {detail.method.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </details>
+      {detail.note && <p className="mt-2 text-xs text-fx-faint">{detail.note}</p>}
     </div>
   );
 }

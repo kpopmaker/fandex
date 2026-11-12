@@ -6,6 +6,17 @@ export type NewsHeadline = {
   title: string;
   url: string;
   publishedAt: number;
+  /** 브랜드·활동·조정 점수에 잡힌 키워드 */
+  keyword?: string;
+};
+
+/** 최근 7일 비슷한 제목끼리 묶은 이슈 */
+export type NewsStory = {
+  title: string;
+  url: string;
+  /** 같은 이슈로 묶인 기사 수 */
+  count: number;
+  latest: number;
 };
 
 export type ChartEntry = {
@@ -38,10 +49,15 @@ export const METRIC_ORDER = [
   'chartPoints',
   'news7d',
   'brand30d',
-  'comeback14d',
-  'risk7d',
+  'comeback30d',
+  'risk30d',
   'listenersK',
   'subscribersK',
+  'news30d',
+  /** Last.fm 누적 재생(천 회) */
+  'playcountK',
+  /** 유튜브 누적 조회(백만 회) */
+  'viewsM',
 ] as const;
 export type MetricId = (typeof METRIC_ORDER)[number];
 
@@ -67,8 +83,21 @@ export type LatestGroup = {
   news7d?: number;
   chartPoints: number;
   brand30d: number;
-  comeback14d: number;
-  risk7d: number;
+  /** 최근 30일 활동 기사 수(예전 형식은 comeback14d) */
+  comeback30d?: number;
+  /** 최근 30일 부정 키워드 기사 수(예전 형식은 risk7d) */
+  risk30d?: number;
+  comeback14d?: number;
+  risk7d?: number;
+  news30d?: number;
+  /** Last.fm 누적 재생 */
+  playcount?: number | null;
+  /** 유튜브 공식 채널 누적 조회 */
+  views?: number | null;
+  /** 최근 7일 많이 보도된 이슈 */
+  stories?: NewsStory[];
+  /** 1주 전 멜론 TOP100에 있던 곡 [순위, 곡명]. 아직 비교할 기록이 없으면 없음 */
+  tracksWeekAgo?: Array<[number, string]>;
   headlines: NewsHeadline[];
   /** 브랜드·활동·조정 점수에 잡힌 최근 기사 예시(최대 3건씩) */
   examples?: { brand: NewsHeadline[]; comeback: NewsHeadline[]; risk: NewsHeadline[] };

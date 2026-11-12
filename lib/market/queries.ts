@@ -304,10 +304,13 @@ function latestMetrics(group: LatestGroup): Metrics {
     chartPoints: group.chartPoints,
     news7d: group.news7d ?? null,
     brand30d: group.brand30d,
-    comeback14d: group.comeback14d,
-    risk7d: group.risk7d,
+    comeback30d: group.comeback30d ?? null,
+    risk30d: group.risk30d ?? null,
     listenersK: group.listeners ? Math.round(group.listeners / 1000) : null,
     subscribersK: group.subscribers ? Math.round(group.subscribers / 1000) : null,
+    news30d: group.news30d ?? null,
+    playcountK: group.playcount ? Math.round(group.playcount / 1000) : null,
+    viewsM: group.views ? Math.round(group.views / 1_000_000) : null,
   };
 }
 
@@ -319,7 +322,7 @@ function compactCount(value: number): string {
 function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean): string {
   switch (id) {
     case 'musicAlbum':
-      return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : '멜론 TOP100 밖';
+      return group.chartPoints > 0 ? `차트 점수 ${group.chartPoints}점` : 'TOP100 밖 · 누적 재생·조회';
     case 'newsIssue':
       return group.news7d === undefined ? `24시간 기사 ${group.news24h}건` : `7일 기사 ${group.news7d}건`;
     case 'snsFandom': {
@@ -332,11 +335,11 @@ function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean)
     case 'brandFit':
       return `30일 기사 ${group.brand30d}건`;
     case 'comebackActivity':
-      return `14일 기사 ${group.comeback14d}건`;
+      return group.comeback30d !== undefined ? `30일 기사 ${group.comeback30d}건` : `14일 기사 ${group.comeback14d ?? 0}건`;
     case 'growthMomentum':
       return hasMomentumBase ? '7일 전 대비' : '비교 기록 쌓는 중';
     case 'riskAdjustment':
-      return `7일 기사 ${group.risk7d}건`;
+      return group.risk30d !== undefined ? `30일 기사 ${group.risk30d}건` : `7일 기사 ${group.risk7d ?? 0}건`;
   }
 }
 
