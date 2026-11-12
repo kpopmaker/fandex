@@ -94,9 +94,12 @@ jobs:
               if (name === 'artist') {
                 const more = page.getByRole('button', { name: '더보기' });
                 if (await more.count() >= 4) {
-                  await more.nth(3).click();
-                  await page.waitForTimeout(400);
-                  await page.screenshot({ path: `shots/${theme}-artist-more.png`, fullPage: true });
+                  // 음원(0), 뉴스(1), 브랜드(3) 더보기를 차례로 연다(하나를 열면 그 버튼은 '접기'가 된다)
+                  for (const [index, label] of [[0, 'music'], [1, 'news'], [3, 'brand']]) {
+                    await page.locator('ul.grid-flow-row-dense > li button[aria-expanded]').nth(index).click();
+                    await page.waitForTimeout(400);
+                    await page.screenshot({ path: `shots/${theme}-artist-more-${label}.png`, fullPage: true });
+                  }
                 }
               }
             }
