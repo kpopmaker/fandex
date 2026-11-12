@@ -75,7 +75,7 @@ const COMEBACK_DAYS = 30;
 const RISK_DAYS = 30;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 8;
+const DATA_EPOCH = 9;
 
 type State = {
   version: string;
@@ -731,12 +731,61 @@ function viewsOf(id: string): number | null {
 }
 
 /** 1주 전(7~9일 전 중 가장 가까운 날) 멜론 TOP100에 있던 그룹 곡 */
-function tracksWeekAgo(id: string): Array<[number, string]> | undefined {
+// ─────────────────────────── 멜론 주간 차트 기록(music-archive 브랜치) ───────────────────────────
+
+type MelonWeek = { points: Record<string, number>; tracks: Record<string, Array<[number, string]>> };
+/** 주(월요일 날짜 번호) → 그 주 멜론 주간 TOP100의 그룹별 점수·곡 */
+let melonWeeks: Map<number, MelonWeek> | null = null;
+
+async function loadMelonWeeks(): Promise<Map<number, MelonWeek> | null> {
+  if (melonWeeks) return melonWeeks;
+  try {
+    const url = process.env.FANDEX_MELON_WEEKLY_URL ?? 'https://raw.githubusercontent.com/kpopmaker/fandex/music-archive/melon-weekly.json.gz';
+    const response = await fetch(url, { signal: AbortSignal.timeout(30_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const archive = JSON.parse(gunzipSync(Buffer.from(await response.arrayBuffer())).toString('utf8')) as {
+      artists: string[];
+      titles: string[];
+      weeks: Record<string, number[]>;
+    };
+    const artistGroup = archive.artists.map((name) => matchChartArtist(name));
+    melonWeeks = new Map();
+    for (const [monday, packed] of Object.entries(archive.weeks)) {
+      const week: MelonWeek = { points: {}, tracks: {} };
+      for (let offset = 0; offset < packed.length; offset += 3) {
+        const id = artistGroup[packed[offset + 1]];
+        if (!id) continue;
+        week.points[id] = (week.points[id] ?? 0) + (101 - packed[offset]);
+        (week.tracks[id] ??= []).push([packed[offset], archive.titles[packed[offset + 2]]]);
+      }
+      melonWeeks.set(kstDay(Date.parse(`${monday.slice(0, 4)}-${monday.slice(4, 6)}-${monday.slice(6, 8)}T12:00:00+09:00`)), week);
+    }
+    return melonWeeks;
+  } catch (error) {
+    report.notes.push(`melon weekly archive unavailable: ${(error as Error).message}`);
+    return null;
+  }
+}
+
+/** 그 날이 속한 주의 월요일 날짜 번호(1970-01-01 목요일 = 0) */
+function mondayOf(day: number): number {
+  return day - ((day + 3) % 7);
+}
+
+/** 그 날의 멜론 주간 차트(그 주 차트가 아직 없으면 지난주) */
+function melonWeekFor(day: number): MelonWeek | undefined {
+  const monday = mondayOf(day);
+  return melonWeeks?.get(monday) ?? melonWeeks?.get(monday - 7);
+}
+
+/** 1주 전 멜론 곡: 7~9일 전 실시간 기록이 있으면 그것, 없으면 지난주 멜론 주간 차트 */
+function tracksWeekAgo(id: string): { tracks: Array<[number, string]>; label: string } | undefined {
   for (let back = 7; back <= 9; back += 1) {
     const day = state.trackDays?.[kstDateString(NOW - back * DAY_MS)];
-    if (day) return day[id] ?? [];
+    if (day) return { tracks: day[id] ?? [], label: '7일 전 실시간 차트' };
   }
-  return undefined;
+  const lastWeek = melonWeeks?.get(mondayOf(kstDay(NOW)) - 7);
+  return lastWeek ? { tracks: lastWeek.tracks[id] ?? [], label: '지난주 멜론 주간 차트' } : undefined;
 }
 
 const STORY_STOPWORDS = new Set(['기자', '뉴스', '오늘', '사진', '영상', '공개', '이번', '위해', '함께', '통해', '대한', '그룹', '멤버', '종합', '단독', '속보', '인터뷰', '현장', '근황', '화제']);
@@ -979,7 +1028,17 @@ async function backfillDaily(): Promise<void> {
 
   const chartByDay = new Map<number, Record<string, number>>();
   const chartFailures: string[] = [];
-  for (const day of days) {
+  // 과거 음원은 멜론 주간 TOP100(그 날이 속한 주). 기록을 못 받으면 예전처럼 벅스 일간 차트.
+  const weeks = await loadMelonWeeks();
+  const chartSource = weeks ? 'melon-weekly' : 'bugs-daily';
+  if (weeks) {
+    for (const day of days) {
+      const week = melonWeekFor(day);
+      if (week) chartByDay.set(day, week.points);
+      else chartFailures.push(`${dayCompact(day)} no melon week`);
+    }
+  }
+  for (const day of weeks ? [] : days) {
     const attempts: string[] = [];
     try {
       const html = await fetchHtml(`https://music.bugs.co.kr/chart/track/day/total?chartdate=${dayCompact(day)}`, attempts);
@@ -1087,15 +1146,16 @@ async function backfillDaily(): Promise<void> {
     days: BACKFILL_DAYS,
     from: dayCompact(days[0]),
     to: dayCompact(days[days.length - 1]),
+    chartSource,
     chartDays: chartByDay.size,
-    chartFailures,
+    chartFailures: chartFailures.slice(0, 20),
     newsImputed: imputed,
     kmi: entries.map((entry) => entry.k),
   };
 }
 
 async function main() {
-  await Promise.all([refreshNews(), refreshChart(), refreshLastfm(), refreshYoutube()]);
+  await Promise.all([refreshNews(), refreshChart(), refreshLastfm(), refreshYoutube(), loadMelonWeeks()]);
 
   // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스·차트·Last.fm이 모두 있어야만 만든다.
   if (state.divisor === null && (!state.news || !state.lastfm || !state.chart || (YOUTUBE_KEY && !state.youtube))) {
@@ -1145,7 +1205,8 @@ async function main() {
           playcount: playcountOf(group.id),
           views: viewsOf(group.id),
           stories: newsStories(group),
-          tracksWeekAgo: tracksWeekAgo(group.id),
+          tracksWeekAgo: tracksWeekAgo(group.id)?.tracks,
+          tracksWeekAgoLabel: tracksWeekAgo(group.id)?.label,
           headlines: state.news?.byId[group.id]?.headlines ?? [],
           examples: {
             brand: state.examples?.[group.id]?.b ?? [],

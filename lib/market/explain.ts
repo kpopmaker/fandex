@@ -128,7 +128,7 @@ export function explainVariable(input: ExplainInput): VariableDetail {
       });
       const current = new Set(input.chartTracks.map((track) => track.title));
       for (const [rank, title] of weekAgo ?? []) {
-        if (!current.has(title)) causes.push({ title, meta: `1주 전 ${rank}위`, tag: '차트 아웃', tone: 'down' });
+        if (!current.has(title)) causes.push({ title, meta: `전에 ${rank}위`, tag: '차트 아웃', tone: 'down' });
       }
       const playcount = group.playcount ?? null;
       const views = group.views ?? null;
@@ -143,7 +143,10 @@ export function explainVariable(input: ExplainInput): VariableDetail {
           : consumption.length
             ? `지금 멜론 TOP100에 든 곡은 없어요. 점수는 ${consumption.join(', ')}에서 나왔어요.`
             : `지금 멜론 TOP100에 든 곡도, 확인된 재생·조회 기록도 없어요. ${MINIMUM_NOTE}`,
-        causesTitle: input.chartTracks.length || weekAgo?.length ? '멜론 TOP100 곡 (1주 전과 비교)' : undefined,
+        causesTitle:
+          input.chartTracks.length || weekAgo?.length
+            ? `멜론 TOP100 곡${weekAgo !== undefined ? ` (${group.tracksWeekAgoLabel ?? '1주 전'}과 비교)` : ''}`
+            : undefined,
         causes,
         change: changeSentence(id, rawDelta, countChange('차트 점수', points, before('chartPoints'), '점')),
         method: [
@@ -151,10 +154,8 @@ export function explainVariable(input: ExplainInput): VariableDetail {
           `누적 소비 = Last.fm 누적 재생(50억 회 = 100점)과 유튜브 누적 조회(500억 회 = 100점) 점수의 평균 × ${CONSUMPTION_WEIGHT}. 차트 밖 그룹도 들은 만큼 점수가 붙어요.`,
         ],
         note: input.weekAgoBackfilled
-          ? '1주 전 값은 과거 복원 기록이라 멜론 대신 벅스 일간 차트 기준이에요.'
-          : weekAgo === undefined
-            ? '1주 전 곡 목록은 기록이 쌓이면(일주일 뒤) 비교해 보여드려요.'
-            : undefined,
+          ? '1주 전 값은 과거 복원 기록이라 실시간 차트 대신 그 주의 멜론 주간 차트 기준이에요.'
+          : undefined,
       };
     }
     case 'newsIssue': {

@@ -98,6 +98,8 @@ export type LatestGroup = {
   stories?: NewsStory[];
   /** 1주 전 멜론 TOP100에 있던 곡 [순위, 곡명]. 아직 비교할 기록이 없으면 없음 */
   tracksWeekAgo?: Array<[number, string]>;
+  /** tracksWeekAgo가 어떤 기록인지(7일 전 실시간 차트 / 지난주 멜론 주간 차트) */
+  tracksWeekAgoLabel?: string;
   headlines: NewsHeadline[];
   /** 브랜드·활동·조정 점수에 잡힌 최근 기사 예시(최대 3건씩) */
   examples?: { brand: NewsHeadline[]; comeback: NewsHeadline[]; risk: NewsHeadline[] };
