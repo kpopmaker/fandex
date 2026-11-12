@@ -6,11 +6,40 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Probe live site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test ranking dropdowns in a browser
         run: |
-          base=https://fandex-product-self-host-v1.onrender.com
-          for p in /api/health / /ranking /artists /artists/aespa "/compare?ids=aespa,ive,riize"; do
-            out=$(curl -s -o body.html -w "%{http_code} total=%{time_total}s %{size_download}B" --max-time 90 "$base$p" || echo "curl-exit-$?")
-            asof=$(grep -o '[0-9]*\. [0-9]*\. [0-9:]* 기준' body.html | head -1)
-            echo "::notice title=$p::$out [$asof]"
-          done
+          npm i --no-save playwright@1.56.1 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+          cat > t.mjs <<'JS'
+          import { chromium } from 'playwright';
+          const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+          let navs = 0, rscs = 0;
+          p.on('framenavigated', (f) => { if (f === p.mainFrame()) navs++; });
+          p.on('request', (r) => { if (r.url().includes('_rsc') || r.headers()['rsc']) rscs++; });
+          await p.goto('https://fandex-product-self-host-v1.onrender.com/ranking', { waitUntil: 'networkidle' });
+          await p.evaluate(() => { window.__marker = 1; window.scrollTo(0, 400); });
+          const navs0 = navs;
+          const first = async () => (await p.locator('tbody tr').first().innerText()).split('\n').slice(0,3).join(' ');
+          const out = [];
+          out.push('start ' + await first());
+          const selects = p.locator('select');
+          out.push('selects=' + await selects.count());
+          await selects.nth(0).selectOption('rise'); await p.waitForTimeout(1500);
+          out.push('after sort=rise ' + await first() + ' url=' + p.url());
+          await selects.nth(2).selectOption('girl_group'); await p.waitForTimeout(1500);
+          await selects.nth(3).selectOption('4'); await p.waitForTimeout(1500);
+          out.push('after girl+4gen ' + await first());
+          await selects.nth(0).selectOption('musicAlbum'); await p.waitForTimeout(1500);
+          const vals = await Promise.all([0,1,2,3,4].map(i => selects.nth(i).inputValue()));
+          out.push('after music: selects=' + vals.join(',') + ' ' + await first());
+          const marker = await p.evaluate(() => window.__marker);
+          const scrollY = await p.evaluate(() => window.scrollY);
+          out.push(`marker=${marker} extraNavigations=${navs-navs0} rscRequests=${rscs} scrollY=${scrollY}`);
+          console.log(out.join('\n'));
+          for (const line of out) console.log('::notice::' + line.replace(/\n/g,' '));
+          await b.close();
+          JS
+          node t.mjs
