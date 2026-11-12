@@ -16,30 +16,23 @@ jobs:
           cat > t.mjs <<'JS'
           import { chromium } from 'playwright';
           const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
-          let navs = 0, rscs = 0;
-          p.on('framenavigated', (f) => { if (f === p.mainFrame()) navs++; });
-          p.on('request', (r) => { if (r.url().includes('_rsc') || r.headers()['rsc']) rscs++; });
+          const reqs = [];
+          p.on('request', (r) => { if (r.headers()['rsc'] || r.url().includes('_rsc')) reqs.push(r.method() + ' ' + r.url().replace('https://fandex-product-self-host-v1.onrender.com','')); });
           await p.goto('https://fandex-product-self-host-v1.onrender.com/ranking', { waitUntil: 'networkidle' });
-          await p.evaluate(() => { window.__marker = 1; window.scrollTo(0, 400); });
-          const navs0 = navs;
-          const first = async () => (await p.locator('tbody tr').first().innerText()).split('\n').slice(0,3).join(' ');
-          const out = [];
-          out.push('start ' + await first());
-          const selects = p.locator('select');
-          out.push('selects=' + await selects.count());
-          await selects.nth(0).selectOption('rise'); await p.waitForTimeout(1500);
-          out.push('after sort=rise ' + await first() + ' url=' + p.url());
-          await selects.nth(2).selectOption('girl_group'); await p.waitForTimeout(1500);
-          await selects.nth(3).selectOption('4'); await p.waitForTimeout(1500);
-          out.push('after girl+4gen ' + await first());
-          await selects.nth(0).selectOption('musicAlbum'); await p.waitForTimeout(1500);
-          const vals = await Promise.all([0,1,2,3,4].map(i => selects.nth(i).inputValue()));
-          out.push('after music: selects=' + vals.join(',') + ' ' + await first());
-          const marker = await p.evaluate(() => window.__marker);
-          const scrollY = await p.evaluate(() => window.scrollY);
-          out.push(`marker=${marker} extraNavigations=${navs-navs0} rscRequests=${rscs} scrollY=${scrollY}`);
-          console.log(out.join('\n'));
-          for (const line of out) console.log('::notice::' + line.replace(/\n/g,' '));
+          await p.waitForTimeout(1500);
+          const h = await p.evaluate(() => document.body.scrollHeight);
+          await p.evaluate(() => window.scrollTo(0, 500));
+          await p.waitForTimeout(300);
+          const out = ['height=' + h + ' scroll0=' + await p.evaluate(() => window.scrollY) + ' rscBefore=' + reqs.length];
+          reqs.length = 0;
+          const sel = p.locator('select');
+          for (const [i, v] of [[0,'rise'],[1,'1W'],[4,'asc'],[0,'brandFit']]) {
+            await sel.nth(i).selectOption(v);
+            await p.waitForTimeout(1500);
+            out.push(`set ${i}=${v} scrollY=${await p.evaluate(() => window.scrollY)} rsc=${reqs.length} ${reqs.slice(0,2).join(' | ')}`);
+            reqs.length = 0;
+          }
+          for (const line of out) console.log('::notice::' + line);
           await b.close();
           JS
           node t.mjs
