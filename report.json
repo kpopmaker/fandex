@@ -1,0 +1,17 @@
+{
+ "runAt": 1794613857568,
+ "source": "멜론 주간 TOP100",
+ "todo": 0,
+ "fetched": 0,
+ "unavailable": 0,
+ "failures": 0,
+ "remaining": 0,
+ "from": "20161128",
+ "to": "20261108",
+ "weekCount": 519,
+ "unavailableTotal": 8,
+ "failedTotal": 0,
+ "groupsWithHistory": 81,
+ "artists": 776,
+ "titles": 2905
+}
