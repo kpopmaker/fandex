@@ -15,14 +15,14 @@ import universeFile from '../../data/market/universe.json';
 import youtubeChannelsFile from '../../data/market/youtube-channels.json';
 import { createChartMatcher, decodeEntities, parseBugs, parseMelon } from './charts';
 import {
-  SCORE_REF,
+  articleScore,
   VARIABLE_ORDER,
   fanFloat,
   fandomScore,
   musicScore,
   newsScore,
   withMinimum,
-  logScore,
+
   momentumScore,
   packRaw,
   priceFromRaw,
@@ -69,13 +69,16 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 type TaggedArticle = { h: string; d: number; b?: 1; c?: 1; r?: 1 };
 type ExampleFlag = 'b' | 'c' | 'r';
 /** 예시 기사를 남겨 둘 기간(그 변수의 집계 기간과 같다) */
-const EXAMPLE_DAYS: Record<ExampleFlag, number> = { b: 30, c: 30, r: 30 };
-/** 활동·조정 집계 기간(2026-11-12 14일·7일 → 30일로 넓힘) */
-const COMEBACK_DAYS = 30;
-const RISK_DAYS = 30;
+const EXAMPLE_DAYS: Record<ExampleFlag, number> = { b: 90, c: 30, r: 90 };
+/**
+ * 브랜드·활동·조정은 30일과 90일 집계를 섞는다(2026-11-12 사용자 요청: 0점으로 몰리지 않게).
+ * 30일 안에 해당 기사가 없는 그룹도 90일 기록으로 서로 구분된다.
+ */
+const SHORT_DAYS = 30;
+const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 9;
+const DATA_EPOCH = 10;
 
 type State = {
   version: string;
@@ -445,7 +448,7 @@ async function refreshNews(): Promise<void> {
   state.examples ??= {};
   const deepFetched: string[] = [];
   // 실시간은 30일 집계면 충분하지만, 과거 복원 전에는 복원 첫날의 30일 집계에 쓸 기사까지 남겨 둔다.
-  const keepDays = state.divisor === null ? BACKFILL_DAYS + 31 : 31;
+  const keepDays = state.divisor === null ? BACKFILL_DAYS + LONG_DAYS + 1 : LONG_DAYS + 1;
   await runWithConcurrency(GROUPS, 3, async (group) => {
     try {
       // 처음 보는 그룹은 지난 기사까지 깊게 받아 30일 집계를 바로 채운다.
@@ -466,8 +469,8 @@ async function refreshNews(): Promise<void> {
       // 뉴스/이슈(7일 하루 평균)에 쓸 최근 8일 기사
       const times = new Map(state.newsTimes![group.id] ?? []);
       for (const entry of result.entries) times.set(hashLink(entry.item.originallink || entry.item.link), entry.time);
-      // 뉴스 점수는 30일 기사도 반영하므로 31일치를 둔다.
-      state.newsTimes![group.id] = [...times.entries()].filter(([, time]) => time > NOW - 31 * DAY_MS);
+      // 뉴스 점수는 90일 기사까지 반영하므로 91일치를 둔다.
+      state.newsTimes![group.id] = [...times.entries()].filter(([, time]) => time > NOW - (LONG_DAYS + 1) * DAY_MS);
 
       // 많이 보도된 이슈를 묶을 최근 8일 기사 제목(제목에 그룹명이 있는 기사만)
       const titles = new Map((state.newsTitles![group.id] ?? []).map((item) => [item[0], item]));
@@ -882,10 +885,14 @@ function liveMetrics(id: string): Metrics {
   return {
     chartPoints: state.chart?.pointsById[id] ?? 0,
     news7d: newsWeekCount(id),
-    brand30d: countTagged(id, 'b', 30),
-    comeback30d: countTagged(id, 'c', COMEBACK_DAYS),
-    risk30d: countTagged(id, 'r', RISK_DAYS),
+    brand30d: countTagged(id, 'b', SHORT_DAYS),
+    comeback30d: countTagged(id, 'c', SHORT_DAYS),
+    risk30d: countTagged(id, 'r', SHORT_DAYS),
+    brand90d: countTagged(id, 'b', LONG_DAYS),
+    comeback90d: countTagged(id, 'c', LONG_DAYS),
+    risk90d: countTagged(id, 'r', LONG_DAYS),
     news30d: newsWindowCount(id, 30),
+    news90d: newsWindowCount(id, LONG_DAYS),
     playcountK: playcountOf(id) ? Math.round(playcountOf(id)! / 1000) : null,
     viewsM: viewsOf(id) ? Math.round(viewsOf(id)! / 1_000_000) : null,
     listenersK: listeners ? Math.round(listeners / 1000) : null,
@@ -931,12 +938,12 @@ function computeRaw(): Record<string, RawScores> {
   for (const group of GROUPS) {
     const raw: RawScores = {
       musicAlbum: musicScore(state.chart?.pointsById[group.id] ?? 0, playcountOf(group.id), viewsOf(group.id)),
-      newsIssue: newsScore(newsWeekCount(group.id), newsWindowCount(group.id, 30)),
+      newsIssue: newsScore(newsWeekCount(group.id), newsWindowCount(group.id, 30), newsWindowCount(group.id, LONG_DAYS)),
       snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
-      brandFit: logScore(countTagged(group.id, 'b', 30), SCORE_REF.brand30d),
-      comebackActivity: logScore(countTagged(group.id, 'c', COMEBACK_DAYS), SCORE_REF.comeback30d),
+      brandFit: articleScore('brand', countTagged(group.id, 'b', SHORT_DAYS), countTagged(group.id, 'b', LONG_DAYS)),
+      comebackActivity: articleScore('comeback', countTagged(group.id, 'c', SHORT_DAYS), countTagged(group.id, 'c', LONG_DAYS)),
       growthMomentum: 50,
-      riskAdjustment: logScore(countTagged(group.id, 'r', RISK_DAYS), SCORE_REF.risk30d),
+      riskAdjustment: articleScore('risk', countTagged(group.id, 'r', SHORT_DAYS), countTagged(group.id, 'r', LONG_DAYS)),
     };
     raw.growthMomentum = momentumScore(raw, baseline ? rawAt(baseline, group.id) : null);
     result[group.id] = withMinimum(raw);
@@ -1098,9 +1105,13 @@ async function backfillDaily(): Promise<void> {
         chartPoints: chart?.[group.id] ?? 0,
         news7d: weekNews(group.id, dayIndex),
         brand30d: countTagged(group.id, 'b', 30, at),
-        comeback30d: countTagged(group.id, 'c', COMEBACK_DAYS, at),
-        risk30d: countTagged(group.id, 'r', RISK_DAYS, at),
+        comeback30d: countTagged(group.id, 'c', SHORT_DAYS, at),
+        risk30d: countTagged(group.id, 'r', SHORT_DAYS, at),
+        brand90d: countTagged(group.id, 'b', LONG_DAYS, at),
+        comeback90d: countTagged(group.id, 'c', LONG_DAYS, at),
+        risk90d: countTagged(group.id, 'r', LONG_DAYS, at),
         news30d: windowNews(group.id, dayIndex, 30),
+        news90d: windowNews(group.id, dayIndex, LONG_DAYS),
         playcountK: playcountOf(group.id) ? Math.round(playcountOf(group.id)! / 1000) : null,
         viewsM: viewsOf(group.id) ? Math.round(viewsOf(group.id)! / 1_000_000) : null,
         listenersK: listenersK(group.id),
@@ -1108,12 +1119,12 @@ async function backfillDaily(): Promise<void> {
       };
       const raw: RawScores = {
         musicAlbum: musicScore(chart?.[group.id] ?? 0, playcountOf(group.id), viewsOf(group.id)),
-        newsIssue: newsScore(weekNews(group.id, dayIndex), windowNews(group.id, dayIndex, 30)),
+        newsIssue: newsScore(weekNews(group.id, dayIndex), windowNews(group.id, dayIndex, 30), windowNews(group.id, dayIndex, LONG_DAYS)),
         snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
-        brandFit: logScore(countTagged(group.id, 'b', 30, at), SCORE_REF.brand30d),
-        comebackActivity: logScore(countTagged(group.id, 'c', COMEBACK_DAYS, at), SCORE_REF.comeback30d),
+        brandFit: articleScore('brand', countTagged(group.id, 'b', SHORT_DAYS, at), countTagged(group.id, 'b', LONG_DAYS, at)),
+        comebackActivity: articleScore('comeback', countTagged(group.id, 'c', SHORT_DAYS, at), countTagged(group.id, 'c', LONG_DAYS, at)),
         growthMomentum: 50,
-        riskAdjustment: logScore(countTagged(group.id, 'r', RISK_DAYS, at), SCORE_REF.risk30d),
+        riskAdjustment: articleScore('risk', countTagged(group.id, 'r', SHORT_DAYS, at), countTagged(group.id, 'r', LONG_DAYS, at)),
       };
       const weekAgo = rawsByDay[dayIndex - 7]?.[group.id] ?? null;
       raw.growthMomentum = momentumScore(raw, weekAgo);
@@ -1198,10 +1209,14 @@ async function main() {
           news24h: state.news?.byId[group.id]?.count ?? 0,
           news7d: metrics[group.id].news7d ?? 0,
           chartPoints: state.chart?.pointsById[group.id] ?? 0,
-          brand30d: countTagged(group.id, 'b', 30),
+          brand30d: metrics[group.id].brand30d ?? 0,
           comeback30d: metrics[group.id].comeback30d ?? 0,
           risk30d: metrics[group.id].risk30d ?? 0,
+          brand90d: metrics[group.id].brand90d ?? 0,
+          comeback90d: metrics[group.id].comeback90d ?? 0,
+          risk90d: metrics[group.id].risk90d ?? 0,
           news30d: metrics[group.id].news30d ?? 0,
+          news90d: metrics[group.id].news90d ?? 0,
           playcount: playcountOf(group.id),
           views: viewsOf(group.id),
           stories: newsStories(group),

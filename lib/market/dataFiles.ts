@@ -54,6 +54,10 @@ export const METRIC_ORDER = [
   'listenersK',
   'subscribersK',
   'news30d',
+  'news90d',
+  'brand90d',
+  'comeback90d',
+  'risk90d',
   /** Last.fm 누적 재생(천 회) */
   'playcountK',
   /** 유튜브 누적 조회(백만 회) */
@@ -90,6 +94,11 @@ export type LatestGroup = {
   comeback14d?: number;
   risk7d?: number;
   news30d?: number;
+  news90d?: number;
+  /** 최근 90일 집계(30일과 섞어 점수를 낸다) */
+  brand90d?: number;
+  comeback90d?: number;
+  risk90d?: number;
   /** Last.fm 누적 재생 */
   playcount?: number | null;
   /** 유튜브 공식 채널 누적 조회 */

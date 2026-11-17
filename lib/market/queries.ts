@@ -309,6 +309,10 @@ function latestMetrics(group: LatestGroup): Metrics {
     listenersK: group.listeners ? Math.round(group.listeners / 1000) : null,
     subscribersK: group.subscribers ? Math.round(group.subscribers / 1000) : null,
     news30d: group.news30d ?? null,
+    news90d: group.news90d ?? null,
+    brand90d: group.brand90d ?? null,
+    comeback90d: group.comeback90d ?? null,
+    risk90d: group.risk90d ?? null,
     playcountK: group.playcount ? Math.round(group.playcount / 1000) : null,
     viewsM: group.views ? Math.round(group.views / 1_000_000) : null,
   };
@@ -335,11 +339,11 @@ function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean)
     case 'brandFit':
       return `30일 기사 ${group.brand30d}건`;
     case 'comebackActivity':
-      return group.comeback30d !== undefined ? `30일 기사 ${group.comeback30d}건` : `14일 기사 ${group.comeback14d ?? 0}건`;
+      return `30일 기사 ${group.comeback30d ?? group.comeback14d ?? 0}건`;
     case 'growthMomentum':
       return hasMomentumBase ? '7일 전 대비' : '비교 기록 쌓는 중';
     case 'riskAdjustment':
-      return group.risk30d !== undefined ? `30일 기사 ${group.risk30d}건` : `7일 기사 ${group.risk7d ?? 0}건`;
+      return `30일 기사 ${group.risk30d ?? group.risk7d ?? 0}건`;
   }
 }
 

@@ -33,73 +33,113 @@ export function logScore(value: number, ref: number): number {
  */
 export const MIN_RAW = 1;
 
-/** 원점수 환산 기준. 이 값이면 100점(상한 아님, 넘으면 100점 이상). */
-export const SCORE_REF = {
-  /** 하루 평균 관련 기사 수(최근 7일 70% + 최근 30일 30%) */
-  newsDaily: 300,
-  /** 최근 30일 광고·모델·협업·패션·뷰티 기사 수 */
-  brand30d: 60,
-  /** 최근 30일 컴백·발매·공연·방송 출연 등 활동 기사 수 */
-  comeback30d: 300,
-  /** 최근 30일 부정 키워드 기사 수 */
-  risk30d: 120,
-  /** 멜론 TOP100 점수 합(1위 100점 … 100위 1점). 과거 복원 구간은 벅스 일간 차트 */
-  chartPoints: 600,
-} as const;
-
-/** 음원 점수에서 '누적 소비'(Last.fm 누적 재생·유튜브 누적 조회)가 차지하는 비중. 차트 밖 그룹도 들은 만큼 점수가 붙는다. */
-export const CONSUMPTION_WEIGHT = 0.35;
-
-/** Last.fm 누적 재생 1천 회 → 0점, 50억 회 → 100점 */
-export function playcountScore(playcount: number | null): number {
-  if (!playcount || playcount <= 0) return 0;
-  return nonNegative((100 * (Math.log10(playcount) - 3)) / (Math.log10(5_000_000_000) - 3));
+/**
+ * 두 기준점 로그 눈금(2026-11-12 사용자 요청: 점수가 전체적으로 낮고 좁아서 폭넓고 세분화되게).
+ * low(실제 분포의 아래쪽) → lowScore점, high(위쪽) → highScore점. 그 사이를 로그로 잇고,
+ * high보다 크면 100점을 넘는다. 기준점은 실제 K-pop 그룹 분포의 10~90% 지점에서 잡았다.
+ */
+export function band(
+  value: number | null,
+  low: number,
+  high: number,
+  lowScore = 15,
+  highScore = 88,
+): number {
+  if (!value || value <= 0 || !Number.isFinite(value)) return 0;
+  const ratio = (Math.log10(1 + value) - Math.log10(1 + low)) / (Math.log10(1 + high) - Math.log10(1 + low));
+  return nonNegative(lowScore + (highScore - lowScore) * ratio);
 }
 
-/** 유튜브 공식 채널 누적 조회 10만 회 → 0점, 500억 회 → 100점 */
+/** 각 변수의 기준점 [아래쪽 값, 위쪽 값]. 아래쪽이 15점, 위쪽이 88점(차트·팬덤은 따로). */
+export const SCORE_BAND = {
+  /** 하루 평균 관련 기사 수 */
+  newsDaily: [0.2, 18],
+  /** 광고·모델·협업·패션·뷰티 기사 수(30일 환산) */
+  brand: [1, 120],
+  /** 컴백·발매·공연·방송 출연 기사 수(30일 환산) */
+  comeback: [3, 600],
+  /** 부정 키워드 기사 수(30일 환산) */
+  risk: [1, 60],
+  /** 멜론 TOP100 점수 합(1위 100점 … 100위 1점) */
+  chartPoints: [5, 900],
+  /** Last.fm 누적 재생 */
+  playcount: [100_000, 500_000_000],
+  /** 유튜브 공식 채널 누적 조회 */
+  views: [10_000_000, 10_000_000_000],
+  /** Last.fm 청취자 */
+  listeners: [3_000, 5_000_000],
+  /** 유튜브 구독자 */
+  subscribers: [10_000, 20_000_000],
+} as const;
+
+/** 멜론 TOP100에 든 만큼 더해지는 점수의 비중. 차트 밖 그룹은 누적 소비만으로 점수가 매겨진다. */
+export const CHART_WEIGHT = 0.6;
+
+/** 최근 7일·30일·90일 기사 수를 섞은 하루 평균. 최근 소식을 크게 보되 한동안 조용한 그룹도 과거 기사가 반영된다. */
+export function newsDailyAverage(week: number, month: number, quarter: number): number {
+  return 0.45 * (week / 7) + 0.35 * (month / 30) + 0.2 * (quarter / 90);
+}
+
+/** 30일 집계와 90일 집계를 섞은 30일 환산값. 30일 안에 기사가 없어도 90일 기록으로 구분된다. */
+export function windowBlend(month: number, quarter: number): number {
+  return 0.6 * month + 0.4 * (quarter / 3);
+}
+
+/** 멜론 TOP100 차트 점수(5점 → 20점, 900점 → 100점) */
+export function chartScore(chartPoints: number): number {
+  return band(chartPoints, SCORE_BAND.chartPoints[0], SCORE_BAND.chartPoints[1], 20, 100);
+}
+
+/** Last.fm 누적 재생 점수 */
+export function playcountScore(playcount: number | null): number {
+  return band(playcount, SCORE_BAND.playcount[0], SCORE_BAND.playcount[1], 10, 95);
+}
+
+/** 유튜브 공식 채널 누적 조회 점수 */
 export function viewsScore(views: number | null): number {
-  if (!views || views <= 0) return 0;
-  return nonNegative((100 * (Math.log10(views) - 5)) / (Math.log10(50_000_000_000) - 5));
+  return band(views, SCORE_BAND.views[0], SCORE_BAND.views[1], 10, 95);
+}
+
+function meanOfPresent(values: Array<number | null>): number {
+  const present = values.filter((value): value is number => value !== null);
+  return present.length ? present.reduce((sum, value) => sum + value, 0) / present.length : 0;
 }
 
 /** 누적 소비 점수: Last.fm 누적 재생과 유튜브 누적 조회 점수의 평균(한쪽만 있으면 그 점수) */
 export function consumptionScore(playcount: number | null, views: number | null): number {
-  const scores = [playcount ? playcountScore(playcount) : null, views ? viewsScore(views) : null].filter(
-    (score): score is number => score !== null,
-  );
-  return scores.length ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
+  return meanOfPresent([playcount ? playcountScore(playcount) : null, views ? viewsScore(views) : null]);
 }
 
-/** 음원/음반: 멜론 TOP100 차트 점수 + 누적 소비 점수×0.35 */
+/** 음원/음반: 누적 소비 점수 + 멜론 TOP100 차트 점수×0.6 */
 export function musicScore(chartPoints: number, playcount: number | null, views: number | null): number {
-  return logScore(chartPoints, SCORE_REF.chartPoints) + CONSUMPTION_WEIGHT * consumptionScore(playcount, views);
+  return consumptionScore(playcount, views) + CHART_WEIGHT * chartScore(chartPoints);
 }
 
-/** 뉴스/이슈: 하루 평균 기사 수(최근 7일 70% + 최근 30일 30%). 한동안 기사가 없던 그룹도 한 달 안의 기사가 반영된다. */
-export function newsScore(week: number, month: number): number {
-  return logScore(0.7 * (week / 7) + 0.3 * (month / 30), SCORE_REF.newsDaily);
+/** 뉴스/이슈: 7일·30일·90일을 섞은 하루 평균 기사 수 */
+export function newsScore(week: number, month: number, quarter: number): number {
+  const [low, high] = SCORE_BAND.newsDaily;
+  return band(newsDailyAverage(week, month, quarter), low, high);
 }
 
-/** Last.fm 청취자 1천 명 → 0점, 500만 명 → 100점(더 많으면 100점 이상) */
+/** 브랜드·활동·조정: 30일과 90일을 섞은 기사 수 */
+export function articleScore(key: 'brand' | 'comeback' | 'risk', month: number, quarter: number): number {
+  const [low, high] = SCORE_BAND[key];
+  return band(windowBlend(month, quarter), low, high);
+}
+
+/** Last.fm 청취자 3천 명 → 5점, 500만 명 → 100점(더 많으면 100점 이상) */
 export function listenerScore(listeners: number | null): number {
-  if (!listeners || listeners <= 0) return 0;
-  return nonNegative((100 * (Math.log10(listeners) - 3)) / (Math.log10(5_000_000) - 3));
+  return band(listeners, SCORE_BAND.listeners[0], SCORE_BAND.listeners[1], 5, 100);
 }
 
-/** 유튜브 구독자 1천 명 → 0점, 2,000만 명 → 100점(더 많으면 100점 이상) */
+/** 유튜브 구독자 1만 명 → 5점, 2,000만 명 → 100점(더 많으면 100점 이상) */
 export function subscriberScore(subscribers: number | null): number {
-  if (!subscribers || subscribers <= 0) return 0;
-  return nonNegative((100 * (Math.log10(subscribers) - 3)) / (Math.log10(20_000_000) - 3));
+  return band(subscribers, SCORE_BAND.subscribers[0], SCORE_BAND.subscribers[1], 5, 100);
 }
 
 /** SNS/팬덤: Last.fm 청취자와 유튜브 구독자 점수의 평균(한쪽만 있으면 그 점수) */
 export function fandomScore(listeners: number | null, subscribers: number | null): number {
-  const scores = [
-    listeners ? listenerScore(listeners) : null,
-    subscribers ? subscriberScore(subscribers) : null,
-  ].filter((score): score is number => score !== null);
-  if (!scores.length) return 0;
-  return scores.reduce((sum, score) => sum + score, 0) / scores.length;
+  return meanOfPresent([listeners ? listenerScore(listeners) : null, subscribers ? subscriberScore(subscribers) : null]);
 }
 
 /**
@@ -119,12 +159,15 @@ export const MOMENTUM_SOURCES: readonly VariableId[] = [
   'brandFit',
 ];
 
+/** 모멘텀이 1주 변화에 반응하는 폭(클수록 넓게 퍼진다) */
+export const MOMENTUM_GAIN = 3;
+
 /** 7일 전 대비 상승 속도(뉴스는 이미 7일 평균이라 하루 기사 몇 건에 흔들리지 않는다). 비교할 과거 값이 없으면 50(중립). */
 export function momentumScore(now: RawScores, before: RawScores | null): number {
   if (!before) return 50;
   const avg = (scores: RawScores) =>
     MOMENTUM_SOURCES.reduce((sum, id) => sum + scores[id], 0) / MOMENTUM_SOURCES.length;
-  return nonNegative(50 + (avg(now) - avg(before)) * 2.2);
+  return nonNegative(50 + (avg(now) - avg(before)) * MOMENTUM_GAIN);
 }
 
 /** 모든 변수에 최소 점수(MIN_RAW)를 적용한다. */

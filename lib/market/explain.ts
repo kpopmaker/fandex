@@ -3,10 +3,11 @@
 
 import type { LatestGroup, MetricId, NewsHeadline, NewsStory } from './dataFiles';
 import {
-  CONSUMPTION_WEIGHT,
+  CHART_WEIGHT,
   MIN_RAW,
+  MOMENTUM_GAIN,
   MOMENTUM_SOURCES,
-  SCORE_REF,
+  SCORE_BAND,
   listenerScore,
   subscriberScore,
   type RawScores,
@@ -150,8 +151,9 @@ export function explainVariable(input: ExplainInput): VariableDetail {
         causes,
         change: changeSentence(id, rawDelta, countChange('차트 점수', points, before('chartPoints'), '점')),
         method: [
-          `차트 점수 = 멜론 TOP100에 든 곡마다 (101 − 순위)점을 더한 값. ${SCORE_REF.chartPoints}점이 100점(로그 눈금, 넘으면 100점 이상).`,
-          `누적 소비 = Last.fm 누적 재생(50억 회 = 100점)과 유튜브 누적 조회(500억 회 = 100점) 점수의 평균 × ${CONSUMPTION_WEIGHT}. 차트 밖 그룹도 들은 만큼 점수가 붙어요.`,
+          `음원 점수 = 누적 소비 점수 + 차트 점수 × ${CHART_WEIGHT}.`,
+          `누적 소비 = Last.fm 누적 재생(${bigNumber(SCORE_BAND.playcount[0])}회 10점 ~ ${bigNumber(SCORE_BAND.playcount[1])}회 95점)과 유튜브 누적 조회(${bigNumber(SCORE_BAND.views[0])}회 ~ ${bigNumber(SCORE_BAND.views[1])}회) 점수의 평균. 차트 밖 그룹도 들은 만큼 점수가 붙어요.`,
+          `차트 점수 = 멜론 TOP100에 든 곡마다 (101 − 순위)점을 더한 값. ${SCORE_BAND.chartPoints[0]}점이 20점, ${SCORE_BAND.chartPoints[1]}점이 100점(로그 눈금, 넘으면 100점 이상).`,
         ],
         note: input.weekAgoBackfilled
           ? '1주 전 값은 과거 복원 기록이라 실시간 차트 대신 그 주의 멜론 주간 차트 기준이에요.'
@@ -182,7 +184,7 @@ export function explainVariable(input: ExplainInput): VariableDetail {
         causes,
         change: changeSentence(id, rawDelta, countChange('7일 기사', week, before('news7d'), '건')),
         method: [
-          `하루 평균 기사 수(최근 7일 70% + 최근 30일 30%)를 로그 눈금으로 바꿔요. 하루 ${SCORE_REF.newsDaily}건이 100점.`,
+          `하루 평균 기사 수(최근 7일 45% + 30일 35% + 90일 20%)를 로그 눈금으로 바꿔요. 하루 ${SCORE_BAND.newsDaily[0]}건이 15점, ${SCORE_BAND.newsDaily[1]}건이 88점(넘으면 더 높아요).`,
           '사진만 있는 기사, 같은 보도자료 중복, 제목에 그룹명 없이 여러 팀을 나열한 기사는 세지 않아요. 비슷한 제목끼리 하나의 이슈로 묶었어요.',
         ],
         note: backfillNote,
@@ -212,7 +214,7 @@ export function explainVariable(input: ExplainInput): VariableDetail {
         causes,
         change: changeSentence(id, rawDelta),
         method: [
-          '청취자 1천 명 = 0점, 500만 명 = 100점 / 구독자 1천 명 = 0점, 2,000만 명 = 100점(더 많으면 100점 이상, 로그 눈금). 둘의 평균.',
+          `청취자 ${bigNumber(SCORE_BAND.listeners[0])}명 = 5점, ${bigNumber(SCORE_BAND.listeners[1])}명 = 100점 / 구독자 ${bigNumber(SCORE_BAND.subscribers[0])}명 = 5점, ${bigNumber(SCORE_BAND.subscribers[1])}명 = 100점(더 많으면 100점 이상, 로그 눈금). 둘의 평균.`,
         ],
         note: input.weekAgoBackfilled
           ? '과거 복원 구간은 청취자·구독자 과거 기록이 없어 현재 값을 써서, 이 기간에는 변화가 없어요.'
@@ -225,39 +227,43 @@ export function explainVariable(input: ExplainInput): VariableDetail {
       const config = {
         brandFit: {
           key: 'brand30d' as const,
+          longKey: 'brand90d' as const,
           what: '광고·모델·협업·패션·뷰티 기사',
           examples: group.examples?.brand,
-          ref: SCORE_REF.brand30d,
+          band: SCORE_BAND.brand,
           extra: '광고, 모델, 앰배서더, 협업, 화보, 패션, 뷰티, 굿즈, 팝업 같은 단어가 들어간 기사',
         },
         comebackActivity: {
           key: 'comeback30d' as const,
+          longKey: 'comeback90d' as const,
           what: '컴백·발매·공연·방송 출연 기사',
           examples: group.examples?.comeback,
-          ref: SCORE_REF.comeback30d,
+          band: SCORE_BAND.comeback,
           extra: '컴백, 발매, 앨범, 공연, 콘서트, 무대, 방송·예능·라디오 출연, 축제, 팬사인회 같은 단어가 들어간 기사',
         },
         riskAdjustment: {
           key: 'risk30d' as const,
+          longKey: 'risk90d' as const,
           what: '부정 키워드 기사',
           examples: group.examples?.risk,
-          ref: SCORE_REF.risk30d,
+          band: SCORE_BAND.risk,
           extra: '논란, 사과, 의혹, 소송, 탈퇴, 부상, 불참, 취소, 입대 같은 단어가 들어간 기사',
         },
       }[id];
-      const total = metrics[config.key] ?? (id === 'comebackActivity' ? group.comeback14d : id === 'riskAdjustment' ? group.risk7d : group.brand30d) ?? null;
+      const total = metrics[config.key] ?? null;
+      const long = metrics[config.longKey] ?? null;
       const causes = articleItems(config.examples);
       const keywords = [...new Set(causes.map((item) => item.tag).filter(Boolean))].slice(0, 3);
       const latest = causes[0];
       return {
-        headline: !total
-          ? `최근 30일 동안 ${config.what}가 없어요. ${MINIMUM_NOTE}`
-          : `최근 30일 ${config.what} ${count(total)}건이 잡혔어요${keywords.length ? `(${keywords.map((word) => `'${word}'`).join(', ')} 등)` : ''}.${latest ? ` 가장 최근은 ${quote(latest.title, 36)}예요.` : ''}`,
+        headline: !total && !long
+          ? `최근 90일 동안 ${config.what}가 없어요. ${MINIMUM_NOTE}`
+          : `최근 30일 ${config.what} ${count(total)}건${long ? `, 90일 ${count(long)}건` : ''}이 잡혔어요${keywords.length ? `(${keywords.map((word) => `'${word}'`).join(', ')} 등)` : ''}.${latest ? ` 가장 최근은 ${quote(latest.title, 36)}예요.` : ''}`,
         causesTitle: causes.length ? '점수에 잡힌 기사 (제목에 그룹명이 있는 기사)' : undefined,
         causes,
         change: changeSentence(id, rawDelta, countChange('30일 기사', total, before(config.key), '건')),
         method: [
-          `최근 30일 ${config.extra} 수. ${config.ref}건이 100점(로그 눈금, 넘으면 100점 이상).`,
+          `${config.extra}를 30일 60% + 90일 40%(30일로 환산)로 섞어 세요. ${config.band[0]}건이 15점, ${config.band[1]}건이 88점(로그 눈금, 넘으면 더 높아요).`,
           ...(id === 'riskAdjustment'
             ? [`이 점수는 가격에서 빼요. 키워드로만 고르기 때문에 그룹 잘못이 아닌 기사도 섞일 수 있고, 모든 그룹이 최소 ${MIN_RAW}점씩 같이 빠져 순위에는 영향이 없어요.`]
             : []),
@@ -287,7 +293,7 @@ export function explainVariable(input: ExplainInput): VariableDetail {
         causes,
         change: changeSentence(id, rawDelta),
         method: [
-          '모멘텀 = 50 + (음원·뉴스·SNS·브랜드 평균 점수의 1주 변화) × 2.2. 좋아지면 50점보다 높고 나빠지면 낮아요.',
+          `모멘텀 = 50 + (음원·뉴스·SNS·브랜드 평균 점수의 1주 변화) × ${MOMENTUM_GAIN}. 좋아지면 50점보다 높고 나빠지면 낮아요.`,
         ],
         note: '1주 전 값은 그날 마감 기록으로 다시 계산한 것이라 실제 계산값과 조금 다를 수 있어요.',
       };

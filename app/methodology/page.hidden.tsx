@@ -1,4 +1,4 @@
-import { SCORE_REF } from '../../lib/market/formula';
+import { MIN_RAW, SCORE_BAND } from '../../lib/market/formula';
 import { ENABLED_VARIABLES } from '../../lib/market/variables';
 
 export const metadata = { title: '산정 방식 | FANDEX' };
@@ -50,11 +50,12 @@ export default function MethodologyPage() {
           <p>
             <span className="font-semibold">원점수</span>
             <span className="text-fx-sub">
-              {' '}= 실제 숫자를 로그 눈금으로 0~100점에 놓아요. 0건이면 0점, 기준치 이상이면 100점이에요. 기준치는
-              7일 하루 평균 기사 {SCORE_REF.newsDaily}건, 30일 브랜드 기사 {SCORE_REF.brand30d}건, 14일 활동 기사{' '}
-              {SCORE_REF.comeback30d}건, 30일 부정 기사 {SCORE_REF.risk30d}건, 차트 점수 {SCORE_REF.chartPoints}점,
-              Last.fm 청취자 500만 명(1만 명 이하는 0점)이에요. 순위가 아니라 절대 규모라서 시장 전체가 조용하면
-              모두 함께 낮아져요.
+              {' '}= 실제 숫자를 두 기준점 사이의 로그 눈금에 놓아요. 아래쪽 기준점이 15점, 위쪽이 88점이고, 위쪽을
+              넘으면 100점도 넘어요. 기준점은 하루 평균 기사 {SCORE_BAND.newsDaily[0]}~{SCORE_BAND.newsDaily[1]}건,
+              브랜드 기사 {SCORE_BAND.brand[0]}~{SCORE_BAND.brand[1]}건, 활동 기사{' '}
+              {SCORE_BAND.comeback[0]}~{SCORE_BAND.comeback[1]}건, 부정 기사 {SCORE_BAND.risk[0]}~{SCORE_BAND.risk[1]}건,
+              차트 점수 {SCORE_BAND.chartPoints[0]}~{SCORE_BAND.chartPoints[1]}점이에요. 기록이 하나도 없어도 최소{' '}
+              {MIN_RAW}점을 줘요. 순위가 아니라 절대 규모라서 시장 전체가 조용하면 모두 함께 낮아져요.
             </span>
           </p>
           <p>

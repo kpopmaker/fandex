@@ -1,0 +1,62 @@
+name: FANDEX deploy
+
+# main에 올라가면 검사를 돌리고, 통과한 커밋만 Render에 배포한다(2026-11-12 사용자 요청: 자동 배포).
+# 검사가 깨지면 배포하지 않으므로, 망가진 코드가 공개 사이트에 올라가지 않는다.
+#
+# 준비: Render 대시보드 → fandex-product-self-host-v1 → Settings → Deploy Hook의 주소를
+#       GitHub 저장소 Settings → Secrets and variables → Actions에 RENDER_DEPLOY_HOOK_URL로 넣는다.
+#       (넣기 전까지는 검사만 하고 배포는 건너뛴다.)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fandex-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npx eslint app/page.tsx app/layout.tsx app/ranking app/artists/page.tsx "app/artists/[artistId]/page.tsx" app/compare/page.tsx app/methodology app/components/market lib/market scripts/market
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: FANDEX_SELF_HOST_STANDALONE=1 npm run build
+
+      - name: Deploy to Render
+        shell: bash
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          set -uo pipefail
+          if [ -z "${HOOK:-}" ]; then
+            echo "::warning title=배포 건너뜀::RENDER_DEPLOY_HOOK_URL 시크릿이 없어 검사만 했어요. Render의 Deploy Hook 주소를 저장소 시크릿에 넣으면 자동 배포돼요."
+            exit 0
+          fi
+          code=$(curl -s -o hook.log -w '%{http_code}' --max-time 60 -X POST "$HOOK")
+          echo "deploy hook HTTP $code"
+          if [ "$code" != "200" ] && [ "$code" != "201" ]; then
+            echo "::error title=배포 요청 실패::Render 배포 훅이 HTTP $code 를 돌려줬어요."
+            cat hook.log || true
+            exit 1
+          fi
+          echo "::notice title=배포 시작::Render가 이 커밋을 배포하고 있어요(2~3분)."
