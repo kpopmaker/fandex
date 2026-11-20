@@ -78,7 +78,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 10;
+const DATA_EPOCH = 11;
 
 type State = {
   version: string;
@@ -845,9 +845,11 @@ function listenersOf(id: string): number | null {
 function countTagged(id: string, flag: 'b' | 'c' | 'r', days: number, at = NOW): number {
   const from = state.coverageFrom?.[id];
   let day = kstDay(at);
-  // 기사 기록이 시작되기 전 날짜(과거 복원)는, 최소 일주일치(7일 집계는 그 기간 전체) 기록이 있는 가장 이른 날 값으로 본다.
+  // 기사 기록이 시작되기 전 날짜(과거 복원)는 집계 기간이 다 덮이는 가장 이른 날 값으로 본다.
+  // 예전에는 '기록 시작 +6일'을 썼는데, 기사가 많아 기록이 며칠뿐인 그룹(BTS 등)은 그 값에 고정됐다가
+  // 실제 데이터와 만나는 날 지수가 계단처럼 튀었다(2026-11-20 수정).
   if (from !== undefined && from !== 0) {
-    day = Math.max(day, Math.min(kstDay(NOW), kstDay(from) + Math.min(days, 7) - 1));
+    day = Math.max(day, Math.min(kstDay(NOW), kstDay(from) + days - 1));
   }
   const count = (state.tagged[id] ?? []).filter(
     (article) => article[flag] && article.d <= day && day - article.d < days,
@@ -1081,10 +1083,17 @@ async function backfillDaily(): Promise<void> {
     );
   }
   /** 복원 dayIndex일까지 최근 days일 기사 수 */
-  const windowNews = (id: string, dayIndex: number, days: number) =>
-    (newsByDay.get(id) ?? [])
-      .slice(dayIndex + LEAD + 1 - days, dayIndex + LEAD + 1)
-      .reduce((sum, count) => sum + count, 0);
+  const windowNews = (id: string, dayIndex: number, days: number) => {
+    const counts = newsByDay.get(id) ?? [];
+    const end = dayIndex + LEAD + 1;
+    // 앞쪽(start < 0)을 자르지 않으면 JS가 배열 끝에서부터 세어 빈 구간이 돼 0이 나온다.
+    // 그래서 90일 집계가 복원 앞 60일 동안 0이었다가 한 번에 튀었다(2026-11-20 수정).
+    const start = Math.max(0, end - days);
+    const sum = counts.slice(start, end).reduce((total, count) => total + count, 0);
+    const covered = end - start;
+    // 그만큼의 기록이 없는 앞 구간은 받은 기간의 하루 평균으로 늘려 추정한다.
+    return covered >= days ? sum : Math.round((sum * days) / Math.max(1, covered));
+  };
   const weekNews = (id: string, dayIndex: number) => windowNews(id, dayIndex, 7);
 
   const entries: HistoryEntry[] = [];
