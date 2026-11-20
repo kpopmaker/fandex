@@ -651,7 +651,10 @@ async function resolveLastfm(group: Group): Promise<LastfmInfo | null> {
     const sameName = [exact, corrected].filter(
       (info): info is LastfmInfo => !!info && verified.some((ok) => normalizeName(ok.name) === normalizeName(info.name)),
     );
-    return sameName.reduce((best, info) => (info.listeners > best.listeners ? info : best));
+    const best = sameName.reduce((top, info) => (info.listeners > top.listeners ? info : top));
+    // 고른 페이지 자체에 K-pop 태그가 없어도, 같은 이름의 태그 있는 페이지로 이미 확인된 그룹이라 그대로 쓴다.
+    // 이 한 줄이 없어서 2026-11-21 첫 실행에서 BABYMONSTER·tripleS·STAYC·에이핑크 등이 아예 빈 값이 됐다.
+    return { ...best, korean: true };
   }
   const korean = await lastfmInfo(group.koreanName, 1);
   return korean?.korean ? korean : null;
@@ -661,7 +664,10 @@ async function refreshLastfm(): Promise<void> {
   const today = kstDateString(NOW);
   // 오늘 이미 받았으면 새로 추가된 그룹만 받는다.
   const sameDay = state.lastfm?.date === today;
-  const targets = sameDay ? GROUPS.filter((group) => !(group.id in state.lastfm!.byId)) : GROUPS;
+  // 오늘 값이 빈 그룹(null)은 다음 실행에서 다시 받는다. 안 그러면 한 번 비면 다음 날까지 비어 있다(2026-11-21).
+  const targets = sameDay
+    ? GROUPS.filter((group) => !(group.id in state.lastfm!.byId) || state.lastfm!.byId[group.id] === null)
+    : GROUPS;
   if (!targets.length) {
     report.sources.lastfm = { status: 'cached', detail: today };
     return;
