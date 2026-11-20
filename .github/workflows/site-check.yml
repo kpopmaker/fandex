@@ -6,6 +6,7 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - name: Probe
         env:
           LF: ${{ secrets.LASTFM_API_KEY }}
