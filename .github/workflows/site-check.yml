@@ -6,11 +6,36 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Probe both addresses from outside
+      - name: Probe Last.fm and Naver
+        env:
+          LF: ${{ secrets.LASTFM_API_KEY }}
+          NID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
+          NSEC: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
         run: |
-          for u in https://fandex-product-self-host-v1.onrender.com https://fandex-eta.vercel.app; do
-            out=$(curl -sL -o b.html -w "%{http_code} %{time_total}s %{size_download}B" --max-time 90 "$u" || echo "curl-exit-$?")
-            title=$(grep -o '<title>[^<]*' b.html | head -1 | sed 's/<title>//')
-            asof=$(grep -o '[0-9]*\. [0-9]*\. [0-9:]* 기준' b.html | head -1)
-            echo "::notice title=$u::$out title=[$title] [$asof]"
-          done
+          lf() {
+            r=$(curl -s --max-time 30 --get "https://ws.audioscrobbler.com/2.0/" \
+              --data-urlencode "method=artist.getinfo" --data-urlencode "artist=$1" \
+              --data-urlencode "autocorrect=1" --data-urlencode "api_key=$LF" --data-urlencode "format=json")
+            echo "::notice title=lastfm $1::$(echo "$r" | python3 -c '
+import json,sys
+try:
+  a=json.load(sys.stdin)["artist"]
+  t=[x["name"] for x in (a.get("tags",{}).get("tag") or [])]
+  print(f"name={a[\"name\"]} listeners={a[\"stats\"][\"listeners\"]} plays={a[\"stats\"][\"playcount\"]} tags={t[:6]}")
+except Exception as e: print("none", e)')"
+          }
+          for q in "NOWADAYS" "NOWZ" "나우즈" "LUCY" "루시" "LUCY (KOR)" "럭시"; do lf "$q"; done
+          nv() {
+            r=$(curl -s --max-time 30 -H "X-Naver-Client-Id: $NID" -H "X-Naver-Client-Secret: $NSEC" \
+              --get "https://openapi.naver.com/v1/search/news.json" --data-urlencode "query=$1" --data-urlencode "display=20" --data-urlencode "sort=date")
+            echo "::notice title=naver [$1]::$(echo "$r" | python3 -c '
+import json,sys,re
+b=json.load(sys.stdin); n=b.get("total",0)
+hit=sum(1 for i in b.get("items",[]) if "호라이즌" in re.sub("<[^>]+>","",i["title"]) or "HORI7ON" in i["title"].upper())
+print(f"total={n} 상위20중 이름포함={hit}")
+for i in b.get("items",[])[:4]: print("   ", re.sub("<[^>]+>","",i["title"])[:62])')"
+          }
+          nv "호라이즌"
+          nv "HORI7ON 호라이즌"
+          nv "HORI7ON"
+          nv "호라이즌 그룹"
