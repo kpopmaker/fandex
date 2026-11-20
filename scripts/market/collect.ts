@@ -13,7 +13,7 @@ import { join } from 'node:path';
 import { gunzipSync, gzipSync } from 'node:zlib';
 import universeFile from '../../data/market/universe.json';
 import youtubeChannelsFile from '../../data/market/youtube-channels.json';
-import { createChartMatcher, decodeEntities, parseBugs, parseMelon } from './charts';
+import { createChartMatcher, decodeEntities, normalizeName, parseBugs, parseMelon } from './charts';
 import {
   articleScore,
   VARIABLE_ORDER,
@@ -78,7 +78,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 12;
+const DATA_EPOCH = 13;
 
 type State = {
   version: string;
@@ -617,8 +617,10 @@ async function refreshChart(): Promise<void> {
 const LASTFM_KEY = process.env.LASTFM_API_KEY ?? '';
 const KPOP_TAGS = ['k-pop', 'kpop', 'korean', 'k-rock', 'k-indie', 'korean rock', 'korean indie', 'k-hip-hop', 'korean hip hop', 'girl group', 'boy band', 'boy group', 'idol', 'k-ballad', 'k-r&b', 'virtual idol'];
 
-async function lastfmInfo(name: string) {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(name)}&autocorrect=1&api_key=${LASTFM_KEY}&format=json`;
+type LastfmInfo = { name: string; listeners: number; playcount: number; korean: boolean };
+
+async function lastfmInfo(name: string, autocorrect: 0 | 1 = 1): Promise<LastfmInfo | null> {
+  const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(name)}&autocorrect=${autocorrect}&api_key=${LASTFM_KEY}&format=json`;
   const response = await fetch(url);
   if (!response.ok) throw new Error(`lastfm ${response.status}`);
   const body = (await response.json()) as {
@@ -632,6 +634,27 @@ async function lastfmInfo(name: string) {
     playcount: Number(body.artist.stats?.playcount ?? 0),
     korean: tags.some((tag) => KPOP_TAGS.includes(tag)),
   };
+}
+
+/**
+ * Last.fm은 같은 그룹을 철자만 다른 두 페이지로 갖고 있을 때가 있다.
+ * autocorrect=1이 기록이 거의 없는 쪽으로 보내서 BABYMONSTER가 60만 → 3.8만, tripleS가 46만 → 1.1만으로 잡혔다(2026-11-21).
+ * 그래서 철자 그대로(autocorrect=0)와 Last.fm이 고친 이름을 둘 다 받아,
+ * K-pop 태그로 확인된 쪽과 '같은 이름'인 페이지 중 기록이 많은 쪽을 쓴다.
+ * 이름만 같고 K-pop 태그가 없는 동명이인(테크노 뮤지션 'Lucy' 등)은 그대로 걸러진다.
+ */
+async function resolveLastfm(group: Group): Promise<LastfmInfo | null> {
+  const name = LASTFM_NAME_OVERRIDES[group.id] ?? group.lastfmName;
+  const [exact, corrected] = await Promise.all([lastfmInfo(name, 0), lastfmInfo(name, 1)]);
+  const verified = [exact, corrected].filter((info): info is LastfmInfo => !!info?.korean);
+  if (verified.length) {
+    const sameName = [exact, corrected].filter(
+      (info): info is LastfmInfo => !!info && verified.some((ok) => normalizeName(ok.name) === normalizeName(info.name)),
+    );
+    return sameName.reduce((best, info) => (info.listeners > best.listeners ? info : best));
+  }
+  const korean = await lastfmInfo(group.koreanName, 1);
+  return korean?.korean ? korean : null;
 }
 
 async function refreshLastfm(): Promise<void> {
@@ -653,11 +676,7 @@ async function refreshLastfm(): Promise<void> {
 
   await runWithConcurrency(targets, 3, async (group) => {
     try {
-      let info = await lastfmInfo(LASTFM_NAME_OVERRIDES[group.id] ?? group.lastfmName);
-      if (!info?.korean) {
-        const korean = await lastfmInfo(group.koreanName);
-        if (korean?.korean) info = korean;
-      }
+      const info = await resolveLastfm(group);
       if (info?.korean) {
         byId[group.id] = { listeners: info.listeners, playcount: info.playcount, name: info.name };
       } else {
