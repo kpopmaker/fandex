@@ -10,6 +10,4 @@ jobs:
       - name: Probe
         env:
           LF: ${{ secrets.LASTFM_API_KEY }}
-          NID: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_ID }}
-          NSEC: ${{ secrets.FANDEX_NAVER_NEWS_CLIENT_SECRET }}
         run: python3 probe.py
