@@ -58,7 +58,15 @@ export function createChartMatcher(groups: ReadonlyArray<{ id: string; matchName
     id: group.id,
     names: group.matchNames.map(normalizeName).filter((name) => name.length >= 2),
   }));
+  const isGroupName = (text: string) =>
+    chartNames.some(({ names }) => names.some((name) => text === name || (name.length >= 4 && text.includes(name))));
+
   return function matchChartArtist(artistText: string): string | null {
+    // '진영 (GOT7)'처럼 괄호 안에만 그룹명이 있는 표기는 멤버 솔로 곡이라 그룹 점수에 넣지 않는다.
+    // 유닛('소녀시대-효리수 …')은 앞부분에 그룹명이 있어 그대로 그룹 점수에 들어간다(2026-11-20).
+    const solo = /^(.+?)\s*[(（]([^)）]+)[)）]\s*$/.exec(artistText);
+    if (solo && !isGroupName(normalizeName(solo[1])) && isGroupName(normalizeName(solo[2]))) return null;
+
     const tokens = artistText
       .split(/,|&|\/|\(|\)|feat\.?|Feat\.?|\bx\b|×/)
       .map(normalizeName)

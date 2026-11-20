@@ -78,7 +78,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 11;
+const DATA_EPOCH = 12;
 
 type State = {
   version: string;
@@ -211,6 +211,18 @@ function containsAny(text: string, words: readonly string[]): boolean {
   return words.some((word) => text.includes(word));
 }
 
+/**
+ * 이름이 일상어라 본문에 스치기만 해도 잡히는 그룹. 제목에 그룹명이 있는 기사만 센다.
+ * 호라이즌: '뉴 호라이즌', '호라이즌 조선' 등으로 30일 290건이 잡혔는데 제목에 이름이 든 기사는 0건이었다(2026-11-20).
+ */
+const TITLE_ONLY_IDS = new Set(['hori7on']);
+
+/** Last.fm이 엉뚱한 아티스트로 잡히는 그룹의 검색 이름 */
+const LASTFM_NAME_OVERRIDES: Record<string, string> = {
+  // 'NOWZ'로 찾으면 우크라이나 메탈코어 밴드 'Noїz'가 잡힌다. 한글명으로 찾아야 큐브 소속 나우즈가 나온다.
+  nowadays: '나우즈',
+};
+
 /** 이름이 흔한 단어라 맥락어 없이 검색하면 다른 기사가 쏟아지는 그룹 */
 const AMBIGUOUS_IDS = new Set([
   'itzy', 'kard', 'buzz', 'secret', 'ikon', 'winner', 'kara', 'vixx', 'pow', 'kiiikiii', 'billlie', 'lucy',
@@ -298,6 +310,7 @@ async function collectGroupNews(
       ? [`${group.koreanName} ${group.englishName}`, group.englishName]
       : [group.koreanName];
   const matcher = MATCHERS.get(group.id)!;
+  const titleOnly = TITLE_ONLY_IDS.has(group.id);
   const cutoff = NOW - DAY_MS;
   const pageUntil = NOW - options.days * DAY_MS;
   let coverageFrom = NOW;
@@ -345,6 +358,7 @@ async function collectGroupNews(
           diag.lineupSkipped += 1;
           continue;
         }
+        if (titleOnly && !titleMatch) continue;
         relevant.push({ item: { ...item, title }, time, text, titleMatch });
       }
       if (Number.isFinite(oldest)) coverageFrom = Math.min(coverageFrom, oldest);
@@ -639,7 +653,7 @@ async function refreshLastfm(): Promise<void> {
 
   await runWithConcurrency(targets, 3, async (group) => {
     try {
-      let info = await lastfmInfo(group.lastfmName);
+      let info = await lastfmInfo(LASTFM_NAME_OVERRIDES[group.id] ?? group.lastfmName);
       if (!info?.korean) {
         const korean = await lastfmInfo(group.koreanName);
         if (korean?.korean) info = korean;
