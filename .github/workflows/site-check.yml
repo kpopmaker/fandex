@@ -1,0 +1,16 @@
+name: site check (probe)
+on:
+  push:
+    branches: ['sitecheck-probe']
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Probe both addresses from outside
+        run: |
+          for u in https://fandex-product-self-host-v1.onrender.com https://fandex-eta.vercel.app; do
+            out=$(curl -sL -o b.html -w "%{http_code} %{time_total}s %{size_download}B" --max-time 90 "$u" || echo "curl-exit-$?")
+            title=$(grep -o '<title>[^<]*' b.html | head -1 | sed 's/<title>//')
+            asof=$(grep -o '[0-9]*\. [0-9]*\. [0-9:]* 기준' b.html | head -1)
+            echo "::notice title=$u::$out title=[$title] [$asof]"
+          done
