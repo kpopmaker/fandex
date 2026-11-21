@@ -6,8 +6,17 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Probe
-        env:
-          LF: ${{ secrets.LASTFM_API_KEY }}
-        run: python3 probe.py
+      - name: Is Melon reachable from a runner?
+        run: |
+          for u in https://www.melon.com/chart/index.htm https://www.melon.com/; do
+            out=$(curl -sL -o m.html -w "%{http_code} %{time_total}s %{size_download}B" --max-time 40 \
+              -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36' \
+              -H 'Accept-Language: ko-KR,ko;q=0.9' "$u" || echo "curl-exit-$?")
+            echo "::notice title=melon $u::$out"
+          done
+      - name: Is the site serving?
+        run: |
+          out=$(curl -sL -o s.html -w "%{http_code} %{time_total}s %{size_download}B" --max-time 90 https://fandex-product-self-host-v1.onrender.com || echo "curl-exit-$?")
+          title=$(grep -o '<title>[^<]*' s.html | head -1 | sed 's/<title>//')
+          err=$(grep -o -i 'MarketDataUnavailable\|지금 데이터를[^<]*\|Application error' s.html | head -1)
+          echo "::notice title=site::$out title=[$title] err=[$err]"
