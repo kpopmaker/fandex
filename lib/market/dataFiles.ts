@@ -62,6 +62,8 @@ export const METRIC_ORDER = [
   'playcountK',
   /** 유튜브 누적 조회(백만 회) */
   'viewsM',
+  /** 써클차트 초동판매량(천 장). 가장 큰 기여를 하는 발매 기준 */
+  'albumFirstK',
 ] as const;
 export type MetricId = (typeof METRIC_ORDER)[number];
 
@@ -112,6 +114,21 @@ export type LatestGroup = {
   headlines: NewsHeadline[];
   /** 브랜드·활동·조정 점수에 잡힌 최근 기사 예시(최대 3건씩) */
   examples?: { brand: NewsHeadline[]; comeback: NewsHeadline[]; risk: NewsHeadline[] };
+  /** 음반 점수를 만든 발매(써클차트 초동판매량). 기록이 없으면 없음 */
+  album?: AlbumPick;
+};
+
+/** 음반 점수에 쓰인 발매 하나 */
+export type AlbumPick = {
+  /** 첫 주 판매량(버전 합산) */
+  first: number;
+  /** 그 주 시작일 YYYY-MM-DD */
+  date: string;
+  title: string;
+  /** 차트에 들어간 버전 수 */
+  versions: number;
+  /** 발매 후 지난 날수 */
+  days: number;
 };
 
 export type LatestFile = {

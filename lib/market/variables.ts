@@ -11,7 +11,8 @@ export type VariableId =
   | 'brandFit'
   | 'comebackActivity'
   | 'growthMomentum'
-  | 'riskAdjustment';
+  | 'riskAdjustment'
+  | 'albumSales';
 
 export type VariableDefinition = {
   id: VariableId;
@@ -79,10 +80,20 @@ export const VARIABLES: readonly VariableDefinition[] = [
     enabled: false,
   },
   {
+    id: 'albumSales',
+    label: '음반',
+    shortLabel: '음반',
+    description: '최신 앨범의 초동판매량(발매 첫 주, 버전 합산). 1,000장 15점 ~ 100만장 88점. 발매 후 시간이 지나면 망각곡선처럼 옅어진다',
+    source: '써클차트 주간 앨범 차트, 주 1회',
+    coefficient: 1.0,
+    penalty: false,
+    enabled: true,
+  },
+  {
     id: 'growthMomentum',
     label: '성장 모멘텀',
     shortLabel: '모멘텀',
-    description: '7일 전 대비 음원·화제성·팬덤 평균 점수 변화(50 + 차이×3). 비교할 기록이 없으면 50점',
+    description: '7일 전 대비 음원·화제성·팬덤·음반 평균 점수 변화(50 + 차이×3). 비교할 기록이 없으면 50점',
     source: 'FANDEX 계산',
     coefficient: 1.0,
     penalty: false,

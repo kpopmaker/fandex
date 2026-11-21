@@ -20,6 +20,7 @@ import {
   fanFloat,
   fandomScore,
   musicScore,
+  albumScore,
   newsScore,
   riskScore,
   withMinimum,
@@ -37,8 +38,10 @@ import {
   type LatestFile,
   type NewsHeadline,
   type RunReport,
+  type AlbumPick,
   MARKET_DATA_VERSION,
 } from '../../lib/market/dataFiles';
+import type { AlbumHistoryFile } from '../../lib/market/albumHistoryFile';
 
 type Group = (typeof universeFile.groups)[number];
 const GROUPS: Group[] = universeFile.groups;
@@ -809,6 +812,70 @@ async function loadMelonWeeks(): Promise<Map<number, MelonWeek> | null> {
   }
 }
 
+// ─────────────────────── 써클차트 초동 기록(circle-archive 브랜치) ───────────────────────
+
+type AlbumRelease = { day: number; first: number; title: string; versions: number };
+let albumReleases: Map<string, AlbumRelease[]> | null = null;
+
+async function loadAlbumReleases(): Promise<void> {
+  try {
+    const url =
+      process.env.FANDEX_ALBUM_HISTORY_URL ??
+      'https://raw.githubusercontent.com/kpopmaker/fandex/circle-archive/album-history.json.gz';
+    const response = await fetch(url, { signal: AbortSignal.timeout(30_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const file = JSON.parse(gunzipSync(Buffer.from(await response.arrayBuffer())).toString('utf8')) as AlbumHistoryFile;
+    if (file.version !== 'album-history-v1') throw new Error(`version ${file.version}`);
+    const byId = new Map<string, AlbumRelease[]>();
+    for (const [id, group] of Object.entries(file.groups)) {
+      const list = group.releases
+        .map(([date, first, title, versions]) => ({
+          day: kstDay(Date.parse(`${date}T12:00:00+09:00`)),
+          first,
+          title,
+          versions,
+        }))
+        .filter((release) => Number.isFinite(release.day) && release.first > 0);
+      if (list.length) byId.set(id, list);
+    }
+    albumReleases = byId;
+    report.sources.circle = { status: 'ok', detail: `${byId.size}팀 / ${file.weekCount}주 (${file.from}~${file.to})` };
+  } catch (error) {
+    albumReleases = null;
+    report.sources.circle = { status: 'skipped', detail: (error as Error).message.slice(0, 120) };
+  }
+}
+
+/**
+ * 그 날 기준으로 음반 점수가 가장 큰 발매를 고른다.
+ * '가장 최근'이 아니라 '가장 큰 기여'로 고르는 이유는, 본 앨범 뒤에 나오는 특별판·재발매가
+ * 몇백 장으로 차트에 다시 들어와 본 앨범을 덮어버리기 때문이다(에스파 LEMONADE Nemo판 8,287장).
+ */
+function pickAlbum(id: string, day: number): (AlbumRelease & { days: number; score: number }) | null {
+  const list = albumReleases?.get(id);
+  if (!list) return null;
+  let best: (AlbumRelease & { days: number; score: number }) | null = null;
+  for (const release of list) {
+    if (release.day > day) continue;
+    const days = day - release.day;
+    const score = albumScore(release.first, days);
+    if (score > 0 && (!best || score > best.score)) best = { ...release, days, score };
+  }
+  return best;
+}
+
+/** latest.json에 넣을 음반 근거(더보기에서 어떤 앨범 때문인지 보여준다) */
+function albumPick(id: string): AlbumPick | undefined {
+  const best = pickAlbum(id, kstDay(NOW));
+  if (!best) return undefined;
+  return { first: best.first, date: compactDate(best.day), title: best.title, versions: best.versions, days: best.days };
+}
+
+/** 날짜 번호 → YYYY-MM-DD(한국 시간) */
+function compactDate(day: number): string {
+  return new Date(day * 86_400_000).toISOString().slice(0, 10);
+}
+
 /** 그 날이 속한 주의 월요일 날짜 번호(1970-01-01 목요일 = 0) */
 function mondayOf(day: number): number {
   return day - ((day + 3) % 7);
@@ -938,6 +1005,7 @@ function liveMetrics(id: string): Metrics {
     viewsM: viewsOf(id) ? Math.round(viewsOf(id)! / 1_000_000) : null,
     listenersK: listeners ? Math.round(listeners / 1000) : null,
     subscribersK: subscribers ? Math.round(subscribers / 1000) : null,
+    albumFirstK: pickAlbum(id, kstDay(NOW)) ? Math.round(pickAlbum(id, kstDay(NOW))!.first / 1000) : null,
   };
 }
 
@@ -994,6 +1062,7 @@ function computeRaw(): Record<string, RawScores> {
       comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS)),
       growthMomentum: 50,
       riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS), newsMonth),
+      albumSales: pickAlbum(group.id, kstDay(NOW))?.score ?? 0,
     };
     raw.growthMomentum = momentumScore(raw, baseline ? rawAt(baseline, group.id) : null);
     result[group.id] = withMinimum(raw);
@@ -1173,6 +1242,7 @@ async function backfillDaily(): Promise<void> {
         viewsM: viewsOf(group.id) ? Math.round(viewsOf(group.id)! / 1_000_000) : null,
         listenersK: listenersK(group.id),
         subscribersK: subscribersK(group.id),
+        albumFirstK: pickAlbum(group.id, day) ? Math.round(pickAlbum(group.id, day)!.first / 1000) : null,
       };
       const newsMonth = windowNews(group.id, dayIndex, SHORT_DAYS);
       const comebackMonth = countTagged(group.id, 'c', SHORT_DAYS, at);
@@ -1191,6 +1261,7 @@ async function backfillDaily(): Promise<void> {
         comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS, at)),
         growthMomentum: 50,
         riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS, at), newsMonth),
+        albumSales: pickAlbum(group.id, day)?.score ?? 0,
       };
       const weekAgo = rawsByDay[dayIndex - 7]?.[group.id] ?? null;
       raw.growthMomentum = momentumScore(raw, weekAgo);
@@ -1232,7 +1303,14 @@ async function backfillDaily(): Promise<void> {
 }
 
 async function main() {
-  await Promise.all([refreshNews(), refreshChart(), refreshLastfm(), refreshYoutube(), loadMelonWeeks()]);
+  await Promise.all([
+    refreshNews(),
+    refreshChart(),
+    refreshLastfm(),
+    refreshYoutube(),
+    loadMelonWeeks(),
+    loadAlbumReleases(),
+  ]);
 
   // 첫 기록은 지수 기준(1,000)이 되므로, 뉴스·차트·Last.fm이 모두 있어야만 만든다.
   if (state.divisor === null && (!state.news || !state.lastfm || !state.chart || (YOUTUBE_KEY && !state.youtube))) {
@@ -1294,6 +1372,7 @@ async function main() {
             comeback: state.examples?.[group.id]?.c ?? [],
             risk: state.examples?.[group.id]?.r ?? [],
           },
+          album: albumPick(group.id),
         },
       ]),
     ),

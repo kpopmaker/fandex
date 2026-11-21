@@ -3,6 +3,7 @@
 
 import type { LatestGroup, MetricId, NewsHeadline, NewsStory } from './dataFiles';
 import {
+  ALBUM_DECAY_DAYS,
   OFF_CHART_CAP,
   OFF_CHART_SHARE,
   RISK_PRIOR_ARTICLES,
@@ -224,6 +225,39 @@ export function explainVariable(input: ExplainInput): VariableDetail {
         note: input.weekAgoBackfilled
           ? '과거 복원 구간은 청취자·구독자 과거 기록이 없어 현재 값을 써서, 이 기간에는 변화가 없어요.'
           : '하루 1번 갱신돼요.',
+      };
+    }
+    case 'albumSales': {
+      const album = group.album;
+      if (!album) {
+        return {
+          headline: `최근 써클차트 앨범 차트에 새로 든 앨범이 없어요. 음반 점수는 종합 점수 계산에서 빠져요.`,
+          causes: [],
+          change: changeSentence(id, weight, rawDelta),
+          method: [
+            `초동판매량(발매 첫 주, 버전 합산)이 ${bigNumber(SCORE_BAND.firstWeek[0])}장이면 15점, ${bigNumber(SCORE_BAND.firstWeek[1])}장이면 88점(로그 눈금, 넘으면 더 높아요).`,
+            `발매 후 지난 날수만큼 옅어져요(${ALBUM_DECAY_DAYS}일에 약 37%). 공백기가 길어질수록 앨범 효과가 줄어드는 것을 그대로 담았어요.`,
+          ],
+          note: '써클차트는 주 1회 갱신돼요.',
+        };
+      }
+      const months = Math.round((album.days / 30) * 10) / 10;
+      return {
+        headline: `${quote(album.title, 28)} 초동 ${bigNumber(album.first)}장이 음반 점수가 됐어요. 발매 ${album.days}일 전이라 ${Math.round(Math.exp(-album.days / ALBUM_DECAY_DAYS) * 100)}%만 반영돼요.`,
+        causesTitle: '점수에 쓰인 발매',
+        causes: [
+          {
+            title: album.title,
+            meta: `${bigNumber(album.first)}장${album.versions > 1 ? ` (${album.versions}개 버전 합산)` : ''}`,
+            tag: `${album.date} · ${months}개월 전`,
+          },
+        ],
+        change: changeSentence(id, weight, rawDelta),
+        method: [
+          `초동판매량(발매 첫 주, 버전 합산)이 ${bigNumber(SCORE_BAND.firstWeek[0])}장이면 15점, ${bigNumber(SCORE_BAND.firstWeek[1])}장이면 88점(로그 눈금, 넘으면 더 높아요).`,
+          `발매 후 지난 날수만큼 옅어져요(${ALBUM_DECAY_DAYS}일에 약 37%). 발매가 여러 번이면 지금 점수가 가장 높은 발매를 써요 — 본 앨범 뒤에 나오는 특별판이 덮지 않게 하려는 거예요.`,
+        ],
+        note: '써클차트 주간 앨범 차트, 주 1회 갱신돼요.',
       };
     }
     case 'brandFit':

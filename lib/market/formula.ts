@@ -13,6 +13,8 @@ export const VARIABLE_ORDER: readonly VariableId[] = [
   'comebackActivity',
   'growthMomentum',
   'riskAdjustment',
+  // 뒤에 붙인다 — 앞 순서를 바꾸면 저장된 기록을 못 읽는다.
+  'albumSales',
 ];
 
 /** 0 아래만 막는다. 원점수에는 위쪽 한계(100점)가 없다(2026-11-08 사용자 요청). */
@@ -72,6 +74,8 @@ export const SCORE_BAND = {
   listeners: [3_000, 5_000_000],
   /** 유튜브 구독자 */
   subscribers: [10_000, 20_000_000],
+  /** 써클차트 초동판매량(버전 합산) */
+  firstWeek: [1_000, 1_000_000],
 } as const;
 
 /**
@@ -123,6 +127,21 @@ export function musicScore(chartPoints: number, playcount: number | null, views:
   const consumption = consumptionScore(playcount, views);
   const floor = consumption > 0 ? Math.min(OFF_CHART_CAP, OFF_CHART_SHARE * consumption) : 0;
   return Math.max(chartScore(chartPoints), floor);
+}
+
+/**
+ * 음반 점수가 반으로 줄어드는 데 걸리는 시간을 정하는 값(망각곡선).
+ * 1개월 후 0.85, 3개월 후 0.61, 6개월 후 0.37, 1년 후 0.13이 된다.
+ * 공백기가 길어질수록 앨범 효과가 옅어지는 것을 그대로 담는다.
+ */
+export const ALBUM_DECAY_DAYS = 180;
+
+/** 음반: 초동판매량(버전 합산)에 발매 후 지난 날수만큼 망각계수를 곱한다. */
+export function albumScore(firstWeek: number | null, daysSinceRelease: number): number {
+  const [low, high] = SCORE_BAND.firstWeek;
+  const base = band(firstWeek, low, high);
+  if (base <= 0) return 0;
+  return base * Math.exp(-Math.max(0, daysSinceRelease) / ALBUM_DECAY_DAYS);
 }
 
 /** 화제성이 활동·브랜드 기사 비중만큼 더 받는 폭(최대 1.25배) */
@@ -217,7 +236,7 @@ export function fanFloat(listeners: number | null, subscribers: number | null = 
   return Math.max(people, 10_000) / 100_000;
 }
 
-export const MOMENTUM_SOURCES: readonly VariableId[] = ['musicAlbum', 'newsIssue', 'snsFandom'];
+export const MOMENTUM_SOURCES: readonly VariableId[] = ['musicAlbum', 'newsIssue', 'snsFandom', 'albumSales'];
 
 /** 모멘텀이 1주 변화에 반응하는 폭(클수록 넓게 퍼진다) */
 export const MOMENTUM_GAIN = 3;
