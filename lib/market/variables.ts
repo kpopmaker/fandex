@@ -1,6 +1,8 @@
-// FANDEX 7개 변수 정의.
-// 계수는 docs/fandex-v1-scoring-formula.md 의 v1 계수를 그대로 사용한다.
-// `enabled` 가 false 인 변수는 화면에 노출하지 않는다. 실데이터가 연결된 변수만 true 로 둔다.
+// FANDEX 변수 정의.
+// 2026-11-21 새 방정식: 변수 간 중복을 없애고 6개로 줄였다. 계수와 기준점은 lib/market/formula.ts 참고.
+// `enabled` 가 false 인 변수는 화면에 노출하지 않고 종합 점수에도 들어가지 않는다.
+// 브랜드·활동은 뉴스와 상관 +0.9로 사실상 같은 변수여서 화제성의 가중치로 흡수했다.
+// 원점수는 '더보기'의 근거로 계속 계산해 저장한다.
 
 export type VariableId =
   | 'musicAlbum'
@@ -26,31 +28,31 @@ export type VariableDefinition = {
 export const VARIABLES: readonly VariableDefinition[] = [
   {
     id: 'musicAlbum',
-    label: '음원/음반',
+    label: '음원',
     shortLabel: '음원',
-    description: 'Last.fm 누적 재생·유튜브 누적 조회 점수 + 멜론 TOP100 차트 점수×0.6. 차트 밖 그룹도 들은 만큼 점수가 붙는다',
+    description: '멜론 TOP100 점수 합(1위 100점~100위 1점). 차트 밖 그룹은 누적 재생·조회 점수의 45%를 바닥으로 받되 35점을 넘지 않는다',
     source: '멜론 TOP100(1시간마다), Last.fm·YouTube(하루 1번)',
-    coefficient: 1.25,
+    coefficient: 1.2,
     penalty: false,
     enabled: true,
   },
   {
     id: 'newsIssue',
-    label: '뉴스/이슈',
-    shortLabel: '뉴스',
-    description: '하루 평균 관련 기사 수(최근 7일 45% + 30일 35% + 90일 20%). 하루 0.2건 15점 ~ 18건 88점',
+    label: '화제성',
+    shortLabel: '화제성',
+    description: '하루 평균 관련 기사 수(최근 7일 45% + 30일 35% + 90일 20%). 하루 0.2건 15점 ~ 18건 88점. 그중 컴백·공연·광고 기사 비중만큼 최대 1.25배 가중',
     source: '네이버 뉴스 검색, 30분마다',
-    coefficient: 1.1,
+    coefficient: 1.0,
     penalty: false,
     enabled: true,
   },
   {
     id: 'snsFandom',
-    label: 'SNS/팬덤',
-    shortLabel: 'SNS',
-    description: '전 세계 음악 청취자 수와 공식 유튜브 구독자 수(둘의 평균, 청취자 3천 명·구독자 1만 명부터 점수)',
+    label: '팬덤',
+    shortLabel: '팬덤',
+    description: '전 세계 음악 청취자 수·누적 재생과 공식 유튜브 구독자 수·누적 조회(있는 것들의 평균)',
     source: 'Last.fm, YouTube Data API, 하루 1번',
-    coefficient: 1.1,
+    coefficient: 1.3,
     penalty: false,
     enabled: true,
   },
@@ -62,7 +64,8 @@ export const VARIABLES: readonly VariableDefinition[] = [
     source: '네이버 뉴스 검색',
     coefficient: 0.9,
     penalty: false,
-    enabled: true,
+    // 2026-11-21: 뉴스와 상관 +0.90이라 화제성 가중치로 흡수했다. 원점수는 더보기 근거로만 쓴다.
+    enabled: false,
   },
   {
     id: 'comebackActivity',
@@ -72,13 +75,14 @@ export const VARIABLES: readonly VariableDefinition[] = [
     source: '네이버 뉴스 검색',
     coefficient: 0.8,
     penalty: false,
-    enabled: true,
+    // 2026-11-21: 뉴스와 상관 +0.92라 화제성 가중치로 흡수했다. 원점수는 더보기 근거로만 쓴다.
+    enabled: false,
   },
   {
     id: 'growthMomentum',
     label: '성장 모멘텀',
     shortLabel: '모멘텀',
-    description: '7일 전 대비 음원·뉴스·SNS·브랜드 평균 점수 변화(50 + 차이×3). 비교할 기록이 없으면 50점',
+    description: '7일 전 대비 음원·화제성·팬덤 평균 점수 변화(50 + 차이×3). 비교할 기록이 없으면 50점',
     source: 'FANDEX 계산',
     coefficient: 1.0,
     penalty: false,
@@ -88,9 +92,9 @@ export const VARIABLES: readonly VariableDefinition[] = [
     id: 'riskAdjustment',
     label: '조정 신호',
     shortLabel: '조정',
-    description: '논란·사과·소송·부상·불참 등 부정 키워드 기사 수(30일 60% + 90일 40%). 1건 15점 ~ 60건 88점, 높을수록 가격에서 차감',
+    description: '전체 기사 중 논란·사과·소송·부상·불참 등 부정 키워드 기사의 비율. 1% 15점 ~ 20% 88점, 높을수록 가격에서 차감. 기사가 적은 그룹은 전체 평균인 2% 쪽으로 보정',
     source: '네이버 뉴스 검색',
-    coefficient: 1.4,
+    coefficient: 1.0,
     penalty: true,
     enabled: true,
   },

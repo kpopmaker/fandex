@@ -21,8 +21,8 @@ import {
   fandomScore,
   musicScore,
   newsScore,
+  riskScore,
   withMinimum,
-
   momentumScore,
   packRaw,
   priceFromRaw,
@@ -78,7 +78,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 13;
+const DATA_EPOCH = 14;
 
 type State = {
   version: string;
@@ -977,14 +977,23 @@ function computeRaw(): Record<string, RawScores> {
   const baseline = baselineEntry();
   const result: Record<string, RawScores> = {};
   for (const group of GROUPS) {
+    const newsMonth = newsWindowCount(group.id, SHORT_DAYS);
+    const comebackMonth = countTagged(group.id, 'c', SHORT_DAYS);
+    const brandMonth = countTagged(group.id, 'b', SHORT_DAYS);
     const raw: RawScores = {
       musicAlbum: musicScore(state.chart?.pointsById[group.id] ?? 0, playcountOf(group.id), viewsOf(group.id)),
-      newsIssue: newsScore(newsWeekCount(group.id), newsWindowCount(group.id, 30), newsWindowCount(group.id, LONG_DAYS)),
-      snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
-      brandFit: articleScore('brand', countTagged(group.id, 'b', SHORT_DAYS), countTagged(group.id, 'b', LONG_DAYS)),
-      comebackActivity: articleScore('comeback', countTagged(group.id, 'c', SHORT_DAYS), countTagged(group.id, 'c', LONG_DAYS)),
+      newsIssue: newsScore(
+        newsWeekCount(group.id),
+        newsMonth,
+        newsWindowCount(group.id, LONG_DAYS),
+        comebackMonth,
+        brandMonth,
+      ),
+      snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id), playcountOf(group.id), viewsOf(group.id)),
+      brandFit: articleScore('brand', brandMonth, countTagged(group.id, 'b', LONG_DAYS)),
+      comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS)),
       growthMomentum: 50,
-      riskAdjustment: articleScore('risk', countTagged(group.id, 'r', SHORT_DAYS), countTagged(group.id, 'r', LONG_DAYS)),
+      riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS), newsMonth),
     };
     raw.growthMomentum = momentumScore(raw, baseline ? rawAt(baseline, group.id) : null);
     result[group.id] = withMinimum(raw);
@@ -1165,14 +1174,23 @@ async function backfillDaily(): Promise<void> {
         listenersK: listenersK(group.id),
         subscribersK: subscribersK(group.id),
       };
+      const newsMonth = windowNews(group.id, dayIndex, SHORT_DAYS);
+      const comebackMonth = countTagged(group.id, 'c', SHORT_DAYS, at);
+      const brandMonth = countTagged(group.id, 'b', SHORT_DAYS, at);
       const raw: RawScores = {
         musicAlbum: musicScore(chart?.[group.id] ?? 0, playcountOf(group.id), viewsOf(group.id)),
-        newsIssue: newsScore(weekNews(group.id, dayIndex), windowNews(group.id, dayIndex, 30), windowNews(group.id, dayIndex, LONG_DAYS)),
-        snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id)),
-        brandFit: articleScore('brand', countTagged(group.id, 'b', SHORT_DAYS, at), countTagged(group.id, 'b', LONG_DAYS, at)),
-        comebackActivity: articleScore('comeback', countTagged(group.id, 'c', SHORT_DAYS, at), countTagged(group.id, 'c', LONG_DAYS, at)),
+        newsIssue: newsScore(
+          weekNews(group.id, dayIndex),
+          newsMonth,
+          windowNews(group.id, dayIndex, LONG_DAYS),
+          comebackMonth,
+          brandMonth,
+        ),
+        snsFandom: fandomScore(listenersOf(group.id), subscribersOf(group.id), playcountOf(group.id), viewsOf(group.id)),
+        brandFit: articleScore('brand', brandMonth, countTagged(group.id, 'b', LONG_DAYS, at)),
+        comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS, at)),
         growthMomentum: 50,
-        riskAdjustment: articleScore('risk', countTagged(group.id, 'r', SHORT_DAYS, at), countTagged(group.id, 'r', LONG_DAYS, at)),
+        riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS, at), newsMonth),
       };
       const weekAgo = rawsByDay[dayIndex - 7]?.[group.id] ?? null;
       raw.growthMomentum = momentumScore(raw, weekAgo);

@@ -16,10 +16,10 @@ import {
 import { explainVariable, type Metrics, type VariableDetail } from './explain';
 import { compactToTime, dayNumberToTime, loadMusicHistory } from './musicHistory';
 import type { MusicHistoryFile } from './musicHistoryFile';
-import { scoreFromRaw, priceFromScore, unpackRaw } from './formula';
+import { positiveWeight, scoreFromRaw, priceFromScore, unpackRaw } from './formula';
 import { DAY_MS, PERIODS } from './time';
 import type { PeriodId, RawVariablePoints, SeriesPoint, VariableSeriesPoint } from './types';
-import { ENABLED_VARIABLES, POSITIVE_COEFFICIENT_SUM, type VariableId } from './variables';
+import { ENABLED_VARIABLES, type VariableId } from './variables';
 
 export type ChangeSet = Record<'1D' | '1W' | '1M', number | null>;
 
@@ -376,7 +376,7 @@ export async function getArtistDetailModel(artistId: string): Promise<ArtistDeta
       change1W: quote.rawChange1W ? quote.rawChange1W[variable.id] : null,
       contribution:
         ((variable.penalty ? -1 : 1) * quote.raw[variable.id] * variable.coefficient) /
-        POSITIVE_COEFFICIENT_SUM,
+        Math.max(1, positiveWeight(quote.raw)),
       rank: ordered.findIndex((item) => item.id === artist.id) + 1,
       basis: basisText(variable.id, group, hasMomentumBase),
       detail: explainVariable({

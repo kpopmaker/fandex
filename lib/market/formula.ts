@@ -1,7 +1,7 @@
 // 수집기(scripts/market/collect.ts)와 사이트가 함께 쓰는 계산식.
 // 여기 숫자를 바꾸면 수집기와 화면이 같이 바뀐다.
 
-import { ENABLED_VARIABLES, POSITIVE_COEFFICIENT_SUM, type VariableId } from './variables';
+import { ENABLED_VARIABLES, type VariableId } from './variables';
 
 export type RawScores = Record<VariableId, number>;
 
@@ -58,8 +58,10 @@ export const SCORE_BAND = {
   brand: [1, 120],
   /** 컴백·발매·공연·방송 출연 기사 수(30일 환산) */
   comeback: [3, 600],
-  /** 부정 키워드 기사 수(30일 환산) */
+  /** 부정 키워드 기사 수(30일 환산). 2026-11-21부터 조정 신호는 riskRate를 쓴다 */
   risk: [1, 60],
+  /** 전체 기사 중 부정 기사 비율(%) */
+  riskRate: [1, 20],
   /** 멜론 TOP100 점수 합(1위 100점 … 100위 1점) */
   chartPoints: [5, 900],
   /** Last.fm 누적 재생 */
@@ -72,8 +74,14 @@ export const SCORE_BAND = {
   subscribers: [10_000, 20_000_000],
 } as const;
 
-/** 멜론 TOP100에 든 만큼 더해지는 점수의 비중. 차트 밖 그룹은 누적 소비만으로 점수가 매겨진다. */
-export const CHART_WEIGHT = 0.6;
+/**
+ * 차트 밖 그룹의 음원 점수 바닥(2026-11-21 새 방정식).
+ * 예전에는 누적 재생·조회를 음원에 그대로 더해서 음원과 팬덤의 상관이 +0.87이었다 — 사실상 같은 변수였다.
+ * 이제 음원은 멜론 차트가 중심이고, 차트에 없는 그룹만 누적 소비 점수의 일부를 바닥으로 받는다.
+ * 상한이 있어서 '차트에 없다'는 사실 자체가 점수에 남는다.
+ */
+export const OFF_CHART_CAP = 35;
+export const OFF_CHART_SHARE = 0.45;
 
 /** 최근 7일·30일·90일 기사 수를 섞은 하루 평균. 최근 소식을 크게 보되 한동안 조용한 그룹도 과거 기사가 반영된다. */
 export function newsDailyAverage(week: number, month: number, quarter: number): number {
@@ -110,15 +118,58 @@ export function consumptionScore(playcount: number | null, views: number | null)
   return meanOfPresent([playcount ? playcountScore(playcount) : null, views ? viewsScore(views) : null]);
 }
 
-/** 음원/음반: 누적 소비 점수 + 멜론 TOP100 차트 점수×0.6 */
+/** 음원: 멜론 차트 점수. 차트 밖 그룹은 누적 소비 점수의 45%를 바닥으로 받되 35점을 넘지 않는다. */
 export function musicScore(chartPoints: number, playcount: number | null, views: number | null): number {
-  return consumptionScore(playcount, views) + CHART_WEIGHT * chartScore(chartPoints);
+  const consumption = consumptionScore(playcount, views);
+  const floor = consumption > 0 ? Math.min(OFF_CHART_CAP, OFF_CHART_SHARE * consumption) : 0;
+  return Math.max(chartScore(chartPoints), floor);
 }
 
-/** 뉴스/이슈: 7일·30일·90일을 섞은 하루 평균 기사 수 */
-export function newsScore(week: number, month: number, quarter: number): number {
+/** 화제성이 활동·브랜드 기사 비중만큼 더 받는 폭(최대 1.25배) */
+export const NEWS_ACTIVITY_GAIN = 0.15;
+export const NEWS_BRAND_GAIN = 0.1;
+/** 비중을 낼 때 기사 수가 이보다 적으면 이 값으로 나눈다(기사 몇 건으로 비중이 1이 되는 것을 막는다) */
+export const NEWS_SHARE_FLOOR = 30;
+
+/**
+ * 화제성: 7일·30일·90일을 섞은 하루 평균 기사 수에, 그중 활동·브랜드 기사 비중만큼 가중한다.
+ * 기사 수만 세면 컴백 기사와 시상식 명단 언급이 같은 가치가 되므로,
+ * 예전에 변수 하나씩 차지하던 브랜드·활동을 여기로 흡수했다(둘 다 뉴스와 상관 +0.9).
+ */
+export function newsScore(
+  week: number,
+  month: number,
+  quarter: number,
+  comebackMonth = 0,
+  brandMonth = 0,
+): number {
   const [low, high] = SCORE_BAND.newsDaily;
-  return band(newsDailyAverage(week, month, quarter), low, high);
+  const base = band(newsDailyAverage(week, month, quarter), low, high);
+  if (base <= 0) return 0;
+  const denominator = Math.max(NEWS_SHARE_FLOOR, month);
+  const activity = Math.min(1, comebackMonth / denominator);
+  const brand = Math.min(1, brandMonth / denominator);
+  return base * (1 + NEWS_ACTIVITY_GAIN * activity + NEWS_BRAND_GAIN * brand);
+}
+
+/** 기사가 적은 그룹을 전체 평균 쪽으로 끌어당기는 보정(평균이 2%인 가상의 기사 30건) */
+export const RISK_PRIOR_RATE = 0.02;
+export const RISK_PRIOR_ARTICLES = 30;
+
+/** 전체 기사 중 부정 기사 비율(0~1) */
+export function riskRate(riskMonth: number, newsMonth: number): number {
+  const prior = RISK_PRIOR_RATE * RISK_PRIOR_ARTICLES;
+  return (Math.max(0, riskMonth) + prior) / (Math.max(0, newsMonth) + RISK_PRIOR_ARTICLES);
+}
+
+/**
+ * 조정 신호: 부정 기사 '비율'(2026-11-21 변경).
+ * 건수로 세면 기사가 많은 팀이 자동으로 불리했다 — 리센느는 부정 8.8%인데 112.9점,
+ * 몬스타엑스는 57.3%인데 103.3점이었다.
+ */
+export function riskScore(riskMonth: number, newsMonth: number): number {
+  const [low, high] = SCORE_BAND.riskRate;
+  return band(riskRate(riskMonth, newsMonth) * 100, low, high);
 }
 
 /** 브랜드·활동·조정: 30일과 90일을 섞은 기사 수 */
@@ -137,9 +188,23 @@ export function subscriberScore(subscribers: number | null): number {
   return band(subscribers, SCORE_BAND.subscribers[0], SCORE_BAND.subscribers[1], 5, 100);
 }
 
-/** SNS/팬덤: Last.fm 청취자와 유튜브 구독자 점수의 평균(한쪽만 있으면 그 점수) */
-export function fandomScore(listeners: number | null, subscribers: number | null): number {
-  return meanOfPresent([listeners ? listenerScore(listeners) : null, subscribers ? subscriberScore(subscribers) : null]);
+/**
+ * 팬덤: Last.fm 청취자·누적 재생과 유튜브 구독자·누적 조회 점수의 평균(있는 것만).
+ * 누적 소비(재생·조회)와 청취자·구독자의 상관이 +0.98이라 따로 변수로 둘 이유가 없어
+ * 2026-11-21에 하나로 합쳤다.
+ */
+export function fandomScore(
+  listeners: number | null,
+  subscribers: number | null,
+  playcount: number | null = null,
+  views: number | null = null,
+): number {
+  return meanOfPresent([
+    listeners ? listenerScore(listeners) : null,
+    subscribers ? subscriberScore(subscribers) : null,
+    playcount ? playcountScore(playcount) : null,
+    views ? viewsScore(views) : null,
+  ]);
 }
 
 /**
@@ -152,38 +217,65 @@ export function fanFloat(listeners: number | null, subscribers: number | null = 
   return Math.max(people, 10_000) / 100_000;
 }
 
-export const MOMENTUM_SOURCES: readonly VariableId[] = [
-  'musicAlbum',
-  'newsIssue',
-  'snsFandom',
-  'brandFit',
-];
+export const MOMENTUM_SOURCES: readonly VariableId[] = ['musicAlbum', 'newsIssue', 'snsFandom'];
 
 /** 모멘텀이 1주 변화에 반응하는 폭(클수록 넓게 퍼진다) */
 export const MOMENTUM_GAIN = 3;
 
-/** 7일 전 대비 상승 속도(뉴스는 이미 7일 평균이라 하루 기사 몇 건에 흔들리지 않는다). 비교할 과거 값이 없으면 50(중립). */
+/**
+ * 7일 전 대비 상승 속도(뉴스는 이미 7일 평균이라 하루 기사 몇 건에 흔들리지 않는다).
+ * 비교할 과거 값이 없거나 양쪽에 다 있는 변수가 없으면 50(중립).
+ * 한쪽만 0(데이터 없음)인 변수는 빼야 한다 — 값이 생긴 날 모멘텀이 튀기 때문이다.
+ */
 export function momentumScore(now: RawScores, before: RawScores | null): number {
   if (!before) return 50;
-  const avg = (scores: RawScores) =>
-    MOMENTUM_SOURCES.reduce((sum, id) => sum + scores[id], 0) / MOMENTUM_SOURCES.length;
+  const ids = MOMENTUM_SOURCES.filter((id) => now[id] > 0 && before[id] > 0);
+  if (!ids.length) return 50;
+  const avg = (scores: RawScores) => ids.reduce((sum, id) => sum + scores[id], 0) / ids.length;
   return nonNegative(50 + (avg(now) - avg(before)) * MOMENTUM_GAIN);
 }
 
-/** 모든 변수에 최소 점수(MIN_RAW)를 적용한다. */
+/**
+ * 기록이 있는 변수에만 최소 점수(MIN_RAW)를 준다.
+ * 0은 '기록 없음'이라 그대로 두고, 종합 점수의 평균에서 빠진다(2026-11-21).
+ * 없는 숫자를 0점으로 세면 데이터가 적은 그룹이 벌점을 받는다.
+ */
 export function withMinimum(raw: RawScores): RawScores {
   const result = { ...raw };
-  for (const id of VARIABLE_ORDER) result[id] = Math.max(MIN_RAW, Number.isFinite(raw[id]) ? raw[id] : 0);
+  for (const id of VARIABLE_ORDER) {
+    const value = Number.isFinite(raw[id]) ? raw[id] : 0;
+    result[id] = value > 0 ? Math.max(MIN_RAW, value) : 0;
+  }
   return result;
 }
 
+/**
+ * 중위 그룹이 50점(가격 100)에 오도록 맞추는 상수. 한 번 정해 박아 두고 매일 다시 계산하지 않는다.
+ * 2026-11-21 188팀 분포에서 보정 전 중위가 35.0점이었다(양수 계수 합 4.5 기준).
+ * 변수를 더하거나 계수를 바꾸면 다시 잡아야 한다 — 써클차트 초동(음반)을 넣으면 다시 측정한다.
+ */
+export const SCORE_CALIBRATION = 15;
+
+/** 그 그룹에 기록이 있는 양수 변수들의 계수 합(종합 점수의 분모) */
+export function positiveWeight(raw: RawScores): number {
+  return ENABLED_VARIABLES.filter((variable) => !variable.penalty && raw[variable.id] > 0).reduce(
+    (sum, variable) => sum + variable.coefficient,
+    0,
+  );
+}
+
 export function scoreFromRaw(raw: RawScores): number {
+  const weight = positiveWeight(raw);
+  if (weight <= 0) return 0;
   let total = 0;
   for (const variable of ENABLED_VARIABLES) {
-    const contribution = raw[variable.id] * variable.coefficient;
-    total += variable.penalty ? -contribution : contribution;
+    if (variable.penalty) {
+      total -= raw[variable.id] * variable.coefficient;
+    } else if (raw[variable.id] > 0) {
+      total += raw[variable.id] * variable.coefficient;
+    }
   }
-  return total / POSITIVE_COEFFICIENT_SUM;
+  return total / weight + SCORE_CALIBRATION;
 }
 
 export function priceFromScore(score: number): number {
