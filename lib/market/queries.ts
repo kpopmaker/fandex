@@ -315,6 +315,7 @@ function latestMetrics(group: LatestGroup): Metrics {
     risk90d: group.risk90d ?? null,
     playcountK: group.playcount ? Math.round(group.playcount / 1000) : null,
     viewsM: group.views ? Math.round(group.views / 1_000_000) : null,
+    albumFirstK: group.album ? Math.round(group.album.first / 1000) : null,
   };
 }
 
@@ -344,6 +345,8 @@ function basisText(id: VariableId, group: LatestGroup, hasMomentumBase: boolean)
       return hasMomentumBase ? '7일 전 대비' : '비교 기록 쌓는 중';
     case 'riskAdjustment':
       return `30일 기사 ${group.risk30d ?? group.risk7d ?? 0}건`;
+    case 'albumSales':
+      return group.album ? `초동 ${compactCount(group.album.first)}장` : '3년간 차트 진입 없음';
   }
 }
 

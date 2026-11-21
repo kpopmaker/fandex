@@ -29,6 +29,8 @@ const VARIABLE_COLORS: Record<VariableId, string> = {
   comebackActivity: '#06b6d4',
   growthMomentum: '#8b5cf6',
   riskAdjustment: '#64748b',
+  // 빨강·파랑은 등락 색이라 변수 선에는 쓰지 않는다.
+  albumSales: '#ec4899',
 };
 
 const GROUP_LABEL = {
