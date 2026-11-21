@@ -1,0 +1,40 @@
+name: circlechart probe
+on:
+  push:
+    branches: ['sitecheck-probe']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch candidate circlechart pages
+        run: |
+          mkdir -p probe-out
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          i=0
+          while IFS='|' read -r label url; do
+            [ -z "$label" ] && continue
+            i=$((i+1))
+            code=$(curl -sL -o "probe-out/$label.html" -w '%{http_code}' --max-time 60 \
+              -A "$UA" -H 'Accept-Language: ko-KR,ko;q=0.9' -H 'Referer: https://circlechart.kr/' \
+              "$url" || echo "curl-exit-$?")
+            size=$(wc -c < "probe-out/$label.html")
+            echo "::notice title=$label::$code ${size}B $url"
+          done <<'LIST'
+          album-week|https://circlechart.kr/page_chart/album.circle?nationGbn=T&termGbn=week&hitYear=2026&targetTime=45
+          album-month|https://circlechart.kr/page_chart/album.circle?nationGbn=T&termGbn=month&hitYear=2026&targetTime=10
+          album-bare|https://circlechart.kr/page_chart/album.circle
+          digital-bare|https://circlechart.kr/page_chart/digital.circle
+          onoff-bare|https://circlechart.kr/page_chart/onoff.circle
+          home|https://circlechart.kr/
+          LIST
+      - name: Keep only what parses as HTML and commit
+        run: |
+          gzip -9 probe-out/*.html
+          git config user.name 'Claude'
+          git config user.email 'noreply@anthropic.com'
+          git add -A probe-out
+          git commit -m 'probe: circlechart raw pages' || exit 0
+          git push origin HEAD:sitecheck-probe
