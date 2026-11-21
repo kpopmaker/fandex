@@ -9,32 +9,41 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch candidate circlechart pages
+      - name: Fetch album sales from the chart API
         run: |
-          mkdir -p probe-out
+          rm -rf probe-out && mkdir -p probe-out
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-          i=0
-          while IFS='|' read -r label url; do
-            [ -z "$label" ] && continue
-            i=$((i+1))
-            code=$(curl -sL -o "probe-out/$label.html" -w '%{http_code}' --max-time 60 \
-              -A "$UA" -H 'Accept-Language: ko-KR,ko;q=0.9' -H 'Referer: https://circlechart.kr/' \
-              "$url" || echo "curl-exit-$?")
-            size=$(wc -c < "probe-out/$label.html")
-            echo "::notice title=$label::$code ${size}B $url"
-          done <<'LIST'
-          album-week|https://circlechart.kr/page_chart/album.circle?nationGbn=T&termGbn=week&hitYear=2026&targetTime=45
-          album-month|https://circlechart.kr/page_chart/album.circle?nationGbn=T&termGbn=month&hitYear=2026&targetTime=10
-          album-bare|https://circlechart.kr/page_chart/album.circle
-          digital-bare|https://circlechart.kr/page_chart/digital.circle
-          onoff-bare|https://circlechart.kr/page_chart/onoff.circle
-          home|https://circlechart.kr/
-          LIST
-      - name: Keep only what parses as HTML and commit
+          api() {
+            curl -s -o "probe-out/$1.json" -w '%{http_code} %{size_download}' --max-time 60 \
+              -A "$UA" -H 'Accept-Language: ko-KR,ko;q=0.9' \
+              -H 'Referer: https://circlechart.kr/page_chart/album.circle' \
+              -H 'X-Requested-With: XMLHttpRequest' \
+              --data-urlencode "nationGbn=T" \
+              --data-urlencode "termGbn=$2" \
+              --data-urlencode "hitYear=$3" \
+              --data-urlencode "targetTime=$4" \
+              --data-urlencode "yearTime=3" \
+              --data-urlencode "curUrl=circlechart.kr/page_chart/album.circle?" \
+              "https://circlechart.kr/data/api/chart/album"
+          }
+          for w in $(seq 30 46); do
+            echo "::notice title=album-week-$w::$(api "album-w2026-$w" week 2026 "$w")"
+            sleep 1
+          done
+          for m in 8 9 10; do
+            echo "::notice title=album-month-$m::$(api "album-m2026-$m" month 2026 "$m")"
+            sleep 1
+          done
+          # 디지털(온·오프 통합) 차트 화면 — API 경로를 찾기 위해 HTML도 받는다
+          curl -s -o probe-out/onoff.html --max-time 60 -A "$UA" \
+            -H 'Referer: https://circlechart.kr/' \
+            'https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL' || true
+          echo "::notice title=onoff-html::$(wc -c < probe-out/onoff.html)"
+      - name: Commit raw results
         run: |
-          gzip -9 probe-out/*.html
+          gzip -9 probe-out/* || true
           git config user.name 'Claude'
           git config user.email 'noreply@anthropic.com'
           git add -A probe-out
-          git commit -m 'probe: circlechart raw pages' || exit 0
+          git commit -m 'probe: circlechart album sales api' || exit 0
           git push origin HEAD:sitecheck-probe
