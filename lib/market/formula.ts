@@ -270,10 +270,10 @@ export function withMinimum(raw: RawScores): RawScores {
 
 /**
  * 중위 그룹이 50점(가격 100)에 오도록 맞추는 상수. 한 번 정해 박아 두고 매일 다시 계산하지 않는다.
- * 2026-11-21 188팀 분포에서 보정 전 중위가 35.0점이었다(양수 계수 합 4.5 기준).
- * 변수를 더하거나 계수를 바꾸면 다시 잡아야 한다 — 써클차트 초동(음반)을 넣으면 다시 측정한다.
+ * 2026-11-22 음반을 넣은 188팀 분포에서 보정 전 중위가 32.4점이었다(양수 계수 합 5.5 기준).
+ * 변수를 더하거나 계수를 바꾸면 다시 잡아야 한다.
  */
-export const SCORE_CALIBRATION = 15;
+export const SCORE_CALIBRATION = 17.6;
 
 /** 그 그룹에 기록이 있는 양수 변수들의 계수 합(종합 점수의 분모) */
 export function positiveWeight(raw: RawScores): number {

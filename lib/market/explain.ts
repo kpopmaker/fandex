@@ -231,7 +231,7 @@ export function explainVariable(input: ExplainInput): VariableDetail {
       const album = group.album;
       if (!album) {
         return {
-          headline: `최근 써클차트 앨범 차트에 새로 든 앨범이 없어요. 음반 점수는 종합 점수 계산에서 빠져요.`,
+          headline: `최근 3년 동안 써클차트 앨범 차트에 새로 든 앨범이 없어요. ${MINIMUM_NOTE}`,
           causes: [],
           change: changeSentence(id, weight, rawDelta),
           method: [

@@ -21,6 +21,7 @@ import {
   fandomScore,
   musicScore,
   albumScore,
+  MIN_RAW,
   newsScore,
   riskScore,
   withMinimum,
@@ -81,7 +82,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 14;
+const DATA_EPOCH = 15;
 
 type State = {
   version: string;
@@ -1062,7 +1063,8 @@ function computeRaw(): Record<string, RawScores> {
       comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS)),
       growthMomentum: 50,
       riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS), newsMonth),
-      albumSales: pickAlbum(group.id, kstDay(NOW))?.score ?? 0,
+      // 아카이브가 3년치를 덮으므로 '차트에 든 앨범 없음'은 모르는 게 아니라 측정된 사실이다 → 최저 1점.
+      albumSales: albumReleases ? (pickAlbum(group.id, kstDay(NOW))?.score ?? MIN_RAW) : 0,
     };
     raw.growthMomentum = momentumScore(raw, baseline ? rawAt(baseline, group.id) : null);
     result[group.id] = withMinimum(raw);
@@ -1261,7 +1263,7 @@ async function backfillDaily(): Promise<void> {
         comebackActivity: articleScore('comeback', comebackMonth, countTagged(group.id, 'c', LONG_DAYS, at)),
         growthMomentum: 50,
         riskAdjustment: riskScore(countTagged(group.id, 'r', SHORT_DAYS, at), newsMonth),
-        albumSales: pickAlbum(group.id, day)?.score ?? 0,
+        albumSales: albumReleases ? (pickAlbum(group.id, day)?.score ?? MIN_RAW) : 0,
       };
       const weekAgo = rawsByDay[dayIndex - 7]?.[group.id] ?? null;
       raw.growthMomentum = momentumScore(raw, weekAgo);
