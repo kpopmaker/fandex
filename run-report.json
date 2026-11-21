@@ -1,0 +1,68 @@
+{
+ "runAt": 1795294828026,
+ "slotTime": 1795294800000,
+ "sources": {
+  "naver": {
+   "status": "cached",
+   "at": 1795293927124
+  },
+  "melon": {
+   "status": "cached",
+   "at": 1795292241875
+  },
+  "youtube": {
+   "status": "cached",
+   "detail": "2026-11-22"
+  },
+  "circle": {
+   "status": "ok",
+   "detail": "165팀 / 160주 (2023-10-22~2026-11-08)"
+  },
+  "lastfm": {
+   "status": "ok",
+   "detail": "2026-11-22",
+   "fetched": 8,
+   "verified": 180,
+   "unverified": [
+    "aen",
+    "nowadays",
+    "tempest",
+    "boystory",
+    "naze",
+    "closeyoureyes",
+    "newbeat",
+    "pow"
+   ],
+   "failureCount": 0
+  }
+ },
+ "notes": [],
+ "summary": {
+  "groups": 188,
+  "kmi": 972.18,
+  "historyRecent": 12,
+  "historyHourly": 4,
+  "historyDaily": 91,
+  "groupsWithNews": 74,
+  "groupsOnChart": 29,
+  "groupsWithListeners": 180,
+  "groupsWithSubscribers": 173,
+  "topNews": [
+   "bigbang:103",
+   "rescene:75",
+   "cortis:71",
+   "bts:66",
+   "ive:46",
+   "tws:40",
+   "enhypen:37",
+   "itzy:34",
+   "illit:31",
+   "txt:29",
+   "viviz:29",
+   "wjsn:27",
+   "alldayproject:21",
+   "ateez:19",
+   "theboyz:18"
+  ]
+ }
+}
