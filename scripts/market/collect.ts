@@ -82,7 +82,7 @@ const SHORT_DAYS = 30;
 const LONG_DAYS = 90;
 
 /** 이 숫자를 올리면 이전 기록을 버리고 새 기준(KMI 1,000)으로 다시 시작한다. */
-const DATA_EPOCH = 15;
+const DATA_EPOCH = 16;
 
 type State = {
   version: string;
@@ -445,7 +445,11 @@ const deepNewsTimes = new Map<string, number[]>();
 
 async function refreshNews(): Promise<void> {
   const age = state.news ? NOW - state.news.at : Infinity;
-  if (age < 25 * 60 * 1000) {
+  // 과거 복원 전(지수 기준점이 없을 때)에는 캐시를 쓰지 않는다.
+  // 2026-11-22: 첫 실행이 멜론 실패로 멈추면서 기사 범위 기록을 지웠는데, 다음 실행이 캐시라 깊게 다시 받지 않았고,
+  // 그 상태로 기준점이 박혀 90일 복원이 통째로 건너뛰어졌다.
+  const needDeep = state.divisor === null && !Object.keys(state.coverageFrom ?? {}).length;
+  if (age < 25 * 60 * 1000 && !needDeep) {
     report.sources.naver = { status: 'cached', at: state.news!.at };
     return;
   }
