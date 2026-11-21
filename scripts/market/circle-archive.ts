@@ -83,14 +83,16 @@ async function curl(args: string[]): Promise<string> {
 async function fetchWeekList(): Promise<Array<{ key: string; start: string }>> {
   const html = await curl(['-H', 'Accept-Language: ko-KR,ko;q=0.9', CHART_PAGE]);
   const options = [...html.matchAll(/<option value="(\d{6})"[^>]*>([^<]+)<\/option>/g)];
-  const weeks: Array<{ key: string; start: string }> = [];
+  // 같은 목록이 PC용·모바일용으로 두 번 들어 있어서 겹치는 주를 걸러낸다
+  // (안 거르면 ARCHIVE_WEEKS의 절반만 모인다 — 2026-11-21).
+  const byKey = new Map<string, string>();
   for (const [, key, labelRaw] of options) {
     const label = decodeEntities(labelRaw);
     const start = /(\d{4})\.(\d{2})\.(\d{2})\s*~/.exec(label);
-    if (start) weeks.push({ key, start: `${start[1]}-${start[2]}-${start[3]}` });
+    if (start && !byKey.has(key)) byKey.set(key, `${start[1]}-${start[2]}-${start[3]}`);
   }
   // 최신 주가 앞에 오도록
-  return weeks.sort((a, b) => (a.key < b.key ? 1 : -1));
+  return [...byKey].map(([key, start]) => ({ key, start })).sort((a, b) => (a.key < b.key ? 1 : -1));
 }
 
 type NewEntry = { artist: string; album: string; sales: number };
