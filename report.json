@@ -1,0 +1,18 @@
+{
+ "runAt": 1795392902170,
+ "source": "써클차트 주간 앨범 차트(신규 진입 첫 주 판매량, 버전 합산)",
+ "todo": 1,
+ "fetched": 1,
+ "empty": 0,
+ "failures": 0,
+ "remaining": 0,
+ "weekListSize": 880,
+ "from": "2023-10-22",
+ "to": "2026-11-08",
+ "weekCount": 160,
+ "groupsWithRelease": 165,
+ "groupsTotal": 188,
+ "artists": 720,
+ "albums": 2291,
+ "failedTotal": 0
+}
